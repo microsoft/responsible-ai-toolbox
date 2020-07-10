@@ -1,0 +1,31 @@
+.GridChart {
+    height: 100%;
+    width: 100%;
+}
+
+.centered {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible-to-only-screen-reader {
+    border: 0;
+    clip: rect(0 0 0 0);
+    display: block;
+    height: 1px; 
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.LoadingScreen {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}

@@ -1,4 +1,11 @@
 
+This project contains packages to help the core responsible AI products.
+
+This includes a shared service layer, that also maintains utilities to determine the environment it is running in and configure the local flask service appropriately.
+
+Also, a base typescript library with controls that should be made common across responsible AI dashboards is maintained. 
+Building on that, the typescript dashboards for each responsible AI product live in this project and are published to NPM for downstream consumption.
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
