@@ -1,0 +1,109 @@
+{
+    "selectPoint": "Selezionare un punto per visualizzarne la spiegazione locale",
+    "defaultClassNames": "Classe {0}",
+    "defaultFeatureNames": "Funzionalità {0}",
+    "absoluteAverage": "Media del valore assoluto",
+    "predictedClass": "Classe stimata",
+    "dataExploration": "Esplorazione dati",
+    "globalImportance": "Importanza globale",
+    "explanationExploration": "Esplorazione spiegazioni",
+    "summaryImportance": "Riepilogo importanza",
+    "featureImportance": "Importanza della caratteristica",
+    "perturbationExploration": "Esplorazione perturbazioni",
+    "localFeatureImportance": "Importanza della caratteristica locale",
+    "ice": "ICE",
+    "clearSelection": "Cancella selezione",
+    "feature": "Aggiornamento delle funzionalità:",
+    "intercept": "Intercetta",
+    "ExplanationScatter": {
+      "dataLabel": "Dati: {0}",
+      "importanceLabel": "Importanza: {0}",
+      "predictedY": "PredictedY",
+      "index": "Indice",
+      "dataGroupLabel": "Dati",
+      "output": "Output",
+      "probabilityLabel": "Probabilità: {0}",
+      "trueY": "True Y",
+      "class": "classe: ",
+      "xValue": "Valore X:",
+      "yValue": "Valore Y:",
+      "colorValue": "Colore:"
+    },
+    "CrossClass": {
+      "label": "Ponderazione tra classi:",
+      "info": "Informazioni sul calcolo tra classi",
+      "overviewInfo": "I modelli multiclasse generano un vettore di importanza della caratteristica indipendente per ogni classe. Il vettore di importanza della caratteristica di ogni classe mostra le caratteristiche che hanno reso una classe più probabile o meno probabile. È possibile selezionare il modo in cui i pesi dei vettori di importanza della caratteristica per classe vengono riepilogati in un singolo valore:",
+      "absoluteValInfo": "Media del valore assoluto: mostra la somma dell'importanza della funzionalità in tutte le classi possibili, divisa per numero di classi",
+      "predictedClassInfo": "Classe stimata: mostra il valore di importanza della caratteristica per la classe stimata di un determinato punto",
+      "enumeratedClassInfo": "Nomi di classi enumerate: mostra solo i valori di importanza della caratteristica della classe specificata in tutti i punti dati.",
+      "close": "Chiudi"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "Valore della funzionalità in scala",
+      "low": "Minimo",
+      "high": "Massimo",
+      "featureLabel": "Funzionalità: {0}",
+      "valueLabel": "Valore della funzionalità: {0}",
+      "importanceLabel": "Importanza: {0}",
+      "predictedClassTooltip": "Classe stimata: {0}",
+      "trueClassTooltip": "Classe true: {0}",
+      "predictedOutputTooltip": "Output stimato: {0}",
+      "trueOutputTooltip": "Output true: {0}",
+      "topKFeatures": "Prime K funzionalità:",
+      "topKInfo": "Come viene calcolato top k",
+      "predictedValue": "Valore stimato",
+      "predictedClass": "Classe stimata",
+      "trueValue": "Valore True",
+      "trueClass": "Classe true",
+      "noColor": "Nessuno",
+      "tooManyRows": "Il set di dati fornito è più grande di quello che questo grafico può supportare"
+    },
+    "BarChart": {
+      "classLabel": "Classe: {0}",
+      "sortBy": "Ordina per",
+      "noData": "Dati non disponibili",
+      "absoluteGlobal": "Assoluto globale",
+      "absoluteLocal": "Assoluto locale",
+      "calculatingExplanation": "Calcolo della spiegazione"
+    },
+    "IcePlot": {
+      "numericError": "Deve essere un carattere numerico",
+      "integerError": "Deve essere un numero intero",
+      "prediction": "Stima",
+      "predictedProbability": "Probabilità stimata",
+      "predictionLabel": "Stima: {0}",
+      "probabilityLabel": "Probabilità: {0}",
+      "noModelError": "Fornire un modello operativo per esplorare le stime nei tracciati ICE.",
+      "featurePickerLabel": "Aggiornamento delle funzionalità:",
+      "minimumInputLabel": "Minimo:",
+      "maximumInputLabel": "Massimo:",
+      "stepInputLabel": "Passi:",
+      "loadingMessage": "Caricamento dei dati...",
+      "submitPrompt": "Inviare un intervallo per visualizzare un tracciato ICE",
+      "topLevelErrorMessage": "Errore nel parametro",
+      "errorPrefix": "Errore riscontrato: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "Caricamento...",
+      "perturbationLabel": "Perturbazione:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "Valore stimato: {0}",
+      "predictedClassLabel": "Classe stimata: {0}"
+    },
+    "Violin": {
+      "groupNone": "Nessun raggruppamento",
+      "groupPredicted": "Y stimato",
+      "groupTrue": "True Y",
+      "groupBy": "Raggruppa per"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "Tipo di grafico:",
+      "violinText": "Violino",
+      "barText": "Barre",
+      "boxText": "Casella",
+      "beehiveText": "Swarm",
+      "globalImportanceExplanation": "L'importanza della caratteristica globale viene calcolata facendo la media del valore assoluto dell'importanza della caratteristica di tutti i punti (normalizzazione L1). ",
+      "multiclassImportanceAddendum": "Tutti i punti sono inclusi nel calcolo dell'importanza di una funzionalità per tutte le classi, non viene usata alcuna ponderazione differenziale. Quindi, una funzionalità con grande importanza negativa per molti punti che si prevede non siano di 'Classe A' aumenterà notevolmente l'importanza 'Classe A' di tale funzionalità."
+    }
+  }

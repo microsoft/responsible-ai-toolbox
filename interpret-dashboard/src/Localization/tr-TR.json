@@ -1,0 +1,109 @@
+{
+    "selectPoint": "Yerel açıklamasını görmek için bir nokta seçin",
+    "defaultClassNames": "{0} sınıfı",
+    "defaultFeatureNames": "Özellik {0}",
+    "absoluteAverage": "Mutlak değer ortalaması",
+    "predictedClass": "Tahmin edilen sınıf",
+    "dataExploration": "Veri Araştırması",
+    "globalImportance": "Genel Önem Derecesi",
+    "explanationExploration": "Açıklama Araştırması",
+    "summaryImportance": "Özet Önem Derecesi",
+    "featureImportance": "Özellik Önem Derecesi",
+    "perturbationExploration": "Sapma Araştırması",
+    "localFeatureImportance": "Yerel Özellik Önem Derecesi",
+    "ice": "ICE",
+    "clearSelection": "Seçimi temizle",
+    "feature": "Özellik:",
+    "intercept": "kesim noktası",
+    "ExplanationScatter": {
+      "dataLabel": "Veri: {0}",
+      "importanceLabel": "Önem derecesi: {0}",
+      "predictedY": "Tahmin edilen Y",
+      "index": "Dizin",
+      "dataGroupLabel": "Veri",
+      "output": "Çıktı",
+      "probabilityLabel": "Olasılık: {0}",
+      "trueY": "Doğru Y",
+      "class": "sınıf: ",
+      "xValue": "X değeri:",
+      "yValue": "Y değeri:",
+      "colorValue": "Renk:"
+    },
+    "CrossClass": {
+      "label": "Sınıflar arası ağırlık:",
+      "info": "Sınıflar arası hesaplama hakkında bilgiler",
+      "overviewInfo": "Çok sınıflı modeller, her sınıf için bağımsız bir özellik önem derecesi vektörü oluşturur. Her sınıfın özellik önem derecesi vektörü, sınıfı hangi özelliklerin daha olası veya daha az olası yaptığını gösterir. Sınıf başına özellik önem derecesi vektörlerinin ağırlığının tek bir değerde nasıl özetleneceğini seçebilirsiniz:",
+      "absoluteValInfo": "Mutlak değer ortalaması: Özelliğin tüm olası sınıflardaki önem derecesi toplamının sınıf sayısına bölümünü gösterir",
+      "predictedClassInfo": "Tahmin edilen sınıf: Belirli bir noktanın tahmin edilen sınıfı için özellik önem derecesi değerini gösterir",
+      "enumeratedClassInfo": "Listelenen sınıf adları: Tüm veri noktalarında yalnızca belirtilen sınıfın özellik önem derecesi değerlerini gösterir.",
+      "close": "Kapat"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "Ölçeklendirilmiş Özellik Değeri",
+      "low": "Düşük",
+      "high": "Yüksek",
+      "featureLabel": "Özellik: {0}",
+      "valueLabel": "Özellik değeri: {0}",
+      "importanceLabel": "Önem derecesi: {0}",
+      "predictedClassTooltip": "Tahmin Edilen Sınıf: {0}",
+      "trueClassTooltip": "Doğru Sınıf: {0}",
+      "predictedOutputTooltip": "Tahmin Edilen Çıkış: {0}",
+      "trueOutputTooltip": "Doğru Çıkış: {0}",
+      "topKFeatures": "En Yüksek K Özellikleri:",
+      "topKInfo": "Üst k nasıl hesaplanır?",
+      "predictedValue": "Tahmin Edilen Değer",
+      "predictedClass": "Tahmin Edilen Sınıf",
+      "trueValue": "Gerçek Değer",
+      "trueClass": "Doğru Sınıf",
+      "noColor": "Yok",
+      "tooManyRows": "Sağlanan veri kümesi, bu grafiğin destekleyebileceğinden daha büyük"
+    },
+    "BarChart": {
+      "classLabel": "Sınıf: {0}",
+      "sortBy": "Sıralama Ölçütü",
+      "noData": "Veri Yok",
+      "absoluteGlobal": "Mutlak genel",
+      "absoluteLocal": "Mutlak yerel",
+      "calculatingExplanation": "Açıklama hesaplanıyor"
+    },
+    "IcePlot": {
+      "numericError": "Sayısal bir değer olmalıdır",
+      "integerError": "Bir tamsayı olmalıdır",
+      "prediction": "Tahmin",
+      "predictedProbability": "Tahmin edilen olasılık",
+      "predictionLabel": "Tahmin: {0}",
+      "probabilityLabel": "Olasılık: {0}",
+      "noModelError": "ICE çizimlerindeki tahminleri keşfetmek için lütfen işlevselleştirilmiş bir model belirtin.",
+      "featurePickerLabel": "Özellik:",
+      "minimumInputLabel": "Minimum:",
+      "maximumInputLabel": "Maksimum:",
+      "stepInputLabel": "Adımlar:",
+      "loadingMessage": "Veriler yükleniyor...",
+      "submitPrompt": "ICE çizimini görüntülemek için bir aralık gönderin",
+      "topLevelErrorMessage": "Parametrede hata",
+      "errorPrefix": "Hatayla karşılaşıldı: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "Yükleniyor...",
+      "perturbationLabel": "Sapma:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "Tahmin edilen değer: {0}",
+      "predictedClassLabel": "Tahmin edilen sınıf: {0}"
+    },
+    "Violin": {
+      "groupNone": "Gruplandırma yok",
+      "groupPredicted": "Tahmin edilen Y",
+      "groupTrue": "Doğru Y",
+      "groupBy": "Gruplandır"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "Grafik türü:",
+      "violinText": "Keman",
+      "barText": "Çubuk",
+      "boxText": "Kutu",
+      "beehiveText": "Swarm",
+      "globalImportanceExplanation": "Genel özellik önem derecesi, tüm noktaların özellik önem derecelerine ait mutlak değerinin ortalaması alınarak hesaplanır (L1 normalleştirme). ",
+      "multiclassImportanceAddendum": "Tüm sınıflar için özelliğin önem derecesi hesaplanırken tüm noktalar dahil edilir ve fark ağırlığı kullanılmaz Bu nedenle, 'A Sınıfı' olmadığı tahmin edilen çok sayıda nokta için büyük negatif önem derecesine sahip bir özellik, bu özelliğin 'A Sınıfı' önem derecesini büyük ölçüde artırır."
+    }
+  }

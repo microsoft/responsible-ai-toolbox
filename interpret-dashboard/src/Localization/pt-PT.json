@@ -1,0 +1,109 @@
+{
+    "selectPoint": "Selecione um ponto para ver a explicação local",
+    "defaultClassNames": "Classe {0}",
+    "defaultFeatureNames": "Funcionalidade {0}",
+    "absoluteAverage": "Média do valor absoluto",
+    "predictedClass": "Classe prevista",
+    "dataExploration": "Exploração de Dados",
+    "globalImportance": "Importância Global",
+    "explanationExploration": "Exploração de Explicação",
+    "summaryImportance": "Importância do Resumo",
+    "featureImportance": "Importância da Funcionalidade",
+    "perturbationExploration": "Exploração de Perturbação",
+    "localFeatureImportance": "Importância da Funcionalidade Local",
+    "ice": "ICE",
+    "clearSelection": "Limpar seleção",
+    "feature": "Funcionalidade:",
+    "intercept": "Intercetar",
+    "ExplanationScatter": {
+      "dataLabel": "Dados: {0}",
+      "importanceLabel": "Importância: {0}",
+      "predictedY": "PredictedY",
+      "index": "Índice",
+      "dataGroupLabel": "Dados",
+      "output": "Saída",
+      "probabilityLabel": "Probabilidade: {0}",
+      "trueY": "Y Verdadeiro",
+      "class": "classe: ",
+      "xValue": "Valor X:",
+      "yValue": "Valor Y:",
+      "colorValue": "Cor:"
+    },
+    "CrossClass": {
+      "label": "Ponderação entre classes:",
+      "info": "Informações sobre o cálculo entre classes",
+      "overviewInfo": "Os modelos de multiclasse geram um vetor de importância de funcionalidade independente para cada classe. O vetor de importância de funcionalidade de cada classe demonstra que funcionalidades tornaram uma classe mais provável ou menos provável. Pode selecionar a forma como os pesos dos vetores de importância da funcionalidade por classe são resumidos num valor único:",
+      "absoluteValInfo": "Média do valor absoluto: mostra a soma da importância do recurso em todas as classes possíveis, dividida pelo número de classes",
+      "predictedClassInfo": "Classe prevista: mostra o valor de importância da funcionalidade para a classe prevista de um determinado ponto",
+      "enumeratedClassInfo": "Nomes de classe enumerados: mostra apenas os valores de importância da funcionalidade da classe especificada em todos os pontos de dados.",
+      "close": "Fechar"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "Valor de Funcionalidade Dimensionado",
+      "low": "Baixa",
+      "high": "Elevado",
+      "featureLabel": "Funcionalidade: {0}",
+      "valueLabel": "Valor da funcionalidade: {0}",
+      "importanceLabel": "Importância: {0}",
+      "predictedClassTooltip": "Classe Prevista: {0}",
+      "trueClassTooltip": "Classe Verdadeira: {0}",
+      "predictedOutputTooltip": "Saída Prevista: {0}",
+      "trueOutputTooltip": "Saída Verdadeira: {0}",
+      "topKFeatures": "Principais Funcionalidades de K:",
+      "topKInfo": "Como é calculado o top k",
+      "predictedValue": "Valor Previsto",
+      "predictedClass": "Classe Prevista",
+      "trueValue": "Valor Verdadeiro",
+      "trueClass": "Classe Verdadeira",
+      "noColor": "Nenhum",
+      "tooManyRows": "O conjunto de dados fornecido é maior do que este gráfico pode suportar"
+    },
+    "BarChart": {
+      "classLabel": "Classe: {0}",
+      "sortBy": "Ordenar por",
+      "noData": "Sem Dados",
+      "absoluteGlobal": "Global absoluto",
+      "absoluteLocal": "Local absoluto",
+      "calculatingExplanation": "A calcular explicação"
+    },
+    "IcePlot": {
+      "numericError": "Tem de ser numérico",
+      "integerError": "Tem de ser um número inteiro",
+      "prediction": "Previsão",
+      "predictedProbability": "Probabilidade prevista",
+      "predictionLabel": "Predição: {0}",
+      "probabilityLabel": "Probabilidade: {0}",
+      "noModelError": "Forneça um modelo operacionalizado para explorar previsões em gráficos ICE.",
+      "featurePickerLabel": "Funcionalidade:",
+      "minimumInputLabel": "Mínimo:",
+      "maximumInputLabel": "Máximo:",
+      "stepInputLabel": "Passos:",
+      "loadingMessage": "A carregar dados...",
+      "submitPrompt": "Submeter um intervalo para ver um gráfico ICE",
+      "topLevelErrorMessage": "Erro no parâmetro",
+      "errorPrefix": "Erro encontrado: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "A carregar...",
+      "perturbationLabel": "Perturbação:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "Valor previsto: {0}",
+      "predictedClassLabel": "Classe prevista: {0}"
+    },
+    "Violin": {
+      "groupNone": "Sem agrupamento",
+      "groupPredicted": "Y Previsto",
+      "groupTrue": "Y Verdadeiro",
+      "groupBy": "Agrupar por"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "Tipo de gráfico:",
+      "violinText": "Violino",
+      "barText": "Barras",
+      "boxText": "Caixa",
+      "beehiveText": "Swarm",
+      "globalImportanceExplanation": "A importância global da funcionalidade é calculada através da média do valor absoluto da importância da funcionalidade de todos os pontos (normalização de L1). ",
+      "multiclassImportanceAddendum": "Todos os pontos estão incluídos no cálculo da importância de uma funcionalidade para todas as classes, não é utilizada nenhuma ponderação diferencial. Portanto, uma funcionalidade com importância negativa grande para muitos pontos prevista como não sendo de \"Classe A\" aumentará imensamente a importância \"Classe A\" da funcionalidade."
+    }
+  }

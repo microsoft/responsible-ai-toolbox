@@ -1,0 +1,109 @@
+{
+    "selectPoint": "ローカルの説明を表示する点を選択します",
+    "defaultClassNames": "クラス {0}",
+    "defaultFeatureNames": "機能 {0}",
+    "absoluteAverage": "絶対値の平均",
+    "predictedClass": "予測クラス",
+    "dataExploration": "データの探索",
+    "globalImportance": "グローバルの重要度",
+    "explanationExploration": "説明の探索",
+    "summaryImportance": "概要の重要度",
+    "featureImportance": "特徴量の重要度",
+    "perturbationExploration": "補正の探索",
+    "localFeatureImportance": "ローカル特徴量の重要度",
+    "ice": "ICE",
+    "clearSelection": "選択範囲のクリア",
+    "feature": "機能:",
+    "intercept": "切片",
+    "ExplanationScatter": {
+      "dataLabel": "データ: {0}",
+      "importanceLabel": "重要度: {0}",
+      "predictedY": "PredictedY",
+      "index": "インデックス",
+      "dataGroupLabel": "データ",
+      "output": "出力",
+      "probabilityLabel": "確率: {0}",
+      "trueY": "True Y",
+      "class": "クラス:",
+      "xValue": "X 値:",
+      "yValue": "Y 値:",
+      "colorValue": "色:"
+    },
+    "CrossClass": {
+      "label": "クロスクラスの重み付け:",
+      "info": "クラス間の計算に関する情報",
+      "overviewInfo": "マルチクラス モデルにより、クラスごとに独立した特徴量の重要度ベクターが生成されます。各クラスの特徴量の重要度ベクターは、クラスの可能性を高めたか低くした機能を示しています。クラスごとの特徴量の重要度ベクターの重みを 1 つの値に集計する方法を選択できます。",
+      "absoluteValInfo": "絶対値の平均: 指定できるすべてのクラスにおける機能の重要性の合計をクラスの数で割ったものを表示します。",
+      "predictedClassInfo": "予測クラス: 指定した点の予測クラスについて特徴量の重要度の値を表示します",
+      "enumeratedClassInfo": "列挙クラス名: 指定されたクラスの特徴量の重要度の値のみをすべてのデータ ポイントに表示します。",
+      "close": "閉じる"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "スケーリングされた機能の値",
+      "low": "安値",
+      "high": "高値",
+      "featureLabel": "機能: {0}",
+      "valueLabel": "機能の値: {0}",
+      "importanceLabel": "重要度: {0}",
+      "predictedClassTooltip": "予測クラス: {0}",
+      "trueClassTooltip": "真のクラス: {0}",
+      "predictedOutputTooltip": "予測出力: {0}",
+      "trueOutputTooltip": "真の出力: {0}",
+      "topKFeatures": "上位の K 個の機能:",
+      "topKInfo": "上位 k 個を計算する方法",
+      "predictedValue": "予測された値",
+      "predictedClass": "予測クラス",
+      "trueValue": "真の値",
+      "trueClass": "真のクラス",
+      "noColor": "なし",
+      "tooManyRows": "指定されたデータセットは、このグラフでサポートできるサイズを超えています"
+    },
+    "BarChart": {
+      "classLabel": "クラス: {0}",
+      "sortBy": "並べ替え",
+      "noData": "データなし",
+      "absoluteGlobal": "絶対グローバル",
+      "absoluteLocal": "絶対ローカル",
+      "calculatingExplanation": "説明を計算しています"
+    },
+    "IcePlot": {
+      "numericError": "数値を指定する必要があります",
+      "integerError": "整数にする必要があります",
+      "prediction": "予測",
+      "predictedProbability": "予測確率",
+      "predictionLabel": "予測: {0}",
+      "probabilityLabel": "確率: {0}",
+      "noModelError": "ICE プロットで予測を調べるには、操作可能なモデルを指定してください。",
+      "featurePickerLabel": "機能:",
+      "minimumInputLabel": "最小:",
+      "maximumInputLabel": "最大:",
+      "stepInputLabel": "ステップ:",
+      "loadingMessage": "データを読み込んでいます...",
+      "submitPrompt": "ICE プロットを表示するには範囲を送信します",
+      "topLevelErrorMessage": "パラメーターでエラーが発生しました",
+      "errorPrefix": "エラーが発生しました: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "読み込んでいます...",
+      "perturbationLabel": "摂動:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "予測値: {0}",
+      "predictedClassLabel": "予測クラス: {0}"
+    },
+    "Violin": {
+      "groupNone": "グループ化なし",
+      "groupPredicted": "予測 Y",
+      "groupTrue": "True Y",
+      "groupBy": "グループ化"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "グラフの種類:",
+      "violinText": "バイオリン",
+      "barText": "横棒",
+      "boxText": "ボックス",
+      "beehiveText": "Swarm",
+      "globalImportanceExplanation": "すべての点の特徴量の重要度の絶対値を平均化 (L1 正規化) して、グローバル特徴量の重要度を計算します。",
+      "multiclassImportanceAddendum": "すべてのクラスについて機能の重要度を計算するときにすべての点が含まれます。差分の重み付けは使用されません。したがって、'クラス A' ではないと予測される多くの点に対して大きな負の重要度をもつ機能は、その機能の 'クラス A' の重要度を大幅に増加させます。"
+    }
+  }

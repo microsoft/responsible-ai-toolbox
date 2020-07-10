@@ -1,0 +1,109 @@
+{
+    "selectPoint": "Seleccione un punto para ver su explicación local.",
+    "defaultClassNames": "Clase {0}",
+    "defaultFeatureNames": "{0} de la característica",
+    "absoluteAverage": "Promedio del valor absoluto",
+    "predictedClass": "Clase predicha",
+    "dataExploration": "Exploración de datos",
+    "globalImportance": "Importancia global",
+    "explanationExploration": "Exploración de explicación",
+    "summaryImportance": "Importancia resumida",
+    "featureImportance": "Importancia de la característica",
+    "perturbationExploration": "Exploración de la perturbación",
+    "localFeatureImportance": "Importancia de la característica local",
+    "ice": "ICE",
+    "clearSelection": "Borrar selección",
+    "feature": "Característica:",
+    "intercept": "Interceptar",
+    "ExplanationScatter": {
+      "dataLabel": "Datos: {0}",
+      "importanceLabel": "Importancia: {0}",
+      "predictedY": "PredictedY",
+      "index": "Índice",
+      "dataGroupLabel": "Datos",
+      "output": "Salida",
+      "probabilityLabel": "Probabilidad: {0}",
+      "trueY": "Y verdadero",
+      "class": "clase: ",
+      "xValue": "Valor de X:",
+      "yValue": "Valor de Y:",
+      "colorValue": "Color:"
+    },
+    "CrossClass": {
+      "label": "Ponderación entre clases:",
+      "info": "Información sobre el cálculo entre clases",
+      "overviewInfo": "Los modelos multiclase generan un vector de importancia de característica independiente para cada clase. El vector de importancia de la característica de cada clase muestra qué características han hecho que una clase sea más o menos probable. Puede seleccionar el modo en que la ponderación de los vectores de importancia de la característica por clase se resume en un único valor:",
+      "absoluteValInfo": "Promedio del valor absoluto: muestra la suma de la importancia de la característica en todas las clases posibles, dividida entre el número de clases.",
+      "predictedClassInfo": "Clase predicha: muestra el valor de importancia de la característica para una clase predicha de un punto determinado.",
+      "enumeratedClassInfo": "Nombres de la clase enumerada: solo muestra los valores de importancia de la característica de la clase especificada en todos los puntos de datos.",
+      "close": "Cerrar"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "Valor de característica escalado",
+      "low": "Baja",
+      "high": "Alta",
+      "featureLabel": "Característica: {0}",
+      "valueLabel": "Valor de la característica: {0}",
+      "importanceLabel": "Importancia: {0}",
+      "predictedClassTooltip": "Clase predicha: {0}",
+      "trueClassTooltip": "Clase verdadera: {0}",
+      "predictedOutputTooltip": "Resultado predicho: {0}",
+      "trueOutputTooltip": "Resultado verdadero: {0}",
+      "topKFeatures": "Características principales de K:",
+      "topKInfo": "Procedimiento para calcular el valor Top K",
+      "predictedValue": "Valor de predicción",
+      "predictedClass": "Clase predicha",
+      "trueValue": "Valor verdadero",
+      "trueClass": "Clase verdadera",
+      "noColor": "Ninguno",
+      "tooManyRows": "El conjunto de datos proporcionado es mayor de lo que admite este gráfico."
+    },
+    "BarChart": {
+      "classLabel": "Clase: {0}",
+      "sortBy": "Ordenar por",
+      "noData": "Sin datos",
+      "absoluteGlobal": "Global absoluto",
+      "absoluteLocal": "Local absoluto",
+      "calculatingExplanation": "Calculando explicación"
+    },
+    "IcePlot": {
+      "numericError": "Debe ser un valor numérico.",
+      "integerError": "Debe ser un entero.",
+      "prediction": "Predicción",
+      "predictedProbability": "Probabilidad predicha",
+      "predictionLabel": "Predicción: {0}",
+      "probabilityLabel": "Probabilidad: {0}",
+      "noModelError": "Proporcione un modelo de en el que se hayan ejecutado operaciones para explorar las predicciones en los trazados de ICE.",
+      "featurePickerLabel": "Característica:",
+      "minimumInputLabel": "Mínimo:",
+      "maximumInputLabel": "Máximo:",
+      "stepInputLabel": "Pasos:",
+      "loadingMessage": "Cargando datos...",
+      "submitPrompt": "Envíe un rango para ver un trazado de ICE.",
+      "topLevelErrorMessage": "Error en el parámetro",
+      "errorPrefix": "Se detectó un error: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "Cargando...",
+      "perturbationLabel": "Perturbación:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "Valor predicho: {0}",
+      "predictedClassLabel": "Clase predicha: {0}"
+    },
+    "Violin": {
+      "groupNone": "Sin agrupar",
+      "groupPredicted": "Y predicho",
+      "groupTrue": "Y verdadero",
+      "groupBy": "Agrupar por"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "Tipo de gráfico:",
+      "violinText": "Violín",
+      "barText": "Barra",
+      "boxText": "Cuadro",
+      "beehiveText": "Swarm",
+      "globalImportanceExplanation": "La importancia de la característica global se calcula mediante el promedio del valor absoluto de la importancia de la característica de todos los puntos (normalización L1). ",
+      "multiclassImportanceAddendum": "Para el cálculo de la importancia de una característica para todas las clases se incluyen todos los puntos y no se utiliza ninguna ponderación diferencial. Por tanto, una característica con una gran importancia negativa para muchos puntos con una predicción de que no será de \"clase A\" aumentará considerablemente la importancia de la \"clase A\" de la característica."
+    }
+  }

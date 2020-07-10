@@ -1,0 +1,109 @@
+{
+    "selectPoint": "Pokud si chcete zobrazit místní vysvětlení určitého bodu, vyberte daný bod.",
+    "defaultClassNames": "Třída {0}",
+    "defaultFeatureNames": "Příznak {0}",
+    "absoluteAverage": "Průměr absolutní hodnoty",
+    "predictedClass": "Predikovaná třída",
+    "dataExploration": "Průzkum dat",
+    "globalImportance": "Globální důležitost",
+    "explanationExploration": "Průzkum vysvětlení",
+    "summaryImportance": "Důležitost souhrnu",
+    "featureImportance": "Významnost atributu",
+    "perturbationExploration": "Průzkum perturbace",
+    "localFeatureImportance": "Významnost místního atributu",
+    "ice": "ICE",
+    "clearSelection": "Vymazat výběr",
+    "feature": "Funkce:",
+    "intercept": "Zachycení",
+    "ExplanationScatter": {
+      "dataLabel": "Data: {0}",
+      "importanceLabel": "Důležitost: {0}",
+      "predictedY": "PredictedY",
+      "index": "Index",
+      "dataGroupLabel": "Data",
+      "output": "Výstup",
+      "probabilityLabel": "Pravděpodobnost: {0}",
+      "trueY": "Skutečné Y",
+      "class": "třída: ",
+      "xValue": "Hodnota X:",
+      "yValue": "Hodnota Y:",
+      "colorValue": "Barva:"
+    },
+    "CrossClass": {
+      "label": "Vážení mezi třídami:",
+      "info": "Informace o výpočtu mezi třídami",
+      "overviewInfo": "Modely s více třídami generují pro každou třídu vektor významností nezávislých atributů. Vektor významností atributů jednotlivých tříd ukazuje, kvůli kterým příznakům je určitá třída pravděpodobnější nebo méně pravděpodobná. Můžete vybrat, jak se váhy vektorů významností atributů pro jednotlivé třídy shrnují do jedné hodnoty:",
+      "absoluteValInfo": "Průměr absolutní hodnoty: Udává součet důležitosti příznaku ve všech možných třídách vydělený počtem tříd.",
+      "predictedClassInfo": "Predikovaná třída: Udává hodnotu významnosti atributu pro predikovanou třídu daného bodu.",
+      "enumeratedClassInfo": "Výčet názvů tříd: Udává jen významnost atributu zadané třídy ve všech datových bodech.",
+      "close": "Zavřít"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "Škálovaná hodnota příznaku",
+      "low": "Nízká",
+      "high": "Vysoká",
+      "featureLabel": "Příznak: {0}",
+      "valueLabel": "Hodnota příznaku: {0}",
+      "importanceLabel": "Důležitost: {0}",
+      "predictedClassTooltip": "Predikovaná třída: {0}",
+      "trueClassTooltip": "Skutečná třída: {0}",
+      "predictedOutputTooltip": "Predikovaný výstup: {0}",
+      "trueOutputTooltip": "Skutečný výstup: {0}",
+      "topKFeatures": "Hlavních K příznaků:",
+      "topKInfo": "Jak se počítá prvních k",
+      "predictedValue": "Předpokládaná hodnota",
+      "predictedClass": "Predikovaná třída",
+      "trueValue": "Pravdivá hodnota",
+      "trueClass": "Skutečná třída",
+      "noColor": "Žádné",
+      "tooManyRows": "Poskytnutá datová sada je větší, než jakou tento graf podporuje."
+    },
+    "BarChart": {
+      "classLabel": "Třída: {0}",
+      "sortBy": "Řadit podle",
+      "noData": "Žádná data",
+      "absoluteGlobal": "Absolutní globální",
+      "absoluteLocal": "Absolutní lokální",
+      "calculatingExplanation": "Počítá se vysvětlení."
+    },
+    "IcePlot": {
+      "numericError": "Musí to být číslo.",
+      "integerError": "Musí to být celé číslo.",
+      "prediction": "Predikce",
+      "predictedProbability": "Predikovaná pravděpodobnost",
+      "predictionLabel": "Predikce: {0}",
+      "probabilityLabel": "Pravděpodobnost: {0}",
+      "noModelError": "Pokud chcete prozkoumat predikce v grafech ICE, poskytněte prosím zprovozněný model.",
+      "featurePickerLabel": "Funkce:",
+      "minimumInputLabel": "Minimum:",
+      "maximumInputLabel": "Maximum:",
+      "stepInputLabel": "Kroky:",
+      "loadingMessage": "Načítají se data...",
+      "submitPrompt": "Pokud si chcete zobrazit graf ICE, odešlete rozsah.",
+      "topLevelErrorMessage": "Chyba v parametru",
+      "errorPrefix": "Došlo k chybě: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "Načítání...",
+      "perturbationLabel": "Perturbace:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "Predikovaná hodnota: {0}",
+      "predictedClassLabel": "Predikovaná třída: {0}"
+    },
+    "Violin": {
+      "groupNone": "Bez seskupení",
+      "groupPredicted": "Predikované Y",
+      "groupTrue": "Skutečné Y",
+      "groupBy": "Seskupit podle"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "Typ grafu:",
+      "violinText": "Houslový",
+      "barText": "Pruhový",
+      "boxText": "Pole",
+      "beehiveText": "Swarm",
+      "globalImportanceExplanation": "Globální významnost atributu se počítá jako průměr absolutní hodnoty významnosti atributu ve všech bodech (normalizace L1). ",
+      "multiclassImportanceAddendum": "Do výpočtu důležitosti příznaku pro všechny třídy se zahrnují všechny body, nepoužívá se žádné rozdílové vážení. Proto příznak, který má velkou zápornou důležitost pro mnoho bodů, pro které se predikovalo, že nejsou třída A, výrazně zvýší důležitost třídy A daného příznaku."
+    }
+  }
