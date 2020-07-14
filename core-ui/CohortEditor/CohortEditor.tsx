@@ -380,12 +380,9 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
     private setDefaultStateForKey(key: string): void {
         const filter: IFilter = { column: key } as IFilter;
         const meta = this.props.jointDataset.metaDict[key];
-        if (meta.isCategorical) {
+        if (meta.treatAsCategorical) {
             filter.method = FilterMethods.includes;
             filter.arg = Array.from(Array(meta.sortedCategoricalValues.length).keys());
-        } else if (meta.treatAsCategorical) {
-            filter.method = FilterMethods.includes;
-            filter.arg = [...meta.sortedCategoricalValues] as any[];
         } else {
             filter.method = FilterMethods.lessThan;
             filter.arg = [meta.featureRange.max];
@@ -443,17 +440,9 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         if (selectedFilter.isCategorical || this.props.jointDataset.metaDict[filter.column].treatAsCategorical) {
             let selectedValues = [];
             const filterArgs = filter.arg;
-
-            // map key to value for isCategorical filter
-            if (selectedFilter.isCategorical) {
-                filterArgs.forEach((element) => {
-                    selectedValues.push(selectedFilter.sortedCategoricalValues[element]);
-                });
-            } else {
-                // treatAsCategorical
-                selectedValues = filterArgs;
-            }
-
+            filterArgs.forEach((element) => {
+                selectedValues.push(selectedFilter.sortedCategoricalValues[element]);
+            });
             stringArgs = selectedValues.toString();
             if (selectedValues.length > 3) {
                 const otherValues = selectedValues.slice(0, 3).toString();
@@ -514,13 +503,9 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         if (selectedMeta.treatAsCategorical) {
             // Numerical values treated as categorical are stored with the values in the column,
             // true categorical values store indexes to the string values
-            categoricalOptions = selectedMeta.isCategorical
-                ? selectedMeta.sortedCategoricalValues.map((label, index) => {
-                      return { key: index, text: label };
-                  })
-                : selectedMeta.sortedCategoricalValues.map((label) => {
-                      return { key: label, text: label.toString() };
-                  });
+            categoricalOptions =selectedMeta.sortedCategoricalValues.map((label, index) => {
+                return { key: index, text: label };
+            });
         } else {
             minVal = this.roundDecimalValue(selectedMeta.featureRange.min);
             maxVal = this.roundDecimalValue(selectedMeta.featureRange.max);
