@@ -136,7 +136,7 @@ import { createTheme } from "@uifabric/styling";
         {label: "english", val: "en-EN"},
         {label: "spanish", val: "es-ES"},
         {label: "german", val: "de"},
-        {label: "simple Chinese", val: "zh-Hans"},
+        {label: "simple Chinese", val: "zh-CN"},
         {label: "japanese", val: "ja"}
       ]
 
