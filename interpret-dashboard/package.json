@@ -10,11 +10,13 @@
     "rel/"
   ],
   "scripts": {
+    "install-all": "yarn install && cd ./test/manual-test/test-page && yarn install",
     "test": "jest",
     "build": "tsc",
     "build-css": "node-sass-chokidar src/MLIDashboard -o rel/ && node-sass-chokidar src/MLIDashboard -o rel/MLIDashboard/",
-    "build-dev": "npm run build && npm run copy",
     "copy": "xcopy \"rel\" \".\\test\\manual-test\\test-page\\node_modules\\interpret-dashboard\\rel\" /e /y",
+    "build-all": "yarn build && yarn build-css && yarn copy",
+    "start": "cd ./test/manual-test/test-page && yarn build && yarn start",
     "lintci": "eslint \"**/*.{js,ts,tsx}\" --quiet",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --quiet --fix"
   },
