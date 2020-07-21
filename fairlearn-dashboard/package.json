@@ -13,7 +13,8 @@
     "install-all": "yarn install && cd ./test/maual-test/test-page && yarn install",
     "build": "tsc",
     "build-all": "npm run build && npm run copy",
-    "copy": "xcopy \"rel\" \"..\\test\\test-page\\node_modules\\fairlearn-dashboard\\rel\" /e /y",
+    "copy": "xcopy \"rel\" \".\\test\\manual-test\\test-page\\node_modules\\fairlearn-dashboard\\rel\" /e /y",
+    "build-dev": "yarn build && yarn copy",
     "start": "cd ./test/manual-test/test-page && yarn build && yarn start",
     "lintci": "eslint \"**/*.{js,ts,tsx}\" --quiet",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --quiet --fix"
