@@ -1,7 +1,7 @@
 {
   "name": "interpret-dashboard",
   "version": "0.1.15",
-  "license": "See license file 'LICENSE'",
+  "license": "MIT",
   "description": "ML Chart Lib",
   "main": "rel/index.js",
   "module": "rel/index.js",
