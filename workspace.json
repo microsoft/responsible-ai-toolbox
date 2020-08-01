@@ -1,6 +1,191 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "interpret": {
+      "root": "libs/interpret",
+      "sourceRoot": "libs/interpret/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/interpret/tsconfig.lib.json",
+              "libs/interpret/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/interpret/**/*"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/interpret",
+            "tsConfig": "libs/interpret/tsconfig.lib.json",
+            "project": "libs/interpret/package.json",
+            "entryFile": "libs/interpret/src/index.ts",
+            "external": ["react", "react-dom"],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/interpret/jest.config.js",
+            "tsConfig": "libs/interpret/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "fairlearn": {
+      "root": "libs/fairlearn",
+      "sourceRoot": "libs/fairlearn/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/fairlearn/tsconfig.lib.json",
+              "libs/fairlearn/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/fairlearn/**/*"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/fairlearn",
+            "tsConfig": "libs/fairlearn/tsconfig.lib.json",
+            "project": "libs/fairlearn/package.json",
+            "entryFile": "libs/fairlearn/src/index.ts",
+            "external": ["react", "react-dom"],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/fairlearn/jest.config.js",
+            "tsConfig": "libs/fairlearn/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "core-ui": {
+      "root": "libs/core-ui",
+      "sourceRoot": "libs/core-ui/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/core-ui/tsconfig.lib.json",
+              "libs/core-ui/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/core-ui/**/*"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/core-ui",
+            "tsConfig": "libs/core-ui/tsconfig.lib.json",
+            "project": "libs/core-ui/package.json",
+            "entryFile": "libs/core-ui/src/index.ts",
+            "external": ["react", "react-dom"],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/core-ui/jest.config.js",
+            "tsConfig": "libs/core-ui/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "mlchartlib": {
+      "root": "libs/mlchartlib",
+      "sourceRoot": "libs/mlchartlib/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/mlchartlib/tsconfig.lib.json",
+              "libs/mlchartlib/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/mlchartlib/**/*"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/mlchartlib",
+            "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
+            "project": "libs/mlchartlib/package.json",
+            "entryFile": "libs/mlchartlib/src/index.ts",
+            "external": ["react", "react-dom"],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/mlchartlib/jest.config.js",
+            "tsConfig": "libs/mlchartlib/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   },

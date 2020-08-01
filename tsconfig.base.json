@@ -15,7 +15,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@responsible-ai/interpret": ["libs/interpret/src/index.ts"],
+      "@responsible-ai/fairlearn": ["libs/fairlearn/src/index.ts"],
+      "@responsible-ai/core-ui": ["libs/core-ui/src/index.ts"],
+      "@responsible-ai/mlchartlib": ["libs/mlchartlib/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

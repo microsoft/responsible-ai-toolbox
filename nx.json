@@ -21,5 +21,18 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "interpret": {
+      "tags": []
+    },
+    "fairlearn": {
+      "tags": []
+    },
+    "core-ui": {
+      "tags": []
+    },
+    "mlchartlib": {
+      "tags": []
+    }
+  }
 }
