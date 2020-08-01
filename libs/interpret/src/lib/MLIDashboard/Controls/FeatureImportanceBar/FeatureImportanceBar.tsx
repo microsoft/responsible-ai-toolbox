@@ -1,21 +1,15 @@
-import React from 'react';
-import _ from 'lodash';
-import { localization } from '../../../Localization/localization';
-import { mergeStyleSets, getTheme } from '@uifabric/styling';
-import { ModelExplanationUtils } from '../../ModelExplanationUtils';
-import { IPlotlyProperty, AccessibleChart } from 'mlchartlib';
-import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
-import { Slider } from 'office-ui-fabric-react/lib/Slider';
-import { LoadingSpinner } from '../../SharedComponents';
-import { isThisExpression } from '@babel/types';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { InteractiveLegend, ILegendItem, SortingState } from '../InteractiveLegend';
-import { FabricStyles } from '../../FabricStyles';
-import { JointDataset } from '../../JointDataset';
-import { IGlobalSeries } from '../GlobalExplanationTab/IGlobalSeries';
-import { featureImportanceBarStyles } from './FeatureImportanceBar.styles';
-import { Text } from 'office-ui-fabric-react';
-import { ChartTypes } from '../../NewExplanationDashboard';
+import React from "react";
+import _ from "lodash";
+import { localization } from "../../../Localization/localization";
+import { getTheme } from "@uifabric/styling";
+import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
+import { LoadingSpinner } from "../../SharedComponents";
+import { FabricStyles } from "../../FabricStyles";
+import { JointDataset } from "../../JointDataset";
+import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
+import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
+import { Text } from "office-ui-fabric-react";
+import { ChartTypes } from "../../NewExplanationDashboard";
 
 export interface IFeatureBarProps {
     jointDataset: JointDataset;
@@ -57,10 +51,10 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
     public render(): React.ReactNode {
         const classNames = featureImportanceBarStyles();
         const relayoutArg = {
-            'xaxis.range': [this.props.startingK - 0.5, this.props.startingK + this.props.topK - 0.5],
+            "xaxis.range": [this.props.startingK - 0.5, this.props.startingK + this.props.topK - 0.5],
         };
         const plotlyProps = this.state.plotlyProps;
-        _.set(plotlyProps, 'layout.xaxis.range', [
+        _.set(plotlyProps, "layout.xaxis.range", [
             this.props.startingK - 0.5,
             this.props.startingK + this.props.topK - 0.5,
         ]);
@@ -73,7 +67,7 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
         ) {
             return (
                 <div className={classNames.noData}>
-                    <Text variant={'xxLarge'}>No data</Text>
+                    <Text variant={"xxLarge"}>No data</Text>
                 </div>
             );
         }
@@ -120,12 +114,12 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
                 autosize: true,
                 dragmode: false,
                 margin: { t: 10, r: 10, b: 30, l: 0 },
-                hovermode: 'closest',
+                hovermode: "closest",
                 xaxis: {
                     automargin: true,
                     color: FabricStyles.chartAxisColor,
                     tickfont: {
-                        family: 'Roboto, Helvetica Neue, sans-serif',
+                        family: "Roboto, Helvetica Neue, sans-serif",
                         size: 11,
                         color: FabricStyles.chartAxisColor,
                     },
@@ -135,37 +129,37 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
                     automargin: true,
                     color: FabricStyles.chartAxisColor,
                     tickfont: {
-                        family: 'Roboto, Helvetica Neue, sans-serif',
+                        family: "Roboto, Helvetica Neue, sans-serif",
                         size: 11,
                         color: FabricStyles.chartAxisColor,
                     },
                     zeroline: true,
                     showgrid: true,
-                    gridcolor: '#e5e5e5',
+                    gridcolor: "#e5e5e5",
                 },
                 showlegend: false,
             } as any,
         };
 
-        const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
+        const xText = sortedIndexVector.map(i => this.props.unsortedX[i]);
         if (this.props.chartType === ChartTypes.Bar) {
-            baseSeries.layout.barmode = 'group';
+            baseSeries.layout.barmode = "group";
             let hovertemplate = this.props.unsortedSeries[0].unsortedFeatureValues
-                ? '%{text}: %{customdata.Yvalue}<br>'
-                : localization.Charts.featurePrefix + ': %{text}<br>';
-            hovertemplate += localization.Charts.importancePrefix + ': %{customdata.Yformatted}<br>';
-            hovertemplate += '%{customdata.Name}<br>';
-            hovertemplate += '<extra></extra>';
+                ? "%{text}: %{customdata.Yvalue}<br>"
+                : localization.Charts.featurePrefix + ": %{text}<br>";
+            hovertemplate += localization.Charts.importancePrefix + ": %{customdata.Yformatted}<br>";
+            hovertemplate += "%{customdata.Name}<br>";
+            hovertemplate += "<extra></extra>";
 
-            const x = sortedIndexVector.map((unused, index) => index);
+            const x = sortedIndexVector.map((_, index) => index);
 
             this.props.unsortedSeries.forEach((series, seriesIndex) => {
                 baseSeries.data.push({
-                    hoverinfo: 'all',
-                    orientation: 'v',
-                    type: 'bar',
+                    hoverinfo: "all",
+                    orientation: "v",
+                    type: "bar",
                     name: series.name,
-                    customdata: sortedIndexVector.map((index) => {
+                    customdata: sortedIndexVector.map(index => {
                         return {
                             Name: series.name,
                             Yformatted: series.unsortedAggregateY[index].toLocaleString(undefined, {
@@ -176,9 +170,9 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
                     }),
                     text: xText,
                     x,
-                    y: sortedIndexVector.map((index) => series.unsortedAggregateY[index]),
+                    y: sortedIndexVector.map(index => series.unsortedAggregateY[index]),
                     marker: {
-                        color: sortedIndexVector.map((index) =>
+                        color: sortedIndexVector.map(index =>
                             index === this.props.selectedFeatureIndex && seriesIndex === this.props.selectedSeriesIndex
                                 ? FabricStyles.fabricColorPalette[series.colorIndex]
                                 : FabricStyles.fabricColorPalette[series.colorIndex],
@@ -188,27 +182,20 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
                 } as any);
             });
         } else if (this.props.chartType === ChartTypes.Box) {
-            baseSeries.layout.boxmode = 'group';
-            const x = new Array(this.props.jointDataset.datasetFeatureCount)
-                .fill(0)
-                .map((unused, index) => new Array(this.props.jointDataset.datasetRowCount).fill(index))
-                .reduce((prev, curr) => {
-                    prev.push(...curr);
-                    return prev;
-                }, []);
-            this.props.unsortedSeries.forEach((series, seriesIndex) => {
+            baseSeries.layout.boxmode = "group";
+            this.props.unsortedSeries.forEach(series => {
                 baseSeries.data.push({
-                    type: 'box',
+                    type: "box",
                     boxmean: true,
                     name: series.name,
                     x: sortedIndexVector
-                        .map((sortIndex, xIndex) => series.unsortedIndividualY[sortIndex].map((unused) => xIndex))
+                        .map((sortIndex, xIndex) => series.unsortedIndividualY[sortIndex].map(() => xIndex))
                         .reduce((prev, curr) => {
                             prev.push(...curr);
                             return prev;
                         }, []),
                     y: sortedIndexVector
-                        .map((index) => series.unsortedIndividualY[index])
+                        .map(index => series.unsortedIndividualY[index])
                         .reduce((prev, curr) => {
                             prev.push(...curr);
                             return prev;
@@ -220,10 +207,10 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
             });
         }
 
-        const tickvals = sortedIndexVector.map((val, index) => index);
+        const tickvals = sortedIndexVector.map((_, index) => index);
 
-        _.set(baseSeries, 'layout.xaxis.ticktext', xText);
-        _.set(baseSeries, 'layout.xaxis.tickvals', tickvals);
+        _.set(baseSeries, "layout.xaxis.ticktext", xText);
+        _.set(baseSeries, "layout.xaxis.tickvals", tickvals);
         return baseSeries;
     }
 

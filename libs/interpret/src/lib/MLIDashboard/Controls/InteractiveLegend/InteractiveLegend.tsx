@@ -1,11 +1,11 @@
-import React from 'react';
-import { interactiveLegendStyles } from './InteractiveLegend.styles';
-import { IconButton, ITheme, Text } from 'office-ui-fabric-react';
+import React from "react";
+import { interactiveLegendStyles } from "./InteractiveLegend.styles";
+import { IconButton, Text } from "office-ui-fabric-react";
 
 export enum SortingState {
-    ascending = 'ascending',
-    descending = 'descending',
-    none = 'none',
+    ascending = "ascending",
+    descending = "descending",
+    none = "none",
 }
 
 export interface ILegendItem {
@@ -40,22 +40,22 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
     private buildRowElement(item: ILegendItem, index: number): React.ReactNode {
         if (item.disabled) {
             return (
-                <div className={this.classes.disabledItem} title={item.disabledMessage || ''} key={index}>
+                <div className={this.classes.disabledItem} title={item.disabledMessage || ""} key={index}>
                     <div className={this.classes.inactiveColorBox} />
-                    <Text nowrap variant={'medium'} className={this.classes.label}>
+                    <Text nowrap variant={"medium"} className={this.classes.label}>
                         {item.name}
                     </Text>
                     {item.onEdit !== undefined && (
                         <IconButton
                             className={this.classes.editButton}
-                            iconProps={{ iconName: 'Edit' }}
+                            iconProps={{ iconName: "Edit" }}
                             onClick={item.onEdit}
                         />
                     )}
                     {item.onDelete !== undefined && (
                         <IconButton
                             className={this.classes.deleteButton}
-                            iconProps={{ iconName: 'Clear' }}
+                            iconProps={{ iconName: "Clear" }}
                             onClick={item.onDelete}
                         />
                     )}
@@ -70,21 +70,21 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
                         className={item.activated === false ? this.classes.inactiveColorBox : this.classes.colorBox}
                         style={{ backgroundColor: item.color }}
                     />
-                    <Text nowrap variant={'medium'} className={this.classes.label}>
+                    <Text nowrap variant={"medium"} className={this.classes.label}>
                         {item.name}
                     </Text>
                 </div>
                 {item.onEdit !== undefined && (
                     <IconButton
                         className={this.classes.editButton}
-                        iconProps={{ iconName: 'Edit', style: { fontSize: '10px' } }}
+                        iconProps={{ iconName: "Edit", style: { fontSize: "10px" } }}
                         onClick={item.onEdit}
                     />
                 )}
                 {item.onDelete !== undefined && (
                     <IconButton
                         className={this.classes.deleteButton}
-                        iconProps={{ iconName: 'Clear', style: { fontSize: '10px' } }}
+                        iconProps={{ iconName: "Clear", style: { fontSize: "10px" } }}
                         onClick={item.onDelete}
                     />
                 )}

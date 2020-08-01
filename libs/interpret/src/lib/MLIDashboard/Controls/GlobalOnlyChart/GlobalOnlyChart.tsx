@@ -1,13 +1,13 @@
-import { IExplanationModelMetadata } from '../../IExplanationContext';
-import React from 'react';
-import { IDropdownOption, Icon, Slider, Text } from 'office-ui-fabric-react';
-import { ModelExplanationUtils } from '../../ModelExplanationUtils';
-import { localization } from '../../../Localization/localization';
-import { FeatureKeys } from '../../SharedComponents';
-import { globalTabStyles } from '../GlobalExplanationTab/GlobalExplanationTab.styles';
-import { FeatureImportanceBar } from '../FeatureImportanceBar/FeatureImportanceBar';
-import { ChartTypes } from '../../NewExplanationDashboard';
-import { IGlobalSeries } from '../GlobalExplanationTab/IGlobalSeries';
+import { IExplanationModelMetadata } from "../../IExplanationContext";
+import React from "react";
+import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
+import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { localization } from "../../../Localization/localization";
+import { FeatureKeys } from "../../SharedComponents";
+import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
+import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { ChartTypes } from "../../NewExplanationDashboard";
+import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
 export interface IGlobalOnlyChartProps {
     metadata: IExplanationModelMetadata;
@@ -26,7 +26,6 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
     private readonly perClassExplanationDimension =
         this.props.globalImportance && this.props.globalImportance[0] ? this.props.globalImportance[0].length : 0;
     private readonly minK = Math.min(4, this.featureDimension);
-    private readonly maxK = Math.min(30, this.featureDimension);
     private classOptions: IDropdownOption[];
     // look into per_class importances when available.
     // if explanation class dimension is singular,
@@ -35,14 +34,14 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
             ? [
                   {
                       name: localization.BarChart.absoluteGlobal,
-                      unsortedAggregateY: this.props.globalImportance.map((classArray) => classArray[0]),
+                      unsortedAggregateY: this.props.globalImportance.map(classArray => classArray[0]),
                       colorIndex: 0,
                   },
               ]
             : this.props.metadata.classNames.map((name, index) => {
                   return {
                       name: name,
-                      unsortedAggregateY: this.props.globalImportance.map((classArray) => classArray[index]),
+                      unsortedAggregateY: this.props.globalImportance.map(classArray => classArray[index]),
                       colorIndex: index,
                   };
               });
@@ -114,7 +113,7 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
         this.setState({ startingK: newValue });
     }
 
-    private setSortIndex(event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSortIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
         const newIndex = item.key;
         const sortArray = this.getSortVector(newIndex).reverse();
         this.setState({ sortingSeriesKey: newIndex, sortArray });

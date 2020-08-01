@@ -60,16 +60,17 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
     }
 
     public render(): React.ReactNode {
+        const style = accessibleChartStyle();
         if (this.hasData()) {
             return (
                 <>
-                    <div className={accessibleChartStyle.chart} id={this.guid} aria-hidden={true} />
+                    <div className={style.chart} id={this.guid} aria-hidden={true} />
                     {this.createTableWithPlotlyData(this.props.plotlyProps.data)}
                 </>
             );
         }
         return (
-            <div className={accessibleChartStyle.noData}>
+            <div className={style.noData}>
                 {this.props.localizedStrings ? this.props.localizedStrings["noData"] : "No Data"}
             </div>
         );
@@ -101,8 +102,9 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
     }
 
     private createTableWithPlotlyData(data: Plotly.Data[]): React.ReactNode {
+        const style = accessibleChartStyle();
         return (
-            <table className={accessibleChartStyle.plotlyTable}>
+            <table className={style.plotlyTable}>
                 <tbody>
                     {data.map((datum, index) => {
                         const xDataLength = datum.x ? datum.x.length : 0;
