@@ -1,15 +1,14 @@
-import { IFilter, FilterMethods } from './Interfaces/IFilter';
-import { JointDataset } from './JointDataset';
-import { ModelExplanationUtils } from './ModelExplanationUtils';
+import { IFilter, FilterMethods } from "./Interfaces/IFilter";
+import { JointDataset } from "./JointDataset";
+import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export class Cohort {
-    public static CohortKey = 'Cohort';
+    public static CohortKey = "Cohort";
     private static _cohortIndex = 0;
 
     public rowCount = 0;
     public filteredData: Array<{ [key: string]: number }>;
     private readonly cohortIndex: number;
-    private mutateCount = 0;
     private cachedAverageImportance: number[];
     private cachedTransposedLocalFeatureImportances: number[][];
     private currentSortKey: string | undefined;
@@ -30,7 +29,7 @@ export class Cohort {
         this.applyFilters();
     }
 
-    // An id to track if a change requiring rerender has occurred.
+    // An id to track if a change requiring re-render has occurred.
     public getCohortID(): number {
         return this.cohortIndex;
     }
@@ -73,12 +72,12 @@ export class Cohort {
                 this.jointDataset.addBin(key);
                 binVector = this.jointDataset.binDict[key];
             }
-            return this.filteredData.map((row) => {
+            return this.filteredData.map(row => {
                 const rowValue = row[key];
-                return binVector.findIndex((upperLimit) => upperLimit >= rowValue);
+                return binVector.findIndex(upperLimit => upperLimit >= rowValue);
             });
         }
-        return this.filteredData.map((row) => row[key]);
+        return this.filteredData.map(row => row[key]);
     }
 
     public calculateAverageImportance(): number[] {
@@ -86,7 +85,7 @@ export class Cohort {
             return this.cachedAverageImportance;
         }
 
-        this.cachedAverageImportance = this.transposedLocalFeatureImportances().map((featureValues) => {
+        this.cachedAverageImportance = this.transposedLocalFeatureImportances().map(featureValues => {
             if (!featureValues || featureValues.length === 0) {
                 return Number.NaN;
             }
@@ -103,7 +102,7 @@ export class Cohort {
             return this.cachedTransposedLocalFeatureImportances;
         }
         const featureLength = this.jointDataset.localExplanationFeatureCount;
-        const localFeatureImportances = this.filteredData.map((row) => {
+        const localFeatureImportances = this.filteredData.map(row => {
             return JointDataset.localExplanationSlice(row, featureLength);
         });
         this.cachedTransposedLocalFeatureImportances = ModelExplanationUtils.transpose2DArray(localFeatureImportances);
@@ -113,13 +112,12 @@ export class Cohort {
     public clearCachedImportances(): void {
         this.cachedAverageImportance = undefined;
         this.cachedTransposedLocalFeatureImportances = undefined;
-        this.mutateCount += 1;
     }
 
     private applyFilters(): void {
         this.clearCachedImportances();
-        this.filteredData = this.jointDataset.dataDict.filter((row) =>
-            this.filters.every((filter) => {
+        this.filteredData = this.jointDataset.dataDict.filter(row =>
+            this.filters.every(filter => {
                 const rowVal = row[filter.column];
                 switch (filter.method) {
                     case FilterMethods.equal:

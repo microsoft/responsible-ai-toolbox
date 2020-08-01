@@ -1,20 +1,20 @@
-import React from 'react';
-import { IGenericChartProps, ISelectorConfig, ChartTypes } from '../../NewExplanationDashboard';
-import { JointDataset, ColumnCategories } from '../../JointDataset';
-import { IExplanationModelMetadata, ModelTypes } from '../../IExplanationContext';
-import { Cohort } from '../../Cohort';
-import { mergeStyleSets, getTheme, ITheme } from '@uifabric/styling';
-import _ from 'lodash';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { localization } from '../../../Localization/localization';
-import { AxisConfigDialog } from '../AxisConfigurationDialog/AxisConfigDialog';
-import { AccessibleChart, IPlotlyProperty } from 'mlchartlib';
-import { Transform } from 'plotly.js-dist';
-import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { modelPerformanceTabStyles } from './ModelPerformanceTab.styles';
-import { Icon, Text } from 'office-ui-fabric-react';
-import { FabricStyles } from '../../FabricStyles';
-import { ILabeledStatistic, generateMetrics } from '../../StatisticsUtils';
+import React from "react";
+import { IGenericChartProps, ISelectorConfig, ChartTypes } from "../../NewExplanationDashboard";
+import { JointDataset, ColumnCategories } from "../../JointDataset";
+import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
+import { Cohort } from "../../Cohort";
+import { getTheme } from "@uifabric/styling";
+import _ from "lodash";
+import { DefaultButton } from "office-ui-fabric-react/lib/Button";
+import { localization } from "../../../Localization/localization";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import { Transform } from "plotly.js-dist";
+import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
+import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
+import { Icon, Text } from "office-ui-fabric-react";
+import { FabricStyles } from "../../FabricStyles";
+import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
 
 export interface IModelPerformanceTabProps {
     chartProps: IGenericChartProps;
@@ -77,7 +77,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
             this.state.selectedCohortIndex,
         );
         const metricsList = this.generateMetrics().reverse();
-        const height = Math.max(400, 160 * metricsList.length) + 'px';
+        const height = Math.max(400, 160 * metricsList.length) + "px";
         const cohortOptions: IDropdownOption[] =
             this.props.chartProps.yAxis.property !== Cohort.CohortKey
                 ? this.props.cohorts.map((cohort, index) => {
@@ -223,7 +223,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
         );
     }
 
-    private setSelectedCohort(event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSelectedCohort(_: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
         this.setState({ selectedCohortIndex: item.key as number });
     }
 
@@ -265,7 +265,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
     private generateDefaultChartAxes(): void {
         let bestModelMetricKey: string;
         if (this.props.metadata.modelType === ModelTypes.binary && this.props.jointDataset.hasPredictedProbabilities) {
-            bestModelMetricKey = JointDataset.ProbabilityYRoot + '0';
+            bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
         } else if (this.props.metadata.modelType === ModelTypes.regression) {
             if (this.props.jointDataset.hasPredictedY && this.props.jointDataset.hasTrueY) {
                 bestModelMetricKey = JointDataset.RegressionError;
@@ -313,7 +313,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
                     t: 25,
                     b: 20,
                 },
-                hovermode: 'closest',
+                hovermode: "closest",
                 showlegend: false,
                 yaxis: {
                     automargin: true,
@@ -325,7 +325,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
                     showline: true,
                 },
                 xaxis: {
-                    side: 'bottom',
+                    side: "bottom",
                     mirror: true,
                     color: FabricStyles.chartAxisColor,
                     tickfont: {
@@ -334,7 +334,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
                     },
                     showline: true,
                     showgrid: true,
-                    gridcolor: '#e5e5e5',
+                    gridcolor: "#e5e5e5",
                 },
             } as any,
         };
@@ -365,48 +365,48 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
             rawY = cohort.unwrap(chartProps.yAxis.property, true);
             rawX = cohort.unwrap(chartProps.xAxis.property, chartProps.chartType === ChartTypes.Histogram);
             yLabels = yMeta.sortedCategoricalValues;
-            yLabelIndexes = yLabels.map((unused, index) => index);
+            yLabelIndexes = yLabels.map((_, index) => index);
         }
 
         // The bounding box for the labels on y axis are too small, add some white space as buffer
-        yLabels = yLabels.map((val) => {
+        yLabels = yLabels.map(val => {
             const len = val.length;
-            let result = ' ';
+            let result = " ";
             for (let i = 0; i < len; i += 5) {
-                result += ' ';
+                result += " ";
             }
             return result + val;
         });
-        plotlyProps.data[0].hoverinfo = 'all';
-        plotlyProps.data[0].orientation = 'h';
+        plotlyProps.data[0].hoverinfo = "all";
+        plotlyProps.data[0].orientation = "h";
         switch (chartProps.chartType) {
             case ChartTypes.Box: {
                 // Uncomment to turn off tooltips on box plots
                 // plotlyProps.layout.hovermode = false;
-                plotlyProps.data[0].type = 'box' as any;
+                plotlyProps.data[0].type = "box" as any;
                 plotlyProps.data[0].x = rawX;
                 plotlyProps.data[0].y = rawY;
                 plotlyProps.data[0].marker = {
                     color: FabricStyles.fabricColorPalette[0],
                 };
-                _.set(plotlyProps, 'layout.yaxis.ticktext', yLabels);
-                _.set(plotlyProps, 'layout.yaxis.tickvals', yLabelIndexes);
+                _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
+                _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
                 break;
             }
             case ChartTypes.Histogram: {
                 // for now, treat all bar charts as histograms, the issue with plotly implemented histogram is
                 // it tries to bin the data passed to it(we'd like to apply the user specified bins.)
                 // We also use the selected Y property as the series prop, since all histograms will just be a count.
-                plotlyProps.data[0].type = 'bar';
+                plotlyProps.data[0].type = "bar";
                 const x = new Array(rawY.length).fill(1);
-                plotlyProps.data[0].text = rawY.map((index) => yLabels[index]);
-                plotlyProps.data[0].hoverinfo = 'all';
+                plotlyProps.data[0].text = rawY.map(index => yLabels[index]);
+                plotlyProps.data[0].hoverinfo = "all";
                 plotlyProps.data[0].hovertemplate = ` ${yAxisName}:%{y}<br> ${localization.Charts.count}: %{x}<br>`;
                 plotlyProps.data[0].y = rawY;
                 plotlyProps.data[0].x = x;
                 plotlyProps.data[0].marker = {};
-                _.set(plotlyProps, 'layout.yaxis.ticktext', yLabels);
-                _.set(plotlyProps, 'layout.yaxis.tickvals', yLabelIndexes);
+                _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
+                _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
                 const styles = jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues.map(
                     (label, index) => {
                         return {
@@ -422,12 +422,12 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
                 );
                 const transforms: Partial<Transform>[] = [
                     {
-                        type: 'aggregate',
+                        type: "aggregate",
                         groups: rawY,
-                        aggregations: [{ target: 'x', func: 'sum' }],
+                        aggregations: [{ target: "x", func: "sum" }],
                     },
                     {
-                        type: 'groupby',
+                        type: "groupby",
                         groups: rawX,
                         styles,
                     },
@@ -442,7 +442,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
 
     private generateMetrics(): ILabeledStatistic[][] {
         if (this.props.chartProps.yAxis.property === Cohort.CohortKey) {
-            const indexes = this.props.cohorts.map((cohort) => cohort.unwrap(JointDataset.IndexLabel));
+            const indexes = this.props.cohorts.map(cohort => cohort.unwrap(JointDataset.IndexLabel));
             return generateMetrics(this.props.jointDataset, indexes, this.props.metadata.modelType);
         } else {
             const cohort = this.props.cohorts[this.state.selectedCohortIndex];
@@ -450,8 +450,8 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
             const indexArray = cohort.unwrap(JointDataset.IndexLabel);
             const sortedCategoricalValues = this.props.jointDataset.metaDict[this.props.chartProps.yAxis.property]
                 .sortedCategoricalValues;
-            const indexes = sortedCategoricalValues.map((label, labelIndex) => {
-                return indexArray.filter((unused, index) => {
+            const indexes = sortedCategoricalValues.map((_, labelIndex) => {
+                return indexArray.filter((_, index) => {
                     return yValues[index] === labelIndex;
                 });
             });

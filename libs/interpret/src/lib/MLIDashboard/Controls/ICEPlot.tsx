@@ -1,18 +1,25 @@
-import _ from 'lodash';
-import * as memoize from 'memoize-one';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Data } from 'plotly.js-dist';
-import React from 'react';
-import { AccessibleChart, ICategoricalRange, INumericRange, IPlotlyProperty, PlotlyMode, RangeTypes } from 'mlchartlib';
-import { localization } from '../../Localization/localization';
-import { FabricStyles } from '../FabricStyles';
-import { IExplanationContext, ModelTypes } from '../IExplanationContext';
-import { ModelExplanationUtils } from '../ModelExplanationUtils';
-import { NoDataMessage } from '../SharedComponents';
-import { HelpMessageDict } from '../Interfaces/IStringsParam';
-require('./ICEPlot.css');
+import _ from "lodash";
+import * as memoize from "memoize-one";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { Data } from "plotly.js-dist";
+import React from "react";
+import {
+    AccessibleChart,
+    ICategoricalRange,
+    INumericRange,
+    IPlotlyProperty,
+    PlotlyMode,
+    RangeTypes,
+} from "@responsible-ai/mlchartlib";
+import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
+import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import { NoDataMessage } from "../SharedComponents";
+import { HelpMessageDict } from "../Interfaces/IStringsParam";
+require("./ICEPlot.css");
 
 export interface IIcePlotProps {
     invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
@@ -70,7 +77,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 : [yData as number[]];
             const data: Data[] = transposedY.map((singleClassValue, classIndex) => {
                 return {
-                    hoverinfo: 'text',
+                    hoverinfo: "text",
                     mode: rangeType === RangeTypes.categorical ? PlotlyMode.markers : PlotlyMode.linesMarkers,
                     text: ICEPlot.buildTextArray(
                         modelType,
@@ -80,7 +87,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                         singleClassValue,
                         classNames[classIndex],
                     ),
-                    type: 'scatter',
+                    type: "scatter",
                     x: xData,
                     y: singleClassValue,
                     name: classNames[classIndex],
@@ -99,7 +106,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                         t: 10,
                         b: 30,
                     },
-                    hovermode: 'closest',
+                    hovermode: "closest",
                     showlegend: transposedY.length > 1,
                     yaxis: {
                         automargin: true,
@@ -156,7 +163,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 );
             }
 
-            return result.join('<br>');
+            return result.join("<br>");
         });
     }
 
@@ -169,7 +176,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             this.featuresOption = ModelExplanationUtils.buildSortedVector(
                 props.explanationContext.localExplanation.values[this.props.datapointIndex],
             )
-                .map((featureIndex) => {
+                .map(featureIndex => {
                     return {
                         key: featureIndex,
                         text: props.explanationContext.modelMetadata.featureNames[featureIndex],
@@ -327,7 +334,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 return {
                     featureIndex,
                     selectedOptionKeys: summary.uniqueValues,
-                    categoricalOptions: summary.uniqueValues.map((text) => {
+                    categoricalOptions: summary.uniqueValues.map(text => {
                         return { key: text, text };
                     }),
                     type: RangeTypes.categorical,
@@ -345,7 +352,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
     }
 
-    private onFeatureSelected(event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
+    private onFeatureSelected(_event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
         if (this.props.invokeModel === undefined) {
             return;
         }
@@ -354,7 +361,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         });
     }
 
-    private onMinRangeChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMinRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state.rangeView);
         rangeView.min = +newValue;
@@ -372,7 +379,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
     }
 
-    private onMaxRangeChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMaxRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state.rangeView);
         rangeView.max = +newValue;
@@ -390,7 +397,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
     }
 
-    private onStepsRangeChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onStepsRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state.rangeView);
         rangeView.steps = +newValue;
@@ -406,9 +413,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     }
 
     private onCategoricalRangeChanged(
-        event: React.FormEvent<IComboBox>,
+        _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
-        index?: number,
+        _index?: number,
         value?: string,
     ): void {
         const rangeView = _.cloneDeep(this.state.rangeView);
@@ -462,10 +469,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                         this.setState({ fetchedData, abortController: undefined });
                     }
                 } catch (err) {
-                    if (err.name === 'AbortError') {
+                    if (err.name === "AbortError") {
                         return;
                     }
-                    if (err.name === 'PythonError') {
+                    if (err.name === "PythonError") {
                         this.setState({
                             errorMessage: localization.formatString(
                                 localization.IcePlot.errorPrefix,
@@ -499,7 +506,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         } else if (!Number.isNaN(min) && !Number.isNaN(max) && Number.isInteger(steps)) {
             const delta = steps > 0 ? (max - min) / steps : max - min;
             return _.uniq(
-                Array.from({ length: steps }, (x, i) =>
+                Array.from({ length: steps }, (_x, i) =>
                     this.state.rangeView.type === RangeTypes.integer ? Math.round(min + i * delta) : min + i * delta,
                 ),
             );
@@ -510,7 +517,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
 
     private buildDataSpans(): Array<number | string>[] {
         const selectedRow = this.props.explanationContext.testDataset.dataset[this.props.datapointIndex];
-        return this.buildRange().map((val) => {
+        return this.buildRange().map(val => {
             const copy = _.cloneDeep(selectedRow);
             copy[this.state.rangeView.featureIndex] = val;
             return copy;

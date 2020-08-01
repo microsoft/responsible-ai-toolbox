@@ -19,6 +19,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowUnusedLabels": false,
+        "resolveJsonModule": true,
         "paths": {
             "@responsible-ai/interpret": ["libs/interpret/src/index.ts"],
             "@responsible-ai/fairlearn": ["libs/fairlearn/src/index.ts"],

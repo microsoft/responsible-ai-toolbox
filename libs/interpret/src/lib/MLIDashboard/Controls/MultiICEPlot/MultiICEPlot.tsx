@@ -1,18 +1,17 @@
-import React from 'react';
-import { JointDataset } from '../../JointDataset';
-import { IRangeView } from '../ICEPlot';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import _ from 'lodash';
-import { IPlotlyProperty, RangeTypes, AccessibleChart, PlotlyMode } from 'mlchartlib';
-import { IComboBox, IComboBoxOption, ComboBox } from 'office-ui-fabric-react/lib/ComboBox';
-import { localization } from '../../../Localization/localization';
-import { NoDataMessage } from '../../SharedComponents';
-import { ModelTypes, IExplanationModelMetadata } from '../../IExplanationContext';
-import { FabricStyles } from '../../FabricStyles';
-import { Data } from 'plotly.js-dist';
-import { ModelExplanationUtils } from '../../ModelExplanationUtils';
-import { SpinButton, Text, getTheme } from 'office-ui-fabric-react';
-import { multiIcePlotStyles } from './MultiICEPlot.styles';
+import React from "react";
+import { JointDataset } from "../../JointDataset";
+import { IRangeView } from "../ICEPlot";
+import _ from "lodash";
+import { IPlotlyProperty, RangeTypes, AccessibleChart, PlotlyMode } from "@responsible-ai/mlchartlib";
+import { IComboBox, IComboBoxOption, ComboBox } from "office-ui-fabric-react/lib/ComboBox";
+import { localization } from "../../../Localization/localization";
+import { NoDataMessage } from "../../SharedComponents";
+import { ModelTypes, IExplanationModelMetadata } from "../../IExplanationContext";
+import { FabricStyles } from "../../FabricStyles";
+import { Data } from "plotly.js-dist";
+import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { SpinButton, Text, getTheme } from "office-ui-fabric-react";
+import { multiIcePlotStyles } from "./MultiICEPlot.styles";
 
 export interface IMultiICEPlotProps {
     invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
@@ -40,7 +39,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
         }
         return (
             localization.IcePlot.predictedProbability +
-            '<br>' +
+            "<br>" +
             localization.formatString(localization.WhatIfTab.classLabel, metadata.classNames[selectedClass])
         );
     }
@@ -54,12 +53,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
         xData?: Array<number | string>,
         yData?: number[][] | number[][][],
     ): IPlotlyProperty | undefined {
-        if (
-            yData === undefined ||
-            xData === undefined ||
-            yData.length === 0 ||
-            yData.some((row) => row === undefined)
-        ) {
+        if (yData === undefined || xData === undefined || yData.length === 0 || yData.some(row => row === undefined)) {
             return undefined;
         }
         const data: Data[] = (yData as number[][][]).map((singleRow, rowIndex) => {
@@ -69,20 +63,20 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
             const predictionLabel =
                 metadata.modelType === ModelTypes.regression
                     ? localization.IcePlot.prediction
-                    : localization.IcePlot.predictedProbability + ': ' + metadata.classNames[selectedClass];
+                    : localization.IcePlot.predictedProbability + ": " + metadata.classNames[selectedClass];
             const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
             return {
                 mode: rangeType === RangeTypes.categorical ? PlotlyMode.markers : PlotlyMode.linesMarkers,
-                type: 'scatter',
+                type: "scatter",
                 hovertemplate,
-                hoverinfo: 'all',
+                hoverinfo: "all",
                 x: xData,
                 y: transposedY[selectedClass],
                 marker: {
                     color: colors[rowIndex],
                 },
                 name: rowNames[rowIndex],
-                customdata: transposedY[selectedClass].map((predY) => {
+                customdata: transposedY[selectedClass].map(predY => {
                     return {
                         Name: rowNames[rowIndex],
                         Yformatted: predY.toLocaleString(undefined, { maximumFractionDigits: 3 }),
@@ -104,7 +98,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
                     b: 30,
                     r: 10,
                 },
-                hovermode: 'closest',
+                hovermode: "closest",
                 showlegend: false,
                 yaxis: {
                     automargin: true,
@@ -150,7 +144,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
     }
 
     public componentWillUnmount(): void {
-        this.state.abortControllers.forEach((abortController) => {
+        this.state.abortControllers.forEach(abortController => {
             if (abortController !== undefined) {
                 abortController.abort();
             }
@@ -162,7 +156,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
             return <NoDataMessage />;
         } else {
             const classNames = multiIcePlotStyles();
-            const hasOutgoingRequest = this.state.abortControllers.some((x) => x !== undefined);
+            const hasOutgoingRequest = this.state.abortControllers.some(x => x !== undefined);
             const plotlyProps = MultiICEPlot.buildPlotlyProps(
                 this.props.metadata,
                 this.props.jointDataset.metaDict[this.props.feature].label,
@@ -198,14 +192,14 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
                                 <div className={classNames.parameterList}>
                                     <SpinButton
                                         styles={{
-                                            spinButtonWrapper: { maxWidth: '68px' },
-                                            labelWrapper: { alignSelf: 'center' },
+                                            spinButtonWrapper: { maxWidth: "68px" },
+                                            labelWrapper: { alignSelf: "center" },
                                             root: {
-                                                display: 'inline-flex',
-                                                float: 'right',
+                                                display: "inline-flex",
+                                                float: "right",
                                                 selectors: {
-                                                    '> div': {
-                                                        maxWidth: '78px',
+                                                    "> div": {
+                                                        maxWidth: "78px",
                                                     },
                                                 },
                                             },
@@ -218,14 +212,14 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
                                     />
                                     <SpinButton
                                         styles={{
-                                            spinButtonWrapper: { maxWidth: '68px' },
-                                            labelWrapper: { alignSelf: 'center' },
+                                            spinButtonWrapper: { maxWidth: "68px" },
+                                            labelWrapper: { alignSelf: "center" },
                                             root: {
-                                                display: 'inline-flex',
-                                                float: 'right',
+                                                display: "inline-flex",
+                                                float: "right",
                                                 selectors: {
-                                                    '> div': {
-                                                        maxWidth: '78px',
+                                                    "> div": {
+                                                        maxWidth: "78px",
                                                     },
                                                 },
                                             },
@@ -238,14 +232,14 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
                                     />
                                     <SpinButton
                                         styles={{
-                                            spinButtonWrapper: { maxWidth: '68px' },
-                                            labelWrapper: { alignSelf: 'center' },
+                                            spinButtonWrapper: { maxWidth: "68px" },
+                                            labelWrapper: { alignSelf: "center" },
                                             root: {
-                                                display: 'inline-flex',
-                                                float: 'right',
+                                                display: "inline-flex",
+                                                float: "right",
                                                 selectors: {
-                                                    '> div': {
-                                                        maxWidth: '78px',
+                                                    "> div": {
+                                                        maxWidth: "78px",
                                                     },
                                                 },
                                             },
@@ -359,9 +353,9 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
     }
 
     private onCategoricalRangeChanged(
-        event: React.FormEvent<IComboBox>,
+        _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
-        index?: number,
+        _index?: number,
         value?: string,
     ): void {
         const rangeView = _.cloneDeep(this.state.rangeView);
@@ -396,7 +390,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
     };
 
     private fetchData(): void {
-        this.state.abortControllers.forEach((abortController) => {
+        this.state.abortControllers.forEach(abortController => {
             if (abortController !== undefined) {
                 abortController.abort();
             }
@@ -407,22 +401,22 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
             const permutations = this.buildDataSpans(row, this.state.xAxisArray);
             return this.props.invokeModel(permutations, abortController.signal);
         });
-        const yAxes = this.props.datapoints.map((x) => undefined);
+        const yAxes = this.props.datapoints.map(() => undefined);
 
         this.setState({ yAxes, errorMessage: undefined }, async () => {
             try {
                 const fetchedData = await Promise.all(promises);
-                if (Array.isArray(fetchedData) && fetchedData.every((prediction) => Array.isArray(prediction))) {
+                if (Array.isArray(fetchedData) && fetchedData.every(prediction => Array.isArray(prediction))) {
                     this.setState({
                         yAxes: fetchedData,
-                        abortControllers: this.props.datapoints.map((x) => undefined),
+                        abortControllers: this.props.datapoints.map(() => undefined),
                     });
                 }
             } catch (err) {
-                if (err.name === 'AbortError') {
+                if (err.name === "AbortError") {
                     return;
                 }
-                if (err.name === 'PythonError') {
+                if (err.name === "PythonError") {
                     this.setState({
                         errorMessage: localization.formatString(
                             localization.IcePlot.errorPrefix,
@@ -451,7 +445,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
                     key: featureKey,
                     featureIndex: summary.index,
                     selectedOptionKeys: summary.sortedCategoricalValues,
-                    categoricalOptions: summary.sortedCategoricalValues.map((text) => {
+                    categoricalOptions: summary.sortedCategoricalValues.map(text => {
                         return { key: text, text };
                     }),
                     type: RangeTypes.categorical,
@@ -462,8 +456,8 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
             return {
                 key: featureKey,
                 featureIndex: summary.index,
-                selectedOptionKeys: summary.sortedCategoricalValues.map((x) => +x),
-                categoricalOptions: summary.sortedCategoricalValues.map((text) => {
+                selectedOptionKeys: summary.sortedCategoricalValues.map(x => +x),
+                categoricalOptions: summary.sortedCategoricalValues.map(text => {
                     return { key: +text, text: text.toString() };
                 }),
                 type: RangeTypes.categorical,
@@ -498,7 +492,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
         } else if (!Number.isNaN(min) && !Number.isNaN(max) && Number.isInteger(steps)) {
             const delta = steps > 0 ? (max - min) / steps : max - min;
             return _.uniq(
-                Array.from({ length: steps }, (x, i) =>
+                Array.from({ length: steps }, (_, i) =>
                     rangeView.type === RangeTypes.integer ? Math.round(min + i * delta) : min + i * delta,
                 ),
             );

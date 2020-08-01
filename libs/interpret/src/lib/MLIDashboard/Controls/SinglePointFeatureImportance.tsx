@@ -1,19 +1,19 @@
-import React from 'react';
-import { IExplanationContext, ModelTypes } from '../IExplanationContext';
-import { IBarChartConfig, FeatureKeys, FeatureSortingKey } from '../SharedComponents/IBarChartConfig';
-import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { localization } from '../../Localization/localization';
-import _ from 'lodash';
-import { ModelExplanationUtils } from '../ModelExplanationUtils';
-import { BarChart, PredictionLabel, LoadingSpinner, NoDataMessage } from '../SharedComponents';
-import { Slider } from 'office-ui-fabric-react/lib/Slider';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { FabricStyles } from '../FabricStyles';
-import { HelpMessageDict } from '../Interfaces';
+import React from "react";
+import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import { IBarChartConfig, FeatureKeys, FeatureSortingKey } from "../SharedComponents/IBarChartConfig";
+import { IDropdownOption } from "office-ui-fabric-react";
+import { localization } from "../../Localization/localization";
+import _ from "lodash";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import { BarChart, PredictionLabel, LoadingSpinner, NoDataMessage } from "../SharedComponents";
+import { Slider } from "office-ui-fabric-react/lib/Slider";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { FabricStyles } from "../FabricStyles";
+import { HelpMessageDict } from "../Interfaces";
 
-require('./SinglePointFeatureImportance.css');
+require("./SinglePointFeatureImportance.css");
 
-export const LocalBarId = 'local_bar_id';
+export const LocalBarId = "local_bar_id";
 
 export interface ISinglePointFeatureImportanceProps {
     explanationContext: IExplanationContext;
@@ -90,7 +90,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
                                     selectedKey={this.state.selectedSorting}
                                     onChange={this.onSortSelect}
                                     options={this.sortOptions}
-                                    ariaLabel={'sort selector'}
+                                    ariaLabel={"sort selector"}
                                     useComboBoxAsMenuWidth={true}
                                     styles={FabricStyles.smallDropdownStyle}
                                 />
@@ -146,7 +146,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
             this.props.explanationContext.testDataset.predictedY !== undefined &&
             this.props.explanationContext.testDataset.predictedY[this.props.selectedRow] !== 0
         ) {
-            return result.map((classVector) => classVector.map((value) => -1 * value));
+            return result.map(classVector => classVector.map(value => -1 * value));
         }
         return result;
     }
@@ -187,7 +187,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
         this.props.onChange(newConfig, LocalBarId);
     }
 
-    private onSortSelect(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onSortSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         this.setState({ selectedSorting: item.key as any });
     }
 }

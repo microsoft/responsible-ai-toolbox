@@ -1,11 +1,11 @@
-import React from 'react';
-import * as memoize from 'memoize-one';
-import _ from 'lodash';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { IExplanationContext, IMultiClassBoundedCoordinates } from '../IExplanationContext';
-import { AccessibleChart, IPlotlyProperty, IData, PlotlyMode } from 'mlchartlib';
-import { localization } from '../../Localization/localization';
-import { FabricStyles } from '../FabricStyles';
+import React from "react";
+import * as memoize from "memoize-one";
+import _ from "lodash";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IExplanationContext, IMultiClassBoundedCoordinates } from "../IExplanationContext";
+import { AccessibleChart, IPlotlyProperty, IData, PlotlyMode } from "@responsible-ai/mlchartlib";
+import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
 
 export interface IEbmProps {
     explanationContext: IExplanationContext;
@@ -20,30 +20,27 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     private static buildCategoricalSeries: (
         coordinates: IMultiClassBoundedCoordinates,
         classes: string[],
-    ) => IData[] = (memoize as any).default(
-        (coordinates: IMultiClassBoundedCoordinates, classes: string[]): IData[] => {
-            return coordinates.scores.map((scores, classIndex) => {
-                const color = FabricStyles.plotlyColorPalette[classIndex % FabricStyles.plotlyColorPalette.length];
-                return {
-                    orientation: 'v',
-                    type: 'bar',
-                    x: coordinates.names,
-                    y: scores,
-                    error_y: {
-                        type: 'data',
-                        symmetric: false,
-                        array:
-                            coordinates.upperBounds !== undefined
-                                ? coordinates.upperBounds[classIndex].map((upperVal, index) => upperVal - scores[index])
-                                : undefined,
-                        arrayminus: coordinates.lowerBounds
-                            ? coordinates.lowerBounds[classIndex].map((lowerVal, index) => scores[index] - lowerVal)
+    ) => IData[] = (memoize as any).default((coordinates: IMultiClassBoundedCoordinates): IData[] => {
+        return coordinates.scores.map((scores, classIndex) => {
+            return {
+                orientation: "v",
+                type: "bar",
+                x: coordinates.names,
+                y: scores,
+                error_y: {
+                    type: "data",
+                    symmetric: false,
+                    array:
+                        coordinates.upperBounds !== undefined
+                            ? coordinates.upperBounds[classIndex].map((upperVal, index) => upperVal - scores[index])
                             : undefined,
-                    },
-                };
-            });
-        },
-    );
+                    arrayminus: coordinates.lowerBounds
+                        ? coordinates.lowerBounds[classIndex].map((lowerVal, index) => scores[index] - lowerVal)
+                        : undefined,
+                },
+            };
+        });
+    });
 
     private static buildContinuousSeries: (
         coordinates: IMultiClassBoundedCoordinates,
@@ -55,10 +52,10 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                     const color = FabricStyles.plotlyColorPalette[classIndex % FabricStyles.plotlyColorPalette.length];
                     const lowerBounds: IData = {
                         mode: PlotlyMode.lines,
-                        type: 'scatter',
+                        type: "scatter",
                         line: {
-                            shape: 'hv',
-                            color: 'transparent',
+                            shape: "hv",
+                            color: "transparent",
                         },
                         name: classes[classIndex],
                         x: coordinates.names,
@@ -66,11 +63,11 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                     };
                     const centerlineSeries: IData = {
                         mode: PlotlyMode.lines,
-                        type: 'scatter',
-                        fill: 'tonexty',
+                        type: "scatter",
+                        fill: "tonexty",
                         fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
                         line: {
-                            shape: 'hv',
+                            shape: "hv",
                             color: `rgb(${color.r}, ${color.g}, ${color.b})`,
                         },
                         name: classes[classIndex],
@@ -80,12 +77,12 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                     };
                     const upperbounds: IData = {
                         mode: PlotlyMode.lines,
-                        type: 'scatter',
-                        fill: 'tonexty',
+                        type: "scatter",
+                        fill: "tonexty",
                         fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
                         line: {
-                            shape: 'hv',
-                            color: 'transparent',
+                            shape: "hv",
+                            color: "transparent",
                         },
                         name: classes[classIndex],
                         legendgroup: classes[classIndex],
@@ -111,7 +108,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             const isCategorical =
                 (explanationContext.modelMetadata.featureIsCategorical &&
                     explanationContext.modelMetadata.featureIsCategorical[featureIndex]) ||
-                boundedCoordinates.names.some((name) => typeof name === 'string');
+                boundedCoordinates.names.some(name => typeof name === "string");
 
             const data: IData[] = !isCategorical
                 ? EbmExplanation.buildContinuousSeries(
@@ -135,7 +132,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                         t: 10,
                         b: 30,
                     },
-                    hovermode: 'closest',
+                    hovermode: "closest",
                     showlegend: false,
                     yaxis: {
                         automargin: true,
@@ -177,7 +174,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                         selectedKey={this.state.selectedFeature}
                         onChange={this.onFeatureSelect}
                         options={this.featureOptions}
-                        ariaLabel={'feature picker'}
+                        ariaLabel={"feature picker"}
                         useComboBoxAsMenuWidth={true}
                         styles={FabricStyles.smallDropdownStyle}
                     />
@@ -187,7 +184,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
         );
     }
 
-    private onFeatureSelect(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onFeatureSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         this.setState({ selectedFeature: item.key as any });
     }
 }

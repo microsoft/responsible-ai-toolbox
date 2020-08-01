@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import React from 'react';
-import { localization } from '../../Localization/localization';
-import { FeatureEditingTile, PredictionLabel, NoDataMessage } from '../SharedComponents';
-import { ICategoricalRange } from 'mlchartlib';
-import { IExplanationContext } from '../IExplanationContext';
-import { HelpMessageDict } from '../Interfaces';
+import _ from "lodash";
+import React from "react";
+import { localization } from "../../Localization/localization";
+import { FeatureEditingTile, PredictionLabel, NoDataMessage } from "../SharedComponents";
+import { ICategoricalRange } from "@responsible-ai/mlchartlib";
+import { IExplanationContext } from "../IExplanationContext";
+import { HelpMessageDict } from "../Interfaces";
 
-require('./PerturbationExploration.css');
+require("./PerturbationExploration.css");
 
 export interface IPerturbationExplorationProps {
     invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
@@ -62,7 +62,7 @@ export class PerturbationExploration extends React.Component<
             const explanationStrings = this.props.messages ? this.props.messages.PredictorReq : undefined;
             return <NoDataMessage explanationStrings={explanationStrings} />;
         }
-        const hasErrors = this.state.featureErrors.some((val) => val);
+        const hasErrors = this.state.featureErrors.some(val => val);
         return (
             <div className="flex-wrapper">
                 {this.props.explanationContext.testDataset.predictedY !== undefined && (
@@ -154,7 +154,7 @@ export class PerturbationExploration extends React.Component<
             this.state.abortController.abort();
         }
         // skip if there are any errors.
-        if (this.state.featureErrors.some((val) => val)) {
+        if (this.state.featureErrors.some(val => val)) {
             return;
         }
         const data = _.cloneDeep(this.props.explanationContext.testDataset.dataset[this.props.datapointIndex]);
@@ -191,10 +191,10 @@ export class PerturbationExploration extends React.Component<
                     this.setState({ prediction: fetchedData[0], abortController: undefined });
                 }
             } catch (err) {
-                if (err.name === 'AbortError') {
+                if (err.name === "AbortError") {
                     return;
                 }
-                if (err.name === 'PythonError') {
+                if (err.name === "PythonError") {
                     this.setState({
                         errorMessage: localization.formatString(
                             localization.IcePlot.errorPrefix,

@@ -1,32 +1,32 @@
-import React from 'react';
+import React from "react";
 import {
     IExplanationDashboardProps,
     IMultiClassLocalFeatureImportance,
     ISingleClassLocalFeatureImportance,
     TelemetryLevels,
-} from './Interfaces';
-import { JointDataset } from './JointDataset';
-import { ModelMetadata } from 'mlchartlib';
-import { localization } from '../Localization/localization';
-import { IExplanationModelMetadata, ModelTypes } from './IExplanationContext';
-import * as memoize from 'memoize-one';
-import { IPivot, IPivotItemProps, PivotItem, Pivot, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
-import _ from 'lodash';
-import { GlobalExplanationTab, IGlobalBarSettings } from './Controls/GlobalExplanationTab/GlobalExplanationTab';
-import { mergeStyleSets, loadTheme } from 'office-ui-fabric-react/lib/Styling';
-import { ModelExplanationUtils } from './ModelExplanationUtils';
-import { WhatIfTab } from './Controls/WhatIfTab/WhatIfTab';
-import { Cohort } from './Cohort';
-import { initializeIcons } from '@uifabric/icons';
-import { ModelPerformanceTab } from './Controls/ModelPerformanceTab/ModelPerformanceTab';
-import { defaultTheme } from './Themes';
-import { CohortList } from './Controls/CohortList/CohortList';
-import { explanationDashboardStyles } from './NewExplanationDashboard.styles';
-import { DatasetExplorerTab } from './Controls/DatasetExplorerTab/DatasetExplorerTab';
-import { ValidateProperties } from './ValidateProperties';
-import { MessageBar, MessageBarType, Text, Link } from 'office-ui-fabric-react';
-import { CohortEditor, ICohort } from './Controls/CohortEditor/CohortEditor';
-import { WeightVectors, WeightVectorOption } from './IWeightedDropdownContext';
+} from "./Interfaces";
+import { JointDataset } from "./JointDataset";
+import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import { localization } from "../Localization/localization";
+import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
+import * as memoize from "memoize-one";
+import { IPivotItemProps, PivotItem, Pivot, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot";
+import _ from "lodash";
+import { GlobalExplanationTab, IGlobalBarSettings } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
+import { mergeStyleSets, loadTheme } from "office-ui-fabric-react/lib/Styling";
+import { ModelExplanationUtils } from "./ModelExplanationUtils";
+import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
+import { Cohort } from "./Cohort";
+import { initializeIcons } from "@uifabric/icons";
+import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
+import { defaultTheme } from "./Themes";
+import { CohortList } from "./Controls/CohortList/CohortList";
+import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
+import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
+import { ValidateProperties } from "./ValidateProperties";
+import { MessageBar, MessageBarType, Text, Link } from "office-ui-fabric-react";
+import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
+import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
 
 export interface INewExplanationDashboardState {
     cohorts: Cohort[];
@@ -57,10 +57,10 @@ interface IGlobalExplanationProps {
 }
 
 export enum ChartTypes {
-    Scatter = 'scatter',
-    Histogram = 'histogram',
-    Box = 'box',
-    Bar = 'bar',
+    Scatter = "scatter",
+    Histogram = "histogram",
+    Box = "box",
+    Bar = "bar",
 }
 
 export interface IGenericChartProps {
@@ -82,10 +82,10 @@ export interface ISelectorConfig {
 }
 
 enum globalTabKeys {
-    modelPerformance = 'modelPerformance',
-    dataExploration = 'dataExploration',
-    explanationTab = 'explanationTab',
-    whatIfTab = 'whatIfTab',
+    modelPerformance = "modelPerformance",
+    dataExploration = "dataExploration",
+    explanationTab = "explanationTab",
+    whatIfTab = "whatIfTab",
 }
 
 export class NewExplanationDashboard extends React.PureComponent<
@@ -105,7 +105,7 @@ export class NewExplanationDashboard extends React.PureComponent<
 
     private static readonly classNames = mergeStyleSets({
         pivotWrapper: {
-            display: 'contents',
+            display: "contents",
         },
     });
 
@@ -115,10 +115,10 @@ export class NewExplanationDashboard extends React.PureComponent<
         let featureNamesAbridged: string[];
         const maxLength = 18;
         if (featureNames !== undefined) {
-            if (!featureNames.every((name) => typeof name === 'string')) {
-                featureNames = featureNames.map((x) => x.toString());
+            if (!featureNames.every(name => typeof name === "string")) {
+                featureNames = featureNames.map(x => x.toString());
             }
-            featureNamesAbridged = featureNames.map((name) => {
+            featureNamesAbridged = featureNames.map(name => {
                 return name.length <= maxLength ? name : `${name.slice(0, maxLength)}...`;
             });
         } else {
@@ -130,8 +130,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             } else if (props.precomputedExplanations && props.precomputedExplanations.localFeatureImportance) {
                 const localImportances = props.precomputedExplanations.localFeatureImportance.scores;
                 if (
-                    (localImportances as number[][][]).every((dim1) => {
-                        return dim1.every((dim2) => Array.isArray(dim2));
+                    (localImportances as number[][][]).every(dim1 => {
+                        return dim1.every(dim2 => Array.isArray(dim2));
                     })
                 ) {
                     featureLength = (props.precomputedExplanations.localFeatureImportance.scores[0][0] as number[])
@@ -179,8 +179,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             ) {
                 const localImportances = props.precomputedExplanations.localFeatureImportance.scores;
                 if (
-                    (localImportances as number[][][]).every((dim1) => {
-                        return dim1.every((dim2) => Array.isArray(dim2));
+                    (localImportances as number[][][]).every(dim1 => {
+                        return dim1.every(dim2 => Array.isArray(dim2));
                     })
                 ) {
                     return localImportances.length;
@@ -196,7 +196,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             ) {
                 // determine if passed in vaules is 1D or 2D
                 if (
-                    (props.precomputedExplanations.globalFeatureImportance.scores as number[][]).every((dim1) =>
+                    (props.precomputedExplanations.globalFeatureImportance.scores as number[][]).every(dim1 =>
                         Array.isArray(dim1),
                     )
                 ) {
@@ -217,14 +217,12 @@ export class NewExplanationDashboard extends React.PureComponent<
     );
 
     private static buildIndexedNames(length: number, baseString: string): string[] {
-        return Array.from(Array(length).keys()).map(
-            (i) => localization.formatString(baseString, i.toString()) as string,
-        );
+        return Array.from(Array(length).keys()).map(i => localization.formatString(baseString, i.toString()) as string);
     }
 
     private static getModelType(props: IExplanationDashboardProps): ModelTypes {
         // If python gave us a hint, use it
-        if (props.modelInformation.method === 'regressor') {
+        if (props.modelInformation.method === "regressor") {
             return ModelTypes.regression;
         }
         switch (NewExplanationDashboard.getClassLength(props)) {
@@ -246,7 +244,7 @@ export class NewExplanationDashboard extends React.PureComponent<
         ) {
             result.isGlobalImportanceDerivedFromLocal = false;
             if (
-                (props.precomputedExplanations.globalFeatureImportance.scores as number[][]).every((dim1) =>
+                (props.precomputedExplanations.globalFeatureImportance.scores as number[][]).every(dim1 =>
                     Array.isArray(dim1),
                 )
             ) {
@@ -255,7 +253,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     .intercept as number[];
             } else {
                 result.globalImportance = (props.precomputedExplanations.globalFeatureImportance
-                    .scores as number[]).map((value) => [value]);
+                    .scores as number[]).map(value => [value]);
                 result.globalImportanceIntercept = [
                     props.precomputedExplanations.globalFeatureImportance.intercept as number,
                 ];
@@ -292,7 +290,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             props.telemetryHook({
                 message: "Invalid inputs",
                 level: TelemetryLevels.error,
-                context: validationCheck.errorStrings.length
+                context: validationCheck.errorStrings.length,
             });
         }
         return {
@@ -316,7 +314,6 @@ export class NewExplanationDashboard extends React.PureComponent<
     }
 
     private pivotItems: IPivotItemProps[] = [];
-    private pivotRef: IPivot;
     private weightVectorOptions: WeightVectorOption[] = [];
     private weightVectorLabels = {};
     constructor(props: IExplanationDashboardProps) {
@@ -365,7 +362,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     }
 
     render(): React.ReactNode {
-        const cohortIDs = this.state.cohorts.map((cohort) => cohort.getCohortID().toString());
+        const cohortIDs = this.state.cohorts.map(cohort => cohort.getCohortID().toString());
         const classNames = explanationDashboardStyles();
         let cohortForEdit: ICohort;
         if (this.state.editingCohortIndex !== undefined) {
@@ -385,7 +382,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             }
         }
         return (
-            <div className={classNames.page} style={{ maxHeight: '1000px' }}>
+            <div className={classNames.page} style={{ maxHeight: "1000px" }}>
                 {this.state.showingDatasizeWarning && (
                     <MessageBar
                         onDismiss={this.clearSizeWarning}
@@ -408,7 +405,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     >
                         <div>
                             <Text block>{localization.ValidationErrors.errorHeader}</Text>
-                            {this.state.validationWarnings.map((message) => {
+                            {this.state.validationWarnings.map(message => {
                                 return <Text block>{message}</Text>;
                             })}
                         </div>
@@ -435,16 +432,13 @@ export class NewExplanationDashboard extends React.PureComponent<
                 )}
                 <div className={NewExplanationDashboard.classNames.pivotWrapper}>
                     <Pivot
-                        componentRef={(ref) => {
-                            this.pivotRef = ref;
-                        }}
                         selectedKey={this.state.activeGlobalTab}
                         onLinkClick={this.handleGlobalTabClick}
                         linkSize={PivotLinkSize.normal}
                         headersOnly={true}
                         styles={{ root: classNames.pivotLabelWrapper }}
                     >
-                        {this.pivotItems.map((props) => (
+                        {this.pivotItems.map(props => (
                             <PivotItem key={props.itemKey} {...props} />
                         ))}
                     </Pivot>
@@ -563,7 +557,7 @@ export class NewExplanationDashboard extends React.PureComponent<
 
     private onWeightVectorChange(weightOption: WeightVectorOption): void {
         this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
-        this.state.cohorts.forEach((cohort) => cohort.clearCachedImportances());
+        this.state.cohorts.forEach(cohort => cohort.clearCachedImportances());
         this.setState({ selectedWeightVector: weightOption });
     }
 

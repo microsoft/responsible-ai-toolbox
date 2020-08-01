@@ -1,10 +1,10 @@
-import { IModelMetadata } from 'mlchartlib';
-import { JointDataset } from './JointDataset';
+import { IModelMetadata } from "@responsible-ai/mlchartlib";
+import { JointDataset } from "./JointDataset";
 
 export enum ModelTypes {
-    regression = 'regression',
-    binary = 'binary',
-    multiclass = 'multiclass',
+    regression = "regression",
+    binary = "binary",
+    multiclass = "multiclass",
 }
 
 export interface IExplanationContext {
@@ -49,7 +49,7 @@ export interface IMultiClassBoundedCoordinates {
 export interface IFeatureValueExplanation {
     featureList: IMultiClassBoundedCoordinates[];
     displayParameters?: {
-        interpolation?: 'vh' | 'other';
+        interpolation?: "vh" | "other";
         yAxisLabel?: string;
         xAxisLabel?: string;
     };

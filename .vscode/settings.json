@@ -21,10 +21,14 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "cSpell.words": [
+        "Importances",
         "Parens",
         "Plotly",
         "Unmount",
+        "cssmodule",
         "jmespath",
+        "mlchartlib",
+        "nrwl",
         "relayout",
         "uifabric"
     ]

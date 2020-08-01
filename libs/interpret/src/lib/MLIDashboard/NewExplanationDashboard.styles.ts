@@ -1,4 +1,4 @@
-import { IStyle, mergeStyleSets, IProcessedStyleSet, ITheme, getTheme } from 'office-ui-fabric-react';
+import { IStyle, mergeStyleSets, IProcessedStyleSet, getTheme } from "office-ui-fabric-react";
 
 export interface IExplanationDashboardStyles {
     pivotLabelWrapper: IStyle;
@@ -9,13 +9,13 @@ export const explanationDashboardStyles: () => IProcessedStyleSet<IExplanationDa
     const theme = getTheme();
     return mergeStyleSets<IExplanationDashboardStyles>({
         pivotLabelWrapper: {
-            justifyContent: 'space-between',
-            display: 'flex',
-            flexDirection: 'row',
-            padding: '0 30px',
+            justifyContent: "space-between",
+            display: "flex",
+            flexDirection: "row",
+            padding: "0 30px",
         },
         page: {
-            maxHeight: '1000px',
+            maxHeight: "1000px",
             backgroundColor: theme.semanticColors.bodyBackground,
             color: theme.semanticColors.bodyText,
         },

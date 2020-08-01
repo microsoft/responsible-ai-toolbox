@@ -1,11 +1,10 @@
-import { IExplanationModelMetadata, ModelTypes } from './IExplanationContext';
-import { INumericRange, ICategoricalRange, RangeTypes } from 'mlchartlib';
-import { localization } from '../Localization/localization';
-import { IFilter, FilterMethods } from './Interfaces/IFilter';
-import _ from 'lodash';
-import { IMultiClassLocalFeatureImportance, ISingleClassLocalFeatureImportance } from './Interfaces';
-import { WeightVectors, WeightVectorOption } from './IWeightedDropdownContext';
-import { Cohort } from './Cohort';
+import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
+import { INumericRange, ICategoricalRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import { localization } from "../Localization/localization";
+import _ from "lodash";
+import { IMultiClassLocalFeatureImportance, ISingleClassLocalFeatureImportance } from "./Interfaces";
+import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { Cohort } from "./Cohort";
 
 export interface IJointDatasetArgs {
     dataset?: any[][];
@@ -17,12 +16,12 @@ export interface IJointDatasetArgs {
 }
 
 export enum ColumnCategories {
-    outcome = 'outcome',
-    dataset = 'dataset',
-    index = 'index',
-    explanation = 'explanation',
-    cohort = 'cohort',
-    none = 'none',
+    outcome = "outcome",
+    dataset = "dataset",
+    index = "index",
+    explanation = "explanation",
+    cohort = "cohort",
+    none = "none",
 }
 
 export enum ClassificationEnum {
@@ -53,18 +52,18 @@ export interface IJointMeta {
 // projection should create a copy of values.
 //
 export class JointDataset {
-    public static readonly IndexLabel = 'Index';
-    public static readonly DataLabelRoot = 'Data';
-    public static readonly PredictedYLabel = 'PredictedY';
-    public static readonly ProbabilityYRoot = 'ProbabilityClass';
-    public static readonly TrueYLabel = 'TrueY';
-    public static readonly DitherLabel = 'Dither';
-    public static readonly DitherLabel2 = 'Dither2';
-    public static readonly ClassificationError = 'ClassificationError';
-    public static readonly RegressionError = 'RegressionError';
-    public static readonly ReducedLocalImportanceRoot = 'LocalImportance';
-    public static readonly ReducedLocalImportanceIntercept = 'LocalImportanceIntercept';
-    public static readonly ReducedLocalImportanceSortIndexRoot = 'LocalImportanceSortIndex';
+    public static readonly IndexLabel = "Index";
+    public static readonly DataLabelRoot = "Data";
+    public static readonly PredictedYLabel = "PredictedY";
+    public static readonly ProbabilityYRoot = "ProbabilityClass";
+    public static readonly TrueYLabel = "TrueY";
+    public static readonly DitherLabel = "Dither";
+    public static readonly DitherLabel2 = "Dither2";
+    public static readonly ClassificationError = "ClassificationError";
+    public static readonly RegressionError = "RegressionError";
+    public static readonly ReducedLocalImportanceRoot = "LocalImportance";
+    public static readonly ReducedLocalImportanceIntercept = "LocalImportanceIntercept";
+    public static readonly ReducedLocalImportanceSortIndexRoot = "LocalImportanceSortIndex";
 
     public hasDataset = false;
     public hasLocalExplanations = false;
@@ -96,12 +95,12 @@ export class JointDataset {
     // datasource as initially envisioned but an array of them, all build off of the true datasource
     public static unwrap(dataset: Array<{ [key: string]: any }>, key: string, binVector?: number[]): any[] {
         if (binVector) {
-            return dataset.map((row) => {
+            return dataset.map(row => {
                 const rowValue = row[key];
-                return binVector.findIndex((upperLimit) => upperLimit >= rowValue);
+                return binVector.findIndex(upperLimit => upperLimit >= rowValue);
             });
         }
-        return dataset.map((row) => row[key]);
+        return dataset.map(row => row[key]);
     }
 
     // recover the array representation of just the eval dataset values from a row
@@ -165,7 +164,7 @@ export class JointDataset {
             this.datasetRowCount = args.dataset.length;
             this.datasetFeatureCount = args.dataset[0].length;
             // first set metadata
-            args.dataset[0].forEach((unused, colIndex) => {
+            args.dataset[0].forEach((_, colIndex) => {
                 const key = JointDataset.DataLabelRoot + colIndex.toString();
                 if (args.metadata.featureIsCategorical[colIndex]) {
                     const sortedUnique = (args.metadata.featureRanges[colIndex] as ICategoricalRange).uniqueValues
@@ -241,7 +240,7 @@ export class JointDataset {
                         localization.ExplanationScatter.probabilityLabel,
                         className,
                     ) as string;
-                    const projection = args.predictedProbabilities.map((row) => row[classIndex]);
+                    const projection = args.predictedProbabilities.map(row => row[classIndex]);
                     this.metaDict[JointDataset.ProbabilityYRoot + classIndex.toString()] = {
                         label,
                         abbridgedLabel: label,
@@ -285,12 +284,12 @@ export class JointDataset {
         }
         // include error columns if applicable
         if (this.hasPredictedY && this.hasTrueY) {
-            this.dataDict.forEach((row) => {
+            this.dataDict.forEach(row => {
                 JointDataset.setErrorMetrics(row, this._modelMeta.modelType);
             });
             // Set appropriate metadata
             if (args.metadata.modelType === ModelTypes.regression) {
-                const regressionErrorArray = this.dataDict.map((row) => row[JointDataset.RegressionError]);
+                const regressionErrorArray = this.dataDict.map(row => row[JointDataset.RegressionError]);
                 this.metaDict[JointDataset.RegressionError] = {
                     label: localization.Columns.regressionError,
                     abbridgedLabel: localization.Columns.error,
@@ -348,11 +347,11 @@ export class JointDataset {
         const metadata = this.metaDict[key];
         metadata.treatAsCategorical = value;
         if (value) {
-            const values = this.dataDict.map((row) => row[key]);
+            const values = this.dataDict.map(row => row[key]);
             const sortedUniqueValues = _.uniq(values).sort((a, b) => {
                 return a - b;
             });
-            metadata.sortedCategoricalValues = sortedUniqueValues.map((num) => num.toString()) as string[];
+            metadata.sortedCategoricalValues = sortedUniqueValues.map(num => num.toString()) as string[];
             this.dataDict.forEach((row, rowIndex) => {
                 const numVal = row[key];
                 row[key] = sortedUniqueValues.indexOf(numVal);
@@ -372,7 +371,7 @@ export class JointDataset {
         // use filtered data for user provided binCount
         if (binCount === undefined) {
             if (meta.featureRange.rangeType === RangeTypes.integer) {
-                const uniqueValues = _.uniq(this.dataDict.map((row) => row[key]));
+                const uniqueValues = _.uniq(this.dataDict.map(row => row[key]));
                 binCount = Math.min(5, uniqueValues.length);
             }
             if (binCount === undefined) {
@@ -388,11 +387,11 @@ export class JointDataset {
         // make uniform bins in these cases
         if (meta.featureRange.rangeType === RangeTypes.numeric || delta < binCount - 1) {
             const binDelta = delta / binCount;
-            const array = new Array(binCount).fill(0).map((unused, index) => {
+            const array = new Array(binCount).fill(0).map((_, index) => {
                 return index !== binCount - 1 ? meta.featureRange.min + binDelta * (1 + index) : meta.featureRange.max;
             });
             let prevMax = meta.featureRange.min;
-            const labelArray = array.map((num) => {
+            const labelArray = array.map(num => {
                 const label = `${prevMax.toLocaleString(undefined, {
                     maximumSignificantDigits: 3,
                 })} - ${num.toLocaleString(undefined, { maximumSignificantDigits: 3 })}`;
@@ -405,14 +404,14 @@ export class JointDataset {
         }
         // handle integer case, increment delta since we include the ends as discrete values
         const intDelta = delta / binCount;
-        const array = new Array(binCount).fill(0).map((unused, index) => {
+        const array = new Array(binCount).fill(0).map((_, index) => {
             if (index === binCount - 1) {
                 return meta.featureRange.max;
             }
             return Math.ceil(meta.featureRange.min - 1 + intDelta * (index + 1));
         });
         let previousVal = meta.featureRange.min;
-        const labelArray = array.map((num) => {
+        const labelArray = array.map(num => {
             const label =
                 previousVal === num
                     ? previousVal.toLocaleString(undefined, { maximumSignificantDigits: 3 })
@@ -432,18 +431,18 @@ export class JointDataset {
         }
         if (this.dataDict !== undefined) {
             if (this.dataDict.length !== arr.length) {
-                throw new Error('Differing length inputs. Ensure data matches explanations and predictions.');
+                throw new Error("Differing length inputs. Ensure data matches explanations and predictions.");
             }
             return;
         }
-        this.dataDict = Array.from({ length: arr.length } as any).map((unused, index) => {
+        this.dataDict = Array.from({ length: arr.length } as any).map((_, index) => {
             const dict = {};
             dict[JointDataset.IndexLabel] = index;
             dict[JointDataset.DitherLabel] = 2 * this.ditherScale * Math.random() - this.ditherScale;
             dict[JointDataset.DitherLabel2] = 2 * this.ditherScale * Math.random() - this.ditherScale;
             return dict;
         });
-        this.numericValuedColumsCache = Array.from({ length: arr.length } as any).map((unused, index) => {
+        this.numericValuedColumsCache = Array.from({ length: arr.length } as any).map(() => {
             return {};
         });
         this.metaDict[JointDataset.IndexLabel] = {
@@ -531,7 +530,7 @@ export class JointDataset {
                 });
             }
         }
-        this.rawLocalImportance[0].forEach((classArray, featureIndex) => {
+        this.rawLocalImportance[0].forEach((_classArray, featureIndex) => {
             const featureLabel = this._modelMeta.featureNames[featureIndex];
             const key = JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
             this.metaDict[key] = {
@@ -555,12 +554,12 @@ export class JointDataset {
     ): number[][][] {
         switch (modelType) {
             case ModelTypes.regression: {
-                return (localExplanationRaw as number[][]).map((featureArray) => featureArray.map((val) => [val]));
+                return (localExplanationRaw as number[][]).map(featureArray => featureArray.map(val => [val]));
             }
             case ModelTypes.binary: {
                 return JointDataset.transposeLocalImportanceMatrix(
                     localExplanationRaw as number[][][],
-                ).map((featuresByClasses) => featuresByClasses.map((classArray) => classArray.slice(0, 1)));
+                ).map(featuresByClasses => featuresByClasses.map(classArray => classArray.slice(0, 1)));
             }
             case ModelTypes.multiclass: {
                 return JointDataset.transposeLocalImportanceMatrix(localExplanationRaw as number[][][]);
@@ -574,10 +573,10 @@ export class JointDataset {
         const numFeatures = input[0][0].length;
         const result: number[][][] = Array(numRows)
             .fill(0)
-            .map((r) =>
+            .map(() =>
                 Array(numFeatures)
                     .fill(0)
-                    .map((f) => Array(numClasses).fill(0)),
+                    .map(() => Array(numClasses).fill(0)),
             );
         input.forEach((rowByFeature, classIndex) => {
             rowByFeature.forEach((featureArray, rowIndex) => {
