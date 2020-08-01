@@ -1,1 +1,2 @@
-export * from './lib/fairlearn';
+export * from "./lib/FairnessWizard";
+export * from "./lib/IFairnessProps";
