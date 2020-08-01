@@ -1,20 +1,20 @@
-import _ from 'lodash';
-import { RangeTypes } from 'mlchartlib';
-import { Text, IProcessedStyleSet } from 'office-ui-fabric-react';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Callout, Target, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { DetailsList, Selection, SelectionMode, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
-import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
-import React from 'react';
-import { localization } from '../../../Localization/localization';
-import { Cohort } from '../../Cohort';
-import { ColumnCategories, IJointMeta, JointDataset } from '../../JointDataset';
-import { ISelectorConfig } from '../../NewExplanationDashboard';
-import { axisControlCallout, axisControlDialogStyles, IAxisControlDialogStyles } from './AxisConfigDialog.styles';
-import { FabricStyles } from '../../FabricStyles';
+import _ from "lodash";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { Text, IProcessedStyleSet } from "office-ui-fabric-react";
+import { PrimaryButton } from "office-ui-fabric-react/lib/Button";
+import { Callout, Target, DirectionalHint } from "office-ui-fabric-react/lib/Callout";
+import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { DetailsList, Selection, SelectionMode, CheckboxVisibility } from "office-ui-fabric-react/lib/DetailsList";
+import { SpinButton } from "office-ui-fabric-react/lib/SpinButton";
+import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+import React from "react";
+import { localization } from "../../../Localization/localization";
+import { Cohort } from "../../Cohort";
+import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { axisControlCallout, axisControlDialogStyles, IAxisControlDialogStyles } from "./AxisConfigDialog.styles";
+import { FabricStyles } from "../../FabricStyles";
 
 export interface IAxisConfigProps {
     jointDataset: JointDataset;
@@ -52,7 +52,7 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
         JointDataset.ProbabilityYRoot,
         ColumnCategories.none,
     ]
-        .map((key) => {
+        .map(key => {
             const metaVal = this.props.jointDataset.metaDict[key];
             if (
                 key === JointDataset.DataLabelRoot &&
@@ -74,17 +74,17 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
 
             return { key, title: metaVal.abbridgedLabel };
         })
-        .filter((obj) => obj !== undefined);
+        .filter(obj => obj !== undefined);
 
     private readonly dataArray: IComboBoxOption[] = new Array(this.props.jointDataset.datasetFeatureCount)
         .fill(0)
-        .map((unused, index) => {
+        .map((_, index) => {
             const key = JointDataset.DataLabelRoot + index.toString();
             return { key, text: this.props.jointDataset.metaDict[key].abbridgedLabel };
         });
     private readonly classArray: IComboBoxOption[] = new Array(this.props.jointDataset.predictionClassCount)
         .fill(0)
-        .map((unused, index) => {
+        .map((_, index) => {
             const key = JointDataset.ProbabilityYRoot + index.toString();
             return { key, text: this.props.jointDataset.metaDict[key].abbridgedLabel };
         });
@@ -145,8 +145,8 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                             checkboxVisibility={CheckboxVisibility.hidden}
                             selection={this._leftSelection}
                             selectionPreservedOnEmptyClick={true}
-                            setKey={'set'}
-                            columns={[{ key: 'col1', name: 'name', minWidth: 200, fieldName: 'title' }]}
+                            setKey={"set"}
+                            columns={[{ key: "col1", name: "name", minWidth: 200, fieldName: "title" }]}
                         />
                     </div>
                     {this.state.selectedColumn.property === Cohort.CohortKey && (
@@ -196,7 +196,7 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                                     )}
                                 {selectedMeta.treatAsCategorical && (
                                     <div>
-                                        <Text variant={'small'} className={styles.featureText}>
+                                        <Text variant={"small"} className={styles.featureText}>
                                             {`${localization.formatString(
                                                 localization.Filters.uniqueValues,
                                                 selectedMeta.sortedCategoricalValues.length,
@@ -215,10 +215,10 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                                 {!selectedMeta.treatAsCategorical && (
                                     <div>
                                         <div className={styles.statsArea}>
-                                            <Text variant={'small'} className={styles.featureText} nowrap block>
+                                            <Text variant={"small"} className={styles.featureText} nowrap block>
                                                 {localization.formatString(localization.Filters.min, minVal)}
                                             </Text>
-                                            <Text variant={'small'} className={styles.featureText} nowrap block>
+                                            <Text variant={"small"} className={styles.featureText} nowrap block>
                                                 {localization.formatString(localization.Filters.max, maxVal)}
                                             </Text>
                                         </div>
@@ -280,13 +280,13 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
         return key;
     }
 
-    private readonly setAsCategorical = (ev: React.FormEvent<HTMLElement>, checked: boolean): void => {
+    private readonly setAsCategorical = (_: React.FormEvent<HTMLElement>, checked: boolean): void => {
         this.props.jointDataset.setTreatAsCategorical(this.state.selectedColumn.property, checked);
         this.setState({ binCount: checked ? undefined : AxisConfigDialog.MIN_HIST_COLS });
         this.forceUpdate();
     };
 
-    private readonly shouldBinClicked = (ev: React.FormEvent<HTMLElement>, checked: boolean): void => {
+    private readonly shouldBinClicked = (_: React.FormEvent<HTMLElement>, checked: boolean): void => {
         const property = this.state.selectedColumn.property;
         if (checked === false) {
             this.setState({
@@ -324,7 +324,7 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
     };
 
     private readonly ditherChecked = (
-        ev?: React.FormEvent<HTMLElement | HTMLInputElement>,
+        _ev?: React.FormEvent<HTMLElement | HTMLInputElement>,
         checked?: boolean,
     ): void => {
         this.setState({
@@ -337,7 +337,7 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
         });
     };
 
-    private readonly setNumericValue = (delta: number, column: IJointMeta, stringVal: string): string | void => {
+    private readonly setNumericValue = (delta: number, _column: IJointMeta, stringVal: string): string | void => {
         if (delta === 0) {
             const number = +stringVal;
             if (
@@ -390,12 +390,12 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
             return;
         }
         if (property === JointDataset.DataLabelRoot || property === JointDataset.ProbabilityYRoot) {
-            property += '0';
+            property += "0";
         }
         this.setDefaultStateForKey(property);
     };
 
-    private readonly setSelectedProperty = (event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
+    private readonly setSelectedProperty = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         const property = item.key as string;
         this.setDefaultStateForKey(property);
     };

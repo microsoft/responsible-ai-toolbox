@@ -8,7 +8,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "importHelpers": true,
-        "target": "es2015",
+        "target": "ES5",
         "module": "esnext",
         "typeRoots": ["node_modules/@types"],
         "lib": ["es2017", "dom"],
@@ -20,6 +20,8 @@
         "noUnusedParameters": true,
         "allowUnusedLabels": false,
         "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         "paths": {
             "@responsible-ai/interpret": ["libs/interpret/src/index.ts"],
             "@responsible-ai/fairlearn": ["libs/fairlearn/src/index.ts"],
