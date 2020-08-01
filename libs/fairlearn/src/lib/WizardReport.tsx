@@ -544,7 +544,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
 
     private readonly formatNumbers = (value: number, key: string, isRatio = false, sigDigits = 3): string => {
-        if (value === null || value === undefined || value === NaN) {
+        if (value === null || value === undefined || isNaN(value)) {
             return NaN.toString();
         }
         const styleObject = { maximumSignificantDigits: sigDigits };
