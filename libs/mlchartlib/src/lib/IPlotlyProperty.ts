@@ -1,4 +1,4 @@
-import { Config, Layout } from "plotly.js";
+import { Config, Layout } from "plotly.js-dist";
 import { IData } from "./IData";
 
 export interface IPlotlyProperty {

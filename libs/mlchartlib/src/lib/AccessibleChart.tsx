@@ -1,17 +1,13 @@
 import * as _ from "lodash";
-import * as Plotly from "plotly.js";
-import { PlotlyHTMLElement, Layout } from "plotly.js";
+import * as Plotly from "plotly.js-dist";
+import { PlotlyHTMLElement, Layout } from "plotly.js-dist";
 import { ITheme } from "@uifabric/styling";
 import * as React from "react";
-import { v4 as uuidv4 } from "uuid";
+import { v4 } from "uuid";
 import { formatValue } from "./DisplayFormatters";
 import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
 import { IPlotlyProperty } from "./IPlotlyProperty";
 import { accessibleChartStyle } from "./AccessibleChart.style";
-
-type SelectableChartType = "scatter" | "multi-line" | "non-selectable";
-
-const s = require("./AccessibleChart.css");
 
 export interface IPlotlyAnimateProps {
     props: Partial<IPlotlyProperty>;
@@ -29,7 +25,7 @@ export interface AccessibleChartProps {
 }
 
 export class AccessibleChart extends React.Component<AccessibleChartProps> {
-    public guid: string = uuidv4();
+    public guid: string = v4();
     private timer: number;
     private plotlyRef: PlotlyHTMLElement;
     private isClickHandled: boolean = false;
@@ -112,7 +108,7 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
                         const xDataLength = datum.x ? datum.x.length : 0;
                         const yDataLength = datum.y ? datum.y.length : 0;
                         const tableWidth = Math.max(xDataLength, yDataLength);
-                        // Building this table is slow, need better accesibility for large charts than an unreadable table
+                        // Building this table is slow, need better accessibility for large charts than an unreadable table
                         if (tableWidth > 500) {
                             return;
                         }

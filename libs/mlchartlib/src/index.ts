@@ -1,7 +1,7 @@
-// export * from "./lib/AccessibleChart";
-// export * from "./lib/AccessorMappingFunctionNames";
-// export * from "./lib/AccessorMappingFunctions";
-// export * from "./lib/ChartBuilder";
+export * from "./lib/AccessibleChart";
+export * from "./lib/AccessorMappingFunctionNames";
+export * from "./lib/AccessorMappingFunctions";
+export * from "./lib/ChartBuilder";
 export * from "./lib/DefaultSelectionFunctions";
 export * from "./lib/IAccessor";
 export * from "./lib/ICategoricalRange";

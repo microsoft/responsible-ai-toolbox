@@ -22,7 +22,7 @@
                         "tsConfig": "libs/interpret/tsconfig.lib.json",
                         "project": "libs/interpret/package.json",
                         "entryFile": "libs/interpret/src/index.ts",
-                        "external": ["react", "react-dom", "office-ui-fabric-react", "plotly-js"],
+                        "external": ["react", "react-dom"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
                         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
                         "assets": [
@@ -65,7 +65,7 @@
                         "tsConfig": "libs/fairlearn/tsconfig.lib.json",
                         "project": "libs/fairlearn/package.json",
                         "entryFile": "libs/fairlearn/src/index.ts",
-                        "external": ["react", "react-dom", "office-ui-fabric-react", "plotly-js"],
+                        "external": ["react", "react-dom"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
                         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
                         "assets": [
@@ -108,7 +108,7 @@
                         "tsConfig": "libs/core-ui/tsconfig.lib.json",
                         "project": "libs/core-ui/package.json",
                         "entryFile": "libs/core-ui/src/index.ts",
-                        "external": ["react", "react-dom", "office-ui-fabric-react", "plotly-js"],
+                        "external": ["react", "react-dom"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
                         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
                         "assets": [
@@ -151,7 +151,7 @@
                         "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
                         "project": "libs/mlchartlib/package.json",
                         "entryFile": "libs/mlchartlib/src/index.ts",
-                        "external": ["react", "react-dom", "office-ui-fabric-react", "plotly-js"],
+                        "external": ["react", "react-dom"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
                         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
                         "assets": [

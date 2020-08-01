@@ -20,5 +20,12 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "cSpell.words": ["Parens", "Plotly", "jmespath"]
+    "cSpell.words": [
+        "Parens",
+        "Plotly",
+        "Unmount",
+        "jmespath",
+        "relayout",
+        "uifabric"
+    ]
 }

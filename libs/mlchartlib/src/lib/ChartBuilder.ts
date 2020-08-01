@@ -1,32 +1,32 @@
-import { Data, Datum } from "plotly.js";
+import { Data, Datum } from "plotly.js-dist";
 import { IData } from "./IData";
-import * as jmespath from 'jmespath';
-import * as _ from 'lodash';
-import { AccessorMappingFunctions } from './AccessorMappingFunctions';
+import * as jmespath from "jmespath";
+import * as _ from "lodash";
+import { AccessorMappingFunctions } from "./AccessorMappingFunctions";
 
 export class ChartBuilder {
     public static buildPlotlySeries<T>(datum: IData, rows: T[]): Array<Partial<Data>> {
         const groupingDictionary: { [key: string]: Partial<Data> } = {};
         let defaultSeries: Partial<Data> | undefined;
         const datumLevelPaths: string = datum.datapointLevelAccessors
-            ? ', ' +
-            Object.keys(datum.datapointLevelAccessors)
-                .map(key => {
-                    return `${key}: [${datum.datapointLevelAccessors![key].path.join(', ')}]`;
-                })
-                .join(', ')
-            : '';
+            ? ", " +
+              Object.keys(datum.datapointLevelAccessors)
+                  .map(key => {
+                      return `${key}: [${datum.datapointLevelAccessors![key].path.join(", ")}]`;
+                  })
+                  .join(", ")
+            : "";
         const projectedRows: Array<{ x: any; y: any; group: any; size: any }> = jmespath.search(
             rows,
-            `${datum.xAccessorPrefix || ''}[*].{x: ${datum.xAccessor}, y: ${datum.yAccessor}, group: ${
+            `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${datum.yAccessor}, group: ${
                 datum.groupBy
-            }, size: ${datum.sizeAccessor}${datumLevelPaths}}`
+            }, size: ${datum.sizeAccessor}${datumLevelPaths}}`,
         );
         // for bubble charts, we scale all sizes to the max size, only needs to be done once since its global
         // Due to https://github.com/plotly/plotly.js/issues/2080 we have to set size explicitly rather than use
-        // the prefered solution of sizeref
+        // the preferred solution of size ref
         const maxBubbleValue = 10;
-        projectedRows.forEach((row, rowIndex) => {
+        projectedRows.forEach(row => {
             let series: Partial<Data>;
 
             // Handle mutiple group by in the future
@@ -112,11 +112,7 @@ export class ChartBuilder {
                     const plotlyPath = accessor.plotlyPath;
                     let value =
                         accessor.mapFunction !== undefined
-                            ? AccessorMappingFunctions[accessor.mapFunction!](
-                                row[key],
-                                datum,
-                                accessor.mapArgs || []
-                            )
+                            ? AccessorMappingFunctions[accessor.mapFunction!](row[key], datum, accessor.mapArgs || [])
                             : row[key];
                     if (hasVectorValues) {
                         if (!Array.isArray(value)) {

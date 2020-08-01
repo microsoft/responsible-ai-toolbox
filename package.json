@@ -32,7 +32,7 @@
         "lodash": "4.17.19",
         "moment": "2.27.0",
         "office-ui-fabric-react": "7.74.1",
-        "plotly.js": "1.54.7",
+        "plotly.js-dist": "1.45.3",
         "react": "16.3.1",
         "react-dom": "16.3.1",
         "uuid": "8.3.0"
@@ -48,7 +48,7 @@
         "@nrwl/workspace": "10.0.7",
         "@types/jest": "25.1.4",
         "@types/node": "~8.9.4",
-        "@types/plotly.js": "1.50.16",
+        "@types/plotly.js-dist": "npm:@types/plotly.js",
         "@types/react": "16.9.44",
         "@types/uuid": "8.0.0",
         "@typescript-eslint/eslint-plugin": "2.19.2",

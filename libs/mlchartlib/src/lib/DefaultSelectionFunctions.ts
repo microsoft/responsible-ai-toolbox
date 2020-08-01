@@ -1,5 +1,5 @@
 import { IPlotlyProperty } from "./IPlotlyProperty";
-import * as Plotly from "plotly.js";
+import * as Plotly from "plotly.js-dist";
 
 export class DefaultSelectionFunctions {
     public static scatterSelection(guid: string, selections: string[], plotlyProps: IPlotlyProperty): void {
