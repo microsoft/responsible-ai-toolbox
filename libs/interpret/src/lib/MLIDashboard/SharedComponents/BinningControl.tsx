@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import { ICategoricalRange, IModelMetadata, INumericRange, RangeTypes } from 'mlchartlib';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import React from 'react';
-import { localization } from '../../Localization/localization';
-import { FabricStyles } from '../FabricStyles';
-require('./BinningControl.css');
+import _ from "lodash";
+import { ICategoricalRange, IModelMetadata, INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { TextField } from "office-ui-fabric-react/lib/TextField";
+import React from "react";
+import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
+require("./BinningControl.css");
 
 export interface IBinningProps {
     modelMetadata: IModelMetadata;
@@ -115,13 +115,13 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         );
     }
 
-    private onFeatureSelected(event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
+    private onFeatureSelected(_event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
         this.setState(this.buildRangeView(item.key as number), () => {
             this.pushChange();
         });
     }
 
-    private onMinRangeChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMinRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         rangeView.min = newValue;
@@ -139,7 +139,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         }
     }
 
-    private onMaxRangeChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMaxRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         rangeView.max = newValue;
@@ -157,7 +157,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         }
     }
 
-    private onStepsRangeChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onStepsRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         rangeView.steps = newValue;
@@ -173,9 +173,9 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
     }
 
     private onCategoricalRangeChanged(
-        event: React.FormEvent<IComboBox>,
+        _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
-        index?: number,
+        _index?: number,
         value?: string,
     ): void {
         const rangeView = _.cloneDeep(this.state) as IBinningState;
@@ -212,7 +212,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
                 return {
                     featureIndex,
                     selectedOptionKeys: summary.uniqueValues,
-                    categoricalOptions: summary.uniqueValues.map((text) => {
+                    categoricalOptions: summary.uniqueValues.map(text => {
                         return { key: text, text };
                     }),
                     type: RangeTypes.categorical,
@@ -224,7 +224,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
                 featureIndex,
                 min: summary.min.toString(),
                 max: summary.max.toString(),
-                steps: this.props.defaultSteps !== undefined ? this.props.defaultSteps.toString() : '20',
+                steps: this.props.defaultSteps !== undefined ? this.props.defaultSteps.toString() : "20",
                 type: summary.rangeType,
             };
         }
@@ -258,7 +258,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         } else if (!Number.isNaN(min) && !Number.isNaN(max) && Number.isInteger(steps)) {
             const delta = steps > 0 ? (max - min) / steps : max - min;
             const array = _.uniq(
-                Array.from({ length: steps }, (x, i) =>
+                Array.from({ length: steps }, (_, i) =>
                     this.state.type === RangeTypes.integer ? Math.round(min + i * delta) : min + i * delta,
                 ),
             );

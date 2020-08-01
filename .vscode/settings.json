@@ -21,6 +21,7 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "cSpell.words": [
+        "Callout",
         "Fairlearn",
         "Importances",
         "Parens",

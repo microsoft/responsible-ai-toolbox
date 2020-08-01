@@ -1,24 +1,24 @@
-import React from 'react';
-import { ScatterUtils, IScatterProps } from './ScatterUtils';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { localization } from '../../../Localization/localization';
-import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
-import { AccessibleChart, IPlotlyProperty, DefaultSelectionFunctions } from 'mlchartlib';
-import { FabricStyles } from '../../FabricStyles';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import _ from 'lodash';
-import { ModelTypes } from '../../IExplanationContext';
-import { LoadingSpinner, NoDataMessage } from '../../SharedComponents';
-require('./Scatter.css');
+import React from "react";
+import { ScatterUtils, IScatterProps } from "./ScatterUtils";
+import { Callout } from "office-ui-fabric-react/lib/Callout";
+import { localization } from "../../../Localization/localization";
+import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import { FabricStyles } from "../../FabricStyles";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import _ from "lodash";
+import { ModelTypes } from "../../IExplanationContext";
+import { LoadingSpinner, NoDataMessage } from "../../SharedComponents";
+require("./Scatter.css");
 
-export const ExplanationScatterId = 'explanation_scatter_id';
+export const ExplanationScatterId = "explanation_scatter_id";
 
 export interface IExplanationExplorationState {
     isCalloutVisible: boolean;
 }
 
 export class ExplanationExploration extends React.PureComponent<IScatterProps, IExplanationExplorationState> {
-    private readonly iconId = 'data-exploration-help-icon1';
+    private readonly iconId = "data-exploration-help-icon1";
     private plotlyProps: IPlotlyProperty;
 
     constructor(props: IScatterProps) {
@@ -94,17 +94,17 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
                                     <div className="label-text">{localization.CrossClass.label}</div>
                                     <IconButton
                                         id={this.iconId}
-                                        iconProps={{ iconName: 'Info' }}
+                                        iconProps={{ iconName: "Info" }}
                                         title={localization.CrossClass.info}
                                         onClick={this.onIconClick}
-                                        styles={{ root: { marginBottom: -3, color: 'rgb(0, 120, 212)' } }}
+                                        styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
                                     />
                                 </div>
                                 <ComboBox
                                     selectedKey={weightContext.selectedKey}
                                     onChange={weightContext.onSelection}
                                     options={weightContext.options}
-                                    ariaLabel={'Cross-class weighting selector'}
+                                    ariaLabel={"Cross-class weighting selector"}
                                     useComboBoxAsMenuWidth={true}
                                     styles={FabricStyles.defaultDropdownStyle}
                                 />
@@ -113,7 +113,7 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
                     </div>
                     {this.state.isCalloutVisible && (
                         <Callout
-                            target={'#' + this.iconId}
+                            target={"#" + this.iconId}
                             setInitialFocus={true}
                             onDismiss={this.onDismiss}
                             role="alertdialog"
@@ -161,17 +161,17 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
         this.props.selectionContext.onSelect(selections);
     }
 
-    private onXSelected(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onXSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         ScatterUtils.updateNewXAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
     }
 
-    private onYSelected(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onYSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         ScatterUtils.updateNewYAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
     }
 
     // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
-    // If it is numeric, we set the color property and display a colorbar. when setting one, clear the other.
-    private onColorSelected(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    // If it is numeric, we set the color property and display a color bar. when setting one, clear the other.
+    private onColorSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         ScatterUtils.updateColorAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
     }
 

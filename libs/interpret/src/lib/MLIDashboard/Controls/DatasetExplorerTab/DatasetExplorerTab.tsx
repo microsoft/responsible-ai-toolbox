@@ -3,7 +3,7 @@ import React from "react";
 import { AccessibleChart, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
-import { cloneDeep, uniq, set } from "lodash";
+import _ from "lodash";
 import { IProcessedStyleSet, getTheme } from "@uifabric/styling";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
@@ -18,10 +18,7 @@ import {
 } from "../../NewExplanationDashboard";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
-import {
-    dastasetExplorerTabStyles as datasetExplorerTabStyles,
-    IDatasetExplorerTabStyles,
-} from "./DatasetExplorerTab.styles";
+import { datasetExplorerTabStyles, IDatasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 import { Icon, Text, Callout, DirectionalHint, ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 
 export interface IDatasetExplorerTabProps {
@@ -346,8 +343,8 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         this.setState({ selectedCohortIndex: item.key as number });
     }
 
-    private onChartTypeChange(_: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void {
-        const newProps = cloneDeep(this.props.chartProps);
+    private onChartTypeChange(_ev: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void {
+        const newProps = _.cloneDeep(this.props.chartProps);
         newProps.chartType = item.key as ChartTypes;
         if (newProps.yAxis.property === ColumnCategories.none) {
             newProps.yAxis = this.generateDefaultYAxis();
@@ -380,21 +377,21 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
     };
 
     private onXSet(value: ISelectorConfig): void {
-        const newProps = cloneDeep(this.props.chartProps);
+        const newProps = _.cloneDeep(this.props.chartProps);
         newProps.xAxis = value;
         this.props.onChange(newProps);
         this.setState({ xDialogOpen: false });
     }
 
     private onYSet(value: ISelectorConfig): void {
-        const newProps = cloneDeep(this.props.chartProps);
+        const newProps = _.cloneDeep(this.props.chartProps);
         newProps.yAxis = value;
         this.props.onChange(newProps);
         this.setState({ yDialogOpen: false });
     }
 
     private onColorSet(value: ISelectorConfig): void {
-        const newProps = cloneDeep(this.props.chartProps);
+        const newProps = _.cloneDeep(this.props.chartProps);
         newProps.colorAxis = value;
         this.props.onChange(newProps);
         this.setState({ colorDialogOpen: false });
@@ -429,7 +426,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                 colorAxis.property !== ColumnCategories.none
             ) {
                 this.props.cohorts[this.state.selectedCohortIndex].sort(colorAxis.property);
-                const includedIndexes = uniq(
+                const includedIndexes = _.uniq(
                     this.props.cohorts[this.state.selectedCohortIndex].unwrap(colorAxis.property),
                 );
                 colorSeries = this.props.jointDataset.metaDict[colorAxis.property].treatAsCategorical
@@ -469,7 +466,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         chartProps: IGenericChartProps,
         cohort: Cohort,
     ): IPlotlyProperty {
-        const plotlyProps = cloneDeep(DatasetExplorerTab.basePlotlyProperties);
+        const plotlyProps = _.cloneDeep(DatasetExplorerTab.basePlotlyProperties);
         plotlyProps.data[0].hoverinfo = "all";
 
         switch (chartProps.chartType) {
@@ -487,8 +484,8 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                     if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
                         const xLabels = jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
                         const xLabelIndexes = xLabels.map((_, index) => index);
-                        set(plotlyProps, "layout.xaxis.ticktext", xLabels);
-                        set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
+                        _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
+                        _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
                     }
                     const rawX = cohort.unwrap(chartProps.xAxis.property);
                     if (chartProps.xAxis.options.dither) {
@@ -504,8 +501,8 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                     if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
                         const yLabels = jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
                         const yLabelIndexes = yLabels.map((_, index) => index);
-                        set(plotlyProps, "layout.yaxis.ticktext", yLabels);
-                        set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
+                        _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
+                        _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
                     }
                     const rawY = cohort.unwrap(chartProps.yAxis.property);
                     if (chartProps.yAxis.options.dither) {
@@ -574,8 +571,8 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                     plotlyProps.data[0].marker = {
                         color: FabricStyles.fabricColorPalette[0],
                     };
-                    set(plotlyProps, "layout.xaxis.ticktext", xLabels);
-                    set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
+                    _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
+                    _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
                     break;
                 }
                 plotlyProps.data[0].type = "bar";
@@ -584,8 +581,8 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                 plotlyProps.data[0].text = rawX.map(index => xLabels[index]);
                 plotlyProps.data[0].x = rawX;
                 plotlyProps.data[0].y = y;
-                set(plotlyProps, "layout.xaxis.ticktext", xLabels);
-                set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
+                _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
+                _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
                 const transforms: Partial<Transform>[] = [
                     {
                         type: "aggregate",

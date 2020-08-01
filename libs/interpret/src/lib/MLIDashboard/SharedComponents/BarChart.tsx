@@ -1,11 +1,11 @@
-import { IExplanationModelMetadata, ModelTypes } from '../IExplanationContext';
-import React from 'react';
-import { localization } from '../../Localization/localization';
-import Plotly from 'plotly.js-dist';
-import uuidv4 from 'uuid/v4';
-import { IPlotlyProperty, PlotlyThemes } from 'mlchartlib';
-import { ModelExplanationUtils } from '../ModelExplanationUtils';
-import _ from 'lodash';
+import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
+import React from "react";
+import { localization } from "../../Localization/localization";
+import Plotly from "plotly.js-dist";
+import { v4 } from "uuid";
+import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import _ from "lodash";
 
 export interface IBarChartProps {
     featureByClassMatrix: number[][];
@@ -14,13 +14,13 @@ export interface IBarChartProps {
     intercept?: number[];
     modelMetadata: IExplanationModelMetadata;
     additionalRowData?: number[];
-    barmode: 'stack' | 'group';
+    barmode: "stack" | "group";
     defaultVisibleClasses?: number[];
     theme?: string;
 }
 
 export class BarChart extends React.PureComponent<IBarChartProps> {
-    private guid: string = uuidv4();
+    private guid: string = v4();
 
     private static buildTextArray(
         sortedIndexVector: number[],
@@ -29,12 +29,12 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         className?: string,
         rowDataArray?: Array<string | number>,
     ): string[] {
-        return sortedIndexVector.map((index) => {
+        return sortedIndexVector.map(index => {
             const result = [];
             result.push(
                 localization.formatString(
                     localization.AggregateImportance.featureLabel,
-                    featureNames[index] || 'unknown feature',
+                    featureNames[index] || "unknown feature",
                 ),
             );
             result.push(
@@ -51,7 +51,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
             if (className) {
                 result.push(localization.formatString(localization.BarChart.classLabel, className));
             }
-            return result.join('<br>');
+            return result.join("<br>");
         });
     }
 
@@ -67,7 +67,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         if (className) {
             result.push(localization.formatString(localization.BarChart.classLabel, className));
         }
-        return result.join('<br>');
+        return result.join("<br>");
     }
 
     public render(): React.ReactNode {
@@ -100,7 +100,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
                     size: 10,
                 },
                 margin: { t: 10, r: 10, b: 30 },
-                hovermode: 'closest',
+                hovermode: "closest",
                 xaxis: {
                     automargin: true,
                 },
@@ -117,10 +117,10 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
                 const visible =
                     this.props.defaultVisibleClasses !== undefined &&
                     this.props.defaultVisibleClasses.indexOf(classIndex) === -1
-                        ? 'legendonly'
+                        ? "legendonly"
                         : true;
-                const x = sortedIndexVector.map((unused, index) => index);
-                const y = sortedIndexVector.map((index) => singleSeries[index]);
+                const x = sortedIndexVector.map((_, index) => index);
+                const y = sortedIndexVector.map(index => singleSeries[index]);
                 const text = BarChart.buildTextArray(
                     sortedIndexVector,
                     singleSeries,
@@ -143,30 +143,30 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
                     );
                 }
 
-                const orientation = 'v';
+                const orientation = "v";
                 baseSeries.data.push({
-                    hoverinfo: 'text',
+                    hoverinfo: "text",
                     orientation,
-                    type: 'bar',
+                    type: "bar",
                     visible,
                     name:
                         this.props.modelMetadata.modelType === ModelTypes.multiclass
                             ? this.props.modelMetadata.classNames[classIndex]
-                            : '',
+                            : "",
                     x,
                     y,
                     text: text,
                 } as any);
             });
         }
-        const ticktext = sortedIndexVector.map((i) => this.props.modelMetadata.featureNamesAbridged[i]);
-        const tickvals = sortedIndexVector.map((val, index) => index);
+        const ticktext = sortedIndexVector.map(i => this.props.modelMetadata.featureNamesAbridged[i]);
+        const tickvals = sortedIndexVector.map((_, index) => index);
         if (this.props.intercept) {
             ticktext.unshift(localization.intercept);
             tickvals.unshift(-1);
         }
-        _.set(baseSeries, 'layout.xaxis.ticktext', ticktext);
-        _.set(baseSeries, 'layout.xaxis.tickvals', tickvals);
+        _.set(baseSeries, "layout.xaxis.ticktext", ticktext);
+        _.set(baseSeries, "layout.xaxis.tickvals", tickvals);
         return baseSeries;
     }
 }

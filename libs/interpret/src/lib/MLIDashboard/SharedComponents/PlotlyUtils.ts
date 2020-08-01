@@ -1,13 +1,13 @@
-import { IPlotlyProperty } from 'mlchartlib';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { IExplanationModelMetadata } from '../IExplanationContext';
-import _ from 'lodash';
+import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { IExplanationModelMetadata } from "../IExplanationContext";
+import _ from "lodash";
 
 export class PlotlyUtils {
     public static setColorProperty(
         plotlyProp: IPlotlyProperty,
         item: IDropdownOption,
-        modelMetadata: IExplanationModelMetadata,
+        _modelMetadata: IExplanationModelMetadata,
         colorBarLabel?: string,
     ): void {
         PlotlyUtils.clearColorProperties(plotlyProp);
@@ -16,21 +16,21 @@ export class PlotlyUtils {
                 plotlyProp.data[0].xAccessorPrefix = `sort_by(@, &${item.data.sortProperty})`;
             }
             plotlyProp.data[0].groupBy = [item.key.toString()];
-            _.set(plotlyProp, 'layout.showlegend', true);
+            _.set(plotlyProp, "layout.showlegend", true);
         } else {
-            if (!_.isEqual([item.key], _.get(plotlyProp.data[0], 'datapointLevelAccessors.color.path'))) {
-                _.set(plotlyProp.data[0], 'datapointLevelAccessors.color', {
+            if (!_.isEqual([item.key], _.get(plotlyProp.data[0], "datapointLevelAccessors.color.path"))) {
+                _.set(plotlyProp.data[0], "datapointLevelAccessors.color", {
                     path: [item.key],
-                    plotlyPath: 'marker.color',
+                    plotlyPath: "marker.color",
                 });
-                _.set(plotlyProp.data[0], 'marker', {
+                _.set(plotlyProp.data[0], "marker", {
                     colorbar: {
                         title: {
-                            side: 'right',
+                            side: "right",
                             text: colorBarLabel,
                         },
                     },
-                    colorscale: 'Bluered',
+                    colorscale: "Bluered",
                 });
             }
         }
@@ -38,9 +38,9 @@ export class PlotlyUtils {
 
     public static clearColorProperties(plotlyProp: IPlotlyProperty): void {
         // Clear any color settings
-        plotlyProp.data[0] = _.omit(plotlyProp.data[0], ['datapointLevelAccessors.color', 'marker.colorbar']);
+        plotlyProp.data[0] = _.omit(plotlyProp.data[0], ["datapointLevelAccessors.color", "marker.colorbar"]);
         // Clear any groupBy settings
         plotlyProp.data[0].groupBy = undefined;
-        _.set(plotlyProp, 'layout.showlegend', false);
+        _.set(plotlyProp, "layout.showlegend", false);
     }
 }

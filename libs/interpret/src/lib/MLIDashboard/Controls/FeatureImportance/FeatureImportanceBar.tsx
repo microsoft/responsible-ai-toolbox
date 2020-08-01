@@ -1,18 +1,18 @@
-import _ from 'lodash';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Slider } from 'office-ui-fabric-react/lib/Slider';
-import React from 'react';
-import { localization } from '../../../Localization/localization';
-import { FabricStyles } from '../../FabricStyles';
-import { ModelTypes } from '../../IExplanationContext';
-import { ModelExplanationUtils } from '../../ModelExplanationUtils';
-import { NoDataMessage, LoadingSpinner, FeatureKeys, FeatureSortingKey, BarChart } from '../../SharedComponents';
-import { IGlobalFeatureImportanceProps } from './FeatureImportanceWrapper';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import _ from "lodash";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { Slider } from "office-ui-fabric-react/lib/Slider";
+import React from "react";
+import { localization } from "../../../Localization/localization";
+import { FabricStyles } from "../../FabricStyles";
+import { ModelTypes } from "../../IExplanationContext";
+import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { NoDataMessage, LoadingSpinner, FeatureKeys, FeatureSortingKey, BarChart } from "../../SharedComponents";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import { Callout } from "office-ui-fabric-react/lib/Callout";
+import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 
-require('./FeatureImportanceBar.css');
+require("./FeatureImportanceBar.css");
 
 export interface IFeatureImportanceBarState {
     selectedSorting: FeatureSortingKey;
@@ -24,7 +24,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     IFeatureImportanceBarState
 > {
     private sortOptions: IDropdownOption[];
-    private readonly _iconId = 'icon-id';
+    private readonly _iconId = "icon-id";
 
     constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
@@ -61,7 +61,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                                 selectedKey={this.props.config.displayMode}
                                 onChange={this.setChart}
                                 options={this.props.chartTypeOptions}
-                                ariaLabel={'chart type picker'}
+                                ariaLabel={"chart type picker"}
                                 useComboBoxAsMenuWidth={true}
                                 styles={FabricStyles.smallDropdownStyle}
                             />
@@ -71,10 +71,10 @@ export class FeatureImportanceBar extends React.PureComponent<
                                 <span className="label-text">{localization.AggregateImportance.topKFeatures}</span>
                                 <IconButton
                                     id={this._iconId}
-                                    iconProps={{ iconName: 'Info' }}
+                                    iconProps={{ iconName: "Info" }}
                                     title={localization.AggregateImportance.topKInfo}
                                     onClick={this.onIconClick}
-                                    styles={{ root: { marginBottom: -3, color: 'rgb(0, 120, 212)' } }}
+                                    styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
                                 />
                             </div>
                             <Slider
@@ -95,7 +95,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                                 selectedKey={this.state.selectedSorting}
                                 onChange={this.onSortSelect}
                                 options={this.sortOptions}
-                                ariaLabel={'sort selector'}
+                                ariaLabel={"sort selector"}
                                 useComboBoxAsMenuWidth={true}
                                 styles={FabricStyles.smallDropdownStyle}
                             />
@@ -103,7 +103,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                     </div>
                     {this.state.isCalloutVisible && (
                         <Callout
-                            target={'#' + this._iconId}
+                            target={"#" + this._iconId}
                             setInitialFocus={true}
                             onDismiss={this.onDismiss}
                             role="alertdialog"
@@ -151,9 +151,9 @@ export class FeatureImportanceBar extends React.PureComponent<
     private getFeatureByClassMatrix(): number[][] {
         return (
             this.props.dashboardContext.explanationContext.globalExplanation.perClassFeatureImportances ||
-            this.props.dashboardContext.explanationContext.globalExplanation.flattenedFeatureImportances.map(
-                (value) => [value],
-            )
+            this.props.dashboardContext.explanationContext.globalExplanation.flattenedFeatureImportances.map(value => [
+                value,
+            ])
         );
     }
 
@@ -183,13 +183,13 @@ export class FeatureImportanceBar extends React.PureComponent<
         this.props.onChange(newConfig, this.props.config.id);
     }
 
-    private setChart(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private setChart(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.displayMode = item.key as any;
         this.props.onChange(newConfig, this.props.config.id);
     }
 
-    private onSortSelect(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onSortSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         this.setState({ selectedSorting: item.key as any });
     }
 

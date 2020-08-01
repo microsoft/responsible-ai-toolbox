@@ -1,11 +1,11 @@
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import React from "react";
-import { AccessibleChart, IPlotlyProperty, DefaultSelectionFunctions } from "mlchartlib";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import _ from "lodash";
-import { NoDataMessage, LoadingSpinner } from "../../SharedComponents";
+import { NoDataMessage } from "../../SharedComponents";
 require("./Scatter.css");
 
 export const DataScatterId = "data_scatter_id";
@@ -96,17 +96,17 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
         this.props.selectionContext.onSelect(selections);
     }
 
-    private onXSelected(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onXSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         ScatterUtils.updateNewXAccessor(this.props, this.plotlyProps, item, DataScatterId);
     }
 
-    private onYSelected(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onYSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         ScatterUtils.updateNewYAccessor(this.props, this.plotlyProps, item, DataScatterId);
     }
 
     // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
     // If it is numeric, we set the color property and display a colorbar. when setting one, clear the other.
-    private onColorSelected(event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onColorSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
         ScatterUtils.updateColorAccessor(this.props, this.plotlyProps, item, DataScatterId);
     }
 

@@ -1,12 +1,12 @@
-import React from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { FabricStyles } from '../FabricStyles';
-import { ComboBox, IComboBox } from 'office-ui-fabric-react/lib/ComboBox';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { RangeTypes } from 'mlchartlib';
-import { localization } from '../../Localization/localization';
+import React from "react";
+import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { FabricStyles } from "../FabricStyles";
+import { ComboBox, IComboBox } from "office-ui-fabric-react/lib/ComboBox";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { localization } from "../../Localization/localization";
 
-require('./FeatureEditingTile.css');
+require("./FeatureEditingTile.css");
 
 export interface IFeatureEditingTileProps {
     onEdit: (index: number, val: string | number, error?: string) => void;
@@ -25,7 +25,7 @@ export interface IFeatureEditingTileState {
 export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps, IFeatureEditingTileState> {
     private options: IDropdownOption[] =
         this.props.enumeratedValues !== undefined
-            ? this.props.enumeratedValues.map((value) => {
+            ? this.props.enumeratedValues.map(value => {
                   return { text: value, key: value };
               })
             : undefined;
@@ -49,12 +49,12 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
     }
 
     public render(): React.ReactNode {
-        let tileClass = 'tile';
+        let tileClass = "tile";
         if (this.state.value !== this.props.defaultValue.toString() && this.state.errorMessage === undefined) {
-            tileClass += ' edited';
+            tileClass += " edited";
         }
         if (this.state.errorMessage !== undefined) {
-            tileClass += ' error';
+            tileClass += " error";
         }
 
         return (
@@ -84,7 +84,7 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
         );
     }
 
-    private onValueChanged(ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onValueChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
         const val = +newValue;
         let errorMessage: string | undefined;
         if (Number.isNaN(val) || (this.props.rangeType === RangeTypes.integer && !Number.isInteger(val))) {
@@ -98,9 +98,9 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
     }
 
     private onComboSelected(
-        event: React.FormEvent<IComboBox>,
+        _event: React.FormEvent<IComboBox>,
         item: IDropdownOption,
-        index: number,
+        _index: number,
         userProvidedValue: string,
     ): void {
         const newVal = item !== undefined ? item.text : userProvidedValue;

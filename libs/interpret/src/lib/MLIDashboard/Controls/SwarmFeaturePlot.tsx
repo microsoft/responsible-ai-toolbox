@@ -1,13 +1,13 @@
-import React from 'react';
-import * as memoize from 'memoize-one';
-import { IExplanationModelMetadata, ModelTypes } from '../IExplanationContext';
-import { JointDataset } from '../JointDataset';
-import { IPlotlyProperty, PlotlyMode, AccessibleChart } from 'mlchartlib';
-import _ from 'lodash';
-import { localization } from '../../Localization/localization';
-import { PlotlyUtils, LoadingSpinner } from '../SharedComponents';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { Cohort } from '../Cohort';
+import React from "react";
+import * as memoize from "memoize-one";
+import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
+import { JointDataset } from "../JointDataset";
+import { IPlotlyProperty, PlotlyMode, AccessibleChart } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import { localization } from "../../Localization/localization";
+import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
+import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { Cohort } from "../Cohort";
 
 export interface ISwarmFeaturePlotProps {
     topK: number;
@@ -34,7 +34,7 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
         selectedOption: IComboBoxOption,
     ) => IPlotlyProperty = (memoize as any).default(
         (
-            jointDataset: JointDataset,
+            _jointDataset: JointDataset,
             metadata: IExplanationModelMetadata,
             cohort: Cohort,
             sortVector: number[],
@@ -45,37 +45,37 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
             const numRows = ditherVector.length;
             _.set(
                 plotlyProps,
-                'layout.xaxis.ticktext',
-                sortVector.map((i) => metadata.featureNamesAbridged[i]),
+                "layout.xaxis.ticktext",
+                sortVector.map(i => metadata.featureNamesAbridged[i]),
             );
             _.set(
                 plotlyProps,
-                'layout.xaxis.tickvals',
-                sortVector.map((val, index) => index),
+                "layout.xaxis.tickvals",
+                sortVector.map((_, index) => index),
             );
             if (metadata.modelType === ModelTypes.binary) {
                 _.set(
                     plotlyProps,
-                    'layout.yaxis.title',
+                    "layout.yaxis.title",
                     `${localization.featureImportance}<br> ${localization.ExplanationScatter.class} ${metadata.classNames[0]}`,
                 );
             }
-            if (selectedOption === undefined || selectedOption.key === 'none') {
+            if (selectedOption === undefined || selectedOption.key === "none") {
                 PlotlyUtils.clearColorProperties(plotlyProps);
             } else {
                 PlotlyUtils.setColorProperty(plotlyProps, selectedOption, metadata, selectedOption.text);
                 if (selectedOption.data.isNormalized) {
                     plotlyProps.data[0].marker.colorscale = [
-                        [0, 'rgba(0,0,255,0.5)'],
-                        [1, 'rgba(255,0,0,0.5)'],
+                        [0, "rgba(0,0,255,0.5)"],
+                        [1, "rgba(255,0,0,0.5)"],
                     ];
-                    _.set(plotlyProps.data[0], 'marker.colorbar.tickvals', [0, 1]);
-                    _.set(plotlyProps.data[0], 'marker.colorbar.ticktext', [
+                    _.set(plotlyProps.data[0], "marker.colorbar.tickvals", [0, 1]);
+                    _.set(plotlyProps.data[0], "marker.colorbar.ticktext", [
                         localization.AggregateImportance.low,
                         localization.AggregateImportance.high,
                     ]);
                 } else {
-                    _.set(plotlyProps.data[0], 'marker.opacity', 0.6);
+                    _.set(plotlyProps.data[0], "marker.opacity", 0.6);
                 }
             }
             const x = [];
@@ -99,9 +99,9 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
         config: { displaylogo: false, responsive: true, displayModeBar: false } as any,
         data: [
             {
-                hoverinfo: 'text',
+                hoverinfo: "text",
                 mode: PlotlyMode.markers,
-                type: 'scattergl',
+                type: "scattergl",
             },
         ] as any,
         layout: {
@@ -110,7 +110,7 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
             font: {
                 size: 10,
             },
-            hovermode: 'closest',
+            hovermode: "closest",
             margin: {
                 t: 10,
                 b: 30,
@@ -153,14 +153,11 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
             this.setState({ plotlyProps });
             return <LoadingSpinner />;
         }
-        const minK = Math.min(4, this.props.jointDataset.localExplanationFeatureCount);
-        const maxK = Math.min(30, this.props.jointDataset.localExplanationFeatureCount);
-        const maxStartingK = Math.max(0, this.props.jointDataset.localExplanationFeatureCount - this.props.topK);
         const relayoutArg = {
-            'xaxis.range': [this.props.startingK - 0.5, this.props.startingK + this.props.topK - 0.5],
+            "xaxis.range": [this.props.startingK - 0.5, this.props.startingK + this.props.topK - 0.5],
         };
         const plotlyProps = this.state.plotlyProps;
-        _.set(plotlyProps, 'layout.xaxis.range', [
+        _.set(plotlyProps, "layout.xaxis.range", [
             this.props.startingK - 0.5,
             this.props.startingK + this.props.topK - 0.5,
         ]);
