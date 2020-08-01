@@ -1,17 +1,16 @@
-import * as _ from 'lodash';
-import * as Plotly from 'plotly.js-dist';
-import { PlotlyHTMLElement, Layout } from 'plotly.js-dist';
+import * as _ from "lodash";
+import * as Plotly from "plotly.js";
+import { PlotlyHTMLElement, Layout } from "plotly.js";
 import { ITheme } from "@uifabric/styling";
-import * as React from 'react';
-import uuidv4 from 'uuid/v4';
-import { formatValue } from './DisplayFormatters';
-import { PlotlyThemes, IPlotlyTheme } from './PlotlyThemes';
-import { IPlotlyProperty } from './IPlotlyProperty';
+import * as React from "react";
+import { v4 as uuidv4 } from "uuid";
+import { formatValue } from "./DisplayFormatters";
+import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
+import { IPlotlyProperty } from "./IPlotlyProperty";
 
+type SelectableChartType = "scatter" | "multi-line" | "non-selectable";
 
-type SelectableChartType = 'scatter' | 'multi-line' | 'non-selectable';
-
-const s = require('./AccessibleChart.css');
+const s = require("./AccessibleChart.css");
 
 export interface IPlotlyAnimateProps {
     props: Partial<IPlotlyProperty>;
@@ -67,16 +66,16 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
         if (this.hasData()) {
             return (
                 <>
-                    <div
-                        className="GridChart"
-                        id={this.guid}
-                        aria-hidden={true}
-                    />
+                    <div className="GridChart" id={this.guid} aria-hidden={true} />
                     {this.createTableWithPlotlyData(this.props.plotlyProps.data)}
                 </>
             );
         }
-        return <div className="centered">{this.props.localizedStrings ? this.props.localizedStrings['noData'] : 'No Data'}</div>;
+        return (
+            <div className="centered">
+                {this.props.localizedStrings ? this.props.localizedStrings["noData"] : "No Data"}
+            </div>
+        );
     }
 
     private hasData(): boolean {
@@ -98,7 +97,7 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
             this.plotlyRef = await Plotly.react(this.guid, themedProps.data, themedProps.layout, themedProps.config);
             if (!this.isClickHandled && this.props.onClickHandler) {
                 this.isClickHandled = true;
-                this.plotlyRef.on('plotly_click', this.props.onClickHandler);
+                this.plotlyRef.on("plotly_click", this.props.onClickHandler);
             }
             this.setState({ loading: false });
         }, 0);
@@ -121,10 +120,10 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
                         const yRowCells = [];
                         for (let i = 0; i < tableWidth; i++) {
                             // Add String() because sometimes data may be Nan
-                            xRowCells.push(<td key={i + '.x'}>{datum.x ? formatValue(datum.x[i]) : ''}</td>);
-                            yRowCells.push(<td key={i + '.y'}>{datum.y ? formatValue(datum.y[i]) : ''}</td>);
+                            xRowCells.push(<td key={i + ".x"}>{datum.x ? formatValue(datum.x[i]) : ""}</td>);
+                            yRowCells.push(<td key={i + ".y"}>{datum.y ? formatValue(datum.y[i]) : ""}</td>);
                         }
-                        return [<tr key={index + '.x'}>{xRowCells}</tr>, <tr key={index + '.y'}>{yRowCells}</tr>];
+                        return [<tr key={index + ".x"}>{xRowCells}</tr>, <tr key={index + ".y"}>{yRowCells}</tr>];
                     })}
                 </tbody>
             </table>

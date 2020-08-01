@@ -1,5 +1,5 @@
-import { Config, Layout } from 'plotly.js-dist';
-import { IData } from './IData';
+import { Config, Layout } from "plotly.js";
+import { IData } from "./IData";
 
 export interface IPlotlyProperty {
     layout?: Partial<Layout>;
