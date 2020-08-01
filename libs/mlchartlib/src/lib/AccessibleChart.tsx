@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { formatValue } from "./DisplayFormatters";
 import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
 import { IPlotlyProperty } from "./IPlotlyProperty";
+import { accessibleChartStyle } from "./AccessibleChart.style";
 
 type SelectableChartType = "scatter" | "multi-line" | "non-selectable";
 
@@ -66,13 +67,13 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
         if (this.hasData()) {
             return (
                 <>
-                    <div className="GridChart" id={this.guid} aria-hidden={true} />
+                    <div className={accessibleChartStyle.chart} id={this.guid} aria-hidden={true} />
                     {this.createTableWithPlotlyData(this.props.plotlyProps.data)}
                 </>
             );
         }
         return (
-            <div className="centered">
+            <div className={accessibleChartStyle.noData}>
                 {this.props.localizedStrings ? this.props.localizedStrings["noData"] : "No Data"}
             </div>
         );
@@ -105,7 +106,7 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
 
     private createTableWithPlotlyData(data: Plotly.Data[]): React.ReactNode {
         return (
-            <table className="plotly-table visible-to-only-screen-reader">
+            <table className={accessibleChartStyle.plotlyTable}>
                 <tbody>
                     {data.map((datum, index) => {
                         const xDataLength = datum.x ? datum.x.length : 0;
