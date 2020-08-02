@@ -108,7 +108,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
                         const tableWidth = Math.max(xDataLength, yDataLength);
                         // Building this table is slow, need better accessibility for large charts than an unreadable table
                         if (tableWidth > 500) {
-                            return;
+                            return undefined;
                         }
 
                         const xRowCells = [];

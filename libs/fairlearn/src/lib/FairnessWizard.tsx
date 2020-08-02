@@ -127,7 +127,7 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
             featureNames,
             featureNamesAbridged: featureNames,
             classNames,
-            featureIsCategorical: props.precomputedFeatureBins.map(_ => true),
+            featureIsCategorical: props.precomputedFeatureBins.map(() => true),
             featureRanges,
             predictionType: props.predictionType,
         };

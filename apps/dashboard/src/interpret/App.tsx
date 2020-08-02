@@ -169,7 +169,7 @@ class App extends React.Component<any, any> {
     generateRandomScore(data, signal) {
         const promise = new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
-                resolve(data.map(x => Math.random()));
+                resolve(data.map(() => Math.random()));
             }, 300);
             signal.addEventListener("abort", () => {
                 clearTimeout(timeout);
@@ -183,7 +183,7 @@ class App extends React.Component<any, any> {
     generateRandomProbs(classDimensions, data, signal) {
         const promise = new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
-                resolve(data.map(x => Array.from({ length: classDimensions }, unused => Math.random())));
+                resolve(data.map(() => Array.from({ length: classDimensions }, () => Math.random())));
             }, 300);
             signal.addEventListener("abort", () => {
                 clearTimeout(timeout);
@@ -194,7 +194,7 @@ class App extends React.Component<any, any> {
         return promise;
     }
 
-    generateExplanatins(explanations, data, signal) {
+    generateExplanatins(explanations, _data, signal) {
         const promise = new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
                 resolve(explanations);

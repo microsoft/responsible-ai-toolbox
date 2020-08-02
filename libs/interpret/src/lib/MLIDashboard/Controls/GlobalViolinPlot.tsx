@@ -36,7 +36,6 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
             metadata: IExplanationModelMetadata,
             cohort: Cohort,
             sortVector: number[],
-            _selectedOption: IComboBoxOption,
         ): IPlotlyProperty => {
             const plotlyProps = _.cloneDeep(GlobalViolinPlot.BasePlotlyProps);
 
@@ -135,8 +134,6 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
             this.props.startingK - 0.5,
             this.props.startingK + this.props.topK - 0.5,
         ]);
-        return (
-            <AccessibleChart plotlyProps={plotlyProps} theme={undefined} relayoutArg={relayoutArg as any} />
-        );
+        return <AccessibleChart plotlyProps={plotlyProps} theme={undefined} relayoutArg={relayoutArg as any} />;
     }
 }
