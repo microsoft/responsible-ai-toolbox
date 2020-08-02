@@ -1,47 +1,17 @@
-import { ClassificationEnum, JointDataset } from './JointDataset';
-import { localization } from '../Localization/localization';
-import { ModelTypes } from './IExplanationContext';
+import { ClassificationEnum, JointDataset } from "./JointDataset";
+import { localization } from "../Localization/localization";
+import { ModelTypes } from "./IExplanationContext";
 
 export interface ILabeledStatistic {
     label: string;
     stat: number;
 }
 
-export const generateMetrics: (
-    jointDataset: JointDataset,
-    selectionIndexes: number[][],
-    modelType: ModelTypes,
-) => ILabeledStatistic[][] = (
-    jointDataset: JointDataset,
-    selectionIndexes: number[][],
-    modelType: ModelTypes,
-): ILabeledStatistic[][] => {
-    if (modelType === ModelTypes.binary) {
-        const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
-        return selectionIndexes.map((selectionArray) => {
-            const outcomeSubset = selectionArray.map((i) => outcomes[i]);
-            return generateBinaryStats(outcomeSubset);
-        });
-    }
-    if (modelType === ModelTypes.regression) {
-        const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
-        const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
-        const errors = jointDataset.unwrap(JointDataset.RegressionError);
-        return selectionIndexes.map((selectionArray) => {
-            const trueYSubset = selectionArray.map((i) => trueYs[i]);
-            const predYSubset = selectionArray.map((i) => predYs[i]);
-            const errorsSubset = selectionArray.map((i) => errors[i]);
-            return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
-        });
-    }
-    return [];
-};
-
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (outcomes: number[]): ILabeledStatistic[] => {
-    const falseNegCount = outcomes.filter((x) => x === ClassificationEnum.FalseNegative).length;
-    const falsePosCount = outcomes.filter((x) => x === ClassificationEnum.FalsePositive).length;
-    const trueNegCount = outcomes.filter((x) => x === ClassificationEnum.TrueNegative).length;
-    const truePosCount = outcomes.filter((x) => x === ClassificationEnum.TruePositive).length;
+    const falseNegCount = outcomes.filter(x => x === ClassificationEnum.FalseNegative).length;
+    const falsePosCount = outcomes.filter(x => x === ClassificationEnum.FalsePositive).length;
+    const trueNegCount = outcomes.filter(x => x === ClassificationEnum.TrueNegative).length;
+    const truePosCount = outcomes.filter(x => x === ClassificationEnum.TruePositive).length;
     const total = outcomes.length;
     return [
         {
@@ -100,4 +70,34 @@ const generateRegressionStats: (trueYs: number[], predYs: number[], errors: numb
                 }, 0) / count,
         },
     ];
+};
+
+export const generateMetrics: (
+    jointDataset: JointDataset,
+    selectionIndexes: number[][],
+    modelType: ModelTypes,
+) => ILabeledStatistic[][] = (
+    jointDataset: JointDataset,
+    selectionIndexes: number[][],
+    modelType: ModelTypes,
+): ILabeledStatistic[][] => {
+    if (modelType === ModelTypes.binary) {
+        const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
+        return selectionIndexes.map(selectionArray => {
+            const outcomeSubset = selectionArray.map(i => outcomes[i]);
+            return generateBinaryStats(outcomeSubset);
+        });
+    }
+    if (modelType === ModelTypes.regression) {
+        const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
+        const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
+        const errors = jointDataset.unwrap(JointDataset.RegressionError);
+        return selectionIndexes.map(selectionArray => {
+            const trueYSubset = selectionArray.map(i => trueYs[i]);
+            const predYSubset = selectionArray.map(i => predYs[i]);
+            const errorsSubset = selectionArray.map(i => errors[i]);
+            return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
+        });
+    }
+    return [];
 };
