@@ -180,7 +180,7 @@ export class App extends React.Component<any, any> {
     // }
 
     public render(): React.ReactNode {
-        const data = _.cloneDeep(App.choices[this.state.value].data);
+        const data: any = _.cloneDeep(App.choices[this.state.value].data);
         const theme = App.themeChoices[this.state.themeIndex].data;
         return (
             <div style={{ backgroundColor: "grey", height: "100%" }}>
@@ -211,7 +211,7 @@ export class App extends React.Component<any, any> {
                 <div style={{ width: "80vw", backgroundColor: "white", margin: "50px auto" }}>
                     <div style={{ width: "940px" }}>
                         <FairnessWizard
-                            modelInformation={{ modelClass: "blackbox" }}
+                            modelInformation={{ modelClass: "blackbox" } as any}
                             dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
                             testData={data.augmentedData}
                             predictedY={data.predictedYs}

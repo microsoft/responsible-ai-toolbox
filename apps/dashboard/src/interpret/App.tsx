@@ -1,5 +1,5 @@
 import React from "react";
-import { NewExplanationDashboard, ExplanationDashboard } from "@responsible-ai/interpret";
+import { NewExplanationDashboard, ExplanationDashboard, ITelemetryMessage } from "@responsible-ai/interpret";
 import { breastCancerData } from "./__mock_data/dummyData";
 import { ibmData } from "./__mock_data/ibmData";
 import { irisData } from "./__mock_data/irisData";
@@ -143,7 +143,7 @@ export class App extends React.Component<any, any> {
         { label: "japanese", val: "ja" },
     ];
 
-    private messages = {
+    private messages: any = {
         LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
         LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
         TestReq: [{ displayText: "TestReq" }],
@@ -209,7 +209,7 @@ export class App extends React.Component<any, any> {
     // }
 
     public render(): React.ReactNode {
-        const data = _.cloneDeep(App.choices[this.state.value].data);
+        const data = _.cloneDeep(App.choices[this.state.value].data) as any;
         const theme = App.themeChoices[this.state.themeIndex].data;
         // data.localExplanations = undefined;
         const classDimension = App.choices[this.state.value].dim;
@@ -252,7 +252,7 @@ export class App extends React.Component<any, any> {
                     <div style={{ width: "100%", height: "100%" }}>
                         {this.state.showNewDash === 1 && (
                             <NewExplanationDashboard
-                                modelInformation={{ modelClass: "blackbox" }}
+                                modelInformation={{ modelClass: "blackbox" } as any}
                                 dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
                                 testData={data.trainingData}
                                 predictedY={data.predictedY}
@@ -269,18 +269,18 @@ export class App extends React.Component<any, any> {
                                         : this.generateRandomProbs.bind(this, classDimension)
                                 }
                                 stringParams={{ contextualHelp: this.messages }}
-                                telemetryHook={er => {
+                                telemetryHook={(er: ITelemetryMessage): void => {
                                     console.error(er.message);
                                 }}
                                 theme={theme}
                                 explanationMethod="mimic"
                                 locale={this.state.language}
-                                key={new Date()}
+                                key={Date.now()}
                             />
                         )}
                         {this.state.showNewDash === 0 && (
                             <ExplanationDashboard
-                                modelInformation={{ modelClass: "blackbox" }}
+                                modelInformation={{ modelClass: "blackbox" } as any}
                                 dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
                                 testData={data.trainingData}
                                 predictedY={data.predictedY}
@@ -293,12 +293,12 @@ export class App extends React.Component<any, any> {
                                 }}
                                 requestPredictions={this.generateRandomProbs.bind(this, classDimension)}
                                 stringParams={{ contextualHelp: this.messages }}
-                                telemetryHook={er => {
+                                telemetryHook={(er: ITelemetryMessage): void => {
                                     console.error(er.message);
                                 }}
                                 theme={theme}
                                 locale={this.state.language}
-                                key={new Date()}
+                                key={Date.now()}
                             />
                         )}
                     </div>
