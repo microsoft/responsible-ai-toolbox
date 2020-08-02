@@ -516,7 +516,9 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
     };
 
     private readonly saveBin = (bin: IBinnedResponse): void => {
-        this.state.featureBins[bin.featureIndex] = bin;
+        const newBin = [...this.state.featureBins];
+        newBin[bin.featureIndex] = bin;
+        this.setState({ featureBins: newBin });
         this.state.metricCache.clearCache(bin.featureIndex);
         this.binningSet(bin);
     };

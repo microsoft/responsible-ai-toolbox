@@ -396,8 +396,10 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
             }
         });
         const promises = this.props.datapoints.map((row, index) => {
+            const newController = [...this.state.abortControllers];
             const abortController = new AbortController();
-            this.state.abortControllers[index] = abortController;
+            newController[index] = abortController;
+            this.setState({ abortControllers: newController });
             const permutations = this.buildDataSpans(row, this.state.xAxisArray);
             return this.props.invokeModel(permutations, abortController.signal);
         });
