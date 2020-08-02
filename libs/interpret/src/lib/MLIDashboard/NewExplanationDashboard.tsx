@@ -504,7 +504,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     private async validatePredictMethod(): Promise<void> {
         if (this.props.requestPredictions && this.props.testData !== undefined && this.props.testData.length > 0) {
             try {
-                const abortController = new AbortController;
+                const abortController = new AbortController();
                 const prediction = await this.props.requestPredictions(
                     [this.props.testData[0]],
                     abortController.signal,

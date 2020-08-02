@@ -1,11 +1,10 @@
-import _ from 'lodash';
-import { CommandBarButton, PrimaryButton, Text } from 'office-ui-fabric-react';
-import React from 'react';
-import { localization } from '../../../Localization/localization';
-import { Cohort } from '../../Cohort';
-import { IExplanationModelMetadata, ModelTypes } from '../../IExplanationContext';
-import { JointDataset } from '../../JointDataset';
-import { cohortListStyles } from './CohortList.styles';
+import { CommandBarButton, PrimaryButton, Text } from "office-ui-fabric-react";
+import React from "react";
+import { localization } from "../../../Localization/localization";
+import { Cohort } from "../../Cohort";
+import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
+import { JointDataset } from "../../JointDataset";
+import { cohortListStyles } from "./CohortList.styles";
 
 export interface ICohortListProps {
     cohorts: Cohort[];
@@ -31,7 +30,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
         return (
             <div className={classNames.banner} id={CohortList.bannerId}>
                 <div className={classNames.summaryBox}>
-                    <Text variant={'xSmall'} block className={classNames.summaryLabel}>
+                    <Text variant={"xSmall"} block className={classNames.summaryLabel}>
                         {localization.CohortBanner.dataStatistics.toUpperCase()}
                     </Text>
                     <Text block className={classNames.summaryItemText}>
@@ -55,14 +54,14 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                     )}
                 </div>
                 <div className={classNames.cohortList}>
-                    <Text variant={'xSmall'} block className={classNames.summaryLabel}>
+                    <Text variant={"xSmall"} block className={classNames.summaryLabel}>
                         {localization.CohortBanner.datasetCohorts.toUpperCase()}
                     </Text>
                     {this.props.cohorts.map((cohort, index) => {
                         return (
                             <div className={classNames.cohortBox} key={index}>
                                 <div className={classNames.cohortLabelWrapper}>
-                                    <Text variant={'mediumPlus'} nowrap className={classNames.cohortLabel}>
+                                    <Text variant={"mediumPlus"} nowrap className={classNames.cohortLabel}>
                                         {cohort.name}
                                     </Text>
 
@@ -74,16 +73,16 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                                             menuIcon: classNames.menuIcon,
                                         }}
                                         disabled={this.props.jointDataset.dataDict.length === 0}
-                                        menuIconProps={{ iconName: 'More' }}
+                                        menuIconProps={{ iconName: "More" }}
                                         menuProps={{
                                             items: [
                                                 {
-                                                    key: 'item4',
+                                                    key: "item4",
                                                     name: localization.CohortBanner.editCohort,
                                                     onClick: this.props.editCohort.bind(this, index),
                                                 },
                                                 {
-                                                    key: 'item5',
+                                                    key: "item5",
                                                     name: localization.CohortBanner.duplicateCohort,
                                                     onClick: this.props.cloneAndEdit.bind(this, index),
                                                 },
@@ -91,10 +90,10 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                                         }}
                                     />
                                 </div>
-                                <Text block variant={'xSmall'} className={classNames.summaryItemText}>
+                                <Text block variant={"xSmall"} className={classNames.summaryItemText}>
                                     {localization.formatString(localization.CohortBanner.datapoints, cohort.rowCount)}
                                 </Text>
-                                <Text block variant={'xSmall'} className={classNames.summaryItemText}>
+                                <Text block variant={"xSmall"} className={classNames.summaryItemText}>
                                     {localization.formatString(
                                         localization.CohortBanner.filters,
                                         cohort.filters.length,

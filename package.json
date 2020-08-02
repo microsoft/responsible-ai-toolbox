@@ -24,6 +24,7 @@
         "nx": "nx",
         "start": "nx serve",
         "test": "nx test",
+        "testall": "nx run-many --target=test --all",
         "update": "nx migrate latest",
         "workspace-schematic": "nx workspace-schematic"
     },

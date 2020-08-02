@@ -54,6 +54,7 @@ export class FeatureImportanceWrapper extends React.PureComponent<IGlobalFeature
             case FeatureImportanceModes.violin:
             case FeatureImportanceModes.box:
                 return <Violin {...this.props} chartTypeOptions={chartTypeOptions} />;
+            default:
         }
     }
 }

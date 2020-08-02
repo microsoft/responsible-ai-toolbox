@@ -612,6 +612,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                 plotlyProps.data[0].transforms = transforms;
                 break;
             }
+            default:
         }
         plotlyProps.data[0].customdata = this.buildCustomData(jointData, chartProps, cohort);
         plotlyProps.data[0].hovertemplate = this.buildHoverTemplate(jointData, chartProps);
@@ -654,7 +655,9 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                     hovertemplate += yName + ": %{customdata.Y}<br>";
                 }
                 hovertemplate += localization.formatString(localization.Charts.countTooltipPrefix, "%{y}<br>");
+                break;
             }
+            default:
         }
         hovertemplate += "<extra></extra>";
         return hovertemplate;

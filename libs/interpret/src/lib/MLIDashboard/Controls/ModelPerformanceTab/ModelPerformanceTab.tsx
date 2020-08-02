@@ -436,6 +436,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
                 plotlyProps.data[0].transforms = transforms;
                 break;
             }
+            default:
         }
         return plotlyProps;
     }

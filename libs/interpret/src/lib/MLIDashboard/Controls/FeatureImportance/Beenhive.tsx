@@ -106,7 +106,6 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             explanationContext: IExplanationContext,
             sortVector: number[],
             selectedOption: IComboBoxOption,
-            _selections: string[],
         ): IPlotlyProperty => {
             const plotlyProps = _.cloneDeep(Beehive.BasePlotlyProps);
             const rows = Beehive.projectData(explanationContext, sortVector);

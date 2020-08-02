@@ -2,7 +2,6 @@ import React from "react";
 import { JointDataset } from "../../JointDataset";
 import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
 import { localization } from "../../../Localization/localization";
-import _ from "lodash";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { IGenericChartProps, ChartTypes } from "../../NewExplanationDashboard";
 import { SpinButton } from "office-ui-fabric-react";
@@ -111,7 +110,7 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         };
 
         if (this.props.globalBarSettings === undefined) {
-            this.setDefaultSettings(props);
+            this.setDefaultSettings();
         }
         if (this.props.metadata.modelType === ModelTypes.multiclass) {
             this.weightOptions = this.props.weightOptions.map(option => {
@@ -573,7 +572,7 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         this.setState({ selectedCohortIndex, seriesIsActive });
     }
 
-    private setDefaultSettings(_props: IGlobalExplanationTabProps): void {
+    private setDefaultSettings(): void {
         const result: IGlobalBarSettings = {} as IGlobalBarSettings;
         result.topK = Math.min(this.props.jointDataset.localExplanationFeatureCount, 4);
         result.startingK = 0;

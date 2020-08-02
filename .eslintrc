@@ -27,6 +27,8 @@
         "@typescript-eslint/explicit-member-accessibility": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-parameter-properties": "off",
+        "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/no-explicit-any": "off",
         "@nrwl/nx/enforce-module-boundaries": [
             "error",
             {
@@ -36,7 +38,6 @@
             }
         ],
         "@typescript-eslint/interface-name-prefix": ["error", "always"],
-        "@typescript-eslint/camelcase": "off",
         "array-callback-return": "error",
         "dot-location": ["error", "property"],
         "eqeqeq": ["error", "smart"],
@@ -243,20 +244,27 @@
         "jsx-a11y/role-supports-aria-props": "error",
         "jsx-a11y/scope": "error",
         "react-hooks/rules-of-hooks": "error",
-        "default-case": "off",
-        "no-dupe-class-members": "off",
-        "no-undef": "off",
+        "default-case": "error",
+        "no-dupe-class-members": "error",
+        "no-undef": "error",
         "@typescript-eslint/consistent-type-assertions": "error",
-        "no-array-constructor": "off",
+        "no-array-constructor": "error",
         "@typescript-eslint/no-array-constructor": "error",
         "@typescript-eslint/no-namespace": "error",
-        "no-use-before-define": "off",
+        "no-use-before-define": [
+            "error",
+            {
+                "functions": false,
+                "classes": false,
+                "variables": true
+            }
+        ],
         "@typescript-eslint/no-use-before-define": [
             "error",
             {
                 "functions": false,
                 "classes": false,
-                "variables": false,
+                "variables": true,
                 "typedefs": false
             }
         ],

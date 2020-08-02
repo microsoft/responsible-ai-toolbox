@@ -528,7 +528,9 @@ export class JointDataset {
                         ] = value;
                     });
                 });
+                break;
             }
+            default:
         }
         this.rawLocalImportance[0].forEach((_classArray, featureIndex) => {
             const featureLabel = this._modelMeta.featureNames[featureIndex];
@@ -564,6 +566,7 @@ export class JointDataset {
             case ModelTypes.multiclass: {
                 return JointDataset.transposeLocalImportanceMatrix(localExplanationRaw as number[][][]);
             }
+            default:
         }
     }
 

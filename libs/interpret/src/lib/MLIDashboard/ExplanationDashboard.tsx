@@ -423,6 +423,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
             case ModelTypes.multiclass: {
                 return ExplanationDashboard.transposeLocalImportanceMatrix(localExplanationRaw as number[][][]);
             }
+            default:
         }
     }
 
@@ -462,6 +463,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                     });
                 });
             }
+            default:
         }
     }
 
@@ -742,174 +744,166 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
         }
         return (
             <div className="explainerDashboard">
-                    <div className="charts-wrapper">
-                        <div className="global-charts-wrapper">
-                            <Pivot
-                                id={"globalPivot"}
-                                selectedKey={ExplanationDashboard.globalTabKeys[this.state.activeGlobalTab]}
-                                onLinkClick={this.handleGlobalTabClick}
-                                linkFormat={PivotLinkFormat.tabs}
-                                linkSize={PivotLinkSize.normal}
-                                headersOnly={true}
-                                styles={FabricStyles.verticalTabsStyle}
-                            >
-                                {this.pivotItems.map(props => (
-                                    <PivotItem key={props.itemKey} {...props} />
-                                ))}
-                            </Pivot>
-                            {this.state.activeGlobalTab === 0 && (
-                                <DataExploration
-                                    dashboardContext={this.state.dashboardContext}
-                                    theme={this.props.theme}
-                                    selectionContext={this.selectionContext}
-                                    selectedRow={this.state.selectedRow}
-                                    plotlyProps={this.state.configs[DataScatterId] as IPlotlyProperty}
-                                    onChange={this.onConfigChanged}
-                                    messages={
-                                        this.props.stringParams ? this.props.stringParams.contextualHelp : undefined
-                                    }
-                                />
-                            )}
-                            {this.state.activeGlobalTab === 1 && (
-                                <FeatureImportanceBar
-                                    dashboardContext={this.state.dashboardContext}
-                                    theme={this.props.theme}
-                                    selectionContext={this.selectionContext}
-                                    selectedRow={this.state.selectedRow}
-                                    config={this.state.configs[BarId] as IFeatureImportanceConfig}
-                                    onChange={this.onConfigChanged}
-                                    messages={
-                                        this.props.stringParams ? this.props.stringParams.contextualHelp : undefined
-                                    }
-                                />
-                            )}
-                            {this.state.activeGlobalTab === 2 && (
-                                <ExplanationExploration
-                                    dashboardContext={this.state.dashboardContext}
-                                    theme={this.props.theme}
-                                    selectionContext={this.selectionContext}
-                                    selectedRow={this.state.selectedRow}
-                                    plotlyProps={this.state.configs[ExplanationScatterId] as IPlotlyProperty}
-                                    onChange={this.onConfigChanged}
-                                    messages={
-                                        this.props.stringParams ? this.props.stringParams.contextualHelp : undefined
-                                    }
-                                />
-                            )}
-                            {this.state.activeGlobalTab === 3 && (
-                                <FeatureImportanceWrapper
-                                    dashboardContext={this.state.dashboardContext}
-                                    theme={this.props.theme}
-                                    selectionContext={this.selectionContext}
-                                    selectedRow={this.state.selectedRow}
-                                    config={this.state.configs[GlobalFeatureImportanceId] as IFeatureImportanceConfig}
-                                    onChange={this.onConfigChanged}
-                                    messages={
-                                        this.props.stringParams ? this.props.stringParams.contextualHelp : undefined
-                                    }
-                                />
-                            )}
-                            {this.state.activeGlobalTab === 4 && (
-                                <EbmExplanation
-                                    explanationContext={this.state.dashboardContext.explanationContext}
-                                    theme={this.props.theme}
-                                />
-                            )}
-                            {this.state.activeGlobalTab === 5 && (
-                                <iframe srcDoc={this.state.dashboardContext.explanationContext.customVis} />
-                            )}
-                        </div>
-                        {this.state.dashboardContext.explanationContext.localExplanation && (
-                            <div className="local-charts-wrapper">
-                                {this.state.selectedRow === undefined && (
-                                    <div className="local-placeholder">
-                                        <div className="placeholder-text">{localization.selectPoint}</div>
-                                    </div>
-                                )}
-                                {this.state.selectedRow !== undefined && (
-                                    <div className="tabbed-viewer">
-                                        <Pivot
-                                            selectedKey={ExplanationDashboard.localTabKeys[this.state.activeLocalTab]}
-                                            onLinkClick={this.handleLocalTabClick}
-                                            linkFormat={PivotLinkFormat.tabs}
-                                            linkSize={PivotLinkSize.normal}
-                                            headersOnly={true}
-                                            styles={FabricStyles.verticalTabsStyle}
-                                        >
-                                            <PivotItem
-                                                headerText={localization.localFeatureImportance}
-                                                itemKey={ExplanationDashboard.localTabKeys[0]}
-                                            />
-                                            {this.props.requestPredictions !== undefined &&
-                                                this.state.dashboardContext.explanationContext.testDataset.dataset && (
-                                                    <PivotItem
-                                                        headerText={localization.perturbationExploration}
-                                                        itemKey={ExplanationDashboard.localTabKeys[1]}
-                                                    />
-                                                )}{" "}
-                                            {this.props.requestPredictions !== undefined &&
-                                                this.state.dashboardContext.explanationContext.testDataset.dataset && (
-                                                    <PivotItem
-                                                        headerText={localization.ice}
-                                                        itemKey={ExplanationDashboard.localTabKeys[2]}
-                                                    />
-                                                )}
-                                        </Pivot>
-                                        <div className="view-panel">
-                                            <div className="local-commands">
-                                                <PrimaryButton
-                                                    className="clear-button"
-                                                    onClick={this.onClearSelection}
-                                                    text={localization.clearSelection}
-                                                />
-                                            </div>
-                                            {this.state.activeLocalTab === 0 && (
-                                                <SinglePointFeatureImportance
-                                                    explanationContext={this.state.dashboardContext.explanationContext}
-                                                    selectedRow={this.state.selectedRow}
-                                                    config={this.state.configs[LocalBarId] as IBarChartConfig}
-                                                    onChange={this.onConfigChanged}
-                                                    messages={
-                                                        this.props.stringParams
-                                                            ? this.props.stringParams.contextualHelp
-                                                            : undefined
-                                                    }
-                                                    theme={this.props.theme}
-                                                />
-                                            )}
-                                            {this.state.activeLocalTab === 1 && (
-                                                <PerturbationExploration
-                                                    explanationContext={this.state.dashboardContext.explanationContext}
-                                                    invokeModel={this.props.requestPredictions}
-                                                    datapointIndex={+this.selectionContext.selectedIds[0]}
-                                                    theme={this.props.theme}
-                                                    messages={
-                                                        this.props.stringParams
-                                                            ? this.props.stringParams.contextualHelp
-                                                            : undefined
-                                                    }
-                                                />
-                                            )}
-                                            {this.state.activeLocalTab === 2 && (
-                                                <ICEPlot
-                                                    explanationContext={this.state.dashboardContext.explanationContext}
-                                                    invokeModel={this.props.requestPredictions}
-                                                    datapointIndex={+this.selectionContext.selectedIds[0]}
-                                                    theme={this.props.theme}
-                                                    messages={
-                                                        this.props.stringParams
-                                                            ? this.props.stringParams.contextualHelp
-                                                            : undefined
-                                                    }
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                <div className="charts-wrapper">
+                    <div className="global-charts-wrapper">
+                        <Pivot
+                            id={"globalPivot"}
+                            selectedKey={ExplanationDashboard.globalTabKeys[this.state.activeGlobalTab]}
+                            onLinkClick={this.handleGlobalTabClick}
+                            linkFormat={PivotLinkFormat.tabs}
+                            linkSize={PivotLinkSize.normal}
+                            headersOnly={true}
+                            styles={FabricStyles.verticalTabsStyle}
+                        >
+                            {this.pivotItems.map(props => (
+                                <PivotItem key={props.itemKey} {...props} />
+                            ))}
+                        </Pivot>
+                        {this.state.activeGlobalTab === 0 && (
+                            <DataExploration
+                                dashboardContext={this.state.dashboardContext}
+                                theme={this.props.theme}
+                                selectionContext={this.selectionContext}
+                                selectedRow={this.state.selectedRow}
+                                plotlyProps={this.state.configs[DataScatterId] as IPlotlyProperty}
+                                onChange={this.onConfigChanged}
+                                messages={this.props.stringParams ? this.props.stringParams.contextualHelp : undefined}
+                            />
+                        )}
+                        {this.state.activeGlobalTab === 1 && (
+                            <FeatureImportanceBar
+                                dashboardContext={this.state.dashboardContext}
+                                theme={this.props.theme}
+                                selectionContext={this.selectionContext}
+                                selectedRow={this.state.selectedRow}
+                                config={this.state.configs[BarId] as IFeatureImportanceConfig}
+                                onChange={this.onConfigChanged}
+                                messages={this.props.stringParams ? this.props.stringParams.contextualHelp : undefined}
+                            />
+                        )}
+                        {this.state.activeGlobalTab === 2 && (
+                            <ExplanationExploration
+                                dashboardContext={this.state.dashboardContext}
+                                theme={this.props.theme}
+                                selectionContext={this.selectionContext}
+                                selectedRow={this.state.selectedRow}
+                                plotlyProps={this.state.configs[ExplanationScatterId] as IPlotlyProperty}
+                                onChange={this.onConfigChanged}
+                                messages={this.props.stringParams ? this.props.stringParams.contextualHelp : undefined}
+                            />
+                        )}
+                        {this.state.activeGlobalTab === 3 && (
+                            <FeatureImportanceWrapper
+                                dashboardContext={this.state.dashboardContext}
+                                theme={this.props.theme}
+                                selectionContext={this.selectionContext}
+                                selectedRow={this.state.selectedRow}
+                                config={this.state.configs[GlobalFeatureImportanceId] as IFeatureImportanceConfig}
+                                onChange={this.onConfigChanged}
+                                messages={this.props.stringParams ? this.props.stringParams.contextualHelp : undefined}
+                            />
+                        )}
+                        {this.state.activeGlobalTab === 4 && (
+                            <EbmExplanation
+                                explanationContext={this.state.dashboardContext.explanationContext}
+                                theme={this.props.theme}
+                            />
+                        )}
+                        {this.state.activeGlobalTab === 5 && (
+                            <iframe title="custom" srcDoc={this.state.dashboardContext.explanationContext.customVis} />
                         )}
                     </div>
+                    {this.state.dashboardContext.explanationContext.localExplanation && (
+                        <div className="local-charts-wrapper">
+                            {this.state.selectedRow === undefined && (
+                                <div className="local-placeholder">
+                                    <div className="placeholder-text">{localization.selectPoint}</div>
+                                </div>
+                            )}
+                            {this.state.selectedRow !== undefined && (
+                                <div className="tabbed-viewer">
+                                    <Pivot
+                                        selectedKey={ExplanationDashboard.localTabKeys[this.state.activeLocalTab]}
+                                        onLinkClick={this.handleLocalTabClick}
+                                        linkFormat={PivotLinkFormat.tabs}
+                                        linkSize={PivotLinkSize.normal}
+                                        headersOnly={true}
+                                        styles={FabricStyles.verticalTabsStyle}
+                                    >
+                                        <PivotItem
+                                            headerText={localization.localFeatureImportance}
+                                            itemKey={ExplanationDashboard.localTabKeys[0]}
+                                        />
+                                        {this.props.requestPredictions !== undefined &&
+                                            this.state.dashboardContext.explanationContext.testDataset.dataset && (
+                                                <PivotItem
+                                                    headerText={localization.perturbationExploration}
+                                                    itemKey={ExplanationDashboard.localTabKeys[1]}
+                                                />
+                                            )}{" "}
+                                        {this.props.requestPredictions !== undefined &&
+                                            this.state.dashboardContext.explanationContext.testDataset.dataset && (
+                                                <PivotItem
+                                                    headerText={localization.ice}
+                                                    itemKey={ExplanationDashboard.localTabKeys[2]}
+                                                />
+                                            )}
+                                    </Pivot>
+                                    <div className="view-panel">
+                                        <div className="local-commands">
+                                            <PrimaryButton
+                                                className="clear-button"
+                                                onClick={this.onClearSelection}
+                                                text={localization.clearSelection}
+                                            />
+                                        </div>
+                                        {this.state.activeLocalTab === 0 && (
+                                            <SinglePointFeatureImportance
+                                                explanationContext={this.state.dashboardContext.explanationContext}
+                                                selectedRow={this.state.selectedRow}
+                                                config={this.state.configs[LocalBarId] as IBarChartConfig}
+                                                onChange={this.onConfigChanged}
+                                                messages={
+                                                    this.props.stringParams
+                                                        ? this.props.stringParams.contextualHelp
+                                                        : undefined
+                                                }
+                                                theme={this.props.theme}
+                                            />
+                                        )}
+                                        {this.state.activeLocalTab === 1 && (
+                                            <PerturbationExploration
+                                                explanationContext={this.state.dashboardContext.explanationContext}
+                                                invokeModel={this.props.requestPredictions}
+                                                datapointIndex={+this.selectionContext.selectedIds[0]}
+                                                theme={this.props.theme}
+                                                messages={
+                                                    this.props.stringParams
+                                                        ? this.props.stringParams.contextualHelp
+                                                        : undefined
+                                                }
+                                            />
+                                        )}
+                                        {this.state.activeLocalTab === 2 && (
+                                            <ICEPlot
+                                                explanationContext={this.state.dashboardContext.explanationContext}
+                                                invokeModel={this.props.requestPredictions}
+                                                datapointIndex={+this.selectionContext.selectedIds[0]}
+                                                theme={this.props.theme}
+                                                messages={
+                                                    this.props.stringParams
+                                                        ? this.props.stringParams.contextualHelp
+                                                        : undefined
+                                                }
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
+            </div>
         );
     }
 
