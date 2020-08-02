@@ -212,8 +212,6 @@
         "@typescript-eslint/no-useless-constructor": "warn"
     },
     "env": { "browser": true, "commonjs": true, "es6": true, "jest": true, "node": true },
-    "settings": { "react": { "version": "detect" } },
-    "plugins": ["import", "jsx-a11y", "react", "react-hooks"],
     "extends": ["../../.eslintrc"],
     "ignorePatterns": ["!**/*"]
 }

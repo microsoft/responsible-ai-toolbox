@@ -7,7 +7,8 @@
         "project": "./tsconfig.base.json"
     },
     "ignorePatterns": ["**/*"],
-    "plugins": ["@typescript-eslint", "@nrwl/nx"],
+    "settings": { "react": { "version": "detect" } },
+    "plugins": ["@typescript-eslint", "@nrwl/nx", "import", "jsx-a11y", "react", "react-hooks"],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
