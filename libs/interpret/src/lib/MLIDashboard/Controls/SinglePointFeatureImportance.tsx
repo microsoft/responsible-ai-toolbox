@@ -11,7 +11,7 @@ import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib
 import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces";
 
-require("./SinglePointFeatureImportance.css");
+import "./SinglePointFeatureImportance.scss";
 
 export const LocalBarId = "local_bar_id";
 

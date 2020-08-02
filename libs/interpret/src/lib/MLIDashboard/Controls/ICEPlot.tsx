@@ -19,7 +19,7 @@ import { IExplanationContext, ModelTypes } from "../IExplanationContext";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { NoDataMessage } from "../SharedComponents";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
-require("./ICEPlot.css");
+import "./ICEPlot.scss";
 
 export interface IIcePlotProps {
     invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;

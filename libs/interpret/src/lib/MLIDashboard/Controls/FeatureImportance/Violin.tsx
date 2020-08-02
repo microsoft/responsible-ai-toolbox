@@ -14,7 +14,7 @@ import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { NoDataMessage, LoadingSpinner, FeatureKeys, FeatureSortingKey } from "../../SharedComponents";
 import { FeatureImportanceModes, IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 
-require("./Violin.css");
+import "./Violin.scss";
 
 export enum GroupByOptions {
     none = "none",

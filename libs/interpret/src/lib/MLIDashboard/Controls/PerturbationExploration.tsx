@@ -6,7 +6,7 @@ import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import { IExplanationContext } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces";
 
-require("./PerturbationExploration.css");
+import "./PerturbationExploration.scss";
 
 export interface IPerturbationExplorationProps {
     invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;

@@ -9,7 +9,7 @@ import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib
 import _ from "lodash";
 import { ModelTypes } from "../../IExplanationContext";
 import { LoadingSpinner, NoDataMessage } from "../../SharedComponents";
-require("./Scatter.css");
+import "./Scatter.scss";
 
 export const ExplanationScatterId = "explanation_scatter_id";
 

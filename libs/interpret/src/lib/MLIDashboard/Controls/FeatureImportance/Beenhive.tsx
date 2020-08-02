@@ -15,7 +15,7 @@ import { PlotlyUtils, NoDataMessage, LoadingSpinner } from "../../SharedComponen
 import { FeatureImportanceModes, IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { ScatterUtils } from "../Scatter";
 
-require("./Beehive.css");
+import "./Beehive.scss";
 
 export interface IBeehiveState {
     calloutContent?: React.ReactNode;
@@ -222,7 +222,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             return data.modelMetadata.featureNames.map((_val, featureIndex) => {
                 if (data.modelMetadata.featureIsCategorical[featureIndex]) {
                     const values = _.uniq(data.testDataset.dataset.map(row => row[featureIndex])).sort();
-                    return value => {
+                    return (value: string | number): number => {
                         return values.length > 1 ? values.indexOf(value) / (values.length - 1) : 0;
                     };
                 }
@@ -230,7 +230,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
                 const min = Math.min(...featureArray);
                 const max = Math.max(...featureArray);
                 const range = max - min;
-                return value => {
+                return (value: string | number): number => {
                     return range !== 0 && typeof value === "number" ? (value - min) / range : 0;
                 };
             });
@@ -375,7 +375,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
                                 min={1}
                                 step={1}
                                 value={this.props.config.topK}
-                                onChange={(value: number) => this.setK(value)}
+                                onChange={(value: number): void => this.setK(value)}
                                 showValue={true}
                             />
                         </div>

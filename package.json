@@ -13,6 +13,7 @@
         "affected:lint": "nx affected:lint",
         "affected:test": "nx affected:test",
         "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx build",
+        "buildall": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx run-many --target=build --all",
         "dep-graph": "nx dep-graph",
         "e2e": "nx e2e",
         "format": "nx format:write",

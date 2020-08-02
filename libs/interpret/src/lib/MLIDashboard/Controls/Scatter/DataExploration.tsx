@@ -6,7 +6,7 @@ import { FabricStyles } from "../../FabricStyles";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import _ from "lodash";
 import { NoDataMessage } from "../../SharedComponents";
-require("./Scatter.css");
+import "./Scatter.scss";
 
 export const DataScatterId = "data_scatter_id";
 

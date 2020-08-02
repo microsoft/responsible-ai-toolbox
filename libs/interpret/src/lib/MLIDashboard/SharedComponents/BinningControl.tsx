@@ -6,7 +6,7 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
-require("./BinningControl.css");
+import "./BinningControl.scss";
 
 export interface IBinningProps {
     modelMetadata: IModelMetadata;

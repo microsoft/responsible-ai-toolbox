@@ -1,7 +1,7 @@
-import React from 'react';
-import { localization } from '../../Localization/localization';
-import { IHelpMessage } from '../Interfaces/IStringsParam';
-require('./NoDataMessage.css');
+import React from "react";
+import { localization } from "../../Localization/localization";
+import { IHelpMessage } from "../Interfaces/IStringsParam";
+import "./NoDataMessage.scss";
 
 export class NoDataMessage extends React.PureComponent<{ explanationStrings?: IHelpMessage[] }> {
     public render(): React.ReactNode {

@@ -6,7 +6,7 @@ import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { localization } from "../../Localization/localization";
 
-require("./FeatureEditingTile.css");
+import "./FeatureEditingTile.scss";
 
 export interface IFeatureEditingTileProps {
     onEdit: (index: number, val: string | number, error?: string) => void;

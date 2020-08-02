@@ -45,7 +45,7 @@ import { EbmExplanation } from "./Controls/EbmExplanation";
 import { JointDataset } from "./JointDataset";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
-require("./ExplanationDashboard.css");
+import "./ExplanationDashboard.scss";
 const RowIndex = "rowIndex";
 
 export interface IDashboardContext {

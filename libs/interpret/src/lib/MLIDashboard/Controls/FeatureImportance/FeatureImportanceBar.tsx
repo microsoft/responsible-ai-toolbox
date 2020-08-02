@@ -12,7 +12,7 @@ import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { Callout } from "office-ui-fabric-react/lib/Callout";
 import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 
-require("./FeatureImportanceBar.css");
+import "./FeatureImportanceBar.scss";
 
 export interface IFeatureImportanceBarState {
     selectedSorting: FeatureSortingKey;
