@@ -1,5 +1,5 @@
 import React from "react";
-import { FairnessWizard } from "@responsible-ai/fairlearn";
+import { FairnessWizard, IMetricResponse } from "@responsible-ai/fairlearn";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
 import { regression } from "./__mock-data/regression";
 import { precomputedBinary } from "./__mock-data/precomputedBinary";
@@ -89,7 +89,7 @@ const darkContrastTheme = createTheme({
     },
 });
 
-class App extends React.Component<any, any> {
+export class App extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = { value: 4, themeIndex: 0, language: App.languages[0].val };
@@ -99,7 +99,7 @@ class App extends React.Component<any, any> {
         this.handleLanguageChange = this.handleLanguageChange.bind(this);
     }
 
-    static choices = [
+    private static choices = [
         { label: "binaryClassifier", data: binaryClassifier },
         { label: "regression", data: regression },
         { label: "probit", data: probit },
@@ -107,13 +107,13 @@ class App extends React.Component<any, any> {
         { label: "precomputed binary2", data: precomputedBinary2 },
     ];
 
-    static themeChoices = [
+    private static themeChoices = [
         { label: "light", data: lightTheme },
         { label: "dark", data: darkTheme },
         { label: "darkHiContrast", data: darkContrastTheme },
     ];
 
-    static languages = [
+    private static languages = [
         { label: "english", val: "en-EN" },
         { label: "spanish", val: "es-ES" },
         { label: "german", val: "de-DE" },
@@ -121,30 +121,30 @@ class App extends React.Component<any, any> {
         { label: "japanese", val: "ja-JP" },
     ];
 
-    messages = {
+    private messages = {
         LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
         LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
         TestReq: [{ displayText: "TestReq" }],
         PredictorReq: [{ displayText: "PredictorReq" }],
     };
 
-    handleChange(event) {
+    private handleChange(event): void {
         this.setState({ value: event.target.value });
     }
 
-    handleThemeChange(event) {
+    private handleThemeChange(event): void {
         this.setState({ themeIndex: event.target.value });
     }
 
-    handleLanguageChange(event) {
+    private handleLanguageChange(event): void {
         this.setState({ language: event.target.value });
     }
 
-    generateRandomScore(data) {
+    private generateRandomScore(data): Promise<any[]> {
         return Promise.resolve(data.map(() => Math.random()));
     }
 
-    generateRandomMetrics(data, signal) {
+    private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
         const binSize = Math.max(...data.binVector);
         const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
         bins[2] = undefined;
@@ -165,21 +165,21 @@ class App extends React.Component<any, any> {
         return promise;
     }
 
-    generateExplanatins(explanations, _data, signal) {
-        const promise = new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                resolve(explanations);
-            }, 300);
-            signal.addEventListener("abort", () => {
-                clearTimeout(timeout);
-                reject(new DOMException("Aborted", "AbortError"));
-            });
-        });
+    // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
+    //     const promise = new Promise((resolve, reject) => {
+    //         const timeout = setTimeout(() => {
+    //             resolve(explanations);
+    //         }, 300);
+    //         signal.addEventListener("abort", () => {
+    //             clearTimeout(timeout);
+    //             reject(new DOMException("Aborted", "AbortError"));
+    //         });
+    //     });
 
-        return promise;
-    }
+    //     return promise;
+    // }
 
-    render() {
+    public render(): React.ReactNode {
         const data = _.cloneDeep(App.choices[this.state.value].data);
         const theme = App.themeChoices[this.state.themeIndex].data;
         return (
@@ -253,5 +253,3 @@ class App extends React.Component<any, any> {
         );
     }
 }
-
-export default App;

@@ -26,9 +26,9 @@
     "rules": {
         "@typescript-eslint/camelcase": "off",
         // "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/explicit-member-accessibility": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-parameter-properties": "off",
+        "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "off" } }],
+        "@typescript-eslint/explicit-function-return-type": "error",
         "@nrwl/nx/enforce-module-boundaries": [
             "error",
             {
