@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import moment from 'moment';
 
-export const NonNumericPlaceholder: string = '-';
+export const NonNumericPlaceholder = '-';
 
 
 export function formatValue(value: any): string {

@@ -1,38 +1,45 @@
 {
-  "npmScope": "responsible-ai",
-  "affected": {
-    "defaultBase": "master"
-  },
-  "implicitDependencies": {
-    "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
+    "npmScope": "responsible-ai",
+    "affected": {
+        "defaultBase": "master"
     },
-    "tsconfig.base.json": "*",
-    "tslint.json": "*",
-    "nx.json": "*"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
+    "implicitDependencies": {
+        "workspace.json": "*",
+        "package.json": {
+            "dependencies": "*",
+            "devDependencies": "*"
+        },
+        "tsconfig.base.json": "*",
+        "tslint.json": "*",
+        "nx.json": "*"
+    },
+    "tasksRunnerOptions": {
+        "default": {
+            "runner": "@nrwl/workspace/tasks-runners/default",
+            "options": {
+                "cacheableOperations": ["build", "lint", "test", "e2e"]
+            }
+        }
+    },
+    "projects": {
+        "interpret": {
+            "tags": []
+        },
+        "fairlearn": {
+            "tags": []
+        },
+        "core-ui": {
+            "tags": []
+        },
+        "mlchartlib": {
+            "tags": []
+        },
+        "dashboard": {
+            "tags": []
+        },
+        "dashboard-e2e": {
+            "tags": [],
+            "implicitDependencies": ["dashboard"]
+        }
     }
-  },
-  "projects": {
-    "interpret": {
-      "tags": []
-    },
-    "fairlearn": {
-      "tags": []
-    },
-    "core-ui": {
-      "tags": []
-    },
-    "mlchartlib": {
-      "tags": []
-    }
-  }
 }

@@ -14,7 +14,7 @@ export interface IPlotlyAnimateProps {
     animationAttributes?: any;
 }
 
-export interface AccessibleChartProps {
+export interface IAccessibleChartProps {
     plotlyProps: IPlotlyProperty;
     theme: string | ITheme;
     themeOverride?: Partial<IPlotlyTheme>;
@@ -24,13 +24,13 @@ export interface AccessibleChartProps {
     onClickHandler?: (data: any) => void;
 }
 
-export class AccessibleChart extends React.Component<AccessibleChartProps> {
+export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     public guid: string = v4();
     private timer: number;
     private plotlyRef: PlotlyHTMLElement;
-    private isClickHandled: boolean = false;
+    private isClickHandled = false;
 
-    constructor(props: AccessibleChartProps) {
+    constructor(props: IAccessibleChartProps) {
         super(props);
     }
 
@@ -40,7 +40,7 @@ export class AccessibleChart extends React.Component<AccessibleChartProps> {
         }
     }
 
-    public componentDidUpdate(prevProps: AccessibleChartProps): void {
+    public componentDidUpdate(prevProps: IAccessibleChartProps): void {
         if (
             (!_.isEqual(prevProps.plotlyProps, this.props.plotlyProps) || this.props.theme !== prevProps.theme) &&
             this.hasData()

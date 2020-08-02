@@ -56,7 +56,7 @@ export class ChartBuilder {
             // Support these cases in the minimally surprising way by upcasting a scalar point to match the highest dimension for that row (like numpy does)
             // If two arrays are logged, but of different lengths, pad the shorter ones with undefined to avoid series having different lengths concatted.
             // We always have a size of at least one, this avoids corner case of one array being empty
-            let maxLength: number = 1;
+            let maxLength = 1;
             let hasVectorValues = false;
             if (Array.isArray(row.x)) {
                 hasVectorValues = true;
@@ -139,7 +139,7 @@ export class ChartBuilder {
     }
 
     private static buildDefaultSeries(datum: IData): Partial<Data> {
-        let series: Partial<Data> = _.cloneDeep(datum);
+        const series: Partial<Data> = _.cloneDeep(datum);
         // defining an x/y accessor will overwrite any hardcoded x or y values.
         if (datum.xAccessor) {
             series.x = [];

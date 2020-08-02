@@ -8,7 +8,7 @@ export interface ISelectionContextSubscriptions {
 export class SelectionContext {
     public selectedIds: string[] = [];
     public hoveredId: string | undefined;
-    public listenerCount: number = 0;
+    public listenerCount = 0;
     public readonly propertyOfInterest: string;
 
     private selectionSubs: Map<string, (s: string[]) => void> = new Map();

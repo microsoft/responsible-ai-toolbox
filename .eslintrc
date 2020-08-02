@@ -27,7 +27,9 @@
                 "depConstraints": [{ "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }]
             }
         ],
-        "@typescript-eslint/interface-name-prefix": ["error", "always"]
+        "@typescript-eslint/interface-name-prefix": ["error", "always"],
+        "@typescript-eslint/camelcase": "off",
+        "eqeqeq": ["error", "smart"]
     },
     "overrides": [
         {

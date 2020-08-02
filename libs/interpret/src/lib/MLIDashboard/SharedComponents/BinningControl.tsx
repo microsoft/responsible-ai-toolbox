@@ -66,7 +66,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
                         onChange={this.onFeatureSelected}
                         label={localization.IcePlot.featurePickerLabel}
                         ariaLabel="feature picker"
-                        selectedKey={!!this.state ? this.state.featureIndex : undefined}
+                        selectedKey={this.state ? this.state.featureIndex : undefined}
                         useComboBoxAsMenuWidth={true}
                         styles={FabricStyles.defaultDropdownStyle}
                     />

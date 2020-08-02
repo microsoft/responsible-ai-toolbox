@@ -78,6 +78,4 @@ export class PlotlyThemes {
             fontColor: theme.semanticColors.bodyText
         }, plotlyLightTheme)
     }
-
-    private constructor() {}
 }

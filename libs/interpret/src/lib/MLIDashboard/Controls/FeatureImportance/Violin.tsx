@@ -393,7 +393,7 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
         const classLabels = Violin.getClassesArray(this.props.dashboardContext.explanationContext, this.state.groupBy);
         const importanceSums = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues
             .filter((_, index) => {
-                classLabels[index] === this.state.selectedSorting;
+                return classLabels[index] === this.state.selectedSorting;
             })
             .reduce((prev: number[], current: number[]) => {
                 return prev.map((featureImp, featureIndex) => {

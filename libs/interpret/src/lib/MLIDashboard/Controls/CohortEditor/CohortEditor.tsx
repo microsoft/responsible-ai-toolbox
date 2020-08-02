@@ -420,8 +420,6 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         if (this.state.cohortName.length > 0) {
             const newCohort = new Cohort(this.state.cohortName, this.props.jointDataset, this.state.filters);
             this.props.onSave(newCohort);
-        } else {
-            this._getErrorMessage;
         }
     }
 
@@ -441,7 +439,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         let label = "";
 
         if (selectedFilter.isCategorical || this.props.jointDataset.metaDict[filter.column].treatAsCategorical) {
-            let selectedValues = [];
+            const selectedValues = [];
             const filterArgs = filter.arg;
             filterArgs.forEach(element => {
                 selectedValues.push(selectedFilter.sortedCategoricalValues[element]);

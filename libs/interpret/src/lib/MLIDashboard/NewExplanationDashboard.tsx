@@ -512,7 +512,9 @@ export class NewExplanationDashboard extends React.PureComponent<
                 if (prediction !== undefined) {
                     this.setState({ requestPredictions: this.props.requestPredictions });
                 }
-            } catch {}
+            } catch {
+                return;
+            }
         }
     }
 
