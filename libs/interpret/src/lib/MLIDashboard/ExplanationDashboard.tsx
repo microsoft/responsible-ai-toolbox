@@ -741,8 +741,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
             return <div>No valid views. Incomplete data.</div>;
         }
         return (
-            <>
-                <div className="explainerDashboard">
+            <div className="explainerDashboard">
                     <div className="charts-wrapper">
                         <div className="global-charts-wrapper">
                             <Pivot
@@ -911,7 +910,6 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                         )}
                     </div>
                 </div>
-            </>
         );
     }
 

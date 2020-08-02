@@ -136,9 +136,7 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
             this.props.startingK + this.props.topK - 0.5,
         ]);
         return (
-            <>
-                <AccessibleChart plotlyProps={plotlyProps} theme={undefined} relayoutArg={relayoutArg as any} />
-            </>
+            <AccessibleChart plotlyProps={plotlyProps} theme={undefined} relayoutArg={relayoutArg as any} />
         );
     }
 }

@@ -162,9 +162,7 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
             this.props.startingK + this.props.topK - 0.5,
         ]);
         return (
-            <>
-                <AccessibleChart plotlyProps={plotlyProps} theme={this.props.theme} relayoutArg={relayoutArg as any} />
-            </>
+            <AccessibleChart plotlyProps={plotlyProps} theme={this.props.theme} relayoutArg={relayoutArg as any} />
         );
     }
 }

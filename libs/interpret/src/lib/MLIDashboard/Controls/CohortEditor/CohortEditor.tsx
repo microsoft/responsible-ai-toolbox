@@ -192,7 +192,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                                 columns={[{ key: "col1", name: "name", minWidth: 150, fieldName: "title" }]}
                             />
                         </div>
-                        {openedFilter == undefined ? (
+                        {!openedFilter ? (
                             <div className={styles.rightHalf}>
                                 <Text className={styles.defaultText} variant={"medium"}>
                                     {localization.CohortEditor.defaultFilterState}
@@ -281,7 +281,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         if (!this._isInitialized) {
             return;
         }
-        if (this._leftSelection.getSelection().length != 0) {
+        if (this._leftSelection.getSelection().length !== 0) {
             let property = this._leftSelection.getSelection()[0].key as string;
             if (property === JointDataset.DataLabelRoot) {
                 property += "0";
@@ -428,7 +428,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
     }
 
     private roundDecimalValue(value): number {
-        return value % 1 != 0 ? (Math.round(value * 10000) / 10000).toFixed(4) : value;
+        return value % 1 !== 0 ? (Math.round(value * 10000) / 10000).toFixed(4) : value;
     }
 
     private setFilterLabel(filter: IFilter, styles: IProcessedStyleSet<ICohortEditorStyles>): React.ReactNode {
@@ -572,7 +572,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                             useComboBoxAsMenuWidth={true}
                             calloutProps={FabricStyles.calloutProps}
                         />
-                        {openedFilter.method == FilterMethods.inTheRangeOf ? (
+                        {openedFilter.method === FilterMethods.inTheRangeOf ? (
                             <div className={styles.valueSpinButtonDiv}>
                                 <SpinButton
                                     labelPosition={Position.top}

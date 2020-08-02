@@ -20,6 +20,7 @@
         "format:write": "nx format:write",
         "help": "nx help",
         "lint": "nx workspace-lint && nx lint",
+        "lintall": "nx workspace-lint && nx run-many --target=lint --all",
         "nx": "nx",
         "start": "nx serve",
         "test": "nx test",

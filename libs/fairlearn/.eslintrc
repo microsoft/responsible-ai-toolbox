@@ -2,7 +2,6 @@
   "rules": {
     "array-callback-return": "warn",
     "dot-location": ["warn", "property"],
-    "eqeqeq": ["warn", "smart"],
     "new-parens": "warn",
     "no-caller": "warn",
     "no-cond-assign": ["warn", "except-parens"],
