@@ -211,7 +211,7 @@ export class App extends React.Component<any, any> {
                 <div style={{ width: "80vw", backgroundColor: "white", margin: "50px auto" }}>
                     <div style={{ width: "940px" }}>
                         <FairnessWizard
-                            modelInformation={{ modelClass: "blackbox" } as any}
+                            // modelInformation={{ modelClass: "blackbox" } as any}
                             dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
                             testData={data.augmentedData}
                             predictedY={data.predictedYs}

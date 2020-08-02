@@ -291,19 +291,19 @@
         },
         "@nrwl/react": {
             "application": {
-                "style": "none",
+                "style": "scss",
                 "linter": "eslint",
                 "babel": true
             },
             "library": {
-                "style": "none",
+                "style": "scss",
                 "linter": "eslint"
             },
             "storybook-configuration": {
                 "linter": "eslint"
             },
             "component": {
-                "style": "none"
+                "style": "scss"
             }
         },
         "@nrwl/next": {
