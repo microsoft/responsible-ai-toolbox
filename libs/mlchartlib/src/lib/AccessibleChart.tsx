@@ -30,10 +30,6 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     private plotlyRef: PlotlyHTMLElement;
     private isClickHandled = false;
 
-    constructor(props: IAccessibleChartProps) {
-        super(props);
-    }
-
     public componentDidMount(): void {
         if (this.hasData()) {
             this.resetRenderTimer();

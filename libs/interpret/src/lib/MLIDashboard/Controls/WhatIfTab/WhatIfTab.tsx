@@ -292,6 +292,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
                     if (isActive) {
                         return this.selectedFeatureImportance[i];
                     }
+                    return undefined;
                 })
                 .filter(item => !!item);
             const includedColors = this.includedFeatureImportance.map(
@@ -303,6 +304,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
                     if (isActive) {
                         return this.selectedDatapoints[i];
                     }
+                    return undefined;
                 })
                 .filter(item => !!item);
             const includedCustomRows = this.state.customPointIsActive
@@ -313,6 +315,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
                         includedNames.push(this.state.customPoints[i][WhatIfTab.namePath]);
                         return this.customDatapoints[i];
                     }
+                    return undefined;
                 })
                 .filter(item => !!item);
             this.testableDatapoints = [...includedRows, ...includedCustomRows];
@@ -1705,7 +1708,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
             const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
             hovertemplate += metaX.label + ": %{customdata.X}<br>";
 
-            rawX.map((val, index) => {
+            rawX.forEach((val, index) => {
                 if (metaX.treatAsCategorical) {
                     customdata[index]["X"] = metaX.sortedCategoricalValues[val];
                 } else {
@@ -1725,7 +1728,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
             const metaY = this.props.jointDataset.metaDict[chartProps.yAxis.property];
             const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
             hovertemplate += metaY.label + ": %{customdata.Y}<br>";
-            rawY.map((val, index) => {
+            rawY.forEach((val, index) => {
                 if (metaY.treatAsCategorical) {
                     customdata[index]["Y"] = metaY.sortedCategoricalValues[val];
                 } else {

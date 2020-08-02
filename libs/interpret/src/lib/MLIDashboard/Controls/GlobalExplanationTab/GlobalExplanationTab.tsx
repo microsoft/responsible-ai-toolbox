@@ -557,6 +557,7 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
                 if (isActive) {
                     return this.cohortSeries[index];
                 }
+                return undefined;
             })
             .filter(series => !!series);
     }

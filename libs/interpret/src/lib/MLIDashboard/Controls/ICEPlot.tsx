@@ -136,7 +136,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         return xData.map((xValue, index) => {
             const yDatum = yData[index];
             if (yDatum === undefined) {
-                return;
+                return undefined;
             }
             const result = [];
             if (modelType !== ModelTypes.regression) {

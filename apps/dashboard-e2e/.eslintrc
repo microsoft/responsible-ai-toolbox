@@ -1,5 +1,4 @@
 {
-    "rules": {},
     "overrides": [
         {
             "files": ["src/plugins/index.js"],

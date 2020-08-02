@@ -134,6 +134,8 @@ export class Cohort {
                         return (filter.arg as number[]).includes(rowVal);
                     case FilterMethods.inTheRangeOf:
                         return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+                    default:
+                        return false;
                 }
             }),
         );

@@ -1,7 +1,7 @@
-import React from 'react';
-import { localization } from '../../Localization/localization';
-import { ModelTypes } from '../IExplanationContext';
-require('./PredictionLabel.css');
+import React from "react";
+import { localization } from "../../Localization/localization";
+import { ModelTypes } from "../IExplanationContext";
+require("./PredictionLabel.css");
 
 export interface IPredictionLabelProps {
     modelType: ModelTypes;
