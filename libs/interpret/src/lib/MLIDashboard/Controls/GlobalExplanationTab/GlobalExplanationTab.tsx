@@ -127,18 +127,6 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         }
         this.buildGlobalSeries();
         this.buildActiveCohortSeries(this.state.sortArray);
-        this.handleFeatureSelection = this.handleFeatureSelection.bind(this);
-        this.setStartingK = this.setStartingK.bind(this);
-        this.setSelectedCohort = this.setSelectedCohort.bind(this);
-        this.setSortIndex = this.setSortIndex.bind(this);
-        this.onXSet = this.onXSet.bind(this);
-        this.toggleCalloutOpen = this.toggleCalloutOpen.bind(this);
-        this.closeCallout = this.closeCallout.bind(this);
-        this.onChartTypeChange = this.onChartTypeChange.bind(this);
-        this.setWeightOption = this.setWeightOption.bind(this);
-        this.toggleDependencePlotTooltip = this.toggleDependencePlotTooltip.bind(this);
-        this.toggleCrossClassInfo = this.toggleCrossClassInfo.bind(this);
-        this.toggleExplanationTooltip = this.toggleExplanationTooltip.bind(this);
     }
 
     public componentDidUpdate(prevProps: IGlobalExplanationTabProps): void {
@@ -482,41 +470,41 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         );
     }
 
-    private setSelectedCohort(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSelectedCohort = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         this.setState({ selectedCohortIndex: item.key as number });
-    }
+    };
 
-    private setStartingK(newValue: number): void {
+    private setStartingK = (newValue: number): void => {
         this.setState({ startingK: newValue });
-    }
+    };
 
-    private setTopK(newValue: number): void {
+    private setTopK = (newValue: number): void => {
         this.setState({ topK: newValue });
-    }
+    };
 
-    private toggleCalloutOpen(): void {
+    private toggleCalloutOpen = (): void => {
         this.setState({ calloutVisible: !this.state.calloutVisible });
-    }
+    };
 
-    private toggleDependencePlotTooltip(): void {
+    private toggleDependencePlotTooltip = (): void => {
         this.setState({ dependenceTooltipVisible: !this.state.dependenceTooltipVisible });
-    }
+    };
 
-    private toggleCrossClassInfo(): void {
+    private toggleCrossClassInfo = (): void => {
         this.setState({ crossClassInfoVisible: !this.state.crossClassInfoVisible });
-    }
+    };
 
-    private toggleExplanationTooltip(): void {
+    private toggleExplanationTooltip = (): void => {
         this.setState({ explanationTooltipVisible: !this.state.explanationTooltipVisible });
-    }
+    };
 
-    private closeCallout(): void {
+    private closeCallout = (): void => {
         this.setState({ calloutVisible: false });
-    }
+    };
 
-    private onChartTypeChange(_event: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void {
+    private onChartTypeChange = (_event: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void => {
         this.setState({ chartType: item.key as ChartTypes });
-    }
+    };
 
     private readonly setNumericValue = (delta: number, max: number, min: number, stringVal: string): string | void => {
         if (delta === 0) {
@@ -586,26 +574,26 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         this.props.onChange(result);
     }
 
-    private setSortIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSortIndex = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         const newIndex = item.key as number;
         const sortArray = ModelExplanationUtils.getSortIndices(
             this.cohortSeries[newIndex].unsortedAggregateY,
         ).reverse();
         this.setState({ sortingSeriesIndex: newIndex, sortArray });
-    }
+    };
 
-    private setWeightOption(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setWeightOption = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         const newIndex = item.key as WeightVectorOption;
         this.props.onWeightChange(newIndex);
-    }
+    };
 
-    private onXSet(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onXSet = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         const key = item.key as string;
         const index = this.props.jointDataset.metaDict[key].index;
         this.handleFeatureSelection(this.state.selectedCohortIndex, index);
-    }
+    };
 
-    private handleFeatureSelection(cohortIndex: number, featureIndex: number): void {
+    private handleFeatureSelection = (cohortIndex: number, featureIndex: number): void => {
         // set to dependence plot initially, can be changed if other feature importances available
         const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
         const xIsDithered = this.props.jointDataset.metaDict[xKey].treatAsCategorical;
@@ -626,5 +614,5 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         };
         this.props.onDependenceChange(chartProps);
         this.setState({ selectedCohortIndex: cohortIndex, selectedFeatureIndex: featureIndex });
-    }
+    };
 }

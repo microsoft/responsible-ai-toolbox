@@ -178,11 +178,6 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
         }
         const explanationContext: IExplanationContext = ExplanationDashboard.buildInitialExplanationContext(props);
         const defaultTopK = Math.min(8, explanationContext.modelMetadata.featureNames.length);
-        this.onClassSelect = this.onClassSelect.bind(this);
-        this.onConfigChanged = this.onConfigChanged.bind(this);
-        this.onClearSelection = this.onClearSelection.bind(this);
-        this.handleGlobalTabClick = this.handleGlobalTabClick.bind(this);
-        this.handleLocalTabClick = this.handleLocalTabClick.bind(this);
         this.pivotItems = [];
         if (explanationContext.testDataset.dataset !== undefined) {
             this.pivotItems.push({
@@ -974,7 +969,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
         );
     }
 
-    private onClassSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onClassSelect = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.setState(prevState => {
             const newWeightContext = _.cloneDeep(prevState.dashboardContext.weightContext);
             newWeightContext.selectedKey = item.key as any;
@@ -1004,38 +999,38 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                 },
             };
         });
-    }
+    };
 
-    private onConfigChanged(
+    private onConfigChanged = (
         newConfig: IPlotlyProperty | IFeatureImportanceConfig | IBarChartConfig,
         configId: string,
-    ): void {
+    ): void => {
         this.setState(prevState => {
             const newConfigs = _.cloneDeep(prevState.configs);
             newConfigs[configId] = newConfig;
             return { configs: newConfigs };
         });
-    }
+    };
 
-    private handleGlobalTabClick(item: PivotItem): void {
+    private handleGlobalTabClick = (item: PivotItem): void => {
         let index = ExplanationDashboard.globalTabKeys.indexOf(item.props.itemKey);
         if (index === -1) {
             index = 0;
         }
         this.setState({ activeGlobalTab: index });
-    }
+    };
 
-    private handleLocalTabClick(item: PivotItem): void {
+    private handleLocalTabClick = (item: PivotItem): void => {
         let index = ExplanationDashboard.localTabKeys.indexOf(item.props.itemKey);
         if (index === -1) {
             index = 0;
         }
         this.setState({ activeLocalTab: index });
-    }
+    };
 
-    private onClearSelection(): void {
+    private onClearSelection = (): void => {
         this.selectionContext.onSelect([]);
         this.setState({ activeLocalTab: 0 });
         (document.querySelector("#globalPivot button") as any).focus();
-    }
+    };
 }

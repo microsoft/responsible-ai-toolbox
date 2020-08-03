@@ -43,10 +43,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
             rangeView,
             xAxisArray,
         };
-        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
-        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
-        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
-        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
+
         this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
     }
     private static buildYAxis(metadata: IExplanationModelMetadata, selectedClass: number): string {
@@ -350,12 +347,12 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
         });
     }
 
-    private onCategoricalRangeChanged(
+    private onCategoricalRangeChanged = (
         _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
         _index?: number,
         value?: string,
-    ): void {
+    ): void => {
         const rangeView = _.cloneDeep(this.state.rangeView);
         const currentSelectedKeys = rangeView.selectedOptionKeys || [];
         if (option) {
@@ -371,7 +368,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
         this.setState({ rangeView, xAxisArray }, () => {
             this.debounceFetchData();
         });
-    }
+    };
 
     private updateSelectedOptionKeys = (
         selectedKeys: Array<string | number>,

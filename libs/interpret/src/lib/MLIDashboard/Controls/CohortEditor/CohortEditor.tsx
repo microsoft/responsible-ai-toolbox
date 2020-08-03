@@ -134,9 +134,6 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         });
         this._leftSelection.setItems(this.leftItems);
         this._isInitialized = true;
-
-        this.saveCohort = this.saveCohort.bind(this);
-        this.setCohortName = this.setCohortName.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -429,16 +426,16 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         this.setState({ filterIndex: index, openedFilter: _.cloneDeep(editFilter) });
     }
 
-    private saveCohort(): void {
+    private saveCohort = (): void => {
         if (this.state.cohortName.length > 0) {
             const newCohort = new Cohort(this.state.cohortName, this.props.jointDataset, this.state.filters);
             this.props.onSave(newCohort);
         }
-    }
+    };
 
-    private setCohortName(event): void {
+    private setCohortName = (event): void => {
         this.setState({ cohortName: event.target.value });
-    }
+    };
 
     private roundDecimalValue(value): number {
         return value % 1 !== 0 ? (Math.round(value * 10000) / 10000).toFixed(4) : value;

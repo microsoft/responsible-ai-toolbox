@@ -164,7 +164,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
                     return prev;
                 }, []);
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
 
     private static buildPlotlyProps: (
@@ -223,7 +223,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             plotlyProps.data = ChartBuilder.buildPlotlySeries(plotlyProps.data[0], rows);
             return plotlyProps;
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
 
     private readonly _crossClassIconId = "cross-class-icon-id";
@@ -233,13 +233,6 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
 
     public constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.showCrossClassInfo = this.showCrossClassInfo.bind(this);
-        this.showGlobalSortInfo = this.showGlobalSortInfo.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.setChart = this.setChart.bind(this);
-        this.setK = this.setK.bind(this);
-        this.setColor = this.setColor.bind(this);
         this.colorOptions = this.buildColorOptions();
         this.rowCount = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues.length;
         const selectedColorIndex = this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
@@ -252,7 +245,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
     private static buildTooltip(data: IExplanationContext, rowIndex: number, featureIndex: number): string {
         const isLarge = data.localExplanation.flattenedValues.length > 500;
         const result = [];
-        // The formatString imputs are keys to loc object. This is because format string tries to use them as keys first, and only uses the passed in string after
+        // The formatString imputes are keys to loc object. This is because format string tries to use them as keys first, and only uses the passed in string after
         // trowing an exception in a try block. This is very slow for repeated calls.
         result.push(
             localization.formatString(
@@ -456,7 +449,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
         }, 1);
     }
 
-    private handleClick(data: any): void {
+    private handleClick = (data: any): void => {
         const clickedId = (data.points[0] as any).customdata;
         const selections: string[] = this.props.selectionContext.selectedIds.slice();
         const existingIndex = selections.indexOf(clickedId);
@@ -466,9 +459,9 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             selections.push(clickedId);
         }
         this.props.selectionContext.onSelect(selections);
-    }
+    };
 
-    private showCrossClassInfo(): void {
+    private showCrossClassInfo = (): void => {
         if (this.state.calloutContent) {
             this.onDismiss();
         } else {
@@ -484,9 +477,9 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             );
             this.setState({ calloutContent, calloutId: this._crossClassIconId });
         }
-    }
+    };
 
-    private showGlobalSortInfo(): void {
+    private showGlobalSortInfo = (): void => {
         if (this.state.calloutContent) {
             this.onDismiss();
         } else {
@@ -504,7 +497,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             );
             this.setState({ calloutContent, calloutId: this._globalSortIconId });
         }
-    }
+    };
 
     private buildColorOptions(): IComboBoxOption[] {
         const isRegression =
@@ -549,23 +542,23 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
         return result;
     }
 
-    private setChart(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private setChart = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.displayMode = item.key as any;
         this.props.onChange(newConfig, this.props.config.id);
-    }
+    };
 
-    private onDismiss(): void {
+    private onDismiss = (): void => {
         this.setState({ calloutContent: undefined, calloutId: undefined });
-    }
+    };
 
-    private setColor(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private setColor = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.setState({ selectedColorOption: item.key as any, plotlyProps: undefined });
-    }
+    };
 
-    private setK(newValue: number): void {
+    private setK = (newValue: number): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.topK = newValue;
         this.props.onChange(newConfig, this.props.config.id);
-    }
+    };
 }

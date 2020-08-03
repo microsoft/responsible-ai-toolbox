@@ -36,8 +36,6 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     public constructor(props: ISinglePointFeatureImportanceProps) {
         super(props);
         this.sortOptions = this.buildSortOptions();
-        this.onSortSelect = this.onSortSelect.bind(this);
-        this.setTopK = this.setTopK.bind(this);
         this.state = {
             selectedSorting: this.getDefaultSorting(),
         };
@@ -180,13 +178,13 @@ export class SinglePointFeatureImportance extends React.PureComponent<
             : FeatureKeys.absoluteLocal;
     }
 
-    private setTopK(newValue: number): void {
+    private setTopK = (newValue: number): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.topK = newValue;
         this.props.onChange(newConfig, LocalBarId);
-    }
+    };
 
-    private onSortSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onSortSelect = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.setState({ selectedSorting: item.key as any });
-    }
+    };
 }

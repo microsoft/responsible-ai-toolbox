@@ -51,7 +51,7 @@ export class ScatterUtils {
                 }, []);
             return result as any;
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
 
     public static buildOptions: (
@@ -185,7 +185,7 @@ export class ScatterUtils {
                 return result;
             });
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
     private static baseScatterProperties: IPlotlyProperty = {
         config: { displaylogo: false, responsive: true, displayModeBar: false },

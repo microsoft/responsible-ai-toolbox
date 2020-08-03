@@ -38,12 +38,6 @@ export interface IBinnedResponse {
 export class BinningControl extends React.PureComponent<IBinningProps, IBinningState> {
     public constructor(props: IBinningProps) {
         super(props);
-
-        this.onFeatureSelected = this.onFeatureSelected.bind(this);
-        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
-        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
-        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
-        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
         this.state = undefined;
     }
 
@@ -113,13 +107,13 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         );
     }
 
-    private onFeatureSelected(_event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
+    private onFeatureSelected = (_event: React.FormEvent<IComboBox>, item: IDropdownOption): void => {
         this.setState(this.buildRangeView(item.key as number), () => {
             this.pushChange();
         });
-    }
+    };
 
-    private onMinRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMinRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         rangeView.min = newValue;
@@ -135,9 +129,9 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
                 this.pushChange();
             });
         }
-    }
+    };
 
-    private onMaxRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMaxRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         rangeView.max = newValue;
@@ -153,9 +147,9 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
                 this.pushChange();
             });
         }
-    }
+    };
 
-    private onStepsRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onStepsRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         rangeView.steps = newValue;
@@ -168,14 +162,14 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
                 this.pushChange();
             });
         }
-    }
+    };
 
-    private onCategoricalRangeChanged(
+    private onCategoricalRangeChanged = (
         _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
         _index?: number,
         value?: string,
-    ): void {
+    ): void => {
         const rangeView = _.cloneDeep(this.state) as IBinningState;
         const currentSelectedKeys = rangeView.selectedOptionKeys || [];
         if (option) {
@@ -190,7 +184,7 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         this.setState(rangeView, () => {
             this.pushChange();
         });
-    }
+    };
 
     private updateSelectedOptionKeys = (selectedKeys: string[], option: IComboBoxOption): string[] => {
         selectedKeys = [...selectedKeys]; // modify a copy

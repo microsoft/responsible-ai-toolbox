@@ -62,7 +62,7 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
             plotlyProps.data = computedSeries;
             return plotlyProps;
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
 
     private static buildViolinPlotlyProps: (
@@ -123,7 +123,7 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
             }
             return plotlyProps;
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
 
     private static getClassesArray: (
@@ -141,7 +141,7 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
             default:
                 return new Array(data.localExplanation.values.length).fill(0);
         }
-    }, _.isEqual);
+    }, _.isEqual.bind(window));
 
     private static violinPlotlyProps: IPlotlyProperty = {
         config: { displaylogo: false, responsive: true, displayModeBar: false } as any,

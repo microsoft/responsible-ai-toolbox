@@ -203,26 +203,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         }
         this.createCopyOfFirstRow();
         this.buildRowOptions(0);
-        this.dismissPanel = this.dismissPanel.bind(this);
-        this.openPanel = this.openPanel.bind(this);
-        this.onXSet = this.onXSet.bind(this);
-        this.onYSet = this.onYSet.bind(this);
-        this.setCustomRowProperty = this.setCustomRowProperty.bind(this);
-        this.setCustomRowPropertyDropdown = this.setCustomRowPropertyDropdown.bind(this);
-        this.savePoint = this.savePoint.bind(this);
-        this.saveAsPoint = this.saveAsPoint.bind(this);
-        this.selectPointFromChart = this.selectPointFromChart.bind(this);
-        this.filterFeatures = this.filterFeatures.bind(this);
-        this.setSelectedCohort = this.setSelectedCohort.bind(this);
-        this.setStartingK = this.setStartingK.bind(this);
-        this.setSecondaryChart = this.setSecondaryChart.bind(this);
-        this.setSelectedIndex = this.setSelectedIndex.bind(this);
-        this.onFeatureSelected = this.onFeatureSelected.bind(this);
-        this.setWeightOption = this.setWeightOption.bind(this);
-        this.setSortIndex = this.setSortIndex.bind(this);
-        this.onICEClassSelected = this.onICEClassSelected.bind(this);
-        this.toggleCrossClassInfo = this.toggleCrossClassInfo.bind(this);
-        this.toggleICETooltip = this.toggleICETooltip.bind(this);
+
         this.fetchData = _.debounce(this.fetchData.bind(this), 400);
     }
 
@@ -671,9 +652,9 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         );
     }
 
-    private editCohort(): void {
+    private editCohort = (): void => {
         this.props.editCohort(this.state.selectedCohortIndex);
-    }
+    };
 
     private buildSecondaryArea(classNames: IProcessedStyleSet<IWhatIfTabStyles>): React.ReactNode {
         let secondaryPlot: React.ReactNode;
@@ -1281,9 +1262,9 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         }
     }
 
-    private setStartingK(newValue: number): void {
+    private setStartingK = (newValue: number): void => {
         this.setState({ startingK: newValue });
-    }
+    };
 
     private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
         const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -1293,14 +1274,14 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         return [];
     }
 
-    private setSelectedCohort(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSelectedCohort = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         this.buildRowOptions(item.key as number);
         this.setState({
             selectedCohortIndex: item.key as number,
             selectedPointsIndexes: [],
             showSelectionWarning: false,
         });
-    }
+    };
 
     private buildRowOptions(cohortIndex: number): void {
         this.props.cohorts[cohortIndex].sort(JointDataset.IndexLabel);
@@ -1315,42 +1296,42 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
             .reverse();
     }
 
-    private onFeatureSelected(_event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
+    private onFeatureSelected = (_event: React.FormEvent<IComboBox>, item: IDropdownOption): void => {
         this.setState({ selectedFeatureKey: item.key as string });
-    }
+    };
 
-    private onICEClassSelected(_event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
+    private onICEClassSelected = (_event: React.FormEvent<IComboBox>, item: IDropdownOption): void => {
         this.setState({ selectedICEClass: item.key as number });
-    }
+    };
 
-    private setSortIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSortIndex = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         const newIndex = item.key as number;
         const sortArray = ModelExplanationUtils.getSortIndices(
             this.includedFeatureImportance[newIndex].unsortedAggregateY,
         ).reverse();
         this.setState({ sortingSeriesIndex: newIndex, sortArray });
-    }
+    };
 
-    private setWeightOption(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setWeightOption = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         const newIndex = item.key as WeightVectorOption;
         this.props.onWeightChange(newIndex);
-    }
+    };
 
-    private setSecondaryChart(_event: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void {
+    private setSecondaryChart = (_event: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void => {
         this.setState({ secondaryChartChoice: item.key });
-    }
+    };
 
-    private setSelectedIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSelectedIndex = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         this.setTemporaryPointToCopyOfDatasetPoint(item.key as number);
-    }
+    };
 
-    private toggleCrossClassInfo(): void {
+    private toggleCrossClassInfo = (): void => {
         this.setState({ crossClassInfoVisible: !this.state.crossClassInfoVisible });
-    }
+    };
 
-    private toggleICETooltip(): void {
+    private toggleICETooltip = (): void => {
         this.setState({ iceTooltipVisible: !this.state.iceTooltipVisible });
-    }
+    };
 
     private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
         this.temporaryPoint = this.props.jointDataset.getRow(index);
@@ -1393,12 +1374,12 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         });
     }
 
-    private setCustomRowProperty(
+    private setCustomRowProperty = (
         key: string,
         isString: boolean,
         _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
         newValue?: string,
-    ): void {
+    ): void => {
         const editingData = this.temporaryPoint;
         this.stringifedValues[key] = newValue;
         if (isString) {
@@ -1418,15 +1399,15 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
                 this.fetchData(editingData);
             }
         }
-    }
+    };
 
-    private setCustomRowPropertyDropdown(
+    private setCustomRowPropertyDropdown = (
         key: string,
         _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
         _index?: number,
         value?: string,
-    ): void {
+    ): void => {
         const editingData = this.temporaryPoint;
         if (option) {
             // User selected/de-selected an existing option
@@ -1440,16 +1421,16 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
 
         this.forceUpdate();
         this.fetchData(editingData);
-    }
+    };
 
-    private savePoint(): void {
+    private savePoint = (): void => {
         const customPoints = [...this.state.customPoints];
         customPoints[this.state.editingDataCustomIndex] = this.temporaryPoint;
         this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
         this.setState({ customPoints });
-    }
+    };
 
-    private saveAsPoint(): void {
+    private saveAsPoint = (): void => {
         const editingDataCustomIndex =
             this.state.editingDataCustomIndex !== undefined
                 ? this.state.editingDataCustomIndex
@@ -1460,7 +1441,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         customPointIsActive.push(true);
         this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
         this.setState({ editingDataCustomIndex, customPoints, customPointIsActive });
-    }
+    };
 
     private createCopyOfFirstRow(): void {
         const indexes = this.getDefaultSelectedPointIndexes(this.props.cohorts[this.state.selectedCohortIndex]);
@@ -1492,31 +1473,31 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         this.setState({ customPointIsActive });
     }
 
-    private dismissPanel(): void {
+    private dismissPanel = (): void => {
         this.setState({ isPanelOpen: false });
         window.dispatchEvent(new Event("resize"));
-    }
+    };
 
-    private openPanel(): void {
+    private openPanel = (): void => {
         this.setState({ isPanelOpen: true });
         window.dispatchEvent(new Event("resize"));
-    }
+    };
 
-    private onXSet(value: ISelectorConfig): void {
+    private onXSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.xAxis = value;
         this.props.onChange(newProps);
         this.setState({ xDialogOpen: false });
-    }
+    };
 
-    private onYSet(value: ISelectorConfig): void {
+    private onYSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.yAxis = value;
         this.props.onChange(newProps);
         this.setState({ yDialogOpen: false });
-    }
+    };
 
-    private filterFeatures(_event?: React.ChangeEvent<HTMLInputElement>, newValue?: string): void {
+    private filterFeatures = (_event?: React.ChangeEvent<HTMLInputElement>, newValue?: string): void => {
         if (newValue === undefined || newValue === null || !/\S/.test(newValue)) {
             this.setState({ filteredFeatureList: this.featuresOption });
         }
@@ -1524,7 +1505,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
             return item.data.fullLabel.includes(newValue.toLowerCase());
         });
         this.setState({ filteredFeatureList });
-    }
+    };
 
     private readonly setXOpen = (val: boolean): void => {
         if (val && this.state.xDialogOpen === false) {
@@ -1542,7 +1523,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         this.setState({ yDialogOpen: false });
     };
 
-    private selectPointFromChart(data: any): void {
+    private selectPointFromChart = (data: any): void => {
         const trace = data.points[0];
         // custom point
         if (trace.curveNumber === 1) {
@@ -1552,7 +1533,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
             this.setTemporaryPointToCopyOfDatasetPoint(index);
             this.toggleSelectionOfPoint(index);
         }
-    }
+    };
 
     private toggleSelectionOfPoint(index: number): void {
         const indexOf = this.state.selectedPointsIndexes.indexOf(index);

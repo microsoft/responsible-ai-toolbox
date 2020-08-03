@@ -121,7 +121,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 } as any,
             };
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
 
     private featuresOption: IDropdownOption[];
@@ -154,11 +154,6 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             rangeView: undefined,
             requestedRange: undefined,
         };
-        this.onFeatureSelected = this.onFeatureSelected.bind(this);
-        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
-        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
-        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
-        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
         this.fetchData = _.debounce(this.fetchData.bind(this), 500);
     }
 
@@ -351,16 +346,16 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
     }
 
-    private onFeatureSelected(_event: React.FormEvent<IComboBox>, item: IDropdownOption): void {
+    private onFeatureSelected = (_event: React.FormEvent<IComboBox>, item: IDropdownOption): void => {
         if (this.props.invokeModel === undefined) {
             return;
         }
         this.setState({ rangeView: this.buildRangeView(item.key as number) }, () => {
             this.fetchData();
         });
-    }
+    };
 
-    private onMinRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMinRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state.rangeView);
         rangeView.min = +newValue;
@@ -376,9 +371,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 this.fetchData();
             });
         }
-    }
+    };
 
-    private onMaxRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onMaxRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state.rangeView);
         rangeView.max = +newValue;
@@ -394,9 +389,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 this.fetchData();
             });
         }
-    }
+    };
 
-    private onStepsRangeChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onStepsRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         const rangeView = _.cloneDeep(this.state.rangeView);
         rangeView.steps = +newValue;
@@ -409,14 +404,14 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 this.fetchData();
             });
         }
-    }
+    };
 
-    private onCategoricalRangeChanged(
+    private onCategoricalRangeChanged = (
         _event: React.FormEvent<IComboBox>,
         option?: IComboBoxOption,
         _index?: number,
         value?: string,
-    ): void {
+    ): void => {
         const rangeView = _.cloneDeep(this.state.rangeView);
         const currentSelectedKeys = rangeView.selectedOptionKeys || [];
         if (option) {
@@ -431,7 +426,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         this.setState({ rangeView }, () => {
             this.fetchData();
         });
-    }
+    };
 
     private updateSelectedOptionKeys = (
         selectedKeys: Array<string | number>,

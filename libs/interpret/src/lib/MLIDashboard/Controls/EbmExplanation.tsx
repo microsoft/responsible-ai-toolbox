@@ -148,7 +148,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                 } as any,
             };
         },
-        _.isEqual,
+        _.isEqual.bind(window),
     );
     private featureOptions: IComboBoxOption[];
 
@@ -160,7 +160,6 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
         this.state = {
             selectedFeature: 0,
         };
-        this.onFeatureSelect = this.onFeatureSelect.bind(this);
     }
     public render(): React.ReactNode {
         const plotlyProps = EbmExplanation.buildPlotlyProps(this.state.selectedFeature, this.props.explanationContext);
@@ -184,7 +183,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
         );
     }
 
-    private onFeatureSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onFeatureSelect = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.setState({ selectedFeature: item.key as any });
-    }
+    };
 }

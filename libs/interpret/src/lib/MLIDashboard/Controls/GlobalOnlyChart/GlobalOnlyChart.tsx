@@ -62,8 +62,6 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
             sortingSeriesKey: FeatureKeys.absoluteGlobal,
             sortArray: ModelExplanationUtils.buildSortedVector(this.props.globalImportance).reverse(),
         };
-        this.setSortIndex = this.setSortIndex.bind(this);
-        this.setStartingK = this.setStartingK.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -112,20 +110,20 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
         );
     }
 
-    private setStartingK(newValue: number): void {
+    private setStartingK = (newValue: number): void => {
         this.setState({ startingK: newValue });
-    }
+    };
 
-    private setSortIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
-        const newIndex = item.key;
-        const sortArray = this.getSortVector(newIndex).reverse();
-        this.setState({ sortingSeriesKey: newIndex, sortArray });
-    }
+    // private setSortIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    //     const newIndex = item.key;
+    //     const sortArray = this.getSortVector(newIndex).reverse();
+    //     this.setState({ sortingSeriesKey: newIndex, sortArray });
+    // }
 
-    private getSortVector(newIndex: string | number): number[] {
-        if (newIndex === FeatureKeys.absoluteGlobal) {
-            return ModelExplanationUtils.buildSortedVector(this.props.globalImportance);
-        }
-        return ModelExplanationUtils.buildSortedVector(this.props.globalImportance, newIndex as number);
-    }
+    // private getSortVector(newIndex: string | number): number[] {
+    //     if (newIndex === FeatureKeys.absoluteGlobal) {
+    //         return ModelExplanationUtils.buildSortedVector(this.props.globalImportance);
+    //     }
+    //     return ModelExplanationUtils.buildSortedVector(this.props.globalImportance, newIndex as number);
+    // }
 }

@@ -16,7 +16,6 @@ import {
     ChoiceGroup,
     IChoiceGroupOption,
 } from "office-ui-fabric-react";
-
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
@@ -112,15 +111,6 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         if (props.chartProps === undefined) {
             this.generateDefaultChartAxes();
         }
-        this.onXSet = this.onXSet.bind(this);
-        this.onYSet = this.onYSet.bind(this);
-        this.onColorSet = this.onColorSet.bind(this);
-        this.scatterSelection = this.scatterSelection.bind(this);
-        this.onChartTypeChange = this.onChartTypeChange.bind(this);
-        this.setSelectedCohort = this.setSelectedCohort.bind(this);
-        this.toggleCalloutOpen = this.toggleCalloutOpen.bind(this);
-        this.closeCallout = this.closeCallout.bind(this);
-        this.editCohort = this.editCohort.bind(this);
     }
 
     private static generatePlotlyProps(
@@ -612,22 +602,22 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         );
     }
 
-    private editCohort(): void {
+    private editCohort = (): void => {
         this.props.editCohort(this.state.selectedCohortIndex);
-    }
+    };
 
-    private setSelectedCohort(_: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSelectedCohort = (_: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         this.setState({ selectedCohortIndex: item.key as number });
-    }
+    };
 
-    private onChartTypeChange(_ev: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void {
+    private onChartTypeChange = (_ev: React.SyntheticEvent<HTMLElement>, item: IChoiceGroupOption): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.chartType = item.key as ChartTypes;
         if (newProps.yAxis.property === ColumnCategories.none) {
             newProps.yAxis = this.generateDefaultYAxis();
         }
         this.props.onChange(newProps);
-    }
+    };
 
     private readonly setXOpen = (val: boolean): void => {
         if (val && this.state.xDialogOpen === false) {
@@ -653,34 +643,34 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         this.setState({ yDialogOpen: false });
     };
 
-    private onXSet(value: ISelectorConfig): void {
+    private onXSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.xAxis = value;
         this.props.onChange(newProps);
         this.setState({ xDialogOpen: false });
-    }
+    };
 
-    private onYSet(value: ISelectorConfig): void {
+    private onYSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.yAxis = value;
         this.props.onChange(newProps);
         this.setState({ yDialogOpen: false });
-    }
+    };
 
-    private onColorSet(value: ISelectorConfig): void {
+    private onColorSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.colorAxis = value;
         this.props.onChange(newProps);
         this.setState({ colorDialogOpen: false });
-    }
+    };
 
-    private toggleCalloutOpen(): void {
+    private toggleCalloutOpen = (): void => {
         this.setState({ calloutVisible: !this.state.calloutVisible });
-    }
+    };
 
-    private closeCallout(): void {
+    private closeCallout = (): void => {
         this.setState({ calloutVisible: false });
-    }
+    };
 
     private buildColorLegend(classNames: IProcessedStyleSet<IDatasetExplorerTabStyles>): React.ReactNode {
         let colorSeries = [];
@@ -768,7 +758,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         };
     }
 
-    private scatterSelection(guid: string, selections: string[], plotlyProps: IPlotlyProperty): void {
+    private scatterSelection = (guid: string, selections: string[], plotlyProps: IPlotlyProperty): void => {
         const selectedPoints =
             selections.length === 0
                 ? null
@@ -801,5 +791,5 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                       return [0];
                   });
         Plotly.restyle(guid, "marker.line.width" as any, newLineWidths as any);
-    }
+    };
 }

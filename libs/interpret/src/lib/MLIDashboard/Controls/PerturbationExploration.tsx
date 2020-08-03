@@ -38,7 +38,7 @@ export class PerturbationExploration extends React.Component<
             featureErrors: new Array(props.explanationContext.modelMetadata.featureNames.length),
             abortController: undefined,
         };
-        this.onValueEdit = this.onValueEdit.bind(this);
+
         this.fetchData = _.debounce(this.fetchData.bind(this), 500);
     }
 
@@ -134,7 +134,7 @@ export class PerturbationExploration extends React.Component<
         );
     }
 
-    private onValueEdit(featureIndex: number, val: string | number, error?: string): void {
+    private onValueEdit = (featureIndex: number, val: string | number, error?: string): void => {
         const perturbedDictionary = _.cloneDeep(this.state.perturbedDictionary);
         const featureErrors = _.cloneDeep(this.state.featureErrors);
         featureErrors[featureIndex] = error !== undefined;
@@ -147,7 +147,7 @@ export class PerturbationExploration extends React.Component<
         this.setState({ perturbedDictionary, featureErrors }, () => {
             this.fetchData();
         });
-    }
+    };
 
     private fetchData(): void {
         if (this.state.abortController !== undefined) {

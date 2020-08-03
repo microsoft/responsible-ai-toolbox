@@ -46,11 +46,6 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
         if (props.chartProps === undefined) {
             this.generateDefaultChartAxes();
         }
-        this.onXSet = this.onXSet.bind(this);
-        this.onYSet = this.onYSet.bind(this);
-        this.setXOpen = this.setXOpen.bind(this);
-        this.setYOpen = this.setYOpen.bind(this);
-        this.setSelectedCohort = this.setSelectedCohort.bind(this);
     }
 
     private static generatePlotlyProps(
@@ -369,9 +364,9 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
         );
     }
 
-    private setSelectedCohort(_: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
+    private setSelectedCohort = (_: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         this.setState({ selectedCohortIndex: item.key as number });
-    }
+    };
 
     private readonly setXOpen = (val: boolean): void => {
         if (val && this.state.xDialogOpen === false) {
@@ -389,7 +384,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
         this.setState({ yDialogOpen: false });
     };
 
-    private onXSet(value: ISelectorConfig): void {
+    private onXSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.xAxis = value;
         newProps.chartType = this.props.jointDataset.metaDict[value.property].treatAsCategorical
@@ -398,15 +393,15 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
 
         this.props.onChange(newProps);
         this.setState({ xDialogOpen: false });
-    }
+    };
 
-    private onYSet(value: ISelectorConfig): void {
+    private onYSet = (value: ISelectorConfig): void => {
         const newProps = _.cloneDeep(this.props.chartProps);
         newProps.yAxis = value;
 
         this.props.onChange(newProps);
         this.setState({ yDialogOpen: false });
-    }
+    };
 
     private generateDefaultChartAxes(): void {
         let bestModelMetricKey: string;

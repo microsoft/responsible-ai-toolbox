@@ -27,7 +27,6 @@ import {
 import { JointDataset } from "./JointDataset";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { GlobalExplanationTab, IGlobalBarSettings } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
-import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
 import { Cohort } from "./Cohort";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
@@ -166,21 +165,6 @@ export class NewExplanationDashboard extends React.PureComponent<
         super(props);
         NewExplanationDashboard.initializeIcons(props);
         loadTheme(props.theme || defaultTheme);
-        this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
-        this.onConfigChanged = this.onConfigChanged.bind(this);
-        this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
-        this.onDependenceChange = this.onDependenceChange.bind(this);
-        this.handleGlobalTabClick = this.handleGlobalTabClick.bind(this);
-        this.setGlobalBarSettings = this.setGlobalBarSettings.bind(this);
-        this.setSortVector = this.setSortVector.bind(this);
-        this.onCohortChange = this.onCohortChange.bind(this);
-        this.deleteCohort = this.deleteCohort.bind(this);
-        this.clearWarning = this.clearWarning.bind(this);
-        this.openCohort = this.openCohort.bind(this);
-        this.closeCohortEditor = this.closeCohortEditor.bind(this);
-        this.clearSizeWarning = this.clearSizeWarning.bind(this);
-        this.cloneAndOpenCohort = this.cloneAndOpenCohort.bind(this);
-        this.onWeightVectorChange = this.onWeightVectorChange.bind(this);
         if (this.props.locale) {
             localization.setLanguage(this.props.locale);
         }
@@ -534,79 +518,79 @@ export class NewExplanationDashboard extends React.PureComponent<
         }
     }
 
-    private onConfigChanged(newConfig: IGenericChartProps): void {
+    private onConfigChanged = (newConfig: IGenericChartProps): void => {
         this.setState({ dataChartConfig: newConfig });
-    }
+    };
 
-    private onModelConfigChanged(newConfig: IGenericChartProps): void {
+    private onModelConfigChanged = (newConfig: IGenericChartProps): void => {
         this.setState({ modelChartConfig: newConfig });
-    }
+    };
 
-    private onWhatIfConfigChanged(newConfig: IGenericChartProps): void {
+    private onWhatIfConfigChanged = (newConfig: IGenericChartProps): void => {
         this.setState({ whatIfChartConfig: newConfig });
-    }
+    };
 
-    private onDependenceChange(newConfig: IGenericChartProps): void {
+    private onDependenceChange = (newConfig: IGenericChartProps): void => {
         this.setState({ dependenceProps: newConfig });
-    }
+    };
 
-    private handleGlobalTabClick(item: PivotItem): void {
+    private handleGlobalTabClick = (item: PivotItem): void => {
         const index: globalTabKeys = globalTabKeys[item.props.itemKey];
         this.setState({ activeGlobalTab: index });
-    }
+    };
 
-    private setGlobalBarSettings(settings: IGlobalBarSettings): void {
+    private setGlobalBarSettings = (settings: IGlobalBarSettings): void => {
         this.setState({ globalBarConfig: settings });
-    }
+    };
 
-    private setSortVector(): void {
-        this.setState({
-            sortVector: ModelExplanationUtils.getSortIndices(
-                this.state.cohorts[0].calculateAverageImportance(),
-            ).reverse(),
-        });
-    }
+    // private setSortVector(): void {
+    //     this.setState({
+    //         sortVector: ModelExplanationUtils.getSortIndices(
+    //             this.state.cohorts[0].calculateAverageImportance(),
+    //         ).reverse(),
+    //     });
+    // }
 
-    private onCohortChange(newCohort: Cohort): void {
+    private onCohortChange = (newCohort: Cohort): void => {
         const prevCohorts = [...this.state.cohorts];
         prevCohorts[this.state.editingCohortIndex] = newCohort;
         this.setState({ cohorts: prevCohorts, editingCohortIndex: undefined });
-    }
+    };
 
-    private onWeightVectorChange(weightOption: WeightVectorOption): void {
+    private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
         this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
         this.state.cohorts.forEach(cohort => cohort.clearCachedImportances());
         this.setState({ selectedWeightVector: weightOption });
-    }
+    };
 
-    private deleteCohort(): void {
+    private deleteCohort = (): void => {
         const prevCohorts = [...this.state.cohorts];
         prevCohorts.splice(this.state.editingCohortIndex, 1);
         this.setState({ cohorts: prevCohorts });
-    }
+    };
 
-    private clearWarning(): void {
+    private clearWarning = (): void => {
         this.setState({ validationWarnings: [] });
-    }
+    };
 
-    private clearSizeWarning(): void {
+    private clearSizeWarning = (): void => {
         this.setState({ showingDatasizeWarning: false });
-    }
+    };
 
-    private openCohort(index: number): void {
+    private openCohort = (index: number): void => {
         this.setState({ editingCohortIndex: index });
-    }
+    };
 
-    private cloneAndOpenCohort(index: number): void {
+    private cloneAndOpenCohort = (index: number): void => {
         const source = this.state.cohorts[index];
         const cohorts = [...this.state.cohorts];
         cohorts.push(
             new Cohort(source.name + localization.CohortBanner.copy, this.state.jointDataset, [...source.filters]),
         );
         this.setState({ cohorts, editingCohortIndex: this.state.cohorts.length });
-    }
+    };
 
-    private closeCohortEditor(): void {
+    private closeCohortEditor = (): void => {
         this.setState({ editingCohortIndex: undefined });
-    }
+    };
 }
