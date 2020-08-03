@@ -1,8 +1,12 @@
-import { IComboBoxStyles } from 'office-ui-fabric-react/lib/ComboBox';
-import { IPivotStyles } from 'office-ui-fabric-react/lib/Pivot';
-import { FontWeights, ICalloutProps, mergeStyles } from 'office-ui-fabric-react';
-import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
-import { IStyle, getTheme, mergeStyleSets } from '@uifabric/styling';
+import {
+    IComboBoxStyles,
+    IPivotStyles,
+    FontWeights,
+    ICalloutProps,
+    mergeStyles,
+    ITextFieldStyles,
+} from "office-ui-fabric-react";
+import { IStyle, getTheme, mergeStyleSets } from "@uifabric/styling";
 
 export interface IRGBColor {
     r: number;
@@ -13,65 +17,74 @@ export interface IRGBColor {
 export class FabricStyles {
     public static limitedSizeMenuDropdown: Partial<IComboBoxStyles> = {
         callout: {
-            maxHeight: '256px',
-            minWidth: '200px',
+            maxHeight: "256px",
+            minWidth: "200px",
         },
         optionsContainerWrapper: {
-            maxHeight: '256px',
-            minWidth: '200px',
+            maxHeight: "256px",
+            minWidth: "200px",
         },
     };
 
-    public static defaultDropdownStyle: Partial<IComboBoxStyles> = 
-        mergeStyleSets<Partial<IComboBoxStyles>, Partial<IComboBoxStyles>>({
-        container: {
-            display: 'inline-flex',
-            width: '100%',
+    public static defaultDropdownStyle: Partial<IComboBoxStyles> = mergeStyleSets<
+        Partial<IComboBoxStyles>,
+        Partial<IComboBoxStyles>
+    >(
+        {
+            container: {
+                display: "inline-flex",
+                width: "100%",
+            },
+            root: {
+                flex: 1,
+            },
+            label: {
+                padding: "5px 10px 0 10px",
+            },
         },
-        root: {
-            flex: 1,
-        },
-        label: {
-            padding: '5px 10px 0 10px',
-        },
-    }, FabricStyles.limitedSizeMenuDropdown);
+        FabricStyles.limitedSizeMenuDropdown,
+    );
 
-    public static smallDropdownStyle: Partial<IComboBoxStyles> = 
-        mergeStyleSets<Partial<IComboBoxStyles>, Partial<IComboBoxStyles>>({
-        container: {
-            display: 'inline-flex',
-            flexWrap: 'wrap',
-            width: '150px',
+    public static smallDropdownStyle: Partial<IComboBoxStyles> = mergeStyleSets<
+        Partial<IComboBoxStyles>,
+        Partial<IComboBoxStyles>
+    >(
+        {
+            container: {
+                display: "inline-flex",
+                flexWrap: "wrap",
+                width: "150px",
+            },
+            root: {
+                flex: 1,
+                minWidth: "150px",
+            },
+            label: {
+                paddingRight: "10px",
+            },
+            callout: {
+                maxHeight: "256px",
+                minWidth: "200px",
+            },
+            optionsContainerWrapper: {
+                maxHeight: "256px",
+                minWidth: "200px",
+            },
         },
-        root: {
-            flex: 1,
-            minWidth: '150px',
-        },
-        label: {
-            paddingRight: '10px',
-        },
-        callout: {
-            maxHeight: '256px',
-            minWidth: '200px',
-        },
-        optionsContainerWrapper: {
-            maxHeight: '256px',
-            minWidth: '200px',
-        },
-    }, FabricStyles.limitedSizeMenuDropdown);
+        FabricStyles.limitedSizeMenuDropdown,
+    );
 
     public static missingParameterPlaceholder: IStyle = {
-        height: '300px',
-        width: '100%',
+        height: "300px",
+        width: "100%",
     };
 
     public static calloutWrapper: IStyle = {
-        width: '300px',
+        width: "300px",
     };
 
-
     public static calloutHeader: IStyle = {
-        padding: '18px 24px 12px',
+        padding: "18px 24px 12px",
     };
 
     public static calloutTitle: IStyle = [
@@ -82,21 +95,21 @@ export class FabricStyles {
         },
     ];
     public static calloutInner: IStyle = {
-        height: '100%',
-        padding: '0 24px 20px',
+        height: "100%",
+        padding: "0 24px 20px",
     };
 
     public static chartEditorButton: IStyle = {
         color: getTheme().semanticColors.accentButtonText,
         backgroundColor: getTheme().semanticColors.accentButtonBackground,
-        borderWidth: '1px',
-        borderStyle: 'solid',
+        borderWidth: "1px",
+        borderStyle: "solid",
         borderColor: getTheme().semanticColors.buttonBorder,
     };
 
     public static calloutContainer: IStyle = {
         zIndex: 10,
-    }
+    };
 
     public static calloutProps: ICalloutProps = {
         doNotLayer: true,
@@ -104,31 +117,31 @@ export class FabricStyles {
             container: mergeStyles([
                 FabricStyles.calloutContainer,
                 {
-                    position: "fixed"
-                }
+                    position: "fixed",
+                },
             ]),
             calloutMain: {
-                maxHeight: "400px"
+                maxHeight: "400px",
             },
-        }
-    }
+        },
+    };
 
     public static placeholderItalic: IStyle = {
-        fontStyle: 'italic',
-        padding: '0 0 5px 5px',
+        fontStyle: "italic",
+        padding: "0 0 5px 5px",
         color: getTheme().semanticColors.disabledBodyText,
     };
 
     public static missingParameterPlaceholderSpacer: IStyle = {
-        margin: '25px auto 0 auto',
-        maxWidth: '400px',
-        padding: '23px',
-        width: 'fit-content',
+        margin: "25px auto 0 auto",
+        maxWidth: "400px",
+        padding: "23px",
+        width: "fit-content",
         boxShadow: getTheme().effects.elevation4,
     };
 
     public static faintText: IStyle = {
-        fontWeight: '350' as any,
+        fontWeight: "350" as any,
     };
 
     public static plotlyColorPalette: IRGBColor[] = [
@@ -145,16 +158,16 @@ export class FabricStyles {
     ];
 
     public static plotlyColorHexPalette: string[] = [
-        '#1f77b4', // muted blue
-        '#ff7f0e', // safety orange
-        '#2ca02c', // cooked asparagus green
-        '#d62728', // brick red
-        '#9467bd', // muted purple
-        '#8c564b', // chestnut brown
-        '#e377c2', // raspberry yogurt pink
-        '#7f7f7f', // middle gray
-        '#bcbd22', // curry yellow-green
-        '#17becf', // blue-teal
+        "#1f77b4", // muted blue
+        "#ff7f0e", // safety orange
+        "#2ca02c", // cooked asparagus green
+        "#d62728", // brick red
+        "#9467bd", // muted purple
+        "#8c564b", // chestnut brown
+        "#e377c2", // raspberry yogurt pink
+        "#7f7f7f", // middle gray
+        "#bcbd22", // curry yellow-green
+        "#17becf", // blue-teal
     ];
 
     // public static fabricColorPalette: string[] = [
@@ -171,60 +184,60 @@ export class FabricStyles {
     // ];
 
     public static fabricColorPalette: string[] = [
-        '#1f77b4', // muted blue
-        '#ff7f0e', // safety orange
-        '#2ca02c', // cooked asparagus green
-        '#d62728', // brick red
-        '#9467bd', // muted purple
-        '#8c564b', // chestnut brown
-        '#e377c2', // raspberry yogurt pink
-        '#7f7f7f', // middle gray
-        '#bcbd22', // curry yellow-green
-        '#17becf', // blue-teal
+        "#1f77b4", // muted blue
+        "#ff7f0e", // safety orange
+        "#2ca02c", // cooked asparagus green
+        "#d62728", // brick red
+        "#9467bd", // muted purple
+        "#8c564b", // chestnut brown
+        "#e377c2", // raspberry yogurt pink
+        "#7f7f7f", // middle gray
+        "#bcbd22", // curry yellow-green
+        "#17becf", // blue-teal
     ];
 
-    public static fabricColorInactiveSeries = '#949494';
+    public static fabricColorInactiveSeries = "#949494";
 
-    public static chartAxisColor = '#979797';
-    public static fontFamilies = 'Segoe UI, Segoe UI Web (West European),  Roboto, Helvetica Neue, sans-serif';
+    public static chartAxisColor = "#979797";
+    public static fontFamilies = "Segoe UI, Segoe UI Web (West European),  Roboto, Helvetica Neue, sans-serif";
 
     public static verticalTabsStyle: Partial<IPivotStyles> = {
         root: {
-            height: '100%',
-            width: '100px',
-            display: 'flex',
-            flexDirection: 'column',
+            height: "100%",
+            width: "100px",
+            display: "flex",
+            flexDirection: "column",
         },
         text: {
-            whiteSpace: 'normal',
-            lineHeight: '28px',
+            whiteSpace: "normal",
+            lineHeight: "28px",
         },
         link: {
             flex: 1,
-            backgroundColor: '#f4f4f4',
+            backgroundColor: "#f4f4f4",
             selectors: {
-                '&:not(:last-child)': {
-                    borderBottom: '1px solid grey',
+                "&:not(:last-child)": {
+                    borderBottom: "1px solid grey",
                 },
-                '.ms-Button-flexContainer': {
-                    justifyContent: 'center',
+                ".ms-Button-flexContainer": {
+                    justifyContent: "center",
                 },
-                '&:focus, &:focus:not(:last-child)': {
-                    border: '3px solid rgb(102, 102, 102)',
+                "&:focus, &:focus:not(:last-child)": {
+                    border: "3px solid rgb(102, 102, 102)",
                 },
             },
         },
         linkIsSelected: {
             flex: 1,
             selectors: {
-                '&:not(:last-child)': {
-                    borderBottom: '1px solid grey',
+                "&:not(:last-child)": {
+                    borderBottom: "1px solid grey",
                 },
-                '.ms-Button-flexContainer': {
-                    justifyContent: 'center',
+                ".ms-Button-flexContainer": {
+                    justifyContent: "center",
                 },
-                '&:focus, &:focus:not(:last-child)': {
-                    border: '3px solid rgb(235, 235, 235)',
+                "&:focus, &:focus:not(:last-child)": {
+                    border: "3px solid rgb(235, 235, 235)",
                 },
             },
         },
@@ -232,15 +245,15 @@ export class FabricStyles {
 
     public static textFieldStyle: Partial<ITextFieldStyles> = {
         root: {
-            minWidth: '150px',
-            padding: '0 5px',
+            minWidth: "150px",
+            padding: "0 5px",
         },
         wrapper: {
-            display: 'inline-flex',
+            display: "inline-flex",
         },
         subComponentStyles: {
             label: {
-                padding: '5px 10px 0 10px',
+                padding: "5px 10px 0 10px",
             },
         },
     };
