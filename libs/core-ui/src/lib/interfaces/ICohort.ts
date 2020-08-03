@@ -29,10 +29,6 @@ export interface ICohort {
 
     // Sort the subset of data by the values in the specified column.
     // Optional reverse parameter determines if ascending or decending.
-    
+
     sort(columnName: string, reverse?: boolean): void;
-
-    constructor()
 }
-
-export interface ICohort

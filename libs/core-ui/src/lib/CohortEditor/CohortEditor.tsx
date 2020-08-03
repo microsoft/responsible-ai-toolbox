@@ -1,19 +1,17 @@
-import _ from 'lodash';
-import { Text, TextField, TooltipHost, TooltipOverflowMode, IProcessedStyleSet } from 'office-ui-fabric-react';
-import { DefaultButton, IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { CheckboxVisibility, DetailsList, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
-import React from 'react';
-import { localization } from '../../../Localization/localization';
-import { ICohort } from '../../Cohort';
-import { FilterMethods, IFilter } from '../../Interfaces/IFilter';
-import { IJointMeta, JointDataset } from '../../JointDataset';
-import { cohortEditorCallout, cohortEditorStyles, tooltipHostStyles, ICohortEditorStyles } from './CohortEditor.styles';
-import { FabricStyles } from '../../FabricStyles';
+import _ from "lodash";
+import { Text, TextField, TooltipHost, TooltipOverflowMode, IProcessedStyleSet , ComboBox, IComboBox, IComboBoxOption , Checkbox } from "office-ui-fabric-react";
+import { DefaultButton, IconButton, PrimaryButton } from "office-ui-fabric-react/lib/Button";
+import { Callout, DirectionalHint } from "office-ui-fabric-react/lib/Callout";
+import { CheckboxVisibility, DetailsList, Selection, SelectionMode } from "office-ui-fabric-react/lib/DetailsList";
+import { SpinButton } from "office-ui-fabric-react/lib/SpinButton";
+import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+import React from "react";
+import { localization } from "../../../Localization/localization";
+import { ICohort } from "../../Cohort";
+import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
+import { IJointMeta, JointDataset } from "../../JointDataset";
+import { FabricStyles } from "../../FabricStyles";
+import { cohortEditorCallout, cohortEditorStyles, tooltipHostStyles, ICohortEditorStyles } from "./CohortEditor.styles";
 
 export interface ICohort {
     filterList: IFilter[];
@@ -55,17 +53,17 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         JointDataset.ClassificationError,
         JointDataset.RegressionError,
     ]
-        .map((key) => {
+        .map(key => {
             const metaVal = this.props.jointDataset.metaDict[key];
             if (key === JointDataset.DataLabelRoot) {
-                return { key, title: 'Dataset' };
+                return { key, title: "Dataset" };
             }
             if (metaVal === undefined) {
                 return undefined;
             }
             return { key, title: metaVal.abbridgedLabel };
         })
-        .filter((obj) => obj !== undefined);
+        .filter(obj => obj !== undefined);
 
     private comparisonOptions: IComboBoxOption[] = [
         {
@@ -134,12 +132,12 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                     {this.setFilterLabel(filter, styles)}
                     <IconButton
                         className={styles.filterIcon}
-                        iconProps={{ iconName: 'Edit' }}
+                        iconProps={{ iconName: "Edit" }}
                         onClick={this.editFilter.bind(this, index)}
                     />
                     <IconButton
                         className={styles.filterIcon}
-                        iconProps={{ iconName: 'Clear' }}
+                        iconProps={{ iconName: "Clear" }}
                         onClick={this.removeFilter.bind(this, index)}
                     />
                 </div>
@@ -160,7 +158,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                 <div className={styles.container}>
                     <IconButton
                         className={styles.closeIcon}
-                        iconProps={{ iconName: 'ChromeClose' }}
+                        iconProps={{ iconName: "ChromeClose" }}
                         onClick={this.closeCallout.bind(this)}
                     />
                     <TextField
@@ -185,13 +183,13 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                                 onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this, styles)}
                                 selection={this._leftSelection}
                                 selectionPreservedOnEmptyClick={true}
-                                setKey={'set'}
-                                columns={[{ key: 'col1', name: 'name', minWidth: 150, fieldName: 'title' }]}
+                                setKey={"set"}
+                                columns={[{ key: "col1", name: "name", minWidth: 150, fieldName: "title" }]}
                             />
                         </div>
                         {openedFilter == undefined ? (
                             <div className={styles.rightHalf}>
-                                <Text className={styles.defaultText} variant={'medium'}>
+                                <Text className={styles.defaultText} variant={"medium"}>
                                     {localization.CohortEditor.defaultFilterState}
                                 </Text>
                             </div>
@@ -200,7 +198,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                         )}
                     </div>
                     <div>
-                        <Text variant={'medium'} className={styles.addedFilter}>
+                        <Text variant={"medium"} className={styles.addedFilter}>
                             {localization.CohortEditor.addedFilters}
                         </Text>
                         <div className={styles.addedFilterDiv}>
@@ -208,7 +206,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                                 <div>{filterList}</div>
                             ) : (
                                 <div>
-                                    <Text variant={'smallPlus'} className={styles.defaultFilterList}>
+                                    <Text variant={"smallPlus"} className={styles.defaultFilterList}>
                                         {localization.CohortEditor.noAddedFilters}
                                     </Text>
                                 </div>
@@ -281,7 +279,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         if (this._leftSelection.getSelection().length != 0) {
             let property = this._leftSelection.getSelection()[0].key as string;
             if (property === JointDataset.DataLabelRoot) {
-                property += '0';
+                property += "0";
             }
             this.setDefaultStateForKey(property);
         }
@@ -435,12 +433,12 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         const tooltip = tooltipHostStyles;
         const selectedFilter = this.props.jointDataset.metaDict[filter.column];
         let stringArgs;
-        let label = '';
+        let label = "";
 
         if (selectedFilter.isCategorical || this.props.jointDataset.metaDict[filter.column].treatAsCategorical) {
-            let selectedValues = [];
+            const selectedValues = [];
             const filterArgs = filter.arg;
-            filterArgs.forEach((element) => {
+            filterArgs.forEach(element => {
                 selectedValues.push(selectedFilter.sortedCategoricalValues[element]);
             });
             stringArgs = selectedValues.toString();
@@ -534,7 +532,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                 )}
                 {selectedMeta.treatAsCategorical && (
                     <div className={styles.featureTextDiv}>
-                        <Text variant={'small'} className={styles.featureText}>
+                        <Text variant={"small"} className={styles.featureText}>
                             {`${localization.formatString(
                                 localization.Filters.uniqueValues,
                                 selectedMeta.sortedCategoricalValues.length,
@@ -556,7 +554,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                 )}
                 {!selectedMeta.treatAsCategorical && (
                     <div className={styles.featureTextDiv}>
-                        <Text block nowrap variant={'small'} className={styles.featureText}>
+                        <Text block nowrap variant={"small"} className={styles.featureText}>
                             {`${localization.formatString(
                                 localization.Filters.min,
                                 minVal,

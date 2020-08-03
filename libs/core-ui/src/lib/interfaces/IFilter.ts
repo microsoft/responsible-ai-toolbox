@@ -1,11 +1,11 @@
 export const enum FilterMethods {
-    greaterThan = 'greater',
-    greaterThanEqualTo = 'greater and equal',
-    lessThan = 'less',
-    lessThanEqualTo = 'less and equal',
-    equal = 'equal',
-    includes = 'includes',
-    inTheRangeOf = 'in the range of',
+    greaterThan = "greater",
+    greaterThanEqualTo = "greater and equal",
+    lessThan = "less",
+    lessThanEqualTo = "less and equal",
+    equal = "equal",
+    includes = "includes",
+    inTheRangeOf = "in the range of",
 }
 
 export interface IFilter {
