@@ -117,7 +117,7 @@ module.exports = {
         globalImportanceExplanation:
             "A importância global da funcionalidade é calculada através da média do valor absoluto da importância da funcionalidade de todos os pontos (normalização de L1). ",
         multiclassImportanceAddendum:
-            'Todos os pontos estão incluídos no cálculo da importância de uma funcionalidade para todas as classes, não é utilizada nenhuma ponderação diferencial. Portanto, uma funcionalidade com importância negativa grande para muitos pontos prevista como não sendo de "Classe A" aumentará imensamente a importância "Classe A" da funcionalidade.',
+            "Todos os pontos estão incluídos no cálculo da importância de uma funcionalidade para todas as classes, não é utilizada nenhuma ponderação diferencial. Portanto, uma funcionalidade com importância negativa grande para muitos pontos prevista como não sendo de \"Classe A\" aumentará imensamente a importância \"Classe A\" da funcionalidade.",
     },
     Filters: {
         equalComparison: "Igual a",
@@ -228,7 +228,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            'Pode selecionar um ponto de dados clicando no gráfico de dispersão para ver os seus valores de importância de funcionalidade local (explicação local) e o gráfico de expectativa condicional individual (ICE) abaixo. Crie um ponto de dados hipotético, utilizando o painel à direito para funcionalidades de perturbação de um ponto de dados conhecido. Os valores de importância da funcionalidade baseiam-se em muitas aproximações e não são a "causa" das previsões. Sem uma robustez matemática rigorosa da inferência causal, não aconselhamos os utilizadores a tomarem decisões da vida real com base nesta ferramenta.',
+            "Pode selecionar um ponto de dados clicando no gráfico de dispersão para ver os seus valores de importância de funcionalidade local (explicação local) e o gráfico de expectativa condicional individual (ICE) abaixo. Crie um ponto de dados hipotético, utilizando o painel à direito para funcionalidades de perturbação de um ponto de dados conhecido. Os valores de importância da funcionalidade baseiam-se em muitas aproximações e não são a \"causa\" das previsões. Sem uma robustez matemática rigorosa da inferência causal, não aconselhamos os utilizadores a tomarem decisões da vida real com base nesta ferramenta.",
         panelPlaceholder: "É necessário um modelo para fazer predições para novos pontos de dados.",
         cohortPickerLabel: "Selecionar uma coorte de conjunto de dados para explorar",
         scatterLegendText: "Ative e desative pontos de dados no desenho ao clicar nos itens da legenda.",
@@ -269,7 +269,7 @@ module.exports = {
         maxLabel: "Máx.",
         stepsLabel: "Passos",
         disclaimer:
-            'Exclusão de responsabilidade: Estas são explicações que se baseiam em diversas aproximações e não são a "causa" das predições. Sem uma robustez matemática rigorosa da inferência causal, não aconselhamos os utilizadores a tomarem decisões da vida real com base nesta ferramenta.',
+            "Exclusão de responsabilidade: Estas são explicações que se baseiam em diversas aproximações e não são a \"causa\" das predições. Sem uma robustez matemática rigorosa da inferência causal, não aconselhamos os utilizadores a tomarem decisões da vida real com base nesta ferramenta.",
         missingParameters: "Este separador requer um conjunto de dados de avaliação seja fornecido.",
         selectionLimit: "Máximo de 3 pontos selecionados",
         classPickerLabel: "Classe",
@@ -353,10 +353,10 @@ module.exports = {
         clickHere: "Saiba mais",
         shapTitle: "Valores de Shapley",
         shapDescription:
-            'Este explicador utiliza o SHAP, que é uma abordagem teórica de jogos para explicar os modelos, em que a importância dos conjuntos de funcionalidades é medida por "ocultar" essas funcionalidades do modelo através de marginalização. Clique na ligação abaixo para saber mais.',
+            "Este explicador utiliza o SHAP, que é uma abordagem teórica de jogos para explicar os modelos, em que a importância dos conjuntos de funcionalidades é medida por \"ocultar\" essas funcionalidades do modelo através de marginalização. Clique na ligação abaixo para saber mais.",
         limeTitle: "LIME (Explicações Agnósticas de Modelo Interpretativo Local)",
         limeDescription:
-            'Este explicador utiliza LIME, que proporciona uma aproximação linear do modelo. Para obter uma explicação, fazemos o seguinte: perturbar a instância, obter previsões de modelos e utilizar estas previsões como etiquetas para aprender um modelo linear disperso, que é localmente fiel. Os pesos deste modelo linear são utilizados como "funcionalidades importantes". Clique na ligação abaixo para saber mais.',
+            "Este explicador utiliza LIME, que proporciona uma aproximação linear do modelo. Para obter uma explicação, fazemos o seguinte: perturbar a instância, obter previsões de modelos e utilizar estas previsões como etiquetas para aprender um modelo linear disperso, que é localmente fiel. Os pesos deste modelo linear são utilizados como \"funcionalidades importantes\". Clique na ligação abaixo para saber mais.",
         mimicTitle: "Simular (Explicações Globais de Substituição)",
         mimicDescription:
             "Este explicador baseia-se na ideia de formar modelos de substituição globais para simular modelos blackbox. Um modelo de substituição global é um modelo intrinsecamente interpretável, que é formado para aproximar as previsões de qualquer modelo de caixa preta com a maior precisão possível. Os valores de importância da característica são valores de importância de funcionalidade baseados no modelo do seu modelo de substituição subjacente (LightGBM, ou Regressão Linear, ou Descida de Gradiente Stochastic, ou Árvore de Decisões)",

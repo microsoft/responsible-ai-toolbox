@@ -52,6 +52,7 @@
                 }
             }
         ],
+        "quotes": ["error", "double"],
         "no-duplicate-imports": "error",
         "array-callback-return": "error",
         "dot-location": ["error", "property"],

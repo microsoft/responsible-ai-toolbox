@@ -101,7 +101,7 @@ export class ScatterUtils {
 
         const props = _.cloneDeep(ScatterUtils.baseScatterProperties);
         const hasPredictedY = exp.testDataset.predictedY !== undefined;
-        const xAccessor = `Index`;
+        const xAccessor = "Index";
         const yAccessor = `TrainingData[${maxIndex}]`;
         const colorAccessor = hasPredictedY ? "PredictedY" : "Index";
         const colorOption = {
@@ -251,7 +251,7 @@ export class ScatterUtils {
                 });
             });
             result.push({
-                key: `Index`,
+                key: "Index",
                 text: localization.ExplanationScatter.index,
                 data: { isCategorical: false },
             });
@@ -263,7 +263,7 @@ export class ScatterUtils {
             });
             if (explanationContext.testDataset.predictedY) {
                 result.push({
-                    key: `PredictedY`,
+                    key: "PredictedY",
                     text: localization.ExplanationScatter.predictedY,
                     data: {
                         isCategorical: explanationContext.modelMetadata.modelType !== ModelTypes.regression,
@@ -292,7 +292,7 @@ export class ScatterUtils {
             }
             if (explanationContext.testDataset.trueY) {
                 result.push({
-                    key: `TrueY`,
+                    key: "TrueY",
                     text: localization.ExplanationScatter.trueY,
                     data: {
                         isCategorical: explanationContext.modelMetadata.modelType !== ModelTypes.regression,

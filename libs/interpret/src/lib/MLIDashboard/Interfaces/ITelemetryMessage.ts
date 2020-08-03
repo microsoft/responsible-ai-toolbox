@@ -1,8 +1,8 @@
 export enum TelemetryLevels {
-    error = 'Error',
-    warning = 'Warning',
-    info = 'Info',
-    trace = 'Trace'
+    error = "Error",
+    warning = "Warning",
+    info = "Info",
+    trace = "Trace"
 }
 
 export type TelemetryLevel = 

@@ -190,7 +190,7 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
             {
                 type: "box" as any,
                 xAccessor: "x",
-                xAccessorPrefix: `sort_by(@, &classIndex)`,
+                xAccessorPrefix: "sort_by(@, &classIndex)",
                 yAccessor: "y",
                 groupBy: "class",
                 boxpoints: "Outliers",

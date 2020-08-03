@@ -322,7 +322,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                 return `Inconsistent dimensions. Predicted probability has dimensions [${length} x ${cLength}], expected [${rowLength} x ${classLength}]`;
             }
             if (!props.probabilityY.every(row => row.length === classLength)) {
-                return `Inconsistent dimensions. Predicted probability has rows of varying length`;
+                return "Inconsistent dimensions. Predicted probability has rows of varying length";
             }
         }
         if (props.testData) {
@@ -344,7 +344,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                 return `Inconsistent dimensions. Eval dataset has dimensions [${length} x ${fLength}], expected [${rowLength} x ${featureLength}]`;
             }
             if (!props.testData.every(row => row.length === featureLength)) {
-                return `Inconsistent dimensions. Eval dataset has rows of varying length`;
+                return "Inconsistent dimensions. Eval dataset has rows of varying length";
             }
         }
         if (
@@ -384,14 +384,14 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                     return `Inconsistent dimensions. Local explanations has dimensions [${cLength} x ${rLength}], expected [${classLength} x ${rowLength}]`;
                 }
                 if (!localExp.every(classArray => classArray.length === rowLength)) {
-                    return `Inconsistent dimensions. Local explanation has rows of varying length`;
+                    return "Inconsistent dimensions. Local explanation has rows of varying length";
                 }
                 const fLength = (localExp[0][0] as number[]).length;
                 if (fLength !== featureLength) {
                     return `Inconsistent dimensions. Local explanations has dimensions [${cLength} x ${rLength} x ${fLength}], expected [${classLength} x ${rowLength} x ${featureLength}]`;
                 }
                 if (!localExp.every(classArray => classArray.every(rowArray => rowArray.length === featureLength))) {
-                    return `Inconsistent dimensions. Local explanation has rows of varying length`;
+                    return "Inconsistent dimensions. Local explanation has rows of varying length";
                 }
             } else {
                 const length = localExp.length;
@@ -409,7 +409,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
                     return `Inconsistent dimensions. Local explanations has dimensions [${length} x ${fLength}], expected [${rowLength} x ${featureLength}]`;
                 }
                 if (!localExp.every(rowArray => rowArray.length === featureLength)) {
-                    return `Inconsistent dimensions. Local explanation has rows of varying length`;
+                    return "Inconsistent dimensions. Local explanation has rows of varying length";
                 }
             }
         }

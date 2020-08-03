@@ -229,7 +229,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            'È possibile selezionare un punto dati facendo clic sul diagramma di dispersione per visualizzarne i valori di importanza della caratteristica locali (spiegazione locale) e il tracciato Aspettativa condizionale individuale (ICE, Individual Conditional Expectation) seguente. Creare un punto dati What If ipotetico usando il pannello sulla destra per perturbare le caratteristiche di un punto dati noto. I valori di importanza della caratteristica si basano su molte approssimazioni e non sono la "causa" delle stime. Senza una rigorosa affidabilità matematica dell\'inferenza causale, non si consiglia agli utenti di prendere decisioni reali basate su questo strumento.',
+            "È possibile selezionare un punto dati facendo clic sul diagramma di dispersione per visualizzarne i valori di importanza della caratteristica locali (spiegazione locale) e il tracciato Aspettativa condizionale individuale (ICE, Individual Conditional Expectation) seguente. Creare un punto dati What If ipotetico usando il pannello sulla destra per perturbare le caratteristiche di un punto dati noto. I valori di importanza della caratteristica si basano su molte approssimazioni e non sono la \"causa\" delle stime. Senza una rigorosa affidabilità matematica dell'inferenza causale, non si consiglia agli utenti di prendere decisioni reali basate su questo strumento.",
         panelPlaceholder: "Per effettuare stime per i nuovi punti dati, è necessario un modello.",
         cohortPickerLabel: "Seleziona una coorte di set di dati da esplorare",
         scatterLegendText:
@@ -271,7 +271,7 @@ module.exports = {
         maxLabel: "Max",
         stepsLabel: "Passi",
         disclaimer:
-            'Dichiarazione di non responsabilità: queste sono spiegazioni basate su molte approssimazioni e non sono la "causa" delle stime. Senza una rigorosa affidabilità matematica dell\'inferenza causale, non si consiglia agli utenti di prendere decisioni reali basate su questo strumento.',
+            "Dichiarazione di non responsabilità: queste sono spiegazioni basate su molte approssimazioni e non sono la \"causa\" delle stime. Senza una rigorosa affidabilità matematica dell'inferenza causale, non si consiglia agli utenti di prendere decisioni reali basate su questo strumento.",
         missingParameters: "Questa scheda richiede che sia fornito un set di dati di valutazione.",
         selectionLimit: "Massimo di 3 punti selezionati",
         classPickerLabel: "Classe",
@@ -356,7 +356,7 @@ module.exports = {
         clickHere: "Altre informazioni",
         shapTitle: "Valori di Shapley",
         shapDescription:
-            'Questo explainer usa SHAP, ovvero un approccio basato sulla teoria dei giochi per spiegare i modelli, in cui l\'importanza dei set di caratteristiche viene misurata "nascondendo" tali caratteristiche nel modello tramite la marginalizzazione. Per altre informazioni, fare clic sul collegamento seguente.',
+            "Questo explainer usa SHAP, ovvero un approccio basato sulla teoria dei giochi per spiegare i modelli, in cui l'importanza dei set di caratteristiche viene misurata \"nascondendo\" tali caratteristiche nel modello tramite la marginalizzazione. Per altre informazioni, fare clic sul collegamento seguente.",
         limeTitle: "LIME (Local Interpretable Model-Agnostic Explanations)",
         limeDescription:
             "Questo explainer usa LIME, che fornisce un'approssimazione lineare del modello. Per ottenere una spiegazione, seguire questa procedura: perturbare l'istanza, ottenere le stime del modello e usarle come etichette per apprendere un modello lineare di tipo sparse fedele a livello locale. I pesi di questo modello lineare vengono usati come 'importanze della caratteristica'. Per altre informazioni, fare clic sul collegamento seguente.",

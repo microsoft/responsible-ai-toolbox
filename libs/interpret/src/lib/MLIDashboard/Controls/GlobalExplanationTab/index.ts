@@ -1,1 +1,1 @@
-export * from './GlobalExplanationTab';
+export * from "./GlobalExplanationTab";

@@ -227,7 +227,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            'Você pode selecionar um ponto de dados clicando no gráfico de dispersão para exibir os valores de importância do recurso local (explicação local) e o gráfico de ICE (expectativa condicional individual) abaixo. Crie um ponto de dados hipotético usando o painel à direita para desorganizar recursos de um ponto de dados conhecido. Os valores de importância do recurso são baseados em muitas aproximações e não são a "causa" das previsões. Sem forte robustez matemática de inferência causal, não aconselhamos os usuários a tomarem decisões de vida real com base nessa ferramenta.',
+            "Você pode selecionar um ponto de dados clicando no gráfico de dispersão para exibir os valores de importância do recurso local (explicação local) e o gráfico de ICE (expectativa condicional individual) abaixo. Crie um ponto de dados hipotético usando o painel à direita para desorganizar recursos de um ponto de dados conhecido. Os valores de importância do recurso são baseados em muitas aproximações e não são a \"causa\" das previsões. Sem forte robustez matemática de inferência causal, não aconselhamos os usuários a tomarem decisões de vida real com base nessa ferramenta.",
         panelPlaceholder: "Um modelo é necessário para fazer previsões para novos pontos de dados.",
         cohortPickerLabel: "Selecionar um coorte do conjunto de dados a ser explorado",
         scatterLegendText: "Ative e desative os pontos de dados no gráfico clicando nos itens da legenda.",
@@ -268,7 +268,7 @@ module.exports = {
         maxLabel: "Máx.",
         stepsLabel: "Etapas",
         disclaimer:
-            'Aviso de isenção de responsabilidade: essas são explicações com base em muitas aproximações e não são a "causa" das previsões. Sem a forte robustez matemática da inferência causal, não aconselhamos os usuários a tomar decisões de vida real com base nesta ferramenta.',
+            "Aviso de isenção de responsabilidade: essas são explicações com base em muitas aproximações e não são a \"causa\" das previsões. Sem a forte robustez matemática da inferência causal, não aconselhamos os usuários a tomar decisões de vida real com base nesta ferramenta.",
         missingParameters: "Esta guia requer que um conjunto de dados de avaliação seja fornecido.",
         selectionLimit: "No máximo três pontos selecionados",
         classPickerLabel: "Classe",
@@ -352,7 +352,7 @@ module.exports = {
         clickHere: "Saiba mais",
         shapTitle: "Valores de Shapley",
         shapDescription:
-            'Este explicador usa o SHAP, que é uma abordagem de teoria dos jogos para explicar os modelos, na qual a importância dos conjuntos de recursos é medida "ocultando" esses recursos do modelo por meio de uso marginal. Clique no link abaixo para saber mais.',
+            "Este explicador usa o SHAP, que é uma abordagem de teoria dos jogos para explicar os modelos, na qual a importância dos conjuntos de recursos é medida \"ocultando\" esses recursos do modelo por meio de uso marginal. Clique no link abaixo para saber mais.",
         limeTitle: "LIME (Explicações Locais Interpretáveis Independentes de Modelo)",
         limeDescription:
             "Este explicativo usa LIME, que fornece uma aproximação linear do modelo. Para obter uma explicação, fazemos o seguinte: desorganizamos a instância, obtemos previsões de modelo e usamos essas previsões como rótulos para aprender um modelo linear esparso que é localmente fiel. Os pesos desse modelo linear são usados como 'importâncias do recurso'. Clique no link abaixo para saber mais.",

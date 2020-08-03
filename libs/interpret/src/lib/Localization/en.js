@@ -390,7 +390,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            'You can select a datapoint by clicking on the scatterplot to view its local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. Create a hypothetical what-if datapoint by using the panel on the right to perturb features of a known datapoint. Feature importance values are based on many approximations and are not the "cause" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.',
+            "You can select a datapoint by clicking on the scatterplot to view its local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. Create a hypothetical what-if datapoint by using the panel on the right to perturb features of a known datapoint. Feature importance values are based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
         "_helperText.comment": "explains what is shown in this tab and what actions are available",
         panelPlaceholder: "A model is required to make predictions for new data points.",
         "_panelPlaceholder.comment": "message shown to user when they did not give a model as inputs",
@@ -471,7 +471,7 @@ module.exports = {
         stepsLabel: "Steps",
         "_stepsLabel.comment": "number of increments to use between minimum and maximum",
         disclaimer:
-            'Disclaimer: These are explanations based on many approximations and are not the "cause" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.',
+            "Disclaimer: These are explanations based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
         "_disclaimer.comment": "the tool should not be liable for any bad predictions",
         missingParameters: "This tab requires an evaluation dataset be supplied.",
         "_missingParameters.comment": "Show a message if the required dataset parameter is not provided",
@@ -599,7 +599,7 @@ module.exports = {
         clickHere: "Learn more",
         shapTitle: "Shapley values",
         shapDescription:
-            'This explainer uses SHAP, which is a game theoretic approach to explaining models, where the importance of features sets is measured by "hiding" those features from the model through marginalization. Click the link below to learn more.',
+            "This explainer uses SHAP, which is a game theoretic approach to explaining models, where the importance of features sets is measured by \"hiding\" those features from the model through marginalization. Click the link below to learn more.",
         limeTitle: "LIME (Local Interpretable Model-Agnostic Explanations)",
         limeDescription:
             "This explainer uses LIME, which provides a linear approximation of the model. To get an explanation, we do the following: perturb the instance, get model predictions, and use these predictions as labels to learn a sparse linear model that is locally faithful. The weights of this linear model are used as 'feature importances'. Click the link below to learn more.",

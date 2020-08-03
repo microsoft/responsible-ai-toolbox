@@ -1,6 +1,6 @@
 module.exports = {
     selectPoint: "Wählen Sie einen Punkt aus, um seine lokale Erklärung anzuzeigen.",
-    defaultClassNames: 'Klasse \\"{0}\\"',
+    defaultClassNames: 'Klasse "{0}"',
     defaultFeatureNames: 'Feature "{0}"',
     absoluteAverage: "Durchschnitt des absoluten Werts",
     predictedClass: "Vorhergesagte Klasse",
