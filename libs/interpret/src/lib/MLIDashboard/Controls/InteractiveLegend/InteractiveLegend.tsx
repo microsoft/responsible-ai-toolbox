@@ -1,6 +1,6 @@
 import React from "react";
-import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 import { IconButton, Text } from "office-ui-fabric-react";
+import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 
 export enum SortingState {
     ascending = "ascending",

@@ -6,8 +6,8 @@ import { IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/component
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { Pivot, PivotItem, PivotLinkFormat, PivotLinkSize, IPivotItemProps } from "office-ui-fabric-react/lib/Pivot";
 import * as React from "react";
-import { localization } from "../Localization/localization";
 import { IPlotlyProperty, SelectionContext, ModelMetadata } from "@responsible-ai/mlchartlib";
+import { localization } from "../Localization/localization";
 import { FabricStyles } from "./FabricStyles";
 import {
     FeatureImportanceWrapper,

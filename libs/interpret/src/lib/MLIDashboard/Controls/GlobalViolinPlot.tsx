@@ -1,12 +1,12 @@
 import React from "react";
 import * as memoize from "memoize-one";
-import { IExplanationModelMetadata } from "../IExplanationContext";
-import { JointDataset } from "../JointDataset";
 import { IPlotlyProperty, AccessibleChart, IData } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IExplanationModelMetadata } from "../IExplanationContext";
+import { JointDataset } from "../JointDataset";
 import { localization } from "../../Localization/localization";
 import { LoadingSpinner } from "../SharedComponents";
-import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import { Cohort } from "../Cohort";
 import { FabricStyles } from "../FabricStyles";
 

@@ -1,13 +1,13 @@
 import React from "react";
-import { IExplanationContext, ModelTypes } from "../IExplanationContext";
-import { IBarChartConfig, FeatureKeys, FeatureSortingKey } from "../SharedComponents/IBarChartConfig";
 import { IDropdownOption } from "office-ui-fabric-react";
-import { localization } from "../../Localization/localization";
 import _ from "lodash";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
-import { BarChart, PredictionLabel, LoadingSpinner, NoDataMessage } from "../SharedComponents";
 import { Slider } from "office-ui-fabric-react/lib/Slider";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import { IBarChartConfig, FeatureKeys, FeatureSortingKey } from "../SharedComponents/IBarChartConfig";
+import { localization } from "../../Localization/localization";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import { BarChart, PredictionLabel, LoadingSpinner, NoDataMessage } from "../SharedComponents";
 import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces";
 

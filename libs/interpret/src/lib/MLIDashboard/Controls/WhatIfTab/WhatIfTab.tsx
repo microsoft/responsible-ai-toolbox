@@ -39,8 +39,8 @@ import {
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { InteractiveLegend } from "../InteractiveLegend";
-import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
+import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
     jointDataset: JointDataset;

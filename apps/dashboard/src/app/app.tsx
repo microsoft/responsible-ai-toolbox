@@ -1,7 +1,7 @@
 import React from "react";
+import { Route, Link } from "react-router-dom";
 import { App as Interpret } from "../interpret/App";
 import { App as Fairlearn } from "../fairlearn/App";
-import { Route, Link } from "react-router-dom";
 
 export default class App extends React.Component {
     public render(): React.ReactNode {

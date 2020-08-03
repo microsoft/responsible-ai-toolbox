@@ -1,10 +1,10 @@
-import { IParityPickerProps } from "../FairnessWizard";
 import React from "react";
-import { localization } from "../Localization/localization";
 import { IconButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { Callout } from "office-ui-fabric-react/lib/Callout";
+import { localization } from "../Localization/localization";
+import { IParityPickerProps } from "../FairnessWizard";
 
 interface IState {
     showCallout: boolean;

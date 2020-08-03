@@ -1,16 +1,16 @@
 import React from "react";
 import { AccessibleChart, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
+import _ from "lodash";
+import { Text } from "office-ui-fabric-react";
 import { IGenericChartProps } from "../../NewExplanationDashboard";
 import { JointDataset } from "../../JointDataset";
 import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
 import { localization } from "../../../Localization/localization";
-import _ from "lodash";
 import { Cohort } from "../../Cohort";
-import { Text } from "office-ui-fabric-react";
 import { FabricStyles } from "../../FabricStyles";
-import { dependencePlotStyles } from "./DependencePlot.styles";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
+import { dependencePlotStyles } from "./DependencePlot.styles";
 
 export interface IDependecePlotProps {
     chartProps: IGenericChartProps;

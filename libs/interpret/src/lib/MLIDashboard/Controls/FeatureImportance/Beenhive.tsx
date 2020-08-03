@@ -12,8 +12,8 @@ import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { PlotlyUtils, NoDataMessage, LoadingSpinner } from "../../SharedComponents";
-import { FeatureImportanceModes, IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { ScatterUtils } from "../Scatter";
+import { FeatureImportanceModes, IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 
 import "./Beehive.scss";
 

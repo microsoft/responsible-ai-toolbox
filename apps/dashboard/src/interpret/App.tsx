@@ -1,5 +1,7 @@
 import React from "react";
 import { NewExplanationDashboard, ExplanationDashboard, ITelemetryMessage } from "@responsible-ai/interpret";
+import { createTheme } from "@uifabric/styling";
+import _ from "lodash";
 import { breastCancerData } from "./__mock_data/dummyData";
 import { ibmData } from "./__mock_data/ibmData";
 import { irisData } from "./__mock_data/irisData";
@@ -11,8 +13,6 @@ import { bostonDataGlobal } from "./__mock_data/bostonDataGlobal";
 import { ebmData } from "./__mock_data/ebmData";
 import { irisNoData } from "./__mock_data/irisNoData";
 import { largeFeatureCount } from "./__mock_data/largeFeatureCount";
-import { createTheme } from "@uifabric/styling";
-import _ from "lodash";
 
 const ibmNoClass = _.cloneDeep(ibmData);
 ibmNoClass.classNames = undefined;

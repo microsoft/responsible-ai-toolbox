@@ -1,12 +1,12 @@
 import React from "react";
 import { FairnessWizard, IMetricResponse } from "@responsible-ai/fairlearn";
+import { createTheme } from "@uifabric/styling";
+import _ from "lodash";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
 import { regression } from "./__mock-data/regression";
 import { precomputedBinary } from "./__mock-data/precomputedBinary";
 import { precomputedBinary2 } from "./__mock-data/precomputedBinary2";
 import { probit } from "./__mock-data/probit";
-import { createTheme } from "@uifabric/styling";
-import _ from "lodash";
 
 const darkTheme = createTheme({
     palette: {

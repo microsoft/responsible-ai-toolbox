@@ -1,6 +1,6 @@
 import { INumericRange, ICategoricalRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { IBinnedResponse } from "./IBinnedResponse";
 import _ from "lodash";
+import { IBinnedResponse } from "./IBinnedResponse";
 
 export class BinnedResponseBuilder {
     public static buildCategorical(

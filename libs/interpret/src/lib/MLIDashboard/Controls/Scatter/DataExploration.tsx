@@ -1,11 +1,11 @@
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import React from "react";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
-import { ScatterUtils, IScatterProps } from "./ScatterUtils";
-import _ from "lodash";
 import { NoDataMessage } from "../../SharedComponents";
+import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import "./Scatter.scss";
 
 export const DataScatterId = "data_scatter_id";

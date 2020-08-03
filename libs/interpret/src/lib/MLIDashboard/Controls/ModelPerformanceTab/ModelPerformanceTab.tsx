@@ -1,20 +1,20 @@
 import React from "react";
-import { IGenericChartProps, ISelectorConfig, ChartTypes } from "../../NewExplanationDashboard";
-import { JointDataset, ColumnCategories } from "../../JointDataset";
-import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
-import { Cohort } from "../../Cohort";
 import { getTheme } from "@uifabric/styling";
 import _ from "lodash";
 import { DefaultButton } from "office-ui-fabric-react/lib/Button";
-import { localization } from "../../../Localization/localization";
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { Transform } from "plotly.js-dist";
 import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
-import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 import { Icon, Text } from "office-ui-fabric-react";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
+import { localization } from "../../../Localization/localization";
+import { Cohort } from "../../Cohort";
+import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
+import { JointDataset, ColumnCategories } from "../../JointDataset";
+import { IGenericChartProps, ISelectorConfig, ChartTypes } from "../../NewExplanationDashboard";
 import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
+import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
     chartProps: IGenericChartProps;

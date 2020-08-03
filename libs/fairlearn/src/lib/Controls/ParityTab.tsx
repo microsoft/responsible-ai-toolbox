@@ -1,12 +1,12 @@
 import React from "react";
-import { localization } from "../Localization/localization";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
-import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { Separator } from "office-ui-fabric-react/lib/Separator";
+import { localization } from "../Localization/localization";
 import { IWizardTabProps } from "../IWizardTabProps";
+import { IParityPickerProps } from "../FairnessWizard";
+import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { WizardFooter } from "./WizardFooter";
 import { TileList, ITileProp } from "./TileList";
-import { IParityPickerProps } from "../FairnessWizard";
 
 export interface IParityTabProps extends IWizardTabProps {
     parityPickerProps: IParityPickerProps;

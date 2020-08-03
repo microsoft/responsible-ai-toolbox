@@ -1,7 +1,7 @@
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { INumericRange, ICategoricalRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { localization } from "../Localization/localization";
 import _ from "lodash";
+import { localization } from "../Localization/localization";
+import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { IMultiClassLocalFeatureImportance, ISingleClassLocalFeatureImportance } from "./Interfaces";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
 import { Cohort } from "./Cohort";

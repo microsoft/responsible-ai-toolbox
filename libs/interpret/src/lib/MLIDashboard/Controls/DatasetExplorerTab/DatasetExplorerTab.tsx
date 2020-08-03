@@ -1,13 +1,13 @@
 import * as Plotly from "plotly.js-dist";
 import React from "react";
 import { AccessibleChart, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
-import { localization } from "../../../Localization/localization";
-import { FabricStyles } from "../../FabricStyles";
 import _ from "lodash";
 import { IProcessedStyleSet, getTheme } from "@uifabric/styling";
-import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
-import { IconButton, DefaultButton, PrimaryButton } from "office-ui-fabric-react";
+import { IconButton, DefaultButton, PrimaryButton , Icon, Text, Callout, DirectionalHint, ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
+import { localization } from "../../../Localization/localization";
+import { FabricStyles } from "../../FabricStyles";
+import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import {
     ISelectorConfig,
@@ -18,7 +18,7 @@ import {
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
 import { datasetExplorerTabStyles, IDatasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
-import { Icon, Text, Callout, DirectionalHint, ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
+
 
 export interface IDatasetExplorerTabProps {
     chartProps: IGenericChartProps;

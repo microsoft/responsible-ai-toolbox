@@ -1,12 +1,12 @@
 import React from "react";
 import * as memoize from "memoize-one";
-import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
-import { JointDataset } from "../JointDataset";
 import { IPlotlyProperty, PlotlyMode, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
+import { JointDataset } from "../JointDataset";
 import { localization } from "../../Localization/localization";
 import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
-import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import { Cohort } from "../Cohort";
 
 export interface ISwarmFeaturePlotProps {

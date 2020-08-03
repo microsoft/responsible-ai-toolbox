@@ -1,5 +1,5 @@
-import { ClassificationEnum, JointDataset } from "./JointDataset";
 import { localization } from "../Localization/localization";
+import { ClassificationEnum, JointDataset } from "./JointDataset";
 import { ModelTypes } from "./IExplanationContext";
 
 export interface ILabeledStatistic {

@@ -1,6 +1,6 @@
-import { IExplanationModelMetadata } from "../../IExplanationContext";
 import React from "react";
 import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
+import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { localization } from "../../../Localization/localization";
 import { FeatureKeys } from "../../SharedComponents";

@@ -1,16 +1,16 @@
 import React from "react";
-import { JointDataset } from "../../JointDataset";
-import { IRangeView } from "../ICEPlot";
 import _ from "lodash";
 import { IPlotlyProperty, RangeTypes, AccessibleChart, PlotlyMode } from "@responsible-ai/mlchartlib";
 import { IComboBox, IComboBoxOption, ComboBox } from "office-ui-fabric-react/lib/ComboBox";
+import { Data } from "plotly.js-dist";
+import { SpinButton, Text, getTheme } from "office-ui-fabric-react";
+import { JointDataset } from "../../JointDataset";
+import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
 import { NoDataMessage } from "../../SharedComponents";
 import { ModelTypes, IExplanationModelMetadata } from "../../IExplanationContext";
 import { FabricStyles } from "../../FabricStyles";
-import { Data } from "plotly.js-dist";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { SpinButton, Text, getTheme } from "office-ui-fabric-react";
 import { multiIcePlotStyles } from "./MultiICEPlot.styles";
 
 export interface IMultiICEPlotProps {

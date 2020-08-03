@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React from "react";
+import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import { localization } from "../../Localization/localization";
 import { FeatureEditingTile, PredictionLabel, NoDataMessage } from "../SharedComponents";
-import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import { IExplanationContext } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces";
 

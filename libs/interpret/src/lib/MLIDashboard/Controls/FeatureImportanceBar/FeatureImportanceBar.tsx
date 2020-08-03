@@ -1,15 +1,15 @@
 import React from "react";
 import _ from "lodash";
-import { localization } from "../../../Localization/localization";
 import { getTheme } from "@uifabric/styling";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
+import { Text } from "office-ui-fabric-react";
+import { localization } from "../../../Localization/localization";
 import { LoadingSpinner } from "../../SharedComponents";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
-import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
-import { Text } from "office-ui-fabric-react";
 import { ChartTypes } from "../../NewExplanationDashboard";
+import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureBarProps {
     jointDataset: JointDataset;

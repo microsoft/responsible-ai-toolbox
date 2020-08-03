@@ -3,14 +3,14 @@ import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { Slider } from "office-ui-fabric-react/lib/Slider";
 import React from "react";
+import { Callout } from "office-ui-fabric-react/lib/Callout";
+import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { NoDataMessage, LoadingSpinner, FeatureKeys, FeatureSortingKey, BarChart } from "../../SharedComponents";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
-import { Callout } from "office-ui-fabric-react/lib/Callout";
-import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 
 import "./FeatureImportanceBar.scss";
 

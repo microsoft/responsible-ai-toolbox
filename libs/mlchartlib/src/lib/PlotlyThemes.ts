@@ -1,6 +1,6 @@
-import { IPlotlyProperty } from './IPlotlyProperty';
 import * as _ from 'lodash';
 import { ITheme } from '@uifabric/styling';
+import { IPlotlyProperty } from './IPlotlyProperty';
 
 export interface IPlotlyTheme {
     axisColor: string;

@@ -20,10 +20,14 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
         "prettier",
         "prettier/@typescript-eslint"
     ],
     "rules": {
+        "import/no-unresolved": "off",
+        "import/order": "error",
         "@typescript-eslint/camelcase": "off",
         // "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-parameter-properties": "off",
@@ -49,12 +53,6 @@
             }
         ],
         "no-duplicate-imports": "error",
-        "sort-imports": [
-            "error",
-            {
-                "allowSeparatedGroups": true
-            }
-        ],
         "array-callback-return": "error",
         "dot-location": ["error", "property"],
         "eqeqeq": ["error", "smart"],

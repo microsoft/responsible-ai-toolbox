@@ -1,11 +1,11 @@
-import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import React from "react";
-import { localization } from "../../Localization/localization";
 import Plotly from "plotly.js-dist";
 import { v4 } from "uuid";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import _ from "lodash";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import { localization } from "../../Localization/localization";
+import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 
 export interface IBarChartProps {
     featureByClassMatrix: number[][];

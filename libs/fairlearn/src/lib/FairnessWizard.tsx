@@ -2,7 +2,7 @@ import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import { ICategoricalRange, ModelMetadata, RangeTypes, SelectionContext } from "@responsible-ai/mlchartlib";
 import { Pivot, PivotItem, Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react";
+import { Text , loadTheme } from "office-ui-fabric-react";
 import React from "react";
 import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
@@ -18,7 +18,7 @@ import { localization } from "./Localization/localization";
 import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
-import { loadTheme } from "office-ui-fabric-react";
+
 import { defaultTheme } from "./Themes";
 
 export interface IAccuracyPickerProps {

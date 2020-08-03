@@ -1,20 +1,5 @@
 import React from "react";
-import { JointDataset } from "../../JointDataset";
-import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
-import { localization } from "../../../Localization/localization";
-import { DependencePlot } from "../DependencePlot/DependencePlot";
-import { IGenericChartProps, ChartTypes } from "../../NewExplanationDashboard";
-import { SpinButton } from "office-ui-fabric-react";
-import { Slider } from "office-ui-fabric-react/lib/Slider";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption, Dropdown } from "office-ui-fabric-react";
-import { FabricStyles } from "../../FabricStyles";
-import { Cohort } from "../../Cohort";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { globalTabStyles } from "./GlobalExplanationTab.styles";
-import { IGlobalSeries } from "./IGlobalSeries";
-import { InteractiveLegend } from "../InteractiveLegend";
-import {
+import { SpinButton , ComboBox, IComboBox, IComboBoxOption, IDropdownOption, Dropdown ,
     Icon,
     Text,
     IconButton,
@@ -25,9 +10,24 @@ import {
     CommandBarButton,
     Link,
 } from "office-ui-fabric-react";
+import { Slider } from "office-ui-fabric-react/lib/Slider";
+import { JointDataset } from "../../JointDataset";
+import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
+import { localization } from "../../../Localization/localization";
+import { DependencePlot } from "../DependencePlot/DependencePlot";
+import { IGenericChartProps, ChartTypes } from "../../NewExplanationDashboard";
+import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+
+import { FabricStyles } from "../../FabricStyles";
+import { Cohort } from "../../Cohort";
+import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { InteractiveLegend } from "../InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 import { ExplainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
+import { globalTabStyles } from "./GlobalExplanationTab.styles";
+import { IGlobalSeries } from "./IGlobalSeries";
+
 
 export interface IGlobalBarSettings {
     topK: number;

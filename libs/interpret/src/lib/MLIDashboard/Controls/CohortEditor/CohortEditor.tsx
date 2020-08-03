@@ -13,9 +13,9 @@ import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../JointDataset";
-import { cohortEditorCallout, cohortEditorStyles, tooltipHostStyles, ICohortEditorStyles } from "./CohortEditor.styles";
 import { CohortList } from "../CohortList/CohortList";
 import { FabricStyles } from "../../FabricStyles";
+import { cohortEditorCallout, cohortEditorStyles, tooltipHostStyles, ICohortEditorStyles } from "./CohortEditor.styles";
 
 export interface ICohort {
     filterList: IFilter[];

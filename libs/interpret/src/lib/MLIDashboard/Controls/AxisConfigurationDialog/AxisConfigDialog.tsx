@@ -13,8 +13,8 @@ import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-import { axisControlCallout, axisControlDialogStyles, IAxisControlDialogStyles } from "./AxisConfigDialog.styles";
 import { FabricStyles } from "../../FabricStyles";
+import { axisControlCallout, axisControlDialogStyles, IAxisControlDialogStyles } from "./AxisConfigDialog.styles";
 
 export interface IAxisConfigProps {
     jointDataset: JointDataset;

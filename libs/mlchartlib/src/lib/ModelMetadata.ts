@@ -1,7 +1,7 @@
+import _ from "lodash";
 import { INumericRange } from "./INumericRange";
 import { ICategoricalRange } from "./ICategoricalRange";
 import { RangeTypes } from "./RangeTypes";
-import _ from "lodash";
 
 export class ModelMetadata {
     public static buildFeatureRanges(testData: any[][], isCategoricalArray: boolean[] | undefined, categoricalMap?: {[key: number]: string[]}):

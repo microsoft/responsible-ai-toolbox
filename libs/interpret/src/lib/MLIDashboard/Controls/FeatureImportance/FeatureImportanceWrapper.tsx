@@ -1,13 +1,13 @@
 import React from "react";
 import { SelectionContext } from "@responsible-ai/mlchartlib";
+import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import { IDashboardContext } from "../../ExplanationDashboard";
 import { IBarChartConfig } from "../../SharedComponents";
+import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { localization } from "../../../Localization/localization";
 import { FeatureImportanceBar } from "./FeatureImportanceBar";
 import { Beehive } from "./Beenhive";
-import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { Violin } from "./Violin";
-import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { localization } from "../../../Localization/localization";
 
 export const BarId = "bar_id";
 export const GlobalFeatureImportanceId = "global_feature_id";

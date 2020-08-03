@@ -1,6 +1,6 @@
+import { localization } from "../Localization/localization";
 import { IExplanationDashboardProps } from "./Interfaces";
 import { IExplanationModelMetadata } from "./IExplanationContext";
-import { localization } from "../Localization/localization";
 
 export class ValidateProperties {
     private readonly classLength: number;

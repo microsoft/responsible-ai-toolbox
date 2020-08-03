@@ -1,14 +1,14 @@
 import React from "react";
-import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import { Callout } from "office-ui-fabric-react/lib/Callout";
-import { localization } from "../../../Localization/localization";
 import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { FabricStyles } from "../../FabricStyles";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
 import _ from "lodash";
+import { FabricStyles } from "../../FabricStyles";
+import { localization } from "../../../Localization/localization";
 import { ModelTypes } from "../../IExplanationContext";
 import { LoadingSpinner, NoDataMessage } from "../../SharedComponents";
+import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import "./Scatter.scss";
 
 export const ExplanationScatterId = "explanation_scatter_id";

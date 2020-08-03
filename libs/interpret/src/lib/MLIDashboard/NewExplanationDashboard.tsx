@@ -1,4 +1,12 @@
 import React from "react";
+import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import * as memoize from "memoize-one";
+import { IPivotItemProps, PivotItem, Pivot, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot";
+import _ from "lodash";
+import { mergeStyleSets, loadTheme } from "office-ui-fabric-react/lib/Styling";
+import { initializeIcons } from "@uifabric/icons";
+import { MessageBar, MessageBarType, Text, Link } from "office-ui-fabric-react";
+import { localization } from "../Localization/localization";
 import {
     IExplanationDashboardProps,
     IMultiClassLocalFeatureImportance,
@@ -6,25 +14,17 @@ import {
     TelemetryLevels,
 } from "./Interfaces";
 import { JointDataset } from "./JointDataset";
-import { ModelMetadata } from "@responsible-ai/mlchartlib";
-import { localization } from "../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
-import * as memoize from "memoize-one";
-import { IPivotItemProps, PivotItem, Pivot, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot";
-import _ from "lodash";
 import { GlobalExplanationTab, IGlobalBarSettings } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
-import { mergeStyleSets, loadTheme } from "office-ui-fabric-react/lib/Styling";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
 import { Cohort } from "./Cohort";
-import { initializeIcons } from "@uifabric/icons";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { defaultTheme } from "./Themes";
 import { CohortList } from "./Controls/CohortList/CohortList";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import { ValidateProperties } from "./ValidateProperties";
-import { MessageBar, MessageBarType, Text, Link } from "office-ui-fabric-react";
 import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
 
