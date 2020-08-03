@@ -44,12 +44,12 @@ export interface IAxisConfigState {
 }
 
 export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxisConfigState> {
-    private _isInitialized = false;
-
-    private _leftSelection: Selection;
     private static readonly MIN_HIST_COLS = 2;
     private static readonly MAX_HIST_COLS = 40;
     private static readonly DEFAULT_BIN_COUNT = 5;
+    private _isInitialized = false;
+
+    private _leftSelection: Selection;
 
     private readonly leftItems = [
         Cohort.CohortKey,

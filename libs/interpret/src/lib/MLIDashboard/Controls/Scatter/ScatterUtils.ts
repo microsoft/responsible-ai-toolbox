@@ -7,7 +7,7 @@ import {
     PlotlyMode,
     SelectionContext,
 } from "@responsible-ai/mlchartlib";
-import { IComboBoxOption , DropdownMenuItemType, IDropdownOption } from "office-ui-fabric-react";
+import { IComboBoxOption, DropdownMenuItemType, IDropdownOption } from "office-ui-fabric-react";
 
 import { localization } from "../../../Localization/localization";
 import { IDashboardContext } from "../../ExplanationDashboard";
@@ -37,6 +37,156 @@ export interface IProjectedData {
 }
 
 export class ScatterUtils {
+    public static populatePlotlyProps: (
+        data: IProjectedData[],
+        plotlyProps: IPlotlyProperty,
+    ) => IPlotlyProperty = (memoize as any).default(
+        (data: IProjectedData[], plotlyProps: IPlotlyProperty): IPlotlyProperty => {
+            const result = _.cloneDeep(plotlyProps);
+            result.data = result.data
+                .map(series => ChartBuilder.buildPlotlySeries(series, data) as any)
+                .reduce((prev, curr) => {
+                    prev.push(...curr);
+                    return prev;
+                }, []);
+            return result as any;
+        },
+        _.isEqual,
+    );
+
+    public static buildOptions: (
+        explanationContext: IExplanationContext,
+        includeFeatureImportance: boolean,
+    ) => IDropdownOption[] = (memoize as any).default(
+        (explanationContext: IExplanationContext, includeFeatureImportance: boolean): IDropdownOption[] => {
+            const result: IDropdownOption[] = [];
+            if (includeFeatureImportance) {
+                result.push({
+                    key: "Header0",
+                    text: localization.featureImportance,
+                    itemType: DropdownMenuItemType.Header,
+                });
+                explanationContext.modelMetadata.featureNames.forEach((featureName, index) => {
+                    result.push({
+                        key: `LocalExplanation[${index}]`,
+                        text: localization.formatString(
+                            localization.ExplanationScatter.importanceLabel,
+                            featureName,
+                        ) as string,
+                        data: { isCategorical: false, isFeatureImportance: true },
+                    });
+                });
+            }
+            result.push({ key: "divider1", text: "-", itemType: DropdownMenuItemType.Divider });
+            result.push({
+                key: "Header1",
+                text: localization.ExplanationScatter.dataGroupLabel,
+                itemType: DropdownMenuItemType.Header,
+            });
+            explanationContext.modelMetadata.featureNames.forEach((featureName, index) => {
+                result.push({
+                    key: `TrainingData[${index}]`,
+                    text: includeFeatureImportance
+                        ? (localization.formatString(localization.ExplanationScatter.dataLabel, featureName) as string)
+                        : featureName,
+                    data: { isCategorical: explanationContext.modelMetadata.featureIsCategorical[index] },
+                });
+            });
+            result.push({
+                key: "Index",
+                text: localization.ExplanationScatter.index,
+                data: { isCategorical: false },
+            });
+            result.push({ key: "divider2", text: "-", itemType: DropdownMenuItemType.Divider });
+            result.push({
+                key: "Header2",
+                text: localization.ExplanationScatter.output,
+                itemType: DropdownMenuItemType.Header,
+            });
+            if (explanationContext.testDataset.predictedY) {
+                result.push({
+                    key: "PredictedY",
+                    text: localization.ExplanationScatter.predictedY,
+                    data: {
+                        isCategorical: explanationContext.modelMetadata.modelType !== ModelTypes.regression,
+                        sortProperty:
+                            explanationContext.modelMetadata.modelType !== ModelTypes.regression
+                                ? "PredictedYClassIndex"
+                                : undefined,
+                    },
+                });
+            }
+            if (explanationContext.testDataset.probabilityY) {
+                explanationContext.testDataset.probabilityY[0].forEach((_, index) => {
+                    let className = explanationContext.modelMetadata.classNames[index];
+                    if (!className) {
+                        className = `class ${index}`;
+                    }
+                    result.push({
+                        key: `ProbabilityY[${index}]`,
+                        text: localization.formatString(
+                            localization.ExplanationScatter.probabilityLabel,
+                            className,
+                        ) as string,
+                        data: { isCategorical: false },
+                    });
+                });
+            }
+            if (explanationContext.testDataset.trueY) {
+                result.push({
+                    key: "TrueY",
+                    text: localization.ExplanationScatter.trueY,
+                    data: {
+                        isCategorical: explanationContext.modelMetadata.modelType !== ModelTypes.regression,
+                        sortProperty:
+                            explanationContext.modelMetadata.modelType !== ModelTypes.regression
+                                ? "TrueYClassIndex"
+                                : undefined,
+                    },
+                });
+            }
+            return result;
+        },
+    );
+
+    // The chartBuilder util works best with arrays of objects, rather than an object with array props.
+    // Just re-zipper to form;
+    public static projectData: (explanationContext: IExplanationContext) => IProjectedData[] = (memoize as any).default(
+        (explanationContext: IExplanationContext): IProjectedData[] => {
+            return explanationContext.testDataset.dataset.map((featuresArray, rowIndex) => {
+                const result: IProjectedData = {
+                    TrainingData: featuresArray,
+                    Index: rowIndex.toString(),
+                };
+                if (explanationContext.localExplanation && explanationContext.localExplanation.flattenedValues) {
+                    result.LocalExplanation = explanationContext.localExplanation.flattenedValues[rowIndex];
+                }
+                if (explanationContext.testDataset.probabilityY) {
+                    result.ProbabilityY = explanationContext.testDataset.probabilityY[rowIndex];
+                }
+                if (explanationContext.testDataset.predictedY) {
+                    const rawPrediction = explanationContext.testDataset.predictedY[rowIndex];
+                    if (explanationContext.modelMetadata.modelType === ModelTypes.regression) {
+                        result.PredictedY = rawPrediction;
+                    } else {
+                        result.PredictedYClassIndex = rawPrediction;
+                        result.PredictedY = explanationContext.modelMetadata.classNames[rawPrediction];
+                    }
+                }
+                if (explanationContext.testDataset.trueY) {
+                    const rawTruth = explanationContext.testDataset.trueY[rowIndex];
+                    if (explanationContext.modelMetadata.modelType === ModelTypes.regression) {
+                        result.TrueY = rawTruth;
+                    } else {
+                        result.TrueY = explanationContext.modelMetadata.classNames[rawTruth];
+                        result.TrueYClassIndex = rawTruth;
+                    }
+                }
+                return result;
+            });
+        },
+        _.isEqual,
+    );
     private static baseScatterProperties: IPlotlyProperty = {
         config: { displaylogo: false, responsive: true, displayModeBar: false },
         data: [
@@ -194,157 +344,6 @@ export class ScatterUtils {
 
         return props;
     }
-
-    public static populatePlotlyProps: (
-        data: IProjectedData[],
-        plotlyProps: IPlotlyProperty,
-    ) => IPlotlyProperty = (memoize as any).default(
-        (data: IProjectedData[], plotlyProps: IPlotlyProperty): IPlotlyProperty => {
-            const result = _.cloneDeep(plotlyProps);
-            result.data = result.data
-                .map(series => ChartBuilder.buildPlotlySeries(series, data) as any)
-                .reduce((prev, curr) => {
-                    prev.push(...curr);
-                    return prev;
-                }, []);
-            return result as any;
-        },
-        _.isEqual,
-    );
-
-    public static buildOptions: (
-        explanationContext: IExplanationContext,
-        includeFeatureImportance: boolean,
-    ) => IDropdownOption[] = (memoize as any).default(
-        (explanationContext: IExplanationContext, includeFeatureImportance: boolean): IDropdownOption[] => {
-            const result: IDropdownOption[] = [];
-            if (includeFeatureImportance) {
-                result.push({
-                    key: "Header0",
-                    text: localization.featureImportance,
-                    itemType: DropdownMenuItemType.Header,
-                });
-                explanationContext.modelMetadata.featureNames.forEach((featureName, index) => {
-                    result.push({
-                        key: `LocalExplanation[${index}]`,
-                        text: localization.formatString(
-                            localization.ExplanationScatter.importanceLabel,
-                            featureName,
-                        ) as string,
-                        data: { isCategorical: false, isFeatureImportance: true },
-                    });
-                });
-            }
-            result.push({ key: "divider1", text: "-", itemType: DropdownMenuItemType.Divider });
-            result.push({
-                key: "Header1",
-                text: localization.ExplanationScatter.dataGroupLabel,
-                itemType: DropdownMenuItemType.Header,
-            });
-            explanationContext.modelMetadata.featureNames.forEach((featureName, index) => {
-                result.push({
-                    key: `TrainingData[${index}]`,
-                    text: includeFeatureImportance
-                        ? (localization.formatString(localization.ExplanationScatter.dataLabel, featureName) as string)
-                        : featureName,
-                    data: { isCategorical: explanationContext.modelMetadata.featureIsCategorical[index] },
-                });
-            });
-            result.push({
-                key: "Index",
-                text: localization.ExplanationScatter.index,
-                data: { isCategorical: false },
-            });
-            result.push({ key: "divider2", text: "-", itemType: DropdownMenuItemType.Divider });
-            result.push({
-                key: "Header2",
-                text: localization.ExplanationScatter.output,
-                itemType: DropdownMenuItemType.Header,
-            });
-            if (explanationContext.testDataset.predictedY) {
-                result.push({
-                    key: "PredictedY",
-                    text: localization.ExplanationScatter.predictedY,
-                    data: {
-                        isCategorical: explanationContext.modelMetadata.modelType !== ModelTypes.regression,
-                        sortProperty:
-                            explanationContext.modelMetadata.modelType !== ModelTypes.regression
-                                ? "PredictedYClassIndex"
-                                : undefined,
-                    },
-                });
-            }
-            if (explanationContext.testDataset.probabilityY) {
-                explanationContext.testDataset.probabilityY[0].forEach((_, index) => {
-                    let className = explanationContext.modelMetadata.classNames[index];
-                    if (!className) {
-                        className = `class ${index}`;
-                    }
-                    result.push({
-                        key: `ProbabilityY[${index}]`,
-                        text: localization.formatString(
-                            localization.ExplanationScatter.probabilityLabel,
-                            className,
-                        ) as string,
-                        data: { isCategorical: false },
-                    });
-                });
-            }
-            if (explanationContext.testDataset.trueY) {
-                result.push({
-                    key: "TrueY",
-                    text: localization.ExplanationScatter.trueY,
-                    data: {
-                        isCategorical: explanationContext.modelMetadata.modelType !== ModelTypes.regression,
-                        sortProperty:
-                            explanationContext.modelMetadata.modelType !== ModelTypes.regression
-                                ? "TrueYClassIndex"
-                                : undefined,
-                    },
-                });
-            }
-            return result;
-        },
-    );
-
-    // The chartBuilder util works best with arrays of objects, rather than an object with array props.
-    // Just re-zipper to form;
-    public static projectData: (explanationContext: IExplanationContext) => IProjectedData[] = (memoize as any).default(
-        (explanationContext: IExplanationContext): IProjectedData[] => {
-            return explanationContext.testDataset.dataset.map((featuresArray, rowIndex) => {
-                const result: IProjectedData = {
-                    TrainingData: featuresArray,
-                    Index: rowIndex.toString(),
-                };
-                if (explanationContext.localExplanation && explanationContext.localExplanation.flattenedValues) {
-                    result.LocalExplanation = explanationContext.localExplanation.flattenedValues[rowIndex];
-                }
-                if (explanationContext.testDataset.probabilityY) {
-                    result.ProbabilityY = explanationContext.testDataset.probabilityY[rowIndex];
-                }
-                if (explanationContext.testDataset.predictedY) {
-                    const rawPrediction = explanationContext.testDataset.predictedY[rowIndex];
-                    if (explanationContext.modelMetadata.modelType === ModelTypes.regression) {
-                        result.PredictedY = rawPrediction;
-                    } else {
-                        result.PredictedYClassIndex = rawPrediction;
-                        result.PredictedY = explanationContext.modelMetadata.classNames[rawPrediction];
-                    }
-                }
-                if (explanationContext.testDataset.trueY) {
-                    const rawTruth = explanationContext.testDataset.trueY[rowIndex];
-                    if (explanationContext.modelMetadata.modelType === ModelTypes.regression) {
-                        result.TrueY = rawTruth;
-                    } else {
-                        result.TrueY = explanationContext.modelMetadata.classNames[rawTruth];
-                        result.TrueYClassIndex = rawTruth;
-                    }
-                }
-                return result;
-            });
-        },
-        _.isEqual,
-    );
 
     public static updateNewXAccessor(
         props: IScatterProps,

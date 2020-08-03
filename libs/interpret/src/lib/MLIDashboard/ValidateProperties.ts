@@ -3,9 +3,9 @@ import { IExplanationDashboardProps } from "./Interfaces";
 import { IExplanationModelMetadata } from "./IExplanationContext";
 
 export class ValidateProperties {
+    public readonly errorStrings: string[] = [];
     private readonly classLength: number;
     private readonly featureLength: number;
-    public readonly errorStrings: string[] = [];
     private rowLength: number;
     public constructor(private props: IExplanationDashboardProps, modelMetadata: IExplanationModelMetadata) {
         this.classLength = modelMetadata.classNames.length;

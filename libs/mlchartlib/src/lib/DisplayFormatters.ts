@@ -3,9 +3,12 @@ import moment from "moment";
 
 export const NonNumericPlaceholder = "-";
 
-export function formatValue(value: any): string {
-    if (typeof value === "string" || !value) {
+export function formatValue(value: unknown): string {
+    if (typeof value === "string") {
         return value;
+    }
+    if (!value) {
+        return "";
     }
     if (_.isDate(value)) {
         return moment(value).format();

@@ -32,6 +32,23 @@ export interface IMultiICEPlotState {
 }
 
 export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMultiICEPlotState> {
+    private debounceFetchData: () => void;
+    public constructor(props: IMultiICEPlotProps) {
+        super(props);
+        const rangeView = this.buildRangeView(this.props.feature);
+        const xAxisArray = this.buildRange(rangeView);
+        this.state = {
+            yAxes: [],
+            abortControllers: [],
+            rangeView,
+            xAxisArray,
+        };
+        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
+        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
+        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
+        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
+        this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
+    }
     private static buildYAxis(metadata: IExplanationModelMetadata, selectedClass: number): string {
         if (metadata.modelType === ModelTypes.regression) {
             return localization.IcePlot.prediction;
@@ -109,24 +126,6 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
                 },
             } as any,
         };
-    }
-
-    private debounceFetchData: () => void;
-    public constructor(props: IMultiICEPlotProps) {
-        super(props);
-        const rangeView = this.buildRangeView(this.props.feature);
-        const xAxisArray = this.buildRange(rangeView);
-        this.state = {
-            yAxes: [],
-            abortControllers: [],
-            rangeView,
-            xAxisArray,
-        };
-        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
-        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
-        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
-        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
-        this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
     }
 
     public componentDidMount(): void {

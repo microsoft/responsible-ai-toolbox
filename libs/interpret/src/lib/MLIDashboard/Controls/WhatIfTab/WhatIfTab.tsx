@@ -87,19 +87,6 @@ export interface IWhatIfTabState {
 }
 
 export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabState> {
-    private static readonly MAX_SELECTION = 2;
-    private static readonly MAX_CLASSES_TOOLTIP = 5;
-    private static readonly colorPath = "Color";
-    private static readonly namePath = "Name";
-    private static readonly IceKey = "ice";
-    private static readonly featureImportanceKey = "feature-importance";
-    private static readonly basePredictionTooltipIds = "predict-tooltip";
-    private static readonly whatIfPredictionTooltipIds = "whatif-predict-tooltip";
-    private static readonly secondaryPlotChoices: IChoiceGroupOption[] = [
-        { key: WhatIfTab.featureImportanceKey, text: localization.WhatIfTab.featureImportancePlot },
-        { key: WhatIfTab.IceKey, text: localization.WhatIfTab.icePlot },
-    ];
-
     public static basePlotlyProperties: IPlotlyProperty = {
         config: { displaylogo: false, responsive: true, displayModeBar: false },
         data: [{}],
@@ -122,6 +109,18 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
             },
         } as any,
     };
+    private static readonly MAX_SELECTION = 2;
+    private static readonly MAX_CLASSES_TOOLTIP = 5;
+    private static readonly colorPath = "Color";
+    private static readonly namePath = "Name";
+    private static readonly IceKey = "ice";
+    private static readonly featureImportanceKey = "feature-importance";
+    private static readonly basePredictionTooltipIds = "predict-tooltip";
+    private static readonly whatIfPredictionTooltipIds = "whatif-predict-tooltip";
+    private static readonly secondaryPlotChoices: IChoiceGroupOption[] = [
+        { key: WhatIfTab.featureImportanceKey, text: localization.WhatIfTab.featureImportancePlot },
+        { key: WhatIfTab.IceKey, text: localization.WhatIfTab.icePlot },
+    ];
 
     private readonly chartAndConfigsId = "chart-and-axis-config-id";
 

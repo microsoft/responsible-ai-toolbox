@@ -65,6 +65,9 @@ export class JointDataset {
     public static readonly ReducedLocalImportanceIntercept = "LocalImportanceIntercept";
     public static readonly ReducedLocalImportanceSortIndexRoot = "LocalImportanceSortIndex";
 
+    public rawLocalImportance: number[][][];
+    public metaDict: { [key: string]: IJointMeta } = {};
+
     public hasDataset = false;
     public hasLocalExplanations = false;
     public hasPredictedY = false;
@@ -84,78 +87,9 @@ export class JointDataset {
     private readonly _localExplanationIndexesComputed: boolean[];
     // The user elected to treat numeric columns as categorical. Store the unaltered values here in case they toggle back.
     private numericValuedColumsCache: Array<{ [key: string]: number }> = [];
-    public rawLocalImportance: number[][][];
-    public metaDict: { [key: string]: IJointMeta } = {};
 
     // Can add method to set dither scale in future, update charts on change.
     private readonly ditherScale = 0.1;
-
-    // creating public static methods of the class instance methonds.
-    // This is to enable prototyping the cohort concept, where we don't have a single
-    // datasource as initially envisioned but an array of them, all build off of the true datasource
-    public static unwrap(dataset: Array<{ [key: string]: any }>, key: string, binVector?: number[]): any[] {
-        if (binVector) {
-            return dataset.map(row => {
-                const rowValue = row[key];
-                return binVector.findIndex(upperLimit => upperLimit >= rowValue);
-            });
-        }
-        return dataset.map(row => row[key]);
-    }
-
-    // recover the array representation of just the eval dataset values from a row
-    // This includes subbing categorical values back in in place of indexes
-    public static datasetSlice(
-        row: { [key: string]: any },
-        metaDict: { [key: string]: IJointMeta },
-        length: number,
-    ): any[] {
-        const result = new Array(length);
-        for (let i = 0; i < length; i++) {
-            const key = JointDataset.DataLabelRoot + i.toString();
-            if (metaDict[key].isCategorical) {
-                result[i] = metaDict[key].sortedCategoricalValues[row[key]];
-            } else {
-                result[i] = row[key];
-            }
-        }
-        return result;
-    }
-
-    // recover the array representation of just the local explanations from a row
-    public static localExplanationSlice(row: { [key: string]: any }, length: number): number[] {
-        const result: number[] = new Array(length);
-        for (let i = 0; i < length; i++) {
-            result[i] = row[JointDataset.ReducedLocalImportanceRoot + i.toString()];
-        }
-        return result;
-    }
-
-    public static predictProbabilitySlice(row: { [key: string]: any }, length: number): number[] {
-        const result: number[] = new Array(length);
-        for (let i = 0; i < length; i++) {
-            result[i] = row[JointDataset.ProbabilityYRoot + i.toString()];
-        }
-        return result;
-    }
-
-    // set the appropriate error value in the keyed column
-    public static setErrorMetrics(row: { [key: string]: any }, modelType: ModelTypes): void {
-        if (modelType === ModelTypes.regression) {
-            row[JointDataset.RegressionError] = row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel];
-            return;
-        }
-        if (modelType === ModelTypes.binary) {
-            // sum pred and 2*true to map to ints 0 - 3,
-            // 0: TN
-            // 1: FP
-            // 2: FN
-            // 3: TP
-            const predictionCategory = 2 * row[JointDataset.TrueYLabel] + row[JointDataset.PredictedYLabel];
-            row[JointDataset.ClassificationError] = predictionCategory;
-            return;
-        }
-    }
 
     public constructor(args: IJointDatasetArgs) {
         this._modelMeta = args.metadata;
@@ -335,6 +269,114 @@ export class JointDataset {
         }
     }
 
+    // creating public static methods of the class instance methonds.
+    // This is to enable prototyping the cohort concept, where we don't have a single
+    // datasource as initially envisioned but an array of them, all build off of the true datasource
+    public static unwrap(dataset: Array<{ [key: string]: any }>, key: string, binVector?: number[]): any[] {
+        if (binVector) {
+            return dataset.map(row => {
+                const rowValue = row[key];
+                return binVector.findIndex(upperLimit => upperLimit >= rowValue);
+            });
+        }
+        return dataset.map(row => row[key]);
+    }
+
+    // recover the array representation of just the eval dataset values from a row
+    // This includes subbing categorical values back in in place of indexes
+    public static datasetSlice(
+        row: { [key: string]: any },
+        metaDict: { [key: string]: IJointMeta },
+        length: number,
+    ): any[] {
+        const result = new Array(length);
+        for (let i = 0; i < length; i++) {
+            const key = JointDataset.DataLabelRoot + i.toString();
+            if (metaDict[key].isCategorical) {
+                result[i] = metaDict[key].sortedCategoricalValues[row[key]];
+            } else {
+                result[i] = row[key];
+            }
+        }
+        return result;
+    }
+
+    // recover the array representation of just the local explanations from a row
+    public static localExplanationSlice(row: { [key: string]: any }, length: number): number[] {
+        const result: number[] = new Array(length);
+        for (let i = 0; i < length; i++) {
+            result[i] = row[JointDataset.ReducedLocalImportanceRoot + i.toString()];
+        }
+        return result;
+    }
+
+    public static predictProbabilitySlice(row: { [key: string]: any }, length: number): number[] {
+        const result: number[] = new Array(length);
+        for (let i = 0; i < length; i++) {
+            result[i] = row[JointDataset.ProbabilityYRoot + i.toString()];
+        }
+        return result;
+    }
+
+    // set the appropriate error value in the keyed column
+    public static setErrorMetrics(row: { [key: string]: any }, modelType: ModelTypes): void {
+        if (modelType === ModelTypes.regression) {
+            row[JointDataset.RegressionError] = row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel];
+            return;
+        }
+        if (modelType === ModelTypes.binary) {
+            // sum pred and 2*true to map to ints 0 - 3,
+            // 0: TN
+            // 1: FP
+            // 2: FN
+            // 3: TP
+            const predictionCategory = 2 * row[JointDataset.TrueYLabel] + row[JointDataset.PredictedYLabel];
+            row[JointDataset.ClassificationError] = predictionCategory;
+            return;
+        }
+    }
+
+    private static buildLocalFeatureMatrix(
+        localExplanationRaw: number[][] | number[][][],
+        modelType: ModelTypes,
+    ): number[][][] {
+        switch (modelType) {
+            case ModelTypes.regression: {
+                return (localExplanationRaw as number[][]).map(featureArray => featureArray.map(val => [val]));
+            }
+            case ModelTypes.binary: {
+                return JointDataset.transposeLocalImportanceMatrix(
+                    localExplanationRaw as number[][][],
+                ).map(featuresByClasses => featuresByClasses.map(classArray => classArray.slice(0, 1)));
+            }
+            case ModelTypes.multiclass: {
+                return JointDataset.transposeLocalImportanceMatrix(localExplanationRaw as number[][][]);
+            }
+            default:
+        }
+    }
+
+    private static transposeLocalImportanceMatrix(input: number[][][]): number[][][] {
+        const numClasses = input.length;
+        const numRows = input[0].length;
+        const numFeatures = input[0][0].length;
+        const result: number[][][] = Array(numRows)
+            .fill(0)
+            .map(() =>
+                Array(numFeatures)
+                    .fill(0)
+                    .map(() => Array(numClasses).fill(0)),
+            );
+        input.forEach((rowByFeature, classIndex) => {
+            rowByFeature.forEach((featureArray, rowIndex) => {
+                featureArray.forEach((value, featureIndex) => {
+                    result[rowIndex][featureIndex][classIndex] = value;
+                });
+            });
+        });
+        return result;
+    }
+
     public getRow(index: number): { [key: string]: number } {
         return { ...this.dataDict[index] };
     }
@@ -425,53 +467,6 @@ export class JointDataset {
         meta.sortedCategoricalValues = labelArray;
     }
 
-    private initializeDataDictIfNeeded(arr: any[]): void {
-        if (arr === undefined) {
-            return;
-        }
-        if (this.dataDict !== undefined) {
-            if (this.dataDict.length !== arr.length) {
-                throw new Error("Differing length inputs. Ensure data matches explanations and predictions.");
-            }
-            return;
-        }
-        this.dataDict = Array.from({ length: arr.length } as any).map((_, index) => {
-            const dict = {};
-            dict[JointDataset.IndexLabel] = index;
-            dict[JointDataset.DitherLabel] = 2 * this.ditherScale * Math.random() - this.ditherScale;
-            dict[JointDataset.DitherLabel2] = 2 * this.ditherScale * Math.random() - this.ditherScale;
-            return dict;
-        });
-        this.numericValuedColumsCache = Array.from({ length: arr.length } as any).map(() => {
-            return {};
-        });
-        this.metaDict[JointDataset.IndexLabel] = {
-            label: localization.ExplanationScatter.index,
-            abbridgedLabel: localization.ExplanationScatter.index,
-            isCategorical: false,
-            featureRange: {
-                rangeType: RangeTypes.integer,
-                min: 0,
-                max: arr.length - 1,
-            },
-            category: ColumnCategories.index,
-        };
-        this.metaDict[Cohort.CohortKey] = {
-            label: localization.Cohort.cohort,
-            abbridgedLabel: localization.Cohort.cohort,
-            isCategorical: true,
-            treatAsCategorical: true,
-            category: ColumnCategories.cohort,
-        };
-        this.metaDict[ColumnCategories.none] = {
-            label: localization.Columns.none,
-            abbridgedLabel: localization.Columns.none,
-            isCategorical: true,
-            treatAsCategorical: true,
-            category: ColumnCategories.none,
-        };
-    }
-
     // project the 3d array based on the selected vector weights. Costly to do, so avoid when possible.
     public buildLocalFlattenMatrix(weightVector: WeightVectorOption): void {
         const featuresMinArray = new Array(this.rawLocalImportance[0].length).fill(Number.MAX_SAFE_INTEGER);
@@ -550,44 +545,50 @@ export class JointDataset {
         });
     }
 
-    private static buildLocalFeatureMatrix(
-        localExplanationRaw: number[][] | number[][][],
-        modelType: ModelTypes,
-    ): number[][][] {
-        switch (modelType) {
-            case ModelTypes.regression: {
-                return (localExplanationRaw as number[][]).map(featureArray => featureArray.map(val => [val]));
-            }
-            case ModelTypes.binary: {
-                return JointDataset.transposeLocalImportanceMatrix(
-                    localExplanationRaw as number[][][],
-                ).map(featuresByClasses => featuresByClasses.map(classArray => classArray.slice(0, 1)));
-            }
-            case ModelTypes.multiclass: {
-                return JointDataset.transposeLocalImportanceMatrix(localExplanationRaw as number[][][]);
-            }
-            default:
+    private initializeDataDictIfNeeded(arr: any[]): void {
+        if (arr === undefined) {
+            return;
         }
-    }
-
-    private static transposeLocalImportanceMatrix(input: number[][][]): number[][][] {
-        const numClasses = input.length;
-        const numRows = input[0].length;
-        const numFeatures = input[0][0].length;
-        const result: number[][][] = Array(numRows)
-            .fill(0)
-            .map(() =>
-                Array(numFeatures)
-                    .fill(0)
-                    .map(() => Array(numClasses).fill(0)),
-            );
-        input.forEach((rowByFeature, classIndex) => {
-            rowByFeature.forEach((featureArray, rowIndex) => {
-                featureArray.forEach((value, featureIndex) => {
-                    result[rowIndex][featureIndex][classIndex] = value;
-                });
-            });
+        if (this.dataDict !== undefined) {
+            if (this.dataDict.length !== arr.length) {
+                throw new Error("Differing length inputs. Ensure data matches explanations and predictions.");
+            }
+            return;
+        }
+        this.dataDict = Array.from({ length: arr.length } as any).map((_, index) => {
+            const dict = {};
+            dict[JointDataset.IndexLabel] = index;
+            dict[JointDataset.DitherLabel] = 2 * this.ditherScale * Math.random() - this.ditherScale;
+            dict[JointDataset.DitherLabel2] = 2 * this.ditherScale * Math.random() - this.ditherScale;
+            return dict;
         });
-        return result;
+        this.numericValuedColumsCache = Array.from({ length: arr.length } as any).map(() => {
+            return {};
+        });
+        this.metaDict[JointDataset.IndexLabel] = {
+            label: localization.ExplanationScatter.index,
+            abbridgedLabel: localization.ExplanationScatter.index,
+            isCategorical: false,
+            featureRange: {
+                rangeType: RangeTypes.integer,
+                min: 0,
+                max: arr.length - 1,
+            },
+            category: ColumnCategories.index,
+        };
+        this.metaDict[Cohort.CohortKey] = {
+            label: localization.Cohort.cohort,
+            abbridgedLabel: localization.Cohort.cohort,
+            isCategorical: true,
+            treatAsCategorical: true,
+            category: ColumnCategories.cohort,
+        };
+        this.metaDict[ColumnCategories.none] = {
+            label: localization.Columns.none,
+            abbridgedLabel: localization.Columns.none,
+            isCategorical: true,
+            treatAsCategorical: true,
+            category: ColumnCategories.none,
+        };
     }
 }

@@ -55,6 +55,15 @@ export interface ICohortEditorState {
 }
 
 export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohortEditorState> {
+    private static filterMethodLabels: { [key in FilterMethods]: string } = {
+        [FilterMethods.equal]: localization.FilterOperations.equals,
+        [FilterMethods.greaterThan]: localization.FilterOperations.greaterThan,
+        [FilterMethods.greaterThanEqualTo]: localization.FilterOperations.greaterThanEquals,
+        [FilterMethods.lessThan]: localization.FilterOperations.lessThan,
+        [FilterMethods.lessThanEqualTo]: localization.FilterOperations.lessThanEquals,
+        [FilterMethods.includes]: localization.FilterOperations.includes,
+        [FilterMethods.inTheRangeOf]: localization.FilterOperations.inTheRangeOf,
+    };
     private _leftSelection: Selection;
     private readonly dataArray: IComboBoxOption[] = new Array(this.props.jointDataset.datasetFeatureCount)
         .fill(0)
@@ -110,16 +119,6 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         },
     ];
     private _isInitialized = false;
-
-    private static filterMethodLabels: { [key in FilterMethods]: string } = {
-        [FilterMethods.equal]: localization.FilterOperations.equals,
-        [FilterMethods.greaterThan]: localization.FilterOperations.greaterThan,
-        [FilterMethods.greaterThanEqualTo]: localization.FilterOperations.greaterThanEquals,
-        [FilterMethods.lessThan]: localization.FilterOperations.lessThan,
-        [FilterMethods.lessThanEqualTo]: localization.FilterOperations.lessThanEquals,
-        [FilterMethods.includes]: localization.FilterOperations.includes,
-        [FilterMethods.inTheRangeOf]: localization.FilterOperations.inTheRangeOf,
-    };
 
     public constructor(props: ICohortEditorProps) {
         super(props);

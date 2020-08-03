@@ -3,6 +3,7 @@ import _ from "lodash";
 import { IBinnedResponse } from "./IBinnedResponse";
 
 export class BinnedResponseBuilder {
+    private static readonly UpperBoundUniqueIntegers = 10;
     public static buildCategorical(
         featureRange: INumericRange | ICategoricalRange,
         index: number,
@@ -125,6 +126,4 @@ export class BinnedResponseBuilder {
             return a - b;
         });
     }
-
-    private static readonly UpperBoundUniqueIntegers = 10;
 }

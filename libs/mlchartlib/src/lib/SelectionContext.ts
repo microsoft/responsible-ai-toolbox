@@ -16,7 +16,7 @@ export class SelectionContext {
     private countSubs: Map<string, (n: number) => void> = new Map();
     private maxItems: number | undefined;
 
-    constructor(propertyOfInterest: string, maxItems?: number) {
+    public constructor(propertyOfInterest: string, maxItems?: number) {
         this.propertyOfInterest = propertyOfInterest;
         this.maxItems = maxItems;
     }

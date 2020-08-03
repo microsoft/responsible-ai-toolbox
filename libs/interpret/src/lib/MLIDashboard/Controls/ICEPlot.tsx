@@ -124,6 +124,44 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         _.isEqual,
     );
 
+    private featuresOption: IDropdownOption[];
+
+    public constructor(props: IIcePlotProps) {
+        super(props);
+        if (props.explanationContext.localExplanation && props.explanationContext.localExplanation.values) {
+            // Sort features in the order of local explanation importance
+            this.featuresOption = ModelExplanationUtils.buildSortedVector(
+                props.explanationContext.localExplanation.values[this.props.datapointIndex],
+            )
+                .map(featureIndex => {
+                    return {
+                        key: featureIndex,
+                        text: props.explanationContext.modelMetadata.featureNames[featureIndex],
+                    };
+                })
+                .reverse();
+        } else {
+            this.featuresOption = props.explanationContext.modelMetadata.featureNames.map(
+                (featureName, featureIndex) => {
+                    return { key: featureIndex, text: featureName };
+                },
+            );
+        }
+        this.state = {
+            requestFeatureIndex: undefined,
+            fetchedData: undefined,
+            abortController: undefined,
+            rangeView: undefined,
+            requestedRange: undefined,
+        };
+        this.onFeatureSelected = this.onFeatureSelected.bind(this);
+        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
+        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
+        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
+        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
+        this.fetchData = _.debounce(this.fetchData.bind(this), 500);
+    }
+
     private static buildTextArray(
         modelType: ModelTypes,
         featureName: string,
@@ -164,44 +202,6 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
 
             return result.join("<br>");
         });
-    }
-
-    private featuresOption: IDropdownOption[];
-
-    public constructor(props: IIcePlotProps) {
-        super(props);
-        if (props.explanationContext.localExplanation && props.explanationContext.localExplanation.values) {
-            // Sort features in the order of local explanation importance
-            this.featuresOption = ModelExplanationUtils.buildSortedVector(
-                props.explanationContext.localExplanation.values[this.props.datapointIndex],
-            )
-                .map(featureIndex => {
-                    return {
-                        key: featureIndex,
-                        text: props.explanationContext.modelMetadata.featureNames[featureIndex],
-                    };
-                })
-                .reverse();
-        } else {
-            this.featuresOption = props.explanationContext.modelMetadata.featureNames.map(
-                (featureName, featureIndex) => {
-                    return { key: featureIndex, text: featureName };
-                },
-            );
-        }
-        this.state = {
-            requestFeatureIndex: undefined,
-            fetchedData: undefined,
-            abortController: undefined,
-            rangeView: undefined,
-            requestedRange: undefined,
-        };
-        this.onFeatureSelected = this.onFeatureSelected.bind(this);
-        this.onCategoricalRangeChanged = this.onCategoricalRangeChanged.bind(this);
-        this.onMinRangeChanged = this.onMinRangeChanged.bind(this);
-        this.onMaxRangeChanged = this.onMaxRangeChanged.bind(this);
-        this.onStepsRangeChanged = this.onStepsRangeChanged.bind(this);
-        this.fetchData = _.debounce(this.fetchData.bind(this), 500);
     }
 
     public componentDidMount(): void {

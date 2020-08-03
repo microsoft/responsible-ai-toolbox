@@ -1,4 +1,4 @@
-import { AccessorMappingFunctionNames } from './AccessorMappingFunctionNames';
+import { AccessorMappingFunctionNames } from "./AccessorMappingFunctionNames";
 
 export interface IAccessor {
     mapArgs?: any[];

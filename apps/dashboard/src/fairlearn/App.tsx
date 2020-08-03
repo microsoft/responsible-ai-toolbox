@@ -90,15 +90,6 @@ const darkContrastTheme = createTheme({
 });
 
 export class App extends React.Component<any, any> {
-    public constructor(props: any) {
-        super(props);
-        this.state = { value: 4, themeIndex: 0, language: App.languages[0].val };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleThemeChange = this.handleThemeChange.bind(this);
-        this.generateRandomScore = this.generateRandomScore.bind(this);
-        this.handleLanguageChange = this.handleLanguageChange.bind(this);
-    }
-
     private static choices = [
         { label: "binaryClassifier", data: binaryClassifier },
         { label: "regression", data: regression },
@@ -127,57 +118,15 @@ export class App extends React.Component<any, any> {
         TestReq: [{ displayText: "TestReq" }],
         PredictorReq: [{ displayText: "PredictorReq" }],
     };
-
-    private handleChange(event): void {
-        this.setState({ value: event.target.value });
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    public constructor(props: any) {
+        super(props);
+        this.state = { value: 4, themeIndex: 0, language: App.languages[0].val };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleThemeChange = this.handleThemeChange.bind(this);
+        this.generateRandomScore = this.generateRandomScore.bind(this);
+        this.handleLanguageChange = this.handleLanguageChange.bind(this);
     }
-
-    private handleThemeChange(event): void {
-        this.setState({ themeIndex: event.target.value });
-    }
-
-    private handleLanguageChange(event): void {
-        this.setState({ language: event.target.value });
-    }
-
-    private generateRandomScore(data): Promise<any[]> {
-        return Promise.resolve(data.map(() => Math.random()));
-    }
-
-    private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
-        const binSize = Math.max(...data.binVector);
-        const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
-        bins[2] = undefined;
-        const promise = new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                resolve({
-                    global: Math.random(),
-                    bins,
-                });
-            }, 300);
-            if (signal) {
-                signal.addEventListener("abort", () => {
-                    clearTimeout(timeout);
-                    reject(new DOMException("Aborted", "AbortError"));
-                });
-            }
-        });
-        return promise;
-    }
-
-    // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
-    //     const promise = new Promise((resolve, reject) => {
-    //         const timeout = setTimeout(() => {
-    //             resolve(explanations);
-    //         }, 300);
-    //         signal.addEventListener("abort", () => {
-    //             clearTimeout(timeout);
-    //             reject(new DOMException("Aborted", "AbortError"));
-    //         });
-    //     });
-
-    //     return promise;
-    // }
 
     public render(): React.ReactNode {
         const data: any = _.cloneDeep(App.choices[this.state.value].data);
@@ -252,4 +201,55 @@ export class App extends React.Component<any, any> {
             </div>
         );
     }
+
+    private handleChange(event): void {
+        this.setState({ value: event.target.value });
+    }
+
+    private handleThemeChange(event): void {
+        this.setState({ themeIndex: event.target.value });
+    }
+
+    private handleLanguageChange(event): void {
+        this.setState({ language: event.target.value });
+    }
+
+    private generateRandomScore(data): Promise<any[]> {
+        return Promise.resolve(data.map(() => Math.random()));
+    }
+
+    private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
+        const binSize = Math.max(...data.binVector);
+        const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
+        bins[2] = undefined;
+        const promise = new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                resolve({
+                    global: Math.random(),
+                    bins,
+                });
+            }, 300);
+            if (signal) {
+                signal.addEventListener("abort", () => {
+                    clearTimeout(timeout);
+                    reject(new DOMException("Aborted", "AbortError"));
+                });
+            }
+        });
+        return promise;
+    }
+
+    // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
+    //     const promise = new Promise((resolve, reject) => {
+    //         const timeout = setTimeout(() => {
+    //             resolve(explanations);
+    //         }, 300);
+    //         signal.addEventListener("abort", () => {
+    //             clearTimeout(timeout);
+    //             reject(new DOMException("Aborted", "AbortError"));
+    //         });
+    //     });
+
+    //     return promise;
+    // }
 }

@@ -103,16 +103,6 @@ const darkContrastTheme = createTheme({
 });
 
 export class App extends React.Component<any, any> {
-    public constructor(props: any) {
-        super(props);
-        this.state = { value: 4, themeIndex: 0, language: App.languages[0].val, showNewDash: 0 };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleThemeChange = this.handleThemeChange.bind(this);
-        this.generateRandomScore = this.generateRandomScore.bind(this);
-        this.handleLanguageChange = this.handleLanguageChange.bind(this);
-        this.handleViewChange = this.handleViewChange.bind(this);
-    }
-
     private static choices = [
         { label: "bostonData", data: bostonData, dim: 1 },
         { label: "bostonDataGlobal", data: bostonDataGlobal, dim: 1 },
@@ -150,63 +140,16 @@ export class App extends React.Component<any, any> {
         PredictorReq: [{ displayText: "PredictorReq" }],
     };
 
-    private handleChange(event): void {
-        this.setState({ value: event.target.value });
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    public constructor(props: any) {
+        super(props);
+        this.state = { value: 4, themeIndex: 0, language: App.languages[0].val, showNewDash: 0 };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleThemeChange = this.handleThemeChange.bind(this);
+        this.generateRandomScore = this.generateRandomScore.bind(this);
+        this.handleLanguageChange = this.handleLanguageChange.bind(this);
+        this.handleViewChange = this.handleViewChange.bind(this);
     }
-
-    private handleThemeChange(event): void {
-        this.setState({ themeIndex: event.target.value });
-    }
-
-    private handleLanguageChange(event): void {
-        this.setState({ language: event.target.value });
-    }
-
-    private handleViewChange(event): void {
-        this.setState({ showNewDash: +event.target.value });
-    }
-
-    private generateRandomScore(data, signal): Promise<any[]> {
-        const promise = new Promise<any>((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                resolve(data.map(() => Math.random()));
-            }, 300);
-            signal.addEventListener("abort", () => {
-                clearTimeout(timeout);
-                reject(new DOMException("Aborted", "AbortError"));
-            });
-        });
-
-        return promise;
-    }
-
-    private generateRandomProbs(classDimensions, data, signal): Promise<any[]> {
-        const promise = new Promise<any[]>((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                resolve(data.map(() => Array.from({ length: classDimensions }, () => Math.random())));
-            }, 300);
-            signal.addEventListener("abort", () => {
-                clearTimeout(timeout);
-                reject(new DOMException("Aborted", "AbortError"));
-            });
-        });
-
-        return promise;
-    }
-
-    // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
-    //     const promise = new Promise((resolve, reject) => {
-    //         const timeout = setTimeout(() => {
-    //             resolve(explanations);
-    //         }, 300);
-    //         signal.addEventListener("abort", () => {
-    //             clearTimeout(timeout);
-    //             reject(new DOMException("Aborted", "AbortError"));
-    //         });
-    //     });
-
-    //     return promise;
-    // }
 
     public render(): React.ReactNode {
         const data = _.cloneDeep(App.choices[this.state.value].data) as any;
@@ -306,4 +249,62 @@ export class App extends React.Component<any, any> {
             </div>
         );
     }
+
+    private handleChange(event): void {
+        this.setState({ value: event.target.value });
+    }
+
+    private handleThemeChange(event): void {
+        this.setState({ themeIndex: event.target.value });
+    }
+
+    private handleLanguageChange(event): void {
+        this.setState({ language: event.target.value });
+    }
+
+    private handleViewChange(event): void {
+        this.setState({ showNewDash: +event.target.value });
+    }
+
+    private generateRandomScore(data, signal): Promise<any[]> {
+        const promise = new Promise<any>((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                resolve(data.map(() => Math.random()));
+            }, 300);
+            signal.addEventListener("abort", () => {
+                clearTimeout(timeout);
+                reject(new DOMException("Aborted", "AbortError"));
+            });
+        });
+
+        return promise;
+    }
+
+    private generateRandomProbs(classDimensions, data, signal): Promise<any[]> {
+        const promise = new Promise<any[]>((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                resolve(data.map(() => Array.from({ length: classDimensions }, () => Math.random())));
+            }, 300);
+            signal.addEventListener("abort", () => {
+                clearTimeout(timeout);
+                reject(new DOMException("Aborted", "AbortError"));
+            });
+        });
+
+        return promise;
+    }
+
+    // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
+    //     const promise = new Promise((resolve, reject) => {
+    //         const timeout = setTimeout(() => {
+    //             resolve(explanations);
+    //         }, 300);
+    //         signal.addEventListener("abort", () => {
+    //             clearTimeout(timeout);
+    //             reject(new DOMException("Aborted", "AbortError"));
+    //         });
+    //     });
+
+    //     return promise;
+    // }
 }

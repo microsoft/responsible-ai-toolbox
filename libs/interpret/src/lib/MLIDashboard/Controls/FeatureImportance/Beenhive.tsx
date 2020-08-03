@@ -43,6 +43,72 @@ interface IProjectedData {
 }
 
 export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, IBeehiveState> {
+    // To present all colors on a uniform color scale, the min and max of each feature are calculated
+    // once per dataset and
+    private static populateMappers: (
+        data: IExplanationContext,
+    ) => Array<(value: number | string) => number> = (memoize as any).default(
+        (data: IExplanationContext): Array<(value: number | string) => number> => {
+            return data.modelMetadata.featureNames.map((_val, featureIndex) => {
+                if (data.modelMetadata.featureIsCategorical[featureIndex]) {
+                    const values = _.uniq(data.testDataset.dataset.map(row => row[featureIndex])).sort();
+                    return (value: string | number): number => {
+                        return values.length > 1 ? values.indexOf(value) / (values.length - 1) : 0;
+                    };
+                }
+                const featureArray = data.testDataset.dataset.map((row: number[]) => row[featureIndex]);
+                const min = Math.min(...featureArray);
+                const max = Math.max(...featureArray);
+                const range = max - min;
+                return (value: string | number): number => {
+                    return range !== 0 && typeof value === "number" ? (value - min) / range : 0;
+                };
+            });
+        },
+    );
+
+    private static BasePlotlyProps: IPlotlyProperty = {
+        config: { displaylogo: false, responsive: true, displayModeBar: false } as any,
+        data: [
+            {
+                hoverinfo: "text",
+                datapointLevelAccessors: {
+                    customdata: {
+                        path: ["rowIndex"],
+                        plotlyPath: "customdata",
+                    },
+                    text: {
+                        path: ["tooltip"],
+                        plotlyPath: "text",
+                    },
+                },
+                mode: PlotlyMode.markers,
+                type: "scattergl",
+                yAccessor: "featureImportance",
+                xAccessor: "ditheredFeatureIndex",
+            },
+        ] as any,
+        layout: {
+            dragmode: false,
+            autosize: true,
+            font: {
+                size: 10,
+            },
+            hovermode: "closest",
+            margin: {
+                t: 10,
+                b: 30,
+            },
+            showlegend: false,
+            yaxis: {
+                automargin: true,
+                title: localization.featureImportance,
+            },
+            xaxis: {
+                automargin: true,
+            },
+        } as any,
+    };
     private static maxFeatures = 30;
 
     private static generateSortVector: (data: IExplanationContext) => number[] = (memoize as any).default(
@@ -160,6 +226,29 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
         _.isEqual,
     );
 
+    private readonly _crossClassIconId = "cross-class-icon-id";
+    private readonly _globalSortIconId = "global-sort-icon-id";
+    private colorOptions: IDropdownOption[];
+    private rowCount: number;
+
+    public constructor(props: IGlobalFeatureImportanceProps) {
+        super(props);
+        this.onDismiss = this.onDismiss.bind(this);
+        this.showCrossClassInfo = this.showCrossClassInfo.bind(this);
+        this.showGlobalSortInfo = this.showGlobalSortInfo.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.setChart = this.setChart.bind(this);
+        this.setK = this.setK.bind(this);
+        this.setColor = this.setColor.bind(this);
+        this.colorOptions = this.buildColorOptions();
+        this.rowCount = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues.length;
+        const selectedColorIndex = this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
+        this.state = {
+            selectedColorOption: this.colorOptions[selectedColorIndex].key as string,
+            plotlyProps: undefined,
+        };
+    }
+
     private static buildTooltip(data: IExplanationContext, rowIndex: number, featureIndex: number): string {
         const isLarge = data.localExplanation.flattenedValues.length > 500;
         const result = [];
@@ -216,96 +305,6 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             }
         }
         return result.join("<br>");
-    }
-
-    // To present all colors on a uniform color scale, the min and max of each feature are calculated
-    // once per dataset and
-    private static populateMappers: (
-        data: IExplanationContext,
-    ) => Array<(value: number | string) => number> = (memoize as any).default(
-        (data: IExplanationContext): Array<(value: number | string) => number> => {
-            return data.modelMetadata.featureNames.map((_val, featureIndex) => {
-                if (data.modelMetadata.featureIsCategorical[featureIndex]) {
-                    const values = _.uniq(data.testDataset.dataset.map(row => row[featureIndex])).sort();
-                    return (value: string | number): number => {
-                        return values.length > 1 ? values.indexOf(value) / (values.length - 1) : 0;
-                    };
-                }
-                const featureArray = data.testDataset.dataset.map((row: number[]) => row[featureIndex]);
-                const min = Math.min(...featureArray);
-                const max = Math.max(...featureArray);
-                const range = max - min;
-                return (value: string | number): number => {
-                    return range !== 0 && typeof value === "number" ? (value - min) / range : 0;
-                };
-            });
-        },
-    );
-
-    private static BasePlotlyProps: IPlotlyProperty = {
-        config: { displaylogo: false, responsive: true, displayModeBar: false } as any,
-        data: [
-            {
-                hoverinfo: "text",
-                datapointLevelAccessors: {
-                    customdata: {
-                        path: ["rowIndex"],
-                        plotlyPath: "customdata",
-                    },
-                    text: {
-                        path: ["tooltip"],
-                        plotlyPath: "text",
-                    },
-                },
-                mode: PlotlyMode.markers,
-                type: "scattergl",
-                yAccessor: "featureImportance",
-                xAccessor: "ditheredFeatureIndex",
-            },
-        ] as any,
-        layout: {
-            dragmode: false,
-            autosize: true,
-            font: {
-                size: 10,
-            },
-            hovermode: "closest",
-            margin: {
-                t: 10,
-                b: 30,
-            },
-            showlegend: false,
-            yaxis: {
-                automargin: true,
-                title: localization.featureImportance,
-            },
-            xaxis: {
-                automargin: true,
-            },
-        } as any,
-    };
-
-    private readonly _crossClassIconId = "cross-class-icon-id";
-    private readonly _globalSortIconId = "global-sort-icon-id";
-    private colorOptions: IDropdownOption[];
-    private rowCount: number;
-
-    public constructor(props: IGlobalFeatureImportanceProps) {
-        super(props);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.showCrossClassInfo = this.showCrossClassInfo.bind(this);
-        this.showGlobalSortInfo = this.showGlobalSortInfo.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.setChart = this.setChart.bind(this);
-        this.setK = this.setK.bind(this);
-        this.setColor = this.setColor.bind(this);
-        this.colorOptions = this.buildColorOptions();
-        this.rowCount = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues.length;
-        const selectedColorIndex = this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
-        this.state = {
-            selectedColorOption: this.colorOptions[selectedColorIndex].key as string,
-            plotlyProps: undefined,
-        };
     }
 
     public render(): React.ReactNode {

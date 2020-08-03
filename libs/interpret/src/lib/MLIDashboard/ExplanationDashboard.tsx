@@ -70,9 +70,6 @@ export interface IDashboardState {
 }
 
 export class ExplanationDashboard extends React.Component<IExplanationDashboardProps, IDashboardState> {
-    private readonly selectionContext = new SelectionContext(RowIndex, 1);
-    private selectionSubscription: string;
-
     private static iconsInitialized = false;
 
     private static globalTabKeys: string[] = [
@@ -85,13 +82,6 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
     ];
 
     private static localTabKeys: string[] = ["featureImportance", "perturbationExploration", "ICE"];
-
-    private static initializeIcons(props: IExplanationDashboardProps): void {
-        if (ExplanationDashboard.iconsInitialized === false && props.shouldInitializeIcons !== false) {
-            initializeIcons(props.iconUrl);
-            ExplanationDashboard.iconsInitialized = true;
-        }
-    }
 
     private static transposeLocalImportanceMatrix: (input: number[][][]) => number[][][] = (memoize as any).default(
         (input: number[][][]): number[][][] => {
@@ -116,6 +106,145 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
         },
     );
 
+    private static buildWeightDropdownOptions: (
+        explanationContext: IExplanationContext,
+    ) => IDropdownOption[] = (memoize as any).default((explanationContext: IExplanationContext): IDropdownOption[] => {
+        const result: IDropdownOption[] = [{ key: WeightVectors.absAvg, text: localization.absoluteAverage }];
+        if (explanationContext.testDataset.predictedY) {
+            result.push({ key: WeightVectors.predicted, text: localization.predictedClass });
+        }
+        explanationContext.modelMetadata.classNames.forEach((name, index) => {
+            result.push({ key: index, text: name });
+        });
+        return result;
+    });
+
+    private static getClassLength: (props: IExplanationDashboardProps) => number = (memoize as any).default(
+        (props: IExplanationDashboardProps): number => {
+            if (
+                props.precomputedExplanations &&
+                props.precomputedExplanations.localFeatureImportance &&
+                props.precomputedExplanations.localFeatureImportance.scores
+            ) {
+                const localImportances = props.precomputedExplanations.localFeatureImportance.scores;
+                if (
+                    (localImportances as number[][][]).every(dim1 => {
+                        return dim1.every(dim2 => Array.isArray(dim2));
+                    })
+                ) {
+                    return localImportances.length;
+                } else {
+                    // 2d is regression (could be a non-scikit convention binary, but that is not supported)
+                    return 1;
+                }
+            }
+            if (
+                props.precomputedExplanations &&
+                props.precomputedExplanations.globalFeatureImportance &&
+                props.precomputedExplanations.globalFeatureImportance.scores
+            ) {
+                // determine if passed in vaules is 1D or 2D
+                if (
+                    (props.precomputedExplanations.globalFeatureImportance.scores as number[][]).every(dim1 =>
+                        Array.isArray(dim1),
+                    )
+                ) {
+                    return (props.precomputedExplanations.globalFeatureImportance.scores as number[][])[0].length;
+                }
+            }
+            if (
+                props.probabilityY &&
+                Array.isArray(props.probabilityY) &&
+                Array.isArray(props.probabilityY[0]) &&
+                props.probabilityY[0].length > 0
+            ) {
+                return props.probabilityY[0].length;
+            }
+            // default to regression case
+            return 1;
+        },
+    );
+
+    private readonly selectionContext = new SelectionContext(RowIndex, 1);
+    private selectionSubscription: string;
+
+    private pivotItems: IPivotItemProps[];
+
+    public constructor(props: IExplanationDashboardProps) {
+        super(props);
+        ExplanationDashboard.initializeIcons(props);
+        if (this.props.locale) {
+            localization.setLanguage(this.props.locale);
+        }
+        const explanationContext: IExplanationContext = ExplanationDashboard.buildInitialExplanationContext(props);
+        const defaultTopK = Math.min(8, explanationContext.modelMetadata.featureNames.length);
+        this.onClassSelect = this.onClassSelect.bind(this);
+        this.onConfigChanged = this.onConfigChanged.bind(this);
+        this.onClearSelection = this.onClearSelection.bind(this);
+        this.handleGlobalTabClick = this.handleGlobalTabClick.bind(this);
+        this.handleLocalTabClick = this.handleLocalTabClick.bind(this);
+        this.pivotItems = [];
+        if (explanationContext.testDataset.dataset !== undefined) {
+            this.pivotItems.push({
+                headerText: localization.dataExploration,
+                itemKey: ExplanationDashboard.globalTabKeys[0],
+            });
+        }
+        if (explanationContext.globalExplanation !== undefined) {
+            this.pivotItems.push({
+                headerText: localization.globalImportance,
+                itemKey: ExplanationDashboard.globalTabKeys[1],
+            });
+        }
+        if (explanationContext.localExplanation !== undefined && explanationContext.testDataset.dataset !== undefined) {
+            this.pivotItems.push({
+                headerText: localization.explanationExploration,
+                itemKey: ExplanationDashboard.globalTabKeys[2],
+            });
+        }
+        if (explanationContext.localExplanation !== undefined) {
+            this.pivotItems.push({
+                headerText: localization.summaryImportance,
+                itemKey: ExplanationDashboard.globalTabKeys[3],
+            });
+        }
+        if (explanationContext.ebmExplanation !== undefined) {
+            this.pivotItems.push({
+                headerText: localization.summaryImportance,
+                itemKey: ExplanationDashboard.globalTabKeys[4],
+            });
+        }
+        if (explanationContext.customVis !== undefined) {
+            this.pivotItems.push({
+                headerText: localization.summaryImportance,
+                itemKey: ExplanationDashboard.globalTabKeys[5],
+            });
+        }
+
+        this.state = {
+            dashboardContext: {
+                weightContext: {
+                    selectedKey: props.predictedY ? WeightVectors.predicted : WeightVectors.absAvg,
+                    onSelection: this.onClassSelect,
+                    options: ExplanationDashboard.buildWeightDropdownOptions(explanationContext),
+                },
+                explanationContext,
+            },
+            activeGlobalTab:
+                this.pivotItems.length > 0 ? ExplanationDashboard.globalTabKeys.indexOf(this.pivotItems[0].itemKey) : 0,
+            activeLocalTab: explanationContext.localExplanation === undefined && this.props.requestPredictions ? 1 : 0,
+            configs: {
+                [BarId]: { displayMode: FeatureImportanceModes.bar, topK: defaultTopK, id: BarId },
+                [GlobalFeatureImportanceId]: {
+                    displayMode: FeatureImportanceModes.beehive,
+                    topK: defaultTopK,
+                    id: GlobalFeatureImportanceId,
+                },
+                [LocalBarId]: { topK: defaultTopK },
+            },
+            selectedRow: undefined,
+        };
+    }
     public static buildInitialExplanationContext(props: IExplanationDashboardProps): IExplanationContext {
         const explanationGenerators: IExplanationGenerators = {
             requestPredictions: props.requestPredictions,
@@ -282,6 +411,13 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
             ebmExplanation: ebmExplanation,
             customVis: customVis,
         };
+    }
+
+    private static initializeIcons(props: IExplanationDashboardProps): void {
+        if (ExplanationDashboard.iconsInitialized === false && props.shouldInitializeIcons !== false) {
+            initializeIcons(props.iconUrl);
+            ExplanationDashboard.iconsInitialized = true;
+        }
     }
 
     private static validateInputs(
@@ -555,65 +691,6 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
         return Array.from(Array(length).keys()).map(i => localization.formatString(baseString, i.toString()) as string);
     }
 
-    private static buildWeightDropdownOptions: (
-        explanationContext: IExplanationContext,
-    ) => IDropdownOption[] = (memoize as any).default((explanationContext: IExplanationContext): IDropdownOption[] => {
-        const result: IDropdownOption[] = [{ key: WeightVectors.absAvg, text: localization.absoluteAverage }];
-        if (explanationContext.testDataset.predictedY) {
-            result.push({ key: WeightVectors.predicted, text: localization.predictedClass });
-        }
-        explanationContext.modelMetadata.classNames.forEach((name, index) => {
-            result.push({ key: index, text: name });
-        });
-        return result;
-    });
-
-    private static getClassLength: (props: IExplanationDashboardProps) => number = (memoize as any).default(
-        (props: IExplanationDashboardProps): number => {
-            if (
-                props.precomputedExplanations &&
-                props.precomputedExplanations.localFeatureImportance &&
-                props.precomputedExplanations.localFeatureImportance.scores
-            ) {
-                const localImportances = props.precomputedExplanations.localFeatureImportance.scores;
-                if (
-                    (localImportances as number[][][]).every(dim1 => {
-                        return dim1.every(dim2 => Array.isArray(dim2));
-                    })
-                ) {
-                    return localImportances.length;
-                } else {
-                    // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-                    return 1;
-                }
-            }
-            if (
-                props.precomputedExplanations &&
-                props.precomputedExplanations.globalFeatureImportance &&
-                props.precomputedExplanations.globalFeatureImportance.scores
-            ) {
-                // determine if passed in vaules is 1D or 2D
-                if (
-                    (props.precomputedExplanations.globalFeatureImportance.scores as number[][]).every(dim1 =>
-                        Array.isArray(dim1),
-                    )
-                ) {
-                    return (props.precomputedExplanations.globalFeatureImportance.scores as number[][])[0].length;
-                }
-            }
-            if (
-                props.probabilityY &&
-                Array.isArray(props.probabilityY) &&
-                Array.isArray(props.probabilityY[0]) &&
-                props.probabilityY[0].length > 0
-            ) {
-                return props.probabilityY[0].length;
-            }
-            // default to regression case
-            return 1;
-        },
-    );
-
     private static getModelType(props: IExplanationDashboardProps): ModelTypes {
         // If python gave us a hint, use it
         if (props.modelInformation.method === "regressor") {
@@ -627,84 +704,6 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
             default:
                 return ModelTypes.multiclass;
         }
-    }
-
-    private pivotItems: IPivotItemProps[];
-
-    public constructor(props: IExplanationDashboardProps) {
-        super(props);
-        ExplanationDashboard.initializeIcons(props);
-        if (this.props.locale) {
-            localization.setLanguage(this.props.locale);
-        }
-        const explanationContext: IExplanationContext = ExplanationDashboard.buildInitialExplanationContext(props);
-        const defaultTopK = Math.min(8, explanationContext.modelMetadata.featureNames.length);
-        this.onClassSelect = this.onClassSelect.bind(this);
-        this.onConfigChanged = this.onConfigChanged.bind(this);
-        this.onClearSelection = this.onClearSelection.bind(this);
-        this.handleGlobalTabClick = this.handleGlobalTabClick.bind(this);
-        this.handleLocalTabClick = this.handleLocalTabClick.bind(this);
-        this.pivotItems = [];
-        if (explanationContext.testDataset.dataset !== undefined) {
-            this.pivotItems.push({
-                headerText: localization.dataExploration,
-                itemKey: ExplanationDashboard.globalTabKeys[0],
-            });
-        }
-        if (explanationContext.globalExplanation !== undefined) {
-            this.pivotItems.push({
-                headerText: localization.globalImportance,
-                itemKey: ExplanationDashboard.globalTabKeys[1],
-            });
-        }
-        if (explanationContext.localExplanation !== undefined && explanationContext.testDataset.dataset !== undefined) {
-            this.pivotItems.push({
-                headerText: localization.explanationExploration,
-                itemKey: ExplanationDashboard.globalTabKeys[2],
-            });
-        }
-        if (explanationContext.localExplanation !== undefined) {
-            this.pivotItems.push({
-                headerText: localization.summaryImportance,
-                itemKey: ExplanationDashboard.globalTabKeys[3],
-            });
-        }
-        if (explanationContext.ebmExplanation !== undefined) {
-            this.pivotItems.push({
-                headerText: localization.summaryImportance,
-                itemKey: ExplanationDashboard.globalTabKeys[4],
-            });
-        }
-        if (explanationContext.customVis !== undefined) {
-            this.pivotItems.push({
-                headerText: localization.summaryImportance,
-                itemKey: ExplanationDashboard.globalTabKeys[5],
-            });
-        }
-
-        this.state = {
-            dashboardContext: {
-                weightContext: {
-                    selectedKey: props.predictedY ? WeightVectors.predicted : WeightVectors.absAvg,
-                    onSelection: this.onClassSelect,
-                    options: ExplanationDashboard.buildWeightDropdownOptions(explanationContext),
-                },
-                explanationContext,
-            },
-            activeGlobalTab:
-                this.pivotItems.length > 0 ? ExplanationDashboard.globalTabKeys.indexOf(this.pivotItems[0].itemKey) : 0,
-            activeLocalTab: explanationContext.localExplanation === undefined && this.props.requestPredictions ? 1 : 0,
-            configs: {
-                [BarId]: { displayMode: FeatureImportanceModes.bar, topK: defaultTopK, id: BarId },
-                [GlobalFeatureImportanceId]: {
-                    displayMode: FeatureImportanceModes.beehive,
-                    topK: defaultTopK,
-                    id: GlobalFeatureImportanceId,
-                },
-                [LocalBarId]: { topK: defaultTopK },
-            },
-            selectedRow: undefined,
-        };
     }
 
     public componentDidMount(): void {

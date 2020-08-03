@@ -63,6 +63,79 @@ const flights = {
 
 export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardState> {
     private static iconsInitialized = false;
+    private selections: SelectionContext;
+
+    public constructor(props: IFairnessProps) {
+        super(props);
+        FairnessWizard.initializeIcons(props);
+        if (this.props.locale) {
+            localization.setLanguage(this.props.locale);
+        }
+        let accuracyMetrics: IAccuracyOption[];
+        loadTheme(props.theme || defaultTheme);
+        this.selections = new SelectionContext("models", 1);
+        this.selections.subscribe({
+            selectionCallback: (strings: string[]) => {
+                const numbers = strings.map(s => +s);
+                this.setSelectedModel(numbers[0]);
+            },
+        });
+        // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
+        if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
+            // we must assume that the same accuracy metrics are provided across models and bins
+            accuracyMetrics = this.buildAccuracyListForPrecomputedMetrics();
+            const readonlyFeatureBins = this.props.precomputedFeatureBins.map((initialBin, index) => {
+                return {
+                    hasError: false,
+                    array: initialBin.binLabels,
+                    labelArray: initialBin.binLabels,
+                    featureIndex: index,
+                    rangeType: RangeTypes.categorical,
+                };
+            });
+            this.state = {
+                accuracyMetrics,
+                selectedAccuracyKey: accuracyMetrics[0].key,
+                parityMetrics: accuracyMetrics,
+                selectedParityKey: accuracyMetrics[0].key,
+                dashboardContext: FairnessWizard.buildPrecomputedFairnessContext(props),
+                activeTabKey: featureBinTabKey,
+                featureBins: readonlyFeatureBins,
+                selectedBinIndex: 0,
+                selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
+                metricCache: new MetricsCache(0, 0, undefined, props.precomputedMetrics),
+            };
+            return;
+        }
+        const fairnessContext = FairnessWizard.buildInitialFairnessContext(props);
+
+        const featureBins = this.buildFeatureBins(fairnessContext);
+        if (featureBins.length > 0) {
+            fairnessContext.binVector = this.generateBinVectorForBin(featureBins[0], fairnessContext.dataset);
+            fairnessContext.groupNames = featureBins[0].labelArray;
+        }
+
+        accuracyMetrics =
+            fairnessContext.modelMetadata.predictionType === PredictionTypes.binaryClassification
+                ? this.props.supportedBinaryClassificationAccuracyKeys.map(key => AccuracyOptions[key])
+                : fairnessContext.modelMetadata.predictionType === PredictionTypes.regression
+                ? this.props.supportedRegressionAccuracyKeys.map(key => AccuracyOptions[key])
+                : this.props.supportedProbabilityAccuracyKeys.map(key => AccuracyOptions[key]);
+        accuracyMetrics = accuracyMetrics.filter(metric => !!metric);
+
+        this.state = {
+            accuracyMetrics,
+            selectedAccuracyKey: accuracyMetrics[0].key,
+            parityMetrics: accuracyMetrics,
+            selectedParityKey: accuracyMetrics[0].key,
+            dashboardContext: fairnessContext,
+            activeTabKey: introTabKey,
+            featureBins,
+            selectedBinIndex: 0,
+            selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
+            metricCache: new MetricsCache(featureBins.length, this.props.predictedY.length, this.props.requestMetrics),
+        };
+    }
 
     private static initializeIcons(props: IFairnessProps): void {
         if (FairnessWizard.iconsInitialized === false && props.shouldInitializeIcons !== false) {
@@ -201,80 +274,6 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
             return PredictionTypes.probability;
         }
         return PredictionTypes.regression;
-    }
-
-    private selections: SelectionContext;
-
-    public constructor(props: IFairnessProps) {
-        super(props);
-        FairnessWizard.initializeIcons(props);
-        if (this.props.locale) {
-            localization.setLanguage(this.props.locale);
-        }
-        let accuracyMetrics: IAccuracyOption[];
-        loadTheme(props.theme || defaultTheme);
-        this.selections = new SelectionContext("models", 1);
-        this.selections.subscribe({
-            selectionCallback: (strings: string[]) => {
-                const numbers = strings.map(s => +s);
-                this.setSelectedModel(numbers[0]);
-            },
-        });
-        // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
-        if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
-            // we must assume that the same accuracy metrics are provided across models and bins
-            accuracyMetrics = this.buildAccuracyListForPrecomputedMetrics();
-            const readonlyFeatureBins = this.props.precomputedFeatureBins.map((initialBin, index) => {
-                return {
-                    hasError: false,
-                    array: initialBin.binLabels,
-                    labelArray: initialBin.binLabels,
-                    featureIndex: index,
-                    rangeType: RangeTypes.categorical,
-                };
-            });
-            this.state = {
-                accuracyMetrics,
-                selectedAccuracyKey: accuracyMetrics[0].key,
-                parityMetrics: accuracyMetrics,
-                selectedParityKey: accuracyMetrics[0].key,
-                dashboardContext: FairnessWizard.buildPrecomputedFairnessContext(props),
-                activeTabKey: featureBinTabKey,
-                featureBins: readonlyFeatureBins,
-                selectedBinIndex: 0,
-                selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-                metricCache: new MetricsCache(0, 0, undefined, props.precomputedMetrics),
-            };
-            return;
-        }
-        const fairnessContext = FairnessWizard.buildInitialFairnessContext(props);
-
-        const featureBins = this.buildFeatureBins(fairnessContext);
-        if (featureBins.length > 0) {
-            fairnessContext.binVector = this.generateBinVectorForBin(featureBins[0], fairnessContext.dataset);
-            fairnessContext.groupNames = featureBins[0].labelArray;
-        }
-
-        accuracyMetrics =
-            fairnessContext.modelMetadata.predictionType === PredictionTypes.binaryClassification
-                ? this.props.supportedBinaryClassificationAccuracyKeys.map(key => AccuracyOptions[key])
-                : fairnessContext.modelMetadata.predictionType === PredictionTypes.regression
-                ? this.props.supportedRegressionAccuracyKeys.map(key => AccuracyOptions[key])
-                : this.props.supportedProbabilityAccuracyKeys.map(key => AccuracyOptions[key]);
-        accuracyMetrics = accuracyMetrics.filter(metric => !!metric);
-
-        this.state = {
-            accuracyMetrics,
-            selectedAccuracyKey: accuracyMetrics[0].key,
-            parityMetrics: accuracyMetrics,
-            selectedParityKey: accuracyMetrics[0].key,
-            dashboardContext: fairnessContext,
-            activeTabKey: introTabKey,
-            featureBins,
-            selectedBinIndex: 0,
-            selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-            metricCache: new MetricsCache(featureBins.length, this.props.predictedY.length, this.props.requestMetrics),
-        };
     }
 
     public render(): React.ReactNode {
