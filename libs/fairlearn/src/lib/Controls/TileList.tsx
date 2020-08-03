@@ -1,5 +1,4 @@
 import { Icon, Text, IProcessedStyleSet } from "office-ui-fabric-react";
-
 import React from "react";
 import { TileListStyles, ITilesListStyles } from "./TileList.styles";
 
@@ -32,7 +31,14 @@ export class TileList extends React.PureComponent<ITileListProps> {
         styles: IProcessedStyleSet<ITilesListStyles>,
     ): JSX.Element => {
         return (
-            <div className={styles.itemCell} onClick={item.onSelect.bind(this)} key={index} data-is-focusable={true}>
+            <div
+                className={styles.itemCell}
+                onClick={item.onSelect.bind(this)}
+                key={index}
+                data-is-focusable={true}
+                role="radio"
+                aria-selected={item.selected}
+            >
                 <Icon iconName={item.selected ? "RadioBtnOn" : "RadioBtnOff"} className={styles.iconClass} />
                 <Text className={styles.title} block>
                     {item.title}

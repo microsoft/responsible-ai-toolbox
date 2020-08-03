@@ -1,5 +1,5 @@
-import { Text, Stack, StackItem } from "office-ui-fabric-react";
-
+import { Text, FocusZone } from "office-ui-fabric-react";
+import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 import { IAccuracyPickerProps } from "../FairnessWizard";
 import { PredictionTypes } from "../IFairnessProps";
@@ -39,16 +39,21 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
                         )}
                     </Text>
                     <StackItem grow={2} className={styles.itemsList}>
-                        <TileList
-                            items={this.props.accuracyPickerProps.accuracyOptions.map(accuracy => {
-                                return {
-                                    title: accuracy.title,
-                                    description: accuracy.description,
-                                    onSelect: this.props.accuracyPickerProps.onAccuracyChange.bind(this, accuracy.key),
-                                    selected: this.props.accuracyPickerProps.selectedAccuracyKey === accuracy.key,
-                                };
-                            })}
-                        />
+                        <FocusZone shouldFocusOnMount={true}>
+                            <TileList
+                                items={this.props.accuracyPickerProps.accuracyOptions.map(accuracy => {
+                                    return {
+                                        title: accuracy.title,
+                                        description: accuracy.description,
+                                        onSelect: this.props.accuracyPickerProps.onAccuracyChange.bind(
+                                            this,
+                                            accuracy.key,
+                                        ),
+                                        selected: this.props.accuracyPickerProps.selectedAccuracyKey === accuracy.key,
+                                    };
+                                })}
+                            />
+                        </FocusZone>
                     </StackItem>
                     <WizardFooter onNext={this.props.onNext} onPrevious={this.props.onPrevious} />
                 </Stack>
