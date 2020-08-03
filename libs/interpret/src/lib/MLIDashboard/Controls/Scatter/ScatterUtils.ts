@@ -7,8 +7,8 @@ import {
     PlotlyMode,
     SelectionContext,
 } from "@responsible-ai/mlchartlib";
-import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { DropdownMenuItemType, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { IComboBoxOption , DropdownMenuItemType, IDropdownOption } from "office-ui-fabric-react";
+
 import { localization } from "../../../Localization/localization";
 import { IDashboardContext } from "../../ExplanationDashboard";
 import { IExplanationContext, IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";

@@ -1,6 +1,5 @@
-import { ActionButton } from "office-ui-fabric-react/lib/Button";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react";
+import { ActionButton, Stack, Text } from "office-ui-fabric-react";
+
 import React from "react";
 import { localization } from "../Localization/localization";
 import { IntroTabStyles } from "./IntroTab.styles";

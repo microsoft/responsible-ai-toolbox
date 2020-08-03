@@ -1,13 +1,13 @@
 import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
-import { Text, TextField, TooltipHost, TooltipOverflowMode, IProcessedStyleSet } from "office-ui-fabric-react";
-import { DefaultButton, IconButton, PrimaryButton } from "office-ui-fabric-react/lib/Button";
-import { Callout, DirectionalHint } from "office-ui-fabric-react/lib/Callout";
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { CheckboxVisibility, DetailsList, Selection, SelectionMode } from "office-ui-fabric-react/lib/DetailsList";
-import { SpinButton } from "office-ui-fabric-react/lib/SpinButton";
-import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+import { Text, TextField, TooltipHost, TooltipOverflowMode, IProcessedStyleSet , DefaultButton, IconButton, PrimaryButton , Callout, DirectionalHint , Checkbox , ComboBox, IComboBox, IComboBoxOption , CheckboxVisibility, DetailsList, Selection, SelectionMode , SpinButton , Position } from "office-ui-fabric-react";
+
+
+
+
+
+
+
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";

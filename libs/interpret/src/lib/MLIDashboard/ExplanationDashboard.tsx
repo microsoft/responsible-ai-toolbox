@@ -1,10 +1,18 @@
 import { initializeIcons } from "@uifabric/icons";
 import * as _ from "lodash";
 import * as memoize from "memoize-one";
-import { PrimaryButton } from "office-ui-fabric-react/lib/Button";
-import { IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/components/ComboBox";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { Pivot, PivotItem, PivotLinkFormat, PivotLinkSize, IPivotItemProps } from "office-ui-fabric-react/lib/Pivot";
+import {
+    PrimaryButton,
+    IComboBox,
+    IComboBoxOption,
+    IDropdownOption,
+    Pivot,
+    PivotItem,
+    PivotLinkFormat,
+    PivotLinkSize,
+    IPivotItemProps,
+} from "office-ui-fabric-react";
+
 import * as React from "react";
 import { IPlotlyProperty, SelectionContext, ModelMetadata } from "@responsible-ai/mlchartlib";
 import { localization } from "../Localization/localization";

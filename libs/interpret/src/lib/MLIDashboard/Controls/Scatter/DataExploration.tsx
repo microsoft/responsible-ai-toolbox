@@ -1,4 +1,4 @@
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";

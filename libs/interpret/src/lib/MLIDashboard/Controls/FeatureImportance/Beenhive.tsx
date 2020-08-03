@@ -1,10 +1,10 @@
 import * as _ from "lodash";
 import * as memoize from "memoize-one";
-import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
-import { Callout } from "office-ui-fabric-react/lib/Callout";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { Slider } from "office-ui-fabric-react/lib/Slider";
+import { DefaultButton, IconButton , Callout , ComboBox, IComboBox, IComboBoxOption , IDropdownOption , Slider } from "office-ui-fabric-react";
+
+
+
+
 import * as React from "react";
 import { ChartBuilder, AccessibleChart, PlotlyMode, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { localization } from "../../../Localization/localization";

@@ -1,8 +1,8 @@
 import React from "react";
-import { Callout } from "office-ui-fabric-react/lib/Callout";
-import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
+import { Callout , DefaultButton, IconButton , ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+
 import _ from "lodash";
 import { FabricStyles } from "../../FabricStyles";
 import { localization } from "../../../Localization/localization";

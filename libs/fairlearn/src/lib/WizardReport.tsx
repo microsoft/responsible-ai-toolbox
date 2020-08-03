@@ -1,9 +1,8 @@
 import { getTheme } from "@uifabric/styling";
 import _ from "lodash";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { ActionButton } from "office-ui-fabric-react/lib/Button";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
-import { Text } from "office-ui-fabric-react/lib/Text";
+import { ActionButton, Spinner, SpinnerSize, Text } from "office-ui-fabric-react";
+
 import React from "react";
 import { AccuracyOptions } from "./AccuracyMetrics";
 import { ChartColors } from "./ChartColors";

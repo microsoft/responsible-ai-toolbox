@@ -2,7 +2,7 @@ import React from "react";
 import * as memoize from "memoize-one";
 import { IPlotlyProperty, PlotlyMode, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IComboBoxOption } from "office-ui-fabric-react";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { JointDataset } from "../JointDataset";
 import { localization } from "../../Localization/localization";

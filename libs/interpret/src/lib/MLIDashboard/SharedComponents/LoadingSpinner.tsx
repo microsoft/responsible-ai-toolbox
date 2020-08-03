@@ -1,5 +1,5 @@
 import React from "react";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
+import { Spinner, SpinnerSize } from "office-ui-fabric-react";
 import { localization } from "../../Localization/localization";
 
 import "./LoadingSpinner.scss";

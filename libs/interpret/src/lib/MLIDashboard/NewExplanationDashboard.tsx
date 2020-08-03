@@ -1,11 +1,22 @@
 import React from "react";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import * as memoize from "memoize-one";
-import { IPivotItemProps, PivotItem, Pivot, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot";
+import {
+    IPivotItemProps,
+    PivotItem,
+    Pivot,
+    PivotLinkSize,
+    mergeStyleSets,
+    loadTheme,
+    MessageBar,
+    MessageBarType,
+    Text,
+    Link,
+} from "office-ui-fabric-react";
 import _ from "lodash";
-import { mergeStyleSets, loadTheme } from "office-ui-fabric-react/lib/Styling";
+
 import { initializeIcons } from "@uifabric/icons";
-import { MessageBar, MessageBarType, Text, Link } from "office-ui-fabric-react";
+
 import { localization } from "../Localization/localization";
 import {
     IExplanationDashboardProps,

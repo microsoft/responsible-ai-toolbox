@@ -1,5 +1,5 @@
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react/lib/Text";
+import { Stack, Text } from "office-ui-fabric-react";
+
 import React from "react";
 import { localization } from "../Localization/localization";
 import { SummaryTableStyles } from "./SummaryTable.styles";

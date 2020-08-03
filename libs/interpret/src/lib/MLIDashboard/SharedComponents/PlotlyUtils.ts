@@ -1,5 +1,5 @@
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { IDropdownOption } from "office-ui-fabric-react";
 import _ from "lodash";
 import { IExplanationModelMetadata } from "../IExplanationContext";
 

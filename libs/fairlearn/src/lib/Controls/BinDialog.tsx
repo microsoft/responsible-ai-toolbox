@@ -1,9 +1,7 @@
 import _ from "lodash";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/Button";
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { SpinButton } from "office-ui-fabric-react/lib/SpinButton";
-import { Text } from "office-ui-fabric-react";
+import { DefaultButton, PrimaryButton, Checkbox, SpinButton, Text } from "office-ui-fabric-react";
+
 import React from "react";
 import { BinnedResponseBuilder } from "../BinnedResponseBuilder";
 import { IBinnedResponse } from "../IBinnedResponse";

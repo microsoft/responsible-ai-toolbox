@@ -1,11 +1,11 @@
 import React from "react";
 import { getTheme } from "@uifabric/styling";
 import _ from "lodash";
-import { DefaultButton } from "office-ui-fabric-react/lib/Button";
+import { DefaultButton , IDropdownOption, Dropdown , Icon, Text } from "office-ui-fabric-react";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { Transform } from "plotly.js-dist";
-import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
-import { Icon, Text } from "office-ui-fabric-react";
+
+
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";

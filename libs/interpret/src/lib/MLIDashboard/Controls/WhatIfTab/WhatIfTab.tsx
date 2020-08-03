@@ -16,11 +16,11 @@ import {
     Callout,
     IComboBoxOption,
     Link,
-} from "office-ui-fabric-react";
-import { DefaultButton, IconButton, PrimaryButton, CommandBarButton } from "office-ui-fabric-react/lib/Button";
-import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { SearchBox } from "office-ui-fabric-react/lib/SearchBox";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+ DefaultButton, IconButton, PrimaryButton, CommandBarButton , Dropdown, IDropdownOption , SearchBox , TextField } from "office-ui-fabric-react";
+
+
+
+
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";

@@ -1,10 +1,6 @@
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { ActionButton } from "office-ui-fabric-react/lib/Button";
-import { Icon } from "office-ui-fabric-react/lib/Icon";
-import { List } from "office-ui-fabric-react/lib/List";
-import { Modal } from "office-ui-fabric-react/lib/Modal";
-import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
-import { Text, IProcessedStyleSet } from "office-ui-fabric-react";
+import { ActionButton, Icon, List, Modal, Stack, StackItem, Text, IProcessedStyleSet } from "office-ui-fabric-react";
+
 import React from "react";
 import { IBinnedResponse } from "../IBinnedResponse";
 import { IWizardTabProps } from "../IWizardTabProps";

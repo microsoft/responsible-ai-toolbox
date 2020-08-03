@@ -1,8 +1,7 @@
 import React from "react";
-import { IDropdownOption } from "office-ui-fabric-react";
+import { IDropdownOption, Slider, ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import _ from "lodash";
-import { Slider } from "office-ui-fabric-react/lib/Slider";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+
 import { IExplanationContext, ModelTypes } from "../IExplanationContext";
 import { IBarChartConfig, FeatureKeys, FeatureSortingKey } from "../SharedComponents/IBarChartConfig";
 import { localization } from "../../Localization/localization";

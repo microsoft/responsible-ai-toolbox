@@ -1,9 +1,9 @@
 import React from "react";
 import _ from "lodash";
 import { IPlotlyProperty, RangeTypes, AccessibleChart, PlotlyMode } from "@responsible-ai/mlchartlib";
-import { IComboBox, IComboBoxOption, ComboBox } from "office-ui-fabric-react/lib/ComboBox";
+import { IComboBox, IComboBoxOption, ComboBox , SpinButton, Text, getTheme } from "office-ui-fabric-react";
 import { Data } from "plotly.js-dist";
-import { SpinButton, Text, getTheme } from "office-ui-fabric-react";
+
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";

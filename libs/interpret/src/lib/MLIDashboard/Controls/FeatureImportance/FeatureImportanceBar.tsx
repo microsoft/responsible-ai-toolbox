@@ -1,10 +1,10 @@
 import _ from "lodash";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { Slider } from "office-ui-fabric-react/lib/Slider";
+import { ComboBox, IComboBox, IComboBoxOption , IDropdownOption , Slider , Callout , DefaultButton, IconButton } from "office-ui-fabric-react";
+
+
 import React from "react";
-import { Callout } from "office-ui-fabric-react/lib/Callout";
-import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
+
+
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ModelTypes } from "../../IExplanationContext";

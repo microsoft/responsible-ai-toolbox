@@ -6,11 +6,17 @@ import {
     PlotlyMode,
     SelectionContext,
 } from "@responsible-ai/mlchartlib";
-import { getTheme, Text } from "office-ui-fabric-react";
-import { ActionButton } from "office-ui-fabric-react/lib/Button";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
+import {
+    getTheme,
+    Text,
+    ActionButton,
+    ChoiceGroup,
+    IChoiceGroupOption,
+    Spinner,
+    SpinnerSize,
+    Stack,
+} from "office-ui-fabric-react";
+
 import React from "react";
 import { AccuracyOptions } from "../AccuracyMetrics";
 import { IAccuracyPickerProps, IFeatureBinPickerProps, IParityPickerProps } from "../FairnessWizard";

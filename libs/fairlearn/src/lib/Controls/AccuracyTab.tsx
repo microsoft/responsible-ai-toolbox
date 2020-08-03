@@ -1,5 +1,5 @@
-import { Text } from "office-ui-fabric-react";
-import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
+import { Text, Stack, StackItem } from "office-ui-fabric-react";
+
 import React from "react";
 import { IAccuracyPickerProps } from "../FairnessWizard";
 import { PredictionTypes } from "../IFairnessProps";

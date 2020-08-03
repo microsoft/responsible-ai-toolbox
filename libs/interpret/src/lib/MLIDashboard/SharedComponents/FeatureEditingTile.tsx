@@ -1,7 +1,6 @@
 import React from "react";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { ComboBox, IComboBox } from "office-ui-fabric-react/lib/ComboBox";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { TextField, ComboBox, IComboBox, IDropdownOption } from "office-ui-fabric-react";
+
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { FabricStyles } from "../FabricStyles";
 import { localization } from "../../Localization/localization";

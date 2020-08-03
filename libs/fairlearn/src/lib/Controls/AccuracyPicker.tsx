@@ -1,7 +1,14 @@
 import React from "react";
-import { IconButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
-import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption } from "office-ui-fabric-react";
-import { Callout } from "office-ui-fabric-react/lib/Callout";
+import {
+    IconButton,
+    DefaultButton,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    IDropdownOption,
+    Callout,
+} from "office-ui-fabric-react";
+
 import { localization } from "../Localization/localization";
 import { IAccuracyPickerProps } from "../FairnessWizard";
 

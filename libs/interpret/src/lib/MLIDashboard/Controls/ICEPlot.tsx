@@ -1,8 +1,7 @@
 import _ from "lodash";
 import * as memoize from "memoize-one";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption, TextField } from "office-ui-fabric-react";
+
 import { Data } from "plotly.js-dist";
 import React from "react";
 import {

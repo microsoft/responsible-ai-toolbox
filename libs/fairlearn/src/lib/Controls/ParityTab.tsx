@@ -1,6 +1,6 @@
 import React from "react";
-import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
-import { Separator } from "office-ui-fabric-react/lib/Separator";
+import { Stack, StackItem, Separator } from "office-ui-fabric-react";
+
 import { localization } from "../Localization/localization";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { IParityPickerProps } from "../FairnessWizard";

@@ -1,5 +1,11 @@
 import React from "react";
-import { SpinButton , ComboBox, IComboBox, IComboBoxOption, IDropdownOption, Dropdown ,
+import {
+    SpinButton,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    IDropdownOption,
+    Dropdown,
     Icon,
     Text,
     IconButton,
@@ -9,8 +15,8 @@ import { SpinButton , ComboBox, IComboBox, IComboBoxOption, IDropdownOption, Dro
     IChoiceGroupOption,
     CommandBarButton,
     Link,
-} from "office-ui-fabric-react";
-import { Slider } from "office-ui-fabric-react/lib/Slider";
+ Slider } from "office-ui-fabric-react";
+
 import { JointDataset } from "../../JointDataset";
 import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
 import { localization } from "../../../Localization/localization";
@@ -27,7 +33,6 @@ import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 import { ExplainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
-
 
 export interface IGlobalBarSettings {
     topK: number;

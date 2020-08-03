@@ -1,8 +1,7 @@
 import _ from "lodash";
 import { ICategoricalRange, IModelMetadata, INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption, TextField } from "office-ui-fabric-react";
+
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";

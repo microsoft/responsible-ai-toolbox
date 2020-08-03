@@ -1,8 +1,7 @@
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import { ICategoricalRange, ModelMetadata, RangeTypes, SelectionContext } from "@responsible-ai/mlchartlib";
-import { Pivot, PivotItem, Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
-import { Text , loadTheme } from "office-ui-fabric-react";
+import { Pivot, PivotItem, Stack, StackItem, Text, loadTheme } from "office-ui-fabric-react";
 import React from "react";
 import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
