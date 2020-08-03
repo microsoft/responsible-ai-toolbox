@@ -1,6 +1,6 @@
-import { IExplanationDashboardProps } from './Interfaces';
-import { IExplanationModelMetadata } from './IExplanationContext';
-import { localization } from '../Localization/localization';
+import { IExplanationDashboardProps } from "./Interfaces";
+import { IExplanationModelMetadata } from "./IExplanationContext";
+import { localization } from "../Localization/localization";
 
 export class ValidateProperties {
     private readonly classLength: number;
@@ -47,9 +47,9 @@ export class ValidateProperties {
                 localization.formatString(
                     localization.ValidationErrors.inconsistentDimensions,
                     localization.ValidationErrors.predictedY,
-                    length,
-                    this.rowLength,
-                ),
+                    length.toString(),
+                    this.rowLength.toString(),
+                ) as string,
             );
         }
     }
@@ -62,7 +62,7 @@ export class ValidateProperties {
                     localization.ValidationErrors.notArray,
                     localization.ValidationErrors.predictedProbability,
                     `${this.rowLength || 0} x ${this.classLength}`,
-                ),
+                ) as string,
             );
             return;
         }
@@ -76,9 +76,9 @@ export class ValidateProperties {
                 localization.formatString(
                     localization.ValidationErrors.inconsistentDimensions,
                     localization.ValidationErrors.predictedProbability,
-                    rowLength,
-                    this.rowLength,
-                ),
+                    rowLength.toString(),
+                    this.rowLength.toString(),
+                ) as string,
             );
             return;
         }
@@ -88,7 +88,7 @@ export class ValidateProperties {
                 localization.formatString(
                     localization.ValidationErrors.notNonEmpty,
                     localization.ValidationErrors.predictedProbability,
-                ),
+                ) as string,
             );
             return;
         }
@@ -101,17 +101,17 @@ export class ValidateProperties {
                     localization.ValidationErrors.predictedProbability,
                     `[${rowLength} x ${classLength}]`,
                     `[${this.rowLength} x ${this.classLength}]`,
-                ),
+                ) as string,
             );
             return;
         }
-        if (!this.props.probabilityY.every((row) => row.length === this.classLength)) {
+        if (!this.props.probabilityY.every(row => row.length === this.classLength)) {
             this.props.probabilityY = undefined;
             this.errorStrings.push(
                 localization.formatString(
                     localization.ValidationErrors.varyingLength,
                     localization.ValidationErrors.predictedProbability,
-                ),
+                ) as string,
             );
             return;
         }
@@ -125,7 +125,7 @@ export class ValidateProperties {
                     localization.ValidationErrors.notArray,
                     localization.ValidationErrors.evalData,
                     `${this.rowLength || 0} x ${this.classLength}`,
-                ),
+                ) as string,
             );
             return;
         }
@@ -139,9 +139,9 @@ export class ValidateProperties {
                 localization.formatString(
                     localization.ValidationErrors.inconsistentDimensions,
                     localization.ValidationErrors.evalData,
-                    rowLength,
-                    this.rowLength,
-                ),
+                    rowLength.toString(),
+                    this.rowLength.toString(),
+                ) as string,
             );
             return;
         }
@@ -151,7 +151,7 @@ export class ValidateProperties {
                 localization.formatString(
                     localization.ValidationErrors.notNonEmpty,
                     localization.ValidationErrors.evalData,
-                ),
+                ) as string,
             );
             return;
         }
@@ -164,17 +164,17 @@ export class ValidateProperties {
                     localization.ValidationErrors.evalData,
                     `[${rowLength} x ${featureLength}]`,
                     `[${this.rowLength} x ${this.featureLength}]`,
-                ),
+                ) as string,
             );
             return;
         }
-        if (!this.props.testData.every((row) => row.length === this.featureLength)) {
+        if (!this.props.testData.every(row => row.length === this.featureLength)) {
             this.props.testData = undefined;
             this.errorStrings.push(
                 localization.formatString(
                     localization.ValidationErrors.varyingLength,
                     localization.ValidationErrors.evalData,
-                ),
+                ) as string,
             );
             return;
         }
@@ -189,15 +189,15 @@ export class ValidateProperties {
                     localization.ValidationErrors.notArray,
                     localization.ValidationErrors.localFeatureImportance,
                     `${this.rowLength || 0} x ${this.featureLength} x ${this.classLength}`,
-                ),
+                ) as string,
             );
             return;
         }
         // explanation will be 2d in case of regression models. 3 for classifier
         let explanationDimension = 2;
         if (
-            (localExp as number[][][]).every((dim1) => {
-                return dim1.every((dim2) => Array.isArray(dim2));
+            (localExp as number[][][]).every(dim1 => {
+                return dim1.every(dim2 => Array.isArray(dim2));
             })
         ) {
             explanationDimension = 3;
@@ -210,9 +210,9 @@ export class ValidateProperties {
                     localization.formatString(
                         localization.ValidationErrors.inconsistentDimensions,
                         localization.ValidationErrors.localFeatureImportance,
-                        classLength,
-                        this.classLength,
-                    ),
+                        classLength.toString(),
+                        this.classLength.toString(),
+                    ) as string,
                 );
                 return;
             }
@@ -222,7 +222,7 @@ export class ValidateProperties {
                     localization.formatString(
                         localization.ValidationErrors.notNonEmpty,
                         localization.ValidationErrors.localFeatureImportance,
-                    ),
+                    ) as string,
                 );
                 return;
             }
@@ -233,7 +233,7 @@ export class ValidateProperties {
                     localization.formatString(
                         localization.ValidationErrors.notNonEmpty,
                         localization.ValidationErrors.localFeatureImportance,
-                    ),
+                    ) as string,
                 );
                 return;
             }
@@ -248,17 +248,17 @@ export class ValidateProperties {
                         localization.ValidationErrors.localFeatureImportance,
                         `${classLength} x ${rowLength}`,
                         `${this.classLength} x ${this.rowLength}`,
-                    ),
+                    ) as string,
                 );
                 return;
             }
-            if (!localExp.every((classArray) => classArray.length === this.rowLength)) {
+            if (!localExp.every(classArray => classArray.length === this.rowLength)) {
                 this.props.precomputedExplanations.localFeatureImportance = undefined;
                 this.errorStrings.push(
                     localization.formatString(
                         localization.ValidationErrors.varyingLength,
                         localization.ValidationErrors.localFeatureImportance,
-                    ),
+                    ) as string,
                 );
                 return;
             }
@@ -271,19 +271,17 @@ export class ValidateProperties {
                         localization.ValidationErrors.localFeatureImportance,
                         `${classLength} x ${rowLength} x ${featureLength}`,
                         `${this.classLength} x ${this.rowLength} x ${this.featureLength}`,
-                    ),
+                    ) as string,
                 );
                 return;
             }
-            if (
-                !localExp.every((classArray) => classArray.every((rowArray) => rowArray.length === this.featureLength))
-            ) {
+            if (!localExp.every(classArray => classArray.every(rowArray => rowArray.length === this.featureLength))) {
                 this.props.precomputedExplanations.localFeatureImportance = undefined;
                 this.errorStrings.push(
                     localization.formatString(
                         localization.ValidationErrors.varyingLength,
                         localization.ValidationErrors.localFeatureImportance,
-                    ),
+                    ) as string,
                 );
                 return;
             }
@@ -300,7 +298,7 @@ export class ValidateProperties {
                         localization.ValidationErrors.localFeatureImportance,
                         `${rowLength}`,
                         `${this.rowLength}`,
-                    ),
+                    ) as string,
                 );
                 return;
             }
@@ -310,7 +308,7 @@ export class ValidateProperties {
                     localization.formatString(
                         localization.ValidationErrors.notNonEmpty,
                         localization.ValidationErrors.localFeatureImportance,
-                    ),
+                    ) as string,
                 );
                 return;
             }
@@ -323,17 +321,17 @@ export class ValidateProperties {
                         localization.ValidationErrors.localFeatureImportance,
                         `${rowLength} x ${featureLength}`,
                         `${this.rowLength} x ${this.featureLength}`,
-                    ),
+                    ) as string,
                 );
                 return;
             }
-            if (!localExp.every((rowArray) => rowArray.length === this.featureLength)) {
+            if (!localExp.every(rowArray => rowArray.length === this.featureLength)) {
                 this.props.precomputedExplanations.localFeatureImportance = undefined;
                 this.errorStrings.push(
                     localization.formatString(
                         localization.ValidationErrors.varyingLength,
                         localization.ValidationErrors.localFeatureImportance,
-                    ),
+                    ) as string,
                 );
                 return;
             }

@@ -361,7 +361,7 @@ export class NewExplanationDashboard extends React.PureComponent<
         this.pivotItems.push({ headerText: localization.individualAndWhatIf, itemKey: globalTabKeys.whatIfTab });
     }
 
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         const cohortIDs = this.state.cohorts.map(cohort => cohort.getCohortID().toString());
         const classNames = explanationDashboardStyles();
         let cohortForEdit: ICohort;
