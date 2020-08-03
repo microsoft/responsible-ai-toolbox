@@ -514,7 +514,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
     }
 
-    private buildDataSpans(): Array<number | string>[] {
+    private buildDataSpans(): Array<Array<number | string>> {
         const selectedRow = this.props.explanationContext.testDataset.dataset[this.props.datapointIndex];
         return this.buildRange().map(val => {
             const copy = _.cloneDeep(selectedRow);

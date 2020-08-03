@@ -420,7 +420,7 @@ export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTa
                         };
                     },
                 );
-                const transforms: Partial<Transform>[] = [
+                const transforms: Array<Partial<Transform>> = [
                     {
                         type: "aggregate",
                         groups: rawY,

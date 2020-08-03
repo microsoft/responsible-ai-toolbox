@@ -15,7 +15,7 @@ import { multiIcePlotStyles } from "./MultiICEPlot.styles";
 
 export interface IMultiICEPlotProps {
     invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
-    datapoints: Array<string | number>[];
+    datapoints: Array<Array<string | number>>;
     rowNames: string[];
     colors: string[];
     jointDataset: JointDataset;
@@ -430,7 +430,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
         });
     }
 
-    private buildDataSpans(row: Array<string | number>, range: Array<string | number>): Array<number | string>[] {
+    private buildDataSpans(row: Array<string | number>, range: Array<string | number>): Array<Array<number | string>> {
         return range.map((val: number | string) => {
             const copy = _.cloneDeep(row);
             copy[this.state.rangeView.featureIndex] = val;

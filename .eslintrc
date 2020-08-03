@@ -52,6 +52,7 @@
                 }
             }
         ],
+        "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
         "quotes": ["error", "double"],
         "no-duplicate-imports": "error",
         "array-callback-return": "error",

@@ -1,7 +1,7 @@
 module.exports = {
     selectPoint: "Wählen Sie einen Punkt aus, um seine lokale Erklärung anzuzeigen.",
-    defaultClassNames: 'Klasse "{0}"',
-    defaultFeatureNames: 'Feature "{0}"',
+    defaultClassNames: "Klasse \"{0}\"",
+    defaultFeatureNames: "Feature \"{0}\"",
     absoluteAverage: "Durchschnitt des absoluten Werts",
     predictedClass: "Vorhergesagte Klasse",
     datasetExplorer: "Dataset-Explorer",
@@ -12,7 +12,7 @@ module.exports = {
     individualAndWhatIf: "Individuelle Featurerelevanz und Was-wäre-wenn-Analyse",
     summaryImportance: "Zusammenfassung – Relevanz",
     featureImportance: "Featurerelevanz",
-    featureImportanceOf: 'Featurerelevanz von "{0}"',
+    featureImportanceOf: "Featurerelevanz von \"{0}\"",
     perturbationExploration: "Durchsuchen des Störeinflusses",
     localFeatureImportance: "Lokale Featurerelevanz",
     ice: "ICE",
@@ -117,7 +117,7 @@ module.exports = {
         globalImportanceExplanation:
             "Die globale Featurerelevanz wird berechnet, indem der Durchschnitt des absoluten Werts der Featurerelevanz aller Punkte ermittelt wird (L1-Normalisierung). ",
         multiclassImportanceAddendum:
-            'Bei der Berechnung der Featurerelevanz für alle Klassen werden alle Punkte berücksichtigt, es wird keine differenzielle Gewichtung verwendet. Ein Feature mit hoher negativer Relevanz, bei dem viele Punkte in der Vorhersage nicht der "Klasse A" zugeordnet werden, führt daher zu einer erheblich erhöhten Featurerelevanz der "Klasse A".',
+            "Bei der Berechnung der Featurerelevanz für alle Klassen werden alle Punkte berücksichtigt, es wird keine differenzielle Gewichtung verwendet. Ein Feature mit hoher negativer Relevanz, bei dem viele Punkte in der Vorhersage nicht der \"Klasse A\" zugeordnet werden, führt daher zu einer erheblich erhöhten Featurerelevanz der \"Klasse A\".",
     },
     Filters: {
         equalComparison: "Gleich",
@@ -230,7 +230,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            'Sie können einen Datenpunkt auswählen, indem Sie auf das Streudiagramm klicken, um unten die zugehörigen lokalen Featurerelevanzwerte (lokale Erklärungen) und den ICE-Plot (Individual Conditional Expectation) anzuzeigen. Erstellen Sie einen hypothetischen Was-wäre-wenn-Datenpunkt, indem Sie den Bereich rechts verwenden, um Features eines bekannten Datenpunkts zu stören. Featurerelevanzwerte basieren auf zahlreichen Näherungen und sind nicht die "Ursache" von Vorhersagen. Ohne absolute mathematische Belastbarkeit der kausalen Rückschlüsse raten wir Benutzern davon ab, basierend auf diesem Tool Entscheidungen in der Praxis zu treffen.',
+            "Sie können einen Datenpunkt auswählen, indem Sie auf das Streudiagramm klicken, um unten die zugehörigen lokalen Featurerelevanzwerte (lokale Erklärungen) und den ICE-Plot (Individual Conditional Expectation) anzuzeigen. Erstellen Sie einen hypothetischen Was-wäre-wenn-Datenpunkt, indem Sie den Bereich rechts verwenden, um Features eines bekannten Datenpunkts zu stören. Featurerelevanzwerte basieren auf zahlreichen Näherungen und sind nicht die \"Ursache\" von Vorhersagen. Ohne absolute mathematische Belastbarkeit der kausalen Rückschlüsse raten wir Benutzern davon ab, basierend auf diesem Tool Entscheidungen in der Praxis zu treffen.",
         panelPlaceholder: "Für Vorhersagen für neue Datenpunkte ist ein Modell erforderlich.",
         cohortPickerLabel: "Wählen Sie eine Datasetkohorte zur Untersuchung aus.",
         scatterLegendText:
@@ -273,7 +273,7 @@ module.exports = {
         maxLabel: "Max.",
         stepsLabel: "Schritte",
         disclaimer:
-            'Haftungsausschluss: Diese Erläuterungen basieren auf zahlreichen Näherungswerten und stellen nicht die "Ursache" von Vorhersagen dar. Ohne absolute mathematische Belastbarkeit der kausalen Rückschlüsse raten wir Benutzern davon ab, basierend auf diesem Tool Entscheidungen in der Praxis zu treffen.',
+            "Haftungsausschluss: Diese Erläuterungen basieren auf zahlreichen Näherungswerten und stellen nicht die \"Ursache\" von Vorhersagen dar. Ohne absolute mathematische Belastbarkeit der kausalen Rückschlüsse raten wir Benutzern davon ab, basierend auf diesem Tool Entscheidungen in der Praxis zu treffen.",
         missingParameters: "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
         selectionLimit: "Maximal 3 ausgewählte Punkte",
         classPickerLabel: "Klasse",
@@ -299,7 +299,7 @@ module.exports = {
         delete: "Löschen",
         cancel: "Abbrechen",
         cohortNameError: "Kohortenname fehlt.",
-        placeholderName: 'Kohorte "{0}"',
+        placeholderName: "Kohorte \"{0}\"",
     },
     AxisConfigDialog: {
         select: "Auswählen",
@@ -318,10 +318,10 @@ module.exports = {
         predictedY: "Vorhersage für Y",
         evalData: "Auswertungsdataset",
         localFeatureImportance: "Lokale Featurerelevanz",
-        inconsistentDimensions: 'Inkonsistente Dimensionen. "{0}" weist die Dimensionen "{1}" auf, erwartet: {2}.',
-        notNonEmpty: 'Die Eingabe "{0}" ist kein nicht leeres Array.',
-        varyingLength: 'Inkonsistente Dimensionen. "{0}" weist Elemente unterschiedlicher Länge auf.',
-        notArray: '"{0}" ist kein Array. Es wird ein Array mit der Dimension "{1}" erwartet.',
+        inconsistentDimensions: "Inkonsistente Dimensionen. \"{0}\" weist die Dimensionen \"{1}\" auf, erwartet: {2}.",
+        notNonEmpty: "Die Eingabe \"{0}\" ist kein nicht leeres Array.",
+        varyingLength: "Inkonsistente Dimensionen. \"{0}\" weist Elemente unterschiedlicher Länge auf.",
+        notArray: "\"{0}\" ist kein Array. Es wird ein Array mit der Dimension \"{1}\" erwartet.",
         errorHeader: "Einige Eingabeparameter waren inkonsistent und werden nicht verwendet: ",
         datasizeWarning:
             "Das Auswertungsdataset ist zu groß, um in einigen Diagrammen effektiv angezeigt zu werden. Fügen Sie Filter hinzu, um die Größe der Kohorte zu verringern. ",
@@ -358,7 +358,7 @@ module.exports = {
         clickHere: "Weitere Informationen",
         shapTitle: "Shapley-Werte",
         shapDescription:
-            'Dieses Erklärmodul verwendet SHAP, einen spieletheoretischen Ansatz zur Erklärung von Modellen, bei dem die Relevanz von Featuresätzen gemessen wird, indem die betreffenden Features durch Marginalisierung vor dem Modell "versteckt" werden. Klicken Sie auf den Link unten, um mehr zu erfahren.',
+            "Dieses Erklärmodul verwendet SHAP, einen spieletheoretischen Ansatz zur Erklärung von Modellen, bei dem die Relevanz von Featuresätzen gemessen wird, indem die betreffenden Features durch Marginalisierung vor dem Modell \"versteckt\" werden. Klicken Sie auf den Link unten, um mehr zu erfahren.",
         limeTitle: "LIME (Local Interpretable Model-Agnostic Explanations)",
         limeDescription:
             "Dieses Erklärmodul verwendet LIME, um eine lineare Näherung des Modells bereitzustellen. Gehen Sie wie folgt vor, um eine Erklärung zu erhalten: Fügen Sie Störungen in die Instanz ein, rufen Sie Modellvorhersagen ab, und verwenden Sie diese Vorhersagen als Beschriftungen, um ein lineares Modell geringer Datendichte zu trainieren, das lokal zuverlässig ist. Die Gewichtungen dieses linearen Modells werden als Featurerelevanz verwendet. Klicken Sie auf den Link unten, um weitere Informationen zu erhalten.",

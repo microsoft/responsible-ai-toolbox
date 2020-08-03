@@ -591,7 +591,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                 plotlyProps.data[0].y = y;
                 _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
                 _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
-                const transforms: Partial<Plotly.Transform>[] = [
+                const transforms: Array<Partial<Plotly.Transform>> = [
                     {
                         type: "aggregate",
                         groups: rawX,
@@ -675,7 +675,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         jointData: JointDataset,
         chartProps: IGenericChartProps,
         cohort: Cohort,
-    ): Array<any> {
+    ): any[] {
         const customdata = cohort.unwrap(JointDataset.IndexLabel).map(val => {
             const dict = {};
             dict[JointDataset.IndexLabel] = val;
