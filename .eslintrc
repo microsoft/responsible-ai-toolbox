@@ -31,7 +31,7 @@
         "@typescript-eslint/camelcase": "off",
         // "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-parameter-properties": "off",
-        "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "off" } }],
+        "@typescript-eslint/explicit-member-accessibility": ["error"],
         "@typescript-eslint/explicit-function-return-type": "error",
         "@nrwl/nx/enforce-module-boundaries": [
             "error",
@@ -53,6 +53,7 @@
             }
         ],
         "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
+        // "@typescript-eslint/member-ordering": ["error"],
         "quotes": ["error", "double"],
         "no-duplicate-imports": "error",
         "array-callback-return": "error",

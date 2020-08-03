@@ -13,7 +13,7 @@ export const DataScatterId = "data_scatter_id";
 export class DataExploration extends React.PureComponent<IScatterProps> {
     private plotlyProps: IPlotlyProperty;
 
-    constructor(props: IScatterProps) {
+    public constructor(props: IScatterProps) {
         super(props);
         this.onXSelected = this.onXSelected.bind(this);
         this.onYSelected = this.onYSelected.bind(this);

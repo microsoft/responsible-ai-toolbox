@@ -15,7 +15,8 @@ import {
     IChoiceGroupOption,
     CommandBarButton,
     Link,
- Slider } from "office-ui-fabric-react";
+    Slider,
+} from "office-ui-fabric-react";
 
 import { JointDataset } from "../../JointDataset";
 import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
@@ -90,7 +91,7 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         this.props.explanationMethod && ExplainerCalloutDictionary[this.props.explanationMethod];
     private readonly _chartConfigId = "chart-connfig-button";
 
-    constructor(props: IGlobalExplanationTabProps) {
+    public constructor(props: IGlobalExplanationTabProps) {
         super(props);
 
         if (!this.props.jointDataset.hasLocalExplanations) {

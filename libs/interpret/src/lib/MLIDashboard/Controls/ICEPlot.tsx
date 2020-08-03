@@ -168,7 +168,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
 
     private featuresOption: IDropdownOption[];
 
-    constructor(props: IIcePlotProps) {
+    public constructor(props: IIcePlotProps) {
         super(props);
         if (props.explanationContext.localExplanation && props.explanationContext.localExplanation.values) {
             // Sort features in the order of local explanation importance

@@ -1,5 +1,5 @@
 import React from "react";
-import { Callout , DefaultButton, IconButton , ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import { Callout, DefaultButton, IconButton, ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
@@ -21,7 +21,7 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
     private readonly iconId = "data-exploration-help-icon1";
     private plotlyProps: IPlotlyProperty;
 
-    constructor(props: IScatterProps) {
+    public constructor(props: IScatterProps) {
         super(props);
         this.state = { isCalloutVisible: false };
         this.onXSelected = this.onXSelected.bind(this);

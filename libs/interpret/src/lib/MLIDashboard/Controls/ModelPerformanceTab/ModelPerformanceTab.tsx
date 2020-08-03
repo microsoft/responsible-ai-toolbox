@@ -1,10 +1,9 @@
 import React from "react";
 import { getTheme } from "@uifabric/styling";
 import _ from "lodash";
-import { DefaultButton , IDropdownOption, Dropdown , Icon, Text } from "office-ui-fabric-react";
+import { DefaultButton, IDropdownOption, Dropdown, Icon, Text } from "office-ui-fabric-react";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { Transform } from "plotly.js-dist";
-
 
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { localization } from "../../../Localization/localization";
@@ -34,7 +33,7 @@ export interface IModelPerformanceTabState {
 export class ModelPerformanceTab extends React.PureComponent<IModelPerformanceTabProps, IModelPerformanceTabState> {
     private readonly chartAndConfigsId = "chart-and-axis-config-id";
 
-    constructor(props: IModelPerformanceTabProps) {
+    public constructor(props: IModelPerformanceTabProps) {
         super(props);
         this.state = {
             xDialogOpen: false,

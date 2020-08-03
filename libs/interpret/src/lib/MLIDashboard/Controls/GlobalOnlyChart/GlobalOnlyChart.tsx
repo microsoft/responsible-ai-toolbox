@@ -46,13 +46,16 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
                   };
               });
 
-    constructor(props: IGlobalOnlyChartProps) {
+    public constructor(props: IGlobalOnlyChartProps) {
         super(props);
 
         this.classOptions = this.props.metadata.classNames.map((className, index) => {
             return { key: index, text: className };
         });
-        this.classOptions.unshift({ key: FeatureKeys.absoluteGlobal, text: localization.BarChart.absoluteGlobal });
+        this.classOptions.unshift({
+            key: FeatureKeys.absoluteGlobal,
+            text: localization.BarChart.absoluteGlobal,
+        });
         this.state = {
             startingK: 0,
             topK: this.minK,

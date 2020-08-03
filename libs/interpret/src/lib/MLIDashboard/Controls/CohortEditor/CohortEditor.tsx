@@ -1,13 +1,27 @@
 import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
-import { Text, TextField, TooltipHost, TooltipOverflowMode, IProcessedStyleSet , DefaultButton, IconButton, PrimaryButton , Callout, DirectionalHint , Checkbox , ComboBox, IComboBox, IComboBoxOption , CheckboxVisibility, DetailsList, Selection, SelectionMode , SpinButton , Position } from "office-ui-fabric-react";
-
-
-
-
-
-
-
+import {
+    Text,
+    TextField,
+    TooltipHost,
+    TooltipOverflowMode,
+    IProcessedStyleSet,
+    DefaultButton,
+    IconButton,
+    PrimaryButton,
+    Callout,
+    DirectionalHint,
+    Checkbox,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    CheckboxVisibility,
+    DetailsList,
+    Selection,
+    SelectionMode,
+    SpinButton,
+    Position,
+} from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
@@ -107,7 +121,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         [FilterMethods.inTheRangeOf]: localization.FilterOperations.inTheRangeOf,
     };
 
-    constructor(props: ICohortEditorProps) {
+    public constructor(props: ICohortEditorProps) {
         super(props);
         this.state = {
             openedFilter: undefined,

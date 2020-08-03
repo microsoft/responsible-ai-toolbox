@@ -127,7 +127,7 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
         } as any,
     };
 
-    constructor(props: ISwarmFeaturePlotProps) {
+    public constructor(props: ISwarmFeaturePlotProps) {
         super(props);
 
         this.state = {

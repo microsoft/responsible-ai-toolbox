@@ -103,7 +103,7 @@ const darkContrastTheme = createTheme({
 });
 
 export class App extends React.Component<any, any> {
-    constructor(props) {
+    public constructor(props: any) {
         super(props);
         this.state = { value: 4, themeIndex: 0, language: App.languages[0].val, showNewDash: 0 };
         this.handleChange = this.handleChange.bind(this);

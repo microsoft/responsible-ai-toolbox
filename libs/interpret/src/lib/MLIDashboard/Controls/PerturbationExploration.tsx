@@ -31,7 +31,7 @@ export class PerturbationExploration extends React.Component<
     IPerturbationExplorationProps,
     IPerturbationExplorationState
 > {
-    constructor(props: IPerturbationExplorationProps) {
+    public constructor(props: IPerturbationExplorationProps) {
         super(props);
         this.state = {
             perturbedDictionary: {},

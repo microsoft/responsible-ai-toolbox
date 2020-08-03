@@ -3,7 +3,9 @@ import React from "react";
 import { AccessibleChart, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { IProcessedStyleSet, getTheme } from "@uifabric/styling";
-import { IDropdownOption, Dropdown ,
+import {
+    IDropdownOption,
+    Dropdown,
     IconButton,
     DefaultButton,
     PrimaryButton,
@@ -95,7 +97,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         { key: ChartTypes.Scatter, text: localization.DatasetExplorer.individualDatapoints },
     ];
 
-    constructor(props: IDatasetExplorerTabProps) {
+    public constructor(props: IDatasetExplorerTabProps) {
         super(props);
         this.state = {
             xDialogOpen: false,
@@ -671,11 +673,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
         return hovertemplate;
     }
 
-    private static buildCustomData(
-        jointData: JointDataset,
-        chartProps: IGenericChartProps,
-        cohort: Cohort,
-    ): any[] {
+    private static buildCustomData(jointData: JointDataset, chartProps: IGenericChartProps, cohort: Cohort): any[] {
         const customdata = cohort.unwrap(JointDataset.IndexLabel).map(val => {
             const dict = {};
             dict[JointDataset.IndexLabel] = val;

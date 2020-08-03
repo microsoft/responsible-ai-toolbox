@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { ICategoricalRange, IModelMetadata, INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption, TextField } from "office-ui-fabric-react";
-
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
@@ -37,7 +36,7 @@ export interface IBinnedResponse {
 }
 
 export class BinningControl extends React.PureComponent<IBinningProps, IBinningState> {
-    constructor(props: IBinningProps) {
+    public constructor(props: IBinningProps) {
         super(props);
 
         this.onFeatureSelected = this.onFeatureSelected.bind(this);

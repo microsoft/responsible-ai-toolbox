@@ -33,7 +33,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
 > {
     private sortOptions: IDropdownOption[];
 
-    constructor(props: ISinglePointFeatureImportanceProps) {
+    public constructor(props: ISinglePointFeatureImportanceProps) {
         super(props);
         this.sortOptions = this.buildSortOptions();
         this.onSortSelect = this.onSortSelect.bind(this);

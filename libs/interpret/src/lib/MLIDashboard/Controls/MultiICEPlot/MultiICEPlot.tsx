@@ -1,9 +1,8 @@
 import React from "react";
 import _ from "lodash";
 import { IPlotlyProperty, RangeTypes, AccessibleChart, PlotlyMode } from "@responsible-ai/mlchartlib";
-import { IComboBox, IComboBoxOption, ComboBox , SpinButton, Text, getTheme } from "office-ui-fabric-react";
+import { IComboBox, IComboBoxOption, ComboBox, SpinButton, Text, getTheme } from "office-ui-fabric-react";
 import { Data } from "plotly.js-dist";
-
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
@@ -113,7 +112,7 @@ export class MultiICEPlot extends React.PureComponent<IMultiICEPlotProps, IMulti
     }
 
     private debounceFetchData: () => void;
-    constructor(props: IMultiICEPlotProps) {
+    public constructor(props: IMultiICEPlotProps) {
         super(props);
         const rangeView = this.buildRangeView(this.props.feature);
         const xAxisArray = this.buildRange(rangeView);

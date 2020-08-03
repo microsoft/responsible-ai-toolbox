@@ -1,13 +1,23 @@
 import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
-import { Text, IProcessedStyleSet , PrimaryButton , Callout, Target, DirectionalHint , Checkbox , ComboBox, IComboBox, IComboBoxOption , DetailsList, Selection, SelectionMode, CheckboxVisibility , SpinButton , Position } from "office-ui-fabric-react";
-
-
-
-
-
-
-
+import {
+    Text,
+    IProcessedStyleSet,
+    PrimaryButton,
+    Callout,
+    Target,
+    DirectionalHint,
+    Checkbox,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    DetailsList,
+    Selection,
+    SelectionMode,
+    CheckboxVisibility,
+    SpinButton,
+    Position,
+} from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
@@ -88,7 +98,7 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
             const key = JointDataset.ProbabilityYRoot + index.toString();
             return { key, text: this.props.jointDataset.metaDict[key].abbridgedLabel };
         });
-    constructor(props: IAxisConfigProps) {
+    public constructor(props: IAxisConfigProps) {
         super(props);
         this.state = {
             selectedColumn: _.cloneDeep(this.props.selectedColumn),

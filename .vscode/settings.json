@@ -1,5 +1,4 @@
 {
-    "editor.formatOnPaste": true,
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },

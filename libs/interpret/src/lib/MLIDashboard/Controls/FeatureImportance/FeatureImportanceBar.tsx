@@ -1,9 +1,16 @@
 import _ from "lodash";
-import { ComboBox, IComboBox, IComboBoxOption , IDropdownOption , Slider , Callout , DefaultButton, IconButton } from "office-ui-fabric-react";
-
+import {
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    IDropdownOption,
+    Slider,
+    Callout,
+    DefaultButton,
+    IconButton,
+} from "office-ui-fabric-react";
 
 import React from "react";
-
 
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
@@ -26,7 +33,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     private sortOptions: IDropdownOption[];
     private readonly _iconId = "icon-id";
 
-    constructor(props: IGlobalFeatureImportanceProps) {
+    public constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
         this.sortOptions = this.buildSortOptions();
         this.onSortSelect = this.onSortSelect.bind(this);

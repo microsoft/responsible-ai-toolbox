@@ -29,7 +29,7 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
               })
             : undefined;
 
-    constructor(props: IFeatureEditingTileProps) {
+    public constructor(props: IFeatureEditingTileProps) {
         super(props);
         this.state = {
             value: this.props.defaultValue.toString(),

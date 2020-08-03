@@ -7,7 +7,7 @@ export class ValidateProperties {
     private readonly featureLength: number;
     public readonly errorStrings: string[] = [];
     private rowLength: number;
-    constructor(private props: IExplanationDashboardProps, modelMetadata: IExplanationModelMetadata) {
+    public constructor(private props: IExplanationDashboardProps, modelMetadata: IExplanationModelMetadata) {
         this.classLength = modelMetadata.classNames.length;
         this.featureLength = modelMetadata.featureNames.length;
         this.validateProps();
@@ -22,7 +22,7 @@ export class ValidateProperties {
             this.validatePredictedY();
         }
         if (this.props.probabilityY) {
-            this.validatePredictProba();
+            this.validatePredictPro();
         }
         if (this.props.testData) {
             this.validateTestData();
@@ -54,7 +54,7 @@ export class ValidateProperties {
         }
     }
 
-    private validatePredictProba(): void {
+    private validatePredictPro(): void {
         if (!Array.isArray(this.props.probabilityY)) {
             this.props.probabilityY = undefined;
             this.errorStrings.push(

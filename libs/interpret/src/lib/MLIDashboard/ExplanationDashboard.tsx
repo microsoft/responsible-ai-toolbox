@@ -631,7 +631,7 @@ export class ExplanationDashboard extends React.Component<IExplanationDashboardP
 
     private pivotItems: IPivotItemProps[];
 
-    constructor(props: IExplanationDashboardProps) {
+    public constructor(props: IExplanationDashboardProps) {
         super(props);
         ExplanationDashboard.initializeIcons(props);
         if (this.props.locale) {

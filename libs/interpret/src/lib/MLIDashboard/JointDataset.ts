@@ -157,7 +157,7 @@ export class JointDataset {
         }
     }
 
-    constructor(args: IJointDatasetArgs) {
+    public constructor(args: IJointDatasetArgs) {
         this._modelMeta = args.metadata;
         if (args.dataset && args.dataset.length > 0) {
             this.initializeDataDictIfNeeded(args.dataset);

@@ -30,7 +30,7 @@ export interface IFeatureBarState {
 }
 
 export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, IFeatureBarState> {
-    constructor(props: IFeatureBarProps) {
+    public constructor(props: IFeatureBarProps) {
         super(props);
         this.state = {
             plotlyProps: undefined,

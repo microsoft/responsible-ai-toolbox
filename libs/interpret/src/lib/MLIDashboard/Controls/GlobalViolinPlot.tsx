@@ -100,7 +100,7 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
         } as any,
     };
 
-    constructor(props: IGlobalViolinPlotProps) {
+    public constructor(props: IGlobalViolinPlotProps) {
         super(props);
 
         this.state = {

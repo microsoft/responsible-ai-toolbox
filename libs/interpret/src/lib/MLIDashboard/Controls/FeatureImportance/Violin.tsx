@@ -1,9 +1,15 @@
 import _ from "lodash";
 import * as memoize from "memoize-one";
-import { DefaultButton, IconButton , Callout , ComboBox, IComboBox, IComboBoxOption , IDropdownOption , Slider } from "office-ui-fabric-react";
-
-
-
+import {
+    DefaultButton,
+    IconButton,
+    Callout,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    IDropdownOption,
+    Slider,
+} from "office-ui-fabric-react";
 
 import React from "react";
 import { ChartBuilder, AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -224,7 +230,7 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
     private readonly _crossClassIconId = "cross-class-icon-id";
     private readonly _globalSortIconId = "global-sort-icon-id";
 
-    constructor(props: IGlobalFeatureImportanceProps) {
+    public constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
         this.groupByOptions = this.buildGroupOptions();
         this.onSortSelect = this.onSortSelect.bind(this);

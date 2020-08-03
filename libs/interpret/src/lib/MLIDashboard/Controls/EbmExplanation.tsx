@@ -152,7 +152,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     );
     private featureOptions: IComboBoxOption[];
 
-    constructor(props: IEbmProps) {
+    public constructor(props: IEbmProps) {
         super(props);
         this.featureOptions = props.explanationContext.modelMetadata.featureNames.map((featureName, featureIndex) => {
             return { key: featureIndex, text: featureName };

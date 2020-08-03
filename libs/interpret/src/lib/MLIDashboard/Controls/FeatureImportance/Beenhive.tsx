@@ -1,10 +1,15 @@
 import * as _ from "lodash";
 import * as memoize from "memoize-one";
-import { DefaultButton, IconButton , Callout , ComboBox, IComboBox, IComboBoxOption , IDropdownOption , Slider } from "office-ui-fabric-react";
-
-
-
-
+import {
+    DefaultButton,
+    IconButton,
+    Callout,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    IDropdownOption,
+    Slider,
+} from "office-ui-fabric-react";
 import * as React from "react";
 import { ChartBuilder, AccessibleChart, PlotlyMode, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { localization } from "../../../Localization/localization";
@@ -285,7 +290,7 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
     private colorOptions: IDropdownOption[];
     private rowCount: number;
 
-    constructor(props: IGlobalFeatureImportanceProps) {
+    public constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
         this.onDismiss = this.onDismiss.bind(this);
         this.showCrossClassInfo = this.showCrossClassInfo.bind(this);

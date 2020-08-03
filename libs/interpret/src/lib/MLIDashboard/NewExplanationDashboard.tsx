@@ -327,7 +327,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     private pivotItems: IPivotItemProps[] = [];
     private weightVectorOptions: WeightVectorOption[] = [];
     private weightVectorLabels = {};
-    constructor(props: IExplanationDashboardProps) {
+    public constructor(props: IExplanationDashboardProps) {
         super(props);
         NewExplanationDashboard.initializeIcons(props);
         loadTheme(props.theme || defaultTheme);
@@ -363,8 +363,14 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.weightVectorOptions.push(index);
         });
 
-        this.pivotItems.push({ headerText: localization.modelPerformance, itemKey: globalTabKeys.modelPerformance });
-        this.pivotItems.push({ headerText: localization.datasetExplorer, itemKey: globalTabKeys.dataExploration });
+        this.pivotItems.push({
+            headerText: localization.modelPerformance,
+            itemKey: globalTabKeys.modelPerformance,
+        });
+        this.pivotItems.push({
+            headerText: localization.datasetExplorer,
+            itemKey: globalTabKeys.dataExploration,
+        });
         this.pivotItems.push({
             headerText: localization.aggregateFeatureImportance,
             itemKey: globalTabKeys.explanationTab,

@@ -16,10 +16,15 @@ import {
     Callout,
     IComboBoxOption,
     Link,
- DefaultButton, IconButton, PrimaryButton, CommandBarButton , Dropdown, IDropdownOption , SearchBox , TextField } from "office-ui-fabric-react";
-
-
-
+    DefaultButton,
+    IconButton,
+    PrimaryButton,
+    CommandBarButton,
+    Dropdown,
+    IDropdownOption,
+    SearchBox,
+    TextField,
+} from "office-ui-fabric-react";
 
 import React from "react";
 import { localization } from "../../../Localization/localization";
@@ -155,7 +160,7 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
         return { key: index, text: name };
     });
 
-    constructor(props: IWhatIfTabProps) {
+    public constructor(props: IWhatIfTabProps) {
         super(props);
 
         if (!this.props.jointDataset.hasDataset) {
@@ -1712,7 +1717,9 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
                 if (metaX.treatAsCategorical) {
                     customdata[index]["X"] = metaX.sortedCategoricalValues[val];
                 } else {
-                    customdata[index]["X"] = (val as number).toLocaleString(undefined, { maximumSignificantDigits: 5 });
+                    customdata[index]["X"] = (val as number).toLocaleString(undefined, {
+                        maximumSignificantDigits: 5,
+                    });
                 }
             });
             if (chartProps.xAxis.options.dither) {
@@ -1732,7 +1739,9 @@ export class WhatIfTab extends React.PureComponent<IWhatIfTabProps, IWhatIfTabSt
                 if (metaY.treatAsCategorical) {
                     customdata[index]["Y"] = metaY.sortedCategoricalValues[val];
                 } else {
-                    customdata[index]["Y"] = (val as number).toLocaleString(undefined, { maximumSignificantDigits: 5 });
+                    customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
+                        maximumSignificantDigits: 5,
+                    });
                 }
             });
             if (chartProps.yAxis.options.dither) {
