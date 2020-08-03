@@ -190,7 +190,7 @@
                         "assets": ["apps/dashboard/src/favicon.ico", "apps/dashboard/src/assets"],
                         "styles": [],
                         "scripts": [],
-                        "webpackConfig": "@nrwl/react/plugins/webpack"
+                        "webpackConfig": "./webpack.config.js"
                     },
                     "configurations": {
                         "production": {
