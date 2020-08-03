@@ -16,8 +16,8 @@ import {
     SelectionMode,
     CheckboxVisibility,
     SpinButton,
-    Position,
 } from "office-ui-fabric-react";
+import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
