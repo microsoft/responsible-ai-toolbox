@@ -15,7 +15,7 @@ export interface IAccuracyPickingTabProps extends IWizardTabProps {
 }
 
 export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         const styles = AccuracyTabStyles();
         return (
             <Stack horizontal horizontalAlign="space-between" className={styles.frame}>

@@ -9,7 +9,6 @@ import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
 import { IconButton, DefaultButton, PrimaryButton } from "office-ui-fabric-react";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
-import { Transform } from "plotly.js-dist";
 import {
     ISelectorConfig,
     IGenericChartProps,
@@ -583,7 +582,7 @@ export class DatasetExplorerTab extends React.PureComponent<IDatasetExplorerTabP
                 plotlyProps.data[0].y = y;
                 _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
                 _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
-                const transforms: Partial<Transform>[] = [
+                const transforms: Partial<Plotly.Transform>[] = [
                     {
                         type: "aggregate",
                         groups: rawX,

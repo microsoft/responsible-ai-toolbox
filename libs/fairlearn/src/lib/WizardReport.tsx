@@ -98,7 +98,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         } as any,
     };
 
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         const styles = WizardReportStyles();
         if (!this.state || !this.state.metrics) {
             this.loadData();

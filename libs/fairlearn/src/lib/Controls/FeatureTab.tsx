@@ -35,7 +35,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         };
     }
 
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         const styles = FeatureTabStyles();
         return (
             <Stack horizontal horizontalAlign="space-between" className={styles.frame}>
@@ -94,7 +94,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         this.props.saveBin(bin);
     };
 
-    private readonly editBins = (index: number) => {
+    private readonly editBins = (index: number): void => {
         this.setState({ editingFeatureIndex: index });
     };
 

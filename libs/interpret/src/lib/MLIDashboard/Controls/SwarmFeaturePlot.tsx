@@ -135,7 +135,7 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
         };
     }
 
-    public componentDidUpdate(prevProps: ISwarmFeaturePlotProps) {
+    public componentDidUpdate(prevProps: ISwarmFeaturePlotProps): void {
         if (this.props.sortVector !== prevProps.sortVector) {
             this.setState({ plotlyProps: undefined });
         }
@@ -161,8 +161,6 @@ export class SwarmFeaturePlot extends React.PureComponent<ISwarmFeaturePlotProps
             this.props.startingK - 0.5,
             this.props.startingK + this.props.topK - 0.5,
         ]);
-        return (
-            <AccessibleChart plotlyProps={plotlyProps} theme={this.props.theme} relayoutArg={relayoutArg as any} />
-        );
+        return <AccessibleChart plotlyProps={plotlyProps} theme={this.props.theme} relayoutArg={relayoutArg as any} />;
     }
 }

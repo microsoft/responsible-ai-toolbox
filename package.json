@@ -6,7 +6,7 @@
     "scripts": {
         "affected": "nx affected",
         "affected:apps": "nx affected:apps",
-        "affected:build": "nx affected:build",
+        "affected:build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx affected:build",
         "affected:dep-graph": "nx affected:dep-graph",
         "affected:e2e": "nx affected:e2e",
         "affected:libs": "nx affected:libs",

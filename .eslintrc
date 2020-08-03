@@ -37,7 +37,24 @@
                 "depConstraints": [{ "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }]
             }
         ],
-        "@typescript-eslint/interface-name-prefix": ["error", "always"],
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "interface",
+                "format": ["PascalCase"],
+                "custom": {
+                    "regex": "^I[A-Z]",
+                    "match": true
+                }
+            }
+        ],
+        "no-duplicate-imports": "error",
+        "sort-imports": [
+            "error",
+            {
+                "allowSeparatedGroups": true
+            }
+        ],
         "array-callback-return": "error",
         "dot-location": ["error", "property"],
         "eqeqeq": ["error", "smart"],

@@ -1,23 +1,23 @@
-import { IAccuracyPickerProps } from '../FairnessWizard';
-import React from 'react';
-import { localization } from '../Localization/localization';
-import { IconButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { IAccuracyPickerProps } from "../FairnessWizard";
+import React from "react";
+import { localization } from "../Localization/localization";
+import { IconButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { Callout } from "office-ui-fabric-react/lib/Callout";
 
 interface IState {
     showCallout: boolean;
 }
 
 export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IState> {
-    private _accuracyDropdownHelpId = '_accuracyDropdownHelpId';
+    private _accuracyDropdownHelpId = "_accuracyDropdownHelpId";
     constructor(props: IAccuracyPickerProps) {
         super(props);
         this.state = { showCallout: false };
     }
-    render(): React.ReactNode {
-        const options: IDropdownOption[] = this.props.accuracyOptions.map((option) => {
+    public render(): React.ReactNode {
+        const options: IDropdownOption[] = this.props.accuracyOptions.map(option => {
             return {
                 key: option.key,
                 text: option.title,
@@ -27,14 +27,14 @@ export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IS
             <div>
                 <div className="selector">
                     <div className="selector-label">
-                        <span>{'TODO'}</span>
+                        <span>{"TODO"}</span>
                         <IconButton
                             id={this._accuracyDropdownHelpId}
-                            iconProps={{ iconName: 'Info' }}
-                            title={'TODO'}
+                            iconProps={{ iconName: "Info" }}
+                            title={"TODO"}
                             ariaLabel="Info"
                             onClick={this.onOpen}
-                            styles={{ root: { marginBottom: -3, color: 'rgb(0, 120, 212)' } }}
+                            styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
                         />
                     </div>
                     <ComboBox
@@ -42,13 +42,13 @@ export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IS
                         selectedKey={this.props.selectedAccuracyKey}
                         onChange={this.onAccuracyChange}
                         options={options}
-                        ariaLabel={'Accuracy selector'}
+                        ariaLabel={"Accuracy selector"}
                         useComboBoxAsMenuWidth={true}
                     />
                 </div>
                 {this.state.showCallout && (
                     <Callout
-                        target={'#' + this._accuracyDropdownHelpId}
+                        target={"#" + this._accuracyDropdownHelpId}
                         setInitialFocus={true}
                         onDismiss={this.onDismiss}
                         role="alertdialog"
@@ -70,7 +70,7 @@ export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IS
         this.setState({ showCallout: true });
     };
 
-    private readonly onAccuracyChange = (event: React.FormEvent<IComboBox>, item: IComboBoxOption) => {
+    private readonly onAccuracyChange = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.props.onAccuracyChange(item.key as string);
     };
 }

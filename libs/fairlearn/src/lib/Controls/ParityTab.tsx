@@ -13,7 +13,7 @@ export interface IParityTabProps extends IWizardTabProps {
 }
 
 export class ParityTab extends React.PureComponent<IParityTabProps> {
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         return (
             <Stack horizontal>
                 <StackItem grow={2}>

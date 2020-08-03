@@ -319,7 +319,9 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
         this.props.onAccept(this.state.selectedColumn);
     };
 
-    private readonly _onRenderDetailsHeader = (styles: IProcessedStyleSet<IAxisControlDialogStyles>) => {
+    private readonly _onRenderDetailsHeader = (
+        styles: IProcessedStyleSet<IAxisControlDialogStyles>,
+    ): React.ReactNode => {
         return <div className={styles.filterHeader}>{localization.AxisConfigDialog.selectFilter}</div>;
     };
 

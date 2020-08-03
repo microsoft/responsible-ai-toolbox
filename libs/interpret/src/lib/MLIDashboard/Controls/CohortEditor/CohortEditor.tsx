@@ -302,7 +302,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         this._leftSelection.setAllSelected(false);
     };
 
-    private readonly _onRenderDetailsHeader = (styles: IProcessedStyleSet<ICohortEditorStyles>) => {
+    private readonly _onRenderDetailsHeader = (styles: IProcessedStyleSet<ICohortEditorStyles>): React.ReactNode => {
         return <div className={styles.filterHeader}>{localization.CohortEditor.selectFilter}</div>;
     };
 
@@ -480,7 +480,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
                 overflowMode={TooltipOverflowMode.Self}
                 hostClassName={styles.filterLabel}
                 content={label}
-                onTooltipToggle={() => false}
+                onTooltipToggle={(): boolean => false}
                 styles={tooltip}
             >
                 {label}

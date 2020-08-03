@@ -17,7 +17,7 @@ export interface ITileListProps {
     columnCount?: number;
 }
 export class TileList extends React.PureComponent<ITileListProps> {
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         const styles = TileListStyles();
         return (
             <div className={styles.container}>

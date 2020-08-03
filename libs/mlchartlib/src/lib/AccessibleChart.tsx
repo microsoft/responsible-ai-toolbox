@@ -1,6 +1,5 @@
 import * as _ from "lodash";
 import * as Plotly from "plotly.js-dist";
-import { PlotlyHTMLElement, Layout } from "plotly.js-dist";
 import { ITheme } from "@uifabric/styling";
 import * as React from "react";
 import { v4 } from "uuid";
@@ -18,7 +17,7 @@ export interface IAccessibleChartProps {
     plotlyProps: IPlotlyProperty;
     theme: string | ITheme;
     themeOverride?: Partial<IPlotlyTheme>;
-    relayoutArg?: Partial<Layout>;
+    relayoutArg?: Partial<Plotly.Layout>;
     animateArg?: IPlotlyAnimateProps;
     localizedStrings?: any;
     onClickHandler?: (data: any) => void;
@@ -27,7 +26,7 @@ export interface IAccessibleChartProps {
 export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     public guid: string = v4();
     private timer: number;
-    private plotlyRef: PlotlyHTMLElement;
+    private plotlyRef: Plotly.PlotlyHTMLElement;
     private isClickHandled = false;
 
     public componentDidMount(): void {

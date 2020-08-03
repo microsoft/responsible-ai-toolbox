@@ -1,11 +1,10 @@
-import * as _ from 'lodash';
-import moment from 'moment';
+import _ from "lodash";
+import moment from "moment";
 
-export const NonNumericPlaceholder = '-';
-
+export const NonNumericPlaceholder = "-";
 
 export function formatValue(value: any): string {
-    if (typeof value === 'string' || !value) {
+    if (typeof value === "string" || !value) {
         return value;
     }
     if (_.isDate(value)) {

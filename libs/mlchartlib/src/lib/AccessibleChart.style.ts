@@ -1,4 +1,4 @@
-import { IStyle, mergeStyleSets } from "office-ui-fabric-react";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "office-ui-fabric-react";
 
 export interface IAccessibleChartStyles {
     chart: IStyle;
@@ -6,7 +6,7 @@ export interface IAccessibleChartStyles {
     plotlyTable: IStyle;
 }
 
-export const accessibleChartStyle = () => {
+export const accessibleChartStyle = (): IProcessedStyleSet<IAccessibleChartStyles> => {
     return mergeStyleSets<IAccessibleChartStyles>({
         chart: {
             height: "100%",

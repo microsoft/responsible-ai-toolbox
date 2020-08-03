@@ -108,7 +108,7 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
         };
     }
 
-    public componentDidUpdate(prevProps: IGlobalViolinPlotProps) {
+    public componentDidUpdate(prevProps: IGlobalViolinPlotProps): void {
         if (this.props.sortVector !== prevProps.sortVector) {
             this.setState({ plotlyProps: undefined });
         }

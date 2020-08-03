@@ -7,9 +7,8 @@ import { IGenericChartProps, ChartTypes } from "../../NewExplanationDashboard";
 import { SpinButton } from "office-ui-fabric-react";
 import { Slider } from "office-ui-fabric-react/lib/Slider";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react/lib/ComboBox";
+import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption, Dropdown } from "office-ui-fabric-react";
 import { FabricStyles } from "../../FabricStyles";
-import { IDropdownOption, Dropdown } from "office-ui-fabric-react/lib/Dropdown";
 import { Cohort } from "../../Cohort";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
@@ -136,7 +135,7 @@ export class GlobalExplanationTab extends React.PureComponent<IGlobalExplanation
         this.toggleExplanationTooltip = this.toggleExplanationTooltip.bind(this);
     }
 
-    public componentDidUpdate(prevProps: IGlobalExplanationTabProps) {
+    public componentDidUpdate(prevProps: IGlobalExplanationTabProps): void {
         if (
             this.props.cohorts !== prevProps.cohorts ||
             this.props.selectedWeightVector !== prevProps.selectedWeightVector

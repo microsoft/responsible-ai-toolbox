@@ -38,7 +38,7 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
         this.selectPointFromChart = this.selectPointFromChart.bind(this);
     }
 
-    public componentDidUpdate(prevProps: IFeatureBarProps) {
+    public componentDidUpdate(prevProps: IFeatureBarProps): void {
         if (
             this.props.unsortedSeries !== prevProps.unsortedSeries ||
             this.props.sortArray !== prevProps.sortArray ||
