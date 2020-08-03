@@ -4,7 +4,7 @@ import { ParityModes } from "./ParityMetrics";
 export class MetricsCache {
     // Top index is featureBin index, second index is model index. Third string key is metricKey
     private cache: Array<Array<{ [key: string]: IMetricResponse }>>;
-    constructor(
+    public constructor(
         private featureCount: number,
         private numberOfModels: number,
         private fetchMethod: (request: IMetricRequest) => Promise<IMetricResponse>,

@@ -1,7 +1,7 @@
 module.exports = {
     loremIpsum:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    defaultClassNames: 'Klasse \\"{0}\\"',
+    defaultClassNames: "Klasse \"{0}\"",
     defaultFeatureNames: "Sensibles Feature {0}",
     defaultSingleFeatureName: "Sensibles Feature",
     defaultCustomMetricName: "Benutzerdefinierte Metrik {0}",
@@ -65,13 +65,13 @@ module.exports = {
         lower: "ein geringerer Wert",
         higher: "ein höherer Wert",
         howToReadText:
-            'Dieses Diagramm stellt jedes der {0} Modelle als auswählbaren Punkt dar. Die x-Achse stellt "{1}" dar, wobei {2} besser ist. Die y-Achse stellt die Abweichung dar, wobei ein geringerer Wert besser ist.',
+            "Dieses Diagramm stellt jedes der {0} Modelle als auswählbaren Punkt dar. Die x-Achse stellt \"{1}\" dar, wobei {2} besser ist. Die y-Achse stellt die Abweichung dar, wobei ein geringerer Wert besser ist.",
         insights: "Erkenntnisse",
-        insightsText1: 'Das Diagramm zeigt "{0}" und die Abweichung bei {1} Modellen.',
-        insightsText2: '"{0}" liegt im Bereich zwischen {1} und {2}. Die Abweichung reicht von {3} bis {4}.',
-        insightsText3: 'Das genaueste Modell erzielt für "{0}" einen Wert von {1} und eine Abweichung von {2}.',
+        insightsText1: "Das Diagramm zeigt \"{0}\" und die Abweichung bei {1} Modellen.",
+        insightsText2: "\"{0}\" liegt im Bereich zwischen {1} und {2}. Die Abweichung reicht von {3} bis {4}.",
+        insightsText3: "Das genaueste Modell erzielt für \"{0}\" einen Wert von {1} und eine Abweichung von {2}.",
         insightsText4:
-            'Das Modell mit der niedrigsten Abweichung erzielt für "{0}" einen Wert von {1} und eine Abweichung von {2}.',
+            "Das Modell mit der niedrigsten Abweichung erzielt für \"{0}\" einen Wert von {1} und eine Abweichung von {2}.",
         disparityInOutcomes: "Abweichung in Vorhersagen",
         disparityInAccuracy: "Abweichung in {0}",
         howToMeasureDisparity: "Wie soll die Abweichung gemessen werden?",
@@ -79,8 +79,8 @@ module.exports = {
     Report: {
         modelName: "Modell {0}",
         title: "Leistungsabweichung",
-        globalAccuracyText: 'Ist der Gesamtwert von "{0}"',
-        accuracyDisparityText: 'Ist die Abweichung in "{0}"',
+        globalAccuracyText: "Ist der Gesamtwert von \"{0}\"",
+        accuracyDisparityText: "Ist die Abweichung in \"{0}\"",
         editConfiguration: "Konfiguration bearbeiten",
         backToComparisons: "Ansicht mit mehreren Modellen",
         outcomesTitle: "Abweichung in Vorhersagen",

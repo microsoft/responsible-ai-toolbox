@@ -113,7 +113,7 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
         } as any,
     };
 
-    constructor(props: IModelComparisonProps) {
+    public constructor(props: IModelComparisonProps) {
         super(props);
         this.state = {
             disparityInOutcomes: true,

@@ -205,7 +205,7 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
 
     private selections: SelectionContext;
 
-    constructor(props: IFairnessProps) {
+    public constructor(props: IFairnessProps) {
         super(props);
         FairnessWizard.initializeIcons(props);
         if (this.props.locale) {

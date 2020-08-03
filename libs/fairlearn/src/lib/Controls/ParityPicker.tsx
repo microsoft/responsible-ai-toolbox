@@ -18,7 +18,7 @@ interface IState {
 
 export class ParityPicker extends React.PureComponent<IParityPickerProps, IState> {
     private _parityDropdownHelpId = "_parityDropdownHelpId";
-    constructor(props: IParityPickerProps) {
+    public constructor(props: IParityPickerProps) {
         super(props);
         this.state = { showCallout: false };
     }

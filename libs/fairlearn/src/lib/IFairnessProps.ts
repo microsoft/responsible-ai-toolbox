@@ -5,9 +5,9 @@ export interface IDatasetSummary {
 }
 
 export enum PredictionTypes {
-    binaryClassification = 'binaryClassification',
-    regression = 'regression',
-    probability = 'probability',
+    binaryClassification = "binaryClassification",
+    regression = "regression",
+    probability = "probability",
 }
 
 export type PredictionType =

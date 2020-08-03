@@ -18,7 +18,7 @@ interface IState {
 
 export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IState> {
     private _accuracyDropdownHelpId = "_accuracyDropdownHelpId";
-    constructor(props: IAccuracyPickerProps) {
+    public constructor(props: IAccuracyPickerProps) {
         super(props);
         this.state = { showCallout: false };
     }

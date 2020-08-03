@@ -21,7 +21,7 @@ export default class BinDialog extends React.PureComponent<IBinDialogProps, IBin
     private static minBins = 1;
     private static maxBins = 30;
 
-    constructor(props: IBinDialogProps) {
+    public constructor(props: IBinDialogProps) {
         super(props);
         this.state = _.cloneDeep(props.bins);
     }

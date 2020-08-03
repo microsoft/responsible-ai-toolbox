@@ -23,7 +23,7 @@ interface IState {
 }
 
 export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
-    constructor(props: IFeatureTabProps) {
+    public constructor(props: IFeatureTabProps) {
         super(props);
         this.state = {
             expandedBins: [],
