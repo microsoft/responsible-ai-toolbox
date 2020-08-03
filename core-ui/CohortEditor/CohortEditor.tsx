@@ -147,10 +147,10 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         });
 
         return (
-            <Callout 
-                setInitialFocus={true} 
-                hidden={false} 
-                styles={cohortEditor} 
+            <Callout
+                setInitialFocus={true}
+                hidden={false}
+                styles={cohortEditor}
                 doNotLayer={true}
                 coverTarget
                 isBeakVisible={false}
@@ -503,7 +503,7 @@ export class CohortEditor extends React.PureComponent<ICohortEditorProps, ICohor
         if (selectedMeta.treatAsCategorical) {
             // Numerical values treated as categorical are stored with the values in the column,
             // true categorical values store indexes to the string values
-            categoricalOptions =selectedMeta.sortedCategoricalValues.map((label, index) => {
+            categoricalOptions = selectedMeta.sortedCategoricalValues.map((label, index) => {
                 return { key: index, text: label };
             });
         } else {

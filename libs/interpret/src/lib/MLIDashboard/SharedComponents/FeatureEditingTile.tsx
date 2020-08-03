@@ -34,8 +34,6 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
         this.state = {
             value: this.props.defaultValue.toString(),
         };
-        this.onValueChanged = this.onValueChanged.bind(this);
-        this.onComboSelected = this.onComboSelected.bind(this);
     }
 
     public componentDidUpdate(prevProps: IFeatureEditingTileProps): void {
@@ -83,7 +81,7 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
         );
     }
 
-    private onValueChanged(_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void {
+    private onValueChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
         const val = +newValue;
         let errorMessage: string | undefined;
         if (Number.isNaN(val) || (this.props.rangeType === RangeTypes.integer && !Number.isInteger(val))) {
@@ -94,16 +92,16 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
         }
         this.props.onEdit(this.props.index, val, errorMessage);
         this.setState({ value: newValue, errorMessage });
-    }
+    };
 
-    private onComboSelected(
+    private onComboSelected = (
         _event: React.FormEvent<IComboBox>,
         item: IDropdownOption,
         _index: number,
         userProvidedValue: string,
-    ): void {
+    ): void => {
         const newVal = item !== undefined ? item.text : userProvidedValue;
         this.props.onEdit(this.props.index, newVal);
         this.setState({ value: newVal });
-    }
+    };
 }

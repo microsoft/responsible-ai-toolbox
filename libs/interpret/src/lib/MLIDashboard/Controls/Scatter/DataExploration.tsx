@@ -13,15 +13,6 @@ export const DataScatterId = "data_scatter_id";
 export class DataExploration extends React.PureComponent<IScatterProps> {
     private plotlyProps: IPlotlyProperty;
 
-    public constructor(props: IScatterProps) {
-        super(props);
-        this.onXSelected = this.onXSelected.bind(this);
-        this.onYSelected = this.onYSelected.bind(this);
-        this.onColorSelected = this.onColorSelected.bind(this);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
     public render(): React.ReactNode {
         if (this.props.dashboardContext.explanationContext.testDataset) {
             const projectedData = ScatterUtils.projectData(this.props.dashboardContext.explanationContext);
@@ -84,7 +75,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
         return <NoDataMessage explanationStrings={explanationStrings} />;
     }
 
-    private handleClick(data: any): void {
+    private handleClick = (data: any): void => {
         const clickedId = (data.points[0] as any).customdata;
         const selections: string[] = this.props.selectionContext.selectedIds.slice();
         const existingIndex = selections.indexOf(clickedId);
@@ -94,23 +85,19 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
             selections.push(clickedId);
         }
         this.props.selectionContext.onSelect(selections);
-    }
+    };
 
-    private onXSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onXSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         ScatterUtils.updateNewXAccessor(this.props, this.plotlyProps, item, DataScatterId);
-    }
+    };
 
-    private onYSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onYSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         ScatterUtils.updateNewYAccessor(this.props, this.plotlyProps, item, DataScatterId);
-    }
+    };
 
     // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
     // If it is numeric, we set the color property and display a colorbar. when setting one, clear the other.
-    private onColorSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onColorSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         ScatterUtils.updateColorAccessor(this.props, this.plotlyProps, item, DataScatterId);
-    }
-
-    private onDismiss(): void {
-        this.setState({ isCalloutVisible: false });
-    }
+    };
 }

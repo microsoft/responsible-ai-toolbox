@@ -144,11 +144,6 @@ export class App extends React.Component<any, any> {
     public constructor(props: any) {
         super(props);
         this.state = { value: 4, themeIndex: 0, language: App.languages[0].val, showNewDash: 0 };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleThemeChange = this.handleThemeChange.bind(this);
-        this.generateRandomScore = this.generateRandomScore.bind(this);
-        this.handleLanguageChange = this.handleLanguageChange.bind(this);
-        this.handleViewChange = this.handleViewChange.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -250,23 +245,23 @@ export class App extends React.Component<any, any> {
         );
     }
 
-    private handleChange(event): void {
+    private handleChange = (event): void => {
         this.setState({ value: event.target.value });
-    }
+    };
 
-    private handleThemeChange(event): void {
+    private handleThemeChange = (event): void => {
         this.setState({ themeIndex: event.target.value });
-    }
+    };
 
-    private handleLanguageChange(event): void {
+    private handleLanguageChange = (event): void => {
         this.setState({ language: event.target.value });
-    }
+    };
 
-    private handleViewChange(event): void {
+    private handleViewChange = (event): void => {
         this.setState({ showNewDash: +event.target.value });
-    }
+    };
 
-    private generateRandomScore(data, signal): Promise<any[]> {
+    private generateRandomScore = (data, signal): Promise<any[]> => {
         const promise = new Promise<any>((resolve, reject) => {
             const timeout = setTimeout(() => {
                 resolve(data.map(() => Math.random()));
@@ -278,7 +273,7 @@ export class App extends React.Component<any, any> {
         });
 
         return promise;
-    }
+    };
 
     private generateRandomProbs(classDimensions, data, signal): Promise<any[]> {
         const promise = new Promise<any[]>((resolve, reject) => {

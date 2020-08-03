@@ -233,13 +233,6 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
     public constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
         this.groupByOptions = this.buildGroupOptions();
-        this.onSortSelect = this.onSortSelect.bind(this);
-        this.onGroupSelect = this.onGroupSelect.bind(this);
-        this.setTopK = this.setTopK.bind(this);
-        this.setChart = this.setChart.bind(this);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.showCrossClassInfo = this.showCrossClassInfo.bind(this);
-        this.showGlobalSortInfo = this.showGlobalSortInfo.bind(this);
         this.state = {
             selectedSorting: FeatureKeys.absoluteGlobal,
             groupBy:
@@ -429,19 +422,19 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
         return result;
     }
 
-    private setChart(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private setChart = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.displayMode = item.key as any;
         this.props.onChange(newConfig, this.props.config.id);
-    }
+    };
 
-    private setTopK(newValue: number): void {
+    private setTopK = (newValue: number): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.topK = newValue;
         this.props.onChange(newConfig, this.props.config.id);
-    }
+    };
 
-    private showCrossClassInfo(): void {
+    private showCrossClassInfo = (): void => {
         if (this.state.calloutContent) {
             this.onDismiss();
         } else {
@@ -457,9 +450,9 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
             );
             this.setState({ calloutContent, calloutId: this._crossClassIconId });
         }
-    }
+    };
 
-    private showGlobalSortInfo(): void {
+    private showGlobalSortInfo = (): void => {
         if (this.state.calloutContent) {
             this.onDismiss();
         } else {
@@ -474,17 +467,17 @@ export class Violin extends React.PureComponent<IGlobalFeatureImportanceProps, I
             );
             this.setState({ calloutContent, calloutId: this._globalSortIconId });
         }
-    }
+    };
 
-    private onDismiss(): void {
+    private onDismiss = (): void => {
         this.setState({ calloutContent: undefined, calloutId: undefined });
-    }
+    };
 
-    private onSortSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
-        this.setState({ selectedSorting: item.key as any });
-    }
+    // private onSortSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    //     this.setState({ selectedSorting: item.key as any });
+    // }
 
-    private onGroupSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onGroupSelect = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.setState({ groupBy: item.key as any });
-    }
+    };
 }

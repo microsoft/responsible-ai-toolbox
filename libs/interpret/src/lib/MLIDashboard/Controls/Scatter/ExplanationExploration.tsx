@@ -24,12 +24,6 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
     public constructor(props: IScatterProps) {
         super(props);
         this.state = { isCalloutVisible: false };
-        this.onXSelected = this.onXSelected.bind(this);
-        this.onYSelected = this.onYSelected.bind(this);
-        this.onColorSelected = this.onColorSelected.bind(this);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.onIconClick = this.onIconClick.bind(this);
-        this.handleClick = this.handleClick.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -149,7 +143,7 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
         return <NoDataMessage explanationStrings={explanationStrings} />;
     }
 
-    private handleClick(data: any): void {
+    private handleClick = (data: any): void => {
         const clickedId = (data.points[0] as any).customdata;
         const selections: string[] = this.props.selectionContext.selectedIds.slice();
         const existingIndex = selections.indexOf(clickedId);
@@ -159,27 +153,27 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
             selections.push(clickedId);
         }
         this.props.selectionContext.onSelect(selections);
-    }
+    };
 
-    private onXSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onXSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         ScatterUtils.updateNewXAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
-    }
+    };
 
-    private onYSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onYSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         ScatterUtils.updateNewYAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
-    }
+    };
 
     // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
     // If it is numeric, we set the color property and display a color bar. when setting one, clear the other.
-    private onColorSelected(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onColorSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         ScatterUtils.updateColorAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
-    }
+    };
 
-    private onIconClick(): void {
+    private onIconClick = (): void => {
         this.setState({ isCalloutVisible: !this.state.isCalloutVisible });
-    }
+    };
 
-    private onDismiss(): void {
+    private onDismiss = (): void => {
         this.setState({ isCalloutVisible: false });
-    }
+    };
 }

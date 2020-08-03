@@ -36,6 +36,8 @@
         "@typescript-eslint/explicit-module-boundary-types": "error",
         "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
         "@typescript-eslint/member-ordering": ["error"],
+        "@typescript-eslint/no-for-in-array": "error",
+        "@typescript-eslint/unbound-method": "error",
         "@nrwl/nx/enforce-module-boundaries": [
             "error",
             {

@@ -122,10 +122,6 @@ export class App extends React.Component<any, any> {
     public constructor(props: any) {
         super(props);
         this.state = { value: 4, themeIndex: 0, language: App.languages[0].val };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleThemeChange = this.handleThemeChange.bind(this);
-        this.generateRandomScore = this.generateRandomScore.bind(this);
-        this.handleLanguageChange = this.handleLanguageChange.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -202,21 +198,21 @@ export class App extends React.Component<any, any> {
         );
     }
 
-    private handleChange(event): void {
+    private handleChange = (event): void => {
         this.setState({ value: event.target.value });
-    }
+    };
 
-    private handleThemeChange(event): void {
+    private handleThemeChange = (event): void => {
         this.setState({ themeIndex: event.target.value });
-    }
+    };
 
-    private handleLanguageChange(event): void {
+    private handleLanguageChange = (event): void => {
         this.setState({ language: event.target.value });
-    }
+    };
 
-    private generateRandomScore(data): Promise<any[]> {
-        return Promise.resolve(data.map(() => Math.random()));
-    }
+    // private generateRandomScore = (data): Promise<any[]> => {
+    //     return Promise.resolve(data.map(() => Math.random()));
+    // };
 
     private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
         const binSize = Math.max(...data.binVector);

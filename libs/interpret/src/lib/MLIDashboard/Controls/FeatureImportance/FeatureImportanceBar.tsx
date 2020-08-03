@@ -36,11 +36,6 @@ export class FeatureImportanceBar extends React.PureComponent<
     public constructor(props: IGlobalFeatureImportanceProps) {
         super(props);
         this.sortOptions = this.buildSortOptions();
-        this.onSortSelect = this.onSortSelect.bind(this);
-        this.setTopK = this.setTopK.bind(this);
-        this.setChart = this.setChart.bind(this);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.onIconClick = this.onIconClick.bind(this);
         this.state = {
             selectedSorting: FeatureKeys.absoluteGlobal,
             isCalloutVisible: false,
@@ -148,23 +143,23 @@ export class FeatureImportanceBar extends React.PureComponent<
         return <NoDataMessage explanationStrings={explanationStrings} />;
     }
 
-    private getSortVector(featureByClassMatrix: number[][]): number[] {
+    private getSortVector = (featureByClassMatrix: number[][]): number[] => {
         if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
             return ModelExplanationUtils.buildSortedVector(featureByClassMatrix);
         }
         return ModelExplanationUtils.buildSortedVector(featureByClassMatrix, this.state.selectedSorting as number);
-    }
+    };
 
-    private getFeatureByClassMatrix(): number[][] {
+    private getFeatureByClassMatrix = (): number[][] => {
         return (
             this.props.dashboardContext.explanationContext.globalExplanation.perClassFeatureImportances ||
             this.props.dashboardContext.explanationContext.globalExplanation.flattenedFeatureImportances.map(value => [
                 value,
             ])
         );
-    }
+    };
 
-    private buildSortOptions(): IDropdownOption[] {
+    private buildSortOptions = (): IDropdownOption[] => {
         if (
             this.props.dashboardContext.explanationContext.modelMetadata.modelType !== ModelTypes.multiclass ||
             this.props.dashboardContext.explanationContext.globalExplanation === undefined ||
@@ -182,29 +177,29 @@ export class FeatureImportanceBar extends React.PureComponent<
             })),
         );
         return result;
-    }
+    };
 
-    private setTopK(newValue: number): void {
+    private setTopK = (newValue: number): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.topK = newValue;
         this.props.onChange(newConfig, this.props.config.id);
-    }
+    };
 
-    private setChart(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private setChart = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         const newConfig = _.cloneDeep(this.props.config);
         newConfig.displayMode = item.key as any;
         this.props.onChange(newConfig, this.props.config.id);
-    }
+    };
 
-    private onSortSelect(_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void {
+    private onSortSelect = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
         this.setState({ selectedSorting: item.key as any });
-    }
+    };
 
-    private onIconClick(): void {
+    private onIconClick = (): void => {
         this.setState({ isCalloutVisible: !this.state.isCalloutVisible });
-    }
+    };
 
-    private onDismiss(): void {
+    private onDismiss = (): void => {
         this.setState({ isCalloutVisible: false });
-    }
+    };
 }
