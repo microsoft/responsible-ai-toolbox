@@ -1,0 +1,33 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "ES5",
+        "module": "esnext",
+        "typeRoots": ["node_modules/@types"],
+        "lib": ["es2017", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "allowUnreachableCode": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowUnusedLabels": false,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "paths": {
+            "@responsible-ai/interpret": ["libs/interpret/src/index.ts"],
+            "@responsible-ai/fairlearn": ["libs/fairlearn/src/index.ts"],
+            "@responsible-ai/core-ui": ["libs/core-ui/src/index.ts"],
+            "@responsible-ai/mlchartlib": ["libs/mlchartlib/src/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
+}
