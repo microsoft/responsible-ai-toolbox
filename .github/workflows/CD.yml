@@ -52,13 +52,12 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                   name: dist
-                  path: dist
             - id: publish
               name: NPM Publish
               uses: JS-DevTools/npm-publish@v1
               with:
                   token: ${{ secrets.KE_NPM_TOKEN }}
-                  package: ${{steps.download.outputs.download-path}}/dist/libs/${{ matrix.package }}/package.json
+                  package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
                   dry-run: true
             - if: steps.publish.type != 'none'
               run: |
