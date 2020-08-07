@@ -5,10 +5,7 @@ name: Node.js CD
 
 on:
     workflow_dispatch:
-
     push:
-        branches: [master]
-    pull_request:
         branches: [master]
 
 jobs:
@@ -58,7 +55,6 @@ jobs:
               with:
                   token: ${{ secrets.KE_NPM_TOKEN }}
                   package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
-                  dry-run: true
             - if: steps.publish.type != 'none'
               run: |
                   echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
