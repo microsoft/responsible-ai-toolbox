@@ -8,6 +8,8 @@ on:
 
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -25,16 +27,20 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: CI
+    - name: Yarn install
       uses: CultureHQ/actions-yarn@v1.0.1
       with:
-        args: ci
+        args: install --frozen-lockfile
+    - name: Build
+      uses: CultureHQ/actions-yarn@v1.0.1
+      with:
+        args: build ${{ matrix.package }} --with-deps
     - id: publish
       name: NPM Publish
       uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.KE_NPM_TOKEN }}
-        package: dist/libs/${{ matrix.node-version }}/package.json 
+        package: dist/libs/${{ matrix.package }}/package.json 
     - if: steps.publish.type != 'none'
       run: |
         echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
