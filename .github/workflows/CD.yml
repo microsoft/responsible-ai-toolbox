@@ -35,6 +35,7 @@ jobs:
                   path: dist
 
     publish:
+        needs: build
         runs-on: ubuntu-latest
         strategy:
             matrix:
