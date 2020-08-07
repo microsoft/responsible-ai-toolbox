@@ -556,12 +556,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     };
 
     private readonly clearModelSelection = (): void => {
-        this.props.selections.onSelect([]);
+        this.props.onChartClick(undefined);
     };
 
     private readonly onEditConfigs = (): void => {
         if (this.props.modelCount > 1) {
-            this.props.selections.onSelect([]);
+            this.props.onChartClick(undefined);
         }
         this.props.onEditConfigs();
     };
