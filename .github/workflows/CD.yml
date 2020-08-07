@@ -1,47 +1,62 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name:  Node.js CD
+name: Node.js CD
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [12.x]
 
-    runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: CI
+              uses: CultureHQ/actions-yarn@v1.0.1
+              with:
+                  args: ci
+            - name: Upload a Build result
+              uses: actions/upload-artifact@v2
+              with:
+                  name: dist
+                  path: dist
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-        package: [core-ui, mlchartlib, fairlearn, interpret]
+    publish:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [12.x]
+                package: [core-ui, mlchartlib, fairlearn, interpret]
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Yarn install
-      uses: CultureHQ/actions-yarn@v1.0.1
-      with:
-        args: install --frozen-lockfile
-    - name: Build
-      uses: CultureHQ/actions-yarn@v1.0.1
-      with:
-        args: build ${{ matrix.package }} --with-deps
-    - id: publish
-      name: NPM Publish
-      uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.KE_NPM_TOKEN }}
-        package: dist/libs/${{ matrix.package }}/package.json
-        dry-run: true
-    - if: steps.publish.type != 'none'
-      run: |
-        echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+        steps:
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: Download a Build Artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: dist
+            - id: publish
+              name: NPM Publish
+              uses: JS-DevTools/npm-publish@v1
+              with:
+                  token: ${{ secrets.KE_NPM_TOKEN }}
+                  package: dist/libs/${{ matrix.package }}/package.json
+                  dry-run: true
+            - if: steps.publish.type != 'none'
+              run: |
+                  echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
