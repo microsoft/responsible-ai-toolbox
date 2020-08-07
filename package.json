@@ -27,7 +27,8 @@
         "test": "nx test",
         "testall": "nx run-many --target=test --all",
         "update": "nx migrate latest",
-        "workspace-schematic": "nx workspace-schematic"
+        "workspace-schematic": "nx workspace-schematic",
+        "ci": "yarn install --frozen-lock-file && yarn testall && yarn lintall && yarn buildall"
     },
     "dependencies": {
         "@uifabric/styling": "7.14.6",

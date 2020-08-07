@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [12.x, 14.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,19 +24,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install
+    - name: CI
       uses: CultureHQ/actions-yarn@v1.0.1
       with:
-        args: install --frozen-lockfile
-    - name: Lint
-      uses: CultureHQ/actions-yarn@v1.0.1
-      with:
-        args: lintall
-    - name: Test
-      uses: CultureHQ/actions-yarn@v1.0.1
-      with:
-        args: testall
-    - name: Build
-      uses: CultureHQ/actions-yarn@v1.0.1
-      with:
-        args: buildall
+        args: ci
