@@ -3,8 +3,7 @@ import {
   AccessibleChart,
   ChartBuilder,
   IPlotlyProperty,
-  PlotlyMode,
-  SelectionContext
+  PlotlyMode
 } from "@responsible-ai/mlchartlib";
 import {
   getTheme,
@@ -35,13 +34,13 @@ import { ModelComparisionChartStyles } from "./ModelComparisionChart.styles";
 const theme = getTheme();
 export interface IModelComparisonProps {
   dashboardContext: IFairnessContext;
-  selections: SelectionContext;
   metricsCache: MetricsCache;
   modelCount: number;
   accuracyPickerProps: IAccuracyPickerProps;
   parityPickerProps: IParityPickerProps;
   featureBinPickerProps: IFeatureBinPickerProps;
   onEditConfigs: () => void;
+  onChartClick?: (data: any) => void;
 }
 
 export interface IState {
@@ -280,7 +279,7 @@ export class ModelComparisonChart extends React.PureComponent<
           <div className={styles.chart}>
             <AccessibleChart
               plotlyProps={props}
-              // sharedSelectionContext={this.props.selections}
+              onClickHandler={this.props.onChartClick}
               theme={undefined}
             />
           </div>

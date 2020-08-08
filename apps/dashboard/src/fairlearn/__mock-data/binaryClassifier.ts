@@ -1,11 +1,11 @@
 export const binaryClassifier = {
   trueY: [1, 0, 1, 1, 0, 1, 0, 0],
-  predictedYs: [
+  predictedY: [
     [1, 0, 0, 1, 1, 1, 1, 0],
     [1, 1, 1, 1, 1, 1, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ],
-  augmentedData: [
+  testData: [
     ["a", "1", "test1", 1],
     ["b", "2", "test2", 2],
     ["b", "2", "test3", 3],

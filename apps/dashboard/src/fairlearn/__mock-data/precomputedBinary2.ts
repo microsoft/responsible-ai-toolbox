@@ -6,6 +6,10 @@ export const precomputedBinary2 = {
     1,
     1,
     1,
+    1,
+    0,
+    1,
+    1,
     0,
     0,
     0,
@@ -1001,7 +1005,7 @@ export const precomputedBinary2 = {
     1,
     1
   ],
-  predictedYs: [
+  predictedY: [
     [
       0,
       1,
@@ -2051,7 +2055,7 @@ export const precomputedBinary2 = {
       }
     ]
   ],
-  precomputedBins: [
+  precomputedFeatureBins: [
     {
       binVector: [
         0,
