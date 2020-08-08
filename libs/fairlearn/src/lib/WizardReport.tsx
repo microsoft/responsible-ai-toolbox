@@ -136,12 +136,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     ),
                     name: localization.Metrics.overprediction,
                     width: 0.5,
-                    color: ChartColors[0],
+                    fillcolor: ChartColors[0],
                     orientation: "h",
                     type: "bar",
-                    textposition: "auto",
                     hoverinfo: "skip",
-                } as any,
+                    textposition: "inside",
+                },
                 {
                     x: this.state.metrics.binnedUnderprediction.map(x => -1 * x),
                     y: nameIndex,
@@ -150,11 +150,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     ),
                     name: localization.Metrics.underprediction,
                     width: 0.5,
-                    color: ChartColors[1],
+                    fillcolor: ChartColors[1],
                     orientation: "h",
                     type: "bar",
-                    textposition: "auto",
                     hoverinfo: "skip",
+                    textposition: "inside",
+                    textfont: { color: theme.palette.black },
                 },
             ];
             accuracyPlot.layout.annotations = [
@@ -186,12 +187,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                         this.formatNumbers(num as number, "selection_rate", false, 2),
                     ),
                     name: outcomeMetric.title,
-                    color: ChartColors[0],
+                    fillcolor: ChartColors[0],
                     orientation: "h",
                     type: "bar",
-                    textposition: "auto",
+                    textposition: "inside",
                     hoverinfo: "skip",
-                } as any,
+                },
             ];
             opportunityPlot.layout.xaxis.tickformat = ",.0%";
             howToReadAccuracySection = (
@@ -231,12 +232,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     ),
                     name: localization.Metrics.overprediction,
                     width: 0.5,
-                    color: ChartColors[0],
+                    fillcolor: ChartColors[0],
                     orientation: "h",
                     type: "bar",
-                    textposition: "auto",
+                    textposition: "inside",
                     hoverinfo: "skip",
-                } as any,
+                },
                 {
                     x: this.state.metrics.binnedUnderprediction.map(x => -1 * x),
                     y: nameIndex,
@@ -245,11 +246,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     ),
                     name: localization.Metrics.underprediction,
                     width: 0.5,
-                    color: ChartColors[1],
+                    fillcolor: ChartColors[1],
                     orientation: "h",
                     type: "bar",
-                    textposition: "auto",
+                    textposition: "inside",
                     hoverinfo: "skip",
+                    textfont: { color: theme.palette.black },
                 },
             ];
             accuracyPlot.layout.annotations = [
@@ -260,7 +262,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     yref: "paper",
                     xref: "paper",
                     showarrow: false,
-                    font: { color: theme.semanticColors.bodySubtext, size: 10 },
+                    font: { color: theme.semanticColors.bodyText, size: 10 },
                 },
                 {
                     text: localization.Report.overestimationError,
@@ -269,7 +271,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     yref: "paper",
                     xref: "paper",
                     showarrow: false,
-                    font: { color: theme.semanticColors.bodySubtext, size: 10 },
+                    font: { color: theme.semanticColors.bodyText, size: 10 },
                 },
             ];
             const opportunityText = this.state.metrics.predictions.map(val => {
@@ -554,12 +556,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     };
 
     private readonly clearModelSelection = (): void => {
-        this.props.selections.onSelect([]);
+        this.props.onChartClick(undefined);
     };
 
     private readonly onEditConfigs = (): void => {
         if (this.props.modelCount > 1) {
-            this.props.selections.onSelect([]);
+            this.props.onChartClick(undefined);
         }
         this.props.onEditConfigs();
     };

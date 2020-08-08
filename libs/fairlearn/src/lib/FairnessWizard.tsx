@@ -1,6 +1,6 @@
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
-import { ICategoricalRange, ModelMetadata, RangeTypes, SelectionContext } from "@responsible-ai/mlchartlib";
+import { ICategoricalRange, ModelMetadata, RangeTypes } from "@responsible-ai/mlchartlib";
 import { Pivot, PivotItem, Stack, StackItem, Text, loadTheme } from "office-ui-fabric-react";
 import React from "react";
 import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
@@ -63,7 +63,6 @@ const flights = {
 
 export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardState> {
     private static iconsInitialized = false;
-    private selections: SelectionContext;
 
     public constructor(props: IFairnessProps) {
         super(props);
@@ -73,13 +72,6 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
         }
         let accuracyMetrics: IAccuracyOption[];
         loadTheme(props.theme || defaultTheme);
-        this.selections = new SelectionContext("models", 1);
-        this.selections.subscribe({
-            selectionCallback: (strings: string[]) => {
-                const numbers = strings.map(s => +s);
-                this.setSelectedModel(numbers[0]);
-            },
-        });
         // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
         if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
             // we must assume that the same accuracy metrics are provided across models and bins
@@ -250,7 +242,7 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
 
     private static determinePredictionType(
         trueY: number[],
-        predictedYs: number[][],
+        predictedY: number[][],
         specifiedType?: PredictionType,
     ): PredictionType {
         if (
@@ -260,14 +252,14 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
         ) {
             return specifiedType;
         }
-        const predictedIsPossibleProba = predictedYs.every(predictionVector =>
+        const predictedIsPossibleProba = predictedY.every(predictionVector =>
             predictionVector.every(x => x >= 0 && x <= 1),
         );
         const trueIsBinary = _.uniq(trueY).length < 3;
         if (!trueIsBinary) {
             return PredictionTypes.regression;
         }
-        if (_.uniq(_.flatten(predictedYs)).length < 3) {
+        if (_.uniq(_.flatten(predictedY)).length < 3) {
             return PredictionTypes.binaryClassification;
         }
         if (predictedIsPossibleProba) {
@@ -384,9 +376,9 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
                     <WizardReport
                         dashboardContext={this.state.dashboardContext}
                         metricsCache={this.state.metricCache}
-                        selections={this.selections}
                         modelCount={this.props.predictedY.length}
                         accuracyPickerProps={accuracyPickerProps}
+                        onChartClick={this.onSelectModel}
                         parityPickerProps={parityPickerProps}
                         featureBinPickerProps={featureBinPickerProps}
                         selectedModelIndex={this.state.selectedModelId}
@@ -397,7 +389,7 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
                     <ModelComparisonChart
                         dashboardContext={this.state.dashboardContext}
                         metricsCache={this.state.metricCache}
-                        selections={this.selections}
+                        onChartClick={this.onSelectModel}
                         modelCount={this.props.predictedY.length}
                         accuracyPickerProps={accuracyPickerProps}
                         parityPickerProps={parityPickerProps}
@@ -443,8 +435,15 @@ export class FairnessWizard extends React.PureComponent<IFairnessProps, IWizardS
         this.setState({ activeTabKey: key });
     };
 
-    private readonly setSelectedModel = (index: number): void => {
-        this.setState({ selectedModelId: index });
+    private readonly onSelectModel = (data: any): void => {
+        console.log(data);
+        if (!data) {
+            this.setState({ selectedModelId: undefined });
+            return;
+        }
+        if (data.points && data.points[0]) {
+            this.setState({ selectedModelId: data.points[0].customdata });
+        }
     };
 
     private readonly setAccuracyKey = (key: string): void => {

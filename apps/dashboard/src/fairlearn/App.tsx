@@ -158,11 +158,11 @@ export class App extends React.Component<any, any> {
                         <FairnessWizard
                             // modelInformation={{ modelClass: "blackbox" } as any}
                             dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
-                            testData={data.augmentedData}
-                            predictedY={data.predictedYs}
+                            testData={data.testData}
+                            predictedY={data.predictedY}
                             trueY={data.trueY}
                             precomputedMetrics={data.precomputedMetrics}
-                            precomputedFeatureBins={data.precomputedBins}
+                            precomputedFeatureBins={data.precomputedFeatureBins}
                             customMetrics={data.customMetrics}
                             predictionType={data.predictionType}
                             supportedBinaryClassificationAccuracyKeys={[
