@@ -7,6 +7,8 @@ indent_style = space
 indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
+quote_type = double
+max_line_length = 80
 
 [*.md]
 max_line_length = off
