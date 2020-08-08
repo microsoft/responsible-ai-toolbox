@@ -1,5 +1,9 @@
 import React from "react";
-import { NewExplanationDashboard, ExplanationDashboard, ITelemetryMessage } from "@responsible-ai/interpret";
+import {
+  NewExplanationDashboard,
+  ExplanationDashboard,
+  ITelemetryMessage
+} from "@responsible-ai/interpret";
 import { createTheme } from "@uifabric/styling";
 import _ from "lodash";
 import { breastCancerData } from "./__mock_data/dummyData";
@@ -44,8 +48,8 @@ const darkTheme = createTheme({
     neutralPrimary: "#ffffff",
     neutralDark: "#f4f4f4",
     black: "#f8f8f8",
-    white: "#121212",
-  },
+    white: "#121212"
+  }
 });
 
 const lightTheme = createTheme({
@@ -71,8 +75,8 @@ const lightTheme = createTheme({
     neutralPrimary: "#323130",
     neutralDark: "#201f1e",
     black: "#000000",
-    white: "#ffffff",
-  },
+    white: "#ffffff"
+  }
 });
 
 const darkContrastTheme = createTheme({
@@ -98,8 +102,8 @@ const darkContrastTheme = createTheme({
     neutralPrimary: "#ffffff",
     neutralDark: "#f4f4f4",
     black: "#f8f8f8",
-    white: "#000000",
-  },
+    white: "#000000"
+  }
 });
 
 export class App extends React.Component<any, any> {
@@ -116,13 +120,13 @@ export class App extends React.Component<any, any> {
     { label: "irisNoFeature", data: irisNoFeatures, dim: 3 },
     { label: "ebmData", data: ebmData, dim: 2 },
     { label: "irisNoData", data: irisNoData, dim: 3 },
-    { label: "largeFeatureCount", data: largeFeatureCount, dim: 2 },
+    { label: "largeFeatureCount", data: largeFeatureCount, dim: 2 }
   ];
 
   private static themeChoices = [
     { label: "light", data: lightTheme },
     { label: "dark", data: darkTheme },
-    { label: "darkHiContrast", data: darkContrastTheme },
+    { label: "darkHiContrast", data: darkContrastTheme }
   ];
 
   private static languages = [
@@ -130,20 +134,25 @@ export class App extends React.Component<any, any> {
     { label: "spanish", val: "es-ES" },
     { label: "german", val: "de" },
     { label: "simple Chinese", val: "zh-CN" },
-    { label: "japanese", val: "ja" },
+    { label: "japanese", val: "ja" }
   ];
 
   private messages: any = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
     LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
     TestReq: [{ displayText: "TestReq" }],
-    PredictorReq: [{ displayText: "PredictorReq" }],
+    PredictorReq: [{ displayText: "PredictorReq" }]
   };
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public constructor(props: any) {
     super(props);
-    this.state = { value: 4, themeIndex: 0, language: App.languages[0].val, showNewDash: 0 };
+    this.state = {
+      value: 4,
+      themeIndex: 0,
+      language: App.languages[0].val,
+      showNewDash: 0
+    };
   }
 
   public render(): React.ReactNode {
@@ -170,8 +179,11 @@ export class App extends React.Component<any, any> {
           ))}
         </select>
         <label>Select language:</label>
-        <select value={this.state.language} onChange={this.handleLanguageChange}>
-          {App.languages.map(item => (
+        <select
+          value={this.state.language}
+          onChange={this.handleLanguageChange}
+        >
+          {App.languages.map((item) => (
             <option key={item.val} value={item.val}>
               {item.label}
             </option>
@@ -186,12 +198,22 @@ export class App extends React.Component<any, any> {
             {"Version 2"}
           </option>
         </select>
-        <div style={{ width: "80vw", height: "90vh", backgroundColor: "white", margin: "50px auto" }}>
+        <div
+          style={{
+            width: "80vw",
+            height: "90vh",
+            backgroundColor: "white",
+            margin: "50px auto"
+          }}
+        >
           <div style={{ width: "100%", height: "100%" }}>
             {this.state.showNewDash === 1 && (
               <NewExplanationDashboard
                 modelInformation={{ modelClass: "blackbox" } as any}
-                dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
+                dataSummary={{
+                  featureNames: data.featureNames,
+                  classNames: data.classNames
+                }}
                 testData={data.trainingData}
                 predictedY={data.predictedY}
                 probabilityY={data.probabilityY}
@@ -199,10 +221,12 @@ export class App extends React.Component<any, any> {
                 precomputedExplanations={{
                   localFeatureImportance: data.localExplanations,
                   globalFeatureImportance: data.globalExplanation,
-                  ebmGlobalExplanation: data.ebmData,
+                  ebmGlobalExplanation: data.ebmData
                 }}
                 requestPredictions={
-                  classDimension === 1 ? this.generateRandomScore : this.generateRandomProbs.bind(this, classDimension)
+                  classDimension === 1
+                    ? this.generateRandomScore
+                    : this.generateRandomProbs.bind(this, classDimension)
                 }
                 stringParams={{ contextualHelp: this.messages }}
                 telemetryHook={(er: ITelemetryMessage): void => {
@@ -217,7 +241,10 @@ export class App extends React.Component<any, any> {
             {this.state.showNewDash === 0 && (
               <ExplanationDashboard
                 modelInformation={{ modelClass: "blackbox" } as any}
-                dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
+                dataSummary={{
+                  featureNames: data.featureNames,
+                  classNames: data.classNames
+                }}
                 testData={data.trainingData}
                 predictedY={data.predictedY}
                 probabilityY={data.probabilityY}
@@ -225,9 +252,12 @@ export class App extends React.Component<any, any> {
                 precomputedExplanations={{
                   localFeatureImportance: data.localExplanations,
                   globalFeatureImportance: data.globalExplanation,
-                  ebmGlobalExplanation: data.ebmData,
+                  ebmGlobalExplanation: data.ebmData
                 }}
-                requestPredictions={this.generateRandomProbs.bind(this, classDimension)}
+                requestPredictions={this.generateRandomProbs.bind(
+                  this,
+                  classDimension
+                )}
                 stringParams={{ contextualHelp: this.messages }}
                 telemetryHook={(er: ITelemetryMessage): void => {
                   console.error(er.message);
@@ -276,7 +306,11 @@ export class App extends React.Component<any, any> {
   private generateRandomProbs(classDimensions, data, signal): Promise<any[]> {
     const promise = new Promise<any[]>((resolve, reject) => {
       const timeout = setTimeout(() => {
-        resolve(data.map(() => Array.from({ length: classDimensions }, () => Math.random())));
+        resolve(
+          data.map(() =>
+            Array.from({ length: classDimensions }, () => Math.random())
+          )
+        );
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);

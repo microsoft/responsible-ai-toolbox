@@ -5,28 +5,40 @@ import { IData } from "./IData";
 import { AccessorMappingFunctions } from "./AccessorMappingFunctions";
 
 export class ChartBuilder {
-  public static buildPlotlySeries<T>(datum: IData, rows: T[]): Array<Partial<Data>> {
+  public static buildPlotlySeries<T>(
+    datum: IData,
+    rows: T[]
+  ): Array<Partial<Data>> {
     const groupingDictionary: { [key: string]: Partial<Data> } = {};
     let defaultSeries: Partial<Data> | undefined;
     const datumLevelPaths: string = datum.datapointLevelAccessors
       ? ", " +
         Object.keys(datum.datapointLevelAccessors)
-          .map(key => {
-            return `${key}: [${datum.datapointLevelAccessors![key].path.join(", ")}]`;
+          .map((key) => {
+            return `${key}: [${datum.datapointLevelAccessors![key].path.join(
+              ", "
+            )}]`;
           })
           .join(", ")
       : "";
-    const projectedRows: Array<{ x: any; y: any; group: any; size: any }> = jmespath.search(
+    const projectedRows: Array<{
+      x: any;
+      y: any;
+      group: any;
+      size: any;
+    }> = jmespath.search(
       rows,
-      `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${datum.yAccessor}, group: ${
-        datum.groupBy
-      }, size: ${datum.sizeAccessor}${datumLevelPaths}}`,
+      `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${
+        datum.yAccessor
+      }, group: ${datum.groupBy}, size: ${
+        datum.sizeAccessor
+      }${datumLevelPaths}}`
     );
     // for bubble charts, we scale all sizes to the max size, only needs to be done once since its global
     // Due to https://github.com/plotly/plotly.js/issues/2080 we have to set size explicitly rather than use
     // the preferred solution of size ref
     const maxBubbleValue = 10;
-    projectedRows.forEach(row => {
+    projectedRows.forEach((row) => {
       let series: Partial<Data>;
 
       // Handle mutiple group by in the future
@@ -103,16 +115,22 @@ export class ChartBuilder {
         }
       }
       if (datum.sizeAccessor) {
-        const size = (row.size * (datum.maxMarkerSize || 40) ** 2) / (2.0 * maxBubbleValue);
+        const size =
+          (row.size * (datum.maxMarkerSize || 40) ** 2) /
+          (2.0 * maxBubbleValue);
         (series.marker!.size as number[]).push(Math.abs(size));
       }
       if (datum.datapointLevelAccessors !== undefined) {
-        Object.keys(datum.datapointLevelAccessors).forEach(key => {
+        Object.keys(datum.datapointLevelAccessors).forEach((key) => {
           const accessor = datum.datapointLevelAccessors![key];
           const plotlyPath = accessor.plotlyPath;
           let value =
             accessor.mapFunction !== undefined
-              ? AccessorMappingFunctions[accessor.mapFunction!](row[key], datum, accessor.mapArgs || [])
+              ? AccessorMappingFunctions[accessor.mapFunction!](
+                  row[key],
+                  datum,
+                  accessor.mapArgs || []
+                )
               : row[key];
           if (hasVectorValues) {
             if (!Array.isArray(value)) {
@@ -132,7 +150,7 @@ export class ChartBuilder {
       }
     });
     const result = defaultSeries !== undefined ? [defaultSeries] : [];
-    Object.keys(groupingDictionary).forEach(key => {
+    Object.keys(groupingDictionary).forEach((key) => {
       result.push(groupingDictionary[key]);
     });
     return result;
@@ -151,7 +169,7 @@ export class ChartBuilder {
       series.marker!.size = [];
     }
     if (datum.datapointLevelAccessors !== undefined) {
-      Object.keys(datum.datapointLevelAccessors).forEach(key => {
+      Object.keys(datum.datapointLevelAccessors).forEach((key) => {
         const plotlyPath = datum.datapointLevelAccessors![key].plotlyPath;
         _.set(series, plotlyPath, []);
       });

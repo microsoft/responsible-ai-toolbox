@@ -17,29 +17,32 @@ module.exports = {
   close: "關閉",
   calculating: "正在計算...",
   accuracyMetric: "成效指標",
-  errorOnInputs: "輸入發生錯誤。敏感性特徵目前必須是類別目錄值。請將值對應至組界類別，然後重試。",
+  errorOnInputs:
+    "輸入發生錯誤。敏感性特徵目前必須是類別目錄值。請將值對應至組界類別，然後重試。",
   Accuracy: {
     header: "要如何測量成效?",
     modelMakes: "模型會建立",
     modelsMake: "模型會建立",
-    body: "您的資料包含 {0} 個標籤和 {2} 個 {1} 預測。根據這些資訊，建議您使用下列指標。請從清單中選取一個指標。",
+    body:
+      "您的資料包含 {0} 個標籤和 {2} 個 {1} 預測。根據這些資訊，建議您使用下列指標。請從清單中選取一個指標。",
     binaryClassifier: "二元分類器",
     probabalisticRegressor: "概率迴歸輸入變數",
     regressor: "迴歸輸入變數",
     binary: "二元",
-    continuous: "連續",
+    continuous: "連續"
   },
   Parity: {
     header: "依據差距進行測量的公平性",
-    body: "差距指標會在所選功能間量化模型行為的變化。有兩種差距指標: 即將推出更多....",
+    body:
+      "差距指標會在所選功能間量化模型行為的變化。有兩種差距指標: 即將推出更多...."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "文件",
+    documentation: "文件"
   },
   Footer: {
     back: "上一步",
-    next: "下一步",
+    next: "下一步"
   },
   Intro: {
     welcome: "歡迎使用",
@@ -52,14 +55,15 @@ module.exports = {
       "敏感性特徵會用於將資料分割成群組。這些群組的模型公平性會以差距指標測量。差距指標會量化模型行為在各群組之間的差異。",
     accuracy: "成效指標",
     accuracyInfo:
-      "成效指標可用於評估模型的整體品質，以及每個群組中的模型品質。各群組成效指標極端值之間的差異，會在成效中回報為差距。",
+      "成效指標可用於評估模型的整體品質，以及每個群組中的模型品質。各群組成效指標極端值之間的差異，會在成效中回報為差距。"
   },
   ModelComparison: {
     title: "模型比較",
     howToRead: "如何閱讀此圖表",
     lower: "低於",
     higher: "高於",
-    howToReadText: "此圖表會將每個 {0} 模型表示為可選取的點。X 軸代表 {1}，越{2}越好。Y 軸代表差距，越低越好。",
+    howToReadText:
+      "此圖表會將每個 {0} 模型表示為可選取的點。X 軸代表 {1}，越{2}越好。Y 軸代表差距，越低越好。",
     insights: "見解",
     insightsText1: "此圖表顯示 {0} 與 {1} 模型的差距。",
     insightsText2: "{0} 的範圍為 {1} 到 {2}。差距的範圍為 {3} 到 {4}。",
@@ -67,7 +71,7 @@ module.exports = {
     insightsText4: "最低差距模型達到 {1} 的 {0} 和 {2} 的差距。",
     disparityInOutcomes: "預測中的差距",
     disparityInAccuracy: "{0} 中的差距",
-    howToMeasureDisparity: "應如何測量差距?",
+    howToMeasureDisparity: "應如何測量差距?"
   },
   Report: {
     modelName: "模型 {0}",
@@ -84,21 +88,27 @@ module.exports = {
     underpredictionExplanation: "(已預測 = 0，True = 1)",
     overpredictionExplanation: "(已預測 = 1，True = 0)",
     overestimationError: "高於預測",
-    classificationOutcomesHowToRead: "橫條圖會顯示各群組中的選擇率，表示分類為 1 的資料點。",
-    regressionOutcomesHowToRead: "盒狀圖會顯示各群組中的預測分佈。個別資料點會重疊在上方。",
+    classificationOutcomesHowToRead:
+      "橫條圖會顯示各群組中的選擇率，表示分類為 1 的資料點。",
+    regressionOutcomesHowToRead:
+      "盒狀圖會顯示各群組中的預測分佈。個別資料點會重疊在上方。",
     classificationAccuracyHowToRead1: "橫條圖會顯示各群組中的誤差分佈。",
     classificationAccuracyHowToRead2:
       "錯誤會分割成高於預測錯誤 (當 True 標籤為 0 時，預測 1) 及低於預測錯誤 (當 True 標籤為 1 時，預測 0)。",
-    classificationAccuracyHowToRead3: "以整體群組大小除以錯誤數目來取得回報比率。",
-    probabilityAccuracyHowToRead1: "橫條圖會顯示各群組的平均絕對誤差，分割成高於預測及低於預測。",
+    classificationAccuracyHowToRead3:
+      "以整體群組大小除以錯誤數目來取得回報比率。",
+    probabilityAccuracyHowToRead1:
+      "橫條圖會顯示各群組的平均絕對誤差，分割成高於預測及低於預測。",
     probabilityAccuracyHowToRead2:
       "在每個範例中，我們都會測量預測與標籤之間的差異。若是正數，我們稱為高於預測; 若是負數，我們稱為低於預測。",
-    probabilityAccuracyHowToRead3: "我們回報了高於預測誤差總和及低於預測誤差總和除以整體群組大小。",
-    regressionAccuracyHowToRead: "誤差是預測與標籤之間的差異。盒狀圖會顯示各群組中的誤差分佈。個別資料點會重疊在上方。",
+    probabilityAccuracyHowToRead3:
+      "我們回報了高於預測誤差總和及低於預測誤差總和除以整體群組大小。",
+    regressionAccuracyHowToRead:
+      "誤差是預測與標籤之間的差異。盒狀圖會顯示各群組中的誤差分佈。個別資料點會重疊在上方。",
     distributionOfPredictions: "預測分佈",
     distributionOfErrors: "誤差分佈",
     tooltipPrediction: "預測: {0}",
-    tooltipError: "誤差: {0}",
+    tooltipError: "誤差: {0}"
   },
   Feature: {
     header: "要依循哪些特徵評估模型公平性?",
@@ -111,7 +121,7 @@ module.exports = {
     hideCategories: "摺疊",
     categoriesOverflow: "   和其他 {0} 個類別",
     editBinning: "編輯群組",
-    subgroups: "子群組",
+    subgroups: "子群組"
   },
   Metrics: {
     accuracyScore: "正確性",
@@ -139,15 +149,19 @@ module.exports = {
     logLoss: "Log Loss",
     accuracyDescription: "正確分類的資料點。",
     precisionDescription: "在分類為 1 的資料點當中，正確分類的資料點。",
-    recallDescription: "在 True 標籤為 1 的資料點當中，正確分類的資料點。替代名稱: 確判為真率、敏感度。",
+    recallDescription:
+      "在 True 標籤為 1 的資料點當中，正確分類的資料點。替代名稱: 確判為真率、敏感度。",
     rmseDescription: "平方誤差平均的平方根。",
     mseDescription: "平方誤差的平均。",
-    meanAbsoluteErrorDescription: "誤差絕對值的平均。比 MSE 更不易受極端值影響。",
+    meanAbsoluteErrorDescription:
+      "誤差絕對值的平均。比 MSE 更不易受極端值影響。",
     r2Description: "模型所解釋的標籤變異數。",
     aucDescription: "從負值範例分隔出正值範例的預測品質，以分數檢視。",
-    balancedRMSEDescription: "正值與負值範例會重新加權，使總權重相等。適用於高度不平衡的基礎資料。",
-    balancedAccuracyDescription: "正值與負值範例會重新加權，使總權重相等。適用於高度不平衡的基礎資料。",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    balancedRMSEDescription:
+      "正值與負值範例會重新加權，使總權重相等。適用於高度不平衡的基礎資料。",
+    balancedAccuracyDescription:
+      "正值與負值範例會重新加權，使總權重相等。適用於高度不平衡的基礎資料。",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "設定組界",
@@ -155,6 +169,6 @@ module.exports = {
     save: "儲存",
     cancel: "取消",
     numberOfBins: "組界數目:",
-    categoryHeader: "組界值:",
-  },
+    categoryHeader: "組界值:"
+  }
 };

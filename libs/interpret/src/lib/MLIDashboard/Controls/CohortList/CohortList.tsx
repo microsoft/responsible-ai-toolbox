@@ -2,7 +2,10 @@ import { CommandBarButton, PrimaryButton, Text } from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
-import { IExplanationModelMetadata, ModelTypes } from "../../IExplanationContext";
+import {
+  IExplanationModelMetadata,
+  ModelTypes
+} from "../../IExplanationContext";
 import { JointDataset } from "../../JointDataset";
 import { cohortListStyles } from "./CohortList.styles";
 
@@ -41,13 +44,13 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
               <Text block className={classNames.summaryItemText}>
                 {localization.formatString(
                   localization.CohortBanner.datapoints,
-                  this.props.jointDataset.datasetRowCount,
+                  this.props.jointDataset.datasetRowCount
                 )}
               </Text>
               <Text block className={classNames.summaryItemText}>
                 {localization.formatString(
                   localization.CohortBanner.features,
-                  this.props.jointDataset.datasetFeatureCount,
+                  this.props.jointDataset.datasetFeatureCount
                 )}
               </Text>
             </div>
@@ -61,7 +64,11 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
             return (
               <div className={classNames.cohortBox} key={index}>
                 <div className={classNames.cohortLabelWrapper}>
-                  <Text variant={"mediumPlus"} nowrap className={classNames.cohortLabel}>
+                  <Text
+                    variant={"mediumPlus"}
+                    nowrap
+                    className={classNames.cohortLabel}
+                  >
                     {cohort.name}
                   </Text>
 
@@ -70,7 +77,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                     role="menuitem"
                     styles={{
                       root: classNames.commandButton,
-                      menuIcon: classNames.menuIcon,
+                      menuIcon: classNames.menuIcon
                     }}
                     disabled={this.props.jointDataset.dataDict.length === 0}
                     menuIconProps={{ iconName: "More" }}
@@ -79,29 +86,46 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                         {
                           key: "item4",
                           name: localization.CohortBanner.editCohort,
-                          onClick: this.props.editCohort.bind(this, index),
+                          onClick: this.props.editCohort.bind(this, index)
                         },
                         {
                           key: "item5",
                           name: localization.CohortBanner.duplicateCohort,
-                          onClick: this.props.cloneAndEdit.bind(this, index),
-                        },
-                      ],
+                          onClick: this.props.cloneAndEdit.bind(this, index)
+                        }
+                      ]
                     }}
                   />
                 </div>
-                <Text block variant={"xSmall"} className={classNames.summaryItemText}>
-                  {localization.formatString(localization.CohortBanner.datapoints, cohort.rowCount)}
+                <Text
+                  block
+                  variant={"xSmall"}
+                  className={classNames.summaryItemText}
+                >
+                  {localization.formatString(
+                    localization.CohortBanner.datapoints,
+                    cohort.rowCount
+                  )}
                 </Text>
-                <Text block variant={"xSmall"} className={classNames.summaryItemText}>
-                  {localization.formatString(localization.CohortBanner.filters, cohort.filters.length)}
+                <Text
+                  block
+                  variant={"xSmall"}
+                  className={classNames.summaryItemText}
+                >
+                  {localization.formatString(
+                    localization.CohortBanner.filters,
+                    cohort.filters.length
+                  )}
                 </Text>
               </div>
             );
           })}
           <PrimaryButton
             disabled={this.props.jointDataset.dataDict.length === 0}
-            onClick={this.props.editCohort.bind(this, this.props.cohorts.length)}
+            onClick={this.props.editCohort.bind(
+              this,
+              this.props.cohorts.length
+            )}
             text={localization.CohortBanner.addCohort}
           />
         </div>

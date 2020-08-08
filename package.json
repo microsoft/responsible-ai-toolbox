@@ -22,7 +22,8 @@
     "format:write": "nx format:write",
     "help": "nx help",
     "lint": "nx workspace-lint && nx lint",
-    "lintall": "nx workspace-lint && nx run-many --target=lint --all",
+    "lintall": "nx workspace-lint && nx run-many --target=lint --all && yarn prettier . --check",
+    "lintfix": "nx workspace-lint && nx run-many --target=lint --all --fix && yarn prettier . --write",
     "nx": "nx",
     "start": "nx serve",
     "test": "nx test",
@@ -79,14 +80,12 @@
     "eslint-plugin-jsx-a11y": "6.3.1",
     "eslint-plugin-react": "7.20.5",
     "eslint-plugin-react-hooks": "4.0.8",
-    "husky": "4.2.5",
     "jest": "26.2.2",
     "prettier": "2.0.5",
     "prettier-plugin-packagejson": "2.2.5",
-    "pretty-quick": "^2.0.1",
     "ts-jest": "26.1.4",
-    "ts-node": "~8.10.2",
-    "tslint": "~6.1.3",
-    "typescript": "~3.9.3"
+    "ts-node": "8.10.2",
+    "tslint": "6.1.3",
+    "typescript": "3.9.3"
   }
 }

@@ -37,14 +37,27 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
 
   public componentDidUpdate(prevProps: IAccessibleChartProps): void {
     if (
-      (!_.isEqual(prevProps.plotlyProps, this.props.plotlyProps) || this.props.theme !== prevProps.theme) &&
+      (!_.isEqual(prevProps.plotlyProps, this.props.plotlyProps) ||
+        this.props.theme !== prevProps.theme) &&
       this.hasData()
     ) {
       this.resetRenderTimer();
-    } else if (this.props.relayoutArg && !_.isEqual(this.props.relayoutArg, prevProps.relayoutArg) && this.guid) {
+    } else if (
+      this.props.relayoutArg &&
+      !_.isEqual(this.props.relayoutArg, prevProps.relayoutArg) &&
+      this.guid
+    ) {
       Plotly.relayout(this.guid, this.props.relayoutArg);
-    } else if (this.props.animateArg && !_.isEqual(this.props.animateArg, prevProps.animateArg) && this.guid) {
-      (Plotly as any).animate(this.guid, this.props.animateArg.props, this.props.animateArg.animationAttributes);
+    } else if (
+      this.props.animateArg &&
+      !_.isEqual(this.props.animateArg, prevProps.animateArg) &&
+      this.guid
+    ) {
+      (Plotly as any).animate(
+        this.guid,
+        this.props.animateArg.props,
+        this.props.animateArg.animationAttributes
+      );
     }
   }
 
@@ -66,7 +79,9 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     }
     return (
       <div className={style.noData}>
-        {this.props.localizedStrings ? this.props.localizedStrings["noData"] : "No Data"}
+        {this.props.localizedStrings
+          ? this.props.localizedStrings["noData"]
+          : "No Data"}
       </div>
     );
   }
@@ -75,7 +90,10 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     return (
       this.props.plotlyProps &&
       this.props.plotlyProps.data.length > 0 &&
-      _.some(this.props.plotlyProps.data, datum => !_.isEmpty(datum.y) || !_.isEmpty(datum.x))
+      _.some(
+        this.props.plotlyProps.data,
+        (datum) => !_.isEmpty(datum.y) || !_.isEmpty(datum.x)
+      )
     );
   }
 
@@ -84,10 +102,19 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
       window.clearTimeout(this.timer);
     }
     const themedProps = this.props.theme
-      ? PlotlyThemes.applyTheme(this.props.plotlyProps, this.props.theme, this.props.themeOverride)
+      ? PlotlyThemes.applyTheme(
+          this.props.plotlyProps,
+          this.props.theme,
+          this.props.themeOverride
+        )
       : _.cloneDeep(this.props.plotlyProps);
     this.timer = window.setTimeout(async () => {
-      this.plotlyRef = await Plotly.react(this.guid, themedProps.data, themedProps.layout, themedProps.config);
+      this.plotlyRef = await Plotly.react(
+        this.guid,
+        themedProps.data,
+        themedProps.layout,
+        themedProps.config
+      );
       if (!this.isClickHandled && this.props.onClickHandler) {
         this.isClickHandled = true;
         this.plotlyRef.on("plotly_click", this.props.onClickHandler);
@@ -114,10 +141,17 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             const yRowCells = [];
             for (let i = 0; i < tableWidth; i++) {
               // Add String() because sometimes data may be Nan
-              xRowCells.push(<td key={i + ".x"}>{datum.x ? formatValue(datum.x[i]) : ""}</td>);
-              yRowCells.push(<td key={i + ".y"}>{datum.y ? formatValue(datum.y[i]) : ""}</td>);
+              xRowCells.push(
+                <td key={i + ".x"}>{datum.x ? formatValue(datum.x[i]) : ""}</td>
+              );
+              yRowCells.push(
+                <td key={i + ".y"}>{datum.y ? formatValue(datum.y[i]) : ""}</td>
+              );
             }
-            return [<tr key={index + ".x"}>{xRowCells}</tr>, <tr key={index + ".y"}>{yRowCells}</tr>];
+            return [
+              <tr key={index + ".x"}>{xRowCells}</tr>,
+              <tr key={index + ".y"}>{yRowCells}</tr>
+            ];
           })}
         </tbody>
       </table>

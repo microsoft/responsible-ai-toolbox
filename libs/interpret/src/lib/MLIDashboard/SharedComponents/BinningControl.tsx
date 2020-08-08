@@ -1,6 +1,17 @@
 import _ from "lodash";
-import { ICategoricalRange, IModelMetadata, INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { ComboBox, IComboBox, IComboBoxOption, IDropdownOption, TextField } from "office-ui-fabric-react";
+import {
+  ICategoricalRange,
+  IModelMetadata,
+  INumericRange,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
+import {
+  ComboBox,
+  IComboBox,
+  IComboBoxOption,
+  IDropdownOption,
+  TextField
+} from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
@@ -35,7 +46,10 @@ export interface IBinnedResponse {
   rangeType: RangeTypes;
 }
 
-export class BinningControl extends React.PureComponent<IBinningProps, IBinningState> {
+export class BinningControl extends React.PureComponent<
+  IBinningProps,
+  IBinningState
+> {
   public constructor(props: IBinningProps) {
     super(props);
     this.state = undefined;
@@ -43,9 +57,12 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
 
   public componentDidMount(): void {
     if (!this.state) {
-      this.setState(this.buildRangeView(this.props.selectedFeatureIndex), () => {
-        this.pushChange();
-      });
+      this.setState(
+        this.buildRangeView(this.props.selectedFeatureIndex),
+        () => {
+          this.pushChange();
+        }
+      );
     }
   }
 
@@ -107,19 +124,30 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
     );
   }
 
-  private onFeatureSelected = (_event: React.FormEvent<IComboBox>, item: IDropdownOption): void => {
+  private onFeatureSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IDropdownOption
+  ): void => {
     this.setState(this.buildRangeView(item.key as number), () => {
       this.pushChange();
     });
   };
 
-  private onMinRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
+  private onMinRangeChanged = (
+    _ev: React.FormEvent<HTMLInputElement>,
+    newValue?: string
+  ): void => {
     const val = +newValue;
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.min = newValue;
-    if (Number.isNaN(val) || (this.state.type === RangeTypes.integer && !Number.isInteger(val))) {
+    if (
+      Number.isNaN(val) ||
+      (this.state.type === RangeTypes.integer && !Number.isInteger(val))
+    ) {
       rangeView.minErrorMessage =
-        this.state.type === RangeTypes.integer ? localization.IcePlot.integerError : localization.IcePlot.numericError;
+        this.state.type === RangeTypes.integer
+          ? localization.IcePlot.integerError
+          : localization.IcePlot.numericError;
       this.setState(rangeView);
     } else {
       rangeView.minErrorMessage = undefined;
@@ -129,13 +157,21 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
     }
   };
 
-  private onMaxRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
+  private onMaxRangeChanged = (
+    _ev: React.FormEvent<HTMLInputElement>,
+    newValue?: string
+  ): void => {
     const val = +newValue;
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.max = newValue;
-    if (Number.isNaN(val) || (this.state.type === RangeTypes.integer && !Number.isInteger(val))) {
+    if (
+      Number.isNaN(val) ||
+      (this.state.type === RangeTypes.integer && !Number.isInteger(val))
+    ) {
       rangeView.maxErrorMessage =
-        this.state.type === RangeTypes.integer ? localization.IcePlot.integerError : localization.IcePlot.numericError;
+        this.state.type === RangeTypes.integer
+          ? localization.IcePlot.integerError
+          : localization.IcePlot.numericError;
       this.setState(rangeView);
     } else {
       rangeView.maxErrorMessage = undefined;
@@ -145,7 +181,10 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
     }
   };
 
-  private onStepsRangeChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
+  private onStepsRangeChanged = (
+    _ev: React.FormEvent<HTMLInputElement>,
+    newValue?: string
+  ): void => {
     const val = +newValue;
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.steps = newValue;
@@ -164,17 +203,23 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
     _event: React.FormEvent<IComboBox>,
     option?: IComboBoxOption,
     _index?: number,
-    value?: string,
+    value?: string
   ): void => {
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     const currentSelectedKeys = rangeView.selectedOptionKeys || [];
     if (option) {
       // User selected/de-selected an existing option
-      rangeView.selectedOptionKeys = this.updateSelectedOptionKeys(currentSelectedKeys, option);
+      rangeView.selectedOptionKeys = this.updateSelectedOptionKeys(
+        currentSelectedKeys,
+        option
+      );
     } else if (value !== undefined) {
       // User typed a freeform option
       const newOption: IComboBoxOption = { key: value, text: value };
-      rangeView.selectedOptionKeys = [...currentSelectedKeys, newOption.key as string];
+      rangeView.selectedOptionKeys = [
+        ...currentSelectedKeys,
+        newOption.key as string
+      ];
       rangeView.categoricalOptions.push(newOption);
     }
     this.setState(rangeView, () => {
@@ -182,7 +227,10 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
     });
   };
 
-  private updateSelectedOptionKeys = (selectedKeys: string[], option: IComboBoxOption): string[] => {
+  private updateSelectedOptionKeys = (
+    selectedKeys: string[],
+    option: IComboBoxOption
+  ): string[] => {
     selectedKeys = [...selectedKeys]; // modify a copy
     const index = selectedKeys.indexOf(option.key as string);
     if (option.selected && index < 0) {
@@ -195,25 +243,32 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
 
   private buildRangeView(featureIndex: number): IBinningState {
     if (this.props.modelMetadata.featureIsCategorical[featureIndex]) {
-      const summary = this.props.modelMetadata.featureRanges[featureIndex] as ICategoricalRange;
+      const summary = this.props.modelMetadata.featureRanges[
+        featureIndex
+      ] as ICategoricalRange;
       if (summary.uniqueValues) {
         return {
           featureIndex,
           selectedOptionKeys: summary.uniqueValues,
-          categoricalOptions: summary.uniqueValues.map(text => {
+          categoricalOptions: summary.uniqueValues.map((text) => {
             return { key: text, text };
           }),
-          type: RangeTypes.categorical,
+          type: RangeTypes.categorical
         };
       }
     } else {
-      const summary = this.props.modelMetadata.featureRanges[featureIndex] as INumericRange;
+      const summary = this.props.modelMetadata.featureRanges[
+        featureIndex
+      ] as INumericRange;
       return {
         featureIndex,
         min: summary.min.toString(),
         max: summary.max.toString(),
-        steps: this.props.defaultSteps !== undefined ? this.props.defaultSteps.toString() : "20",
-        type: summary.rangeType,
+        steps:
+          this.props.defaultSteps !== undefined
+            ? this.props.defaultSteps.toString()
+            : "20",
+        type: summary.rangeType
       };
     }
   }
@@ -229,39 +284,48 @@ export class BinningControl extends React.PureComponent<IBinningProps, IBinningS
         hasError: true,
         array: [],
         featureIndex: this.state.featureIndex,
-        rangeType: undefined,
+        rangeType: undefined
       });
     }
     const min = +this.state.min;
     const max = +this.state.max;
     const steps = +this.state.steps;
 
-    if (this.state.type === RangeTypes.categorical && Array.isArray(this.state.selectedOptionKeys)) {
+    if (
+      this.state.type === RangeTypes.categorical &&
+      Array.isArray(this.state.selectedOptionKeys)
+    ) {
       this.props.onChange({
         hasError: false,
         array: this.state.selectedOptionKeys,
         featureIndex: this.state.featureIndex,
-        rangeType: RangeTypes.categorical,
+        rangeType: RangeTypes.categorical
       });
-    } else if (!Number.isNaN(min) && !Number.isNaN(max) && Number.isInteger(steps)) {
+    } else if (
+      !Number.isNaN(min) &&
+      !Number.isNaN(max) &&
+      Number.isInteger(steps)
+    ) {
       const delta = steps > 0 ? (max - min) / steps : max - min;
       const array = _.uniq(
         Array.from({ length: steps }, (_, i) =>
-          this.state.type === RangeTypes.integer ? Math.round(min + i * delta) : min + i * delta,
-        ),
+          this.state.type === RangeTypes.integer
+            ? Math.round(min + i * delta)
+            : min + i * delta
+        )
       );
       this.props.onChange({
         hasError: false,
         array,
         featureIndex: this.state.featureIndex,
-        rangeType: this.state.type,
+        rangeType: this.state.type
       });
     } else {
       this.props.onChange({
         hasError: true,
         array: [],
         featureIndex: this.state.featureIndex,
-        rangeType: undefined,
+        rangeType: undefined
       });
     }
   }

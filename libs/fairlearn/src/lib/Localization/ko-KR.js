@@ -29,33 +29,35 @@ module.exports = {
     probabalisticRegressor: "프로빗 회귀 변수",
     regressor: "회귀 변수",
     binary: "이진",
-    continuous: "연속",
+    continuous: "연속"
   },
   Parity: {
     header: "차이 측면에서 측정된 공정성",
     body:
-      "차이 메트릭은 선택한 기능에서 모델 동작의 변형을 정량화합니다. 차이 메트릭에는 두 가지 종류가 있으며 더 많은 종류가 제공될 예정입니다.",
+      "차이 메트릭은 선택한 기능에서 모델 동작의 변형을 정량화합니다. 차이 메트릭에는 두 가지 종류가 있으며 더 많은 종류가 제공될 예정입니다."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "설명서",
+    documentation: "설명서"
   },
   Footer: {
     back: "뒤로",
-    next: "다음",
+    next: "다음"
   },
   Intro: {
     welcome: "환영",
     fairlearnDashboard: "Fairlearn 대시보드",
-    introBody: "Fairlearn 대시보드에서 모델의 성능과 공정성 간의 상쇄 관계를 평가할 수 있습니다.",
-    explanatoryStep: "평가를 설정하려면 중요한 기능과 성능 메트릭을 지정해야 합니다.",
+    introBody:
+      "Fairlearn 대시보드에서 모델의 성능과 공정성 간의 상쇄 관계를 평가할 수 있습니다.",
+    explanatoryStep:
+      "평가를 설정하려면 중요한 기능과 성능 메트릭을 지정해야 합니다.",
     getStarted: "시작",
     features: "중요한 기능",
     featuresInfo:
       "중요한 기능은 데이터를 그룹으로 분할하는 데 사용됩니다. 해당 그룹에서 모델의 공정성은 차이 메트릭으로 측정됩니다. 차이 메트릭은 모델의 동작이 해당 그룹에서 얼마나 다른지를 정량화합니다.",
     accuracy: "성능 메트릭",
     accuracyInfo:
-      "성능 메트릭은 모델의 전체 품질과 각 그룹의 모델 품질을 평가하는 데 사용됩니다. 그룹에서 성능 메트릭의 극단적인 값 간 차이는 성능의 차이로 보고됩니다.",
+      "성능 메트릭은 모델의 전체 품질과 각 그룹의 모델 품질을 평가하는 데 사용됩니다. 그룹에서 성능 메트릭의 극단적인 값 간 차이는 성능의 차이로 보고됩니다."
   },
   ModelComparison: {
     title: "모델 비교",
@@ -71,7 +73,7 @@ module.exports = {
     insightsText4: "차이가 최저인 모델은 {1}의 {0} 및 {2}의 차이를 실현합니다.",
     disparityInOutcomes: "예측의 차이",
     disparityInAccuracy: "{0}의 차이",
-    howToMeasureDisparity: "차이를 측정하는 방법은 무엇입니까?",
+    howToMeasureDisparity: "차이를 측정하는 방법은 무엇입니까?"
   },
   Report: {
     modelName: "모델 {0}",
@@ -92,10 +94,12 @@ module.exports = {
       "가로 막대형 차트는 각 그룹의 선택 비율을 보여 주며, 1로 분류된 요소의 비율을 의미합니다.",
     regressionOutcomesHowToRead:
       "상자 그림은 각 그룹의 예측 분포를 보여 줍니다. 개별 데이터 요소가 위에 오버레이되어 있습니다.",
-    classificationAccuracyHowToRead1: "가로 막대형 차트는 각 그룹의 오차 분포를 보여 줍니다.",
+    classificationAccuracyHowToRead1:
+      "가로 막대형 차트는 각 그룹의 오차 분포를 보여 줍니다.",
     classificationAccuracyHowToRead2:
       "오차는 과대 예측 오차(실제 레이블이 0인 경우 1을 예측)와 과소 예측 오차(실제 레이블이 1인 경우 0을 예측)로 나뉩니다.",
-    classificationAccuracyHowToRead3: "보고된 비율은 오차 수를 전체 그룹 크기로 나눠 얻을 수 있습니다.",
+    classificationAccuracyHowToRead3:
+      "보고된 비율은 오차 수를 전체 그룹 크기로 나눠 얻을 수 있습니다.",
     probabilityAccuracyHowToRead1:
       "가로 막대형 차트는 각 그룹의 절대 평균 오차를 의미하며, 과대 예측과 과소 예측으로 나누어져 있습니다.",
     probabilityAccuracyHowToRead2:
@@ -107,7 +111,7 @@ module.exports = {
     distributionOfPredictions: "예측 분포",
     distributionOfErrors: "오차 분포",
     tooltipPrediction: "예측: {0}",
-    tooltipError: "오차: {0}",
+    tooltipError: "오차: {0}"
   },
   Feature: {
     header: "어떤 기능에 따라 모델의 공정성을 평가하시겠습니까?",
@@ -115,12 +119,13 @@ module.exports = {
       "공정성은 모델 동작의 차이 측면에서 평가됩니다. 선택한 각 기능의 값에 따라 데이터를 분할하고 해당 분할에서 모델의 성능 메트릭 및 예측이 어떻게 다른지를 평가합니다.",
     learnMore: "자세한 정보",
     summaryCategoricalCount: "이 기능에는 고유 값이 {0}개 있습니다.",
-    summaryNumericCount: "이 숫자 기능은 범위가 {0}~{1}이며, {2}개 bin으로 그룹화되었습니다.",
+    summaryNumericCount:
+      "이 숫자 기능은 범위가 {0}~{1}이며, {2}개 bin으로 그룹화되었습니다.",
     showCategories: "모두 표시",
     hideCategories: "축소",
     categoriesOverflow: "   및 {0}개 추가 범주",
     editBinning: "그룹 편집",
-    subgroups: "하위 그룹",
+    subgroups: "하위 그룹"
   },
   Metrics: {
     accuracyScore: "정확도",
@@ -147,19 +152,22 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "제대로 분류된 데이터 요소의 비율입니다.",
-    precisionDescription: "1로 분류된 데이터 요소 중에서 제대로 분류된 데이터 요소의 비율입니다.",
+    precisionDescription:
+      "1로 분류된 데이터 요소 중에서 제대로 분류된 데이터 요소의 비율입니다.",
     recallDescription:
       "실제 레이블이 1인 데이터 요소 중 제대로 분류된 데이터 요소의 비율입니다. 대체 이름: 진양성 비율, 민감도.",
     rmseDescription: "제곱 오차의 평균에 대한 제곱근입니다.",
     mseDescription: "제곱 오차의 평균입니다.",
-    meanAbsoluteErrorDescription: "오차의 절대값에 대한 평균입니다. MSE보다 이상값에 영향을 덜 받습니다.",
+    meanAbsoluteErrorDescription:
+      "오차의 절대값에 대한 평균입니다. MSE보다 이상값에 영향을 덜 받습니다.",
     r2Description: "모델에서 설명하는 레이블의 분산 비율입니다.",
-    aucDescription: "올바른 예제와 잘못된 예제를 구분하여 점수로 표시한 예측의 품질입니다.",
+    aucDescription:
+      "올바른 예제와 잘못된 예제를 구분하여 점수로 표시한 예측의 품질입니다.",
     balancedRMSEDescription:
       "올바른 예제와 잘못된 예제는 같은 총 가중치를 갖도록 가중치가 다시 지정됩니다. 기본 데이터가 매우 불균형한 경우 적합합니다.",
     balancedAccuracyDescription:
       "올바른 예제와 잘못된 예제는 같은 총 가중치를 갖도록 가중치가 다시 지정됩니다. 기본 데이터가 매우 불균형한 경우 적합합니다.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "bin 구성",
@@ -167,6 +175,6 @@ module.exports = {
     save: "저장",
     cancel: "취소",
     numberOfBins: "bin 수:",
-    categoryHeader: "bin 값:",
-  },
+    categoryHeader: "bin 값:"
+  }
 };

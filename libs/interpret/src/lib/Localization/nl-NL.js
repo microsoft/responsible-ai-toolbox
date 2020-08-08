@@ -33,7 +33,7 @@ module.exports = {
     xValue: "X-waarde:",
     yValue: "Y-waarde:",
     colorValue: "Kleur:",
-    count: "Aantal",
+    count: "Aantal"
   },
   CrossClass: {
     label: "Weging voor alle klassen:",
@@ -47,7 +47,7 @@ module.exports = {
     enumeratedClassInfo:
       "Geïnventariseerde klassenamen: hiermee worden alleen de functie-urgentiewaarden van de opgegeven klasse weergegeven voor alle gegevenspunten.",
     close: "Sluiten",
-    crossClassWeights: "Gewichten in meerdere klassen",
+    crossClassWeights: "Gewichten in meerdere klassen"
   },
   AggregateImportance: {
     scaledFeatureValue: "Geschaalde functiewaarde",
@@ -67,7 +67,8 @@ module.exports = {
     trueValue: "Ware waarde",
     trueClass: "Ware klasse",
     noColor: "Geen",
-    tooManyRows: "De opgegeven gegevensset is groter dan door deze grafiek wordt ondersteund",
+    tooManyRows:
+      "De opgegeven gegevensset is groter dan door deze grafiek wordt ondersteund"
   },
   BarChart: {
     classLabel: "Klasse: {0}",
@@ -75,7 +76,7 @@ module.exports = {
     noData: "Geen gegevens",
     absoluteGlobal: "Absoluut algemeen",
     absoluteLocal: "Absoluut lokaal",
-    calculatingExplanation: "Berekeningsuitleg",
+    calculatingExplanation: "Berekeningsuitleg"
   },
   IcePlot: {
     numericError: "Moet numeriek zijn",
@@ -84,7 +85,8 @@ module.exports = {
     predictedProbability: "Voorspelde waarschijnlijkheid",
     predictionLabel: "Voorspelling: {0}",
     probabilityLabel: "Waarschijnlijkheid: {0}",
-    noModelError: "Geef een operationeel model op om voorspellingen te verkennen in ICE-tekeningen.",
+    noModelError:
+      "Geef een operationeel model op om voorspellingen te verkennen in ICE-tekeningen.",
     featurePickerLabel: "Functie:",
     minimumInputLabel: "Minimum:",
     maximumInputLabel: "Maximum:",
@@ -92,21 +94,21 @@ module.exports = {
     loadingMessage: "Gegevens laden...",
     submitPrompt: "Een bereik verzenden om een ICE-tekening weer te geven",
     topLevelErrorMessage: "Fout in parameter",
-    errorPrefix: "Fout aangetroffen: {0}",
+    errorPrefix: "Fout aangetroffen: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "Laden...",
-    perturbationLabel: "Storing:",
+    perturbationLabel: "Storing:"
   },
   PredictionLabel: {
     predictedValueLabel: "Voorspelde waarde: {0}",
-    predictedClassLabel: "Voorspelde klasse: {0}",
+    predictedClassLabel: "Voorspelde klasse: {0}"
   },
   Violin: {
     groupNone: "Geen groepering",
     groupPredicted: "Voorspelde Y",
     groupTrue: "Ware Y",
-    groupBy: "Groeperen op",
+    groupBy: "Groeperen op"
   },
   FeatureImportanceWrapper: {
     chartType: "Grafiektype:",
@@ -117,7 +119,7 @@ module.exports = {
     globalImportanceExplanation:
       "De algemene functie-urgentie wordt berekend door het gemiddelde te berekenen van de absolute waarde van de functie-urgentie van alle punten (L1-normalisatie). ",
     multiclassImportanceAddendum:
-      "Alle punten worden opgenomen in de berekening van de urgentie van een functie voor alle klassen. Er wordt geen differentiële weging gebruikt. Een functie met een grote negatieve urgentie voor veel punten die volgens de voorspelling niet van klasse A zijn, verhoogt het belang van de klasse A-urgentie van die functie aanzienlijk.",
+      "Alle punten worden opgenomen in de berekening van de urgentie van een functie voor alle klassen. Er wordt geen differentiële weging gebruikt. Een functie met een grote negatieve urgentie voor veel punten die volgens de voorspelling niet van klasse A zijn, verhoogt het belang van de klasse A-urgentie van die functie aanzienlijk."
   },
   Filters: {
     equalComparison: "Is gelijk aan",
@@ -133,7 +135,7 @@ module.exports = {
     maximum: "Maximum",
     min: "Min: {0}",
     max: "Max: {0}",
-    uniqueValues: "aantal unieke waarden: {0}",
+    uniqueValues: "aantal unieke waarden: {0}"
   },
   Columns: {
     regressionError: "Regressiefout",
@@ -145,35 +147,37 @@ module.exports = {
     falseNegative: "Fout-negatief",
     dataset: "Gegevensset",
     predictedProbabilities: "Voorspellingskansen",
-    none: "Aantal",
+    none: "Aantal"
   },
   WhatIf: {
     closeAriaLabel: "Sluiten",
     defaultCustomRootName: "Kopie van rij {0}",
-    filterFeaturePlaceholder: "Zoeken naar functies",
+    filterFeaturePlaceholder: "Zoeken naar functies"
   },
   Cohort: {
     cohort: "Cohort",
-    defaultLabel: "Alle gegevens",
+    defaultLabel: "Alle gegevens"
   },
   GlobalTab: {
     helperText:
       "Verken de k belangrijkste functies die invloed hebben op uw algemene modelvoorspellingen (ofwel algemene verklaring). Gebruik de schuifregelaar om waarden voor functie-urgentie aflopend weer te geven. Selecteer maximaal drie cohorten om de bijbehorende waarden voor functie-urgentie naast elkaar weer te geven. Klik op een functiebalk in de grafiek om te bekijken hoe waarden van de geselecteerde functie invloed hebben op de modelvoorspelling.",
     topAtoB: "Belangrijkste {0}-{1} functies",
     datasetCohorts: "Gegevenssetcohorten",
-    legendHelpText: "Schakel cohorten in en uit in de plot door op de legenda-items te klikken.",
+    legendHelpText:
+      "Schakel cohorten in en uit in de plot door op de legenda-items te klikken.",
     sortBy: "Sorteren op",
     viewDependencePlotFor: "Plot met afhankelijkheden weergeven voor:",
     datasetCohortSelector: "Een gegevenssetcohort selecteren",
     aggregateFeatureImportance: "Belang van de functie Samenvoegen",
-    missingParameters: "Op dit tabblad moet de parameter voor het lokale functiebelang worden opgegeven.",
+    missingParameters:
+      "Op dit tabblad moet de parameter voor het lokale functiebelang worden opgegeven.",
     weightOptions: "Gewichten voor urgentie van klassen",
     dependencePlotTitle: "Plots met afhankelijkheden",
     dependencePlotHelperText:
       "In deze plot met afhankelijkheden wordt de relatie tussen de waarde van een functie en het bijbehorende belang van de functie in een cohort weergegeven.",
     dependencePlotFeatureSelectPlaceholder: "Functie selecteren",
     datasetRequired:
-      "Plots met afhankelijkheden vereisen de evaluatiegegevensset en de prioriteitsmatrix van lokale functies.",
+      "Plots met afhankelijkheden vereisen de evaluatiegegevensset en de prioriteitsmatrix van lokale functies."
   },
   CohortBanner: {
     dataStatistics: "Gegevensstatistieken",
@@ -187,16 +191,17 @@ module.exports = {
     editCohort: "Cohort bewerken",
     duplicateCohort: "Dubbele cohort",
     addCohort: "Cohort toevoegen",
-    copy: " kopiëren",
+    copy: " kopiëren"
   },
   ModelPerformance: {
     helperText:
       "Evalueer de prestaties van uw model door de distributie van uw voorspellingswaarden en de waarden van uw metrische prestatiegegevens van het model te verkennen. U kunt uw model nog verder onderzoeken door naar de vergelijkende analyse van de prestaties van verschillende cohorten of subgroepen van uw gegevensset te kijken. Selecteer filters voor de y- en de x-waarde om een beeld van verschillende dimensies te krijgen. Selecteer het tandwieltje in de grafiek om het grafiektype te wijzigen.",
     modelStatistics: "Modelstatistieken",
     cohortPickerLabel: "Een gegevenssetcohort selecteren om te verkennen",
-    missingParameters: "Op dit tabblad moet de matrix van voorspelde waarden uit het model worden opgegeven.",
+    missingParameters:
+      "Op dit tabblad moet de matrix van voorspelde waarden uit het model worden opgegeven.",
     missingTrueY:
-      "Prestatiestatistieken voor modellen moeten naast de voorspelde resultaten ook de echte resultaten weergeven",
+      "Prestatiestatistieken voor modellen moeten naast de voorspelde resultaten ook de echte resultaten weergeven"
   },
   Charts: {
     yValue: "Y-waarde",
@@ -209,7 +214,7 @@ module.exports = {
     featurePrefix: "Functie",
     importancePrefix: "Urgentie",
     cohort: "Cohort",
-    howToRead: "Hoe u deze grafiek moet lezen",
+    howToRead: "Hoe u deze grafiek moet lezen"
   },
   DatasetExplorer: {
     helperText:
@@ -218,20 +223,23 @@ module.exports = {
     individualDatapoints: "Afzonderlijke gegevenspunten",
     aggregatePlots: "Plots samenvoegen",
     chartType: "Grafiektype",
-    missingParameters: "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
-    noColor: "Geen",
+    missingParameters:
+      "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
+    noColor: "Geen"
   },
   DependencePlot: {
     featureImportanceOf: "Belang van de functie van",
     placeholder:
-      "Klik op een functie in het bovenstaande staafdiagram om de bijbehorende plot met afhankelijkheden weer te geven",
+      "Klik op een functie in het bovenstaande staafdiagram om de bijbehorende plot met afhankelijkheden weer te geven"
   },
   WhatIfTab: {
     helperText:
       "U kunt een gegevenspunt selecteren door op het spreidingsdiagram te klikken om de bijbehorende waarden voor lokale functie-urgentie (lokale uitleg) en ICE (afzonderlijke voorwaardelijke verwachting) hieronder weer te geven. Maak een hypothetisch what-if-gegevenspunt door het deelvenster aan de rechterkant te gebruiken om functies van een bekend gegevenspunt te verstoren. De waarden voor functie-urgentie zijn op vele benaderingen gebaseerd en niet de 'oorzaak' van voorspellingen. Zonder een strikte wiskundige onderbouwing van causale interferentie is het niet raadzaam dat gebruikers echte beslissingen nemen op basis van dit hulpprogramma.",
-    panelPlaceholder: "Een model is vereist om voorspellingen te maken voor nieuwe gegevenspunten.",
+    panelPlaceholder:
+      "Een model is vereist om voorspellingen te maken voor nieuwe gegevenspunten.",
     cohortPickerLabel: "Een gegevenssetcohort selecteren om te verkennen",
-    scatterLegendText: "Schakel gegevenspunten in en uit in de plot door op de legenda-items te klikken.",
+    scatterLegendText:
+      "Schakel gegevenspunten in en uit in de plot door op de legenda-items te klikken.",
     realPoint: "Werkelijke gegevenspunten",
     noneSelectedYet: "Nog geen geselecteerd",
     whatIfDatapoints: "What-If-gegevenspunten",
@@ -241,10 +249,12 @@ module.exports = {
     icePlot: "ICE-tekenbewerking (Individual Conditional Expectation)",
     featureImportanceLackingParameters:
       "Geef het belang van de lokale functie op om te zien hoe elke functie invloed heeft op afzonderlijke voorspellingen.",
-    featureImportanceGetStartedText: "Selecteer een punt om het belang van de functie weer te geven",
+    featureImportanceGetStartedText:
+      "Selecteer een punt om het belang van de functie weer te geven",
     iceLackingParameters:
       "Voor ICE-grafieken is een operationeel model vereist om voorspellingen te maken voor hypothetische gegevenspunten.",
-    IceGetStartedText: "Een punt selecteren of een What-If-punt maken om ICE-plots weer te geven",
+    IceGetStartedText:
+      "Een punt selecteren of een What-If-punt maken om ICE-plots weer te geven",
     whatIfDatapoint: "What-If-gegevenspunt",
     whatIfHelpText:
       "Selecteer een punt in de plot of voer handmatig een bekende gegevenspuntindex voor verstoren en om als een nieuw What-If-punt op te slaan.",
@@ -270,7 +280,8 @@ module.exports = {
     stepsLabel: "Stappen",
     disclaimer:
       "Disclaimer: dit zijn verklaringen die op vele schattingen zijn gebaseerd en niet de 'oorzaak' van voorspellingen. Zonder een strikte wiskundige onderbouwing van causale interferentie is het niet raadzaam dat gebruikers echte beslissingen nemen op basis van dit hulpprogramma.",
-    missingParameters: "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
+    missingParameters:
+      "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
     selectionLimit: "Maximaal drie geselecteerde punten",
     classPickerLabel: "Klasse",
     tooltipTitleMany: "Belangrijkste {0} voorspelde klassen",
@@ -280,7 +291,7 @@ module.exports = {
     deltaLabel: "Delta",
     nonNumericValue: "Waarde moet numeriek zijn",
     icePlotHelperText:
-      "Met ICE-spreidingsdiagrammen wordt aangegeven hoe de voorspellingswaarden van het geselecteerde gegevenspunt worden gewijzigd langs een aantal functiewaarden tussen een minimum- en maximumwaarde.",
+      "Met ICE-spreidingsdiagrammen wordt aangegeven hoe de voorspellingswaarden van het geselecteerde gegevenspunt worden gewijzigd langs een aantal functiewaarden tussen een minimum- en maximumwaarde."
   },
   CohortEditor: {
     selectFilter: "Filter selecteren",
@@ -288,14 +299,15 @@ module.exports = {
     addFilter: "Filter toevoegen",
     addedFilters: "Toegevoegde filters",
     noAddedFilters: "Nog geen filters toegevoegd",
-    defaultFilterState: "Selecteer een filter om parameters aan uw gegevenssetcohort toe te voegen.",
+    defaultFilterState:
+      "Selecteer een filter om parameters aan uw gegevenssetcohort toe te voegen.",
     cohortNameLabel: "Naam van de gegevenssetcohort",
     cohortNamePlaceholder: "Een naam voor uw cohort invoeren",
     save: "Opslaan",
     delete: "Verwijderen",
     cancel: "Annuleren",
     cohortNameError: "Cohortnaam ontbreekt",
-    placeholderName: "Cohort {0}",
+    placeholderName: "Cohort {0}"
   },
   AxisConfigDialog: {
     select: "Selecteren",
@@ -307,22 +319,27 @@ module.exports = {
     numOfBins: "Aantal opslaglocaties",
     groupByCohort: "Groeperen op cohort",
     selectClass: "Klasse selecteren",
-    countHelperText: "Een histogram van het aantal punten",
+    countHelperText: "Een histogram van het aantal punten"
   },
   ValidationErrors: {
     predictedProbability: "Voorspelde waarschijnlijkheid",
     predictedY: "Voorspelde Y",
     evalData: "Evaluatiegegevensset",
     localFeatureImportance: "Belang van lokale functie",
-    inconsistentDimensions: "Inconsistente dimensies. {0} heeft dimensies {1}, verwacht {2}",
+    inconsistentDimensions:
+      "Inconsistente dimensies. {0} heeft dimensies {1}, verwacht {2}",
     notNonEmpty: "{0} invoer is geen niet-lege matrix",
-    varyingLength: "Inconsistente dimensies. {0} heeft elementen van verschillende lengte",
-    notArray: "{0} geen matrix. Er wordt een matrix van de dimensie {1} verwacht",
-    errorHeader: "Sommige invoerparameters zijn inconsistent en worden niet gebruikt: ",
+    varyingLength:
+      "Inconsistente dimensies. {0} heeft elementen van verschillende lengte",
+    notArray:
+      "{0} geen matrix. Er wordt een matrix van de dimensie {1} verwacht",
+    errorHeader:
+      "Sommige invoerparameters zijn inconsistent en worden niet gebruikt: ",
     datasizeWarning:
       "De gegevensset voor evaluatie is te groot om in sommige grafieken effectief te kunnen worden weergegeven. Voeg filters toe om de grootte van de cohort te verkleinen. ",
-    datasizeError: "De geselecteerde cohort is te groot. Voeg filters toe om de grootte van de cohort te verkleinen.",
-    addFilters: "Filters toevoegen",
+    datasizeError:
+      "De geselecteerde cohort is te groot. Voeg filters toe om de grootte van de cohort te verkleinen.",
+    addFilters: "Filters toevoegen"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -332,7 +349,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " bevat {0} ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} en {1} anderen",
+    overflowFilterArgs: "{0} en {1} anderen"
   },
   Statistics: {
     mse: "MSE: {0}",
@@ -342,11 +359,11 @@ module.exports = {
     precision: "Precisie: {0}",
     recall: "Terughalen: {0}",
     fpr: "FPR: {0}",
-    fnr: "FNR: {0}",
+    fnr: "FNR: {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Verken de k belangrijkste functies die invloed hebben op uw algemene modelvoorspellingen. Gebruik de schuifbalk om functies van aflopend belang weer te geven.",
+      "Verken de k belangrijkste functies die invloed hebben op uw algemene modelvoorspellingen. Gebruik de schuifbalk om functies van aflopend belang weer te geven."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "Wat betekenen deze toelichtingen?",
@@ -362,6 +379,6 @@ module.exports = {
       "Deze verklarende factor is gebaseerd op het idee van het trainen van globale surrogaatmodellen om black box-modellen na te bootsen. Een globaal surrogaatmodel is een intrinsiek interpreteerbaar model dat is getraind om de voorspellingen van elk black box-model zo nauwkeurig mogelijk te benaderen. De waarden voor functie-urgentie zijn modelwaarden voor functie-urgentie van het onderliggende surrogaatmodel (LightGBM, lineaire regressie, Stochastic Gradient Descent of beslissingsstructuur)",
     pfiTitle: "PFI (Permutation Feature Importance)",
     pfiDescription:
-      "Met deze verklarende factor worden per functie de gegevens van een volledige gegevensset willekeurig gebruikt en wordt berekend in welke mate de metrische prestatiegegevens voor het belang veranderen (standaardwaarden voor metrische prestatiegegevens: F1 voor binaire classificatie, F1-score met microgemiddelde voor classificatie met meerdere klassen en gemiddelde absolute fout voor regressie). Hoe groter de verandering, hoe belangrijker de functie. Deze verklarende factor kan alleen het algemene gedrag van het onderliggende model uitleggen. Er worden geen afzonderlijke voorspellingen uitgelegd. De waarde voor functie-urgentie van een functie geeft het verschil in de prestatie van het model aan wanneer die specifieke functie wordt verstoord.",
-  },
+      "Met deze verklarende factor worden per functie de gegevens van een volledige gegevensset willekeurig gebruikt en wordt berekend in welke mate de metrische prestatiegegevens voor het belang veranderen (standaardwaarden voor metrische prestatiegegevens: F1 voor binaire classificatie, F1-score met microgemiddelde voor classificatie met meerdere klassen en gemiddelde absolute fout voor regressie). Hoe groter de verandering, hoe belangrijker de functie. Deze verklarende factor kan alleen het algemene gedrag van het onderliggende model uitleggen. Er worden geen afzonderlijke voorspellingen uitgelegd. De waarde voor functie-urgentie van een functie geeft het verschil in de prestatie van het model aan wanneer die specifieke functie wordt verstoord."
+  }
 };

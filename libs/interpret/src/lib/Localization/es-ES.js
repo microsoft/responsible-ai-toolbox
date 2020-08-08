@@ -9,7 +9,8 @@ module.exports = {
   aggregateFeatureImportance: "Importancia de características agregadas",
   globalImportance: "Importancia global",
   explanationExploration: "Exploración de explicación",
-  individualAndWhatIf: "Importancia de características individuales e hipótesis",
+  individualAndWhatIf:
+    "Importancia de características individuales e hipótesis",
   summaryImportance: "Importancia resumida",
   featureImportance: "Importancia de la característica",
   featureImportanceOf: "Importancia de la característica: {0}",
@@ -33,7 +34,7 @@ module.exports = {
     xValue: "Valor de X:",
     yValue: "Valor de Y:",
     colorValue: "Color:",
-    count: "Recuento",
+    count: "Recuento"
   },
   CrossClass: {
     label: "Ponderación entre clases:",
@@ -47,7 +48,7 @@ module.exports = {
     enumeratedClassInfo:
       "Nombres de la clase enumerada: solo muestra los valores de importancia de la característica de la clase especificada en todos los puntos de datos.",
     close: "Cerrar",
-    crossClassWeights: "Niveles de importancia de varias clases",
+    crossClassWeights: "Niveles de importancia de varias clases"
   },
   AggregateImportance: {
     scaledFeatureValue: "Valor de característica escalado",
@@ -67,7 +68,8 @@ module.exports = {
     trueValue: "Valor verdadero",
     trueClass: "Clase verdadera",
     noColor: "Ninguno",
-    tooManyRows: "El conjunto de datos proporcionado es mayor de lo que admite este gráfico.",
+    tooManyRows:
+      "El conjunto de datos proporcionado es mayor de lo que admite este gráfico."
   },
   BarChart: {
     classLabel: "Clase: {0}",
@@ -75,7 +77,7 @@ module.exports = {
     noData: "Sin datos",
     absoluteGlobal: "Global absoluto",
     absoluteLocal: "Local absoluto",
-    calculatingExplanation: "Calculando explicación",
+    calculatingExplanation: "Calculando explicación"
   },
   IcePlot: {
     numericError: "Debe ser un valor numérico.",
@@ -93,21 +95,21 @@ module.exports = {
     loadingMessage: "Cargando datos...",
     submitPrompt: "Envíe un rango para ver un trazado de ICE.",
     topLevelErrorMessage: "Error en el parámetro",
-    errorPrefix: "Se detectó un error: {0}",
+    errorPrefix: "Se detectó un error: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "Cargando...",
-    perturbationLabel: "Perturbación:",
+    perturbationLabel: "Perturbación:"
   },
   PredictionLabel: {
     predictedValueLabel: "Valor predicho: {0}",
-    predictedClassLabel: "Clase predicha: {0}",
+    predictedClassLabel: "Clase predicha: {0}"
   },
   Violin: {
     groupNone: "Sin agrupar",
     groupPredicted: "Y predicho",
     groupTrue: "Y verdadero",
-    groupBy: "Agrupar por",
+    groupBy: "Agrupar por"
   },
   FeatureImportanceWrapper: {
     chartType: "Tipo de gráfico:",
@@ -118,7 +120,7 @@ module.exports = {
     globalImportanceExplanation:
       "La importancia de la característica global se calcula mediante el promedio del valor absoluto de la importancia de la característica de todos los puntos (normalización L1). ",
     multiclassImportanceAddendum:
-      'Para el cálculo de la importancia de una característica para todas las clases se incluyen todos los puntos y no se utiliza ninguna ponderación diferencial. Por tanto, una característica con una gran importancia negativa para muchos puntos con una predicción de que no será de "clase A" aumentará considerablemente la importancia de la "clase A" de la característica.',
+      'Para el cálculo de la importancia de una característica para todas las clases se incluyen todos los puntos y no se utiliza ninguna ponderación diferencial. Por tanto, una característica con una gran importancia negativa para muchos puntos con una predicción de que no será de "clase A" aumentará considerablemente la importancia de la "clase A" de la característica.'
   },
   Filters: {
     equalComparison: "Igual que",
@@ -134,7 +136,7 @@ module.exports = {
     maximum: "Máximo",
     min: "Mín.: {0}",
     max: "Máx.: {0}",
-    uniqueValues: "número de valores únicos: {0}",
+    uniqueValues: "número de valores únicos: {0}"
   },
   Columns: {
     regressionError: "Error de regresión",
@@ -146,23 +148,24 @@ module.exports = {
     falseNegative: "Falso negativo",
     dataset: "Conjunto de datos",
     predictedProbabilities: "Probabilidades de predicción",
-    none: "Recuento",
+    none: "Recuento"
   },
   WhatIf: {
     closeAriaLabel: "Cerrar",
     defaultCustomRootName: "Copia de la fila {0}",
-    filterFeaturePlaceholder: "Buscar características",
+    filterFeaturePlaceholder: "Buscar características"
   },
   Cohort: {
     cohort: "Cohorte",
-    defaultLabel: "Todos los datos",
+    defaultLabel: "Todos los datos"
   },
   GlobalTab: {
     helperText:
       "Explore las principales características importantes K que afectan a las predicciones generales de su modelo (explicación global). Puede usar el control deslizante para mostrar los valores de la importancia de las características en orden descendente, así como seleccionar hasta tres cohortes para consultar los valores de importancia de las características en paralelo. Asimismo, puede hacer clic en cualquiera de las barras de características del gráfico para consultar el modo en el que los valores de la característica seleccionada afectan al modelo de predicción.",
     topAtoB: "Principales características: {0}-{1}",
     datasetCohorts: "Cohortes de conjunto de datos",
-    legendHelpText: "Para activar o desactivar los cohortes en el trazado, haga clic en los elementos de la leyenda.",
+    legendHelpText:
+      "Para activar o desactivar los cohortes en el trazado, haga clic en los elementos de la leyenda.",
     sortBy: "Ordenar por",
     viewDependencePlotFor: "Ver trazado de dependencias para:",
     datasetCohortSelector: "Seleccionar cohorte de un conjunto de datos",
@@ -175,7 +178,7 @@ module.exports = {
       "Este trazado de dependencia muestra la relación entre el valor de una característica y la importancia correspondiente de la característica en un cohorte.",
     dependencePlotFeatureSelectPlaceholder: "Seleccionar característica",
     datasetRequired:
-      "Los trazados de dependencia requieren el conjunto de datos de evaluación y la matriz de importancia de características locales.",
+      "Los trazados de dependencia requieren el conjunto de datos de evaluación y la matriz de importancia de características locales."
   },
   CohortBanner: {
     dataStatistics: "Estadísticas de datos",
@@ -189,16 +192,18 @@ module.exports = {
     editCohort: "Editar cohorte",
     duplicateCohort: "Duplicar cohorte",
     addCohort: "Agregar cohorte",
-    copy: " copia",
+    copy: " copia"
   },
   ModelPerformance: {
     helperText:
       "Evalúe el rendimiento de su modelo. Para ello, explore la distribución de los valores de predicción y los de las métricas de rendimiento del modelo. Asimismo, si quiere investigar el modelo con todavía mayor profundidad, consulte un análisis comparativo de su rendimiento en varios cohortes o subgrupos de su conjunto de datos. Seleccione los filtros pertinentes, junto con los valores X e Y, para segmentar dimensiones distintas. También puede seleccionar el icono de engranaje para cambiar el tipo de gráfico.",
     modelStatistics: "Estadísticas del modelo",
-    cohortPickerLabel: "Seleccionar cohorte de un conjunto de datos para explorar",
-    missingParameters: "Esta pestaña requiere que se proporcione la matriz de valores de predicción del modelo.",
+    cohortPickerLabel:
+      "Seleccionar cohorte de un conjunto de datos para explorar",
+    missingParameters:
+      "Esta pestaña requiere que se proporcione la matriz de valores de predicción del modelo.",
     missingTrueY:
-      "Las estadísticas de rendimiento del modelo requieren que se proporcionen los resultados verdaderos además de los previstos.",
+      "Las estadísticas de rendimiento del modelo requieren que se proporcionen los resultados verdaderos además de los previstos."
   },
   Charts: {
     yValue: "Valor Y",
@@ -211,7 +216,7 @@ module.exports = {
     featurePrefix: "Característica",
     importancePrefix: "Importancia",
     cohort: "Cohorte",
-    howToRead: "Cómo leer este gráfico",
+    howToRead: "Cómo leer este gráfico"
   },
   DatasetExplorer: {
     helperText:
@@ -220,18 +225,22 @@ module.exports = {
     individualDatapoints: "Puntos de datos individuales",
     aggregatePlots: "Trazados agregados",
     chartType: "Tipo de gráfico",
-    missingParameters: "Esta pestaña requiere que se proporcione un conjunto de datos de evaluación.",
-    noColor: "Ninguno",
+    missingParameters:
+      "Esta pestaña requiere que se proporcione un conjunto de datos de evaluación.",
+    noColor: "Ninguno"
   },
   DependencePlot: {
     featureImportanceOf: "Importancia de la característica:",
-    placeholder: "Haga clic en una característica del gráfico de barras para mostrar su trazado de dependencias.",
+    placeholder:
+      "Haga clic en una característica del gráfico de barras para mostrar su trazado de dependencias."
   },
   WhatIfTab: {
     helperText:
       'Puede seleccionar un punto de datos haciendo clic en el trazado disperso para ver sus valores de importancia de característica local (explicación local) y el trazado de expectativa condicional individual (ICE) a continuación. Cree un punto de datos "What If" hipotético con el panel de la derecha para perturbar las características de un punto de datos conocido. Los valores de importancia de característica se basan en varias aproximaciones y no son la causa de las predicciones. Sin la solidez matemática estricta de la inferencia causal, no se recomienda a los usuarios que tomen decisiones reales basadas en esta herramienta.',
-    panelPlaceholder: "Se necesita un modelo para efectuar predicciones para nuevos puntos de datos.",
-    cohortPickerLabel: "Seleccionar cohorte de un conjunto de datos para explorar",
+    panelPlaceholder:
+      "Se necesita un modelo para efectuar predicciones para nuevos puntos de datos.",
+    cohortPickerLabel:
+      "Seleccionar cohorte de un conjunto de datos para explorar",
     scatterLegendText:
       "Para activar o desactivar los puntos de datos en el trazado, haga clic en los elementos de la leyenda.",
     realPoint: "Puntos de datos reales",
@@ -243,10 +252,12 @@ module.exports = {
     icePlot: "Trazado de expectativa condicional individual (ICE)",
     featureImportanceLackingParameters:
       "Especifique la importancia de las características locales para ver cómo afecta cada característica a las predicciones individuales.",
-    featureImportanceGetStartedText: "Seleccione un punto para consultar la importancia de la característica.",
+    featureImportanceGetStartedText:
+      "Seleccione un punto para consultar la importancia de la característica.",
     iceLackingParameters:
       "Los trazados de ICE requieren un modelo de operaciones para poder realizar predicciones para los puntos de datos hipotéticos.",
-    IceGetStartedText: "Seleccione un punto o cree uno hipotético para consultar los trazados de ICE.",
+    IceGetStartedText:
+      "Seleccione un punto o cree uno hipotético para consultar los trazados de ICE.",
     whatIfDatapoint: "Punto de datos hipotético",
     whatIfHelpText:
       "Seleccione un punto en el trazado o indique manualmente un índice de puntos de datos conocido para alterarlo y guardarlo como hipotético.",
@@ -272,7 +283,8 @@ module.exports = {
     stepsLabel: "Pasos",
     disclaimer:
       'Declinación de responsabilidades: Estas explicaciones se basan en una gran variedad de enfoques y no son la "causa" de las predicciones. Sin una solidez matemática estricta de la inferencia causal, recomendamos a los usuarios que no utilicen esta herramienta para tomar decisiones que afecten a la vida real.',
-    missingParameters: "Esta pestaña requiere que se proporcione un conjunto de datos de evaluación.",
+    missingParameters:
+      "Esta pestaña requiere que se proporcione un conjunto de datos de evaluación.",
     selectionLimit: "Máximo de 3 puntos seleccionados",
     classPickerLabel: "Clase",
     tooltipTitleMany: "Principales {0} clases previstas",
@@ -282,7 +294,7 @@ module.exports = {
     deltaLabel: "Delta",
     nonNumericValue: "El valor debe ser numérico.",
     icePlotHelperText:
-      "Los trazados de ICE muestran cómo cambian los valores de predicción del punto de datos seleccionado en un rango de valores de característica entre un valor mínimo y uno máximo.",
+      "Los trazados de ICE muestran cómo cambian los valores de predicción del punto de datos seleccionado en un rango de valores de característica entre un valor mínimo y uno máximo."
   },
   CohortEditor: {
     selectFilter: "Seleccionar filtro",
@@ -290,14 +302,15 @@ module.exports = {
     addFilter: "Agregar filtro",
     addedFilters: "Filtros agregados",
     noAddedFilters: "Todavía no se ha agregado ningún filtro.",
-    defaultFilterState: "Seleccione un filtro para agregar parámetros al cohorte de su conjunto de datos.",
+    defaultFilterState:
+      "Seleccione un filtro para agregar parámetros al cohorte de su conjunto de datos.",
     cohortNameLabel: "Nombre de cohorte de conjunto de datos",
     cohortNamePlaceholder: "Asignar nombre a cohorte",
     save: "Guardar",
     delete: "Eliminar",
     cancel: "Cancelar",
     cohortNameError: "Falta el nombre de cohorte.",
-    placeholderName: "Cohorte {0}",
+    placeholderName: "Cohorte {0}"
   },
   AxisConfigDialog: {
     select: "Seleccionar",
@@ -309,22 +322,26 @@ module.exports = {
     numOfBins: "Número de discretizaciones",
     groupByCohort: "Agrupar por cohorte",
     selectClass: "Seleccionar clase",
-    countHelperText: "Histograma del número de puntos",
+    countHelperText: "Histograma del número de puntos"
   },
   ValidationErrors: {
     predictedProbability: "Probabilidad prevista",
     predictedY: "Eje Y previsto",
     evalData: "Conjunto de datos de evaluación",
     localFeatureImportance: "Importancia de la característica local",
-    inconsistentDimensions: "Las dimensiones son incoherentes. Dimensiones de {0}: {1}; dimensiones esperadas: {2}.",
+    inconsistentDimensions:
+      "Las dimensiones son incoherentes. Dimensiones de {0}: {1}; dimensiones esperadas: {2}.",
     notNonEmpty: "La entrada de {0} no es una matriz no vacía.",
-    varyingLength: "Las dimensiones son incoherentes. {0} tiene elementos de longitud variable.",
+    varyingLength:
+      "Las dimensiones son incoherentes. {0} tiene elementos de longitud variable.",
     notArray: "{0} no es una matriz. Se esperaba una matriz de dimensión {1}.",
-    errorHeader: "Algunos parámetros de entrada no son coherentes y no se usarán: ",
+    errorHeader:
+      "Algunos parámetros de entrada no son coherentes y no se usarán: ",
     datasizeWarning:
       "El conjunto de datos de evaluación es demasiado grande para mostrarse correctamente en algunos gráficos. Agregue filtros para reducir el tamaño de la cohorte. ",
-    datasizeError: "La cohorte seleccionada es demasiado grande. Agregue filtros para reducir su tamaño.",
-    addFilters: "Agregar filtros",
+    datasizeError:
+      "La cohorte seleccionada es demasiado grande. Agregue filtros para reducir su tamaño.",
+    addFilters: "Agregar filtros"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -334,7 +351,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " incluye {0} ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} y {1} más",
+    overflowFilterArgs: "{0} y {1} más"
   },
   Statistics: {
     mse: "Error cuadrático medio: {0}",
@@ -344,11 +361,11 @@ module.exports = {
     precision: "Precisión: {0}",
     recall: "Recuperación: {0}",
     fpr: "Tasa de falsos positivos: {0}",
-    fnr: "Tasa de falsos negativos: {0}",
+    fnr: "Tasa de falsos negativos: {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Explore las características k más importantes que afectan a las predicciones generales de modelos. Use el control deslizante para mostrar la importancia de las características en orden descendente.",
+      "Explore las características k más importantes que afectan a las predicciones generales de modelos. Use el control deslizante para mostrar la importancia de las características en orden descendente."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "¿Qué significan estas explicaciones?",
@@ -356,7 +373,8 @@ module.exports = {
     shapTitle: "Valores de Shapley",
     shapDescription:
       'Este explicador usa SHAP, que es un enfoque teórico de juego para explicar modelos en los que la importancia de los conjuntos de características se mide "ocultando" en el modelo las características en cuestión a través de la marginalización. Haga clic en el vínculo a continuación para obtener más información.',
-    limeTitle: "LIME (explicaciones independientes del modelo interpretables locales)",
+    limeTitle:
+      "LIME (explicaciones independientes del modelo interpretables locales)",
     limeDescription:
       'Este explicador utiliza LIME, que proporciona una aproximación lineal del modelo. Para obtener una explicación, debe hacerse lo siguiente: perturbar la instancia, obtener predicciones de modelo y usar las predicciones como etiquetas para obtener un modelo lineal disperso que sea fiel localmente. Las ponderaciones de este modelo lineal se usan como "importancias de características". Haga clic en el vínculo a continuación para obtener más información.',
     mimicTitle: "Imitación (explicaciones subrogadas globales)",
@@ -364,6 +382,6 @@ module.exports = {
       "Este explicador se basa en la idea de los modelos subrogados globales de entrenamiento para imitar los modelos de una caja negra. Un modelo subrogado global es un modelo interpretable de forma intrínseca que se ha entrenado para aproximar las predicciones de cualquier modelo de una caja negra de la forma más precisa posible. Los valores de importancia de característica son valores de importancia de característica basados en modelos del modelo subrogado subyacente (LightGBM, regresión lineal, descenso de gradiente estocástico o árbol de decisión).",
     pfiTitle: "Importancia de la característica de permutación (PFI)",
     pfiDescription:
-      "Este explicador mezcla aleatoriamente datos de característica en característica para todo el conjunto de datos y calcula el grado de cambio de una métrica de rendimiento en cuestión (métricas de rendimiento predeterminadas: F1 para clasificación binaria, puntuación F1 con micropromedio para clasificación multiclase y error absoluto medio para regresión). Cuanto mayor sea el cambio, más importante será la característica. Este explicador solo puede explicar el comportamiento general del modelo subyacente, por lo que no explica predicciones individuales. El valor de importancia de una característica representa el valor delta del rendimiento del modelo perturbando la característica correspondiente.",
-  },
+      "Este explicador mezcla aleatoriamente datos de característica en característica para todo el conjunto de datos y calcula el grado de cambio de una métrica de rendimiento en cuestión (métricas de rendimiento predeterminadas: F1 para clasificación binaria, puntuación F1 con micropromedio para clasificación multiclase y error absoluto medio para regresión). Cuanto mayor sea el cambio, más importante será la característica. Este explicador solo puede explicar el comportamiento general del modelo subyacente, por lo que no explica predicciones individuales. El valor de importancia de una característica representa el valor delta del rendimiento del modelo perturbando la característica correspondiente."
+  }
 };

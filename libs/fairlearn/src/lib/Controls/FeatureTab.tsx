@@ -1,5 +1,14 @@
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { ActionButton, Icon, List, Modal, Stack, StackItem, Text, IProcessedStyleSet } from "office-ui-fabric-react";
+import {
+  ActionButton,
+  Icon,
+  List,
+  Modal,
+  Stack,
+  StackItem,
+  Text,
+  IProcessedStyleSet
+} from "office-ui-fabric-react";
 
 import React from "react";
 import { IBinnedResponse } from "../IBinnedResponse";
@@ -27,19 +36,29 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
     super(props);
     this.state = {
       expandedBins: [],
-      editingFeatureIndex: undefined,
+      editingFeatureIndex: undefined
     };
   }
 
   public render(): React.ReactNode {
     const styles = FeatureTabStyles();
     return (
-      <Stack horizontal horizontalAlign="space-between" className={styles.frame}>
-        <Modal isOpen={this.state.editingFeatureIndex !== undefined} isBlocking={false} onDismiss={this.hideModal}>
+      <Stack
+        horizontal
+        horizontalAlign="space-between"
+        className={styles.frame}
+      >
+        <Modal
+          isOpen={this.state.editingFeatureIndex !== undefined}
+          isBlocking={false}
+          onDismiss={this.hideModal}
+        >
           {this.state.editingFeatureIndex !== undefined && (
             <BinDialog
               range={
-                this.props.dashboardContext.modelMetadata.featureRanges[this.state.editingFeatureIndex] as INumericRange
+                this.props.dashboardContext.modelMetadata.featureRanges[
+                  this.state.editingFeatureIndex
+                ] as INumericRange
               }
               bins={this.props.featureBins[this.state.editingFeatureIndex]}
               dataset={this.props.dashboardContext.dataset}
@@ -63,7 +82,10 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             </Text>
           </div>
           <StackItem grow={2} className={styles.itemsList}>
-            <List items={this.props.featureBins} onRenderCell={this._onRenderCell.bind(this, styles)} />
+            <List
+              items={this.props.featureBins}
+              onRenderCell={this._onRenderCell.bind(this, styles)}
+            />
           </StackItem>
           <WizardFooter onNext={this.props.onNext} />
         </Stack>
@@ -91,7 +113,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   private readonly _onRenderCell = (
     styles: IProcessedStyleSet<IFeatureTabStyles>,
     item: IBinnedResponse,
-    index: number | undefined,
+    index: number | undefined
   ): JSX.Element => {
     return (
       <div
@@ -102,7 +124,11 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
       >
         <div className={styles.iconWrapper}>
           <Icon
-            iconName={this.props.selectedFeatureIndex === index ? "RadioBtnOn" : "RadioBtnOff"}
+            iconName={
+              this.props.selectedFeatureIndex === index
+                ? "RadioBtnOn"
+                : "RadioBtnOff"
+            }
             className={styles.iconClass}
           />
         </div>
@@ -112,7 +138,12 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           </Text>
           {item.rangeType === RangeTypes.categorical && (
             <Text variant={"mediumPlus"} className={styles.valueCount} block>
-              {localization.formatString(localization.Feature.summaryCategoricalCount, item.array.length) as string}
+              {
+                localization.formatString(
+                  localization.Feature.summaryCategoricalCount,
+                  item.array.length
+                ) as string
+              }
             </Text>
           )}
           {item.rangeType !== RangeTypes.categorical && (
@@ -120,14 +151,20 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
               {
                 localization.formatString(
                   localization.Feature.summaryNumericCount,
-                  (this.props.dashboardContext.modelMetadata.featureRanges[index] as INumericRange).min,
-                  (this.props.dashboardContext.modelMetadata.featureRanges[index] as INumericRange).max,
-                  item.labelArray.length,
+                  (this.props.dashboardContext.modelMetadata.featureRanges[
+                    index
+                  ] as INumericRange).min,
+                  (this.props.dashboardContext.modelMetadata.featureRanges[
+                    index
+                  ] as INumericRange).max,
+                  item.labelArray.length
                 ) as string
               }
             </Text>
           )}
-          {!this.props.dashboardContext.modelMetadata.featureIsCategorical[index] && (
+          {!this.props.dashboardContext.modelMetadata.featureIsCategorical[
+            index
+          ] && (
             <ActionButton
               className={styles.expandButton}
               iconProps={{ iconName: "Edit" }}

@@ -29,25 +29,26 @@ module.exports = {
     probabalisticRegressor: "regressore probit",
     regressor: "regressore",
     binary: "binario",
-    continuous: "continuo",
+    continuous: "continuo"
   },
   Parity: {
     header: "Equità misurata in termini di disparità",
     body:
-      "Le metriche di disparità quantificano la variazione del comportamento del modello in tutte le funzionalità selezionate. Esistono due tipi di metriche di disparità: altro da aggiungere....",
+      "Le metriche di disparità quantificano la variazione del comportamento del modello in tutte le funzionalità selezionate. Esistono due tipi di metriche di disparità: altro da aggiungere...."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Documentazione",
+    documentation: "Documentazione"
   },
   Footer: {
     back: "Indietro",
-    next: "Avanti",
+    next: "Avanti"
   },
   Intro: {
     welcome: "Benvenuti in",
     fairlearnDashboard: "Dashboard Fairlearn",
-    introBody: "Il dashboard Fairlearn consente di valutare i compromessi tra prestazioni ed equità dei modelli",
+    introBody:
+      "Il dashboard Fairlearn consente di valutare i compromessi tra prestazioni ed equità dei modelli",
     explanatoryStep:
       "Per configurare la valutazione, è necessario specificare una caratteristica sensibile e una metrica delle prestazioni.",
     getStarted: "Attività iniziali",
@@ -56,7 +57,7 @@ module.exports = {
       "Le caratteristiche sensibili vengono usate per suddividere i dati in gruppi. L'equità del modello in questi gruppi viene misurata con le metriche di disparità. Le metriche di disparità quantificano quanto varia il comportamento del modello in questi gruppi.",
     accuracy: "Metrica delle prestazioni",
     accuracyInfo:
-      "Le metriche delle prestazioni vengono usate per valutare la qualità complessiva del modello e la qualità del modello in ogni gruppo. La differenza tra i valori estremi della metrica delle prestazioni nei gruppi viene indicata come disparità nelle prestazioni.",
+      "Le metriche delle prestazioni vengono usate per valutare la qualità complessiva del modello e la qualità del modello in ogni gruppo. La differenza tra i valori estremi della metrica delle prestazioni nei gruppi viene indicata come disparità nelle prestazioni."
   },
   ModelComparison: {
     title: "Confronto tra modelli",
@@ -68,11 +69,13 @@ module.exports = {
     insights: "Informazioni dettagliate",
     insightsText1: "Il grafico mostra {0} e la disparità di {1} modelli.",
     insightsText2: "{0} varia da {1} a {2}. La disparità varia da {3} a {4}.",
-    insightsText3: "Il modello più accurato raggiunge {0} di {1} e una disparità di {2}.",
-    insightsText4: "Il modello con disparità più bassa raggiunge {0} di {1} e una disparità di {2}.",
+    insightsText3:
+      "Il modello più accurato raggiunge {0} di {1} e una disparità di {2}.",
+    insightsText4:
+      "Il modello con disparità più bassa raggiunge {0} di {1} e una disparità di {2}.",
     disparityInOutcomes: "Disparità nelle previsioni",
     disparityInAccuracy: "Disparità in {0}",
-    howToMeasureDisparity: "Come misurare la disparità?",
+    howToMeasureDisparity: "Come misurare la disparità?"
   },
   Report: {
     modelName: "Modello {0}",
@@ -93,7 +96,8 @@ module.exports = {
       "Il grafico a barre mostra il tasso di selezione in ogni gruppo, ovvero la frazione dei punti classificati come 1.",
     regressionOutcomesHowToRead:
       "I box plot mostrano la distribuzione delle previsioni in ogni gruppo. I singoli punti dati sono sovrapposti in alto.",
-    classificationAccuracyHowToRead1: "Il grafico a barre mostra la distribuzione degli errori in ogni gruppo.",
+    classificationAccuracyHowToRead1:
+      "Il grafico a barre mostra la distribuzione degli errori in ogni gruppo.",
     classificationAccuracyHowToRead2:
       "Gli errori vengono suddivisi in errori di sovrastima (previsione di 1 quando l'etichetta vero è 0) ed errori di sottostima (previsione di 0 quando l'etichetta vero è 1).",
     classificationAccuracyHowToRead3:
@@ -109,7 +113,7 @@ module.exports = {
     distributionOfPredictions: "Distribuzione delle previsioni",
     distributionOfErrors: "Distribuzione degli errori",
     tooltipPrediction: "Previsione: {0}",
-    tooltipError: "Errore: {0}",
+    tooltipError: "Errore: {0}"
   },
   Feature: {
     header: "Con quali funzionalità si vuole valutare l'equità del modello?",
@@ -117,12 +121,13 @@ module.exports = {
       "L'equità viene valutata in termini di disparità nel comportamento del modello. I dati verranno suddivisi in base ai valori di ogni funzionalità selezionata e verrà valutato il modo in cui le previsioni e la metrica delle prestazioni del modello differiscono tra queste suddivisioni.",
     learnMore: "Altre informazioni",
     summaryCategoricalCount: "Questa funzionalità ha {0} valori univoci",
-    summaryNumericCount: "Questa funzionalità numerica varia da {0} a {1} ed è raggruppata in {2} bin.",
+    summaryNumericCount:
+      "Questa funzionalità numerica varia da {0} a {1} ed è raggruppata in {2} bin.",
     showCategories: "Mostra tutto",
     hideCategories: "Comprimi",
     categoriesOverflow: "   e {0} categorie aggiuntive",
     editBinning: "Modifica gruppi",
-    subgroups: "Sottogruppi",
+    subgroups: "Sottogruppi"
   },
   Metrics: {
     accuracyScore: "Accuratezza",
@@ -149,21 +154,23 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "Frazione dei punti dati classificati correttamente.",
-    precisionDescription: "Frazione dei punti dati classificati correttamente tra quelli classificati come 1.",
+    precisionDescription:
+      "Frazione dei punti dati classificati correttamente tra quelli classificati come 1.",
     recallDescription:
       "Frazione dei punti dati classificati correttamente tra quelli la cui etichetta vero è 1. Nomi alternativi: percentuale di veri positivi, sensibilità.",
     rmseDescription: "Radice quadrata della media degli errori quadratici.",
     mseDescription: "Media degli errori quadratici.",
     meanAbsoluteErrorDescription:
       "Media dei valori assoluti degli errori. Più affidabile per gli outlier rispetto a MSE.",
-    r2Description: "Frazione della varianza nelle etichette spiegata dal modello.",
+    r2Description:
+      "Frazione della varianza nelle etichette spiegata dal modello.",
     aucDescription:
       "Qualità delle previsioni, visualizzate come punteggi, nel separare esempi positivi da esempi negativi.",
     balancedRMSEDescription:
       "Gli esempi positivi e negativi vengono riponderati in modo da avere un peso totale uguale. Adatto se i dati sottostanti sono altamente sbilanciati.",
     balancedAccuracyDescription:
       "Gli esempi positivi e negativi vengono riponderati in modo da avere un peso totale uguale. Adatto se i dati sottostanti sono altamente sbilanciati.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Configura bin",
@@ -171,6 +178,6 @@ module.exports = {
     save: "Salva",
     cancel: "Annulla",
     numberOfBins: "Numero di bin:",
-    categoryHeader: "Valori bin:",
-  },
+    categoryHeader: "Valori bin:"
+  }
 };

@@ -29,20 +29,20 @@ module.exports = {
     probabalisticRegressor: "regresor probit",
     regressor: "regresor",
     binary: "binario",
-    continuous: "continuo",
+    continuous: "continuo"
   },
   Parity: {
     header: "Equidad medida en términos de disparidad",
     body:
-      "Las métricas de disparidad cuantifican la variación del comportamiento del modelo en las características seleccionadas. Hay dos tipos de métricas de disparidad, pero está previsto que haya más disponibles.",
+      "Las métricas de disparidad cuantifican la variación del comportamiento del modelo en las características seleccionadas. Hay dos tipos de métricas de disparidad, pero está previsto que haya más disponibles."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Documentación",
+    documentation: "Documentación"
   },
   Footer: {
     back: "Atrás",
-    next: "Siguiente",
+    next: "Siguiente"
   },
   Intro: {
     welcome: "Le damos la bienvenida a",
@@ -57,7 +57,7 @@ module.exports = {
       "Las características confidenciales se usan para dividir los datos en grupos. Las métricas de disparidad miden la equidad del modelo en estos grupos y cuantifican la variación del comportamiento del modelo en estos grupos.",
     accuracy: "Métrica de rendimiento",
     accuracyInfo:
-      "Las métricas de rendimiento se usan para evaluar la calidad general del modelo, así como la calidad del modelo en cada grupo. La diferencia entre los valores extremos de la métrica de rendimiento en los distintos grupos se notifica como una disparidad de rendimiento.",
+      "Las métricas de rendimiento se usan para evaluar la calidad general del modelo, así como la calidad del modelo en cada grupo. La diferencia entre los valores extremos de la métrica de rendimiento en los distintos grupos se notifica como una disparidad de rendimiento."
   },
   ModelComparison: {
     title: "Comparación de modelos",
@@ -68,12 +68,15 @@ module.exports = {
       "Este gráfico representa cada uno de los {0} modelos como un punto seleccionable. El eje X representa {1}, donde un valor {2} es mejor; el eje Y representa la disparidad, donde un valor menor es mejor.",
     insights: "Conclusiones",
     insightsText1: "El gráfico muestra {0} y disparidad de los modelos de {1}.",
-    insightsText2: "{0} puede tener un valor de {1} a {2}. La disparidad puede tener un valor de {3} a {4}.",
-    insightsText3: "El modelo más preciso logra {0} de {1} y una disparidad de {2}.",
-    insightsText4: "El modelo de menor disparidad logra {0} de {1} y una disparidad de {2}.",
+    insightsText2:
+      "{0} puede tener un valor de {1} a {2}. La disparidad puede tener un valor de {3} a {4}.",
+    insightsText3:
+      "El modelo más preciso logra {0} de {1} y una disparidad de {2}.",
+    insightsText4:
+      "El modelo de menor disparidad logra {0} de {1} y una disparidad de {2}.",
     disparityInOutcomes: "Disparidad en predicciones",
     disparityInAccuracy: "Disparidad en {0}",
-    howToMeasureDisparity: "¿Cómo se deben medir las disparidades?",
+    howToMeasureDisparity: "¿Cómo se deben medir las disparidades?"
   },
   Report: {
     modelName: "Modelo {0}",
@@ -94,7 +97,8 @@ module.exports = {
       "El gráfico de barras muestra la probabilidad de selecciones de cada grupo, es decir, la fracción de puntos que se clasifica como 1.",
     regressionOutcomesHowToRead:
       "Los diagramas de caja muestran la distribución de predicciones en cada grupo, mientras que los puntos de datos individuales están superpuestos.",
-    classificationAccuracyHowToRead1: "El gráfico de barras muestra la distribución de los errores en cada grupo.",
+    classificationAccuracyHowToRead1:
+      "El gráfico de barras muestra la distribución de los errores en cada grupo.",
     classificationAccuracyHowToRead2:
       "Los errores se dividen en errores de sobrepredicción (se predice 1 cuando la etiqueta verdadera es 0) y los errores de infrapredicción (se predice 0 cuando la etiqueta verdadera es 1).",
     classificationAccuracyHowToRead3:
@@ -110,20 +114,22 @@ module.exports = {
     distributionOfPredictions: "Distribución de predicciones",
     distributionOfErrors: "Distribución de errores",
     tooltipPrediction: "Predicción: {0}",
-    tooltipError: "Error: {0}",
+    tooltipError: "Error: {0}"
   },
   Feature: {
-    header: "¿Con respecto a qué características quiere evaluar la equidad de su modelo?",
+    header:
+      "¿Con respecto a qué características quiere evaluar la equidad de su modelo?",
     body:
       "La equidad se evalúa en términos de disparidades en el comportamiento del modelo. Se dividirán los datos en función de los valores de las características seleccionadas y se evaluarán las diferencias entre las predicciones y las métricas de rendimiento del modelo de acuerdo con estas divisiones.",
     learnMore: "Más información",
     summaryCategoricalCount: "Esta característica tiene {0} valores únicos.",
-    summaryNumericCount: "Esta característica numérica abarca de {0} a {1} y se agrupa en {2} rangos.",
+    summaryNumericCount:
+      "Esta característica numérica abarca de {0} a {1} y se agrupa en {2} rangos.",
     showCategories: "Mostrar todo",
     hideCategories: "Contraer",
     categoriesOverflow: "   y {0} categorías adicionales",
     editBinning: "Editar grupos",
-    subgroups: "Subgrupos",
+    subgroups: "Subgrupos"
   },
   Metrics: {
     accuracyScore: "Exactitud",
@@ -149,21 +155,25 @@ module.exports = {
     balancedAccuracy: "Exactitud equilibrada",
     f1Score: "F1-Score",
     logLoss: "Log Loss",
-    accuracyDescription: "Fracción de puntos de datos clasificada correctamente.",
-    precisionDescription: "Fracción de puntos de datos clasificada correctamente entre los clasificados como 1.",
+    accuracyDescription:
+      "Fracción de puntos de datos clasificada correctamente.",
+    precisionDescription:
+      "Fracción de puntos de datos clasificada correctamente entre los clasificados como 1.",
     recallDescription:
       "Fracción de puntos de datos clasificada correctamente entre aquellos cuya etiqueta verdadera es 1. Nombres alternativos: índice de verdaderos positivos, confidencialidad.",
     rmseDescription: "Raíz cuadrada del promedio de errores cuadráticos.",
     mseDescription: "Promedio de errores cuadráticos.",
-    meanAbsoluteErrorDescription: "Promedio de valores absolutos de errores; más robusto a valores atípicos que ECM.",
-    r2Description: "Fracción de varianza de las etiquetas explicadas por el modelo.",
+    meanAbsoluteErrorDescription:
+      "Promedio de valores absolutos de errores; más robusto a valores atípicos que ECM.",
+    r2Description:
+      "Fracción de varianza de las etiquetas explicadas por el modelo.",
     aucDescription:
       "Calidad de las predicciones, vistas como puntuaciones, en la separación de ejemplos positivos de ejemplos negativos.",
     balancedRMSEDescription:
       "Los ejemplos positivos y negativos se vuelven a ponderar para que tengan la misma ponderación total. Esto es adecuado si los datos subyacentes están muy desequilibrados.",
     balancedAccuracyDescription:
       "Los ejemplos positivos y negativos se vuelven a ponderar para que tengan la misma ponderación total. Esto es adecuado si los datos subyacentes están muy desequilibrados.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Configuración de rangos",
@@ -171,6 +181,6 @@ module.exports = {
     save: "Guardar",
     cancel: "Cancelar",
     numberOfBins: "Número de rangos:",
-    categoryHeader: "Valores de rangos:",
-  },
+    categoryHeader: "Valores de rangos:"
+  }
 };

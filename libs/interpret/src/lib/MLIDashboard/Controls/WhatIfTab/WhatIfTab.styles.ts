@@ -1,4 +1,9 @@
-import { IProcessedStyleSet, getTheme, mergeStyleSets, IStyle } from "@uifabric/styling";
+import {
+  IProcessedStyleSet,
+  getTheme,
+  mergeStyleSets,
+  IStyle
+} from "@uifabric/styling";
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IWhatIfTabStyles {
@@ -71,24 +76,27 @@ export interface IWhatIfTabStyles {
   rightJustifiedContainer: IStyle;
 }
 
-export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () => {
+export const whatIfTabStyles: () => IProcessedStyleSet<
+  IWhatIfTabStyles
+> = () => {
   const legendWidth = "160px";
   const theme = getTheme();
   return mergeStyleSets<IWhatIfTabStyles>({
     page: {
       width: "100%",
       padding: "16px 0 0 14px",
-      boxSizing: "border-box",
+      boxSizing: "border-box"
     },
     blackIcon: {
-      color: theme.semanticColors.bodyText,
+      color: theme.semanticColors.bodyText
     },
     expandedPanel: {
       marginTop: "10px",
       width: "250px",
-      boxShadow: "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
+      boxShadow:
+        "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     parameterList: {
       margin: "8px 18px 30px 22px",
@@ -96,7 +104,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
       flexGrow: 1,
       backgroundColor: theme.palette.neutralLighter,
       padding: "6px 0 6px 12px",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     featureList: {
       display: "flex",
@@ -105,68 +113,69 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
       flexGrow: 1,
       flexDirection: "column",
       maxHeight: "400px",
-      overflowY: "auto",
+      overflowY: "auto"
     },
     collapsedPanel: {
       width: "40px",
-      boxShadow: "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
+      boxShadow:
+        "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)"
     },
     mainArea: {
       flex: 1,
       display: "flex",
       flexDirection: "row-reverse",
       alignItems: "stretch",
-      minHeight: "800px",
+      minHeight: "800px"
     },
     chartsArea: {
-      flex: 1,
+      flex: 1
     },
     infoWithText: {
       display: "flex",
       flexDirection: "row",
       width: "100%",
       boxSizing: "border-box",
-      paddingLeft: "25px",
+      paddingLeft: "25px"
     },
     infoIcon: {
       width: "23px",
       height: "23px",
-      fontSize: "23px",
+      fontSize: "23px"
     },
     helperText: {
       paddingRight: "120px",
-      paddingLeft: "15px",
+      paddingLeft: "15px"
     },
     topArea: {
       width: "100%",
       height: "400px",
       display: "flex",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     legendAndText: {
       height: "100%",
       width: legendWidth,
       boxSizing: "border-box",
       paddingLeft: "10px",
-      paddingRight: "10px",
+      paddingRight: "10px"
     },
     chartWithAxes: {
       display: "flex",
       flexGrow: "1",
       boxSizing: "border-box",
       paddingTop: "30px",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     chartWithVertical: {
       display: "flex",
       flexGrow: "1",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     verticalAxis: {
       position: "relative",
       top: "0px",
       height: "auto",
-      width: "67px",
+      width: "67px"
     },
     rotatedVerticalBox: {
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
@@ -174,19 +183,19 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
       position: "absolute",
       top: "50%",
       textAlign: "center",
-      width: "max-content",
+      width: "max-content"
     },
     horizontalAxisWithPadding: {
       display: "flex",
       paddingBottom: "30px",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     paddingDiv: {
-      width: "50px",
+      width: "50px"
     },
     horizontalAxis: {
       flex: 1,
-      textAlign: "center",
+      textAlign: "center"
     },
     cohortPickerWrapper: {
       paddingLeft: "63px",
@@ -194,124 +203,126 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
       height: "32px",
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "center"
     },
     cohortPickerLabel: {
       fontWeight: "600",
-      paddingRight: "8px",
+      paddingRight: "8px"
     },
     boldText: {
       fontWeight: "600",
-      paddingBottom: "5px",
+      paddingBottom: "5px"
     },
     featureImportanceArea: {
-      width: "100%",
+      width: "100%"
     },
     featureImportanceChartAndLegend: {
       height: "300px",
       width: "100%",
       display: "flex",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     featureImportanceLegend: {
       height: "100%",
-      width: legendWidth,
+      width: legendWidth
     },
     sliderLabel: {
       fontWeight: "600",
-      paddingRight: "10px",
+      paddingRight: "10px"
     },
     startingK: {
       flex: 1,
-      paddingRight: legendWidth,
+      paddingRight: legendWidth
     },
     featureImportanceControls: {
       display: "flex",
       flexDirection: "row",
-      padding: "18px 30px 4px 67px",
+      padding: "18px 30px 4px 67px"
     },
     legendHlepWrapper: {
-      width: "120px",
+      width: "120px"
     },
     legendHelpText: {
       fontWeight: "300",
       lineHeight: "14px",
-      width: "120px",
+      width: "120px"
     },
     legendLabel: {
       fontWeight: "600",
       paddingBottom: "5px",
-      paddingTop: "10px",
+      paddingTop: "10px"
     },
     smallItalic: {
       fontStyle: "italic",
       padding: "0 0 5px 5px",
-      color: theme.semanticColors.disabledBodyText,
+      color: theme.semanticColors.disabledBodyText
     },
     choiceBoxArea: {
       paddingLeft: "67px",
       display: "flex",
       flexDirection: "row",
-      alignItems: "baseline",
+      alignItems: "baseline"
     },
     choiceGroup: {
-      paddingLeft: "30px",
+      paddingLeft: "30px"
     },
     choiceGroupFlexContainer: {
       display: "inline-flex",
       width: "500px",
-      justifyContent: "space-between",
+      justifyContent: "space-between"
     },
     panelIconAndLabel: {
       paddingTop: "10px",
       alignItems: "center",
-      display: "flex",
+      display: "flex"
     },
     missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [FabricStyles.missingParameterPlaceholderSpacer],
+    missingParametersPlaceholderSpacer: [
+      FabricStyles.missingParameterPlaceholderSpacer
+    ],
     faintText: [FabricStyles.faintText],
     predictedBlock: {
       paddingTop: "5px",
       display: "flex",
       flexDirection: "row",
-      alignContent: "stretch",
+      alignContent: "stretch"
     },
     upperWhatIfPanel: {
       paddingLeft: "32px",
-      paddingRight: "32px",
+      paddingRight: "32px"
     },
     customPredictBlock: {
-      paddingTop: "5px",
+      paddingTop: "5px"
     },
     saveButton: {
-      margin: "0 0 10px 24px",
+      margin: "0 0 10px 24px"
     },
     featureSearch: {
       marginRight: "10px",
-      marginBottom: "8px",
+      marginBottom: "8px"
     },
     iceFeatureSelection: {
-      margin: "43px 10px 10px 0",
+      margin: "43px 10px 10px 0"
     },
     iceClassSelection: {
-      margin: "10px 10px 10px 0",
+      margin: "10px 10px 10px 0"
     },
     disclaimerWrapper: {
-      padding: "5px 15px 10px 26px",
+      padding: "5px 15px 10px 26px"
     },
     panelPlaceholderWrapper: [
       FabricStyles.missingParameterPlaceholder,
       {
         padding: "0 16px",
-        boxSizing: "border-box",
-      },
+        boxSizing: "border-box"
+      }
     ],
     errorText: {
-      color: theme.semanticColors.errorText,
+      color: theme.semanticColors.errorText
     },
     tooltipTable: {
       display: "flex",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     tooltipColumn: {
       display: "flex",
@@ -322,32 +333,32 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
       minWidth: "60px",
       maxWidth: "200px",
       paddingRight: "10px",
-      boxSizing: "border-box",
+      boxSizing: "border-box"
     },
     tooltipTitle: {
-      paddingBottom: "8px",
+      paddingBottom: "8px"
     },
     tooltipHost: {
       height: "100%",
       marginRight: "4px",
-      display: "inline-block",
+      display: "inline-block"
     },
     negativeNumber: {
-      color: theme.palette.red,
+      color: theme.palette.red
     },
     positiveNumber: {
-      color: theme.palette.green,
+      color: theme.palette.green
     },
     tooltipWrapper: {
-      padding: "10px 15px",
+      padding: "10px 15px"
     },
     multiclassWeightLabel: {
       display: "inline-flex",
-      paddingTop: "10px",
+      paddingTop: "10px"
     },
     multiclassWeightLabelText: {
       paddingTop: "5px",
-      fontWeight: "600",
+      fontWeight: "600"
     },
     calloutWrapper: [FabricStyles.calloutWrapper],
     calloutHeader: [FabricStyles.calloutHeader],
@@ -356,19 +367,19 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
     infoButton: {
       width: "fit-content",
       margin: "5px",
-      padding: "8px 10px",
+      padding: "8px 10px"
     },
     calloutActions: {
       position: "relative",
       marginTop: 20,
       width: "100%",
-      whiteSpace: "nowrap",
+      whiteSpace: "nowrap"
     },
     calloutLink: [
       theme.fonts.medium,
       {
-        color: theme.palette.neutralPrimary,
-      },
+        color: theme.palette.neutralPrimary
+      }
     ],
     rightJustifiedContainer: {
       width: "100%",
@@ -376,7 +387,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> = () =>
       boxSizing: "border-box",
       display: "inline-flex",
       flexDirection: "row",
-      justifyContent: "flex-end",
-    },
+      justifyContent: "flex-end"
+    }
   });
 };

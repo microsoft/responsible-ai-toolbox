@@ -1,4 +1,10 @@
-import { getTheme, IProcessedStyleSet, IStyle, mergeStyleSets, FontWeights } from "office-ui-fabric-react";
+import {
+  getTheme,
+  IProcessedStyleSet,
+  IStyle,
+  mergeStyleSets,
+  FontWeights
+} from "office-ui-fabric-react";
 
 export interface IAccuracyTabStyles {
   iconClass: IStyle;
@@ -9,36 +15,38 @@ export interface IAccuracyTabStyles {
   textBody: IStyle;
 }
 
-export const AccuracyTabStyles: () => IProcessedStyleSet<IAccuracyTabStyles> = () => {
+export const AccuracyTabStyles: () => IProcessedStyleSet<
+  IAccuracyTabStyles
+> = () => {
   const theme = getTheme();
   return mergeStyleSets<IAccuracyTabStyles>({
     iconClass: {
       fontSize: "20px",
       position: "absolute",
       right: "10px",
-      top: "10px",
+      top: "10px"
     },
     itemsList: {
-      overflowY: "auto",
+      overflowY: "auto"
     },
     frame: {
-      height: "100%",
+      height: "100%"
     },
     main: {
       height: "100%",
       maxWidth: "750px",
-      flex: 1,
+      flex: 1
     },
     header: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semibold,
-      margin: "26px 0",
+      margin: "26px 0"
     },
     textBody: {
       paddingTop: "12px",
       fontWeight: FontWeights.semilight,
       color: theme.semanticColors.bodyText,
-      paddingBottom: "12px",
-    },
+      paddingBottom: "12px"
+    }
   });
 };

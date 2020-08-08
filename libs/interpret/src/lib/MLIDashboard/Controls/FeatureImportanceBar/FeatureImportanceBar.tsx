@@ -29,11 +29,14 @@ export interface IFeatureBarState {
   plotlyProps: IPlotlyProperty;
 }
 
-export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, IFeatureBarState> {
+export class FeatureImportanceBar extends React.PureComponent<
+  IFeatureBarProps,
+  IFeatureBarState
+> {
   public constructor(props: IFeatureBarProps) {
     super(props);
     this.state = {
-      plotlyProps: undefined,
+      plotlyProps: undefined
     };
   }
 
@@ -50,12 +53,15 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
   public render(): React.ReactNode {
     const classNames = featureImportanceBarStyles();
     const relayoutArg = {
-      "xaxis.range": [this.props.startingK - 0.5, this.props.startingK + this.props.topK - 0.5],
+      "xaxis.range": [
+        this.props.startingK - 0.5,
+        this.props.startingK + this.props.topK - 0.5
+      ]
     };
     const plotlyProps = this.state.plotlyProps;
     _.set(plotlyProps, "layout.xaxis.range", [
       this.props.startingK - 0.5,
-      this.props.startingK + this.props.topK - 0.5,
+      this.props.startingK + this.props.topK - 0.5
     ]);
 
     if (
@@ -80,7 +86,12 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
           <div className={classNames.rotatedVerticalBox}>
             <div>
               {this.props.yAxisLabels.map((label, i) => (
-                <Text block variant="medium" className={classNames.boldText} key={i}>
+                <Text
+                  block
+                  variant="medium"
+                  className={classNames.boldText}
+                  key={i}
+                >
                   {label}
                 </Text>
               ))}
@@ -107,7 +118,11 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
   private buildBarPlotlyProps(): IPlotlyProperty {
     const sortedIndexVector = this.props.sortArray;
     const baseSeries = {
-      config: { displaylogo: false, responsive: true, displayModeBar: false } as Plotly.Config,
+      config: {
+        displaylogo: false,
+        responsive: true,
+        displayModeBar: false
+      } as Plotly.Config,
       data: [],
       layout: {
         autosize: true,
@@ -120,9 +135,9 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
           tickfont: {
             family: "Roboto, Helvetica Neue, sans-serif",
             size: 11,
-            color: FabricStyles.chartAxisColor,
+            color: FabricStyles.chartAxisColor
           },
-          showgrid: false,
+          showgrid: false
         },
         yaxis: {
           automargin: true,
@@ -130,23 +145,24 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
           tickfont: {
             family: "Roboto, Helvetica Neue, sans-serif",
             size: 11,
-            color: FabricStyles.chartAxisColor,
+            color: FabricStyles.chartAxisColor
           },
           zeroline: true,
           showgrid: true,
-          gridcolor: "#e5e5e5",
+          gridcolor: "#e5e5e5"
         },
-        showlegend: false,
-      } as any,
+        showlegend: false
+      } as any
     };
 
-    const xText = sortedIndexVector.map(i => this.props.unsortedX[i]);
+    const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
     if (this.props.chartType === ChartTypes.Bar) {
       baseSeries.layout.barmode = "group";
       let hovertemplate = this.props.unsortedSeries[0].unsortedFeatureValues
         ? "%{text}: %{customdata.Yvalue}<br>"
         : localization.Charts.featurePrefix + ": %{text}<br>";
-      hovertemplate += localization.Charts.importancePrefix + ": %{customdata.Yformatted}<br>";
+      hovertemplate +=
+        localization.Charts.importancePrefix + ": %{customdata.Yformatted}<br>";
       hovertemplate += "%{customdata.Name}<br>";
       hovertemplate += "<extra></extra>";
 
@@ -158,50 +174,58 @@ export class FeatureImportanceBar extends React.PureComponent<IFeatureBarProps, 
           orientation: "v",
           type: "bar",
           name: series.name,
-          customdata: sortedIndexVector.map(index => {
+          customdata: sortedIndexVector.map((index) => {
             return {
               Name: series.name,
-              Yformatted: series.unsortedAggregateY[index].toLocaleString(undefined, {
-                maximumFractionDigits: 3,
-              }),
-              Yvalue: series.unsortedFeatureValues ? series.unsortedFeatureValues[index] : undefined,
+              Yformatted: series.unsortedAggregateY[index].toLocaleString(
+                undefined,
+                {
+                  maximumFractionDigits: 3
+                }
+              ),
+              Yvalue: series.unsortedFeatureValues
+                ? series.unsortedFeatureValues[index]
+                : undefined
             };
           }),
           text: xText,
           x,
-          y: sortedIndexVector.map(index => series.unsortedAggregateY[index]),
+          y: sortedIndexVector.map((index) => series.unsortedAggregateY[index]),
           marker: {
-            color: sortedIndexVector.map(index =>
-              index === this.props.selectedFeatureIndex && seriesIndex === this.props.selectedSeriesIndex
+            color: sortedIndexVector.map((index) =>
+              index === this.props.selectedFeatureIndex &&
+              seriesIndex === this.props.selectedSeriesIndex
                 ? FabricStyles.fabricColorPalette[series.colorIndex]
-                : FabricStyles.fabricColorPalette[series.colorIndex],
-            ),
+                : FabricStyles.fabricColorPalette[series.colorIndex]
+            )
           },
-          hovertemplate,
+          hovertemplate
         } as any);
       });
     } else if (this.props.chartType === ChartTypes.Box) {
       baseSeries.layout.boxmode = "group";
-      this.props.unsortedSeries.forEach(series => {
+      this.props.unsortedSeries.forEach((series) => {
         baseSeries.data.push({
           type: "box",
           boxmean: true,
           name: series.name,
           x: sortedIndexVector
-            .map((sortIndex, xIndex) => series.unsortedIndividualY[sortIndex].map(() => xIndex))
+            .map((sortIndex, xIndex) =>
+              series.unsortedIndividualY[sortIndex].map(() => xIndex)
+            )
             .reduce((prev, curr) => {
               prev.push(...curr);
               return prev;
             }, []),
           y: sortedIndexVector
-            .map(index => series.unsortedIndividualY[index])
+            .map((index) => series.unsortedIndividualY[index])
             .reduce((prev, curr) => {
               prev.push(...curr);
               return prev;
             }, []),
           marker: {
-            color: FabricStyles.fabricColorPalette[series.colorIndex],
-          },
+            color: FabricStyles.fabricColorPalette[series.colorIndex]
+          }
         } as any);
       });
     }

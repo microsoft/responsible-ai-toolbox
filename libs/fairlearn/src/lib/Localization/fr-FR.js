@@ -29,20 +29,20 @@ module.exports = {
     probabalisticRegressor: "régresseur probit",
     regressor: "régresseur",
     binary: "binaire",
-    continuous: "continu",
+    continuous: "continu"
   },
   Parity: {
     header: "Équité mesurée en termes de disparité",
     body:
-      "Les métriques de disparité quantifient la variation du comportement de votre modèle sur les caractéristiques sélectionnées. Il existe deux types de métriques de disparité : d'autres sont à venir...",
+      "Les métriques de disparité quantifient la variation du comportement de votre modèle sur les caractéristiques sélectionnées. Il existe deux types de métriques de disparité : d'autres sont à venir..."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Documentation",
+    documentation: "Documentation"
   },
   Footer: {
     back: "Précédent",
-    next: "Suivant",
+    next: "Suivant"
   },
   Intro: {
     welcome: "Bienvenue dans :",
@@ -57,7 +57,7 @@ module.exports = {
       "Les caractéristiques sensibles permettent de diviser vos données en groupes. L'équité de votre modèle dans ces groupes est évaluée par des métriques de disparité qui quantifient la variation du comportement de votre modèle dans ces groupes.",
     accuracy: "Métrique de performances",
     accuracyInfo:
-      "Les métriques de performances permettent d'évaluer la qualité globale de votre modèle ainsi que la qualité de votre modèle dans chaque groupe. La disparité des performances signalée est la différence entre les valeurs extrêmes de la métrique de performances dans les groupes.",
+      "Les métriques de performances permettent d'évaluer la qualité globale de votre modèle ainsi que la qualité de votre modèle dans chaque groupe. La disparité des performances signalée est la différence entre les valeurs extrêmes de la métrique de performances dans les groupes."
   },
   ModelComparison: {
     title: "Comparaison de modèles",
@@ -68,12 +68,15 @@ module.exports = {
       "Ce graphique représente chacun des modèles {0} sous la forme d'un point sélectionnable. L'axe X représente {1} (une valeur {2} étant meilleure). L'axe Y représente la disparité (une valeur inférieure étant meilleure).",
     insights: "Insights",
     insightsText1: "Le graphique montre {0} et la disparité de {1} modèles.",
-    insightsText2: "{0} est compris entre {1} et {2}. Les plages de disparité vont de {3} à {4}.",
-    insightsText3: "Le modèle le plus juste obtient {0} sur {1} et une disparité de {2}.",
-    insightsText4: "Le modèle de disparité le plus faible obtient {0} sur {1} et une disparité de {2}.",
+    insightsText2:
+      "{0} est compris entre {1} et {2}. Les plages de disparité vont de {3} à {4}.",
+    insightsText3:
+      "Le modèle le plus juste obtient {0} sur {1} et une disparité de {2}.",
+    insightsText4:
+      "Le modèle de disparité le plus faible obtient {0} sur {1} et une disparité de {2}.",
     disparityInOutcomes: "Disparité dans les prédictions",
     disparityInAccuracy: "Disparité dans {0}",
-    howToMeasureDisparity: "Comment la disparité doit-elle être mesurée ?",
+    howToMeasureDisparity: "Comment la disparité doit-elle être mesurée ?"
   },
   Report: {
     modelName: "Modèle {0}",
@@ -94,7 +97,8 @@ module.exports = {
       "Le graphique à barres montre le taux de sélection dans chaque groupe, c'est-à-dire la fraction des points classifiés comme ayant la valeur 1.",
     regressionOutcomesHowToRead:
       "Les diagrammes à surfaces montrent la répartition des prédictions dans chaque groupe. Les points de données individuels sont superposés.",
-    classificationAccuracyHowToRead1: "Le graphique à barres montre la répartition des erreurs dans chaque groupe.",
+    classificationAccuracyHowToRead1:
+      "Le graphique à barres montre la répartition des erreurs dans chaque groupe.",
     classificationAccuracyHowToRead2:
       "Les erreurs sont divisées en erreurs de surprédiction (prédire 1 quand l'étiquette true est 0) et en erreurs de sous-prédiction (prédire 0 quand l'étiquette true est 1).",
     classificationAccuracyHowToRead3:
@@ -110,20 +114,22 @@ module.exports = {
     distributionOfPredictions: "Répartition des prédictions",
     distributionOfErrors: "Distribution des erreurs",
     tooltipPrediction: "Prédiction : {0}",
-    tooltipError: "Erreur : {0}",
+    tooltipError: "Erreur : {0}"
   },
   Feature: {
-    header: "Selon quelles caractéristiques souhaitez-vous évaluer l'équité de votre modèle ?",
+    header:
+      "Selon quelles caractéristiques souhaitez-vous évaluer l'équité de votre modèle ?",
     body:
       "L'équité est évaluée en termes de disparités dans le comportement de votre modèle. Nous allons diviser vos données en fonction des valeurs de chaque caractéristique sélectionnée, puis évaluer la manière dont la métrique et les prédictions de performance de votre modèle diffèrent dans ces divisions.",
     learnMore: "En savoir plus",
     summaryCategoricalCount: "Cette caractéristique a {0} valeurs uniques",
-    summaryNumericCount: "Cette caractéristique numérique, comprise entre {0} et {1}, est regroupée en {2} classes.",
+    summaryNumericCount:
+      "Cette caractéristique numérique, comprise entre {0} et {1}, est regroupée en {2} classes.",
     showCategories: "Tout afficher",
     hideCategories: "Réduire",
     categoriesOverflow: "   et {0} catégories supplémentaires",
     editBinning: "Modifier les groupes",
-    subgroups: "Sous-groupes",
+    subgroups: "Sous-groupes"
   },
   Metrics: {
     accuracyScore: "Justesse",
@@ -149,7 +155,8 @@ module.exports = {
     balancedAccuracy: "Justesse équilibrée",
     f1Score: "F1-Score",
     logLoss: "Log Loss",
-    accuracyDescription: "Fraction des points de données correctement classifiés.",
+    accuracyDescription:
+      "Fraction des points de données correctement classifiés.",
     precisionDescription:
       "Fraction de points de données correctement classifiés parmi ceux classifiés comme ayant la valeur 1.",
     recallDescription:
@@ -158,14 +165,15 @@ module.exports = {
     mseDescription: "Moyenne des erreurs quadratiques.",
     meanAbsoluteErrorDescription:
       "Moyenne des valeurs absolues des erreurs. Résiste mieux aux valeurs hors norme que MSE.",
-    r2Description: "Fraction de variance dans les étiquettes expliquée par le modèle.",
+    r2Description:
+      "Fraction de variance dans les étiquettes expliquée par le modèle.",
     aucDescription:
       "Qualité des prédictions, présentées sous forme de scores, pour séparer les exemples positifs des exemples négatifs.",
     balancedRMSEDescription:
       "Les exemples positifs et négatifs sont repondérés pour avoir un poids total égal. Convient si les données sous-jacentes sont fortement déséquilibrées.",
     balancedAccuracyDescription:
       "Les exemples positifs et négatifs sont repondérés pour avoir un poids total égal. Convient si les données sous-jacentes sont fortement déséquilibrées.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Configurer les classes",
@@ -173,6 +181,6 @@ module.exports = {
     save: "Enregistrer",
     cancel: "Annuler",
     numberOfBins: "Nombre de classes :",
-    categoryHeader: "Valeurs de classe :",
-  },
+    categoryHeader: "Valeurs de classe :"
+  }
 };

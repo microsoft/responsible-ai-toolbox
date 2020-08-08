@@ -31,8 +31,8 @@ const darkTheme = createTheme({
     neutralPrimary: "#ffffff",
     neutralDark: "#f4f4f4",
     black: "#f8f8f8",
-    white: "#121212",
-  },
+    white: "#121212"
+  }
 });
 
 const lightTheme = createTheme({
@@ -58,8 +58,8 @@ const lightTheme = createTheme({
     neutralPrimary: "#323130",
     neutralDark: "#201f1e",
     black: "#000000",
-    white: "#ffffff",
-  },
+    white: "#ffffff"
+  }
 });
 
 const darkContrastTheme = createTheme({
@@ -85,8 +85,8 @@ const darkContrastTheme = createTheme({
     neutralPrimary: "#ffffff",
     neutralDark: "#f4f4f4",
     black: "#f8f8f8",
-    white: "#000000",
-  },
+    white: "#000000"
+  }
 });
 
 export class App extends React.Component<any, any> {
@@ -95,13 +95,13 @@ export class App extends React.Component<any, any> {
     { label: "regression", data: regression },
     { label: "probit", data: probit },
     { label: "precomputed binary", data: precomputedBinary },
-    { label: "precomputed binary2", data: precomputedBinary2 },
+    { label: "precomputed binary2", data: precomputedBinary2 }
   ];
 
   private static themeChoices = [
     { label: "light", data: lightTheme },
     { label: "dark", data: darkTheme },
-    { label: "darkHiContrast", data: darkContrastTheme },
+    { label: "darkHiContrast", data: darkContrastTheme }
   ];
 
   private static languages = [
@@ -109,14 +109,14 @@ export class App extends React.Component<any, any> {
     { label: "spanish", val: "es-ES" },
     { label: "german", val: "de-DE" },
     { label: "chinese-s", val: "zh-CN" },
-    { label: "japanese", val: "ja-JP" },
+    { label: "japanese", val: "ja-JP" }
   ];
 
   private messages = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
     LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
     TestReq: [{ displayText: "TestReq" }],
-    PredictorReq: [{ displayText: "PredictorReq" }],
+    PredictorReq: [{ displayText: "PredictorReq" }]
   };
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public constructor(props: any) {
@@ -146,18 +146,30 @@ export class App extends React.Component<any, any> {
           ))}
         </select>
         <label>Select language:</label>
-        <select value={this.state.language} onChange={this.handleLanguageChange}>
-          {App.languages.map(item => (
+        <select
+          value={this.state.language}
+          onChange={this.handleLanguageChange}
+        >
+          {App.languages.map((item) => (
             <option key={item.val} value={item.val}>
               {item.label}
             </option>
           ))}
         </select>
-        <div style={{ width: "80vw", backgroundColor: "white", margin: "50px auto" }}>
+        <div
+          style={{
+            width: "80vw",
+            backgroundColor: "white",
+            margin: "50px auto"
+          }}
+        >
           <div style={{ width: "940px" }}>
             <FairnessWizard
               // modelInformation={{ modelClass: "blackbox" } as any}
-              dataSummary={{ featureNames: data.featureNames, classNames: data.classNames }}
+              dataSummary={{
+                featureNames: data.featureNames,
+                classNames: data.classNames
+              }}
               testData={data.augmentedData}
               predictedY={data.predictedYs}
               trueY={data.trueY}
@@ -170,13 +182,13 @@ export class App extends React.Component<any, any> {
                 "balanced_accuracy_score",
                 "precision_score",
                 "recall_score",
-                "f1_score",
+                "f1_score"
               ]}
               supportedRegressionAccuracyKeys={[
                 "mean_absolute_error",
                 "r2_score",
                 "mean_squared_error",
-                "root_mean_squared_error",
+                "root_mean_squared_error"
               ]}
               supportedProbabilityAccuracyKeys={[
                 "auc",
@@ -184,7 +196,7 @@ export class App extends React.Component<any, any> {
                 "balanced_root_mean_squared_error",
                 "r2_score",
                 "mean_squared_error",
-                "mean_absolute_error",
+                "mean_absolute_error"
               ]}
               stringParams={{ contextualHelp: this.messages }}
               requestMetrics={this.generateRandomMetrics.bind(this)}
@@ -222,7 +234,7 @@ export class App extends React.Component<any, any> {
       const timeout = setTimeout(() => {
         resolve({
           global: Math.random(),
-          bins,
+          bins
         });
       }, 300);
       if (signal) {

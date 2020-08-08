@@ -1,4 +1,8 @@
-import { INumericRange, ICategoricalRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import {
+  INumericRange,
+  ICategoricalRange,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { IBinnedResponse } from "./IBinnedResponse";
 
@@ -7,7 +11,7 @@ export class BinnedResponseBuilder {
   public static buildCategorical(
     featureRange: INumericRange | ICategoricalRange,
     index: number,
-    sensitiveFeatures: any[][],
+    sensitiveFeatures: any[][]
   ): IBinnedResponse {
     if (featureRange.rangeType === RangeTypes.categorical) {
       return {
@@ -15,16 +19,19 @@ export class BinnedResponseBuilder {
         array: (featureRange as ICategoricalRange).uniqueValues,
         featureIndex: index,
         rangeType: RangeTypes.categorical,
-        labelArray: (featureRange as ICategoricalRange).uniqueValues,
+        labelArray: (featureRange as ICategoricalRange).uniqueValues
       };
     }
-    const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(sensitiveFeatures, index);
+    const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
+      sensitiveFeatures,
+      index
+    );
     return {
       hasError: false,
       array: uniqueValues,
       featureIndex: index,
       rangeType: RangeTypes.categorical,
-      labelArray: uniqueValues.map(num => num.toString()),
+      labelArray: uniqueValues.map((num) => num.toString())
     };
   }
 
@@ -32,11 +39,14 @@ export class BinnedResponseBuilder {
     featureRange: INumericRange,
     index: number,
     sensitiveFeatures: any[][],
-    binCount?: number,
+    binCount?: number
   ): IBinnedResponse {
     if (binCount === undefined) {
       if (featureRange.rangeType === RangeTypes.integer) {
-        const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(sensitiveFeatures, index);
+        const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
+          sensitiveFeatures,
+          index
+        );
         binCount = Math.min(5, uniqueValues.length);
       }
       if (binCount === undefined) {
@@ -50,20 +60,24 @@ export class BinnedResponseBuilder {
         array: [featureRange.max],
         featureIndex: index,
         rangeType: RangeTypes.categorical,
-        labelArray: [featureRange.max.toString()],
+        labelArray: [featureRange.max.toString()]
       };
     }
     // make uniform bins in these cases
     if (featureRange.rangeType === RangeTypes.numeric || delta < binCount - 1) {
       const binDelta = delta / binCount;
       const array = new Array(binCount).fill(0).map((_, index) => {
-        return index !== binCount - 1 ? featureRange.min + binDelta * (1 + index) : featureRange.max;
+        return index !== binCount - 1
+          ? featureRange.min + binDelta * (1 + index)
+          : featureRange.max;
       });
       let prevMax = featureRange.min;
-      const labelArray = array.map(num => {
+      const labelArray = array.map((num) => {
         const label = `${prevMax.toLocaleString(undefined, {
-          maximumSignificantDigits: 3,
-        })} - ${num.toLocaleString(undefined, { maximumSignificantDigits: 3 })}`;
+          maximumSignificantDigits: 3
+        })} - ${num.toLocaleString(undefined, {
+          maximumSignificantDigits: 3
+        })}`;
         prevMax = num;
         return label;
       });
@@ -72,7 +86,7 @@ export class BinnedResponseBuilder {
         array,
         featureIndex: index,
         rangeType: RangeTypes.numeric,
-        labelArray,
+        labelArray
       };
     }
     // handle integer case, increment delta since we include the ends as discrete values
@@ -84,13 +98,17 @@ export class BinnedResponseBuilder {
       return Math.ceil(featureRange.min - 1 + intDelta * (index + 1));
     });
     let previousVal = featureRange.min;
-    const labelArray = array.map(num => {
+    const labelArray = array.map((num) => {
       const label =
         previousVal === num
-          ? previousVal.toLocaleString(undefined, { maximumSignificantDigits: 3 })
+          ? previousVal.toLocaleString(undefined, {
+              maximumSignificantDigits: 3
+            })
           : `${previousVal.toLocaleString(undefined, {
-              maximumSignificantDigits: 3,
-            })} - ${num.toLocaleString(undefined, { maximumSignificantDigits: 3 })}`;
+              maximumSignificantDigits: 3
+            })} - ${num.toLocaleString(undefined, {
+              maximumSignificantDigits: 3
+            })}`;
       previousVal = num + 1;
       return label;
     });
@@ -99,29 +117,49 @@ export class BinnedResponseBuilder {
       array,
       featureIndex: index,
       rangeType: RangeTypes.integer,
-      labelArray,
+      labelArray
     };
   }
 
   public static buildDefaultBin(
     featureRange: INumericRange | ICategoricalRange,
     index: number,
-    sensitiveFeatures: any[][],
+    sensitiveFeatures: any[][]
   ): IBinnedResponse {
     if (featureRange.rangeType === RangeTypes.categorical) {
-      return BinnedResponseBuilder.buildCategorical(featureRange, index, sensitiveFeatures);
+      return BinnedResponseBuilder.buildCategorical(
+        featureRange,
+        index,
+        sensitiveFeatures
+      );
     }
     if (featureRange.rangeType === RangeTypes.integer) {
-      const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(sensitiveFeatures, index);
-      if (uniqueValues.length <= BinnedResponseBuilder.UpperBoundUniqueIntegers) {
-        return BinnedResponseBuilder.buildCategorical(featureRange, index, sensitiveFeatures);
+      const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
+        sensitiveFeatures,
+        index
+      );
+      if (
+        uniqueValues.length <= BinnedResponseBuilder.UpperBoundUniqueIntegers
+      ) {
+        return BinnedResponseBuilder.buildCategorical(
+          featureRange,
+          index,
+          sensitiveFeatures
+        );
       }
     }
-    return BinnedResponseBuilder.buildNumeric(featureRange, index, sensitiveFeatures);
+    return BinnedResponseBuilder.buildNumeric(
+      featureRange,
+      index,
+      sensitiveFeatures
+    );
   }
 
-  private static getIntegerUniqueValues(sensitiveFeatures: any[][], index: number): number[] {
-    const column = sensitiveFeatures.map(row => row[index]) as number[];
+  private static getIntegerUniqueValues(
+    sensitiveFeatures: any[][],
+    index: number
+  ): number[] {
+    const column = sensitiveFeatures.map((row) => row[index]) as number[];
     return _.uniq(column).sort((a, b) => {
       return a - b;
     });

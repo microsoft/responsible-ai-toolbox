@@ -1,6 +1,12 @@
 import _ from "lodash";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { DefaultButton, PrimaryButton, Checkbox, SpinButton, Text } from "office-ui-fabric-react";
+import {
+  DefaultButton,
+  PrimaryButton,
+  Checkbox,
+  SpinButton,
+  Text
+} from "office-ui-fabric-react";
 
 import React from "react";
 import { BinnedResponseBuilder } from "../BinnedResponseBuilder";
@@ -17,7 +23,10 @@ export interface IBinDialogProps {
   onCancel: () => void;
 }
 
-export default class BinDialog extends React.PureComponent<IBinDialogProps, IBinnedResponse> {
+export default class BinDialog extends React.PureComponent<
+  IBinDialogProps,
+  IBinnedResponse
+> {
   private static minBins = 1;
   private static maxBins = 30;
 
@@ -53,10 +62,10 @@ export default class BinDialog extends React.PureComponent<IBinDialogProps, IBin
                       float: "right",
                       selectors: {
                         "> div": {
-                          maxWidth: "108px",
-                        },
-                      },
-                    },
+                          maxWidth: "108px"
+                        }
+                      }
+                    }
                   }}
                   label={localization.BinDialog.numberOfBins}
                   min={BinDialog.minBins}
@@ -81,7 +90,11 @@ export default class BinDialog extends React.PureComponent<IBinDialogProps, IBin
           </div>
         </div>
         <div className={styles.buttons}>
-          <PrimaryButton className={styles.saveButton} text={localization.BinDialog.save} onClick={this.onSave} />
+          <PrimaryButton
+            className={styles.saveButton}
+            text={localization.BinDialog.save}
+            onClick={this.onSave}
+          />
           <DefaultButton
             className={styles.cancelButton}
             text={localization.BinDialog.cancel}
@@ -96,25 +109,54 @@ export default class BinDialog extends React.PureComponent<IBinDialogProps, IBin
     this.props.onSave(this.state);
   };
 
-  private readonly toggleCategorical = (_ev: React.FormEvent<HTMLElement>, checked: boolean): void => {
+  private readonly toggleCategorical = (
+    _ev: React.FormEvent<HTMLElement>,
+    checked: boolean
+  ): void => {
     if (checked) {
-      this.setState(BinnedResponseBuilder.buildCategorical(this.props.range, this.props.index, this.props.dataset));
+      this.setState(
+        BinnedResponseBuilder.buildCategorical(
+          this.props.range,
+          this.props.index,
+          this.props.dataset
+        )
+      );
     } else {
       if (this.props.bins.rangeType === RangeTypes.integer) {
         this.setState(this.props.bins);
       } else {
-        this.setState(BinnedResponseBuilder.buildNumeric(this.props.range, this.props.index, this.props.dataset));
+        this.setState(
+          BinnedResponseBuilder.buildNumeric(
+            this.props.range,
+            this.props.index,
+            this.props.dataset
+          )
+        );
       }
     }
   };
 
-  private readonly setBinCount = (delta: number, stringVal: string): string | void => {
+  private readonly setBinCount = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     if (delta === 0) {
       const number = +stringVal;
-      if (!Number.isInteger(number) || number > BinDialog.maxBins || number < BinDialog.minBins) {
+      if (
+        !Number.isInteger(number) ||
+        number > BinDialog.maxBins ||
+        number < BinDialog.minBins
+      ) {
         return this.state.array.length.toString();
       }
-      this.setState(BinnedResponseBuilder.buildNumeric(this.props.range, this.props.index, this.props.dataset, number));
+      this.setState(
+        BinnedResponseBuilder.buildNumeric(
+          this.props.range,
+          this.props.index,
+          this.props.dataset,
+          number
+        )
+      );
     } else {
       const prevVal = this.state.array.length;
       const binCount = prevVal + delta;
@@ -122,7 +164,12 @@ export default class BinDialog extends React.PureComponent<IBinDialogProps, IBin
         return prevVal.toString();
       }
       this.setState(
-        BinnedResponseBuilder.buildNumeric(this.props.range, this.props.index, this.props.dataset, prevVal + delta),
+        BinnedResponseBuilder.buildNumeric(
+          this.props.range,
+          this.props.index,
+          this.props.dataset,
+          prevVal + delta
+        )
       );
     }
   };

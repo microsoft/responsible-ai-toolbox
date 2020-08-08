@@ -29,34 +29,35 @@ module.exports = {
     probabalisticRegressor: "probitregressor",
     regressor: "regressor",
     binary: "binär",
-    continuous: "kontinuerlig",
+    continuous: "kontinuerlig"
   },
   Parity: {
     header: "Rättvisa mätt avseende diskrepans",
     body:
-      "Diskrepansmått kvantifierar variationer i dina modellers beteende för valda funktioner. Det finns två olika typer av diskrepansmått: mer kommer...",
+      "Diskrepansmått kvantifierar variationer i dina modellers beteende för valda funktioner. Det finns två olika typer av diskrepansmått: mer kommer..."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Dokumentation",
+    documentation: "Dokumentation"
   },
   Footer: {
     back: "Tillbaka",
-    next: "Nästa",
+    next: "Nästa"
   },
   Intro: {
     welcome: "Välkommen till",
     fairlearnDashboard: "Fairlearn-instrumentpanel",
     introBody:
       "Med Fairlearn-instrumentpanelen kan du utvärdera kompromisser mellan prestanda och rättvisa för dina modeller",
-    explanatoryStep: "Om du vill konfigurera utvärderingen måste du ange en känslig funktion och ett prestandamått.",
+    explanatoryStep:
+      "Om du vill konfigurera utvärderingen måste du ange en känslig funktion och ett prestandamått.",
     getStarted: "Kom igång",
     features: "Känsliga funktioner",
     featuresInfo:
       "Känsliga funktioner används för att dela upp dina data i grupper. Din modells rättvisa för dessa grupper mäts av diskrepansmått. Diskrepansmått anger hur mycket av modellens beteende som varierar för de här grupperna.",
     accuracy: "Prestandamått",
     accuracyInfo:
-      "Prestandamått används för att utvärdera den totala kvaliteten på din modell och kvaliteten på din modell i varje grupp. Skillnaden mellan de extrema värdena på prestandamåttet i grupperna rapporteras som en prestandadiskrepans.",
+      "Prestandamått används för att utvärdera den totala kvaliteten på din modell och kvaliteten på din modell i varje grupp. Skillnaden mellan de extrema värdena på prestandamåttet i grupperna rapporteras som en prestandadiskrepans."
   },
   ModelComparison: {
     title: "Modelljämförelse",
@@ -67,12 +68,15 @@ module.exports = {
       "Det här diagrammet representerar var och en av {0}-modellerna som en valbar punkt. X-axeln representerar {1}, där {2} är bättre. Y-axeln representerar diskrepans, där lägre är bättre.",
     insights: "Insikter",
     insightsText1: "Diagrammet visar {0} och diskrepanser för {1} modeller.",
-    insightsText2: "{0} intervall från {1} till {2}. Diskrepansen är från {3} till {4}.",
-    insightsText3: "Den mest exakta modellen uppnår {0} av {1} och en diskrepans på {2}.",
-    insightsText4: "Modellen med lägsta diskrepans uppnår {0} av {1} och en diskrepans på {2}.",
+    insightsText2:
+      "{0} intervall från {1} till {2}. Diskrepansen är från {3} till {4}.",
+    insightsText3:
+      "Den mest exakta modellen uppnår {0} av {1} och en diskrepans på {2}.",
+    insightsText4:
+      "Modellen med lägsta diskrepans uppnår {0} av {1} och en diskrepans på {2}.",
     disparityInOutcomes: "Diskrepans i förutsägelser",
     disparityInAccuracy: "Diskrepans i {0}",
-    howToMeasureDisparity: "Hur ska diskrepanser mätas?",
+    howToMeasureDisparity: "Hur ska diskrepanser mätas?"
   },
   Report: {
     modelName: "Modell {0}",
@@ -93,7 +97,8 @@ module.exports = {
       "I stapeldiagrammet visas markeringshastigheten i varje grupp, vilket innebär fraktionen punkter som klassificeras som 1.",
     regressionOutcomesHowToRead:
       "I låddiagram visas fördelningen av förutsägelser i varje grupp. Enskilda datapunkter läggs ovanpå.",
-    classificationAccuracyHowToRead1: "Stapeldiagrammet visar distributionen av fel i varje grupp.",
+    classificationAccuracyHowToRead1:
+      "Stapeldiagrammet visar distributionen av fel i varje grupp.",
     classificationAccuracyHowToRead2:
       "Fel delas upp i överförutsägelsefel (förutsäger 1 när den sanna etiketten är 0) och underförutsägelsefel (förutsäger 0 när den sanna etiketten är 1).",
     classificationAccuracyHowToRead3:
@@ -109,7 +114,7 @@ module.exports = {
     distributionOfPredictions: "Distribution av förutsägelser",
     distributionOfErrors: "Distribution av fel",
     tooltipPrediction: "Förutsägelse: {0}",
-    tooltipError: "Fel: {0}",
+    tooltipError: "Fel: {0}"
   },
   Feature: {
     header: "Efter vilka funktioner vill du utvärdera din modells rättvisa?",
@@ -123,7 +128,7 @@ module.exports = {
     hideCategories: "Minimera",
     categoriesOverflow: "   och {0} ytterligare kategorier",
     editBinning: "Redigera grupper",
-    subgroups: "Undergrupper",
+    subgroups: "Undergrupper"
   },
   Metrics: {
     accuracyScore: "Noggrannhet",
@@ -150,20 +155,23 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "Datapunktsfraktionen klassificeras korrekt.",
-    precisionDescription: "Fraktionen av datapunkter som klassificeras korrekt bland de som klassificerats som 1.",
+    precisionDescription:
+      "Fraktionen av datapunkter som klassificeras korrekt bland de som klassificerats som 1.",
     recallDescription:
       "Fraktionen av datapunkter som klassificeras korrekt bland de vars sanna etikett är 1. Alternativa namn: sant positiv hastighet, känslighet.",
     rmseDescription: "Kvadratroten för genomsnittet av kvadratfel.",
     mseDescription: "Medelvärdet för kvadratfel.",
-    meanAbsoluteErrorDescription: "Medelvärdet av absoluta värden för fel. Mer robust för extremvärden än MSE.",
-    r2Description: "Fraktionen av varians i etiketterna som beskrivs av modellen.",
+    meanAbsoluteErrorDescription:
+      "Medelvärdet av absoluta värden för fel. Mer robust för extremvärden än MSE.",
+    r2Description:
+      "Fraktionen av varians i etiketterna som beskrivs av modellen.",
     aucDescription:
       "Kvaliteten på förutsägelserna, visade som poäng, vid separering av positiva exempel från negativa exempel.",
     balancedRMSEDescription:
       "Positiva och negativa exempel viktas om för att ha samma total viktning. Lämpligt om underliggande data är högt obalanserade.",
     balancedAccuracyDescription:
       "Positiva och negativa exempel viktas om för att ha samma total viktning. Lämpligt om underliggande data är högt obalanserade.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Konfigurera diskretiseringar",
@@ -171,6 +179,6 @@ module.exports = {
     save: "Spara",
     cancel: "Avbryt",
     numberOfBins: "Antal diskretiseringar:",
-    categoryHeader: "Diskretiserade värden:",
-  },
+    categoryHeader: "Diskretiserade värden:"
+  }
 };

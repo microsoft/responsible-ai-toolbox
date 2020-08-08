@@ -1,4 +1,9 @@
-import { IStyle, mergeStyleSets, IProcessedStyleSet, getTheme } from "office-ui-fabric-react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "office-ui-fabric-react";
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IDatasetExplorerTabStyles {
@@ -31,7 +36,9 @@ export interface IDatasetExplorerTabStyles {
   smallItalic: IStyle;
 }
 
-export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> = () => {
+export const datasetExplorerTabStyles: () => IProcessedStyleSet<
+  IDatasetExplorerTabStyles
+> = () => {
   const theme = getTheme();
   return mergeStyleSets<IDatasetExplorerTabStyles>({
     page: {
@@ -40,23 +47,23 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       padding: "16px 0 0 14px",
       boxSizing: "border-box",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     infoWithText: {
       display: "flex",
       flexDirection: "row",
       width: "100%",
       boxSizing: "border-box",
-      paddingLeft: "25px",
+      paddingLeft: "25px"
     },
     infoIcon: {
       width: "23px",
       height: "23px",
-      fontSize: "23px",
+      fontSize: "23px"
     },
     helperText: {
       paddingRight: "160px",
-      paddingLeft: "15px",
+      paddingLeft: "15px"
     },
     chartWithAxes: {
       display: "flex",
@@ -64,32 +71,32 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       boxSizing: "border-box",
       paddingTop: "30px",
       flexDirection: "column",
-      paddingRight: "10px",
+      paddingRight: "10px"
     },
     chartWithVertical: {
       display: "flex",
       flexGrow: "1",
       flexDirection: "row",
-      position: "relative",
+      position: "relative"
     },
     chart: {
-      flexGrow: "1",
+      flexGrow: "1"
     },
     mainArea: {
       width: "100%",
       height: "600px",
       display: "flex",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     legendAndText: {
       width: "195px",
-      height: "100%",
+      height: "100%"
     },
     verticalAxis: {
       position: "relative",
       top: "0px",
       height: "auto",
-      width: "64px",
+      width: "64px"
     },
     rotatedVerticalBox: {
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
@@ -97,19 +104,19 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       position: "absolute",
       top: "50%",
       textAlign: "center",
-      width: "max-content",
+      width: "max-content"
     },
     horizontalAxisWithPadding: {
       display: "flex",
       paddingBottom: "30px",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     paddingDiv: {
-      width: "50px",
+      width: "50px"
     },
     horizontalAxis: {
       flex: 1,
-      textAlign: "center",
+      textAlign: "center"
     },
     cohortPickerWrapper: {
       paddingLeft: "63px",
@@ -117,15 +124,15 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       height: "32px",
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "center"
     },
     cohortPickerLabel: {
       fontWeight: "600",
-      paddingRight: "8px",
+      paddingRight: "8px"
     },
     boldText: {
       fontWeight: "600",
-      paddingBottom: "5px",
+      paddingBottom: "5px"
     },
     colorBox: {
       margin: "11px 4px 11px 8px",
@@ -133,17 +140,17 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       height: "12px",
       display: "inline-block",
       borderRadius: "6px",
-      cursor: "pointer",
+      cursor: "pointer"
     },
     legendLabel: {
       display: "inline-block",
-      flex: "1",
+      flex: "1"
     },
     legendItem: {
       height: "28px",
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "center"
     },
     legend: {},
     callout: {
@@ -152,19 +159,21 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       display: "flex",
       flexDirection: "column",
       padding: "10px 20px",
-      backgroundColor: theme.semanticColors.bodyBackground,
+      backgroundColor: theme.semanticColors.bodyBackground
     },
     chartEditorButton: [
       FabricStyles.chartEditorButton,
       {
         position: "absolute",
         zIndex: 10,
-        right: "10px",
-      },
+        right: "10px"
+      }
     ],
     missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [FabricStyles.missingParameterPlaceholderSpacer],
+    missingParametersPlaceholderSpacer: [
+      FabricStyles.missingParameterPlaceholderSpacer
+    ],
     faintText: [FabricStyles.faintText],
-    smallItalic: [FabricStyles.placeholderItalic],
+    smallItalic: [FabricStyles.placeholderItalic]
   });
 };

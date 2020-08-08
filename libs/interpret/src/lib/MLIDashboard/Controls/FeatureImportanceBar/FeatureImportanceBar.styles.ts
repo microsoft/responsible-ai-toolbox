@@ -8,22 +8,24 @@ export interface IFeatureImportanceBarStyles {
   boldText: IStyle;
 }
 
-export const featureImportanceBarStyles: () => IProcessedStyleSet<IFeatureImportanceBarStyles> = () => {
+export const featureImportanceBarStyles: () => IProcessedStyleSet<
+  IFeatureImportanceBarStyles
+> = () => {
   return mergeStyleSets<IFeatureImportanceBarStyles>({
     chartWithVertical: {
       display: "flex",
       flexGrow: "1",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     noData: {
       flex: "1",
-      margin: "100px auto 0 auto",
+      margin: "100px auto 0 auto"
     },
     verticalAxis: {
       position: "relative",
       top: "0px",
       height: "auto",
-      width: "64px",
+      width: "64px"
     },
     rotatedVerticalBox: {
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
@@ -31,10 +33,10 @@ export const featureImportanceBarStyles: () => IProcessedStyleSet<IFeatureImport
       position: "absolute",
       top: "50%",
       textAlign: "center",
-      width: "max-content",
+      width: "max-content"
     },
     boldText: {
-      fontWeight: "600",
-    },
+      fontWeight: "600"
+    }
   });
 };

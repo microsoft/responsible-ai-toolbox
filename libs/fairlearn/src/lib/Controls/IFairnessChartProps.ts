@@ -5,7 +5,7 @@ export enum FairnessChartModes {
   bar = "bar",
   beehive = "beehive",
   violin = "violin",
-  box = "box",
+  box = "box"
 }
 
 export interface IFairnessChartProps {

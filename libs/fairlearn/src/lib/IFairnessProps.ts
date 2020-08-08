@@ -7,7 +7,7 @@ export interface IDatasetSummary {
 export enum PredictionTypes {
   binaryClassification = "binaryClassification",
   regression = "regression",
-  probability = "probability",
+  probability = "probability"
 }
 
 export type PredictionType =
@@ -60,5 +60,8 @@ export interface IFairnessProps {
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
   // The request hook
-  requestMetrics: (request: IMetricRequest, abortSignal?: AbortSignal) => Promise<IMetricResponse>;
+  requestMetrics: (
+    request: IMetricRequest,
+    abortSignal?: AbortSignal
+  ) => Promise<IMetricResponse>;
 }

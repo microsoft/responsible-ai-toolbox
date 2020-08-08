@@ -1,4 +1,9 @@
-import { IStyle, mergeStyleSets, IProcessedStyleSet, getTheme } from "office-ui-fabric-react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "office-ui-fabric-react";
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IModelPerformanceTabStyles {
@@ -27,7 +32,9 @@ export interface IModelPerformanceTabStyles {
   faintText: IStyle;
 }
 
-export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerformanceTabStyles> = () => {
+export const modelPerformanceTabStyles: () => IProcessedStyleSet<
+  IModelPerformanceTabStyles
+> = () => {
   const theme = getTheme();
   return mergeStyleSets<IModelPerformanceTabStyles>({
     page: {
@@ -36,50 +43,50 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       padding: "16px 0 0 14px",
       boxSizing: "border-box",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     infoWithText: {
       display: "flex",
       flexDirection: "row",
       width: "100%",
       boxSizing: "border-box",
-      paddingLeft: "25px",
+      paddingLeft: "25px"
     },
     infoIcon: {
       width: "23px",
       height: "23px",
-      fontSize: "23px",
+      fontSize: "23px"
     },
     helperText: {
       paddingRight: "160px",
-      paddingLeft: "15px",
+      paddingLeft: "15px"
     },
     chartWithAxes: {
       display: "flex",
       flexGrow: "1",
       boxSizing: "border-box",
       paddingTop: "30px",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     chartWithVertical: {
       display: "flex",
       flexGrow: "1",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     scrollableWrapper: {
       flexGrow: "1",
       maxHeight: "700px",
-      overflowY: "auto",
+      overflowY: "auto"
     },
     scrollContent: {
       width: "100%",
       display: "flex",
       flexDirection: "row",
       alignItems: "stretch",
-      height: "500px",
+      height: "500px"
     },
     chart: {
-      flexGrow: "1",
+      flexGrow: "1"
     },
     rightPanel: {
       width: "195px",
@@ -89,7 +96,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       flexDirection: "column",
       justifyContent: "space-evenly",
       padding: "10px 15px 11px 30px",
-      boxSizing: "border-box",
+      boxSizing: "border-box"
     },
     statsBox: {
       height: "120px",
@@ -99,13 +106,13 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       flexDirection: "column",
       justifyContent: "center",
       boxShadow: theme.effects.elevation4,
-      backgroundColor: theme.semanticColors.bodyBackground,
+      backgroundColor: theme.semanticColors.bodyBackground
     },
     verticalAxis: {
       position: "relative",
       top: "0px",
       height: "auto",
-      width: "64px",
+      width: "64px"
     },
     rotatedVerticalBox: {
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
@@ -113,19 +120,19 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       position: "absolute",
       top: "50%",
       textAlign: "center",
-      width: "max-content",
+      width: "max-content"
     },
     horizontalAxisWithPadding: {
       display: "flex",
       paddingBottom: "30px",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     paddingDiv: {
-      width: "50px",
+      width: "50px"
     },
     horizontalAxis: {
       flex: 1,
-      textAlign: "center",
+      textAlign: "center"
     },
     cohortPickerWrapper: {
       paddingLeft: "63px",
@@ -133,24 +140,26 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       height: "32px",
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "center"
     },
     cohortPickerLabel: {
       fontWeight: "600",
-      paddingRight: "8px",
+      paddingRight: "8px"
     },
     boldText: {
       fontWeight: "600",
-      paddingBottom: "5px",
+      paddingBottom: "5px"
     },
     missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [FabricStyles.missingParameterPlaceholderSpacer],
+    missingParametersPlaceholderSpacer: [
+      FabricStyles.missingParameterPlaceholderSpacer
+    ],
     missingParametersPlaceholderNeutralSpacer: [
       FabricStyles.missingParameterPlaceholderSpacer,
       {
-        backgroundColor: theme.semanticColors.bodyBackground,
-      },
+        backgroundColor: theme.semanticColors.bodyBackground
+      }
     ],
-    faintText: [FabricStyles.faintText],
+    faintText: [FabricStyles.faintText]
   });
 };

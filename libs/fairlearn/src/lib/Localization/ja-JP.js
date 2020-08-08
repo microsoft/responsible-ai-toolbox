@@ -29,33 +29,35 @@ module.exports = {
     probabalisticRegressor: "プロビット リグレッサー",
     regressor: "リグレッサー",
     binary: "2 項",
-    continuous: "継続的",
+    continuous: "継続的"
   },
   Parity: {
     header: "公平性を不均衡の観点から測定",
     body:
-      "不均衡メトリックは、選択した特徴量間のモデルの動作のバリエーションを定量化します。次の 2 種類の不均衡メトリックがあり、さらに増える予定です。",
+      "不均衡メトリックは、選択した特徴量間のモデルの動作のバリエーションを定量化します。次の 2 種類の不均衡メトリックがあり、さらに増える予定です。"
   },
   Header: {
     title: "Fairlearn",
-    documentation: "ドキュメント",
+    documentation: "ドキュメント"
   },
   Footer: {
     back: "戻る",
-    next: "次へ",
+    next: "次へ"
   },
   Intro: {
     welcome: "ようこそ:",
     fairlearnDashboard: "Fairlearn ダッシュボード",
-    introBody: "Fairlearn ダッシュボードを使用すると、モデルのパフォーマンスと公平性との間のトレードオフを評価できます",
-    explanatoryStep: "評価を設定するには、重要な特徴量とパフォーマンス メトリックを指定する必要があります。",
+    introBody:
+      "Fairlearn ダッシュボードを使用すると、モデルのパフォーマンスと公平性との間のトレードオフを評価できます",
+    explanatoryStep:
+      "評価を設定するには、重要な特徴量とパフォーマンス メトリックを指定する必要があります。",
     getStarted: "はじめに",
     features: "重要な特徴量",
     featuresInfo:
       "重要な特徴量は、データをグループに分割するために使用されます。これらのグループ間のモデルの公平性は、不均衡メトリックによって測定されます。不均衡メトリックは、これらのグループ間でモデルの動作がどれだけ変わるかを定量化します。",
     accuracy: "パフォーマンス メトリック",
     accuracyInfo:
-      "パフォーマンス メトリックは、モデルの全体的な品質と、各グループのモデルの品質を評価するために使用されます。グループ間のパフォーマンス メトリックの極値の差は、パフォーマンスの不均衡として報告されます。",
+      "パフォーマンス メトリックは、モデルの全体的な品質と、各グループのモデルの品質を評価するために使用されます。グループ間のパフォーマンス メトリックの極値の差は、パフォーマンスの不均衡として報告されます。"
   },
   ModelComparison: {
     title: "モデルの比較",
@@ -65,13 +67,17 @@ module.exports = {
     howToReadText:
       "このグラフでは、各 {0} モデルを選択可能なポイントとして表します。X 軸は {1} を表し、{2} ほど優れています。Y 軸は、不均衡を表し、値が小さいほど優れています。",
     insights: "分析情報",
-    insightsText1: "このグラフには、{1} モデルの {0} と不均衡が示されています。",
-    insightsText2: "{0} の範囲は {1} から {2} までです。不均衡の範囲は {3} から {4} までです。",
-    insightsText3: "最も正確なモデルは {1} の {0} と {2} の不均衡を実現します。",
-    insightsText4: "最小の不均衡モデルは、{1} の {0} と {2} の不均衡を実現します。",
+    insightsText1:
+      "このグラフには、{1} モデルの {0} と不均衡が示されています。",
+    insightsText2:
+      "{0} の範囲は {1} から {2} までです。不均衡の範囲は {3} から {4} までです。",
+    insightsText3:
+      "最も正確なモデルは {1} の {0} と {2} の不均衡を実現します。",
+    insightsText4:
+      "最小の不均衡モデルは、{1} の {0} と {2} の不均衡を実現します。",
     disparityInOutcomes: "予測の不均衡",
     disparityInAccuracy: "{0} の不均衡",
-    howToMeasureDisparity: "不均衡の測定方法",
+    howToMeasureDisparity: "不均衡の測定方法"
   },
   Report: {
     modelName: "モデル {0}",
@@ -92,10 +98,12 @@ module.exports = {
       "横棒グラフは、各グループの選択率を示しており、ポイントの割合が 1 として分類されます。",
     regressionOutcomesHowToRead:
       "ボックス プロットは、各グループの予測の分布を示します。個々のデータ ポイントは上に重ねて表示されています。",
-    classificationAccuracyHowToRead1: "横棒グラフは、各グループの誤差の分布を示します。",
+    classificationAccuracyHowToRead1:
+      "横棒グラフは、各グループの誤差の分布を示します。",
     classificationAccuracyHowToRead2:
       "誤差は過剰予測による誤差 (true ラベルが 0 の場合に 1 を予測) と過少予測による誤差 (true ラベルが 1 の場合に 0 を予測) に分割されます。",
-    classificationAccuracyHowToRead3: "報告率は、誤差の数をグループ全体のサイズで除算して取得します。",
+    classificationAccuracyHowToRead3:
+      "報告率は、誤差の数をグループ全体のサイズで除算して取得します。",
     probabilityAccuracyHowToRead1:
       "横棒グラフは、各グループの平均絶対誤差を示しており、過剰予測と過少予測に分割されます。",
     probabilityAccuracyHowToRead2:
@@ -107,7 +115,7 @@ module.exports = {
     distributionOfPredictions: "予測の分布",
     distributionOfErrors: "誤差の分布",
     tooltipPrediction: "予測: {0}",
-    tooltipError: "誤差: {0}",
+    tooltipError: "誤差: {0}"
   },
   Feature: {
     header: "モデルの公平性を評価する特徴量",
@@ -115,12 +123,13 @@ module.exports = {
       "公平性は、モデルの動作における不均衡の観点から評価されます。選択された各特徴量の値に従ってデータが分割され、モデルのパフォーマンス メトリックと予測がこれらの分割間でどのように異なるかが評価されます。",
     learnMore: "詳細情報",
     summaryCategoricalCount: "この特徴量には {0} 個の一意の値があります",
-    summaryNumericCount: "この数値の特徴量は {0} から {1} までの範囲に及び、{2} 個のビンにグループ化されています。",
+    summaryNumericCount:
+      "この数値の特徴量は {0} から {1} までの範囲に及び、{2} 個のビンにグループ化されています。",
     showCategories: "すべて表示",
     hideCategories: "折りたたむ",
     categoriesOverflow: "と {0} 個の追加カテゴリ",
     editBinning: "グループの編集",
-    subgroups: "サブグループ",
+    subgroups: "サブグループ"
   },
   Metrics: {
     accuracyScore: "精度",
@@ -147,19 +156,22 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "正しく分類されたデータ ポイントの割合。",
-    precisionDescription: "1 に分類されたデータ ポイントの中で正しく分類されたデータ ポイントの割合。",
+    precisionDescription:
+      "1 に分類されたデータ ポイントの中で正しく分類されたデータ ポイントの割合。",
     recallDescription:
       "true ラベルが 1 のデータ ポイントの中で正しく分類されたデータ ポイントの割合。代替名: 真陽性率、感度。",
     rmseDescription: "平均二乗誤差の平方根。",
     mseDescription: "二乗誤差の平均値。",
-    meanAbsoluteErrorDescription: "誤差の絶対値の平均値。MSE よりも外れ値に対して頑健です。",
+    meanAbsoluteErrorDescription:
+      "誤差の絶対値の平均値。MSE よりも外れ値に対して頑健です。",
     r2Description: "モデルによって説明されているラベルの差異の割合。",
-    aucDescription: "負の例から正の例を分ける際の予測の品質をスコアとして見たものです。",
+    aucDescription:
+      "負の例から正の例を分ける際の予測の品質をスコアとして見たものです。",
     balancedRMSEDescription:
       "正および負の例は、総重量が等しくなるようにもう一度加重されます。基になるデータが極めて不均衡である場合に適しています。",
     balancedAccuracyDescription:
       "正および負の例は、総重量が等しくなるようにもう一度加重されます。基になるデータが極めて不均衡である場合に適しています。",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "ビンの構成",
@@ -167,6 +179,6 @@ module.exports = {
     save: "保存",
     cancel: "キャンセル",
     numberOfBins: "ビンの数:",
-    categoryHeader: "ビンの値:",
-  },
+    categoryHeader: "ビンの値:"
+  }
 };

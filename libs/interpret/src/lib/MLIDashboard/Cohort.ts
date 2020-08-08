@@ -13,7 +13,11 @@ export class Cohort {
   private cachedTransposedLocalFeatureImportances: number[][];
   private currentSortKey: string | undefined;
   private currentSortReversed = false;
-  public constructor(public name: string, private jointDataset: JointDataset, public filters: IFilter[] = []) {
+  public constructor(
+    public name: string,
+    private jointDataset: JointDataset,
+    public filters: IFilter[] = []
+  ) {
     this.cohortIndex = Cohort._cohortIndex;
     this.name = name;
     Cohort._cohortIndex += 1;
@@ -43,7 +47,10 @@ export class Cohort {
     return { ...this.jointDataset.dataDict[index] };
   }
 
-  public sort(columnName: string = JointDataset.IndexLabel, reverse?: boolean): void {
+  public sort(
+    columnName: string = JointDataset.IndexLabel,
+    reverse?: boolean
+  ): void {
     if (this.currentSortKey !== columnName) {
       this.filteredData.sort((a, b) => {
         return a[columnName] - b[columnName];
@@ -72,12 +79,12 @@ export class Cohort {
         this.jointDataset.addBin(key);
         binVector = this.jointDataset.binDict[key];
       }
-      return this.filteredData.map(row => {
+      return this.filteredData.map((row) => {
         const rowValue = row[key];
-        return binVector.findIndex(upperLimit => upperLimit >= rowValue);
+        return binVector.findIndex((upperLimit) => upperLimit >= rowValue);
       });
     }
-    return this.filteredData.map(row => row[key]);
+    return this.filteredData.map((row) => row[key]);
   }
 
   public calculateAverageImportance(): number[] {
@@ -85,15 +92,17 @@ export class Cohort {
       return this.cachedAverageImportance;
     }
 
-    this.cachedAverageImportance = this.transposedLocalFeatureImportances().map(featureValues => {
-      if (!featureValues || featureValues.length === 0) {
-        return Number.NaN;
+    this.cachedAverageImportance = this.transposedLocalFeatureImportances().map(
+      (featureValues) => {
+        if (!featureValues || featureValues.length === 0) {
+          return Number.NaN;
+        }
+        const total = featureValues.reduce((prev, current) => {
+          return prev + Math.abs(current);
+        }, 0);
+        return total / featureValues.length;
       }
-      const total = featureValues.reduce((prev, current) => {
-        return prev + Math.abs(current);
-      }, 0);
-      return total / featureValues.length;
-    });
+    );
     return this.cachedAverageImportance;
   }
 
@@ -102,10 +111,12 @@ export class Cohort {
       return this.cachedTransposedLocalFeatureImportances;
     }
     const featureLength = this.jointDataset.localExplanationFeatureCount;
-    const localFeatureImportances = this.filteredData.map(row => {
+    const localFeatureImportances = this.filteredData.map((row) => {
       return JointDataset.localExplanationSlice(row, featureLength);
     });
-    this.cachedTransposedLocalFeatureImportances = ModelExplanationUtils.transpose2DArray(localFeatureImportances);
+    this.cachedTransposedLocalFeatureImportances = ModelExplanationUtils.transpose2DArray(
+      localFeatureImportances
+    );
     return this.cachedTransposedLocalFeatureImportances;
   }
 
@@ -116,8 +127,8 @@ export class Cohort {
 
   private applyFilters(): void {
     this.clearCachedImportances();
-    this.filteredData = this.jointDataset.dataDict.filter(row =>
-      this.filters.every(filter => {
+    this.filteredData = this.jointDataset.dataDict.filter((row) =>
+      this.filters.every((filter) => {
         const rowVal = row[filter.column];
         switch (filter.method) {
           case FilterMethods.equal:
@@ -137,7 +148,7 @@ export class Cohort {
           default:
             return false;
         }
-      }),
+      })
     );
     this.rowCount = this.filteredData.length;
   }

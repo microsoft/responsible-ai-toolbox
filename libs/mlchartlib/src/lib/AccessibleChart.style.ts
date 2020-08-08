@@ -1,4 +1,8 @@
-import { IStyle, mergeStyleSets, IProcessedStyleSet } from "office-ui-fabric-react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet
+} from "office-ui-fabric-react";
 
 export interface IAccessibleChartStyles {
   chart: IStyle;
@@ -6,14 +10,16 @@ export interface IAccessibleChartStyles {
   plotlyTable: IStyle;
 }
 
-export const accessibleChartStyle = (): IProcessedStyleSet<IAccessibleChartStyles> => {
+export const accessibleChartStyle = (): IProcessedStyleSet<
+  IAccessibleChartStyles
+> => {
   return mergeStyleSets<IAccessibleChartStyles>({
     chart: {
       height: "100%",
-      width: "100%",
+      width: "100%"
     },
     noData: {
-      "text-align": "center",
+      "text-align": "center"
     },
     plotlyTable: {
       border: "0",
@@ -24,7 +30,7 @@ export const accessibleChartStyle = (): IProcessedStyleSet<IAccessibleChartStyle
       overflow: "hidden",
       padding: "0",
       position: "absolute",
-      width: "1px",
-    },
+      width: "1px"
+    }
   });
 };

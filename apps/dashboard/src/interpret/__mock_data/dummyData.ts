@@ -31,7 +31,7 @@ export const breastCancerData = {
     "worst concavity",
     "worst concave points",
     "worst symmetry",
-    "worst fractal dimension",
+    "worst fractal dimension"
   ],
   globalExplanation: {
     intercept: 0.2,
@@ -65,8 +65,8 @@ export const breastCancerData = {
       0.0004112589372673081,
       0.000523013001870266,
       0.0006480624042401926,
-      0.0007516822617219001,
-    ],
+      0.0007516822617219001
+    ]
   },
   localExplanations: {
     intercept: [0.2, -0.2],
@@ -102,7 +102,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -134,7 +134,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -166,7 +166,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -198,7 +198,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -230,7 +230,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.0038698440062457026,
-          0.0,
+          0.0
         ],
         [
           -0.002789384388320104,
@@ -262,7 +262,7 @@ export const breastCancerData = {
           0.0,
           -0.005605769933952509,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -294,7 +294,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -326,7 +326,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -358,7 +358,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -390,7 +390,7 @@ export const breastCancerData = {
           0.0,
           -0.0070821656594037274,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.014391925740233763,
@@ -422,7 +422,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.008612430127583948,
+          0.008612430127583948
         ],
         [
           0.0,
@@ -454,7 +454,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.00498909525114391,
@@ -486,7 +486,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -518,7 +518,7 @@ export const breastCancerData = {
           0.0,
           0.0017550109028894312,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -550,7 +550,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -582,7 +582,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0049234433428176905,
+          0.0049234433428176905
         ],
         [
           -0.005384690427832496,
@@ -614,7 +614,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.01305831248642303,
+          -0.01305831248642303
         ],
         [
           0.005020915854698715,
@@ -646,7 +646,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.002948759421038727,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -678,7 +678,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -710,7 +710,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0057811331013780665,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -742,7 +742,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -774,7 +774,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -806,7 +806,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.00555087276528915,
+          -0.00555087276528915
         ],
         [
           0.0,
@@ -838,7 +838,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.006332937046534093,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -870,7 +870,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.003994228876261163,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -902,7 +902,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -934,7 +934,7 @@ export const breastCancerData = {
           0.0,
           -0.000415970289530887,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -966,7 +966,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -998,7 +998,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.004222422100609191,
@@ -1030,7 +1030,7 @@ export const breastCancerData = {
           0.004247907984034571,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1062,7 +1062,7 @@ export const breastCancerData = {
           0.0,
           -0.0035719302060645552,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1094,7 +1094,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.010736557864350349,
+          0.010736557864350349
         ],
         [
           0.0,
@@ -1126,7 +1126,7 @@ export const breastCancerData = {
           -0.0012639153181384088,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.005901334939142883,
@@ -1158,7 +1158,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.0025207843236879635,
@@ -1190,7 +1190,7 @@ export const breastCancerData = {
           -0.002975817788901075,
           0.0,
           -0.007341957086221262,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1222,7 +1222,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.004871533320670906,
@@ -1254,7 +1254,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1286,7 +1286,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1318,7 +1318,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1350,7 +1350,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1382,7 +1382,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1414,7 +1414,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1446,7 +1446,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1478,7 +1478,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1510,7 +1510,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1542,7 +1542,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.002284457043389476,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1574,7 +1574,7 @@ export const breastCancerData = {
           0.0,
           -0.010177180577355782,
           0.0,
-          -0.0018599796495314957,
+          -0.0018599796495314957
         ],
         [
           0.0,
@@ -1606,7 +1606,7 @@ export const breastCancerData = {
           -0.006316885929215754,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1638,7 +1638,7 @@ export const breastCancerData = {
           -0.002674922180634587,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1670,7 +1670,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.00657102621586074,
@@ -1702,7 +1702,7 @@ export const breastCancerData = {
           0.0,
           0.005254550862410445,
           0.0017257752252795577,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1734,7 +1734,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.011174021857942362,
@@ -1766,7 +1766,7 @@ export const breastCancerData = {
           0.004074426744426041,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1798,7 +1798,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1830,7 +1830,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1862,7 +1862,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1894,7 +1894,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1926,7 +1926,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1958,7 +1958,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -1990,7 +1990,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2022,7 +2022,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2054,7 +2054,7 @@ export const breastCancerData = {
           0.0,
           0.006687884506593078,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2086,7 +2086,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.007456435808215145,
@@ -2118,7 +2118,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2150,7 +2150,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2182,7 +2182,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0037282685674201455,
@@ -2214,7 +2214,7 @@ export const breastCancerData = {
           0.0038374362570845477,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2246,7 +2246,7 @@ export const breastCancerData = {
           0.0017626441169660834,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2278,7 +2278,7 @@ export const breastCancerData = {
           0.0,
           0.002127789643953104,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2310,7 +2310,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2342,7 +2342,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.010115660355403955,
@@ -2374,7 +2374,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.0013881517346156225,
@@ -2406,7 +2406,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.0060693369226715865,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2438,7 +2438,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.010722146992449971,
@@ -2470,7 +2470,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.008216012715185683,
+          0.008216012715185683
         ],
         [
           0.0,
@@ -2502,7 +2502,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.004128048848954929,
@@ -2534,7 +2534,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.00538613942894467,
-          -0.006232809702322095,
+          -0.006232809702322095
         ],
         [
           -0.0058174422136019754,
@@ -2566,7 +2566,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2598,7 +2598,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.008558018802138023,
@@ -2630,7 +2630,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2662,7 +2662,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2694,7 +2694,7 @@ export const breastCancerData = {
           0.0016175026549065663,
           0.0,
           0.0,
-          0.008308699588418234,
+          0.008308699588418234
         ],
         [
           0.0,
@@ -2726,7 +2726,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2758,7 +2758,7 @@ export const breastCancerData = {
           -0.004186950139483753,
           -0.003925345802916758,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.007768188605806831,
@@ -2790,7 +2790,7 @@ export const breastCancerData = {
           0.0,
           0.003032986121411785,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2822,7 +2822,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2854,7 +2854,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.004231957447317691,
@@ -2886,7 +2886,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2918,7 +2918,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2950,7 +2950,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -2982,7 +2982,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.0067115831133151005,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3014,7 +3014,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3046,7 +3046,7 @@ export const breastCancerData = {
           0.0,
           0.0070506356724234776,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3078,7 +3078,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.00365366357359842,
+          0.00365366357359842
         ],
         [
           0.0,
@@ -3110,7 +3110,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.003456636202740976,
@@ -3142,7 +3142,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.007981946861231659,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3174,7 +3174,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3206,7 +3206,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3238,7 +3238,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3270,7 +3270,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3302,7 +3302,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3334,7 +3334,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3366,7 +3366,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3398,7 +3398,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3430,7 +3430,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.006888726218957086,
-          0.010746582954895167,
+          0.010746582954895167
         ],
         [
           -0.005441117993055522,
@@ -3462,7 +3462,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.0015564392348281775,
-          0.0,
+          0.0
         ],
         [
           0.0026744789768126664,
@@ -3494,7 +3494,7 @@ export const breastCancerData = {
           0.007602604742669272,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3526,7 +3526,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3558,7 +3558,7 @@ export const breastCancerData = {
           0.0,
           0.002936262034304693,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0020260247911155216,
@@ -3590,7 +3590,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.0030083292063560266,
@@ -3622,7 +3622,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.005922218468344731,
@@ -3654,7 +3654,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.007622873843608713,
@@ -3686,7 +3686,7 @@ export const breastCancerData = {
           0.0063225049920125065,
           0.0,
           0.005005850497085684,
-          0.003792413065881184,
+          0.003792413065881184
         ],
         [
           0.003876843665116439,
@@ -3718,8 +3718,8 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
-        ],
+          0.0
+        ]
       ],
       [
         [
@@ -3752,7 +3752,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3784,7 +3784,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3816,7 +3816,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3848,7 +3848,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3880,7 +3880,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0038698440062457165,
-          0.0,
+          0.0
         ],
         [
           0.002789384388320132,
@@ -3912,7 +3912,7 @@ export const breastCancerData = {
           0.0,
           0.005605769933952398,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3944,7 +3944,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -3976,7 +3976,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4008,7 +4008,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4040,7 +4040,7 @@ export const breastCancerData = {
           0.0,
           0.007082165659403672,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.014391925740233694,
@@ -4072,7 +4072,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.008612430127584225,
+          -0.008612430127584225
         ],
         [
           0.0,
@@ -4104,7 +4104,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.004989095251143841,
@@ -4136,7 +4136,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4168,7 +4168,7 @@ export const breastCancerData = {
           0.0,
           -0.0017550109028893202,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4200,7 +4200,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4232,7 +4232,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.0049234433428176905,
+          -0.0049234433428176905
         ],
         [
           0.005384690427832475,
@@ -4264,7 +4264,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.01305831248642303,
+          0.01305831248642303
         ],
         [
           -0.005020915854698771,
@@ -4296,7 +4296,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.0029487594210386714,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4328,7 +4328,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4360,7 +4360,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.005781133101378122,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4392,7 +4392,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4424,7 +4424,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4456,7 +4456,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.005550872765289094,
+          0.005550872765289094
         ],
         [
           0.0,
@@ -4488,7 +4488,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.006332937046533982,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4520,7 +4520,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.003994228876261385,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4552,7 +4552,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4584,7 +4584,7 @@ export const breastCancerData = {
           0.0,
           0.00041597028953072046,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4616,7 +4616,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4648,7 +4648,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.004222422100609191,
@@ -4680,7 +4680,7 @@ export const breastCancerData = {
           -0.004247907984034349,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4712,7 +4712,7 @@ export const breastCancerData = {
           0.0,
           0.0035719302060644442,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4744,7 +4744,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.01073655786435046,
+          -0.01073655786435046
         ],
         [
           0.0,
@@ -4776,7 +4776,7 @@ export const breastCancerData = {
           0.0012639153181385199,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.005901334939142661,
@@ -4808,7 +4808,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.002520784323687922,
@@ -4840,7 +4840,7 @@ export const breastCancerData = {
           0.0029758177889010196,
           0.0,
           0.007341957086221318,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4872,7 +4872,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.004871533320670996,
@@ -4904,7 +4904,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4936,7 +4936,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -4968,7 +4968,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5000,7 +5000,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5032,7 +5032,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5064,7 +5064,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5096,7 +5096,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5128,7 +5128,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5160,7 +5160,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5192,7 +5192,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.002284457043389254,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5224,7 +5224,7 @@ export const breastCancerData = {
           0.0,
           0.010177180577355782,
           0.0,
-          0.0018599796495314957,
+          0.0018599796495314957
         ],
         [
           0.0,
@@ -5256,7 +5256,7 @@ export const breastCancerData = {
           0.006316885929215754,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5288,7 +5288,7 @@ export const breastCancerData = {
           0.0026749221806346424,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5320,7 +5320,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.006571026215860809,
@@ -5352,7 +5352,7 @@ export const breastCancerData = {
           0.0,
           -0.005254550862410556,
           -0.0017257752252796132,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5384,7 +5384,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.011174021857942362,
@@ -5416,7 +5416,7 @@ export const breastCancerData = {
           -0.004074426744426152,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5448,7 +5448,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5480,7 +5480,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5512,7 +5512,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5544,7 +5544,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5576,7 +5576,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5608,7 +5608,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5640,7 +5640,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5672,7 +5672,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5704,7 +5704,7 @@ export const breastCancerData = {
           0.0,
           -0.006687884506593633,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5736,7 +5736,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.007456435808215173,
@@ -5768,7 +5768,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5800,7 +5800,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5832,7 +5832,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.0037282685674201455,
@@ -5864,7 +5864,7 @@ export const breastCancerData = {
           -0.0038374362570846032,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5896,7 +5896,7 @@ export const breastCancerData = {
           -0.0017626441169661944,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5928,7 +5928,7 @@ export const breastCancerData = {
           0.0,
           -0.002127789643953104,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5960,7 +5960,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -5992,7 +5992,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.010115660355403983,
@@ -6024,7 +6024,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.001388151734615567,
@@ -6056,7 +6056,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.006069336922671531,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6088,7 +6088,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.010722146992449916,
@@ -6120,7 +6120,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.008216012715185683,
+          -0.008216012715185683
         ],
         [
           0.0,
@@ -6152,7 +6152,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.004128048848954902,
@@ -6184,7 +6184,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0053861394289445585,
-          0.00623280970232204,
+          0.00623280970232204
         ],
         [
           0.0058174422136019754,
@@ -6216,7 +6216,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6248,7 +6248,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.008558018802138048,
@@ -6280,7 +6280,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6312,7 +6312,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6344,7 +6344,7 @@ export const breastCancerData = {
           -0.0016175026549065663,
           0.0,
           0.0,
-          -0.008308699588418178,
+          -0.008308699588418178
         ],
         [
           0.0,
@@ -6376,7 +6376,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6408,7 +6408,7 @@ export const breastCancerData = {
           0.004186950139483725,
           0.003925345802916758,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.007768188605806803,
@@ -6440,7 +6440,7 @@ export const breastCancerData = {
           0.0,
           -0.003032986121411785,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6472,7 +6472,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6504,7 +6504,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0042319574473177815,
@@ -6536,7 +6536,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6568,7 +6568,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6600,7 +6600,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6632,7 +6632,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0067115831133151005,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6664,7 +6664,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6696,7 +6696,7 @@ export const breastCancerData = {
           0.0,
           -0.0070506356724234776,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6728,7 +6728,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          -0.0036536635735987533,
+          -0.0036536635735987533
         ],
         [
           0.0,
@@ -6760,7 +6760,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.003456636202741059,
@@ -6792,7 +6792,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.00798194686123177,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6824,7 +6824,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6856,7 +6856,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6888,7 +6888,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6920,7 +6920,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6952,7 +6952,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -6984,7 +6984,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -7016,7 +7016,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -7048,7 +7048,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -7080,7 +7080,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           -0.006888726218957142,
-          -0.010746582954895167,
+          -0.010746582954895167
         ],
         [
           0.0054411179930554665,
@@ -7112,7 +7112,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0015564392348281775,
-          0.0,
+          0.0
         ],
         [
           -0.0026744789768124305,
@@ -7144,7 +7144,7 @@ export const breastCancerData = {
           -0.007602604742669161,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -7176,7 +7176,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.0,
@@ -7208,7 +7208,7 @@ export const breastCancerData = {
           0.0,
           -0.0029362620343047485,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.0020260247911155216,
@@ -7240,7 +7240,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           0.003008329206356068,
@@ -7272,7 +7272,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.005922218468344731,
@@ -7304,7 +7304,7 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
+          0.0
         ],
         [
           -0.007622873843608713,
@@ -7336,7 +7336,7 @@ export const breastCancerData = {
           -0.0063225049920123955,
           0.0,
           -0.005005850497085573,
-          -0.003792413065880962,
+          -0.003792413065880962
         ],
         [
           -0.003876843665116411,
@@ -7368,10 +7368,10 @@ export const breastCancerData = {
           0.0,
           0.0,
           0.0,
-          0.0,
-        ],
-      ],
-    ],
+          0.0
+        ]
+      ]
+    ]
   },
   trainingData: [
     [
@@ -7404,7 +7404,7 @@ export const breastCancerData = {
       5.106e-1,
       2.051e-1,
       3.585e-1,
-      1.109e-1,
+      1.109e-1
     ],
     [
       1.321e1,
@@ -7436,7 +7436,7 @@ export const breastCancerData = {
       1.39e-1,
       6.005e-2,
       2.444e-1,
-      6.788e-2,
+      6.788e-2
     ],
     [
       1.402e1,
@@ -7468,7 +7468,7 @@ export const breastCancerData = {
       6.26e-2,
       8.216e-2,
       2.136e-1,
-      6.71e-2,
+      6.71e-2
     ],
     [
       1.426e1,
@@ -7500,7 +7500,7 @@ export const breastCancerData = {
       1.565e-1,
       7.53e-2,
       2.636e-1,
-      7.676e-2,
+      7.676e-2
     ],
     [
       1.303e1,
@@ -7532,7 +7532,7 @@ export const breastCancerData = {
       4.833e-2,
       5.013e-2,
       1.987e-1,
-      6.169e-2,
+      6.169e-2
     ],
     [
       1.134e1,
@@ -7564,7 +7564,7 @@ export const breastCancerData = {
       1.624e-1,
       8.542e-2,
       3.06e-1,
-      6.783e-2,
+      6.783e-2
     ],
     [
       1.205e1,
@@ -7596,7 +7596,7 @@ export const breastCancerData = {
       2.912e-1,
       1.092e-1,
       2.191e-1,
-      9.349e-2,
+      9.349e-2
     ],
     [
       1.17e1,
@@ -7628,7 +7628,7 @@ export const breastCancerData = {
       7.915e-2,
       5.741e-2,
       3.487e-1,
-      6.958e-2,
+      6.958e-2
     ],
     [
       7.729,
@@ -7660,7 +7660,7 @@ export const breastCancerData = {
       0.0,
       0.0,
       3.058e-1,
-      9.938e-2,
+      9.938e-2
     ],
     [
       1.026e1,
@@ -7692,7 +7692,7 @@ export const breastCancerData = {
       7.162e-2,
       4.074e-2,
       2.434e-1,
-      8.488e-2,
+      8.488e-2
     ],
     [
       1.469e1,
@@ -7724,7 +7724,7 @@ export const breastCancerData = {
       3.219e-1,
       1.108e-1,
       2.827e-1,
-      9.208e-2,
+      9.208e-2
     ],
     [
       1.462e1,
@@ -7756,7 +7756,7 @@ export const breastCancerData = {
       9.189e-2,
       6.946e-2,
       2.522e-1,
-      7.246e-2,
+      7.246e-2
     ],
     [
       9.397,
@@ -7788,7 +7788,7 @@ export const breastCancerData = {
       1.868e-1,
       2.564e-2,
       2.376e-1,
-      9.206e-2,
+      9.206e-2
     ],
     [
       1.684e1,
@@ -7820,7 +7820,7 @@ export const breastCancerData = {
       1.882e-1,
       8.436e-2,
       2.527e-1,
-      5.972e-2,
+      5.972e-2
     ],
     [
       1.464e1,
@@ -7852,7 +7852,7 @@ export const breastCancerData = {
       2.604e-1,
       1.397e-1,
       3.151e-1,
-      8.473e-2,
+      8.473e-2
     ],
     [
       1.546e1,
@@ -7884,7 +7884,7 @@ export const breastCancerData = {
       5.83e-1,
       1.827e-1,
       3.216e-1,
-      1.01e-1,
+      1.01e-1
     ],
     [
       9.042,
@@ -7916,7 +7916,7 @@ export const breastCancerData = {
       4.609e-1,
       1.145e-1,
       3.135e-1,
-      1.055e-1,
+      1.055e-1
     ],
     [
       2.051e1,
@@ -7948,7 +7948,7 @@ export const breastCancerData = {
       4.146e-1,
       1.563e-1,
       2.437e-1,
-      8.328e-2,
+      8.328e-2
     ],
     [
       1.955e1,
@@ -7980,7 +7980,7 @@ export const breastCancerData = {
       3.829e-1,
       1.825e-1,
       2.576e-1,
-      7.602e-2,
+      7.602e-2
     ],
     [
       2.094e1,
@@ -8012,7 +8012,7 @@ export const breastCancerData = {
       6.991e-1,
       2.105e-1,
       3.126e-1,
-      7.849e-2,
+      7.849e-2
     ],
     [
       1.184e1,
@@ -8044,7 +8044,7 @@ export const breastCancerData = {
       6.956e-1,
       1.546e-1,
       4.761e-1,
-      1.402e-1,
+      1.402e-1
     ],
     [
       1.624e1,
@@ -8076,7 +8076,7 @@ export const breastCancerData = {
       5.026e-1,
       1.732e-1,
       2.77e-1,
-      1.063e-1,
+      1.063e-1
     ],
     [
       1.347e1,
@@ -8108,7 +8108,7 @@ export const breastCancerData = {
       1.848e-1,
       1.335e-1,
       3.227e-1,
-      9.326e-2,
+      9.326e-2
     ],
     [
       1.184e1,
@@ -8140,7 +8140,7 @@ export const breastCancerData = {
       1.471e-1,
       6.913e-2,
       2.535e-1,
-      7.993e-2,
+      7.993e-2
     ],
     [
       2.137e1,
@@ -8172,7 +8172,7 @@ export const breastCancerData = {
       4.024e-1,
       1.966e-1,
       2.73e-1,
-      8.666e-2,
+      8.666e-2
     ],
     [
       1.193e1,
@@ -8204,7 +8204,7 @@ export const breastCancerData = {
       1.514e-1,
       6.876e-2,
       2.46e-1,
-      7.262e-2,
+      7.262e-2
     ],
     [
       1.09e1,
@@ -8236,7 +8236,7 @@ export const breastCancerData = {
       1.854e-2,
       3.953e-2,
       2.738e-1,
-      7.685e-2,
+      7.685e-2
     ],
     [
       1.373e1,
@@ -8268,7 +8268,7 @@ export const breastCancerData = {
       6.943e-1,
       2.208e-1,
       3.596e-1,
-      1.431e-1,
+      1.431e-1
     ],
     [
       1.34e1,
@@ -8300,7 +8300,7 @@ export const breastCancerData = {
       1.364e-1,
       6.987e-2,
       2.741e-1,
-      7.582e-2,
+      7.582e-2
     ],
     [
       1.877e1,
@@ -8332,7 +8332,7 @@ export const breastCancerData = {
       4.634e-1,
       2.048e-1,
       3.679e-1,
-      9.87e-2,
+      9.87e-2
     ],
     [
       1.281e1,
@@ -8364,7 +8364,7 @@ export const breastCancerData = {
       2.758e-2,
       3.99e-2,
       1.783e-1,
-      7.319e-2,
+      7.319e-2
     ],
     [
       2.057e1,
@@ -8396,7 +8396,7 @@ export const breastCancerData = {
       2.416e-1,
       1.86e-1,
       2.75e-1,
-      8.902e-2,
+      8.902e-2
     ],
     [
       1.314e1,
@@ -8428,7 +8428,7 @@ export const breastCancerData = {
       4.504e-1,
       1.181e-1,
       2.563e-1,
-      8.174e-2,
+      8.174e-2
     ],
     [
       1.616e1,
@@ -8460,7 +8460,7 @@ export const breastCancerData = {
       2.992e-1,
       1.312e-1,
       3.48e-1,
-      7.619e-2,
+      7.619e-2
     ],
     [
       9.738,
@@ -8492,7 +8492,7 @@ export const breastCancerData = {
       0.0,
       0.0,
       3.105e-1,
-      8.151e-2,
+      8.151e-2
     ],
     [
       1.268e1,
@@ -8524,7 +8524,7 @@ export const breastCancerData = {
       4.024e-1,
       1.716e-1,
       3.383e-1,
-      1.031e-1,
+      1.031e-1
     ],
     [
       1.327e1,
@@ -8556,7 +8556,7 @@ export const breastCancerData = {
       1.786e-1,
       9.678e-2,
       2.506e-1,
-      7.623e-2,
+      7.623e-2
     ],
     [
       1.9e1,
@@ -8588,7 +8588,7 @@ export const breastCancerData = {
       3.207e-1,
       1.218e-1,
       2.841e-1,
-      6.541e-2,
+      6.541e-2
     ],
     [
       1.486e1,
@@ -8620,7 +8620,7 @@ export const breastCancerData = {
       1.22e-1,
       7.971e-2,
       2.525e-1,
-      6.827e-2,
+      6.827e-2
     ],
     [
       1.508e1,
@@ -8652,7 +8652,7 @@ export const breastCancerData = {
       4.029e-1,
       1.526e-1,
       2.654e-1,
-      9.438e-2,
+      9.438e-2
     ],
     [
       1.513e1,
@@ -8684,7 +8684,7 @@ export const breastCancerData = {
       1.547e-1,
       6.575e-2,
       3.233e-1,
-      6.165e-2,
+      6.165e-2
     ],
     [
       8.878,
@@ -8716,7 +8716,7 @@ export const breastCancerData = {
       9.441e-2,
       4.762e-2,
       2.434e-1,
-      7.431e-2,
+      7.431e-2
     ],
     [
       1.602e1,
@@ -8748,7 +8748,7 @@ export const breastCancerData = {
       1.459e-1,
       9.975e-2,
       2.948e-1,
-      8.452e-2,
+      8.452e-2
     ],
     [
       1.032e1,
@@ -8780,7 +8780,7 @@ export const breastCancerData = {
       4.384e-2,
       2.381e-2,
       2.681e-1,
-      7.399e-2,
+      7.399e-2
     ],
     [
       1.324e1,
@@ -8812,7 +8812,7 @@ export const breastCancerData = {
       6.556e-1,
       1.357e-1,
       2.845e-1,
-      1.249e-1,
+      1.249e-1
     ],
     [
       2.156e1,
@@ -8844,7 +8844,7 @@ export const breastCancerData = {
       4.107e-1,
       2.216e-1,
       2.06e-1,
-      7.115e-2,
+      7.115e-2
     ],
     [
       8.671,
@@ -8876,7 +8876,7 @@ export const breastCancerData = {
       0.0,
       0.0,
       2.592e-1,
-      7.848e-2,
+      7.848e-2
     ],
     [
       1.403e1,
@@ -8908,7 +8908,7 @@ export const breastCancerData = {
       6.231e-2,
       7.963e-2,
       2.226e-1,
-      7.617e-2,
+      7.617e-2
     ],
     [
       1.181e1,
@@ -8940,7 +8940,7 @@ export const breastCancerData = {
       8.803e-2,
       4.306e-2,
       3.2e-1,
-      6.576e-2,
+      6.576e-2
     ],
     [
       1.454e1,
@@ -8972,7 +8972,7 @@ export const breastCancerData = {
       7.026e-1,
       1.712e-1,
       4.218e-1,
-      1.341e-1,
+      1.341e-1
     ],
     [
       1.917e1,
@@ -9004,7 +9004,7 @@ export const breastCancerData = {
       3.639e-1,
       1.767e-1,
       3.176e-1,
-      1.023e-1,
+      1.023e-1
     ],
     [
       1.486e1,
@@ -9036,7 +9036,7 @@ export const breastCancerData = {
       4.589e-1,
       1.727e-1,
       3.0e-1,
-      8.701e-2,
+      8.701e-2
     ],
     [
       1.845e1,
@@ -9068,7 +9068,7 @@ export const breastCancerData = {
       3.965e-1,
       1.379e-1,
       3.109e-1,
-      7.61e-2,
+      7.61e-2
     ],
     [
       1.16e1,
@@ -9100,7 +9100,7 @@ export const breastCancerData = {
       1.86e-1,
       8.288e-2,
       3.21e-1,
-      7.863e-2,
+      7.863e-2
     ],
     [
       1.246e1,
@@ -9132,7 +9132,7 @@ export const breastCancerData = {
       1.904e-1,
       7.625e-2,
       2.685e-1,
-      7.764e-2,
+      7.764e-2
     ],
     [
       1.147e1,
@@ -9164,7 +9164,7 @@ export const breastCancerData = {
       9.823e-2,
       6.548e-2,
       2.851e-1,
-      8.763e-2,
+      8.763e-2
     ],
     [
       1.132e1,
@@ -9196,7 +9196,7 @@ export const breastCancerData = {
       1.089e-1,
       2.083e-2,
       2.849e-1,
-      7.087e-2,
+      7.087e-2
     ],
     [
       1.227e1,
@@ -9228,7 +9228,7 @@ export const breastCancerData = {
       0.0,
       0.0,
       2.409e-1,
-      6.743e-2,
+      6.743e-2
     ],
     [
       1.218e1,
@@ -9260,7 +9260,7 @@ export const breastCancerData = {
       1.145e-1,
       7.431e-2,
       2.694e-1,
-      6.878e-2,
+      6.878e-2
     ],
     [
       2.175e1,
@@ -9292,7 +9292,7 @@ export const breastCancerData = {
       5.807e-1,
       1.841e-1,
       2.833e-1,
-      8.858e-2,
+      8.858e-2
     ],
     [
       1.377e1,
@@ -9324,7 +9324,7 @@ export const breastCancerData = {
       3.809e-1,
       1.673e-1,
       3.08e-1,
-      9.333e-2,
+      9.333e-2
     ],
     [
       1.607e1,
@@ -9356,7 +9356,7 @@ export const breastCancerData = {
       2.829e-1,
       1.52e-1,
       2.65e-1,
-      6.387e-2,
+      6.387e-2
     ],
     [
       1.114e1,
@@ -9388,7 +9388,7 @@ export const breastCancerData = {
       1.201e-1,
       3.922e-2,
       2.576e-1,
-      7.018e-2,
+      7.018e-2
     ],
     [
       1.287e1,
@@ -9420,7 +9420,7 @@ export const breastCancerData = {
       1.992e-1,
       5.78e-2,
       3.604e-1,
-      7.062e-2,
+      7.062e-2
     ],
     [
       1.76e1,
@@ -9452,7 +9452,7 @@ export const breastCancerData = {
       5.165e-1,
       1.996e-1,
       2.301e-1,
-      1.224e-1,
+      1.224e-1
     ],
     [
       1.204e1,
@@ -9484,7 +9484,7 @@ export const breastCancerData = {
       5.524e-2,
       5.547e-2,
       2.404e-1,
-      6.639e-2,
+      6.639e-2
     ],
     [
       2.227e1,
@@ -9516,7 +9516,7 @@ export const breastCancerData = {
       9.608e-1,
       2.91e-1,
       4.055e-1,
-      9.789e-2,
+      9.789e-2
     ],
     [
       1.746e1,
@@ -9548,7 +9548,7 @@ export const breastCancerData = {
       3.241e-1,
       2.066e-1,
       2.853e-1,
-      8.496e-2,
+      8.496e-2
     ],
     [
       2.058e1,
@@ -9580,7 +9580,7 @@ export const breastCancerData = {
       3.861e-1,
       1.92e-1,
       2.909e-1,
-      5.865e-2,
+      5.865e-2
     ],
     [
       9.465,
@@ -9612,7 +9612,7 @@ export const breastCancerData = {
       9.412e-2,
       6.517e-2,
       2.878e-1,
-      9.211e-2,
+      9.211e-2
     ],
     [
       1.442e1,
@@ -9644,7 +9644,7 @@ export const breastCancerData = {
       3.755e-1,
       1.414e-1,
       3.053e-1,
-      8.764e-2,
+      8.764e-2
     ],
     [
       1.613e1,
@@ -9676,7 +9676,7 @@ export const breastCancerData = {
       4.784e-1,
       2.073e-1,
       3.706e-1,
-      1.142e-1,
+      1.142e-1
     ],
     [
       1.152e1,
@@ -9708,7 +9708,7 @@ export const breastCancerData = {
       1.804e-1,
       9.608e-2,
       2.664e-1,
-      7.809e-2,
+      7.809e-2
     ],
     [
       1.46e1,
@@ -9740,7 +9740,7 @@ export const breastCancerData = {
       2.675e-1,
       1.359e-1,
       2.477e-1,
-      6.836e-2,
+      6.836e-2
     ],
     [
       1.865e1,
@@ -9772,7 +9772,7 @@ export const breastCancerData = {
       7.345e-1,
       2.378e-1,
       3.799e-1,
-      9.185e-2,
+      9.185e-2
     ],
     [
       1.3e1,
@@ -9804,7 +9804,7 @@ export const breastCancerData = {
       4.462e-2,
       5.921e-2,
       2.306e-1,
-      6.291e-2,
+      6.291e-2
     ],
     [
       8.571,
@@ -9836,7 +9836,7 @@ export const breastCancerData = {
       1.754e-1,
       8.512e-2,
       2.983e-1,
-      1.049e-1,
+      1.049e-1
     ],
     [
       1.305e1,
@@ -9868,7 +9868,7 @@ export const breastCancerData = {
       2.573e-1,
       1.258e-1,
       3.113e-1,
-      8.317e-2,
+      8.317e-2
     ],
     [
       1.166e1,
@@ -9900,7 +9900,7 @@ export const breastCancerData = {
       3.046e-2,
       4.262e-2,
       2.731e-1,
-      6.825e-2,
+      6.825e-2
     ],
     [
       8.734,
@@ -9932,7 +9932,7 @@ export const breastCancerData = {
       0.0,
       0.0,
       2.445e-1,
-      8.865e-2,
+      8.865e-2
     ],
     [
       1.66e1,
@@ -9964,7 +9964,7 @@ export const breastCancerData = {
       3.403e-1,
       1.418e-1,
       2.218e-1,
-      7.82e-2,
+      7.82e-2
     ],
     [
       2.018e1,
@@ -9996,7 +9996,7 @@ export const breastCancerData = {
       7.681e-1,
       2.508e-1,
       5.44e-1,
-      9.964e-2,
+      9.964e-2
     ],
     [
       1.578e1,
@@ -10028,7 +10028,7 @@ export const breastCancerData = {
       7.356e-1,
       2.034e-1,
       3.274e-1,
-      1.252e-1,
+      1.252e-1
     ],
     [
       1.243e1,
@@ -10060,7 +10060,7 @@ export const breastCancerData = {
       2.237e-2,
       2.832e-2,
       1.901e-1,
-      5.932e-2,
+      5.932e-2
     ],
     [
       1.603e1,
@@ -10092,7 +10092,7 @@ export const breastCancerData = {
       4.956e-1,
       1.981e-1,
       3.019e-1,
-      9.124e-2,
+      9.124e-2
     ],
     [
       1.232e1,
@@ -10124,7 +10124,7 @@ export const breastCancerData = {
       1.242e-1,
       9.391e-2,
       2.827e-1,
-      6.771e-2,
+      6.771e-2
     ],
     [
       1.35e1,
@@ -10156,7 +10156,7 @@ export const breastCancerData = {
       1.379e-2,
       2.21e-2,
       2.267e-1,
-      6.192e-2,
+      6.192e-2
     ],
     [
       8.196,
@@ -10188,7 +10188,7 @@ export const breastCancerData = {
       6.88e-2,
       2.564e-2,
       3.105e-1,
-      7.409e-2,
+      7.409e-2
     ],
     [
       1.719e1,
@@ -10220,7 +10220,7 @@ export const breastCancerData = {
       3.889e-1,
       1.984e-1,
       3.216e-1,
-      7.57e-2,
+      7.57e-2
     ],
     [
       2.06e1,
@@ -10252,7 +10252,7 @@ export const breastCancerData = {
       9.387e-1,
       2.65e-1,
       4.087e-1,
-      1.24e-1,
+      1.24e-1
     ],
     [
       9.504,
@@ -10284,7 +10284,7 @@ export const breastCancerData = {
       8.867e-2,
       6.227e-2,
       2.45e-1,
-      7.773e-2,
+      7.773e-2
     ],
     [
       1.512e1,
@@ -10316,7 +10316,7 @@ export const breastCancerData = {
       3.327e-1,
       1.252e-1,
       3.415e-1,
-      9.74e-2,
+      9.74e-2
     ],
     [
       1.499e1,
@@ -10348,7 +10348,7 @@ export const breastCancerData = {
       3.114e-1,
       1.308e-1,
       3.163e-1,
-      9.251e-2,
+      9.251e-2
     ],
     [
       1.522e1,
@@ -10380,7 +10380,7 @@ export const breastCancerData = {
       1.17,
       2.356e-1,
       4.089e-1,
-      1.409e-1,
+      1.409e-1
     ],
     [
       9.405,
@@ -10412,7 +10412,7 @@ export const breastCancerData = {
       6.141e-2,
       3.77e-2,
       2.872e-1,
-      8.304e-2,
+      8.304e-2
     ],
     [
       9.876,
@@ -10444,7 +10444,7 @@ export const breastCancerData = {
       2.644e-1,
       9.749e-2,
       2.622e-1,
-      8.49e-2,
+      8.49e-2
     ],
     [
       1.55e1,
@@ -10476,7 +10476,7 @@ export const breastCancerData = {
       4.211e-1,
       2.134e-1,
       3.003e-1,
-      1.048e-1,
+      1.048e-1
     ],
     [
       1.289e1,
@@ -10508,7 +10508,7 @@ export const breastCancerData = {
       7.727e-1,
       1.561e-1,
       2.639e-1,
-      1.178e-1,
+      1.178e-1
     ],
     [
       1.157e1,
@@ -10540,7 +10540,7 @@ export const breastCancerData = {
       2.56e-1,
       6.664e-2,
       3.035e-1,
-      8.284e-2,
+      8.284e-2
     ],
     [
       1.143e1,
@@ -10572,7 +10572,7 @@ export const breastCancerData = {
       7.708e-2,
       6.402e-2,
       2.584e-1,
-      8.096e-2,
+      8.096e-2
     ],
     [
       8.888,
@@ -10604,7 +10604,7 @@ export const breastCancerData = {
       1.434e-1,
       4.786e-2,
       2.254e-1,
-      1.084e-1,
+      1.084e-1
     ],
     [
       1.236e1,
@@ -10636,7 +10636,7 @@ export const breastCancerData = {
       1.937e-1,
       8.442e-2,
       2.983e-1,
-      7.185e-2,
+      7.185e-2
     ],
     [
       1.497e1,
@@ -10668,7 +10668,7 @@ export const breastCancerData = {
       7.75e-2,
       5.754e-2,
       2.646e-1,
-      6.085e-2,
+      6.085e-2
     ],
     [
       1.405e1,
@@ -10700,7 +10700,7 @@ export const breastCancerData = {
       1.326e-1,
       1.048e-1,
       2.25e-1,
-      8.321e-2,
+      8.321e-2
     ],
     [
       1.846e1,
@@ -10732,7 +10732,7 @@ export const breastCancerData = {
       3.157e-1,
       1.642e-1,
       3.695e-1,
-      8.579e-2,
+      8.579e-2
     ],
     [
       9.268,
@@ -10764,7 +10764,7 @@ export const breastCancerData = {
       2.099e-1,
       1.025e-1,
       3.038e-1,
-      1.252e-1,
+      1.252e-1
     ],
     [
       1.791e1,
@@ -10796,7 +10796,7 @@ export const breastCancerData = {
       9.034e-1,
       1.964e-1,
       3.245e-1,
-      1.198e-1,
+      1.198e-1
     ],
     [
       1.288e1,
@@ -10828,7 +10828,7 @@ export const breastCancerData = {
       1.246e-1,
       1.096e-1,
       2.582e-1,
-      8.893e-2,
+      8.893e-2
     ],
     [
       1.561e1,
@@ -10860,7 +10860,7 @@ export const breastCancerData = {
       2.26e-1,
       8.568e-2,
       2.683e-1,
-      6.829e-2,
+      6.829e-2
     ],
     [
       1.742e1,
@@ -10892,7 +10892,7 @@ export const breastCancerData = {
       2.803e-1,
       1.099e-1,
       1.603e-1,
-      6.818e-2,
+      6.818e-2
     ],
     [
       1.275e1,
@@ -10924,7 +10924,7 @@ export const breastCancerData = {
       1.423e-1,
       8.045e-2,
       3.071e-1,
-      8.557e-2,
+      8.557e-2
     ],
     [
       2.018e1,
@@ -10956,7 +10956,7 @@ export const breastCancerData = {
       5.308e-1,
       2.173e-1,
       3.032e-1,
-      8.075e-2,
+      8.075e-2
     ],
     [
       1.831e1,
@@ -10988,7 +10988,7 @@ export const breastCancerData = {
       3.759e-1,
       1.51e-1,
       3.074e-1,
-      7.863e-2,
+      7.863e-2
     ],
     [
       1.504e1,
@@ -11020,8 +11020,8 @@ export const breastCancerData = {
       1.856e-1,
       1.018e-1,
       2.177e-1,
-      8.549e-2,
-    ],
+      8.549e-2
+    ]
   ],
   trueY: [
     0,
@@ -11137,7 +11137,7 @@ export const breastCancerData = {
     1,
     0,
     0,
-    1,
+    1
   ],
   predictedY: [
     1,
@@ -11253,7 +11253,7 @@ export const breastCancerData = {
     1,
     0,
     0,
-    0,
+    0
   ],
   probabilityY: [
     [3.77505559e-1, 6.22494441e-1],
@@ -11369,6 +11369,6 @@ export const breastCancerData = {
     [1.38771278e-2, 9.86122872e-1],
     [8.11753823e-1, 1.88246177e-1],
     [8.83590496e-1, 1.16409504e-1],
-    [5.8337958e-1, 4.1662042e-1],
-  ],
+    [5.8337958e-1, 4.1662042e-1]
+  ]
 };

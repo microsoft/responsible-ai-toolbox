@@ -33,18 +33,20 @@ module.exports = {
     xValue: "X 值:",
     yValue: "Y 值:",
     colorValue: "颜色:",
-    count: "项计数",
+    count: "项计数"
   },
   CrossClass: {
     label: "交叉类权重:",
     info: "有关跨类计算的信息",
     overviewInfo:
       "多类分类模型为每个类生成一个独立的特征重要性向量。每个类的特征重要性向量说明了哪些特征使类的可能性更高或更低。可以选择如何将每个类特征重要性向量的权重汇总为单个值:",
-    absoluteValInfo: "绝对值的平均值: 显示所有可能类中特征重要性的总和，除以类的数量",
+    absoluteValInfo:
+      "绝对值的平均值: 显示所有可能类中特征重要性的总和，除以类的数量",
     predictedClassInfo: "预测类: 显示给定点的预测类的特征重要性值",
-    enumeratedClassInfo: "枚举的类名: 仅显示所有数据点中指定的类的特征重要性值。",
+    enumeratedClassInfo:
+      "枚举的类名: 仅显示所有数据点中指定的类的特征重要性值。",
     close: "关闭",
-    crossClassWeights: "跨类权重",
+    crossClassWeights: "跨类权重"
   },
   AggregateImportance: {
     scaledFeatureValue: "缩放的特征值",
@@ -64,7 +66,7 @@ module.exports = {
     trueValue: "True 值",
     trueClass: "真实类",
     noColor: "无",
-    tooManyRows: "提供的数据集大于此图表可支持的数据集",
+    tooManyRows: "提供的数据集大于此图表可支持的数据集"
   },
   BarChart: {
     classLabel: "类: {0}",
@@ -72,7 +74,7 @@ module.exports = {
     noData: "无数据",
     absoluteGlobal: "绝对全局",
     absoluteLocal: "绝对本地",
-    calculatingExplanation: "正在计算解释",
+    calculatingExplanation: "正在计算解释"
   },
   IcePlot: {
     numericError: "必须为数值",
@@ -89,21 +91,21 @@ module.exports = {
     loadingMessage: "正在加载数据...",
     submitPrompt: "提交一个范围以查看 ICE 绘图",
     topLevelErrorMessage: "参数错误",
-    errorPrefix: "出现错误: {0}",
+    errorPrefix: "出现错误: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "正在加载...",
-    perturbationLabel: "小改动:",
+    perturbationLabel: "小改动:"
   },
   PredictionLabel: {
     predictedValueLabel: "预测值: {0}",
-    predictedClassLabel: "预测类: {0}",
+    predictedClassLabel: "预测类: {0}"
   },
   Violin: {
     groupNone: "不进行分组",
     groupPredicted: "预测 Y",
     groupTrue: "真实 Y",
-    groupBy: "分组依据",
+    groupBy: "分组依据"
   },
   FeatureImportanceWrapper: {
     chartType: "图表类型:",
@@ -111,9 +113,10 @@ module.exports = {
     barText: "条形图",
     boxText: "框",
     beehiveText: "Swarm",
-    globalImportanceExplanation: "全局特征重要性是通过对所有点的特征重要性的绝对值求平均值(L1 规范化)计算出来的。",
+    globalImportanceExplanation:
+      "全局特征重要性是通过对所有点的特征重要性的绝对值求平均值(L1 规范化)计算出来的。",
     multiclassImportanceAddendum:
-      "计算所有类的特征重要性时，所有点都包括在内，不使用任何差异权重。因此，对许多预测为非“A 类”的点具有较大负面重要性的特征将大大提高该特征的“A 类”重要性。",
+      "计算所有类的特征重要性时，所有点都包括在内，不使用任何差异权重。因此，对许多预测为非“A 类”的点具有较大负面重要性的特征将大大提高该特征的“A 类”重要性。"
   },
   Filters: {
     equalComparison: "等于",
@@ -129,7 +132,7 @@ module.exports = {
     maximum: "最大",
     min: "最小值: {0}",
     max: "最大值: {0}",
-    uniqueValues: "唯一值的数目: {0} 个",
+    uniqueValues: "唯一值的数目: {0} 个"
   },
   Columns: {
     regressionError: "回归错误",
@@ -141,16 +144,16 @@ module.exports = {
     falseNegative: "假负",
     dataset: "数据集",
     predictedProbabilities: "预测概率",
-    none: "计数",
+    none: "计数"
   },
   WhatIf: {
     closeAriaLabel: "关闭",
     defaultCustomRootName: "第 {0} 行的副本",
-    filterFeaturePlaceholder: "搜索特征",
+    filterFeaturePlaceholder: "搜索特征"
   },
   Cohort: {
     cohort: "队列",
-    defaultLabel: "所有数据",
+    defaultLabel: "所有数据"
   },
   GlobalTab: {
     helperText:
@@ -165,9 +168,10 @@ module.exports = {
     missingParameters: "此选项卡要求提供本地特征重要性参数。",
     weightOptions: "类重要性权重",
     dependencePlotTitle: "依赖关系图",
-    dependencePlotHelperText: "此依赖关系图显示特征的值与特征在整个队列中的相应重要性之间的关系。",
+    dependencePlotHelperText:
+      "此依赖关系图显示特征的值与特征在整个队列中的相应重要性之间的关系。",
     dependencePlotFeatureSelectPlaceholder: "选择特征",
-    datasetRequired: "依赖关系图需要计算数据集和本地特征重要性数组。",
+    datasetRequired: "依赖关系图需要计算数据集和本地特征重要性数组。"
   },
   CohortBanner: {
     dataStatistics: "数据统计信息",
@@ -181,7 +185,7 @@ module.exports = {
     editCohort: "编辑队列",
     duplicateCohort: "复制队列",
     addCohort: "添加队列",
-    copy: "副本",
+    copy: "副本"
   },
   ModelPerformance: {
     helperText:
@@ -189,7 +193,7 @@ module.exports = {
     modelStatistics: "模型统计信息",
     cohortPickerLabel: "选择要浏览的数据集队列",
     missingParameters: "此选项卡要求提供来自模型的预测值数组。",
-    missingTrueY: "除了预测结果之外，模型性能统计信息还要求提供 true 结果",
+    missingTrueY: "除了预测结果之外，模型性能统计信息还要求提供 true 结果"
   },
   Charts: {
     yValue: "Y 值",
@@ -202,7 +206,7 @@ module.exports = {
     featurePrefix: "特征",
     importancePrefix: "重要性",
     cohort: "队列",
-    howToRead: "如何阅读此图表",
+    howToRead: "如何阅读此图表"
   },
   DatasetExplorer: {
     helperText:
@@ -212,11 +216,11 @@ module.exports = {
     aggregatePlots: "聚合绘图",
     chartType: "图表类型",
     missingParameters: "此选项卡要求提供评估数据集。",
-    noColor: "无",
+    noColor: "无"
   },
   DependencePlot: {
     featureImportanceOf: "特性重要性为",
-    placeholder: "单击上面条形图中的特征可以显示它的相关性绘图",
+    placeholder: "单击上面条形图中的特征可以显示它的相关性绘图"
   },
   WhatIfTab: {
     helperText:
@@ -231,12 +235,14 @@ module.exports = {
     showLabel: "显示:",
     featureImportancePlot: "特征重要性绘图",
     icePlot: "个体条件期望(ICE)图",
-    featureImportanceLackingParameters: "请提供本地特征重要性，以了解每个特征对各个预测有何影响。",
+    featureImportanceLackingParameters:
+      "请提供本地特征重要性，以了解每个特征对各个预测有何影响。",
     featureImportanceGetStartedText: "选择一个点来查看特征重要性",
     iceLackingParameters: "ICE 绘图需要运营模型才能对假设数据点进行预测。",
     IceGetStartedText: "选择一个点或创建一个模拟点来查看 ICE 绘图",
     whatIfDatapoint: "模拟数据点",
-    whatIfHelpText: "在绘图上选择一个点，或手动输入一个要打乱的已知数据点索引，并另存为新的模拟点。",
+    whatIfHelpText:
+      "在绘图上选择一个点，或手动输入一个要打乱的已知数据点索引，并另存为新的模拟点。",
     indexLabel: "要打乱的数据索引",
     rowLabel: "第 {0} 行",
     whatIfNameLabel: "模拟数据点名称",
@@ -268,7 +274,8 @@ module.exports = {
     probabilityLabel: "概率",
     deltaLabel: "增量",
     nonNumericValue: "值应为数值",
-    icePlotHelperText: "ICE 图演示了所选数据点的预测值是如何沿介于最小值和最大值之间的一系列特征值变化的。",
+    icePlotHelperText:
+      "ICE 图演示了所选数据点的预测值是如何沿介于最小值和最大值之间的一系列特征值变化的。"
   },
   CohortEditor: {
     selectFilter: "选择筛选器",
@@ -283,7 +290,7 @@ module.exports = {
     delete: "删除",
     cancel: "取消",
     cohortNameError: "缺少队列名称",
-    placeholderName: "队列 {0}",
+    placeholderName: "队列 {0}"
   },
   AxisConfigDialog: {
     select: "选择",
@@ -295,7 +302,7 @@ module.exports = {
     numOfBins: "箱数",
     groupByCohort: "按队列分组",
     selectClass: "选择类",
-    countHelperText: "点数直方图",
+    countHelperText: "点数直方图"
   },
   ValidationErrors: {
     predictedProbability: "预测概率",
@@ -307,9 +314,10 @@ module.exports = {
     varyingLength: "尺寸不一致。{0} 有长度不同的元素",
     notArray: "{0} 不是数组。应为尺寸 {1} 的数组",
     errorHeader: "有些输入参数不一致，将不会被使用:",
-    datasizeWarning: "计算数据集过大，无法有效地显示在某些图表中，请添加筛选器以减小队列的大小。",
+    datasizeWarning:
+      "计算数据集过大，无法有效地显示在某些图表中，请添加筛选器以减小队列的大小。",
     datasizeError: "所选队列过大，请添加筛选器以减小队列的大小。",
-    addFilters: "添加筛选器",
+    addFilters: "添加筛选器"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -319,7 +327,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: "包含 {0}",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} 和另外 {1} 人",
+    overflowFilterArgs: "{0} 和另外 {1} 人"
   },
   Statistics: {
     mse: "均方误差: {0}",
@@ -329,10 +337,11 @@ module.exports = {
     precision: "精准率: {0}",
     recall: "召回率: {0}",
     fpr: "假正率: {0}",
-    fnr: "假负率: {0}",
+    fnr: "假负率: {0}"
   },
   GlobalOnlyChart: {
-    helperText: "了解可影响整体模型预测的前 k 个重要特征。使用滑块可按降序显示特征重要性。",
+    helperText:
+      "了解可影响整体模型预测的前 k 个重要特征。使用滑块可按降序显示特征重要性。"
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "这些解释是什么意思?",
@@ -348,6 +357,6 @@ module.exports = {
       "此解释器基于以下理念: 训练全局代理模型来模仿黑盒模型。全局代理模型是一种本质上可解释的模型，它被训练为尽可能准确地对任何黑盒模型的预测进行近似处理。特征重要性值是基础代理模型(LightGBM、线性回归、随机梯度下降或决策树)的基于模型的特征重要性值",
     pfiTitle: "排列特征重要性(PFI)",
     pfiDescription:
-      "此解释器对整个数据集一次一个特征地随机选择数据，并计算相关性能指标的变化幅度(默认性能指标: F1 用于二元分类，含微平均的 F1 分数用于多类分类，平均绝对误差用于回归)。变化越大，相应特征就越重要。此解释器只能解释基础模型的整体行为，而不能解释单个预测。特征的特征重要性值代表了通过扰乱相应特定特征实现的模型性能增量。",
-  },
+      "此解释器对整个数据集一次一个特征地随机选择数据，并计算相关性能指标的变化幅度(默认性能指标: F1 用于二元分类，含微平均的 F1 分数用于多类分类，平均绝对误差用于回归)。变化越大，相应特征就越重要。此解释器只能解释基础模型的整体行为，而不能解释单个预测。特征的特征重要性值代表了通过扰乱相应特定特征实现的模型性能增量。"
+  }
 };

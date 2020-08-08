@@ -1,5 +1,6 @@
 module.exports = {
-  selectPoint: "Wählen Sie einen Punkt aus, um seine lokale Erklärung anzuzeigen.",
+  selectPoint:
+    "Wählen Sie einen Punkt aus, um seine lokale Erklärung anzuzeigen.",
   defaultClassNames: 'Klasse "{0}"',
   defaultFeatureNames: 'Feature "{0}"',
   absoluteAverage: "Durchschnitt des absoluten Werts",
@@ -33,7 +34,7 @@ module.exports = {
     xValue: "X-Wert:",
     yValue: "Y-Wert:",
     colorValue: "Farbe:",
-    count: "Anzahl",
+    count: "Anzahl"
   },
   CrossClass: {
     label: "Klassenübergreifende Gewichtung:",
@@ -47,7 +48,7 @@ module.exports = {
     enumeratedClassInfo:
       "Aufgelistete Klassennamen: Zeigt nur die Featurerelevanz der angegebenen Klasse für alle Datenpunkte an.",
     close: "Schließen",
-    crossClassWeights: "Klassenübergreifende Gewichtungen",
+    crossClassWeights: "Klassenübergreifende Gewichtungen"
   },
   AggregateImportance: {
     scaledFeatureValue: "Featurewert auf Farbskala",
@@ -67,7 +68,8 @@ module.exports = {
     trueValue: "True-Wert",
     trueClass: "TRUE-Klasse",
     noColor: "Keine",
-    tooManyRows: "Das angegebene Dataset ist größer als von diesem Diagramm unterstützt wird.",
+    tooManyRows:
+      "Das angegebene Dataset ist größer als von diesem Diagramm unterstützt wird."
   },
   BarChart: {
     classLabel: "Klasse: {0}",
@@ -75,7 +77,7 @@ module.exports = {
     noData: "Keine Daten",
     absoluteGlobal: "Absolut global",
     absoluteLocal: "Absolut lokal",
-    calculatingExplanation: "Erklärung wird berechnet.",
+    calculatingExplanation: "Erklärung wird berechnet."
   },
   IcePlot: {
     numericError: "Muss numerisch sein.",
@@ -84,29 +86,31 @@ module.exports = {
     predictedProbability: "Vorhergesagte Wahrscheinlichkeit",
     predictionLabel: "Vorhersage: {0}",
     probabilityLabel: "Wahrscheinlichkeit: {0}",
-    noModelError: "Geben Sie ein operationalisiertes Modell an, um Vorhersagen in ICE-Plots zu untersuchen.",
+    noModelError:
+      "Geben Sie ein operationalisiertes Modell an, um Vorhersagen in ICE-Plots zu untersuchen.",
     featurePickerLabel: "Feature:",
     minimumInputLabel: "Minimum:",
     maximumInputLabel: "Maximum:",
     stepInputLabel: "Schritte:",
     loadingMessage: "Daten werden geladen...",
-    submitPrompt: "Übermitteln Sie einen Bereich, um einen ICE-Plot anzuzeigen.",
+    submitPrompt:
+      "Übermitteln Sie einen Bereich, um einen ICE-Plot anzuzeigen.",
     topLevelErrorMessage: "Fehler in Parameter.",
-    errorPrefix: "Fehler erkannt: {0} ",
+    errorPrefix: "Fehler erkannt: {0} "
   },
   PerturbationExploration: {
     loadingMessage: "Wird geladen...",
-    perturbationLabel: "Störeinfluss:",
+    perturbationLabel: "Störeinfluss:"
   },
   PredictionLabel: {
     predictedValueLabel: "Vorhergesagter Wert : {0}",
-    predictedClassLabel: "Vorhergesagte Klasse : {0}",
+    predictedClassLabel: "Vorhergesagte Klasse : {0}"
   },
   Violin: {
     groupNone: "Keine Gruppierung",
     groupPredicted: "Vorhersage für Y",
     groupTrue: "TRUE Y",
-    groupBy: "Gruppieren nach",
+    groupBy: "Gruppieren nach"
   },
   FeatureImportanceWrapper: {
     chartType: "Diagrammtyp:",
@@ -117,7 +121,7 @@ module.exports = {
     globalImportanceExplanation:
       "Die globale Featurerelevanz wird berechnet, indem der Durchschnitt des absoluten Werts der Featurerelevanz aller Punkte ermittelt wird (L1-Normalisierung). ",
     multiclassImportanceAddendum:
-      'Bei der Berechnung der Featurerelevanz für alle Klassen werden alle Punkte berücksichtigt, es wird keine differenzielle Gewichtung verwendet. Ein Feature mit hoher negativer Relevanz, bei dem viele Punkte in der Vorhersage nicht der "Klasse A" zugeordnet werden, führt daher zu einer erheblich erhöhten Featurerelevanz der "Klasse A".',
+      'Bei der Berechnung der Featurerelevanz für alle Klassen werden alle Punkte berücksichtigt, es wird keine differenzielle Gewichtung verwendet. Ein Feature mit hoher negativer Relevanz, bei dem viele Punkte in der Vorhersage nicht der "Klasse A" zugeordnet werden, führt daher zu einer erheblich erhöhten Featurerelevanz der "Klasse A".'
   },
   Filters: {
     equalComparison: "Gleich",
@@ -133,7 +137,7 @@ module.exports = {
     maximum: "Maximum",
     min: "Mindestwert: {0}",
     max: "Höchstwert: {0}",
-    uniqueValues: "Anzahl eindeutiger Werte: {0}",
+    uniqueValues: "Anzahl eindeutiger Werte: {0}"
   },
   Columns: {
     regressionError: "Regressionsfehler",
@@ -145,35 +149,37 @@ module.exports = {
     falseNegative: "False Negative",
     dataset: "Dataset",
     predictedProbabilities: "Vorhersagewahrscheinlichkeiten",
-    none: "Anzahl",
+    none: "Anzahl"
   },
   WhatIf: {
     closeAriaLabel: "Schließen",
     defaultCustomRootName: "Kopie von Zeile {0}",
-    filterFeaturePlaceholder: "Features durchsuchen",
+    filterFeaturePlaceholder: "Features durchsuchen"
   },
   Cohort: {
     cohort: "Kohorte",
-    defaultLabel: "Alle Daten",
+    defaultLabel: "Alle Daten"
   },
   GlobalTab: {
     helperText:
       "Untersuchen Sie die wichtigsten k Funktionen, die sich auf die Gesamtvorhersagen Ihrer Modelle auswirken (globale Erklärungen). Verwenden Sie den Schieberegler, um absteigende Featurerelevanzwerte anzuzeigen. Wählen Sie bis zu drei Kohorten aus, um die zugehörigen Featurerelevanzwerte nebeneinander anzuzeigen. Klicken Sie auf einen der Featurebalken im Diagramm, um anzuzeigen, wie sich die Werte des ausgewählten Features auf die Modellvorhersage auswirken.",
     topAtoB: "Erste {0} bis {1} Features",
     datasetCohorts: "Datasetkohorten",
-    legendHelpText: "Aktivieren und deaktivieren Sie Kohorten im Plot, indem Sie auf die Legendenelemente klicken.",
+    legendHelpText:
+      "Aktivieren und deaktivieren Sie Kohorten im Plot, indem Sie auf die Legendenelemente klicken.",
     sortBy: "Sortieren nach",
     viewDependencePlotFor: "Abhängigkeitsplot anzeigen für:",
     datasetCohortSelector: "Datasetkohorte auswählen",
     aggregateFeatureImportance: "Aggregierte Featurerelevanz",
-    missingParameters: "Auf dieser Registerkarte muss der Parameter für die lokale Featurerelevanz angegeben werden.",
+    missingParameters:
+      "Auf dieser Registerkarte muss der Parameter für die lokale Featurerelevanz angegeben werden.",
     weightOptions: "Gewichtungen der Klassenrelevanz",
     dependencePlotTitle: "Abhängigkeitsplots",
     dependencePlotHelperText:
       "Dieser Abhängigkeitsplot zeigt die Beziehung zwischen dem Wert eines Features und der entsprechenden Relevanz des Features in einer Kohorte.",
     dependencePlotFeatureSelectPlaceholder: "Feature auswählen",
     datasetRequired:
-      "Für Abhängigkeitsplots ist das Array aus Auswertungsdataset und lokaler Featurerelevanz erforderlich.",
+      "Für Abhängigkeitsplots ist das Array aus Auswertungsdataset und lokaler Featurerelevanz erforderlich."
   },
   CohortBanner: {
     dataStatistics: "Datenstatistik",
@@ -187,7 +193,7 @@ module.exports = {
     editCohort: "Kohorte bearbeiten",
     duplicateCohort: "Doppelte Kohorte",
     addCohort: "Kohorte hinzufügen",
-    copy: " Kopie",
+    copy: " Kopie"
   },
   ModelPerformance: {
     helperText:
@@ -197,7 +203,7 @@ module.exports = {
     missingParameters:
       "Auf dieser Registerkarte muss das Array mit vorhergesagten Werten aus dem Modell angegeben werden.",
     missingTrueY:
-      "Für die Modellleistungsstatistik müssen zusätzlich zu den vorhergesagten Ergebnissen die tatsächlichen Ergebnisse angegeben werden.",
+      "Für die Modellleistungsstatistik müssen zusätzlich zu den vorhergesagten Ergebnissen die tatsächlichen Ergebnisse angegeben werden."
   },
   Charts: {
     yValue: "Y-Wert",
@@ -210,7 +216,7 @@ module.exports = {
     featurePrefix: "Feature",
     importancePrefix: "Relevanz",
     cohort: "Kohorte",
-    howToRead: "Lesen dieses Diagramms",
+    howToRead: "Lesen dieses Diagramms"
   },
   DatasetExplorer: {
     helperText:
@@ -219,18 +225,20 @@ module.exports = {
     individualDatapoints: "Einzelne Datenpunkte",
     aggregatePlots: "Aggregierte Plots",
     chartType: "Diagrammtyp",
-    missingParameters: "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
-    noColor: "Keine",
+    missingParameters:
+      "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
+    noColor: "Keine"
   },
   DependencePlot: {
     featureImportanceOf: "Featurerelevanz von",
     placeholder:
-      "Klicken Sie im obigen Balkendiagramm auf ein Feature, um den zugehörigen Abhängigkeitsplot anzuzeigen.",
+      "Klicken Sie im obigen Balkendiagramm auf ein Feature, um den zugehörigen Abhängigkeitsplot anzuzeigen."
   },
   WhatIfTab: {
     helperText:
       'Sie können einen Datenpunkt auswählen, indem Sie auf das Streudiagramm klicken, um unten die zugehörigen lokalen Featurerelevanzwerte (lokale Erklärungen) und den ICE-Plot (Individual Conditional Expectation) anzuzeigen. Erstellen Sie einen hypothetischen Was-wäre-wenn-Datenpunkt, indem Sie den Bereich rechts verwenden, um Features eines bekannten Datenpunkts zu stören. Featurerelevanzwerte basieren auf zahlreichen Näherungen und sind nicht die "Ursache" von Vorhersagen. Ohne absolute mathematische Belastbarkeit der kausalen Rückschlüsse raten wir Benutzern davon ab, basierend auf diesem Tool Entscheidungen in der Praxis zu treffen.',
-    panelPlaceholder: "Für Vorhersagen für neue Datenpunkte ist ein Modell erforderlich.",
+    panelPlaceholder:
+      "Für Vorhersagen für neue Datenpunkte ist ein Modell erforderlich.",
     cohortPickerLabel: "Wählen Sie eine Datasetkohorte zur Untersuchung aus.",
     scatterLegendText:
       "Aktivieren und deaktivieren Sie die Datenpunkte im Plot, indem Sie auf die Legendenelemente klicken.",
@@ -243,7 +251,8 @@ module.exports = {
     icePlot: "ICE-Plot (Individual Conditional Expectation)",
     featureImportanceLackingParameters:
       "Geben Sie Werte für die lokale Featurerelevanz an, um festzustellen, wie sich jedes Feature auf die einzelnen Vorhersagen auswirkt.",
-    featureImportanceGetStartedText: "Wählen Sie einen Punkt für die Anzeige der Featurerelevanz aus.",
+    featureImportanceGetStartedText:
+      "Wählen Sie einen Punkt für die Anzeige der Featurerelevanz aus.",
     iceLackingParameters:
       "Für ICE-Plots ist ein operationalisiertes Modell erforderlich, um Vorhersagen für hypothetische Datenpunkte zu treffen.",
     IceGetStartedText:
@@ -273,7 +282,8 @@ module.exports = {
     stepsLabel: "Schritte",
     disclaimer:
       'Haftungsausschluss: Diese Erläuterungen basieren auf zahlreichen Näherungswerten und stellen nicht die "Ursache" von Vorhersagen dar. Ohne absolute mathematische Belastbarkeit der kausalen Rückschlüsse raten wir Benutzern davon ab, basierend auf diesem Tool Entscheidungen in der Praxis zu treffen.',
-    missingParameters: "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
+    missingParameters:
+      "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
     selectionLimit: "Maximal 3 ausgewählte Punkte",
     classPickerLabel: "Klasse",
     tooltipTitleMany: "Erste {0} vorhergesagte Klassen",
@@ -283,7 +293,7 @@ module.exports = {
     deltaLabel: "Delta",
     nonNumericValue: "Der Wert muss numerisch sein.",
     icePlotHelperText:
-      "ICE-Plots zeigen, wie sich die Vorhersagewerte des ausgewählten Datenpunkts entlang eines Bereichs von Featurewerten zwischen einem Mindest- und einem Höchstwert ändern.",
+      "ICE-Plots zeigen, wie sich die Vorhersagewerte des ausgewählten Datenpunkts entlang eines Bereichs von Featurewerten zwischen einem Mindest- und einem Höchstwert ändern."
   },
   CohortEditor: {
     selectFilter: "Filter auswählen",
@@ -291,14 +301,15 @@ module.exports = {
     addFilter: "Filter hinzufügen",
     addedFilters: "Hinzugefügte Filter",
     noAddedFilters: "Noch keine Filter hinzugefügt.",
-    defaultFilterState: "Wählen Sie einen Filter aus, um Ihrer Datasetkohorte Parameter hinzuzufügen.",
+    defaultFilterState:
+      "Wählen Sie einen Filter aus, um Ihrer Datasetkohorte Parameter hinzuzufügen.",
     cohortNameLabel: "Name der Datasetkohorte",
     cohortNamePlaceholder: "Kohorte benennen",
     save: "Speichern",
     delete: "Löschen",
     cancel: "Abbrechen",
     cohortNameError: "Kohortenname fehlt.",
-    placeholderName: 'Kohorte "{0}"',
+    placeholderName: 'Kohorte "{0}"'
   },
   AxisConfigDialog: {
     select: "Auswählen",
@@ -310,23 +321,27 @@ module.exports = {
     numOfBins: "Datengruppenanzahl",
     groupByCohort: "Nach Kohorte gruppieren",
     selectClass: "Klasse auswählen",
-    countHelperText: "Ein Histogramm der Punkteanzahl",
+    countHelperText: "Ein Histogramm der Punkteanzahl"
   },
   ValidationErrors: {
     predictedProbability: "Vorhergesagte Wahrscheinlichkeit",
     predictedY: "Vorhersage für Y",
     evalData: "Auswertungsdataset",
     localFeatureImportance: "Lokale Featurerelevanz",
-    inconsistentDimensions: 'Inkonsistente Dimensionen. "{0}" weist die Dimensionen "{1}" auf, erwartet: {2}.',
+    inconsistentDimensions:
+      'Inkonsistente Dimensionen. "{0}" weist die Dimensionen "{1}" auf, erwartet: {2}.',
     notNonEmpty: 'Die Eingabe "{0}" ist kein nicht leeres Array.',
-    varyingLength: 'Inkonsistente Dimensionen. "{0}" weist Elemente unterschiedlicher Länge auf.',
-    notArray: '"{0}" ist kein Array. Es wird ein Array mit der Dimension "{1}" erwartet.',
-    errorHeader: "Einige Eingabeparameter waren inkonsistent und werden nicht verwendet: ",
+    varyingLength:
+      'Inkonsistente Dimensionen. "{0}" weist Elemente unterschiedlicher Länge auf.',
+    notArray:
+      '"{0}" ist kein Array. Es wird ein Array mit der Dimension "{1}" erwartet.',
+    errorHeader:
+      "Einige Eingabeparameter waren inkonsistent und werden nicht verwendet: ",
     datasizeWarning:
       "Das Auswertungsdataset ist zu groß, um in einigen Diagrammen effektiv angezeigt zu werden. Fügen Sie Filter hinzu, um die Größe der Kohorte zu verringern. ",
     datasizeError:
       "Die ausgewählte Kohorte ist zu groß. Fügen Sie Filter hinzu, um die Größe der Kohorte zu verringern.",
-    addFilters: "Filter hinzufügen",
+    addFilters: "Filter hinzufügen"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -336,7 +351,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " enthält {0} ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} und {1} andere",
+    overflowFilterArgs: "{0} und {1} andere"
   },
   Statistics: {
     mse: "Mittlere quadratische Abweichung: {0}",
@@ -346,11 +361,11 @@ module.exports = {
     precision: "Genauigkeit: {0}",
     recall: "Abruf: {0}",
     fpr: "FPR: {0}",
-    fnr: "FNR: {0}",
+    fnr: "FNR: {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Untersuchen Sie die Features mit Top-k-Relevanz, die sich auf Ihre Modellvorhersagen insgesamt auswirken. Verwenden Sie den Schieberegler, um Featurerelevanzen absteigend anzuzeigen.",
+      "Untersuchen Sie die Features mit Top-k-Relevanz, die sich auf Ihre Modellvorhersagen insgesamt auswirken. Verwenden Sie den Schieberegler, um Featurerelevanzen absteigend anzuzeigen."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "Was bedeuten diese Erklärungen?",
@@ -366,6 +381,6 @@ module.exports = {
       "Dieses Erklärmodul basiert auf der Idee, globale Ersatzmodelle zur Nachahmung von Blackbox-Modellen zu trainieren. Ein globales Ersatzmodell ist ein intrinsisch interpretierbares Modell, das so trainiert wird, dass es sich so genau wie möglich an die Vorhersagen eines Black Box-Modells annähert. Die Werte der Featurerelevanz sind modellbasierte Featurerelevanzwerte des zugrunde liegenden Ersatzmodells (LightGBM, lineare Regression, stochastischer Gradientenabstieg oder Entscheidungsstruktur).",
     pfiTitle: "Permutation Feature Importance (PFI)",
     pfiDescription:
-      "Dieses Erklärmodul ordnet die Daten für den gesamten Datensatz – jeweils ein Feature nach dem anderen – nach dem Zufallsprinzip an und berechnet, wie sich die relevante Leistungsmetrik ändert (standardmäßige Leistungsmetriken: F1 für binäre Klassifikation, F1-Bewertung mit Mikrodurchschnitt für Mehrklassenklassifikation und mittlerer absoluter Fehler für Regression). Je größer die Änderung, desto relevanter ist das Feature. Dieses Erklärmodul kann nur das Gesamtverhalten des zugrunde liegenden Modells erklären, nicht jedoch einzelne Vorhersagen. Der Wert der Featurerelevanz repräsentiert das Delta für die Modellleistung, indem dieses bestimmte Feature gestört wird.",
-  },
+      "Dieses Erklärmodul ordnet die Daten für den gesamten Datensatz – jeweils ein Feature nach dem anderen – nach dem Zufallsprinzip an und berechnet, wie sich die relevante Leistungsmetrik ändert (standardmäßige Leistungsmetriken: F1 für binäre Klassifikation, F1-Bewertung mit Mikrodurchschnitt für Mehrklassenklassifikation und mittlerer absoluter Fehler für Regression). Je größer die Änderung, desto relevanter ist das Feature. Dieses Erklärmodul kann nur das Gesamtverhalten des zugrunde liegenden Modells erklären, nicht jedoch einzelne Vorhersagen. Der Wert der Featurerelevanz repräsentiert das Delta für die Modellleistung, indem dieses bestimmte Feature gestört wird."
+  }
 };

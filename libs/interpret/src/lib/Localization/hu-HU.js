@@ -1,5 +1,6 @@
 module.exports = {
-  selectPoint: "A helyi magyarázat megjelenítéséhez válassza ki a kívánt pontot",
+  selectPoint:
+    "A helyi magyarázat megjelenítéséhez válassza ki a kívánt pontot",
   defaultClassNames: "{0} osztály",
   defaultFeatureNames: "{0} funkció",
   absoluteAverage: "Abszolút érték átlaga",
@@ -33,7 +34,7 @@ module.exports = {
     xValue: "X érték",
     yValue: "Y érték",
     colorValue: "Szín:",
-    count: "Mennyiség",
+    count: "Mennyiség"
   },
   CrossClass: {
     label: "Többosztályos súlyozás:",
@@ -47,7 +48,7 @@ module.exports = {
     enumeratedClassInfo:
       "Enumerált osztálynevek: csak a megadott osztály jellemzőfontossági értékeinek megjelenítése az összes adatpontra vonatkozóan.",
     close: "Bezárás",
-    crossClassWeights: "Több osztályra vonatkozó súlyozás",
+    crossClassWeights: "Több osztályra vonatkozó súlyozás"
   },
   AggregateImportance: {
     scaledFeatureValue: "Skálázott funkció értéke",
@@ -67,7 +68,8 @@ module.exports = {
     trueValue: "Igaz érték",
     trueClass: "Igaz osztály",
     noColor: "Nincs",
-    tooManyRows: "A megadott adathalmaz nagyobb a diagram által támogatott méretnél",
+    tooManyRows:
+      "A megadott adathalmaz nagyobb a diagram által támogatott méretnél"
   },
   BarChart: {
     classLabel: "Osztály: {0}",
@@ -75,7 +77,7 @@ module.exports = {
     noData: "Nincs adat",
     absoluteGlobal: "Abszolút globális",
     absoluteLocal: "Abszolút helyi",
-    calculatingExplanation: "Magyarázat kiszámítása",
+    calculatingExplanation: "Magyarázat kiszámítása"
   },
   IcePlot: {
     numericError: "Numerikus karakternek kell lennie",
@@ -84,7 +86,8 @@ module.exports = {
     predictedProbability: "Előre jelzett valószínűség",
     predictionLabel: "Előrejelzés: {0}",
     probabilityLabel: "Valószínűség: {0}",
-    noModelError: "Adjon meg egy üzembe helyezett modellt az ICE-diagramokban lévő előrejelzések vizsgálatához.",
+    noModelError:
+      "Adjon meg egy üzembe helyezett modellt az ICE-diagramokban lévő előrejelzések vizsgálatához.",
     featurePickerLabel: "Funkciófrissítés:",
     minimumInputLabel: "Minimum:",
     maximumInputLabel: "Maximum:",
@@ -92,21 +95,21 @@ module.exports = {
     loadingMessage: "Adatok betöltése...",
     submitPrompt: "Adja meg az ICE-diagramon megtekinteni kívánt tartományt",
     topLevelErrorMessage: "Hiba a paraméterben",
-    errorPrefix: "Hiba történt: {0}",
+    errorPrefix: "Hiba történt: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "Betöltés...",
-    perturbationLabel: "Perturbáció:",
+    perturbationLabel: "Perturbáció:"
   },
   PredictionLabel: {
     predictedValueLabel: "Előre jelzett érték: {0}",
-    predictedClassLabel: "Előre jelzett osztály: {0}",
+    predictedClassLabel: "Előre jelzett osztály: {0}"
   },
   Violin: {
     groupNone: "Nincs csoportosítás",
     groupPredicted: "Előre jelzett Y",
     groupTrue: "Igaz Y",
-    groupBy: "Csoportosítási szempont",
+    groupBy: "Csoportosítási szempont"
   },
   FeatureImportanceWrapper: {
     chartType: "Diagram típusa:",
@@ -117,7 +120,7 @@ module.exports = {
     globalImportanceExplanation:
       "A globális jellemzőfontosság az összes pont (L1 normalizálás) abszolút jellemzőfontossági értékének átlagolásával számítható ki. ",
     multiclassImportanceAddendum:
-      "A funkciófontosság összes osztályra vonatkozóan történő kiszámítása minden pontot magában foglal, tehát nem használ különbségi súlyozást. Így egy olyan funkció, amelynek nagy negatív fontossága van számos nem „A osztályúként” előrejelzett pont esetében, nagy mértékben növelni fogja a funkció „A osztályú” fontosságát.",
+      "A funkciófontosság összes osztályra vonatkozóan történő kiszámítása minden pontot magában foglal, tehát nem használ különbségi súlyozást. Így egy olyan funkció, amelynek nagy negatív fontossága van számos nem „A osztályúként” előrejelzett pont esetében, nagy mértékben növelni fogja a funkció „A osztályú” fontosságát."
   },
   Filters: {
     equalComparison: "Egyenlő",
@@ -133,7 +136,7 @@ module.exports = {
     maximum: "Maximum",
     min: "Minimum: {0}",
     max: "Maximum: {0}",
-    uniqueValues: "egyedi értékek száma: {0}",
+    uniqueValues: "egyedi értékek száma: {0}"
   },
   Columns: {
     regressionError: "Regressziós hiba",
@@ -145,34 +148,37 @@ module.exports = {
     falseNegative: "Álnegatív",
     dataset: "Adathalmaz",
     predictedProbabilities: "Előrejelzési valószínűségek",
-    none: "Mennyiség",
+    none: "Mennyiség"
   },
   WhatIf: {
     closeAriaLabel: "Bezárás",
     defaultCustomRootName: "{0}. sor másolata",
-    filterFeaturePlaceholder: "Jellemzők keresése",
+    filterFeaturePlaceholder: "Jellemzők keresése"
   },
   Cohort: {
     cohort: "Kohorsz",
-    defaultLabel: "Minden adat",
+    defaultLabel: "Minden adat"
   },
   GlobalTab: {
     helperText:
       "Megtekintheti azokat a top-k típusú fontos jellemzőket, amelyek hatással vannak az általános modell-előrejelzésekre (más néven globális értelmezésre). A jellemzőfontossági értékeket a csúszka segítségével jelenítheti meg csökkenő sorrendben. Legfeljebb három kohorszot kiválasztva egymás mellet jelenítheti meg azok jellemzőfontosságát. A diagram bármely jellemzősávjára kattintva megtekintheti, hogy a kiválasztott jellemző értékei miként befolyásolják a modell előrejelzését.",
     topAtoB: "Első {0}-{1} jellemző",
     datasetCohorts: "Adathalmazi kohorszok",
-    legendHelpText: "A jelmagyarázat elemeire kattintva be- és kikapcsolhatja a kohorszokat a diagramon.",
+    legendHelpText:
+      "A jelmagyarázat elemeire kattintva be- és kikapcsolhatja a kohorszokat a diagramon.",
     sortBy: "Rendezés szempontja",
     viewDependencePlotFor: "Függőségi terület megtekintése:",
     datasetCohortSelector: "Adathalmazkohorsz kiválasztása",
     aggregateFeatureImportance: "Aggregált jellemzőfontosság",
-    missingParameters: "Ezen a lapon meg kell adni a helyi jellemzőfontossági paramétert.",
+    missingParameters:
+      "Ezen a lapon meg kell adni a helyi jellemzőfontossági paramétert.",
     weightOptions: "Osztály fontossági súlyozása",
     dependencePlotTitle: "Függőségi ábrák",
     dependencePlotHelperText:
       "Ez a függőségi ábra a funkció értéke és a funkció kohorszban betöltött fontossága közötti kapcsolatot mutatja meg.",
     dependencePlotFeatureSelectPlaceholder: "Jellemző kiválasztása",
-    datasetRequired: "A függőségi ábrák megkövetelik a kiértékelési adathalmazt és a helyi jellemzőfontossági tömböt.",
+    datasetRequired:
+      "A függőségi ábrák megkövetelik a kiértékelési adathalmazt és a helyi jellemzőfontossági tömböt."
   },
   CohortBanner: {
     dataStatistics: "Adatstatisztikák",
@@ -186,16 +192,17 @@ module.exports = {
     editCohort: "Kohorsz szerkesztése",
     duplicateCohort: "Ismétlődő kohorsz",
     addCohort: "Kohorsz hozzáadása",
-    copy: " másolás",
+    copy: " másolás"
   },
   ModelPerformance: {
     helperText:
       "Megvizsgálhatja a modell teljesítményét a becslési értékek eloszlásának és a modell teljesítménymetrika-értékeinek feltárásával. A modell további vizsgálatával áttekintheti a modellnek az adathalmaz különböző kohorszaiban vagy alcsoportjában mutatott teljesítményét összehasonlító elemzést. Kiválaszthatja az y-értékhez és az x-értékhez a szűrőket a különböző dimenziók kivágásához. A diagram típusát a fogaskerék kiválasztásával módosíthatja a grafikonon.",
     modelStatistics: "Modell statisztikái",
     cohortPickerLabel: "Válassza ki a böngészni kívánt adathalmazkohorszt",
-    missingParameters: "Ezen a lapon meg kell adni a modell előrejelzett értékeinek tömbjét.",
+    missingParameters:
+      "Ezen a lapon meg kell adni a modell előrejelzett értékeinek tömbjét.",
     missingTrueY:
-      "A modell teljesítménystatisztikáihoz arra van szükség, hogy az előrejelzett kimenetek mellett a tényleges kimenetek is meg legyenek adva",
+      "A modell teljesítménystatisztikáihoz arra van szükség, hogy az előrejelzett kimenetek mellett a tényleges kimenetek is meg legyenek adva"
   },
   Charts: {
     yValue: "Y-érték",
@@ -208,7 +215,7 @@ module.exports = {
     featurePrefix: "Funkció:",
     importancePrefix: "Fontosság:",
     cohort: "Kohorsz",
-    howToRead: "A diagram értelmezése",
+    howToRead: "A diagram értelmezése"
   },
   DatasetExplorer: {
     helperText:
@@ -217,19 +224,23 @@ module.exports = {
     individualDatapoints: "Egyéni adatpontok",
     aggregatePlots: "Aggregált diagramok",
     chartType: "Diagram típusa",
-    missingParameters: "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
-    noColor: "Nincs",
+    missingParameters:
+      "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
+    noColor: "Nincs"
   },
   DependencePlot: {
     featureImportanceOf: "A következő jellemzőfontossága:",
-    placeholder: "Kattintson a fenti oszlopdiagram egyik funkciójára a függőségi diagram megjelenítéséhez",
+    placeholder:
+      "Kattintson a fenti oszlopdiagram egyik funkciójára a függőségi diagram megjelenítéséhez"
   },
   WhatIfTab: {
     helperText:
       "A pontdiagram kívánt adatpontjára kattintva megtekintheti az adatpont helyi jellemzőfontossági értékeit (helyi értelmezését) és ICE-diagramját. Egy ismert adatpont jellemzőinek perturbálásához hozzon létre egy hipotetikus „mi lenne, ha” adatpontot a jobb oldalon lévő panelen. A jellemzőfontossági értékek nem az előrejelzések „okán”, hanem számos approximáción alapulnak. Az ok–okozati következtetés szilárd matematikai megalapozottsága nélkül nem tanácsoljuk a felhasználóknak, hogy a valós helyzetekben ezen eszköz alapján hozzanak döntéseket.",
-    panelPlaceholder: "Az új adatpontokra vonatkozó előrejelzések készítéséhez modell szükséges.",
+    panelPlaceholder:
+      "Az új adatpontokra vonatkozó előrejelzések készítéséhez modell szükséges.",
     cohortPickerLabel: "Válassza ki a böngészni kívánt adathalmazkohorszt",
-    scatterLegendText: "A jelmagyarázat elemeire kattintva be- és kikapcsolhatja a adatpontokat a diagramon.",
+    scatterLegendText:
+      "A jelmagyarázat elemeire kattintva be- és kikapcsolhatja a adatpontokat a diagramon.",
     realPoint: "Valós adatpontok",
     noneSelectedYet: "Még nincs kiválasztott",
     whatIfDatapoints: "Lehetőségelemzési adatpontok",
@@ -239,7 +250,8 @@ module.exports = {
     icePlot: "ICE-diagram",
     featureImportanceLackingParameters:
       "Adja meg a helyi jellemzőfontosságokat, ha meg szeretné tekinteni, hogy az egyes jellemzők hogyan befolyásolják a különálló előrejelzéseket.",
-    featureImportanceGetStartedText: "Válasszon ki egy pontot a jellemzőfontosság megtekintéséhez",
+    featureImportanceGetStartedText:
+      "Válasszon ki egy pontot a jellemzőfontosság megtekintéséhez",
     iceLackingParameters:
       "Az ICE-ábrákhoz arra van szükség, hogy egy operacionalizált modell előrejelzéseket készítsen feltételes adatpontokkal kapcsolatban.",
     IceGetStartedText:
@@ -269,7 +281,8 @@ module.exports = {
     stepsLabel: "Lépések",
     disclaimer:
       "Jogi nyilatkozat: ezek a magyarázatok számos közelítésen alapulnak, és nem az előrejelzések okai. Az ok-okozati megállapítás szigorú matematikai szilárdsága nélkül nem tanácsoljuk a felhasználóknak, hogy az eszközre alapozva hozzanak valós döntéseket.",
-    missingParameters: "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
+    missingParameters:
+      "Ehhez a laphoz meg kell adni egy kiértékelési adathalmazt.",
     selectionLimit: "Legfeljebb 3 kiválasztott pont",
     classPickerLabel: "Osztály",
     tooltipTitleMany: "{0} leggyakoribb előrejelzett osztály",
@@ -279,7 +292,7 @@ module.exports = {
     deltaLabel: "Különbözet",
     nonNumericValue: "Numerikus értéknek kell lennie",
     icePlotHelperText:
-      "Az ICE-diagramok azt mutatják be, hogy a kiválasztott adatpont előrejelzési értékei miként változnak egy adott jellemzőérték-tartomány minimális és a maximális értéke között.",
+      "Az ICE-diagramok azt mutatják be, hogy a kiválasztott adatpont előrejelzési értékei miként változnak egy adott jellemzőérték-tartomány minimális és a maximális értéke között."
   },
   CohortEditor: {
     selectFilter: "Válasszon szűrőt",
@@ -287,14 +300,15 @@ module.exports = {
     addFilter: "Szűrő hozzáadása",
     addedFilters: "Hozzáadott szűrők",
     noAddedFilters: "Még nincsenek hozzáadva szűrők",
-    defaultFilterState: "Válasszon ki egy szűrőt a paraméterek az adatkészlet kohorszához való hozzáadásához.",
+    defaultFilterState:
+      "Válasszon ki egy szűrőt a paraméterek az adatkészlet kohorszához való hozzáadásához.",
     cohortNameLabel: "Adatkészlet kohorszának neve",
     cohortNamePlaceholder: "Adja meg a kohorsz nevét",
     save: "Mentés",
     delete: "Törlés",
     cancel: "Mégse",
     cohortNameError: "Hiányzik a kohorsznév",
-    placeholderName: "{0} kohorsz",
+    placeholderName: "{0} kohorsz"
   },
   AxisConfigDialog: {
     select: "Kiválasztás",
@@ -306,22 +320,26 @@ module.exports = {
     numOfBins: "Dobozok száma",
     groupByCohort: "Csoportosítás kohorsz szerint",
     selectClass: "Osztály kijelölése",
-    countHelperText: "A pontok számának hisztogramja",
+    countHelperText: "A pontok számának hisztogramja"
   },
   ValidationErrors: {
     predictedProbability: "Előrejelzett valószínűség",
     predictedY: "Előrejelzett Y",
     evalData: "Értékelési adathalmaz",
     localFeatureImportance: "Helyi jellemzőfontosság",
-    inconsistentDimensions: "Inkonzisztens dimenziók. A(z) {0} dimenziói: {1}, a várt érték: {2}",
+    inconsistentDimensions:
+      "Inkonzisztens dimenziók. A(z) {0} dimenziói: {1}, a várt érték: {2}",
     notNonEmpty: "A(z) {0} bemenet nem egy nem üres tömb",
-    varyingLength: "Inkonzisztens dimenziók. A(z) {0} eltérő hosszúságú elemekkel rendelkezik",
+    varyingLength:
+      "Inkonzisztens dimenziók. A(z) {0} eltérő hosszúságú elemekkel rendelkezik",
     notArray: "A(z) {0} nem tömb. A tömb várt dimenziója: {1}",
-    errorHeader: "Néhány bemeneti paraméter nem volt konzisztens, és nem lesz használva: ",
+    errorHeader:
+      "Néhány bemeneti paraméter nem volt konzisztens, és nem lesz használva: ",
     datasizeWarning:
       "A kiértékelési adathalmaz túl nagy ahhoz, hogy néhány diagramon hatékonyan megjelenjen. Adjon hozzá szűrőket a kohorsz csökkentéséhez.",
-    datasizeError: "A kiválasztott kohorsz túl nagy. Adjon hozzá szűrőket a kohorsz csökkentéséhez.",
-    addFilters: "Szűrők hozzáadása",
+    datasizeError:
+      "A kiválasztott kohorsz túl nagy. Adjon hozzá szűrőket a kohorsz csökkentéséhez.",
+    addFilters: "Szűrők hozzáadása"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -331,7 +349,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " tartalmazza: {0} ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} és {1} további",
+    overflowFilterArgs: "{0} és {1} további"
   },
   Statistics: {
     mse: "MSE: {0}",
@@ -341,11 +359,11 @@ module.exports = {
     precision: "Pontosság: {0}",
     recall: "Felidézés: {0}",
     fpr: "FPR: {0}",
-    fnr: "FNR: {0}",
+    fnr: "FNR: {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Áttekintheti a modell egészére kiható top k számú legfontosabb jellemzőt. A csúszka segítségével megtekintheti a jellemzők fontosságát csökkenő sorrendben.",
+      "Áttekintheti a modell egészére kiható top k számú legfontosabb jellemzőt. A csúszka segítségével megtekintheti a jellemzők fontosságát csökkenő sorrendben."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "Mit jelentenek ezek az értelmezések?",
@@ -361,6 +379,6 @@ module.exports = {
       "Ez az értelmezés a globális helyettesítő modellek feketedoboz-modellek utánzására történő betanításának ötletén alapul. A globális helyettesítő modell olyan belsőleg értelmezhető modell, amely a feketedoboz-modellek predikcióinak lehető legpontosabb megközelítésére van betanítva. A jellemzőfontossági értékek a mögöttes helyettesítő modell (LightGBM, lineáris regresszió, sztochasztikus gradiensesés vagy döntési fa) modellalapú jellemzőfontossági értékei",
     pfiTitle: "Permutációs jellemzőfontosság (PFI)",
     pfiDescription:
-      "Ez az értelmező a teljes adathalmaz esetében jellemzőnként összekeveri az adatokat, és kiszámítja, hogy a fontosság teljesítménymetrikája milyen mértékben változik (alapértelmezett teljesítménymetrikák: F1 bináris besorolás esetén, F1-mérték átlagos mikro pontossággal többosztályos besorolás esetén és átlagos abszolút hiba regresszió esetén). Minél nagyobb mértékű a változás, annál fontosabb a jellemző. Ez az értelmező csak az alapul szolgáló modell általános viselkedését képes értelmezni, az egyes előrejelzéseket nem. A jellemző fontossági értéke a modell teljesítményének az adott jellemző perturbálásával kiszámított változását jelzi.",
-  },
+      "Ez az értelmező a teljes adathalmaz esetében jellemzőnként összekeveri az adatokat, és kiszámítja, hogy a fontosság teljesítménymetrikája milyen mértékben változik (alapértelmezett teljesítménymetrikák: F1 bináris besorolás esetén, F1-mérték átlagos mikro pontossággal többosztályos besorolás esetén és átlagos abszolút hiba regresszió esetén). Minél nagyobb mértékű a változás, annál fontosabb a jellemző. Ez az értelmező csak az alapul szolgáló modell általános viselkedését képes értelmezni, az egyes előrejelzéseket nem. A jellemző fontossági értéke a modell teljesítményének az adott jellemző perturbálásával kiszámított változását jelzi."
+  }
 };

@@ -9,7 +9,8 @@ module.exports = {
   aggregateFeatureImportance: "Agréger l'importance des caractéristiques",
   globalImportance: "Importance globale",
   explanationExploration: "Exploration de l'explication",
-  individualAndWhatIf: "Importance d'une caractéristique individuelle et simulation",
+  individualAndWhatIf:
+    "Importance d'une caractéristique individuelle et simulation",
   summaryImportance: "Importance combinée",
   featureImportance: "Importance de la caractéristique",
   featureImportanceOf: "Importance de la caractéristique {0}",
@@ -33,7 +34,7 @@ module.exports = {
     xValue: "Valeur X :",
     yValue: "Valeur Y :",
     colorValue: "Couleur :",
-    count: "Nombre",
+    count: "Nombre"
   },
   CrossClass: {
     label: "Pondération interclasse :",
@@ -47,7 +48,7 @@ module.exports = {
     enumeratedClassInfo:
       "Noms de classe énumérés : montre uniquement les valeurs d'importance de la caractéristique pour la classe spécifiée sur tous les points de données.",
     close: "Fermer",
-    crossClassWeights: "Pondérations multiclasses",
+    crossClassWeights: "Pondérations multiclasses"
   },
   AggregateImportance: {
     scaledFeatureValue: "Valeur de caractéristique mise à l'échelle",
@@ -68,7 +69,7 @@ module.exports = {
     trueClass: "Classe réelle",
     noColor: "Aucun",
     tooManyRows:
-      "Ce graphique ne peut pas prendre en charge le jeu de données fourni en raison de sa taille trop importante",
+      "Ce graphique ne peut pas prendre en charge le jeu de données fourni en raison de sa taille trop importante"
   },
   BarChart: {
     classLabel: "Classe : {0}",
@@ -76,7 +77,7 @@ module.exports = {
     noData: "Aucune donnée",
     absoluteGlobal: "Valeur absolue globale",
     absoluteLocal: "Valeur absolue locale",
-    calculatingExplanation: "Calcul de l'explication",
+    calculatingExplanation: "Calcul de l'explication"
   },
   IcePlot: {
     numericError: "Doit être numérique",
@@ -85,7 +86,8 @@ module.exports = {
     predictedProbability: "Probabilité prédite",
     predictionLabel: "Prédiction : {0}",
     probabilityLabel: "Probabilité : {0}",
-    noModelError: "Indiquez un modèle opérationnalisé pour explorer les prédictions dans les tracés ICE.",
+    noModelError:
+      "Indiquez un modèle opérationnalisé pour explorer les prédictions dans les tracés ICE.",
     featurePickerLabel: "Fonctionnalité :",
     minimumInputLabel: "Minimum :",
     maximumInputLabel: "Maximum :",
@@ -93,21 +95,21 @@ module.exports = {
     loadingMessage: "Chargement des données...",
     submitPrompt: "Envoyer une plage pour voir un tracé ICE",
     topLevelErrorMessage: "Erreur dans le paramètre",
-    errorPrefix: "Erreur rencontrée : {0}",
+    errorPrefix: "Erreur rencontrée : {0}"
   },
   PerturbationExploration: {
     loadingMessage: "Chargement...",
-    perturbationLabel: "Perturbation :",
+    perturbationLabel: "Perturbation :"
   },
   PredictionLabel: {
     predictedValueLabel: "Valeur prédite : {0}",
-    predictedClassLabel: "Classe prédite : {0}",
+    predictedClassLabel: "Classe prédite : {0}"
   },
   Violin: {
     groupNone: "Aucun regroupement",
     groupPredicted: "Y prédit",
     groupTrue: "Y réel",
-    groupBy: "Regrouper par",
+    groupBy: "Regrouper par"
   },
   FeatureImportanceWrapper: {
     chartType: "Type de graphique :",
@@ -118,7 +120,7 @@ module.exports = {
     globalImportanceExplanation:
       "L'importance d'une caractéristique globale est déterminée en calculant la moyenne de la valeur absolue de l'importance de la caractéristique sur tous les points (normalisation L1). ",
     multiclassImportanceAddendum:
-      "Tous les points sont inclus dans le calcul de l'importance d'une caractéristique pour toutes les classes, sans aucune pondération différentielle. Ainsi, une caractéristique avec une grande importance négative pour de nombreux points qui, par prédiction, ne sont pas de « Classe A », augmente considérablement l'importance de cette classe.",
+      "Tous les points sont inclus dans le calcul de l'importance d'une caractéristique pour toutes les classes, sans aucune pondération différentielle. Ainsi, une caractéristique avec une grande importance négative pour de nombreux points qui, par prédiction, ne sont pas de « Classe A », augmente considérablement l'importance de cette classe."
   },
   Filters: {
     equalComparison: "Égal à",
@@ -134,7 +136,7 @@ module.exports = {
     maximum: "Maximum",
     min: "Min : {0}",
     max: "Max : {0}",
-    uniqueValues: "Nb de valeurs uniques : {0}",
+    uniqueValues: "Nb de valeurs uniques : {0}"
   },
   Columns: {
     regressionError: "Erreur de régression",
@@ -146,35 +148,37 @@ module.exports = {
     falseNegative: "Faux négatif",
     dataset: "Jeu de données",
     predictedProbabilities: "Probabilités de prédiction",
-    none: "Nombre",
+    none: "Nombre"
   },
   WhatIf: {
     closeAriaLabel: "Fermer",
     defaultCustomRootName: "Copie de la ligne {0}",
-    filterFeaturePlaceholder: "Rechercher des caractéristiques",
+    filterFeaturePlaceholder: "Rechercher des caractéristiques"
   },
   Cohort: {
     cohort: "Cohorte",
-    defaultLabel: "Toutes les données",
+    defaultLabel: "Toutes les données"
   },
   GlobalTab: {
     helperText:
       "Explorez les k principales caractéristiques importantes qui impactent vos prédictions de modèle générales (c'est-à-dire, l'explication globale). Utilisez le curseur pour afficher les valeurs d'importance de caractéristique par ordre décroissant. Sélectionnez jusqu'à trois cohortes pour voir leurs valeurs d'importance de caractéristique côte à côte. Cliquez sur les barres de caractéristique dans le graphe pour voir comment les valeurs de la caractéristique sélectionnée impactent le modèle de prédiction.",
     topAtoB: "{0}-{1} principales caractéristiques",
     datasetCohorts: "Cohortes de jeu de données",
-    legendHelpText: "Activez ou désactivez les cohortes dans le tracé en cliquant sur les éléments de la légende.",
+    legendHelpText:
+      "Activez ou désactivez les cohortes dans le tracé en cliquant sur les éléments de la légende.",
     sortBy: "Trier par",
     viewDependencePlotFor: "Voir le tracé des dépendances pour :",
     datasetCohortSelector: "Sélectionner une cohorte de jeu de données",
     aggregateFeatureImportance: "Agréger l'importance des caractéristiques",
-    missingParameters: "Cet onglet nécessite la spécification du paramètre d'importance de la caractéristique locale.",
+    missingParameters:
+      "Cet onglet nécessite la spécification du paramètre d'importance de la caractéristique locale.",
     weightOptions: "Pondérations de l'importance de classe",
     dependencePlotTitle: "Tracés de dépendance",
     dependencePlotHelperText:
       "Ce tracé de dépendance montre la relation entre la valeur d'une caractéristique et son importance dans une cohorte.",
     dependencePlotFeatureSelectPlaceholder: "Sélectionner une caractéristique",
     datasetRequired:
-      "Les tracés de dépendance nécessitent le jeu de données d'évaluation et le tableau des importances de caractéristique locale.",
+      "Les tracés de dépendance nécessitent le jeu de données d'évaluation et le tableau des importances de caractéristique locale."
   },
   CohortBanner: {
     dataStatistics: "Statistiques des données",
@@ -188,16 +192,17 @@ module.exports = {
     editCohort: "Modifier la cohorte",
     duplicateCohort: "Dupliquer la cohorte",
     addCohort: "Ajouter une cohorte",
-    copy: " copie",
+    copy: " copie"
   },
   ModelPerformance: {
     helperText:
       "Évaluez les performances de votre modèle en explorant la distribution de vos valeurs de prédiction et les valeurs de vos métriques de performances de modèle. Vous pouvez examiner plus en détail votre modèle en étudiant une analyse comparative de ses performances sur différentes cohortes ou sous-groupes de votre jeu de données. Sélectionnez des filtres avec une valeur X et une valeur Y pour les croiser sur différentes dimensions. Sélectionnez l'engrenage dans le graphique pour changer le type de graphique.",
     modelStatistics: "Statistiques du modèle",
     cohortPickerLabel: "Sélectionner une cohorte de jeu de données à explorer",
-    missingParameters: "Cet onglet nécessite la spécification du tableau des valeurs prédites du modèle.",
+    missingParameters:
+      "Cet onglet nécessite la spécification du tableau des valeurs prédites du modèle.",
     missingTrueY:
-      "Les statistiques de performance du modèle nécessitent la spécification des résultats réels en plus des résultats prédits",
+      "Les statistiques de performance du modèle nécessitent la spécification des résultats réels en plus des résultats prédits"
   },
   Charts: {
     yValue: "Valeur Y",
@@ -210,7 +215,7 @@ module.exports = {
     featurePrefix: "Caractéristique",
     importancePrefix: "Importance",
     cohort: "Cohorte",
-    howToRead: "Comment lire ce graphique",
+    howToRead: "Comment lire ce graphique"
   },
   DatasetExplorer: {
     helperText:
@@ -219,18 +224,20 @@ module.exports = {
     individualDatapoints: "Points de données individuels",
     aggregatePlots: "Agréger les tracés",
     chartType: "Type de graphique",
-    missingParameters: "Cet onglet nécessite la spécification d'un jeu de données d'évaluation.",
-    noColor: "Aucun",
+    missingParameters:
+      "Cet onglet nécessite la spécification d'un jeu de données d'évaluation.",
+    noColor: "Aucun"
   },
   DependencePlot: {
     featureImportanceOf: "Importance de la caractéristique",
     placeholder:
-      "Cliquer sur une caractéristique dans l'histogramme ci-dessus pour afficher le tracé de ses dépendances",
+      "Cliquer sur une caractéristique dans l'histogramme ci-dessus pour afficher le tracé de ses dépendances"
   },
   WhatIfTab: {
     helperText:
       "Vous pouvez sélectionner un point de données en cliquant sur le nuage de points pour voir ses valeurs d'importance de caractéristique locale (explication locale) et le tracé d'espérance conditionnelle individuelle (ICE) ci-dessous. Créez un point de données « Et si » hypothétique en utilisant le panneau de droite pour perturber les caractéristiques d'un point de données connu. Les valeurs d'importance de caractéristique sont basées sur de nombreuses approximations et ne sont pas la « cause » des prédictions. Sans une robustesse mathématique stricte de l'inférence causale, nous ne conseillons pas aux utilisateurs de prendre des décisions concrètes basées sur cet outil.",
-    panelPlaceholder: "Un modèle est nécessaire pour effectuer des prédictions pour les nouveaux points de données.",
+    panelPlaceholder:
+      "Un modèle est nécessaire pour effectuer des prédictions pour les nouveaux points de données.",
     cohortPickerLabel: "Sélectionner une cohorte de jeu de données à explorer",
     scatterLegendText:
       "Activez ou désactivez les points de données dans le tracé en cliquant sur les éléments de la légende.",
@@ -243,10 +250,12 @@ module.exports = {
     icePlot: "Tracé ICE (Individual Conditional Expectation)",
     featureImportanceLackingParameters:
       "Spécifiez l'importance des caractéristiques locales pour voir comment chaque caractéristique impacte les prédictions individuelles.",
-    featureImportanceGetStartedText: "Sélectionner un point pour voir l'importance de la caractéristique",
+    featureImportanceGetStartedText:
+      "Sélectionner un point pour voir l'importance de la caractéristique",
     iceLackingParameters:
       "Les tracés ICE nécessitent un modèle opérationnalisé afin de faire des prédictions pour des points de données hypothétiques.",
-    IceGetStartedText: "Sélectionner un point ou créer un point de simulation pour voir les tracés ICE",
+    IceGetStartedText:
+      "Sélectionner un point ou créer un point de simulation pour voir les tracés ICE",
     whatIfDatapoint: "Point de données de simulation",
     whatIfHelpText:
       "Sélectionnez un point sur le tracé ou entrez manuellement un index de point de données connu afin de créer une perturbation et l'enregistrer comme nouveau point de simulation.",
@@ -272,7 +281,8 @@ module.exports = {
     stepsLabel: "Étapes",
     disclaimer:
       "Exclusion : Ces explications sont basées sur de nombreuses approximations et ne sont pas la « cause » des prédictions. Sans une robustesse mathématique stricte de l'inférence causale, nous ne conseillons pas aux utilisateurs de prendre des décisions réelles basées sur cet outil.",
-    missingParameters: "Cet onglet nécessite la spécification d'un jeu de données d'évaluation.",
+    missingParameters:
+      "Cet onglet nécessite la spécification d'un jeu de données d'évaluation.",
     selectionLimit: "3 points maximum sélectionnés",
     classPickerLabel: "Classe",
     tooltipTitleMany: "Top {0} des classes prédites",
@@ -282,7 +292,7 @@ module.exports = {
     deltaLabel: "Delta",
     nonNumericValue: "La valeur doit être numérique",
     icePlotHelperText:
-      "Les tracés ICE montrent comment les valeurs de prédiction du point de données sélectionné varient pour plusieurs valeurs de caractéristique entre la valeur minimale et la valeur maximale.",
+      "Les tracés ICE montrent comment les valeurs de prédiction du point de données sélectionné varient pour plusieurs valeurs de caractéristique entre la valeur minimale et la valeur maximale."
   },
   CohortEditor: {
     selectFilter: "Sélectionner un filtre",
@@ -290,14 +300,15 @@ module.exports = {
     addFilter: "Ajouter un filtre",
     addedFilters: "Filtres ajoutés",
     noAddedFilters: "Aucun filtre ajouté pour le moment",
-    defaultFilterState: "Sélectionnez un filtre pour ajouter des paramètres à votre cohorte de jeu de données.",
+    defaultFilterState:
+      "Sélectionnez un filtre pour ajouter des paramètres à votre cohorte de jeu de données.",
     cohortNameLabel: "Nom de cohorte de jeu de données",
     cohortNamePlaceholder: "Nommer votre cohorte",
     save: "Enregistrer",
     delete: "Supprimer",
     cancel: "Annuler",
     cohortNameError: "Nom de cohorte manquant",
-    placeholderName: "Cohorte {0}",
+    placeholderName: "Cohorte {0}"
   },
   AxisConfigDialog: {
     select: "Sélectionner",
@@ -309,22 +320,26 @@ module.exports = {
     numOfBins: "Nombre de compartiments",
     groupByCohort: "Regrouper par cohorte",
     selectClass: "Sélectionner une classe",
-    countHelperText: "Histogramme du nombre de points",
+    countHelperText: "Histogramme du nombre de points"
   },
   ValidationErrors: {
     predictedProbability: "Probabilité prédite",
     predictedY: "Valeur Y prédite",
     evalData: "Jeu de données d'évaluation",
     localFeatureImportance: "Importance de la caractéristique locale",
-    inconsistentDimensions: "Dimensions incohérentes. {0} a les dimensions {1}, {2} était attendu",
+    inconsistentDimensions:
+      "Dimensions incohérentes. {0} a les dimensions {1}, {2} était attendu",
     notNonEmpty: "L'entrée {0} n'est pas un tableau non vide",
-    varyingLength: "Dimensions incohérentes. {0} a des éléments de longueur variable",
+    varyingLength:
+      "Dimensions incohérentes. {0} a des éléments de longueur variable",
     notArray: "{0} n'est pas un tableau. Tableau de dimension {1} attendu",
-    errorHeader: "Certains paramètres d'entrée étaient incohérents et ne sont pas utilisés : ",
+    errorHeader:
+      "Certains paramètres d'entrée étaient incohérents et ne sont pas utilisés : ",
     datasizeWarning:
       "Le jeu de données d'évaluation est trop grand pour être affiché correctement dans certains graphiques, ajoutez des filtres pour réduire la taille de la cohorte. ",
-    datasizeError: "La cohorte sélectionnée est trop grande, ajoutez des filtres pour en réduire la taille.",
-    addFilters: "Ajouter des filtres",
+    datasizeError:
+      "La cohorte sélectionnée est trop grande, ajoutez des filtres pour en réduire la taille.",
+    addFilters: "Ajouter des filtres"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -334,7 +349,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " inclut {0} ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} et {1} autres",
+    overflowFilterArgs: "{0} et {1} autres"
   },
   Statistics: {
     mse: "MSE : {0}",
@@ -344,11 +359,11 @@ module.exports = {
     precision: "Précision : {0}",
     recall: "Rappel : {0}",
     fpr: "FPR : {0}",
-    fnr: "FNR : {0}",
+    fnr: "FNR : {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Explorez le top k des caractéristiques les plus importantes qui impactent vos prédictions de modèle globales. Utilisez le curseur pour afficher les caractéristiques par importance décroissante.",
+      "Explorez le top k des caractéristiques les plus importantes qui impactent vos prédictions de modèle globales. Utilisez le curseur pour afficher les caractéristiques par importance décroissante."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "Que signifient ces explications ?",
@@ -364,6 +379,6 @@ module.exports = {
       "Cet explicateur s'appuie sur l'idée d'entraîner des modèles de substitution globaux pour imiter les modèles de boîte noire. Un modèle de substitution global est un modèle interprétable de manière intrinsèque qui est entraîné pour se rapprocher des prédictions d'un modèle de boîte noire de manière aussi juste que possible. Les valeurs d'importance de caractéristique sont les valeurs basées sur votre modèle de substitution sous-jacent (LightGBM ou régression linéaire ou algorithme du gradient stochastique ou arbre de décision)",
     pfiTitle: "Importance de caractéristique de permutation (PFI)",
     pfiDescription:
-      "Cet explicateur lit les données de manière aléatoire caractéristique par caractéristique pour l'ensemble du jeu de données et calcule la variation de la métrique de performances concernée (métriques de performances par défaut : F1 pour la classification binaire, score F1 avec moyenne micro pour la classification multiclasse et erreur absolue moyenne pour la régression). Plus la variation est grande, plus cette caractéristique est importante. Cet explicateur peut uniquement expliquer le comportement général du modèle sous-jacent, mais n'explique pas les prédictions individuelles. La valeur d'importance d'une caractéristique représente le delta des performances du modèle en perturbant cette caractéristique particulière.",
-  },
+      "Cet explicateur lit les données de manière aléatoire caractéristique par caractéristique pour l'ensemble du jeu de données et calcule la variation de la métrique de performances concernée (métriques de performances par défaut : F1 pour la classification binaire, score F1 avec moyenne micro pour la classification multiclasse et erreur absolue moyenne pour la régression). Plus la variation est grande, plus cette caractéristique est importante. Cet explicateur peut uniquement expliquer le comportement général du modèle sous-jacent, mais n'explique pas les prédictions individuelles. La valeur d'importance d'une caractéristique représente le delta des performances du modèle en perturbant cette caractéristique particulière."
+  }
 };

@@ -9,13 +9,17 @@ const stringify = (value: any[], _datum: IData, args: any[]): string => {
   for (let i = 0; i < minLength; i++) {
     let formattedValue = value[i];
     if (typeof formattedValue === "number") {
-      formattedValue = formattedValue.toLocaleString(undefined, { minimumFractionDigits: 2 });
+      formattedValue = formattedValue.toLocaleString(undefined, {
+        minimumFractionDigits: 2
+      });
     }
     result[i] = `${args[i]}: ${formattedValue}`;
   }
   return result.join("<br>");
 };
 
-export const AccessorMappingFunctions: { [key: string]: (value: any[], datum: IData, args: any[]) => any } = {
-  [AccessorMappingFunctionNames.stringifyText]: stringify,
+export const AccessorMappingFunctions: {
+  [key: string]: (value: any[], datum: IData, args: any[]) => any;
+} = {
+  [AccessorMappingFunctionNames.stringifyText]: stringify
 };

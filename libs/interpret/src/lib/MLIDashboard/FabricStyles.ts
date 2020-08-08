@@ -4,7 +4,7 @@ import {
   FontWeights,
   ICalloutProps,
   mergeStyles,
-  ITextFieldStyles,
+  ITextFieldStyles
 } from "office-ui-fabric-react";
 import { IStyle, getTheme, mergeStyleSets } from "@uifabric/styling";
 
@@ -18,12 +18,12 @@ export class FabricStyles {
   public static limitedSizeMenuDropdown: Partial<IComboBoxStyles> = {
     callout: {
       maxHeight: "256px",
-      minWidth: "200px",
+      minWidth: "200px"
     },
     optionsContainerWrapper: {
       maxHeight: "256px",
-      minWidth: "200px",
-    },
+      minWidth: "200px"
+    }
   };
 
   public static defaultDropdownStyle: Partial<IComboBoxStyles> = mergeStyleSets<
@@ -33,16 +33,16 @@ export class FabricStyles {
     {
       container: {
         display: "inline-flex",
-        width: "100%",
+        width: "100%"
       },
       root: {
-        flex: 1,
+        flex: 1
       },
       label: {
-        padding: "5px 10px 0 10px",
-      },
+        padding: "5px 10px 0 10px"
+      }
     },
-    FabricStyles.limitedSizeMenuDropdown,
+    FabricStyles.limitedSizeMenuDropdown
   );
 
   public static smallDropdownStyle: Partial<IComboBoxStyles> = mergeStyleSets<
@@ -53,50 +53,50 @@ export class FabricStyles {
       container: {
         display: "inline-flex",
         flexWrap: "wrap",
-        width: "150px",
+        width: "150px"
       },
       root: {
         flex: 1,
-        minWidth: "150px",
+        minWidth: "150px"
       },
       label: {
-        paddingRight: "10px",
+        paddingRight: "10px"
       },
       callout: {
         maxHeight: "256px",
-        minWidth: "200px",
+        minWidth: "200px"
       },
       optionsContainerWrapper: {
         maxHeight: "256px",
-        minWidth: "200px",
-      },
+        minWidth: "200px"
+      }
     },
-    FabricStyles.limitedSizeMenuDropdown,
+    FabricStyles.limitedSizeMenuDropdown
   );
 
   public static missingParameterPlaceholder: IStyle = {
     height: "300px",
-    width: "100%",
+    width: "100%"
   };
 
   public static calloutWrapper: IStyle = {
-    width: "300px",
+    width: "300px"
   };
 
   public static calloutHeader: IStyle = {
-    padding: "18px 24px 12px",
+    padding: "18px 24px 12px"
   };
 
   public static calloutTitle: IStyle = [
     getTheme().fonts.xLarge,
     {
       margin: 0,
-      fontWeight: FontWeights.semilight,
-    },
+      fontWeight: FontWeights.semilight
+    }
   ];
   public static calloutInner: IStyle = {
     height: "100%",
-    padding: "0 24px 20px",
+    padding: "0 24px 20px"
   };
 
   public static chartEditorButton: IStyle = {
@@ -104,11 +104,11 @@ export class FabricStyles {
     backgroundColor: getTheme().semanticColors.accentButtonBackground,
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: getTheme().semanticColors.buttonBorder,
+    borderColor: getTheme().semanticColors.buttonBorder
   };
 
   public static calloutContainer: IStyle = {
-    zIndex: 10,
+    zIndex: 10
   };
 
   public static calloutProps: ICalloutProps = {
@@ -117,19 +117,19 @@ export class FabricStyles {
       container: mergeStyles([
         FabricStyles.calloutContainer,
         {
-          position: "fixed",
-        },
+          position: "fixed"
+        }
       ]),
       calloutMain: {
-        maxHeight: "400px",
-      },
-    },
+        maxHeight: "400px"
+      }
+    }
   };
 
   public static placeholderItalic: IStyle = {
     fontStyle: "italic",
     padding: "0 0 5px 5px",
-    color: getTheme().semanticColors.disabledBodyText,
+    color: getTheme().semanticColors.disabledBodyText
   };
 
   public static missingParameterPlaceholderSpacer: IStyle = {
@@ -137,11 +137,11 @@ export class FabricStyles {
     maxWidth: "400px",
     padding: "23px",
     width: "fit-content",
-    boxShadow: getTheme().effects.elevation4,
+    boxShadow: getTheme().effects.elevation4
   };
 
   public static faintText: IStyle = {
-    fontWeight: "350" as any,
+    fontWeight: "350" as any
   };
 
   public static plotlyColorPalette: IRGBColor[] = [
@@ -154,7 +154,7 @@ export class FabricStyles {
     { r: 227, g: 119, b: 194 }, // raspberry yogurt pink
     { r: 127, g: 127, b: 127 }, // middle gray
     { r: 188, g: 189, b: 34 }, // curry yellow-green
-    { r: 23, g: 190, b: 207 }, // blue-teal
+    { r: 23, g: 190, b: 207 } // blue-teal
   ];
 
   public static plotlyColorHexPalette: string[] = [
@@ -167,7 +167,7 @@ export class FabricStyles {
     "#e377c2", // raspberry yogurt pink
     "#7f7f7f", // middle gray
     "#bcbd22", // curry yellow-green
-    "#17becf", // blue-teal
+    "#17becf" // blue-teal
   ];
 
   // public static fabricColorPalette: string[] = [
@@ -193,68 +193,69 @@ export class FabricStyles {
     "#e377c2", // raspberry yogurt pink
     "#7f7f7f", // middle gray
     "#bcbd22", // curry yellow-green
-    "#17becf", // blue-teal
+    "#17becf" // blue-teal
   ];
 
   public static fabricColorInactiveSeries = "#949494";
 
   public static chartAxisColor = "#979797";
-  public static fontFamilies = "Segoe UI, Segoe UI Web (West European),  Roboto, Helvetica Neue, sans-serif";
+  public static fontFamilies =
+    "Segoe UI, Segoe UI Web (West European),  Roboto, Helvetica Neue, sans-serif";
 
   public static verticalTabsStyle: Partial<IPivotStyles> = {
     root: {
       height: "100%",
       width: "100px",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     text: {
       whiteSpace: "normal",
-      lineHeight: "28px",
+      lineHeight: "28px"
     },
     link: {
       flex: 1,
       backgroundColor: "#f4f4f4",
       selectors: {
         "&:not(:last-child)": {
-          borderBottom: "1px solid grey",
+          borderBottom: "1px solid grey"
         },
         ".ms-Button-flexContainer": {
-          justifyContent: "center",
+          justifyContent: "center"
         },
         "&:focus, &:focus:not(:last-child)": {
-          border: "3px solid rgb(102, 102, 102)",
-        },
-      },
+          border: "3px solid rgb(102, 102, 102)"
+        }
+      }
     },
     linkIsSelected: {
       flex: 1,
       selectors: {
         "&:not(:last-child)": {
-          borderBottom: "1px solid grey",
+          borderBottom: "1px solid grey"
         },
         ".ms-Button-flexContainer": {
-          justifyContent: "center",
+          justifyContent: "center"
         },
         "&:focus, &:focus:not(:last-child)": {
-          border: "3px solid rgb(235, 235, 235)",
-        },
-      },
-    },
+          border: "3px solid rgb(235, 235, 235)"
+        }
+      }
+    }
   };
 
   public static textFieldStyle: Partial<ITextFieldStyles> = {
     root: {
       minWidth: "150px",
-      padding: "0 5px",
+      padding: "0 5px"
     },
     wrapper: {
-      display: "inline-flex",
+      display: "inline-flex"
     },
     subComponentStyles: {
       label: {
-        padding: "5px 10px 0 10px",
-      },
-    },
+        padding: "5px 10px 0 10px"
+      }
+    }
   };
 }

@@ -3,7 +3,7 @@ export const binaryClassifier = {
   predictedYs: [
     [1, 0, 0, 1, 1, 1, 1, 0],
     [1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
   ],
   augmentedData: [
     ["a", "1", "test1", 1],
@@ -13,6 +13,6 @@ export const binaryClassifier = {
     ["b", "2", "test5", 2],
     ["b", "2", "test6", 3],
     ["b", "2", "test7", 0],
-    ["b", "2", "test8", 3],
-  ],
+    ["b", "2", "test8", 3]
+  ]
 };

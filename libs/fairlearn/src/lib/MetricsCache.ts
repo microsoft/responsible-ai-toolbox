@@ -8,7 +8,7 @@ export class MetricsCache {
     private featureCount: number,
     private numberOfModels: number,
     private fetchMethod: (request: IMetricRequest) => Promise<IMetricResponse>,
-    precomputedCache?: Array<Array<{ [key: string]: IMetricResponse }>>,
+    precomputedCache?: Array<Array<{ [key: string]: IMetricResponse }>>
   ) {
     if (precomputedCache) {
       this.cache = precomputedCache;
@@ -16,7 +16,7 @@ export class MetricsCache {
       this.cache = new Array(featureCount).fill(0).map(() =>
         new Array(numberOfModels).fill(0).map(() => {
           return {};
-        }),
+        })
       );
     }
   }
@@ -25,14 +25,14 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    key: string,
+    key: string
   ): Promise<IMetricResponse> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
         metricKey: key,
         binVector: binIndexVector,
-        modelIndex: modelIndex,
+        modelIndex: modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }
@@ -44,23 +44,27 @@ export class MetricsCache {
     featureIndex: number,
     modelIndex: number,
     key: string,
-    disparityMethod: ParityModes,
+    disparityMethod: ParityModes
   ): Promise<number> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
         metricKey: key,
         binVector: binIndexVector,
-        modelIndex: modelIndex,
+        modelIndex: modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }
 
-    const bins = value.bins.slice().filter(x => x !== undefined && !isNaN(x));
+    const bins = value.bins.slice().filter((x) => x !== undefined && !isNaN(x));
 
     const min = Math.min(...(bins as number[]));
     const max = Math.max(...(bins as number[]));
-    if (isNaN(min) || isNaN(max) || (max === 0 && disparityMethod === ParityModes.ratio)) {
+    if (
+      isNaN(min) ||
+      isNaN(max) ||
+      (max === 0 && disparityMethod === ParityModes.ratio)
+    ) {
       return Number.NaN;
     }
     return disparityMethod === ParityModes.difference ? max - min : min / max;
@@ -75,7 +79,7 @@ export class MetricsCache {
       this.cache = new Array(this.featureCount).fill(0).map(() =>
         new Array(this.numberOfModels).fill(0).map(() => {
           return {};
-        }),
+        })
       );
     }
   }

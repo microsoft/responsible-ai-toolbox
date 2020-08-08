@@ -72,7 +72,11 @@ export class SummaryTable extends React.PureComponent<ISummaryTableProps> {
           <div className={styles.flexCol}>
             {this.props.formattedBinValues.map((value, index) => {
               return (
-                <Text variant={"xLargePlus"} className={styles.metricBox} key={index}>
+                <Text
+                  variant={"xLargePlus"}
+                  className={styles.metricBox}
+                  key={index}
+                >
                   {value !== undefined ? value : "empty"}
                 </Text>
               );

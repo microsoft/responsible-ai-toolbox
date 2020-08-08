@@ -8,7 +8,9 @@ export interface IDataSpecProps {
   featureNames: string[];
 }
 
-export class DataSpecificationBlade extends React.PureComponent<IDataSpecProps> {
+export class DataSpecificationBlade extends React.PureComponent<
+  IDataSpecProps
+> {
   public render(): React.ReactNode {
     const styles = DataSpecificationBladeStyles();
     return (
@@ -19,10 +21,16 @@ export class DataSpecificationBlade extends React.PureComponent<IDataSpecProps> 
         <Text variant={"small"} className={styles.text} block>
           {this.props.featureNames.length === 1
             ? localization.singleAttributeCount
-            : localization.formatString(localization.attributesCount, this.props.featureNames.length)}
+            : localization.formatString(
+                localization.attributesCount,
+                this.props.featureNames.length
+              )}
         </Text>
         <Text variant={"small"} className={styles.text} block>
-          {localization.formatString(localization.instanceCount, this.props.numberRows)}
+          {localization.formatString(
+            localization.instanceCount,
+            this.props.numberRows
+          )}
         </Text>
       </div>
     );

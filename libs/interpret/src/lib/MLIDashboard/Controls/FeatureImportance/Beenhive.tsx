@@ -8,17 +8,29 @@ import {
   IComboBox,
   IComboBoxOption,
   IDropdownOption,
-  Slider,
+  Slider
 } from "office-ui-fabric-react";
 import * as React from "react";
-import { ChartBuilder, AccessibleChart, PlotlyMode, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import {
+  ChartBuilder,
+  AccessibleChart,
+  PlotlyMode,
+  IPlotlyProperty
+} from "@responsible-ai/mlchartlib";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { PlotlyUtils, NoDataMessage, LoadingSpinner } from "../../SharedComponents";
+import {
+  PlotlyUtils,
+  NoDataMessage,
+  LoadingSpinner
+} from "../../SharedComponents";
 import { ScatterUtils } from "../Scatter";
-import { FeatureImportanceModes, IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import {
+  FeatureImportanceModes,
+  IGlobalFeatureImportanceProps
+} from "./FeatureImportanceWrapper";
 
 import "./Beehive.scss";
 
@@ -42,118 +54,149 @@ interface IProjectedData {
   tooltip: string;
 }
 
-export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, IBeehiveState> {
+export class Beehive extends React.PureComponent<
+  IGlobalFeatureImportanceProps,
+  IBeehiveState
+> {
   // To present all colors on a uniform color scale, the min and max of each feature are calculated
   // once per dataset and
   private static populateMappers: (
-    data: IExplanationContext,
+    data: IExplanationContext
   ) => Array<(value: number | string) => number> = (memoize as any).default(
     (data: IExplanationContext): Array<(value: number | string) => number> => {
       return data.modelMetadata.featureNames.map((_val, featureIndex) => {
         if (data.modelMetadata.featureIsCategorical[featureIndex]) {
-          const values = _.uniq(data.testDataset.dataset.map(row => row[featureIndex])).sort();
+          const values = _.uniq(
+            data.testDataset.dataset.map((row) => row[featureIndex])
+          ).sort();
           return (value: string | number): number => {
-            return values.length > 1 ? values.indexOf(value) / (values.length - 1) : 0;
+            return values.length > 1
+              ? values.indexOf(value) / (values.length - 1)
+              : 0;
           };
         }
-        const featureArray = data.testDataset.dataset.map((row: number[]) => row[featureIndex]);
+        const featureArray = data.testDataset.dataset.map(
+          (row: number[]) => row[featureIndex]
+        );
         const min = Math.min(...featureArray);
         const max = Math.max(...featureArray);
         const range = max - min;
         return (value: string | number): number => {
-          return range !== 0 && typeof value === "number" ? (value - min) / range : 0;
+          return range !== 0 && typeof value === "number"
+            ? (value - min) / range
+            : 0;
         };
       });
-    },
+    }
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {
-    config: { displaylogo: false, responsive: true, displayModeBar: false } as any,
+    config: {
+      displaylogo: false,
+      responsive: true,
+      displayModeBar: false
+    } as any,
     data: [
       {
         hoverinfo: "text",
         datapointLevelAccessors: {
           customdata: {
             path: ["rowIndex"],
-            plotlyPath: "customdata",
+            plotlyPath: "customdata"
           },
           text: {
             path: ["tooltip"],
-            plotlyPath: "text",
-          },
+            plotlyPath: "text"
+          }
         },
         mode: PlotlyMode.markers,
         type: "scattergl",
         yAccessor: "featureImportance",
-        xAccessor: "ditheredFeatureIndex",
-      },
+        xAccessor: "ditheredFeatureIndex"
+      }
     ] as any,
     layout: {
       dragmode: false,
       autosize: true,
       font: {
-        size: 10,
+        size: 10
       },
       hovermode: "closest",
       margin: {
         t: 10,
-        b: 30,
+        b: 30
       },
       showlegend: false,
       yaxis: {
         automargin: true,
-        title: localization.featureImportance,
+        title: localization.featureImportance
       },
       xaxis: {
-        automargin: true,
-      },
-    } as any,
+        automargin: true
+      }
+    } as any
   };
   private static maxFeatures = 30;
 
-  private static generateSortVector: (data: IExplanationContext) => number[] = (memoize as any).default(
+  private static generateSortVector: (
+    data: IExplanationContext
+  ) => number[] = (memoize as any).default(
     (data: IExplanationContext): number[] => {
-      return ModelExplanationUtils.buildSortedVector(data.globalExplanation.perClassFeatureImportances);
-    },
+      return ModelExplanationUtils.buildSortedVector(
+        data.globalExplanation.perClassFeatureImportances
+      );
+    }
   );
 
   private static projectData: (
     data: IExplanationContext,
-    sortVector: number[],
+    sortVector: number[]
   ) => IProjectedData[] = (memoize as any).default(
     (data: IExplanationContext, sortVector: number[]): IProjectedData[] => {
       const mappers: Array<(value: string | number) => number> | undefined =
-        data.testDataset.dataset !== undefined ? Beehive.populateMappers(data) : undefined;
-      const isClassifier = data.modelMetadata.modelType !== ModelTypes.regression;
+        data.testDataset.dataset !== undefined
+          ? Beehive.populateMappers(data)
+          : undefined;
+      const isClassifier =
+        data.modelMetadata.modelType !== ModelTypes.regression;
       return sortVector
         .map((featureIndex, sortVectorIndex) => {
           return data.localExplanation.flattenedValues.map((row, rowIndex) => {
-            const predictedClassIndex = data.testDataset.predictedY ? data.testDataset.predictedY[rowIndex] : undefined;
+            const predictedClassIndex = data.testDataset.predictedY
+              ? data.testDataset.predictedY[rowIndex]
+              : undefined;
             const predictedClass = data.testDataset.predictedY
               ? isClassifier
-                ? data.modelMetadata.classNames[predictedClassIndex] || `class ${predictedClassIndex}`
+                ? data.modelMetadata.classNames[predictedClassIndex] ||
+                  `class ${predictedClassIndex}`
                 : predictedClassIndex
               : undefined;
-            const trueClassIndex = data.testDataset.trueY ? data.testDataset.trueY[rowIndex] : undefined;
+            const trueClassIndex = data.testDataset.trueY
+              ? data.testDataset.trueY[rowIndex]
+              : undefined;
             const trueClass = data.testDataset.trueY
               ? isClassifier
-                ? data.modelMetadata.classNames[trueClassIndex] || `class ${trueClassIndex}`
+                ? data.modelMetadata.classNames[trueClassIndex] ||
+                  `class ${trueClassIndex}`
                 : trueClassIndex
               : undefined;
             return {
               rowIndex: rowIndex.toString(),
               normalizedFeatureValue:
                 mappers !== undefined
-                  ? mappers[featureIndex](data.testDataset.dataset[rowIndex][featureIndex])
+                  ? mappers[featureIndex](
+                      data.testDataset.dataset[rowIndex][featureIndex]
+                    )
                   : undefined,
               featureIndex: sortVectorIndex,
-              ditheredFeatureIndex: sortVectorIndex + (0.2 * Math.random() - 0.1),
+              ditheredFeatureIndex:
+                sortVectorIndex + (0.2 * Math.random() - 0.1),
               featureImportance: row[featureIndex],
               predictedClass,
               predictedClassIndex,
               trueClassIndex,
               trueClass,
-              tooltip: Beehive.buildTooltip(data, rowIndex, featureIndex),
+              tooltip: Beehive.buildTooltip(data, rowIndex, featureIndex)
             };
           });
         })
@@ -162,37 +205,39 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
           return prev;
         }, []);
     },
-    _.isEqual.bind(window),
+    _.isEqual.bind(window)
   );
 
   private static buildPlotlyProps: (
     explanationContext: IExplanationContext,
     sortVector: number[],
     selectedOption: IComboBoxOption,
-    selections: string[],
+    selections: string[]
   ) => IPlotlyProperty = (memoize as any).default(
     (
       explanationContext: IExplanationContext,
       sortVector: number[],
-      selectedOption: IComboBoxOption,
+      selectedOption: IComboBoxOption
     ): IPlotlyProperty => {
       const plotlyProps = _.cloneDeep(Beehive.BasePlotlyProps);
       const rows = Beehive.projectData(explanationContext, sortVector);
       _.set(
         plotlyProps,
         "layout.xaxis.ticktext",
-        sortVector.map(i => explanationContext.modelMetadata.featureNamesAbridged[i]),
+        sortVector.map(
+          (i) => explanationContext.modelMetadata.featureNamesAbridged[i]
+        )
       );
       _.set(
         plotlyProps,
         "layout.xaxis.tickvals",
-        sortVector.map((_, index) => index),
+        sortVector.map((_, index) => index)
       );
       if (explanationContext.modelMetadata.modelType === ModelTypes.binary) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
-          `${localization.featureImportance}<br> ${localization.ExplanationScatter.class} ${explanationContext.modelMetadata.classNames[0]}`,
+          `${localization.featureImportance}<br> ${localization.ExplanationScatter.class} ${explanationContext.modelMetadata.classNames[0]}`
         );
       }
       if (selectedOption === undefined || selectedOption.key === "none") {
@@ -202,26 +247,29 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
           plotlyProps,
           selectedOption,
           explanationContext.modelMetadata,
-          selectedOption.text,
+          selectedOption.text
         );
         if (selectedOption.data.isNormalized) {
           plotlyProps.data[0].marker.colorscale = [
             [0, "rgba(0,0,255,0.5)"],
-            [1, "rgba(255,0,0,0.5)"],
+            [1, "rgba(255,0,0,0.5)"]
           ];
           _.set(plotlyProps.data[0], "marker.colorbar.tickvals", [0, 1]);
           _.set(plotlyProps.data[0], "marker.colorbar.ticktext", [
             localization.AggregateImportance.low,
-            localization.AggregateImportance.high,
+            localization.AggregateImportance.high
           ]);
         } else {
           _.set(plotlyProps.data[0], "marker.opacity", 0.6);
         }
       }
-      plotlyProps.data = ChartBuilder.buildPlotlySeries(plotlyProps.data[0], rows);
+      plotlyProps.data = ChartBuilder.buildPlotlySeries(
+        plotlyProps.data[0],
+        rows
+      );
       return plotlyProps;
     },
-    _.isEqual.bind(window),
+    _.isEqual.bind(window)
   );
 
   private readonly _crossClassIconId = "cross-class-icon-id";
@@ -233,57 +281,90 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
     super(props);
     this.colorOptions = this.buildColorOptions();
     this.rowCount = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues.length;
-    const selectedColorIndex = this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
+    const selectedColorIndex =
+      this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
     this.state = {
       selectedColorOption: this.colorOptions[selectedColorIndex].key as string,
-      plotlyProps: undefined,
+      plotlyProps: undefined
     };
   }
 
-  private static buildTooltip(data: IExplanationContext, rowIndex: number, featureIndex: number): string {
+  private static buildTooltip(
+    data: IExplanationContext,
+    rowIndex: number,
+    featureIndex: number
+  ): string {
     const isLarge = data.localExplanation.flattenedValues.length > 500;
     const result = [];
     // The formatString imputes are keys to loc object. This is because format string tries to use them as keys first, and only uses the passed in string after
     // trowing an exception in a try block. This is very slow for repeated calls.
     result.push(
-      localization.formatString("AggregateImportance.featureLabel", data.modelMetadata.featureNames[featureIndex]),
+      localization.formatString(
+        "AggregateImportance.featureLabel",
+        data.modelMetadata.featureNames[featureIndex]
+      )
     );
     if (data.testDataset.dataset) {
       result.push(
-        localization.formatString("AggregateImportance.valueLabel", data.testDataset.dataset[rowIndex][featureIndex]),
+        localization.formatString(
+          "AggregateImportance.valueLabel",
+          data.testDataset.dataset[rowIndex][featureIndex]
+        )
       );
     }
     // formatting strings is slow, only do for small numbers
     const formattedImportance = isLarge
       ? data.localExplanation.flattenedValues[rowIndex][featureIndex]
-      : data.localExplanation.flattenedValues[rowIndex][featureIndex].toLocaleString(undefined, {
-          minimumFractionDigits: 3,
+      : data.localExplanation.flattenedValues[rowIndex][
+          featureIndex
+        ].toLocaleString(undefined, {
+          minimumFractionDigits: 3
         });
-    result.push(localization.formatString("AggregateImportance.importanceLabel", formattedImportance));
+    result.push(
+      localization.formatString(
+        "AggregateImportance.importanceLabel",
+        formattedImportance
+      )
+    );
     if (data.modelMetadata.modelType === ModelTypes.regression) {
       if (data.testDataset.predictedY) {
         result.push(
           localization.formatString(
             "AggregateImportance.predictedOutputTooltip",
-            data.testDataset.predictedY[rowIndex],
-          ),
+            data.testDataset.predictedY[rowIndex]
+          )
         );
       }
       if (data.testDataset.trueY) {
         result.push(
-          localization.formatString("AggregateImportance.trueOutputTooltip", data.testDataset.trueY[rowIndex]),
+          localization.formatString(
+            "AggregateImportance.trueOutputTooltip",
+            data.testDataset.trueY[rowIndex]
+          )
         );
       }
     } else {
       if (data.testDataset.predictedY) {
         const classIndex = data.testDataset.predictedY[rowIndex];
-        const className = data.modelMetadata.classNames[classIndex] || "unknown class";
-        result.push(localization.formatString("AggregateImportance.predictedClassTooltip", className));
+        const className =
+          data.modelMetadata.classNames[classIndex] || "unknown class";
+        result.push(
+          localization.formatString(
+            "AggregateImportance.predictedClassTooltip",
+            className
+          )
+        );
       }
       if (data.testDataset.trueY) {
         const classIndex = data.testDataset.trueY[rowIndex];
-        const className = data.modelMetadata.classNames[classIndex] || "unknown class";
-        result.push(localization.formatString("AggregateImportance.trueClassTooltip", className));
+        const className =
+          data.modelMetadata.classNames[classIndex] || "unknown class";
+        result.push(
+          localization.formatString(
+            "AggregateImportance.trueClassTooltip",
+            className
+          )
+        );
       }
     }
     return result.join("<br>");
@@ -291,14 +372,22 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
 
   public render(): React.ReactNode {
     if (
-      this.props.dashboardContext.explanationContext.testDataset !== undefined &&
-      this.props.dashboardContext.explanationContext.localExplanation !== undefined &&
-      this.props.dashboardContext.explanationContext.localExplanation.values !== undefined
+      this.props.dashboardContext.explanationContext.testDataset !==
+        undefined &&
+      this.props.dashboardContext.explanationContext.localExplanation !==
+        undefined &&
+      this.props.dashboardContext.explanationContext.localExplanation.values !==
+        undefined
     ) {
       if (this.rowCount > 10000) {
         return (
           <NoDataMessage
-            explanationStrings={[{ displayText: localization.AggregateImportance.tooManyRows, format: "text" }]}
+            explanationStrings={[
+              {
+                displayText: localization.AggregateImportance.tooManyRows,
+                format: "text"
+              }
+            ]}
           />
         );
       }
@@ -308,9 +397,17 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
       }
       let plotlyProps = this.state.plotlyProps;
       const weightContext = this.props.dashboardContext.weightContext;
-      const relayoutArg = { "xaxis.range": [-0.5, this.props.config.topK - 0.5] };
-      _.set(plotlyProps, "layout.xaxis.range", [-0.5, this.props.config.topK - 0.5]);
-      plotlyProps = ScatterUtils.updatePropsForSelections(plotlyProps, this.props.selectedRow);
+      const relayoutArg = {
+        "xaxis.range": [-0.5, this.props.config.topK - 0.5]
+      };
+      _.set(plotlyProps, "layout.xaxis.range", [
+        -0.5,
+        this.props.config.topK - 0.5
+      ]);
+      plotlyProps = ScatterUtils.updatePropsForSelections(
+        plotlyProps,
+        this.props.selectedRow
+      );
       return (
         <div className="aggregate-chart">
           <div className="top-controls">
@@ -338,14 +435,19 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             )}
             <div className="slider-control">
               <div className="slider-label">
-                <span className="label-text">{localization.AggregateImportance.topKFeatures}</span>
-                {this.props.dashboardContext.explanationContext.isGlobalDerived && (
+                <span className="label-text">
+                  {localization.AggregateImportance.topKFeatures}
+                </span>
+                {this.props.dashboardContext.explanationContext
+                  .isGlobalDerived && (
                   <IconButton
                     id={this._globalSortIconId}
                     iconProps={{ iconName: "Info" }}
                     title={localization.AggregateImportance.topKInfo}
                     onClick={this.showGlobalSortInfo}
-                    styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
+                    styles={{
+                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                    }}
                   />
                 )}
               </div>
@@ -354,7 +456,8 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
                 ariaLabel={localization.AggregateImportance.topKFeatures}
                 max={Math.min(
                   Beehive.maxFeatures,
-                  this.props.dashboardContext.explanationContext.modelMetadata.featureNames.length,
+                  this.props.dashboardContext.explanationContext.modelMetadata
+                    .featureNames.length
                 )}
                 min={1}
                 step={1}
@@ -363,7 +466,8 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
                 showValue={true}
               />
             </div>
-            {this.props.dashboardContext.explanationContext.modelMetadata.modelType === ModelTypes.multiclass && (
+            {this.props.dashboardContext.explanationContext.modelMetadata
+              .modelType === ModelTypes.multiclass && (
               <div className="selector">
                 <div className="selector-label">
                   <span>{localization.CrossClass.label}</span>
@@ -372,7 +476,9 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
                     iconProps={{ iconName: "Info" }}
                     title={localization.CrossClass.info}
                     onClick={this.showCrossClassInfo}
-                    styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
+                    styles={{
+                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                    }}
                   />
                 </div>
                 <ComboBox
@@ -396,7 +502,9 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
             >
               <div className="callout-info">
                 {this.state.calloutContent}
-                <DefaultButton onClick={this.onDismiss}>{localization.CrossClass.close}</DefaultButton>
+                <DefaultButton onClick={this.onDismiss}>
+                  {localization.CrossClass.close}
+                </DefaultButton>
               </div>
             </Callout>
           )}
@@ -411,25 +519,32 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
     }
     if (
       this.props.dashboardContext.explanationContext.localExplanation &&
-      this.props.dashboardContext.explanationContext.localExplanation.percentComplete !== undefined
+      this.props.dashboardContext.explanationContext.localExplanation
+        .percentComplete !== undefined
     ) {
       return <LoadingSpinner />;
     }
 
-    const explanationStrings = this.props.messages ? this.props.messages.LocalExpAndTestReq : undefined;
+    const explanationStrings = this.props.messages
+      ? this.props.messages.LocalExpAndTestReq
+      : undefined;
     return <NoDataMessage explanationStrings={explanationStrings} />;
   }
 
   private loadProps(): void {
     setTimeout(() => {
-      const sortVector = Beehive.generateSortVector(this.props.dashboardContext.explanationContext)
+      const sortVector = Beehive.generateSortVector(
+        this.props.dashboardContext.explanationContext
+      )
         .slice(-1 * Beehive.maxFeatures)
         .reverse();
       const props = Beehive.buildPlotlyProps(
         this.props.dashboardContext.explanationContext,
         sortVector,
-        this.colorOptions.find(option => (option.key as any) === this.state.selectedColorOption),
-        this.props.selectionContext.selectedIds,
+        this.colorOptions.find(
+          (option) => (option.key as any) === this.state.selectedColorOption
+        ),
+        this.props.selectionContext.selectedIds
       );
       this.setState({ plotlyProps: props });
     }, 1);
@@ -471,9 +586,17 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
     } else {
       const calloutContent = (
         <div className="class-weight-info">
-          <span>{localization.FeatureImportanceWrapper.globalImportanceExplanation}</span>
-          {this.props.dashboardContext.explanationContext.modelMetadata.modelType === ModelTypes.multiclass && (
-            <span>{localization.FeatureImportanceWrapper.multiclassImportanceAddendum}</span>
+          <span>
+            {localization.FeatureImportanceWrapper.globalImportanceExplanation}
+          </span>
+          {this.props.dashboardContext.explanationContext.modelMetadata
+            .modelType === ModelTypes.multiclass && (
+            <span>
+              {
+                localization.FeatureImportanceWrapper
+                  .multiclassImportanceAddendum
+              }
+            </span>
           )}
           <div>
             <br />
@@ -486,18 +609,19 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
 
   private buildColorOptions(): IComboBoxOption[] {
     const isRegression =
-      this.props.dashboardContext.explanationContext.modelMetadata.modelType === ModelTypes.regression;
+      this.props.dashboardContext.explanationContext.modelMetadata.modelType ===
+      ModelTypes.regression;
     const result: IComboBoxOption[] = [
       {
         key: "none",
-        text: localization.AggregateImportance.noColor,
-      },
+        text: localization.AggregateImportance.noColor
+      }
     ];
     if (this.props.dashboardContext.explanationContext.testDataset.dataset) {
       result.push({
         key: "normalizedFeatureValue",
         text: localization.AggregateImportance.scaledFeatureValue,
-        data: { isCategorical: false, isNormalized: true },
+        data: { isCategorical: false, isNormalized: true }
       });
     }
     if (this.props.dashboardContext.explanationContext.testDataset.predictedY) {
@@ -508,24 +632,29 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
           : localization.AggregateImportance.predictedClass,
         data: {
           isCategorical: !isRegression,
-          sortProperty: !isRegression ? "predictedClassIndex" : undefined,
-        },
+          sortProperty: !isRegression ? "predictedClassIndex" : undefined
+        }
       });
     }
     if (this.props.dashboardContext.explanationContext.testDataset.trueY) {
       result.push({
         key: "trueClass",
-        text: isRegression ? localization.AggregateImportance.trueValue : localization.AggregateImportance.trueClass,
+        text: isRegression
+          ? localization.AggregateImportance.trueValue
+          : localization.AggregateImportance.trueClass,
         data: {
           isCategorical: !isRegression,
-          sortProperty: !isRegression ? "trueClassIndex" : undefined,
-        },
+          sortProperty: !isRegression ? "trueClassIndex" : undefined
+        }
       });
     }
     return result;
   }
 
-  private setChart = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
+  private setChart = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.displayMode = item.key as any;
     this.props.onChange(newConfig, this.props.config.id);
@@ -535,8 +664,14 @@ export class Beehive extends React.PureComponent<IGlobalFeatureImportanceProps, 
     this.setState({ calloutContent: undefined, calloutId: undefined });
   };
 
-  private setColor = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    this.setState({ selectedColorOption: item.key as any, plotlyProps: undefined });
+  private setColor = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    this.setState({
+      selectedColorOption: item.key as any,
+      plotlyProps: undefined
+    });
   };
 
   private setK = (newValue: number): void => {

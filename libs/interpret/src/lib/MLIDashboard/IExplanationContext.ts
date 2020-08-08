@@ -4,7 +4,7 @@ import { JointDataset } from "./JointDataset";
 export enum ModelTypes {
   regression = "regression",
   binary = "binary",
-  multiclass = "multiclass",
+  multiclass = "multiclass"
 }
 
 export interface IExplanationContext {
@@ -56,11 +56,14 @@ export interface IFeatureValueExplanation {
 }
 
 export interface IExplanationGenerators {
-  requestPredictions?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   requestLocalFeatureExplanations?: (
     request: any[],
     abortSignal: AbortSignal,
-    explanationAlgorithm?: string,
+    explanationAlgorithm?: string
   ) => Promise<any[]>;
 }
 

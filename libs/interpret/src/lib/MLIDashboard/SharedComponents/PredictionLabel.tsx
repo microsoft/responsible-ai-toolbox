@@ -26,20 +26,24 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
     if (this.props.modelType === ModelTypes.regression) {
       return localization.formatString(
         localization.PredictionLabel.predictedValueLabel,
-        this.props.prediction.toLocaleString(undefined, { minimumFractionDigits: 3 }),
+        this.props.prediction.toLocaleString(undefined, {
+          minimumFractionDigits: 3
+        })
       ) as string;
     }
     return localization.formatString(
       localization.PredictionLabel.predictedClassLabel,
-      this.props.classNames[this.props.prediction],
+      this.props.classNames[this.props.prediction]
     ) as string;
   }
 
   private makeProbabilityLabel(): string {
-    const probability = this.props.predictedProbabilities[this.props.prediction];
+    const probability = this.props.predictedProbabilities[
+      this.props.prediction
+    ];
     return localization.formatString(
       localization.IcePlot.probabilityLabel,
-      probability.toLocaleString(undefined, { minimumFractionDigits: 3 }),
+      probability.toLocaleString(undefined, { minimumFractionDigits: 3 })
     ) as string;
   }
 }

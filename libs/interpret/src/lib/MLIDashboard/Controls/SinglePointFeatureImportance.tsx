@@ -1,12 +1,27 @@
 import React from "react";
-import { IDropdownOption, Slider, ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import {
+  IDropdownOption,
+  Slider,
+  ComboBox,
+  IComboBox,
+  IComboBoxOption
+} from "office-ui-fabric-react";
 import _ from "lodash";
 
 import { IExplanationContext, ModelTypes } from "../IExplanationContext";
-import { IBarChartConfig, FeatureKeys, FeatureSortingKey } from "../SharedComponents/IBarChartConfig";
+import {
+  IBarChartConfig,
+  FeatureKeys,
+  FeatureSortingKey
+} from "../SharedComponents/IBarChartConfig";
 import { localization } from "../../Localization/localization";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
-import { BarChart, PredictionLabel, LoadingSpinner, NoDataMessage } from "../SharedComponents";
+import {
+  BarChart,
+  PredictionLabel,
+  LoadingSpinner,
+  NoDataMessage
+} from "../SharedComponents";
 import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces";
 
@@ -37,13 +52,16 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     super(props);
     this.sortOptions = this.buildSortOptions();
     this.state = {
-      selectedSorting: this.getDefaultSorting(),
+      selectedSorting: this.getDefaultSorting()
     };
   }
 
   public render(): React.ReactNode {
     const localExplanation = this.props.explanationContext.localExplanation;
-    if (localExplanation !== undefined && localExplanation.values !== undefined) {
+    if (
+      localExplanation !== undefined &&
+      localExplanation.values !== undefined
+    ) {
       const featuresByClassMatrix = this.getFeatureByClassMatrix();
       const sortVector = this.getSortVector();
       const defaultVisibleClasses: number[] =
@@ -53,24 +71,39 @@ export class SinglePointFeatureImportance extends React.PureComponent<
           : undefined;
       return (
         <div className="local-summary">
-          {this.props.explanationContext.testDataset && this.props.explanationContext.testDataset.predictedY && (
-            <PredictionLabel
-              prediction={this.props.explanationContext.testDataset.predictedY[this.props.selectedRow]}
-              classNames={this.props.explanationContext.modelMetadata.classNames}
-              modelType={this.props.explanationContext.modelMetadata.modelType}
-              predictedProbabilities={
-                this.props.explanationContext.testDataset.probabilityY
-                  ? this.props.explanationContext.testDataset.probabilityY[this.props.selectedRow]
-                  : undefined
-              }
-            />
-          )}
+          {this.props.explanationContext.testDataset &&
+            this.props.explanationContext.testDataset.predictedY && (
+              <PredictionLabel
+                prediction={
+                  this.props.explanationContext.testDataset.predictedY[
+                    this.props.selectedRow
+                  ]
+                }
+                classNames={
+                  this.props.explanationContext.modelMetadata.classNames
+                }
+                modelType={
+                  this.props.explanationContext.modelMetadata.modelType
+                }
+                predictedProbabilities={
+                  this.props.explanationContext.testDataset.probabilityY
+                    ? this.props.explanationContext.testDataset.probabilityY[
+                        this.props.selectedRow
+                      ]
+                    : undefined
+                }
+              />
+            )}
           <div className="feature-bar-explanation-chart">
             <div className="top-controls">
               <Slider
                 className="feature-slider"
                 label={localization.AggregateImportance.topKFeatures}
-                max={Math.min(30, this.props.explanationContext.modelMetadata.featureNames.length)}
+                max={Math.min(
+                  30,
+                  this.props.explanationContext.modelMetadata.featureNames
+                    .length
+                )}
                 min={1}
                 step={1}
                 value={this.props.config.topK}
@@ -91,14 +124,18 @@ export class SinglePointFeatureImportance extends React.PureComponent<
               )}
             </div>
             <BarChart
-              intercept={this.props.explanationContext.localExplanation.intercepts}
+              intercept={
+                this.props.explanationContext.localExplanation.intercepts
+              }
               featureByClassMatrix={featuresByClassMatrix}
               sortedIndexVector={sortVector}
               topK={this.props.config.topK}
               modelMetadata={this.props.explanationContext.modelMetadata}
               additionalRowData={
                 this.props.explanationContext.testDataset.dataset !== undefined
-                  ? this.props.explanationContext.testDataset.dataset[this.props.selectedRow]
+                  ? this.props.explanationContext.testDataset.dataset[
+                      this.props.selectedRow
+                    ]
                   : undefined
               }
               barmode="group"
@@ -109,10 +146,15 @@ export class SinglePointFeatureImportance extends React.PureComponent<
         </div>
       );
     }
-    if (localExplanation !== undefined && localExplanation.percentComplete !== undefined) {
+    if (
+      localExplanation !== undefined &&
+      localExplanation.percentComplete !== undefined
+    ) {
       return <LoadingSpinner />;
     }
-    const explanationStrings = this.props.messages ? this.props.messages.LocalExpAndTestReq : undefined;
+    const explanationStrings = this.props.messages
+      ? this.props.messages.LocalExpAndTestReq
+      : undefined;
     return <NoDataMessage explanationStrings={explanationStrings} />;
   }
 
@@ -120,45 +162,71 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     const localExplanation = this.props.explanationContext.localExplanation;
     if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
       return ModelExplanationUtils.buildSortedVector(
-        this.props.explanationContext.globalExplanation.perClassFeatureImportances,
+        this.props.explanationContext.globalExplanation
+          .perClassFeatureImportances
       );
     } else if (this.state.selectedSorting === FeatureKeys.absoluteLocal) {
-      return ModelExplanationUtils.buildSortedVector(localExplanation.values[this.props.selectedRow]);
+      return ModelExplanationUtils.buildSortedVector(
+        localExplanation.values[this.props.selectedRow]
+      );
     } else {
       return ModelExplanationUtils.buildSortedVector(
         localExplanation.values[this.props.selectedRow],
-        this.state.selectedSorting,
+        this.state.selectedSorting
       );
     }
   }
 
   private getFeatureByClassMatrix(): number[][] {
-    const result = this.props.explanationContext.localExplanation.values[this.props.selectedRow];
+    const result = this.props.explanationContext.localExplanation.values[
+      this.props.selectedRow
+    ];
     // Binary classifier just has feature importance for class 0 stored, class one is equal and oposite.
     if (
-      this.props.explanationContext.modelMetadata.modelType === ModelTypes.binary &&
+      this.props.explanationContext.modelMetadata.modelType ===
+        ModelTypes.binary &&
       this.props.explanationContext.testDataset.predictedY !== undefined &&
-      this.props.explanationContext.testDataset.predictedY[this.props.selectedRow] !== 0
+      this.props.explanationContext.testDataset.predictedY[
+        this.props.selectedRow
+      ] !== 0
     ) {
-      return result.map(classVector => classVector.map(value => -1 * value));
+      return result.map((classVector) =>
+        classVector.map((value) => -1 * value)
+      );
     }
     return result;
   }
 
   private buildSortOptions(): IDropdownOption[] {
-    const result: IDropdownOption[] = [{ key: FeatureKeys.absoluteGlobal, text: localization.BarChart.absoluteGlobal }];
+    const result: IDropdownOption[] = [
+      {
+        key: FeatureKeys.absoluteGlobal,
+        text: localization.BarChart.absoluteGlobal
+      }
+    ];
     // if (!this.props.explanationContext.testDataset.predictedY) {
     //     return result;
     // }
-    if (this.props.explanationContext.modelMetadata.modelType !== ModelTypes.multiclass) {
-      result.push({ key: FeatureKeys.absoluteLocal, text: localization.BarChart.absoluteLocal });
+    if (
+      this.props.explanationContext.modelMetadata.modelType !==
+      ModelTypes.multiclass
+    ) {
+      result.push({
+        key: FeatureKeys.absoluteLocal,
+        text: localization.BarChart.absoluteLocal
+      });
     }
-    if (this.props.explanationContext.modelMetadata.modelType === ModelTypes.multiclass) {
+    if (
+      this.props.explanationContext.modelMetadata.modelType ===
+      ModelTypes.multiclass
+    ) {
       result.push(
-        ...this.props.explanationContext.modelMetadata.classNames.map((className, index) => ({
-          key: index,
-          text: className,
-        })),
+        ...this.props.explanationContext.modelMetadata.classNames.map(
+          (className, index) => ({
+            key: index,
+            text: className
+          })
+        )
       );
     }
     return result;
@@ -168,8 +236,11 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     if (!this.props.explanationContext.testDataset.predictedY) {
       return FeatureKeys.absoluteGlobal;
     }
-    return this.props.explanationContext.modelMetadata.modelType === ModelTypes.multiclass
-      ? this.props.explanationContext.testDataset.predictedY[this.props.selectedRow]
+    return this.props.explanationContext.modelMetadata.modelType ===
+      ModelTypes.multiclass
+      ? this.props.explanationContext.testDataset.predictedY[
+          this.props.selectedRow
+        ]
       : FeatureKeys.absoluteLocal;
   }
 
@@ -179,7 +250,10 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     this.props.onChange(newConfig, LocalBarId);
   };
 
-  private onSortSelect = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
+  private onSortSelect = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
     this.setState({ selectedSorting: item.key as any });
   };
 }

@@ -23,6 +23,6 @@ export const defaultTheme: ITheme = createTheme({
     neutralPrimary: "#323130",
     neutralDark: "#201f1e",
     black: "#000000",
-    white: "#ffffff",
-  },
+    white: "#ffffff"
+  }
 });

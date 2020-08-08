@@ -29,34 +29,35 @@ module.exports = {
     probabalisticRegressor: "probit magyarázó változója",
     regressor: "magyarázó változó",
     binary: "bináris",
-    continuous: "folyamatos",
+    continuous: "folyamatos"
   },
   Parity: {
     header: "Egyenlőtlenség alapján mért méltányosság",
     body:
-      "Az egyenlőtlenségi metrikák számszerűsítik a modell viselkedésének variációját a kiválasztott jellemzők tekintetében. Kétféle egyenlőtlenségi metrika létezik: hamarosan....",
+      "Az egyenlőtlenségi metrikák számszerűsítik a modell viselkedésének variációját a kiválasztott jellemzők tekintetében. Kétféle egyenlőtlenségi metrika létezik: hamarosan...."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Dokumentáció",
+    documentation: "Dokumentáció"
   },
   Footer: {
     back: "Vissza",
-    next: "Tovább",
+    next: "Tovább"
   },
   Intro: {
     welcome: "Üdvözöli a",
     fairlearnDashboard: "Fairlearn irányítópult",
     introBody:
       "A Fairlearn-irányítópult lehetővé teszi a modellek teljesítménye és a méltányossága közötti kompromisszumok értékelését",
-    explanatoryStep: "Az értékelés beállításához meg kell adnia egy érzékeny jellemzőt és egy teljesítménymutatót.",
+    explanatoryStep:
+      "Az értékelés beállításához meg kell adnia egy érzékeny jellemzőt és egy teljesítménymutatót.",
     getStarted: "Első lépések",
     features: "Érzékeny jellemzők",
     featuresInfo:
       "Az érzékeny jellemzők csoportokra osztják az adatokat. A modell csoportonkénti méltányossága az egyenlőtlenségi metrikák alapján van mérve. Az egyenlőtlenségi metrikák számszerűsítik, hogy a modell csoportonkénti viselkedése mennyire változatos.",
     accuracy: "Teljesítménymutató",
     accuracyInfo:
-      "A teljesítménymutató a modell összesített és csoportonkénti teljesítményének kiértékelésére szolgálnak. A teljesítménymutató szélsőséges értékei közötti csoportonkénti különbséget a rendszer teljesítménybeli egyenlőtlenségként fogja lejelenteni.",
+      "A teljesítménymutató a modell összesített és csoportonkénti teljesítményének kiértékelésére szolgálnak. A teljesítménymutató szélsőséges értékei közötti csoportonkénti különbséget a rendszer teljesítménybeli egyenlőtlenségként fogja lejelenteni."
   },
   ModelComparison: {
     title: "Modell-összehasonlítás",
@@ -66,13 +67,17 @@ module.exports = {
     howToReadText:
       "Ez a diagram a(z) {0} modellek mindegyikét kijelölhető pontként ábrázolja. Az x tengelyen {1} látható, ahol {2} jobb. Az Y tengely az egyenlőtlenséget mutatja, ahol az alacsonyabb érték jobb.",
     insights: "Elemzések",
-    insightsText1: "A diagramon látható a(z) {0} és a(z) {1} modellek egyenlőtlensége.",
-    insightsText2: "A(z) {0} terjedelme: {1}–{2}. Az egyenlőtlenség terjedelme: {3}–{4}.",
-    insightsText3: "A legpontosabb modell {1}/{0} értéket és {2} egyenlőtlenséget ér el.",
-    insightsText4: "A legkisebb egyenlőtlenséges modell {1}/{0} értéket és {2} egyenlőtlenséget ér el.",
+    insightsText1:
+      "A diagramon látható a(z) {0} és a(z) {1} modellek egyenlőtlensége.",
+    insightsText2:
+      "A(z) {0} terjedelme: {1}–{2}. Az egyenlőtlenség terjedelme: {3}–{4}.",
+    insightsText3:
+      "A legpontosabb modell {1}/{0} értéket és {2} egyenlőtlenséget ér el.",
+    insightsText4:
+      "A legkisebb egyenlőtlenséges modell {1}/{0} értéket és {2} egyenlőtlenséget ér el.",
     disparityInOutcomes: "Egyenlőtlenség az előrejelzések között",
     disparityInAccuracy: "Egyenlőtlenség itt: {0}",
-    howToMeasureDisparity: "Hogyan szeretné mérni az egyenlőtlenséget?",
+    howToMeasureDisparity: "Hogyan szeretné mérni az egyenlőtlenséget?"
   },
   Report: {
     modelName: "{0} modell",
@@ -93,7 +98,8 @@ module.exports = {
       "A sávdiagram az egyes csoportok kiválasztási arányát, vagyis az 1-es osztályozású ponthányadokat jeleníti meg.",
     regressionOutcomesHowToRead:
       "A dobozdiagramok a csoportonként eloszló előrejelzéseket mutatják. Az egyéni adatpontok felül, átfedésben jelennek meg.",
-    classificationAccuracyHowToRead1: "A sávdiagram az eltérések eloszlását mutatja az egyes csoportokban.",
+    classificationAccuracyHowToRead1:
+      "A sávdiagram az eltérések eloszlását mutatja az egyes csoportokban.",
     classificationAccuracyHowToRead2:
       "Az eltéréseket a rendszer túlbecslési eltérésekre (az előrejelzés 1, miközben a valós címke 0) és alábecslési eltérésekre (az előrejelzés 0, miközben a valós címke 1) bontja.",
     classificationAccuracyHowToRead3:
@@ -109,20 +115,22 @@ module.exports = {
     distributionOfPredictions: "Előrejelzések eloszlása",
     distributionOfErrors: "Eltérések eloszlása",
     tooltipPrediction: "Előrejelzés: {0}",
-    tooltipError: "Eltérés: {0}",
+    tooltipError: "Eltérés: {0}"
   },
   Feature: {
-    header: "Mely jellemzők mellett szeretné kiértékelni a modell méltányosságát?",
+    header:
+      "Mely jellemzők mellett szeretné kiértékelni a modell méltányosságát?",
     body:
       "A méltányosságot a rendszer a modell viselkedésében mutatkozó egyenlőtlenségek alapján értékeli ki. Az adatokat az egyes kiválasztott jellemzők értékei szerint osztjuk fel, és kiértékeljük, hogy a modell teljesítménymutatója és előrejelzései felosztásonként hogyan változik.",
     learnMore: "További információ",
     summaryCategoricalCount: "Ez a jellemző {0} egyedi értékeket tartalmaz",
-    summaryNumericCount: "Ez a numerikus jellemző {0} és {1} között mozog, és {2} dobozba van csoportosítva.",
+    summaryNumericCount:
+      "Ez a numerikus jellemző {0} és {1} között mozog, és {2} dobozba van csoportosítva.",
     showCategories: "Összes megjelenítése",
     hideCategories: "Összecsukás",
     categoriesOverflow: "   és további {0} kategória",
     editBinning: "Csoportok szerkesztése",
-    subgroups: "Alcsoportok",
+    subgroups: "Alcsoportok"
   },
   Metrics: {
     accuracyScore: "Pontosság",
@@ -149,7 +157,8 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "A megfelelően osztályozott adatpontok hányada.",
-    precisionDescription: "Az 1-es osztályozású adatpontok hányada, amelyek helyesen vannak osztályozva.",
+    precisionDescription:
+      "Az 1-es osztályozású adatpontok hányada, amelyek helyesen vannak osztályozva.",
     recallDescription:
       "Az 1-es valós címkével rendelkező adatpontok hányada, amelyek helyesen vannak osztályozva. Alternatív megnevezés: valós pozitív arány, érzékenység.",
     rmseDescription: "A négyzetes eltérések átlagának négyzetgyöke.",
@@ -157,12 +166,13 @@ module.exports = {
     meanAbsoluteErrorDescription:
       "Az eltérések abszolút értékeinek átlaga. Ellenállóbbak a kiugró értékekkel szemben, mint az MSE.",
     r2Description: "A címkék modell által kifejtett varianciahányada.",
-    aucDescription: "Az előrejelzések pontszámként ábrázolt minősége a pozitív és a negatív példák elkülönítése terén.",
+    aucDescription:
+      "Az előrejelzések pontszámként ábrázolt minősége a pozitív és a negatív példák elkülönítése terén.",
     balancedRMSEDescription:
       "A rendszer újrasúlyozza a pozitív és negatív példákat, hogy a teljes súly egyenlő legyen. Akkor ajánlott, ha a mögöttes adatok nagy mértékben kiegyensúlyozatlanok.",
     balancedAccuracyDescription:
       "A rendszer újrasúlyozza a pozitív és negatív példákat, hogy a teljes súly egyenlő legyen. Akkor ajánlott, ha a mögöttes adatok nagy mértékben kiegyensúlyozatlanok.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Dobozok konfigurálása",
@@ -170,6 +180,6 @@ module.exports = {
     save: "Mentés",
     cancel: "Mégse",
     numberOfBins: "Dobozok száma:",
-    categoryHeader: "Dobozértékek:",
-  },
+    categoryHeader: "Dobozértékek:"
+  }
 };

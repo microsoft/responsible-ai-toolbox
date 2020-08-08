@@ -7,6 +7,6 @@ const perPointExplanation = new Array(numRows).fill(0).map(() => {
 export const largeFeatureCount = {
   localExplanations: {
     intercept: [0.2, -0.2, 0.1],
-    scores: [perPointExplanation, perPointExplanation, perPointExplanation],
-  },
+    scores: [perPointExplanation, perPointExplanation, perPointExplanation]
+  }
 };

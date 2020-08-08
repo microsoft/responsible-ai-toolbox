@@ -29,20 +29,20 @@ module.exports = {
     probabalisticRegressor: "regressor de probit",
     regressor: "regressor",
     binary: "binário",
-    continuous: "contínuo",
+    continuous: "contínuo"
   },
   Parity: {
     header: "Equidade medida em termos de disparidade",
     body:
-      "As métricas de disparidade quantificam a variação do comportamento do seu modelo nos recursos selecionados. Há dois tipos de métricas de disparidade: mais em breve....",
+      "As métricas de disparidade quantificam a variação do comportamento do seu modelo nos recursos selecionados. Há dois tipos de métricas de disparidade: mais em breve...."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Documentação",
+    documentation: "Documentação"
   },
   Footer: {
     back: "Voltar",
-    next: "Avançar",
+    next: "Avançar"
   },
   Intro: {
     welcome: "Bem-vindo(a) a",
@@ -57,7 +57,7 @@ module.exports = {
       "Recursos confidenciais são usados para dividir os seus dados em grupos. A equidade do seu modelo nesses grupos é medida por métricas de disparidade. As métricas de disparidade quantificam o quanto o comportamento do modelo varia nesses grupos.",
     accuracy: "Métrica de desempenho",
     accuracyInfo:
-      "As métricas de desempenho são usadas para avaliar a qualidade geral do seu modelo, bem como a qualidade do seu modelo em cada grupo. A diferença entre os valores extremos da métrica de desempenho nos grupos é relatada como a disparidade no desempenho.",
+      "As métricas de desempenho são usadas para avaliar a qualidade geral do seu modelo, bem como a qualidade do seu modelo em cada grupo. A diferença entre os valores extremos da métrica de desempenho nos grupos é relatada como a disparidade no desempenho."
   },
   ModelComparison: {
     title: "Comparação de modelo",
@@ -68,12 +68,15 @@ module.exports = {
       "Este gráfico representa cada um dos modelos de {0} como um ponto selecionável. O eixo x representa {1}, no qual {2} é melhor. O eixo y representa a disparidade, na qual um valor menor é melhor.",
     insights: "Insights",
     insightsText1: "O gráfico mostra {0} e a disparidade de modelos de {1}.",
-    insightsText2: "{0} tem um intervalo de {1} a {2}. A disparidade tem um intervalo de {3} a {4}.",
-    insightsText3: "O modelo mais preciso atinge {0} de {1} e uma disparidade de {2}.",
-    insightsText4: "O modelo com menor disparidade atinge {0} de {1} e uma disparidade de {2}.",
+    insightsText2:
+      "{0} tem um intervalo de {1} a {2}. A disparidade tem um intervalo de {3} a {4}.",
+    insightsText3:
+      "O modelo mais preciso atinge {0} de {1} e uma disparidade de {2}.",
+    insightsText4:
+      "O modelo com menor disparidade atinge {0} de {1} e uma disparidade de {2}.",
     disparityInOutcomes: "Disparidade nas previsões",
     disparityInAccuracy: "A disparidade no {0}",
-    howToMeasureDisparity: "Como deve ser medida a disparidade?",
+    howToMeasureDisparity: "Como deve ser medida a disparidade?"
   },
   Report: {
     modelName: "Modelo {0}",
@@ -94,7 +97,8 @@ module.exports = {
       "O gráfico de barras mostra a taxa de seleção em cada grupo, o que significa a fração de pontos classificados como 1.",
     regressionOutcomesHowToRead:
       "Os gráficos de caixa mostram a distribuição de previsões em cada grupo. Os pontos de dados individuais estão sobrepostos na parte superior.",
-    classificationAccuracyHowToRead1: "O gráfico de barras mostra a distribuição de erros em cada grupo.",
+    classificationAccuracyHowToRead1:
+      "O gráfico de barras mostra a distribuição de erros em cada grupo.",
     classificationAccuracyHowToRead2:
       "Os erros são divididos em erros de sobreprevisão (prever 1 quando o rótulo verdadeiro é 0) e erros de subprevisão (prever 0 quando o rótulo verdadeiro é 1).",
     classificationAccuracyHowToRead3:
@@ -110,20 +114,22 @@ module.exports = {
     distributionOfPredictions: "Distribuição de previsões",
     distributionOfErrors: "Distribuição de erros",
     tooltipPrediction: "Previsão: {0}",
-    tooltipError: "Erro: {0}",
+    tooltipError: "Erro: {0}"
   },
   Feature: {
-    header: "Junto com quais recursos você deseja avaliar a equidade do seu modelo?",
+    header:
+      "Junto com quais recursos você deseja avaliar a equidade do seu modelo?",
     body:
       "A equidade é avaliada em termos de disparidades no comportamento do modelo. Vamos dividir os seus dados de acordo com os valores de cada recurso selecionado e avaliar como a métrica de desempenho e as previsões do modelo diferem nessas divisões.",
     learnMore: "Saiba mais",
     summaryCategoricalCount: "Este recurso tem {0} valores exclusivos",
-    summaryNumericCount: "Este recurso numérico varia de {0} a {1} e é agrupado em {2} compartimentos.",
+    summaryNumericCount:
+      "Este recurso numérico varia de {0} a {1} e é agrupado em {2} compartimentos.",
     showCategories: "Mostrar tudo",
     hideCategories: "Recolher",
     categoriesOverflow: "   e {0} categorias adicionais",
     editBinning: "Editar grupos",
-    subgroups: "Subgrupos",
+    subgroups: "Subgrupos"
   },
   Metrics: {
     accuracyScore: "Precisão",
@@ -149,13 +155,16 @@ module.exports = {
     balancedAccuracy: "Precisão balanceada",
     f1Score: "F1-Score",
     logLoss: "Log Loss",
-    accuracyDescription: "A fração de pontos de dados classificados corretamente.",
-    precisionDescription: "A fração de pontos de dados classificados corretamente entre aqueles classificados como 1.",
+    accuracyDescription:
+      "A fração de pontos de dados classificados corretamente.",
+    precisionDescription:
+      "A fração de pontos de dados classificados corretamente entre aqueles classificados como 1.",
     recallDescription:
       "A fração de pontos de dados classificados corretamente entre aqueles cujo rótulo verdadeiro é 1. Nomes alternativos: taxa de verdadeiro positivo, confidencialidade.",
     rmseDescription: "Raiz quadrada da média de erros quadráticos.",
     mseDescription: "A média de erros quadráticos.",
-    meanAbsoluteErrorDescription: "A média de valores absolutos de erros. Mais robusto para exceções do que para MSE.",
+    meanAbsoluteErrorDescription:
+      "A média de valores absolutos de erros. Mais robusto para exceções do que para MSE.",
     r2Description: "A fração de variância nos rótulos explicada pelo modelo.",
     aucDescription:
       "A qualidade das previsões, exibidas como pontuações, ao separar exemplos positivos de exemplos negativos.",
@@ -163,7 +172,7 @@ module.exports = {
       "Exemplos positivos e negativos são ponderados novamente para que tenham o peso total igual. Adequado se os dados subjacentes forem altamente desequilibrados.",
     balancedAccuracyDescription:
       "Exemplos positivos e negativos são ponderados novamente para que tenham o peso total igual. Adequado se os dados subjacentes forem altamente desequilibrados.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Configurar compartimentos",
@@ -171,6 +180,6 @@ module.exports = {
     save: "Salvar",
     cancel: "Cancelar",
     numberOfBins: "Número de compartimentos:",
-    categoryHeader: "Valores de compartimento:",
-  },
+    categoryHeader: "Valores de compartimento:"
+  }
 };

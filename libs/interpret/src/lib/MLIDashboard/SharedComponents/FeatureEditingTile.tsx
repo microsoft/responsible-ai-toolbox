@@ -1,5 +1,10 @@
 import React from "react";
-import { TextField, ComboBox, IComboBox, IDropdownOption } from "office-ui-fabric-react";
+import {
+  TextField,
+  ComboBox,
+  IComboBox,
+  IDropdownOption
+} from "office-ui-fabric-react";
 
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { FabricStyles } from "../FabricStyles";
@@ -21,10 +26,13 @@ export interface IFeatureEditingTileState {
   errorMessage?: string;
 }
 
-export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps, IFeatureEditingTileState> {
+export class FeatureEditingTile extends React.Component<
+  IFeatureEditingTileProps,
+  IFeatureEditingTileState
+> {
   private options: IDropdownOption[] =
     this.props.enumeratedValues !== undefined
-      ? this.props.enumeratedValues.map(value => {
+      ? this.props.enumeratedValues.map((value) => {
           return { text: value, key: value };
         })
       : undefined;
@@ -32,7 +40,7 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
   public constructor(props: IFeatureEditingTileProps) {
     super(props);
     this.state = {
-      value: this.props.defaultValue.toString(),
+      value: this.props.defaultValue.toString()
     };
   }
 
@@ -40,14 +48,17 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
     if (this.props.defaultValue !== prevProps.defaultValue) {
       this.setState({
         value: this.props.defaultValue.toString(),
-        errorMessage: undefined,
+        errorMessage: undefined
       });
     }
   }
 
   public render(): React.ReactNode {
     let tileClass = "tile";
-    if (this.state.value !== this.props.defaultValue.toString() && this.state.errorMessage === undefined) {
+    if (
+      this.state.value !== this.props.defaultValue.toString() &&
+      this.state.errorMessage === undefined
+    ) {
       tileClass += " edited";
     }
     if (this.state.errorMessage !== undefined) {
@@ -81,10 +92,16 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
     );
   }
 
-  private onValueChanged = (_ev: React.FormEvent<HTMLInputElement>, newValue?: string): void => {
+  private onValueChanged = (
+    _ev: React.FormEvent<HTMLInputElement>,
+    newValue?: string
+  ): void => {
     const val = +newValue;
     let errorMessage: string | undefined;
-    if (Number.isNaN(val) || (this.props.rangeType === RangeTypes.integer && !Number.isInteger(val))) {
+    if (
+      Number.isNaN(val) ||
+      (this.props.rangeType === RangeTypes.integer && !Number.isInteger(val))
+    ) {
       errorMessage =
         this.props.rangeType === RangeTypes.integer
           ? localization.IcePlot.integerError
@@ -98,7 +115,7 @@ export class FeatureEditingTile extends React.Component<IFeatureEditingTileProps
     _event: React.FormEvent<IComboBox>,
     item: IDropdownOption,
     _index: number,
-    userProvidedValue: string,
+    userProvidedValue: string
   ): void => {
     const newVal = item !== undefined ? item.text : userProvidedValue;
     this.props.onEdit(this.props.index, newVal);

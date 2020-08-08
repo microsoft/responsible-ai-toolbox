@@ -8,7 +8,14 @@
   },
   "ignorePatterns": ["**/*"],
   "settings": { "react": { "version": "detect" } },
-  "plugins": ["@typescript-eslint", "@nrwl/nx", "import", "jsx-a11y", "react", "react-hooks"],
+  "plugins": [
+    "@typescript-eslint",
+    "@nrwl/nx",
+    "import",
+    "jsx-a11y",
+    "react",
+    "react-hooks"
+  ],
   "env": {
     "browser": true,
     "commonjs": true,
@@ -43,7 +50,9 @@
       {
         "enforceBuildableLibDependency": true,
         "allow": [],
-        "depConstraints": [{ "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }]
+        "depConstraints": [
+          { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+        ]
       }
     ],
     "@typescript-eslint/naming-convention": [
@@ -57,7 +66,13 @@
         }
       }
     ],
-    "quotes": ["error", "double"],
+    "quotes": [
+      "error",
+      "double",
+      {
+        "avoidEscape": true
+      }
+    ],
     "no-duplicate-imports": "error",
     "array-callback-return": "error",
     "dot-location": ["error", "property"],
@@ -249,7 +264,10 @@
     "jsx-a11y/accessible-emoji": "error",
     "jsx-a11y/alt-text": "error",
     "jsx-a11y/anchor-has-content": "error",
-    "jsx-a11y/anchor-is-valid": ["error", { "aspects": ["noHref", "invalidHref"] }],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      { "aspects": ["noHref", "invalidHref"] }
+    ],
     "jsx-a11y/aria-activedescendant-has-tabindex": "error",
     "jsx-a11y/aria-props": "error",
     "jsx-a11y/aria-proptypes": "error",

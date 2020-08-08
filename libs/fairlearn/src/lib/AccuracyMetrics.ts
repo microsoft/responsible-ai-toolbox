@@ -18,7 +18,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.accuracyDescription,
     isMinimization: false,
     isPercentage: true,
-    userVisible: true,
+    userVisible: true
   },
   precision_score: {
     key: "precision_score",
@@ -26,7 +26,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.precisionDescription,
     isMinimization: false,
     isPercentage: true,
-    userVisible: true,
+    userVisible: true
   },
   recall_score: {
     key: "recall_score",
@@ -34,56 +34,56 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.recallDescription,
     isMinimization: false,
     isPercentage: true,
-    userVisible: true,
+    userVisible: true
   },
   zero_one_loss: {
     key: "zero_one_loss",
     title: localization.Metrics.zeroOneLoss,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: true,
+    isPercentage: true
   },
   specificity_score: {
     key: "specificity_score",
     title: localization.Metrics.specificityScore,
     description: localization.loremIpsum,
     isMinimization: false,
-    isPercentage: true,
+    isPercentage: true
   },
   miss_rate: {
     key: "miss_rate",
     title: localization.Metrics.missRate,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: true,
+    isPercentage: true
   },
   fallout_rate: {
     key: "fallout_rate",
     title: localization.Metrics.falloutRate,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: true,
+    isPercentage: true
   },
   false_positive_over_total: {
     key: "false_positive_over_total",
     title: localization.Metrics.falloutRate,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: true,
+    isPercentage: true
   },
   false_negative_over_total: {
     key: "false_negative_over_total",
     title: localization.Metrics.falloutRate,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: true,
+    isPercentage: true
   },
   max_error: {
     key: "max_error",
     title: localization.Metrics.maxError,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: false,
+    isPercentage: false
   },
   mean_absolute_error: {
     key: "mean_absolute_error",
@@ -91,7 +91,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.meanAbsoluteErrorDescription,
     isMinimization: true,
     isPercentage: false,
-    userVisible: true,
+    userVisible: true
   },
   mean_squared_error: {
     key: "mean_squared_error",
@@ -99,21 +99,21 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.mseDescription,
     isMinimization: true,
     isPercentage: false,
-    userVisible: true,
+    userVisible: true
   },
   mean_squared_log_error: {
     key: "mean_squared_log_error",
     title: localization.Metrics.meanSquaredLogError,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: false,
+    isPercentage: false
   },
   median_absolute_error: {
     key: "median_absolute_error",
     title: localization.Metrics.medianAbsoluteError,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: false,
+    isPercentage: false
   },
   balanced_root_mean_squared_error: {
     key: "balanced_root_mean_squared_error",
@@ -121,35 +121,35 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.balancedRMSEDescription,
     isMinimization: true,
     isPercentage: false,
-    userVisible: true,
+    userVisible: true
   },
   average: {
     key: "average",
     title: localization.Metrics.average,
     description: localization.loremIpsum,
     isMinimization: false,
-    isPercentage: false,
+    isPercentage: false
   },
   selection_rate: {
     key: "selection_rate",
     title: localization.Metrics.selectionRate,
     description: localization.loremIpsum,
     isMinimization: false,
-    isPercentage: true,
+    isPercentage: true
   },
   overprediction: {
     key: "overprediction",
     title: localization.Metrics.overprediction,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: false,
+    isPercentage: false
   },
   underprediction: {
     key: "underprediction",
     title: localization.Metrics.underprediction,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: false,
+    isPercentage: false
   },
   r2_score: {
     key: "r2_score",
@@ -158,7 +158,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     isMinimization: false,
     isPercentage: false,
     userVisible: true,
-    alwaysUpperCase: true,
+    alwaysUpperCase: true
   },
   root_mean_squared_error: {
     key: "root_mean_squared_error",
@@ -167,7 +167,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     isMinimization: true,
     isPercentage: false,
     userVisible: true,
-    alwaysUpperCase: true,
+    alwaysUpperCase: true
   },
   auc: {
     key: "auc",
@@ -175,7 +175,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.aucDescription,
     isMinimization: false,
     isPercentage: false,
-    userVisible: true,
+    userVisible: true
   },
   balanced_accuracy_score: {
     key: "balanced_accuracy_score",
@@ -183,7 +183,7 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     description: localization.Metrics.balancedAccuracyDescription,
     isMinimization: false,
     isPercentage: true,
-    userVisible: true,
+    userVisible: true
   },
   f1_score: {
     key: "f1_score",
@@ -192,13 +192,13 @@ export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
     isMinimization: false,
     isPercentage: false,
     userVisible: true,
-    alwaysUpperCase: true,
+    alwaysUpperCase: true
   },
   log_loss: {
     key: "log_loss",
     title: localization.Metrics.logLoss,
     description: localization.loremIpsum,
     isMinimization: true,
-    isPercentage: false,
-  },
+    isPercentage: false
+  }
 };

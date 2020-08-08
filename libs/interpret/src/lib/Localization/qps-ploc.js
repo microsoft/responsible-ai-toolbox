@@ -1,5 +1,6 @@
 module.exports = {
-  selectPoint: "[pj0ZL][©¥Select a point to see its local explanation !!! !!! !!! !!! ]",
+  selectPoint:
+    "[pj0ZL][©¥Select a point to see its local explanation !!! !!! !!! !!! ]",
   defaultClassNames: "[UtXv6][éÐClass {0} !!! ]",
   defaultFeatureNames: "[G3wWC][ÅÛFeature {0} !!! !]",
   absoluteAverage: "[O4D5D][¥©Average of absolute value !!! !!! !!]",
@@ -27,7 +28,7 @@ module.exports = {
     class: "[VOC3W][âªclass:  !!!]",
     xValue: "[sHVVa][ë£X value: !!! ]",
     yValue: "[BnzmV][@µY value: !!! ]",
-    colorValue: "[XnCSF][ÌüColor: !!!]",
+    colorValue: "[XnCSF][ÌüColor: !!!]"
   },
   CrossClass: {
     label: "[50Sxt][ùéCross-class weighting: !!! !!! !]",
@@ -40,7 +41,7 @@ module.exports = {
       "[wdPZC][û¢Predicted class: Shows the feature importance value for a given point's predicted class !!! !!! !!! !!! !!! !!! !!! !!!]",
     enumeratedClassInfo:
       "[j44e9][áêEnumerated class names: Shows only the specified class's feature importance values across all data points. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!]",
-    close: "[zjhsk][ôµClose !!!]",
+    close: "[zjhsk][ôµClose !!!]"
   },
   AggregateImportance: {
     scaledFeatureValue: "[pORh1][ãËScaled Feature Value !!! !!! ]",
@@ -60,7 +61,8 @@ module.exports = {
     trueValue: "[xl0EI][ËÿTrue Value !!! !]",
     trueClass: "[lj5M0][ªæTrue Class !!! !]",
     noColor: "[kzmVi][ÒÃNone !!]",
-    tooManyRows: "[2WWK2][ýÜThe provided dataset is larger than this chart can support !!! !!! !!! !!! !!! !]",
+    tooManyRows:
+      "[2WWK2][ýÜThe provided dataset is larger than this chart can support !!! !!! !!! !!! !!! !]"
   },
   BarChart: {
     classLabel: "[u2tbv][£ÞClass: {0} !!! !]",
@@ -68,7 +70,7 @@ module.exports = {
     noData: "[UNQEN][@ýNo Data !!!]",
     absoluteGlobal: "[yIM5x][òßAbsolute global !!! !!]",
     absoluteLocal: "[Yc3In][ËáAbsolute local !!! !!]",
-    calculatingExplanation: "[tCp6t][ÃÇCalculating explanation !!! !!! !]",
+    calculatingExplanation: "[tCp6t][ÃÇCalculating explanation !!! !!! !]"
   },
   IcePlot: {
     numericError: "[DTMTC][âäMust be numeric !!! !!]",
@@ -86,21 +88,21 @@ module.exports = {
     loadingMessage: "[xgP7D][ÃøLoading data... !!! !!]",
     submitPrompt: "[w1fJh][ÜùSubmit a range to view an ICE plot !!! !!! !!! !]",
     topLevelErrorMessage: "[9p4hQ][ïµError in parameter !!! !!!]",
-    errorPrefix: "[M9P6g][óìError encountered: {0} !!! !!! !]",
+    errorPrefix: "[M9P6g][óìError encountered: {0} !!! !!! !]"
   },
   PerturbationExploration: {
     loadingMessage: "[zMRsK][©éLoading... !!! !]",
-    perturbationLabel: "[UBaah][ÙýPerturbation: !!! !!]",
+    perturbationLabel: "[UBaah][ÙýPerturbation: !!! !!]"
   },
   PredictionLabel: {
     predictedValueLabel: "[sDBkT][ÎéPredicted value : {0} !!! !!! ]",
-    predictedClassLabel: "[qGwXu][ÑèPredicted class : {0} !!! !!! ]",
+    predictedClassLabel: "[qGwXu][ÑèPredicted class : {0} !!! !!! ]"
   },
   Violin: {
     groupNone: "[1T5yN][ÔöNo grouping !!! !]",
     groupPredicted: "[A3shb][@ÂPredicted Y !!! !]",
     groupTrue: "[2GB3k][ÆðTrue Y !!!]",
-    groupBy: "[QYE75][ØæGroup by !!! ]",
+    groupBy: "[QYE75][ØæGroup by !!! ]"
   },
   FeatureImportanceWrapper: {
     chartType: "[54FZM][ÂÝChart type: !!! !]",
@@ -111,6 +113,6 @@ module.exports = {
     globalImportanceExplanation:
       "[HxsS0][ÚóGlobal feature importance is calculated by averaging the absolute value of the feature importance of all points (L1 normalization).  !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]",
     multiclassImportanceAddendum:
-      "[FpXeR][öïAll points are included in calculating a feature's importance for all classes, no differential weighting is used. So a feature that has large negative importance for many points predicted to not be of 'Class A' will greatly increase that feature's 'Class A'  importance. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]",
-  },
+      "[FpXeR][öïAll points are included in calculating a feature's importance for all classes, no differential weighting is used. So a feature that has large negative importance for many points predicted to not be of 'Class A' will greatly increase that feature's 'Class A'  importance. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]"
+  }
 };

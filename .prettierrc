@@ -1,5 +1,4 @@
 {
   "endOfLine": "auto",
-  "trailingComma": "all",
-  "arrowParens": "avoid"
+  "trailingComma": "none"
 }

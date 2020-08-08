@@ -36,5 +36,5 @@ export const localization = new LocalizedStrings({
   sv,
   tr,
   "zh-CN": zhcn,
-  "zh-TW": zhtw,
+  "zh-TW": zhtw
 });

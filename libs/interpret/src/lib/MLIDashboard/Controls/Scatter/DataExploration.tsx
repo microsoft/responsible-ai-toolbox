@@ -15,15 +15,31 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
 
   public render(): React.ReactNode {
     if (this.props.dashboardContext.explanationContext.testDataset) {
-      const projectedData = ScatterUtils.projectData(this.props.dashboardContext.explanationContext);
+      const projectedData = ScatterUtils.projectData(
+        this.props.dashboardContext.explanationContext
+      );
       this.plotlyProps =
         this.props.plotlyProps !== undefined
           ? _.cloneDeep(this.props.plotlyProps)
-          : ScatterUtils.defaultDataExpPlotlyProps(this.props.dashboardContext.explanationContext);
-      const dropdownOptions = ScatterUtils.buildOptions(this.props.dashboardContext.explanationContext, false);
-      const initialColorOption = ScatterUtils.getselectedColorOption(this.plotlyProps, dropdownOptions);
-      let plotProps = ScatterUtils.populatePlotlyProps(projectedData, _.cloneDeep(this.plotlyProps));
-      plotProps = ScatterUtils.updatePropsForSelections(plotProps, this.props.selectedRow);
+          : ScatterUtils.defaultDataExpPlotlyProps(
+              this.props.dashboardContext.explanationContext
+            );
+      const dropdownOptions = ScatterUtils.buildOptions(
+        this.props.dashboardContext.explanationContext,
+        false
+      );
+      const initialColorOption = ScatterUtils.getselectedColorOption(
+        this.plotlyProps,
+        dropdownOptions
+      );
+      let plotProps = ScatterUtils.populatePlotlyProps(
+        projectedData,
+        _.cloneDeep(this.plotlyProps)
+      );
+      plotProps = ScatterUtils.updatePropsForSelections(
+        plotProps,
+        this.props.selectedRow
+      );
       return (
         <div className="explanation-chart">
           <div className="top-controls">
@@ -63,11 +79,17 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
               />
             </div>
           </div>
-          <AccessibleChart plotlyProps={plotProps} theme={this.props.theme} onClickHandler={this.handleClick} />
+          <AccessibleChart
+            plotlyProps={plotProps}
+            theme={this.props.theme}
+            onClickHandler={this.handleClick}
+          />
         </div>
       );
     }
-    const explanationStrings = this.props.messages ? this.props.messages.TestReq : undefined;
+    const explanationStrings = this.props.messages
+      ? this.props.messages.TestReq
+      : undefined;
     return <NoDataMessage explanationStrings={explanationStrings} />;
   }
 
@@ -83,17 +105,41 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
     this.props.selectionContext.onSelect(selections);
   };
 
-  private onXSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    ScatterUtils.updateNewXAccessor(this.props, this.plotlyProps, item, DataScatterId);
+  private onXSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    ScatterUtils.updateNewXAccessor(
+      this.props,
+      this.plotlyProps,
+      item,
+      DataScatterId
+    );
   };
 
-  private onYSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    ScatterUtils.updateNewYAccessor(this.props, this.plotlyProps, item, DataScatterId);
+  private onYSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    ScatterUtils.updateNewYAccessor(
+      this.props,
+      this.plotlyProps,
+      item,
+      DataScatterId
+    );
   };
 
   // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
   // If it is numeric, we set the color property and display a colorbar. when setting one, clear the other.
-  private onColorSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    ScatterUtils.updateColorAccessor(this.props, this.plotlyProps, item, DataScatterId);
+  private onColorSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    ScatterUtils.updateColorAccessor(
+      this.props,
+      this.plotlyProps,
+      item,
+      DataScatterId
+    );
   };
 }

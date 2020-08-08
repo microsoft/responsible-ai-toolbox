@@ -15,7 +15,7 @@ import {
   Selection,
   SelectionMode,
   CheckboxVisibility,
-  SpinButton,
+  SpinButton
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
@@ -24,7 +24,11 @@ import { Cohort } from "../../Cohort";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { FabricStyles } from "../../FabricStyles";
-import { axisControlCallout, axisControlDialogStyles, IAxisControlDialogStyles } from "./AxisConfigDialog.styles";
+import {
+  axisControlCallout,
+  axisControlDialogStyles,
+  IAxisControlDialogStyles
+} from "./AxisConfigDialog.styles";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;
@@ -43,7 +47,10 @@ export interface IAxisConfigState {
   binCount?: number;
 }
 
-export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxisConfigState> {
+export class AxisConfigDialog extends React.PureComponent<
+  IAxisConfigProps,
+  IAxisConfigState
+> {
   private static readonly MIN_HIST_COLS = 2;
   private static readonly MAX_HIST_COLS = 40;
   private static readonly DEFAULT_BIN_COUNT = 5;
@@ -60,9 +67,9 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
     JointDataset.ClassificationError,
     JointDataset.RegressionError,
     JointDataset.ProbabilityYRoot,
-    ColumnCategories.none,
+    ColumnCategories.none
   ]
-    .map(key => {
+    .map((key) => {
       const metaVal = this.props.jointDataset.metaDict[key];
       if (
         key === JointDataset.DataLabelRoot &&
@@ -78,46 +85,70 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
       ) {
         return { key, title: localization.Columns.predictedProbabilities };
       }
-      if (metaVal === undefined || !this.props.orderedGroupTitles.includes(metaVal.category)) {
+      if (
+        metaVal === undefined ||
+        !this.props.orderedGroupTitles.includes(metaVal.category)
+      ) {
         return undefined;
       }
 
       return { key, title: metaVal.abbridgedLabel };
     })
-    .filter(obj => obj !== undefined);
+    .filter((obj) => obj !== undefined);
 
-  private readonly dataArray: IComboBoxOption[] = new Array(this.props.jointDataset.datasetFeatureCount)
+  private readonly dataArray: IComboBoxOption[] = new Array(
+    this.props.jointDataset.datasetFeatureCount
+  )
     .fill(0)
     .map((_, index) => {
       const key = JointDataset.DataLabelRoot + index.toString();
-      return { key, text: this.props.jointDataset.metaDict[key].abbridgedLabel };
+      return {
+        key,
+        text: this.props.jointDataset.metaDict[key].abbridgedLabel
+      };
     });
-  private readonly classArray: IComboBoxOption[] = new Array(this.props.jointDataset.predictionClassCount)
+  private readonly classArray: IComboBoxOption[] = new Array(
+    this.props.jointDataset.predictionClassCount
+  )
     .fill(0)
     .map((_, index) => {
       const key = JointDataset.ProbabilityYRoot + index.toString();
-      return { key, text: this.props.jointDataset.metaDict[key].abbridgedLabel };
+      return {
+        key,
+        text: this.props.jointDataset.metaDict[key].abbridgedLabel
+      };
     });
   public constructor(props: IAxisConfigProps) {
     super(props);
     this.state = {
       selectedColumn: _.cloneDeep(this.props.selectedColumn),
-      binCount: this._getBinCountForProperty(this.props.selectedColumn.property),
+      binCount: this._getBinCountForProperty(this.props.selectedColumn.property)
     };
     this._leftSelection = new Selection({
       selectionMode: SelectionMode.single,
-      onSelectionChanged: this._setSelection,
+      onSelectionChanged: this._setSelection
     });
     this._leftSelection.setItems(this.leftItems);
-    this._leftSelection.setKeySelected(this.extractSelectionKey(this.props.selectedColumn.property), true, false);
+    this._leftSelection.setKeySelected(
+      this.extractSelectionKey(this.props.selectedColumn.property),
+      true,
+      false
+    );
     this._isInitialized = true;
   }
 
   public render(): React.ReactNode {
     const styles = axisControlDialogStyles();
-    const selectedMeta = this.props.jointDataset.metaDict[this.state.selectedColumn.property];
-    const isDataColumn = this.state.selectedColumn.property.indexOf(JointDataset.DataLabelRoot) !== -1;
-    const isProbabilityColumn = this.state.selectedColumn.property.indexOf(JointDataset.ProbabilityYRoot) !== -1;
+    const selectedMeta = this.props.jointDataset.metaDict[
+      this.state.selectedColumn.property
+    ];
+    const isDataColumn =
+      this.state.selectedColumn.property.indexOf(JointDataset.DataLabelRoot) !==
+      -1;
+    const isProbabilityColumn =
+      this.state.selectedColumn.property.indexOf(
+        JointDataset.ProbabilityYRoot
+      ) !== -1;
     const minVal = selectedMeta.treatAsCategorical
       ? 0
       : Number.isInteger(selectedMeta.featureRange.min)
@@ -151,12 +182,17 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
               ariaLabelForSelectionColumn="Toggle selection"
               ariaLabelForSelectAllCheckbox="Toggle selection for all items"
               checkButtonAriaLabel="Row checkbox"
-              onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this, styles)}
+              onRenderDetailsHeader={this._onRenderDetailsHeader.bind(
+                this,
+                styles
+              )}
               checkboxVisibility={CheckboxVisibility.hidden}
               selection={this._leftSelection}
               selectionPreservedOnEmptyClick={true}
               setKey={"set"}
-              columns={[{ key: "col1", name: "name", minWidth: 200, fieldName: "title" }]}
+              columns={[
+                { key: "col1", name: "name", minWidth: 200, fieldName: "title" }
+              ]}
             />
           </div>
           {this.state.selectedColumn.property === Cohort.CohortKey && (
@@ -194,21 +230,23 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
-                {selectedMeta.featureRange && selectedMeta.featureRange.rangeType === RangeTypes.integer && (
-                  <Checkbox
-                    key={this.state.selectedColumn.property}
-                    className={styles.treatCategorical}
-                    label={localization.AxisConfigDialog.TreatAsCategorical}
-                    checked={selectedMeta.treatAsCategorical}
-                    onChange={this.setAsCategorical}
-                  />
-                )}
+                {selectedMeta.featureRange &&
+                  selectedMeta.featureRange.rangeType ===
+                    RangeTypes.integer && (
+                    <Checkbox
+                      key={this.state.selectedColumn.property}
+                      className={styles.treatCategorical}
+                      label={localization.AxisConfigDialog.TreatAsCategorical}
+                      checked={selectedMeta.treatAsCategorical}
+                      onChange={this.setAsCategorical}
+                    />
+                  )}
                 {selectedMeta.treatAsCategorical && (
                   <div>
                     <Text variant={"small"} className={styles.featureText}>
                       {`${localization.formatString(
                         localization.Filters.uniqueValues,
-                        selectedMeta.sortedCategoricalValues.length,
+                        selectedMeta.sortedCategoricalValues.length
                       )}`}
                     </Text>
                     {this.props.canDither && (
@@ -224,11 +262,27 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                 {!selectedMeta.treatAsCategorical && (
                   <div>
                     <div className={styles.statsArea}>
-                      <Text variant={"small"} className={styles.featureText} nowrap block>
-                        {localization.formatString(localization.Filters.min, minVal)}
+                      <Text
+                        variant={"small"}
+                        className={styles.featureText}
+                        nowrap
+                        block
+                      >
+                        {localization.formatString(
+                          localization.Filters.min,
+                          minVal
+                        )}
                       </Text>
-                      <Text variant={"small"} className={styles.featureText} nowrap block>
-                        {localization.formatString(localization.Filters.max, maxVal)}
+                      <Text
+                        variant={"small"}
+                        className={styles.featureText}
+                        nowrap
+                        block
+                      >
+                        {localization.formatString(
+                          localization.Filters.max,
+                          maxVal
+                        )}
                       </Text>
                     </div>
                     {this.props.canBin && !this.props.mustBin && (
@@ -239,7 +293,8 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                         onChange={this.shouldBinClicked}
                       />
                     )}
-                    {(this.props.mustBin || this.state.selectedColumn.options.bin) &&
+                    {(this.props.mustBin ||
+                      this.state.selectedColumn.options.bin) &&
                       this.state.binCount !== undefined && (
                         <SpinButton
                           className={styles.spinButton}
@@ -248,19 +303,35 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
                           min={AxisConfigDialog.MIN_HIST_COLS}
                           max={AxisConfigDialog.MAX_HIST_COLS}
                           value={this.state.binCount.toString()}
-                          onIncrement={this.setNumericValue.bind(this, 1, selectedMeta)}
-                          onDecrement={this.setNumericValue.bind(this, -1, selectedMeta)}
-                          onValidate={this.setNumericValue.bind(this, 0, selectedMeta)}
+                          onIncrement={this.setNumericValue.bind(
+                            this,
+                            1,
+                            selectedMeta
+                          )}
+                          onDecrement={this.setNumericValue.bind(
+                            this,
+                            -1,
+                            selectedMeta
+                          )}
+                          onValidate={this.setNumericValue.bind(
+                            this,
+                            0,
+                            selectedMeta
+                          )}
                         />
                       )}
-                    {!(this.props.mustBin || this.state.selectedColumn.options.bin) && this.props.canDither && (
-                      <Checkbox
-                        key={this.state.selectedColumn.property}
-                        label={localization.AxisConfigDialog.ditherLabel}
-                        checked={this.state.selectedColumn.options.dither}
-                        onChange={this.ditherChecked}
-                      />
-                    )}
+                    {!(
+                      this.props.mustBin ||
+                      this.state.selectedColumn.options.bin
+                    ) &&
+                      this.props.canDither && (
+                        <Checkbox
+                          key={this.state.selectedColumn.property}
+                          label={localization.AxisConfigDialog.ditherLabel}
+                          checked={this.state.selectedColumn.options.dither}
+                          onChange={this.ditherChecked}
+                        />
+                      )}
                   </div>
                 )}
               </div>
@@ -288,23 +359,34 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
     return key;
   }
 
-  private readonly setAsCategorical = (_: React.FormEvent<HTMLElement>, checked: boolean): void => {
-    this.props.jointDataset.setTreatAsCategorical(this.state.selectedColumn.property, checked);
-    this.setState({ binCount: checked ? undefined : AxisConfigDialog.MIN_HIST_COLS });
+  private readonly setAsCategorical = (
+    _: React.FormEvent<HTMLElement>,
+    checked: boolean
+  ): void => {
+    this.props.jointDataset.setTreatAsCategorical(
+      this.state.selectedColumn.property,
+      checked
+    );
+    this.setState({
+      binCount: checked ? undefined : AxisConfigDialog.MIN_HIST_COLS
+    });
     this.forceUpdate();
   };
 
-  private readonly shouldBinClicked = (_: React.FormEvent<HTMLElement>, checked: boolean): void => {
+  private readonly shouldBinClicked = (
+    _: React.FormEvent<HTMLElement>,
+    checked: boolean
+  ): void => {
     const property = this.state.selectedColumn.property;
     if (checked === false) {
       this.setState({
         selectedColumn: {
           property,
           options: {
-            bin: checked,
-          },
+            bin: checked
+          }
         },
-        binCount: undefined,
+        binCount: undefined
       });
     } else {
       const binCount = this._getBinCountForProperty(property);
@@ -312,37 +394,53 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
         selectedColumn: {
           property,
           options: {
-            bin: checked,
-          },
+            bin: checked
+          }
         },
-        binCount,
+        binCount
       });
     }
   };
 
   private readonly saveState = (): void => {
     if (this.state.binCount) {
-      this.props.jointDataset.addBin(this.state.selectedColumn.property, this.state.binCount);
+      this.props.jointDataset.addBin(
+        this.state.selectedColumn.property,
+        this.state.binCount
+      );
     }
     this.props.onAccept(this.state.selectedColumn);
   };
 
-  private readonly _onRenderDetailsHeader = (styles: IProcessedStyleSet<IAxisControlDialogStyles>): React.ReactNode => {
-    return <div className={styles.filterHeader}>{localization.AxisConfigDialog.selectFilter}</div>;
+  private readonly _onRenderDetailsHeader = (
+    styles: IProcessedStyleSet<IAxisControlDialogStyles>
+  ): React.ReactNode => {
+    return (
+      <div className={styles.filterHeader}>
+        {localization.AxisConfigDialog.selectFilter}
+      </div>
+    );
   };
 
-  private readonly ditherChecked = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean): void => {
+  private readonly ditherChecked = (
+    _ev?: React.FormEvent<HTMLElement | HTMLInputElement>,
+    checked?: boolean
+  ): void => {
     this.setState({
       selectedColumn: {
         property: this.state.selectedColumn.property,
         options: {
-          dither: checked,
-        },
-      },
+          dither: checked
+        }
+      }
     });
   };
 
-  private readonly setNumericValue = (delta: number, _column: IJointMeta, stringVal: string): string | void => {
+  private readonly setNumericValue = (
+    delta: number,
+    _column: IJointMeta,
+    stringVal: string
+  ): string | void => {
     if (delta === 0) {
       const number = +stringVal;
       if (
@@ -356,7 +454,10 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
     } else {
       const prevVal = this.state.binCount as number;
       const newVal = prevVal + delta;
-      if (newVal > AxisConfigDialog.MAX_HIST_COLS || newVal < AxisConfigDialog.MIN_HIST_COLS) {
+      if (
+        newVal > AxisConfigDialog.MAX_HIST_COLS ||
+        newVal < AxisConfigDialog.MIN_HIST_COLS
+      ) {
         return prevVal.toString();
       }
       this.setState({ binCount: newVal });
@@ -364,16 +465,18 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
   };
 
   private setDefaultStateForKey(property: string): void {
-    const dither = this.props.canDither && this.props.jointDataset.metaDict[property].treatAsCategorical;
+    const dither =
+      this.props.canDither &&
+      this.props.jointDataset.metaDict[property].treatAsCategorical;
     const binCount = this._getBinCountForProperty(property);
     this.setState({
       selectedColumn: {
         property,
         options: {
-          dither,
-        },
+          dither
+        }
       },
-      binCount,
+      binCount
     });
   }
 
@@ -387,20 +490,26 @@ export class AxisConfigDialog extends React.PureComponent<IAxisConfigProps, IAxi
         selectedColumn: {
           property,
           options: {
-            dither: false,
-          },
+            dither: false
+          }
         },
-        binCount: undefined,
+        binCount: undefined
       });
       return;
     }
-    if (property === JointDataset.DataLabelRoot || property === JointDataset.ProbabilityYRoot) {
+    if (
+      property === JointDataset.DataLabelRoot ||
+      property === JointDataset.ProbabilityYRoot
+    ) {
       property += "0";
     }
     this.setDefaultStateForKey(property);
   };
 
-  private readonly setSelectedProperty = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
+  private readonly setSelectedProperty = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
     const property = item.key as string;
     this.setDefaultStateForKey(property);
   };

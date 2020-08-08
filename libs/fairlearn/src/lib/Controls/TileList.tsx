@@ -20,7 +20,9 @@ export class TileList extends React.PureComponent<ITileListProps> {
     const styles = TileListStyles();
     return (
       <div className={styles.container}>
-        {this.props.items.map((item, index) => this._onRenderCell(item, index, styles))}
+        {this.props.items.map((item, index) =>
+          this._onRenderCell(item, index, styles)
+        )}
       </div>
     );
   }
@@ -28,7 +30,7 @@ export class TileList extends React.PureComponent<ITileListProps> {
   private _onRenderCell = (
     item: ITileProp,
     index: number | undefined,
-    styles: IProcessedStyleSet<ITilesListStyles>,
+    styles: IProcessedStyleSet<ITilesListStyles>
   ): JSX.Element => {
     return (
       <div
@@ -39,7 +41,10 @@ export class TileList extends React.PureComponent<ITileListProps> {
         role="radio"
         aria-checked={item.selected}
       >
-        <Icon iconName={item.selected ? "RadioBtnOn" : "RadioBtnOff"} className={styles.iconClass} />
+        <Icon
+          iconName={item.selected ? "RadioBtnOn" : "RadioBtnOff"}
+          className={styles.iconClass}
+        />
         <Text className={styles.title} block>
           {item.title}
         </Text>

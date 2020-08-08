@@ -1,4 +1,11 @@
-import { getTheme, IProcessedStyleSet, IStyle, mergeStyleSets, FontSizes, FontWeights } from "office-ui-fabric-react";
+import {
+  getTheme,
+  IProcessedStyleSet,
+  IStyle,
+  mergeStyleSets,
+  FontSizes,
+  FontWeights
+} from "office-ui-fabric-react";
 
 export interface IFeatureTabStyles {
   itemCell: IStyle;
@@ -19,7 +26,9 @@ export interface IFeatureTabStyles {
   subgroupHeader: IStyle;
 }
 
-export const FeatureTabStyles: () => IProcessedStyleSet<IFeatureTabStyles> = () => {
+export const FeatureTabStyles: () => IProcessedStyleSet<
+  IFeatureTabStyles
+> = () => {
   const theme = getTheme();
   return mergeStyleSets<IFeatureTabStyles>({
     itemCell: {
@@ -32,34 +41,36 @@ export const FeatureTabStyles: () => IProcessedStyleSet<IFeatureTabStyles> = () 
       borderBottom: "1px solid",
       borderBottomColor: theme.semanticColors.bodyDivider,
       selectors: {
-        "&:hover": { background: theme.semanticColors.listItemBackgroundHovered },
-      },
+        "&:hover": {
+          background: theme.semanticColors.listItemBackgroundHovered
+        }
+      }
     },
     iconClass: {
       fontSize: FontSizes.large,
-      color: theme.semanticColors.accentButtonBackground,
+      color: theme.semanticColors.accentButtonBackground
     },
     itemsList: {
-      overflowY: "auto",
+      overflowY: "auto"
     },
     frame: {
-      height: "100%",
+      height: "100%"
     },
     main: {
       height: "100%",
       maxWidth: "700px",
-      flex: 1,
+      flex: 1
     },
     header: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semibold,
-      margin: "26px 0",
+      margin: "26px 0"
     },
     textBody: {
       paddingTop: "12px",
       fontWeight: FontWeights.semilight,
       color: theme.semanticColors.bodyText,
-      paddingBottom: "12px",
+      paddingBottom: "12px"
     },
     tableHeader: {
       display: "flex",
@@ -68,45 +79,45 @@ export const FeatureTabStyles: () => IProcessedStyleSet<IFeatureTabStyles> = () 
       paddingBottom: "15px",
       color: theme.semanticColors.bodyText,
       borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider,
+      borderColor: theme.semanticColors.bodyDivider
     },
     itemTitle: {
       margin: 0,
-      color: theme.semanticColors.listText,
+      color: theme.semanticColors.listText
     },
     valueCount: {
       paddingTop: "15px",
-      color: theme.semanticColors.bodyText,
+      color: theme.semanticColors.bodyText
     },
     iconWrapper: {
       paddingTop: "4px",
       paddingLeft: "5px",
-      width: "30px",
+      width: "30px"
     },
     featureDescriptionSection: {
       flex: 1,
       paddingRight: "20px",
-      minHeight: "75px",
+      minHeight: "75px"
     },
     binSection: {
-      width: "130px",
+      width: "130px"
     },
     expandButton: {
       paddingLeft: 0,
       selectors: {
         "& i": {
-          marginLeft: 0,
-        },
-      },
+          marginLeft: 0
+        }
+      }
     },
     category: {
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
       overflow: "hidden",
-      color: theme.semanticColors.bodyText,
+      color: theme.semanticColors.bodyText
     },
     subgroupHeader: {
-      width: "130px",
-    },
+      width: "130px"
+    }
   });
 };

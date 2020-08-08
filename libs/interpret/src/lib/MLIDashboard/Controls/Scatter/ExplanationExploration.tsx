@@ -1,5 +1,12 @@
 import React from "react";
-import { Callout, DefaultButton, IconButton, ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import {
+  Callout,
+  DefaultButton,
+  IconButton,
+  ComboBox,
+  IComboBox,
+  IComboBoxOption
+} from "office-ui-fabric-react";
 
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
@@ -17,7 +24,10 @@ export interface IExplanationExplorationState {
   isCalloutVisible: boolean;
 }
 
-export class ExplanationExploration extends React.PureComponent<IScatterProps, IExplanationExplorationState> {
+export class ExplanationExploration extends React.PureComponent<
+  IScatterProps,
+  IExplanationExplorationState
+> {
   private readonly iconId = "data-exploration-help-icon1";
   private plotlyProps: IPlotlyProperty;
 
@@ -32,18 +42,35 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
       this.props.dashboardContext.explanationContext.localExplanation &&
       this.props.dashboardContext.explanationContext.localExplanation.values
     ) {
-      const projectedData = ScatterUtils.projectData(this.props.dashboardContext.explanationContext);
+      const projectedData = ScatterUtils.projectData(
+        this.props.dashboardContext.explanationContext
+      );
       this.plotlyProps =
         this.props.plotlyProps !== undefined
           ? _.cloneDeep(this.props.plotlyProps)
-          : ScatterUtils.defaultExplanationPlotlyProps(this.props.dashboardContext.explanationContext);
-      const dropdownOptions = ScatterUtils.buildOptions(this.props.dashboardContext.explanationContext, true);
-      const initialColorOption = ScatterUtils.getselectedColorOption(this.plotlyProps, dropdownOptions);
+          : ScatterUtils.defaultExplanationPlotlyProps(
+              this.props.dashboardContext.explanationContext
+            );
+      const dropdownOptions = ScatterUtils.buildOptions(
+        this.props.dashboardContext.explanationContext,
+        true
+      );
+      const initialColorOption = ScatterUtils.getselectedColorOption(
+        this.plotlyProps,
+        dropdownOptions
+      );
       const weightContext = this.props.dashboardContext.weightContext;
       const includeWeightDropdown =
-        this.props.dashboardContext.explanationContext.modelMetadata.modelType === ModelTypes.multiclass;
-      let plotProp = ScatterUtils.populatePlotlyProps(projectedData, _.cloneDeep(this.plotlyProps));
-      plotProp = ScatterUtils.updatePropsForSelections(plotProp, this.props.selectedRow);
+        this.props.dashboardContext.explanationContext.modelMetadata
+          .modelType === ModelTypes.multiclass;
+      let plotProp = ScatterUtils.populatePlotlyProps(
+        projectedData,
+        _.cloneDeep(this.plotlyProps)
+      );
+      plotProp = ScatterUtils.updatePropsForSelections(
+        plotProp,
+        this.props.selectedRow
+      );
       return (
         <div className="explanation-chart">
           <div className="top-controls">
@@ -85,13 +112,17 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
             {includeWeightDropdown && (
               <div className="selector">
                 <div className="selector-label">
-                  <div className="label-text">{localization.CrossClass.label}</div>
+                  <div className="label-text">
+                    {localization.CrossClass.label}
+                  </div>
                   <IconButton
                     id={this.iconId}
                     iconProps={{ iconName: "Info" }}
                     title={localization.CrossClass.info}
                     onClick={this.onIconClick}
-                    styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
+                    styles={{
+                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                    }}
                   />
                 </div>
                 <ComboBox
@@ -106,7 +137,12 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
             )}
           </div>
           {this.state.isCalloutVisible && (
-            <Callout target={"#" + this.iconId} setInitialFocus={true} onDismiss={this.onDismiss} role="alertdialog">
+            <Callout
+              target={"#" + this.iconId}
+              setInitialFocus={true}
+              onDismiss={this.onDismiss}
+              role="alertdialog"
+            >
               <div className="callout-info">
                 <div className="class-weight-info">
                   <span>{localization.CrossClass.overviewInfo}</span>
@@ -116,21 +152,30 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
                     <li>{localization.CrossClass.enumeratedClassInfo}</li>
                   </ul>
                 </div>
-                <DefaultButton onClick={this.onDismiss}>{localization.CrossClass.close}</DefaultButton>
+                <DefaultButton onClick={this.onDismiss}>
+                  {localization.CrossClass.close}
+                </DefaultButton>
               </div>
             </Callout>
           )}
-          <AccessibleChart plotlyProps={plotProp} theme={this.props.theme} onClickHandler={this.handleClick} />
+          <AccessibleChart
+            plotlyProps={plotProp}
+            theme={this.props.theme}
+            onClickHandler={this.handleClick}
+          />
         </div>
       );
     }
     if (
       this.props.dashboardContext.explanationContext.localExplanation &&
-      this.props.dashboardContext.explanationContext.localExplanation.percentComplete !== undefined
+      this.props.dashboardContext.explanationContext.localExplanation
+        .percentComplete !== undefined
     ) {
       return <LoadingSpinner />;
     }
-    const explanationStrings = this.props.messages ? this.props.messages.LocalExpAndTestReq : undefined;
+    const explanationStrings = this.props.messages
+      ? this.props.messages.LocalExpAndTestReq
+      : undefined;
     return <NoDataMessage explanationStrings={explanationStrings} />;
   }
 
@@ -146,18 +191,42 @@ export class ExplanationExploration extends React.PureComponent<IScatterProps, I
     this.props.selectionContext.onSelect(selections);
   };
 
-  private onXSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    ScatterUtils.updateNewXAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
+  private onXSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    ScatterUtils.updateNewXAccessor(
+      this.props,
+      this.plotlyProps,
+      item,
+      ExplanationScatterId
+    );
   };
 
-  private onYSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    ScatterUtils.updateNewYAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
+  private onYSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    ScatterUtils.updateNewYAccessor(
+      this.props,
+      this.plotlyProps,
+      item,
+      ExplanationScatterId
+    );
   };
 
   // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
   // If it is numeric, we set the color property and display a color bar. when setting one, clear the other.
-  private onColorSelected = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
-    ScatterUtils.updateColorAccessor(this.props, this.plotlyProps, item, ExplanationScatterId);
+  private onColorSelected = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
+    ScatterUtils.updateColorAccessor(
+      this.props,
+      this.plotlyProps,
+      item,
+      ExplanationScatterId
+    );
   };
 
   private onIconClick = (): void => {

@@ -1,4 +1,9 @@
-import { IStyle, mergeStyleSets, IProcessedStyleSet, getTheme } from "office-ui-fabric-react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "office-ui-fabric-react";
 
 export interface IInteractiveLegendStyles {
   root: IStyle;
@@ -13,19 +18,21 @@ export interface IInteractiveLegendStyles {
   clickTarget: IStyle;
 }
 
-export const interactiveLegendStyles: () => IProcessedStyleSet<IInteractiveLegendStyles> = () => {
+export const interactiveLegendStyles: () => IProcessedStyleSet<
+  IInteractiveLegendStyles
+> = () => {
   const theme = getTheme();
   return mergeStyleSets<IInteractiveLegendStyles>({
     root: {
       paddingTop: "8px",
-      paddingBottom: "8px",
+      paddingBottom: "8px"
     },
     item: {
       height: "34px",
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "1px",
+      marginBottom: "1px"
     },
     disabledItem: {
       height: "34px",
@@ -33,7 +40,7 @@ export const interactiveLegendStyles: () => IProcessedStyleSet<IInteractiveLegen
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "1px",
+      marginBottom: "1px"
     },
     inactiveItem: {
       height: "34px",
@@ -41,7 +48,7 @@ export const interactiveLegendStyles: () => IProcessedStyleSet<IInteractiveLegen
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "1px",
+      marginBottom: "1px"
     },
     colorBox: {
       margin: "11px 4px 11px 8px",
@@ -49,7 +56,7 @@ export const interactiveLegendStyles: () => IProcessedStyleSet<IInteractiveLegen
       height: "12px",
       display: "inline-block",
       borderRadius: "6px",
-      cursor: "pointer",
+      cursor: "pointer"
     },
     inactiveColorBox: {
       margin: "11px 4px 11px 8px",
@@ -58,29 +65,29 @@ export const interactiveLegendStyles: () => IProcessedStyleSet<IInteractiveLegen
       display: "inline-block",
       borderRadius: "6px",
       opacity: 0.4,
-      cursor: "pointer",
+      cursor: "pointer"
     },
     label: {
       display: "inline-block",
       flex: "1",
-      cursor: "pointer",
+      cursor: "pointer"
     },
     editButton: {
       width: "16px",
       display: "inline-block",
-      color: theme.semanticColors.buttonText,
+      color: theme.semanticColors.buttonText
     },
     deleteButton: {
       width: "16px",
       display: "inline-block",
-      color: theme.semanticColors.errorText,
+      color: theme.semanticColors.errorText
     },
     clickTarget: {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
       cursor: "pointer",
-      flex: "1",
-    },
+      flex: "1"
+    }
   });
 };

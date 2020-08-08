@@ -5,7 +5,7 @@ import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 export enum SortingState {
   ascending = "ascending",
   descending = "descending",
-  none = "none",
+  none = "none"
 }
 
 export interface ILegendItem {
@@ -24,7 +24,9 @@ export interface IInteractiveLegendProps {
   items: ILegendItem[];
 }
 
-export class InteractiveLegend extends React.PureComponent<IInteractiveLegendProps> {
+export class InteractiveLegend extends React.PureComponent<
+  IInteractiveLegendProps
+> {
   private readonly classes = interactiveLegendStyles();
 
   public render(): React.ReactNode {
@@ -40,13 +42,21 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
   private buildRowElement(item: ILegendItem, index: number): React.ReactNode {
     if (item.disabled) {
       return (
-        <div className={this.classes.disabledItem} title={item.disabledMessage || ""} key={index}>
+        <div
+          className={this.classes.disabledItem}
+          title={item.disabledMessage || ""}
+          key={index}
+        >
           <div className={this.classes.inactiveColorBox} />
           <Text nowrap variant={"medium"} className={this.classes.label}>
             {item.name}
           </Text>
           {item.onEdit !== undefined && (
-            <IconButton className={this.classes.editButton} iconProps={{ iconName: "Edit" }} onClick={item.onEdit} />
+            <IconButton
+              className={this.classes.editButton}
+              iconProps={{ iconName: "Edit" }}
+              onClick={item.onEdit}
+            />
           )}
           {item.onDelete !== undefined && (
             <IconButton
@@ -58,12 +68,17 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
         </div>
       );
     }
-    const rootClass = item.activated === false ? this.classes.inactiveItem : this.classes.item;
+    const rootClass =
+      item.activated === false ? this.classes.inactiveItem : this.classes.item;
     return (
       <div className={rootClass} key={index}>
         <div className={this.classes.clickTarget} onClick={item.onClick}>
           <div
-            className={item.activated === false ? this.classes.inactiveColorBox : this.classes.colorBox}
+            className={
+              item.activated === false
+                ? this.classes.inactiveColorBox
+                : this.classes.colorBox
+            }
             style={{ backgroundColor: item.color }}
           />
           <Text nowrap variant={"medium"} className={this.classes.label}>

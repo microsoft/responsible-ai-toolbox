@@ -31,11 +31,14 @@ export interface IExplanationDashboardProps {
   iconUrl?: string;
   explanationMethod?: string;
   telemetryHook?: (message: ITelemetryMessage) => void;
-  requestPredictions?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   requestLocalFeatureExplanations?: (
     request: any[],
     abortSignal: AbortSignal,
-    explanationAlgorithm?: string,
+    explanationAlgorithm?: string
   ) => Promise<any[]>;
 }
 
@@ -51,8 +54,12 @@ export interface IDatasetSummary {
 }
 
 export interface IPrecomputedExplanations {
-  localFeatureImportance?: IMultiClassLocalFeatureImportance | ISingleClassLocalFeatureImportance;
-  globalFeatureImportance?: IMultiClassGlobalFeatureImportance | ISingleClassGlobalFeatureImportance;
+  localFeatureImportance?:
+    | IMultiClassLocalFeatureImportance
+    | ISingleClassLocalFeatureImportance;
+  globalFeatureImportance?:
+    | IMultiClassGlobalFeatureImportance
+    | ISingleClassGlobalFeatureImportance;
   ebmGlobalExplanation?: IEBMGlobalExplanation;
   customVis?: string;
 }

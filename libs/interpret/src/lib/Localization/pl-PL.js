@@ -33,7 +33,7 @@ module.exports = {
     xValue: "Wartość X:",
     yValue: "Wartość Y:",
     colorValue: "Kolor:",
-    count: "Liczba",
+    count: "Liczba"
   },
   CrossClass: {
     label: "Waga wieloklasowa:",
@@ -42,11 +42,12 @@ module.exports = {
       "Modele wieloklasowe generują dla każdej klasy niezależny wektor istotności funkcji. Wektor istotności funkcji każdej klasy wskazuje, które funkcje powodują, że klasa jest mniej lub bardziej prawdopodobna. Możesz wybrać, w jaki sposób wagi wektorów istotności funkcji każdej klasy są podsumowywane do pojedynczej wartości:",
     absoluteValInfo:
       "Średnia wartości bezwzględnej: pokazuje sumę ważności cechy dla wszystkich możliwych klas podzieloną przez liczbę klas",
-    predictedClassInfo: "Przewidywana klasa: pokazuje wartość istotności funkcji dla przewidywanej klasy danego punktu",
+    predictedClassInfo:
+      "Przewidywana klasa: pokazuje wartość istotności funkcji dla przewidywanej klasy danego punktu",
     enumeratedClassInfo:
       "Wyliczane nazwy klas: pokazuje tylko określone wartości istotności funkcji klasy dla wszystkich punktów danych.",
     close: "Zamknij",
-    crossClassWeights: "Wagi między klasami",
+    crossClassWeights: "Wagi między klasami"
   },
   AggregateImportance: {
     scaledFeatureValue: "Skalowana wartości cechy",
@@ -66,7 +67,8 @@ module.exports = {
     trueValue: "Wartość Prawda",
     trueClass: "Prawdziwa klasa",
     noColor: "Brak",
-    tooManyRows: "Podany zestaw danych jest większy niż ten wykres może obsłużyć",
+    tooManyRows:
+      "Podany zestaw danych jest większy niż ten wykres może obsłużyć"
   },
   BarChart: {
     classLabel: "Klasa: {0}",
@@ -74,7 +76,7 @@ module.exports = {
     noData: "Brak danych",
     absoluteGlobal: "Bezwzględne globalnie",
     absoluteLocal: "Bezwzględne lokalnie",
-    calculatingExplanation: "Obliczanie wyjaśnienia",
+    calculatingExplanation: "Obliczanie wyjaśnienia"
   },
   IcePlot: {
     numericError: "Musi być liczbą",
@@ -83,7 +85,8 @@ module.exports = {
     predictedProbability: "Przewidywane prawdopodobieństwo",
     predictionLabel: "Przewidywanie: {0}",
     probabilityLabel: "Prawdopodobieństwo: {0}",
-    noModelError: "Podaj funkcjonujący model, aby eksplorować przewidywania na wykresach ICE.",
+    noModelError:
+      "Podaj funkcjonujący model, aby eksplorować przewidywania na wykresach ICE.",
     featurePickerLabel: "Funkcja:",
     minimumInputLabel: "Minimum:",
     maximumInputLabel: "Maksimum:",
@@ -91,21 +94,21 @@ module.exports = {
     loadingMessage: "Trwa ładowanie danych...",
     submitPrompt: "Prześlij zakres, aby wyświetlić wykres ICE",
     topLevelErrorMessage: "Błąd w parametrze",
-    errorPrefix: "Wystąpił błąd: {0}",
+    errorPrefix: "Wystąpił błąd: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "Trwa ładowanie...",
-    perturbationLabel: "Perturbacja:",
+    perturbationLabel: "Perturbacja:"
   },
   PredictionLabel: {
     predictedValueLabel: "Przewidywana wartość: {0}",
-    predictedClassLabel: "Przewidywana klasa: {0}",
+    predictedClassLabel: "Przewidywana klasa: {0}"
   },
   Violin: {
     groupNone: "Brak grupowania",
     groupPredicted: "Przewidywane Y",
     groupTrue: "Prawda Y",
-    groupBy: "Grupuj według",
+    groupBy: "Grupuj według"
   },
   FeatureImportanceWrapper: {
     chartType: "Typ wykresu:",
@@ -116,7 +119,7 @@ module.exports = {
     globalImportanceExplanation:
       "Globalna istotność funkcji jest obliczana przez wyliczenie średniej wartości bezwzględnej istotności funkcji we wszystkich punktach (normalizacja L1). ",
     multiclassImportanceAddendum:
-      "Wszystkie punkty są uwzględniane przy obliczaniu ważności cechy dla wszystkich klas, nie są używane żadne wagi różnicujące. W ten sposób cecha, która ma duże negatywne znaczenie dla wielu punktów przewidywanych jako nienależące do klasy „Klasa A”, znacznie zwiększy znaczenie tej cechy w obrębie klasy „Klasa A”.",
+      "Wszystkie punkty są uwzględniane przy obliczaniu ważności cechy dla wszystkich klas, nie są używane żadne wagi różnicujące. W ten sposób cecha, która ma duże negatywne znaczenie dla wielu punktów przewidywanych jako nienależące do klasy „Klasa A”, znacznie zwiększy znaczenie tej cechy w obrębie klasy „Klasa A”."
   },
   Filters: {
     equalComparison: "Równe",
@@ -132,7 +135,7 @@ module.exports = {
     maximum: "Maksimum",
     min: "Min. {0}",
     max: "Maks. {0}",
-    uniqueValues: "Liczba unikatowych wartości: {0}",
+    uniqueValues: "Liczba unikatowych wartości: {0}"
   },
   Columns: {
     regressionError: "Błąd regresji",
@@ -144,34 +147,37 @@ module.exports = {
     falseNegative: "Wynik fałszywie ujemny",
     dataset: "Zestaw danych",
     predictedProbabilities: "Prawdopodobieństwa przewidywania",
-    none: "Liczba",
+    none: "Liczba"
   },
   WhatIf: {
     closeAriaLabel: "Zamknij",
     defaultCustomRootName: "Kopia wiersza {0}",
-    filterFeaturePlaceholder: "Wyszukaj funkcje",
+    filterFeaturePlaceholder: "Wyszukaj funkcje"
   },
   Cohort: {
     cohort: "Kohorta",
-    defaultLabel: "Wszystkie dane",
+    defaultLabel: "Wszystkie dane"
   },
   GlobalTab: {
     helperText:
       "Poznaj pierwsze k najważniejszych cech, które mają wpływ na ogólne przewidywania modelu (inaczej nazywane wyjaśnieniem globalnym). Za pomocą suwaka możesz wyświetlać wartości ważności cech w kolejności malejącej. Wybierz maksymalnie trzy kohorty, aby zobaczyć ich wartości ważności cech obok siebie. Kliknij dowolny pasek cechy na wykresie, aby zobaczyć, jak wartości wybranej cechy wpływają na przewidywania modelu.",
     topAtoB: "Najważniejsze funkcje: {0}–{1}",
     datasetCohorts: "Kohorty zestawów danych",
-    legendHelpText: "Włącz lub wyłącz kohorty na wykresie, klikając elementy legendy.",
+    legendHelpText:
+      "Włącz lub wyłącz kohorty na wykresie, klikając elementy legendy.",
     sortBy: "Sortuj według",
     viewDependencePlotFor: "Wyświetl wykres zależności dla:",
     datasetCohortSelector: "Wybierz kohortę zestawów danych",
     aggregateFeatureImportance: "Ważność funkcji agregującej",
-    missingParameters: "Na tej karcie musi być podany parametr ważności cechy lokalnej.",
+    missingParameters:
+      "Na tej karcie musi być podany parametr ważności cechy lokalnej.",
     weightOptions: "Wagi ważności klasy",
     dependencePlotTitle: "Wykresy zależności",
     dependencePlotHelperText:
       "Ten wykres zależności pokazuje relację między wartością cechy a odpowiadającą jej ważnością cechy w kohorcie.",
     dependencePlotFeatureSelectPlaceholder: "Wybierz cechę",
-    datasetRequired: "Wykresy zależności wymagają zestawu danych oceny i tablicy ważności cech lokalnych.",
+    datasetRequired:
+      "Wykresy zależności wymagają zestawu danych oceny i tablicy ważności cech lokalnych."
   },
   CohortBanner: {
     dataStatistics: "Statystyki danych",
@@ -185,15 +191,17 @@ module.exports = {
     editCohort: "Edytuj kohortę",
     duplicateCohort: "Zduplikuj kohortę",
     addCohort: "Dodaj kohortę",
-    copy: " kopia",
+    copy: " kopia"
   },
   ModelPerformance: {
     helperText:
       "Oceń wydajność modelu, badając rozkład wartości prognozowania i wartości metryk wydajności modelu. Możesz dokładniej zbadać model, patrząc na analizę porównawczą jego wydajności w różnych kohortach lub podgrupach zestaw danych. Wybierz filtry wzdłuż wartości y i wartości x, aby przeciąć różne wymiary. Wybierz ikonę koła zębatego na wykresie, aby zmienić typ wykresu.",
     modelStatistics: "Statystyki modelu",
     cohortPickerLabel: "Wybierz kohortę zestawów danych do zbadania",
-    missingParameters: "Ta karta wymaga, aby była podana tablica przewidywanych wartości z modelu.",
-    missingTrueY: "Statystyki wydajności modelu wymagają podania prawdziwych wyników oprócz przewidywanych wyników",
+    missingParameters:
+      "Ta karta wymaga, aby była podana tablica przewidywanych wartości z modelu.",
+    missingTrueY:
+      "Statystyki wydajności modelu wymagają podania prawdziwych wyników oprócz przewidywanych wyników"
   },
   Charts: {
     yValue: "Wartość Y",
@@ -206,7 +214,7 @@ module.exports = {
     featurePrefix: "Funkcja",
     importancePrefix: "Ważność",
     cohort: "Kohorta",
-    howToRead: "Jak czytać ten wykres",
+    howToRead: "Jak czytać ten wykres"
   },
   DatasetExplorer: {
     helperText:
@@ -216,18 +224,21 @@ module.exports = {
     aggregatePlots: "Zagreguj wykresy",
     chartType: "Typ wykresu",
     missingParameters: "Ta karta wymaga dostarczenia zestawu danych oceny.",
-    noColor: "Brak",
+    noColor: "Brak"
   },
   DependencePlot: {
     featureImportanceOf: "Ważność funkcji",
-    placeholder: "Kliknij funkcję na wykresie słupkowym powyżej, aby wyświetlić jej wykres zależności",
+    placeholder:
+      "Kliknij funkcję na wykresie słupkowym powyżej, aby wyświetlić jej wykres zależności"
   },
   WhatIfTab: {
     helperText:
       "Klikając na wykresie punktowym, możesz wybrać punkt danych, aby wyświetlić poniżej jego lokalne wartości ważności cech (lokalne wyjaśnienie) oraz wykres indywidualnego oczekiwania warunkowego (ICE, individual conditional expectation). Utwórz hipotetyczny, warunkowy punkt danych, korzystając z panelu po prawej stronie w celu zaburzenia cech znanego punktu danych. Wartości ważności cech są oparte na wielu przybliżeniach i nie są „przyczyną” przewidywań. Nie zalecamy użytkownikom podejmowania rzeczywistych decyzji na podstawie informacji z tego narzędzia bez ścisłej matematycznej niezawodności wnioskowania przyczyn.",
-    panelPlaceholder: "Do utworzenia przewidywań dla nowych punktów danych potrzebny jest model.",
+    panelPlaceholder:
+      "Do utworzenia przewidywań dla nowych punktów danych potrzebny jest model.",
     cohortPickerLabel: "Wybierz kohortę zestawów danych do zbadania",
-    scatterLegendText: "Włącz lub wyłącz punkty danych na wykresie, klikając elementy legendy.",
+    scatterLegendText:
+      "Włącz lub wyłącz punkty danych na wykresie, klikając elementy legendy.",
     realPoint: "Realne punkty danych",
     noneSelectedYet: "Jeszcze nie wybrano",
     whatIfDatapoints: "Waurnkowe punkty danych",
@@ -237,10 +248,12 @@ module.exports = {
     icePlot: "Wykres ICE (individual conditional expectation)",
     featureImportanceLackingParameters:
       "Podaj ważności cech lokalnych, aby zobaczyć, jak każda cecha wpływa na poszczególne przewidywania.",
-    featureImportanceGetStartedText: "Wybierz punkt, aby wyświetlić ważność funkcji",
+    featureImportanceGetStartedText:
+      "Wybierz punkt, aby wyświetlić ważność funkcji",
     iceLackingParameters:
       "Wykresy ICE wymagają działającego modelu do opracowywania przewidywań dla hipotetycznych punktów danych.",
-    IceGetStartedText: "Wybierz punkt lub utwórz punkt warunkowy, aby wyświetlić wykresy ICE",
+    IceGetStartedText:
+      "Wybierz punkt lub utwórz punkt warunkowy, aby wyświetlić wykresy ICE",
     whatIfDatapoint: "Warunkowy punkt danych",
     whatIfHelpText:
       "Wybierz punkt na wykresie lub ręcznie wprowadź znany indeks punktu danych do zakłócenia i zapisz jako nowy punkt warunkowy.",
@@ -253,7 +266,8 @@ module.exports = {
     probability: "Prawdopodobieństwo:",
     trueClass: "Prawdziwa klasa:",
     trueValue: "Prawdziwa wartość:",
-    "trueValue.comment": "prefiks do rzeczywistej etykiety na potrzeby regresji",
+    "trueValue.comment":
+      "prefiks do rzeczywistej etykiety na potrzeby regresji",
     newPredictedClass: "Nowa przewidywana klasa:",
     newPredictedValue: "Nowa przewidywana wartość: ",
     newProbability: "Nowe prawdopodobieństwo: ",
@@ -276,7 +290,7 @@ module.exports = {
     deltaLabel: "Delta",
     nonNumericValue: "Wartość powinna być liczbowa",
     icePlotHelperText:
-      "Wykresy ICE przedstawiają, jak wartości przewidywań wybranych punktów danych zmieniają się w zależności od wartości cechy z zakresu od minimalnej do maksymalnej.",
+      "Wykresy ICE przedstawiają, jak wartości przewidywań wybranych punktów danych zmieniają się w zależności od wartości cechy z zakresu od minimalnej do maksymalnej."
   },
   CohortEditor: {
     selectFilter: "Wybierz filtr",
@@ -284,14 +298,15 @@ module.exports = {
     addFilter: "Dodaj filtr",
     addedFilters: "Dodane filtry",
     noAddedFilters: "Nie dodano jeszcze filtrów",
-    defaultFilterState: "Wybierz filtr, aby dodać parametry do kohorty zestawów danych.",
+    defaultFilterState:
+      "Wybierz filtr, aby dodać parametry do kohorty zestawów danych.",
     cohortNameLabel: "Nazwa kohorty zestawu danych",
     cohortNamePlaceholder: "Nazwij kohortę",
     save: "Zapisz",
     delete: "Usuń",
     cancel: "Anuluj",
     cohortNameError: "Brak nazwy kohorty",
-    placeholderName: "Kohorta {0}",
+    placeholderName: "Kohorta {0}"
   },
   AxisConfigDialog: {
     select: "Wybierz",
@@ -303,22 +318,26 @@ module.exports = {
     numOfBins: "Liczba pojemników",
     groupByCohort: "Grupuj według kohorty",
     selectClass: "Wybierz klasę",
-    countHelperText: "Histogram liczby punktów",
+    countHelperText: "Histogram liczby punktów"
   },
   ValidationErrors: {
     predictedProbability: "Przewidywane prawdopodobieństwo",
     predictedY: "Przewidywana wartość Y",
     evalData: "Zestaw danych oceny",
     localFeatureImportance: "Istotność cechy lokalnej",
-    inconsistentDimensions: "Niespójne wymiary. Element {0} ma wymiary {1}, a oczekiwano wymiarów {2}",
+    inconsistentDimensions:
+      "Niespójne wymiary. Element {0} ma wymiary {1}, a oczekiwano wymiarów {2}",
     notNonEmpty: "Dane wejściowe {0} nie są niepustą tablicą",
-    varyingLength: "Niespójne wymiary. Element {0} ma elementy o różnej długości",
+    varyingLength:
+      "Niespójne wymiary. Element {0} ma elementy o różnej długości",
     notArray: "Element {0} nie jest tablicą. Oczekiwano tablicy o wymiarze {1}",
-    errorHeader: "Niektóre parametry wejściowe były niespójne i nie zostaną użyte: ",
+    errorHeader:
+      "Niektóre parametry wejściowe były niespójne i nie zostaną użyte: ",
     datasizeWarning:
       "Zestaw danych oceny jest za duży, aby można było go efektywnie wyświetlić na niektórych wykresach. Dodaj filtry, aby zmniejszyć rozmiar kohorty. ",
-    datasizeError: "Wybrana kohorta jest za duża. Dodaj filtry, aby zmniejszyć jej rozmiar.",
-    addFilters: "Dodaj filtry",
+    datasizeError:
+      "Wybrana kohorta jest za duża. Dodaj filtry, aby zmniejszyć jej rozmiar.",
+    addFilters: "Dodaj filtry"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -328,7 +347,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " obejmuje {0}",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} i {1} innych",
+    overflowFilterArgs: "{0} i {1} innych"
   },
   Statistics: {
     mse: "Błąd średniokwadratowy: {0}",
@@ -338,11 +357,11 @@ module.exports = {
     precision: "Precyzja: {0}",
     recall: "Kompletność: {0}",
     fpr: "Współczynnik wyników fałszywie dodatnich: {0}",
-    fnr: "Współczynnik wyników fałszywie ujemnych: {0}",
+    fnr: "Współczynnik wyników fałszywie ujemnych: {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Poznaj „top k” ważnych cech, które wpływają na ogólne przewidywania modelu. Użyj suwaka, aby wyświetlić malejące ważności cech.",
+      "Poznaj „top k” ważnych cech, które wpływają na ogólne przewidywania modelu. Użyj suwaka, aby wyświetlić malejące ważności cech."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "Co oznaczają te wyjaśnienia?",
@@ -350,7 +369,8 @@ module.exports = {
     shapTitle: "Wartości Shapleya",
     shapDescription:
       "Ten element wyjaśniający używa podejścia SHAP, czyli podejścia z zakresu teorii gier do wyjaśniania modeli, w którym ważność cech jest mierzona przez „ukrywanie” tych cech w modelu za pomocą marginalizacji. Kliknij poniższy link, aby dowiedzieć się więcej.",
-    limeTitle: "Lokalne, interpretowalne wyjaśnienia niezależne od modelu (LIME)",
+    limeTitle:
+      "Lokalne, interpretowalne wyjaśnienia niezależne od modelu (LIME)",
     limeDescription:
       "Ten element wyjaśniający używa lokalnych, interpretowalnych wyjaśnień niezależnych od modelu (LIME, Local Interpretable Model-Agnostic Explanations), które zapewniają liniową aproksymację modelu. Aby uzyskać wyjaśnienie, wykonujemy następujące czynności: zaburzamy wystąpienie i pobieramy przewidywania modelu, a następnie używamy tych przewidywań jako etykiet, aby nauczyć rozrzedzony model liniowy, który jest wierny lokalnie. Wagi tego modelu liniowego są używane jako ważności cech. Kliknij poniższy link, aby dowiedzieć się więcej.",
     mimicTitle: "Naśladowanie (globalne wyjaśnienia zastępcze)",
@@ -358,6 +378,6 @@ module.exports = {
       "Ten element wyjaśniający jest oparty na trenowaniu globalnych modeli zastępczych naśladujących modele czarnej skrzynki. Globalny model zastępczy to wewnętrznie interpretowalny model wytrenowany do jak najdokładniejszej aproksymacji przewidywań dowolnego modelu czarnej skrzynki. Wartości ważności cech to oparte na modelu wartości ważności cech podstawowego modelu zastępczego (LightGBM, regresja liniowa, stochastyczny spadek wzdłuż gradientu lub drzewo decyzyjne)",
     pfiTitle: "Ważność cechy za pomocą permutacji",
     pfiDescription:
-      "Ten element wyjaśniający losowo zmienia dane, modyfikując po jednej cesze całego zestawu danych i obliczając, jak bardzo zmienia się badana metryka wydajności (domyślne metryki wydajności: F1 w przypadku klasyfikacji binarnej, miara F1 z mikrośrednią w przypadku klasyfikacji wielu klas oraz średni błąd bezwzględny w przypadku regresji). Im większa zmiana, tym ważniejsza jest cecha. Ten element wyjaśniający może wyjaśnić tylko ogólne zachowanie podstawowego modelu, ale nie wyjaśnia poszczególnych przewidywań. Wartość ważności cechy reprezentuje zmianę wydajności modelu spowodowaną zaburzeniem tej konkretnej cechy.",
-  },
+      "Ten element wyjaśniający losowo zmienia dane, modyfikując po jednej cesze całego zestawu danych i obliczając, jak bardzo zmienia się badana metryka wydajności (domyślne metryki wydajności: F1 w przypadku klasyfikacji binarnej, miara F1 z mikrośrednią w przypadku klasyfikacji wielu klas oraz średni błąd bezwzględny w przypadku regresji). Im większa zmiana, tym ważniejsza jest cecha. Ten element wyjaśniający może wyjaśnić tylko ogólne zachowanie podstawowego modelu, ale nie wyjaśnia poszczególnych przewidywań. Wartość ważności cechy reprezentuje zmianę wydajności modelu spowodowaną zaburzeniem tej konkretnej cechy."
+  }
 };

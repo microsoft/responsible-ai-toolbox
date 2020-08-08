@@ -14,7 +14,7 @@ module.exports = (config, context) => {
       http2: "empty",
       net: "empty",
       tls: "empty",
-      child_process: "empty",
-    },
+      child_process: "empty"
+    }
   };
 };

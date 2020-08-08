@@ -10,25 +10,26 @@ export interface IExplainerInfo {
 const shapExplanation: IExplainerInfo = {
   title: localization.ExplanationSummary.shapTitle,
   description: localization.ExplanationSummary.shapDescription,
-  linkUrl: "https://github.com/slundberg/shap",
+  linkUrl: "https://github.com/slundberg/shap"
 };
 
 const limeExplanation: IExplainerInfo = {
   title: localization.ExplanationSummary.limeTitle,
   description: localization.ExplanationSummary.limeDescription,
-  linkUrl: "https://github.com/marcotcr/lime",
+  linkUrl: "https://github.com/marcotcr/lime"
 };
 
 const mimicExplanation: IExplainerInfo = {
   title: localization.ExplanationSummary.mimicTitle,
   description: localization.ExplanationSummary.mimicDescription,
-  linkUrl: "https://christophm.github.io/interpretable-ml-book/global.html",
+  linkUrl: "https://christophm.github.io/interpretable-ml-book/global.html"
 };
 
 const pfiExplanation: IExplainerInfo = {
   title: localization.ExplanationSummary.pfiTitle,
   description: localization.ExplanationSummary.pfiDescription,
-  linkUrl: "https://christophm.github.io/interpretable-ml-book/feature-importance.html",
+  linkUrl:
+    "https://christophm.github.io/interpretable-ml-book/feature-importance.html"
 };
 
 export const ExplainerCalloutDictionary: { [key: string]: IExplainerInfo } = {
@@ -41,5 +42,5 @@ export const ExplainerCalloutDictionary: { [key: string]: IExplainerInfo } = {
   mimic: mimicExplanation,
   "mimic.sgd": mimicExplanation,
   "mimic.linear": mimicExplanation,
-  pfi: pfiExplanation,
+  pfi: pfiExplanation
 };

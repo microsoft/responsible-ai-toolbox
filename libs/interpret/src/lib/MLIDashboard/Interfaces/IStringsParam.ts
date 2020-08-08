@@ -14,7 +14,7 @@ export enum HelperKeys {
   LocalExpAndTestReq = "LocalExpAndTestReq",
   LocalOrGlobalAndTestReq = "LocalOrGlobalAndTestReq",
   TestReq = "TestReq",
-  PredictorReq = "PredictorReq",
+  PredictorReq = "PredictorReq"
 }
 
 export type HelpMessageDict = {

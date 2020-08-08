@@ -29,33 +29,35 @@ module.exports = {
     probabalisticRegressor: "Regresor probit",
     regressor: "regresor",
     binary: "binární",
-    continuous: "průběžné",
+    continuous: "průběžné"
   },
   Parity: {
     header: "Nestrannost měřená ve smyslu nekonzistence",
     body:
-      "Metriky nekonzistence vyjadřují proměnlivost chování modelu mezi vybranými příznaky. Existují dva druhy metrik nekonzistence: další připravujeme...",
+      "Metriky nekonzistence vyjadřují proměnlivost chování modelu mezi vybranými příznaky. Existují dva druhy metrik nekonzistence: další připravujeme..."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Dokumentace",
+    documentation: "Dokumentace"
   },
   Footer: {
     back: "Zpět",
-    next: "Další",
+    next: "Další"
   },
   Intro: {
     welcome: "Vítá vás",
     fairlearnDashboard: "Řídicí panel Fairlearn",
-    introBody: "Řídicí panel Fairlearn umožňuje posoudit kompromisy mezi výkonem a nestranností modelů.",
-    explanatoryStep: "Pokud chcete nastavit posouzení, musí se zadat citlivý příznak a metrika výkonu.",
+    introBody:
+      "Řídicí panel Fairlearn umožňuje posoudit kompromisy mezi výkonem a nestranností modelů.",
+    explanatoryStep:
+      "Pokud chcete nastavit posouzení, musí se zadat citlivý příznak a metrika výkonu.",
     getStarted: "Začínáme",
     features: "Citlivé příznaky",
     featuresInfo:
       "Citlivé příznaky se používají k rozdělení dat do skupin. Nestrannost modelu mezi těmito skupinami se měří jako metriky nekonzistence. Metriky nekonzistence vyjadřují, jak moc se chování modelu liší mezi jednotlivými skupinami.",
     accuracy: "Metrika výkonu",
     accuracyInfo:
-      "Metriky výkonu se používají k vyhodnocení celkové kvality modelu i kvality modelu v jednotlivých skupinách. Rozdíl mezi odlehlými hodnotami metriky výkonu ve skupinách se označuje za nekonzistenci ve výkonu.",
+      "Metriky výkonu se používají k vyhodnocení celkové kvality modelu i kvality modelu v jednotlivých skupinách. Rozdíl mezi odlehlými hodnotami metriky výkonu ve skupinách se označuje za nekonzistenci ve výkonu."
   },
   ModelComparison: {
     title: "Porovnání modelů",
@@ -66,12 +68,14 @@ module.exports = {
       "Tento graf reprezentuje každý z modelů {0} jako bod, který se dá vybrat. Osa x představuje {1}, kde {2} je lépe. Osa y představuje nekonzistenci a méně je lépe.",
     insights: "Přehledy",
     insightsText1: "Graf zobrazuje {0} a nekonzistenci modelů {1}.",
-    insightsText2: "{0} má rozsah od {1} do {2}. Rozsah nekonzistence je od {3} do {4}.",
-    insightsText3: "Nejpřesnější model dosahuje {0} z {1} a má nekonzistenci {2}.",
+    insightsText2:
+      "{0} má rozsah od {1} do {2}. Rozsah nekonzistence je od {3} do {4}.",
+    insightsText3:
+      "Nejpřesnější model dosahuje {0} z {1} a má nekonzistenci {2}.",
     insightsText4: "Model s nejmenší nekonzistencí {2} dosahuje {0} z {1}.",
     disparityInOutcomes: "Nekonzistence v predikcích",
     disparityInAccuracy: "Nekonzistence v {0}",
-    howToMeasureDisparity: "Jak se má nekonzistence měřit?",
+    howToMeasureDisparity: "Jak se má nekonzistence měřit?"
   },
   Report: {
     modelName: "Model {0}",
@@ -92,10 +96,12 @@ module.exports = {
       "Pruhový graf zobrazuje míru výběru v jednotlivých skupinách, tedy podíl bodů klasifikovaných jako 1.",
     regressionOutcomesHowToRead:
       "Krabicové diagramy zobrazují distribuci chyb v jednotlivých skupinách. Jednotlivé datové body se zobrazují v popředí.",
-    classificationAccuracyHowToRead1: "Pruhový graf zobrazuje distribuci chyb v jednotlivých skupinách.",
+    classificationAccuracyHowToRead1:
+      "Pruhový graf zobrazuje distribuci chyb v jednotlivých skupinách.",
     classificationAccuracyHowToRead2:
       "Chyby jsou rozdělené na chyby nadhodnocení (predikuje se 1, když skutečný popisek je 0) a chyby podhodnocení (predikuje se 0, když skutečný popisek je 1).",
-    classificationAccuracyHowToRead3: "Uvedené míry se získají vydělením počtu chyb celkovou velikostí skupiny.",
+    classificationAccuracyHowToRead3:
+      "Uvedené míry se získají vydělením počtu chyb celkovou velikostí skupiny.",
     probabilityAccuracyHowToRead1:
       "Pruhový graf zobrazuje střední absolutní chybu v jednotlivých skupinách rozdělenou na nadhodnocení a podhodnocení.",
     probabilityAccuracyHowToRead2:
@@ -107,20 +113,22 @@ module.exports = {
     distributionOfPredictions: "Distribuce predikcí",
     distributionOfErrors: "Distribuce chyb",
     tooltipPrediction: "Predikce: {0}",
-    tooltipError: "Chyba: {0}",
+    tooltipError: "Chyba: {0}"
   },
   Feature: {
     header: "Se kterým příznakem byste chtěli vyhodnotit nestrannost modelu?",
     body:
       "Nestrannost se vyhodnocuje ve smyslu nekonzistence chování modelů. Vaše data rozdělíme podle hodnot každého vybraného příznaku a vyhodnotíme, jak se mezi jednotlivými částmi liší metrika výkonu a predikce modelu.",
     learnMore: "Další informace",
-    summaryCategoricalCount: "Tento příznak má následující počet jedinečných hodnot: {0}",
-    summaryNumericCount: "Tento číselný příznak má rozsah od {0} do {1} a je seskupený do {2} intervalů.",
+    summaryCategoricalCount:
+      "Tento příznak má následující počet jedinečných hodnot: {0}",
+    summaryNumericCount:
+      "Tento číselný příznak má rozsah od {0} do {1} a je seskupený do {2} intervalů.",
     showCategories: "Zobrazit vše",
     hideCategories: "Sbalit",
     categoriesOverflow: "   a tento počet dalších kategorií: {0}",
     editBinning: "Upravit skupiny",
-    subgroups: "Podskupiny",
+    subgroups: "Podskupiny"
   },
   Metrics: {
     accuracyScore: "Úspěšnost",
@@ -147,19 +155,22 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "Část správně klasifikovaných datových bodů",
-    precisionDescription: "Část správně klasifikovaných datových bodů mezi body klasifikovanými jako 1",
+    precisionDescription:
+      "Část správně klasifikovaných datových bodů mezi body klasifikovanými jako 1",
     recallDescription:
       "Část správně klasifikovaných datových bodů mezi body, jejichž skutečný popisek je 1. Alternativní názvy: míra pravdivě pozitivních predikcí, citlivost",
     rmseDescription: "Druhá odmocnina průměru kvadratických chyb",
     mseDescription: "Průměr kvadratických chyb",
-    meanAbsoluteErrorDescription: "Průměr absolutních hodnot chyb. Je robustnější vůči odlehlým hodnotám než MSE.",
+    meanAbsoluteErrorDescription:
+      "Průměr absolutních hodnot chyb. Je robustnější vůči odlehlým hodnotám než MSE.",
     r2Description: "Část odchylky v popiscích vysvětlené modelem",
-    aucDescription: "Kvalita predikcí při oddělování pozitivních příkladů od těch negativních, zobrazovaná jako skóre",
+    aucDescription:
+      "Kvalita predikcí při oddělování pozitivních příkladů od těch negativních, zobrazovaná jako skóre",
     balancedRMSEDescription:
       "Váhy pozitivních a negativních příkladů se nastaví znovu, aby příklady měly stejnou celkovou váhu. Vhodné v situacích, kdy jsou základní data ve výrazné nerovnováze.",
     balancedAccuracyDescription:
       "Váhy pozitivních a negativních příkladů se nastaví znovu, aby příklady měly stejnou celkovou váhu. Vhodné v situacích, kdy jsou základní data ve výrazné nerovnováze.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Nakonfigurovat intervaly",
@@ -167,6 +178,6 @@ module.exports = {
     save: "Uložit",
     cancel: "Zrušit",
     numberOfBins: "Počet intervalů:",
-    categoryHeader: "Hodnoty intervalů:",
-  },
+    categoryHeader: "Hodnoty intervalů:"
+  }
 };

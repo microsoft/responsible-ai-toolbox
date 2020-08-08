@@ -6,7 +6,7 @@ import {
   IComboBox,
   IComboBoxOption,
   IDropdownOption,
-  Callout,
+  Callout
 } from "office-ui-fabric-react";
 
 import { localization } from "../Localization/localization";
@@ -16,19 +16,24 @@ interface IState {
   showCallout: boolean;
 }
 
-export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IState> {
+export class AccuracyPicker extends React.PureComponent<
+  IAccuracyPickerProps,
+  IState
+> {
   private _accuracyDropdownHelpId = "_accuracyDropdownHelpId";
   public constructor(props: IAccuracyPickerProps) {
     super(props);
     this.state = { showCallout: false };
   }
   public render(): React.ReactNode {
-    const options: IDropdownOption[] = this.props.accuracyOptions.map(option => {
-      return {
-        key: option.key,
-        text: option.title,
-      };
-    });
+    const options: IDropdownOption[] = this.props.accuracyOptions.map(
+      (option) => {
+        return {
+          key: option.key,
+          text: option.title
+        };
+      }
+    );
     return (
       <div>
         <div className="selector">
@@ -60,7 +65,9 @@ export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IS
             role="alertdialog"
           >
             <div className="callout-info">
-              <DefaultButton onClick={this.onDismiss}>{localization.close}</DefaultButton>
+              <DefaultButton onClick={this.onDismiss}>
+                {localization.close}
+              </DefaultButton>
             </div>
           </Callout>
         )}
@@ -76,7 +83,10 @@ export class AccuracyPicker extends React.PureComponent<IAccuracyPickerProps, IS
     this.setState({ showCallout: true });
   };
 
-  private readonly onAccuracyChange = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
+  private readonly onAccuracyChange = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
     this.props.onAccuracyChange(item.key as string);
   };
 }

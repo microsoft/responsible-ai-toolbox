@@ -24,15 +24,17 @@ export class SelectionContext {
   public onSelect(newSelections: string[]): void {
     // Keep the most recently added selections
     if (this.maxItems !== undefined) {
-      newSelections = newSelections.slice(Math.max(newSelections.length - this.maxItems, 0));
+      newSelections = newSelections.slice(
+        Math.max(newSelections.length - this.maxItems, 0)
+      );
     }
     this.selectedIds = newSelections;
-    this.selectionSubs.forEach(sub => sub(newSelections));
+    this.selectionSubs.forEach((sub) => sub(newSelections));
   }
 
   public onHover(newItem: string | undefined): void {
     this.hoveredId = newItem;
-    this.hoverSubs.forEach(sub => sub(newItem));
+    this.hoverSubs.forEach((sub) => sub(newItem));
   }
 
   public subscribe(subs: ISelectionContextSubscriptions): string {
@@ -48,7 +50,7 @@ export class SelectionContext {
     }
 
     this.listenerCount += 1;
-    this.countSubs.forEach(val => val(this.listenerCount));
+    this.countSubs.forEach((val) => val(this.listenerCount));
     return id;
   }
 

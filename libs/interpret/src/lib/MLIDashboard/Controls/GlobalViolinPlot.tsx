@@ -1,6 +1,10 @@
 import React from "react";
 import * as memoize from "memoize-one";
-import { IPlotlyProperty, AccessibleChart, IData } from "@responsible-ai/mlchartlib";
+import {
+  IPlotlyProperty,
+  AccessibleChart,
+  IData
+} from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import { IExplanationModelMetadata } from "../IExplanationContext";
@@ -23,37 +27,42 @@ export interface IGlobalViolinPlotState {
   plotlyProps: IPlotlyProperty;
 }
 
-export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps, IGlobalViolinPlotState> {
+export class GlobalViolinPlot extends React.PureComponent<
+  IGlobalViolinPlotProps,
+  IGlobalViolinPlotState
+> {
   private static buildPlotlyProps: (
     jointDataset: JointDataset,
     metadata: IExplanationModelMetadata,
     cohort: Cohort,
     sortVector: number[],
-    selectedOption: IComboBoxOption,
+    selectedOption: IComboBoxOption
   ) => IPlotlyProperty = (memoize as any).default(
     (
       _jointDataset: JointDataset,
       metadata: IExplanationModelMetadata,
       cohort: Cohort,
-      sortVector: number[],
+      sortVector: number[]
     ): IPlotlyProperty => {
       const plotlyProps = _.cloneDeep(GlobalViolinPlot.BasePlotlyProps);
 
       _.set(
         plotlyProps,
         "layout.xaxis.ticktext",
-        sortVector.map(i => metadata.featureNamesAbridged[i]),
+        sortVector.map((i) => metadata.featureNamesAbridged[i])
       );
       _.set(
         plotlyProps,
         "layout.xaxis.tickvals",
-        sortVector.map((_, index) => index),
+        sortVector.map((_, index) => index)
       );
 
       const baseData = plotlyProps.data[0];
       const dataArray: IData[] = [];
       sortVector.forEach((featureIndex, xIndex) => {
-        const featureImportance = cohort.unwrap(JointDataset.ReducedLocalImportanceRoot + featureIndex.toString());
+        const featureImportance = cohort.unwrap(
+          JointDataset.ReducedLocalImportanceRoot + featureIndex.toString()
+        );
         const data = { ...baseData };
         data.x = new Array(featureImportance.length).fill(xIndex);
         data.y = featureImportance;
@@ -63,46 +72,50 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
       plotlyProps.data = dataArray;
       return plotlyProps;
     },
-    _.isEqual.bind(window),
+    _.isEqual.bind(window)
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {
-    config: { displaylogo: false, responsive: true, displayModeBar: false } as any,
+    config: {
+      displaylogo: false,
+      responsive: true,
+      displayModeBar: false
+    } as any,
     data: [
       {
         type: "violin",
         scalemode: "count",
-        spanmode: "hard",
-      },
+        spanmode: "hard"
+      }
     ] as any,
     layout: {
       dragmode: false,
       autosize: true,
       font: {
-        size: 10,
+        size: 10
       },
       hovermode: "closest",
       margin: {
         t: 10,
         b: 30,
-        r: 210,
+        r: 210
       },
       showlegend: false,
       yaxis: {
         automargin: true,
-        title: localization.featureImportance,
+        title: localization.featureImportance
       },
       xaxis: {
-        automargin: true,
-      },
-    } as any,
+        automargin: true
+      }
+    } as any
   };
 
   public constructor(props: IGlobalViolinPlotProps) {
     super(props);
 
     this.state = {
-      plotlyProps: undefined,
+      plotlyProps: undefined
     };
   }
 
@@ -119,19 +132,28 @@ export class GlobalViolinPlot extends React.PureComponent<IGlobalViolinPlotProps
         this.props.metadata,
         this.props.cohort,
         this.props.sortVector,
-        undefined,
+        undefined
       );
       this.setState({ plotlyProps });
       return <LoadingSpinner />;
     }
     const relayoutArg = {
-      "xaxis.range": [this.props.startingK - 0.5, this.props.startingK + this.props.topK - 0.5],
+      "xaxis.range": [
+        this.props.startingK - 0.5,
+        this.props.startingK + this.props.topK - 0.5
+      ]
     };
     const plotlyProps = this.state.plotlyProps;
     _.set(plotlyProps, "layout.xaxis.range", [
       this.props.startingK - 0.5,
-      this.props.startingK + this.props.topK - 0.5,
+      this.props.startingK + this.props.topK - 0.5
     ]);
-    return <AccessibleChart plotlyProps={plotlyProps} theme={undefined} relayoutArg={relayoutArg as any} />;
+    return (
+      <AccessibleChart
+        plotlyProps={plotlyProps}
+        theme={undefined}
+        relayoutArg={relayoutArg as any}
+      />
+    );
   }
 }

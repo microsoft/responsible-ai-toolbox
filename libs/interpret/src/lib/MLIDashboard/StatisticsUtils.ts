@@ -7,40 +7,54 @@ export interface ILabeledStatistic {
   stat: number;
 }
 
-const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (outcomes: number[]): ILabeledStatistic[] => {
-  const falseNegCount = outcomes.filter(x => x === ClassificationEnum.FalseNegative).length;
-  const falsePosCount = outcomes.filter(x => x === ClassificationEnum.FalsePositive).length;
-  const trueNegCount = outcomes.filter(x => x === ClassificationEnum.TrueNegative).length;
-  const truePosCount = outcomes.filter(x => x === ClassificationEnum.TruePositive).length;
+const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
+  outcomes: number[]
+): ILabeledStatistic[] => {
+  const falseNegCount = outcomes.filter(
+    (x) => x === ClassificationEnum.FalseNegative
+  ).length;
+  const falsePosCount = outcomes.filter(
+    (x) => x === ClassificationEnum.FalsePositive
+  ).length;
+  const trueNegCount = outcomes.filter(
+    (x) => x === ClassificationEnum.TrueNegative
+  ).length;
+  const truePosCount = outcomes.filter(
+    (x) => x === ClassificationEnum.TruePositive
+  ).length;
   const total = outcomes.length;
   return [
     {
       label: localization.Statistics.accuracy,
-      stat: (truePosCount + trueNegCount) / total,
+      stat: (truePosCount + trueNegCount) / total
     },
     {
       label: localization.Statistics.precision,
-      stat: truePosCount / (truePosCount + trueNegCount),
+      stat: truePosCount / (truePosCount + trueNegCount)
     },
     {
       label: localization.Statistics.recall,
-      stat: truePosCount / (truePosCount + falseNegCount),
+      stat: truePosCount / (truePosCount + falseNegCount)
     },
     {
       label: localization.Statistics.fpr,
-      stat: falsePosCount / (trueNegCount + falsePosCount),
+      stat: falsePosCount / (trueNegCount + falsePosCount)
     },
     {
       label: localization.Statistics.fnr,
-      stat: falseNegCount / (truePosCount + falseNegCount),
-    },
+      stat: falseNegCount / (truePosCount + falseNegCount)
+    }
   ];
 };
 
-const generateRegressionStats: (trueYs: number[], predYs: number[], errors: number[]) => ILabeledStatistic[] = (
+const generateRegressionStats: (
   trueYs: number[],
   predYs: number[],
-  errors: number[],
+  errors: number[]
+) => ILabeledStatistic[] = (
+  trueYs: number[],
+  predYs: number[],
+  errors: number[]
 ): ILabeledStatistic[] => {
   const count = trueYs.length;
   const residualSumOfSquares = errors.reduce((prev, curr) => {
@@ -56,35 +70,35 @@ const generateRegressionStats: (trueYs: number[], predYs: number[], errors: numb
   return [
     {
       label: localization.Statistics.mse,
-      stat: residualSumOfSquares / count,
+      stat: residualSumOfSquares / count
     },
     {
       label: localization.Statistics.rSquared,
-      stat: 1 - residualSumOfSquares / totalSumOfSquares,
+      stat: 1 - residualSumOfSquares / totalSumOfSquares
     },
     {
       label: localization.Statistics.meanPrediction,
       stat:
         predYs.reduce((prev, curr) => {
           return prev + curr;
-        }, 0) / count,
-    },
+        }, 0) / count
+    }
   ];
 };
 
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes,
+  modelType: ModelTypes
 ) => ILabeledStatistic[][] = (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
-  modelType: ModelTypes,
+  modelType: ModelTypes
 ): ILabeledStatistic[][] => {
   if (modelType === ModelTypes.binary) {
     const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
-    return selectionIndexes.map(selectionArray => {
-      const outcomeSubset = selectionArray.map(i => outcomes[i]);
+    return selectionIndexes.map((selectionArray) => {
+      const outcomeSubset = selectionArray.map((i) => outcomes[i]);
       return generateBinaryStats(outcomeSubset);
     });
   }
@@ -92,10 +106,10 @@ export const generateMetrics: (
     const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
     const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
     const errors = jointDataset.unwrap(JointDataset.RegressionError);
-    return selectionIndexes.map(selectionArray => {
-      const trueYSubset = selectionArray.map(i => trueYs[i]);
-      const predYSubset = selectionArray.map(i => predYs[i]);
-      const errorsSubset = selectionArray.map(i => errors[i]);
+    return selectionIndexes.map((selectionArray) => {
+      const trueYSubset = selectionArray.map((i) => trueYs[i]);
+      const predYSubset = selectionArray.map((i) => predYs[i]);
+      const errorsSubset = selectionArray.map((i) => errors[i]);
       return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
     });
   }

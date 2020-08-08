@@ -5,7 +5,7 @@ export const enum FilterMethods {
   lessThanEqualTo = "less and equal",
   equal = "equal",
   includes = "includes",
-  inTheRangeOf = "in the range of",
+  inTheRangeOf = "in the range of"
 }
 
 export interface IFilter {

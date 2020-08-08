@@ -6,7 +6,7 @@ import {
   IComboBox,
   IComboBoxOption,
   IDropdownOption,
-  Callout,
+  Callout
 } from "office-ui-fabric-react";
 
 import { localization } from "../Localization/localization";
@@ -16,19 +16,24 @@ interface IState {
   showCallout: boolean;
 }
 
-export class ParityPicker extends React.PureComponent<IParityPickerProps, IState> {
+export class ParityPicker extends React.PureComponent<
+  IParityPickerProps,
+  IState
+> {
   private _parityDropdownHelpId = "_parityDropdownHelpId";
   public constructor(props: IParityPickerProps) {
     super(props);
     this.state = { showCallout: false };
   }
   public ender(): React.ReactNode {
-    const options: IDropdownOption[] = this.props.parityOptions.map(option => {
-      return {
-        key: option.key,
-        text: option.title,
-      };
-    });
+    const options: IDropdownOption[] = this.props.parityOptions.map(
+      (option) => {
+        return {
+          key: option.key,
+          text: option.title
+        };
+      }
+    );
 
     return (
       <div>
@@ -61,7 +66,9 @@ export class ParityPicker extends React.PureComponent<IParityPickerProps, IState
             role="alertdialog"
           >
             <div className="callout-info">
-              <DefaultButton onClick={this.onDismiss}>{localization.close}</DefaultButton>
+              <DefaultButton onClick={this.onDismiss}>
+                {localization.close}
+              </DefaultButton>
             </div>
           </Callout>
         )}
@@ -77,7 +84,10 @@ export class ParityPicker extends React.PureComponent<IParityPickerProps, IState
     this.setState({ showCallout: true });
   };
 
-  private readonly onParityChange = (_event: React.FormEvent<IComboBox>, item: IComboBoxOption): void => {
+  private readonly onParityChange = (
+    _event: React.FormEvent<IComboBox>,
+    item: IComboBoxOption
+  ): void => {
     this.props.onParityChange(item.key as string);
   };
 }

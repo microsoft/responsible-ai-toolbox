@@ -11,7 +11,10 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["libs/interpret/tsconfig.lib.json", "libs/interpret/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/interpret/tsconfig.lib.json",
+              "libs/interpret/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/interpret/**/*"]
           }
         },
@@ -54,7 +57,10 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["libs/fairlearn/tsconfig.lib.json", "libs/fairlearn/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/fairlearn/tsconfig.lib.json",
+              "libs/fairlearn/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/fairlearn/**/*"]
           }
         },
@@ -97,7 +103,10 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["libs/core-ui/tsconfig.lib.json", "libs/core-ui/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/core-ui/tsconfig.lib.json",
+              "libs/core-ui/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/core-ui/**/*"]
           }
         },
@@ -140,7 +149,10 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["libs/mlchartlib/tsconfig.lib.json", "libs/mlchartlib/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/mlchartlib/tsconfig.lib.json",
+              "libs/mlchartlib/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/mlchartlib/**/*"]
           }
         },
@@ -187,7 +199,10 @@
             "main": "apps/dashboard/src/main.tsx",
             "polyfills": "apps/dashboard/src/polyfills.ts",
             "tsConfig": "apps/dashboard/tsconfig.app.json",
-            "assets": ["apps/dashboard/src/favicon.ico", "apps/dashboard/src/assets"],
+            "assets": [
+              "apps/dashboard/src/favicon.ico",
+              "apps/dashboard/src/assets"
+            ],
             "styles": [],
             "scripts": [],
             "webpackConfig": "./webpack.config.js"
@@ -232,7 +247,10 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["apps/dashboard/tsconfig.app.json", "apps/dashboard/tsconfig.spec.json"],
+            "tsConfig": [
+              "apps/dashboard/tsconfig.app.json",
+              "apps/dashboard/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!apps/dashboard/**/*"]
           }
         },

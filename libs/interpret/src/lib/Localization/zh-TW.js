@@ -33,18 +33,20 @@ module.exports = {
     xValue: "X 值:",
     yValue: "Y 值:",
     colorValue: "色彩:",
-    count: "計數",
+    count: "計數"
   },
   CrossClass: {
     label: "跨類別加權:",
     info: "跨類別計算的資訊",
     overviewInfo:
       "多類別模型會為每個類別產生獨立的特徵重要度向量。每個類別的特徵重要度向量會呈現出哪些特徵較有可能或較不可能構成某個類別。您可以選取如何將每個類別特徵重要度向量的權重加總成單一值:",
-    absoluteValInfo: "絕對值的平均值: 顯示所有可能類別的特徵重要性總和除以類別數目",
+    absoluteValInfo:
+      "絕對值的平均值: 顯示所有可能類別的特徵重要性總和除以類別數目",
     predictedClassInfo: "預測的類別: 為指定點的預測類別顯示特徵重要度值",
-    enumeratedClassInfo: "列舉的類別名稱: 只顯示所有資料點中指定類別的特徵重要度值。",
+    enumeratedClassInfo:
+      "列舉的類別名稱: 只顯示所有資料點中指定類別的特徵重要度值。",
     close: "關閉",
-    crossClassWeights: "跨類別權數",
+    crossClassWeights: "跨類別權數"
   },
   AggregateImportance: {
     scaledFeatureValue: "縮放的特徵值",
@@ -64,7 +66,7 @@ module.exports = {
     trueValue: "True 值",
     trueClass: "實際的類別",
     noColor: "無",
-    tooManyRows: "提供的資料集超過這個圖表可支援的大小",
+    tooManyRows: "提供的資料集超過這個圖表可支援的大小"
   },
   BarChart: {
     classLabel: "類別: {0}",
@@ -72,7 +74,7 @@ module.exports = {
     noData: "沒有資料",
     absoluteGlobal: "絕對全域",
     absoluteLocal: "絕對區域",
-    calculatingExplanation: "正在計算解釋",
+    calculatingExplanation: "正在計算解釋"
   },
   IcePlot: {
     numericError: "必須為數值",
@@ -89,21 +91,21 @@ module.exports = {
     loadingMessage: "正在載入資料...",
     submitPrompt: "提交範圍以檢視 ICE 繪圖",
     topLevelErrorMessage: "參數有誤",
-    errorPrefix: "發生的錯誤: {0}",
+    errorPrefix: "發生的錯誤: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "正在載入...",
-    perturbationLabel: "更動:",
+    perturbationLabel: "更動:"
   },
   PredictionLabel: {
     predictedValueLabel: "預測的值: {0}",
-    predictedClassLabel: "預測的類別: {0}",
+    predictedClassLabel: "預測的類別: {0}"
   },
   Violin: {
     groupNone: "未分組",
     groupPredicted: "預測的 Y",
     groupTrue: "實際的 Y",
-    groupBy: "群組依據",
+    groupBy: "群組依據"
   },
   FeatureImportanceWrapper: {
     chartType: "圖表類型:",
@@ -114,7 +116,7 @@ module.exports = {
     globalImportanceExplanation:
       "全域特徵重要度的計算方法，是先算出所有點之特徵重要性的絕對值，再計算該絕對值的平均值 (L1 正規化)。 ",
     multiclassImportanceAddendum:
-      "計算特徵對所有類別的重要性時，所有點皆會予以計入，而不會使用差異加權。因此，若特徵對於許多預測不屬於「A 類別」的點具有重大負面重要性，將會大幅增加該特徵的「A 類別」重要性。",
+      "計算特徵對所有類別的重要性時，所有點皆會予以計入，而不會使用差異加權。因此，若特徵對於許多預測不屬於「A 類別」的點具有重大負面重要性，將會大幅增加該特徵的「A 類別」重要性。"
   },
   Filters: {
     equalComparison: "等於",
@@ -130,7 +132,7 @@ module.exports = {
     maximum: "最大值",
     min: "下限: {0}",
     max: "上限: {0}",
-    uniqueValues: "# 個唯一值: {0}",
+    uniqueValues: "# 個唯一值: {0}"
   },
   Columns: {
     regressionError: "迴歸錯誤",
@@ -142,16 +144,16 @@ module.exports = {
     falseNegative: "誤判不為真",
     dataset: "資料集",
     predictedProbabilities: "預測可能性",
-    none: "計數",
+    none: "計數"
   },
   WhatIf: {
     closeAriaLabel: "關閉",
     defaultCustomRootName: "資料列 {0} 的複本",
-    filterFeaturePlaceholder: "搜尋特徵",
+    filterFeaturePlaceholder: "搜尋特徵"
   },
   Cohort: {
     cohort: "世代",
-    defaultLabel: "所有資料",
+    defaultLabel: "所有資料"
   },
   GlobalTab: {
     helperText:
@@ -166,9 +168,10 @@ module.exports = {
     missingParameters: "此索引標籤需要提供本機特徵重要度參數。",
     weightOptions: "類別重要性權數",
     dependencePlotTitle: "依存性繪圖",
-    dependencePlotHelperText: "此依序性繪圖顯示跨世代的特徵值以及與特徵對應之重要性間的關聯性。",
+    dependencePlotHelperText:
+      "此依序性繪圖顯示跨世代的特徵值以及與特徵對應之重要性間的關聯性。",
     dependencePlotFeatureSelectPlaceholder: "選取特徵",
-    datasetRequired: "依存性繪圖需要評估資料集與局部特徵重要度陣列。",
+    datasetRequired: "依存性繪圖需要評估資料集與局部特徵重要度陣列。"
   },
   CohortBanner: {
     dataStatistics: "資料統計資訊",
@@ -182,7 +185,7 @@ module.exports = {
     editCohort: "編輯世代",
     duplicateCohort: "複製世代",
     addCohort: "新增世代",
-    copy: " 複本",
+    copy: " 複本"
   },
   ModelPerformance: {
     helperText:
@@ -190,7 +193,7 @@ module.exports = {
     modelStatistics: "模型統計資料",
     cohortPickerLabel: "選取要探索的資料集世代",
     missingParameters: "此索引標籤需要提供來自模型的預測值陣列。",
-    missingTrueY: "除了預測結果以外，模型效能統計資料還需要提供真實結果",
+    missingTrueY: "除了預測結果以外，模型效能統計資料還需要提供真實結果"
   },
   Charts: {
     yValue: "Y 值",
@@ -203,7 +206,7 @@ module.exports = {
     featurePrefix: "特徵",
     importancePrefix: "重要度",
     cohort: "世代",
-    howToRead: "如何閱讀此圖表",
+    howToRead: "如何閱讀此圖表"
   },
   DatasetExplorer: {
     helperText:
@@ -213,11 +216,11 @@ module.exports = {
     aggregatePlots: "彙總繪圖",
     chartType: "圖表類型",
     missingParameters: "此索引標籤需要提供評估資料集。",
-    noColor: "無",
+    noColor: "無"
   },
   DependencePlot: {
     featureImportanceOf: "特徵重要度:",
-    placeholder: "按一下上方橫條圖上的特徵以顯示其依存性繪圖",
+    placeholder: "按一下上方橫條圖上的特徵以顯示其依存性繪圖"
   },
   WhatIfTab: {
     helperText:
@@ -232,12 +235,14 @@ module.exports = {
     showLabel: "顯示:",
     featureImportancePlot: "特徵重要度繪圖",
     icePlot: "個別條件預測 (ICE) 平面圖",
-    featureImportanceLackingParameters: "提供本機特徵重要度，以了解各個特徵如何影響個別預測。",
+    featureImportanceLackingParameters:
+      "提供本機特徵重要度，以了解各個特徵如何影響個別預測。",
     featureImportanceGetStartedText: "選取一個點以檢視特徵重要度",
     iceLackingParameters: "ICE 繪圖需要可操作的模型，才可為假設資料點做預測。",
     IceGetStartedText: "選取一個點或建立一個假設點以檢視 ICE 繪圖",
     whatIfDatapoint: "假設資料點",
-    whatIfHelpText: "在繪圖上選取一個點，或手動輸入已知的資料點索引以用於擾動，並另存為新的假設點。",
+    whatIfHelpText:
+      "在繪圖上選取一個點，或手動輸入已知的資料點索引以用於擾動，並另存為新的假設點。",
     indexLabel: "要擾動的資料索引",
     rowLabel: "資料列 {0}",
     whatIfNameLabel: "假設資料點名稱",
@@ -269,7 +274,8 @@ module.exports = {
     probabilityLabel: "可能性",
     deltaLabel: "差異",
     nonNumericValue: "值應為數值",
-    icePlotHelperText: "ICE 繪圖示範所選資料點的預測值，如何按照最小值與最大值之間的特徵值範圍發生變化。",
+    icePlotHelperText:
+      "ICE 繪圖示範所選資料點的預測值，如何按照最小值與最大值之間的特徵值範圍發生變化。"
   },
   CohortEditor: {
     selectFilter: "選取篩選",
@@ -284,7 +290,7 @@ module.exports = {
     delete: "刪除",
     cancel: "取消",
     cohortNameError: "缺少世代名稱",
-    placeholderName: "世代 {0}",
+    placeholderName: "世代 {0}"
   },
   AxisConfigDialog: {
     select: "選取",
@@ -296,7 +302,7 @@ module.exports = {
     numOfBins: "量化數目",
     groupByCohort: "依世代分組",
     selectClass: "選取類別",
-    countHelperText: "包含點數的長條圖",
+    countHelperText: "包含點數的長條圖"
   },
   ValidationErrors: {
     predictedProbability: "預測的可能性",
@@ -308,9 +314,10 @@ module.exports = {
     varyingLength: "維度不一致。{0} 具有不同長度的元素",
     notArray: "{0} 不是陣列。必須是維度 {1} 的陣列",
     errorHeader: "某些輸入參數不一致，將不予採用: ",
-    datasizeWarning: "評估資料集太大，無法有效地顯示在某些圖表中。請新增篩選縮小該世代。 ",
+    datasizeWarning:
+      "評估資料集太大，無法有效地顯示在某些圖表中。請新增篩選縮小該世代。 ",
     datasizeError: "選取的世代太大。請新增篩選縮小該世代。",
-    addFilters: "新增篩選",
+    addFilters: "新增篩選"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -320,7 +327,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " 包括 {0} ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} 及 {1} 個其他",
+    overflowFilterArgs: "{0} 及 {1} 個其他"
   },
   Statistics: {
     mse: "MSE: {0}",
@@ -330,10 +337,11 @@ module.exports = {
     precision: "精確度: {0}",
     recall: "召回率: {0}",
     fpr: "FPR: {0}",
-    fnr: "FNR: {0}",
+    fnr: "FNR: {0}"
   },
   GlobalOnlyChart: {
-    helperText: "探索影響您整體模型預測的前 k 項重要特徵。使用滑桿顯示遞減的特徵重要度。",
+    helperText:
+      "探索影響您整體模型預測的前 k 項重要特徵。使用滑桿顯示遞減的特徵重要度。"
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "這些解釋的意思為何?",
@@ -349,6 +357,6 @@ module.exports = {
       "此解釋器根據訓練全域代理模型的概念來模仿黑箱模型。全域代理模型為一種內部可解釋的模型，經過訓練能夠盡可能正確地近似任何黑箱模型的預測。特徵重要度是基礎代理模型 (LightGBM、線性迴歸或隨機梯度下降法或決策樹) 的模型特徵重要度",
     pfiTitle: "排列特徵重要度 (PFI)",
     pfiDescription:
-      "此解釋器針對整個資料集的資料，隨機地一次解釋一個特徵，並計算偏好變數的效能計量 (預設效能計量: F1 用於二進位分類，具有微平均值的 F1 分數用於多元分類，而平均絕對誤差用於迴歸)。變數越大，特徵就越重要。此解釋器只能解釋基礎模型的整體行為，而不會解釋個別的預測。透過擾動該特定特徵，特徵的特徵重要度代表模型效能中的差異。",
-  },
+      "此解釋器針對整個資料集的資料，隨機地一次解釋一個特徵，並計算偏好變數的效能計量 (預設效能計量: F1 用於二進位分類，具有微平均值的 F1 分數用於多元分類，而平均絕對誤差用於迴歸)。變數越大，特徵就越重要。此解釋器只能解釋基礎模型的整體行為，而不會解釋個別的預測。透過擾動該特定特徵，特徵的特徵重要度代表模型效能中的差異。"
+  }
 };

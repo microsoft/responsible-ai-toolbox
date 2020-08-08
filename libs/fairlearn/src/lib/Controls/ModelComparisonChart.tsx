@@ -4,7 +4,7 @@ import {
   ChartBuilder,
   IPlotlyProperty,
   PlotlyMode,
-  SelectionContext,
+  SelectionContext
 } from "@responsible-ai/mlchartlib";
 import {
   getTheme,
@@ -14,12 +14,16 @@ import {
   IChoiceGroupOption,
   Spinner,
   SpinnerSize,
-  Stack,
+  Stack
 } from "office-ui-fabric-react";
 
 import React from "react";
 import { AccuracyOptions } from "../AccuracyMetrics";
-import { IAccuracyPickerProps, IFeatureBinPickerProps, IParityPickerProps } from "../FairnessWizard";
+import {
+  IAccuracyPickerProps,
+  IFeatureBinPickerProps,
+  IParityPickerProps
+} from "../FairnessWizard";
 import { FormatMetrics } from "../FormatMetrics";
 import { IFairnessContext } from "../IFairnessContext";
 import { PredictionTypes } from "../IFairnessProps";
@@ -46,7 +50,10 @@ export interface IState {
   disparityInOutcomes: boolean;
 }
 
-export class ModelComparisonChart extends React.PureComponent<IModelComparisonProps, IState> {
+export class ModelComparisonChart extends React.PureComponent<
+  IModelComparisonProps,
+  IState
+> {
   private readonly plotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
@@ -62,35 +69,35 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
         "zoomIn2d",
         "zoomOut2d",
         "autoScale2d",
-        "resetScale2d",
-      ],
+        "resetScale2d"
+      ]
     },
     data: [
       {
         datapointLevelAccessors: {
           customdata: {
             path: ["index"],
-            plotlyPath: "customdata",
-          },
+            plotlyPath: "customdata"
+          }
         },
         mode: PlotlyMode.markers,
         marker: {
-          size: 14,
+          size: 14
         },
         type: "scatter",
         xAccessor: "Accuracy",
         yAccessor: "Parity",
-        hoverinfo: "text",
-      },
+        hoverinfo: "text"
+      }
     ],
     layout: {
       autosize: true,
       font: {
-        size: 10,
+        size: 10
       },
       margin: {
         t: 4,
-        r: 0,
+        r: 0
       },
       hovermode: "closest",
       xaxis: {
@@ -100,37 +107,47 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
         linecolor: theme.semanticColors.disabledBorder,
         linewidth: 1,
         title: {
-          text: "Error",
-        },
+          text: "Error"
+        }
       },
       yaxis: {
         automargin: true,
         fixedrange: true,
         title: {
-          text: "Disparity",
-        },
-      },
-    } as any,
+          text: "Disparity"
+        }
+      }
+    } as any
   };
 
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
-      disparityInOutcomes: true,
+      disparityInOutcomes: true
     };
   }
 
   public render(): React.ReactNode {
     const styles = ModelComparisionChartStyles();
-    if (!this.state || this.state.accuracyArray === undefined || this.state.disparityArray === undefined) {
+    if (
+      !this.state ||
+      this.state.accuracyArray === undefined ||
+      this.state.disparityArray === undefined
+    ) {
       this.loadData();
-      return <Spinner className={styles.spinner} size={SpinnerSize.large} label={localization.calculating} />;
+      return (
+        <Spinner
+          className={styles.spinner}
+          size={SpinnerSize.large}
+          label={localization.calculating}
+        />
+      );
     }
     const data = this.state.accuracyArray.map((accuracy, index) => {
       return {
         Parity: this.state.disparityArray[index],
         Accuracy: accuracy,
-        index: index,
+        index: index
       };
     });
 
@@ -162,25 +179,27 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
     });
     const formattedMinAccuracy = FormatMetrics.formatNumbers(
       minAccuracy,
-      this.props.accuracyPickerProps.selectedAccuracyKey,
+      this.props.accuracyPickerProps.selectedAccuracyKey
     );
     const formattedMaxAccuracy = FormatMetrics.formatNumbers(
       maxAccuracy,
-      this.props.accuracyPickerProps.selectedAccuracyKey,
+      this.props.accuracyPickerProps.selectedAccuracyKey
     );
     const formattedMinDisparity = FormatMetrics.formatNumbers(
       minDisparity,
-      this.props.accuracyPickerProps.selectedAccuracyKey,
+      this.props.accuracyPickerProps.selectedAccuracyKey
     );
     const formattedMaxDisparity = FormatMetrics.formatNumbers(
       maxDisparity,
-      this.props.accuracyPickerProps.selectedAccuracyKey,
+      this.props.accuracyPickerProps.selectedAccuracyKey
     );
-    let selectedMetric = AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey];
+    let selectedMetric =
+      AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey];
     // handle custom metric case
     if (selectedMetric === undefined) {
       selectedMetric = this.props.accuracyPickerProps.accuracyOptions.find(
-        metric => metric.key === this.props.accuracyPickerProps.selectedAccuracyKey,
+        (metric) =>
+          metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
       );
     }
     const insights2 = localization.formatString(
@@ -189,7 +208,7 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
       formattedMinAccuracy,
       formattedMaxAccuracy,
       formattedMinDisparity,
-      formattedMaxDisparity,
+      formattedMaxDisparity
     );
     const metricTitleAppropriateCase = selectedMetric.alwaysUpperCase
       ? selectedMetric.title
@@ -197,11 +216,15 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
     const insights3 = localization.formatString(
       localization.ModelComparison.insightsText3,
       metricTitleAppropriateCase,
-      selectedMetric.isMinimization ? formattedMinAccuracy : formattedMaxAccuracy,
+      selectedMetric.isMinimization
+        ? formattedMinAccuracy
+        : formattedMaxAccuracy,
       FormatMetrics.formatNumbers(
-        this.state.disparityArray[selectedMetric.isMinimization ? minAccuracyIndex : maxAccuracyIndex],
-        this.props.accuracyPickerProps.selectedAccuracyKey,
-      ),
+        this.state.disparityArray[
+          selectedMetric.isMinimization ? minAccuracyIndex : maxAccuracyIndex
+        ],
+        this.props.accuracyPickerProps.selectedAccuracyKey
+      )
     );
 
     const insights4 = localization.formatString(
@@ -209,31 +232,35 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
       metricTitleAppropriateCase,
       FormatMetrics.formatNumbers(
         this.state.accuracyArray[minDisparityIndex],
-        this.props.accuracyPickerProps.selectedAccuracyKey,
+        this.props.accuracyPickerProps.selectedAccuracyKey
       ),
-      formattedMinDisparity,
+      formattedMinDisparity
     );
 
     const howToReadText = localization.formatString(
       localization.ModelComparison.howToReadText,
       this.props.modelCount.toString(),
       metricTitleAppropriateCase,
-      selectedMetric.isMinimization ? localization.ModelComparison.lower : localization.ModelComparison.higher,
+      selectedMetric.isMinimization
+        ? localization.ModelComparison.lower
+        : localization.ModelComparison.higher
     );
 
     const props = _.cloneDeep(this.plotlyProps);
-    props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(series => {
-      series.name = this.props.dashboardContext.modelNames[series.name];
-      series.text = this.props.dashboardContext.modelNames;
-      return series;
-    });
+    props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
+      (series) => {
+        series.name = this.props.dashboardContext.modelNames[series.name];
+        series.text = this.props.dashboardContext.modelNames;
+        return series;
+      }
+    );
     const accuracyMetricTitle = selectedMetric.title;
     props.layout.xaxis.title = accuracyMetricTitle;
     props.layout.yaxis.title = this.state.disparityInOutcomes
       ? localization.ModelComparison.disparityInOutcomes
       : (localization.formatString(
           localization.ModelComparison.disparityInAccuracy,
-          metricTitleAppropriateCase,
+          metricTitleAppropriateCase
         ) as string);
     return (
       <Stack className={styles.frame}>
@@ -283,21 +310,23 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
         <div>
           <ChoiceGroup
             className={styles.radio}
-            selectedKey={this.state.disparityInOutcomes ? "outcomes" : "accuracy"}
+            selectedKey={
+              this.state.disparityInOutcomes ? "outcomes" : "accuracy"
+            }
             options={[
               {
                 key: "accuracy",
                 text: localization.formatString(
                   localization.ModelComparison.disparityInAccuracy,
-                  metricTitleAppropriateCase,
+                  metricTitleAppropriateCase
                 ) as string,
-                styles: { choiceFieldWrapper: styles.radioOptions },
+                styles: { choiceFieldWrapper: styles.radioOptions }
               },
               {
                 key: "outcomes",
                 text: localization.ModelComparison.disparityInOutcomes,
-                styles: { choiceFieldWrapper: styles.radioOptions },
-              },
+                styles: { choiceFieldWrapper: styles.radioOptions }
+              }
             ]}
             onChange={this.disparityChanged}
             label={localization.ModelComparison.howToMeasureDisparity}
@@ -310,30 +339,37 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
 
   private async loadData(): Promise<void> {
     try {
-      const accuracyPromises = new Array(this.props.modelCount).fill(0).map((_, modelIndex) => {
-        return this.props.metricsCache.getMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          modelIndex,
-          this.props.accuracyPickerProps.selectedAccuracyKey,
-        );
-      });
+      const accuracyPromises = new Array(this.props.modelCount)
+        .fill(0)
+        .map((_, modelIndex) => {
+          return this.props.metricsCache.getMetric(
+            this.props.dashboardContext.binVector,
+            this.props.featureBinPickerProps.selectedBinIndex,
+            modelIndex,
+            this.props.accuracyPickerProps.selectedAccuracyKey
+          );
+        });
       const disparityMetric = this.state.disparityInOutcomes
-        ? this.props.dashboardContext.modelMetadata.predictionType === PredictionTypes.binaryClassification
+        ? this.props.dashboardContext.modelMetadata.predictionType ===
+          PredictionTypes.binaryClassification
           ? "selection_rate"
           : "average"
         : this.props.accuracyPickerProps.selectedAccuracyKey;
-      const disparityPromises = new Array(this.props.modelCount).fill(0).map((_, modelIndex) => {
-        return this.props.metricsCache.getDisparityMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          modelIndex,
-          disparityMetric,
-          ParityModes.difference,
-        );
-      });
+      const disparityPromises = new Array(this.props.modelCount)
+        .fill(0)
+        .map((_, modelIndex) => {
+          return this.props.metricsCache.getDisparityMetric(
+            this.props.dashboardContext.binVector,
+            this.props.featureBinPickerProps.selectedBinIndex,
+            modelIndex,
+            disparityMetric,
+            ParityModes.difference
+          );
+        });
 
-      const accuracyArray = (await Promise.all(accuracyPromises)).map(metric => metric.global);
+      const accuracyArray = (await Promise.all(accuracyPromises)).map(
+        (metric) => metric.global
+      );
       const disparityArray = await Promise.all(disparityPromises);
       this.setState({ accuracyArray, disparityArray });
     } catch {
@@ -341,7 +377,10 @@ export class ModelComparisonChart extends React.PureComponent<IModelComparisonPr
     }
   }
 
-  private readonly disparityChanged = (_ev: React.FormEvent<HTMLInputElement>, option: IChoiceGroupOption): void => {
+  private readonly disparityChanged = (
+    _ev: React.FormEvent<HTMLInputElement>,
+    option: IChoiceGroupOption
+  ): void => {
     const disparityInOutcomes = option.key !== "accuracy";
     if (this.state.disparityInOutcomes !== disparityInOutcomes) {
       this.setState({ disparityInOutcomes, disparityArray: undefined });

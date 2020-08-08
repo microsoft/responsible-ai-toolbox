@@ -1,7 +1,11 @@
 import { AccuracyOptions } from "./AccuracyMetrics";
 
 export class FormatMetrics {
-  public static formatNumbers = (value: number, key: string, isRatio = false): string => {
+  public static formatNumbers = (
+    value: number,
+    key: string,
+    isRatio = false
+  ): string => {
     if (value === null || value === undefined) {
       return NaN.toString();
     }

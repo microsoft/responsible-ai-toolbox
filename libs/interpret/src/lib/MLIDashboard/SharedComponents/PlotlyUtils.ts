@@ -8,7 +8,7 @@ export class PlotlyUtils {
     plotlyProp: IPlotlyProperty,
     item: IDropdownOption,
     _modelMetadata: IExplanationModelMetadata,
-    colorBarLabel?: string,
+    colorBarLabel?: string
   ): void {
     PlotlyUtils.clearColorProperties(plotlyProp);
     if (item.data && item.data.isCategorical) {
@@ -18,19 +18,24 @@ export class PlotlyUtils {
       plotlyProp.data[0].groupBy = [item.key.toString()];
       _.set(plotlyProp, "layout.showlegend", true);
     } else {
-      if (!_.isEqual([item.key], _.get(plotlyProp.data[0], "datapointLevelAccessors.color.path"))) {
+      if (
+        !_.isEqual(
+          [item.key],
+          _.get(plotlyProp.data[0], "datapointLevelAccessors.color.path")
+        )
+      ) {
         _.set(plotlyProp.data[0], "datapointLevelAccessors.color", {
           path: [item.key],
-          plotlyPath: "marker.color",
+          plotlyPath: "marker.color"
         });
         _.set(plotlyProp.data[0], "marker", {
           colorbar: {
             title: {
               side: "right",
-              text: colorBarLabel,
-            },
+              text: colorBarLabel
+            }
           },
-          colorscale: "Bluered",
+          colorscale: "Bluered"
         });
       }
     }
@@ -38,7 +43,10 @@ export class PlotlyUtils {
 
   public static clearColorProperties(plotlyProp: IPlotlyProperty): void {
     // Clear any color settings
-    plotlyProp.data[0] = _.omit(plotlyProp.data[0], ["datapointLevelAccessors.color", "marker.colorbar"]);
+    plotlyProp.data[0] = _.omit(plotlyProp.data[0], [
+      "datapointLevelAccessors.color",
+      "marker.colorbar"
+    ]);
     // Clear any groupBy settings
     plotlyProp.data[0].groupBy = undefined;
     _.set(plotlyProp, "layout.showlegend", false);

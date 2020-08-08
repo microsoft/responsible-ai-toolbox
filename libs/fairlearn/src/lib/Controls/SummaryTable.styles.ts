@@ -1,4 +1,10 @@
-import { getTheme, IProcessedStyleSet, IStyle, mergeStyleSets, FontWeights } from "office-ui-fabric-react";
+import {
+  getTheme,
+  IProcessedStyleSet,
+  IStyle,
+  mergeStyleSets,
+  FontWeights
+} from "office-ui-fabric-react";
 
 export interface ISummaryTableStyles {
   minMaxLabel: IStyle;
@@ -13,24 +19,26 @@ export interface ISummaryTableStyles {
   frame: IStyle;
 }
 
-export const SummaryTableStyles: () => IProcessedStyleSet<ISummaryTableStyles> = () => {
+export const SummaryTableStyles: () => IProcessedStyleSet<
+  ISummaryTableStyles
+> = () => {
   const theme = getTheme();
   return mergeStyleSets<ISummaryTableStyles>({
     minMaxLabel: {
       padding: "1px 9px",
       marginTop: "4px",
       color: theme.semanticColors.bodySubtext,
-      backgroundColor: theme.semanticColors.bodyStandoutBackground,
+      backgroundColor: theme.semanticColors.bodyStandoutBackground
     },
     groupCol: {
       display: "inline-flex",
       flexDirection: "column",
       height: "100%",
-      width: "max-content",
+      width: "max-content"
     },
     groupLabel: {
       color: theme.semanticColors.bodyText,
-      height: "26px",
+      height: "26px"
     },
     flexCol: {
       display: "flex",
@@ -38,7 +46,7 @@ export const SummaryTableStyles: () => IProcessedStyleSet<ISummaryTableStyles> =
       flexDirection: "column",
       borderTop: "1px solid",
       borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider,
+      borderColor: theme.semanticColors.bodyDivider
     },
     binBox: {
       flex: 1,
@@ -47,21 +55,21 @@ export const SummaryTableStyles: () => IProcessedStyleSet<ISummaryTableStyles> =
       flexDirection: "column",
       justifyContent: "center",
       borderBottom: "0.5px dashed",
-      borderColor: theme.semanticColors.bodyDivider,
+      borderColor: theme.semanticColors.bodyDivider
     },
     binTitle: {
-      color: theme.semanticColors.bodyText,
+      color: theme.semanticColors.bodyText
     },
     metricCol: {
       display: "inline-flex",
       flexDirection: "column",
       height: "100%",
-      width: "120px",
+      width: "120px"
     },
     metricLabel: {
       color: theme.semanticColors.bodyText,
       height: "26px",
-      paddingLeft: "10px",
+      paddingLeft: "10px"
     },
     metricBox: {
       flex: 1,
@@ -73,11 +81,11 @@ export const SummaryTableStyles: () => IProcessedStyleSet<ISummaryTableStyles> =
       justifyContent: "center",
       borderLeft: "0.5px dashed",
       borderBottom: "0.5px dashed",
-      borderColor: theme.semanticColors.bodyDivider,
+      borderColor: theme.semanticColors.bodyDivider
     },
     frame: {
       paddingBottom: "19px",
-      display: "flex",
-    },
+      display: "flex"
+    }
   });
 };

@@ -29,33 +29,35 @@ module.exports = {
     probabalisticRegressor: "regresor probitów",
     regressor: "regresor",
     binary: "binarny",
-    continuous: "ciągły",
+    continuous: "ciągły"
   },
   Parity: {
     header: "Atrakcyjność mierzona za pomocą rozbieżności",
     body:
-      "Metryki rozbieżności określają wartość odchylenia dla zachowania modelu w ramach wybranych cech. Istnieją dwa rodzaje metryk rozbieżności: informacje zostaną uzupełnione....",
+      "Metryki rozbieżności określają wartość odchylenia dla zachowania modelu w ramach wybranych cech. Istnieją dwa rodzaje metryk rozbieżności: informacje zostaną uzupełnione...."
   },
   Header: {
     title: "Fairlearn",
-    documentation: "Dokumentacja",
+    documentation: "Dokumentacja"
   },
   Footer: {
     back: "Wstecz",
-    next: "Dalej",
+    next: "Dalej"
   },
   Intro: {
     welcome: "Witamy w",
     fairlearnDashboard: "Pulpit nawigacyjny Fairlearn",
-    introBody: "Pulpit nawigacyjny Fairlearn umożliwia ocenę kompromisów między wydajnością i atrakcyjnością modeli",
-    explanatoryStep: "Aby skonfigurować ocenę, należy określić cechę wrażliwą i metrykę wydajności.",
+    introBody:
+      "Pulpit nawigacyjny Fairlearn umożliwia ocenę kompromisów między wydajnością i atrakcyjnością modeli",
+    explanatoryStep:
+      "Aby skonfigurować ocenę, należy określić cechę wrażliwą i metrykę wydajności.",
     getStarted: "Rozpocznij",
     features: "Cechy wrażliwe",
     featuresInfo:
       "Cechy wrażliwe służą do dzielenia danych na grupy. Atrakcyjność modelu w ramach tych grup jest mierzona za pomocą metryk rozbieżności. Metryki rozbieżności określają wielkość różnic w zachowaniu modelu względem grup.",
     accuracy: "Metryka wydajności",
     accuracyInfo:
-      "Metryki wydajności służą do oceny ogólnej jakości modelu oraz jakości modelu w każdej grupie. Różnica między skrajnymi wartościami metryki wydajności w grupach jest zgłaszana jako rozbieżność wydajności.",
+      "Metryki wydajności służą do oceny ogólnej jakości modelu oraz jakości modelu w każdej grupie. Różnica między skrajnymi wartościami metryki wydajności w grupach jest zgłaszana jako rozbieżność wydajności."
   },
   ModelComparison: {
     title: "Porównanie modeli",
@@ -66,12 +68,15 @@ module.exports = {
       "Ten wykres reprezentuje każdy z {0} modeli jako punkt, który można wybrać. Oś X reprezentuje {1}, przy czym wartość {2} jest lepsza. Oś Y reprezentuje rozbieżność, przy czym wartość mniejsza jest lepsza.",
     insights: "Analizy",
     insightsText1: "Wykres pokazuje {0} i rozbieżność {1} modeli.",
-    insightsText2: "Zakresy w liczbie {0} od {1} do {2}. Zakresy rozbieżności od {3} do {4}.",
-    insightsText3: "Najbardziej dokładny model osiąga {0} z {1} i rozbieżność {2}.",
-    insightsText4: "Model najniższej rozbieżności osiąga {0} z {1} i rozbieżność {2}.",
+    insightsText2:
+      "Zakresy w liczbie {0} od {1} do {2}. Zakresy rozbieżności od {3} do {4}.",
+    insightsText3:
+      "Najbardziej dokładny model osiąga {0} z {1} i rozbieżność {2}.",
+    insightsText4:
+      "Model najniższej rozbieżności osiąga {0} z {1} i rozbieżność {2}.",
     disparityInOutcomes: "Rozbieżność w przewidywaniach",
     disparityInAccuracy: "Rozbieżność w {0}",
-    howToMeasureDisparity: "Jak należy mierzyć rozbieżności?",
+    howToMeasureDisparity: "Jak należy mierzyć rozbieżności?"
   },
   Report: {
     modelName: "Model {0}",
@@ -92,7 +97,8 @@ module.exports = {
       "Wykres słupkowy pokazuje współczynnik wyboru w każdej grupie, co oznacza ułamek punktów sklasyfikowanych jako 1.",
     regressionOutcomesHowToRead:
       "Wykresy skrzynkowe pokazują rozkład przewidywań w każdej grupie. Poszczególne punkty danych są nałożone na górze.",
-    classificationAccuracyHowToRead1: "Wykres słupkowy pokazuje rozkład błędów w każdej grupie.",
+    classificationAccuracyHowToRead1:
+      "Wykres słupkowy pokazuje rozkład błędów w każdej grupie.",
     classificationAccuracyHowToRead2:
       "Błędy są podzielone na błędy przeszacowania (przewidywanie 1, gdy rzeczywista etykieta to 0) i niedoszacowania (przewidywanie 0, gdy rzeczywista etykieta to 1).",
     classificationAccuracyHowToRead3:
@@ -108,7 +114,7 @@ module.exports = {
     distributionOfPredictions: "Rozkład przewidywań",
     distributionOfErrors: "Rozkład błędów",
     tooltipPrediction: "Przewidywanie: {0}",
-    tooltipError: "Błąd: {0}",
+    tooltipError: "Błąd: {0}"
   },
   Feature: {
     header: "Względem jakich cech chcesz ocenić atrakcyjność modelu?",
@@ -116,12 +122,13 @@ module.exports = {
       "Atrakcyjność jest oceniana pod względem rozbieżności w zachowaniu modelu. Dane zostaną podzielone według wartości każdej wybranej cechy, a następnie zostaną ocenione różnice między metryką wydajności i przewidywaniami modelu w ramach tych podziałów.",
     learnMore: "Dowiedz się więcej",
     summaryCategoricalCount: "Liczba unikatowych wartości tej cechy to {0}",
-    summaryNumericCount: "Zakres tej cechy liczbowej to od {0} do {1} w {2} przedziałach.",
+    summaryNumericCount:
+      "Zakres tej cechy liczbowej to od {0} do {1} w {2} przedziałach.",
     showCategories: "Pokaż wszystko",
     hideCategories: "Zwiń",
     categoriesOverflow: "   i dodatkowe kategorie w liczbie {0}",
     editBinning: "Edytuj grupy",
-    subgroups: "Podgrupy",
+    subgroups: "Podgrupy"
   },
   Metrics: {
     accuracyScore: "Dokładność",
@@ -148,7 +155,8 @@ module.exports = {
     f1Score: "F1-Score",
     logLoss: "Log Loss",
     accuracyDescription: "Ułamek punktów danych sklasyfikowanych poprawnie.",
-    precisionDescription: "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, które sklasyfikowano jako 1.",
+    precisionDescription:
+      "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, które sklasyfikowano jako 1.",
     recallDescription:
       "Ułamek punktów danych sklasyfikowanych poprawnie wśród tych, których rzeczywista etykieta to 1. Alternatywne nazwy: rzeczywisty współczynnik poprawności, wrażliwość.",
     rmseDescription: "Pierwiastek kwadratowy ze średniej błędów do kwadratu.",
@@ -162,7 +170,7 @@ module.exports = {
       "Próbki pozytywne i negatywne są ważone ponownie, tak aby miały równą wagę łączną. Odpowiednie, jeśli dane podstawowe są bardzo niezrównoważone.",
     balancedAccuracyDescription:
       "Próbki pozytywne i negatywne są ważone ponownie, tak aby miały równą wagę łączną. Odpowiednie, jeśli dane podstawowe są bardzo niezrównoważone.",
-    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall.",
+    f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {
     header: "Konfiguruj przedziały",
@@ -170,6 +178,6 @@ module.exports = {
     save: "Zapisz",
     cancel: "Anuluj",
     numberOfBins: "Liczba przedziałów:",
-    categoryHeader: "Wartości przedziału:",
-  },
+    categoryHeader: "Wartości przedziału:"
+  }
 };

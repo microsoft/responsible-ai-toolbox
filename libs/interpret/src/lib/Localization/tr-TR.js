@@ -33,7 +33,7 @@ module.exports = {
     xValue: "X değeri:",
     yValue: "Y değeri:",
     colorValue: "Renk:",
-    count: "Sayı",
+    count: "Sayı"
   },
   CrossClass: {
     label: "Sınıflar arası ağırlık:",
@@ -47,7 +47,7 @@ module.exports = {
     enumeratedClassInfo:
       "Listelenen sınıf adları: Tüm veri noktalarında yalnızca belirtilen sınıfın özellik önem derecesi değerlerini gösterir.",
     close: "Kapat",
-    crossClassWeights: "Sınıflar arası ağırlıklar",
+    crossClassWeights: "Sınıflar arası ağırlıklar"
   },
   AggregateImportance: {
     scaledFeatureValue: "Ölçeklendirilmiş Özellik Değeri",
@@ -67,7 +67,8 @@ module.exports = {
     trueValue: "Gerçek Değer",
     trueClass: "Doğru Sınıf",
     noColor: "Yok",
-    tooManyRows: "Sağlanan veri kümesi, bu grafiğin destekleyebileceğinden daha büyük",
+    tooManyRows:
+      "Sağlanan veri kümesi, bu grafiğin destekleyebileceğinden daha büyük"
   },
   BarChart: {
     classLabel: "Sınıf: {0}",
@@ -75,7 +76,7 @@ module.exports = {
     noData: "Veri Yok",
     absoluteGlobal: "Mutlak genel",
     absoluteLocal: "Mutlak yerel",
-    calculatingExplanation: "Açıklama hesaplanıyor",
+    calculatingExplanation: "Açıklama hesaplanıyor"
   },
   IcePlot: {
     numericError: "Sayısal bir değer olmalıdır",
@@ -84,7 +85,8 @@ module.exports = {
     predictedProbability: "Tahmin edilen olasılık",
     predictionLabel: "Tahmin: {0}",
     probabilityLabel: "Olasılık: {0}",
-    noModelError: "ICE çizimlerindeki tahminleri keşfetmek için lütfen işlevselleştirilmiş bir model belirtin.",
+    noModelError:
+      "ICE çizimlerindeki tahminleri keşfetmek için lütfen işlevselleştirilmiş bir model belirtin.",
     featurePickerLabel: "Özellik:",
     minimumInputLabel: "Minimum:",
     maximumInputLabel: "Maksimum:",
@@ -92,21 +94,21 @@ module.exports = {
     loadingMessage: "Veriler yükleniyor...",
     submitPrompt: "ICE çizimini görüntülemek için bir aralık gönderin",
     topLevelErrorMessage: "Parametrede hata",
-    errorPrefix: "Hatayla karşılaşıldı: {0}",
+    errorPrefix: "Hatayla karşılaşıldı: {0}"
   },
   PerturbationExploration: {
     loadingMessage: "Yükleniyor...",
-    perturbationLabel: "Sapma:",
+    perturbationLabel: "Sapma:"
   },
   PredictionLabel: {
     predictedValueLabel: "Tahmin edilen değer: {0}",
-    predictedClassLabel: "Tahmin edilen sınıf: {0}",
+    predictedClassLabel: "Tahmin edilen sınıf: {0}"
   },
   Violin: {
     groupNone: "Gruplandırma yok",
     groupPredicted: "Tahmin edilen Y",
     groupTrue: "Doğru Y",
-    groupBy: "Gruplandır",
+    groupBy: "Gruplandır"
   },
   FeatureImportanceWrapper: {
     chartType: "Grafik türü:",
@@ -117,7 +119,7 @@ module.exports = {
     globalImportanceExplanation:
       "Genel özellik önem derecesi, tüm noktaların özellik önem derecelerine ait mutlak değerinin ortalaması alınarak hesaplanır (L1 normalleştirme). ",
     multiclassImportanceAddendum:
-      "Tüm sınıflar için özelliğin önem derecesi hesaplanırken tüm noktalar dahil edilir ve fark ağırlığı kullanılmaz Bu nedenle, 'A Sınıfı' olmadığı tahmin edilen çok sayıda nokta için büyük negatif önem derecesine sahip bir özellik, bu özelliğin 'A Sınıfı' önem derecesini büyük ölçüde artırır.",
+      "Tüm sınıflar için özelliğin önem derecesi hesaplanırken tüm noktalar dahil edilir ve fark ağırlığı kullanılmaz Bu nedenle, 'A Sınıfı' olmadığı tahmin edilen çok sayıda nokta için büyük negatif önem derecesine sahip bir özellik, bu özelliğin 'A Sınıfı' önem derecesini büyük ölçüde artırır."
   },
   Filters: {
     equalComparison: "Eşittir",
@@ -133,7 +135,7 @@ module.exports = {
     maximum: "Maksimum",
     min: "En az: {0}",
     max: "En fazla: {0}",
-    uniqueValues: "benzersiz değerlerin sayısı: {0}",
+    uniqueValues: "benzersiz değerlerin sayısı: {0}"
   },
   Columns: {
     regressionError: "Regresyon hatası",
@@ -145,34 +147,37 @@ module.exports = {
     falseNegative: "Hatalı negatif sonuç",
     dataset: "Veri kümesi",
     predictedProbabilities: "Tahmin olasılıkları",
-    none: "Sayı",
+    none: "Sayı"
   },
   WhatIf: {
     closeAriaLabel: "Kapat",
     defaultCustomRootName: "{0} satırının kopyası",
-    filterFeaturePlaceholder: "Özelliklerde arama yapın",
+    filterFeaturePlaceholder: "Özelliklerde arama yapın"
   },
   Cohort: {
     cohort: "Kohort",
-    defaultLabel: "Tüm veriler",
+    defaultLabel: "Tüm veriler"
   },
   GlobalTab: {
     helperText:
       "Genel model tahminlerinizi etkileyen en önemli k özelliği (yani genel açıklama) keşfedin. Azalan özellik önem değerlerini görüntülemek için kaydırıcıyı kullanın. Özellik önem değerlerini yan yana görmek için en fazla üç kohort seçin. Seçilen özelliğin değerlerinin model tahminini nasıl etkilediğini görmek için grafik çubuklarından birine tıklayın.",
     topAtoB: "İlk {0}-{1} özellik",
     datasetCohorts: "Veri kümesi kohortları",
-    legendHelpText: "Gösterge öğelerine tıklayarak çizimdeki kohortları açıp kapatın.",
+    legendHelpText:
+      "Gösterge öğelerine tıklayarak çizimdeki kohortları açıp kapatın.",
     sortBy: "Sıralama ölçütü:",
     viewDependencePlotFor: "Şunun için bağımlılık çizimini görüntüle:",
     datasetCohortSelector: "Veri kümesi kohortu seçin",
     aggregateFeatureImportance: "Kümelenmiş Özellik Önem Derecesi",
-    missingParameters: "Bu sekme için yerel özellik önem derecesi parametresinin sağlanması gerekir.",
+    missingParameters:
+      "Bu sekme için yerel özellik önem derecesi parametresinin sağlanması gerekir.",
     weightOptions: "Sınıf önem ağırlıkları",
     dependencePlotTitle: "Bağımlılık Çizimleri",
     dependencePlotHelperText:
       "Bu bağımlılık çizimi, bir özelliğin değeri ile bir kohort arasındaki özelliğin önem derecesi arasındaki ilişkiyi gösterir.",
     dependencePlotFeatureSelectPlaceholder: "Özellik seçin",
-    datasetRequired: "Bağımlılık çizimleri için değerlendirme veri kümesi ve yerel özellik önem dizesi gereklidir.",
+    datasetRequired:
+      "Bağımlılık çizimleri için değerlendirme veri kümesi ve yerel özellik önem dizesi gereklidir."
   },
   CohortBanner: {
     dataStatistics: "Veri İstatistikleri",
@@ -186,16 +191,17 @@ module.exports = {
     editCohort: "Kohortu Düzenle",
     duplicateCohort: "Yinelenen Kohort",
     addCohort: "Kohort Ekle",
-    copy: " kopyası",
+    copy: " kopyası"
   },
   ModelPerformance: {
     helperText:
       "Tahmin değerlerinizin dağılımını ve model performans ölçümlerinizin değerlerini keşfederek modelinizin performansını değerlendirin. Veri kümenizin farklı kohortlarında veya alt gruplarındaki performansının karşılaştırmalı analizine bakarak modelinizi daha ileri düzeyde araştırabilirsiniz. Farklı boyutlarda kesmek için y değeri ve x değeri boyunca filtreleri seçin. Grafik türünü değiştirmek için grafikteki dişliyi seçin.",
     modelStatistics: "Model İstatistikleri",
     cohortPickerLabel: "Keşfedilecek veri kümesi kohortunu seçin",
-    missingParameters: "Bu sekme için modeldeki tahmini değerler dizisinin sağlanması gerekir.",
+    missingParameters:
+      "Bu sekme için modeldeki tahmini değerler dizisinin sağlanması gerekir.",
     missingTrueY:
-      "Model performans istatistikleri için tahmini sonuçların yanı sıra, doğru sonuçların da sağlanması gerekir",
+      "Model performans istatistikleri için tahmini sonuçların yanı sıra, doğru sonuçların da sağlanması gerekir"
   },
   Charts: {
     yValue: "Y değeri",
@@ -208,7 +214,7 @@ module.exports = {
     featurePrefix: "Özellik",
     importancePrefix: "Önem derecesi",
     cohort: "Kohort",
-    howToRead: "Bu grafiği okuma",
+    howToRead: "Bu grafiği okuma"
   },
   DatasetExplorer: {
     helperText:
@@ -217,19 +223,23 @@ module.exports = {
     individualDatapoints: "Ayrı ayrı veri noktaları",
     aggregatePlots: "Kümelenmiş çizimler",
     chartType: "Grafik türü",
-    missingParameters: "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
-    noColor: "Yok",
+    missingParameters:
+      "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
+    noColor: "Yok"
   },
   DependencePlot: {
     featureImportanceOf: "Özellik önem derecesi:",
-    placeholder: "Bağımlılık çizimini görüntülemek için yukarıdaki çubuk grafiğinde bulunan bir özelliğe tıklayın",
+    placeholder:
+      "Bağımlılık çizimini görüntülemek için yukarıdaki çubuk grafiğinde bulunan bir özelliğe tıklayın"
   },
   WhatIfTab: {
     helperText:
       'Aşağıda yerel özellik önem değerlerini (yerel açıklama) ve bireysel koşullu beklenti (ICE) çizimini görüntülemek için dağılıma tıklayarak bir veri noktası seçebilirsiniz. Bilinen bir veri noktasının özelliklerini karıştırmak için sağdaki paneli kullanarak varsayımsal bir durum veri noktası oluşturun. Özellik önem değerleri birçok yaklaşıma dayanır ve tahminlerin "nedeni" değildir. Nedensel çıkarıma dayalı katı matematiksel sağlamlık olmadan, kullanıcıların bu araca dayalı olarak gerçek hayata yönelik kararlar vermelerini önermiyoruz.',
-    panelPlaceholder: "Yeni veri noktalarına yönelik tahminlerde bulunmak için bir model gerekir.",
+    panelPlaceholder:
+      "Yeni veri noktalarına yönelik tahminlerde bulunmak için bir model gerekir.",
     cohortPickerLabel: "Keşfedilecek veri kümesi kohortunu seçin",
-    scatterLegendText: "Gösterge öğelerine tıklayarak çizimdeki veri noktalarını açıp kapatın.",
+    scatterLegendText:
+      "Gösterge öğelerine tıklayarak çizimdeki veri noktalarını açıp kapatın.",
     realPoint: "Gerçek veri noktaları",
     noneSelectedYet: "Henüz seçilmedi",
     whatIfDatapoints: "Durum değerlendirmesi veri noktaları",
@@ -239,10 +249,12 @@ module.exports = {
     icePlot: "Tek koşullu beklenti (ICE) çizimi",
     featureImportanceLackingParameters:
       "Her bir özelliğin tahminleri nasıl etkilediğini görmek için yerel özellik önem derecelerini belirtin.",
-    featureImportanceGetStartedText: "Özellik önem derecesini görüntülemek için bir nokta seçin",
+    featureImportanceGetStartedText:
+      "Özellik önem derecesini görüntülemek için bir nokta seçin",
     iceLackingParameters:
       "ICE çizimleri, kuramsal veri noktalarına yönelik tahminler yapmak için kullanıma hazır hale getirilmiş bir model gerektirir.",
-    IceGetStartedText: "ICE çizimlerini görüntülemek için bir nokta seçin veya Durum değerlendirmesi noktası oluşturun",
+    IceGetStartedText:
+      "ICE çizimlerini görüntülemek için bir nokta seçin veya Durum değerlendirmesi noktası oluşturun",
     whatIfDatapoint: "Durum değerlendirmesi veri noktası",
     whatIfHelpText:
       "Çizimde bir nokta seçin veya saptırmak ve yeni bir Durum değerlendirmesi noktası olarak kaydetmek için bilinen veri noktası dizinini kendiniz girin.",
@@ -268,7 +280,8 @@ module.exports = {
     stepsLabel: "Adımlar",
     disclaimer:
       "Yasal uyarı: Bunlar birçok tahmine dayanan açıklamalar olup tahminlerin “nedeni” değildir. Nedensel çıkarımın sağlam matematiksel temeli olmadan kullanıcıların bu araca dayalı olarak gerçek hayata yönelik karar vermeleri önerilmez.",
-    missingParameters: "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
+    missingParameters:
+      "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
     selectionLimit: "En fazla 3 nokta seçilebilir",
     classPickerLabel: "Sınıf",
     tooltipTitleMany: "En iyi {0} tahmin edilen sınıf",
@@ -278,7 +291,7 @@ module.exports = {
     deltaLabel: "Delta",
     nonNumericValue: "Değer sayısal olmalıdır",
     icePlotHelperText:
-      "ICE çizimleri, seçilen veri noktasının tahmin değerlerinin en küçük ve en büyük değerler arasındaki özellik değerleri aralığı boyunca nasıl değiştiğini gösterir.",
+      "ICE çizimleri, seçilen veri noktasının tahmin değerlerinin en küçük ve en büyük değerler arasındaki özellik değerleri aralığı boyunca nasıl değiştiğini gösterir."
   },
   CohortEditor: {
     selectFilter: "Filtre Seçin",
@@ -286,14 +299,15 @@ module.exports = {
     addFilter: "Filtre Ekle",
     addedFilters: "Eklenen Filtreler",
     noAddedFilters: "Henüz filtre eklenmedi",
-    defaultFilterState: "Veri kümesi kohortunuza parametre eklemek için bir filtre seçin.",
+    defaultFilterState:
+      "Veri kümesi kohortunuza parametre eklemek için bir filtre seçin.",
     cohortNameLabel: "Veri kümesi kohortu adı",
     cohortNamePlaceholder: "Kohortunuzu adlandırın",
     save: "Kaydet",
     delete: "Sil",
     cancel: "İptal",
     cohortNameError: "Kohort adı eksik",
-    placeholderName: "{0} kohortu",
+    placeholderName: "{0} kohortu"
   },
   AxisConfigDialog: {
     select: "Seçin",
@@ -305,22 +319,25 @@ module.exports = {
     numOfBins: "Bölme sayısı",
     groupByCohort: "Kohorta göre gruplandır",
     selectClass: "Sınıf seçin",
-    countHelperText: "Nokta sayısının histogramı",
+    countHelperText: "Nokta sayısının histogramı"
   },
   ValidationErrors: {
     predictedProbability: "Tahmini olasılık",
     predictedY: "Tahmini Y",
     evalData: "Değerlendirme veri kümesi",
     localFeatureImportance: "Yerel özellik önem derecesi",
-    inconsistentDimensions: "Boyutlar tutarsız. {0}, {1} boyutlarına sahip. {2} bekleniyordu",
+    inconsistentDimensions:
+      "Boyutlar tutarsız. {0}, {1} boyutlarına sahip. {2} bekleniyordu",
     notNonEmpty: "{0} girişi, boş olmayan bir dizi değil",
     varyingLength: "Boyutlar tutarsız. {0}, çeşitli uzunlukta öğeler içeriyor",
     notArray: "{0}, bir dizi değil. Beklenen boyut dizisi {1}",
-    errorHeader: "Bazı giriş parametreleri tutarsız olduğundan kullanılmayacak: ",
+    errorHeader:
+      "Bazı giriş parametreleri tutarsız olduğundan kullanılmayacak: ",
     datasizeWarning:
       "Değerlendirme veri kümesi, bazı grafiklerde etkili bir şekilde görüntülenemeyecek kadar büyük. Lütfen kohortun boyutunu azaltmak için filtreler ekleyin. ",
-    datasizeError: "Seçilen kohort çok büyük. Kohortun boyutunu azaltmak için lütfen filtre ekleyin.",
-    addFilters: "Filtre ekle",
+    datasizeError:
+      "Seçilen kohort çok büyük. Kohortun boyutunu azaltmak için lütfen filtre ekleyin.",
+    addFilters: "Filtre ekle"
   },
   FilterOperations: {
     equals: " = {0}",
@@ -330,7 +347,7 @@ module.exports = {
     greaterThanEquals: " >= {0}",
     includes: " {0} içerir ",
     inTheRangeOf: "[ {0} ]",
-    overflowFilterArgs: "{0} ve diğer {1} kişi",
+    overflowFilterArgs: "{0} ve diğer {1} kişi"
   },
   Statistics: {
     mse: "MSE: {0}",
@@ -340,11 +357,11 @@ module.exports = {
     precision: "Duyarlık: {0}",
     recall: "Geri çağırma: {0}",
     fpr: "FPR: {0}",
-    fnr: "FNR: {0}",
+    fnr: "FNR: {0}"
   },
   GlobalOnlyChart: {
     helperText:
-      "Genel model tahminlerinizi etkileyen en önemli k özelliği keşfedin. Azalan özellik önceliklerini göstermek için kaydırıcıyı kullanın.",
+      "Genel model tahminlerinizi etkileyen en önemli k özelliği keşfedin. Azalan özellik önceliklerini göstermek için kaydırıcıyı kullanın."
   },
   ExplanationSummary: {
     whatDoExplanationsMean: "Bu açıklamalar ne anlama geliyor?",
@@ -360,6 +377,6 @@ module.exports = {
       "Bu açıklayıcı, kara kutu modellerini taklit etmek için küresel vekil modellerini eğitme fikrine dayanmaktadır. Küresel bir vekil modeli, herhangi bir kara kutu modelini mümkün olduğunca doğru olarak tahmin etmek için eğitilmiş içsel olarak yorumlanabilir bir modeldir. Özellik önem değerleri, temel vekil modelinizin (LightGBM veya Lineer Regresyon veya Stokastik Gradyan İniş veya Karar Ağacı) model tabanlı özellik önem değerleridir.",
     pfiTitle: "Permütasyon Özelliği Önem Derecesi (PFI)",
     pfiDescription:
-      "Bu açıklayıcı, tüm veri kümesi için verileri tek tek özellik bazında rastgele karıştırır ve ilgilenilen performans ölçümündeki değişim oranını hesaplar (varsayılan performans ölçümleri: ikili sınıflandırma için F1, çok sınıflı sınıflandırma için mikro ortalamalı F1 Puanı ve regresyon için ortalama mutlak hata). Değişiklik ne kadar büyükse, bu özellik o kadar önemlidir. Bu açıklayıcı yalnızca temel modelin genel davranışını açıklayabilir, ancak tek tek tahminleri açıklamaz. Bir özelliğin önem değeri, bu özelliği değiştirerek modelin performansında elde edilen deltayı temsil eder.",
-  },
+      "Bu açıklayıcı, tüm veri kümesi için verileri tek tek özellik bazında rastgele karıştırır ve ilgilenilen performans ölçümündeki değişim oranını hesaplar (varsayılan performans ölçümleri: ikili sınıflandırma için F1, çok sınıflı sınıflandırma için mikro ortalamalı F1 Puanı ve regresyon için ortalama mutlak hata). Değişiklik ne kadar büyükse, bu özellik o kadar önemlidir. Bu açıklayıcı yalnızca temel modelin genel davranışını açıklayabilir, ancak tek tek tahminleri açıklamaz. Bir özelliğin önem değeri, bu özelliği değiştirerek modelin performansında elde edilen deltayı temsil eder."
+  }
 };

@@ -21,10 +21,15 @@ export interface IGlobalOnlyChartState {
   sortArray: number[];
 }
 
-export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, IGlobalOnlyChartState> {
+export class GlobalOnlyChart extends React.PureComponent<
+  IGlobalOnlyChartProps,
+  IGlobalOnlyChartState
+> {
   private readonly featureDimension = this.props.metadata.featureNames.length;
   private readonly perClassExplanationDimension =
-    this.props.globalImportance && this.props.globalImportance[0] ? this.props.globalImportance[0].length : 0;
+    this.props.globalImportance && this.props.globalImportance[0]
+      ? this.props.globalImportance[0].length
+      : 0;
   private readonly minK = Math.min(4, this.featureDimension);
   private classOptions: IDropdownOption[];
   // look into per_class importances when available.
@@ -34,33 +39,41 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
       ? [
           {
             name: localization.BarChart.absoluteGlobal,
-            unsortedAggregateY: this.props.globalImportance.map(classArray => classArray[0]),
-            colorIndex: 0,
-          },
+            unsortedAggregateY: this.props.globalImportance.map(
+              (classArray) => classArray[0]
+            ),
+            colorIndex: 0
+          }
         ]
       : this.props.metadata.classNames.map((name, index) => {
           return {
             name: name,
-            unsortedAggregateY: this.props.globalImportance.map(classArray => classArray[index]),
-            colorIndex: index,
+            unsortedAggregateY: this.props.globalImportance.map(
+              (classArray) => classArray[index]
+            ),
+            colorIndex: index
           };
         });
 
   public constructor(props: IGlobalOnlyChartProps) {
     super(props);
 
-    this.classOptions = this.props.metadata.classNames.map((className, index) => {
-      return { key: index, text: className };
-    });
+    this.classOptions = this.props.metadata.classNames.map(
+      (className, index) => {
+        return { key: index, text: className };
+      }
+    );
     this.classOptions.unshift({
       key: FeatureKeys.absoluteGlobal,
-      text: localization.BarChart.absoluteGlobal,
+      text: localization.BarChart.absoluteGlobal
     });
     this.state = {
       startingK: 0,
       topK: this.minK,
       sortingSeriesKey: FeatureKeys.absoluteGlobal,
-      sortArray: ModelExplanationUtils.buildSortedVector(this.props.globalImportance).reverse(),
+      sortArray: ModelExplanationUtils.buildSortedVector(
+        this.props.globalImportance
+      ).reverse()
     };
   }
 
@@ -80,7 +93,7 @@ export class GlobalOnlyChart extends React.PureComponent<IGlobalOnlyChartProps, 
             {localization.formatString(
               localization.GlobalTab.topAtoB,
               this.state.startingK + 1,
-              this.state.startingK + this.state.topK,
+              this.state.startingK + this.state.topK
             )}
           </Text>
           <Slider

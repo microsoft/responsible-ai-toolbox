@@ -1,4 +1,9 @@
-import { IStyle, mergeStyleSets, IProcessedStyleSet, getTheme } from "office-ui-fabric-react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "office-ui-fabric-react";
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IGlobalTabStyles {
@@ -35,7 +40,9 @@ export interface IGlobalTabStyles {
   rightJustifiedContainer: IStyle;
 }
 
-export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> = () => {
+export const globalTabStyles: () => IProcessedStyleSet<
+  IGlobalTabStyles
+> = () => {
   const theme = getTheme();
   const rightMarginWidth = "200px";
   return mergeStyleSets<IGlobalTabStyles>({
@@ -45,74 +52,76 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> = () =>
       padding: "16px 40px 0 14px",
       boxSizing: "border-box",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     },
     infoWithText: {
       display: "flex",
       flexDirection: "row",
       width: "100%",
       boxSizing: "border-box",
-      paddingLeft: "25px",
+      paddingLeft: "25px"
     },
     infoIcon: {
       width: "23px",
       height: "23px",
-      fontSize: "23px",
+      fontSize: "23px"
     },
     helperText: {
       paddingRight: "120px",
-      paddingLeft: "15px",
+      paddingLeft: "15px"
     },
     globalChartControls: {
       display: "flex",
       flexDirection: "row",
-      padding: "18px 300px 4px 67px",
+      padding: "18px 300px 4px 67px"
     },
     sliderLabel: {
       fontWeight: "600",
-      paddingRight: "10px",
+      paddingRight: "10px"
     },
     topK: {
-      maxWidth: "200px",
+      maxWidth: "200px"
     },
     startingK: {
-      flex: 1,
+      flex: 1
     },
     chartTypeDropdown: {
-      margin: "0 5px 0 0",
+      margin: "0 5px 0 0"
     },
     globalChartWithLegend: {
       height: "400px",
       width: "100%",
       display: "flex",
       flexDirection: "row",
-      position: "relative",
+      position: "relative"
     },
     secondaryChartAndLegend: {
       height: "300px",
       width: "100%",
       display: "flex",
-      flexDirection: "row",
+      flexDirection: "row"
     },
     legendAndSort: {
       width: rightMarginWidth,
-      height: "100%",
+      height: "100%"
     },
     cohortLegend: {
       fontWeight: "600",
-      paddingBottom: "10px",
+      paddingBottom: "10px"
     },
     legendHelpText: {
-      fontWeight: "300",
+      fontWeight: "300"
     },
     missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [FabricStyles.missingParameterPlaceholderSpacer],
+    missingParametersPlaceholderSpacer: [
+      FabricStyles.missingParameterPlaceholderSpacer
+    ],
     faintText: [FabricStyles.faintText],
     chartEditorButton: [
       FabricStyles.chartEditorButton,
       {
-        margin: "5px",
-      },
+        margin: "5px"
+      }
     ],
     callout: {
       width: "200px",
@@ -120,11 +129,11 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> = () =>
       display: "flex",
       flexDirection: "column",
       padding: "10px 20px",
-      backgroundColor: theme.semanticColors.bodyBackground,
+      backgroundColor: theme.semanticColors.bodyBackground
     },
     boldText: {
       fontWeight: "600",
-      paddingBottom: "5px",
+      paddingBottom: "5px"
     },
     calloutWrapper: [FabricStyles.calloutWrapper],
     calloutHeader: [FabricStyles.calloutHeader],
@@ -133,32 +142,32 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> = () =>
     infoButton: {
       width: "fit-content",
       margin: "5px",
-      padding: "8px 10px",
+      padding: "8px 10px"
     },
     multiclassWeightLabel: {
       display: "inline-flex",
-      paddingTop: "10px",
+      paddingTop: "10px"
     },
     multiclassWeightLabelText: {
       paddingTop: "5px",
-      fontWeight: "600",
+      fontWeight: "600"
     },
     cohortLegendWithTop: {
       fontWeight: "600",
       paddingBottom: "10px",
-      paddingTop: "10px",
+      paddingTop: "10px"
     },
     calloutActions: {
       position: "relative",
       marginTop: 20,
       width: "100%",
-      whiteSpace: "nowrap",
+      whiteSpace: "nowrap"
     },
     calloutLink: [
       theme.fonts.medium,
       {
-        color: theme.palette.neutralPrimary,
-      },
+        color: theme.palette.neutralPrimary
+      }
     ],
     rightJustifiedContainer: {
       width: "100%",
@@ -166,7 +175,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> = () =>
       boxSizing: "border-box",
       display: "inline-flex",
       flexDirection: "row",
-      justifyContent: "flex-end",
-    },
+      justifyContent: "flex-end"
+    }
   });
 };

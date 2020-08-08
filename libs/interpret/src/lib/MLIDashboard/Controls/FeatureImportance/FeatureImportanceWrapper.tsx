@@ -16,7 +16,7 @@ export enum FeatureImportanceModes {
   bar = "bar",
   beehive = "beehive",
   violin = "violin",
-  box = "box",
+  box = "box"
 }
 
 export interface IFeatureImportanceConfig extends IBarChartConfig {
@@ -35,20 +35,37 @@ export interface IGlobalFeatureImportanceProps {
   onChange: (config: IFeatureImportanceConfig, id: string) => void;
 }
 
-export class FeatureImportanceWrapper extends React.PureComponent<IGlobalFeatureImportanceProps> {
+export class FeatureImportanceWrapper extends React.PureComponent<
+  IGlobalFeatureImportanceProps
+> {
   public render(): React.ReactNode {
     const chartTypeOptions: IComboBoxOption[] =
-      this.props.dashboardContext.explanationContext.localExplanation !== undefined
+      this.props.dashboardContext.explanationContext.localExplanation !==
+      undefined
         ? [
-            { text: localization.FeatureImportanceWrapper.boxText, key: FeatureImportanceModes.box },
-            { text: localization.FeatureImportanceWrapper.beehiveText, key: FeatureImportanceModes.beehive },
-            { text: localization.FeatureImportanceWrapper.violinText, key: FeatureImportanceModes.violin },
+            {
+              text: localization.FeatureImportanceWrapper.boxText,
+              key: FeatureImportanceModes.box
+            },
+            {
+              text: localization.FeatureImportanceWrapper.beehiveText,
+              key: FeatureImportanceModes.beehive
+            },
+            {
+              text: localization.FeatureImportanceWrapper.violinText,
+              key: FeatureImportanceModes.violin
+            }
           ]
         : [];
 
     switch (this.props.config.displayMode) {
       case FeatureImportanceModes.bar:
-        return <FeatureImportanceBar {...this.props} chartTypeOptions={chartTypeOptions} />;
+        return (
+          <FeatureImportanceBar
+            {...this.props}
+            chartTypeOptions={chartTypeOptions}
+          />
+        );
       case FeatureImportanceModes.beehive:
         return <Beehive {...this.props} chartTypeOptions={chartTypeOptions} />;
       case FeatureImportanceModes.violin:

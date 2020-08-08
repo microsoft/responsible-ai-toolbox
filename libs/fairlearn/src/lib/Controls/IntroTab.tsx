@@ -53,7 +53,11 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
             </div>
           </div>
           <Stack horizontalAlign={"center"}>
-            <ActionButton iconProps={{ iconName: "Forward" }} className={styles.getStarted} onClick={this.props.onNext}>
+            <ActionButton
+              iconProps={{ iconName: "Forward" }}
+              className={styles.getStarted}
+              onClick={this.props.onNext}
+            >
               {localization.Intro.getStarted}
             </ActionButton>
           </Stack>

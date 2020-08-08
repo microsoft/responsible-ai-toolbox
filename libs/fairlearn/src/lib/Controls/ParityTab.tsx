@@ -24,19 +24,27 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
               <TileList
                 items={this.props.parityPickerProps.parityOptions.map(
                   (parity): ITileProp => {
-                    const selected = this.props.parityPickerProps.selectedParityKey === parity.key;
+                    const selected =
+                      this.props.parityPickerProps.selectedParityKey ===
+                      parity.key;
                     return {
                       title: parity.title,
                       description: parity.description,
-                      onSelect: this.props.parityPickerProps.onParityChange.bind(this, parity.key),
-                      selected,
+                      onSelect: this.props.parityPickerProps.onParityChange.bind(
+                        this,
+                        parity.key
+                      ),
+                      selected
                     };
-                  },
+                  }
                 )}
               />
             </StackItem>
             <Separator />
-            <WizardFooter onNext={this.props.onNext} onPrevious={this.props.onPrevious} />
+            <WizardFooter
+              onNext={this.props.onNext}
+              onPrevious={this.props.onPrevious}
+            />
           </Stack>
         </StackItem>
         <DataSpecificationBlade
