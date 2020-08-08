@@ -118,7 +118,7 @@ module.exports = {
         globalImportanceExplanation:
             "La importancia de la característica global se calcula mediante el promedio del valor absoluto de la importancia de la característica de todos los puntos (normalización L1). ",
         multiclassImportanceAddendum:
-            "Para el cálculo de la importancia de una característica para todas las clases se incluyen todos los puntos y no se utiliza ninguna ponderación diferencial. Por tanto, una característica con una gran importancia negativa para muchos puntos con una predicción de que no será de \"clase A\" aumentará considerablemente la importancia de la \"clase A\" de la característica.",
+            'Para el cálculo de la importancia de una característica para todas las clases se incluyen todos los puntos y no se utiliza ninguna ponderación diferencial. Por tanto, una característica con una gran importancia negativa para muchos puntos con una predicción de que no será de "clase A" aumentará considerablemente la importancia de la "clase A" de la característica.',
     },
     Filters: {
         equalComparison: "Igual que",
@@ -230,7 +230,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            "Puede seleccionar un punto de datos haciendo clic en el trazado disperso para ver sus valores de importancia de característica local (explicación local) y el trazado de expectativa condicional individual (ICE) a continuación. Cree un punto de datos \"What If\" hipotético con el panel de la derecha para perturbar las características de un punto de datos conocido. Los valores de importancia de característica se basan en varias aproximaciones y no son la causa de las predicciones. Sin la solidez matemática estricta de la inferencia causal, no se recomienda a los usuarios que tomen decisiones reales basadas en esta herramienta.",
+            'Puede seleccionar un punto de datos haciendo clic en el trazado disperso para ver sus valores de importancia de característica local (explicación local) y el trazado de expectativa condicional individual (ICE) a continuación. Cree un punto de datos "What If" hipotético con el panel de la derecha para perturbar las características de un punto de datos conocido. Los valores de importancia de característica se basan en varias aproximaciones y no son la causa de las predicciones. Sin la solidez matemática estricta de la inferencia causal, no se recomienda a los usuarios que tomen decisiones reales basadas en esta herramienta.',
         panelPlaceholder: "Se necesita un modelo para efectuar predicciones para nuevos puntos de datos.",
         cohortPickerLabel: "Seleccionar cohorte de un conjunto de datos para explorar",
         scatterLegendText:
@@ -272,7 +272,7 @@ module.exports = {
         maxLabel: "Máx.",
         stepsLabel: "Pasos",
         disclaimer:
-            "Declinación de responsabilidades: Estas explicaciones se basan en una gran variedad de enfoques y no son la \"causa\" de las predicciones. Sin una solidez matemática estricta de la inferencia causal, recomendamos a los usuarios que no utilicen esta herramienta para tomar decisiones que afecten a la vida real.",
+            'Declinación de responsabilidades: Estas explicaciones se basan en una gran variedad de enfoques y no son la "causa" de las predicciones. Sin una solidez matemática estricta de la inferencia causal, recomendamos a los usuarios que no utilicen esta herramienta para tomar decisiones que afecten a la vida real.',
         missingParameters: "Esta pestaña requiere que se proporcione un conjunto de datos de evaluación.",
         selectionLimit: "Máximo de 3 puntos seleccionados",
         classPickerLabel: "Clase",
@@ -357,10 +357,10 @@ module.exports = {
         clickHere: "Más información",
         shapTitle: "Valores de Shapley",
         shapDescription:
-            "Este explicador usa SHAP, que es un enfoque teórico de juego para explicar modelos en los que la importancia de los conjuntos de características se mide \"ocultando\" en el modelo las características en cuestión a través de la marginalización. Haga clic en el vínculo a continuación para obtener más información.",
+            'Este explicador usa SHAP, que es un enfoque teórico de juego para explicar modelos en los que la importancia de los conjuntos de características se mide "ocultando" en el modelo las características en cuestión a través de la marginalización. Haga clic en el vínculo a continuación para obtener más información.',
         limeTitle: "LIME (explicaciones independientes del modelo interpretables locales)",
         limeDescription:
-            "Este explicador utiliza LIME, que proporciona una aproximación lineal del modelo. Para obtener una explicación, debe hacerse lo siguiente: perturbar la instancia, obtener predicciones de modelo y usar las predicciones como etiquetas para obtener un modelo lineal disperso que sea fiel localmente. Las ponderaciones de este modelo lineal se usan como \"importancias de características\". Haga clic en el vínculo a continuación para obtener más información.",
+            'Este explicador utiliza LIME, que proporciona una aproximación lineal del modelo. Para obtener una explicación, debe hacerse lo siguiente: perturbar la instancia, obtener predicciones de modelo y usar las predicciones como etiquetas para obtener un modelo lineal disperso que sea fiel localmente. Las ponderaciones de este modelo lineal se usan como "importancias de características". Haga clic en el vínculo a continuación para obtener más información.',
         mimicTitle: "Imitación (explicaciones subrogadas globales)",
         mimicDescription:
             "Este explicador se basa en la idea de los modelos subrogados globales de entrenamiento para imitar los modelos de una caja negra. Un modelo subrogado global es un modelo interpretable de forma intrínseca que se ha entrenado para aproximar las predicciones de cualquier modelo de una caja negra de la forma más precisa posible. Los valores de importancia de característica son valores de importancia de característica basados en modelos del modelo subrogado subyacente (LightGBM, regresión lineal, descenso de gradiente estocástico o árbol de decisión).",

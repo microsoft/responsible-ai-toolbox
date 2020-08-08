@@ -1,5 +1,3 @@
-
-
 .explainerDashboard {
     width: 100%;
     height: 100%;
@@ -15,7 +13,7 @@
             height: 55%;
             display: flex;
             flex-direction: row;
-            .ms-FocusZone{
+            .ms-FocusZone {
                 height: 100%;
             }
             .chart {
@@ -35,7 +33,8 @@
                 font-size: 25px;
                 .placeholder-text {
                     margin: auto;
-                    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+                    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system,
+                        BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
                     padding: 40px;
                     line-height: 35px;
                 }
@@ -44,7 +43,7 @@
                 display: flex;
                 flex-direction: row;
                 height: 100%;
-                .ms-FocusZone{
+                .ms-FocusZone {
                     height: 100%;
                 }
                 .view-panel {

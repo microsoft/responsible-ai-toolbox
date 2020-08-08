@@ -2,9 +2,12 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    .unavailable, .charting-prompt, .loading {
+    .unavailable,
+    .charting-prompt,
+    .loading {
         margin: auto;
-        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+            "Helvetica Neue", sans-serif;
         padding: 40px;
         font-size: 25px;
     }

@@ -10,20 +10,21 @@
     flex-direction: column;
     justify-content: space-between;
     .tile-label {
-        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+            "Helvetica Neue", sans-serif;
         overflow-wrap: break-word;
         font-size: 20px;
         padding: 3px 4px 15px 4px;
     }
 
     &.edited {
-        border: 2px solid #0078D4;
+        border: 2px solid #0078d4;
         padding: 3px;
         border-radius: 5px;
     }
 
     &.error {
-        border: 2px solid #A80000;
+        border: 2px solid #a80000;
         padding: 3px;
         border-radius: 5px;
     }

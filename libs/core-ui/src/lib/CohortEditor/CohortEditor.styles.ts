@@ -277,10 +277,10 @@ const cohortEditor = cohortEditorStyles();
 export const cohortEditorCallout: () => ICalloutContentStyles = () => {
     return {
         container: {
-            zIndex: 15
+            zIndex: 15,
         },
         root: {
-            top: "-22px !important"
+            top: "-22px !important",
         },
         beak: {},
         beakCurtain: {},

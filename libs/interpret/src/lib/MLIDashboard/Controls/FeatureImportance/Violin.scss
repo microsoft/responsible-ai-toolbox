@@ -6,7 +6,7 @@
     .top-controls {
         display: flex;
         padding: 3px 15px;
-        .feature-slider{
+        .feature-slider {
             flex: 1;
         }
         .path-selector {
@@ -17,10 +17,11 @@
             flex-direction: row;
             span {
                 padding-top: 5px;
-                font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+                font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont,
+                    Roboto, "Helvetica Neue", sans-serif;
             }
         }
-        .slider-control{
+        .slider-control {
             flex: 1;
             padding: 0 4px;
             .slider-label {
@@ -30,7 +31,8 @@
                     line-height: 14px;
                     margin: 7px 0 0 4px;
                     font-size: 14px;
-                    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;    
+                    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system,
+                        BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
                 }
             }
         }
@@ -42,8 +44,9 @@
     flex-direction: column;
     max-width: 300px;
     padding: 30px;
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+        "Helvetica Neue", sans-serif;
+
     button {
         max-width: 100px;
     }

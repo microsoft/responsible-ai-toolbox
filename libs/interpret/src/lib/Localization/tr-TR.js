@@ -226,7 +226,7 @@ module.exports = {
     },
     WhatIfTab: {
         helperText:
-            "Aşağıda yerel özellik önem değerlerini (yerel açıklama) ve bireysel koşullu beklenti (ICE) çizimini görüntülemek için dağılıma tıklayarak bir veri noktası seçebilirsiniz. Bilinen bir veri noktasının özelliklerini karıştırmak için sağdaki paneli kullanarak varsayımsal bir durum veri noktası oluşturun. Özellik önem değerleri birçok yaklaşıma dayanır ve tahminlerin \"nedeni\" değildir. Nedensel çıkarıma dayalı katı matematiksel sağlamlık olmadan, kullanıcıların bu araca dayalı olarak gerçek hayata yönelik kararlar vermelerini önermiyoruz.",
+            'Aşağıda yerel özellik önem değerlerini (yerel açıklama) ve bireysel koşullu beklenti (ICE) çizimini görüntülemek için dağılıma tıklayarak bir veri noktası seçebilirsiniz. Bilinen bir veri noktasının özelliklerini karıştırmak için sağdaki paneli kullanarak varsayımsal bir durum veri noktası oluşturun. Özellik önem değerleri birçok yaklaşıma dayanır ve tahminlerin "nedeni" değildir. Nedensel çıkarıma dayalı katı matematiksel sağlamlık olmadan, kullanıcıların bu araca dayalı olarak gerçek hayata yönelik kararlar vermelerini önermiyoruz.',
         panelPlaceholder: "Yeni veri noktalarına yönelik tahminlerde bulunmak için bir model gerekir.",
         cohortPickerLabel: "Keşfedilecek veri kümesi kohortunu seçin",
         scatterLegendText: "Gösterge öğelerine tıklayarak çizimdeki veri noktalarını açıp kapatın.",
@@ -352,7 +352,7 @@ module.exports = {
         clickHere: "Daha fazla bilgi",
         shapTitle: "Shapley değerleri",
         shapDescription:
-            "Bu açıklayıcı, modelleri açıklamaya yönelik bir oyun teorisi yaklaşımı olan SHAP'yi kullanır. Bu yöntemde özellik kümelerinin önemi, bu özellikleri marjinalleştirme yoluyla modelden \"gizleyerek\" ölçülür. Daha fazla bilgi için aşağıdaki bağlantıya tıklayın.",
+            'Bu açıklayıcı, modelleri açıklamaya yönelik bir oyun teorisi yaklaşımı olan SHAP\'yi kullanır. Bu yöntemde özellik kümelerinin önemi, bu özellikleri marjinalleştirme yoluyla modelden "gizleyerek" ölçülür. Daha fazla bilgi için aşağıdaki bağlantıya tıklayın.',
         limeTitle: "LIME (Yerel Yorumlanabilir Modelden Bağımsız Açıklamalar)",
         limeDescription:
             "Bu açıklayıcı, modelin doğrusal bir yaklaşımını sağlayan LIME kullanır. Bir açıklama almak için, aşağıdakileri yaparız: örneği karıştırır, model tahminleri alır ve yerel olarak sadık olan seyrek bir doğrusal modeli öğrenmek için bu tahminleri etiket olarak kullanırız. Bu doğrusal modelin ağırlıkları 'özellik önemi' olarak kullanılır. Daha fazla bilgi için aşağıdaki bağlantıya tıklayın.",

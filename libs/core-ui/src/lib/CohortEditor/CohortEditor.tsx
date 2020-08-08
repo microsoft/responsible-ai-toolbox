@@ -1,5 +1,15 @@
 import _ from "lodash";
-import { Text, TextField, TooltipHost, TooltipOverflowMode, IProcessedStyleSet , ComboBox, IComboBox, IComboBoxOption , Checkbox } from "office-ui-fabric-react";
+import {
+    Text,
+    TextField,
+    TooltipHost,
+    TooltipOverflowMode,
+    IProcessedStyleSet,
+    ComboBox,
+    IComboBox,
+    IComboBoxOption,
+    Checkbox,
+} from "office-ui-fabric-react";
 import { DefaultButton, IconButton, PrimaryButton } from "office-ui-fabric-react/lib/Button";
 import { Callout, DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 import { CheckboxVisibility, DetailsList, Selection, SelectionMode } from "office-ui-fabric-react/lib/DetailsList";

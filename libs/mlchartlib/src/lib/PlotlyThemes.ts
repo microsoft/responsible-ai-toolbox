@@ -13,33 +13,36 @@ const plotlyLightTheme: IPlotlyTheme = {
     axisColor: "#444",
     axisGridColor: "#eee",
     backgroundColor: "#fff",
-    fontColor: "#000"
+    fontColor: "#000",
 };
 
 const plotlyDarkTheme: IPlotlyTheme = {
     axisColor: "#aaa",
     axisGridColor: "#222",
     backgroundColor: "#000",
-    fontColor: "#fff"
+    fontColor: "#fff",
 };
 
 const plotlyWhiteTheme: IPlotlyTheme = {
     axisColor: "#000",
     axisGridColor: "#000",
     backgroundColor: "#fff",
-    fontColor: "#000"
+    fontColor: "#000",
 };
 
 const plotlyBlackTheme: IPlotlyTheme = {
     axisColor: "#fff",
     axisGridColor: "#fff",
     backgroundColor: "#000",
-    fontColor: "#fff"
+    fontColor: "#fff",
 };
 
 export class PlotlyThemes {
-    public static applyTheme(props: IPlotlyProperty, theme?: string | ITheme, themeOverride?: Partial<IPlotlyTheme>): IPlotlyProperty {
-
+    public static applyTheme(
+        props: IPlotlyProperty,
+        theme?: string | ITheme,
+        themeOverride?: Partial<IPlotlyTheme>,
+    ): IPlotlyProperty {
         const newProps = _.cloneDeep(props);
 
         const plotTheme = _.merge(this.getTheme(theme), themeOverride);
@@ -71,11 +74,14 @@ export class PlotlyThemes {
                     return plotlyLightTheme;
             }
         }
-        return _.defaults({
-            axisColor: theme.semanticColors.bodyText,
-            axisGridColor: theme.semanticColors.bodySubtext,
-            backgroundColor: theme.semanticColors.bodyBackground,
-            fontColor: theme.semanticColors.bodyText
-        }, plotlyLightTheme)
+        return _.defaults(
+            {
+                axisColor: theme.semanticColors.bodyText,
+                axisGridColor: theme.semanticColors.bodySubtext,
+                backgroundColor: theme.semanticColors.bodyBackground,
+                fontColor: theme.semanticColors.bodyText,
+            },
+            plotlyLightTheme,
+        );
     }
 }

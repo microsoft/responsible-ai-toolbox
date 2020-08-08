@@ -6,5 +6,5 @@ export enum PlotlyMode {
     textMarkers = "text+markers",
     textLines = "text+lines",
     textLinesMarkers = "text+lines+markers",
-    none = "none"
+    none = "none",
 }

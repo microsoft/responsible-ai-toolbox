@@ -8,7 +8,7 @@
         display: flex;
         padding: 3px 15px;
         justify-content: space-between;
-        .selector{
+        .selector {
             display: flex;
             .selector-label {
                 display: flex;
@@ -18,7 +18,8 @@
                     line-height: 14px;
                     margin-right: -16px;
                     font-size: 14px;
-                    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;    
+                    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system,
+                        BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
                 }
             }
             .ms-ComboBox-container {
@@ -33,8 +34,9 @@
     flex-direction: column;
     max-width: 300px;
     padding: 30px;
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+        "Helvetica Neue", sans-serif;
+
     button {
         max-width: 100px;
     }

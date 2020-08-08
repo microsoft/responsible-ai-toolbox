@@ -2,14 +2,14 @@ export enum TelemetryLevels {
     error = "Error",
     warning = "Warning",
     info = "Info",
-    trace = "Trace"
+    trace = "Trace",
 }
 
-export type TelemetryLevel = 
-    TelemetryLevels.error | 
-    TelemetryLevels.warning |
-    TelemetryLevels.info |
-    TelemetryLevels.trace;
+export type TelemetryLevel =
+    | TelemetryLevels.error
+    | TelemetryLevels.warning
+    | TelemetryLevels.info
+    | TelemetryLevels.trace;
 
 export interface ITelemetryMessage {
     level: TelemetryLevel;

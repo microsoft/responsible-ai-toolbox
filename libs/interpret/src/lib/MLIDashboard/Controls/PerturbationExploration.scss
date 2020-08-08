@@ -4,14 +4,16 @@
     overflow: hidden;
     .loading-message {
         display: flex;
-        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+            "Helvetica Neue", sans-serif;
         font-size: 20px;
         border-bottom: 1px solid;
         padding: 5px 10px;
     }
     .label-group {
         display: flex;
-        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+            "Helvetica Neue", sans-serif;
         font-size: 20px;
         border-bottom: 1px solid;
         .label-group-label {
