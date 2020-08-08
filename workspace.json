@@ -24,7 +24,7 @@
                         "entryFile": "libs/interpret/src/index.ts",
                         "external": ["react", "react-dom", "office-ui-fabric-react"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
-                        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                        "rollupConfig": "./rollup.config.js",
                         "assets": [
                             {
                                 "glob": "README.md",
@@ -67,7 +67,7 @@
                         "entryFile": "libs/fairlearn/src/index.ts",
                         "external": ["react", "react-dom", "office-ui-fabric-react"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
-                        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                        "rollupConfig": "./rollup.config.js",
                         "assets": [
                             {
                                 "glob": "README.md",
@@ -110,7 +110,7 @@
                         "entryFile": "libs/core-ui/src/index.ts",
                         "external": ["react", "react-dom", "office-ui-fabric-react"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
-                        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                        "rollupConfig": "./rollup.config.js",
                         "assets": [
                             {
                                 "glob": "README.md",
@@ -153,7 +153,7 @@
                         "entryFile": "libs/mlchartlib/src/index.ts",
                         "external": ["react", "react-dom", "office-ui-fabric-react"],
                         "babelConfig": "@nrwl/react/plugins/bundle-babel",
-                        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                        "rollupConfig": "./rollup.config.js",
                         "assets": [
                             {
                                 "glob": "README.md",
