@@ -1,39 +1,39 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll": true
-    },
-    "[json]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascriptreact]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescript]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescriptreact]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "cSpell.words": [
-        "Callout",
-        "Fairlearn",
-        "Importances",
-        "Parens",
-        "Plotly",
-        "Unmount",
-        "cssmodule",
-        "jmespath",
-        "mlchartlib",
-        "nrwl",
-        "relayout",
-        "uifabric"
-    ]
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": [
+    "Callout",
+    "Fairlearn",
+    "Importances",
+    "Parens",
+    "Plotly",
+    "Unmount",
+    "cssmodule",
+    "jmespath",
+    "mlchartlib",
+    "nrwl",
+    "relayout",
+    "uifabric"
+  ]
 }

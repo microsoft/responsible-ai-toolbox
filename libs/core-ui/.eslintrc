@@ -1,4 +1,4 @@
 {
-    "extends": ["../../.eslintrc"],
-    "ignorePatterns": ["!**/*", "lib/**/*"]
+  "extends": ["../../.eslintrc"],
+  "ignorePatterns": ["!**/*", "lib/**/*"]
 }
