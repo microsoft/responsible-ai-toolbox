@@ -5,13 +5,13 @@ import { localization } from "../../Localization/localization";
 import "./LoadingSpinner.scss";
 
 export class LoadingSpinner extends React.PureComponent {
-    public render(): React.ReactNode {
-        return (
-            <Spinner
-                className={"explanation-spinner"}
-                size={SpinnerSize.large}
-                label={localization.BarChart.calculatingExplanation}
-            />
-        );
-    }
+  public render(): React.ReactNode {
+    return (
+      <Spinner
+        className={"explanation-spinner"}
+        size={SpinnerSize.large}
+        label={localization.BarChart.calculatingExplanation}
+      />
+    );
+  }
 }

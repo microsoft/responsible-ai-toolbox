@@ -1,4 +1,4 @@
 {
-    "extends": ["../../.eslintrc"],
-    "ignorePatterns": ["!**/*", "webpack.config.js"]
+  "extends": ["../../.eslintrc"],
+  "ignorePatterns": ["!**/*", "webpack.config.js"]
 }
