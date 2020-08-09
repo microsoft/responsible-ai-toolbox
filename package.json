@@ -39,6 +39,7 @@
     "lodash": "4.17.19",
     "memoize-one": "5.1.1",
     "moment": "2.27.0",
+    "nx": "^10.0.10",
     "office-ui-fabric-react": "7.124.1",
     "plotly.js-dist": "1.45.3",
     "react": "16.13.1",
