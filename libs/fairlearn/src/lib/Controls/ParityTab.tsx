@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, StackItem, Separator } from "office-ui-fabric-react";
+import { Stack, StackItem, Text } from "office-ui-fabric-react";
 
 import { localization } from "../Localization/localization";
 import { IWizardTabProps } from "../IWizardTabProps";
@@ -7,6 +7,7 @@ import { IParityPickerProps } from "../FairnessWizard";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { WizardFooter } from "./WizardFooter";
 import { TileList, ITileProp } from "./TileList";
+import { ParityTabStyles } from './ParityTab.styles';
 
 export interface IParityTabProps extends IWizardTabProps {
   parityPickerProps: IParityPickerProps;
@@ -14,13 +15,18 @@ export interface IParityTabProps extends IWizardTabProps {
 
 export class ParityTab extends React.PureComponent<IParityTabProps> {
   public render(): React.ReactNode {
+    const styles = ParityTabStyles();
     return (
-      <Stack horizontal>
+      <Stack horizontal horizontalAlign="space-between" className={styles.frame}>
         <StackItem grow={2}>
-          <Stack>
-            <h2 style={{ fontWeight: "bold" }}>{localization.Parity.header}</h2>
-            <p>{localization.Parity.body}</p>
-            <StackItem grow={2}>
+          <Stack className={styles.main}>
+            <Text className={styles.header} block>
+              {localization.Accuracy.header}
+            </Text>
+            <Text className={styles.textBody} block>
+              {localization.Parity.body}
+            </Text>
+            <StackItem grow={2} className={styles.itemsList}>
               <TileList
                 items={this.props.parityPickerProps.parityOptions.map(
                   (parity): ITileProp => {
@@ -40,7 +46,6 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
                 )}
               />
             </StackItem>
-            <Separator />
             <WizardFooter
               onNext={this.props.onNext}
               onPrevious={this.props.onPrevious}
@@ -48,7 +53,7 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
           </Stack>
         </StackItem>
         <DataSpecificationBlade
-          numberRows={this.props.dashboardContext.dataset.length}
+          numberRows={this.props.dashboardContext.trueY.length}
           featureNames={this.props.dashboardContext.modelMetadata.featureNames}
         />
       </Stack>
