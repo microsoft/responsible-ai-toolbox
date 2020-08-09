@@ -1539,6 +1539,17 @@
     node-gyp "^6.1.0"
     read-package-json-fast "^1.1.3"
 
+"@nrwl/cli@*":
+  version "10.0.10"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-10.0.10.tgz#adf8f351ade7f2d1b36634cf9269f8841111124d"
+  integrity sha512-Jf1dGpHUc7BXhTMzctj8PlJ2zrB3iyurRSLWkt+CpPslGODGYu1GxR//0ZZvOQA5y5Pz+SRQNKp0Ckx8/JvOPA==
+  dependencies:
+    "@nrwl/tao" "10.0.10"
+    chalk "2.4.2"
+    tmp "0.0.33"
+    yargs "^11.0.0"
+    yargs-parser "10.0.0"
+
 "@nrwl/cli@10.0.7":
   version "10.0.7"
   resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-10.0.7.tgz#cef6db6c7dfbcdf79b5ac9e546621c875b27680f"
@@ -1605,6 +1616,18 @@
     eslint-plugin-react "^7.18.3"
     eslint-plugin-react-hooks "^2.4.0"
     url-loader "^3.0.0"
+
+"@nrwl/tao@10.0.10":
+  version "10.0.10"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-10.0.10.tgz#66fad49d9dcdea58d243ac7344ebc4b2f2c60039"
+  integrity sha512-Dd1cBfA0iysLVOf19O8ai6x9CBIJ1oa63paOPnYKUAD4Lz1rZ8ngfNWZ1nzc+3xr3ABfQmWnN2QzjDAHf18gjA==
+  dependencies:
+    "@angular-devkit/architect" "~0.1000.0"
+    "@angular-devkit/core" "~10.0.0"
+    "@angular-devkit/schematics" "~10.0.0"
+    inquirer "^6.3.1"
+    minimist "^1.2.0"
+    strip-json-comments "2.0.1"
 
 "@nrwl/tao@10.0.7":
   version "10.0.7"
@@ -8627,6 +8650,13 @@ nwsapi@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
+
+nx@^10.0.10:
+  version "10.0.10"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-10.0.10.tgz#064a85422a7e28149418765a2641d9c34ba6ef81"
+  integrity sha512-23sepe9gSSxB8VGEW0+ztjtB6NAkUK+ADdKv+J2sOrVbq5bBxwCQ/2UNUx8+Kq/5oWXjLg5S0aaVJHgwDOczYw==
+  dependencies:
+    "@nrwl/cli" "*"
 
 oauth-sign@~0.9.0:
   version "0.9.0"
