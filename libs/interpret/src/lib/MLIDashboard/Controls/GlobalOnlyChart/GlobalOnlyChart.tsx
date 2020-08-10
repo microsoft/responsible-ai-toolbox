@@ -6,7 +6,7 @@ import { localization } from "../../../Localization/localization";
 import { FeatureKeys } from "../../SharedComponents";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { ChartTypes } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
 export interface IGlobalOnlyChartProps {

@@ -358,9 +358,9 @@ export class FairnessWizard extends React.PureComponent<
             verticalAlign="center"
             className={styles.thinHeader}
           >
-            <Text variant={"mediumPlus"} className={styles.headerLeft}>
+            {/* <Text variant={"mediumPlus"} className={styles.headerLeft}>
               {localization.Header.title}
-            </Text>
+            </Text> */}
           </Stack>
           <Stack.Item grow={2} className={styles.body}>
             <Text variant={"mediumPlus"}>{localization.errorOnInputs}</Text>
@@ -376,9 +376,9 @@ export class FairnessWizard extends React.PureComponent<
           verticalAlign="center"
           className={styles.thinHeader}
         >
-          <Text variant={"mediumPlus"} className={styles.headerLeft}>
+          {/* <Text variant={"mediumPlus"} className={styles.headerLeft}>
             {localization.Header.title}
-          </Text>
+          </Text> */}
         </Stack>
         {this.state.activeTabKey === introTabKey && (
           <StackItem grow={2} className={styles.body}>
