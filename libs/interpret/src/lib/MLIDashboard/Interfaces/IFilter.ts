@@ -1,4 +1,4 @@
-export const enum FilterMethods {
+export enum FilterMethods {
   greaterThan = "greater",
   greaterThanEqualTo = "greater and equal",
   lessThan = "less",
