@@ -30,11 +30,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: unit-test-coverage
+          name: unit-test-coverage-${{ matrix.node-version }}
           path: coverage
       - name: Upload e2e test screen shot
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: e2e-screen-shot
+          name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
