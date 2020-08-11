@@ -23,7 +23,7 @@ export interface IBinDialogProps {
   onCancel: () => void;
 }
 
-export default class BinDialog extends React.PureComponent<
+export class BinDialog extends React.PureComponent<
   IBinDialogProps,
   IBinnedResponse
 > {

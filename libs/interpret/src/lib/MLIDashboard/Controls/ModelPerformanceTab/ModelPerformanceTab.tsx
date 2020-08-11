@@ -19,13 +19,12 @@ import {
   ModelTypes
 } from "../../IExplanationContext";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
-import {
-  IGenericChartProps,
-  ISelectorConfig,
-  ChartTypes
-} from "../../NewExplanationDashboard";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
+import { CohortKey } from "../../CohortKey";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
@@ -114,7 +113,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     let yLabelIndexes: number[];
     const yMeta = jointData.metaDict[chartProps.yAxis.property];
     const yAxisName = yMeta.label;
-    if (chartProps.yAxis.property === Cohort.CohortKey) {
+    if (chartProps.yAxis.property === CohortKey) {
       rawX = [];
       rawY = [];
       yLabels = [];
@@ -239,7 +238,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
     const cohortOptions: IDropdownOption[] =
-      this.props.chartProps.yAxis.property !== Cohort.CohortKey
+      this.props.chartProps.yAxis.property !== CohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })
@@ -481,7 +480,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         ? ChartTypes.Histogram
         : ChartTypes.Box,
       yAxis: {
-        property: Cohort.CohortKey,
+        property: CohortKey,
         options: {}
       },
       xAxis: {
@@ -495,7 +494,7 @@ export class ModelPerformanceTab extends React.PureComponent<
   }
 
   private generateMetrics(): ILabeledStatistic[][] {
-    if (this.props.chartProps.yAxis.property === Cohort.CohortKey) {
+    if (this.props.chartProps.yAxis.property === CohortKey) {
       const indexes = this.props.cohorts.map((cohort) =>
         cohort.unwrap(JointDataset.IndexLabel)
       );

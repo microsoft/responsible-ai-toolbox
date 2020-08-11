@@ -8,16 +8,10 @@ import { localization } from "../../../Localization/localization";
 import { FeatureImportanceBar } from "./FeatureImportanceBar";
 import { Beehive } from "./Beenhive";
 import { Violin } from "./Violin";
+import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
 export const BarId = "bar_id";
 export const GlobalFeatureImportanceId = "global_feature_id";
-
-export enum FeatureImportanceModes {
-  bar = "bar",
-  beehive = "beehive",
-  violin = "violin",
-  box = "box"
-}
 
 export interface IFeatureImportanceConfig extends IBarChartConfig {
   displayMode: FeatureImportanceModes;

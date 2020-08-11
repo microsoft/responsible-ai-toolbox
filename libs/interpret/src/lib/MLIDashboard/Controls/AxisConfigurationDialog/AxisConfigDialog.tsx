@@ -20,10 +20,10 @@ import {
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 import { localization } from "../../../Localization/localization";
-import { Cohort } from "../../Cohort";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { FabricStyles } from "../../FabricStyles";
+import { CohortKey } from "../../CohortKey";
 import {
   axisControlCallout,
   axisControlDialogStyles,
@@ -59,7 +59,7 @@ export class AxisConfigDialog extends React.PureComponent<
   private _leftSelection: Selection;
 
   private readonly leftItems = [
-    Cohort.CohortKey,
+    CohortKey,
     JointDataset.IndexLabel,
     JointDataset.DataLabelRoot,
     JointDataset.PredictedYLabel,
@@ -195,7 +195,7 @@ export class AxisConfigDialog extends React.PureComponent<
               ]}
             />
           </div>
-          {this.state.selectedColumn.property === Cohort.CohortKey && (
+          {this.state.selectedColumn.property === CohortKey && (
             <div className={styles.rightHalf}>
               <Text>{localization.AxisConfigDialog.groupByCohort}</Text>
             </div>
@@ -205,7 +205,7 @@ export class AxisConfigDialog extends React.PureComponent<
               <Text>{localization.AxisConfigDialog.countHelperText}</Text>
             </div>
           )}
-          {this.state.selectedColumn.property !== Cohort.CohortKey &&
+          {this.state.selectedColumn.property !== CohortKey &&
             this.state.selectedColumn.property !== ColumnCategories.none && (
               <div className={styles.rightHalf}>
                 {isDataColumn && (

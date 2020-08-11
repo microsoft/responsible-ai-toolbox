@@ -43,16 +43,14 @@ import { ColumnCategories, JointDataset } from "../../JointDataset";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import {
-  ChartTypes,
-  IGenericChartProps,
-  ISelectorConfig,
-  NewExplanationDashboard
-} from "../../NewExplanationDashboard";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { InteractiveLegend } from "../InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
+import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
@@ -384,7 +382,7 @@ export class WhatIfTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .rowCount;
     const canRenderChart =
-      cohortLength < NewExplanationDashboard.ROW_ERROR_SIZE ||
+      cohortLength < NewExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {
