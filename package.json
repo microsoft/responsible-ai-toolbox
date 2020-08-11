@@ -14,7 +14,7 @@
     "affected:test": "nx affected:test",
     "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx build",
     "buildall": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx run-many --target=build --all",
-    "ci": "yarn install --frozen-lock-file && yarn testall --coverage && yarn lintall && yarn e2eall && yarn buildall",
+    "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn e2eall && yarn buildall",
     "dep-graph": "nx dep-graph",
     "e2e": "nx e2e",
     "e2eall": "nx run-many --target=e2e --all",
