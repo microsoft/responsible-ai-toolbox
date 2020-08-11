@@ -11,7 +11,7 @@ import {
   ISingleClassLocalFeatureImportance
 } from "./Interfaces";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
-import { Cohort } from "./Cohort";
+import { CohortKey } from "./CohortKey";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];
@@ -667,7 +667,7 @@ export class JointDataset {
       },
       category: ColumnCategories.index
     };
-    this.metaDict[Cohort.CohortKey] = {
+    this.metaDict[CohortKey] = {
       label: localization.Cohort.cohort,
       abbridgedLabel: localization.Cohort.cohort,
       isCategorical: true,

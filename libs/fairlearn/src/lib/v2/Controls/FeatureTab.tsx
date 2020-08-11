@@ -14,7 +14,7 @@ import React from "react";
 import { IBinnedResponse } from "../IBinnedResponse";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { localization } from "../Localization/localization";
-import BinDialog from "./BinDialog";
+import { BinDialog } from "./BinDialog";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { WizardFooter } from "./WizardFooter";
 import { FeatureTabStyles, IFeatureTabStyles } from "./FeatureTab.styles";

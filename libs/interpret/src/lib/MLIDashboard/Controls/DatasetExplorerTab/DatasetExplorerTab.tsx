@@ -24,14 +24,13 @@ import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
-import {
-  ISelectorConfig,
-  IGenericChartProps,
-  ChartTypes,
-  NewExplanationDashboard
-} from "../../NewExplanationDashboard";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
+import { CohortKey } from "../../CohortKey";
+import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
 import {
   datasetExplorerTabStyles,
   IDatasetExplorerTabStyles
@@ -476,7 +475,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       this.props.cohorts[this.state.selectedCohortIndex]
     );
     const cohortOptions: IDropdownOption[] =
-      this.props.chartProps.xAxis.property !== Cohort.CohortKey
+      this.props.chartProps.xAxis.property !== CohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })
@@ -485,7 +484,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .rowCount;
     const canRenderChart =
-      cohortLength < NewExplanationDashboard.ROW_ERROR_SIZE ||
+      cohortLength < NewExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
       ColumnCategories.index,

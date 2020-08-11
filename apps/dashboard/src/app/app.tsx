@@ -3,7 +3,7 @@ import { Route, Link } from "react-router-dom";
 import { App as Interpret } from "../interpret/App";
 import { App as Fairlearn } from "../fairlearn/App";
 
-export default class App extends React.Component {
+export class App extends React.Component {
   public render(): React.ReactNode {
     return (
       <div>

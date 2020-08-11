@@ -1,4 +1,4 @@
-import IStringsParam from "./IStringsParam";
+import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";
 
 // This is the interface of the data to be provided by any glue code, be it the ModelExplanationController, the Jupyter widget,

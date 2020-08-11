@@ -8,7 +8,7 @@ import { LoadingSpinner } from "../../SharedComponents";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
-import { ChartTypes } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureBarProps {

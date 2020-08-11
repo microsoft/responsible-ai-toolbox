@@ -242,6 +242,7 @@
       }
     ],
     "getter-return": "error",
+    "import/no-default-export": "error",
     "import/first": "error",
     "import/no-amd": "error",
     "import/no-webpack-loader-syntax": "error",

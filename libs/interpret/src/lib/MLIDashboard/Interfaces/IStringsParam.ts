@@ -1,4 +1,4 @@
-export default interface IStringsParam {
+export interface IStringsParam {
   localizations?: any;
   contextualHelp?: HelpMessageDict;
 }
