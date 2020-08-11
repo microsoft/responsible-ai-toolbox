@@ -5,7 +5,8 @@ module.exports = {
   },
   resolver: "@nrwl/jest/plugins/resolver",
   moduleFileExtensions: ["ts", "js", "html"],
-  coverageReporters: ["html"],
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts?(x)"],
+  coverageReporters: ["html", "cobertura", "lcov", "text"],
   setupFilesAfterEnv: ["<rootDir>/../../setupTest.ts"],
   moduleNameMapper: {
     "^@uifabric/foundation/lib/(.*)$": "@uifabric/foundation/lib-commonjs/$1",
