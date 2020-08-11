@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install yarn
+        run: npm install yarn -g
       - name: CI
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: ci
+        run: yarn ci
