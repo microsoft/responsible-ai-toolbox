@@ -1,4 +1,8 @@
-import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@uifabric/styling";
+import {
+  IProcessedStyleSet,
+  mergeStyleSets,
+  IStyle
+} from "office-ui-fabric-react";
 
 export interface IMultiIcePlotStyles {
   iceWrapper: IStyle;

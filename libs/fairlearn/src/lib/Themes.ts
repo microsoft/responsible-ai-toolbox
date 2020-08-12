@@ -1,4 +1,4 @@
-import { ITheme, createTheme } from "@uifabric/styling";
+import { ITheme, createTheme } from "office-ui-fabric-react";
 
 export const defaultTheme: ITheme = createTheme({
   palette: {

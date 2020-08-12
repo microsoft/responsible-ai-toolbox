@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { ITheme } from "@uifabric/styling";
+import { ITheme } from "office-ui-fabric-react";
 import { IPlotlyProperty } from "./IPlotlyProperty";
 
 export interface IPlotlyTheme {

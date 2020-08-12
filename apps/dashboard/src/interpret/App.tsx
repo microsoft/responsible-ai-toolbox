@@ -4,7 +4,7 @@ import {
   ExplanationDashboard,
   ITelemetryMessage
 } from "@responsible-ai/interpret";
-import { createTheme } from "@uifabric/styling";
+import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
 import { breastCancerData } from "./__mock_data/dummyData";
 import { ibmData } from "./__mock_data/ibmData";
