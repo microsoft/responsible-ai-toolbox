@@ -4,9 +4,8 @@ import {
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
-import { getTheme } from "@uifabric/styling";
+import { getTheme, Text } from "office-ui-fabric-react";
 import _ from "lodash";
-import { Text } from "office-ui-fabric-react";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { JointDataset } from "../../JointDataset";
 import {

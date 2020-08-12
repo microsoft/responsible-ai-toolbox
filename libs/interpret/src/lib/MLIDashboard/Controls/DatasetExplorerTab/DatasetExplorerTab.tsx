@@ -1,4 +1,4 @@
-import * as Plotly from "plotly.js-dist";
+import * as Plotly from "plotly.js/lib/core";
 import React from "react";
 import {
   AccessibleChart,
@@ -6,8 +6,9 @@ import {
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { IProcessedStyleSet, getTheme } from "@uifabric/styling";
 import {
+  IProcessedStyleSet,
+  getTheme,
   IDropdownOption,
   Dropdown,
   IconButton,
@@ -20,6 +21,7 @@ import {
   ChoiceGroup,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
+
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset, ColumnCategories } from "../../JointDataset";

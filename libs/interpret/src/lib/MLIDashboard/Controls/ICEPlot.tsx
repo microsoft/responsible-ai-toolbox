@@ -8,7 +8,7 @@ import {
   TextField
 } from "office-ui-fabric-react";
 
-import { Data } from "plotly.js-dist";
+import { Data } from "plotly.js/lib/core";
 import React from "react";
 import {
   AccessibleChart,

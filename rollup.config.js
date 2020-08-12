@@ -2,6 +2,7 @@ const nrwlConfig = require("@nrwl/react/plugins/bundle-rollup"); // require the 
 
 module.exports = (config) => {
   config = nrwlConfig(config);
+
   config.context = "window";
 
   return config;

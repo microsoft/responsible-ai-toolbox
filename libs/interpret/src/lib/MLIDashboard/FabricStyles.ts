@@ -4,9 +4,11 @@ import {
   FontWeights,
   ICalloutProps,
   mergeStyles,
-  ITextFieldStyles
+  ITextFieldStyles,
+  IStyle,
+  getTheme,
+  mergeStyleSets
 } from "office-ui-fabric-react";
-import { IStyle, getTheme, mergeStyleSets } from "@uifabric/styling";
 
 export interface IRGBColor {
   r: number;
