@@ -1,12 +1,6 @@
-import { IProcessedStyleSet, getTheme } from "@uifabric/styling";
-import _ from "lodash";
 import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
-import {
+  IProcessedStyleSet,
+  getTheme,
   ChoiceGroup,
   IChoiceGroupOption,
   Icon,
@@ -30,6 +24,13 @@ import {
   SearchBox,
   TextField
 } from "office-ui-fabric-react";
+import _ from "lodash";
+import {
+  AccessibleChart,
+  IPlotlyProperty,
+  PlotlyMode,
+  IData
+} from "@responsible-ai/mlchartlib";
 
 import React from "react";
 import { localization } from "../../../Localization/localization";

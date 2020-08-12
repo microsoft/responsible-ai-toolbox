@@ -1,15 +1,16 @@
 import React from "react";
-import { getTheme } from "@uifabric/styling";
-import _ from "lodash";
 import {
+  getTheme,
   DefaultButton,
   IDropdownOption,
   Dropdown,
   Icon,
   Text
 } from "office-ui-fabric-react";
+import _ from "lodash";
+
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { Transform } from "plotly.js-dist";
+import { Transform } from "plotly.js/lib/core";
 
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { localization } from "../../../Localization/localization";

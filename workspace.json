@@ -25,9 +25,20 @@
             "tsConfig": "libs/interpret/tsconfig.lib.json",
             "project": "libs/interpret/package.json",
             "entryFile": "libs/interpret/src/index.ts",
-            "external": ["react", "react-dom", "office-ui-fabric-react"],
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js/lib/core",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "rollupConfig": "./rollup.config.js",
             "assets": [
               {
                 "glob": "README.md",
@@ -71,9 +82,19 @@
             "tsConfig": "libs/fairlearn/tsconfig.lib.json",
             "project": "libs/fairlearn/package.json",
             "entryFile": "libs/fairlearn/src/index.ts",
-            "external": ["react", "react-dom", "office-ui-fabric-react"],
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js/lib/core",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "rollupConfig": "./rollup.config.js",
             "assets": [
               {
                 "glob": "README.md",
@@ -117,9 +138,16 @@
             "tsConfig": "libs/core-ui/tsconfig.lib.json",
             "project": "libs/core-ui/package.json",
             "entryFile": "libs/core-ui/src/index.ts",
-            "external": ["react", "react-dom", "office-ui-fabric-react"],
+            "external": [
+              "lodash",
+              "office-ui-fabric-react",
+              "plotly.js/lib/core",
+              "react-dom",
+              "react",
+              "uuid"
+            ],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "rollupConfig": "./rollup.config.js",
             "assets": [
               {
                 "glob": "README.md",
@@ -163,9 +191,18 @@
             "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
             "project": "libs/mlchartlib/package.json",
             "entryFile": "libs/mlchartlib/src/index.ts",
-            "external": ["react", "react-dom", "office-ui-fabric-react"],
+            "external": [
+              "jmespath",
+              "lodash",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js/lib/core",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "rollupConfig": "./rollup.config.js",
             "assets": [
               {
                 "glob": "README.md",
@@ -199,6 +236,8 @@
             "main": "apps/dashboard/src/main.tsx",
             "polyfills": "apps/dashboard/src/polyfills.ts",
             "tsConfig": "apps/dashboard/tsconfig.app.json",
+            "progress": false,
+            "memoryLimit": 4096,
             "assets": [
               "apps/dashboard/src/favicon.ico",
               "apps/dashboard/src/assets"

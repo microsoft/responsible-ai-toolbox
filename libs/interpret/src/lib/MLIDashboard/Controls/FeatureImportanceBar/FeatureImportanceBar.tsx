@@ -1,8 +1,7 @@
 import React from "react";
 import _ from "lodash";
-import { getTheme } from "@uifabric/styling";
+import { getTheme, Text } from "office-ui-fabric-react";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
-import { Text } from "office-ui-fabric-react";
 import { localization } from "../../../Localization/localization";
 import { LoadingSpinner } from "../../SharedComponents";
 import { FabricStyles } from "../../FabricStyles";

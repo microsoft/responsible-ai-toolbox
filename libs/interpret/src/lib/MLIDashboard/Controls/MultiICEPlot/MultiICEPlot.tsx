@@ -14,7 +14,7 @@ import {
   Text,
   getTheme
 } from "office-ui-fabric-react";
-import { Data } from "plotly.js-dist";
+import { Data } from "plotly.js/lib/core";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
