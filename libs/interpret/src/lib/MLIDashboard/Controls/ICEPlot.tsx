@@ -25,6 +25,7 @@ import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { NoDataMessage } from "../SharedComponents";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import "./ICEPlot.scss";
+import { iCEPlotStyles } from "./ICEPlot.styles";
 
 export interface IIcePlotProps {
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
@@ -273,10 +274,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           this.state.rangeView.minErrorMessage !== undefined ||
           this.state.rangeView.stepsErrorMessage !== undefined);
       return (
-        <div className="ICE-wrapper">
-          <div className="feature-pickers">
-            <div className="feature-picker">
-              <div className="path-selector">
+        <div className={iCEPlotStyles.iceWrapper}>
+          <div>
+            <div className={iCEPlotStyles.featurePicker}>
+              <div>
                 <ComboBox
                   options={this.featuresOption}
                   onChange={this.onFeatureSelected}
@@ -292,7 +293,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 />
               </div>
               {this.state.rangeView !== undefined && (
-                <div className="rangeview">
+                <div className={iCEPlotStyles.rangeView}>
                   {this.state.rangeView.type === RangeTypes.categorical && (
                     <ComboBox
                       multiSelect
@@ -307,7 +308,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     />
                   )}
                   {this.state.rangeView.type !== RangeTypes.categorical && (
-                    <div className="parameter-set">
+                    <div className={iCEPlotStyles.parameterSet}>
                       <TextField
                         label={localization.IcePlot.minimumInputLabel}
                         styles={FabricStyles.textFieldStyle}
@@ -336,27 +337,25 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             </div>
           </div>
           {this.state.abortController !== undefined && (
-            <div className="loading">{localization.IcePlot.loadingMessage}</div>
+            <div className={iCEPlotStyles.loading}>
+              {localization.IcePlot.loadingMessage}
+            </div>
           )}
           {this.state.errorMessage && (
-            <div className="loading">{this.state.errorMessage}</div>
+            <div className={iCEPlotStyles.loading}>
+              {this.state.errorMessage}
+            </div>
           )}
           {plotlyProps === undefined &&
             this.state.abortController === undefined && (
-              <div className="charting-prompt">
-                {localization.IcePlot.submitPrompt}
-              </div>
+              <div>{localization.IcePlot.submitPrompt}</div>
             )}
-          {hasError && (
-            <div className="charting-prompt">
-              {localization.IcePlot.topLevelErrorMessage}
-            </div>
-          )}
+          {hasError && <div>{localization.IcePlot.topLevelErrorMessage}</div>}
           {plotlyProps !== undefined &&
             this.state.abortController === undefined &&
             !hasError && (
-              <div className="second-wrapper">
-                <div className="chart-wrapper">
+              <div className={iCEPlotStyles.secondWrapper}>
+                <div className={iCEPlotStyles.chartWrapper}>
                   <AccessibleChart
                     plotlyProps={plotlyProps}
                     theme={this.props.theme}

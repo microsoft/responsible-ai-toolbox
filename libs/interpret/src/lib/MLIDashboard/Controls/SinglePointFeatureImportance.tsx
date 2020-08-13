@@ -26,6 +26,7 @@ import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces";
 
 import "./SinglePointFeatureImportance.scss";
+import { explanationDashboardStyle } from "../ExplanationDashboard.style";
 
 export const LocalBarId = "local_bar_id";
 
@@ -70,7 +71,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
           ? [this.state.selectedSorting]
           : undefined;
       return (
-        <div className="local-summary">
+        <div className={explanationDashboardStyle.viewPanel}>
           {this.props.explanationContext.testDataset &&
             this.props.explanationContext.testDataset.predictedY && (
               <PredictionLabel

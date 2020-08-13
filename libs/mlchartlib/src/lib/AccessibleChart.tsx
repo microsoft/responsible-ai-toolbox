@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 import { formatValue } from "./DisplayFormatters";
 import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
 import { IPlotlyProperty } from "./IPlotlyProperty";
-import { accessibleChartStyle } from "./AccessibleChart.style";
+import { accessibleChartStyles } from "./AccessibleChart.styles";
 
 export interface IPlotlyAnimateProps {
   props: Partial<IPlotlyProperty>;
@@ -68,17 +68,20 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   }
 
   public render(): React.ReactNode {
-    const style = accessibleChartStyle();
     if (this.hasData()) {
       return (
         <>
-          <div className={style.chart} id={this.guid} aria-hidden={true} />
+          <div
+            className={accessibleChartStyles.chart}
+            id={this.guid}
+            aria-hidden={true}
+          />
           {this.createTableWithPlotlyData(this.props.plotlyProps.data)}
         </>
       );
     }
     return (
-      <div className={style.noData}>
+      <div className={accessibleChartStyles.noData}>
         {this.props.localizedStrings
           ? this.props.localizedStrings["noData"]
           : "No Data"}
@@ -124,9 +127,8 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   }
 
   private createTableWithPlotlyData(data: Plotly.Data[]): React.ReactNode {
-    const style = accessibleChartStyle();
     return (
-      <table className={style.plotlyTable}>
+      <table className={accessibleChartStyles.plotlyTable}>
         <tbody>
           {data.map((datum, index) => {
             const xDataLength = datum.x ? datum.x.length : 0;

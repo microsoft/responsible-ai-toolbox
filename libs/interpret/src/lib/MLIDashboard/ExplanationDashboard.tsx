@@ -62,6 +62,7 @@ import { JointDataset } from "./JointDataset";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
 import "./ExplanationDashboard.scss";
+import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 const RowIndex = "rowIndex";
 
 export interface IDashboardContext {
@@ -862,9 +863,9 @@ export class ExplanationDashboard extends React.Component<
       return <div>No valid views. Incomplete data.</div>;
     }
     return (
-      <div className="explainerDashboard">
-        <div className="charts-wrapper">
-          <div className="global-charts-wrapper">
+      <div className={explanationDashboardStyles.explainerDashboard}>
+        <div className={explanationDashboardStyles.chartsWrapper}>
+          <div className={explanationDashboardStyles.globalChartsWrapper}>
             <Pivot
               id={"globalPivot"}
               selectedKey={
@@ -966,16 +967,16 @@ export class ExplanationDashboard extends React.Component<
             )}
           </div>
           {this.state.dashboardContext.explanationContext.localExplanation && (
-            <div className="local-charts-wrapper">
+            <div className={explanationDashboardStyles.explainerDashboard}>
               {this.state.selectedRow === undefined && (
-                <div className="local-placeholder">
-                  <div className="placeholder-text">
+                <div className={explanationDashboardStyles.localPlaceholder}>
+                  <div className={explanationDashboardStyles.placeholderText}>
                     {localization.selectPoint}
                   </div>
                 </div>
               )}
               {this.state.selectedRow !== undefined && (
-                <div className="tabbed-viewer">
+                <div className={explanationDashboardStyles.tabbedViewer}>
                   <Pivot
                     selectedKey={
                       ExplanationDashboard.localTabKeys[
@@ -1009,10 +1010,10 @@ export class ExplanationDashboard extends React.Component<
                         />
                       )}
                   </Pivot>
-                  <div className="view-panel">
-                    <div className="local-commands">
+                  <div className={explanationDashboardStyles.viewPanel}>
+                    <div className={explanationDashboardStyles.localCommands}>
                       <PrimaryButton
-                        className="clear-button"
+                        className={explanationDashboardStyles.clearButton}
                         onClick={this.onClearSelection}
                         text={localization.clearSelection}
                       />
