@@ -54,11 +54,12 @@ export interface IFeatureBinPickerProps {
 }
 
 export interface IWizardState {
+  showIntro: boolean;
   activeTabKey: string;
   selectedModelId?: number;
   dashboardContext: IFairnessContext;
   accuracyMetrics: IAccuracyOption[];
-  parityMetrics: IAccuracyOption[];
+  parityMetrics: IParityOption[];
   selectedAccuracyKey: string;
   selectedParityKey: string;
   featureBins: IBinnedResponse[];

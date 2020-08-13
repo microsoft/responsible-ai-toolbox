@@ -11,8 +11,6 @@ import {
   IconButton,
   getTheme,
   Text,
-  ChoiceGroup,
-  IChoiceGroupOption,
   Spinner,
   SpinnerSize,
   Stack,
@@ -36,7 +34,7 @@ import { IFairnessContext } from "../IFairnessContext";
 import { PredictionTypes } from "../IFairnessProps";
 import { localization } from "../Localization/localization";
 import { MetricsCache } from "../MetricsCache";
-import { ParityModes, ParityOptions } from "../ParityMetrics";
+import { ParityOptions } from "../ParityMetrics";
 import { ModelComparisionChartStyles } from "./ModelComparisionChart.styles";
 
 const theme = getTheme();
@@ -48,8 +46,8 @@ export interface IModelComparisonProps {
   accuracyPickerProps: IAccuracyPickerProps;
   parityPickerProps: IParityPickerProps;
   featureBinPickerProps: IFeatureBinPickerProps;
-  onEditConfigs: () => void;
   onHideIntro: () => void;
+  onEditConfigs: () => void;
   onChartClick?: (data: any) => void;
 }
 
@@ -197,7 +195,6 @@ export class ModelComparisonChart extends React.PureComponent<
       let minAccuracyIndex: number;
       let maxAccuracyIndex: number;
       let minDisparityIndex: number;
-      let maxDisparityIndex: number;
       this.state.accuracyArray.forEach((value, index) => {
         if (value >= maxAccuracy) {
           maxAccuracyIndex = index;
@@ -210,7 +207,6 @@ export class ModelComparisonChart extends React.PureComponent<
       });
       this.state.disparityArray.forEach((value, index) => {
         if (value >= maxDisparity) {
-          maxDisparityIndex = index;
           maxDisparity = value;
         }
         if (value <= minDisparity) {
@@ -269,15 +265,6 @@ export class ModelComparisonChart extends React.PureComponent<
           this.props.accuracyPickerProps.selectedAccuracyKey,
         ),
         formattedMinDisparity,
-      );
-
-      const howToReadText = localization.formatString(
-        localization.ModelComparison.howToReadText,
-        this.props.modelCount.toString(),
-        selectedMetric.title.toLowerCase(),
-        selectedMetric.isMinimization
-          ? localization.ModelComparison.lower
-          : localization.ModelComparison.higher,
       );
 
       const props = _.cloneDeep(this.plotlyProps);
@@ -360,7 +347,7 @@ export class ModelComparisonChart extends React.PureComponent<
             <div className={styles.chart}>
               <AccessibleChart
                 plotlyProps={props}
-                sharedSelectionContext={this.props.selections}
+                onClickHandler={this.props.onChartClick}
                 theme={undefined}
               />
             </div>
@@ -375,6 +362,11 @@ export class ModelComparisonChart extends React.PureComponent<
             <div className={styles.insightsText}>
               <Text className={styles.textSection} block>
                 {insights2}
+              </Text>
+              <Text className={styles.textSection} block>
+                {insights3}
+              </Text>
+              <Text className={styles.textSection} block>
                 {insights4}
               </Text>
             </div>
@@ -471,7 +463,7 @@ export class ModelComparisonChart extends React.PureComponent<
     }
   }
 
-  private readonly featureChanged = (ev: React.FormEvent<HTMLInputElement>, option: IDropdownOption): void => {
+  private readonly featureChanged = (_ev: React.FormEvent<HTMLInputElement>, option: IDropdownOption): void => {
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
       this.props.featureBinPickerProps.selectedBinIndex = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
@@ -481,7 +473,7 @@ export class ModelComparisonChart extends React.PureComponent<
     }
   };
 
-  private readonly accuracyChanged = (ev: React.FormEvent<HTMLInputElement>, option: IDropdownOption): void => {
+  private readonly accuracyChanged = (_ev: React.FormEvent<HTMLInputElement>, option: IDropdownOption): void => {
     const accuracyKey = option.key.toString();
     if (this.state.accuracyKey !== accuracyKey) {
       this.props.accuracyPickerProps.onAccuracyChange(accuracyKey);
@@ -489,7 +481,7 @@ export class ModelComparisonChart extends React.PureComponent<
     }
   };
 
-  private readonly parityChanged = (ev: React.FormEvent<HTMLInputElement>, option: IDropdownOption): void => {
+  private readonly parityChanged = (_ev: React.FormEvent<HTMLInputElement>, option: IDropdownOption): void => {
     const parityKey = option.key.toString();
     if (this.state.parityKey !== parityKey) {
       this.props.parityPickerProps.onParityChange(parityKey);
@@ -497,16 +489,16 @@ export class ModelComparisonChart extends React.PureComponent<
     }
   };
 
-  private readonly handleCloseModalIntro = (event): void => {
+  private readonly handleCloseModalIntro = (_ev): void => {
     this.setState({ showModalIntro: false });
     this.props.onHideIntro();
   };
 
-  private readonly handleOpenModalHelp = (event): void => {
+  private readonly handleOpenModalHelp = (_ev): void => {
     this.setState({ showModalHelp: true });
   };
 
-  private readonly handleCloseModalHelp = (event): void => {
+  private readonly handleCloseModalHelp = (_ev): void => {
     this.setState({ showModalHelp: false });
   };
 }

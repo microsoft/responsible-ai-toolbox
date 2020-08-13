@@ -1,4 +1,4 @@
-import { ActionButton, PrimaryButton, Stack, Text } from "office-ui-fabric-react";
+import { PrimaryButton, Stack, Text } from "office-ui-fabric-react";
 
 import React from "react";
 import { localization } from "../Localization/localization";
