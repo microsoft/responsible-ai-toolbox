@@ -1,6 +1,6 @@
 import { Data, Datum } from "plotly.js/lib/core";
-import * as jmespath from "jmespath";
-import * as _ from "lodash";
+import jmespath from "jmespath";
+import _ from "lodash";
 import { IData } from "./IData";
 import { AccessorMappingFunctions } from "./AccessorMappingFunctions";
 

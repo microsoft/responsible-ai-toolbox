@@ -1,7 +1,7 @@
-import * as _ from "lodash";
-import * as Plotly from "plotly.js/lib/core";
+import _ from "lodash";
+import Plotly from "plotly.js/lib/core";
 import { ITheme } from "office-ui-fabric-react";
-import * as React from "react";
+import React from "react";
 import { v4 } from "uuid";
 import { formatValue } from "./DisplayFormatters";
 import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";

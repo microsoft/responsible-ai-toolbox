@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import _ from "lodash";
 import memoize from "memoize-one";
 import {
   DefaultButton,
@@ -10,7 +10,7 @@ import {
   IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
-import * as React from "react";
+import React from "react";
 import {
   ChartBuilder,
   AccessibleChart,

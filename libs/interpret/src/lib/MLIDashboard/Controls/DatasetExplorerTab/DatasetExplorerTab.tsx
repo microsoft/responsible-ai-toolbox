@@ -1,4 +1,4 @@
-import * as Plotly from "plotly.js/lib/core";
+import Plotly from "plotly.js/lib/core";
 import React from "react";
 import {
   AccessibleChart,
