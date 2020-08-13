@@ -31,6 +31,7 @@ import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
 import "./Beehive.scss";
+import { beenhiveStyles } from "./Beehive.styles";
 
 export interface IBeehiveState {
   calloutContent?: React.ReactNode;
@@ -405,11 +406,11 @@ export class Beehive extends React.PureComponent<
         this.props.selectedRow
       );
       return (
-        <div className="aggregate-chart">
-          <div className="top-controls">
+        <div className={beenhiveStyles.aggregateChart}>
+          <div className={beenhiveStyles.topControls}>
             <ComboBox
               label={localization.FeatureImportanceWrapper.chartType}
-              className="path-selector"
+              className={beenhiveStyles.pathSelector}
               selectedKey={FeatureImportanceModes.beehive}
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
@@ -420,7 +421,7 @@ export class Beehive extends React.PureComponent<
             {this.colorOptions.length > 1 && (
               <ComboBox
                 label={localization.ExplanationScatter.colorValue}
-                className="path-selector"
+                className={beenhiveStyles.pathSelector}
                 selectedKey={this.state.selectedColorOption}
                 onChange={this.setColor}
                 options={this.colorOptions}
@@ -429,9 +430,9 @@ export class Beehive extends React.PureComponent<
                 styles={FabricStyles.smallDropdownStyle}
               />
             )}
-            <div className="slider-control">
-              <div className="slider-label">
-                <span className="label-text">
+            <div className={beenhiveStyles.sliderControl}>
+              <div className={beenhiveStyles.sliderLabel}>
+                <span className={beenhiveStyles.labelText}>
                   {localization.AggregateImportance.topKFeatures}
                 </span>
                 {this.props.dashboardContext.explanationContext
@@ -448,7 +449,7 @@ export class Beehive extends React.PureComponent<
                 )}
               </div>
               <Slider
-                className="feature-slider"
+                className={beenhiveStyles.featureSlider}
                 ariaLabel={localization.AggregateImportance.topKFeatures}
                 max={Math.min(
                   Beehive.maxFeatures,
@@ -464,8 +465,8 @@ export class Beehive extends React.PureComponent<
             </div>
             {this.props.dashboardContext.explanationContext.modelMetadata
               .modelType === ModelTypes.multiclass && (
-              <div className="selector">
-                <div className="selector-label">
+              <div>
+                <div className={beenhiveStyles.selectorLabel}>
                   <span>{localization.CrossClass.label}</span>
                   <IconButton
                     id={this._crossClassIconId}
@@ -478,7 +479,7 @@ export class Beehive extends React.PureComponent<
                   />
                 </div>
                 <ComboBox
-                  className="path-selector"
+                  className={beenhiveStyles.pathSelector}
                   selectedKey={weightContext.selectedKey}
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
@@ -496,9 +497,12 @@ export class Beehive extends React.PureComponent<
               onDismiss={this.onDismiss}
               role="alertdialog"
             >
-              <div className="callout-info">
+              <div className={beenhiveStyles.calloutInfo}>
                 {this.state.calloutContent}
-                <DefaultButton onClick={this.onDismiss}>
+                <DefaultButton
+                  onClick={this.onDismiss}
+                  className={beenhiveStyles.calloutButton}
+                >
                   {localization.CrossClass.close}
                 </DefaultButton>
               </div>
@@ -563,7 +567,7 @@ export class Beehive extends React.PureComponent<
       this.onDismiss();
     } else {
       const calloutContent = (
-        <div className="class-weight-info">
+        <div>
           <span>{localization.CrossClass.overviewInfo}</span>
           <ul>
             <li>{localization.CrossClass.absoluteValInfo}</li>
@@ -581,7 +585,7 @@ export class Beehive extends React.PureComponent<
       this.onDismiss();
     } else {
       const calloutContent = (
-        <div className="class-weight-info">
+        <div>
           <span>
             {localization.FeatureImportanceWrapper.globalImportanceExplanation}
           </span>

@@ -61,7 +61,6 @@ import { EbmExplanation } from "./Controls/EbmExplanation";
 import { JointDataset } from "./JointDataset";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
-import "./ExplanationDashboard.scss";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 const RowIndex = "rowIndex";
 
