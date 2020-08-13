@@ -24,7 +24,6 @@ import { IExplanationContext, ModelTypes } from "../IExplanationContext";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { NoDataMessage } from "../SharedComponents";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
-import "./ICEPlot.scss";
 import { iCEPlotStyles } from "./ICEPlot.styles";
 
 export interface IIcePlotProps {

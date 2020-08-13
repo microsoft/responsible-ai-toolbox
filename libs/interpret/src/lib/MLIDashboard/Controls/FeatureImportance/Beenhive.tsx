@@ -30,7 +30,6 @@ import { ScatterUtils } from "../Scatter";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
-import "./Beehive.scss";
 import { beenhiveStyles } from "./Beehive.styles";
 
 export interface IBeehiveState {
