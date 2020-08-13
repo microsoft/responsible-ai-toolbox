@@ -48,20 +48,3 @@ export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> = mergeStyleSets<
   },
   chartWrapper: { height: "100%" }
 });
-
-// .ICE-wrapper {
-//   .unavailable,
-//   .charting-prompt,
-//   .loading {
-//   }
-//   .feature-picker {
-//   }
-//   .rangeview {
-//     .parameter-set {
-//     }
-//   }
-//   .second-wrapper {
-//   }
-//   .chart-wrapper {
-//   }
-// }
