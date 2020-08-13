@@ -35,18 +35,17 @@
     "workspace-schematic": "nx workspace-schematic"
   },
   "dependencies": {
-    "jmespath": "0.15.0",
-    "localized-strings": "0.2.4",
-    "lodash": "4.17.19",
-    "memoize-one": "5.1.1",
-    "moment": "2.27.0",
-    "nx": "^10.0.10",
-    "office-ui-fabric-react": "7.124.1",
-    "plotly.js": "1.54.7",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-router-dom": "5.2.0",
-    "uuid": "8.3.0"
+    "jmespath": "^0.15.0",
+    "localized-strings": "^0.2.4",
+    "lodash": "^4.17.11",
+    "memoize-one": "^5.1.1",
+    "moment": "^2.24.0",
+    "office-ui-fabric-react": "^7.117.0",
+    "plotly.js": "^1.48.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.0.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/core": "7.11.1",

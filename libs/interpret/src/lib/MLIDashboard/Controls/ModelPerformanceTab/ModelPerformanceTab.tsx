@@ -10,7 +10,7 @@ import {
 import _ from "lodash";
 
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { Transform } from "plotly.js/lib/core";
+import { Transform } from "plotly.js";
 
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { localization } from "../../../Localization/localization";
