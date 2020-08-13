@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   DefaultButton,
   IconButton,
@@ -60,7 +60,7 @@ export class Beehive extends React.PureComponent<
   // once per dataset and
   private static populateMappers: (
     data: IExplanationContext
-  ) => Array<(value: number | string) => number> = (memoize as any).default(
+  ) => Array<(value: number | string) => number> = memoize(
     (data: IExplanationContext): Array<(value: number | string) => number> => {
       return data.modelMetadata.featureNames.map((_val, featureIndex) => {
         if (data.modelMetadata.featureIsCategorical[featureIndex]) {
@@ -138,18 +138,16 @@ export class Beehive extends React.PureComponent<
 
   private static generateSortVector: (
     data: IExplanationContext
-  ) => number[] = (memoize as any).default(
-    (data: IExplanationContext): number[] => {
-      return ModelExplanationUtils.buildSortedVector(
-        data.globalExplanation.perClassFeatureImportances
-      );
-    }
-  );
+  ) => number[] = memoize((data: IExplanationContext): number[] => {
+    return ModelExplanationUtils.buildSortedVector(
+      data.globalExplanation.perClassFeatureImportances
+    );
+  });
 
   private static projectData: (
     data: IExplanationContext,
     sortVector: number[]
-  ) => IProjectedData[] = (memoize as any).default(
+  ) => IProjectedData[] = memoize(
     (data: IExplanationContext, sortVector: number[]): IProjectedData[] => {
       const mappers: Array<(value: string | number) => number> | undefined =
         data.testDataset.dataset !== undefined
@@ -211,7 +209,7 @@ export class Beehive extends React.PureComponent<
     sortVector: number[],
     selectedOption: IComboBoxOption,
     selections: string[]
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       explanationContext: IExplanationContext,
       sortVector: number[],

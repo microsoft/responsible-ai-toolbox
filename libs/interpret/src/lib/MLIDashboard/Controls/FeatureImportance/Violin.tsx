@@ -1,5 +1,5 @@
 import _ from "lodash";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   DefaultButton,
   IconButton,
@@ -56,7 +56,7 @@ export class Violin extends React.PureComponent<
     data: IExplanationContext,
     sortVector: number[],
     groupBy: GroupByOptions
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       data: IExplanationContext,
       sortVector: number[],
@@ -93,7 +93,7 @@ export class Violin extends React.PureComponent<
     data: IExplanationContext,
     sortVector: number[],
     groupBy: GroupByOptions
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       data: IExplanationContext,
       sortVector: number[],
@@ -167,7 +167,7 @@ export class Violin extends React.PureComponent<
   private static getClassesArray: (
     data: IExplanationContext,
     groupBy: GroupByOptions
-  ) => number[] = (memoize as any).default(
+  ) => number[] = memoize(
     (data: IExplanationContext, groupBy: GroupByOptions): number[] => {
       switch (groupBy) {
         case GroupByOptions.predictedY: {

@@ -1,6 +1,6 @@
 import { initializeIcons } from "@uifabric/icons";
 import * as _ from "lodash";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   PrimaryButton,
   IComboBox,
@@ -103,32 +103,30 @@ export class ExplanationDashboard extends React.Component<
 
   private static transposeLocalImportanceMatrix: (
     input: number[][][]
-  ) => number[][][] = (memoize as any).default(
-    (input: number[][][]): number[][][] => {
-      const numClasses = input.length;
-      const numRows = input[0].length;
-      const numFeatures = input[0][0].length;
-      const result: number[][][] = Array(numRows)
-        .fill(0)
-        .map(() =>
-          Array(numFeatures)
-            .fill(0)
-            .map(() => Array(numClasses).fill(0))
-        );
-      input.forEach((rowByFeature, classIndex) => {
-        rowByFeature.forEach((featureArray, rowIndex) => {
-          featureArray.forEach((value, featureIndex) => {
-            result[rowIndex][featureIndex][classIndex] = value;
-          });
+  ) => number[][][] = memoize((input: number[][][]): number[][][] => {
+    const numClasses = input.length;
+    const numRows = input[0].length;
+    const numFeatures = input[0][0].length;
+    const result: number[][][] = Array(numRows)
+      .fill(0)
+      .map(() =>
+        Array(numFeatures)
+          .fill(0)
+          .map(() => Array(numClasses).fill(0))
+      );
+    input.forEach((rowByFeature, classIndex) => {
+      rowByFeature.forEach((featureArray, rowIndex) => {
+        featureArray.forEach((value, featureIndex) => {
+          result[rowIndex][featureIndex][classIndex] = value;
         });
       });
-      return result;
-    }
-  );
+    });
+    return result;
+  });
 
   private static buildWeightDropdownOptions: (
     explanationContext: IExplanationContext
-  ) => IDropdownOption[] = (memoize as any).default(
+  ) => IDropdownOption[] = memoize(
     (explanationContext: IExplanationContext): IDropdownOption[] => {
       const result: IDropdownOption[] = [
         { key: WeightVectors.absAvg, text: localization.absoluteAverage }
@@ -148,52 +146,50 @@ export class ExplanationDashboard extends React.Component<
 
   private static getClassLength: (
     props: IExplanationDashboardProps
-  ) => number = (memoize as any).default(
-    (props: IExplanationDashboardProps): number => {
+  ) => number = memoize((props: IExplanationDashboardProps): number => {
+    if (
+      props.precomputedExplanations &&
+      props.precomputedExplanations.localFeatureImportance &&
+      props.precomputedExplanations.localFeatureImportance.scores
+    ) {
+      const localImportances =
+        props.precomputedExplanations.localFeatureImportance.scores;
       if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.localFeatureImportance &&
-        props.precomputedExplanations.localFeatureImportance.scores
+        (localImportances as number[][][]).every((dim1) => {
+          return dim1.every((dim2) => Array.isArray(dim2));
+        })
       ) {
-        const localImportances =
-          props.precomputedExplanations.localFeatureImportance.scores;
-        if (
-          (localImportances as number[][][]).every((dim1) => {
-            return dim1.every((dim2) => Array.isArray(dim2));
-          })
-        ) {
-          return localImportances.length;
-        } else {
-          // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-          return 1;
-        }
+        return localImportances.length;
+      } else {
+        // 2d is regression (could be a non-scikit convention binary, but that is not supported)
+        return 1;
       }
-      if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.globalFeatureImportance &&
-        props.precomputedExplanations.globalFeatureImportance.scores
-      ) {
-        // determine if passed in vaules is 1D or 2D
-        if (
-          (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][]).every((dim1) => Array.isArray(dim1))
-        ) {
-          return (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][])[0].length;
-        }
-      }
-      if (
-        props.probabilityY &&
-        Array.isArray(props.probabilityY) &&
-        Array.isArray(props.probabilityY[0]) &&
-        props.probabilityY[0].length > 0
-      ) {
-        return props.probabilityY[0].length;
-      }
-      // default to regression case
-      return 1;
     }
-  );
+    if (
+      props.precomputedExplanations &&
+      props.precomputedExplanations.globalFeatureImportance &&
+      props.precomputedExplanations.globalFeatureImportance.scores
+    ) {
+      // determine if passed in vaules is 1D or 2D
+      if (
+        (props.precomputedExplanations.globalFeatureImportance
+          .scores as number[][]).every((dim1) => Array.isArray(dim1))
+      ) {
+        return (props.precomputedExplanations.globalFeatureImportance
+          .scores as number[][])[0].length;
+      }
+    }
+    if (
+      props.probabilityY &&
+      Array.isArray(props.probabilityY) &&
+      Array.isArray(props.probabilityY[0]) &&
+      props.probabilityY[0].length > 0
+    ) {
+      return props.probabilityY[0].length;
+    }
+    // default to regression case
+    return 1;
+  });
 
   private readonly selectionContext = new SelectionContext(RowIndex, 1);
   private selectionSubscription: string;

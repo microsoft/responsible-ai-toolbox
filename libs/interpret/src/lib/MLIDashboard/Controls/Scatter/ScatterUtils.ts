@@ -1,5 +1,5 @@
 import _ from "lodash";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   AccessorMappingFunctionNames,
   ChartBuilder,
@@ -48,7 +48,7 @@ export class ScatterUtils {
   public static populatePlotlyProps: (
     data: IProjectedData[],
     plotlyProps: IPlotlyProperty
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (data: IProjectedData[], plotlyProps: IPlotlyProperty): IPlotlyProperty => {
       const result = _.cloneDeep(plotlyProps);
       result.data = result.data
@@ -65,7 +65,7 @@ export class ScatterUtils {
   public static buildOptions: (
     explanationContext: IExplanationContext,
     includeFeatureImportance: boolean
-  ) => IDropdownOption[] = (memoize as any).default(
+  ) => IDropdownOption[] = memoize(
     (
       explanationContext: IExplanationContext,
       includeFeatureImportance: boolean
@@ -188,7 +188,7 @@ export class ScatterUtils {
   // Just re-zipper to form;
   public static projectData: (
     explanationContext: IExplanationContext
-  ) => IProjectedData[] = (memoize as any).default(
+  ) => IProjectedData[] = memoize(
     (explanationContext: IExplanationContext): IProjectedData[] => {
       return explanationContext.testDataset.dataset.map(
         (featuresArray, rowIndex) => {

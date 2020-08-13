@@ -1,5 +1,5 @@
 import _ from "lodash";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   ComboBox,
   IComboBox,
@@ -66,7 +66,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     rangeType: RangeTypes,
     xData?: Array<number | string>,
     yData?: number[] | number[][]
-  ) => IPlotlyProperty | undefined = (memoize as any).default(
+  ) => IPlotlyProperty | undefined = memoize(
     (
       modelType: ModelTypes,
       featureName: string,
