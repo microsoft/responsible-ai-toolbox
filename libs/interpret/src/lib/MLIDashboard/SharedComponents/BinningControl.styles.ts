@@ -25,11 +25,3 @@ export const binningControlStyles: IProcessedStyleSet<IBinningControlStyles> = m
   },
   parameterSet: { display: "flex" }
 });
-
-// .feature-picker {
-// }
-// .rangeview {
-//   .parameter-set {
-//     ,
-//   }
-// }
