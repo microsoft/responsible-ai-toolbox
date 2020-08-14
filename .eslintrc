@@ -333,7 +333,7 @@
       //e2e only contains ts
       "files": ["*.spec.ts"],
       "rules": {
-        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.test$"]]
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.spec$"]]
       }
     },
     {
