@@ -1,15 +1,17 @@
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { IHelpMessage } from "../Interfaces/IStringsParam";
-import "./NoDataMessage.scss";
+import { noDataMessageStyles } from "./NoDataMessage.styles";
 
 export class NoDataMessage extends React.PureComponent<{
   explanationStrings?: IHelpMessage[];
 }> {
   public render(): React.ReactNode {
     return (
-      <div className="centered">
-        <div className="primary-message">{localization.BarChart.noData}</div>
+      <div className={noDataMessageStyles.centered}>
+        <div className={noDataMessageStyles.primaryMessage}>
+          {localization.BarChart.noData}
+        </div>
         {this.renderExplanationStrings()}
       </div>
     );
@@ -26,6 +28,8 @@ export class NoDataMessage extends React.PureComponent<{
     const children = this.props.explanationStrings.map((message, index) => {
       return <span key={index}>{message.displayText}</span>;
     });
-    return <div className="secondary-message">{children}</div>;
+    return (
+      <div className={noDataMessageStyles.secondaryMessage}>{children}</div>
+    );
   }
 }
