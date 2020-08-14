@@ -3,14 +3,14 @@ import { Stack, StackItem, Text } from "office-ui-fabric-react";
 
 import { localization } from "../Localization/localization";
 import { IWizardTabProps } from "../IWizardTabProps";
-import { IParityPickerProps } from "../FairnessWizard";
+import { IParityPickerPropsv2 } from "../FairnessWizard";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { WizardFooter } from "./WizardFooter";
 import { TileList, ITileProp } from "./TileList";
 import { ParityTabStyles } from './ParityTab.styles';
 
 export interface IParityTabProps extends IWizardTabProps {
-  parityPickerProps: IParityPickerProps;
+  parityPickerProps: IParityPickerPropsv2;
 }
 
 export class ParityTab extends React.PureComponent<IParityTabProps> {

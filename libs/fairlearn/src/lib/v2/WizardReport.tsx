@@ -13,7 +13,7 @@ import { AccuracyOptions } from "./AccuracyMetrics";
 import { ChartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
-import { IMetricResponse, PredictionTypes } from "./IFairnessProps";
+import { IMetricResponsev2, PredictionTypes } from "./IFairnessProps";
 import { localization } from "./Localization/localization";
 import { ParityModes } from "./ParityMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
@@ -834,7 +834,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let binnedUnderprediction: number[];
       let predictions: number[];
       let errors: number[];
-      let outcomes: IMetricResponse;
+      let outcomes: IMetricResponsev2;
       let outcomeDisparity: number;
       const accuracy = await this.props.metricsCache.getMetric(
         this.props.dashboardContext.binVector,
