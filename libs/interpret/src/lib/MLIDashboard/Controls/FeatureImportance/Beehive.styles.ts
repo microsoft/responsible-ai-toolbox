@@ -4,7 +4,7 @@ import {
   IProcessedStyleSet
 } from "office-ui-fabric-react";
 
-export interface IBeenhiveStyles {
+export interface IBeehiveStyles {
   aggregateChart: IStyle;
   topControls: IStyle;
   featureSlider: IStyle;
@@ -17,8 +17,8 @@ export interface IBeenhiveStyles {
   calloutButton: IStyle;
 }
 
-export const beenhiveStyles: IProcessedStyleSet<IBeenhiveStyles> = mergeStyleSets<
-  IBeenhiveStyles
+export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> = mergeStyleSets<
+  IBeehiveStyles
 >({
   aggregateChart: {
     width: "100%",

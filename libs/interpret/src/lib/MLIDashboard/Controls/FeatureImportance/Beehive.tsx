@@ -28,7 +28,7 @@ import { ScatterUtils } from "../Scatter/ScatterUtils";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
-import { beenhiveStyles } from "./Beehive.styles";
+import { beehiveStyles } from "./Beehive.styles";
 
 export interface IBeehiveState {
   calloutContent?: React.ReactNode;
@@ -403,11 +403,11 @@ export class Beehive extends React.PureComponent<
         this.props.selectedRow
       );
       return (
-        <div className={beenhiveStyles.aggregateChart}>
-          <div className={beenhiveStyles.topControls}>
+        <div className={beehiveStyles.aggregateChart}>
+          <div className={beehiveStyles.topControls}>
             <ComboBox
               label={localization.FeatureImportanceWrapper.chartType}
-              className={beenhiveStyles.pathSelector}
+              className={beehiveStyles.pathSelector}
               selectedKey={FeatureImportanceModes.beehive}
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
@@ -418,7 +418,7 @@ export class Beehive extends React.PureComponent<
             {this.colorOptions.length > 1 && (
               <ComboBox
                 label={localization.ExplanationScatter.colorValue}
-                className={beenhiveStyles.pathSelector}
+                className={beehiveStyles.pathSelector}
                 selectedKey={this.state.selectedColorOption}
                 onChange={this.setColor}
                 options={this.colorOptions}
@@ -427,9 +427,9 @@ export class Beehive extends React.PureComponent<
                 styles={FabricStyles.smallDropdownStyle}
               />
             )}
-            <div className={beenhiveStyles.sliderControl}>
-              <div className={beenhiveStyles.sliderLabel}>
-                <span className={beenhiveStyles.labelText}>
+            <div className={beehiveStyles.sliderControl}>
+              <div className={beehiveStyles.sliderLabel}>
+                <span className={beehiveStyles.labelText}>
                   {localization.AggregateImportance.topKFeatures}
                 </span>
                 {this.props.dashboardContext.explanationContext
@@ -446,7 +446,7 @@ export class Beehive extends React.PureComponent<
                 )}
               </div>
               <Slider
-                className={beenhiveStyles.featureSlider}
+                className={beehiveStyles.featureSlider}
                 ariaLabel={localization.AggregateImportance.topKFeatures}
                 max={Math.min(
                   Beehive.maxFeatures,
@@ -463,7 +463,7 @@ export class Beehive extends React.PureComponent<
             {this.props.dashboardContext.explanationContext.modelMetadata
               .modelType === ModelTypes.multiclass && (
               <div>
-                <div className={beenhiveStyles.selectorLabel}>
+                <div className={beehiveStyles.selectorLabel}>
                   <span>{localization.CrossClass.label}</span>
                   <IconButton
                     id={this._crossClassIconId}
@@ -476,7 +476,7 @@ export class Beehive extends React.PureComponent<
                   />
                 </div>
                 <ComboBox
-                  className={beenhiveStyles.pathSelector}
+                  className={beehiveStyles.pathSelector}
                   selectedKey={weightContext.selectedKey}
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
@@ -494,11 +494,11 @@ export class Beehive extends React.PureComponent<
               onDismiss={this.onDismiss}
               role="alertdialog"
             >
-              <div className={beenhiveStyles.calloutInfo}>
+              <div className={beehiveStyles.calloutInfo}>
                 {this.state.calloutContent}
                 <DefaultButton
                   onClick={this.onDismiss}
-                  className={beenhiveStyles.calloutButton}
+                  className={beehiveStyles.calloutButton}
                 >
                   {localization.CrossClass.close}
                 </DefaultButton>
