@@ -9,7 +9,7 @@ import {
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { FabricStyles } from "../FabricStyles";
 import { localization } from "../../Localization/localization";
-import { featureEditingTileStyles } from "./FeatureEditingTile.style";
+import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
 
 export interface IFeatureEditingTileProps {
   onEdit: (index: number, val: string | number, error?: string) => void;
