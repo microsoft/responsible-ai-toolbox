@@ -15,7 +15,6 @@ import {
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
-import "./BinningControl.scss";
 import { binningControlStyles } from "./BinningControl.styles";
 
 export interface IBinningProps {

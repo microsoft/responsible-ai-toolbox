@@ -197,11 +197,10 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     );
 
     return (
-      <div className="aggregate-chart">
-        <div className="top-controls">
+      <div>
+        <div>
           <ComboBox
             label={localization.feature}
-            className="pathSelector"
             selectedKey={this.state.selectedFeature}
             onChange={this.onFeatureSelect}
             options={this.featureOptions}
