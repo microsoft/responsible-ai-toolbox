@@ -1,5 +1,5 @@
 import React from "react";
-import { FairnessWizard, IMetricResponse } from "@responsible-ai/fairlearn";
+import { FairnessWizardv1, IMetricResponsev1 } from "@responsible-ai/fairlearn";
 import { createTheme } from "@uifabric/styling";
 import _ from "lodash";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
@@ -164,7 +164,7 @@ export class App extends React.Component<any, any> {
           }}
         >
           <div style={{ width: "940px" }}>
-            <FairnessWizard
+            <FairnessWizardv1
               // modelInformation={{ modelClass: "blackbox" } as any}
               dataSummary={{
                 featureNames: data.featureNames,
@@ -226,7 +226,7 @@ export class App extends React.Component<any, any> {
   //     return Promise.resolve(data.map(() => Math.random()));
   // };
 
-  private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
+  private generateRandomMetrics(data, signal): Promise<IMetricResponsev1> {
     const binSize = Math.max(...data.binVector);
     const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
     bins[2] = undefined;

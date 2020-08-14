@@ -1,7 +1,7 @@
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
-import { IAccuracyPickerProps } from "../FairnessWizard";
+import { IAccuracyPickerPropsv2 } from "../FairnessWizard";
 import { PredictionTypes } from "../IFairnessProps";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { localization } from "../Localization/localization";
@@ -11,7 +11,7 @@ import { TileList } from "./TileList";
 import { WizardFooter } from "./WizardFooter";
 
 export interface IAccuracyPickingTabProps extends IWizardTabProps {
-  accuracyPickerProps: IAccuracyPickerProps;
+  accuracyPickerProps: IAccuracyPickerPropsv2;
 }
 
 export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {

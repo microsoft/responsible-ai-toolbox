@@ -15,7 +15,7 @@ export type PredictionType =
   | PredictionTypes.probability
   | PredictionTypes.regression;
 
-export interface IMetricResponse {
+export interface IMetricResponsev2 {
   global?: number;
   bins?: number[];
 }
@@ -29,7 +29,7 @@ export interface IMetricRequest {
 export interface IFeatureBinMeta {
   binVector: number[];
   binLabels: string[];
-  // this could alos be held in a 'features name' array separate with the same length.
+  // this could also be held in a 'features name' array separate with the same length.
   featureBinName: string;
 }
 
@@ -43,7 +43,7 @@ export interface IFairnessProps {
   startingTabIndex?: number;
   dataSummary: IDatasetSummary;
   testData?: any[][];
-  precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
+  precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponsev2 }>>;
   precomputedFeatureBins?: IFeatureBinMeta[];
   customMetrics: ICustomMetric[];
   predictionType?: PredictionTypes;
@@ -63,5 +63,5 @@ export interface IFairnessProps {
   requestMetrics: (
     request: IMetricRequest,
     abortSignal?: AbortSignal
-  ) => Promise<IMetricResponse>;
+  ) => Promise<IMetricResponsev2>;
 }

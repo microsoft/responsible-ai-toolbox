@@ -10,18 +10,18 @@ import {
 } from "office-ui-fabric-react";
 
 import { localization } from "../Localization/localization";
-import { IParityPickerProps } from "../FairnessWizard";
+import { IParityPickerPropsv1 } from "../FairnessWizard";
 
 interface IState {
   showCallout: boolean;
 }
 
 export class ParityPicker extends React.PureComponent<
-  IParityPickerProps,
+  IParityPickerPropsv1,
   IState
 > {
   private _parityDropdownHelpId = "_parityDropdownHelpId";
-  public constructor(props: IParityPickerProps) {
+  public constructor(props: IParityPickerPropsv1) {
     super(props);
     this.state = { showCallout: false };
   }

@@ -10,18 +10,18 @@ import {
 } from "office-ui-fabric-react";
 
 import { localization } from "../Localization/localization";
-import { IAccuracyPickerProps } from "../FairnessWizard";
+import { IAccuracyPickerPropsv1 } from "../FairnessWizard";
 
 interface IState {
   showCallout: boolean;
 }
 
 export class AccuracyPicker extends React.PureComponent<
-  IAccuracyPickerProps,
+  IAccuracyPickerPropsv1,
   IState
 > {
   private _accuracyDropdownHelpId = "_accuracyDropdownHelpId";
-  public constructor(props: IAccuracyPickerProps) {
+  public constructor(props: IAccuracyPickerPropsv1) {
     super(props);
     this.state = { showCallout: false };
   }

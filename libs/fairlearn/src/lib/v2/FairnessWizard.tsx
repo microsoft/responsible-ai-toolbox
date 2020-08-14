@@ -35,25 +35,25 @@ import { BinnedResponseBuilder } from './BinnedResponseBuilder';
 
 import { defaultTheme } from "./Themes";
 
-export interface IAccuracyPickerProps {
+export interface IAccuracyPickerPropsv2 {
   accuracyOptions: IAccuracyOption[];
   selectedAccuracyKey: string;
   onAccuracyChange: (newKey: string) => void;
 }
 
-export interface IParityPickerProps {
+export interface IParityPickerPropsv2 {
   parityOptions: IParityOption[];
   selectedParityKey: string;
   onParityChange: (newKey: string) => void;
 }
 
-export interface IFeatureBinPickerProps {
+export interface IFeatureBinPickerPropsv2 {
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
   onBinChange: (index: number) => void;
 }
 
-export interface IWizardState {
+export interface IWizardStatev2 {
   showIntro: boolean;
   activeTabKey: string;
   selectedModelId?: number;
@@ -77,15 +77,15 @@ const flights = {
   skipDisparity: false
 };
 
-export class FairnessWizard extends React.PureComponent<
+export class FairnessWizardv2 extends React.PureComponent<
   IFairnessProps,
-  IWizardState
+  IWizardStatev2
   > {
   private static iconsInitialized = false;
 
   public constructor(props: IFairnessProps) {
     super(props);
-    FairnessWizard.initializeIcons(props);
+    FairnessWizardv2.initializeIcons(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -114,7 +114,7 @@ export class FairnessWizard extends React.PureComponent<
         selectedAccuracyKey: accuracyMetrics[0].key,
         parityMetrics: parityMetrics,
         selectedParityKey: parityMetrics[0].key,
-        dashboardContext: FairnessWizard.buildPrecomputedFairnessContext(props),
+        dashboardContext: FairnessWizardv2.buildPrecomputedFairnessContext(props),
         activeTabKey: featureBinTabKey,
         featureBins: readonlyFeatureBins,
         selectedBinIndex: 0,
@@ -123,7 +123,7 @@ export class FairnessWizard extends React.PureComponent<
       };
       return;
     }
-    const fairnessContext = FairnessWizard.buildInitialFairnessContext(props);
+    const fairnessContext = FairnessWizardv2.buildInitialFairnessContext(props);
 
     const featureBins = this.buildFeatureBins(fairnessContext);
     if (featureBins.length > 0) {
@@ -174,11 +174,11 @@ export class FairnessWizard extends React.PureComponent<
 
   private static initializeIcons(props: IFairnessProps): void {
     if (
-      FairnessWizard.iconsInitialized === false &&
+      FairnessWizardv2.iconsInitialized === false &&
       props.shouldInitializeIcons !== false
     ) {
       initializeIcons(props.iconUrl);
-      FairnessWizard.iconsInitialized = true;
+      FairnessWizardv2.iconsInitialized = true;
     }
   }
 
@@ -198,8 +198,8 @@ export class FairnessWizard extends React.PureComponent<
       predictions: props.predictedY,
       binVector: [],
       groupNames: [],
-      modelMetadata: FairnessWizard.buildModelMetadata(props),
-      modelNames: FairnessWizard.buildModelNames(props)
+      modelMetadata: FairnessWizardv2.buildModelMetadata(props),
+      modelNames: FairnessWizardv2.buildModelNames(props)
     };
   }
 
@@ -212,8 +212,8 @@ export class FairnessWizard extends React.PureComponent<
       predictions: props.predictedY,
       binVector: props.precomputedFeatureBins[0].binVector,
       groupNames: props.precomputedFeatureBins[0].binLabels,
-      modelMetadata: FairnessWizard.buildPrecomputedModelMetadata(props),
-      modelNames: FairnessWizard.buildModelNames(props)
+      modelMetadata: FairnessWizardv2.buildPrecomputedModelMetadata(props),
+      modelNames: FairnessWizardv2.buildModelNames(props)
     };
   }
 
@@ -235,8 +235,8 @@ export class FairnessWizard extends React.PureComponent<
     }
     const classNames =
       props.dataSummary.classNames ||
-      FairnessWizard.buildIndexedNames(
-        FairnessWizard.getClassLength(props),
+      FairnessWizardv2.buildIndexedNames(
+        FairnessWizardv2.getClassLength(props),
         localization.defaultClassNames
       );
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
@@ -267,15 +267,15 @@ export class FairnessWizard extends React.PureComponent<
       featureNames =
         featureLength === 1
           ? [localization.defaultSingleFeatureName]
-          : FairnessWizard.buildIndexedNames(
+          : FairnessWizardv2.buildIndexedNames(
             featureLength,
             localization.defaultFeatureNames
           );
     }
     const classNames =
       props.dataSummary.classNames ||
-      FairnessWizard.buildIndexedNames(
-        FairnessWizard.getClassLength(props),
+      FairnessWizardv2.buildIndexedNames(
+        FairnessWizardv2.getClassLength(props),
         localization.defaultClassNames
       );
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
@@ -288,7 +288,7 @@ export class FairnessWizard extends React.PureComponent<
       featureIsCategorical,
       props.dataSummary.categoricalMap
     );
-    const predictionType = FairnessWizard.determinePredictionType(
+    const predictionType = FairnessWizardv2.determinePredictionType(
       props.trueY,
       props.predictedY,
       props.predictionType
@@ -559,11 +559,11 @@ export class FairnessWizard extends React.PureComponent<
   };
 
   private readonly setAccuracyKey = (key: string): void => {
-    const value: Partial<IWizardState> = { selectedAccuracyKey: key };
+    const value: Partial<IWizardStatev2> = { selectedAccuracyKey: key };
     if (flights.skipDisparity) {
       value.selectedParityKey = key;
     }
-    this.setState(value as IWizardState);
+    this.setState(value as IWizardStatev2);
   };
 
   private readonly setParityKey = (key: string): void => {

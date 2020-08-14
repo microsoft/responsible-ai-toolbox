@@ -25,9 +25,9 @@ import {
 import React from "react";
 import { AccuracyOptions } from "../AccuracyMetrics";
 import {
-  IAccuracyPickerProps,
-  IFeatureBinPickerProps,
-  IParityPickerProps
+  IAccuracyPickerPropsv2,
+  IFeatureBinPickerPropsv2,
+  IParityPickerPropsv2
 } from "../FairnessWizard";
 import { FormatMetrics } from "../FormatMetrics";
 import { IFairnessContext } from "../IFairnessContext";
@@ -43,9 +43,9 @@ export interface IModelComparisonProps {
   dashboardContext: IFairnessContext;
   metricsCache: MetricsCache;
   modelCount: number;
-  accuracyPickerProps: IAccuracyPickerProps;
-  parityPickerProps: IParityPickerProps;
-  featureBinPickerProps: IFeatureBinPickerProps;
+  accuracyPickerProps: IAccuracyPickerPropsv2;
+  parityPickerProps: IParityPickerPropsv2;
+  featureBinPickerProps: IFeatureBinPickerPropsv2;
   onHideIntro: () => void;
   onEditConfigs: () => void;
   onChartClick?: (data: any) => void;
