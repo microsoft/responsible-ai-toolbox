@@ -1,9 +1,4 @@
 import React from 'react';
-import { List } from 'office-ui-fabric-react/lib/List';
-import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { mergeStyleSets } from '@uifabric/styling';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { localization } from '../Localization/localization';
 import { OverallTableStyles } from './OverallTable.styles';
 
@@ -17,16 +12,14 @@ export interface IOverallTableProps {
     binGroup: string;
 }
 
-interface IBinItem {
-    title: string;
-    score: string;
-    isMin: boolean;
-    isMax: boolean;
-}
+// interface IBinItem {
+//     title: string;
+//     score: string;
+//     isMin: boolean;
+//     isMax: boolean;
+// }
 
 export class OverallTable extends React.PureComponent<IOverallTableProps> {
-    private static readonly classNames = mergeStyleSets({});
-
     public render(): React.ReactNode {
         const styles = OverallTableStyles();
         let minIndexes = [];
