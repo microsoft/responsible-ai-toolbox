@@ -107,6 +107,7 @@
         ]
       }
     ],
+    "no-else-return": "error",
     "quotes": [
       "error",
       "double",

@@ -169,12 +169,11 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       return ModelExplanationUtils.buildSortedVector(
         localExplanation.values[this.props.selectedRow]
       );
-    } else {
-      return ModelExplanationUtils.buildSortedVector(
-        localExplanation.values[this.props.selectedRow],
-        this.state.selectedSorting
-      );
     }
+    return ModelExplanationUtils.buildSortedVector(
+      localExplanation.values[this.props.selectedRow],
+      this.state.selectedSorting
+    );
   }
 
   private getFeatureByClassMatrix(): number[][] {

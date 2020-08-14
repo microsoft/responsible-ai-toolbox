@@ -164,10 +164,9 @@ export class ExplanationDashboard extends React.Component<
         })
       ) {
         return localImportances.length;
-      } else {
-        // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-        return 1;
       }
+      // 2d is regression (could be a non-scikit convention binary, but that is not supported)
+      return 1;
     }
     if (
       props.precomputedExplanations &&

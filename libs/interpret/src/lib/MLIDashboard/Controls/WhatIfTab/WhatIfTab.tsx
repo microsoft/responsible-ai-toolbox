@@ -1216,43 +1216,42 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         </div>
       );
-    } else {
-      const row = this.props.jointDataset.getRow(
-        this.state.selectedWhatIfRootIndex
-      );
-      const trueValue = this.props.jointDataset.hasTrueY
-        ? row[JointDataset.TrueYLabel]
-        : undefined;
-      const predictedValue = this.props.jointDataset.hasPredictedY
-        ? row[JointDataset.PredictedYLabel]
-        : undefined;
-      return (
-        <div className={classNames.predictedBlock}>
-          <div>
-            {trueValue !== undefined && (
-              <div>
-                <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.trueValue}
-                </Text>
-                <Text variant="small">{trueValue}</Text>
-              </div>
-            )}
-            {predictedValue !== undefined && (
-              <div>
-                <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.predictedValue}
-                </Text>
-                <Text variant="small">
-                  {predictedValue.toLocaleString(undefined, {
-                    maximumFractionDigits: 3
-                  })}
-                </Text>
-              </div>
-            )}
-          </div>
-        </div>
-      );
     }
+    const row = this.props.jointDataset.getRow(
+      this.state.selectedWhatIfRootIndex
+    );
+    const trueValue = this.props.jointDataset.hasTrueY
+      ? row[JointDataset.TrueYLabel]
+      : undefined;
+    const predictedValue = this.props.jointDataset.hasPredictedY
+      ? row[JointDataset.PredictedYLabel]
+      : undefined;
+    return (
+      <div className={classNames.predictedBlock}>
+        <div>
+          {trueValue !== undefined && (
+            <div>
+              <Text className={classNames.boldText} variant="small">
+                {localization.WhatIfTab.trueValue}
+              </Text>
+              <Text variant="small">{trueValue}</Text>
+            </div>
+          )}
+          {predictedValue !== undefined && (
+            <div>
+              <Text className={classNames.boldText} variant="small">
+                {localization.WhatIfTab.predictedValue}
+              </Text>
+              <Text variant="small">
+                {predictedValue.toLocaleString(undefined, {
+                  maximumFractionDigits: 3
+                })}
+              </Text>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   }
 
   private buildCustomPredictionLabels(
@@ -1423,27 +1422,26 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         </div>
       );
-    } else {
-      const predictedValueString =
-        this.temporaryPoint[JointDataset.PredictedYLabel] !== undefined
-          ? this.temporaryPoint[JointDataset.PredictedYLabel].toLocaleString(
-              undefined,
-              {
-                maximumFractionDigits: 3
-              }
-            )
-          : localization.WhatIfTab.loading;
-      return (
-        <div className={classNames.customPredictBlock}>
-          <div>
-            <Text className={classNames.boldText} variant="small">
-              {localization.WhatIfTab.newPredictedValue}
-            </Text>
-            <Text variant="small">{predictedValueString}</Text>
-          </div>
-        </div>
-      );
     }
+    const predictedValueString =
+      this.temporaryPoint[JointDataset.PredictedYLabel] !== undefined
+        ? this.temporaryPoint[JointDataset.PredictedYLabel].toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 3
+            }
+          )
+        : localization.WhatIfTab.loading;
+    return (
+      <div className={classNames.customPredictBlock}>
+        <div>
+          <Text className={classNames.boldText} variant="small">
+            {localization.WhatIfTab.newPredictedValue}
+          </Text>
+          <Text variant="small">{predictedValueString}</Text>
+        </div>
+      </div>
+    );
   }
 
   private setStartingK = (newValue: number): void => {
