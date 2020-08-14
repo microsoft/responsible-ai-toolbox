@@ -50,7 +50,6 @@ export class FeatureImportanceBar extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const classNames = featureImportanceBarStyles();
     const relayoutArg = {
       "xaxis.range": [
         this.props.startingK - 0.5,
@@ -70,7 +69,7 @@ export class FeatureImportanceBar extends React.PureComponent<
       this.props.sortArray.length === 0
     ) {
       return (
-        <div className={classNames.noData}>
+        <div className={featureImportanceBarStyles.noData}>
           <Text variant={"xxLarge"}>No data</Text>
         </div>
       );
@@ -80,15 +79,15 @@ export class FeatureImportanceBar extends React.PureComponent<
       return <LoadingSpinner />;
     }
     return (
-      <div className={classNames.chartWithVertical}>
-        <div className={classNames.verticalAxis}>
-          <div className={classNames.rotatedVerticalBox}>
+      <div className={featureImportanceBarStyles.chartWithVertical}>
+        <div className={featureImportanceBarStyles.verticalAxis}>
+          <div className={featureImportanceBarStyles.rotatedVerticalBox}>
             <div>
               {this.props.yAxisLabels.map((label, i) => (
                 <Text
                   block
                   variant="medium"
-                  className={classNames.boldText}
+                  className={featureImportanceBarStyles.boldText}
                   key={i}
                 >
                   {label}
