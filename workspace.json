@@ -32,7 +32,7 @@
               "memoize-one",
               "moment",
               "office-ui-fabric-react",
-              "plotly.js/lib/core",
+              "plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -88,7 +88,7 @@
               "lodash",
               "moment",
               "office-ui-fabric-react",
-              "plotly.js/lib/core",
+              "plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -141,7 +141,7 @@
             "external": [
               "lodash",
               "office-ui-fabric-react",
-              "plotly.js/lib/core",
+              "plotly.js",
               "react-dom",
               "react",
               "uuid"
@@ -196,7 +196,7 @@
               "lodash",
               "moment",
               "office-ui-fabric-react",
-              "plotly.js/lib/core",
+              "plotly.js",
               "react",
               "react-dom",
               "uuid"

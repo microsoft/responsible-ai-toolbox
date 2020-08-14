@@ -1,4 +1,4 @@
-import { Data, Datum } from "plotly.js/lib/core";
+import { Data, Datum } from "plotly.js";
 import jmespath from "jmespath";
 import _ from "lodash";
 import { IData } from "./IData";

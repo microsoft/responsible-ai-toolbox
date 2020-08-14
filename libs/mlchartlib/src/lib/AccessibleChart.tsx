@@ -1,5 +1,5 @@
 import _ from "lodash";
-import Plotly from "plotly.js/lib/core";
+import Plotly from "plotly.js";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { v4 } from "uuid";
