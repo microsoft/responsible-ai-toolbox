@@ -9,22 +9,20 @@ import {
   DefaultButton,
   IconButton
 } from "office-ui-fabric-react";
-
 import React from "react";
-
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import {
-  NoDataMessage,
-  LoadingSpinner,
-  FeatureKeys,
   FeatureSortingKey,
-  BarChart
-} from "../../SharedComponents";
-import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+  FeatureKeys
+} from "../../SharedComponents/IBarChartConfig";
+import { BarChart } from "../../SharedComponents/BarChart";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 
 export interface IFeatureImportanceBarState {
   selectedSorting: FeatureSortingKey;

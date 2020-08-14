@@ -21,12 +21,10 @@ import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import {
-  PlotlyUtils,
-  NoDataMessage,
-  LoadingSpinner
-} from "../../SharedComponents";
-import { ScatterUtils } from "../Scatter";
+import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { ScatterUtils } from "../Scatter/ScatterUtils";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 

@@ -22,7 +22,7 @@ import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../IExplanationContext";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
-import { NoDataMessage } from "../SharedComponents";
+import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { iCEPlotStyles } from "./ICEPlot.styles";
 

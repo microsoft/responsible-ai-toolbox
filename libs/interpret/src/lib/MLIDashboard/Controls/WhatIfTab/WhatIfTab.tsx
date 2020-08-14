@@ -49,7 +49,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { InteractiveLegend } from "../InteractiveLegend";
+import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";

@@ -2,13 +2,11 @@ import _ from "lodash";
 import React from "react";
 import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import { localization } from "../../Localization/localization";
-import {
-  FeatureEditingTile,
-  PredictionLabel,
-  NoDataMessage
-} from "../SharedComponents";
 import { IExplanationContext } from "../IExplanationContext";
-import { HelpMessageDict } from "../Interfaces";
+import { HelpMessageDict } from "../Interfaces/IStringsParam";
+import { NoDataMessage } from "../SharedComponents/NoDataMessage";
+import { PredictionLabel } from "../SharedComponents/PredictionLabel";
+import { FeatureEditingTile } from "../SharedComponents/FeatureEditingTile";
 import { perturbationExplorationStyles } from "./PerturbationExploration.styles";
 
 export interface IPerturbationExplorationProps {

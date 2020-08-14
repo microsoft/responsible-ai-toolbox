@@ -16,14 +16,12 @@ import {
 } from "../SharedComponents/IBarChartConfig";
 import { localization } from "../../Localization/localization";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
-import {
-  BarChart,
-  PredictionLabel,
-  LoadingSpinner,
-  NoDataMessage
-} from "../SharedComponents";
+import { BarChart } from "../SharedComponents/BarChart";
 import { FabricStyles } from "../FabricStyles";
-import { HelpMessageDict } from "../Interfaces";
+import { HelpMessageDict } from "../Interfaces/IStringsParam";
+import { PredictionLabel } from "../SharedComponents/PredictionLabel";
+import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
+import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 import { singlePointFeatureImportanceStyles } from "./SinglePointFeatureImportance.styles";
 
 export const LocalBarId = "local_bar_id";

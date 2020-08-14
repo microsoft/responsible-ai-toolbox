@@ -14,7 +14,8 @@ import _ from "lodash";
 import { FabricStyles } from "../../FabricStyles";
 import { localization } from "../../../Localization/localization";
 import { ModelTypes } from "../../IExplanationContext";
-import { LoadingSpinner, NoDataMessage } from "../../SharedComponents";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import { scatterStyles } from "./Scatter.styles";
 

@@ -21,12 +21,12 @@ import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import {
-  NoDataMessage,
-  LoadingSpinner,
   FeatureKeys,
   FeatureSortingKey
-} from "../../SharedComponents";
+} from "../../SharedComponents/IBarChartConfig";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 import { violinStyles } from "./Violin.styles";
