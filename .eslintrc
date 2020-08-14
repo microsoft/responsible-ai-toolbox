@@ -39,7 +39,6 @@
     "filenames/match-regex": "error",
     "filenames/match-exported": "error",
     "filenames/no-index": "error",
-    "@typescript-eslint/camelcase": "off",
     // "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/explicit-member-accessibility": ["error"],
@@ -68,6 +67,44 @@
           "regex": "^I[A-Z]",
           "match": true
         }
+      }
+    ],
+    "camelcase": [
+      "error",
+      {
+        "allow": [
+          "accuracy_score",
+          "balanced_accuracy_score",
+          "balanced_root_mean_squared_error",
+          "error_y",
+          "f1_score",
+          "fallout_rate",
+          "false_negative_over_total",
+          "false_positive_over_total",
+          "feature_list",
+          "log_loss",
+          "lower_bounds",
+          "max_error",
+          "mean_absolute_error",
+          "mean_squared_error",
+          "mean_squared_log_error",
+          "median_absolute_error",
+          "miss_rate",
+          "plot_bgcolor",
+          "precision_score",
+          "r2_score",
+          "recall_score",
+          "rms_error",
+          "root_mean_squared_error",
+          "scores_range",
+          "selection_rate",
+          "shap_deep",
+          "shap_kernel",
+          "shap_tree",
+          "specificity_score",
+          "upper_bounds",
+          "zero_one_loss"
+        ]
       }
     ],
     "quotes": [
