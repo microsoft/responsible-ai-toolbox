@@ -7,7 +7,7 @@
   .probability-label {
     margin: auto;
     padding: 5px;
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+    fontFamily:: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   }
 }

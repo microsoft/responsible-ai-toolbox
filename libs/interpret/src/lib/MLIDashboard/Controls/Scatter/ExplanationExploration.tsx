@@ -16,7 +16,7 @@ import { localization } from "../../../Localization/localization";
 import { ModelTypes } from "../../IExplanationContext";
 import { LoadingSpinner, NoDataMessage } from "../../SharedComponents";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
-import "./Scatter.scss";
+import { scatterStyles } from "./Scatter.styles";
 
 export const ExplanationScatterId = "explanation_scatter_id";
 
@@ -72,9 +72,9 @@ export class ExplanationExploration extends React.PureComponent<
         this.props.selectedRow
       );
       return (
-        <div className="explanation-chart">
-          <div className="top-controls">
-            <div className="path-selector x-value">
+        <div className={scatterStyles.explanationChart}>
+          <div className={scatterStyles.topControls}>
+            <div>
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onXSelected}
@@ -85,7 +85,7 @@ export class ExplanationExploration extends React.PureComponent<
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
-            <div className="path-selector">
+            <div>
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onColorSelected}
@@ -97,8 +97,8 @@ export class ExplanationExploration extends React.PureComponent<
               />
             </div>
           </div>
-          <div className="top-controls">
-            <div className="path-selector y-value">
+          <div className={scatterStyles.topControls}>
+            <div>
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onYSelected}
@@ -110,9 +110,9 @@ export class ExplanationExploration extends React.PureComponent<
               />
             </div>
             {includeWeightDropdown && (
-              <div className="selector">
-                <div className="selector-label">
-                  <div className="label-text">
+              <div className={scatterStyles.selector}>
+                <div className={scatterStyles.selectorLabel}>
+                  <div className={scatterStyles.labelText}>
                     {localization.CrossClass.label}
                   </div>
                   <IconButton
@@ -126,6 +126,7 @@ export class ExplanationExploration extends React.PureComponent<
                   />
                 </div>
                 <ComboBox
+                  className={scatterStyles.comboBox}
                   selectedKey={weightContext.selectedKey}
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
@@ -143,8 +144,8 @@ export class ExplanationExploration extends React.PureComponent<
               onDismiss={this.onDismiss}
               role="alertdialog"
             >
-              <div className="callout-info">
-                <div className="class-weight-info">
+              <div className={scatterStyles.calloutInfo}>
+                <div>
                   <span>{localization.CrossClass.overviewInfo}</span>
                   <ul>
                     <li>{localization.CrossClass.absoluteValInfo}</li>
@@ -152,7 +153,10 @@ export class ExplanationExploration extends React.PureComponent<
                     <li>{localization.CrossClass.enumeratedClassInfo}</li>
                   </ul>
                 </div>
-                <DefaultButton onClick={this.onDismiss}>
+                <DefaultButton
+                  onClick={this.onDismiss}
+                  className={scatterStyles.button}
+                >
                   {localization.CrossClass.close}
                 </DefaultButton>
               </div>

@@ -1,44 +1,63 @@
-.explanation-chart {
-  width: 100%;
-  height: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  .top-controls {
-    display: flex;
-    padding: 3px 15px;
-    justify-content: space-between;
-    .selector {
-      display: flex;
-      .selector-label {
-        display: flex;
-        flex-direction: row;
-        .label-text {
-          max-width: 84px;
-          line-height: 14px;
-          margin-right: -16px;
-          font-size: 14px;
-          font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-            -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-            sans-serif;
-        }
-      }
-      .ms-ComboBox-container {
-        max-width: 208px;
-      }
-    }
-  }
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet
+} from "office-ui-fabric-react";
+
+export interface IScatterStyles {
+  explanationChart: IStyle;
+  topControls: IStyle;
+  selector: IStyle;
+  selectorLabel: IStyle;
+  labelText: IStyle;
+  comboBox: IStyle;
+  calloutInfo: IStyle;
+  button: IStyle;
 }
 
-.callout-info {
-  display: flex;
-  flex-direction: column;
-  max-width: 300px;
-  padding: 30px;
-  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-
-  button {
-    max-width: 100px;
+export const scatterStyles: IProcessedStyleSet<IScatterStyles> = mergeStyleSets<
+  IScatterStyles
+>({
+  explanationChart: {
+    width: "100%",
+    height: "100%",
+    flex: "1",
+    display: "flex",
+    flexDirection: "column"
+  },
+  topControls: {
+    display: "flex",
+    padding: "3px 15px",
+    justifyContent: "space-between"
+  },
+  selector: {
+    display: "flex"
+  },
+  selectorLabel: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  labelText: {
+    maxWidth: "84px",
+    lineHeight: "14px",
+    marginRight: "-16px",
+    fontSize: "14px",
+    fontFamily: ` "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
+      sans-serif`
+  },
+  comboBox: {
+    maxWidth: "208px"
+  },
+  calloutInfo: {
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "300px",
+    padding: "30px",
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`
+  },
+  button: {
+    maxWidth: "100px"
   }
-}
+});

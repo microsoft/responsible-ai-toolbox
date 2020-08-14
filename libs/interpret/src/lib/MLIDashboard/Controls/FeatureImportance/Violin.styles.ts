@@ -22,7 +22,7 @@ export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> = mergeStyleSets<
 //   width: 100%,
 //   height: 100%,
 //   display: flex,
-//   flex-direction: column,
+//   flexDirection: column,
 //   .top-controls {
 //     display: flex,
 //     padding: 3px 15px,
@@ -34,10 +34,10 @@ export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> = mergeStyleSets<
 //     }
 //     .selector-label {
 //       display: flex,
-//       flex-direction: row,
+//       flexDirection: row,
 //       span {
 //         padding-top: 5px,
-//         font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+//         fontFamily:: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
 //           -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
 //           sans-serif,
 //       }
@@ -47,12 +47,12 @@ export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> = mergeStyleSets<
 //       padding: 0 4px,
 //       .slider-label {
 //         display: flex,
-//         flex-direction: row,
+//         flexDirection: row,
 //         .label-text {
 //           line-height: 14px,
 //           margin: 7px 0 0 4px,
 //           font-size: 14px,
-//           font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+//           fontFamily:: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
 //             -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
 //             sans-serif,
 //         }
@@ -63,13 +63,13 @@ export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> = mergeStyleSets<
 
 // .callout-info {
 //   display: flex,
-//   flex-direction: column,
-//   max-width: 300px,
+//   flexDirection: column,
+//   maxWidth: 300px,
 //   padding: 30px,
-//   font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+//   fontFamily:: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
 //     -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif,
 
 //   button {
-//     max-width: 100px,
+//     maxWidth: 100px,
 //   }
 // }
