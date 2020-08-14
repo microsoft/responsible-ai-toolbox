@@ -9,8 +9,7 @@ import {
 } from "../SharedComponents";
 import { IExplanationContext } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces";
-
-import "./PerturbationExploration.scss";
+import { perturbationExplorationStyles } from "./PerturbationExploration.styles";
 
 export interface IPerturbationExplorationProps {
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
@@ -74,11 +73,13 @@ export class PerturbationExploration extends React.Component<
     }
     const hasErrors = this.state.featureErrors.some((val) => val);
     return (
-      <div className="flex-wrapper">
+      <div className={perturbationExplorationStyles.flexWrapper}>
         {this.props.explanationContext.testDataset.predictedY !== undefined && (
-          <div className="label-group">
-            <div className="label-group-label">Base:</div>
-            <div className="flex-full">
+          <div className={perturbationExplorationStyles.labelGroup}>
+            <div className={perturbationExplorationStyles.labelGroupLabel}>
+              Base:
+            </div>
+            <div className={perturbationExplorationStyles.flexFull}>
               <PredictionLabel
                 prediction={
                   this.props.explanationContext.testDataset.predictedY[
@@ -103,26 +104,29 @@ export class PerturbationExploration extends React.Component<
           </div>
         )}
         {this.state.abortController && !hasErrors && (
-          <div className="loading-message">
+          <div className={perturbationExplorationStyles.loadingMessage}>
             {localization.PerturbationExploration.loadingMessage}
           </div>
         )}
         {this.state.errorMessage && (
-          <div className="loading-message"> {this.state.errorMessage}</div>
+          <div className={perturbationExplorationStyles.loadingMessage}>
+            {" "}
+            {this.state.errorMessage}
+          </div>
         )}
         {hasErrors && (
-          <div className="loading-message">
+          <div className={perturbationExplorationStyles.loadingMessage}>
             {localization.IcePlot.topLevelErrorMessage}
           </div>
         )}
         {!hasErrors &&
           this.state.prediction !== undefined &&
           this.state.abortController === undefined && (
-            <div className="label-group">
-              <div className="label-group-label">
+            <div className={perturbationExplorationStyles.labelGroup}>
+              <div className={perturbationExplorationStyles.labelGroupLabel}>
                 {localization.PerturbationExploration.perturbationLabel}
               </div>
-              <div className="flex-full">
+              <div className={perturbationExplorationStyles.flexFull}>
                 <PredictionLabel
                   prediction={this.state.prediction}
                   classNames={
@@ -136,7 +140,7 @@ export class PerturbationExploration extends React.Component<
               </div>
             </div>
           )}
-        <div className="tile-scroller">
+        <div className={perturbationExplorationStyles.tileScroller}>
           {_.cloneDeep(
             this.props.explanationContext.testDataset.dataset[
               this.props.datapointIndex

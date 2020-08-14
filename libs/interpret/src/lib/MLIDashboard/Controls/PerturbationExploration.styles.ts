@@ -1,35 +1,54 @@
-.flex-wrapper {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .loading-message {
-    display: flex;
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    font-size: 20px;
-    border-bottom: 1px solid;
-    padding: 5px 10px;
-  }
-  .label-group {
-    display: flex;
-    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    font-size: 20px;
-    border-bottom: 1px solid;
-    .label-group-label {
-      width: 150px;
-      align-self: center;
-      padding-left: 10px;
-    }
-    .flex-full {
-      flex: 1;
-    }
-  }
-  .tile-scroller {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet
+} from "office-ui-fabric-react";
+
+export interface IPerturbationExplorationStyles {
+  flexWrapper: IStyle;
+  loadingMessage: IStyle;
+  labelGroup: IStyle;
+  labelGroupLabel: IStyle;
+  flexFull: IStyle;
+  tileScroller: IStyle;
 }
+
+export const perturbationExplorationStyles: IProcessedStyleSet<IPerturbationExplorationStyles> = mergeStyleSets<
+  IPerturbationExplorationStyles
+>({
+  flexWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    overflow: "hidden"
+  },
+  loadingMessage: {
+    display: "flex",
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    fontSize: "20px",
+    borderBottom: "1px solid",
+    padding: "5px 10px"
+  },
+  labelGroup: {
+    display: "flex",
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    fontSize: "20px",
+    borderBottom: "1px solid"
+  },
+  labelGroupLabel: {
+    width: "150px",
+    alignSelf: "center",
+    paddingLeft: "10px"
+  },
+  flexFull: {
+    flex: 1
+  },
+  tileScroller: {
+    flex: 1,
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap"
+  }
+});
