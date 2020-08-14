@@ -18,7 +18,7 @@ import { Data } from "plotly.js/lib/core";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
-import { NoDataMessage } from "../../SharedComponents";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import {
   ModelTypes,
   IExplanationModelMetadata

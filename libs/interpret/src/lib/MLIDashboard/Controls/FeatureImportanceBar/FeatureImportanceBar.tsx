@@ -3,7 +3,7 @@ import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import { localization } from "../../../Localization/localization";
-import { LoadingSpinner } from "../../SharedComponents";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

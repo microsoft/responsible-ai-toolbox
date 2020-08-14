@@ -20,8 +20,8 @@ import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
-import { HelpMessageDict } from "../../Interfaces";
-import { PlotlyUtils } from "../../SharedComponents";
+import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
 
 export interface IScatterProps {
   plotlyProps: IPlotlyProperty;
