@@ -16,14 +16,7 @@ import {
 import _ from "lodash";
 
 import { initializeIcons } from "@uifabric/icons";
-
 import { localization } from "../Localization/localization";
-import {
-  IExplanationDashboardProps,
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance,
-  TelemetryLevels
-} from "./Interfaces";
 import { JointDataset } from "./JointDataset";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import {
@@ -41,6 +34,12 @@ import { ValidateProperties } from "./ValidateProperties";
 import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
 import { IGenericChartProps } from "./IGenericChartProps";
+import {
+  IExplanationDashboardProps,
+  IMultiClassLocalFeatureImportance,
+  ISingleClassLocalFeatureImportance
+} from "./Interfaces/IExplanationDashboardProps";
+import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];

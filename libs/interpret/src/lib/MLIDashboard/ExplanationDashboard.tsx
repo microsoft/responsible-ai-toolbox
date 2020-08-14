@@ -22,23 +22,6 @@ import {
 import { localization } from "../Localization/localization";
 import { FabricStyles } from "./FabricStyles";
 import {
-  FeatureImportanceWrapper,
-  GlobalFeatureImportanceId,
-  IFeatureImportanceConfig,
-  FeatureImportanceModes,
-  BarId,
-  DataExploration,
-  DataScatterId,
-  ExplanationScatterId,
-  ExplanationExploration,
-  ICEPlot,
-  PerturbationExploration,
-  SinglePointFeatureImportance,
-  LocalBarId,
-  FeatureImportanceBar
-} from "./Controls";
-
-import {
   IExplanationContext,
   IExplanationGenerators,
   IGlobalExplanation,
@@ -62,6 +45,28 @@ import { JointDataset } from "./JointDataset";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
+import {
+  IFeatureImportanceConfig,
+  GlobalFeatureImportanceId,
+  BarId,
+  FeatureImportanceWrapper
+} from "./Controls/FeatureImportance/FeatureImportanceWrapper";
+import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
+import {
+  LocalBarId,
+  SinglePointFeatureImportance
+} from "./Controls/SinglePointFeatureImportance";
+import {
+  ExplanationExploration,
+  ExplanationScatterId
+} from "./Controls/Scatter/ExplanationExploration";
+import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
+import {
+  DataExploration,
+  DataScatterId
+} from "./Controls/Scatter/DataExploration";
+import { PerturbationExploration } from "./Controls/PerturbationExploration";
+import { ICEPlot } from "./Controls/ICEPlot";
 const RowIndex = "rowIndex";
 
 export interface IDashboardContext {
