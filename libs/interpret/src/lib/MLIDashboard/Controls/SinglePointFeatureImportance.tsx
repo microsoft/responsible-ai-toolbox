@@ -24,8 +24,7 @@ import {
 } from "../SharedComponents";
 import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces";
-
-import "./SinglePointFeatureImportance.scss";
+import { singlePointFeatureImportanceStyles } from "./SinglePointFeatureImportance.styles";
 
 export const LocalBarId = "local_bar_id";
 
@@ -94,10 +93,14 @@ export class SinglePointFeatureImportance extends React.PureComponent<
                 }
               />
             )}
-          <div className="feature-bar-explanation-chart">
-            <div className="top-controls">
+          <div
+            className={
+              singlePointFeatureImportanceStyles.featureBarExplanationChart
+            }
+          >
+            <div className={singlePointFeatureImportanceStyles.topControls}>
               <Slider
-                className="feature-slider"
+                className={singlePointFeatureImportanceStyles.featureSlider}
                 label={localization.AggregateImportance.topKFeatures}
                 max={Math.min(
                   30,
@@ -112,7 +115,6 @@ export class SinglePointFeatureImportance extends React.PureComponent<
               />
               {this.sortOptions.length > 1 && (
                 <ComboBox
-                  className="pathSelector"
                   label={localization.BarChart.sortBy}
                   selectedKey={this.state.selectedSorting}
                   onChange={this.onSortSelect}

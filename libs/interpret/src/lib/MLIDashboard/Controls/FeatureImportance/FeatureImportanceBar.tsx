@@ -24,8 +24,7 @@ import {
   BarChart
 } from "../../SharedComponents";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
-
-import "./FeatureImportanceBar.scss";
+import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureImportanceBarState {
   selectedSorting: FeatureSortingKey;
@@ -60,13 +59,12 @@ export class FeatureImportanceBar extends React.PureComponent<
       const sortVector = this.getSortVector(featuresByClassMatrix);
 
       return (
-        <div className="feature-bar-explanation-chart">
-          <div className="top-controls">
+        <div className={featureImportanceBarStyles.featureBarExplanationChart}>
+          <div className={featureImportanceBarStyles.topControls}>
             {this.props.chartTypeOptions &&
               this.props.chartTypeOptions.length > 1 && (
                 <ComboBox
                   label={localization.FeatureImportanceWrapper.chartType}
-                  className="pathSelector"
                   selectedKey={this.props.config.displayMode}
                   onChange={this.setChart}
                   options={this.props.chartTypeOptions}
@@ -75,9 +73,9 @@ export class FeatureImportanceBar extends React.PureComponent<
                   styles={FabricStyles.smallDropdownStyle}
                 />
               )}
-            <div className="slider-control">
-              <div className="slider-label">
-                <span className="label-text">
+            <div className={featureImportanceBarStyles.sliderControl}>
+              <div className={featureImportanceBarStyles.sliderLabel}>
+                <span className={featureImportanceBarStyles.labelText}>
                   {localization.AggregateImportance.topKFeatures}
                 </span>
                 <IconButton
@@ -91,7 +89,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                 />
               </div>
               <Slider
-                className="feature-slider"
+                className={featureImportanceBarStyles.featureSlider}
                 max={Math.min(30, expContext.modelMetadata.featureNames.length)}
                 min={1}
                 step={1}
@@ -103,7 +101,6 @@ export class FeatureImportanceBar extends React.PureComponent<
             </div>
             {this.sortOptions.length > 0 && (
               <ComboBox
-                className="pathSelector"
                 label={localization.BarChart.sortBy}
                 selectedKey={this.state.selectedSorting}
                 onChange={this.onSortSelect}
@@ -121,8 +118,8 @@ export class FeatureImportanceBar extends React.PureComponent<
               onDismiss={this.onDismiss}
               role="alertdialog"
             >
-              <div className="callout-info">
-                <div className="class-weight-info">
+              <div className={featureImportanceBarStyles.calloutInfo}>
+                <div>
                   <span>{localization.CrossClass.overviewInfo}</span>
                   <ul>
                     <li>{localization.CrossClass.absoluteValInfo}</li>

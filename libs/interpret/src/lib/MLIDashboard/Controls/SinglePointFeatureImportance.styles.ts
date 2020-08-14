@@ -1,18 +1,30 @@
-.feature-bar-explanation-chart {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  .top-controls {
-    display: flex;
-    padding: 3px 15px;
-    .feature-slider {
-      flex: 1;
-    }
-  }
-  .feature-importance-bar-chart {
-    width: 100%;
-    flex: 1;
-  }
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet
+} from "office-ui-fabric-react";
+
+export interface ISinglePointFeatureImportanceStyles {
+  featureBarExplanationChart: IStyle;
+  topControls: IStyle;
+  featureSlider: IStyle;
 }
+
+export const singlePointFeatureImportanceStyles: IProcessedStyleSet<ISinglePointFeatureImportanceStyles> = mergeStyleSets<
+  ISinglePointFeatureImportanceStyles
+>({
+  featureBarExplanationChart: {
+    width: "100%",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    height: "100%"
+  },
+  topControls: {
+    display: "flex",
+    padding: "3px 15px"
+  },
+  featureSlider: {
+    flex: 1
+  }
+});
