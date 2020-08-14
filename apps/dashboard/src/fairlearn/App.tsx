@@ -1,6 +1,6 @@
 import React from "react";
 import { FairnessWizardv1, IMetricResponsev1 } from "@responsible-ai/fairlearn";
-import { createTheme } from "@uifabric/styling";
+import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
 import { regression } from "./__mock-data/regression";

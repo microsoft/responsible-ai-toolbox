@@ -3,7 +3,7 @@ import {
   getTheme,
   mergeStyleSets,
   IStyle
-} from "@uifabric/styling";
+} from "office-ui-fabric-react";
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IWhatIfTabStyles {

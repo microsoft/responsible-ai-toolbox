@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: cypress/base
 
     strategy:
       matrix:
@@ -21,7 +22,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install yarn
+        run: npm install yarn -g
       - name: CI
-        uses: CultureHQ/actions-yarn@v1.0.1
+        run: yarn ci
+      - name: Upload unit test code coverage
+        if: always()
+        uses: actions/upload-artifact@v2
         with:
-          args: ci
+          name: unit-test-coverage-${{ matrix.node-version }}
+          path: coverage
+      - name: Upload e2e test screen shot
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: e2e-screen-shot-${{ matrix.node-version }}
+          path: dist/cypress

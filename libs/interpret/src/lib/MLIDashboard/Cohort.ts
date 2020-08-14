@@ -3,7 +3,6 @@ import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export class Cohort {
-  public static CohortKey = "Cohort";
   private static _cohortIndex = 0;
 
   public rowCount = 0;

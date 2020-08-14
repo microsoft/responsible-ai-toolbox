@@ -1,4 +1,20 @@
 {
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.vs": true,
+    "**/.cache": true
+  },
+  "search.exclude": {
+    "**/.cache": true,
+    "**/tmp": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/yarn.lock": true
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
@@ -24,6 +40,7 @@
   },
   "cSpell.words": [
     "Callout",
+    "Chainable",
     "Fairlearn",
     "Importances",
     "Overprediction",

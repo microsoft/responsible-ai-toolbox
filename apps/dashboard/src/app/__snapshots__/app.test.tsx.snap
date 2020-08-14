@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FairnessWizard should render successfully 1`] = `
+<div>
+  <div
+    role="navigation"
+  >
+    <ul>
+      <li>
+        <Link
+          to="/fairlearn"
+        >
+          Fairlearn
+        </Link>
+      </li>
+      <li>
+        <Link
+          to="/interpret"
+        >
+          Interpret
+        </Link>
+      </li>
+    </ul>
+  </div>
+  <Route
+    component={[Function]}
+    exact={true}
+    path="/fairlearn"
+  />
+  <Route
+    component={[Function]}
+    exact={true}
+    path="/interpret"
+  />
+</div>
+`;

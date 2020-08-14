@@ -1,12 +1,6 @@
-import { IProcessedStyleSet, getTheme } from "@uifabric/styling";
-import _ from "lodash";
 import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
-import {
+  IProcessedStyleSet,
+  getTheme,
   ChoiceGroup,
   IChoiceGroupOption,
   Icon,
@@ -30,6 +24,13 @@ import {
   SearchBox,
   TextField
 } from "office-ui-fabric-react";
+import _ from "lodash";
+import {
+  AccessibleChart,
+  IPlotlyProperty,
+  PlotlyMode,
+  IData
+} from "@responsible-ai/mlchartlib";
 
 import React from "react";
 import { localization } from "../../../Localization/localization";
@@ -43,16 +44,14 @@ import { ColumnCategories, JointDataset } from "../../JointDataset";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import {
-  ChartTypes,
-  IGenericChartProps,
-  ISelectorConfig,
-  NewExplanationDashboard
-} from "../../NewExplanationDashboard";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { InteractiveLegend } from "../InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
+import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
@@ -384,7 +383,7 @@ export class WhatIfTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .rowCount;
     const canRenderChart =
-      cohortLength < NewExplanationDashboard.ROW_ERROR_SIZE ||
+      cohortLength < NewExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {

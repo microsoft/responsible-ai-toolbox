@@ -1,5 +1,5 @@
 import React from "react";
-import Plotly from "plotly.js-dist";
+import Plotly from "plotly.js";
 import { v4 } from "uuid";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";

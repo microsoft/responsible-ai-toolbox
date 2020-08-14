@@ -1,4 +1,4 @@
-import { Data } from "plotly.js-dist";
+import { Data } from "plotly.js";
 import { IAccessor } from "./IAccessor";
 
 export interface IData extends Data {

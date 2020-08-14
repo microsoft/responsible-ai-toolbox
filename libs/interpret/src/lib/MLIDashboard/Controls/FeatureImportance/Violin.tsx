@@ -27,10 +27,8 @@ import {
   FeatureKeys,
   FeatureSortingKey
 } from "../../SharedComponents";
-import {
-  FeatureImportanceModes,
-  IGlobalFeatureImportanceProps
-} from "./FeatureImportanceWrapper";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
 import "./Violin.scss";
 

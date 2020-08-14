@@ -1,14 +1,13 @@
 import React from "react";
 import _ from "lodash";
-import { getTheme } from "@uifabric/styling";
+import { getTheme, Text } from "office-ui-fabric-react";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
-import { Text } from "office-ui-fabric-react";
 import { localization } from "../../../Localization/localization";
 import { LoadingSpinner } from "../../SharedComponents";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
-import { ChartTypes } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureBarProps {

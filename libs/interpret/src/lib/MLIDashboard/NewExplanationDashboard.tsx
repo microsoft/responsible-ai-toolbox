@@ -40,6 +40,7 @@ import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplore
 import { ValidateProperties } from "./ValidateProperties";
 import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { IGenericChartProps } from "./IGenericChartProps";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];
@@ -72,21 +73,6 @@ interface IGlobalExplanationProps {
   isGlobalImportanceDerivedFromLocal: boolean;
 }
 
-export enum ChartTypes {
-  Scatter = "scatter",
-  Histogram = "histogram",
-  Box = "box",
-  Bar = "bar"
-}
-
-export interface IGenericChartProps {
-  chartType: ChartTypes;
-  xAxis?: ISelectorConfig;
-  yAxis?: ISelectorConfig;
-  colorAxis?: ISelectorConfig;
-  selectedCohortIndex?: number;
-}
-
 export interface ISelectorConfig {
   property: string;
   index?: number;
@@ -108,7 +94,6 @@ export class NewExplanationDashboard extends React.PureComponent<
   IExplanationDashboardProps,
   INewExplanationDashboardState
 > {
-  public static ROW_ERROR_SIZE = 10000;
   private static iconsInitialized = false;
   private static ROW_WARNING_SIZE = 6000;
 

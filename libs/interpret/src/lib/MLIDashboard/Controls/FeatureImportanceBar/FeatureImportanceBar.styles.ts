@@ -1,4 +1,8 @@
-import { IStyle, IProcessedStyleSet, mergeStyleSets } from "@uifabric/styling";
+import {
+  IStyle,
+  IProcessedStyleSet,
+  mergeStyleSets
+} from "office-ui-fabric-react";
 
 export interface IFeatureImportanceBarStyles {
   chartWithVertical: IStyle;

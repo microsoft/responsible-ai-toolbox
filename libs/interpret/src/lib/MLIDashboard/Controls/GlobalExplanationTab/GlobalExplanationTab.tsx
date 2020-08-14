@@ -25,7 +25,8 @@ import {
 } from "../../IExplanationContext";
 import { localization } from "../../../Localization/localization";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
-import { IGenericChartProps, ChartTypes } from "../../NewExplanationDashboard";
+import { ChartTypes } from "../../ChartTypes";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 
 import { FabricStyles } from "../../FabricStyles";
@@ -64,7 +65,7 @@ export interface IGlobalExplanationTabProps {
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
-export interface IGlobalExplanationtabState {
+interface IGlobalExplanationTabState {
   startingK: number;
   topK: number;
   sortingSeriesIndex: number;
@@ -81,7 +82,7 @@ export interface IGlobalExplanationtabState {
 
 export class GlobalExplanationTab extends React.PureComponent<
   IGlobalExplanationTabProps,
-  IGlobalExplanationtabState
+  IGlobalExplanationTabState
 > {
   private cohortSeries: IGlobalSeries[];
   private activeSeries: IGlobalSeries[];

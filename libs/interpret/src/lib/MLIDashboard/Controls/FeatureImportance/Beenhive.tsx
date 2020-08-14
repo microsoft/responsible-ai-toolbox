@@ -27,10 +27,8 @@ import {
   LoadingSpinner
 } from "../../SharedComponents";
 import { ScatterUtils } from "../Scatter";
-import {
-  FeatureImportanceModes,
-  IGlobalFeatureImportanceProps
-} from "./FeatureImportanceWrapper";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
 import "./Beehive.scss";
 
