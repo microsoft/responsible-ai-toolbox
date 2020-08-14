@@ -47,7 +47,7 @@ export class GlobalOnlyChart extends React.PureComponent<
         ]
       : this.props.metadata.classNames.map((name, index) => {
           return {
-            name: name,
+            name,
             unsortedAggregateY: this.props.globalImportance.map(
               (classArray) => classArray[index]
             ),

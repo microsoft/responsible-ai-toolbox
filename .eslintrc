@@ -108,6 +108,10 @@
       }
     ],
     "no-else-return": "error",
+    "no-useless-call": "error",
+    "object-shorthand": "error",
+    "no-lonely-if": "error",
+    "no-extra-semi": "error",
     "quotes": [
       "error",
       "double",

@@ -580,11 +580,10 @@ export class FairnessWizard extends React.PureComponent<
       if (value.rangeType === RangeTypes.categorical) {
         // this handles categorical, as well as integers when user requests to treat as categorical
         return value.array.indexOf(featureValue);
-      } else {
-        return value.array.findIndex((upperLimit) => {
-          return upperLimit >= featureValue;
-        });
       }
+      return value.array.findIndex((upperLimit) => {
+        return upperLimit >= featureValue;
+      });
     });
   }
 

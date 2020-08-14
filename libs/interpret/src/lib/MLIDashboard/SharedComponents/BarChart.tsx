@@ -187,7 +187,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
               : "",
           x,
           y,
-          text: text
+          text
         } as any);
       });
     }

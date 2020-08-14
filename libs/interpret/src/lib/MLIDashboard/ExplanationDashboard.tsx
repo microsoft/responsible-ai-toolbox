@@ -471,8 +471,8 @@ export class ExplanationDashboard extends React.Component<
       testDataset,
       globalExplanation,
       isGlobalDerived,
-      ebmExplanation: ebmExplanation,
-      customVis: customVis
+      ebmExplanation,
+      customVis
     };
   }
 

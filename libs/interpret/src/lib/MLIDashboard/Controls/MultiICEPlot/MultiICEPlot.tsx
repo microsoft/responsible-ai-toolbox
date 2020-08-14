@@ -537,16 +537,15 @@ export class MultiICEPlot extends React.PureComponent<
         }),
         type: RangeTypes.categorical
       };
-    } 
-      return {
-        key: featureKey,
-        featureIndex: summary.index,
-        min: summary.featureRange.min,
-        max: summary.featureRange.max,
-        steps: 20,
-        type: summary.featureRange.rangeType
-      };
-    
+    }
+    return {
+      key: featureKey,
+      featureIndex: summary.index,
+      min: summary.featureRange.min,
+      max: summary.featureRange.max,
+      steps: 20,
+      type: summary.featureRange.rangeType
+    };
   }
 
   private buildRange(rangeView: IRangeView): number[] | string[] {
@@ -580,8 +579,7 @@ export class MultiICEPlot extends React.PureComponent<
             : min + i * delta
         )
       );
-    } 
-      return [];
-    
+    }
+    return [];
   }
 }

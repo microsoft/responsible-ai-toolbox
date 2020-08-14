@@ -17,27 +17,25 @@ export class PlotlyUtils {
       }
       plotlyProp.data[0].groupBy = [item.key.toString()];
       _.set(plotlyProp, "layout.showlegend", true);
-    } else {
-      if (
-        !_.isEqual(
-          [item.key],
-          _.get(plotlyProp.data[0], "datapointLevelAccessors.color.path")
-        )
-      ) {
-        _.set(plotlyProp.data[0], "datapointLevelAccessors.color", {
-          path: [item.key],
-          plotlyPath: "marker.color"
-        });
-        _.set(plotlyProp.data[0], "marker", {
-          colorbar: {
-            title: {
-              side: "right",
-              text: colorBarLabel
-            }
-          },
-          colorscale: "Bluered"
-        });
-      }
+    } else if (
+      !_.isEqual(
+        [item.key],
+        _.get(plotlyProp.data[0], "datapointLevelAccessors.color.path")
+      )
+    ) {
+      _.set(plotlyProp.data[0], "datapointLevelAccessors.color", {
+        path: [item.key],
+        plotlyPath: "marker.color"
+      });
+      _.set(plotlyProp.data[0], "marker", {
+        colorbar: {
+          title: {
+            side: "right",
+            text: colorBarLabel
+          }
+        },
+        colorscale: "Bluered"
+      });
     }
   }
 

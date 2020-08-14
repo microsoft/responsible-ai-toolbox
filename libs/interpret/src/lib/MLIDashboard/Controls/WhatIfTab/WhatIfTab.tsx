@@ -251,7 +251,7 @@ export class WhatIfTab extends React.PureComponent<
         (rowIndex, colorIndex) => {
           const row = this.props.jointDataset.getRow(rowIndex);
           return {
-            colorIndex: colorIndex,
+            colorIndex,
             id: rowIndex,
             name: localization.formatString(
               localization.WhatIfTab.rowLabel,
@@ -934,114 +934,112 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         );
       }
+    } else if (!this.props.invokeModel) {
+      secondaryPlot = (
+        <div className={classNames.missingParametersPlaceholder}>
+          <div className={classNames.missingParametersPlaceholderSpacer}>
+            <Text variant="large" className={classNames.faintText}>
+              {localization.WhatIfTab.iceLackingParameters}
+            </Text>
+          </div>
+        </div>
+      );
+    } else if (this.testableDatapoints.length === 0) {
+      secondaryPlot = (
+        <div className={classNames.missingParametersPlaceholder}>
+          <div className={classNames.missingParametersPlaceholderSpacer}>
+            <Text variant="large" className={classNames.faintText}>
+              {localization.WhatIfTab.IceGetStartedText}
+            </Text>
+          </div>
+        </div>
+      );
     } else {
-      if (!this.props.invokeModel) {
-        secondaryPlot = (
-          <div className={classNames.missingParametersPlaceholder}>
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {localization.WhatIfTab.iceLackingParameters}
-              </Text>
-            </div>
-          </div>
-        );
-      } else if (this.testableDatapoints.length === 0) {
-        secondaryPlot = (
-          <div className={classNames.missingParametersPlaceholder}>
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {localization.WhatIfTab.IceGetStartedText}
-              </Text>
-            </div>
-          </div>
-        );
-      } else {
-        secondaryPlot = (
-          <div className={classNames.featureImportanceArea}>
-            <div className={classNames.rightJustifiedContainer}>
-              <CommandBarButton
-                iconProps={{ iconName: "Info" }}
-                id="explanation-info"
-                className={classNames.infoButton}
-                text={localization.Charts.howToRead}
-                onClick={this.toggleICETooltip}
-              />
-              {this.state.iceTooltipVisible && (
-                <Callout
-                  doNotLayer={true}
-                  target={"#explanation-info"}
-                  setInitialFocus={true}
-                  onDismiss={this.toggleICETooltip}
-                  role="alertdialog"
-                  styles={{ container: FabricStyles.calloutContainer }}
-                >
-                  <div className={classNames.calloutWrapper}>
-                    <div className={classNames.calloutHeader}>
-                      <Text className={classNames.calloutTitle}>
-                        {localization.WhatIfTab.icePlot}
-                      </Text>
-                    </div>
-                    <div className={classNames.calloutInner}>
-                      <Text>{localization.WhatIfTab.icePlotHelperText}</Text>
-                      <div className={classNames.calloutActions}>
-                        <Link
-                          className={classNames.calloutLink}
-                          href={
-                            "https://christophm.github.io/interpretable-ml-book/ice.html#ice"
-                          }
-                          target="_blank"
-                        >
-                          {localization.ExplanationSummary.clickHere}
-                        </Link>
-                      </div>
+      secondaryPlot = (
+        <div className={classNames.featureImportanceArea}>
+          <div className={classNames.rightJustifiedContainer}>
+            <CommandBarButton
+              iconProps={{ iconName: "Info" }}
+              id="explanation-info"
+              className={classNames.infoButton}
+              text={localization.Charts.howToRead}
+              onClick={this.toggleICETooltip}
+            />
+            {this.state.iceTooltipVisible && (
+              <Callout
+                doNotLayer={true}
+                target={"#explanation-info"}
+                setInitialFocus={true}
+                onDismiss={this.toggleICETooltip}
+                role="alertdialog"
+                styles={{ container: FabricStyles.calloutContainer }}
+              >
+                <div className={classNames.calloutWrapper}>
+                  <div className={classNames.calloutHeader}>
+                    <Text className={classNames.calloutTitle}>
+                      {localization.WhatIfTab.icePlot}
+                    </Text>
+                  </div>
+                  <div className={classNames.calloutInner}>
+                    <Text>{localization.WhatIfTab.icePlotHelperText}</Text>
+                    <div className={classNames.calloutActions}>
+                      <Link
+                        className={classNames.calloutLink}
+                        href={
+                          "https://christophm.github.io/interpretable-ml-book/ice.html#ice"
+                        }
+                        target="_blank"
+                      >
+                        {localization.ExplanationSummary.clickHere}
+                      </Link>
                     </div>
                   </div>
-                </Callout>
-              )}
-            </div>
-            <div className={classNames.featureImportanceChartAndLegend}>
-              <MultiICEPlot
-                invokeModel={this.props.invokeModel}
-                datapoints={this.testableDatapoints}
-                colors={this.testableDatapointColors}
-                rowNames={this.testableDatapointNames}
-                jointDataset={this.props.jointDataset}
-                metadata={this.props.metadata}
-                feature={this.state.selectedFeatureKey}
-                selectedClass={this.state.selectedICEClass}
+                </div>
+              </Callout>
+            )}
+          </div>
+          <div className={classNames.featureImportanceChartAndLegend}>
+            <MultiICEPlot
+              invokeModel={this.props.invokeModel}
+              datapoints={this.testableDatapoints}
+              colors={this.testableDatapointColors}
+              rowNames={this.testableDatapointNames}
+              jointDataset={this.props.jointDataset}
+              metadata={this.props.metadata}
+              feature={this.state.selectedFeatureKey}
+              selectedClass={this.state.selectedICEClass}
+            />
+            <div className={classNames.featureImportanceLegend}>
+              <ComboBox
+                autoComplete={"on"}
+                className={classNames.iceFeatureSelection}
+                options={this.featuresOption}
+                onChange={this.onFeatureSelected}
+                label={localization.IcePlot.featurePickerLabel}
+                ariaLabel="feature picker"
+                selectedKey={this.state.selectedFeatureKey}
+                useComboBoxAsMenuWidth={true}
+                calloutProps={FabricStyles.calloutProps}
+                styles={FabricStyles.limitedSizeMenuDropdown}
               />
-              <div className={classNames.featureImportanceLegend}>
+              {this.props.metadata.modelType === ModelTypes.multiclass && (
                 <ComboBox
                   autoComplete={"on"}
-                  className={classNames.iceFeatureSelection}
-                  options={this.featuresOption}
-                  onChange={this.onFeatureSelected}
-                  label={localization.IcePlot.featurePickerLabel}
-                  ariaLabel="feature picker"
-                  selectedKey={this.state.selectedFeatureKey}
+                  className={classNames.iceClassSelection}
+                  options={this.classOptions}
+                  onChange={this.onICEClassSelected}
+                  label={localization.WhatIfTab.classPickerLabel}
+                  ariaLabel="class picker"
+                  selectedKey={this.state.selectedICEClass}
                   useComboBoxAsMenuWidth={true}
                   calloutProps={FabricStyles.calloutProps}
                   styles={FabricStyles.limitedSizeMenuDropdown}
                 />
-                {this.props.metadata.modelType === ModelTypes.multiclass && (
-                  <ComboBox
-                    autoComplete={"on"}
-                    className={classNames.iceClassSelection}
-                    options={this.classOptions}
-                    onChange={this.onICEClassSelected}
-                    label={localization.WhatIfTab.classPickerLabel}
-                    ariaLabel="class picker"
-                    selectedKey={this.state.selectedICEClass}
-                    useComboBoxAsMenuWidth={true}
-                    calloutProps={FabricStyles.calloutProps}
-                    styles={FabricStyles.limitedSizeMenuDropdown}
-                  />
-                )}
-              </div>
+              )}
             </div>
           </div>
-        );
-      }
+        </div>
+      );
     }
 
     return (
