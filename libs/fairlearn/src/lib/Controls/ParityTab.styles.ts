@@ -1,4 +1,4 @@
-import { getTheme, IProcessedStyleSet, IStyle, mergeStyleSets, FontWeights, FontSizes } from 'office-ui-fabric-react';
+import { getTheme, IProcessedStyleSet, IStyle, mergeStyleSets, FontWeights } from 'office-ui-fabric-react';
 
 export interface IParityTabStyles {
     iconClass: IStyle;
