@@ -1,4 +1,12 @@
 {
   "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*", "webpack.config.js"]
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["main.tsx"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
+    }
+  ]
 }
