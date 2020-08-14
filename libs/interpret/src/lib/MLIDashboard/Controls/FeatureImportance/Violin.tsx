@@ -29,8 +29,7 @@ import {
 } from "../../SharedComponents";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
-
-import "./Violin.scss";
+import { violinStyles } from "./Violin.styles";
 
 export enum GroupByOptions {
   none = "none",
@@ -328,11 +327,11 @@ export class Violin extends React.PureComponent<
         this.props.config.topK - 0.5
       ]);
       return (
-        <div className="aggregate-chart">
-          <div className="top-controls">
+        <div className={violinStyles.aggregateChart}>
+          <div className={violinStyles.topControls}>
             <ComboBox
               label={localization.FeatureImportanceWrapper.chartType}
-              className="path-selector"
+              className={violinStyles.pathSelector}
               selectedKey={this.props.config.displayMode}
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
@@ -345,7 +344,7 @@ export class Violin extends React.PureComponent<
               this.groupByOptions.length > 1 && (
                 <ComboBox
                   label={localization.Violin.groupBy}
-                  className="path-selector"
+                  className={violinStyles.pathSelector}
                   selectedKey={this.state.groupBy}
                   onChange={this.onGroupSelect}
                   options={this.groupByOptions}
@@ -354,9 +353,9 @@ export class Violin extends React.PureComponent<
                   styles={FabricStyles.smallDropdownStyle}
                 />
               )}
-            <div className="slider-control">
-              <div className="slider-label">
-                <span className="label-text">
+            <div className={violinStyles.sliderControl}>
+              <div className={violinStyles.sliderLabel}>
+                <span className={violinStyles.labelText}>
                   {localization.AggregateImportance.topKFeatures}
                 </span>
                 <IconButton
@@ -371,7 +370,7 @@ export class Violin extends React.PureComponent<
                 />
               </div>
               <Slider
-                className="feature-slider"
+                className={violinStyles.featureSlider}
                 max={Math.min(
                   Violin.maxFeatures,
                   this.props.dashboardContext.explanationContext.modelMetadata
@@ -386,9 +385,11 @@ export class Violin extends React.PureComponent<
             </div>
             {this.props.dashboardContext.explanationContext.modelMetadata
               .modelType === ModelTypes.multiclass && (
-              <div className="selector">
-                <div className="selector-label">
-                  <span>{localization.CrossClass.label}</span>
+              <div>
+                <div className={violinStyles.selectorLabel}>
+                  <span className={violinStyles.selectorSpan}>
+                    {localization.CrossClass.label}
+                  </span>
                   <IconButton
                     id={this._crossClassIconId}
                     iconProps={{ iconName: "Info" }}
@@ -401,7 +402,7 @@ export class Violin extends React.PureComponent<
                   />
                 </div>
                 <ComboBox
-                  className="pathSelector"
+                  className={violinStyles.pathSelector}
                   selectedKey={weightContext.selectedKey}
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
@@ -419,9 +420,12 @@ export class Violin extends React.PureComponent<
               onDismiss={this.onDismiss}
               role="alertdialog"
             >
-              <div className="callout-info">
+              <div className={violinStyles.calloutInfo}>
                 {this.state.calloutContent}
-                <DefaultButton onClick={this.onDismiss}>
+                <DefaultButton
+                  className={violinStyles.calloutButton}
+                  onClick={this.onDismiss}
+                >
                   {localization.CrossClass.close}
                 </DefaultButton>
               </div>
@@ -531,7 +535,7 @@ export class Violin extends React.PureComponent<
       this.onDismiss();
     } else {
       const calloutContent = (
-        <div className="class-weight-info">
+        <div>
           <span>{localization.CrossClass.overviewInfo}</span>
           <ul>
             <li>{localization.CrossClass.absoluteValInfo}</li>
@@ -549,7 +553,7 @@ export class Violin extends React.PureComponent<
       this.onDismiss();
     } else {
       const calloutContent = (
-        <div className="class-weight-info">
+        <div>
           <span>
             {localization.FeatureImportanceWrapper.globalImportanceExplanation}
           </span>

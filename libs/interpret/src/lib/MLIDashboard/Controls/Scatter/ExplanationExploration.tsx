@@ -126,7 +126,7 @@ export class ExplanationExploration extends React.PureComponent<
                   />
                 </div>
                 <ComboBox
-                  className={scatterStyles.comboBox}
+                  className={scatterStyles.selectorComboBox}
                   selectedKey={weightContext.selectedKey}
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
@@ -155,7 +155,7 @@ export class ExplanationExploration extends React.PureComponent<
                 </div>
                 <DefaultButton
                   onClick={this.onDismiss}
-                  className={scatterStyles.button}
+                  className={scatterStyles.calloutButton}
                 >
                   {localization.CrossClass.close}
                 </DefaultButton>

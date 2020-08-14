@@ -2,12 +2,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  font-size: 20px;
+  fontSize: 20px;
   .prediction-label,
   .probability-label {
     margin: auto;
     padding: 5px;
-    fontFamily:: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+    fontFamily: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   }
 }

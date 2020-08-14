@@ -10,9 +10,9 @@ export interface IScatterStyles {
   selector: IStyle;
   selectorLabel: IStyle;
   labelText: IStyle;
-  comboBox: IStyle;
+  selectorComboBox: IStyle;
   calloutInfo: IStyle;
-  button: IStyle;
+  calloutButton: IStyle;
 }
 
 export const scatterStyles: IProcessedStyleSet<IScatterStyles> = mergeStyleSets<
@@ -46,7 +46,7 @@ export const scatterStyles: IProcessedStyleSet<IScatterStyles> = mergeStyleSets<
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
       sans-serif`
   },
-  comboBox: {
+  selectorComboBox: {
     maxWidth: "208px"
   },
   calloutInfo: {
@@ -57,7 +57,7 @@ export const scatterStyles: IProcessedStyleSet<IScatterStyles> = mergeStyleSets<
     fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`
   },
-  button: {
+  calloutButton: {
     maxWidth: "100px"
   }
 });
