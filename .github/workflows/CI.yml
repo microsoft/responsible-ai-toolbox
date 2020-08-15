@@ -37,4 +37,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
-          path: dist/cypress
+          path: dist/cypresscypress
+      - uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
+      - name: Azure CLI Action
+        uses: Azure/cli@v1.0.0
+        with:
+          inlineScript: |
+            az account show
+            az storage -h
