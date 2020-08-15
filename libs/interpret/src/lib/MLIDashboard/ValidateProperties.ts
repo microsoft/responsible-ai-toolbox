@@ -1,5 +1,5 @@
 import { localization } from "../Localization/localization";
-import { IExplanationDashboardProps } from "./Interfaces";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { IExplanationModelMetadata } from "./IExplanationContext";
 
 export class ValidateProperties {

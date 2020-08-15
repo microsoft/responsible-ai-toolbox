@@ -1,5 +1,5 @@
-import * as _ from "lodash";
-import * as memoize from "memoize-one";
+import _ from "lodash";
+import memoize from "memoize-one";
 import {
   DefaultButton,
   IconButton,
@@ -10,7 +10,7 @@ import {
   IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
-import * as React from "react";
+import React from "react";
 import {
   ChartBuilder,
   AccessibleChart,
@@ -21,16 +21,14 @@ import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import {
-  PlotlyUtils,
-  NoDataMessage,
-  LoadingSpinner
-} from "../../SharedComponents";
-import { ScatterUtils } from "../Scatter";
+import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { ScatterUtils } from "../Scatter/ScatterUtils";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
-import "./Beehive.scss";
+import { beehiveStyles } from "./Beehive.styles";
 
 export interface IBeehiveState {
   calloutContent?: React.ReactNode;
@@ -60,7 +58,7 @@ export class Beehive extends React.PureComponent<
   // once per dataset and
   private static populateMappers: (
     data: IExplanationContext
-  ) => Array<(value: number | string) => number> = (memoize as any).default(
+  ) => Array<(value: number | string) => number> = memoize(
     (data: IExplanationContext): Array<(value: number | string) => number> => {
       return data.modelMetadata.featureNames.map((_val, featureIndex) => {
         if (data.modelMetadata.featureIsCategorical[featureIndex]) {
@@ -138,18 +136,16 @@ export class Beehive extends React.PureComponent<
 
   private static generateSortVector: (
     data: IExplanationContext
-  ) => number[] = (memoize as any).default(
-    (data: IExplanationContext): number[] => {
-      return ModelExplanationUtils.buildSortedVector(
-        data.globalExplanation.perClassFeatureImportances
-      );
-    }
-  );
+  ) => number[] = memoize((data: IExplanationContext): number[] => {
+    return ModelExplanationUtils.buildSortedVector(
+      data.globalExplanation.perClassFeatureImportances
+    );
+  });
 
   private static projectData: (
     data: IExplanationContext,
     sortVector: number[]
-  ) => IProjectedData[] = (memoize as any).default(
+  ) => IProjectedData[] = memoize(
     (data: IExplanationContext, sortVector: number[]): IProjectedData[] => {
       const mappers: Array<(value: string | number) => number> | undefined =
         data.testDataset.dataset !== undefined
@@ -211,7 +207,7 @@ export class Beehive extends React.PureComponent<
     sortVector: number[],
     selectedOption: IComboBoxOption,
     selections: string[]
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       explanationContext: IExplanationContext,
       sortVector: number[],
@@ -407,11 +403,11 @@ export class Beehive extends React.PureComponent<
         this.props.selectedRow
       );
       return (
-        <div className="aggregate-chart">
-          <div className="top-controls">
+        <div className={beehiveStyles.aggregateChart}>
+          <div className={beehiveStyles.topControls}>
             <ComboBox
               label={localization.FeatureImportanceWrapper.chartType}
-              className="path-selector"
+              className={beehiveStyles.pathSelector}
               selectedKey={FeatureImportanceModes.beehive}
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
@@ -422,7 +418,7 @@ export class Beehive extends React.PureComponent<
             {this.colorOptions.length > 1 && (
               <ComboBox
                 label={localization.ExplanationScatter.colorValue}
-                className="path-selector"
+                className={beehiveStyles.pathSelector}
                 selectedKey={this.state.selectedColorOption}
                 onChange={this.setColor}
                 options={this.colorOptions}
@@ -431,9 +427,9 @@ export class Beehive extends React.PureComponent<
                 styles={FabricStyles.smallDropdownStyle}
               />
             )}
-            <div className="slider-control">
-              <div className="slider-label">
-                <span className="label-text">
+            <div className={beehiveStyles.sliderControl}>
+              <div className={beehiveStyles.sliderLabel}>
+                <span className={beehiveStyles.labelText}>
                   {localization.AggregateImportance.topKFeatures}
                 </span>
                 {this.props.dashboardContext.explanationContext
@@ -450,7 +446,7 @@ export class Beehive extends React.PureComponent<
                 )}
               </div>
               <Slider
-                className="feature-slider"
+                className={beehiveStyles.featureSlider}
                 ariaLabel={localization.AggregateImportance.topKFeatures}
                 max={Math.min(
                   Beehive.maxFeatures,
@@ -466,8 +462,8 @@ export class Beehive extends React.PureComponent<
             </div>
             {this.props.dashboardContext.explanationContext.modelMetadata
               .modelType === ModelTypes.multiclass && (
-              <div className="selector">
-                <div className="selector-label">
+              <div>
+                <div className={beehiveStyles.selectorLabel}>
                   <span>{localization.CrossClass.label}</span>
                   <IconButton
                     id={this._crossClassIconId}
@@ -480,7 +476,7 @@ export class Beehive extends React.PureComponent<
                   />
                 </div>
                 <ComboBox
-                  className="path-selector"
+                  className={beehiveStyles.pathSelector}
                   selectedKey={weightContext.selectedKey}
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
@@ -498,9 +494,12 @@ export class Beehive extends React.PureComponent<
               onDismiss={this.onDismiss}
               role="alertdialog"
             >
-              <div className="callout-info">
+              <div className={beehiveStyles.calloutInfo}>
                 {this.state.calloutContent}
-                <DefaultButton onClick={this.onDismiss}>
+                <DefaultButton
+                  onClick={this.onDismiss}
+                  className={beehiveStyles.calloutButton}
+                >
                   {localization.CrossClass.close}
                 </DefaultButton>
               </div>
@@ -565,7 +564,7 @@ export class Beehive extends React.PureComponent<
       this.onDismiss();
     } else {
       const calloutContent = (
-        <div className="class-weight-info">
+        <div>
           <span>{localization.CrossClass.overviewInfo}</span>
           <ul>
             <li>{localization.CrossClass.absoluteValInfo}</li>
@@ -583,7 +582,7 @@ export class Beehive extends React.PureComponent<
       this.onDismiss();
     } else {
       const calloutContent = (
-        <div className="class-weight-info">
+        <div>
           <span>
             {localization.FeatureImportanceWrapper.globalImportanceExplanation}
           </span>

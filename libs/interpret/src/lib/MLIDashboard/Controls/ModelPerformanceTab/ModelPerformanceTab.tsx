@@ -504,23 +504,22 @@ export class ModelPerformanceTab extends React.PureComponent<
         indexes,
         this.props.metadata.modelType
       );
-    } else {
-      const cohort = this.props.cohorts[this.state.selectedCohortIndex];
-      const yValues = cohort.unwrap(this.props.chartProps.yAxis.property, true);
-      const indexArray = cohort.unwrap(JointDataset.IndexLabel);
-      const sortedCategoricalValues = this.props.jointDataset.metaDict[
-        this.props.chartProps.yAxis.property
-      ].sortedCategoricalValues;
-      const indexes = sortedCategoricalValues.map((_, labelIndex) => {
-        return indexArray.filter((_, index) => {
-          return yValues[index] === labelIndex;
-        });
-      });
-      return generateMetrics(
-        this.props.jointDataset,
-        indexes,
-        this.props.metadata.modelType
-      );
     }
+    const cohort = this.props.cohorts[this.state.selectedCohortIndex];
+    const yValues = cohort.unwrap(this.props.chartProps.yAxis.property, true);
+    const indexArray = cohort.unwrap(JointDataset.IndexLabel);
+    const sortedCategoricalValues = this.props.jointDataset.metaDict[
+      this.props.chartProps.yAxis.property
+    ].sortedCategoricalValues;
+    const indexes = sortedCategoricalValues.map((_, labelIndex) => {
+      return indexArray.filter((_, index) => {
+        return yValues[index] === labelIndex;
+      });
+    });
+    return generateMetrics(
+      this.props.jointDataset,
+      indexes,
+      this.props.metadata.modelType
+    );
   }
 }

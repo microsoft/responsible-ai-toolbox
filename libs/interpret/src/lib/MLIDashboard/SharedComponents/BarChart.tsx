@@ -6,6 +6,7 @@ import _ from "lodash";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { localization } from "../../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
+import { barChartStyles } from "./BarChart.styles";
 
 export interface IBarChartProps {
   featureByClassMatrix: number[][];
@@ -96,9 +97,13 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           themedProps.config
         );
       }, 0);
-      return <div className="feature-importance-bar-chart" id={this.guid} />;
+      return <div className={barChartStyles.barChart} id={this.guid} />;
     }
-    return <div className="centered">{localization.BarChart.noData}</div>;
+    return (
+      <div className={barChartStyles.centered}>
+        {localization.BarChart.noData}
+      </div>
+    );
   }
 
   private hasData(): boolean {
@@ -182,7 +187,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
               : "",
           x,
           y,
-          text: text
+          text
         } as any);
       });
     }

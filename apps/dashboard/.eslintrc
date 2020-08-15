@@ -1,4 +1,18 @@
 {
   "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*", "webpack.config.js"]
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["main.tsx"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
+    },
+    {
+      "files": ["src/environments/*.*"],
+      "rules": {
+        "filenames/match-regex": ["error", "^environment(\\.[a-z]+)?$"]
+      }
+    }
+  ]
 }

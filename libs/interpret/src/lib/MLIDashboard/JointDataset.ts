@@ -6,12 +6,12 @@ import {
 import _ from "lodash";
 import { localization } from "../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
+import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { CohortKey } from "./CohortKey";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
-} from "./Interfaces";
-import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
-import { CohortKey } from "./CohortKey";
+} from "./Interfaces/IExplanationDashboardProps";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];

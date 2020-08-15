@@ -2,11 +2,11 @@ import React from "react";
 import { SelectionContext } from "@responsible-ai/mlchartlib";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import { IDashboardContext } from "../../ExplanationDashboard";
-import { IBarChartConfig } from "../../SharedComponents";
+import { IBarChartConfig } from "../../SharedComponents/IBarChartConfig";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { localization } from "../../../Localization/localization";
 import { FeatureImportanceBar } from "./FeatureImportanceBar";
-import { Beehive } from "./Beenhive";
+import { Beehive } from "./Beehive";
 import { Violin } from "./Violin";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 

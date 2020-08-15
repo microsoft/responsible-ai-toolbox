@@ -1,4 +1,4 @@
-export const precomputedBinary2 = {
+export const precomputedBinaryTwo = {
   trueY: [
     0,
     0,

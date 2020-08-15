@@ -49,7 +49,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { InteractiveLegend } from "../InteractiveLegend";
+import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
@@ -251,7 +251,7 @@ export class WhatIfTab extends React.PureComponent<
         (rowIndex, colorIndex) => {
           const row = this.props.jointDataset.getRow(rowIndex);
           return {
-            colorIndex: colorIndex,
+            colorIndex,
             id: rowIndex,
             name: localization.formatString(
               localization.WhatIfTab.rowLabel,
@@ -934,114 +934,112 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         );
       }
+    } else if (!this.props.invokeModel) {
+      secondaryPlot = (
+        <div className={classNames.missingParametersPlaceholder}>
+          <div className={classNames.missingParametersPlaceholderSpacer}>
+            <Text variant="large" className={classNames.faintText}>
+              {localization.WhatIfTab.iceLackingParameters}
+            </Text>
+          </div>
+        </div>
+      );
+    } else if (this.testableDatapoints.length === 0) {
+      secondaryPlot = (
+        <div className={classNames.missingParametersPlaceholder}>
+          <div className={classNames.missingParametersPlaceholderSpacer}>
+            <Text variant="large" className={classNames.faintText}>
+              {localization.WhatIfTab.IceGetStartedText}
+            </Text>
+          </div>
+        </div>
+      );
     } else {
-      if (!this.props.invokeModel) {
-        secondaryPlot = (
-          <div className={classNames.missingParametersPlaceholder}>
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {localization.WhatIfTab.iceLackingParameters}
-              </Text>
-            </div>
-          </div>
-        );
-      } else if (this.testableDatapoints.length === 0) {
-        secondaryPlot = (
-          <div className={classNames.missingParametersPlaceholder}>
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {localization.WhatIfTab.IceGetStartedText}
-              </Text>
-            </div>
-          </div>
-        );
-      } else {
-        secondaryPlot = (
-          <div className={classNames.featureImportanceArea}>
-            <div className={classNames.rightJustifiedContainer}>
-              <CommandBarButton
-                iconProps={{ iconName: "Info" }}
-                id="explanation-info"
-                className={classNames.infoButton}
-                text={localization.Charts.howToRead}
-                onClick={this.toggleICETooltip}
-              />
-              {this.state.iceTooltipVisible && (
-                <Callout
-                  doNotLayer={true}
-                  target={"#explanation-info"}
-                  setInitialFocus={true}
-                  onDismiss={this.toggleICETooltip}
-                  role="alertdialog"
-                  styles={{ container: FabricStyles.calloutContainer }}
-                >
-                  <div className={classNames.calloutWrapper}>
-                    <div className={classNames.calloutHeader}>
-                      <Text className={classNames.calloutTitle}>
-                        {localization.WhatIfTab.icePlot}
-                      </Text>
-                    </div>
-                    <div className={classNames.calloutInner}>
-                      <Text>{localization.WhatIfTab.icePlotHelperText}</Text>
-                      <div className={classNames.calloutActions}>
-                        <Link
-                          className={classNames.calloutLink}
-                          href={
-                            "https://christophm.github.io/interpretable-ml-book/ice.html#ice"
-                          }
-                          target="_blank"
-                        >
-                          {localization.ExplanationSummary.clickHere}
-                        </Link>
-                      </div>
+      secondaryPlot = (
+        <div className={classNames.featureImportanceArea}>
+          <div className={classNames.rightJustifiedContainer}>
+            <CommandBarButton
+              iconProps={{ iconName: "Info" }}
+              id="explanation-info"
+              className={classNames.infoButton}
+              text={localization.Charts.howToRead}
+              onClick={this.toggleICETooltip}
+            />
+            {this.state.iceTooltipVisible && (
+              <Callout
+                doNotLayer={true}
+                target={"#explanation-info"}
+                setInitialFocus={true}
+                onDismiss={this.toggleICETooltip}
+                role="alertdialog"
+                styles={{ container: FabricStyles.calloutContainer }}
+              >
+                <div className={classNames.calloutWrapper}>
+                  <div className={classNames.calloutHeader}>
+                    <Text className={classNames.calloutTitle}>
+                      {localization.WhatIfTab.icePlot}
+                    </Text>
+                  </div>
+                  <div className={classNames.calloutInner}>
+                    <Text>{localization.WhatIfTab.icePlotHelperText}</Text>
+                    <div className={classNames.calloutActions}>
+                      <Link
+                        className={classNames.calloutLink}
+                        href={
+                          "https://christophm.github.io/interpretable-ml-book/ice.html#ice"
+                        }
+                        target="_blank"
+                      >
+                        {localization.ExplanationSummary.clickHere}
+                      </Link>
                     </div>
                   </div>
-                </Callout>
-              )}
-            </div>
-            <div className={classNames.featureImportanceChartAndLegend}>
-              <MultiICEPlot
-                invokeModel={this.props.invokeModel}
-                datapoints={this.testableDatapoints}
-                colors={this.testableDatapointColors}
-                rowNames={this.testableDatapointNames}
-                jointDataset={this.props.jointDataset}
-                metadata={this.props.metadata}
-                feature={this.state.selectedFeatureKey}
-                selectedClass={this.state.selectedICEClass}
+                </div>
+              </Callout>
+            )}
+          </div>
+          <div className={classNames.featureImportanceChartAndLegend}>
+            <MultiICEPlot
+              invokeModel={this.props.invokeModel}
+              datapoints={this.testableDatapoints}
+              colors={this.testableDatapointColors}
+              rowNames={this.testableDatapointNames}
+              jointDataset={this.props.jointDataset}
+              metadata={this.props.metadata}
+              feature={this.state.selectedFeatureKey}
+              selectedClass={this.state.selectedICEClass}
+            />
+            <div className={classNames.featureImportanceLegend}>
+              <ComboBox
+                autoComplete={"on"}
+                className={classNames.iceFeatureSelection}
+                options={this.featuresOption}
+                onChange={this.onFeatureSelected}
+                label={localization.IcePlot.featurePickerLabel}
+                ariaLabel="feature picker"
+                selectedKey={this.state.selectedFeatureKey}
+                useComboBoxAsMenuWidth={true}
+                calloutProps={FabricStyles.calloutProps}
+                styles={FabricStyles.limitedSizeMenuDropdown}
               />
-              <div className={classNames.featureImportanceLegend}>
+              {this.props.metadata.modelType === ModelTypes.multiclass && (
                 <ComboBox
                   autoComplete={"on"}
-                  className={classNames.iceFeatureSelection}
-                  options={this.featuresOption}
-                  onChange={this.onFeatureSelected}
-                  label={localization.IcePlot.featurePickerLabel}
-                  ariaLabel="feature picker"
-                  selectedKey={this.state.selectedFeatureKey}
+                  className={classNames.iceClassSelection}
+                  options={this.classOptions}
+                  onChange={this.onICEClassSelected}
+                  label={localization.WhatIfTab.classPickerLabel}
+                  ariaLabel="class picker"
+                  selectedKey={this.state.selectedICEClass}
                   useComboBoxAsMenuWidth={true}
                   calloutProps={FabricStyles.calloutProps}
                   styles={FabricStyles.limitedSizeMenuDropdown}
                 />
-                {this.props.metadata.modelType === ModelTypes.multiclass && (
-                  <ComboBox
-                    autoComplete={"on"}
-                    className={classNames.iceClassSelection}
-                    options={this.classOptions}
-                    onChange={this.onICEClassSelected}
-                    label={localization.WhatIfTab.classPickerLabel}
-                    ariaLabel="class picker"
-                    selectedKey={this.state.selectedICEClass}
-                    useComboBoxAsMenuWidth={true}
-                    calloutProps={FabricStyles.calloutProps}
-                    styles={FabricStyles.limitedSizeMenuDropdown}
-                  />
-                )}
-              </div>
+              )}
             </div>
           </div>
-        );
-      }
+        </div>
+      );
     }
 
     return (
@@ -1216,43 +1214,42 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         </div>
       );
-    } else {
-      const row = this.props.jointDataset.getRow(
-        this.state.selectedWhatIfRootIndex
-      );
-      const trueValue = this.props.jointDataset.hasTrueY
-        ? row[JointDataset.TrueYLabel]
-        : undefined;
-      const predictedValue = this.props.jointDataset.hasPredictedY
-        ? row[JointDataset.PredictedYLabel]
-        : undefined;
-      return (
-        <div className={classNames.predictedBlock}>
-          <div>
-            {trueValue !== undefined && (
-              <div>
-                <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.trueValue}
-                </Text>
-                <Text variant="small">{trueValue}</Text>
-              </div>
-            )}
-            {predictedValue !== undefined && (
-              <div>
-                <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.predictedValue}
-                </Text>
-                <Text variant="small">
-                  {predictedValue.toLocaleString(undefined, {
-                    maximumFractionDigits: 3
-                  })}
-                </Text>
-              </div>
-            )}
-          </div>
-        </div>
-      );
     }
+    const row = this.props.jointDataset.getRow(
+      this.state.selectedWhatIfRootIndex
+    );
+    const trueValue = this.props.jointDataset.hasTrueY
+      ? row[JointDataset.TrueYLabel]
+      : undefined;
+    const predictedValue = this.props.jointDataset.hasPredictedY
+      ? row[JointDataset.PredictedYLabel]
+      : undefined;
+    return (
+      <div className={classNames.predictedBlock}>
+        <div>
+          {trueValue !== undefined && (
+            <div>
+              <Text className={classNames.boldText} variant="small">
+                {localization.WhatIfTab.trueValue}
+              </Text>
+              <Text variant="small">{trueValue}</Text>
+            </div>
+          )}
+          {predictedValue !== undefined && (
+            <div>
+              <Text className={classNames.boldText} variant="small">
+                {localization.WhatIfTab.predictedValue}
+              </Text>
+              <Text variant="small">
+                {predictedValue.toLocaleString(undefined, {
+                  maximumFractionDigits: 3
+                })}
+              </Text>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   }
 
   private buildCustomPredictionLabels(
@@ -1423,27 +1420,26 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         </div>
       );
-    } else {
-      const predictedValueString =
-        this.temporaryPoint[JointDataset.PredictedYLabel] !== undefined
-          ? this.temporaryPoint[JointDataset.PredictedYLabel].toLocaleString(
-              undefined,
-              {
-                maximumFractionDigits: 3
-              }
-            )
-          : localization.WhatIfTab.loading;
-      return (
-        <div className={classNames.customPredictBlock}>
-          <div>
-            <Text className={classNames.boldText} variant="small">
-              {localization.WhatIfTab.newPredictedValue}
-            </Text>
-            <Text variant="small">{predictedValueString}</Text>
-          </div>
-        </div>
-      );
     }
+    const predictedValueString =
+      this.temporaryPoint[JointDataset.PredictedYLabel] !== undefined
+        ? this.temporaryPoint[JointDataset.PredictedYLabel].toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 3
+            }
+          )
+        : localization.WhatIfTab.loading;
+    return (
+      <div className={classNames.customPredictBlock}>
+        <div>
+          <Text className={classNames.boldText} variant="small">
+            {localization.WhatIfTab.newPredictedValue}
+          </Text>
+          <Text variant="small">{predictedValueString}</Text>
+        </div>
+      </div>
+    );
   }
 
   private setStartingK = (newValue: number): void => {

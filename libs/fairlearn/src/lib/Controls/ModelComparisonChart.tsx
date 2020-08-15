@@ -146,7 +146,7 @@ export class ModelComparisonChart extends React.PureComponent<
       return {
         Parity: this.state.disparityArray[index],
         Accuracy: accuracy,
-        index: index
+        index
       };
     });
 
