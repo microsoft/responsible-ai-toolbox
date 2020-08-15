@@ -23,18 +23,14 @@ jobs:
         uses: c-py/action-dotenv-to-setenv@v1
         with:
           env-file: .env
-      - uses: azure/login@v1.1
-        with:
-          creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
       - id: publish_url
-        name: "Publish url"
         run: |
           echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
       - name: Upload dashboard ${{steps.publish_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name="${blob_account}" -d="${blob_container_pr}" --destination-path="${source}" -s="tools" --auth-mode="login"
+            az storage blob upload-batch --account-name="${blob_account}" -d="${blob_container_pr}" --destination-path="${source}" -s="tools" --connection-string="${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
       - run: |
           echo "Source: ::set-output name=source::${source}"
       - name: Use Node.js ${{ matrix.node-version }}
