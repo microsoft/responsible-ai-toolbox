@@ -56,9 +56,9 @@ jobs:
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
-      - id: publish_url
-        run: |
-          echo "Publish To: ::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
+      # - id: publish_url
+      #   run: |
+      #     echo "Publish To: ::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
       - name: Upload dashboard to ${{steps.publish_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
