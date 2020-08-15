@@ -18,15 +18,15 @@ jobs:
         node-version: [12.x, 14.x]
 
     steps:
-      # - name: Install prerequisite package for cypress
-      # - run: apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+      - uses: actions/checkout@v2
       - name: Populate env var from .env
         uses: c-py/action-dotenv-to-setenv@v1
         with:
-        env-file: .env
-      - name: "Source: ${source}"
-      - name: "Publish To: https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html"
-      - uses: actions/checkout@v2
+          env-file: .env
+      - run: |
+          echo "Source: ${source}"
+      - run: |
+          echo "Publish To: https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html"
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
