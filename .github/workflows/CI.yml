@@ -20,7 +20,7 @@ jobs:
       # - run: apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       - uses: actions/checkout@v2
       - run: |
-          echo "github.event.pull_request.head ${{ github.event.pull_request.head }}"
+          echo "github.event.pull_request.head.repo.name ${{ github.event.pull_request.head.repo.name }}/${{ github.head_ref }}"
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
