@@ -231,6 +231,7 @@
         "build": {
           "builder": "@nrwl/web:build",
           "options": {
+            "baseHref": ".",
             "outputPath": "dist/apps/dashboard",
             "index": "apps/dashboard/src/index.html",
             "main": "apps/dashboard/src/main.tsx",

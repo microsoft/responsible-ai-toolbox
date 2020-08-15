@@ -2,6 +2,8 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CI
+env: 
+  source: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}"
 
 on:
   pull_request:
@@ -18,18 +20,16 @@ jobs:
     steps:
       # - name: Install prerequisite package for cypress
       # - run: apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+      - name: Populate env var from .env
+        uses: c-py/action-dotenv-to-setenv@v1
+        with:
+        env-file: .env
+      - name: "Source: ${source}"
+      - name: "Publish To: https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html"
       - uses: actions/checkout@v2
-      - run: |
-          echo "github.event.pull_request.head.repo.name ${{ github.event.pull_request.head.repo.name }}/${{ github.head_ref }}"
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
-      - name: Azure CLI Action
-        uses: Azure/cli@v1.0.0
-        with:
-          inlineScript: |
-            az account show
-            az storage -h
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -50,3 +50,8 @@ jobs:
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
+      - name: Upload dashboard to https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html
+        uses: Azure/cli@v1.0.0
+        with:
+          inlineScript: |
+            az storage blob upload-batch --account-name ${blob_account} -d ${blob_container_pr} --destination-path ${source} -s dist/apps/dashboard --auth-mode login
