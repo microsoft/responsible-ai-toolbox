@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: cypress/base
 
     strategy:
       matrix:
