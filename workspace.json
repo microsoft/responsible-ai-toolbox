@@ -238,6 +238,12 @@
             "tsConfig": "apps/dashboard/tsconfig.app.json",
             "progress": false,
             "memoryLimit": 4096,
+            "globals": [
+              {
+                "moduleId": "plotly.js",
+                "global": "Plotly"
+              }
+            ],
             "assets": [
               "apps/dashboard/src/favicon.ico",
               "apps/dashboard/src/assets"
