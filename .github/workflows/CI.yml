@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
-          path: dist/cypresscypress
+          path: dist/cypress
