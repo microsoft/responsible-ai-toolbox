@@ -16,12 +16,9 @@ export const automlMimicAdult = {
     "Column14"
   ],
   classNames: [" <=50K", " >50K"],
-  "localExplanations": {
-    "intercept": [
-      2.017027712531668,
-      -2.017027712531668
-    ],
-    "scores": [
+  localExplanations: {
+    intercept: [2.017027712531668, -2.017027712531668],
+    scores: [
       [
         [
           0.3983844330617047,
