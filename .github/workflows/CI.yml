@@ -23,6 +23,9 @@ jobs:
         uses: c-py/action-dotenv-to-setenv@v1
         with:
           env-file: .env
+      - uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
       - id: publish_url
         run: |
           echo "Publish To: ::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
@@ -33,9 +36,6 @@ jobs:
             az storage blob upload-batch --account-name ${blob_account} -d ${blob_container_pr} --destination-path ${source} -s tools --auth-mode login
       - run: |
           echo "Source: ::set-output name=source::${source}"
-      - uses: azure/login@v1.1
-        with:
-          creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
