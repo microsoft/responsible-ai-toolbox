@@ -18,7 +18,7 @@ import { Data } from "plotly.js";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
-import { NoDataMessage } from "../../SharedComponents";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import {
   ModelTypes,
   IExplanationModelMetadata
@@ -185,141 +185,140 @@ export class MultiICEPlot extends React.PureComponent<
   public render(): React.ReactNode {
     if (this.props.invokeModel === undefined) {
       return <NoDataMessage />;
-    } else {
-      const classNames = multiIcePlotStyles();
-      const hasOutgoingRequest = this.state.abortControllers.some(
-        (x) => x !== undefined
-      );
-      const plotlyProps = MultiICEPlot.buildPlotlyProps(
-        this.props.metadata,
-        this.props.jointDataset.metaDict[this.props.feature].label,
-        this.props.selectedClass,
-        this.props.colors,
-        this.props.rowNames,
-        this.state.rangeView.type,
-        this.state.xAxisArray,
-        this.state.yAxes
-      );
-      const hasError =
-        this.state.rangeView !== undefined &&
-        (this.state.rangeView.maxErrorMessage !== undefined ||
-          this.state.rangeView.minErrorMessage !== undefined ||
-          this.state.rangeView.stepsErrorMessage !== undefined);
-      return (
-        <div className={classNames.iceWrapper}>
-          {this.state.rangeView !== undefined && (
-            <div className={classNames.controlArea}>
-              {this.state.rangeView.type === RangeTypes.categorical && (
-                <ComboBox
-                  multiSelect
-                  selectedKey={
-                    this.state.rangeView.selectedOptionKeys as string[]
-                  }
-                  allowFreeform={true}
-                  autoComplete="on"
-                  options={this.state.rangeView.categoricalOptions}
-                  onChange={this.onCategoricalRangeChanged}
-                  styles={FabricStyles.defaultDropdownStyle}
-                  calloutProps={FabricStyles.calloutProps}
-                />
-              )}
-              {this.state.rangeView.type !== RangeTypes.categorical && (
-                <div className={classNames.parameterList}>
-                  <SpinButton
-                    styles={{
-                      spinButtonWrapper: { maxWidth: "68px" },
-                      labelWrapper: { alignSelf: "center" },
-                      root: {
-                        display: "inline-flex",
-                        float: "right",
-                        selectors: {
-                          "> div": {
-                            maxWidth: "78px"
-                          }
-                        }
-                      }
-                    }}
-                    label={localization.WhatIfTab.minLabel}
-                    value={this.state.rangeView.min.toString()}
-                    onIncrement={this.onMinRangeChanged.bind(this, 1)}
-                    onDecrement={this.onMinRangeChanged.bind(this, -1)}
-                    onValidate={this.onMinRangeChanged.bind(this, 0)}
-                  />
-                  <SpinButton
-                    styles={{
-                      spinButtonWrapper: { maxWidth: "68px" },
-                      labelWrapper: { alignSelf: "center" },
-                      root: {
-                        display: "inline-flex",
-                        float: "right",
-                        selectors: {
-                          "> div": {
-                            maxWidth: "78px"
-                          }
-                        }
-                      }
-                    }}
-                    label={localization.WhatIfTab.maxLabel}
-                    value={this.state.rangeView.max.toString()}
-                    onIncrement={this.onMaxRangeChanged.bind(this, 1)}
-                    onDecrement={this.onMaxRangeChanged.bind(this, -1)}
-                    onValidate={this.onMaxRangeChanged.bind(this, 0)}
-                  />
-                  <SpinButton
-                    styles={{
-                      spinButtonWrapper: { maxWidth: "68px" },
-                      labelWrapper: { alignSelf: "center" },
-                      root: {
-                        display: "inline-flex",
-                        float: "right",
-                        selectors: {
-                          "> div": {
-                            maxWidth: "78px"
-                          }
-                        }
-                      }
-                    }}
-                    label={localization.WhatIfTab.stepsLabel}
-                    value={this.state.rangeView.steps.toString()}
-                    onIncrement={this.onStepsRangeChanged.bind(this, 1)}
-                    onDecrement={this.onStepsRangeChanged.bind(this, -1)}
-                    onValidate={this.onStepsRangeChanged.bind(this, 0)}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-          {hasOutgoingRequest && (
-            <div className={classNames.placeholder}>
-              <Text>{localization.IcePlot.loadingMessage}</Text>
-            </div>
-          )}
-          {this.state.errorMessage && (
-            <div className={classNames.placeholder}>
-              <Text>{this.state.errorMessage}</Text>
-            </div>
-          )}
-          {plotlyProps === undefined && !hasOutgoingRequest && (
-            <div className={classNames.placeholder}>
-              <Text>{localization.IcePlot.submitPrompt}</Text>
-            </div>
-          )}
-          {hasError && (
-            <div className={classNames.placeholder}>
-              <Text>{localization.IcePlot.topLevelErrorMessage}</Text>
-            </div>
-          )}
-          {plotlyProps !== undefined && !hasOutgoingRequest && !hasError && (
-            <div className={classNames.chartWrapper}>
-              <AccessibleChart
-                plotlyProps={plotlyProps}
-                theme={getTheme() as any}
-              />
-            </div>
-          )}
-        </div>
-      );
     }
+    const classNames = multiIcePlotStyles();
+    const hasOutgoingRequest = this.state.abortControllers.some(
+      (x) => x !== undefined
+    );
+    const plotlyProps = MultiICEPlot.buildPlotlyProps(
+      this.props.metadata,
+      this.props.jointDataset.metaDict[this.props.feature].label,
+      this.props.selectedClass,
+      this.props.colors,
+      this.props.rowNames,
+      this.state.rangeView.type,
+      this.state.xAxisArray,
+      this.state.yAxes
+    );
+    const hasError =
+      this.state.rangeView !== undefined &&
+      (this.state.rangeView.maxErrorMessage !== undefined ||
+        this.state.rangeView.minErrorMessage !== undefined ||
+        this.state.rangeView.stepsErrorMessage !== undefined);
+    return (
+      <div className={classNames.iceWrapper}>
+        {this.state.rangeView !== undefined && (
+          <div className={classNames.controlArea}>
+            {this.state.rangeView.type === RangeTypes.categorical && (
+              <ComboBox
+                multiSelect
+                selectedKey={
+                  this.state.rangeView.selectedOptionKeys as string[]
+                }
+                allowFreeform={true}
+                autoComplete="on"
+                options={this.state.rangeView.categoricalOptions}
+                onChange={this.onCategoricalRangeChanged}
+                styles={FabricStyles.defaultDropdownStyle}
+                calloutProps={FabricStyles.calloutProps}
+              />
+            )}
+            {this.state.rangeView.type !== RangeTypes.categorical && (
+              <div className={classNames.parameterList}>
+                <SpinButton
+                  styles={{
+                    spinButtonWrapper: { maxWidth: "68px" },
+                    labelWrapper: { alignSelf: "center" },
+                    root: {
+                      display: "inline-flex",
+                      float: "right",
+                      selectors: {
+                        "> div": {
+                          maxWidth: "78px"
+                        }
+                      }
+                    }
+                  }}
+                  label={localization.WhatIfTab.minLabel}
+                  value={this.state.rangeView.min.toString()}
+                  onIncrement={this.onMinRangeChanged.bind(this, 1)}
+                  onDecrement={this.onMinRangeChanged.bind(this, -1)}
+                  onValidate={this.onMinRangeChanged.bind(this, 0)}
+                />
+                <SpinButton
+                  styles={{
+                    spinButtonWrapper: { maxWidth: "68px" },
+                    labelWrapper: { alignSelf: "center" },
+                    root: {
+                      display: "inline-flex",
+                      float: "right",
+                      selectors: {
+                        "> div": {
+                          maxWidth: "78px"
+                        }
+                      }
+                    }
+                  }}
+                  label={localization.WhatIfTab.maxLabel}
+                  value={this.state.rangeView.max.toString()}
+                  onIncrement={this.onMaxRangeChanged.bind(this, 1)}
+                  onDecrement={this.onMaxRangeChanged.bind(this, -1)}
+                  onValidate={this.onMaxRangeChanged.bind(this, 0)}
+                />
+                <SpinButton
+                  styles={{
+                    spinButtonWrapper: { maxWidth: "68px" },
+                    labelWrapper: { alignSelf: "center" },
+                    root: {
+                      display: "inline-flex",
+                      float: "right",
+                      selectors: {
+                        "> div": {
+                          maxWidth: "78px"
+                        }
+                      }
+                    }
+                  }}
+                  label={localization.WhatIfTab.stepsLabel}
+                  value={this.state.rangeView.steps.toString()}
+                  onIncrement={this.onStepsRangeChanged.bind(this, 1)}
+                  onDecrement={this.onStepsRangeChanged.bind(this, -1)}
+                  onValidate={this.onStepsRangeChanged.bind(this, 0)}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        {hasOutgoingRequest && (
+          <div className={classNames.placeholder}>
+            <Text>{localization.IcePlot.loadingMessage}</Text>
+          </div>
+        )}
+        {this.state.errorMessage && (
+          <div className={classNames.placeholder}>
+            <Text>{this.state.errorMessage}</Text>
+          </div>
+        )}
+        {plotlyProps === undefined && !hasOutgoingRequest && (
+          <div className={classNames.placeholder}>
+            <Text>{localization.IcePlot.submitPrompt}</Text>
+          </div>
+        )}
+        {hasError && (
+          <div className={classNames.placeholder}>
+            <Text>{localization.IcePlot.topLevelErrorMessage}</Text>
+          </div>
+        )}
+        {plotlyProps !== undefined && !hasOutgoingRequest && !hasError && (
+          <div className={classNames.chartWrapper}>
+            <AccessibleChart
+              plotlyProps={plotlyProps}
+              theme={getTheme() as any}
+            />
+          </div>
+        )}
+      </div>
+    );
   }
 
   private onFeatureSelected(): void {
@@ -538,16 +537,15 @@ export class MultiICEPlot extends React.PureComponent<
         }),
         type: RangeTypes.categorical
       };
-    } else {
-      return {
-        key: featureKey,
-        featureIndex: summary.index,
-        min: summary.featureRange.min,
-        max: summary.featureRange.max,
-        steps: 20,
-        type: summary.featureRange.rangeType
-      };
     }
+    return {
+      key: featureKey,
+      featureIndex: summary.index,
+      min: summary.featureRange.min,
+      max: summary.featureRange.max,
+      steps: 20,
+      type: summary.featureRange.rangeType
+    };
   }
 
   private buildRange(rangeView: IRangeView): number[] | string[] {
@@ -581,8 +579,7 @@ export class MultiICEPlot extends React.PureComponent<
             : min + i * delta
         )
       );
-    } else {
-      return [];
     }
+    return [];
   }
 }

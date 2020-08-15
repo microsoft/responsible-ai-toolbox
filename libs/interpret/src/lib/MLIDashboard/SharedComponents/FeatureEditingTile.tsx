@@ -9,8 +9,7 @@ import {
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { FabricStyles } from "../FabricStyles";
 import { localization } from "../../Localization/localization";
-
-import "./FeatureEditingTile.scss";
+import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
 
 export interface IFeatureEditingTileProps {
   onEdit: (index: number, val: string | number, error?: string) => void;
@@ -54,20 +53,22 @@ export class FeatureEditingTile extends React.Component<
   }
 
   public render(): React.ReactNode {
-    let tileClass = "tile";
+    let tileClass = featureEditingTileStyles.tile;
     if (
       this.state.value !== this.props.defaultValue.toString() &&
       this.state.errorMessage === undefined
     ) {
-      tileClass += " edited";
+      tileClass += " " + featureEditingTileStyles.edited;
     }
     if (this.state.errorMessage !== undefined) {
-      tileClass += " error";
+      tileClass += " " + featureEditingTileStyles.error;
     }
 
     return (
       <div className={tileClass}>
-        <div className="tile-label">{this.props.featureName}</div>
+        <div className={featureEditingTileStyles.tileLabel}>
+          {this.props.featureName}
+        </div>
         {this.props.enumeratedValues === undefined && (
           <TextField
             styles={FabricStyles.textFieldStyle}

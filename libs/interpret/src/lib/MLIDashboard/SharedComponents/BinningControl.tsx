@@ -15,7 +15,7 @@ import {
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
-import "./BinningControl.scss";
+import { binningControlStyles } from "./BinningControl.styles";
 
 export interface IBinningProps {
   modelMetadata: IModelMetadata;
@@ -68,8 +68,8 @@ export class BinningControl extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <div className="feature-picker">
-        <div className="path-selector">
+      <div className={binningControlStyles.featurePicker}>
+        <div>
           <ComboBox
             options={this.props.featureOptions}
             onChange={this.onFeatureSelected}
@@ -81,7 +81,7 @@ export class BinningControl extends React.PureComponent<
           />
         </div>
         {!!this.state && (
-          <div className="rangeview">
+          <div className={binningControlStyles.rangeView}>
             {this.state.type === RangeTypes.categorical && (
               <ComboBox
                 multiSelect
@@ -94,7 +94,7 @@ export class BinningControl extends React.PureComponent<
               />
             )}
             {this.state.type !== RangeTypes.categorical && (
-              <div className="parameter-set">
+              <div className={binningControlStyles.featurePicker}>
                 <TextField
                   label={localization.IcePlot.minimumInputLabel}
                   styles={FabricStyles.textFieldStyle}

@@ -5,7 +5,7 @@ import _ from "lodash";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
 import { regression } from "./__mock-data/regression";
 import { precomputedBinary } from "./__mock-data/precomputedBinary";
-import { precomputedBinary2 } from "./__mock-data/precomputedBinary2";
+import { precomputedBinaryTwo } from "./__mock-data/precomputedBinaryTwo";
 import { probit } from "./__mock-data/probit";
 
 const darkTheme = createTheme({
@@ -95,7 +95,7 @@ export class App extends React.Component<any, any> {
     { label: "regression", data: regression },
     { label: "probit", data: probit },
     { label: "precomputed binary", data: precomputedBinary },
-    { label: "precomputed binary2", data: precomputedBinary2 }
+    { label: "precomputed binary2", data: precomputedBinaryTwo }
   ];
 
   private static themeChoices = [

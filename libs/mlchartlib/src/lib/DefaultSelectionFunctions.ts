@@ -1,4 +1,4 @@
-import * as Plotly from "plotly.js";
+import Plotly from "plotly.js";
 import { IPlotlyProperty } from "./IPlotlyProperty";
 
 export class DefaultSelectionFunctions {

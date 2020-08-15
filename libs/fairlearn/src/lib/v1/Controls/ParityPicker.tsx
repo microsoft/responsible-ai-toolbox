@@ -37,8 +37,8 @@ export class ParityPicker extends React.PureComponent<
 
     return (
       <div>
-        <div className="selector">
-          <div className="selector-label">
+        <div>
+          <div>
             <span>{"TODO"}</span>
             <IconButton
               id={this._parityDropdownHelpId}
@@ -50,7 +50,6 @@ export class ParityPicker extends React.PureComponent<
             />
           </div>
           <ComboBox
-            className="path-selector"
             selectedKey={this.props.selectedParityKey}
             onChange={this.onParityChange}
             options={options}
@@ -65,7 +64,7 @@ export class ParityPicker extends React.PureComponent<
             onDismiss={this.onDismiss}
             role="alertdialog"
           >
-            <div className="callout-info">
+            <div>
               <DefaultButton onClick={this.onDismiss}>
                 {localization.close}
               </DefaultButton>

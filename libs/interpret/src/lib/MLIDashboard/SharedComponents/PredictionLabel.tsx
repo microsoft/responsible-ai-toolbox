@@ -1,7 +1,7 @@
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { ModelTypes } from "../IExplanationContext";
-import "./PredictionLabel.scss";
+import { predictionLabelStyles } from "./PredictionLabel.styles";
 
 export interface IPredictionLabelProps {
   modelType: ModelTypes;
@@ -13,10 +13,14 @@ export interface IPredictionLabelProps {
 export class PredictionLabel extends React.Component<IPredictionLabelProps> {
   public render(): React.ReactNode {
     return (
-      <div className="prediction-area">
-        <div className="prediction-label">{this.makePredictionLabel()}</div>
+      <div className={predictionLabelStyles.predictionArea}>
+        <div className={predictionLabelStyles.probabilityLabel}>
+          {this.makePredictionLabel()}
+        </div>
         {this.props.predictedProbabilities !== undefined && (
-          <div className="probability-label">{this.makeProbabilityLabel()}</div>
+          <div className={predictionLabelStyles.probabilityLabel}>
+            {this.makeProbabilityLabel()}
+          </div>
         )}
       </div>
     );

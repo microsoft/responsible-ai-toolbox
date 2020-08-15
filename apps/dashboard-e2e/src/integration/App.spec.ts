@@ -1,4 +1,4 @@
-import { getLink } from "../support/app.po";
+import { getLink } from "../support/App";
 
 describe("dashboard", () => {
   beforeEach(() => cy.visit("/"));

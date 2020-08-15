@@ -4,9 +4,9 @@ import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
-import { NoDataMessage } from "../../SharedComponents";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
-import "./Scatter.scss";
+import { scatterStyles } from "./Scatter.styles";
 
 export const DataScatterId = "data_scatter_id";
 
@@ -41,9 +41,9 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
         this.props.selectedRow
       );
       return (
-        <div className="explanation-chart">
-          <div className="top-controls">
-            <div className="path-selector x-value">
+        <div className={scatterStyles.explanationChart}>
+          <div className={scatterStyles.topControls}>
+            <div>
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onXSelected}
@@ -54,7 +54,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
-            <div className="path-selector">
+            <div>
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onColorSelected}
@@ -66,8 +66,8 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
               />
             </div>
           </div>
-          <div className="top-controls">
-            <div className="path-selector y-value">
+          <div className={scatterStyles.topControls}>
+            <div>
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onYSelected}

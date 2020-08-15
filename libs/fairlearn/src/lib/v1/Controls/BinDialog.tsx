@@ -121,18 +121,16 @@ export class BinDialog extends React.PureComponent<
           this.props.dataset
         )
       );
+    } else if (this.props.bins.rangeType === RangeTypes.integer) {
+      this.setState(this.props.bins);
     } else {
-      if (this.props.bins.rangeType === RangeTypes.integer) {
-        this.setState(this.props.bins);
-      } else {
-        this.setState(
-          BinnedResponseBuilder.buildNumeric(
-            this.props.range,
-            this.props.index,
-            this.props.dataset
-          )
-        );
-      }
+      this.setState(
+        BinnedResponseBuilder.buildNumeric(
+          this.props.range,
+          this.props.index,
+          this.props.dataset
+        )
+      );
     }
   };
 
