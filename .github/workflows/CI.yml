@@ -25,8 +25,6 @@ jobs:
           env-file: .env
       - run: |
           echo "Source: ${source}"
-      - run: |
-          echo "Publish To: https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html"
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
@@ -50,6 +48,8 @@ jobs:
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
+      - run: |
+          echo "Publish To: https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
       - name: Upload dashboard to https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html
         uses: Azure/cli@v1.0.0
         with:
