@@ -3,7 +3,7 @@
 
 name: Node.js CI
 env:
-  source: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}"
+  source: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}
 
 on:
   pull_request:
@@ -23,8 +23,16 @@ jobs:
         uses: c-py/action-dotenv-to-setenv@v1
         with:
           env-file: .env
+      - id: publish_url
+        run: |
+          echo "Publish To: ::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
+      - name: Upload dashboard to ${{steps.publish_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        with:
+          inlineScript: |
+            az storage blob upload-batch --account-name ${blob_account} -d ${blob_container_pr} --destination-path ${source} -s tools --auth-mode login
       - run: |
-          echo "Source: ${source}"
+          echo "Source: ::set-output name=source::${source}"
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_RESPONSIBLE_AI_AUTOMATION }}
@@ -48,9 +56,10 @@ jobs:
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
-      - run: |
-          echo "Publish To: https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
-      - name: Upload dashboard to https://${blob_account}.blob.core.windows.net/${blob_container_pr}/index.html
+      - id: publish_url
+        run: |
+          echo "Publish To: ::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
+      - name: Upload dashboard to ${{steps.publish_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
           inlineScript: |
