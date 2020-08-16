@@ -24,10 +24,12 @@ jobs:
       - id: publish_url
         run: |
           echo "::set-output name=url::https://${{env.blob_account}}.blob.core.windows.net/${{env.blob_container}}/${{env.blob_path}}/index.html"
-      - uses: github-actions-up-and-running/pr-comment@v1.0.0
+      - uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          message: ${{steps.publish_url.outputs.url}}
+          msg: ${{steps.publish_url.outputs.url}}
+          check_for_duplicate_msg: true
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
