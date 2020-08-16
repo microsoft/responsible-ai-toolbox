@@ -29,9 +29,9 @@ jobs:
       - uses: bacongobbler/azure-blob-storage-upload@v1.1.1
         with:
           source_dir: tools
-          container_name: ${blob_container_pr}
-          connection_string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-          extra_args:  --destination-path ${source}
+          container_name: pullrequest
+          connection_string: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+          extra_args:  --destination-path="${source}"
           sync: true
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
