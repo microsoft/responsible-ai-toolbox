@@ -7,6 +7,7 @@ env:
   blob_account: responsibleai
   blob_container: pullrequest
   blob_path: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}
+  publish_url: https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html
 
 on:
   pull_request:
