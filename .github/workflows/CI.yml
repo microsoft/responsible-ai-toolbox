@@ -27,7 +27,7 @@ jobs:
           AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
         with:
           inlineScript: |
-            az storage blob upload-batch -d ${blob_container} -s dist/apps/dashboard
+            az storage blob upload-batch -d pullrequest -s dist/apps/dashboard
       - uses: azure/login@v1.1
         with:
           creds: ${{secrets.AZURE_RESPONSIBLE_AI_AUTOMATION}}
