@@ -35,7 +35,7 @@ jobs:
           AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
         with:
           inlineScript: |
-            az storage blob upload-batch -d ${blob_container_pr} -s tools --account-name ${blob_account}
+            az storage blob upload-batch -d responsibleai -s tools --account-name ${blob_account}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
