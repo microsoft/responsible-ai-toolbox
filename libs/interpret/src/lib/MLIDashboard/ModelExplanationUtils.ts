@@ -36,9 +36,9 @@ export class ModelExplanationUtils {
     return input
       .reduce(
         (a, b) => {
-          return a.map((a_classArray, featureIndex) => {
-            return a_classArray.map((a_cell, classIndex) => {
-              return a_cell + Math.abs(b[featureIndex][classIndex]);
+          return a.map((aClassArray, featureIndex) => {
+            return aClassArray.map((aCell, classIndex) => {
+              return aCell + Math.abs(b[featureIndex][classIndex]);
             });
           });
         },

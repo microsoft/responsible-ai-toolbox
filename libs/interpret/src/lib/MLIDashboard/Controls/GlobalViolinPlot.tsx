@@ -1,5 +1,5 @@
 import React from "react";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   IPlotlyProperty,
   AccessibleChart,
@@ -37,7 +37,7 @@ export class GlobalViolinPlot extends React.PureComponent<
     cohort: Cohort,
     sortVector: number[],
     selectedOption: IComboBoxOption
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       _jointDataset: JointDataset,
       metadata: IExplanationModelMetadata,

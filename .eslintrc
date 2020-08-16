@@ -14,7 +14,8 @@
     "import",
     "jsx-a11y",
     "react",
-    "react-hooks"
+    "react-hooks",
+    "filenames"
   ],
   "env": {
     "browser": true,
@@ -35,7 +36,9 @@
   "rules": {
     "import/no-unresolved": "off",
     "import/order": "error",
-    "@typescript-eslint/camelcase": "off",
+    "filenames/match-regex": "error",
+    "filenames/match-exported": "error",
+    "filenames/no-index": "error",
     // "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/explicit-member-accessibility": ["error"],
@@ -66,6 +69,49 @@
         }
       }
     ],
+    "camelcase": [
+      "error",
+      {
+        "allow": [
+          "accuracy_score",
+          "balanced_accuracy_score",
+          "balanced_root_mean_squared_error",
+          "error_y",
+          "f1_score",
+          "fallout_rate",
+          "false_negative_over_total",
+          "false_positive_over_total",
+          "feature_list",
+          "log_loss",
+          "lower_bounds",
+          "max_error",
+          "mean_absolute_error",
+          "mean_squared_error",
+          "mean_squared_log_error",
+          "median_absolute_error",
+          "miss_rate",
+          "plot_bgcolor",
+          "precision_score",
+          "r2_score",
+          "recall_score",
+          "rms_error",
+          "root_mean_squared_error",
+          "scores_range",
+          "selection_rate",
+          "shap_deep",
+          "shap_kernel",
+          "shap_tree",
+          "specificity_score",
+          "upper_bounds",
+          "zero_one_loss"
+        ]
+      }
+    ],
+    "no-else-return": "error",
+    "no-useless-call": "error",
+    "object-shorthand": "error",
+    "no-lonely-if": "error",
+    "no-extra-semi": "error",
     "quotes": [
       "error",
       "double",
@@ -315,7 +361,55 @@
   "overrides": [
     {
       "files": ["*.tsx"],
-      "rules": {}
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+$"]]
+      }
+    },
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-z]+$"]]
+      }
+    },
+    {
+      //e2e only contains ts
+      "files": ["*.spec.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.spec$"]]
+      }
+    },
+    {
+      // ut for react and ts
+      "files": ["*.test.tsx", "*.test.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.test$"]]
+      }
+    },
+    {
+      // style in js
+      "files": ["*.styles.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.styles$"]]
+      }
+    },
+    {
+      "files": ["jest.config.js"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
+    },
+    {
+      "files": ["**/Localization/*.*"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
+    },
+    {
+      //top level index is allowed
+      "files": ["src/index.ts"],
+      "rules": {
+        "filenames/no-index": "off"
+      }
     }
   ]
 }

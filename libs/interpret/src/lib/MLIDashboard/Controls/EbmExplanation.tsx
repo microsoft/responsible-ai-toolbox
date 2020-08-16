@@ -1,5 +1,5 @@
 import React from "react";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import _ from "lodash";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import {
@@ -28,7 +28,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
   private static buildCategoricalSeries: (
     coordinates: IMultiClassBoundedCoordinates,
     classes: string[]
-  ) => IData[] = (memoize as any).default(
+  ) => IData[] = memoize(
     (coordinates: IMultiClassBoundedCoordinates): IData[] => {
       return coordinates.scores.map((scores, classIndex) => {
         return {
@@ -59,7 +59,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
   private static buildContinuousSeries: (
     coordinates: IMultiClassBoundedCoordinates,
     classes: string[]
-  ) => IData[] = (memoize as any).default(
+  ) => IData[] = memoize(
     (
       coordinates: IMultiClassBoundedCoordinates,
       classes: string[]
@@ -119,7 +119,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
   private static buildPlotlyProps: (
     featureIndex: number,
     explanationContext: IExplanationContext
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       featureIndex: number,
       explanationContext: IExplanationContext
@@ -197,11 +197,10 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     );
 
     return (
-      <div className="aggregate-chart">
-        <div className="top-controls">
+      <div>
+        <div>
           <ComboBox
             label={localization.feature}
-            className="pathSelector"
             selectedKey={this.state.selectedFeature}
             onChange={this.onFeatureSelect}
             options={this.featureOptions}

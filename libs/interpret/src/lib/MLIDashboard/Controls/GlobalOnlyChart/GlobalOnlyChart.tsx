@@ -3,11 +3,11 @@ import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { localization } from "../../../Localization/localization";
-import { FeatureKeys } from "../../SharedComponents";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { ChartTypes } from "../../ChartTypes";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
+import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 
 export interface IGlobalOnlyChartProps {
   metadata: IExplanationModelMetadata;
@@ -47,7 +47,7 @@ export class GlobalOnlyChart extends React.PureComponent<
         ]
       : this.props.metadata.classNames.map((name, index) => {
           return {
-            name: name,
+            name,
             unsortedAggregateY: this.props.globalImportance.map(
               (classArray) => classArray[index]
             ),

@@ -28,14 +28,13 @@ import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-
 import { FabricStyles } from "../../FabricStyles";
 import { Cohort } from "../../Cohort";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { InteractiveLegend } from "../InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 import { ExplainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
+import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
 

@@ -1,6 +1,6 @@
 import { initializeIcons } from "@uifabric/icons";
-import * as _ from "lodash";
-import * as memoize from "memoize-one";
+import _ from "lodash";
+import memoize from "memoize-one";
 import {
   PrimaryButton,
   IComboBox,
@@ -13,7 +13,7 @@ import {
   IPivotItemProps
 } from "office-ui-fabric-react";
 
-import * as React from "react";
+import React from "react";
 import {
   IPlotlyProperty,
   SelectionContext,
@@ -21,23 +21,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import { localization } from "../Localization/localization";
 import { FabricStyles } from "./FabricStyles";
-import {
-  FeatureImportanceWrapper,
-  GlobalFeatureImportanceId,
-  IFeatureImportanceConfig,
-  FeatureImportanceModes,
-  BarId,
-  DataExploration,
-  DataScatterId,
-  ExplanationScatterId,
-  ExplanationExploration,
-  ICEPlot,
-  PerturbationExploration,
-  SinglePointFeatureImportance,
-  LocalBarId,
-  FeatureImportanceBar
-} from "./Controls";
-
 import {
   IExplanationContext,
   IExplanationGenerators,
@@ -61,7 +44,29 @@ import { EbmExplanation } from "./Controls/EbmExplanation";
 import { JointDataset } from "./JointDataset";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
-import "./ExplanationDashboard.scss";
+import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
+import {
+  IFeatureImportanceConfig,
+  GlobalFeatureImportanceId,
+  BarId,
+  FeatureImportanceWrapper
+} from "./Controls/FeatureImportance/FeatureImportanceWrapper";
+import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
+import {
+  LocalBarId,
+  SinglePointFeatureImportance
+} from "./Controls/SinglePointFeatureImportance";
+import {
+  ExplanationExploration,
+  ExplanationScatterId
+} from "./Controls/Scatter/ExplanationExploration";
+import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
+import {
+  DataExploration,
+  DataScatterId
+} from "./Controls/Scatter/DataExploration";
+import { PerturbationExploration } from "./Controls/PerturbationExploration";
+import { ICEPlot } from "./Controls/ICEPlot";
 const RowIndex = "rowIndex";
 
 export interface IDashboardContext {
@@ -102,32 +107,30 @@ export class ExplanationDashboard extends React.Component<
 
   private static transposeLocalImportanceMatrix: (
     input: number[][][]
-  ) => number[][][] = (memoize as any).default(
-    (input: number[][][]): number[][][] => {
-      const numClasses = input.length;
-      const numRows = input[0].length;
-      const numFeatures = input[0][0].length;
-      const result: number[][][] = Array(numRows)
-        .fill(0)
-        .map(() =>
-          Array(numFeatures)
-            .fill(0)
-            .map(() => Array(numClasses).fill(0))
-        );
-      input.forEach((rowByFeature, classIndex) => {
-        rowByFeature.forEach((featureArray, rowIndex) => {
-          featureArray.forEach((value, featureIndex) => {
-            result[rowIndex][featureIndex][classIndex] = value;
-          });
+  ) => number[][][] = memoize((input: number[][][]): number[][][] => {
+    const numClasses = input.length;
+    const numRows = input[0].length;
+    const numFeatures = input[0][0].length;
+    const result: number[][][] = Array(numRows)
+      .fill(0)
+      .map(() =>
+        Array(numFeatures)
+          .fill(0)
+          .map(() => Array(numClasses).fill(0))
+      );
+    input.forEach((rowByFeature, classIndex) => {
+      rowByFeature.forEach((featureArray, rowIndex) => {
+        featureArray.forEach((value, featureIndex) => {
+          result[rowIndex][featureIndex][classIndex] = value;
         });
       });
-      return result;
-    }
-  );
+    });
+    return result;
+  });
 
   private static buildWeightDropdownOptions: (
     explanationContext: IExplanationContext
-  ) => IDropdownOption[] = (memoize as any).default(
+  ) => IDropdownOption[] = memoize(
     (explanationContext: IExplanationContext): IDropdownOption[] => {
       const result: IDropdownOption[] = [
         { key: WeightVectors.absAvg, text: localization.absoluteAverage }
@@ -147,52 +150,49 @@ export class ExplanationDashboard extends React.Component<
 
   private static getClassLength: (
     props: IExplanationDashboardProps
-  ) => number = (memoize as any).default(
-    (props: IExplanationDashboardProps): number => {
+  ) => number = memoize((props: IExplanationDashboardProps): number => {
+    if (
+      props.precomputedExplanations &&
+      props.precomputedExplanations.localFeatureImportance &&
+      props.precomputedExplanations.localFeatureImportance.scores
+    ) {
+      const localImportances =
+        props.precomputedExplanations.localFeatureImportance.scores;
       if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.localFeatureImportance &&
-        props.precomputedExplanations.localFeatureImportance.scores
+        (localImportances as number[][][]).every((dim1) => {
+          return dim1.every((dim2) => Array.isArray(dim2));
+        })
       ) {
-        const localImportances =
-          props.precomputedExplanations.localFeatureImportance.scores;
-        if (
-          (localImportances as number[][][]).every((dim1) => {
-            return dim1.every((dim2) => Array.isArray(dim2));
-          })
-        ) {
-          return localImportances.length;
-        } else {
-          // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-          return 1;
-        }
+        return localImportances.length;
       }
-      if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.globalFeatureImportance &&
-        props.precomputedExplanations.globalFeatureImportance.scores
-      ) {
-        // determine if passed in vaules is 1D or 2D
-        if (
-          (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][]).every((dim1) => Array.isArray(dim1))
-        ) {
-          return (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][])[0].length;
-        }
-      }
-      if (
-        props.probabilityY &&
-        Array.isArray(props.probabilityY) &&
-        Array.isArray(props.probabilityY[0]) &&
-        props.probabilityY[0].length > 0
-      ) {
-        return props.probabilityY[0].length;
-      }
-      // default to regression case
+      // 2d is regression (could be a non-scikit convention binary, but that is not supported)
       return 1;
     }
-  );
+    if (
+      props.precomputedExplanations &&
+      props.precomputedExplanations.globalFeatureImportance &&
+      props.precomputedExplanations.globalFeatureImportance.scores
+    ) {
+      // determine if passed in vaules is 1D or 2D
+      if (
+        (props.precomputedExplanations.globalFeatureImportance
+          .scores as number[][]).every((dim1) => Array.isArray(dim1))
+      ) {
+        return (props.precomputedExplanations.globalFeatureImportance
+          .scores as number[][])[0].length;
+      }
+    }
+    if (
+      props.probabilityY &&
+      Array.isArray(props.probabilityY) &&
+      Array.isArray(props.probabilityY[0]) &&
+      props.probabilityY[0].length > 0
+    ) {
+      return props.probabilityY[0].length;
+    }
+    // default to regression case
+    return 1;
+  });
 
   private readonly selectionContext = new SelectionContext(RowIndex, 1);
   private selectionSubscription: string;
@@ -471,8 +471,8 @@ export class ExplanationDashboard extends React.Component<
       testDataset,
       globalExplanation,
       isGlobalDerived,
-      ebmExplanation: ebmExplanation,
-      customVis: customVis
+      ebmExplanation,
+      customVis
     };
   }
 
@@ -862,9 +862,9 @@ export class ExplanationDashboard extends React.Component<
       return <div>No valid views. Incomplete data.</div>;
     }
     return (
-      <div className="explainerDashboard">
-        <div className="charts-wrapper">
-          <div className="global-charts-wrapper">
+      <div className={explanationDashboardStyles.explainerDashboard}>
+        <div className={explanationDashboardStyles.chartsWrapper}>
+          <div className={explanationDashboardStyles.globalChartsWrapper}>
             <Pivot
               id={"globalPivot"}
               selectedKey={
@@ -966,16 +966,16 @@ export class ExplanationDashboard extends React.Component<
             )}
           </div>
           {this.state.dashboardContext.explanationContext.localExplanation && (
-            <div className="local-charts-wrapper">
+            <div className={explanationDashboardStyles.explainerDashboard}>
               {this.state.selectedRow === undefined && (
-                <div className="local-placeholder">
-                  <div className="placeholder-text">
+                <div className={explanationDashboardStyles.localPlaceholder}>
+                  <div className={explanationDashboardStyles.placeholderText}>
                     {localization.selectPoint}
                   </div>
                 </div>
               )}
               {this.state.selectedRow !== undefined && (
-                <div className="tabbed-viewer">
+                <div className={explanationDashboardStyles.tabbedViewer}>
                   <Pivot
                     selectedKey={
                       ExplanationDashboard.localTabKeys[
@@ -1009,10 +1009,10 @@ export class ExplanationDashboard extends React.Component<
                         />
                       )}
                   </Pivot>
-                  <div className="view-panel">
-                    <div className="local-commands">
+                  <div className={explanationDashboardStyles.viewPanel}>
+                    <div className={explanationDashboardStyles.localCommands}>
                       <PrimaryButton
-                        className="clear-button"
+                        className={explanationDashboardStyles.clearButton}
                         onClick={this.onClearSelection}
                         text={localization.clearSelection}
                       />

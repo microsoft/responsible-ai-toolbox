@@ -348,20 +348,16 @@
     },
     "@nrwl/react": {
       "application": {
-        "style": "scss",
         "linter": "eslint",
         "babel": true
       },
       "library": {
-        "style": "scss",
         "linter": "eslint"
       },
       "storybook-configuration": {
         "linter": "eslint"
       },
-      "component": {
-        "style": "scss"
-      }
+      "component": {}
     },
     "@nrwl/next": {
       "application": {

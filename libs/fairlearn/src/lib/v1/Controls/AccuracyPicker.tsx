@@ -36,8 +36,8 @@ export class AccuracyPicker extends React.PureComponent<
     );
     return (
       <div>
-        <div className="selector">
-          <div className="selector-label">
+        <div>
+          <div>
             <span>{"TODO"}</span>
             <IconButton
               id={this._accuracyDropdownHelpId}
@@ -49,7 +49,6 @@ export class AccuracyPicker extends React.PureComponent<
             />
           </div>
           <ComboBox
-            className="path-selector"
             selectedKey={this.props.selectedAccuracyKey}
             onChange={this.onAccuracyChange}
             options={options}
@@ -64,7 +63,7 @@ export class AccuracyPicker extends React.PureComponent<
             onDismiss={this.onDismiss}
             role="alertdialog"
           >
-            <div className="callout-info">
+            <div>
               <DefaultButton onClick={this.onDismiss}>
                 {localization.close}
               </DefaultButton>

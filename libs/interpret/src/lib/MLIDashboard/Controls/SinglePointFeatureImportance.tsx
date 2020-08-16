@@ -16,16 +16,13 @@ import {
 } from "../SharedComponents/IBarChartConfig";
 import { localization } from "../../Localization/localization";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
-import {
-  BarChart,
-  PredictionLabel,
-  LoadingSpinner,
-  NoDataMessage
-} from "../SharedComponents";
+import { BarChart } from "../SharedComponents/BarChart";
 import { FabricStyles } from "../FabricStyles";
-import { HelpMessageDict } from "../Interfaces";
-
-import "./SinglePointFeatureImportance.scss";
+import { HelpMessageDict } from "../Interfaces/IStringsParam";
+import { PredictionLabel } from "../SharedComponents/PredictionLabel";
+import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
+import { NoDataMessage } from "../SharedComponents/NoDataMessage";
+import { singlePointFeatureImportanceStyles } from "./SinglePointFeatureImportance.styles";
 
 export const LocalBarId = "local_bar_id";
 
@@ -70,7 +67,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
           ? [this.state.selectedSorting]
           : undefined;
       return (
-        <div className="local-summary">
+        <div>
           {this.props.explanationContext.testDataset &&
             this.props.explanationContext.testDataset.predictedY && (
               <PredictionLabel
@@ -94,10 +91,14 @@ export class SinglePointFeatureImportance extends React.PureComponent<
                 }
               />
             )}
-          <div className="feature-bar-explanation-chart">
-            <div className="top-controls">
+          <div
+            className={
+              singlePointFeatureImportanceStyles.featureBarExplanationChart
+            }
+          >
+            <div className={singlePointFeatureImportanceStyles.topControls}>
               <Slider
-                className="feature-slider"
+                className={singlePointFeatureImportanceStyles.featureSlider}
                 label={localization.AggregateImportance.topKFeatures}
                 max={Math.min(
                   30,
@@ -112,7 +113,6 @@ export class SinglePointFeatureImportance extends React.PureComponent<
               />
               {this.sortOptions.length > 1 && (
                 <ComboBox
-                  className="pathSelector"
                   label={localization.BarChart.sortBy}
                   selectedKey={this.state.selectedSorting}
                   onChange={this.onSortSelect}
@@ -169,12 +169,11 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       return ModelExplanationUtils.buildSortedVector(
         localExplanation.values[this.props.selectedRow]
       );
-    } else {
-      return ModelExplanationUtils.buildSortedVector(
-        localExplanation.values[this.props.selectedRow],
-        this.state.selectedSorting
-      );
     }
+    return ModelExplanationUtils.buildSortedVector(
+      localExplanation.values[this.props.selectedRow],
+      this.state.selectedSorting
+    );
   }
 
   private getFeatureByClassMatrix(): number[][] {

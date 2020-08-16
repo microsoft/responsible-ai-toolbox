@@ -1,5 +1,5 @@
 import React from "react";
-import * as memoize from "memoize-one";
+import memoize from "memoize-one";
 import {
   IPlotlyProperty,
   PlotlyMode,
@@ -39,7 +39,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
     cohort: Cohort,
     sortVector: number[],
     selectedOption: IComboBoxOption
-  ) => IPlotlyProperty = (memoize as any).default(
+  ) => IPlotlyProperty = memoize(
     (
       _jointDataset: JointDataset,
       metadata: IExplanationModelMetadata,
