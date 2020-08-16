@@ -28,10 +28,7 @@ jobs:
         with:
           inlineScript: |
             echo ${blob_container}
-            az storage blob upload-batch -d pullrequest -s tools --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
-      - uses: azure/login@v1.1
-        with:
-          creds: ${{secrets.AZURE_RESPONSIBLE_AI_AUTOMATION}}
+            az storage blob upload-batch -d '${blob_container}' -s tools --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
