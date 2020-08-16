@@ -22,6 +22,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: github-actions-up-and-running/pr-comment@v1.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          message: ${{steps.publish_url.outputs.url}}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
