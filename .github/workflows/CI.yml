@@ -28,7 +28,7 @@ jobs:
         with:
           inlineScript: |
             echo ${blob_container}
-            az storage blob upload-batch -d ${{env.blob_container}} -s tools --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
+            az storage blob upload-batch -d ${{env.blob_container}} --destination-path '${{env.source}}' -s tools --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -52,3 +52,11 @@ jobs:
       - id: publish_url
         run: |
           echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${source}/index.html"
+      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+        with:
+          inlineScript: |
+            echo ${blob_container}
+            az storage blob upload-batch -d ${{env.blob_container}} --destination-path '${{env.source}}' -s dist/apps/dashboard --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
