@@ -43,7 +43,6 @@ jobs:
           inlineScript: |
             az storage blob upload-batch -s dist/apps/dashboard -d ${{env.blob_container}} --destination-path '${{env.blob_path}}' --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
 
-
   publish:
     needs: build
     runs-on: ubuntu-latest
