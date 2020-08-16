@@ -21,6 +21,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
+        with:
+          inlineScript: |
+            az storage blob upload-batch -d ${blob_container} -s dist/apps/dashboard
       - uses: azure/login@v1.1
         with:
           creds: ${{secrets.AZURE_RESPONSIBLE_AI_AUTOMATION}}
@@ -47,8 +54,3 @@ jobs:
       - id: publish_url
         run: |
           echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${source}/index.html"
-      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
-        uses: Azure/cli@v1.0.0
-        with:
-          inlineScript: |
-            az storage blob upload-batch -d ${blob_container} -s dist/apps/dashboard --account-name ${blob_account} --auth-mode login
