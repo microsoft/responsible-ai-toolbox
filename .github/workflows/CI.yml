@@ -21,6 +21,9 @@ jobs:
         node-version: [12.x, 14.x]
 
     steps:
+      - id: publish_url
+        run: |
+          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html"
       - uses: github-actions-up-and-running/pr-comment@v1.0.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,9 +49,6 @@ jobs:
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
-      - id: publish_url
-        run: |
-          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html"
       - name: Upload dashboard ${{steps.publish_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
