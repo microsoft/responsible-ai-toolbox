@@ -23,16 +23,19 @@ jobs:
         uses: c-py/action-dotenv-to-setenv@v1
         with:
           env-file: .env
+      - uses: azure/login@v1.1
+        with:
+          creds: ${{secrets.AZURE_RESPONSIBLE_AI_AUTOMATION}}
       - id: publish_url
         run: |
           echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_pr}/${source}/index.html"
-      - uses: bacongobbler/azure-blob-storage-upload@v1.1.1
+      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
         with:
-          source_dir: tools
-          container_name: pullrequest
-          connection_string: ${{secrets.AZURE_STORAGE_CONNECTION_STRING}}
-          extra_args:  --destination-path="${source}"
-          sync: true
+          inlineScript: |
+            az storage blob upload-batch -d ${blob_container_pr} -s tools --account-name ${blob_account}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
