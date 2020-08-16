@@ -7,7 +7,7 @@ env:
   blob_account: responsibleai
   blob_container: pullrequest
   blob_path: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}
-  publish_url: https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html
+  publish_url: https://${{env.blob_account}}.blob.core.windows.net/${{env.blob_container}}/${{env.blob_path}}/index.html
 
 on:
   pull_request:
@@ -24,7 +24,7 @@ jobs:
     steps:
       - id: publish_url
         run: |
-          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html"
+          echo "::set-output name=url::https://${{env.blob_account}}.blob.core.windows.net/${{env.blob_container}}/${{env.blob_path}}/index.html"
       - uses: github-actions-up-and-running/pr-comment@v1.0.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
