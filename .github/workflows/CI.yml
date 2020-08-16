@@ -28,7 +28,7 @@ jobs:
         with:
           inlineScript: |
             echo ${blob_container}
-            az storage blob upload-batch -d '${blob_container}' -s tools --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
+            az storage blob upload-batch -d ${{env.blob_container}} -s tools --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
