@@ -33,7 +33,7 @@ jobs:
         uses: Azure/cli@v1.0.0
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name="${blob_account}" -d="${blob_container_pr}" --destination-path="${source}" -s="tools"
+            az storage blob upload-batch --account-name="${blob_account}" --sas-token="${{ secrets.AZURE_STORAGE_SAS_TOKEN }}" -d="${blob_container_pr}" --destination-path="${source}" -s="tools"
       - run: |
           echo "Source: ::set-output name=source::${source}"
       - name: Use Node.js ${{ matrix.node-version }}
