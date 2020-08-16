@@ -3,9 +3,10 @@
 
 name: Node.js CD
 env:
+  folder_to_upload: dist/apps/dashboard
   blob_account: responsibleai
   blob_container: latest
-  blob_path: 
+  blob_path:
 
 on:
   workflow_dispatch:
@@ -20,11 +21,6 @@ jobs:
         node-version: [12.x]
 
     steps:
-      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
-        uses: Azure/cli@v1.0.0
-        with:
-          inlineScript: |
-            az storage blob delete-batch -s ${{env.blob_container}} --pattern '${{env.blob_path}}/*' --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -46,8 +42,7 @@ jobs:
         uses: Azure/cli@v1.0.0
         with:
           inlineScript: |
-            az storage blob delete-batch -s ${{env.blob_container}} --pattern '${{env.blob_path}}/*' --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
-            az storage blob upload-batch -s dist/apps/dashboard -d ${{env.blob_container}} --destination-path '${{env.blob_path}}' --connection-string='${{secrets.AZURE_STORAGE_CONNECTION_STRING}}'
+            az storage blob sync -c "${{env.blob_container}}" -s "${{env.folder_to_upload}}" -d "${{env.blob_path}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
   publish:
     needs: build
