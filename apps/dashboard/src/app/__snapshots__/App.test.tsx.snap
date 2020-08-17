@@ -22,15 +22,5 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
       </li>
     </ul>
   </div>
-  <Route
-    component={[Function]}
-    exact={true}
-    path="/fairlearn"
-  />
-  <Route
-    component={[Function]}
-    exact={true}
-    path="/interpret"
-  />
-</div>
+</HashRouter>
 `;

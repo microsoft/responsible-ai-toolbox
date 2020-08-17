@@ -2,6 +2,11 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CD
+env:
+  folder_to_upload: dist/apps/dashboard
+  blob_account: responsibleai
+  blob_container: latest
+  blob_path:
 
 on:
   workflow_dispatch:
@@ -30,6 +35,14 @@ jobs:
         with:
           name: dist
           path: dist
+      - id: publish_url
+        run: |
+          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html"
+      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        with:
+          inlineScript: |
+            az storage blob sync -c "${{env.blob_container}}" -s "${{env.folder_to_upload}}" -d "${{env.blob_path}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
   publish:
     needs: build
