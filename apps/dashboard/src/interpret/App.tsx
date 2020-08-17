@@ -6,6 +6,7 @@ import {
 } from "@responsible-ai/interpret";
 import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
+import { automlMimicAdult } from "./__mock_data/automlMimicAdult";
 import { breastCancerData } from "./__mock_data/dummyData";
 import { ibmData } from "./__mock_data/ibmData";
 import { irisData } from "./__mock_data/irisData";
@@ -108,6 +109,7 @@ const darkContrastTheme = createTheme({
 
 export class App extends React.Component<any, any> {
   private static choices = [
+    { label: "automlMimicAdult", data: automlMimicAdult, dim: 3 },
     { label: "bostonData", data: bostonData, dim: 1 },
     { label: "bostonDataGlobal", data: bostonDataGlobal, dim: 1 },
     { label: "irisData", data: irisData, dim: 3 },

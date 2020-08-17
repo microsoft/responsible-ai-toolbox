@@ -231,6 +231,7 @@
         "build": {
           "builder": "@nrwl/web:build",
           "options": {
+            "baseHref": ".",
             "outputPath": "dist/apps/dashboard",
             "index": "apps/dashboard/src/index.html",
             "main": "apps/dashboard/src/main.tsx",
@@ -238,6 +239,12 @@
             "tsConfig": "apps/dashboard/tsconfig.app.json",
             "progress": false,
             "memoryLimit": 4096,
+            "globals": [
+              {
+                "moduleId": "plotly.js",
+                "global": "Plotly"
+              }
+            ],
             "assets": [
               "apps/dashboard/src/favicon.ico",
               "apps/dashboard/src/assets"
