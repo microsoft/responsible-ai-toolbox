@@ -117,7 +117,8 @@ def build_environment(ip, port):
         DatabricksEnvironment,
         LocalIPythonEnvironment
     ]
-    #legacy
+
+    # legacy
     checks = {
         "azure_nb": AzureNBEnvironment,
         "databricks": _detect_databricks,
@@ -131,7 +132,17 @@ def build_environment(ip, port):
         "ipython-zmq": _detect_ipython_zmq,
         "ipython": _detect_ipython,
     }
-    for env_class in environment_classes:
-        env = env_class(ip, port)
-        if env is not None:
-            return env
+
+    azure_nb_environment = AzureNBEnvironment(ip, port)
+    databricks_environment = DatabricksEnvironment(ip, port)
+    local_ipython_environment = LocalIPythonEnvironment(ip, port)
+
+    # Todo: Add case for detecting and using a Jupyterlab environment
+    if databricks_environment.successfully_detected:
+        return databricks_environment
+    if azure_nb_environment.successfully_detected:
+        return azure_nb_environment
+    if local_ipython_environment.successfully_detected:
+        return local_ipython_environment
+    else:
+        raise Exception("Failed to detect Ipython environment")
