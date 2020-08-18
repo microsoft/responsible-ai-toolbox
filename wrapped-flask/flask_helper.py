@@ -30,11 +30,13 @@ class FlaskHelper(object):
             self.ip = "localhost"
         if self.port is None:
             # Try 100 different ports
+            available = False
             for port in range(5000, 5100):
                 available = FlaskHelper._local_port_available(
                     self.ip, port, raise_error=False)
                 if available:
                     self.port = port
+                    break
 
             if not available:
                 error_message = """Ports 5000 to 5100 not available.
@@ -43,7 +45,7 @@ class FlaskHelper(object):
                     error_message.format(port)
                 )
         else:
-            FlaskHelper._local_port_available(self.ip, self.port, raise_error=False)
+            FlaskHelper._local_port_available(self.ip, self.port, raise_error=True)
         self._thread = threading.Thread(target=self.run, daemon=True)
         self._thread.start()
         self.env = build_environment(self.ip, self.port)
