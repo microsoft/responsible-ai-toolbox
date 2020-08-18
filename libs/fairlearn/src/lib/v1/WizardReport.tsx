@@ -13,7 +13,7 @@ import { AccuracyOptions } from "./AccuracyMetrics";
 import { ChartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
-import { IMetricResponsev1, PredictionTypes } from "./IFairnessProps";
+import { IMetricResponseV1, PredictionTypesV1 } from "./IFairnessProps";
 import { localization } from "./Localization/localization";
 import { ParityModes } from "./ParityMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
@@ -125,8 +125,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
     const accuracyKey = this.props.accuracyPickerProps.selectedAccuracyKey;
     const outcomeKey =
-      this.props.dashboardContext.modelMetadata.predictionType ===
-      PredictionTypes.binaryClassification
+      this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+      PredictionTypesV1.binaryClassification
         ? "selection_rate"
         : "average";
     const outcomeMetric = AccuracyOptions[outcomeKey];
@@ -140,8 +140,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     let opportunityChartHeader = "";
 
     if (
-      this.props.dashboardContext.modelMetadata.predictionType ===
-      PredictionTypes.binaryClassification
+      this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+      PredictionTypesV1.binaryClassification
     ) {
       accuracyPlot.data = [
         {
@@ -253,8 +253,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
     }
     if (
-      this.props.dashboardContext.modelMetadata.predictionType ===
-      PredictionTypes.probability
+      this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+      PredictionTypesV1.probability
     ) {
       accuracyPlot.data = [
         {
@@ -366,8 +366,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       opportunityChartHeader = localization.Report.distributionOfPredictions;
     }
     if (
-      this.props.dashboardContext.modelMetadata.predictionType ===
-      PredictionTypes.regression
+      this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+      PredictionTypesV1.regression
     ) {
       const opportunityText = this.state.metrics.predictions.map((val) => {
         return localization.formatString(
@@ -658,7 +658,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let binnedUnderprediction: number[];
       let predictions: number[];
       let errors: number[];
-      let outcomes: IMetricResponsev1;
+      let outcomes: IMetricResponseV1;
       let outcomeDisparity: number;
       const accuracy = await this.props.metricsCache.getMetric(
         this.props.dashboardContext.binVector,
@@ -674,8 +674,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ParityModes.difference
       );
       if (
-        this.props.dashboardContext.modelMetadata.predictionType ===
-        PredictionTypes.binaryClassification
+        this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+        PredictionTypesV1.binaryClassification
       ) {
         binnedUnderprediction = (
           await this.props.metricsCache.getMetric(
@@ -708,8 +708,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         );
       }
       if (
-        this.props.dashboardContext.modelMetadata.predictionType ===
-        PredictionTypes.probability
+        this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+        PredictionTypesV1.probability
       ) {
         predictions = this.props.dashboardContext.predictions[
           this.props.selectedModelIndex
@@ -745,8 +745,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         );
       }
       if (
-        this.props.dashboardContext.modelMetadata.predictionType ===
-        PredictionTypes.regression
+        this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+        PredictionTypesV1.regression
       ) {
         predictions = this.props.dashboardContext.predictions[
           this.props.selectedModelIndex

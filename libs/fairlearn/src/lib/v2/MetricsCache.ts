@@ -1,14 +1,14 @@
-import { IMetricResponsev2, IMetricRequest } from "./IFairnessProps";
+import { IMetricResponseV2, IMetricRequestV2 } from "./IFairnessProps";
 import { ParityModes } from "./ParityMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey
-  private cache: Array<Array<{ [key: string]: IMetricResponsev2 }>>;
+  private cache: Array<Array<{ [key: string]: IMetricResponseV2 }>>;
   public constructor(
     private featureCount: number,
     private numberOfModels: number,
-    private fetchMethod: (request: IMetricRequest) => Promise<IMetricResponsev2>,
-    precomputedCache?: Array<Array<{ [key: string]: IMetricResponsev2 }>>
+    private fetchMethod: (request: IMetricRequestV2) => Promise<IMetricResponseV2>,
+    precomputedCache?: Array<Array<{ [key: string]: IMetricResponseV2 }>>
   ) {
     if (precomputedCache) {
       this.cache = precomputedCache;
@@ -26,7 +26,7 @@ export class MetricsCache {
     featureIndex: number,
     modelIndex: number,
     key: string
-  ): Promise<IMetricResponsev2> {
+  ): Promise<IMetricResponseV2> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({

@@ -24,9 +24,9 @@ import { ParityTab } from "./Controls/ParityTab";
 import { IBinnedResponse } from "./IBinnedResponse";
 import { IFairnessContext, IFairnessModelMetadata } from "./IFairnessContext";
 import {
-  IFairnessProps,
-  PredictionType,
-  PredictionTypes
+  IFairnessPropsV1,
+  PredictionTypeV1,
+  PredictionTypesV1
 } from "./IFairnessProps";
 import { localization } from "./Localization/localization";
 import { MetricsCache } from "./MetricsCache";
@@ -35,25 +35,25 @@ import { FairnessWizardStyles } from "./FairnessWizard.styles";
 
 import { defaultTheme } from "./Themes";
 
-export interface IAccuracyPickerPropsv1 {
+export interface IAccuracyPickerPropsV1 {
   accuracyOptions: IAccuracyOption[];
   selectedAccuracyKey: string;
   onAccuracyChange: (newKey: string) => void;
 }
 
-export interface IParityPickerPropsv1 {
+export interface IParityPickerPropsV1 {
   parityOptions: IAccuracyOption[];
   selectedParityKey: string;
   onParityChange: (newKey: string) => void;
 }
 
-export interface IFeatureBinPickerPropsv1 {
+export interface IFeatureBinPickerPropsV1 {
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
   onBinChange: (index: number) => void;
 }
 
-export interface IWizardStatev1 {
+export interface IWizardStateV1 {
   activeTabKey: string;
   selectedModelId?: number;
   dashboardContext: IFairnessContext;
@@ -76,15 +76,15 @@ const flights = {
   skipDisparity: true
 };
 
-export class FairnessWizardv1 extends React.PureComponent<
-  IFairnessProps,
-  IWizardStatev1
+export class FairnessWizardV1 extends React.PureComponent<
+  IFairnessPropsV1,
+  IWizardStateV1
 > {
   private static iconsInitialized = false;
 
-  public constructor(props: IFairnessProps) {
+  public constructor(props: IFairnessPropsV1) {
     super(props);
-    FairnessWizardv1.initializeIcons(props);
+    FairnessWizardV1.initializeIcons(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -110,7 +110,7 @@ export class FairnessWizardv1 extends React.PureComponent<
         selectedAccuracyKey: accuracyMetrics[0].key,
         parityMetrics: accuracyMetrics,
         selectedParityKey: accuracyMetrics[0].key,
-        dashboardContext: FairnessWizardv1.buildPrecomputedFairnessContext(props),
+        dashboardContext: FairnessWizardV1.buildPrecomputedFairnessContext(props),
         activeTabKey: featureBinTabKey,
         featureBins: readonlyFeatureBins,
         selectedBinIndex: 0,
@@ -119,7 +119,7 @@ export class FairnessWizardv1 extends React.PureComponent<
       };
       return;
     }
-    const fairnessContext = FairnessWizardv1.buildInitialFairnessContext(props);
+    const fairnessContext = FairnessWizardV1.buildInitialFairnessContext(props);
 
     const featureBins = this.buildFeatureBins(fairnessContext);
     if (featureBins.length > 0) {
@@ -131,13 +131,13 @@ export class FairnessWizardv1 extends React.PureComponent<
     }
 
     accuracyMetrics =
-      fairnessContext.modelMetadata.predictionType ===
-      PredictionTypes.binaryClassification
+      fairnessContext.modelMetadata.PredictionTypeV1 ===
+      PredictionTypesV1.binaryClassification
         ? this.props.supportedBinaryClassificationAccuracyKeys.map(
             (key) => AccuracyOptions[key]
           )
-        : fairnessContext.modelMetadata.predictionType ===
-          PredictionTypes.regression
+        : fairnessContext.modelMetadata.PredictionTypeV1 ===
+          PredictionTypesV1.regression
         ? this.props.supportedRegressionAccuracyKeys.map(
             (key) => AccuracyOptions[key]
           )
@@ -164,17 +164,17 @@ export class FairnessWizardv1 extends React.PureComponent<
     };
   }
 
-  private static initializeIcons(props: IFairnessProps): void {
+  private static initializeIcons(props: IFairnessPropsV1): void {
     if (
-      FairnessWizardv1.iconsInitialized === false &&
+      FairnessWizardV1.iconsInitialized === false &&
       props.shouldInitializeIcons !== false
     ) {
       initializeIcons(props.iconUrl);
-      FairnessWizardv1.iconsInitialized = true;
+      FairnessWizardV1.iconsInitialized = true;
     }
   }
 
-  private static buildModelNames(props: IFairnessProps): string[] {
+  private static buildModelNames(props: IFairnessPropsV1): string[] {
     return !!props.modelNames &&
       props.modelNames.length === props.predictedY.length
       ? props.modelNames
@@ -182,7 +182,7 @@ export class FairnessWizardv1 extends React.PureComponent<
   }
 
   private static buildInitialFairnessContext(
-    props: IFairnessProps
+    props: IFairnessPropsV1
   ): IFairnessContext {
     return {
       dataset: props.testData,
@@ -190,13 +190,13 @@ export class FairnessWizardv1 extends React.PureComponent<
       predictions: props.predictedY,
       binVector: [],
       groupNames: [],
-      modelMetadata: FairnessWizardv1.buildModelMetadata(props),
-      modelNames: FairnessWizardv1.buildModelNames(props)
+      modelMetadata: FairnessWizardV1.buildModelMetadata(props),
+      modelNames: FairnessWizardV1.buildModelNames(props)
     };
   }
 
   private static buildPrecomputedFairnessContext(
-    props: IFairnessProps
+    props: IFairnessPropsV1
   ): IFairnessContext {
     return {
       dataset: undefined,
@@ -204,17 +204,17 @@ export class FairnessWizardv1 extends React.PureComponent<
       predictions: props.predictedY,
       binVector: props.precomputedFeatureBins[0].binVector,
       groupNames: props.precomputedFeatureBins[0].binLabels,
-      modelMetadata: FairnessWizardv1.buildPrecomputedModelMetadata(props),
-      modelNames: FairnessWizardv1.buildModelNames(props)
+      modelMetadata: FairnessWizardV1.buildPrecomputedModelMetadata(props),
+      modelNames: FairnessWizardV1.buildModelNames(props)
     };
   }
 
-  private static getClassLength(props: IFairnessProps): number {
+  private static getClassLength(props: IFairnessPropsV1): number {
     return _.uniq(props.trueY).length;
   }
 
   private static buildPrecomputedModelMetadata(
-    props: IFairnessProps
+    props: IFairnessPropsV1
   ): IFairnessModelMetadata {
     let featureNames = props.dataSummary.featureNames;
     if (!featureNames) {
@@ -227,8 +227,8 @@ export class FairnessWizardv1 extends React.PureComponent<
     }
     const classNames =
       props.dataSummary.classNames ||
-      FairnessWizardv1.buildIndexedNames(
-        FairnessWizardv1.getClassLength(props),
+      FairnessWizardV1.buildIndexedNames(
+        FairnessWizardV1.getClassLength(props),
         localization.defaultClassNames
       );
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
@@ -243,12 +243,12 @@ export class FairnessWizardv1 extends React.PureComponent<
       classNames,
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
       featureRanges,
-      predictionType: props.predictionType
+      PredictionTypeV1: props.PredictionTypeV1
     };
   }
 
   private static buildModelMetadata(
-    props: IFairnessProps
+    props: IFairnessPropsV1
   ): IFairnessModelMetadata {
     let featureNames = props.dataSummary.featureNames;
     if (!featureNames) {
@@ -259,15 +259,15 @@ export class FairnessWizardv1 extends React.PureComponent<
       featureNames =
         featureLength === 1
           ? [localization.defaultSingleFeatureName]
-          : FairnessWizardv1.buildIndexedNames(
+          : FairnessWizardV1.buildIndexedNames(
               featureLength,
               localization.defaultFeatureNames
             );
     }
     const classNames =
       props.dataSummary.classNames ||
-      FairnessWizardv1.buildIndexedNames(
-        FairnessWizardv1.getClassLength(props),
+      FairnessWizardV1.buildIndexedNames(
+        FairnessWizardV1.getClassLength(props),
         localization.defaultClassNames
       );
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
@@ -280,10 +280,10 @@ export class FairnessWizardv1 extends React.PureComponent<
       featureIsCategorical,
       props.dataSummary.categoricalMap
     );
-    const predictionType = FairnessWizardv1.determinePredictionType(
+    const PredictionTypeV1 = FairnessWizardV1.determinePredictionType(
       props.trueY,
       props.predictedY,
-      props.predictionType
+      props.PredictionTypeV1
     );
     return {
       featureNames,
@@ -291,7 +291,7 @@ export class FairnessWizardv1 extends React.PureComponent<
       classNames,
       featureIsCategorical,
       featureRanges,
-      predictionType
+      PredictionTypeV1
     };
   }
 
@@ -307,12 +307,12 @@ export class FairnessWizardv1 extends React.PureComponent<
   private static determinePredictionType(
     trueY: number[],
     predictedY: number[][],
-    specifiedType?: PredictionType
-  ): PredictionType {
+    specifiedType?: PredictionTypeV1
+  ): PredictionTypeV1 {
     if (
-      specifiedType === PredictionTypes.binaryClassification ||
-      specifiedType === PredictionTypes.probability ||
-      specifiedType === PredictionTypes.regression
+      specifiedType === PredictionTypesV1.binaryClassification ||
+      specifiedType === PredictionTypesV1.probability ||
+      specifiedType === PredictionTypesV1.regression
     ) {
       return specifiedType;
     }
@@ -321,15 +321,15 @@ export class FairnessWizardv1 extends React.PureComponent<
     );
     const trueIsBinary = _.uniq(trueY).length < 3;
     if (!trueIsBinary) {
-      return PredictionTypes.regression;
+      return PredictionTypesV1.regression;
     }
     if (_.uniq(_.flatten(predictedY)).length < 3) {
-      return PredictionTypes.binaryClassification;
+      return PredictionTypesV1.binaryClassification;
     }
     if (predictedIsPossibleProba) {
-      return PredictionTypes.probability;
+      return PredictionTypesV1.probability;
     }
-    return PredictionTypes.regression;
+    return PredictionTypesV1.regression;
   }
 
   public render(): React.ReactNode {
@@ -523,11 +523,11 @@ export class FairnessWizardv1 extends React.PureComponent<
   };
 
   private readonly setAccuracyKey = (key: string): void => {
-    const value: Partial<IWizardStatev1> = { selectedAccuracyKey: key };
+    const value: Partial<IWizardStateV1> = { selectedAccuracyKey: key };
     if (flights.skipDisparity) {
       value.selectedParityKey = key;
     }
-    this.setState(value as IWizardStatev1);
+    this.setState(value as IWizardStateV1);
   };
 
   private readonly setParityKey = (key: string): void => {
