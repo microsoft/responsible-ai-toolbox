@@ -7,17 +7,20 @@ from  .environment_detector import build_environment
 import socket
 import threading
 import atexit
+
+
 try:
     from gevent.pywsgi import WSGIServer
 except ModuleNotFoundError:
     raise RuntimeError("Error: gevent package is missing, please run 'conda install gevent' or"
                        "'pip install gevent' or 'pip install interpret-community[visualization]'")
 
-class FlaskHelper:
+
+class FlaskHelper(object):
     app = Flask(__name__)
     CORS(app)
 
-    def __init__(self, *, port, ip):
+    def __init__(self, ip=None, port=None):
 
         self.port = port
         self.ip = ip
@@ -28,24 +31,25 @@ class FlaskHelper:
         if self.port is None:
             # Try 100 different ports
             for port in range(5000, 5100):
-                available = FlaskHelper._local_port_available(self.ip, port, rais=False)
+                available = FlaskHelper._local_port_available(
+                    self.ip, port, raise_error=False)
                 if available:
                     self.port = port
-                    return
-            error_message = """Ports 5000 to 5100 not available.
-                Please specify an open port for use via the 'port' parameter"""
-            raise RuntimeError(
-                error_message.format(port)
-            )
+
+            if not available:
+                error_message = """Ports 5000 to 5100 not available.
+                    Please specify an open port for use via the 'port' parameter"""
+                raise RuntimeError(
+                    error_message.format(port)
+                )
         else:
-            FlaskHelper._local_port_available(self.ip, self.port)
+            FlaskHelper._local_port_available(self.ip, self.port, raise_error=False)
         self._thread = threading.Thread(target=self.run, daemon=True)
         self._thread.start()
         self.env = build_environment(self.ip, self.port)
-        
 
     @staticmethod
-    def _local_port_available(ip, port, rais=True):
+    def _local_port_available(ip, port, raise_error=True):
         """
         Borrowed from:
         https://stackoverflow.com/questions/19196105/how-to-check-if-a-network-port-is-open-on-linux
@@ -57,7 +61,7 @@ class FlaskHelper:
             sock.listen(backlog)
             sock.close()
         except socket.error:  # pragma: no cover
-            if rais:
+            if raise_error:
                 error_message = """Port {0} is not available.
                 Please specify another port for use via the 'port' parameter"""
                 raise RuntimeError(
@@ -66,7 +70,7 @@ class FlaskHelper:
             else:
                 return False
         return True
-    
+
     def run(self):
         class devnull:
             write = lambda _: None  # noqa: E731
