@@ -1,8 +1,8 @@
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
-import { IAccuracyPickerPropsv1 } from "../FairnessWizard";
-import { PredictionTypes } from "../IFairnessProps";
+import { IAccuracyPickerPropsV1 } from "../FairnessWizard";
+import { PredictionTypesV1 } from "../IFairnessProps";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { localization } from "../Localization/localization";
 import { AccuracyTabStyles } from "./AccuracyTab.styles";
@@ -11,7 +11,7 @@ import { TileList } from "./TileList";
 import { WizardFooter } from "./WizardFooter";
 
 export interface IAccuracyPickingTabProps extends IWizardTabProps {
-  accuracyPickerProps: IAccuracyPickerPropsv1;
+  accuracyPickerProps: IAccuracyPickerPropsV1;
 }
 
 export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
@@ -30,12 +30,12 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
           <Text className={styles.textBody} block>
             {localization.formatString(
               localization.Accuracy.body,
-              this.props.dashboardContext.modelMetadata.predictionType !==
-                PredictionTypes.regression
+              this.props.dashboardContext.modelMetadata.PredictionTypeV1 !==
+                PredictionTypesV1.regression
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
-              this.props.dashboardContext.modelMetadata.predictionType ===
-                PredictionTypes.binaryClassification
+              this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+                PredictionTypesV1.binaryClassification
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
               this.props.dashboardContext.predictions.length === 1

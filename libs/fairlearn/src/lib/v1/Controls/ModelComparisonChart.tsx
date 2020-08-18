@@ -19,13 +19,13 @@ import {
 import React from "react";
 import { AccuracyOptions } from "../AccuracyMetrics";
 import {
-  IAccuracyPickerPropsv1,
-  IFeatureBinPickerPropsv1,
-  IParityPickerPropsv1
+  IAccuracyPickerPropsV1,
+  IFeatureBinPickerPropsV1,
+  IParityPickerPropsV1
 } from "../FairnessWizard";
 import { FormatMetrics } from "../FormatMetrics";
 import { IFairnessContext } from "../IFairnessContext";
-import { PredictionTypes } from "../IFairnessProps";
+import { PredictionTypesV1 } from "../IFairnessProps";
 import { localization } from "../Localization/localization";
 import { MetricsCache } from "../MetricsCache";
 import { ParityModes } from "../ParityMetrics";
@@ -36,9 +36,9 @@ export interface IModelComparisonProps {
   dashboardContext: IFairnessContext;
   metricsCache: MetricsCache;
   modelCount: number;
-  accuracyPickerProps: IAccuracyPickerPropsv1;
-  parityPickerProps: IParityPickerPropsv1;
-  featureBinPickerProps: IFeatureBinPickerPropsv1;
+  accuracyPickerProps: IAccuracyPickerPropsV1;
+  parityPickerProps: IParityPickerPropsV1;
+  featureBinPickerProps: IFeatureBinPickerPropsV1;
   onEditConfigs: () => void;
   onChartClick?: (data: any) => void;
 }
@@ -350,8 +350,8 @@ export class ModelComparisonChart extends React.PureComponent<
           );
         });
       const disparityMetric = this.state.disparityInOutcomes
-        ? this.props.dashboardContext.modelMetadata.predictionType ===
-          PredictionTypes.binaryClassification
+        ? this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
+          PredictionTypesV1.binaryClassification
           ? "selection_rate"
           : "average"
         : this.props.accuracyPickerProps.selectedAccuracyKey;
