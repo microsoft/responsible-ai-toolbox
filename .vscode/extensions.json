@@ -2,6 +2,7 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "nrwl.angular-console"
   ]
 }

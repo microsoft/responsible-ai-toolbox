@@ -4,5 +4,5 @@ export function getGreeting(): Cypress.Chainable<JQuery<HTMLHeadingElement>> {
 export function getLink(
   href: string
 ): Cypress.Chainable<JQuery<HTMLAnchorElement>> {
-  return cy.get(`a[href="${href}"]`);
+  return cy.get(`a[href$="#${href}"]`);
 }

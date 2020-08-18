@@ -1,19 +1,27 @@
 import os
 
+
 class DatabricksInterfaceConstants(object):
     DISPLAY_HTML = "displayHTML"
     DISPLAY = "display"
     SPARK = "spark"
 
+
 class DatabricksEnvironment:
     lazy_display_function = None
+
     def __init__(self, ip, port):
-        if "DATABRICKS_RUNTIME_VERSION" not in os.environ:
-            return None
-        self.base_url = "http://{0}:{1}".format(
-            ip,
-            port)
+        self.successfully_detected = False
+        self.base_url = None
         self.externally_available = False
+
+        if "DATABRICKS_RUNTIME_VERSION" not in os.environ:
+            self.successfully_detected = False
+        else:
+            self.base_url = "http://{0}:{1}".format(
+                ip,
+                port)
+            self.externally_available = True
 
     # NOTE: Code mostly derived from Plotly's databricks render as linked below:
     # https://github.com/plotly/plotly.py/blob/01a78d3fdac14848affcd33ddc4f9ec72d475232/packages/python/plotly/plotly/io/_base_renderers.py

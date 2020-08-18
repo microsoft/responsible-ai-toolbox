@@ -13,6 +13,8 @@ module.exports = (config) => {
     tls: "empty",
     child_process: "empty"
   };
+  config.externals = config.externals || {};
+  config.externals["plotly.js"] = "Plotly";
 
   return config;
 };
