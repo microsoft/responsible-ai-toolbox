@@ -31,7 +31,7 @@ import {
 } from "../FairnessWizard";
 import { FormatMetrics } from "../FormatMetrics";
 import { IFairnessContext } from "../IFairnessContext";
-import { PredictionTypesV2 } from "../IFairnessProps";
+import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
 import { MetricsCache } from "../MetricsCache";
 import { ParityOptions } from "../ParityMetrics";
@@ -476,8 +476,8 @@ export class ModelComparisonChart extends React.PureComponent<
       const parityOption =
         ParityOptions[this.props.parityPickerProps.selectedParityKey];
       const disparityMetric =
-        this.props.dashboardContext.modelMetadata.PredictionTypeV2 ===
-        PredictionTypesV2.binaryClassification
+        this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.binaryClassification
           ? parityOption.parityMetric
           : "average";
       const parityMode = parityOption.parityMode;

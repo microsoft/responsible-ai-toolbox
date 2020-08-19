@@ -2,7 +2,7 @@ import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 import { IAccuracyPickerPropsV1 } from "../FairnessWizard";
-import { PredictionTypesV1 } from "../IFairnessProps";
+import { PredictionTypes } from "../../IFairnessProps";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { localization } from "../../Localization/localization";
 import { AccuracyTabStyles } from "./AccuracyTab.styles";
@@ -30,12 +30,12 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
           <Text className={styles.textBody} block>
             {localization.formatString(
               localization.Accuracy.body,
-              this.props.dashboardContext.modelMetadata.PredictionTypeV1 !==
-                PredictionTypesV1.regression
+              this.props.dashboardContext.modelMetadata.PredictionType !==
+                PredictionTypes.regression
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
-              this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
-                PredictionTypesV1.binaryClassification
+              this.props.dashboardContext.modelMetadata.PredictionType ===
+                PredictionTypes.binaryClassification
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
               this.props.dashboardContext.predictions.length === 1

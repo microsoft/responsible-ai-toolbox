@@ -25,9 +25,9 @@ import { IBinnedResponse } from "./IBinnedResponse";
 import { IFairnessContext, IFairnessModelMetadata } from "./IFairnessContext";
 import {
   IFairnessPropsV1,
-  PredictionTypeV1,
-  PredictionTypesV1
-} from "./IFairnessProps";
+  PredictionType,
+  PredictionTypes
+} from "../IFairnessProps";
 import { localization } from "./../Localization/localization";
 import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";
@@ -133,13 +133,13 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
 
     accuracyMetrics =
-      fairnessContext.modelMetadata.PredictionTypeV1 ===
-      PredictionTypesV1.binaryClassification
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.binaryClassification
         ? this.props.supportedBinaryClassificationAccuracyKeys.map(
             (key) => AccuracyOptions[key]
           )
-        : fairnessContext.modelMetadata.PredictionTypeV1 ===
-          PredictionTypesV1.regression
+        : fairnessContext.modelMetadata.PredictionType ===
+          PredictionTypes.regression
         ? this.props.supportedRegressionAccuracyKeys.map(
             (key) => AccuracyOptions[key]
           )
@@ -245,7 +245,7 @@ export class FairnessWizardV1 extends React.PureComponent<
       classNames,
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
       featureRanges,
-      PredictionTypeV1: props.PredictionTypeV1
+      PredictionType: props.PredictionType
     };
   }
 
@@ -282,10 +282,10 @@ export class FairnessWizardV1 extends React.PureComponent<
       featureIsCategorical,
       props.dataSummary.categoricalMap
     );
-    const PredictionTypeV1 = FairnessWizardV1.determinePredictionType(
+    const PredictionType = FairnessWizardV1.determinePredictionType(
       props.trueY,
       props.predictedY,
-      props.PredictionTypeV1
+      props.PredictionType
     );
     return {
       featureNames,
@@ -293,7 +293,7 @@ export class FairnessWizardV1 extends React.PureComponent<
       classNames,
       featureIsCategorical,
       featureRanges,
-      PredictionTypeV1
+      PredictionType
     };
   }
 
@@ -309,12 +309,12 @@ export class FairnessWizardV1 extends React.PureComponent<
   private static determinePredictionType(
     trueY: number[],
     predictedY: number[][],
-    specifiedType?: PredictionTypeV1
-  ): PredictionTypeV1 {
+    specifiedType?: PredictionType
+  ): PredictionType {
     if (
-      specifiedType === PredictionTypesV1.binaryClassification ||
-      specifiedType === PredictionTypesV1.probability ||
-      specifiedType === PredictionTypesV1.regression
+      specifiedType === PredictionTypes.binaryClassification ||
+      specifiedType === PredictionTypes.probability ||
+      specifiedType === PredictionTypes.regression
     ) {
       return specifiedType;
     }
@@ -323,15 +323,15 @@ export class FairnessWizardV1 extends React.PureComponent<
     );
     const trueIsBinary = _.uniq(trueY).length < 3;
     if (!trueIsBinary) {
-      return PredictionTypesV1.regression;
+      return PredictionTypes.regression;
     }
     if (_.uniq(_.flatten(predictedY)).length < 3) {
-      return PredictionTypesV1.binaryClassification;
+      return PredictionTypes.binaryClassification;
     }
     if (predictedIsPossibleProba) {
-      return PredictionTypesV1.probability;
+      return PredictionTypes.probability;
     }
-    return PredictionTypesV1.regression;
+    return PredictionTypes.regression;
   }
 
   public render(): React.ReactNode {

@@ -1,5 +1,5 @@
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
-import { PredictionTypeV1 } from "./IFairnessProps";
+import { PredictionType } from "../IFairnessProps";
 
 export interface IFairnessContext {
   // rows by [aug columns + feature columns + trueY + groupIndex]
@@ -14,5 +14,5 @@ export interface IFairnessContext {
 }
 
 export interface IFairnessModelMetadata extends IModelMetadata {
-  PredictionTypeV1: PredictionTypeV1;
+  PredictionType: PredictionType;
 }

@@ -25,7 +25,7 @@ import {
 } from "../FairnessWizard";
 import { FormatMetrics } from "../FormatMetrics";
 import { IFairnessContext } from "../IFairnessContext";
-import { PredictionTypesV1 } from "../IFairnessProps";
+import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
 import { MetricsCache } from "../MetricsCache";
 import { ParityModes } from "../ParityMetrics";
@@ -350,8 +350,8 @@ export class ModelComparisonChart extends React.PureComponent<
           );
         });
       const disparityMetric = this.state.disparityInOutcomes
-        ? this.props.dashboardContext.modelMetadata.PredictionTypeV1 ===
-          PredictionTypesV1.binaryClassification
+        ? this.props.dashboardContext.modelMetadata.PredictionType ===
+          PredictionTypes.binaryClassification
           ? "selection_rate"
           : "average"
         : this.props.accuracyPickerProps.selectedAccuracyKey;

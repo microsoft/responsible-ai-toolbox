@@ -1,9 +1,8 @@
 import React from "react";
 import {
   FairnessWizardV1,
-  IMetricResponseV1,
   FairnessWizardV2,
-  IMetricResponseV2
+  IMetricResponse
 } from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
@@ -245,7 +244,7 @@ export class App extends React.Component<any, any> {
                   App.supportedProbabilityAccuracyKeys
                 }
                 stringParams={{ contextualHelp: App.messages }}
-                requestMetrics={this.generateRandomMetricsV1.bind(this)}
+                requestMetrics={this.generateRandomMetrics.bind(this)}
                 theme={theme}
                 locale={this.state.language}
                 key={Date.now()}
@@ -273,7 +272,7 @@ export class App extends React.Component<any, any> {
                   App.supportedProbabilityAccuracyKeys
                 }
                 stringParams={{ contextualHelp: App.messages }}
-                requestMetrics={this.generateRandomMetricsV2.bind(this)}
+                requestMetrics={this.generateRandomMetrics.bind(this)}
                 theme={theme}
                 locale={this.state.language}
                 key={Date.now()}
@@ -285,28 +284,7 @@ export class App extends React.Component<any, any> {
     );
   }
 
-  private generateRandomMetricsV1(data, signal): Promise<IMetricResponseV1> {
-    const binSize = Math.max(...data.binVector);
-    const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
-    bins[2] = undefined;
-    const promise = new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        resolve({
-          global: Math.random(),
-          bins
-        });
-      }, 300);
-      if (signal) {
-        signal.addEventListener("abort", () => {
-          clearTimeout(timeout);
-          reject(new DOMException("Aborted", "AbortError"));
-        });
-      }
-    });
-    return promise;
-  }
-
-  private generateRandomMetricsV2(data, signal): Promise<IMetricResponseV2> {
+  private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
     const binSize = Math.max(...data.binVector);
     const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
     bins[2] = undefined;
