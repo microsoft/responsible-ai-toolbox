@@ -33,17 +33,17 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
     },
     firstSectionContainer: {
       width: "100%",
-      height: "250px",
+      height: "250px"
     },
     firstSectionTitle: {
       fontSize: "42px",
       lineHeight: "50px",
-      fontWeight: FontWeights.light,
+      fontWeight: FontWeights.light
     },
     firstSectionSubtitle: {
       fontSize: "42px",
       lineHeight: "50px",
-      fontWeight: FontWeights.semibold,
+      fontWeight: FontWeights.semibold
     },
     firstSectionBody: {
       paddingTop: "30px",
@@ -57,7 +57,7 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
       height: "154px",
       background: theme.semanticColors.bodyBackground,
       fill: theme.semanticColors.bodyText,
-      stroke: theme.semanticColors.bodyText,
+      stroke: theme.semanticColors.bodyText
     },
     lowerSection: {
       padding: "50px 70px 90px 90px",
@@ -81,7 +81,7 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
     numericLabel: {
       fontWeight: FontWeights.bold,
       width: "20px",
-      marginRight: "5px",
+      marginRight: "5px"
     },
     explanatoryStep: {
       maxWidth: "300px",

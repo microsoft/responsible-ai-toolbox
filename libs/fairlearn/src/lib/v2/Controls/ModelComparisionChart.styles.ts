@@ -4,7 +4,7 @@ import {
   IStyle,
   mergeStyleSets,
   FontWeights,
-  FontSizes,
+  FontSizes
 } from "office-ui-fabric-react";
 
 export interface IModelComparisionChartStyles {
@@ -68,11 +68,11 @@ export const ModelComparisionChartStyles: () => IProcessedStyleSet<
     },
     headerOptions: {
       backgroundColor: theme.semanticColors.bodyBackground,
-      padding: "0 100px",
+      padding: "0 100px"
     },
     dropDown: {
       margin: "10px 10px 10px 0px",
-      display: "inline-block",
+      display: "inline-block"
     },
     infoButton: {
       color: theme.semanticColors.bodyText,
@@ -86,7 +86,7 @@ export const ModelComparisionChartStyles: () => IProcessedStyleSet<
       borderRadius: "50%",
       border: "1px solid",
       marginTop: "3px",
-      marginRight: "3px",
+      marginRight: "3px"
     },
     doneButton: {
       margin: "auto",
@@ -95,43 +95,43 @@ export const ModelComparisionChartStyles: () => IProcessedStyleSet<
       lineHeight: "24px",
       color: theme.semanticColors.bodyText,
       fontSize: FontSizes.large,
-      fontWeight: FontWeights.regular,
+      fontWeight: FontWeights.regular
     },
     modalContentIntro: {
       float: "left",
-      width: "250px",
+      width: "250px"
     },
     modalContentIntroText: {
       padding: "0px 20px",
       textAlign: "center",
-      wordWrap: "break-word",
+      wordWrap: "break-word"
     },
     modalContentHelp: {
       float: "left",
-      width: "250px",
+      width: "250px"
     },
     modalContentHelpText: {
       padding: "0px 20px",
       textAlign: "center",
-      wordWrap: "break-word",
+      wordWrap: "break-word"
     },
     editButton: {
-      color: theme.semanticColors.buttonText,
+      color: theme.semanticColors.buttonText
     },
     howTo: {
       paddingTop: "20px",
-      paddingLeft: "100px",
+      paddingLeft: "100px"
     },
     main: {
       height: "100%",
       flex: 1,
       display: "inline-flex",
       flexDirection: "row",
-      backgroundColor: theme.semanticColors.bodyBackground,
+      backgroundColor: theme.semanticColors.bodyBackground
     },
     mainLeft: {
       width: "75%",
-      backgroundColor: theme.semanticColors.bodyBackground,
+      backgroundColor: theme.semanticColors.bodyBackground
     },
     mainRight: {
       padding: "30px 0 0 35px",
@@ -153,13 +153,13 @@ export const ModelComparisionChartStyles: () => IProcessedStyleSet<
       textTransform: "uppercase",
       color: theme.semanticColors.bodyText,
       padding: "18px 10px",
-      display: "inline",
+      display: "inline"
     },
     insightsIcon: {
       verticalAlign: "middle",
       marginRight: "10px",
       width: "24",
-      height: "28",
+      height: "28"
     },
     insightsText: {
       marginTop: "20px",
@@ -172,7 +172,7 @@ export const ModelComparisionChartStyles: () => IProcessedStyleSet<
       verticalAlign: "middle",
       marginRight: "10px",
       width: "17",
-      height: "18",
+      height: "18"
     },
     downloadReport: {
       color: theme.semanticColors.bodyText,
@@ -181,7 +181,7 @@ export const ModelComparisionChartStyles: () => IProcessedStyleSet<
       fontWeight: "normal",
       paddingTop: "20px",
       paddingBottom: "20px",
-      paddingLeft: "0px",
+      paddingLeft: "0px"
     },
     chart: {
       padding: "0px 0 0 0",

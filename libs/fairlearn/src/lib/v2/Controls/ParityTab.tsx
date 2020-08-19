@@ -17,7 +17,11 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
   public render(): React.ReactNode {
     const styles = ParityTabStyles();
     return (
-      <Stack horizontal horizontalAlign="space-between" className={styles.frame}>
+      <Stack
+        horizontal
+        horizontalAlign="space-between"
+        className={styles.frame}
+      >
         <StackItem grow={2}>
           <Stack className={styles.main}>
             <Text className={styles.header} block>

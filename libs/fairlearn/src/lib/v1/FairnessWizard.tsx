@@ -110,7 +110,9 @@ export class FairnessWizardV1 extends React.PureComponent<
         selectedAccuracyKey: accuracyMetrics[0].key,
         parityMetrics: accuracyMetrics,
         selectedParityKey: accuracyMetrics[0].key,
-        dashboardContext: FairnessWizardV1.buildPrecomputedFairnessContext(props),
+        dashboardContext: FairnessWizardV1.buildPrecomputedFairnessContext(
+          props
+        ),
         activeTabKey: featureBinTabKey,
         featureBins: readonlyFeatureBins,
         selectedBinIndex: 0,

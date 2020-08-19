@@ -45,6 +45,7 @@ yarn start
 ```
 
 which can take a few seconds before printing out
+
 ```
 $ nx serve
 

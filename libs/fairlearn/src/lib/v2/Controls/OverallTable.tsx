@@ -65,7 +65,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                                 </Stack> */}
                   </div>
                 );
-              return <div style={{display:"none"}}></div>;
+              return <div style={{ display: "none" }}></div>;
             })}
           </div>
         </div>
@@ -84,7 +84,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                         {value !== undefined ? value : "empty"}
                       </div>
                     );
-                  return <div style={{display:"none"}}></div>;
+                  return <div style={{ display: "none" }}></div>;
                 })}
               </div>
             </div>

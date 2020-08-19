@@ -19,27 +19,27 @@ export const ParityOptions: { [key: string]: IParityOption } = {
     title: localization.Metrics.parityDifference,
     description: localization.Metrics.parityDifferenceDescription,
     parityMetric: "selection_rate",
-    parityMode: ParityModes.difference,
+    parityMode: ParityModes.difference
   },
   selection_rate_ratio: {
     key: "selection_rate_ratio",
     title: localization.Metrics.parityRatio,
     description: localization.Metrics.parityRatioDescription,
     parityMetric: "selection_rate",
-    parityMode: ParityModes.ratio,
+    parityMode: ParityModes.ratio
   },
   zero_one_loss: {
     key: "zero_one_loss",
     title: localization.Metrics.errorRateDifference,
     description: localization.Metrics.errorRateDifferenceDescription,
     parityMetric: "zero_one_loss",
-    parityMode: ParityModes.difference,
+    parityMode: ParityModes.difference
   },
   recall_score: {
     key: "recall_score",
     title: localization.Metrics.equalOpportunityDifference,
     description: localization.Metrics.equalOpportunityDifferenceDescription,
     parityMetric: "recall_score",
-    parityMode: ParityModes.difference,
-  },
+    parityMode: ParityModes.difference
+  }
 };

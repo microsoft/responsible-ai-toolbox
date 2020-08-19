@@ -803,11 +803,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   //   this.props.onEditConfigs();
   // };
 
-  private readonly handleOpenModalHelp = (_event: React.MouseEvent<HTMLInputElement>): void => {
+  private readonly handleOpenModalHelp = (
+    _event: React.MouseEvent<HTMLInputElement>
+  ): void => {
     this.setState({ showModalHelp: true });
   };
 
-  private readonly handleCloseModalHelp = (_event: React.MouseEvent<HTMLInputElement>): void => {
+  private readonly handleCloseModalHelp = (
+    _event: React.MouseEvent<HTMLInputElement>
+  ): void => {
     this.setState({ showModalHelp: false });
   };
 

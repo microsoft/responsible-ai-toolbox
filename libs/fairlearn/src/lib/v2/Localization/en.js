@@ -71,9 +71,11 @@ module.exports = {
     featuresInfo:
       "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by disparity metrics. Disparity metrics quantify how much your model's behavior varies across these groups.",
     accuracy: "Performance metric",
-    accuracyInfo: "Performance metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of the performance metric across the groups is reported as the disparity in performance.",
+    accuracyInfo:
+      "Performance metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of the performance metric across the groups is reported as the disparity in performance.",
     parity: "Disparity metrics",
-    parityInfo: "Parity metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of accuracy is reported as the disparity in accuracy."
+    parityInfo:
+      "Parity metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of accuracy is reported as the disparity in accuracy."
   },
   ModelComparison: {
     title: "Model comparison",
@@ -90,9 +92,11 @@ module.exports = {
     rangesFrom: " ranges from ",
     to: " to ",
     period: ". ",
-    introModalText: "Each model is a selectable point. Click or tap on model for it's full fairness assessment.", 
+    introModalText:
+      "Each model is a selectable point. Click or tap on model for it's full fairness assessment.",
     helpModalText1: "The x-axis represents accuracy, with higher being better.",
-    helpModalText2: "The y-axis represents disparity,  with lower being better.",
+    helpModalText2:
+      "The y-axis represents disparity,  with lower being better.",
     insightsText1: "The chart shows {0} and disparity of {1} models.",
     "_insightsText1.comment": "??? NOT FOUND IN SRC",
     insightsText2:

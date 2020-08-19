@@ -7,7 +7,9 @@ export class MetricsCache {
   public constructor(
     private featureCount: number,
     private numberOfModels: number,
-    private fetchMethod: (request: IMetricRequestV1) => Promise<IMetricResponseV1>,
+    private fetchMethod: (
+      request: IMetricRequestV1
+    ) => Promise<IMetricResponseV1>,
     precomputedCache?: Array<Array<{ [key: string]: IMetricResponseV1 }>>
   ) {
     if (precomputedCache) {
