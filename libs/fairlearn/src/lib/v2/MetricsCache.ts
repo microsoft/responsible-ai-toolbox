@@ -32,7 +32,7 @@ export class MetricsCache {
       value = await this.fetchMethod({
         metricKey: key,
         binVector: binIndexVector,
-        modelIndex: modelIndex
+        modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }
@@ -51,7 +51,7 @@ export class MetricsCache {
       value = await this.fetchMethod({
         metricKey: key,
         binVector: binIndexVector,
-        modelIndex: modelIndex
+        modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }

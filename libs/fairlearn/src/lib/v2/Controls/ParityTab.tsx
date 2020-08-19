@@ -7,7 +7,7 @@ import { IParityPickerPropsV2 } from "../FairnessWizard";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { WizardFooter } from "./WizardFooter";
 import { TileList, ITileProp } from "./TileList";
-import { ParityTabStyles } from './ParityTab.styles';
+import { ParityTabStyles } from "./ParityTab.styles";
 
 export interface IParityTabProps extends IWizardTabProps {
   parityPickerProps: IParityPickerPropsV2;

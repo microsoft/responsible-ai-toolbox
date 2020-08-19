@@ -32,17 +32,17 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
       color: theme.semanticColors.bodyText
     },
     firstSectionContainer: {
-      width: '100%',
-      height: '250px',
+      width: "100%",
+      height: "250px",
     },
     firstSectionTitle: {
-      fontSize: '42px',
-      lineHeight: '50px',
+      fontSize: "42px",
+      lineHeight: "50px",
       fontWeight: FontWeights.light,
     },
     firstSectionSubtitle: {
-      fontSize: '42px',
-      lineHeight: '50px',
+      fontSize: "42px",
+      lineHeight: "50px",
       fontWeight: FontWeights.semibold,
     },
     firstSectionBody: {
@@ -53,8 +53,8 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
       lineHeight: "24px"
     },
     firstSectionGraphics: {
-      width: '346px',
-      height: '154px',
+      width: "346px",
+      height: "154px",
       background: theme.semanticColors.bodyBackground,
       fill: theme.semanticColors.bodyText,
       stroke: theme.semanticColors.bodyText,
@@ -81,7 +81,7 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
     numericLabel: {
       fontWeight: FontWeights.bold,
       width: "20px",
-      marginRight: '5px',
+      marginRight: "5px",
     },
     explanatoryStep: {
       maxWidth: "300px",
@@ -92,9 +92,9 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
       paddingTop: "15px"
     },
     getStarted: {
-      height: '44px',
-      padding: '12px',
-      lineHeight: '24px',
+      height: "44px",
+      padding: "12px",
+      lineHeight: "24px",
       fontSize: FontSizes.large,
       fontWeight: FontWeights.regular
     }

@@ -153,7 +153,7 @@ export class App extends React.Component<any, any> {
     PredictorReq: [{ displayText: "PredictorReq" }]
   };
 
-  state: {
+  private state: {
     value: number;
     themeIndex: number;
     language: string;
@@ -223,7 +223,7 @@ export class App extends React.Component<any, any> {
           }}
         >
           <div style={{ width: "940px" }}>
-            {version == "v1" && (
+            {version === "v1" && (
               <FairnessWizardV1
                 dataSummary={{
                   featureNames: data.featureNames,
@@ -252,7 +252,7 @@ export class App extends React.Component<any, any> {
                 key={Date.now()}
               />
             )}
-            {version == "v2" && (
+            {version === "v2" && (
               <FairnessWizardV2
                 dataSummary={{
                   featureNames: data.featureNames,

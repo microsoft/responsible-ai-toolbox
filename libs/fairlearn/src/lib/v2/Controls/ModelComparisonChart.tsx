@@ -95,7 +95,7 @@ export class ModelComparisonChart extends React.PureComponent<
         marker: {
           size: 14
         },
-        textposition: 'top',
+        textposition: "top",
         type: "scatter",
         xAccessor: "Accuracy",
         yAccessor: "Parity",
@@ -157,15 +157,15 @@ export class ModelComparisonChart extends React.PureComponent<
 
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
-      title: { borderRadius: '5px' },
+      title: { borderRadius: "5px" },
     };
 
     const iconButtonStyles = {
       root: {
         color: theme.semanticColors.bodyText,
-        marginLeft: 'auto',
-        marginTop: '4px',
-        marginRight: '2px',
+        marginLeft: "auto",
+        marginTop: "4px",
+        marginRight: "2px",
       },
       rootHovered: {
         color: theme.semanticColors.bodyBackgroundHovered,
@@ -185,7 +185,7 @@ export class ModelComparisonChart extends React.PureComponent<
         return {
           Parity: this.state.disparityArray[index],
           Accuracy: accuracy,
-          index: index,
+          index,
         };
       });
       let minAccuracy: number = Number.MAX_SAFE_INTEGER;
@@ -279,10 +279,10 @@ export class ModelComparisonChart extends React.PureComponent<
       props.layout.xaxis.title = accuracyMetricTitle;
       props.layout.yaxis.title = parityMetricTitle;
 
-      const InsightsIcon = () => <Icon iconName="CRMCustomerInsightsApp" className={styles.insightsIcon} />;
-      const DownloadIcon = () => <Icon iconName="Download" className={styles.downloadIcon} />;
+      const InsightsIcon = (): JSX.Element => <Icon iconName="CRMCustomerInsightsApp" className={styles.insightsIcon} />;
+      const DownloadIcon = (): JSX.Element => <Icon iconName="Download" className={styles.downloadIcon} />;
 
-      const cancelIcon: IIconProps = { iconName: 'Cancel' };
+      const cancelIcon: IIconProps = { iconName: "Cancel" };
 
       mainChart = (
         <div className={styles.main}>
@@ -295,7 +295,7 @@ export class ModelComparisonChart extends React.PureComponent<
                 isModeless={true}
                 containerClassName={styles.modalContentIntro}
               >
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: "flex" }}>
                   <IconButton
                     styles={iconButtonStyles}
                     iconProps={cancelIcon}
@@ -306,7 +306,7 @@ export class ModelComparisonChart extends React.PureComponent<
                 <p className={styles.modalContentIntroText}>
                   {localization.ModelComparison.introModalText}
                 </p>
-                <div style={{ display: 'flex', paddingBottom: '20px' }}>
+                <div style={{ display: "flex", paddingBottom: "20px" }}>
                   <PrimaryButton className={styles.doneButton} onClick={this.handleCloseModalIntro}>
                     {localization.done}
                   </PrimaryButton>
@@ -323,7 +323,7 @@ export class ModelComparisonChart extends React.PureComponent<
                 isModeless={true}
                 containerClassName={styles.modalContentHelp}
               >
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: "flex" }}>
                   <IconButton
                     styles={iconButtonStyles}
                     iconProps={cancelIcon}
@@ -337,7 +337,7 @@ export class ModelComparisonChart extends React.PureComponent<
                   <br />
                   {localization.ModelComparison.helpModalText2}
                 </p>
-                <div style={{ display: 'flex', paddingBottom: '20px' }}>
+                <div style={{ display: "flex", paddingBottom: "20px" }}>
                   <PrimaryButton className={styles.doneButton} onClick={this.handleCloseModalHelp}>
                     {localization.done}
                   </PrimaryButton>
@@ -372,7 +372,7 @@ export class ModelComparisonChart extends React.PureComponent<
             </div>
             <div className={styles.downloadReport}>
               <DownloadIcon />
-              <Text style={{ verticalAlign: 'middle' }}>
+              <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.downloadReport}
               </Text>
             </div>
@@ -384,7 +384,7 @@ export class ModelComparisonChart extends React.PureComponent<
     return (
       <Stack className={styles.frame}>
         <div className={styles.header}>
-          <Text variant={'large'} className={styles.headerTitle} block>
+          <Text variant={"large"} className={styles.headerTitle} block>
             {localization.ModelComparison.title} <b>assessment</b>
           </Text>
         </div>
@@ -439,7 +439,7 @@ export class ModelComparisonChart extends React.PureComponent<
       const disparityMetric =
         this.props.dashboardContext.modelMetadata.PredictionTypeV2 === PredictionTypesV2.binaryClassification
           ? parityOption.parityMetric
-          : 'average';
+          : "average";
       const parityMode = parityOption.parityMode;
       const disparityPromises = new Array(this.props.modelCount)
         .fill(0)
@@ -469,7 +469,7 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.featureBinPickerProps.selectedBinIndex = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
         featureKey,
       );
-      this.setState({ featureKey: featureKey, accuracyArray: undefined, disparityArray: undefined });
+      this.setState({ featureKey, accuracyArray: undefined, disparityArray: undefined });
     }
   };
 
@@ -477,7 +477,7 @@ export class ModelComparisonChart extends React.PureComponent<
     const accuracyKey = option.key.toString();
     if (this.state.accuracyKey !== accuracyKey) {
       this.props.accuracyPickerProps.onAccuracyChange(accuracyKey);
-      this.setState({ accuracyKey: accuracyKey, accuracyArray: undefined });
+      this.setState({ accuracyKey, accuracyArray: undefined });
     }
   };
 
@@ -485,20 +485,20 @@ export class ModelComparisonChart extends React.PureComponent<
     const parityKey = option.key.toString();
     if (this.state.parityKey !== parityKey) {
       this.props.parityPickerProps.onParityChange(parityKey);
-      this.setState({ parityKey: parityKey, disparityArray: undefined });
+      this.setState({ parityKey, disparityArray: undefined });
     }
   };
 
-  private readonly handleCloseModalIntro = (_ev): void => {
+  private readonly handleCloseModalIntro = (_event: React.MouseEvent<HTMLInputElement>): void => {
     this.setState({ showModalIntro: false });
     this.props.onHideIntro();
   };
 
-  private readonly handleOpenModalHelp = (_ev): void => {
+  private readonly handleOpenModalHelp = (_event: React.MouseEvent<HTMLInputElement>): void => {
     this.setState({ showModalHelp: true });
   };
 
-  private readonly handleCloseModalHelp = (_ev): void => {
+  private readonly handleCloseModalHelp = (_event: React.MouseEvent<HTMLInputElement>): void => {
     this.setState({ showModalHelp: false });
   };
 }

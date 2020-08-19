@@ -9,14 +9,6 @@ import {
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
-import { AccuracyOptions } from "./AccuracyMetrics";
-import { ChartColors } from "./ChartColors";
-import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
-import { SummaryTable } from "./Controls/SummaryTable";
-import { IMetricResponseV2, PredictionTypesV2 } from "./IFairnessProps";
-import { localization } from "./Localization/localization";
-import { ParityModes } from "./ParityMetrics";
-import { WizardReportStyles } from "./WizardReport.styles";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -25,6 +17,14 @@ import {
   IIconProps,
   Icon
 } from "office-ui-fabric-react";
+import { AccuracyOptions } from "./AccuracyMetrics";
+import { ChartColors } from "./ChartColors";
+import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
+import { SummaryTable } from "./Controls/SummaryTable";
+import { IMetricResponseV2, PredictionTypesV2 } from "./IFairnessProps";
+import { localization } from "./Localization/localization";
+import { ParityModes } from "./ParityMetrics";
+import { WizardReportStyles } from "./WizardReport.styles";
 import { OverallTable } from "./Controls/OverallTable";
 
 const theme = getTheme();
@@ -117,7 +117,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     } as any
   };
 
-  render(): React.ReactNode {
+  public render(): React.ReactNode {
     const styles = WizardReportStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
@@ -550,20 +550,20 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         AccuracyOptions[underpredictionKey].title
       ];
 
-      const InsightsIcon = () => (
+      const InsightsIcon = (): JSX.Element => (
         <Icon
           iconName="CRMCustomerInsightsApp"
           className={styles.insightsIcon}
         />
       );
-      const DownloadIcon = () => (
+      const DownloadIcon = (): JSX.Element => (
         <Icon iconName="Download" className={styles.downloadIcon} />
       );
 
-      const ChevronUp = () => (
+      const ChevronUp = (): JSX.Element => (
         <Icon iconName="ChevronUp" className={styles.chevronIcon} />
       );
-      const ChevronDown = () => (
+      const ChevronDown = (): JSX.Element => (
         <Icon iconName="ChevronDown" className={styles.chevronIcon} />
       );
 
@@ -778,7 +778,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     isRatio = false,
     sigDigits = 3
   ): string => {
-    if (value === null || value === undefined || value === NaN) {
+    if (value === null || value === undefined || isNaN(value)) {
       return NaN.toString();
     }
     const styleObject = { maximumSignificantDigits: sigDigits };
@@ -803,16 +803,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   //   this.props.onEditConfigs();
   // };
 
-  private readonly handleOpenModalHelp = (_ev): void => {
+  private readonly handleOpenModalHelp = (_event: React.MouseEvent<HTMLInputElement>): void => {
     this.setState({ showModalHelp: true });
   };
 
-  private readonly handleCloseModalHelp = (_ev): void => {
+  private readonly handleCloseModalHelp = (_event: React.MouseEvent<HTMLInputElement>): void => {
     this.setState({ showModalHelp: false });
   };
 
   private readonly featureChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _: React.FormEvent<HTMLInputElement>,
     option: IDropdownOption
   ): void => {
     const featureKey = option.key.toString();
@@ -820,7 +820,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       this.props.featureBinPickerProps.selectedBinIndex = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
         featureKey
       );
-      this.setState({ featureKey: featureKey, metrics: undefined });
+      this.setState({ featureKey, metrics: undefined });
     }
   };
 
@@ -964,16 +964,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         metrics: {
           globalAccuracy: accuracy.global,
           binnedAccuracy: accuracy.bins,
-          accuracyDisparity: accuracyDisparity,
+          accuracyDisparity,
           globalOutcome: outcomes.global,
           binnedOutcome: outcomes.bins,
-          outcomeDisparity: outcomeDisparity,
-          predictions: predictions,
-          errors: errors,
+          outcomeDisparity,
+          predictions,
+          errors,
           globalOverprediction: overallOverprediction,
           globalUnderprediction: overallUnderprediction,
-          binnedOverprediction: binnedOverprediction,
-          binnedUnderprediction: binnedUnderprediction
+          binnedOverprediction,
+          binnedUnderprediction
         }
       });
     } catch {

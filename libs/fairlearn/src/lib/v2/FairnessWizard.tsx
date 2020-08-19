@@ -30,8 +30,8 @@ import { localization } from "./Localization/localization";
 import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
-import { IParityOption, ParityOptions } from './ParityMetrics';
-import { BinnedResponseBuilder } from './BinnedResponseBuilder';
+import { IParityOption, ParityOptions } from "./ParityMetrics";
+import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 
 import { defaultTheme } from "./Themes";
 
@@ -112,7 +112,7 @@ export class FairnessWizardV2 extends React.PureComponent<
         showIntro: true,
         accuracyMetrics,
         selectedAccuracyKey: accuracyMetrics[0].key,
-        parityMetrics: parityMetrics,
+        parityMetrics,
         selectedParityKey: parityMetrics[0].key,
         dashboardContext: FairnessWizardV2.buildPrecomputedFairnessContext(props),
         activeTabKey: featureBinTabKey,
@@ -157,7 +157,7 @@ export class FairnessWizardV2 extends React.PureComponent<
       showIntro: true,
       accuracyMetrics,
       selectedAccuracyKey: accuracyMetrics[0].key,
-      parityMetrics: parityMetrics,
+      parityMetrics,
       selectedParityKey: parityMetrics[0].key,
       dashboardContext: fairnessContext,
       activeTabKey: introTabKey,
@@ -431,7 +431,7 @@ export class FairnessWizardV2 extends React.PureComponent<
                   <PivotItem
                     headerText={localization.disparityMetric}
                     itemKey={disparityTabKey}
-                    style={{ height: '100%', paddingLeft: '8px' }}
+                    style={{ height: "100%", paddingLeft: "8px" }}
                   >
                     <ParityTab
                       dashboardContext={this.state.dashboardContext}
@@ -479,7 +479,7 @@ export class FairnessWizardV2 extends React.PureComponent<
     );
   }
 
-  private readonly hideIntro = () => {
+  private readonly hideIntro = ():void => {
     this.setState({ showIntro: false });
   };
 
@@ -616,11 +616,11 @@ export class FairnessWizardV2 extends React.PureComponent<
       if (value.rangeType === RangeTypes.categorical) {
         // this handles categorical, as well as integers when user requests to treat as categorical
         return value.array.indexOf(featureValue);
-      } else {
+      } 
         return value.array.findIndex((upperLimit) => {
           return upperLimit >= featureValue;
         });
-      }
+      
     });
   }
 
