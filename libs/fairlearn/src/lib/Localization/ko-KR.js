@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "인스턴스 {0}개",
   close: "닫기",
   calculating: "계산하는 중...",
-  accuracyMetric: "성능 메트릭",
+  accuracyMetricLegacy: "성능 메트릭",
   errorOnInputs:
     "입력에 오류가 있습니다. 지금은 중요한 기능이 범주 값이어야 합니다. 값을 계급 구간으로 나뉜 범주에 매핑한 후 다시 시도하세요.",
   Accuracy: {

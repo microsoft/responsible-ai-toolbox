@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} istanze",
   close: "Chiudi",
   calculating: "Calcolo...",
-  accuracyMetric: "Metrica delle prestazioni",
+  accuracyMetricLegacy: "Metrica delle prestazioni",
   errorOnInputs:
     "Errore con input. Le caratteristiche sensibili devono essere al momento valori categorici. Eseguire il mapping dei valori alle categorie di cui è stato effettuato il binning e riprovare.",
   Accuracy: {

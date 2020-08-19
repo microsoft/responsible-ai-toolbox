@@ -292,7 +292,7 @@ export class ModelComparisonChart extends React.PureComponent<
               {howToReadText}
             </Text>
             <Text className={styles.insights} block>
-              {localization.ModelComparison.insights}
+              {localization.ModelComparison.insightsLegacy}
             </Text>
             <div className={styles.insightsText}>
               <Text className={styles.textSection} block>

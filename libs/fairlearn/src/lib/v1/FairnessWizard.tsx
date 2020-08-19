@@ -416,7 +416,7 @@ export class FairnessWizardV1 extends React.PureComponent<
                 />
               </PivotItem>
               <PivotItem
-                headerText={localization.accuracyMetric}
+                headerText={localization.accuracyMetricLegacy}
                 itemKey={accuracyTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >

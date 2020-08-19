@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "Počet instancí: {0}",
   close: "Zavřít",
   calculating: "Probíhá výpočet...",
-  accuracyMetric: "Metrika výkonu",
+  accuracyMetricLegacy: "Metrika výkonu",
   errorOnInputs:
     "Chyba ve vstupu. Citlivé příznaky musí být v tuto chvíli kategorické hodnoty. Namapujte prosím hodnoty na intervalové kategorie a zkuste to znovu.",
   Accuracy: {

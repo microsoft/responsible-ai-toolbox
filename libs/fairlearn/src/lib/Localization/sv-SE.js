@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} instanser",
   close: "Stäng",
   calculating: "Beräknar...",
-  accuracyMetric: "Prestandamått",
+  accuracyMetricLegacy: "Prestandamått",
   errorOnInputs:
     "Fel med indata. De känsliga funktionerna måste vara kategoriska värden just nu. Mappa värden till diskretiserade kategorier och försök igen.",
   Accuracy: {

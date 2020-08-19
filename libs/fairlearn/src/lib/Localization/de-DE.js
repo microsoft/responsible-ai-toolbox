@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} Instanzen",
   close: "Schließen",
   calculating: "Wird berechnet...",
-  accuracyMetric: "Leistungsmetrik",
+  accuracyMetricLegacy: "Leistungsmetrik",
   errorOnInputs:
     "Fehler bei der Eingabe. Sensible Features müssen zurzeit kategorische Werte sein. Ordnen Sie den Datengruppenkategorien Werte zu, und versuchen Sie es noch mal.",
   Accuracy: {

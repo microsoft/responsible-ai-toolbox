@@ -25,8 +25,12 @@ module.exports = {
   instanceCount: "{0} instances",
   "_instanceCount.comment": "formatted string of the number of instances",
   close: "Close",
+  done: "Done",
   calculating: "Calculating...",
-  accuracyMetric: "Performance metric",
+  accuracyMetricLegacy: "Performance metric",
+  sensitiveFeatures: "01 Sensitive features",
+  accuracyMetric: "02 Performance metrics",
+  disparityMetric: "03 Disparity metrics",
   errorOnInputs:
     "Error with input. Sensitive features must be categorical values at this time. Please map values to binned categories and retry.",
   Accuracy: {
@@ -45,8 +49,10 @@ module.exports = {
   },
   Parity: {
     header: "Fairness measured in terms of disparity",
+    bodyLegacy:
+      "Disparity metrics quantify variation of your model's behavior across selected features. There are two kinds of disparity metrics: more to come....",
     body:
-      "Disparity metrics quantify variation of your model's behavior across selected features. There are two kinds of disparity metrics: more to come...."
+      "Disparity metrics quantify variation of your model's behavior across selected features. There are four kinds of disparity metrics: more to come...."
   },
   Header: {
     title: "Fairlearn",
@@ -69,7 +75,10 @@ module.exports = {
       "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by disparity metrics. Disparity metrics quantify how much your model's behavior varies across these groups.",
     accuracy: "Performance metric",
     accuracyInfo:
-      "Performance metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of the performance metric across the groups is reported as the disparity in performance."
+      "Performance metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of the performance metric across the groups is reported as the disparity in performance.",
+    parity: "Disparity metrics",
+    parityInfo:
+      "Parity metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of accuracy is reported as the disparity in accuracy."
   },
   ModelComparison: {
     title: "Model comparison",
@@ -80,7 +89,18 @@ module.exports = {
       "This chart represents each of the {0} models as a selectable point. The x-axis represents {1}, with {2} being better. The y-axis represents disparity, with lower being better.",
     "_howToReadText.comment":
       "Instructions for reading a chart. The number of models in the chart (0), the metric shown of the x-axix (1), and orientation for interpreting the x-axis",
-    insights: "Insights",
+    insightsLegacy: "Insights",
+    insights: "Key Insights",
+    downloadReport: "Download report",
+    disparity: " The disparity ",
+    rangesFrom: " ranges from ",
+    to: " to ",
+    period: ". ",
+    introModalText:
+      "Each model is a selectable point. Click or tap on model for it's full fairness assessment.",
+    helpModalText1: "The x-axis represents accuracy, with higher being better.",
+    helpModalText2:
+      "The y-axis represents disparity,  with lower being better.",
     insightsText1: "The chart shows {0} and disparity of {1} models.",
     "_insightsText1.comment": "??? NOT FOUND IN SRC",
     insightsText2:
@@ -112,11 +132,17 @@ module.exports = {
     "_accuracyDisparityText.comment":
       "The title of the metric for which accuracy is being assessed",
     editConfiguration: "Edit configuration",
-    backToComparisons: "Multimodel view",
+    backToComparisonsLegacy: "Multimodel view",
+    backToComparisons: "Back to all models",
+    assessmentResults: "Assessment results for",
+    equalizedOddsDisparity: "Equalized odds disparity",
     outcomesTitle: "Disparity in predictions",
+    expandSensitiveAttributes: "Expand sensitive attributes",
+    collapseSensitiveAttributes: "Collapse sensitive attributes",
     minTag: "Min",
     maxTag: "Max",
     groupLabel: "Subgroup",
+    overallLabel: "Overall",
     underestimationError: "Underprediction",
     underpredictionExplanation: "(predicted = 0, true = 1)",
     overpredictionExplanation: "(predicted = 1, true = 0)",
@@ -213,6 +239,14 @@ module.exports = {
       "Positive and negative examples are reweighted to have equal total weight. Suitable if the underlying data is highly imbalanced.",
     balancedAccuracyDescription:
       "Positive and negative examples are reweighted to have equal total weight. Suitable if the underlying data is highly imbalanced.",
+    parityDifference: "Parity difference",
+    parityDifferenceDescription: "Parity difference",
+    parityRatio: "Parity ratio",
+    parityRatioDescription: "Parity ratio",
+    errorRateDifference: "Error rate difference",
+    errorRateDifferenceDescription: "Error rate difference",
+    equalOpportunityDifference: "Equal opportunity difference",
+    equalOpportunityDifferenceDescription: "Equal opportunity difference",
     f1ScoreDescription: "F1-Score is the harmonic mean of precision and recall."
   },
   BinDialog: {

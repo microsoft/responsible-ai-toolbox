@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} instances",
   close: "Fermer",
   calculating: "Calcul...",
-  accuracyMetric: "Métrique de performances",
+  accuracyMetricLegacy: "Métrique de performances",
   errorOnInputs:
     "Erreur d'entrée. Les caractéristiques sensibles doivent être des valeurs catégoriques pour l'instant. Mappez les valeurs à des catégories classées et réessayez.",
   Accuracy: {

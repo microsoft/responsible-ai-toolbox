@@ -19,7 +19,7 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
         <StackItem grow={2}>
           <Stack>
             <h2 style={{ fontWeight: "bold" }}>{localization.Parity.header}</h2>
-            <p>{localization.Parity.body}</p>
+            <p>{localization.Parity.bodyLegacy}</p>
             <StackItem grow={2}>
               <TileList
                 items={this.props.parityPickerProps.parityOptions.map(

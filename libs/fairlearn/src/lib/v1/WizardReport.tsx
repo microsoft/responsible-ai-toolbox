@@ -481,7 +481,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 iconProps={{ iconName: "ChevronLeft" }}
                 onClick={this.clearModelSelection}
               >
-                {localization.Report.backToComparisons}
+                {localization.Report.backToComparisonsLegacy}
               </ActionButton>
               <Text variant={"large"} className={styles.modelLabel}>
                 {
