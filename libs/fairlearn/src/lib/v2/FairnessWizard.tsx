@@ -26,7 +26,7 @@ import {
   PredictionTypeV2,
   PredictionTypesV2
 } from "./IFairnessProps";
-import { localization } from "./Localization/localization";
+import { localization } from "./../Localization/localization";
 import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";

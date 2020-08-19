@@ -4,7 +4,7 @@ import React from "react";
 import { IAccuracyPickerPropsV1 } from "../FairnessWizard";
 import { PredictionTypesV1 } from "../IFairnessProps";
 import { IWizardTabProps } from "../IWizardTabProps";
-import { localization } from "../Localization/localization";
+import { localization } from "../../Localization/localization";
 import { AccuracyTabStyles } from "./AccuracyTab.styles";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { TileList } from "./TileList";

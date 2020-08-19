@@ -1,7 +1,7 @@
 import { Stack, Text } from "office-ui-fabric-react";
 
 import React from "react";
-import { localization } from "../Localization/localization";
+import { localization } from "../../Localization/localization";
 import { SummaryTableStyles } from "./SummaryTable.styles";
 
 export interface ISummaryTableProps {

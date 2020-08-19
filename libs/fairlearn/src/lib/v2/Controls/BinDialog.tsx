@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { BinnedResponseBuilder } from "../BinnedResponseBuilder";
 import { IBinnedResponse } from "../IBinnedResponse";
-import { localization } from "../Localization/localization";
+import { localization } from "../../Localization/localization";
 import { BinDialogStyles } from "./BinDialog.styles";
 
 export interface IBinDialogProps {

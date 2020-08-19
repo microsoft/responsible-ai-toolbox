@@ -1,4 +1,4 @@
-import { localization } from "./Localization/localization";
+import { localization } from "./../Localization/localization";
 
 export interface IAccuracyOption {
   key: string;

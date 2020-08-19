@@ -1,5 +1,5 @@
 import React from "react";
-import { localization } from "../Localization/localization";
+import { localization } from "../../Localization/localization";
 import { OverallTableStyles } from "./OverallTable.styles";
 
 export interface IOverallTableProps {

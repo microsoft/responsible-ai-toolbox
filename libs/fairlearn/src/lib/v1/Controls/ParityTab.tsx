@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, StackItem, Separator } from "office-ui-fabric-react";
 
-import { localization } from "../Localization/localization";
+import { localization } from "../../Localization/localization";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { IParityPickerPropsV1 } from "../FairnessWizard";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";

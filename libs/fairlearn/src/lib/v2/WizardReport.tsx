@@ -22,7 +22,7 @@ import { ChartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { IMetricResponseV2, PredictionTypesV2 } from "./IFairnessProps";
-import { localization } from "./Localization/localization";
+import { localization } from "./../Localization/localization";
 import { ParityModes } from "./ParityMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
 import { OverallTable } from "./Controls/OverallTable";

@@ -3,7 +3,7 @@ import {
   PrimaryButton
 } from "office-ui-fabric-react/lib/Button";
 import React from "react";
-import { localization } from "../Localization/localization";
+import { localization } from "../../Localization/localization";
 import { WizardFooterStyles } from "./WizardFooter.styles";
 
 export interface IWizardFooterProps {
