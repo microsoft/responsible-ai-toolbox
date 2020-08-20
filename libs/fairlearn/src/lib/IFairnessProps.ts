@@ -46,7 +46,7 @@ export interface IFairnessPropsV1 {
   precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
   precomputedFeatureBins?: IFeatureBinMeta[];
   customMetrics: ICustomMetric[];
-  PredictionType?: PredictionTypes;
+  predictionType?: PredictionTypes;
   // One array per each model;
   predictedY: number[][];
   modelNames?: string[];
@@ -73,7 +73,7 @@ export interface IFairnessPropsV2 {
   precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
   precomputedFeatureBins?: IFeatureBinMeta[];
   customMetrics: ICustomMetric[];
-  PredictionType?: PredictionTypes;
+  predictionType?: PredictionTypes;
   // One array per each model;
   predictedY: number[][];
   modelNames?: string[];

@@ -234,6 +234,7 @@ export class App extends React.Component<any, any> {
                 precomputedMetrics={data.precomputedMetrics}
                 precomputedFeatureBins={data.precomputedFeatureBins}
                 customMetrics={data.customMetrics}
+                predictionType={data.predictionType}
                 supportedBinaryClassificationAccuracyKeys={
                   App.supportedBinaryClassificationAccuracyKeys
                 }
@@ -262,6 +263,7 @@ export class App extends React.Component<any, any> {
                 precomputedMetrics={data.precomputedMetrics}
                 precomputedFeatureBins={data.precomputedFeatureBins}
                 customMetrics={data.customMetrics}
+                predictionType={data.predictionType}
                 supportedBinaryClassificationAccuracyKeys={
                   App.supportedBinaryClassificationAccuracyKeys
                 }

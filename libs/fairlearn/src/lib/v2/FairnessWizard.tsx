@@ -253,7 +253,7 @@ export class FairnessWizardV2 extends React.PureComponent<
       classNames,
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
       featureRanges,
-      PredictionType: props.PredictionType
+      PredictionType: props.predictionType
     };
   }
 
@@ -293,7 +293,7 @@ export class FairnessWizardV2 extends React.PureComponent<
     const PredictionType = FairnessWizardV2.determinePredictionType(
       props.trueY,
       props.predictedY,
-      props.PredictionType
+      props.predictionType
     );
     return {
       featureNames,
