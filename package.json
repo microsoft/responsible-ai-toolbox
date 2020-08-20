@@ -58,6 +58,7 @@
     "@nrwl/react": "10.0.10",
     "@nrwl/web": "10.0.10",
     "@nrwl/workspace": "10.0.10",
+    "@rollup/plugin-json": "4.1.0",
     "@types/enzyme": "3.10.5",
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/enzyme-to-json": "1.5.3",
