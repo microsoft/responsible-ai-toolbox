@@ -17,11 +17,11 @@ import {
   IIconProps,
   Icon
 } from "office-ui-fabric-react";
+import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { AccuracyOptions } from "./AccuracyMetrics";
 import { ChartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
-import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { localization } from "./../Localization/localization";
 import { ParityModes } from "./ParityMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
@@ -803,15 +803,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   //   this.props.onEditConfigs();
   // };
 
-  private readonly handleOpenModalHelp = (
-    _event: React.MouseEvent<HTMLInputElement>
-  ): void => {
+  private readonly handleOpenModalHelp = (): void => {
     this.setState({ showModalHelp: true });
   };
 
-  private readonly handleCloseModalHelp = (
-    _event: React.MouseEvent<HTMLInputElement>
-  ): void => {
+  private readonly handleCloseModalHelp = (): void => {
     this.setState({ showModalHelp: false });
   };
 

@@ -14,6 +14,11 @@ import {
   loadTheme
 } from "office-ui-fabric-react";
 import React from "react";
+import {
+  IFairnessPropsV1,
+  PredictionType,
+  PredictionTypes
+} from "../IFairnessProps";
 import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { AccuracyTab } from "./Controls/AccuracyTab";
@@ -23,11 +28,6 @@ import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
 import { IBinnedResponse } from "./IBinnedResponse";
 import { IFairnessContext, IFairnessModelMetadata } from "./IFairnessContext";
-import {
-  IFairnessPropsV1,
-  PredictionType,
-  PredictionTypes
-} from "../IFairnessProps";
 import { localization } from "./../Localization/localization";
 import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";

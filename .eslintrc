@@ -354,7 +354,7 @@
         "typedefs": false
       }
     ],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-unused-vars": "error",
     "no-useless-constructor": "error"
   },
   "overrides": [

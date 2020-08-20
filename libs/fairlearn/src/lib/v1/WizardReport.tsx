@@ -9,11 +9,11 @@ import _ from "lodash";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 import React from "react";
+import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { AccuracyOptions } from "./AccuracyMetrics";
 import { ChartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
-import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { localization } from "./../Localization/localization";
 import { ParityModes } from "./ParityMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";

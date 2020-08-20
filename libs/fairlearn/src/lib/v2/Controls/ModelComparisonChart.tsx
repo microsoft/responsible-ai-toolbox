@@ -542,22 +542,16 @@ export class ModelComparisonChart extends React.PureComponent<
     }
   };
 
-  private readonly handleCloseModalIntro = (
-    _event: React.MouseEvent<HTMLInputElement>
-  ): void => {
+  private readonly handleCloseModalIntro = (): void => {
     this.setState({ showModalIntro: false });
     this.props.onHideIntro();
   };
 
-  private readonly handleOpenModalHelp = (
-    _event: React.MouseEvent<HTMLInputElement>
-  ): void => {
+  private readonly handleOpenModalHelp = (): void => {
     this.setState({ showModalHelp: true });
   };
 
-  private readonly handleCloseModalHelp = (
-    _event: React.MouseEvent<HTMLInputElement>
-  ): void => {
+  private readonly handleCloseModalHelp = (): void => {
     this.setState({ showModalHelp: false });
   };
 }
