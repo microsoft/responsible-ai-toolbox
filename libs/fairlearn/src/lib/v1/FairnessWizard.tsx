@@ -288,7 +288,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     const PredictionType = FairnessWizardV1.determinePredictionType(
       props.trueY,
       props.predictedY,
-      props.redictionType
+      props.predictionType
     );
     return {
       featureNames,
