@@ -2,3 +2,6 @@
 
 /dist
 /coverage
+/wrapped-flask
+/.github
+
