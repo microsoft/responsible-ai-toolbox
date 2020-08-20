@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} exemplaren",
   close: "Sluiten",
   calculating: "Berekenen...",
-  accuracyMetric: "Metrische prestatiegegevens",
+  accuracyMetricLegacy: "Metrische prestatiegegevens",
   errorOnInputs:
     "Fout bij invoer. Gevoelige functies moeten op dit moment categorisch zijn. Wijs waarden toe aan categorieën in bins en probeer het opnieuw.",
   Accuracy: {

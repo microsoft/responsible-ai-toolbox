@@ -29,7 +29,7 @@ export interface IMetricRequest {
 export interface IFeatureBinMeta {
   binVector: number[];
   binLabels: string[];
-  // this could alos be held in a 'features name' array separate with the same length.
+  // this could also be held in a 'features name' array separate with the same length.
   featureBinName: string;
 }
 
@@ -39,7 +39,7 @@ export interface ICustomMetric {
   id: string;
 }
 
-export interface IFairnessProps {
+export interface IFairnessPropsV1 {
   startingTabIndex?: number;
   dataSummary: IDatasetSummary;
   testData?: any[][];
@@ -57,6 +57,33 @@ export interface IFairnessProps {
   supportedBinaryClassificationAccuracyKeys?: string[];
   supportedRegressionAccuracyKeys?: string[];
   supportedProbabilityAccuracyKeys?: string[];
+  shouldInitializeIcons?: boolean;
+  iconUrl?: string;
+  // The request hook
+  requestMetrics: (
+    request: IMetricRequest,
+    abortSignal?: AbortSignal
+  ) => Promise<IMetricResponse>;
+}
+
+export interface IFairnessPropsV2 {
+  startingTabIndex?: number;
+  dataSummary: IDatasetSummary;
+  testData?: any[][];
+  precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
+  precomputedFeatureBins?: IFeatureBinMeta[];
+  customMetrics: ICustomMetric[];
+  predictionType?: PredictionTypes;
+  // One array per each model;
+  predictedY: number[][];
+  modelNames?: string[];
+  trueY: number[];
+  theme?: any;
+  locale?: string;
+  stringParams?: any;
+  supportedBinaryClassificationAccuracyKeys: string[];
+  supportedRegressionAccuracyKeys: string[];
+  supportedProbabilityAccuracyKeys: string[];
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
   // The request hook

@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} instancias",
   close: "Cerrar",
   calculating: "Cálculo en curso...",
-  accuracyMetric: "Métrica de rendimiento",
+  accuracyMetricLegacy: "Métrica de rendimiento",
   errorOnInputs:
     "Error con la entrada. Las características confidenciales deben ser valores de categorías en este momento. Asigne valores a las categorías con rangos y vuelva a intentarlo.",
   Accuracy: {

@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "Wystąpienia: {0}",
   close: "Zamknij",
   calculating: "Trwa obliczanie...",
-  accuracyMetric: "Metryka wydajności",
+  accuracyMetricLegacy: "Metryka wydajności",
   errorOnInputs:
     "Błąd danych wejściowych. Cechy wrażliwe muszą być teraz wartościami kategorialnymi. Zamapuj wartości do kategorii w przedziałach i ponów próbę.",
   Accuracy: {

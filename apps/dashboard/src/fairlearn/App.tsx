@@ -1,5 +1,9 @@
 import React from "react";
-import { FairnessWizard, IMetricResponse } from "@responsible-ai/fairlearn";
+import {
+  FairnessWizardV1,
+  FairnessWizardV2,
+  IMetricResponse
+} from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
@@ -104,6 +108,11 @@ export class App extends React.Component<any, any> {
     { label: "darkHiContrast", data: darkContrastTheme }
   ];
 
+  private static versionChoices = [
+    { label: "v1", data: "v1" },
+    { label: "v2", data: "v2" }
+  ];
+
   private static languages = [
     { label: "english", val: "en-EN" },
     { label: "spanish", val: "es-ES" },
@@ -112,21 +121,59 @@ export class App extends React.Component<any, any> {
     { label: "japanese", val: "ja-JP" }
   ];
 
-  private messages = {
+  private static supportedBinaryClassificationAccuracyKeys = [
+    "accuracy_score",
+    "balanced_accuracy_score",
+    "precision_score",
+    "recall_score",
+    "f1_score"
+  ];
+
+  private static supportedRegressionAccuracyKeys = [
+    "mean_absolute_error",
+    "r2_score",
+    "mean_squared_error",
+    "root_mean_squared_error"
+  ];
+
+  private static supportedProbabilityAccuracyKeys = [
+    "auc",
+    "root_mean_squared_error",
+    "balanced_root_mean_squared_error",
+    "r2_score",
+    "mean_squared_error",
+    "mean_absolute_error"
+  ];
+
+  private static messages = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
     LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
     TestReq: [{ displayText: "TestReq" }],
     PredictorReq: [{ displayText: "PredictorReq" }]
   };
+
+  public state: {
+    value: number;
+    themeIndex: number;
+    language: string;
+    versionIndex: number;
+  };
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public constructor(props: any) {
     super(props);
-    this.state = { value: 4, themeIndex: 0, language: App.languages[0].val };
+    this.state = {
+      value: 4,
+      themeIndex: 0,
+      language: App.languages[0].val,
+      versionIndex: 0
+    };
   }
 
   public render(): React.ReactNode {
     const data: any = _.cloneDeep(App.choices[this.state.value].data);
     const theme = App.themeChoices[this.state.themeIndex].data;
+    const version: string = App.versionChoices[this.state.versionIndex].data;
     return (
       <div style={{ backgroundColor: "grey", height: "100%" }}>
         <label>Select dataset:</label>
@@ -140,6 +187,17 @@ export class App extends React.Component<any, any> {
         <label>Select theme:</label>
         <select value={this.state.themeIndex} onChange={this.handleThemeChange}>
           {App.themeChoices.map((item, index) => (
+            <option key={item.label} value={index}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+        <label>Select version:</label>
+        <select
+          value={this.state.versionIndex}
+          onChange={this.handleVersionChange}
+        >
+          {App.versionChoices.map((item, index) => (
             <option key={item.label} value={index}>
               {item.label}
             </option>
@@ -164,67 +222,69 @@ export class App extends React.Component<any, any> {
           }}
         >
           <div style={{ width: "940px" }}>
-            <FairnessWizard
-              // modelInformation={{ modelClass: "blackbox" } as any}
-              dataSummary={{
-                featureNames: data.featureNames,
-                classNames: data.classNames
-              }}
-              testData={data.testData}
-              predictedY={data.predictedY}
-              trueY={data.trueY}
-              precomputedMetrics={data.precomputedMetrics}
-              precomputedFeatureBins={data.precomputedFeatureBins}
-              customMetrics={data.customMetrics}
-              predictionType={data.predictionType}
-              supportedBinaryClassificationAccuracyKeys={[
-                "accuracy_score",
-                "balanced_accuracy_score",
-                "precision_score",
-                "recall_score",
-                "f1_score"
-              ]}
-              supportedRegressionAccuracyKeys={[
-                "mean_absolute_error",
-                "r2_score",
-                "mean_squared_error",
-                "root_mean_squared_error"
-              ]}
-              supportedProbabilityAccuracyKeys={[
-                "auc",
-                "root_mean_squared_error",
-                "balanced_root_mean_squared_error",
-                "r2_score",
-                "mean_squared_error",
-                "mean_absolute_error"
-              ]}
-              stringParams={{ contextualHelp: this.messages }}
-              requestMetrics={this.generateRandomMetrics.bind(this)}
-              theme={theme}
-              locale={this.state.language}
-              key={Date.now()}
-            />
+            {version === "v1" && (
+              <FairnessWizardV1
+                dataSummary={{
+                  featureNames: data.featureNames,
+                  classNames: data.classNames
+                }}
+                testData={data.testData}
+                predictedY={data.predictedY}
+                trueY={data.trueY}
+                precomputedMetrics={data.precomputedMetrics}
+                precomputedFeatureBins={data.precomputedFeatureBins}
+                customMetrics={data.customMetrics}
+                predictionType={data.predictionType}
+                supportedBinaryClassificationAccuracyKeys={
+                  App.supportedBinaryClassificationAccuracyKeys
+                }
+                supportedRegressionAccuracyKeys={
+                  App.supportedRegressionAccuracyKeys
+                }
+                supportedProbabilityAccuracyKeys={
+                  App.supportedProbabilityAccuracyKeys
+                }
+                stringParams={{ contextualHelp: App.messages }}
+                requestMetrics={this.generateRandomMetrics.bind(this)}
+                theme={theme}
+                locale={this.state.language}
+                key={Date.now()}
+              />
+            )}
+            {version === "v2" && (
+              <FairnessWizardV2
+                dataSummary={{
+                  featureNames: data.featureNames,
+                  classNames: data.classNames
+                }}
+                testData={data.testData}
+                predictedY={data.predictedY}
+                trueY={data.trueY}
+                precomputedMetrics={data.precomputedMetrics}
+                precomputedFeatureBins={data.precomputedFeatureBins}
+                customMetrics={data.customMetrics}
+                predictionType={data.predictionType}
+                supportedBinaryClassificationAccuracyKeys={
+                  App.supportedBinaryClassificationAccuracyKeys
+                }
+                supportedRegressionAccuracyKeys={
+                  App.supportedRegressionAccuracyKeys
+                }
+                supportedProbabilityAccuracyKeys={
+                  App.supportedProbabilityAccuracyKeys
+                }
+                stringParams={{ contextualHelp: App.messages }}
+                requestMetrics={this.generateRandomMetrics.bind(this)}
+                theme={theme}
+                locale={this.state.language}
+                key={Date.now()}
+              />
+            )}
           </div>
         </div>
       </div>
     );
   }
-
-  private handleChange = (event): void => {
-    this.setState({ value: event.target.value });
-  };
-
-  private handleThemeChange = (event): void => {
-    this.setState({ themeIndex: event.target.value });
-  };
-
-  private handleLanguageChange = (event): void => {
-    this.setState({ language: event.target.value });
-  };
-
-  // private generateRandomScore = (data): Promise<any[]> => {
-  //     return Promise.resolve(data.map(() => Math.random()));
-  // };
 
   private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
     const binSize = Math.max(...data.binVector);
@@ -247,17 +307,19 @@ export class App extends React.Component<any, any> {
     return promise;
   }
 
-  // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
-  //     const promise = new Promise((resolve, reject) => {
-  //         const timeout = setTimeout(() => {
-  //             resolve(explanations);
-  //         }, 300);
-  //         signal.addEventListener("abort", () => {
-  //             clearTimeout(timeout);
-  //             reject(new DOMException("Aborted", "AbortError"));
-  //         });
-  //     });
+  private handleChange = (event): void => {
+    this.setState({ value: event.target.value });
+  };
 
-  //     return promise;
-  // }
+  private handleThemeChange = (event): void => {
+    this.setState({ themeIndex: event.target.value });
+  };
+
+  private handleVersionChange = (event): void => {
+    this.setState({ versionIndex: event.target.value });
+  };
+
+  private handleLanguageChange = (event): void => {
+    this.setState({ language: event.target.value });
+  };
 }

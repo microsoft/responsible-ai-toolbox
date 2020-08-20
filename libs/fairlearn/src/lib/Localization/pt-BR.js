@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} instâncias",
   close: "Fechar",
   calculating: "Calculando...",
-  accuracyMetric: "Métrica de desempenho",
+  accuracyMetricLegacy: "Métrica de desempenho",
   errorOnInputs:
     "Erro com a entrada. Recursos confidenciais precisam ser valores categóricos neste momento. Mapeie valores para as categorias compartimentalizadas e tente novamente.",
   Accuracy: {

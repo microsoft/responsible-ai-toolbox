@@ -355,7 +355,6 @@
       }
     ],
     "no-unused-vars": "error",
-    // "@typescript-eslint/no-unused-vars": ["error", { "args": "none", "ignoreRestSiblings": true }],
     "no-useless-constructor": "error"
   },
   "overrides": [

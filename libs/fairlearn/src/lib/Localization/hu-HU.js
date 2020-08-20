@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} példány",
   close: "Bezárás",
   calculating: "Számítás...",
-  accuracyMetric: "Teljesítménymutató",
+  accuracyMetricLegacy: "Teljesítménymutató",
   errorOnInputs:
     "Hiba történt a bemenettel. Az érzékeny jellemzőknek jelenleg kategorikus értékeknek kell lenniük. Rendelje hozzá az értékeket dobozolt kategóriákhoz, majd próbálja újra.",
   Accuracy: {

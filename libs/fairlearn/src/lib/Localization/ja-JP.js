@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} 個のインスタンス",
   close: "閉じる",
   calculating: "計算しています...",
-  accuracyMetric: "パフォーマンス メトリック",
+  accuracyMetricLegacy: "パフォーマンス メトリック",
   errorOnInputs:
     "入力でエラーが発生しました。現在、重要な特徴量はカテゴリ値である必要があります。値をビン分割されたカテゴリにマップしてから、もう一度お試しください。",
   Accuracy: {

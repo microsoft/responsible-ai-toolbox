@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} 个实例",
   close: "关闭",
   calculating: "正在计算...",
-  accuracyMetric: "性能指标",
+  accuracyMetricLegacy: "性能指标",
   errorOnInputs:
     "输入出错。目前敏感特征必须是分类值。请将值映射到已装箱的类别，然后重试。",
   Accuracy: {

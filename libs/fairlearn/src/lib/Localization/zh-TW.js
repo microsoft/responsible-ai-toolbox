@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} 個執行個體",
   close: "關閉",
   calculating: "正在計算...",
-  accuracyMetric: "成效指標",
+  accuracyMetricLegacy: "成效指標",
   errorOnInputs:
     "輸入發生錯誤。敏感性特徵目前必須是類別目錄值。請將值對應至組界類別，然後重試。",
   Accuracy: {

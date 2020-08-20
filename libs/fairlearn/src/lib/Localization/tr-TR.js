@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} örnek",
   close: "Kapat",
   calculating: "Hesaplanıyor...",
-  accuracyMetric: "Performans ölçümü",
+  accuracyMetricLegacy: "Performans ölçümü",
   errorOnInputs:
     "Giriş hatası. Hassas özellikler şu anda kategorik değerler olmalıdır. Lütfen değerleri bölmelenmiş kategorilere eşleyip yeniden deneyin.",
   Accuracy: {

@@ -16,7 +16,7 @@ module.exports = {
   instanceCount: "{0} instâncias",
   close: "Fechar",
   calculating: "A calcular...",
-  accuracyMetric: "Métrica de desempenho",
+  accuracyMetricLegacy: "Métrica de desempenho",
   errorOnInputs:
     "Erro na entrada. As funcionalidades sensíveis têm de ser valores categóricos neste momento. Mapeie os valores para as categorias discretizadas e tente novamente.",
   Accuracy: {

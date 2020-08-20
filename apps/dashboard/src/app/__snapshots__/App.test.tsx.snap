@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FairnessWizard should render successfully 1`] = `
+exports[`FairnessWizardV1 should render successfully 1`] = `
 <HashRouter>
   <div>
     <div
