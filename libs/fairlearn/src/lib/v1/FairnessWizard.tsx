@@ -105,7 +105,6 @@ export class FairnessWizardV1 extends React.PureComponent<
           };
         }
       );
-      console.log(props);
       this.state = {
         accuracyMetrics,
         selectedAccuracyKey: accuracyMetrics[0].key,
@@ -240,8 +239,6 @@ export class FairnessWizardV1 extends React.PureComponent<
         rangeType: RangeTypes.categorical
       } as ICategoricalRange;
     });
-    console.log("buildPrecomputedModelMetadata");
-    console.log(props.predictionType);
     return {
       featureNames,
       featureNamesAbridged: featureNames,
@@ -517,7 +514,6 @@ export class FairnessWizardV1 extends React.PureComponent<
   };
 
   private readonly onSelectModel = (data: any): void => {
-    console.log(data);
     if (!data) {
       this.setState({ selectedModelId: undefined });
       return;
