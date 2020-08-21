@@ -1,11 +1,11 @@
 pytest==5.0.1
 requests==2.24.0
 
-autopep8
-flake8
-flake8-blind-except
-flake8-builtins
-flake8-docstrings
-flake8-logging-format
-flake8-rst-docstrings
-requirements-parser
+autopep8==1.5.3
+flake8==3.7.9
+flake8-blind-except==0.1.1
+flake8-builtins==1.5.3
+flake8-docstrings==1.5.0
+flake8-logging-format==0.6.0
+flake8-rst-docstrings==0.0.13
+requirements-parser==0.2.0
