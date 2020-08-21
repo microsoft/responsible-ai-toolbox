@@ -17,6 +17,7 @@ class TestFlaskHelper(object):
         cls.test_port_local = 5100
 
     def get_http_client(self):
+        """Get HTTP client with automatic retries."""
         retry_strategy = Retry(total=3)
         adapter = HTTPAdapter(max_retries=retry_strategy)
         http = requests.Session()
@@ -27,7 +28,6 @@ class TestFlaskHelper(object):
 
     def test_without_explicit_port(self):
         """Test the flask helper without setting an explicit port."""
-
         http = self.get_http_client()
 
         flask_service = FlaskHelper(ip=self.test_ip_local)
@@ -45,10 +45,10 @@ class TestFlaskHelper(object):
 
     def test_with_explicit_port(self):
         """Test the flask helper when setting an explicit port."""
-
         http = self.get_http_client()
 
-        flask_service = FlaskHelper(ip=self.test_ip_local, port=self.test_port_local)
+        flask_service = FlaskHelper(ip=self.test_ip_local,
+                                    port=self.test_port_local)
 
         assert(flask_service.port == self.test_port_local)
 
