@@ -1,4 +1,15 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
+
 class LocalIPythonEnvironment:
+    """Environment class for local IPython environments.
+
+    LocalIPythonEnvironment represents functionality to detect whether it is
+    executed in a local python environment based on IPython's availability.
+    Additionally, it can display corresponding visualizations.
+    """
+
     def __init__(self, ip, port):
         self.successfully_detected = False
         self.base_url = None
@@ -6,7 +17,7 @@ class LocalIPythonEnvironment:
         self.port = port
 
         try:
-            from IPython.display import HTML, display
+            from IPython.display import HTML, display  # noqa: F401
         except NameError:
             self.successfully_detected = False
         else:
@@ -17,5 +28,6 @@ class LocalIPythonEnvironment:
             self.externally_available = True
 
     def display(self, html):
+        """Display the passed HTML using IPython."""
         from IPython.display import HTML, display
         display(HTML(html))

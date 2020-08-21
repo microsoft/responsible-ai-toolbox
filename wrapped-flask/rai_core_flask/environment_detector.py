@@ -1,14 +1,14 @@
-# Copyright (c) 2019 Microsoft Corporation
-# Distributed under the MIT software license
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 
 import os
 from .environments import AzureNBEnvironment
 from .environments import DatabricksEnvironment
 from .environments import LocalIPythonEnvironment
 
-""" Environment detection related utilities.
-A good portion of this code has largely been sourced from open-source licensed code available
-between StackOverflow and plotly.
+"""Environment detection related utilities.
+A good portion of this code has largely been sourced from open-source licensed
+code available between StackOverflow and plotly.
 
 Plotly derived code comes from below:
 https://github.com/plotly/plotly.py/blob/944af4a0b28bef2b139307a7808c02c51d804c4d/packages/python/plotly/plotly/io/_renderers.py#L455
@@ -16,14 +16,16 @@ https://github.com/plotly/plotly.py/blob/944af4a0b28bef2b139307a7808c02c51d804c4
 
 
 def _detect_ipython():
-    """ Detects if called in an IPython environment.
-    Mostly derived from stackoverflow below:
+    """Detect if called in an IPython environment.
+
+    Mostly derived from StackOverflow below:
     https://stackoverflow.com/questions/15411967/how-can-i-check-if-code-is-executed-in-the-ipython-notebook
 
-    Returns:
+    Returns
+    -------
         True if in IPython environment.
-    """
 
+    """
     try:
         from IPython import get_ipython
 
@@ -33,13 +35,17 @@ def _detect_ipython():
 
 
 def _detect_ipython_zmq():
-    """ Detects if in an IPython environment using ZMQ (i.e. notebook/qtconsole/lab).
+    """Detect if running in an IPython environment using ZMQ.
 
-    Mostly derived from stackoverflow below:
+    i.e. notebook/qtconsole/lab.
+
+    Mostly derived from StackOverflow below:
     https://stackoverflow.com/questions/15411967/how-can-i-check-if-code-is-executed-in-the-ipython-notebook/24937408
 
-    Returns:
+    Returns
+    -------
         True if called in IPython notebook or qtconsole.
+
     """
     try:
         from IPython import get_ipython
@@ -93,6 +99,7 @@ def _detect_databricks():
 
 
 def is_cloud_env(detected):
+    """Detect whether it is running in a cloud environment."""
     cloud_env = [
         "databricks",
         "azure",
@@ -109,17 +116,9 @@ def is_cloud_env(detected):
 
 
 def build_environment(ip, port):
-    # ordered list of environment classes
-    # ideally these would be of a given interface, having a base_url, externaly_available, and other props
-    # local should be last, to eliminate possibility of being a known cloud env.
-    environment_classes = [
-        AzureNBEnvironment,
-        DatabricksEnvironment,
-        LocalIPythonEnvironment
-    ]
-
+    """Create a runtime environment object."""
     # legacy
-    checks = {
+    checks = {  # noqa: F841
         "azure_nb": AzureNBEnvironment,
         "databricks": _detect_databricks,
         "vscode": _detect_vscode,

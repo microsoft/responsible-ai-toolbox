@@ -1,11 +1,11 @@
-#
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 #
 import setuptools
 
 
-# this must be incremented every time we push an update to pypi (but not before)
+# The version must be incremented every time we push an update to pypi (but
+# not before)
 VERSION = "0.0.1"
 
 # supply contents of our README file as our package's long description
@@ -15,7 +15,9 @@ with open("README.md", "r") as fh:
 
 requirements = []
 with open("requirements.txt", "r") as fr:
-    requirements = list(filter(lambda rq: rq != "", map(lambda r: r.strip(), fr.read().split("\n"))))
+    requirements = list(filter(
+        lambda rq: rq != "",
+        map(lambda r: r.strip(), fr.read().split("\n"))))
 
 
 setuptools.setup(

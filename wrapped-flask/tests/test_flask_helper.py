@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -7,16 +10,14 @@ from rai_core_flask import FlaskHelper
 class TestFlaskHelper(object):
 
     def setup_class(cls):
-        """
-        Setup once for all tests
-        """
-
+        """Set up once for all tests."""
         cls.port_range_start = 5000
         cls.port_range_end = 5099
         cls.test_ip_local = "127.0.0.1"
         cls.test_port_local = 5100
 
     def get_http_client(self):
+        """Get HTTP client with automatic retries."""
         retry_strategy = Retry(total=3)
         adapter = HTTPAdapter(max_retries=retry_strategy)
         http = requests.Session()
@@ -26,10 +27,7 @@ class TestFlaskHelper(object):
         return http
 
     def test_without_explicit_port(self):
-        """
-        Test the flask helper without setting an explicit port
-        """
-
+        """Test the flask helper without setting an explicit port."""
         http = self.get_http_client()
 
         flask_service = FlaskHelper(ip=self.test_ip_local)
@@ -46,13 +44,11 @@ class TestFlaskHelper(object):
         assert(response.text == "Hello")
 
     def test_with_explicit_port(self):
-        """
-        Test the flask helper when setting an explicit port
-        """
-
+        """Test the flask helper when setting an explicit port."""
         http = self.get_http_client()
 
-        flask_service = FlaskHelper(ip=self.test_ip_local, port=self.test_port_local)
+        flask_service = FlaskHelper(ip=self.test_ip_local,
+                                    port=self.test_port_local)
 
         assert(flask_service.port == self.test_port_local)
 

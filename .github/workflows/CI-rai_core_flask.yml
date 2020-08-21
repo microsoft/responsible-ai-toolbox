@@ -2,27 +2,31 @@ name: Responsible AI Core Flask
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.6
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.6
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r wrapped-flask/dev-requirements.txt
-        pip install -e wrapped-flask/
-    - name: Run tests
-      run: |
-        pytest wrapped-flask/tests/
+      - uses: actions/checkout@v2
 
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r wrapped-flask/dev-requirements.txt
+          pip install -e wrapped-flask/
+
+      - name: flake8
+        run: flake8
+
+      - name: Run tests
+        run: |
+          pytest wrapped-flask/tests/
