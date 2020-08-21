@@ -548,7 +548,6 @@ export class FairnessWizardV2 extends React.PureComponent<
   };
 
   private readonly onSelectModel = (data: any): void => {
-    console.log(data);
     if (!data) {
       this.setState({ selectedModelId: undefined });
       return;
