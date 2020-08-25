@@ -14,3 +14,4 @@ export * from "./lib/PlotlyMode";
 export * from "./lib/PlotlyThemes";
 export * from "./lib/RangeTypes";
 export * from "./lib/SelectionContext";
+export * from "./lib/util/getLocalization";
