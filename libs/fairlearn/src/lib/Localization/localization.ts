@@ -1,7 +1,4 @@
-import {
-  default as LocalizedStringsClass,
-  LocalizedStrings
-} from "localized-strings";
+import { getLocalization } from "@responsible-ai/mlchartlib";
 import cs from "./cs-CZ.json";
 import de from "./de-DE.json";
 import en from "./en.json";
@@ -21,7 +18,7 @@ import tr from "./tr-TR.json";
 import zhcn from "./zh-CN.json";
 import zhtw from "./zh-TW.json";
 
-export const localization = new LocalizedStringsClass({
+export const localization = getLocalization({
   en,
   cs,
   de,
@@ -40,4 +37,4 @@ export const localization = new LocalizedStringsClass({
   tr,
   "zh-CN": zhcn,
   "zh-TW": zhtw
-}) as LocalizedStrings<typeof en>;
+});

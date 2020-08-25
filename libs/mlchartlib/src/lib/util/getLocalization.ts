@@ -14,18 +14,19 @@ export enum Language {
   Ko = "ko",
   PtBR = "pt-BR",
   Ru = "ru",
-  ZhHans = "zh-Hans",
-  ZhHant = "zh-Hant",
+  ZhHans = "zh-CN",
+  ZhHant = "zh-TW",
   Nl = "nl",
   Hu = "hu",
   PtPT = "pt-PT",
   Pl = "pl",
   Sv = "sv",
-  Tr = "tr",
-  QpsPloc = "qps-ploc"
+  Tr = "tr"
 }
 
-export type ILocalizationConfig<T> = { readonly [key in Language]: () => T };
+export type ILocalizationConfig<T> = { en: T } & {
+  readonly [key in Language]: any;
+};
 
 export type ILocalization<T> = Omit<LocalizedStrings<T>, "formatString"> & {
   formatString(str: string, ...values: Array<string | number>): string;
@@ -62,6 +63,7 @@ export function getLocalization<T>(
     const par = [...values];
     for (let i = 0; i < par.length; i++) {
       if (par[i] === undefined) {
+        // undefined will crash localization
         par[i] = "";
       }
     }
