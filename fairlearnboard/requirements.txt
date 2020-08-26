@@ -1,0 +1,5 @@
+numpy>=1.17.2
+ipywidgets>=7.5.0
+pandas>=0.25.1
+scipy>=1.4.1
+fairlearn==0.4.6
