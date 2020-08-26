@@ -8,6 +8,7 @@ export interface ISinglePointFeatureImportanceStyles {
   featureBarExplanationChart: IStyle;
   topControls: IStyle;
   featureSlider: IStyle;
+  localSummary: IStyle;
 }
 
 export const singlePointFeatureImportanceStyles: IProcessedStyleSet<ISinglePointFeatureImportanceStyles> = mergeStyleSets<
@@ -25,6 +26,12 @@ export const singlePointFeatureImportanceStyles: IProcessedStyleSet<ISinglePoint
     padding: "3px 15px"
   },
   featureSlider: {
+    flex: 1
+  },
+  localSummary: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
     flex: 1
   }
 });

@@ -966,7 +966,7 @@ export class ExplanationDashboard extends React.Component<
             )}
           </div>
           {this.state.dashboardContext.explanationContext.localExplanation && (
-            <div className={explanationDashboardStyles.explainerDashboard}>
+            <div className={explanationDashboardStyles.localChartsWrapper}>
               {this.state.selectedRow === undefined && (
                 <div className={explanationDashboardStyles.localPlaceholder}>
                   <div className={explanationDashboardStyles.placeholderText}>
