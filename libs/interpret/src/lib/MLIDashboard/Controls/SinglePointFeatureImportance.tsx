@@ -67,7 +67,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
           ? [this.state.selectedSorting]
           : undefined;
       return (
-        <div>
+        <div className={singlePointFeatureImportanceStyles.localSummary}>
           {this.props.explanationContext.testDataset &&
             this.props.explanationContext.testDataset.predictedY && (
               <PredictionLabel

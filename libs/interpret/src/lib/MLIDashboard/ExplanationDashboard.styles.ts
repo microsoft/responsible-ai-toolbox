@@ -15,7 +15,6 @@ export interface IExplanationDashboardStyles {
   viewPanel: IStyle;
   localCommands: IStyle;
   clearButton: IStyle;
-  localSummary: IStyle;
 }
 
 export const explanationDashboardStyles: IProcessedStyleSet<IExplanationDashboardStyles> = mergeStyleSets<
@@ -78,12 +77,6 @@ export const explanationDashboardStyles: IProcessedStyleSet<IExplanationDashboar
     borderBottomStyle: "solid"
   },
   clearButton: {
-    flex: 1
-  },
-  localSummary: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
     flex: 1
   }
 });
