@@ -4,6 +4,9 @@
 /dist
 /tmp
 /out-tsc
+/fairlearnboard/fairlearnboard/js/dist/*
+/fairlearnboard/fairlearnboard/js/lib/*
+/fairlearnboard/fairlearnboard/js/node_modules/*
 
 # dependencies
 /node_modules/

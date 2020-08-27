@@ -35,10 +35,10 @@ setuptools.setup(
     include_package_data=True,
     data_files=[
         ('share/jupyter/nbextensions/fairlearn-widget', [
-            #'fairlearnboard/static/extension.js',
-            #'fairlearnboard/static/extension.js.map',
-            'fairlearnboard/js/dist/index.js',
-            'fairlearnboard/js/dist/index.js.map'
+            'fairlearnboard/static/extension.js',
+            'fairlearnboard/static/extension.js.map',
+            'fairlearnboard/static/index.js',
+            'fairlearnboard/static/index.js.map'
         ]),
         ("etc/jupyter/nbconfig/notebook.d", [
             "jupyter-config/nbconfig/notebook.d/fairlearn-widget.json"

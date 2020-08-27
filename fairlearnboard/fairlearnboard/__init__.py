@@ -14,7 +14,7 @@ __all__ = ['FairlearnDashboard']
 def _jupyter_nbextension_paths():
     return [{
         'section': 'notebook',
-        'src': 'js/dist',
+        'src': 'static',
         'dest': 'fairlearnboard',
         'require': 'fairlearnboard/extension'
     }]
