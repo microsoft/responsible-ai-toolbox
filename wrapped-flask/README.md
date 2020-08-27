@@ -22,3 +22,9 @@ To register a function to listen on an route:
 def my_func(param_name):
     return something
 ```
+
+## Release Process
+
+1. Increment the version number in `setup.py`
+2. Activate your virtual environment.
+3. Run the `release.sh` script.
