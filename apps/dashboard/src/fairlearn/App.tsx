@@ -109,8 +109,8 @@ export class App extends React.Component<any, any> {
   ];
 
   private static versionChoices = [
-    { label: "v1", data: "v1" },
-    { label: "v2", data: "v2" }
+    { label: "Version 1", data: "v1" },
+    { label: "Version 2", data: "v2" }
   ];
 
   private static languages = [
@@ -163,10 +163,10 @@ export class App extends React.Component<any, any> {
   public constructor(props: any) {
     super(props);
     this.state = {
-      value: 4,
+      value: 0,
       themeIndex: 0,
       language: App.languages[0].val,
-      versionIndex: 0
+      versionIndex: 1
     };
   }
 
@@ -177,7 +177,11 @@ export class App extends React.Component<any, any> {
     return (
       <div style={{ backgroundColor: "grey", height: "100%" }}>
         <label>Select dataset:</label>
-        <select value={this.state.value} onChange={this.handleChange}>
+        <select
+          id="datasetSelector"
+          value={this.state.value}
+          onChange={this.handleChange}
+        >
           {App.choices.map((item, index) => (
             <option key={item.label} value={index}>
               {item.label}
@@ -192,17 +196,6 @@ export class App extends React.Component<any, any> {
             </option>
           ))}
         </select>
-        <label>Select version:</label>
-        <select
-          value={this.state.versionIndex}
-          onChange={this.handleVersionChange}
-        >
-          {App.versionChoices.map((item, index) => (
-            <option key={item.label} value={index}>
-              {item.label}
-            </option>
-          ))}
-        </select>
         <label>Select language:</label>
         <select
           value={this.state.language}
@@ -210,6 +203,18 @@ export class App extends React.Component<any, any> {
         >
           {App.languages.map((item) => (
             <option key={item.val} value={item.val}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+        <label>Select version:</label>
+        <select
+          id="versionSelector"
+          value={this.state.versionIndex}
+          onChange={this.handleVersionChange}
+        >
+          {App.versionChoices.map((item, index) => (
+            <option key={item.label} value={index}>
               {item.label}
             </option>
           ))}

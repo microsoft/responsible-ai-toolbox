@@ -60,7 +60,7 @@ export interface IFairnessPropsV1 {
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
   // The request hook
-  requestMetrics: (
+  requestMetrics?: (
     request: IMetricRequest,
     abortSignal?: AbortSignal
   ) => Promise<IMetricResponse>;
@@ -87,7 +87,7 @@ export interface IFairnessPropsV2 {
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
   // The request hook
-  requestMetrics: (
+  requestMetrics?: (
     request: IMetricRequest,
     abortSignal?: AbortSignal
   ) => Promise<IMetricResponse>;

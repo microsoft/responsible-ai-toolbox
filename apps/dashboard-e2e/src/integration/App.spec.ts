@@ -4,10 +4,10 @@ describe("dashboard", () => {
   beforeEach(() => cy.visit("/"));
 
   it("should display Fairlearn link", () => {
-    getLink("/fairlearn").contains("Fairlearn");
+    getLink("/fairlearn").should("exist");
   });
 
   it("should display Interpret link", () => {
-    getLink("/interpret").contains("Interpret");
+    getLink("/interpret").should("exist");
   });
 });
