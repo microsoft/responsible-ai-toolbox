@@ -2,7 +2,7 @@ import { PrimaryButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../Localization/localization";
 
-import { ReactComponent as Icon } from "./IntroTabIcon.svg";
+import IntroTabIcon from "./IntroTabIcon.svg";
 import { IntroTabStyles } from "./IntroTab.styles";
 
 export interface IIntroTabProps {
@@ -30,7 +30,7 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
             {localization.Intro.introBody}
           </Text>
           <div className={styles.firstSectionGraphics}>
-            <Icon />
+            <IntroTabIcon />
           </div>
         </Stack>
         <div className={styles.lowerSection}>
