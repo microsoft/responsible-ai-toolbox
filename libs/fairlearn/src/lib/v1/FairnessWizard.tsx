@@ -15,7 +15,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 import {
-  IFairnessPropsV1,
+  IFairnessProps,
   PredictionType,
   PredictionTypes
 } from "../IFairnessProps";
@@ -77,12 +77,12 @@ const flights = {
 };
 
 export class FairnessWizardV1 extends React.PureComponent<
-  IFairnessPropsV1,
+  IFairnessProps,
   IWizardStateV1
 > {
   private static iconsInitialized = false;
 
-  public constructor(props: IFairnessPropsV1) {
+  public constructor(props: IFairnessProps) {
     super(props);
     FairnessWizardV1.initializeIcons(props);
     if (this.props.locale) {
@@ -166,7 +166,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     };
   }
 
-  private static initializeIcons(props: IFairnessPropsV1): void {
+  private static initializeIcons(props: IFairnessProps): void {
     if (
       FairnessWizardV1.iconsInitialized === false &&
       props.shouldInitializeIcons !== false
@@ -176,7 +176,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
   }
 
-  private static buildModelNames(props: IFairnessPropsV1): string[] {
+  private static buildModelNames(props: IFairnessProps): string[] {
     return !!props.modelNames &&
       props.modelNames.length === props.predictedY.length
       ? props.modelNames
@@ -184,7 +184,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildInitialFairnessContext(
-    props: IFairnessPropsV1
+    props: IFairnessProps
   ): IFairnessContext {
     return {
       dataset: props.testData,
@@ -198,7 +198,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildPrecomputedFairnessContext(
-    props: IFairnessPropsV1
+    props: IFairnessProps
   ): IFairnessContext {
     return {
       dataset: undefined,
@@ -211,12 +211,12 @@ export class FairnessWizardV1 extends React.PureComponent<
     };
   }
 
-  private static getClassLength(props: IFairnessPropsV1): number {
+  private static getClassLength(props: IFairnessProps): number {
     return _.uniq(props.trueY).length;
   }
 
   private static buildPrecomputedModelMetadata(
-    props: IFairnessPropsV1
+    props: IFairnessProps
   ): IFairnessModelMetadata {
     let featureNames = props.dataSummary.featureNames;
     if (!featureNames) {
@@ -250,7 +250,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildModelMetadata(
-    props: IFairnessPropsV1
+    props: IFairnessProps
   ): IFairnessModelMetadata {
     let featureNames = props.dataSummary.featureNames;
     if (!featureNames) {

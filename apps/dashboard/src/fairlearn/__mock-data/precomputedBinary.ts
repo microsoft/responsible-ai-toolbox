@@ -1,4 +1,11 @@
-export const precomputedBinary = {
+import { IFairnessProps, PredictionTypes } from "@responsible-ai/fairlearn";
+
+export const precomputedBinary: Omit<
+  IFairnessProps,
+  | "supportedBinaryClassificationAccuracyKeys"
+  | "supportedRegressionAccuracyKeys"
+  | "supportedProbabilityAccuracyKeys"
+> = {
   trueY: [1, 0, 1, 1, 0, 1, 0, 0],
   predictedY: [
     [1, 0, 0, 1, 1, 1, 1, 0],
@@ -115,7 +122,7 @@ export const precomputedBinary = {
       featureBinName: "serious real feature"
     }
   ],
-  predictionType: "binaryClassification",
+  predictionType: PredictionTypes.binaryClassification,
   // feel free to come up with a better name
   customMetrics: [
     {

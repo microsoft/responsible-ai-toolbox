@@ -2,7 +2,8 @@ import React from "react";
 import {
   FairnessWizardV1,
   FairnessWizardV2,
-  IMetricResponse
+  IMetricResponse,
+  IFairnessProps
 } from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
@@ -171,7 +172,12 @@ export class App extends React.Component<any, any> {
   }
 
   public render(): React.ReactNode {
-    const data: any = _.cloneDeep(App.choices[this.state.value].data);
+    const data: Omit<
+      IFairnessProps,
+      | "supportedBinaryClassificationAccuracyKeys"
+      | "supportedRegressionAccuracyKeys"
+      | "supportedProbabilityAccuracyKeys"
+    > = _.cloneDeep(App.choices[this.state.value].data);
     const theme = App.themeChoices[this.state.themeIndex].data;
     const version: string = App.versionChoices[this.state.versionIndex].data;
     return (
@@ -229,17 +235,7 @@ export class App extends React.Component<any, any> {
           <div style={{ width: "940px" }}>
             {version === "v1" && (
               <FairnessWizardV1
-                dataSummary={{
-                  featureNames: data.featureNames,
-                  classNames: data.classNames
-                }}
-                testData={data.testData}
-                predictedY={data.predictedY}
-                trueY={data.trueY}
-                precomputedMetrics={data.precomputedMetrics}
-                precomputedFeatureBins={data.precomputedFeatureBins}
-                customMetrics={data.customMetrics}
-                predictionType={data.predictionType}
+                {...data}
                 supportedBinaryClassificationAccuracyKeys={
                   App.supportedBinaryClassificationAccuracyKeys
                 }
@@ -258,17 +254,7 @@ export class App extends React.Component<any, any> {
             )}
             {version === "v2" && (
               <FairnessWizardV2
-                dataSummary={{
-                  featureNames: data.featureNames,
-                  classNames: data.classNames
-                }}
-                testData={data.testData}
-                predictedY={data.predictedY}
-                trueY={data.trueY}
-                precomputedMetrics={data.precomputedMetrics}
-                precomputedFeatureBins={data.precomputedFeatureBins}
-                customMetrics={data.customMetrics}
-                predictionType={data.predictionType}
+                {...data}
                 supportedBinaryClassificationAccuracyKeys={
                   App.supportedBinaryClassificationAccuracyKeys
                 }
