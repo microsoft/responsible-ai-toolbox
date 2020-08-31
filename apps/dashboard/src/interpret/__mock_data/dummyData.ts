@@ -1,4 +1,3 @@
-/* tslint:disable:object-literal-sort-keys */
 export const breastCancerData = {
   classNames: ["malignant", "benign"],
   featureNames: [
