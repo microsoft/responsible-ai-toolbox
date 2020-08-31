@@ -1,1 +1,1 @@
-export * from "./lib/interfaces/ICohort";
+export * from "./lib/util/PartialRequired";

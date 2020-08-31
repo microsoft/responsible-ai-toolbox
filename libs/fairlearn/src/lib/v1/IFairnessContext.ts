@@ -3,7 +3,7 @@ import { PredictionType } from "../IFairnessProps";
 
 export interface IFairnessContext {
   // rows by [aug columns + feature columns + trueY + groupIndex]
-  dataset: any[];
+  dataset?: any[];
   trueY: number[];
   // modelPredictions, models x rows
   predictions: number[][];

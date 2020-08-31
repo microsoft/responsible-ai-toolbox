@@ -1,11 +1,6 @@
-import { IFairnessProps } from "@responsible-ai/fairlearn";
+import { IFairnessDataProps } from "@responsible-ai/fairlearn";
 
-export const regression: Omit<
-  IFairnessProps,
-  | "supportedBinaryClassificationAccuracyKeys"
-  | "supportedRegressionAccuracyKeys"
-  | "supportedProbabilityAccuracyKeys"
-> = {
+export const regression: IFairnessDataProps = {
   trueY: [
     1.1,
     1.7,

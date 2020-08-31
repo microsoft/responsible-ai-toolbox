@@ -3,7 +3,8 @@ import {
   FairnessWizardV1,
   FairnessWizardV2,
   IMetricResponse,
-  IFairnessProps
+  IMetricRequest,
+  IFairnessDataProps
 } from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
@@ -172,12 +173,9 @@ export class App extends React.Component<any, any> {
   }
 
   public render(): React.ReactNode {
-    const data: Omit<
-      IFairnessProps,
-      | "supportedBinaryClassificationAccuracyKeys"
-      | "supportedRegressionAccuracyKeys"
-      | "supportedProbabilityAccuracyKeys"
-    > = _.cloneDeep(App.choices[this.state.value].data);
+    const data: IFairnessDataProps = _.cloneDeep(
+      App.choices[this.state.value].data
+    );
     const theme = App.themeChoices[this.state.themeIndex].data;
     const version: string = App.versionChoices[this.state.versionIndex].data;
     return (
@@ -277,19 +275,24 @@ export class App extends React.Component<any, any> {
     );
   }
 
-  private generateRandomMetrics(data, signal): Promise<IMetricResponse> {
-    const binSize = Math.max(...data.binVector);
-    const bins = new Array(binSize + 1).fill(0).map(() => Math.random());
+  private generateRandomMetrics(
+    request: IMetricRequest,
+    abortSignal?: AbortSignal
+  ): Promise<IMetricResponse> {
+    const binSize = Math.max(...request.binVector);
+    const bins: number[] = new Array(binSize + 1)
+      .fill(0)
+      .map(() => Math.random());
     bins[2] = undefined;
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise<IMetricResponse>((resolve, reject) => {
       const timeout = setTimeout(() => {
         resolve({
           global: Math.random(),
           bins
         });
       }, 300);
-      if (signal) {
-        signal.addEventListener("abort", () => {
+      if (abortSignal) {
+        abortSignal.addEventListener("abort", () => {
           clearTimeout(timeout);
           reject(new DOMException("Aborted", "AbortError"));
         });
@@ -298,19 +301,27 @@ export class App extends React.Component<any, any> {
     return promise;
   }
 
-  private handleChange = (event): void => {
+  private handleChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
     this.setState({ value: event.target.value });
   };
 
-  private handleThemeChange = (event): void => {
+  private handleThemeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
     this.setState({ themeIndex: event.target.value });
   };
 
-  private handleVersionChange = (event): void => {
+  private handleVersionChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
     this.setState({ versionIndex: event.target.value });
   };
 
-  private handleLanguageChange = (event): void => {
+  private handleLanguageChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
     this.setState({ language: event.target.value });
   };
 }

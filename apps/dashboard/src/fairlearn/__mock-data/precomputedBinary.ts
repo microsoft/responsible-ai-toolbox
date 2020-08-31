@@ -1,11 +1,6 @@
-import { IFairnessProps, PredictionTypes } from "@responsible-ai/fairlearn";
+import { IFairnessDataProps, PredictionTypes } from "@responsible-ai/fairlearn";
 
-export const precomputedBinary: Omit<
-  IFairnessProps,
-  | "supportedBinaryClassificationAccuracyKeys"
-  | "supportedRegressionAccuracyKeys"
-  | "supportedProbabilityAccuracyKeys"
-> = {
+export const precomputedBinary: IFairnessDataProps = {
   trueY: [1, 0, 1, 1, 0, 1, 0, 0],
   predictedY: [
     [1, 0, 0, 1, 1, 1, 1, 0],

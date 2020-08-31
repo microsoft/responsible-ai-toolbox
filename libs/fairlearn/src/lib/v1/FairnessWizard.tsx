@@ -5,6 +5,7 @@ import {
   ModelMetadata,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
+import { PartialRequired } from "@responsible-ai/core-ui";
 import {
   Pivot,
   PivotItem,
@@ -93,7 +94,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
       // we must assume that the same accuracy metrics are provided across models and bins
-      accuracyMetrics = this.buildAccuracyListForPrecomputedMetrics();
+      accuracyMetrics = this.buildAccuracyListForPrecomputedMetrics(this.props);
       const readonlyFeatureBins = this.props.precomputedFeatureBins.map(
         (initialBin, index) => {
           return {
@@ -111,7 +112,7 @@ export class FairnessWizardV1 extends React.PureComponent<
         parityMetrics: accuracyMetrics,
         selectedParityKey: accuracyMetrics[0].key,
         dashboardContext: FairnessWizardV1.buildPrecomputedFairnessContext(
-          props
+          this.props
         ),
         activeTabKey: featureBinTabKey,
         featureBins: readonlyFeatureBins,
@@ -198,7 +199,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildPrecomputedFairnessContext(
-    props: IFairnessProps
+    props: PartialRequired<IFairnessProps, "precomputedFeatureBins">
   ): IFairnessContext {
     return {
       dataset: undefined,
@@ -216,9 +217,9 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildPrecomputedModelMetadata(
-    props: IFairnessProps
+    props: PartialRequired<IFairnessProps, "precomputedFeatureBins">
   ): IFairnessModelMetadata {
-    let featureNames = props.dataSummary.featureNames;
+    let featureNames = props.dataSummary?.featureNames;
     if (!featureNames) {
       featureNames = props.precomputedFeatureBins.map((binObject, index) => {
         return (
@@ -228,7 +229,7 @@ export class FairnessWizardV1 extends React.PureComponent<
       }) as string[];
     }
     const classNames =
-      props.dataSummary.classNames ||
+      props.dataSummary?.classNames ||
       FairnessWizardV1.buildIndexedNames(
         FairnessWizardV1.getClassLength(props),
         localization.defaultClassNames
@@ -252,7 +253,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   private static buildModelMetadata(
     props: IFairnessProps
   ): IFairnessModelMetadata {
-    let featureNames = props.dataSummary.featureNames;
+    let featureNames = props.dataSummary?.featureNames;
     if (!featureNames) {
       let featureLength = 0;
       if (props.testData && props.testData[0] !== undefined) {
@@ -267,7 +268,7 @@ export class FairnessWizardV1 extends React.PureComponent<
             );
     }
     const classNames =
-      props.dataSummary.classNames ||
+      props.dataSummary?.classNames ||
       FairnessWizardV1.buildIndexedNames(
         FairnessWizardV1.getClassLength(props),
         localization.defaultClassNames
@@ -275,12 +276,12 @@ export class FairnessWizardV1 extends React.PureComponent<
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
       featureNames.length,
       props.testData,
-      props.dataSummary.categoricalMap
+      props.dataSummary?.categoricalMap
     );
     const featureRanges = ModelMetadata.buildFeatureRanges(
       props.testData,
       featureIsCategorical,
-      props.dataSummary.categoricalMap
+      props.dataSummary?.categoricalMap
     );
     const PredictionType = FairnessWizardV1.determinePredictionType(
       props.trueY,
@@ -474,23 +475,26 @@ export class FairnessWizardV1 extends React.PureComponent<
     );
   }
 
-  private readonly buildAccuracyListForPrecomputedMetrics = (): IAccuracyOption[] => {
+  private readonly buildAccuracyListForPrecomputedMetrics = (
+    props: PartialRequired<
+      IFairnessProps,
+      "precomputedMetrics" | "customMetrics"
+    >
+  ): IAccuracyOption[] => {
     const customMetrics: IAccuracyOption[] = [];
     const providedMetrics: IAccuracyOption[] = [];
-    Object.keys(this.props.precomputedMetrics[0][0]).forEach((key) => {
+    Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
       const metric = AccuracyOptions[key];
       if (metric !== undefined) {
         if (metric.userVisible) {
           providedMetrics.push(metric);
         }
       } else {
-        const customIndex = this.props.customMetrics.findIndex(
+        const customIndex = props.customMetrics.findIndex(
           (metric) => metric.id === key
         );
         const customMetric =
-          customIndex !== -1
-            ? this.props.customMetrics[customIndex]
-            : { id: key };
+          customIndex !== -1 ? props.customMetrics[customIndex] : { id: key };
 
         customMetrics.push({
           key,
@@ -550,8 +554,10 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
   };
 
-  private readonly handleTabClick = (item: PivotItem): void => {
-    this.setState({ activeTabKey: item.props.itemKey });
+  private readonly handleTabClick = (item: PivotItem | undefined): void => {
+    if (item && item.props.itemKey) {
+      this.setState({ activeTabKey: item.props.itemKey });
+    }
   };
 
   private readonly binningSet = (value: IBinnedResponse): void => {

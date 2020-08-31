@@ -39,18 +39,30 @@ export interface ICustomMetric {
   id: string;
 }
 
-export interface IFairnessProps {
-  startingTabIndex?: number;
+export type IFairnessDataProps = {
   dataSummary?: IDatasetSummary;
   testData?: any[][];
-  precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
-  precomputedFeatureBins?: IFeatureBinMeta[];
-  customMetrics?: ICustomMetric[];
-  predictionType?: PredictionTypes;
   // One array per each model;
   predictedY: number[][];
   modelNames?: string[];
   trueY: number[];
+} & (
+  | {
+      precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;
+      precomputedFeatureBins: IFeatureBinMeta[];
+      customMetrics: ICustomMetric[];
+      predictionType: PredictionTypes;
+    }
+  | {
+      precomputedMetrics?: never;
+      precomputedFeatureBins?: never;
+      customMetrics?: never;
+      predictionType?: never;
+    }
+);
+
+export type IFairnessProps = IFairnessDataProps & {
+  startingTabIndex?: number;
   theme?: any;
   locale?: string;
   stringParams?: any;
@@ -64,4 +76,4 @@ export interface IFairnessProps {
     request: IMetricRequest,
     abortSignal?: AbortSignal
   ) => Promise<IMetricResponse>;
-}
+};

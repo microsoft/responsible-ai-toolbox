@@ -25,8 +25,8 @@ export interface IAccessibleChartProps {
 
 export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   public guid: string = v4();
-  private timer: number;
-  private plotlyRef: Plotly.PlotlyHTMLElement;
+  private timer: number | undefined;
+  private plotlyRef: Plotly.PlotlyHTMLElement | undefined;
   private isClickHandled = false;
 
   public componentDidMount(): void {
