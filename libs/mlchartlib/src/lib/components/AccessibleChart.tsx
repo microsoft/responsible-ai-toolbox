@@ -15,7 +15,7 @@ export interface IPlotlyAnimateProps {
 
 export interface IAccessibleChartProps {
   plotlyProps: IPlotlyProperty;
-  theme: string | ITheme;
+  theme: string | ITheme | undefined;
   themeOverride?: Partial<IPlotlyTheme>;
   relayoutArg?: Partial<Plotly.Layout>;
   animateArg?: IPlotlyAnimateProps;

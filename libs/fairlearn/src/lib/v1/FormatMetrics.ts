@@ -2,7 +2,7 @@ import { AccuracyOptions } from "./AccuracyMetrics";
 
 export class FormatMetrics {
   public static formatNumbers = (
-    value: number,
+    value: number | undefined,
     key: string,
     isRatio = false
   ): string => {
