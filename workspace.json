@@ -234,7 +234,6 @@
           "builder": "@nrwl/web:build",
           "options": {
             "baseHref": ".",
-            "buildLibsFromSource": true,
             "outputPath": "dist/apps/dashboard",
             "index": "apps/dashboard/src/index.html",
             "main": "apps/dashboard/src/main.tsx",
@@ -266,7 +265,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
