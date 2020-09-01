@@ -1,5 +1,5 @@
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
-import { ParityModes } from "./ParityMetrics";
+import { ParityModes } from "../util/ParityMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey
@@ -55,11 +55,14 @@ export class MetricsCache {
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }
+    if (!value?.bins) {
+      return Number.NaN;
+    }
 
     const bins = value.bins.slice().filter((x) => x !== undefined && !isNaN(x));
 
-    const min = Math.min(...(bins as number[]));
-    const max = Math.max(...(bins as number[]));
+    const min = Math.min(...bins);
+    const max = Math.max(...bins);
     if (
       isNaN(min) ||
       isNaN(max) ||

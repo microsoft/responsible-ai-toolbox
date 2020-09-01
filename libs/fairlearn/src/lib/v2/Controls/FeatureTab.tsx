@@ -11,7 +11,7 @@ import {
 } from "office-ui-fabric-react";
 
 import React from "react";
-import { IBinnedResponse } from "../IBinnedResponse";
+import { IBinnedResponse } from "../../util/IBinnedResponse";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { localization } from "../../Localization/localization";
 import { BinDialog } from "./BinDialog";
@@ -112,9 +112,12 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
 
   private readonly _onRenderCell = (
     styles: IProcessedStyleSet<IFeatureTabStyles>,
-    item: IBinnedResponse,
-    index: number | undefined
+    item?: IBinnedResponse | undefined,
+    index?: number | undefined
   ): JSX.Element => {
+    if (item === undefined || index === undefined) {
+      return <div />;
+    }
     return (
       <div
         key={index}
@@ -204,7 +207,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
                 <ActionButton
                   className={styles.expandButton}
                   iconProps={{ iconName: "ChevronUpMed" }}
-                  onClick={this.updateExpandedList.bind(this)}
+                  onClick={this.updateExpandedList.bind(this, undefined)}
                 >
                   {localization.Feature.hideCategories}
                 </ActionButton>
@@ -217,8 +220,8 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   };
 
   private readonly updateExpandedList = (value?: number): void => {
-    this.setState(() => {
-      return { expandedBins: [value] };
-    });
+    if (value !== undefined) {
+      this.setState({ expandedBins: [value] });
+    }
   };
 }
