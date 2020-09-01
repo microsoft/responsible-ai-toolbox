@@ -107,6 +107,8 @@
         ]
       }
     ],
+    "complexity": "warn",
+    "max-len": "warn",
     "no-else-return": "error",
     "no-useless-call": "error",
     "object-shorthand": "error",
@@ -367,7 +369,9 @@
     {
       "files": ["*.ts"],
       "rules": {
-        "filenames/match-regex": ["error", ["^[A-z]+$"]]
+        "filenames/match-regex": ["error", ["^[A-z]+$"]],
+        // turn off for function overload
+        "no-dupe-class-members": "off"
       }
     },
     {

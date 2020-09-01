@@ -42,11 +42,11 @@ export interface ICustomMetric {
 
 export interface IFairnessBaseData {
   dataSummary?: IDatasetSummary;
-  testData?: any[][];
   // One array per each model;
   predictedY: number[][];
   modelNames?: string[];
   trueY: number[];
+  testData?: any[][];
 }
 export interface IPreComputedData {
   precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;
@@ -54,13 +54,13 @@ export interface IPreComputedData {
   predictionType: PredictionTypes;
   customMetrics?: ICustomMetric[];
 }
-export type IFairnessPreComputedData = IFairnessBaseData & IPreComputedData;
-export type IFairnessNonePreComputedData = IFairnessBaseData &
-  Never<IPreComputedData>;
+export type IRunTimeData = Never<IPreComputedData> & {
+  testData: any[][];
+};
+export type IPreComputedFairnessData = IFairnessBaseData & IPreComputedData;
+export type IRunTimeFairnessData = IFairnessBaseData & IRunTimeData;
 
-export type IFairnessData =
-  | IFairnessPreComputedData
-  | IFairnessNonePreComputedData;
+export type IFairnessData = IPreComputedFairnessData | IRunTimeFairnessData;
 
 export type IFairnessProps = IFairnessData & {
   startingTabIndex?: number;

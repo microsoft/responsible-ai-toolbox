@@ -63,6 +63,7 @@
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/enzyme-to-json": "1.5.3",
     "@types/jest": "26.0.9",
+    "@types/jmespath": "0.15.0",
     "@types/lodash": "4.14.159",
     "@types/memoize-one": "5.1.2",
     "@types/node": "14.0.27",

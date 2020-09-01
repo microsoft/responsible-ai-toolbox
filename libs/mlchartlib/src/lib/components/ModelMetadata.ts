@@ -5,6 +5,11 @@ import { RangeTypes } from "./RangeTypes";
 
 export class ModelMetadata {
   public static buildFeatureRanges(
+    testData: any[][],
+    isCategoricalArray: boolean[],
+    categoricalMap?: { [key: number]: string[] }
+  ): Array<INumericRange | ICategoricalRange>;
+  public static buildFeatureRanges(
     testData: any[][] | undefined,
     isCategoricalArray: boolean[] | undefined,
     categoricalMap?: { [key: number]: string[] }
@@ -39,6 +44,11 @@ export class ModelMetadata {
 
   public static buildIsCategorical(
     featureLength: number,
+    testData: any[][],
+    categoricalMap?: { [key: number]: string[] }
+  ): boolean[];
+  public static buildIsCategorical(
+    featureLength: number,
     testData?: any[][],
     categoricalMap?: { [key: number]: string[] }
   ): boolean[] | undefined {
@@ -46,7 +56,7 @@ export class ModelMetadata {
     if (categoricalMap) {
       return featureIndexArray.map((i) => categoricalMap[i] !== undefined);
     }
-    if (testData && testData.length > 0) {
+    if (testData) {
       return featureIndexArray.map((featureIndex) => {
         return !testData.every((row) => typeof row[featureIndex] === "number");
       });

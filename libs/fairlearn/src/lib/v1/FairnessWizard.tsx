@@ -5,7 +5,6 @@ import {
   ModelMetadata,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
-import { PartialRequired } from "@responsible-ai/core-ui";
 import {
   Pivot,
   PivotItem,
@@ -20,7 +19,8 @@ import {
   PredictionType,
   PredictionTypes,
   IFairnessBaseData,
-  IFairnessPreComputedData
+  IPreComputedFairnessData,
+  IRunTimeFairnessData
 } from "../IFairnessProps";
 import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
@@ -30,7 +30,11 @@ import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
 import { IBinnedResponse } from "./IBinnedResponse";
-import { IFairnessContext, IFairnessModelMetadata } from "./IFairnessContext";
+import {
+  IFairnessContext,
+  IFairnessModelMetadata,
+  IRunTimeFairnessContext
+} from "./IFairnessContext";
 import { localization } from "./../Localization/localization";
 import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";
@@ -124,7 +128,9 @@ export class FairnessWizardV1 extends React.PureComponent<
       };
       return;
     }
-    const fairnessContext = FairnessWizardV1.buildInitialFairnessContext(props);
+    const fairnessContext = FairnessWizardV1.buildInitialFairnessContext(
+      this.props
+    );
 
     const featureBins = this.buildFeatureBins(fairnessContext);
     if (featureBins.length > 0) {
@@ -187,8 +193,8 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildInitialFairnessContext(
-    props: IFairnessProps
-  ): IFairnessContext {
+    props: IRunTimeFairnessData
+  ): IRunTimeFairnessContext {
     return {
       dataset: props.testData,
       trueY: props.trueY,
@@ -201,7 +207,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildPrecomputedFairnessContext(
-    props: IFairnessPreComputedData
+    props: IPreComputedFairnessData
   ): IFairnessContext {
     return {
       dataset: undefined,
@@ -219,10 +225,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildPrecomputedModelMetadata(
-    props: PartialRequired<
-      IFairnessProps,
-      "precomputedFeatureBins" | "predictionType"
-    >
+    props: IPreComputedFairnessData
   ): IFairnessModelMetadata {
     let featureNames = props.dataSummary?.featureNames;
     if (!featureNames) {
@@ -256,8 +259,8 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildModelMetadata(
-    props: IFairnessProps
-  ): IFairnessModelMetadata {
+    props: IRunTimeFairnessData
+  ): Required<IFairnessModelMetadata> {
     let featureNames = props.dataSummary?.featureNames;
     if (!featureNames) {
       let featureLength = 0;
@@ -481,7 +484,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private readonly buildAccuracyListForPrecomputedMetrics = (
-    props: PartialRequired<IFairnessProps, "precomputedMetrics">
+    props: IPreComputedFairnessData
   ): IAccuracyOption[] => {
     const customMetrics: IAccuracyOption[] = [];
     const providedMetrics: IAccuracyOption[] = [];
@@ -598,7 +601,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private readonly buildFeatureBins = (
-    fairnessContext: IFairnessContext
+    fairnessContext: IRunTimeFairnessContext
   ): IBinnedResponse[] => {
     return fairnessContext.modelMetadata.featureNames.map((_, index) => {
       return BinnedResponseBuilder.buildDefaultBin(
