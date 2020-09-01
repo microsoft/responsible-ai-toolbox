@@ -28,7 +28,7 @@ import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
 import { MetricsCache } from "../../util/MetricsCache";
 import { ParityModes } from "../../util/ParityMetrics";
-import { ModelComparisionChartStyles } from "./ModelComparisionChart.styles";
+import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 const theme = getTheme();
 export interface IModelComparisonProps {
@@ -126,7 +126,7 @@ export class ModelComparisonChart extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const styles = ModelComparisionChartStyles();
+    const styles = ModelComparisonChartStyles();
     if (
       !this.state ||
       this.state.accuracyArray === undefined ||

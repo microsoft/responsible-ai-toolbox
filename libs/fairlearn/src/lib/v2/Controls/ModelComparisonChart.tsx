@@ -33,9 +33,9 @@ import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { MetricsCache } from "../MetricsCache";
+import { MetricsCache } from "../../util/MetricsCache";
 import { ParityOptions } from "../../util/ParityMetrics";
-import { ModelComparisionChartStyles } from "./ModelComparisionChart.styles";
+import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 const theme = getTheme();
 export interface IModelComparisonProps {
@@ -178,7 +178,7 @@ export class ModelComparisonChart extends React.PureComponent<
       }
     };
 
-    const styles = ModelComparisionChartStyles();
+    const styles = ModelComparisonChartStyles();
 
     let mainChart;
     if (
