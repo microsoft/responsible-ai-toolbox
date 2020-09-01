@@ -1,6 +1,6 @@
-import { IFairnessDataProps } from "@responsible-ai/fairlearn";
+import { IFairnessData } from "@responsible-ai/fairlearn";
 
-export const regression: IFairnessDataProps = {
+export const regression: IFairnessData = {
   trueY: [
     1.1,
     1.7,

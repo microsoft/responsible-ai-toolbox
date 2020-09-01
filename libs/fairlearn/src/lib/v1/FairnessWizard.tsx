@@ -18,7 +18,9 @@ import React from "react";
 import {
   IFairnessProps,
   PredictionType,
-  PredictionTypes
+  PredictionTypes,
+  IFairnessBaseData,
+  IFairnessPreComputedData
 } from "../IFairnessProps";
 import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
@@ -177,7 +179,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
   }
 
-  private static buildModelNames(props: IFairnessProps): string[] {
+  private static buildModelNames(props: IFairnessBaseData): string[] {
     return !!props.modelNames &&
       props.modelNames.length === props.predictedY.length
       ? props.modelNames
@@ -199,7 +201,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private static buildPrecomputedFairnessContext(
-    props: PartialRequired<IFairnessProps, "precomputedFeatureBins">
+    props: IFairnessPreComputedData
   ): IFairnessContext {
     return {
       dataset: undefined,
@@ -212,12 +214,15 @@ export class FairnessWizardV1 extends React.PureComponent<
     };
   }
 
-  private static getClassLength(props: IFairnessProps): number {
+  private static getClassLength(props: IFairnessBaseData): number {
     return _.uniq(props.trueY).length;
   }
 
   private static buildPrecomputedModelMetadata(
-    props: PartialRequired<IFairnessProps, "precomputedFeatureBins">
+    props: PartialRequired<
+      IFairnessProps,
+      "precomputedFeatureBins" | "predictionType"
+    >
   ): IFairnessModelMetadata {
     let featureNames = props.dataSummary?.featureNames;
     if (!featureNames) {
@@ -476,10 +481,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   }
 
   private readonly buildAccuracyListForPrecomputedMetrics = (
-    props: PartialRequired<
-      IFairnessProps,
-      "precomputedMetrics" | "customMetrics"
-    >
+    props: PartialRequired<IFairnessProps, "precomputedMetrics">
   ): IAccuracyOption[] => {
     const customMetrics: IAccuracyOption[] = [];
     const providedMetrics: IAccuracyOption[] = [];
@@ -490,23 +492,21 @@ export class FairnessWizardV1 extends React.PureComponent<
           providedMetrics.push(metric);
         }
       } else {
-        const customIndex = props.customMetrics.findIndex(
+        const customMetric = props.customMetrics?.find(
           (metric) => metric.id === key
         );
-        const customMetric =
-          customIndex !== -1 ? props.customMetrics[customIndex] : { id: key };
 
         customMetrics.push({
           key,
           title:
-            customMetric.name ||
+            customMetric?.name ||
             (localization.formatString(
               localization.defaultCustomMetricName,
               customMetrics.length
             ) as string),
           isMinimization: true,
           isPercentage: true,
-          description: customMetric.description
+          description: customMetric?.description
         });
       }
     });
@@ -580,8 +580,11 @@ export class FairnessWizardV1 extends React.PureComponent<
 
   private generateBinVectorForBin(
     value: IBinnedResponse,
-    dataset: any[][]
+    dataset: any[][] | undefined
   ): number[] {
+    if (!dataset) {
+      return [];
+    }
     return dataset.map((row) => {
       const featureValue = row[value.featureIndex];
       if (value.rangeType === RangeTypes.categorical) {

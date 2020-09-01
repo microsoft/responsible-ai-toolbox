@@ -5,7 +5,7 @@ import { RangeTypes } from "./RangeTypes";
 
 export class ModelMetadata {
   public static buildFeatureRanges(
-    testData: any[][],
+    testData: any[][] | undefined,
     isCategoricalArray: boolean[] | undefined,
     categoricalMap?: { [key: number]: string[] }
   ): Array<INumericRange | ICategoricalRange> | undefined {

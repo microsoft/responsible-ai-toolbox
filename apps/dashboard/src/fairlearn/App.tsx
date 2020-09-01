@@ -4,7 +4,7 @@ import {
   FairnessWizardV2,
   IMetricResponse,
   IMetricRequest,
-  IFairnessDataProps
+  IFairnessData
 } from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
 import _ from "lodash";
@@ -173,9 +173,7 @@ export class App extends React.Component<any, any> {
   }
 
   public render(): React.ReactNode {
-    const data: IFairnessDataProps = _.cloneDeep(
-      App.choices[this.state.value].data
-    );
+    const data: IFairnessData = _.cloneDeep(App.choices[this.state.value].data);
     const theme = App.themeChoices[this.state.themeIndex].data;
     const version: string = App.versionChoices[this.state.versionIndex].data;
     return (

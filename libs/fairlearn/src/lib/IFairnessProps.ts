@@ -1,3 +1,4 @@
+import { Never } from "@responsible-ai/core-ui";
 export interface IDatasetSummary {
   featureNames?: string[];
   classNames?: string[];
@@ -39,29 +40,29 @@ export interface ICustomMetric {
   id: string;
 }
 
-export type IFairnessDataProps = {
+export interface IFairnessBaseData {
   dataSummary?: IDatasetSummary;
   testData?: any[][];
   // One array per each model;
   predictedY: number[][];
   modelNames?: string[];
   trueY: number[];
-} & (
-  | {
-      precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;
-      precomputedFeatureBins: IFeatureBinMeta[];
-      customMetrics: ICustomMetric[];
-      predictionType: PredictionTypes;
-    }
-  | {
-      precomputedMetrics?: never;
-      precomputedFeatureBins?: never;
-      customMetrics?: never;
-      predictionType?: never;
-    }
-);
+}
+export interface IPreComputedData {
+  precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;
+  precomputedFeatureBins: IFeatureBinMeta[];
+  predictionType: PredictionTypes;
+  customMetrics?: ICustomMetric[];
+}
+export type IFairnessPreComputedData = IFairnessBaseData & IPreComputedData;
+export type IFairnessNonePreComputedData = IFairnessBaseData &
+  Never<IPreComputedData>;
 
-export type IFairnessProps = IFairnessDataProps & {
+export type IFairnessData =
+  | IFairnessPreComputedData
+  | IFairnessNonePreComputedData;
+
+export type IFairnessProps = IFairnessData & {
   startingTabIndex?: number;
   theme?: any;
   locale?: string;
