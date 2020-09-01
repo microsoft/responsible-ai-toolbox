@@ -344,10 +344,12 @@ export class CohortEditor extends React.PureComponent<
     _: React.FormEvent<IComboBox>,
     item: IComboBoxOption
   ): void => {
-    const property = item.key as string;
-    // reset filterIndex to handle if user clicks on another filter while in edit mode
-    this.setState({ filterIndex: this.state.filters.length });
-    this.setDefaultStateForKey(property);
+    if (typeof item?.key === "string") {
+      const property = item.key;
+      // reset filterIndex to handle if user clicks on another filter while in edit mode
+      this.setState({ filterIndex: this.state.filters.length });
+      this.setDefaultStateForKey(property);
+    }
   };
 
   private saveState = (index: number): void => {

@@ -86,7 +86,7 @@ export class WizardBuilder {
           binObject.featureBinName ||
           localization.formatString(localization.defaultFeatureNames, index)
         );
-      }) as string[];
+      });
     }
     const classNames =
       props.dataSummary?.classNames ||
@@ -162,8 +162,8 @@ export class WizardBuilder {
     length: number,
     baseString: string
   ): string[] {
-    return Array.from(Array(length).keys()).map(
-      (i) => localization.formatString(baseString, i.toString()) as string
+    return Array.from(Array(length).keys()).map((i) =>
+      localization.formatString(baseString, i.toString())
     );
   }
 
@@ -215,10 +215,10 @@ export class WizardBuilder {
           key,
           title:
             customMetric?.name ||
-            (localization.formatString(
+            localization.formatString(
               localization.defaultCustomMetricName,
               customMetrics.length
-            ) as string),
+            ),
           isMinimization: true,
           isPercentage: true,
           description: customMetric?.description

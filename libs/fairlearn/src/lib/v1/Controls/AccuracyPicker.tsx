@@ -84,8 +84,10 @@ export class AccuracyPicker extends React.PureComponent<
 
   private readonly onAccuracyChange = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    this.props.onAccuracyChange(item.key as string);
+    if (typeof item?.key === "string") {
+      this.props.onAccuracyChange(item.key);
+    }
   };
 }

@@ -256,7 +256,7 @@ export class WhatIfTab extends React.PureComponent<
             name: localization.formatString(
               localization.WhatIfTab.rowLabel,
               rowIndex.toString()
-            ) as string,
+            ),
             unsortedFeatureValues: JointDataset.datasetSlice(
               row,
               this.props.jointDataset.metaDict,
@@ -820,7 +820,7 @@ export class WhatIfTab extends React.PureComponent<
         const yAxisLabels: string[] = [localization.featureImportance];
         if (this.props.metadata.modelType !== ModelTypes.regression) {
           yAxisLabels.push(
-            this.props.weightLabels[this.props.selectedWeightVector] as string
+            this.props.weightLabels[this.props.selectedWeightVector]
           );
         }
         const maxStartingK = Math.max(
@@ -1476,7 +1476,7 @@ export class WhatIfTab extends React.PureComponent<
           text: localization.formatString(
             localization.WhatIfTab.rowLabel,
             index.toString()
-          ) as string
+          )
         };
       })
       .reverse();
@@ -1486,7 +1486,7 @@ export class WhatIfTab extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item: IDropdownOption
   ): void => {
-    this.setState({ selectedFeatureKey: item.key as string });
+    this.setState({ selectedFeatureKey: item.key });
   };
 
   private onICEClassSelected = (
@@ -1542,7 +1542,7 @@ export class WhatIfTab extends React.PureComponent<
     this.temporaryPoint[WhatIfTab.namePath] = localization.formatString(
       localization.WhatIf.defaultCustomRootName,
       index
-    ) as string;
+    );
     this.temporaryPoint[WhatIfTab.colorPath] =
       FabricStyles.fabricColorPalette[
         WhatIfTab.MAX_SELECTION + this.state.customPoints.length
@@ -1666,7 +1666,7 @@ export class WhatIfTab extends React.PureComponent<
     this.temporaryPoint[WhatIfTab.namePath] = localization.formatString(
       localization.WhatIf.defaultCustomRootName,
       indexes[0]
-    ) as string;
+    );
     this.temporaryPoint[WhatIfTab.colorPath] =
       FabricStyles.fabricColorPalette[
         WhatIfTab.MAX_SELECTION + this.state.customPoints.length
@@ -1827,7 +1827,7 @@ export class WhatIfTab extends React.PureComponent<
             localization.formatString(
               localization.IcePlot.errorPrefix,
               err.message
-            ) as string
+            )
           );
         }
       }

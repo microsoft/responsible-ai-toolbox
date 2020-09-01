@@ -141,28 +141,24 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           </Text>
           {item.rangeType === RangeTypes.categorical && (
             <Text variant={"mediumPlus"} className={styles.valueCount} block>
-              {
-                localization.formatString(
-                  localization.Feature.summaryCategoricalCount,
-                  item.array.length
-                ) as string
-              }
+              {localization.formatString(
+                localization.Feature.summaryCategoricalCount,
+                item.array.length
+              )}
             </Text>
           )}
           {item.rangeType !== RangeTypes.categorical && (
             <Text variant={"mediumPlus"} className={styles.valueCount} block>
-              {
-                localization.formatString(
-                  localization.Feature.summaryNumericCount,
-                  (this.props.dashboardContext.modelMetadata.featureRanges[
-                    index
-                  ] as INumericRange).min,
-                  (this.props.dashboardContext.modelMetadata.featureRanges[
-                    index
-                  ] as INumericRange).max,
-                  item.labelArray.length
-                ) as string
-              }
+              {localization.formatString(
+                localization.Feature.summaryNumericCount,
+                (this.props.dashboardContext.modelMetadata.featureRanges[
+                  index
+                ] as INumericRange).min,
+                (this.props.dashboardContext.modelMetadata.featureRanges[
+                  index
+                ] as INumericRange).max,
+                item.labelArray.length
+              )}
             </Text>
           )}
           {!this.props.dashboardContext.modelMetadata.featureIsCategorical[

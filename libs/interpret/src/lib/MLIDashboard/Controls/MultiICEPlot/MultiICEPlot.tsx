@@ -493,7 +493,7 @@ export class MultiICEPlot extends React.PureComponent<
             errorMessage: localization.formatString(
               localization.IcePlot.errorPrefix,
               err.message
-            ) as string
+            )
           });
         }
       }

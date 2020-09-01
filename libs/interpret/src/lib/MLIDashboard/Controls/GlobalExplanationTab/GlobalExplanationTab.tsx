@@ -683,11 +683,15 @@ export class GlobalExplanationTab extends React.PureComponent<
 
   private onXSet = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    const key = item.key as string;
-    const index = this.props.jointDataset.metaDict[key].index;
-    this.handleFeatureSelection(this.state.selectedCohortIndex, index);
+    if (typeof item?.key === "string") {
+      const key = item.key as string;
+      const index = this.props.jointDataset.metaDict[key].index;
+      if (index !== undefined) {
+        this.handleFeatureSelection(this.state.selectedCohortIndex, index);
+      }
+    }
   };
 
   private handleFeatureSelection = (

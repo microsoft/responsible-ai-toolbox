@@ -85,8 +85,10 @@ export class ParityPicker extends React.PureComponent<
 
   private readonly onParityChange = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    this.props.onParityChange(item.key as string);
+    if (typeof item?.key === "string") {
+      this.props.onParityChange(item.key);
+    }
   };
 }

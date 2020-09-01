@@ -328,7 +328,7 @@ export class ModelComparisonChart extends React.PureComponent<
                 text: localization.formatString(
                   localization.ModelComparison.disparityInAccuracy,
                   metricTitleAppropriateCase
-                ) as string,
+                ),
                 styles: { choiceFieldWrapper: styles.radioOptions }
               },
               {

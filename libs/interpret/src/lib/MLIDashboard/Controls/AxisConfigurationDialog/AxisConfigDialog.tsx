@@ -508,10 +508,12 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private readonly setSelectedProperty = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    const property = item.key as string;
-    this.setDefaultStateForKey(property);
+    if (typeof item?.key === "string") {
+      const property = item.key;
+      this.setDefaultStateForKey(property);
+    }
   };
 
   private _getBinCountForProperty(key: string): number | undefined {

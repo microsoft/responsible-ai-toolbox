@@ -793,8 +793,8 @@ export class ExplanationDashboard extends React.Component<
     length: number,
     baseString: string
   ): string[] {
-    return Array.from(Array(length).keys()).map(
-      (i) => localization.formatString(baseString, i.toString()) as string
+    return Array.from(Array(length).keys()).map((i) =>
+      localization.formatString(baseString, i.toString())
     );
   }
 

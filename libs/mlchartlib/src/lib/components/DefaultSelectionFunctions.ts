@@ -12,9 +12,10 @@ export class DefaultSelectionFunctions {
         ? null
         : plotlyProps.data.map((trace) => {
             const selectedIndexes: number[] = [];
-            if ((trace as any).customdata) {
-              ((trace as any).customdata as string[]).forEach((id, index) => {
-                if (selections.indexOf(id) !== -1) {
+            if (trace.customdata) {
+              trace.customdata.forEach((data, index) => {
+                const id = data?.toString();
+                if (id && selections.includes(id)) {
                   selectedIndexes.push(index);
                 }
               });
@@ -26,11 +27,12 @@ export class DefaultSelectionFunctions {
       selections.length === 0
         ? [0]
         : plotlyProps.data.map((trace) => {
-            if ((trace as any).customdata) {
-              const customData = (trace as any).customdata as string[];
+            if (trace.customdata) {
+              const customData = trace.customdata;
               const newWidths: number[] = new Array(customData.length).fill(0);
-              customData.forEach((id, index) => {
-                if (selections.indexOf(id) !== -1) {
+              customData.forEach((data, index) => {
+                const id = data?.toString();
+                if (id && selections.includes(id)) {
                   newWidths[index] = 2;
                 }
               });

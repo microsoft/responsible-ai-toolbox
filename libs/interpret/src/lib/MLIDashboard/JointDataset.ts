@@ -194,7 +194,7 @@ export class JointDataset {
           const label = localization.formatString(
             localization.ExplanationScatter.probabilityLabel,
             className
-          ) as string;
+          );
           const projection = args.predictedProbabilities.map(
             (row) => row[classIndex]
           );
@@ -449,7 +449,7 @@ export class JointDataset {
       });
       metadata.sortedCategoricalValues = sortedUniqueValues.map((num) =>
         num.toString()
-      ) as string[];
+      );
       this.dataDict.forEach((row, rowIndex) => {
         const numVal = row[key];
         row[key] = sortedUniqueValues.indexOf(numVal);
@@ -611,11 +611,11 @@ export class JointDataset {
         label: localization.formatString(
           localization.featureImportanceOf,
           featureLabel
-        ) as string,
+        ),
         abbridgedLabel: localization.formatString(
           localization.featureImportanceOf,
           featureLabel
-        ) as string,
+        ),
         isCategorical: false,
         featureRange: {
           rangeType: RangeTypes.numeric,

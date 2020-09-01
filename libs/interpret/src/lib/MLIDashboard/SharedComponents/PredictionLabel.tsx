@@ -33,12 +33,12 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
         this.props.prediction.toLocaleString(undefined, {
           minimumFractionDigits: 3
         })
-      ) as string;
+      );
     }
     return localization.formatString(
       localization.PredictionLabel.predictedClassLabel,
       this.props.classNames[this.props.prediction]
-    ) as string;
+    );
   }
 
   private makeProbabilityLabel(): string {
@@ -48,6 +48,6 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
     return localization.formatString(
       localization.IcePlot.probabilityLabel,
       probability.toLocaleString(undefined, { minimumFractionDigits: 3 })
-    ) as string;
+    );
   }
 }

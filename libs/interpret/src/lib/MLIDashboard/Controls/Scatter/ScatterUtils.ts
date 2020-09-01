@@ -84,7 +84,7 @@ export class ScatterUtils {
               text: localization.formatString(
                 localization.ExplanationScatter.importanceLabel,
                 featureName
-              ) as string,
+              ),
               data: { isCategorical: false, isFeatureImportance: true }
             });
           }
@@ -105,10 +105,10 @@ export class ScatterUtils {
           result.push({
             key: `TrainingData[${index}]`,
             text: includeFeatureImportance
-              ? (localization.formatString(
+              ? localization.formatString(
                   localization.ExplanationScatter.dataLabel,
                   featureName
-                ) as string)
+                )
               : featureName,
             data: {
               isCategorical:
@@ -159,7 +159,7 @@ export class ScatterUtils {
             text: localization.formatString(
               localization.ExplanationScatter.probabilityLabel,
               className
-            ) as string,
+            ),
             data: { isCategorical: false }
           });
         });
@@ -538,12 +538,12 @@ export class ScatterUtils {
     }
     if (
       plotlyProps.data[0].groupBy === undefined ||
-      plotlyProps.data[0].groupBy!.length < 1
+      plotlyProps.data[0].groupBy?.length < 1
     ) {
       return undefined;
     }
     foundOption = options.find(
-      (option) => option.key === plotlyProps.data[0].groupBy![0]
+      (option) => option.key === plotlyProps.data[0].groupBy?.[0]
     );
     return foundOption ? foundOption.key.toString() : undefined;
   }
@@ -564,8 +564,8 @@ export class ScatterUtils {
     plotlyProps.data.forEach((trace) => {
       const selectedIndexes: number[] = [];
       let newWidths: number[] = [0];
-      if ((trace as any).customdata) {
-        const customData = (trace as any).customdata as string[];
+      if (trace.customdata) {
+        const customData = trace.customdata;
         newWidths = new Array(customData.length).fill(0);
 
         customData.forEach((id, index) => {

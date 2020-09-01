@@ -554,7 +554,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
               errorMessage: localization.formatString(
                 localization.IcePlot.errorPrefix,
                 err.message
-              ) as string
+              )
             });
           }
         }

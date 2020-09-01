@@ -254,7 +254,7 @@ export class PerturbationExploration extends React.Component<
             errorMessage: localization.formatString(
               localization.IcePlot.errorPrefix,
               err.message
-            ) as string
+            )
           });
         }
       }

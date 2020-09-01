@@ -358,8 +358,8 @@ export class NewExplanationDashboard extends React.PureComponent<
     length: number,
     baseString: string
   ): string[] {
-    return Array.from(Array(length).keys()).map(
-      (i) => localization.formatString(baseString, i.toString()) as string
+    return Array.from(Array(length).keys()).map((i) =>
+      localization.formatString(baseString, i.toString())
     );
   }
 
@@ -420,7 +420,7 @@ export class NewExplanationDashboard extends React.PureComponent<
           cohortName: localization.formatString(
             localization.CohortEditor.placeholderName,
             this.state.editingCohortIndex
-          ) as string,
+          ),
           filterList: []
         };
       } else {
