@@ -17,8 +17,8 @@ export type PredictionType =
   | PredictionTypes.regression;
 
 export interface IMetricResponse {
-  global?: number;
-  bins?: number[];
+  global: number;
+  bins: number[];
 }
 
 export interface IMetricRequest {

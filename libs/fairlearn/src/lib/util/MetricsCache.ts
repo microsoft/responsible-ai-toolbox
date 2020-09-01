@@ -1,5 +1,5 @@
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
-import { ParityModes } from "../util/ParityMetrics";
+import { ParityModes } from "./ParityMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey

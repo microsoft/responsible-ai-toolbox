@@ -22,11 +22,11 @@ import {
   IFeatureBinPickerPropsV1,
   IParityPickerPropsV1
 } from "../FairnessWizard";
-import { FormatMetrics } from "../FormatMetrics";
+import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { MetricsCache } from "../MetricsCache";
+import { MetricsCache } from "../../util/MetricsCache";
 import { ParityModes } from "../../util/ParityMetrics";
 import { ModelComparisionChartStyles } from "./ModelComparisionChart.styles";
 

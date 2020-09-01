@@ -10,12 +10,13 @@ import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 import React from "react";
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { AccuracyOptions } from "./AccuracyMetrics";
+import { AccuracyOptions } from "../util/AccuracyMetrics";
+import { ParityModes } from "../util/ParityMetrics";
+import { FormatMetrics } from "../util/FormatMetrics";
 import { ChartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { localization } from "./../Localization/localization";
-import { ParityModes } from "./ParityMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
 
 const theme = getTheme();
@@ -147,8 +148,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         {
           x: this.state.metrics.binnedOverprediction,
           y: nameIndex,
-          text: this.state.metrics.binnedOverprediction.map((num) =>
-            this.formatNumbers(num as number, "accuracy_score", false, 2)
+          text: this.state.metrics.binnedOverprediction?.map((num) =>
+            FormatMetrics.formatNumbers(num, "accuracy_score", false, 2)
           ),
           name: localization.Metrics.overprediction,
           width: 0.5,
@@ -159,10 +160,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           textposition: "inside"
         },
         {
-          x: this.state.metrics.binnedUnderprediction.map((x) => -1 * x),
+          x: this.state.metrics.binnedUnderprediction?.map((x) => -1 * x),
           y: nameIndex,
-          text: this.state.metrics.binnedUnderprediction.map((num) =>
-            this.formatNumbers(num as number, "accuracy_score", false, 2)
+          text: this.state.metrics.binnedUnderprediction?.map((num) =>
+            FormatMetrics.formatNumbers(num, "accuracy_score", false, 2)
           ),
           name: localization.Metrics.underprediction,
           width: 0.5,
@@ -174,33 +175,37 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           textfont: { color: theme.palette.black }
         }
       ];
-      accuracyPlot.layout.annotations = [
-        {
-          text: localization.Report.underestimationError,
-          x: 0.02,
-          y: 1,
-          yref: "paper",
-          xref: "paper",
-          showarrow: false,
-          font: { color: theme.semanticColors.bodySubtext, size: 10 }
-        },
-        {
-          text: localization.Report.overestimationError,
-          x: 0.98,
-          y: 1,
-          yref: "paper",
-          xref: "paper",
-          showarrow: false,
-          font: { color: theme.semanticColors.bodySubtext, size: 10 }
-        }
-      ];
-      accuracyPlot.layout.xaxis.tickformat = ",.0%";
+      if (accuracyPlot.layout) {
+        accuracyPlot.layout.annotations = [
+          {
+            text: localization.Report.underestimationError,
+            x: 0.02,
+            y: 1,
+            yref: "paper",
+            xref: "paper",
+            showarrow: false,
+            font: { color: theme.semanticColors.bodySubtext, size: 10 }
+          },
+          {
+            text: localization.Report.overestimationError,
+            x: 0.98,
+            y: 1,
+            yref: "paper",
+            xref: "paper",
+            showarrow: false,
+            font: { color: theme.semanticColors.bodySubtext, size: 10 }
+          }
+        ];
+      }
+      if (accuracyPlot.layout?.xaxis) {
+        accuracyPlot.layout.xaxis.tickformat = ",.0%";
+      }
       opportunityPlot.data = [
         {
           x: this.state.metrics.binnedOutcome,
           y: nameIndex,
           text: this.state.metrics.binnedOutcome.map((num) =>
-            this.formatNumbers(num as number, "selection_rate", false, 2)
+            FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
           ),
           name: outcomeMetric.title,
           fillcolor: ChartColors[0],
@@ -210,7 +215,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           hoverinfo: "skip"
         }
       ];
-      opportunityPlot.layout.xaxis.tickformat = ",.0%";
+      if (opportunityPlot.layout?.xaxis) {
+        opportunityPlot.layout.xaxis.tickformat = ",.0%";
+      }
       howToReadAccuracySection = (
         <div className={styles.rightText}>
           <div className={styles.textRow}>
@@ -260,8 +267,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         {
           x: this.state.metrics.binnedOverprediction,
           y: nameIndex,
-          text: this.state.metrics.binnedOverprediction.map((num) =>
-            this.formatNumbers(num as number, "overprediction", false, 2)
+          text: this.state.metrics.binnedOverprediction?.map((num) =>
+            FormatMetrics.formatNumbers(num, "overprediction", false, 2)
           ),
           name: localization.Metrics.overprediction,
           width: 0.5,
@@ -272,10 +279,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           hoverinfo: "skip"
         },
         {
-          x: this.state.metrics.binnedUnderprediction.map((x) => -1 * x),
+          x: this.state.metrics.binnedUnderprediction?.map((x) => -1 * x),
           y: nameIndex,
-          text: this.state.metrics.binnedUnderprediction.map((num) =>
-            this.formatNumbers(num as number, "underprediction", false, 2)
+          text: this.state.metrics.binnedUnderprediction?.map((num) =>
+            FormatMetrics.formatNumbers(num, "underprediction", false, 2)
           ),
           name: localization.Metrics.underprediction,
           width: 0.5,
@@ -287,30 +294,32 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           textfont: { color: theme.palette.black }
         }
       ];
-      accuracyPlot.layout.annotations = [
-        {
-          text: localization.Report.underestimationError,
-          x: 0.1,
-          y: 1,
-          yref: "paper",
-          xref: "paper",
-          showarrow: false,
-          font: { color: theme.semanticColors.bodyText, size: 10 }
-        },
-        {
-          text: localization.Report.overestimationError,
-          x: 0.9,
-          y: 1,
-          yref: "paper",
-          xref: "paper",
-          showarrow: false,
-          font: { color: theme.semanticColors.bodyText, size: 10 }
-        }
-      ];
-      const opportunityText = this.state.metrics.predictions.map((val) => {
+      if (accuracyPlot.layout) {
+        accuracyPlot.layout.annotations = [
+          {
+            text: localization.Report.underestimationError,
+            x: 0.1,
+            y: 1,
+            yref: "paper",
+            xref: "paper",
+            showarrow: false,
+            font: { color: theme.semanticColors.bodyText, size: 10 }
+          },
+          {
+            text: localization.Report.overestimationError,
+            x: 0.9,
+            y: 1,
+            yref: "paper",
+            xref: "paper",
+            showarrow: false,
+            font: { color: theme.semanticColors.bodyText, size: 10 }
+          }
+        ];
+      }
+      const opportunityText = this.state.metrics.predictions?.map((val) => {
         return localization.formatString(
           localization.Report.tooltipPrediction,
-          this.formatNumbers(val as number, "average", false, 3)
+          FormatMetrics.formatNumbers(val, "average", false, 3)
         );
       });
       opportunityPlot.data = [
@@ -369,24 +378,26 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.regression
     ) {
-      const opportunityText = this.state.metrics.predictions.map((val) => {
+      const opportunityText = this.state.metrics.predictions?.map((val) => {
         return localization.formatString(
           localization.Report.tooltipPrediction,
           val
         );
       });
-      const accuracyText = this.state.metrics.predictions.map((val, index) => {
+      const accuracyText = this.state.metrics.predictions?.map((val, index) => {
         return `${localization.formatString(
           localization.Report.tooltipError,
-          this.formatNumbers(
-            this.state.metrics.errors[index] as number,
+          FormatMetrics.formatNumbers(
+            this.state.metrics?.errors
+              ? this.state.metrics.errors[index]
+              : undefined,
             "average",
             false,
             3
           )
         )}<br>${localization.formatString(
           localization.Report.tooltipPrediction,
-          this.formatNumbers(val as number, "average", false, 3)
+          FormatMetrics.formatNumbers(val, "average", false, 3)
         )}`;
       });
       accuracyPlot.data = [
@@ -439,37 +450,34 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       accuracyChartHeader = localization.Report.distributionOfErrors;
     }
 
-    const globalAccuracyString = this.formatNumbers(
+    const globalAccuracyString = FormatMetrics.formatNumbers(
       this.state.metrics.globalAccuracy,
       accuracyKey
     );
-    const disparityAccuracyString = this.formatNumbers(
+    const disparityAccuracyString = FormatMetrics.formatNumbers(
       this.state.metrics.accuracyDisparity,
       accuracyKey
     );
-    let selectedMetric =
-      AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey];
-    // handle custom metric case
-    if (selectedMetric === undefined) {
-      selectedMetric = this.props.accuracyPickerProps.accuracyOptions.find(
+    const selectedMetric =
+      AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+      this.props.accuracyPickerProps.accuracyOptions.find(
         (metric) =>
           metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
       );
-    }
 
-    const globalOutcomeString = this.formatNumbers(
+    const globalOutcomeString = FormatMetrics.formatNumbers(
       this.state.metrics.globalOutcome,
       outcomeKey
     );
-    const disparityOutcomeString = this.formatNumbers(
+    const disparityOutcomeString = FormatMetrics.formatNumbers(
       this.state.metrics.outcomeDisparity,
       outcomeKey
     );
     const formattedBinAccuracyValues = this.state.metrics.binnedAccuracy.map(
-      (value) => this.formatNumbers(value, accuracyKey)
+      (value) => FormatMetrics.formatNumbers(value, accuracyKey)
     );
     const formattedBinOutcomeValues = this.state.metrics.binnedOutcome.map(
-      (value) => this.formatNumbers(value, outcomeKey)
+      (value) => FormatMetrics.formatNumbers(value, outcomeKey)
     );
     return (
       <div style={{ height: "100%", overflowY: "auto" }}>
@@ -625,39 +633,27 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     );
   }
 
-  private readonly formatNumbers = (
-    value: number,
-    key: string,
-    isRatio = false,
-    sigDigits = 3
-  ): string => {
-    if (value === null || value === undefined || isNaN(value)) {
-      return NaN.toString();
-    }
-    const styleObject = { maximumSignificantDigits: sigDigits };
-    if (AccuracyOptions[key] && AccuracyOptions[key].isPercentage && !isRatio) {
-      (styleObject as any).style = "percent";
-    }
-    return value.toLocaleString(undefined, styleObject);
-  };
-
   private readonly clearModelSelection = (): void => {
-    this.props.onChartClick(undefined);
+    if (this.props.onChartClick) {
+      this.props.onChartClick(undefined);
+    }
   };
 
   private readonly onEditConfigs = (): void => {
     if (this.props.modelCount > 1) {
-      this.props.onChartClick(undefined);
+      if (this.props.onChartClick) {
+        this.props.onChartClick(undefined);
+      }
     }
     this.props.onEditConfigs();
   };
 
   private async loadData(): Promise<void> {
     try {
-      let binnedOverprediction: number[];
-      let binnedUnderprediction: number[];
-      let predictions: number[];
-      let errors: number[];
+      let binnedOverprediction: number[] | undefined;
+      let binnedUnderprediction: number[] | undefined;
+      let predictions: number[] | undefined;
+      let errors: number[] | undefined;
       let outcomes: IMetricResponse;
       let outcomeDisparity: number;
       const accuracy = await this.props.metricsCache.getMetric(
@@ -673,100 +669,97 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.accuracyPickerProps.selectedAccuracyKey,
         ParityModes.difference
       );
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.binaryClassification
-      ) {
-        binnedUnderprediction = (
-          await this.props.metricsCache.getMetric(
+      switch (this.props.dashboardContext.modelMetadata.PredictionType) {
+        case PredictionTypes.binaryClassification: {
+          binnedUnderprediction = (
+            await this.props.metricsCache.getMetric(
+              this.props.dashboardContext.binVector,
+              this.props.featureBinPickerProps.selectedBinIndex,
+              this.props.selectedModelIndex,
+              "underprediction"
+            )
+          ).bins;
+          binnedOverprediction = (
+            await this.props.metricsCache.getMetric(
+              this.props.dashboardContext.binVector,
+              this.props.featureBinPickerProps.selectedBinIndex,
+              this.props.selectedModelIndex,
+              "overprediction"
+            )
+          ).bins;
+          outcomes = await this.props.metricsCache.getMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
-            "underprediction"
-          )
-        ).bins;
-        binnedOverprediction = (
-          await this.props.metricsCache.getMetric(
+            "selection_rate"
+          );
+          outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
-            "overprediction"
-          )
-        ).bins;
-        outcomes = await this.props.metricsCache.getMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          this.props.selectedModelIndex,
-          "selection_rate"
-        );
-        outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          this.props.selectedModelIndex,
-          "selection_rate",
-          ParityModes.difference
-        );
-      }
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.probability
-      ) {
-        predictions = this.props.dashboardContext.predictions[
-          this.props.selectedModelIndex
-        ];
-        binnedOverprediction = (
-          await this.props.metricsCache.getMetric(
+            "selection_rate",
+            ParityModes.difference
+          );
+          break;
+        }
+        case PredictionTypes.probability: {
+          predictions = this.props.dashboardContext.predictions[
+            this.props.selectedModelIndex
+          ];
+          binnedOverprediction = (
+            await this.props.metricsCache.getMetric(
+              this.props.dashboardContext.binVector,
+              this.props.featureBinPickerProps.selectedBinIndex,
+              this.props.selectedModelIndex,
+              "overprediction"
+            )
+          ).bins;
+          binnedUnderprediction = (
+            await this.props.metricsCache.getMetric(
+              this.props.dashboardContext.binVector,
+              this.props.featureBinPickerProps.selectedBinIndex,
+              this.props.selectedModelIndex,
+              "underprediction"
+            )
+          ).bins;
+          outcomes = await this.props.metricsCache.getMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
-            "overprediction"
-          )
-        ).bins;
-        binnedUnderprediction = (
-          await this.props.metricsCache.getMetric(
+            "average"
+          );
+          outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
-            "underprediction"
-          )
-        ).bins;
-        outcomes = await this.props.metricsCache.getMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          this.props.selectedModelIndex,
-          "average"
-        );
-        outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          this.props.selectedModelIndex,
-          "average",
-          ParityModes.difference
-        );
-      }
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.regression
-      ) {
-        predictions = this.props.dashboardContext.predictions[
-          this.props.selectedModelIndex
-        ];
-        errors = predictions.map((predicted, index) => {
-          return predicted - this.props.dashboardContext.trueY[index];
-        });
-        outcomes = await this.props.metricsCache.getMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          this.props.selectedModelIndex,
-          "average"
-        );
-        outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
-          this.props.dashboardContext.binVector,
-          this.props.featureBinPickerProps.selectedBinIndex,
-          this.props.selectedModelIndex,
-          "average",
-          ParityModes.difference
-        );
+            "average",
+            ParityModes.difference
+          );
+          break;
+        }
+        case PredictionTypes.regression:
+        default: {
+          predictions = this.props.dashboardContext.predictions[
+            this.props.selectedModelIndex
+          ];
+          errors = predictions.map((predicted, index) => {
+            return predicted - this.props.dashboardContext.trueY[index];
+          });
+          outcomes = await this.props.metricsCache.getMetric(
+            this.props.dashboardContext.binVector,
+            this.props.featureBinPickerProps.selectedBinIndex,
+            this.props.selectedModelIndex,
+            "average"
+          );
+          outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
+            this.props.dashboardContext.binVector,
+            this.props.featureBinPickerProps.selectedBinIndex,
+            this.props.selectedModelIndex,
+            "average",
+            ParityModes.difference
+          );
+          break;
+        }
       }
       this.setState({
         metrics: {
