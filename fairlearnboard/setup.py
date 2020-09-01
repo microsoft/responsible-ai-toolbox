@@ -33,19 +33,11 @@ setuptools.setup(
         "Development Status :: 3 - Alpha"
     ],
     include_package_data=True,
-    data_files=[
-        ('share/jupyter/nbextensions/fairlearn-widget', [
-            'fairlearnboard/static/extension.js',
-            'fairlearnboard/static/extension.js.map',
-            'fairlearnboard/static/index.js',
-            'fairlearnboard/static/index.js.map'
-        ]),
-        ("etc/jupyter/nbconfig/notebook.d", [
-            "jupyter-config/nbconfig/notebook.d/fairlearn-widget.json"
-        ]),
-        ('share/jupyter/lab/extensions', [
-            'fairlearnboard/js/'
-            'fairlearn_widget/labextension/fairlearn-widget-0.1.0.tgz'
-        ])],
+    package_data={
+        '': [
+            'fairlearnboard/templates/inlineDashboard.html',
+            'fairlearnboard/static/index.js'
+        ]
+    },
     zip_safe=False,
 )
