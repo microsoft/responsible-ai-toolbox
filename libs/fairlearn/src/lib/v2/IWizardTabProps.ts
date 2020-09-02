@@ -1,4 +1,4 @@
-import { IFairnessContext } from "./IFairnessContext";
+import { IFairnessContext } from "../util/IFairnessContext";
 
 export interface IWizardTabProps {
   dashboardContext: IFairnessContext;

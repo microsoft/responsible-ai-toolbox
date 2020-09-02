@@ -171,10 +171,10 @@ export class App extends React.Component<unknown, IAppState> {
   public constructor(props: unknown) {
     super(props);
     this.state = {
-      value: 0,
+      value: 4,
       themeIndex: 0,
       language: App.languages[0].val,
-      versionIndex: 1
+      versionIndex: 0
     };
   }
 
@@ -284,10 +284,10 @@ export class App extends React.Component<unknown, IAppState> {
     abortSignal?: AbortSignal
   ): Promise<IMetricResponse> {
     const binSize = Math.max(...request.binVector);
-    const bins: Array<number | undefined> = new Array(binSize + 1)
+    const bins: number[] = new Array(binSize + 1)
       .fill(0)
       .map(() => Math.random());
-    bins[2] = undefined;
+    // bins[2] = undefined;
     const promise = new Promise<IMetricResponse>((resolve, reject) => {
       const timeout = setTimeout(() => {
         resolve({

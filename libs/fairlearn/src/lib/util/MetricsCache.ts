@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 import { ParityModes } from "./ParityMetrics";
 
@@ -61,11 +62,11 @@ export class MetricsCache {
 
     const bins = value.bins.slice().filter((x) => x !== undefined && !isNaN(x));
 
-    const min = Math.min(...bins);
-    const max = Math.max(...bins);
+    const min = _.min(bins);
+    const max = _.max(bins);
     if (
-      isNaN(min) ||
-      isNaN(max) ||
+      min === undefined ||
+      max === undefined ||
       (max === 0 && disparityMethod === ParityModes.ratio)
     ) {
       return Number.NaN;

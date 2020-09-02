@@ -18,7 +18,7 @@ export type PredictionType =
 
 export interface IMetricResponse {
   global: number;
-  bins: Array<number | undefined>;
+  bins: number[];
 }
 
 export interface IMetricRequest {
@@ -31,7 +31,7 @@ export interface IFeatureBinMeta {
   binVector: number[];
   binLabels: string[];
   // this could also be held in a 'features name' array separate with the same length.
-  featureBinName: string;
+  featureBinName?: string;
 }
 
 export interface ICustomMetric {

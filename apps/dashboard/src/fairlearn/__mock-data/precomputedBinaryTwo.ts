@@ -3057,8 +3057,7 @@ export const precomputedBinaryTwo: IFairnessData = {
         0,
         0
       ],
-      binLabels: ["Group 0", "Group 1"],
-      featureBinName: "Sensitive feature"
+      binLabels: ["Group 0", "Group 1"]
     }
   ],
   predictionType: PredictionTypes.binaryClassification

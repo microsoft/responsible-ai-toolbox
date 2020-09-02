@@ -61,7 +61,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
                 ] as INumericRange
               }
               bins={this.props.featureBins[this.state.editingFeatureIndex]}
-              dataset={this.props.dashboardContext.dataset}
+              dataset={this.props.dashboardContext.dataset || []}
               index={this.state.editingFeatureIndex}
               onSave={this.onBinSave}
               onCancel={this.hideModal}
@@ -161,7 +161,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
               )}
             </Text>
           )}
-          {!this.props.dashboardContext.modelMetadata.featureIsCategorical[
+          {!this.props.dashboardContext.modelMetadata.featureIsCategorical?.[
             index
           ] && (
             <ActionButton
