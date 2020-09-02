@@ -92,7 +92,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     },
     { key: ChartTypes.Box, text: localization.FeatureImportanceWrapper.boxText }
   ];
-  private weightOptions: IDropdownOption[];
+  private weightOptions: IDropdownOption[] | undefined;
   private readonly minK = Math.min(
     4,
     this.props.jointDataset.localExplanationFeatureCount
@@ -102,15 +102,17 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.props.jointDataset.localExplanationFeatureCount
   );
   private readonly hasDataset = this.props.jointDataset.hasDataset;
-  private readonly explainerCalloutInfo =
-    this.props.explanationMethod &&
-    ExplainerCalloutDictionary[this.props.explanationMethod];
+  private readonly explainerCalloutInfo = this.props.explanationMethod
+    ? ExplainerCalloutDictionary[this.props.explanationMethod]
+    : undefined;
   private readonly _chartConfigId = "chart-connfig-button";
 
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
 
     if (!this.props.jointDataset.hasLocalExplanations) {
+      this.activeSeries = [];
+      this.cohortSeries = [];
       return;
     }
 
@@ -141,8 +143,10 @@ export class GlobalExplanationTab extends React.PureComponent<
         };
       });
     }
-    this.buildGlobalSeries();
-    this.buildActiveCohortSeries(this.state.sortArray);
+    this.cohortSeries = this.getGlobalSeries();
+    this.activeSeries = this.getActiveCohortSeries(
+      this.state.sortArray.map(() => false)
+    );
   }
 
   public componentDidUpdate(prevProps: IGlobalExplanationTabProps): void {
@@ -235,7 +239,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               onClick={this.toggleExplanationTooltip}
             />
           )}
-          {this.state.explanationTooltipVisible && (
+          {this.state.explanationTooltipVisible && this.explainerCalloutInfo && (
             <Callout
               doNotLayer={true}
               target={"#explanation-info"}
@@ -375,63 +379,64 @@ export class GlobalExplanationTab extends React.PureComponent<
               selectedKey={this.state.sortingSeriesIndex}
               onChange={this.setSortIndex}
             />
-            {this.props.metadata.modelType === ModelTypes.multiclass && (
-              <div>
-                <div className={classNames.multiclassWeightLabel}>
-                  <Text
-                    variant={"medium"}
-                    className={classNames.multiclassWeightLabelText}
-                  >
-                    {localization.GlobalTab.weightOptions}
-                  </Text>
-                  <IconButton
-                    id={"cross-class-weight-info"}
-                    iconProps={{ iconName: "Info" }}
-                    title={localization.CrossClass.info}
-                    onClick={this.toggleCrossClassInfo}
+            {this.props.metadata.modelType === ModelTypes.multiclass &&
+              this.weightOptions && (
+                <div>
+                  <div className={classNames.multiclassWeightLabel}>
+                    <Text
+                      variant={"medium"}
+                      className={classNames.multiclassWeightLabelText}
+                    >
+                      {localization.GlobalTab.weightOptions}
+                    </Text>
+                    <IconButton
+                      id={"cross-class-weight-info"}
+                      iconProps={{ iconName: "Info" }}
+                      title={localization.CrossClass.info}
+                      onClick={this.toggleCrossClassInfo}
+                    />
+                  </div>
+                  <Dropdown
+                    options={this.weightOptions}
+                    selectedKey={this.props.selectedWeightVector}
+                    onChange={this.setWeightOption}
                   />
+                  {this.state.crossClassInfoVisible && (
+                    <Callout
+                      doNotLayer={true}
+                      target={"#cross-class-weight-info"}
+                      setInitialFocus={true}
+                      onDismiss={this.toggleCrossClassInfo}
+                      directionalHint={DirectionalHint.leftCenter}
+                      role="alertdialog"
+                      styles={{ container: FabricStyles.calloutContainer }}
+                    >
+                      <div className={classNames.calloutWrapper}>
+                        <div className={classNames.calloutHeader}>
+                          <Text className={classNames.calloutTitle}>
+                            {localization.CrossClass.crossClassWeights}
+                          </Text>
+                        </div>
+                        <div className={classNames.calloutInner}>
+                          <Text>{localization.CrossClass.overviewInfo}</Text>
+                          <ul>
+                            <li>
+                              <Text>
+                                {localization.CrossClass.absoluteValInfo}
+                              </Text>
+                            </li>
+                            <li>
+                              <Text>
+                                {localization.CrossClass.enumeratedClassInfo}
+                              </Text>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </Callout>
+                  )}
                 </div>
-                <Dropdown
-                  options={this.weightOptions}
-                  selectedKey={this.props.selectedWeightVector}
-                  onChange={this.setWeightOption}
-                />
-                {this.state.crossClassInfoVisible && (
-                  <Callout
-                    doNotLayer={true}
-                    target={"#cross-class-weight-info"}
-                    setInitialFocus={true}
-                    onDismiss={this.toggleCrossClassInfo}
-                    directionalHint={DirectionalHint.leftCenter}
-                    role="alertdialog"
-                    styles={{ container: FabricStyles.calloutContainer }}
-                  >
-                    <div className={classNames.calloutWrapper}>
-                      <div className={classNames.calloutHeader}>
-                        <Text className={classNames.calloutTitle}>
-                          {localization.CrossClass.crossClassWeights}
-                        </Text>
-                      </div>
-                      <div className={classNames.calloutInner}>
-                        <Text>{localization.CrossClass.overviewInfo}</Text>
-                        <ul>
-                          <li>
-                            <Text>
-                              {localization.CrossClass.absoluteValInfo}
-                            </Text>
-                          </li>
-                          <li>
-                            <Text>
-                              {localization.CrossClass.enumeratedClassInfo}
-                            </Text>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </Callout>
-                )}
-              </div>
-            )}
+              )}
           </div>
         </div>
         {!this.hasDataset && (
@@ -541,10 +546,12 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   private setSelectedCohort = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item: IDropdownOption
+    _event: React.FormEvent,
+    item?: IDropdownOption
   ): void => {
-    this.setState({ selectedCohortIndex: item.key as number });
+    if (item?.key !== undefined) {
+      this.setState({ selectedCohortIndex: item.key as number });
+    }
   };
 
   private setStartingK = (newValue: number): void => {
@@ -580,10 +587,12 @@ export class GlobalExplanationTab extends React.PureComponent<
   };
 
   private onChartTypeChange = (
-    _event: React.SyntheticEvent<HTMLElement>,
-    item: IChoiceGroupOption
+    _event?: React.FormEvent,
+    item?: IChoiceGroupOption
   ): void => {
-    this.setState({ chartType: item.key as ChartTypes });
+    if (item?.key !== undefined) {
+      this.setState({ chartType: item.key as ChartTypes });
+    }
   };
 
   private readonly setNumericValue = (
@@ -611,12 +620,12 @@ export class GlobalExplanationTab extends React.PureComponent<
   private toggleActivation(index: number): void {
     const seriesIsActive = [...this.state.seriesIsActive];
     seriesIsActive[index] = !seriesIsActive[index];
-    this.buildActiveCohortSeries(seriesIsActive);
+    this.activeSeries = this.getActiveCohortSeries(seriesIsActive);
     this.setState({ seriesIsActive });
   }
 
-  private buildGlobalSeries(): void {
-    this.cohortSeries = this.props.cohorts.map((cohort, i) => {
+  private getGlobalSeries(): IGlobalSeries[] {
+    return this.props.cohorts.map((cohort, i) => {
       return {
         name: cohort.name,
         unsortedIndividualY: cohort.transposedLocalFeatureImportances(),
@@ -628,15 +637,8 @@ export class GlobalExplanationTab extends React.PureComponent<
 
   // This can probably be done cheaper by passing the active array to the charts, and zeroing
   // the series in the plotlyProps. Later optimization.
-  private buildActiveCohortSeries(activeArray): void {
-    this.activeSeries = activeArray
-      .map((isActive, index) => {
-        if (isActive) {
-          return this.cohortSeries[index];
-        }
-        return undefined;
-      })
-      .filter((series) => !!series);
+  private getActiveCohortSeries(activeArray: boolean[]): IGlobalSeries[] {
+    return this.cohortSeries.filter((_series, idx) => activeArray[idx]);
   }
 
   private updateIncludedCohortsOnCohortEdit(): void {
@@ -645,8 +647,8 @@ export class GlobalExplanationTab extends React.PureComponent<
       selectedCohortIndex = 0;
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
-    this.buildGlobalSeries();
-    this.buildActiveCohortSeries(seriesIsActive);
+    this.cohortSeries = this.getGlobalSeries();
+    this.activeSeries = this.getActiveCohortSeries(seriesIsActive);
     this.setState({ selectedCohortIndex, seriesIsActive });
   }
 
@@ -664,21 +666,25 @@ export class GlobalExplanationTab extends React.PureComponent<
 
   private setSortIndex = (
     _event: React.FormEvent<HTMLDivElement>,
-    item: IDropdownOption
+    item?: IDropdownOption
   ): void => {
-    const newIndex = item.key as number;
-    const sortArray = ModelExplanationUtils.getSortIndices(
-      this.cohortSeries[newIndex].unsortedAggregateY
-    ).reverse();
-    this.setState({ sortingSeriesIndex: newIndex, sortArray });
+    if (item?.key !== undefined) {
+      const newIndex = item.key as number;
+      const sortArray = ModelExplanationUtils.getSortIndices(
+        this.cohortSeries[newIndex].unsortedAggregateY
+      ).reverse();
+      this.setState({ sortingSeriesIndex: newIndex, sortArray });
+    }
   };
 
   private setWeightOption = (
     _event: React.FormEvent<HTMLDivElement>,
-    item: IDropdownOption
+    item?: IDropdownOption
   ): void => {
-    const newIndex = item.key as WeightVectorOption;
-    this.props.onWeightChange(newIndex);
+    if (item?.key !== undefined) {
+      const newIndex = item.key as WeightVectorOption;
+      this.props.onWeightChange(newIndex);
+    }
   };
 
   private onXSet = (

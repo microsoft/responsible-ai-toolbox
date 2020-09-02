@@ -19,7 +19,7 @@ import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { dependencePlotStyles } from "./DependencePlot.styles";
 
 export interface IDependecePlotProps {
-  chartProps: IGenericChartProps;
+  chartProps: IGenericChartProps | undefined;
   jointDataset: JointDataset;
   cohort: Cohort;
   cohortIndex: number;
