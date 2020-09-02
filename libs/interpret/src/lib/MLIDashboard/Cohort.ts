@@ -5,11 +5,10 @@ import { ModelExplanationUtils } from "./ModelExplanationUtils";
 export class Cohort {
   private static _cohortIndex = 0;
 
-  public rowCount = 0;
   public filteredData: Array<{ [key: string]: number }>;
   private readonly cohortIndex: number;
-  private cachedAverageImportance: number[];
-  private cachedTransposedLocalFeatureImportances: number[][];
+  private cachedAverageImportance: number[] | undefined;
+  private cachedTransposedLocalFeatureImportances: number[][] | undefined;
   private currentSortKey: string | undefined;
   private currentSortReversed = false;
   public constructor(
@@ -20,7 +19,7 @@ export class Cohort {
     this.cohortIndex = Cohort._cohortIndex;
     this.name = name;
     Cohort._cohortIndex += 1;
-    this.applyFilters();
+    this.filteredData = this.applyFilters();
   }
 
   public updateFilter(filter: IFilter, index?: number): void {
@@ -29,7 +28,7 @@ export class Cohort {
     }
 
     this.filters[index] = filter;
-    this.applyFilters();
+    this.filteredData = this.applyFilters();
   }
 
   // An id to track if a change requiring re-render has occurred.
@@ -39,7 +38,7 @@ export class Cohort {
 
   public deleteFilter(index: number): void {
     this.filters.splice(index, 1);
-    this.applyFilters();
+    this.filteredData = this.applyFilters();
   }
 
   public getRow(index: number): { [key: string]: number } {
@@ -124,9 +123,9 @@ export class Cohort {
     this.cachedTransposedLocalFeatureImportances = undefined;
   }
 
-  private applyFilters(): void {
+  private applyFilters(): Array<{ [key: string]: number }> {
     this.clearCachedImportances();
-    this.filteredData = this.jointDataset.dataDict.filter((row) =>
+    return this.jointDataset.dataDict.filter((row) =>
       this.filters.every((filter) => {
         const rowVal = row[filter.column];
         switch (filter.method) {
@@ -149,6 +148,5 @@ export class Cohort {
         }
       })
     );
-    this.rowCount = this.filteredData.length;
   }
 }

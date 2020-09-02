@@ -561,7 +561,7 @@ export class ScatterUtils {
 
   public static updatePropsForSelections(
     plotlyProps: IPlotlyProperty,
-    selectedRow: number
+    selectedRow: number | undefined
   ): IPlotlyProperty {
     if (selectedRow === undefined) {
       plotlyProps.data.forEach((trace) => {

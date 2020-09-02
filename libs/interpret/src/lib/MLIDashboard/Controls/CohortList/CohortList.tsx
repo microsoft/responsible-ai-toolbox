@@ -27,7 +27,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
       modelType = localization.CohortBanner.binaryClassifier;
     } else if (this.props.metadata.modelType === ModelTypes.multiclass) {
       modelType = localization.CohortBanner.multiclassClassifier;
-    } else if (this.props.metadata.modelType === ModelTypes.regression) {
+    } else {
       modelType = localization.CohortBanner.regressor;
     }
     return (
@@ -104,7 +104,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                 >
                   {localization.formatString(
                     localization.CohortBanner.datapoints,
-                    cohort.rowCount
+                    cohort.filteredData.length
                   )}
                 </Text>
                 <Text

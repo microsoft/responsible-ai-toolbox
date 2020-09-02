@@ -51,7 +51,7 @@ export interface IJointMeta {
   sortedCategoricalValues?: string[];
   featureRange?: INumericRange;
   category: ColumnCategories;
-  index?: number;
+  index: number;
 }
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
@@ -92,7 +92,7 @@ export class JointDataset {
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
   public dataDict: Array<{ [key: string]: number }> | undefined;
-  // public binDict: { [key: string]: number[] } = {};
+  public binDict: { [key: string]: number[] | undefined } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
   // private readonly _localExplanationIndexesComputed: boolean[];
@@ -493,7 +493,7 @@ export class JointDataset {
     }
     const delta = featureRange.max - featureRange.min;
     if (delta === 0 || binCount === 0) {
-      // this.binDict[key] = [featureRange.max];
+      this.binDict[key] = [featureRange.max];
       meta.sortedCategoricalValues = [
         `${featureRange.min} - ${featureRange.max}`
       ];
@@ -517,7 +517,7 @@ export class JointDataset {
         prevMax = num;
         return label;
       });
-      // this.binDict[key] = array;
+      this.binDict[key] = array;
       meta.sortedCategoricalValues = labelArray;
       return;
     }
@@ -544,7 +544,7 @@ export class JointDataset {
       previousVal = num + 1;
       return label;
     });
-    // this.binDict[key] = array;
+    this.binDict[key] = array;
     meta.sortedCategoricalValues = labelArray;
   }
 
@@ -645,7 +645,7 @@ export class JointDataset {
         },
         category: ColumnCategories.explanation
       };
-      // this.binDict[key] = undefined;
+      this.binDict[key] = undefined;
     });
   }
 

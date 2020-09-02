@@ -162,7 +162,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         const xLabels =
           jointData.metaDict[this.props.chartProps.xAxis.property]
             .sortedCategoricalValues;
-        const xLabelIndexes = xLabels.map((_, index) => index);
+        const xLabelIndexes = xLabels?.map((_, index) => index);
         _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
         _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
       }
@@ -184,7 +184,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
             customdata[index]["X"] =
               jointData.metaDict[
                 this.props.chartProps.xAxis.property
-              ].sortedCategoricalValues[val];
+              ].sortedCategoricalValues?.[val];
           } else {
             customdata[index]["X"] = val;
           }
@@ -202,7 +202,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         const yLabels =
           jointData.metaDict[this.props.chartProps.yAxis.property]
             .sortedCategoricalValues;
-        const yLabelIndexes = yLabels.map((_, index) => index);
+        const yLabelIndexes = yLabels?.map((_, index) => index);
         _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
         _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
       }

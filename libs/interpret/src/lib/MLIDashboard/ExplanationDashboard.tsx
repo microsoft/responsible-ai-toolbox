@@ -1016,7 +1016,8 @@ export class ExplanationDashboard extends React.Component<
                     />
                     {this.props.requestPredictions !== undefined &&
                       this.state.dashboardContext.explanationContext.testDataset
-                        .dataset && (
+                        .dataset &&
+                      this.props.requestPredictions && (
                         <PivotItem
                           headerText={localization.perturbationExploration}
                           itemKey={ExplanationDashboard.localTabKeys[1]}
@@ -1169,8 +1170,11 @@ export class ExplanationDashboard extends React.Component<
 
   private onClassSelect = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
+    if (!item) {
+      return;
+    }
     this.setState((prevState) => {
       const newWeightContext = _.cloneDeep(
         prevState.dashboardContext.weightContext

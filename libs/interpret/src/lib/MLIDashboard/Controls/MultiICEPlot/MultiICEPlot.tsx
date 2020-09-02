@@ -1,5 +1,5 @@
 import React from "react";
-import _ from "lodash";
+import _, { toNumber, map } from "lodash";
 import {
   IPlotlyProperty,
   RangeTypes,
@@ -15,6 +15,7 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
+import { IsTwoDimArray, PartialRequired } from "@responsible-ai/core-ui";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
@@ -42,7 +43,7 @@ export interface IMultiICEPlotState {
   yAxes: number[][] | number[][][];
   xAxisArray: string[] | number[];
   abortControllers: AbortController[];
-  rangeView: IRangeView | undefined;
+  rangeView: PartialRequired<IRangeView, "min" | "max"> | undefined;
   errorMessage?: string;
 }
 
@@ -86,7 +87,7 @@ export class MultiICEPlot extends React.PureComponent<
     selectedClass: number,
     colors: string[],
     rowNames: string[],
-    rangeType: RangeTypes,
+    rangeType?: RangeTypes,
     xData?: Array<number | string>,
     yData?: number[][] | number[][][]
   ): IPlotlyProperty | undefined {
@@ -94,45 +95,48 @@ export class MultiICEPlot extends React.PureComponent<
       yData === undefined ||
       xData === undefined ||
       yData.length === 0 ||
-      yData.some((row) => row === undefined)
+      yData.some((row: number[] | number[][]) => row === undefined)
     ) {
       return undefined;
     }
-    const data: Data[] = (yData as number[][][]).map((singleRow, rowIndex) => {
-      const transposedY: number[][] = Array.isArray(singleRow[0])
-        ? ModelExplanationUtils.transpose2DArray(singleRow)
-        : ([singleRow] as any);
-      const predictionLabel =
-        metadata.modelType === ModelTypes.regression
-          ? localization.IcePlot.prediction
-          : localization.IcePlot.predictedProbability +
-            ": " +
-            metadata.classNames[selectedClass];
-      const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
-      return {
-        mode:
-          rangeType === RangeTypes.categorical
-            ? PlotlyMode.markers
-            : PlotlyMode.linesMarkers,
-        type: "scatter",
-        hovertemplate,
-        hoverinfo: "all",
-        x: xData,
-        y: transposedY[selectedClass],
-        marker: {
-          color: colors[rowIndex]
-        },
-        name: rowNames[rowIndex],
-        customdata: transposedY[selectedClass].map((predY) => {
-          return {
-            Name: rowNames[rowIndex],
-            Yformatted: predY.toLocaleString(undefined, {
-              maximumFractionDigits: 3
-            })
-          };
-        })
-      };
-    }) as any;
+    const data: Data[] = map<number[] | number[][]>(
+      yData,
+      (singleRow: number[] | number[][], rowIndex: number) => {
+        const transposedY: number[][] = IsTwoDimArray(singleRow)
+          ? ModelExplanationUtils.transpose2DArray(singleRow)
+          : [singleRow];
+        const predictionLabel =
+          metadata.modelType === ModelTypes.regression
+            ? localization.IcePlot.prediction
+            : localization.IcePlot.predictedProbability +
+              ": " +
+              metadata.classNames[selectedClass];
+        const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
+        return {
+          mode:
+            rangeType === RangeTypes.categorical
+              ? PlotlyMode.markers
+              : PlotlyMode.linesMarkers,
+          type: "scatter",
+          hovertemplate,
+          hoverinfo: "all",
+          x: xData,
+          y: transposedY[selectedClass],
+          marker: {
+            color: colors[rowIndex]
+          },
+          name: rowNames[rowIndex],
+          customdata: transposedY[selectedClass].map((predY) => {
+            return {
+              Name: rowNames[rowIndex],
+              Yformatted: predY.toLocaleString(undefined, {
+                maximumFractionDigits: 3
+              })
+            };
+          })
+        };
+      }
+    ) as any;
     return {
       config: { displaylogo: false, responsive: true, displayModeBar: false },
       data,
@@ -520,7 +524,7 @@ export class MultiICEPlot extends React.PureComponent<
           key: featureKey,
           featureIndex: summary.index,
           selectedOptionKeys: summary.sortedCategoricalValues,
-          categoricalOptions: summary.sortedCategoricalValues.map((text) => {
+          categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
             return { key: text, text };
           }),
           type: RangeTypes.categorical
@@ -531,8 +535,8 @@ export class MultiICEPlot extends React.PureComponent<
       return {
         key: featureKey,
         featureIndex: summary.index,
-        selectedOptionKeys: summary.sortedCategoricalValues.map((x) => +x),
-        categoricalOptions: summary.sortedCategoricalValues.map((text) => {
+        selectedOptionKeys: summary.sortedCategoricalValues?.map((x) => +x),
+        categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
           return { key: +text, text: text.toString() };
         }),
         type: RangeTypes.categorical
@@ -541,8 +545,8 @@ export class MultiICEPlot extends React.PureComponent<
     return {
       key: featureKey,
       featureIndex: summary.index,
-      min: summary.featureRange.min,
-      max: summary.featureRange.max,
+      min: summary.featureRange?.min,
+      max: summary.featureRange?.max,
       steps: 20,
       type: summary.featureRange.rangeType
     };
@@ -557,9 +561,9 @@ export class MultiICEPlot extends React.PureComponent<
     ) {
       return [];
     }
-    const min = rangeView.min;
-    const max = rangeView.max;
-    const steps = rangeView.steps;
+    const min = toNumber(rangeView.min);
+    const max = toNumber(rangeView.max);
+    const steps = toNumber(rangeView.steps);
 
     if (
       rangeView.type === RangeTypes.categorical &&

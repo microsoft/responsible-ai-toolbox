@@ -476,7 +476,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       this.props.chartProps,
       this.props.cohorts[this.state.selectedCohortIndex]
     );
-    const cohortOptions: IDropdownOption[] =
+    const cohortOptions =
       this.props.chartProps.xAxis.property !== CohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
@@ -484,7 +484,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         : undefined;
     const legend = this.buildColorLegend(classNames);
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
-      .rowCount;
+      .filteredData.length;
     const canRenderChart =
       cohortLength < NewExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;

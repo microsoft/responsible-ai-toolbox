@@ -382,7 +382,7 @@ export class WhatIfTab extends React.PureComponent<
       this.props.cohorts[this.state.selectedCohortIndex]
     );
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
-      .rowCount;
+      .filteredData.length;
     const canRenderChart =
       cohortLength < NewExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
