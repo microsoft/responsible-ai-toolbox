@@ -42,12 +42,12 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
   }
 
   private makeProbabilityLabel(): string {
-    const probability = this.props.predictedProbabilities[
+    const probability = this.props.predictedProbabilities?.[
       this.props.prediction
     ];
     return localization.formatString(
       localization.IcePlot.probabilityLabel,
-      probability.toLocaleString(undefined, { minimumFractionDigits: 3 })
+      probability?.toLocaleString(undefined, { minimumFractionDigits: 3 })
     );
   }
 }

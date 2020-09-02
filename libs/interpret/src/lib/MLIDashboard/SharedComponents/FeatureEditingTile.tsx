@@ -3,7 +3,6 @@ import {
   TextField,
   ComboBox,
   IComboBox,
-  IDropdownOption,
   IComboBoxOption
 } from "office-ui-fabric-react";
 

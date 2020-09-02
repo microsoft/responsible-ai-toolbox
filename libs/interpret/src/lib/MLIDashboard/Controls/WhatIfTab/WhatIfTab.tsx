@@ -359,6 +359,7 @@ export class WhatIfTab extends React.PureComponent<
     this.setState({ sortingSeriesIndex, sortArray });
   }
 
+  // eslint-disable-next-line complexity
   public render(): React.ReactNode {
     const classNames = whatIfTabStyles();
     if (!this.props.jointDataset.hasDataset) {

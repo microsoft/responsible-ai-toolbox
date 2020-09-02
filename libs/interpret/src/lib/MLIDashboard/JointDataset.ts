@@ -48,7 +48,7 @@ export interface IJointMeta {
   isCategorical: boolean;
   // used to allow user to treat integers as categorical (but switch back as convenient...)
   treatAsCategorical?: boolean;
-  sortedCategoricalValues: string[];
+  sortedCategoricalValues?: string[];
   featureRange?: INumericRange;
   category: ColumnCategories;
   index?: number;
@@ -92,10 +92,10 @@ export class JointDataset {
   // these properties should only be accessed by Cohort class,
   // which enables independent filtered views of this data
   public dataDict: Array<{ [key: string]: number }> | undefined;
-  public binDict: { [key: string]: number[] } = {};
+  // public binDict: { [key: string]: number[] } = {};
 
   private readonly _modelMeta: IExplanationModelMetadata;
-  private readonly _localExplanationIndexesComputed: boolean[];
+  // private readonly _localExplanationIndexesComputed: boolean[];
   // The user elected to treat numeric columns as categorical. Store the unaltered values here in case they toggle back.
   private numericValuedColumnsCache: Array<{ [key: string]: number }> = [];
 
@@ -252,11 +252,11 @@ export class JointDataset {
     }
     // include error columns if applicable
     if (this.hasPredictedY && this.hasTrueY) {
-      this.dataDict.forEach((row) => {
+      this.dataDict?.forEach((row) => {
         JointDataset.setErrorMetrics(row, this._modelMeta.modelType);
       });
       // Set appropriate metadata
-      if (args.metadata.modelType === ModelTypes.regression) {
+      if (args.metadata.modelType === ModelTypes.regression && this.dataDict) {
         const regressionErrorArray = this.dataDict.map(
           (row) => row[JointDataset.RegressionError]
         );
@@ -296,10 +296,13 @@ export class JointDataset {
       );
       this.localExplanationFeatureCount = this.rawLocalImportance[0].length;
       this.initializeDataDictIfNeeded(this.rawLocalImportance);
-      this._localExplanationIndexesComputed = new Array(
-        this.localExplanationFeatureCount
-      ).fill(false);
-      this.buildLocalFlattenMatrix(WeightVectors.absAvg);
+      // this._localExplanationIndexesComputed = new Array(
+      //   this.localExplanationFeatureCount
+      // ).fill(false);
+      this.buildLocalFlattenMatrix(
+        WeightVectors.absAvg,
+        this.rawLocalImportance
+      );
       this.hasLocalExplanations = true;
     }
     if (this.dataDict === undefined) {
@@ -335,7 +338,7 @@ export class JointDataset {
     for (let i = 0; i < length; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
       if (metaDict[key].isCategorical) {
-        result[i] = metaDict[key].sortedCategoricalValues[row[key]];
+        result[i] = metaDict[key].sortedCategoricalValues?.[row[key]];
       } else {
         result[i] = row[key];
       }
@@ -406,12 +409,12 @@ export class JointDataset {
           featuresByClasses.map((classArray) => classArray.slice(0, 1))
         );
       }
-      case ModelTypes.multiclass: {
+      case ModelTypes.multiclass:
+      default: {
         return JointDataset.transposeLocalImportanceMatrix(
           localExplanationRaw as number[][][]
         );
       }
-      default:
     }
   }
 
@@ -439,80 +442,82 @@ export class JointDataset {
   }
 
   public getRow(index: number): { [key: string]: number } {
-    return { ...this.dataDict[index] };
+    return { ...this.dataDict?.[index] };
   }
 
   public unwrap(key: string, binVector?: number[]): any[] {
-    return JointDataset.unwrap(this.dataDict, key, binVector);
+    if (this.dataDict) {
+      return JointDataset.unwrap(this.dataDict, key, binVector);
+    }
+    return [];
   }
 
   public setTreatAsCategorical(key: string, value: boolean): void {
     const metadata = this.metaDict[key];
     metadata.treatAsCategorical = value;
     if (value) {
-      const values = this.dataDict.map((row) => row[key]);
+      const values = this.dataDict?.map((row) => row[key]);
       const sortedUniqueValues = _.uniq(values).sort((a, b) => {
         return a - b;
       });
       metadata.sortedCategoricalValues = sortedUniqueValues.map((num) =>
         num.toString()
       );
-      this.dataDict.forEach((row, rowIndex) => {
+      this.dataDict?.forEach((row, rowIndex) => {
         const numVal = row[key];
         row[key] = sortedUniqueValues.indexOf(numVal);
         this.numericValuedColumnsCache[rowIndex][key] = numVal;
       });
     } else {
-      this.dataDict.forEach((row, rowIndex) => {
+      this.dataDict?.forEach((row, rowIndex) => {
         row[key] = this.numericValuedColumnsCache[rowIndex][key];
       });
       this.addBin(key);
     }
   }
 
-  public addBin(key: string, binCount?: number): void {
+  public addBin(key: string, binCountIn?: number): void {
     const meta = this.metaDict[key];
+    if (!meta.featureRange) {
+      return;
+    }
+    const featureRange = meta.featureRange;
     // use data-dict for undefined binCount (building default bin)
     // use filtered data for user provided binCount
-    if (binCount === undefined) {
-      if (meta.featureRange.rangeType === RangeTypes.integer) {
-        const uniqueValues = _.uniq(this.dataDict.map((row) => row[key]));
+    let binCount = 5;
+    if (binCountIn === undefined) {
+      if (featureRange.rangeType === RangeTypes.integer) {
+        const uniqueValues = _.uniq(this.dataDict?.map((row) => row[key]));
         binCount = Math.min(5, uniqueValues.length);
       }
-      if (binCount === undefined) {
-        binCount = 5;
-      }
     }
-    const delta = meta.featureRange.max - meta.featureRange.min;
+    const delta = featureRange.max - featureRange.min;
     if (delta === 0 || binCount === 0) {
-      this.binDict[key] = [meta.featureRange.max];
+      // this.binDict[key] = [featureRange.max];
       meta.sortedCategoricalValues = [
-        `${meta.featureRange.min} - ${meta.featureRange.max}`
+        `${featureRange.min} - ${featureRange.max}`
       ];
       return;
     }
     // make uniform bins in these cases
-    if (
-      meta.featureRange.rangeType === RangeTypes.numeric ||
-      delta < binCount - 1
-    ) {
+    if (featureRange.rangeType === RangeTypes.numeric || delta < binCount - 1) {
       const binDelta = delta / binCount;
       const array = new Array(binCount).fill(0).map((_, index) => {
         return index !== binCount - 1
-          ? meta.featureRange.min + binDelta * (1 + index)
-          : meta.featureRange.max;
+          ? featureRange.min + binDelta * (1 + index)
+          : featureRange.max;
       });
-      let prevMax = meta.featureRange.min;
+      let prevMax = featureRange.min;
       const labelArray = array.map((num) => {
         const label = `${prevMax.toLocaleString(undefined, {
           maximumSignificantDigits: 3
-        })} - ${num.toLocaleString(undefined, {
+        })} - ${num?.toLocaleString(undefined, {
           maximumSignificantDigits: 3
         })}`;
         prevMax = num;
         return label;
       });
-      this.binDict[key] = array;
+      // this.binDict[key] = array;
       meta.sortedCategoricalValues = labelArray;
       return;
     }
@@ -520,11 +525,11 @@ export class JointDataset {
     const intDelta = delta / binCount;
     const array = new Array(binCount).fill(0).map((_, index) => {
       if (index === binCount - 1) {
-        return meta.featureRange.max;
+        return featureRange.max;
       }
-      return Math.ceil(meta.featureRange.min - 1 + intDelta * (index + 1));
+      return Math.ceil(featureRange.min - 1 + intDelta * (index + 1));
     });
-    let previousVal = meta.featureRange.min;
+    let previousVal = featureRange.min;
     const labelArray = array.map((num) => {
       const label =
         previousVal === num
@@ -539,23 +544,26 @@ export class JointDataset {
       previousVal = num + 1;
       return label;
     });
-    this.binDict[key] = array;
+    // this.binDict[key] = array;
     meta.sortedCategoricalValues = labelArray;
   }
 
   // project the 3d array based on the selected vector weights. Costly to do, so avoid when possible.
-  public buildLocalFlattenMatrix(weightVector: WeightVectorOption): void {
-    const featuresMinArray = new Array(this.rawLocalImportance[0].length).fill(
+  public buildLocalFlattenMatrix(
+    weightVector: WeightVectorOption,
+    rawLocalImportance: number[][][]
+  ): void {
+    const featuresMinArray = new Array(rawLocalImportance[0].length).fill(
       Number.MAX_SAFE_INTEGER
     );
-    const featuresMaxArray = new Array(this.rawLocalImportance[0].length).fill(
+    const featuresMaxArray = new Array(rawLocalImportance[0].length).fill(
       Number.MIN_SAFE_INTEGER
     );
     switch (this._modelMeta.modelType) {
       case ModelTypes.regression:
       case ModelTypes.binary: {
         // no need to flatten what is already flat
-        this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
+        rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
             const val = classArray[0];
             if (val > featuresMaxArray[featureIndex]) {
@@ -564,18 +572,21 @@ export class JointDataset {
             if (val < featuresMinArray[featureIndex]) {
               featuresMinArray[featureIndex] = val;
             }
-            this.dataDict[rowIndex][
-              JointDataset.ReducedLocalImportanceRoot + featureIndex.toString()
-            ] = classArray[0];
-            this._localExplanationIndexesComputed[rowIndex] = false;
+            if (this.dataDict) {
+              this.dataDict[rowIndex][
+                JointDataset.ReducedLocalImportanceRoot +
+                  featureIndex.toString()
+              ] = classArray[0];
+            }
+            // this._localExplanationIndexesComputed[rowIndex] = false;
           });
         });
         break;
       }
       case ModelTypes.multiclass: {
-        this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
+        rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
-            this._localExplanationIndexesComputed[rowIndex] = false;
+            // this._localExplanationIndexesComputed[rowIndex] = false;
             let value: number;
             switch (weightVector) {
               case WeightVectors.equal: {
@@ -601,16 +612,19 @@ export class JointDataset {
             if (value < featuresMinArray[featureIndex]) {
               featuresMinArray[featureIndex] = value;
             }
-            this.dataDict[rowIndex][
-              JointDataset.ReducedLocalImportanceRoot + featureIndex.toString()
-            ] = value;
+            if (this.dataDict) {
+              this.dataDict[rowIndex][
+                JointDataset.ReducedLocalImportanceRoot +
+                  featureIndex.toString()
+              ] = value;
+            }
           });
         });
         break;
       }
       default:
     }
-    this.rawLocalImportance[0].forEach((_classArray, featureIndex) => {
+    rawLocalImportance[0].forEach((_classArray, featureIndex) => {
       const featureLabel = this._modelMeta.featureNames[featureIndex];
       const key =
         JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
@@ -631,7 +645,7 @@ export class JointDataset {
         },
         category: ColumnCategories.explanation
       };
-      this.binDict[key] = undefined;
+      // this.binDict[key] = undefined;
     });
   }
 
