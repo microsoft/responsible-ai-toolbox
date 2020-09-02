@@ -205,7 +205,9 @@ export class ModelPerformanceTab extends React.PureComponent<
             styles
           }
         ];
-        plotlyProps.layout.showlegend = true;
+        if (plotlyProps.layout) {
+          plotlyProps.layout.showlegend = true;
+        }
         plotlyProps.data[0].transforms = transforms;
         break;
       }
@@ -238,7 +240,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     );
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
-    const cohortOptions: IDropdownOption[] =
+    const cohortOptions =
       this.props.chartProps.yAxis.property !== CohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
@@ -414,9 +416,11 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   private setSelectedCohort = (
     _: React.FormEvent<HTMLDivElement>,
-    item: IDropdownOption
+    item?: IDropdownOption
   ): void => {
-    this.setState({ selectedCohortIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedCohortIndex: item.key });
+    }
   };
 
   private readonly setXOpen = (val: boolean): void => {

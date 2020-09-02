@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { toNumber } from "lodash";
 import {
   ICategoricalRange,
   IModelMetadata,
@@ -43,18 +43,13 @@ export interface IBinnedResponse {
   hasError: boolean;
   array: Array<number | string>;
   featureIndex: number;
-  rangeType: RangeTypes;
+  rangeType?: RangeTypes;
 }
 
 export class BinningControl extends React.PureComponent<
   IBinningProps,
   IBinningState
 > {
-  public constructor(props: IBinningProps) {
-    super(props);
-    this.state = undefined;
-  }
-
   public componentDidMount(): void {
     if (!this.state) {
       this.setState(
@@ -126,18 +121,20 @@ export class BinningControl extends React.PureComponent<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item: IDropdownOption
+    item?: IDropdownOption
   ): void => {
-    this.setState(this.buildRangeView(item.key as number), () => {
-      this.pushChange();
-    });
+    if (typeof item?.key === "number") {
+      this.setState(this.buildRangeView(item.key), () => {
+        this.pushChange();
+      });
+    }
   };
 
   private onMinRangeChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.min = newValue;
     if (
@@ -158,10 +155,10 @@ export class BinningControl extends React.PureComponent<
   };
 
   private onMaxRangeChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.max = newValue;
     if (
@@ -182,10 +179,10 @@ export class BinningControl extends React.PureComponent<
   };
 
   private onStepsRangeChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.steps = newValue;
     if (!Number.isInteger(val)) {
@@ -220,7 +217,9 @@ export class BinningControl extends React.PureComponent<
         ...currentSelectedKeys,
         newOption.key as string
       ];
-      rangeView.categoricalOptions.push(newOption);
+      if (rangeView.categoricalOptions) {
+        rangeView.categoricalOptions.push(newOption);
+      }
     }
     this.setState(rangeView, () => {
       this.pushChange();
@@ -242,35 +241,32 @@ export class BinningControl extends React.PureComponent<
   };
 
   private buildRangeView(featureIndex: number): IBinningState {
-    if (this.props.modelMetadata.featureIsCategorical[featureIndex]) {
+    if (this.props.modelMetadata.featureIsCategorical?.[featureIndex]) {
       const summary = this.props.modelMetadata.featureRanges[
         featureIndex
       ] as ICategoricalRange;
-      if (summary.uniqueValues) {
-        return {
-          featureIndex,
-          selectedOptionKeys: summary.uniqueValues,
-          categoricalOptions: summary.uniqueValues.map((text) => {
-            return { key: text, text };
-          }),
-          type: RangeTypes.categorical
-        };
-      }
-    } else {
-      const summary = this.props.modelMetadata.featureRanges[
-        featureIndex
-      ] as INumericRange;
       return {
         featureIndex,
-        min: summary.min.toString(),
-        max: summary.max.toString(),
-        steps:
-          this.props.defaultSteps !== undefined
-            ? this.props.defaultSteps.toString()
-            : "20",
-        type: summary.rangeType
+        selectedOptionKeys: summary.uniqueValues,
+        categoricalOptions: summary.uniqueValues.map((text) => {
+          return { key: text, text };
+        }),
+        type: RangeTypes.categorical
       };
     }
+    const summary = this.props.modelMetadata.featureRanges[
+      featureIndex
+    ] as INumericRange;
+    return {
+      featureIndex,
+      min: summary.min.toString(),
+      max: summary.max.toString(),
+      steps:
+        this.props.defaultSteps !== undefined
+          ? this.props.defaultSteps.toString()
+          : "20",
+      type: summary.rangeType
+    };
   }
 
   private pushChange(): void {
@@ -287,9 +283,9 @@ export class BinningControl extends React.PureComponent<
         rangeType: undefined
       });
     }
-    const min = +this.state.min;
-    const max = +this.state.max;
-    const steps = +this.state.steps;
+    const min = toNumber(this.state.min);
+    const max = toNumber(this.state.max);
+    const steps = toNumber(this.state.steps);
 
     if (
       this.state.type === RangeTypes.categorical &&
