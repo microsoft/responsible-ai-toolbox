@@ -1,37 +1,44 @@
-export const bostonDataGlobal = {
-  featureNames: [
-    "CRIM",
-    "ZN",
-    "INDUS",
-    "CHAS",
-    "NOX",
-    "RM",
-    "AGE",
-    "DIS",
-    "RAD",
-    "TAX",
-    "PTRATIO",
-    "B",
-    "LSTAT"
-  ],
-  globalExplanation: {
-    scores: [
-      0.47353925321840673,
-      0.009792442047157582,
-      0.1806369017600677,
-      0.007737880545490991,
-      0.6301678974587717,
-      1.5774414042677294,
-      0.5701866766083523,
-      0.6111090772142793,
-      0.0903037496673469,
-      0.5119680964984695,
-      0.9115765292668955,
-      0.26031928443456054,
-      2.750619869786484
+import { IExplanationDashboardData } from "@responsible-ai/interpret";
+
+export const bostonDataGlobal: IExplanationDashboardData = {
+  modelInformation: { modelClass: "blackbox", method: "regressor" },
+  dataSummary: {
+    featureNames: [
+      "CRIM",
+      "ZN",
+      "INDUS",
+      "CHAS",
+      "NOX",
+      "RM",
+      "AGE",
+      "DIS",
+      "RAD",
+      "TAX",
+      "PTRATIO",
+      "B",
+      "LSTAT"
     ]
   },
-  trainingData: [
+  precomputedExplanations: {
+    globalFeatureImportance: {
+      scores: [
+        0.47353925321840673,
+        0.009792442047157582,
+        0.1806369017600677,
+        0.007737880545490991,
+        0.6301678974587717,
+        1.5774414042677294,
+        0.5701866766083523,
+        0.6111090772142793,
+        0.0903037496673469,
+        0.5119680964984695,
+        0.9115765292668955,
+        0.26031928443456054,
+        2.750619869786484
+      ]
+    }
+  },
+  testData: [
     [
       0.06724,
       0.0,

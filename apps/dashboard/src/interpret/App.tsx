@@ -2,10 +2,12 @@ import React from "react";
 import {
   NewExplanationDashboard,
   ExplanationDashboard,
-  ITelemetryMessage
+  ITelemetryMessage,
+  IExplanationDashboardProps,
+  IExplanationDashboardData
 } from "@responsible-ai/interpret";
 import { createTheme } from "office-ui-fabric-react";
-import _ from "lodash";
+import _, { toNumber } from "lodash";
 import { automlMimicAdult } from "./__mock_data/automlMimicAdult";
 import { breastCancerData } from "./__mock_data/dummyData";
 import { ibmData } from "./__mock_data/ibmData";
@@ -20,11 +22,11 @@ import { irisNoData } from "./__mock_data/irisNoData";
 import { largeFeatureCount } from "./__mock_data/largeFeatureCount";
 
 const ibmNoClass = _.cloneDeep(ibmData);
-ibmNoClass.classNames = undefined;
+ibmNoClass.dataSummary.classNames = undefined;
 // initializeIcons();
 
 const irisNoFeatures = _.cloneDeep(irisData);
-irisNoFeatures.featureNames = undefined;
+irisNoFeatures.dataSummary.featureNames = undefined;
 
 const darkTheme = createTheme({
   palette: {
@@ -114,8 +116,12 @@ interface IAppState {
   versionIndex: number;
 }
 
-export class App extends React.Component<{}, IAppState> {
-  private static choices = [
+export class App extends React.Component<unknown, IAppState> {
+  private static choices: Array<{
+    label: string;
+    data: IExplanationDashboardData;
+    dim: number;
+  }> = [
     { label: "automlMimicAdult", data: automlMimicAdult, dim: 3 },
     { label: "bostonData", data: bostonData, dim: 1 },
     { label: "bostonDataGlobal", data: bostonDataGlobal, dim: 1 },
@@ -153,21 +159,35 @@ export class App extends React.Component<{}, IAppState> {
     PredictorReq: [{ displayText: "PredictorReq" }]
   };
 
-  public constructor(props: {}) {
+  public constructor(props: unknown) {
     super(props);
     this.state = {
       value: 4,
       themeIndex: 0,
       language: App.languages[0].val,
-      showNewDash: 0
+      versionIndex: 0
     };
   }
 
   public render(): React.ReactNode {
-    const data = _.cloneDeep(App.choices[this.state.value].data) as any;
+    const data = _.cloneDeep(App.choices[this.state.value].data);
     const theme = App.themeChoices[this.state.themeIndex].data;
     // data.localExplanations = undefined;
     const classDimension = App.choices[this.state.value].dim;
+    const dashboardProp: IExplanationDashboardProps = {
+      ...data,
+      requestPredictions:
+        classDimension === 1
+          ? this.generateRandomScore
+          : this.generateRandomProbs.bind(this, classDimension),
+      stringParams: { contextualHelp: this.messages },
+      telemetryHook: (er: ITelemetryMessage): void => {
+        console.error(er.message);
+      },
+      theme,
+      explanationMethod: "mimic",
+      locale: this.state.language
+    };
     return (
       <div style={{ backgroundColor: "grey", height: "100%" }}>
         <label>Select dataset:</label>
@@ -198,7 +218,10 @@ export class App extends React.Component<{}, IAppState> {
           ))}
         </select>
         <label>Select view:</label>
-        <select value={this.state.showNewDash} onChange={this.handleViewChange}>
+        <select
+          value={this.state.versionIndex}
+          onChange={this.handleViewChange}
+        >
           <option key={"1"} value={0}>
             {"Version 1"}
           </option>
@@ -215,65 +238,11 @@ export class App extends React.Component<{}, IAppState> {
           }}
         >
           <div style={{ width: "100%", height: "100%" }}>
-            {this.state.showNewDash === 1 && (
-              <NewExplanationDashboard
-                modelInformation={{ modelClass: "blackbox" } as any}
-                dataSummary={{
-                  featureNames: data.featureNames,
-                  classNames: data.classNames
-                }}
-                testData={data.trainingData}
-                predictedY={data.predictedY}
-                probabilityY={data.probabilityY}
-                trueY={data.trueY}
-                precomputedExplanations={{
-                  localFeatureImportance: data.localExplanations,
-                  globalFeatureImportance: data.globalExplanation,
-                  ebmGlobalExplanation: data.ebmData
-                }}
-                requestPredictions={
-                  classDimension === 1
-                    ? this.generateRandomScore
-                    : this.generateRandomProbs.bind(this, classDimension)
-                }
-                stringParams={{ contextualHelp: this.messages }}
-                telemetryHook={(er: ITelemetryMessage): void => {
-                  console.error(er.message);
-                }}
-                theme={theme}
-                explanationMethod="mimic"
-                locale={this.state.language}
-                key={Date.now()}
-              />
+            {this.state.versionIndex === 1 && (
+              <NewExplanationDashboard {...dashboardProp} />
             )}
-            {this.state.showNewDash === 0 && (
-              <ExplanationDashboard
-                modelInformation={{ modelClass: "blackbox" } as any}
-                dataSummary={{
-                  featureNames: data.featureNames,
-                  classNames: data.classNames
-                }}
-                testData={data.trainingData}
-                predictedY={data.predictedY}
-                probabilityY={data.probabilityY}
-                trueY={data.trueY}
-                precomputedExplanations={{
-                  localFeatureImportance: data.localExplanations,
-                  globalFeatureImportance: data.globalExplanation,
-                  ebmGlobalExplanation: data.ebmData
-                }}
-                requestPredictions={this.generateRandomProbs.bind(
-                  this,
-                  classDimension
-                )}
-                stringParams={{ contextualHelp: this.messages }}
-                telemetryHook={(er: ITelemetryMessage): void => {
-                  console.error(er.message);
-                }}
-                theme={theme}
-                locale={this.state.language}
-                key={Date.now()}
-              />
+            {this.state.versionIndex === 0 && (
+              <ExplanationDashboard {...dashboardProp} />
             )}
           </div>
         </div>
@@ -281,23 +250,34 @@ export class App extends React.Component<{}, IAppState> {
     );
   }
 
-  private handleChange = (event): void => {
-    this.setState({ value: event.target.value });
+  private handleChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    this.setState({ value: toNumber(event.target.value) });
   };
 
-  private handleThemeChange = (event): void => {
-    this.setState({ themeIndex: event.target.value });
+  private handleThemeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    this.setState({ themeIndex: toNumber(event.target.value) });
   };
 
-  private handleLanguageChange = (event): void => {
+  private handleLanguageChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
     this.setState({ language: event.target.value });
   };
 
-  private handleViewChange = (event): void => {
-    this.setState({ showNewDash: +event.target.value });
+  private handleViewChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    this.setState({ versionIndex: toNumber(event.target.value) });
   };
 
-  private generateRandomScore = (data, signal): Promise<any[]> => {
+  private generateRandomScore = (
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any[]> => {
     const promise = new Promise<any>((resolve, reject) => {
       const timeout = setTimeout(() => {
         resolve(data.map(() => Math.random()));
@@ -311,7 +291,11 @@ export class App extends React.Component<{}, IAppState> {
     return promise;
   };
 
-  private generateRandomProbs(classDimensions, data, signal): Promise<any[]> {
+  private generateRandomProbs(
+    classDimensions: number,
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any[]> {
     const promise = new Promise<any[]>((resolve, reject) => {
       const timeout = setTimeout(() => {
         resolve(
@@ -328,18 +312,4 @@ export class App extends React.Component<{}, IAppState> {
 
     return promise;
   }
-
-  // private generateExplanatins(explanations, _data, signal): Promise<any[]> {
-  //     const promise = new Promise((resolve, reject) => {
-  //         const timeout = setTimeout(() => {
-  //             resolve(explanations);
-  //         }, 300);
-  //         signal.addEventListener("abort", () => {
-  //             clearTimeout(timeout);
-  //             reject(new DOMException("Aborted", "AbortError"));
-  //         });
-  //     });
-
-  //     return promise;
-  // }
 }

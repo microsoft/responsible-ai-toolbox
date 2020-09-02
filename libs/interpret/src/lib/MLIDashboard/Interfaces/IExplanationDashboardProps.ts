@@ -16,7 +16,7 @@ import { ITelemetryMessage } from "./ITelemetryMessage";
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
 
-export interface IExplanationDashboardProps {
+export interface IExplanationDashboardData {
   modelInformation: IModelInformation;
   dataSummary: IDatasetSummary;
   testData?: any[][];
@@ -26,7 +26,9 @@ export interface IExplanationDashboardProps {
   explanationMethod?: string;
 
   precomputedExplanations?: IPrecomputedExplanations;
+}
 
+export interface IExplanationDashboardProps extends IExplanationDashboardData {
   theme?: any;
   locale?: string;
   stringParams?: IStringsParam;
@@ -68,7 +70,7 @@ export interface IPrecomputedExplanations {
 
 export interface IBoundedCoordinates {
   type: string;
-  names: number[];
+  names: number[] | string[];
   scores: number[] | number[][];
   scores_range?: number[];
   upper_bounds?: number[] | number[][];

@@ -284,7 +284,7 @@ export class App extends React.Component<unknown, IAppState> {
     abortSignal?: AbortSignal
   ): Promise<IMetricResponse> {
     const binSize = Math.max(...request.binVector);
-    const bins: number[] = new Array(binSize + 1)
+    const bins: Array<number | undefined> = new Array(binSize + 1)
       .fill(0)
       .map(() => Math.random());
     bins[2] = undefined;
