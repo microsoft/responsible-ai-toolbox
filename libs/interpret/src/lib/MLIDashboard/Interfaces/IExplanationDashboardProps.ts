@@ -23,13 +23,15 @@ export interface IExplanationDashboardProps {
   predictedY?: number[];
   probabilityY?: number[][];
   trueY?: number[];
+  explanationMethod?: string;
+
   precomputedExplanations?: IPrecomputedExplanations;
+
   theme?: any;
   locale?: string;
   stringParams?: IStringsParam;
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
-  explanationMethod?: string;
   telemetryHook?: (message: ITelemetryMessage) => void;
   requestPredictions?: (
     request: any[],

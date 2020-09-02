@@ -1,5 +1,6 @@
 import _ from "lodash";
 import memoize from "memoize-one";
+import { PartialRequired2 } from "@responsible-ai/core-ui";
 import {
   AccessorMappingFunctionNames,
   ChartBuilder,
@@ -26,7 +27,7 @@ import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
 export interface IScatterProps {
   plotlyProps: IPlotlyProperty;
   selectionContext: SelectionContext;
-  selectedRow: number;
+  selectedRow?: number;
   theme?: string;
   messages?: HelpMessageDict;
   dashboardContext: IDashboardContext;
@@ -112,7 +113,7 @@ export class ScatterUtils {
               : featureName,
             data: {
               isCategorical:
-                explanationContext.modelMetadata.featureIsCategorical[index]
+                explanationContext.modelMetadata.featureIsCategorical?.[index]
             }
           });
         }
@@ -187,9 +188,19 @@ export class ScatterUtils {
   // The chartBuilder util works best with arrays of objects, rather than an object with array props.
   // Just re-zipper to form;
   public static projectData: (
-    explanationContext: IExplanationContext
+    explanationContext: PartialRequired2<
+      IExplanationContext,
+      "testDataset",
+      "dataset"
+    >
   ) => IProjectedData[] = memoize(
-    (explanationContext: IExplanationContext): IProjectedData[] => {
+    (
+      explanationContext: PartialRequired2<
+        IExplanationContext,
+        "testDataset",
+        "dataset"
+      >
+    ): IProjectedData[] => {
       return explanationContext.testDataset.dataset.map(
         (featuresArray, rowIndex) => {
           const result: IProjectedData = {
@@ -392,7 +403,7 @@ export class ScatterUtils {
       key: colorAccessor,
       text: exp.modelMetadata.featureNames[secondIndex],
       data: {
-        isCategorical: exp.modelMetadata.featureIsCategorical[secondIndex]
+        isCategorical: exp.modelMetadata.featureIsCategorical?.[secondIndex]
       }
     };
     const modelData = exp.modelMetadata;
@@ -588,8 +599,10 @@ export class ScatterUtils {
     label: string,
     index: number
   ): void {
-    props.data[0].datapointLevelAccessors["text"].mapArgs[index] = label;
-    props.data[0].datapointLevelAccessors["text"].path[index] = accessor;
+    if (props.data[0]?.datapointLevelAccessors?.["text"]?.mapArgs) {
+      props.data[0].datapointLevelAccessors["text"].mapArgs[index] = label;
+      props.data[0].datapointLevelAccessors["text"].path[index] = accessor;
+    }
   }
 
   private static formatItemTextForAxis(

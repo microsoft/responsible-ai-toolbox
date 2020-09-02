@@ -5,7 +5,7 @@ import { RangeTypes } from "./RangeTypes";
 
 export class ModelMetadata {
   public static buildFeatureRanges(
-    testData: any[][],
+    testData: any[][] | undefined,
     isCategoricalArray: boolean[],
     categoricalMap?: { [key: number]: string[] }
   ): Array<INumericRange | ICategoricalRange>;
@@ -44,7 +44,7 @@ export class ModelMetadata {
 
   public static buildIsCategorical(
     featureLength: number,
-    testData: any[][],
+    testData: any[][] | undefined,
     categoricalMap?: { [key: number]: string[] }
   ): boolean[];
   public static buildIsCategorical(
