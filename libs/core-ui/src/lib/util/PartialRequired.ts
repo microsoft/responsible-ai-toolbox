@@ -6,5 +6,5 @@ export type PartialRequired2<
   L extends keyof Pick<T, K>[K]
 > = Omit<T, K> &
   {
-    [P in K]: PartialRequired<T[P], L>;
+    [P in K]-?: PartialRequired<T[P], L>;
   };

@@ -63,23 +63,24 @@ export class Violin extends React.PureComponent<
     ): IPlotlyProperty => {
       const plotlyProps = _.cloneDeep(Violin.boxPlotlyProps);
       const classesArray = Violin.getClassesArray(data, groupBy);
-      const mappedData = data.localExplanation.flattenedValues.map(
-        (featureArray, rowIndex) => {
-          return {
-            x: sortVector.map(
-              (featureIndex) => data.modelMetadata.featureNames[featureIndex]
-            ),
-            y: sortVector.map((featureIndex) => featureArray[featureIndex]),
-            classIndex: classesArray[rowIndex],
-            class: data.modelMetadata.classNames[classesArray[rowIndex]]
-          };
-        }
-      );
+      const mappedData =
+        data.localExplanation?.flattenedValues?.map(
+          (featureArray, rowIndex) => {
+            return {
+              x: sortVector.map(
+                (featureIndex) => data.modelMetadata.featureNames[featureIndex]
+              ),
+              y: sortVector.map((featureIndex) => featureArray[featureIndex]),
+              classIndex: classesArray[rowIndex],
+              class: data.modelMetadata.classNames[classesArray[rowIndex]]
+            };
+          }
+        ) || [];
       const computedSeries = ChartBuilder.buildPlotlySeries(
         plotlyProps.data[0],
         mappedData
       );
-      if (computedSeries.length === 1) {
+      if (computedSeries.length === 1 && plotlyProps.layout) {
         plotlyProps.layout.showlegend = false;
       }
       plotlyProps.data = computedSeries;
@@ -100,9 +101,11 @@ export class Violin extends React.PureComponent<
     ): IPlotlyProperty => {
       const plotlyProps = _.cloneDeep(Violin.violinPlotlyProps);
       const classesArray = Violin.getClassesArray(data, groupBy);
-      const featuresByRows = ModelExplanationUtils.transpose2DArray(
-        data.localExplanation.flattenedValues
-      );
+      const featuresByRows = data.localExplanation?.flattenedValues
+        ? ModelExplanationUtils.transpose2DArray(
+            data.localExplanation.flattenedValues
+          )
+        : [];
       const computedSeries = sortVector
         .map((featureIndex) => {
           const baseSeries: any = _.cloneDeep(plotlyProps.data[0]);
@@ -149,13 +152,13 @@ export class Violin extends React.PureComponent<
         }, []);
       computedSeries.sort((a, b) => {
         return (
-          data.modelMetadata.classNames.indexOf(a.name) -
-          data.modelMetadata.classNames.indexOf(b.name)
+          (a.name ? data.modelMetadata.classNames.indexOf(a.name) : 0) -
+          (b.name ? data.modelMetadata.classNames.indexOf(b.name) : 0)
         );
       });
       plotlyProps.data = computedSeries;
       // a single series, no need for a legend
-      if (computedSeries.length === sortVector.length) {
+      if (computedSeries.length === sortVector.length && plotlyProps.layout) {
         plotlyProps.layout.showlegend = false;
       }
       return plotlyProps;
@@ -170,14 +173,14 @@ export class Violin extends React.PureComponent<
     (data: IExplanationContext, groupBy: GroupByOptions): number[] => {
       switch (groupBy) {
         case GroupByOptions.predictedY: {
-          return data.testDataset.predictedY;
+          return data.testDataset.predictedY || [];
         }
         case GroupByOptions.trueY: {
-          return data.testDataset.trueY;
+          return data.testDataset.trueY || [];
         }
         case GroupByOptions.none:
         default:
-          return new Array(data.localExplanation.values.length).fill(0);
+          return new Array(data.localExplanation?.values.length).fill(0);
       }
     },
     _.isEqual.bind(window)
@@ -455,23 +458,29 @@ export class Violin extends React.PureComponent<
 
   private getSortVector(): number[] {
     if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
-      return ModelExplanationUtils.buildSortedVector(
-        this.props.dashboardContext.explanationContext.globalExplanation
-          .perClassFeatureImportances
-      );
+      return this.props.dashboardContext.explanationContext.globalExplanation
+        ?.perClassFeatureImportances
+        ? ModelExplanationUtils.buildSortedVector(
+            this.props.dashboardContext.explanationContext.globalExplanation
+              .perClassFeatureImportances
+          )
+        : [];
     }
     if (this.state.groupBy === GroupByOptions.none) {
-      return ModelExplanationUtils.buildSortedVector(
-        this.props.dashboardContext.explanationContext.localExplanation
-          .flattenedValues
-      );
+      return this.props.dashboardContext.explanationContext.localExplanation
+        ?.flattenedValues
+        ? ModelExplanationUtils.buildSortedVector(
+            this.props.dashboardContext.explanationContext.localExplanation
+              .flattenedValues
+          )
+        : [];
     }
     const classLabels = Violin.getClassesArray(
       this.props.dashboardContext.explanationContext,
       this.state.groupBy
     );
-    const importanceSums = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues
-      .filter((_, index) => {
+    const importanceSums = this.props.dashboardContext.explanationContext.localExplanation?.flattenedValues
+      ?.filter((_, index) => {
         return classLabels[index] === this.state.selectedSorting;
       })
       .reduce((prev: number[], current: number[]) => {
@@ -479,7 +488,7 @@ export class Violin extends React.PureComponent<
           return featureImp + current[featureIndex];
         });
       }, new Array(this.props.dashboardContext.explanationContext.modelMetadata.featureNames.length).fill(0));
-    return ModelExplanationUtils.getSortIndices(importanceSums);
+    return ModelExplanationUtils.getSortIndices(importanceSums || []);
   }
 
   private buildGroupOptions(): IDropdownOption[] {
@@ -517,8 +526,11 @@ export class Violin extends React.PureComponent<
 
   private setChart = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
+    if (!item) {
+      return;
+    }
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.displayMode = item.key as any;
     this.props.onChange(newConfig, this.props.config.id);
@@ -582,8 +594,11 @@ export class Violin extends React.PureComponent<
 
   private onGroupSelect = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
+    if (!item) {
+      return;
+    }
     this.setState({ groupBy: item.key as any });
   };
 }

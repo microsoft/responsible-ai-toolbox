@@ -69,7 +69,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         showgrid: true,
         gridcolor: "#e5e5e5"
       }
-    } as any
+    }
   };
 
   public render(): React.ReactNode {
@@ -107,10 +107,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
               </div>
             </div>
             <div className={classNames.chart}>
-              <AccessibleChart
-                plotlyProps={plotlyProps}
-                theme={getTheme() as any}
-              />
+              <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
             </div>
           </div>
           <div className={classNames.horizontalAxisWithPadding}>
@@ -132,44 +129,42 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
 
   private generatePlotlyProps(): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(DependencePlot.basePlotlyProperties);
+    if (!this.props.chartProps) {
+      return plotlyProps;
+    }
+    const chartProps = this.props.chartProps;
     const jointData = this.props.jointDataset;
     const cohort = this.props.cohort;
     plotlyProps.data[0].hoverinfo = "all";
     let hovertemplate = "";
     if (
-      this.props.chartProps.colorAxis &&
-      (this.props.chartProps.colorAxis.options.bin ||
-        jointData.metaDict[this.props.chartProps.colorAxis.property]
-          .treatAsCategorical)
+      chartProps.colorAxis &&
+      (chartProps.colorAxis.options.bin ||
+        jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
     ) {
-      cohort.sort(this.props.chartProps.colorAxis.property);
+      cohort.sort(chartProps.colorAxis.property);
     }
     const customdata = cohort.unwrap(JointDataset.IndexLabel).map((val) => {
       const dict = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
-    plotlyProps.data[0].type = this.props.chartProps.chartType;
+    plotlyProps.data[0].type = chartProps.chartType;
     plotlyProps.data[0].mode = PlotlyMode.markers;
     plotlyProps.data[0].marker = {
       color: FabricStyles.fabricColorPalette[this.props.cohortIndex]
     };
-    if (this.props.chartProps.xAxis) {
-      if (
-        jointData.metaDict[this.props.chartProps.xAxis.property]
-          .treatAsCategorical
-      ) {
+    if (chartProps.xAxis) {
+      if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
         const xLabels =
-          jointData.metaDict[this.props.chartProps.xAxis.property]
-            .sortedCategoricalValues;
+          jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
         const xLabelIndexes = xLabels?.map((_, index) => index);
         _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
         _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
       }
-      const rawX = cohort.unwrap(this.props.chartProps.xAxis.property);
-      const xLabel =
-        jointData.metaDict[this.props.chartProps.xAxis.property].label;
-      if (this.props.chartProps.xAxis.options.dither) {
+      const rawX = cohort.unwrap(chartProps.xAxis.property);
+      const xLabel = jointData.metaDict[chartProps.xAxis.property].label;
+      if (chartProps.xAxis.options.dither) {
         const dithered = cohort.unwrap(JointDataset.DitherLabel);
         plotlyProps.data[0].x = dithered.map((dither, index) => {
           return rawX[index] + dither;
@@ -178,12 +173,11 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         rawX.forEach((val, index) => {
           // If categorical, show string value in tooltip
           if (
-            jointData.metaDict[this.props.chartProps.xAxis.property]
-              .treatAsCategorical
+            jointData.metaDict[chartProps.xAxis.property].treatAsCategorical
           ) {
             customdata[index]["X"] =
               jointData.metaDict[
-                this.props.chartProps.xAxis.property
+                chartProps.xAxis.property
               ].sortedCategoricalValues?.[val];
           } else {
             customdata[index]["X"] = val;
@@ -194,21 +188,15 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         hovertemplate += xLabel + ": %{x}<br>";
       }
     }
-    if (this.props.chartProps.yAxis) {
-      if (
-        jointData.metaDict[this.props.chartProps.yAxis.property]
-          .treatAsCategorical
-      ) {
+    if (chartProps.yAxis) {
+      if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
         const yLabels =
-          jointData.metaDict[this.props.chartProps.yAxis.property]
-            .sortedCategoricalValues;
+          jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
         const yLabelIndexes = yLabels?.map((_, index) => index);
         _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
         _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
       }
-      const rawY: number[] = cohort.unwrap(
-        this.props.chartProps.yAxis.property
-      );
+      const rawY: number[] = cohort.unwrap(chartProps.yAxis.property);
       const yLabel = localization.Charts.featureImportance;
       plotlyProps.data[0].y = rawY;
       rawY.forEach((val, index) => {

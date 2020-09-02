@@ -34,12 +34,12 @@ export interface IBeehiveState {
   calloutContent?: React.ReactNode;
   calloutId?: string;
   selectedColorOption?: string;
-  plotlyProps: IPlotlyProperty;
+  plotlyProps: IPlotlyProperty | undefined;
 }
 
 interface IProjectedData {
   rowIndex: string;
-  normalizedFeatureValue: number;
+  normalizedFeatureValue: number | undefined;
   featureIndex: number;
   ditheredFeatureIndex: number;
   featureImportance: number;
@@ -61,9 +61,9 @@ export class Beehive extends React.PureComponent<
   ) => Array<(value: number | string) => number> = memoize(
     (data: IExplanationContext): Array<(value: number | string) => number> => {
       return data.modelMetadata.featureNames.map((_val, featureIndex) => {
-        if (data.modelMetadata.featureIsCategorical[featureIndex]) {
+        if (data.modelMetadata.featureIsCategorical?.[featureIndex]) {
           const values = _.uniq(
-            data.testDataset.dataset.map((row) => row[featureIndex])
+            data.testDataset.dataset?.map((row) => row[featureIndex])
           ).sort();
           return (value: string | number): number => {
             return values.length > 1
@@ -71,9 +71,9 @@ export class Beehive extends React.PureComponent<
               : 0;
           };
         }
-        const featureArray = data.testDataset.dataset.map(
-          (row: number[]) => row[featureIndex]
-        );
+        const featureArray =
+          data.testDataset.dataset?.map((row: number[]) => row[featureIndex]) ||
+          [];
         const min = Math.min(...featureArray);
         const max = Math.max(...featureArray);
         const range = max - min;
@@ -91,7 +91,7 @@ export class Beehive extends React.PureComponent<
       displaylogo: false,
       responsive: true,
       displayModeBar: false
-    } as any,
+    },
     data: [
       {
         hoverinfo: "text",
@@ -110,7 +110,7 @@ export class Beehive extends React.PureComponent<
         yAccessor: "featureImportance",
         xAccessor: "ditheredFeatureIndex"
       }
-    ] as any,
+    ],
     layout: {
       dragmode: false,
       autosize: true,
@@ -130,16 +130,18 @@ export class Beehive extends React.PureComponent<
       xaxis: {
         automargin: true
       }
-    } as any
+    }
   };
   private static maxFeatures = 30;
 
   private static generateSortVector: (
     data: IExplanationContext
   ) => number[] = memoize((data: IExplanationContext): number[] => {
-    return ModelExplanationUtils.buildSortedVector(
-      data.globalExplanation.perClassFeatureImportances
-    );
+    return data.globalExplanation?.perClassFeatureImportances
+      ? ModelExplanationUtils.buildSortedVector(
+          data.globalExplanation.perClassFeatureImportances
+        )
+      : [];
   });
 
   private static projectData: (
@@ -155,44 +157,47 @@ export class Beehive extends React.PureComponent<
         data.modelMetadata.modelType !== ModelTypes.regression;
       return sortVector
         .map((featureIndex, sortVectorIndex) => {
-          return data.localExplanation.flattenedValues.map((row, rowIndex) => {
-            const predictedClassIndex = data.testDataset.predictedY
-              ? data.testDataset.predictedY[rowIndex]
-              : undefined;
-            const predictedClass = data.testDataset.predictedY
-              ? isClassifier
-                ? data.modelMetadata.classNames[predictedClassIndex] ||
-                  `class ${predictedClassIndex}`
-                : predictedClassIndex
-              : undefined;
-            const trueClassIndex = data.testDataset.trueY
-              ? data.testDataset.trueY[rowIndex]
-              : undefined;
-            const trueClass = data.testDataset.trueY
-              ? isClassifier
-                ? data.modelMetadata.classNames[trueClassIndex] ||
-                  `class ${trueClassIndex}`
-                : trueClassIndex
-              : undefined;
-            return {
-              rowIndex: rowIndex.toString(),
-              normalizedFeatureValue:
-                mappers !== undefined
-                  ? mappers[featureIndex](
-                      data.testDataset.dataset[rowIndex][featureIndex]
-                    )
-                  : undefined,
-              featureIndex: sortVectorIndex,
-              ditheredFeatureIndex:
-                sortVectorIndex + (0.2 * Math.random() - 0.1),
-              featureImportance: row[featureIndex],
-              predictedClass,
-              predictedClassIndex,
-              trueClassIndex,
-              trueClass,
-              tooltip: Beehive.buildTooltip(data, rowIndex, featureIndex)
-            };
-          });
+          return (
+            data.localExplanation?.flattenedValues?.map((row, rowIndex) => {
+              const predictedClassIndex = data.testDataset.predictedY
+                ? data.testDataset.predictedY[rowIndex]
+                : undefined;
+              const predictedClass = data.testDataset.predictedY
+                ? isClassifier && predictedClassIndex !== undefined
+                  ? data.modelMetadata.classNames[predictedClassIndex] ||
+                    `class ${predictedClassIndex}`
+                  : predictedClassIndex
+                : undefined;
+              const trueClassIndex = data.testDataset.trueY
+                ? data.testDataset.trueY[rowIndex]
+                : undefined;
+              const trueClass = data.testDataset.trueY
+                ? isClassifier && trueClassIndex !== undefined
+                  ? data.modelMetadata.classNames[trueClassIndex] ||
+                    `class ${trueClassIndex}`
+                  : trueClassIndex
+                : undefined;
+              return {
+                rowIndex: rowIndex.toString(),
+                normalizedFeatureValue:
+                  mappers !== undefined &&
+                  data.testDataset.dataset?.[rowIndex][featureIndex]
+                    ? mappers[featureIndex](
+                        data.testDataset.dataset[rowIndex][featureIndex]
+                      )
+                    : undefined,
+                featureIndex: sortVectorIndex,
+                ditheredFeatureIndex:
+                  sortVectorIndex + (0.2 * Math.random() - 0.1),
+                featureImportance: row[featureIndex],
+                predictedClass,
+                predictedClassIndex,
+                trueClassIndex,
+                trueClass,
+                tooltip: Beehive.buildTooltip(data, rowIndex, featureIndex)
+              };
+            }) || []
+          );
         })
         .reduce((prev, curr) => {
           prev.push(...curr);
@@ -205,13 +210,12 @@ export class Beehive extends React.PureComponent<
   private static buildPlotlyProps: (
     explanationContext: IExplanationContext,
     sortVector: number[],
-    selectedOption: IComboBoxOption,
-    selections: string[]
+    selectedOption: IComboBoxOption | undefined
   ) => IPlotlyProperty = memoize(
     (
       explanationContext: IExplanationContext,
       sortVector: number[],
-      selectedOption: IComboBoxOption
+      selectedOption: IComboBoxOption | undefined
     ): IPlotlyProperty => {
       const plotlyProps = _.cloneDeep(Beehive.BasePlotlyProps);
       const rows = Beehive.projectData(explanationContext, sortVector);
@@ -243,7 +247,7 @@ export class Beehive extends React.PureComponent<
           explanationContext.modelMetadata,
           selectedOption.text
         );
-        if (selectedOption.data.isNormalized) {
+        if (selectedOption.data.isNormalized && plotlyProps.data[0].marker) {
           plotlyProps.data[0].marker.colorscale = [
             [0, "rgba(0,0,255,0.5)"],
             [1, "rgba(255,0,0,0.5)"]
@@ -274,7 +278,9 @@ export class Beehive extends React.PureComponent<
   public constructor(props: IGlobalFeatureImportanceProps) {
     super(props);
     this.colorOptions = this.buildColorOptions();
-    this.rowCount = this.props.dashboardContext.explanationContext.localExplanation.flattenedValues.length;
+    this.rowCount =
+      this.props.dashboardContext.explanationContext.localExplanation
+        ?.flattenedValues?.length || 0;
     const selectedColorIndex =
       this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
     this.state = {
@@ -288,7 +294,7 @@ export class Beehive extends React.PureComponent<
     rowIndex: number,
     featureIndex: number
   ): string {
-    const isLarge = data.localExplanation.flattenedValues.length > 500;
+    const isLarge = (data.localExplanation?.flattenedValues?.length || 0) > 500;
     const result = [];
     // The formatString imputes are keys to loc object. This is because format string tries to use them as keys first, and only uses the passed in string after
     // trowing an exception in a try block. This is very slow for repeated calls.
@@ -307,7 +313,9 @@ export class Beehive extends React.PureComponent<
       );
     }
     // formatting strings is slow, only do for small numbers
-    const formattedImportance = isLarge
+    const formattedImportance = !data.localExplanation?.flattenedValues
+      ? ""
+      : isLarge
       ? data.localExplanation.flattenedValues[rowIndex][featureIndex]
       : data.localExplanation.flattenedValues[rowIndex][
           featureIndex
@@ -391,7 +399,7 @@ export class Beehive extends React.PureComponent<
       }
       let plotlyProps = this.state.plotlyProps;
       const weightContext = this.props.dashboardContext.weightContext;
-      const relayoutArg = {
+      const relayoutArg: Partial<Plotly.Layout> = {
         "xaxis.range": [-0.5, this.props.config.topK - 0.5]
       };
       _.set(plotlyProps, "layout.xaxis.range", [
@@ -509,7 +517,7 @@ export class Beehive extends React.PureComponent<
             plotlyProps={plotlyProps}
             onClickHandler={this.handleClick}
             theme={this.props.theme}
-            relayoutArg={relayoutArg as any}
+            relayoutArg={relayoutArg}
           />
         </div>
       );
@@ -539,9 +547,8 @@ export class Beehive extends React.PureComponent<
         this.props.dashboardContext.explanationContext,
         sortVector,
         this.colorOptions.find(
-          (option) => (option.key as any) === this.state.selectedColorOption
-        ),
-        this.props.selectionContext.selectedIds
+          (option) => option.key === this.state.selectedColorOption
+        )
       );
       this.setState({ plotlyProps: props });
     }, 1);
@@ -649,9 +656,12 @@ export class Beehive extends React.PureComponent<
   }
 
   private setChart = (
-    _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    _event?: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
   ): void => {
+    if (!item?.key) {
+      return;
+    }
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.displayMode = item.key as any;
     this.props.onChange(newConfig, this.props.config.id);
@@ -662,11 +672,14 @@ export class Beehive extends React.PureComponent<
   };
 
   private setColor = (
-    _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    _event?: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
   ): void => {
+    if (!item?.key) {
+      return;
+    }
     this.setState({
-      selectedColorOption: item.key as any,
+      selectedColorOption: item.key as string,
       plotlyProps: undefined
     });
   };

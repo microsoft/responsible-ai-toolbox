@@ -102,7 +102,7 @@ interface IAppState {
   versionIndex: number;
 }
 
-export class App extends React.Component<{}, IAppState> {
+export class App extends React.Component<unknown, IAppState> {
   private static choices = [
     { label: "binaryClassifier", data: binaryClassifier },
     { label: "regression", data: regression },
@@ -168,7 +168,7 @@ export class App extends React.Component<{}, IAppState> {
     versionIndex: number;
   };
 
-  public constructor(props: IAppProps) {
+  public constructor(props: unknown) {
     super(props);
     this.state = {
       value: 0,
