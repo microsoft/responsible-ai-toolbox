@@ -157,7 +157,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             const xLabels =
               jointData.metaDict[chartProps.xAxis.property]
                 .sortedCategoricalValues;
-            const xLabelIndexes = xLabels.map((_, index) => index);
+            const xLabelIndexes = xLabels?.map((_, index) => index);
             _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
             _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
           }
@@ -178,7 +178,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             const yLabels =
               jointData.metaDict[chartProps.yAxis.property]
                 .sortedCategoricalValues;
-            const yLabelIndexes = yLabels.map((_, index) => index);
+            const yLabelIndexes = yLabels?.map((_, index) => index);
             _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
             _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
           }
@@ -207,7 +207,7 @@ export class DatasetExplorerTab extends React.PureComponent<
           ) {
             const styles = jointData.metaDict[
               chartProps.colorAxis.property
-            ].sortedCategoricalValues.map((label, index) => {
+            ].sortedCategoricalValues?.map((label, index) => {
               return {
                 target: index,
                 value: {
@@ -225,7 +225,9 @@ export class DatasetExplorerTab extends React.PureComponent<
                 styles
               }
             ];
-            plotlyProps.layout.showlegend = false;
+            if (plotlyProps.layout) {
+              plotlyProps.layout.showlegend = false;
+            }
           } else {
             plotlyProps.data[0].marker = {
               color: rawColor,
@@ -247,11 +249,13 @@ export class DatasetExplorerTab extends React.PureComponent<
         const xMeta = jointData.metaDict[chartProps.xAxis.property];
         const yMeta = jointData.metaDict[chartProps.yAxis.property];
         const xLabels = xMeta.sortedCategoricalValues;
-        const xLabelIndexes = xLabels.map((_, index) => index);
+        const xLabelIndexes = xLabels?.map((_, index) => index);
         // color series will be set by the y axis if it is categorical, otherwise no color for aggregate charts
         if (!jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
-          plotlyProps.data[0].type = "box" as any;
-          plotlyProps.layout.hovermode = false;
+          plotlyProps.data[0].type = "box";
+          if (plotlyProps.layout) {
+            plotlyProps.layout.hovermode = false;
+          }
           plotlyProps.data[0].x = rawX;
           plotlyProps.data[0].y = cohort.unwrap(
             chartProps.yAxis.property,
@@ -267,7 +271,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         plotlyProps.data[0].type = "bar";
 
         const y = new Array(rawX.length).fill(1);
-        plotlyProps.data[0].text = rawX.map((index) => xLabels[index]);
+        plotlyProps.data[0].text = rawX.map((index) => xLabels?.[index] || "");
         plotlyProps.data[0].x = rawX;
         plotlyProps.data[0].y = y;
         _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
@@ -284,7 +288,7 @@ export class DatasetExplorerTab extends React.PureComponent<
           chartProps.yAxis.property !== ColumnCategories.none
         ) {
           const rawColor = cohort.unwrap(chartProps.yAxis.property, true);
-          const styles = yMeta.sortedCategoricalValues.map((label, index) => {
+          const styles = yMeta.sortedCategoricalValues?.map((label, index) => {
             return {
               target: index,
               value: {
@@ -392,7 +396,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             customdata[index]["X"] =
               jointData.metaDict[
                 chartProps.xAxis.property
-              ].sortedCategoricalValues[val];
+              ].sortedCategoricalValues?.[val];
           } else {
             customdata[index]["X"] = (val as number).toLocaleString(undefined, {
               maximumFractionDigits: 3
@@ -411,7 +415,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             customdata[index]["Y"] =
               jointData.metaDict[
                 chartProps.yAxis.property
-              ].sortedCategoricalValues[val];
+              ].sortedCategoricalValues?.[val];
           } else {
             customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
               maximumFractionDigits: 3
@@ -421,11 +425,11 @@ export class DatasetExplorerTab extends React.PureComponent<
       }
       const colorAxis = chartProps.colorAxis;
       if (colorAxis && colorAxis.property) {
-        const rawColor = cohort.unwrap(chartProps.colorAxis.property);
+        const rawColor = cohort.unwrap(colorAxis.property);
         rawColor.forEach((val, index) => {
           if (jointData.metaDict[colorAxis.property].treatAsCategorical) {
             customdata[index]["Color"] =
-              jointData.metaDict[colorAxis.property].sortedCategoricalValues[
+              jointData.metaDict[colorAxis.property].sortedCategoricalValues?.[
                 val
               ];
           } else {
@@ -448,7 +452,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       if (yMeta.treatAsCategorical) {
         const rawY = cohort.unwrap(chartProps.yAxis.property);
         rawY.forEach((val, index) => {
-          customdata[index]["Y"] = yMeta.sortedCategoricalValues[val];
+          customdata[index]["Y"] = yMeta.sortedCategoricalValues?.[val];
         });
       }
     }
@@ -513,12 +517,14 @@ export class DatasetExplorerTab extends React.PureComponent<
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
             {localization.ModelPerformance.cohortPickerLabel}
           </Text>
-          <Dropdown
-            styles={{ dropdown: { width: 150 } }}
-            options={cohortOptions}
-            selectedKey={this.state.selectedCohortIndex}
-            onChange={this.setSelectedCohort}
-          />
+          {cohortOptions && (
+            <Dropdown
+              styles={{ dropdown: { width: 150 } }}
+              options={cohortOptions}
+              selectedKey={this.state.selectedCohortIndex}
+              onChange={this.setSelectedCohort}
+            />
+          )}
         </div>
         <div className={classNames.mainArea}>
           <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
@@ -562,7 +568,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                 target={`#${this.chartAndConfigsId}`}
               />
             )}
-            {this.state.colorDialogOpen && (
+            {this.state.colorDialogOpen && this.props.chartProps.colorAxis && (
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={[
@@ -697,11 +703,13 @@ export class DatasetExplorerTab extends React.PureComponent<
               <DefaultButton
                 onClick={this.setColorOpen.bind(this, true)}
                 text={
+                  this.props.chartProps.colorAxis &&
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.colorAxis.property
                   ].abbridgedLabel
                 }
                 title={
+                  this.props.chartProps.colorAxis &&
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.colorAxis.property
                   ].label
@@ -721,16 +729,21 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   private setSelectedCohort = (
     _: React.FormEvent<HTMLDivElement>,
-    item: IDropdownOption
+    item?: IDropdownOption
   ): void => {
-    this.setState({ selectedCohortIndex: item.key as number });
+    if (item?.key !== undefined) {
+      this.setState({ selectedCohortIndex: item.key as number });
+    }
   };
 
   private onChartTypeChange = (
-    _ev: React.SyntheticEvent<HTMLElement>,
-    item: IChoiceGroupOption
+    _ev?: React.SyntheticEvent<HTMLElement>,
+    item?: IChoiceGroupOption
   ): void => {
     const newProps = _.cloneDeep(this.props.chartProps);
+    if (item?.key === undefined || !newProps) {
+      return;
+    }
     newProps.chartType = item.key as ChartTypes;
     if (newProps.yAxis.property === ColumnCategories.none) {
       newProps.yAxis = this.generateDefaultYAxis();
@@ -763,6 +776,9 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
+    if (!this.props.chartProps) {
+      return;
+    }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
     this.props.onChange(newProps);
@@ -770,6 +786,9 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private onYSet = (value: ISelectorConfig): void => {
+    if (!this.props.chartProps) {
+      return;
+    }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
     this.props.onChange(newProps);
@@ -777,6 +796,9 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private onColorSet = (value: ISelectorConfig): void => {
+    if (!this.props.chartProps) {
+      return;
+    }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.colorAxis = value;
     this.props.onChange(newProps);
@@ -794,6 +816,9 @@ export class DatasetExplorerTab extends React.PureComponent<
   private buildColorLegend(
     classNames: IProcessedStyleSet<IDatasetExplorerTabStyles>
   ): React.ReactNode {
+    if (!this.props.chartProps) {
+      return;
+    }
     let colorSeries = [];
     if (this.props.chartProps.chartType === ChartTypes.Scatter) {
       const colorAxis = this.props.chartProps.colorAxis;
@@ -806,8 +831,9 @@ export class DatasetExplorerTab extends React.PureComponent<
         this.props.cohorts[this.state.selectedCohortIndex].sort(
           colorAxis.property
         );
-        colorSeries = this.props.jointDataset.metaDict[colorAxis.property]
-          .sortedCategoricalValues;
+        colorSeries =
+          this.props.jointDataset.metaDict[colorAxis.property]
+            .sortedCategoricalValues || [];
       } else {
         // continuous color, handled by plotly for now
         return;
@@ -832,7 +858,7 @@ export class DatasetExplorerTab extends React.PureComponent<
           ? includedIndexes.map(
               (category) =>
                 this.props.jointDataset.metaDict[colorAxis.property]
-                  .sortedCategoricalValues[category]
+                  .sortedCategoricalValues?.[category]
             )
           : includedIndexes;
       }

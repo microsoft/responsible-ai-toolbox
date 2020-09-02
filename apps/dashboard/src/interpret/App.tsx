@@ -107,7 +107,14 @@ const darkContrastTheme = createTheme({
   }
 });
 
-export class App extends React.Component<any, any> {
+interface IAppState {
+  value: number;
+  themeIndex: number;
+  language: string;
+  versionIndex: number;
+}
+
+export class App extends React.Component<{}, IAppState> {
   private static choices = [
     { label: "automlMimicAdult", data: automlMimicAdult, dim: 3 },
     { label: "bostonData", data: bostonData, dim: 1 },
@@ -146,8 +153,7 @@ export class App extends React.Component<any, any> {
     PredictorReq: [{ displayText: "PredictorReq" }]
   };
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public constructor(props: any) {
+  public constructor(props: {}) {
     super(props);
     this.state = {
       value: 4,

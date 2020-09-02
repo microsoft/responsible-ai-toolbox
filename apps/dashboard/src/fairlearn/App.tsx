@@ -7,7 +7,7 @@ import {
   IFairnessData
 } from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
-import _ from "lodash";
+import _, { toNumber } from "lodash";
 import { binaryClassifier } from "./__mock-data/binaryClassifier";
 import { regression } from "./__mock-data/regression";
 import { precomputedBinary } from "./__mock-data/precomputedBinary";
@@ -95,7 +95,14 @@ const darkContrastTheme = createTheme({
   }
 });
 
-export class App extends React.Component<any, any> {
+interface IAppState {
+  value: number;
+  themeIndex: number;
+  language: string;
+  versionIndex: number;
+}
+
+export class App extends React.Component<{}, IAppState> {
   private static choices = [
     { label: "binaryClassifier", data: binaryClassifier },
     { label: "regression", data: regression },
@@ -161,8 +168,7 @@ export class App extends React.Component<any, any> {
     versionIndex: number;
   };
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public constructor(props: any) {
+  public constructor(props: IAppProps) {
     super(props);
     this.state = {
       value: 0,
@@ -302,19 +308,19 @@ export class App extends React.Component<any, any> {
   private handleChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
-    this.setState({ value: event.target.value });
+    this.setState({ value: toNumber(event.target.value) });
   };
 
   private handleThemeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
-    this.setState({ themeIndex: event.target.value });
+    this.setState({ themeIndex: toNumber(event.target.value) });
   };
 
   private handleVersionChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
-    this.setState({ versionIndex: event.target.value });
+    this.setState({ versionIndex: toNumber(event.target.value) });
   };
 
   private handleLanguageChange = (
