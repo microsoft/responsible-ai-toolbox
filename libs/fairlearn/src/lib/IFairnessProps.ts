@@ -18,7 +18,7 @@ export type PredictionType =
 
 export interface IMetricResponse {
   global: number;
-  bins: number[];
+  bins: Array<number | undefined>;
 }
 
 export interface IMetricRequest {
