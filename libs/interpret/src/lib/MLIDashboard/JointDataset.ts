@@ -51,7 +51,7 @@ export interface IJointMeta {
   sortedCategoricalValues?: string[];
   featureRange?: INumericRange;
   category: ColumnCategories;
-  index: number;
+  index?: number;
 }
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
@@ -299,10 +299,7 @@ export class JointDataset {
       // this._localExplanationIndexesComputed = new Array(
       //   this.localExplanationFeatureCount
       // ).fill(false);
-      this.buildLocalFlattenMatrix(
-        WeightVectors.absAvg,
-        this.rawLocalImportance
-      );
+      this.buildLocalFlattenMatrix(WeightVectors.absAvg);
       this.hasLocalExplanations = true;
     }
     if (this.dataDict === undefined) {
@@ -549,21 +546,21 @@ export class JointDataset {
   }
 
   // project the 3d array based on the selected vector weights. Costly to do, so avoid when possible.
-  public buildLocalFlattenMatrix(
-    weightVector: WeightVectorOption,
-    rawLocalImportance: number[][][]
-  ): void {
-    const featuresMinArray = new Array(rawLocalImportance[0].length).fill(
+  public buildLocalFlattenMatrix(weightVector: WeightVectorOption): void {
+    if (!this.rawLocalImportance) {
+      return;
+    }
+    const featuresMinArray = new Array(this.rawLocalImportance[0].length).fill(
       Number.MAX_SAFE_INTEGER
     );
-    const featuresMaxArray = new Array(rawLocalImportance[0].length).fill(
+    const featuresMaxArray = new Array(this.rawLocalImportance[0].length).fill(
       Number.MIN_SAFE_INTEGER
     );
     switch (this._modelMeta.modelType) {
       case ModelTypes.regression:
       case ModelTypes.binary: {
         // no need to flatten what is already flat
-        rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
+        this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
             const val = classArray[0];
             if (val > featuresMaxArray[featureIndex]) {
@@ -584,7 +581,7 @@ export class JointDataset {
         break;
       }
       case ModelTypes.multiclass: {
-        rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
+        this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
             // this._localExplanationIndexesComputed[rowIndex] = false;
             let value: number;
@@ -624,7 +621,7 @@ export class JointDataset {
       }
       default:
     }
-    rawLocalImportance[0].forEach((_classArray, featureIndex) => {
+    this.rawLocalImportance[0].forEach((_classArray, featureIndex) => {
       const featureLabel = this._modelMeta.featureNames[featureIndex];
       const key =
         JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();

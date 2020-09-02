@@ -58,7 +58,7 @@ export interface IWhatIfTabProps {
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
   cohorts: Cohort[];
-  chartProps: IGenericChartProps;
+  chartProps?: IGenericChartProps;
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;

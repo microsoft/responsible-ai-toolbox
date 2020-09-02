@@ -46,15 +46,15 @@ export interface INewExplanationDashboardState {
   activeGlobalTab: globalTabKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
-  modelChartConfig: IGenericChartProps;
-  dataChartConfig: IGenericChartProps;
-  whatIfChartConfig: IGenericChartProps;
-  globalBarConfig: IGlobalBarSettings;
-  dependenceProps: IGenericChartProps;
+  modelChartConfig?: IGenericChartProps;
+  dataChartConfig?: IGenericChartProps;
+  whatIfChartConfig?: IGenericChartProps;
+  globalBarConfig?: IGlobalBarSettings;
+  dependenceProps?: IGenericChartProps;
   globalImportanceIntercept: number[];
   globalImportance: number[][];
   isGlobalImportanceDerivedFromLocal: boolean;
-  sortVector: number[];
+  sortVector?: number[];
   validationWarnings: string[];
   showingDatasizeWarning: boolean;
   editingCohortIndex?: number;
@@ -203,7 +203,8 @@ export class NewExplanationDashboard extends React.PureComponent<
 
     let localExplanations:
       | IMultiClassLocalFeatureImportance
-      | ISingleClassLocalFeatureImportance;
+      | ISingleClassLocalFeatureImportance
+      | undefined;
     if (
       props &&
       props.precomputedExplanations &&
@@ -413,7 +414,7 @@ export class NewExplanationDashboard extends React.PureComponent<
       cohort.getCohortID().toString()
     );
     const classNames = explanationDashboardStyles();
-    let cohortForEdit: ICohort;
+    let cohortForEdit: ICohort | undefined;
     if (this.state.editingCohortIndex !== undefined) {
       if (this.state.editingCohortIndex === this.state.cohorts.length) {
         cohortForEdit = {
@@ -536,21 +537,22 @@ export class NewExplanationDashboard extends React.PureComponent<
               explanationMethod={this.props.explanationMethod}
             />
           )}
-          {this.state.activeGlobalTab === globalTabKeys.whatIfTab && (
-            <WhatIfTab
-              jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              cohorts={this.state.cohorts}
-              onChange={this.onWhatIfConfigChanged}
-              chartProps={this.state.whatIfChartConfig}
-              invokeModel={this.state.requestPredictions}
-              editCohort={this.openCohort}
-              selectedWeightVector={this.state.selectedWeightVector}
-              weightOptions={this.weightVectorOptions}
-              weightLabels={this.weightVectorLabels}
-              onWeightChange={this.onWeightVectorChange}
-            />
-          )}
+          {this.state.activeGlobalTab === globalTabKeys.whatIfTab &&
+            this.state.requestPredictions && (
+              <WhatIfTab
+                jointDataset={this.state.jointDataset}
+                metadata={this.state.modelMetadata}
+                cohorts={this.state.cohorts}
+                onChange={this.onWhatIfConfigChanged}
+                chartProps={this.state.whatIfChartConfig}
+                invokeModel={this.state.requestPredictions}
+                editCohort={this.openCohort}
+                selectedWeightVector={this.state.selectedWeightVector}
+                weightOptions={this.weightVectorOptions}
+                weightLabels={this.weightVectorLabels}
+                onWeightChange={this.onWeightVectorChange}
+              />
+            )}
         </div>
       </div>
     );
@@ -593,9 +595,11 @@ export class NewExplanationDashboard extends React.PureComponent<
     this.setState({ dependenceProps: newConfig });
   };
 
-  private handleGlobalTabClick = (item: PivotItem): void => {
-    const index: globalTabKeys = globalTabKeys[item.props.itemKey];
-    this.setState({ activeGlobalTab: index });
+  private handleGlobalTabClick = (item?: PivotItem): void => {
+    if (item?.props.itemKey) {
+      const index: globalTabKeys = globalTabKeys[item.props.itemKey];
+      this.setState({ activeGlobalTab: index });
+    }
   };
 
   private setGlobalBarSettings = (settings: IGlobalBarSettings): void => {
@@ -612,7 +616,9 @@ export class NewExplanationDashboard extends React.PureComponent<
 
   private onCohortChange = (newCohort: Cohort): void => {
     const prevCohorts = [...this.state.cohorts];
-    prevCohorts[this.state.editingCohortIndex] = newCohort;
+    if (this.state.editingCohortIndex) {
+      prevCohorts[this.state.editingCohortIndex] = newCohort;
+    }
     this.setState({ cohorts: prevCohorts, editingCohortIndex: undefined });
   };
 
@@ -624,7 +630,9 @@ export class NewExplanationDashboard extends React.PureComponent<
 
   private deleteCohort = (): void => {
     const prevCohorts = [...this.state.cohorts];
-    prevCohorts.splice(this.state.editingCohortIndex, 1);
+    if (this.state.editingCohortIndex) {
+      prevCohorts.splice(this.state.editingCohortIndex, 1);
+    }
     this.setState({ cohorts: prevCohorts });
   };
 

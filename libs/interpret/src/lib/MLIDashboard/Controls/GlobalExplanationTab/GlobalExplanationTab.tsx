@@ -46,10 +46,10 @@ export interface IGlobalBarSettings {
 }
 
 export interface IGlobalExplanationTabProps {
-  globalBarSettings: IGlobalBarSettings;
-  sortVector: number[];
+  globalBarSettings?: IGlobalBarSettings;
+  sortVector?: number[];
   jointDataset: JointDataset;
-  dependenceProps: IGenericChartProps;
+  dependenceProps?: IGenericChartProps;
   metadata: IExplanationModelMetadata;
   globalImportance?: number[][];
   isGlobalDerivedFromLocal: boolean;

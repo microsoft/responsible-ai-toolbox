@@ -29,7 +29,7 @@ import { CohortKey } from "../../CohortKey";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
-  chartProps: IGenericChartProps;
+  chartProps?: IGenericChartProps;
   theme?: string;
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;

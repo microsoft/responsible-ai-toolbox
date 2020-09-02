@@ -39,7 +39,7 @@ import {
 } from "./DatasetExplorerTab.styles";
 
 export interface IDatasetExplorerTabProps {
-  chartProps: IGenericChartProps;
+  chartProps?: IGenericChartProps;
   theme?: string;
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
