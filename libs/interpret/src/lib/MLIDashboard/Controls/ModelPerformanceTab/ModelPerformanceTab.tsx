@@ -110,8 +110,8 @@ export class ModelPerformanceTab extends React.PureComponent<
     };
     let rawX: number[];
     let rawY: number[];
-    let yLabels: string[];
-    let yLabelIndexes: number[];
+    let yLabels: string[] | undefined;
+    let yLabelIndexes: number[] | undefined;
     const yMeta = jointData.metaDict[chartProps.yAxis.property];
     const yAxisName = yMeta.label;
     if (chartProps.yAxis.property === CohortKey) {
@@ -127,8 +127,8 @@ export class ModelPerformanceTab extends React.PureComponent<
         const cohortY = new Array(cohortXs.length).fill(cohortIndex);
         rawX.push(...cohortXs);
         rawY.push(...cohortY);
-        yLabels.push(cohort.name);
-        yLabelIndexes.push(cohortIndex);
+        yLabels?.push(cohort.name);
+        yLabelIndexes?.push(cohortIndex);
       });
     } else {
       const cohort = cohorts[selectedCohortIndex];
@@ -138,11 +138,11 @@ export class ModelPerformanceTab extends React.PureComponent<
         chartProps.chartType === ChartTypes.Histogram
       );
       yLabels = yMeta.sortedCategoricalValues;
-      yLabelIndexes = yLabels.map((_, index) => index);
+      yLabelIndexes = yLabels?.map((_, index) => index);
     }
 
     // The bounding box for the labels on y axis are too small, add some white space as buffer
-    yLabels = yLabels.map((val) => {
+    yLabels = yLabels?.map((val) => {
       const len = val.length;
       let result = " ";
       for (let i = 0; i < len; i += 5) {
@@ -172,7 +172,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         // We also use the selected Y property as the series prop, since all histograms will just be a count.
         plotlyProps.data[0].type = "bar";
         const x = new Array(rawY.length).fill(1);
-        plotlyProps.data[0].text = rawY.map((index) => yLabels[index]);
+        plotlyProps.data[0].text = rawY.map((index) => yLabels?.[index] || "");
         plotlyProps.data[0].hoverinfo = "all";
         plotlyProps.data[0].hovertemplate = ` ${yAxisName}:%{y}<br> ${localization.Charts.count}: %{x}<br>`;
         plotlyProps.data[0].y = rawY;
@@ -182,7 +182,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
         const styles = jointData.metaDict[
           chartProps.xAxis.property
-        ].sortedCategoricalValues.map((label, index) => {
+        ].sortedCategoricalValues?.map((label, index) => {
           return {
             target: index,
             value: {
@@ -441,6 +441,9 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   private onXSet = (value: ISelectorConfig): void => {
     const newProps = _.cloneDeep(this.props.chartProps);
+    if (!newProps) {
+      return;
+    }
     newProps.xAxis = value;
     newProps.chartType = this.props.jointDataset.metaDict[value.property]
       .treatAsCategorical
@@ -453,6 +456,9 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   private onYSet = (value: ISelectorConfig): void => {
     const newProps = _.cloneDeep(this.props.chartProps);
+    if (!newProps) {
+      return;
+    }
     newProps.yAxis = value;
 
     this.props.onChange(newProps);
@@ -499,6 +505,9 @@ export class ModelPerformanceTab extends React.PureComponent<
   }
 
   private generateMetrics(): ILabeledStatistic[][] {
+    if (!this.props.chartProps) {
+      return [];
+    }
     if (this.props.chartProps.yAxis.property === CohortKey) {
       const indexes = this.props.cohorts.map((cohort) =>
         cohort.unwrap(JointDataset.IndexLabel)
@@ -515,14 +524,14 @@ export class ModelPerformanceTab extends React.PureComponent<
     const sortedCategoricalValues = this.props.jointDataset.metaDict[
       this.props.chartProps.yAxis.property
     ].sortedCategoricalValues;
-    const indexes = sortedCategoricalValues.map((_, labelIndex) => {
+    const indexes = sortedCategoricalValues?.map((_, labelIndex) => {
       return indexArray.filter((_, index) => {
         return yValues[index] === labelIndex;
       });
     });
     return generateMetrics(
       this.props.jointDataset,
-      indexes,
+      indexes || [],
       this.props.metadata.modelType
     );
   }

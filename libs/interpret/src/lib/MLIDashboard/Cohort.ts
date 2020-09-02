@@ -42,7 +42,7 @@ export class Cohort {
   }
 
   public getRow(index: number): { [key: string]: number } {
-    return { ...this.jointDataset.dataDict[index] };
+    return { ...this.jointDataset.dataDict?.[index] };
   }
 
   public sort(
@@ -79,7 +79,7 @@ export class Cohort {
       }
       return this.filteredData.map((row) => {
         const rowValue = row[key];
-        return binVector.findIndex((upperLimit) => upperLimit >= rowValue);
+        return binVector?.findIndex((upperLimit) => upperLimit >= rowValue);
       });
     }
     return this.filteredData.map((row) => row[key]);
@@ -125,28 +125,30 @@ export class Cohort {
 
   private applyFilters(): Array<{ [key: string]: number }> {
     this.clearCachedImportances();
-    return this.jointDataset.dataDict.filter((row) =>
-      this.filters.every((filter) => {
-        const rowVal = row[filter.column];
-        switch (filter.method) {
-          case FilterMethods.equal:
-            return rowVal === filter.arg[0];
-          case FilterMethods.greaterThan:
-            return rowVal > filter.arg[0];
-          case FilterMethods.greaterThanEqualTo:
-            return rowVal >= filter.arg[0];
-          case FilterMethods.lessThan:
-            return rowVal < filter.arg[0];
-          case FilterMethods.lessThanEqualTo:
-            return rowVal <= filter.arg[0];
-          case FilterMethods.includes:
-            return (filter.arg as number[]).includes(rowVal);
-          case FilterMethods.inTheRangeOf:
-            return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
-          default:
-            return false;
-        }
-      })
+    return (
+      this.jointDataset.dataDict?.filter((row) =>
+        this.filters.every((filter) => {
+          const rowVal = row[filter.column];
+          switch (filter.method) {
+            case FilterMethods.equal:
+              return rowVal === filter.arg[0];
+            case FilterMethods.greaterThan:
+              return rowVal > filter.arg[0];
+            case FilterMethods.greaterThanEqualTo:
+              return rowVal >= filter.arg[0];
+            case FilterMethods.lessThan:
+              return rowVal < filter.arg[0];
+            case FilterMethods.lessThanEqualTo:
+              return rowVal <= filter.arg[0];
+            case FilterMethods.includes:
+              return (filter.arg as number[]).includes(rowVal);
+            case FilterMethods.inTheRangeOf:
+              return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+            default:
+              return false;
+          }
+        })
+      ) || []
     );
   }
 }
