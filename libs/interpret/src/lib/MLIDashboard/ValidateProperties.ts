@@ -187,11 +187,17 @@ export class ValidateProperties {
     }
   }
 
-  private validateLocalExplanation(): void {
-    const localExp = this.props.precomputedExplanations.localFeatureImportance
-      .scores;
-    if (!Array.isArray(localExp)) {
+  private nullifyLocalFeatureImportance(): void {
+    if (this.props.precomputedExplanations) {
       this.props.precomputedExplanations.localFeatureImportance = undefined;
+    }
+  }
+
+  private validateLocalExplanation(): void {
+    const localExp = this.props.precomputedExplanations?.localFeatureImportance
+      ?.scores;
+    if (!Array.isArray(localExp)) {
+      this.nullifyLocalFeatureImportance();
       this.errorStrings.push(
         localization.formatString(
           localization.ValidationErrors.notArray,
@@ -213,7 +219,7 @@ export class ValidateProperties {
     if (explanationDimension === 3) {
       const classLength = localExp.length;
       if (this.classLength !== classLength) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.inconsistentDimensions,
@@ -225,7 +231,7 @@ export class ValidateProperties {
         return;
       }
       if (classLength === 0) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.notNonEmpty,
@@ -236,7 +242,7 @@ export class ValidateProperties {
       }
       const rowLength = localExp[0].length;
       if (rowLength === 0) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.notNonEmpty,
@@ -249,7 +255,7 @@ export class ValidateProperties {
         this.rowLength = rowLength;
       }
       if (rowLength !== this.rowLength) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.inconsistentDimensions,
@@ -261,9 +267,12 @@ export class ValidateProperties {
         return;
       }
       if (
-        !localExp.every((classArray) => classArray.length === this.rowLength)
+        !localExp.every(
+          (classArray: number[] | number[][]) =>
+            classArray.length === this.rowLength
+        )
       ) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.varyingLength,
@@ -274,7 +283,7 @@ export class ValidateProperties {
       }
       const featureLength = (localExp[0][0] as number[]).length;
       if (featureLength !== this.featureLength) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.inconsistentDimensions,
@@ -287,10 +296,13 @@ export class ValidateProperties {
       }
       if (
         !localExp.every((classArray: number[] | number[][]) =>
-          classArray.every((rowArray) => rowArray.length === this.featureLength)
+          classArray.every(
+            (rowArray: number | number[]) =>
+              Array.isArray(rowArray) && rowArray.length === this.featureLength
+          )
         )
       ) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.varyingLength,
@@ -305,7 +317,7 @@ export class ValidateProperties {
         this.rowLength = rowLength;
       }
       if (rowLength !== this.rowLength) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.inconsistentDimensions,
@@ -317,7 +329,7 @@ export class ValidateProperties {
         return;
       }
       if (rowLength === 0) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.notNonEmpty,
@@ -328,7 +340,7 @@ export class ValidateProperties {
       }
       const featureLength = (localExp[0] as number[]).length;
       if (featureLength !== this.featureLength) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.inconsistentDimensions,
@@ -345,7 +357,7 @@ export class ValidateProperties {
             rowArray.length === this.featureLength
         )
       ) {
-        this.props.precomputedExplanations.localFeatureImportance = undefined;
+        this.nullifyLocalFeatureImportance();
         this.errorStrings.push(
           localization.formatString(
             localization.ValidationErrors.varyingLength,
