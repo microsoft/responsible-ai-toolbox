@@ -35,8 +35,9 @@ setuptools.setup(
     include_package_data=True,
     package_data={
         '': [
-            'fairlearnboard/templates/inlineDashboard.html',
-            'fairlearnboard/static/index.js'
+            'templates/inlineDashboard.html',
+            'static/index.js',
+            'static/index.js.map'
         ]
     },
     zip_safe=False,

@@ -13,6 +13,7 @@
     "dependencies": {
       "@babel/core": "7.4.3",
       "@babel/plugin-proposal-class-properties": "^7.4.0",
+      "@babel/plugin-transform-runtime": "7.11.5",
       "@babel/preset-env": "7.4.3",
       "@babel/preset-react": "7.0.0",
       "@responsible-ai/fairlearn": "0.1.1",
