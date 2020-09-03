@@ -213,6 +213,7 @@ export class ExplanationDashboard extends React.Component<
       explanationContext.modelMetadata.featureNames.length
     );
     this.pivotItems = [];
+    console.log(explanationContext.testDataset);
     if (explanationContext.testDataset.dataset !== undefined) {
       this.pivotItems.push({
         headerText: localization.dataExploration,

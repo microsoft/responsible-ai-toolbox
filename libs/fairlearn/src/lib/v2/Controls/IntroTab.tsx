@@ -14,25 +14,26 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
     const styles = IntroTabStyles();
     return (
       <Stack style={{ height: "100%" }}>
-        <div className={styles.firstSection}></div>
-        <Stack
-          wrap
-          horizontalAlign={"start"}
-          className={styles.firstSectionContainer}
-        >
-          <Text className={styles.firstSectionTitle} block>
-            {localization.Intro.welcome}
-          </Text>
-          <Text className={styles.firstSectionSubtitle} block>
-            {localization.Intro.fairlearnDashboard}
-          </Text>
-          <Text className={styles.firstSectionBody} variant={"large"} block>
-            {localization.Intro.introBody}
-          </Text>
-          <div className={styles.firstSectionGraphics}>
-            <ReactComponent />
-          </div>
-        </Stack>
+        <div className={styles.firstSection}>
+          <Stack
+            wrap
+            horizontalAlign={"start"}
+            className={styles.firstSectionContainer}
+          >
+            <Text className={styles.firstSectionTitle} block>
+              {localization.Intro.welcome}
+            </Text>
+            <Text className={styles.firstSectionSubtitle} block>
+              {localization.Intro.fairlearnDashboard}
+            </Text>
+            <Text className={styles.firstSectionBody} variant={"large"} block>
+              {localization.Intro.introBody}
+            </Text>
+            <div className={styles.firstSectionGraphics}>
+              <ReactComponent />
+            </div>
+          </Stack>
+        </div>
         <div className={styles.lowerSection}>
           <div className={styles.stepsContainer}>
             <Text variant={"large"} className={styles.boldStep}>

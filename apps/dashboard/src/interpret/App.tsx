@@ -239,10 +239,10 @@ export class App extends React.Component<unknown, IAppState> {
         >
           <div style={{ width: "100%", height: "100%" }}>
             {this.state.versionIndex === 1 && (
-              <NewExplanationDashboard {...dashboardProp} />
+              <NewExplanationDashboard {...dashboardProp} key={Date.now()} />
             )}
             {this.state.versionIndex === 0 && (
-              <ExplanationDashboard {...dashboardProp} />
+              <ExplanationDashboard {...dashboardProp} key={Date.now()} />
             )}
           </div>
         </div>

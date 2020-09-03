@@ -145,7 +145,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     }
     this.cohortSeries = this.getGlobalSeries();
     this.activeSeries = this.getActiveCohortSeries(
-      this.state.sortArray.map(() => false)
+      this.state.sortArray.map(() => true)
     );
   }
 

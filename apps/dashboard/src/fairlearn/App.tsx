@@ -4,7 +4,8 @@ import {
   FairnessWizardV2,
   IMetricResponse,
   IMetricRequest,
-  IFairnessData
+  IFairnessData,
+  IFairnessProps
 } from "@responsible-ai/fairlearn";
 import { createTheme } from "office-ui-fabric-react";
 import _, { toNumber } from "lodash";
@@ -171,7 +172,7 @@ export class App extends React.Component<unknown, IAppState> {
   public constructor(props: unknown) {
     super(props);
     this.state = {
-      value: 4,
+      value: 0,
       themeIndex: 0,
       language: App.languages[0].val,
       versionIndex: 0
@@ -182,6 +183,17 @@ export class App extends React.Component<unknown, IAppState> {
     const data: IFairnessData = _.cloneDeep(App.choices[this.state.value].data);
     const theme = App.themeChoices[this.state.themeIndex].data;
     const version: string = App.versionChoices[this.state.versionIndex].data;
+    const dashboardProps: IFairnessProps = {
+      ...data,
+      supportedBinaryClassificationAccuracyKeys:
+        App.supportedBinaryClassificationAccuracyKeys,
+      supportedRegressionAccuracyKeys: App.supportedRegressionAccuracyKeys,
+      supportedProbabilityAccuracyKeys: App.supportedProbabilityAccuracyKeys,
+      stringParams: { contextualHelp: App.messages },
+      requestMetrics: this.generateRandomMetrics.bind(this),
+      theme,
+      locale: this.state.language
+    };
     return (
       <div style={{ backgroundColor: "grey", height: "100%" }}>
         <label>Select dataset:</label>
@@ -236,42 +248,10 @@ export class App extends React.Component<unknown, IAppState> {
         >
           <div style={{ width: "940px" }}>
             {version === "v1" && (
-              <FairnessWizardV1
-                {...data}
-                supportedBinaryClassificationAccuracyKeys={
-                  App.supportedBinaryClassificationAccuracyKeys
-                }
-                supportedRegressionAccuracyKeys={
-                  App.supportedRegressionAccuracyKeys
-                }
-                supportedProbabilityAccuracyKeys={
-                  App.supportedProbabilityAccuracyKeys
-                }
-                stringParams={{ contextualHelp: App.messages }}
-                requestMetrics={this.generateRandomMetrics.bind(this)}
-                theme={theme}
-                locale={this.state.language}
-                key={Date.now()}
-              />
+              <FairnessWizardV1 {...dashboardProps} key={Date.now()} />
             )}
             {version === "v2" && (
-              <FairnessWizardV2
-                {...data}
-                supportedBinaryClassificationAccuracyKeys={
-                  App.supportedBinaryClassificationAccuracyKeys
-                }
-                supportedRegressionAccuracyKeys={
-                  App.supportedRegressionAccuracyKeys
-                }
-                supportedProbabilityAccuracyKeys={
-                  App.supportedProbabilityAccuracyKeys
-                }
-                stringParams={{ contextualHelp: App.messages }}
-                requestMetrics={this.generateRandomMetrics.bind(this)}
-                theme={theme}
-                locale={this.state.language}
-                key={Date.now()}
-              />
+              <FairnessWizardV2 {...dashboardProps} key={Date.now()} />
             )}
           </div>
         </div>
