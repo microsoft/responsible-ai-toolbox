@@ -7,7 +7,6 @@ import { IAppSetting } from "./app/IAppSetting";
 function renderApp(props: RouteComponentProps<IAppSetting>): React.ReactNode {
   return <App {...props.match.params} />;
 }
-console.log(App.route);
 
 ReactDOM.render(
   <React.StrictMode>

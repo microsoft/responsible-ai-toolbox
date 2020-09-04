@@ -69,8 +69,7 @@ export const FeatureTabStyles: () => IProcessedStyleSet<
     textBody: {
       paddingTop: "12px",
       fontWeight: FontWeights.semilight,
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "50px"
+      color: theme.semanticColors.bodyText
     },
     tableHeader: {
       display: "flex",

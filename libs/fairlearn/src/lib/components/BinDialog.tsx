@@ -9,9 +9,9 @@ import {
 } from "office-ui-fabric-react";
 
 import React from "react";
-import { BinnedResponseBuilder } from "../../util/BinnedResponseBuilder";
-import { IBinnedResponse } from "../../util/IBinnedResponse";
-import { localization } from "../../Localization/localization";
+import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
+import { IBinnedResponse } from "../util/IBinnedResponse";
+import { localization } from "../Localization/localization";
 import { BinDialogStyles } from "./BinDialog.styles";
 
 export interface IBinDialogProps {

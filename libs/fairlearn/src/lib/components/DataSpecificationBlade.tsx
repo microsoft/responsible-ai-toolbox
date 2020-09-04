@@ -1,6 +1,6 @@
 import { Text } from "office-ui-fabric-react";
 import React from "react";
-import { localization } from "../../Localization/localization";
+import { localization } from "../Localization/localization";
 import { DataSpecificationBladeStyles } from "./DataSpecificationBlade.styles";
 
 export interface IDataSpecProps {
