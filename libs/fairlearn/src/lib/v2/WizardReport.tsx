@@ -499,8 +499,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         formattedBinOverPredictionValues,
         formattedBinUnderPredictionValues
       ];
+      console.log(this.props.accuracyPickerProps.accuracyOptions, accuracyKey);
       const metricLabels = [
-        AccuracyOptions[accuracyKey].title,
+        (
+          this.props.accuracyPickerProps.accuracyOptions.find(
+            (a) => a.key === accuracyKey
+          ) || AccuracyOptions[accuracyKey]
+        ).title,
         AccuracyOptions[outcomeKey].title,
         AccuracyOptions[overpredicitonKey].title,
         AccuracyOptions[underpredictionKey].title

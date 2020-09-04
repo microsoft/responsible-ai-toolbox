@@ -109,7 +109,7 @@
     ],
     "complexity": "warn",
     "curly": ["error", "all"],
-    // "max-lines": "warn",
+    "max-lines": "warn",
     "no-else-return": "error",
     "no-useless-call": "error",
     "object-shorthand": "error",

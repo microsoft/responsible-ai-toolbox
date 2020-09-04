@@ -31,7 +31,10 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     const items: ICommandBarItemProps[] = [
       {
         key: "application",
-        text: "Application",
+        text: `Application - ${this.props.application}`,
+        iconProps: {
+          iconName: "AllApps"
+        },
         subMenuProps: {
           items: this.getOptions(
             Object.keys(applications),
@@ -41,7 +44,10 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
       },
       {
         key: "version",
-        text: "Version",
+        text: `Version - ${this.props.version}`,
+        iconProps: {
+          iconName: "NumberField"
+        },
         subMenuProps: {
           items: this.getOptions(
             Object.keys(applications[this.props.application].versions),
@@ -51,7 +57,10 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
       },
       {
         key: "dataset",
-        text: "Dataset",
+        text: `Dataset - ${this.props.dataset}`,
+        iconProps: {
+          iconName: "Database"
+        },
         subMenuProps: {
           items: this.getOptions(
             Object.keys(applications[this.props.application].datasets),
@@ -61,20 +70,26 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
       },
       {
         key: "theme",
-        text: "Theme",
+        text: `Theme - ${this.props.theme}`,
+        iconProps: {
+          iconName: "ColorSolid"
+        },
         subMenuProps: {
           items: this.getOptions(Object.keys(themes), this.onThemeSelect)
         }
       },
       {
         key: "language",
-        text: "Language",
+        text: `Language - ${this.props.language}`,
+        iconProps: {
+          iconName: "PlainText"
+        },
         subMenuProps: {
           items: this.getOptions(Object.keys(languages), this.onLanguageSelect)
         }
       }
     ];
-    return <CommandBar items={items} />;
+    return <CommandBar items={items} id="topMenuBar" />;
   }
   private getOptions(
     labels: readonly string[],

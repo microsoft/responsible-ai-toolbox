@@ -1,10 +1,10 @@
-import { getSpan, selectDataset, selectVersion } from "../../support/App";
+import { getSpan } from "../../support/App";
 
 describe("dashboard", () => {
   beforeEach(() => {
-    cy.visit("/#/fairlearn");
-    selectDataset("binaryClassifier");
-    selectVersion(2);
+    cy.visit(
+      "http://localhost:4200/#/fairlearn/binaryClassifier/light/english/Version-2"
+    );
   });
 
   it("should display header", () => {
