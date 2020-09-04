@@ -63,7 +63,7 @@ export interface IWhatIfTabProps {
   weightOptions: WeightVectorOption[];
   weightLabels: any;
   onChange: (config: IGenericChartProps) => void;
-  invokeModel: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   editCohort: (index: number) => void;
   onWeightChange: (option: WeightVectorOption) => void;
 }
@@ -1813,6 +1813,9 @@ export class WhatIfTab extends React.PureComponent<
 
   // fetch prediction for temporary point
   private fetchData(fetchingReference: { [key: string]: any }): void {
+    if (!this.props.invokeModel) {
+      return;
+    }
     if (this.state.request !== undefined) {
       this.state.request.abort();
     }
