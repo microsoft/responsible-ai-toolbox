@@ -32,7 +32,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    "strictNullChecks": true,    
+    "strictNullChecks": true,
     "paths": {
       "@responsible-ai/interpret": ["libs/interpret/src/index.ts"],
       "@responsible-ai/fairlearn": ["libs/fairlearn/src/index.ts"],
