@@ -1,3 +1,4 @@
+import { Never } from "@responsible-ai/core-ui";
 export interface IDatasetSummary {
   featureNames?: string[];
   classNames?: string[];
@@ -16,8 +17,8 @@ export type PredictionType =
   | PredictionTypes.regression;
 
 export interface IMetricResponse {
-  global?: number;
-  bins?: number[];
+  global: number;
+  bins: number[];
 }
 
 export interface IMetricRequest {
@@ -30,7 +31,7 @@ export interface IFeatureBinMeta {
   binVector: number[];
   binLabels: string[];
   // this could also be held in a 'features name' array separate with the same length.
-  featureBinName: string;
+  featureBinName?: string;
 }
 
 export interface ICustomMetric {
@@ -39,45 +40,30 @@ export interface ICustomMetric {
   id: string;
 }
 
-export interface IFairnessPropsV1 {
-  startingTabIndex?: number;
-  dataSummary: IDatasetSummary;
-  testData?: any[][];
-  precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
-  precomputedFeatureBins?: IFeatureBinMeta[];
-  customMetrics: ICustomMetric[];
-  predictionType?: PredictionTypes;
+export interface IFairnessBaseData {
+  dataSummary?: IDatasetSummary;
   // One array per each model;
   predictedY: number[][];
   modelNames?: string[];
   trueY: number[];
-  theme?: any;
-  locale?: string;
-  stringParams?: any;
-  supportedBinaryClassificationAccuracyKeys?: string[];
-  supportedRegressionAccuracyKeys?: string[];
-  supportedProbabilityAccuracyKeys?: string[];
-  shouldInitializeIcons?: boolean;
-  iconUrl?: string;
-  // The request hook
-  requestMetrics: (
-    request: IMetricRequest,
-    abortSignal?: AbortSignal
-  ) => Promise<IMetricResponse>;
+  testData?: any[][];
 }
+export interface IPreComputedData {
+  precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;
+  precomputedFeatureBins: IFeatureBinMeta[];
+  predictionType: PredictionTypes;
+  customMetrics?: ICustomMetric[];
+}
+export type IRunTimeData = Never<IPreComputedData> & {
+  testData: any[][];
+};
+export type IPreComputedFairnessData = IFairnessBaseData & IPreComputedData;
+export type IRunTimeFairnessData = IFairnessBaseData & IRunTimeData;
 
-export interface IFairnessPropsV2 {
+export type IFairnessData = IPreComputedFairnessData | IRunTimeFairnessData;
+
+export type IFairnessProps = IFairnessData & {
   startingTabIndex?: number;
-  dataSummary: IDatasetSummary;
-  testData?: any[][];
-  precomputedMetrics?: Array<Array<{ [key: string]: IMetricResponse }>>;
-  precomputedFeatureBins?: IFeatureBinMeta[];
-  customMetrics: ICustomMetric[];
-  predictionType?: PredictionTypes;
-  // One array per each model;
-  predictedY: number[][];
-  modelNames?: string[];
-  trueY: number[];
   theme?: any;
   locale?: string;
   stringParams?: any;
@@ -87,8 +73,8 @@ export interface IFairnessPropsV2 {
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
   // The request hook
-  requestMetrics: (
+  requestMetrics?: (
     request: IMetricRequest,
     abortSignal?: AbortSignal
   ) => Promise<IMetricResponse>;
-}
+};

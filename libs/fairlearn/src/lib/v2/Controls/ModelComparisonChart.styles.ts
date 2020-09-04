@@ -7,7 +7,7 @@ import {
   FontSizes
 } from "office-ui-fabric-react";
 
-export interface IModelComparisionChartStyles {
+export interface IModelComparisonChartStyles {
   frame: IStyle;
   spinner: IStyle;
   header: IStyle;
@@ -38,11 +38,11 @@ export interface IModelComparisionChartStyles {
   radioOptions: IStyle;
 }
 
-export const ModelComparisionChartStyles: () => IProcessedStyleSet<
-  IModelComparisionChartStyles
+export const ModelComparisonChartStyles: () => IProcessedStyleSet<
+  IModelComparisonChartStyles
 > = () => {
   const theme = getTheme();
-  return mergeStyleSets<IModelComparisionChartStyles>({
+  return mergeStyleSets<IModelComparisonChartStyles>({
     frame: {
       flex: 1,
       display: "flex",

@@ -22,7 +22,7 @@ export interface IGlobalFeatureImportanceProps {
   dashboardContext: IDashboardContext;
   config: IFeatureImportanceConfig;
   selectionContext: SelectionContext;
-  selectedRow: number;
+  selectedRow?: number;
   chartTypeOptions?: IComboBoxOption[];
   messages?: HelpMessageDict;
   theme?: string;
@@ -64,8 +64,8 @@ export class FeatureImportanceWrapper extends React.PureComponent<
         return <Beehive {...this.props} chartTypeOptions={chartTypeOptions} />;
       case FeatureImportanceModes.violin:
       case FeatureImportanceModes.box:
-        return <Violin {...this.props} chartTypeOptions={chartTypeOptions} />;
       default:
+        return <Violin {...this.props} chartTypeOptions={chartTypeOptions} />;
     }
   }
 }

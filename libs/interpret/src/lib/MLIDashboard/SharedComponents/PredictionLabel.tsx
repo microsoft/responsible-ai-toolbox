@@ -33,21 +33,21 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
         this.props.prediction.toLocaleString(undefined, {
           minimumFractionDigits: 3
         })
-      ) as string;
+      );
     }
     return localization.formatString(
       localization.PredictionLabel.predictedClassLabel,
       this.props.classNames[this.props.prediction]
-    ) as string;
+    );
   }
 
   private makeProbabilityLabel(): string {
-    const probability = this.props.predictedProbabilities[
+    const probability = this.props.predictedProbabilities?.[
       this.props.prediction
     ];
     return localization.formatString(
       localization.IcePlot.probabilityLabel,
-      probability.toLocaleString(undefined, { minimumFractionDigits: 3 })
-    ) as string;
+      probability?.toLocaleString(undefined, { minimumFractionDigits: 3 })
+    );
   }
 }

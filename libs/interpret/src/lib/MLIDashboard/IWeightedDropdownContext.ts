@@ -16,6 +16,6 @@ export interface IWeightedDropdownContext {
   selectedKey: WeightVectorOption;
   onSelection: (
     event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ) => void;
 }

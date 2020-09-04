@@ -117,7 +117,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     const sortedIndexVector = this.props.sortedIndexVector
       .slice(-1 * this.props.topK)
       .reverse();
-    const baseSeries = {
+    const baseSeries: IPlotlyProperty = {
       config: {
         displaylogo: false,
         responsive: true,

@@ -10,7 +10,8 @@ import {
 } from "@responsible-ai/mlchartlib";
 import {
   IExplanationContext,
-  IMultiClassBoundedCoordinates
+  IMultiClassBoundedCoordinates,
+  IFeatureValueExplanation
 } from "../IExplanationContext";
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
@@ -51,7 +52,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
                 )
               : undefined
           }
-        };
+        } as IData;
       });
     }
   );
@@ -79,7 +80,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             },
             name: classes[classIndex],
             x: coordinates.names,
-            y: coordinates.lowerBounds[classIndex]
+            y: coordinates.lowerBounds?.[classIndex]
           };
           const centerlineSeries: IData = {
             mode: PlotlyMode.lines,
@@ -108,7 +109,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             legendgroup: classes[classIndex],
             showlegend: false,
             x: coordinates.names,
-            y: coordinates.upperBounds[classIndex]
+            y: coordinates.upperBounds?.[classIndex]
           } as any;
           return [lowerBounds, centerlineSeries, upperbounds];
         })
@@ -124,8 +125,8 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
       featureIndex: number,
       explanationContext: IExplanationContext
     ): IPlotlyProperty => {
-      const ebmObject = explanationContext.ebmExplanation;
-      const boundedCoordinates = ebmObject.featureList[featureIndex];
+      const ebmObject = explanationContext.ebmExplanation as IFeatureValueExplanation;
+      const boundedCoordinates = ebmObject?.featureList[featureIndex];
 
       const featureName =
         explanationContext.modelMetadata.featureNames[featureIndex];
@@ -134,15 +135,20 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
           explanationContext.modelMetadata.featureIsCategorical[
             featureIndex
           ]) ||
-        boundedCoordinates.names.some((name) => typeof name === "string");
+        boundedCoordinates?.names.some(
+          (name: string | number) => typeof name === "string"
+        );
 
-      const data: IData[] = !isCategorical
+      const feature = ebmObject.featureList[featureIndex];
+      const data: IData[] = !feature
+        ? []
+        : !isCategorical
         ? EbmExplanation.buildContinuousSeries(
-            ebmObject.featureList[featureIndex],
+            feature,
             explanationContext.modelMetadata.classNames
           )
         : EbmExplanation.buildCategoricalSeries(
-            ebmObject.featureList[featureIndex],
+            feature,
             explanationContext.modelMetadata.classNames
           );
       return {
@@ -216,8 +222,10 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
 
   private onFeatureSelect = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    this.setState({ selectedFeature: item.key as any });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedFeature: item.key });
+    }
   };
 }

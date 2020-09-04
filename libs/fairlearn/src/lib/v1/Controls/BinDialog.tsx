@@ -9,8 +9,8 @@ import {
 } from "office-ui-fabric-react";
 
 import React from "react";
-import { BinnedResponseBuilder } from "../BinnedResponseBuilder";
-import { IBinnedResponse } from "../IBinnedResponse";
+import { BinnedResponseBuilder } from "../../util/BinnedResponseBuilder";
+import { IBinnedResponse } from "../../util/IBinnedResponse";
 import { localization } from "../../Localization/localization";
 import { BinDialogStyles } from "./BinDialog.styles";
 
@@ -110,8 +110,8 @@ export class BinDialog extends React.PureComponent<
   };
 
   private readonly toggleCategorical = (
-    _ev: React.FormEvent<HTMLElement>,
-    checked: boolean
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
   ): void => {
     if (checked) {
       this.setState(

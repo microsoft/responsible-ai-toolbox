@@ -39,19 +39,21 @@ export class BinnedResponseBuilder {
     featureRange: INumericRange,
     index: number,
     sensitiveFeatures: any[][],
-    binCount?: number
+    binCountIn?: number
   ): IBinnedResponse {
-    if (binCount === undefined) {
+    let binCount: number;
+    if (binCountIn === undefined) {
       if (featureRange.rangeType === RangeTypes.integer) {
         const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
           sensitiveFeatures,
           index
         );
         binCount = Math.min(5, uniqueValues.length);
-      }
-      if (binCount === undefined) {
+      } else {
         binCount = 5;
       }
+    } else {
+      binCount = binCountIn;
     }
     const delta = featureRange.max - featureRange.min;
     if (delta === 0 || binCount === 0) {

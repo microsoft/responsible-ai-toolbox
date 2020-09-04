@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 import { ParityModes } from "./ParityMetrics";
 
@@ -7,7 +8,7 @@ export class MetricsCache {
   public constructor(
     private featureCount: number,
     private numberOfModels: number,
-    private fetchMethod: (request: IMetricRequest) => Promise<IMetricResponse>,
+    private fetchMethod?: (request: IMetricRequest) => Promise<IMetricResponse>,
     precomputedCache?: Array<Array<{ [key: string]: IMetricResponse }>>
   ) {
     if (precomputedCache) {
@@ -55,14 +56,17 @@ export class MetricsCache {
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }
+    if (!value?.bins) {
+      return Number.NaN;
+    }
 
     const bins = value.bins.slice().filter((x) => x !== undefined && !isNaN(x));
 
-    const min = Math.min(...(bins as number[]));
-    const max = Math.max(...(bins as number[]));
+    const min = _.min(bins);
+    const max = _.max(bins);
     if (
-      isNaN(min) ||
-      isNaN(max) ||
+      min === undefined ||
+      max === undefined ||
       (max === 0 && disparityMethod === ParityModes.ratio)
     ) {
       return Number.NaN;

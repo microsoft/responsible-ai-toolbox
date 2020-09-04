@@ -1,4 +1,6 @@
-export const regression = {
+import { IFairnessData } from "@responsible-ai/fairlearn";
+
+export const regression: IFairnessData = {
   trueY: [
     1.1,
     1.7,

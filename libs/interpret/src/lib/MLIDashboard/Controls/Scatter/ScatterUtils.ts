@@ -1,5 +1,6 @@
 import _ from "lodash";
 import memoize from "memoize-one";
+import { PartialRequired2 } from "@responsible-ai/core-ui";
 import {
   AccessorMappingFunctionNames,
   ChartBuilder,
@@ -26,7 +27,7 @@ import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
 export interface IScatterProps {
   plotlyProps: IPlotlyProperty;
   selectionContext: SelectionContext;
-  selectedRow: number;
+  selectedRow?: number;
   theme?: string;
   messages?: HelpMessageDict;
   dashboardContext: IDashboardContext;
@@ -84,7 +85,7 @@ export class ScatterUtils {
               text: localization.formatString(
                 localization.ExplanationScatter.importanceLabel,
                 featureName
-              ) as string,
+              ),
               data: { isCategorical: false, isFeatureImportance: true }
             });
           }
@@ -105,14 +106,14 @@ export class ScatterUtils {
           result.push({
             key: `TrainingData[${index}]`,
             text: includeFeatureImportance
-              ? (localization.formatString(
+              ? localization.formatString(
                   localization.ExplanationScatter.dataLabel,
                   featureName
-                ) as string)
+                )
               : featureName,
             data: {
               isCategorical:
-                explanationContext.modelMetadata.featureIsCategorical[index]
+                explanationContext.modelMetadata.featureIsCategorical?.[index]
             }
           });
         }
@@ -159,7 +160,7 @@ export class ScatterUtils {
             text: localization.formatString(
               localization.ExplanationScatter.probabilityLabel,
               className
-            ) as string,
+            ),
             data: { isCategorical: false }
           });
         });
@@ -187,9 +188,19 @@ export class ScatterUtils {
   // The chartBuilder util works best with arrays of objects, rather than an object with array props.
   // Just re-zipper to form;
   public static projectData: (
-    explanationContext: IExplanationContext
+    explanationContext: PartialRequired2<
+      IExplanationContext,
+      "testDataset",
+      "dataset"
+    >
   ) => IProjectedData[] = memoize(
-    (explanationContext: IExplanationContext): IProjectedData[] => {
+    (
+      explanationContext: PartialRequired2<
+        IExplanationContext,
+        "testDataset",
+        "dataset"
+      >
+    ): IProjectedData[] => {
       return explanationContext.testDataset.dataset.map(
         (featuresArray, rowIndex) => {
           const result: IProjectedData = {
@@ -392,7 +403,7 @@ export class ScatterUtils {
       key: colorAccessor,
       text: exp.modelMetadata.featureNames[secondIndex],
       data: {
-        isCategorical: exp.modelMetadata.featureIsCategorical[secondIndex]
+        isCategorical: exp.modelMetadata.featureIsCategorical?.[secondIndex]
       }
     };
     const modelData = exp.modelMetadata;
@@ -538,19 +549,19 @@ export class ScatterUtils {
     }
     if (
       plotlyProps.data[0].groupBy === undefined ||
-      plotlyProps.data[0].groupBy!.length < 1
+      plotlyProps.data[0].groupBy?.length < 1
     ) {
       return undefined;
     }
     foundOption = options.find(
-      (option) => option.key === plotlyProps.data[0].groupBy![0]
+      (option) => option.key === plotlyProps.data[0].groupBy?.[0]
     );
     return foundOption ? foundOption.key.toString() : undefined;
   }
 
   public static updatePropsForSelections(
     plotlyProps: IPlotlyProperty,
-    selectedRow: number
+    selectedRow: number | undefined
   ): IPlotlyProperty {
     if (selectedRow === undefined) {
       plotlyProps.data.forEach((trace) => {
@@ -564,8 +575,8 @@ export class ScatterUtils {
     plotlyProps.data.forEach((trace) => {
       const selectedIndexes: number[] = [];
       let newWidths: number[] = [0];
-      if ((trace as any).customdata) {
-        const customData = (trace as any).customdata as string[];
+      if (trace.customdata) {
+        const customData = trace.customdata;
         newWidths = new Array(customData.length).fill(0);
 
         customData.forEach((id, index) => {
@@ -588,8 +599,10 @@ export class ScatterUtils {
     label: string,
     index: number
   ): void {
-    props.data[0].datapointLevelAccessors["text"].mapArgs[index] = label;
-    props.data[0].datapointLevelAccessors["text"].path[index] = accessor;
+    if (props.data[0]?.datapointLevelAccessors?.["text"]?.mapArgs) {
+      props.data[0].datapointLevelAccessors["text"].mapArgs[index] = label;
+      props.data[0].datapointLevelAccessors["text"].path[index] = accessor;
+    }
   }
 
   private static formatItemTextForAxis(

@@ -9,10 +9,10 @@ export enum ModelTypes {
 
 export interface IExplanationContext {
   modelMetadata: IExplanationModelMetadata;
-  jointDataset: JointDataset;
+  jointDataset?: JointDataset;
   explanationGenerators: IExplanationGenerators;
   localExplanation?: ILocalExplanation;
-  testDataset?: ITestDataset;
+  testDataset: ITestDataset;
   globalExplanation?: IGlobalExplanation;
   isGlobalDerived: boolean;
   ebmExplanation?: IFeatureValueExplanation;
@@ -21,9 +21,9 @@ export interface IExplanationContext {
 }
 
 // The interface containing either the local explanations matrix,
-// or information on the fetcing of the local explanation.
+// or information on the fetching of the local explanation.
 export interface ILocalExplanation {
-  values?: number[][][];
+  values: number[][][];
   flattenedValues?: number[][];
   intercepts?: number[];
   percentComplete?: number;
@@ -47,7 +47,7 @@ export interface IMultiClassBoundedCoordinates {
 }
 
 export interface IFeatureValueExplanation {
-  featureList: IMultiClassBoundedCoordinates[];
+  featureList: Array<IMultiClassBoundedCoordinates | undefined>;
   displayParameters?: {
     interpolation?: "vh" | "other";
     yAxisLabel?: string;

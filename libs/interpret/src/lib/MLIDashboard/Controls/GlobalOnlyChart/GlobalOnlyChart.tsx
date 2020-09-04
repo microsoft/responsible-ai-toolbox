@@ -39,18 +39,19 @@ export class GlobalOnlyChart extends React.PureComponent<
       ? [
           {
             name: localization.BarChart.absoluteGlobal,
-            unsortedAggregateY: this.props.globalImportance.map(
-              (classArray) => classArray[0]
-            ),
+            unsortedAggregateY:
+              this.props.globalImportance?.map((classArray) => classArray[0]) ||
+              [],
             colorIndex: 0
           }
         ]
       : this.props.metadata.classNames.map((name, index) => {
           return {
             name,
-            unsortedAggregateY: this.props.globalImportance.map(
-              (classArray) => classArray[index]
-            ),
+            unsortedAggregateY:
+              this.props.globalImportance?.map(
+                (classArray) => classArray[index]
+              ) || [],
             colorIndex: index
           };
         });
@@ -72,7 +73,7 @@ export class GlobalOnlyChart extends React.PureComponent<
       topK: this.minK,
       sortingSeriesKey: FeatureKeys.absoluteGlobal,
       sortArray: ModelExplanationUtils.buildSortedVector(
-        this.props.globalImportance
+        this.props.globalImportance || []
       ).reverse()
     };
   }

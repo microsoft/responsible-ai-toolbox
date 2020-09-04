@@ -1,5 +1,5 @@
 import React from "react";
-import _ from "lodash";
+import _, { toNumber, map } from "lodash";
 import {
   IPlotlyProperty,
   RangeTypes,
@@ -15,6 +15,7 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
+import { IsTwoDimArray } from "@responsible-ai/core-ui";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
@@ -39,9 +40,9 @@ export interface IMultiICEPlotProps {
 }
 
 export interface IMultiICEPlotState {
-  yAxes: number[][] | number[][][];
+  yAxes: number[][] | number[][][] | undefined;
   xAxisArray: string[] | number[];
-  abortControllers: AbortController[];
+  abortControllers: Array<AbortController | undefined>;
   rangeView: IRangeView | undefined;
   errorMessage?: string;
 }
@@ -86,7 +87,7 @@ export class MultiICEPlot extends React.PureComponent<
     selectedClass: number,
     colors: string[],
     rowNames: string[],
-    rangeType: RangeTypes,
+    rangeType?: RangeTypes,
     xData?: Array<number | string>,
     yData?: number[][] | number[][][]
   ): IPlotlyProperty | undefined {
@@ -94,45 +95,48 @@ export class MultiICEPlot extends React.PureComponent<
       yData === undefined ||
       xData === undefined ||
       yData.length === 0 ||
-      yData.some((row) => row === undefined)
+      yData.some((row: number[] | number[][]) => row === undefined)
     ) {
       return undefined;
     }
-    const data: Data[] = (yData as number[][][]).map((singleRow, rowIndex) => {
-      const transposedY: number[][] = Array.isArray(singleRow[0])
-        ? ModelExplanationUtils.transpose2DArray(singleRow)
-        : ([singleRow] as any);
-      const predictionLabel =
-        metadata.modelType === ModelTypes.regression
-          ? localization.IcePlot.prediction
-          : localization.IcePlot.predictedProbability +
-            ": " +
-            metadata.classNames[selectedClass];
-      const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
-      return {
-        mode:
-          rangeType === RangeTypes.categorical
-            ? PlotlyMode.markers
-            : PlotlyMode.linesMarkers,
-        type: "scatter",
-        hovertemplate,
-        hoverinfo: "all",
-        x: xData,
-        y: transposedY[selectedClass],
-        marker: {
-          color: colors[rowIndex]
-        },
-        name: rowNames[rowIndex],
-        customdata: transposedY[selectedClass].map((predY) => {
-          return {
-            Name: rowNames[rowIndex],
-            Yformatted: predY.toLocaleString(undefined, {
-              maximumFractionDigits: 3
-            })
-          };
-        })
-      };
-    }) as any;
+    const data: Data[] = map<number[] | number[][]>(
+      yData,
+      (singleRow: number[] | number[][], rowIndex: number) => {
+        const transposedY: number[][] = IsTwoDimArray(singleRow)
+          ? ModelExplanationUtils.transpose2DArray(singleRow)
+          : [singleRow];
+        const predictionLabel =
+          metadata.modelType === ModelTypes.regression
+            ? localization.IcePlot.prediction
+            : localization.IcePlot.predictedProbability +
+              ": " +
+              metadata.classNames[selectedClass];
+        const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
+        return {
+          mode:
+            rangeType === RangeTypes.categorical
+              ? PlotlyMode.markers
+              : PlotlyMode.linesMarkers,
+          type: "scatter",
+          hovertemplate,
+          hoverinfo: "all",
+          x: xData,
+          y: transposedY[selectedClass],
+          marker: {
+            color: colors[rowIndex]
+          },
+          name: rowNames[rowIndex],
+          customdata: transposedY[selectedClass].map((predY) => {
+            return {
+              Name: rowNames[rowIndex],
+              Yformatted: predY.toLocaleString(undefined, {
+                maximumFractionDigits: 3
+              })
+            };
+          })
+        };
+      }
+    ) as any;
     return {
       config: { displaylogo: false, responsive: true, displayModeBar: false },
       data,
@@ -157,7 +161,7 @@ export class MultiICEPlot extends React.PureComponent<
           title: featureName,
           automargin: true
         }
-      } as any
+      }
     };
   }
 
@@ -190,16 +194,18 @@ export class MultiICEPlot extends React.PureComponent<
     const hasOutgoingRequest = this.state.abortControllers.some(
       (x) => x !== undefined
     );
-    const plotlyProps = MultiICEPlot.buildPlotlyProps(
-      this.props.metadata,
-      this.props.jointDataset.metaDict[this.props.feature].label,
-      this.props.selectedClass,
-      this.props.colors,
-      this.props.rowNames,
-      this.state.rangeView.type,
-      this.state.xAxisArray,
-      this.state.yAxes
-    );
+    const plotlyProps = this.state.rangeView
+      ? MultiICEPlot.buildPlotlyProps(
+          this.props.metadata,
+          this.props.jointDataset.metaDict[this.props.feature].label,
+          this.props.selectedClass,
+          this.props.colors,
+          this.props.rowNames,
+          this.state.rangeView.type,
+          this.state.xAxisArray,
+          this.state.yAxes
+        )
+      : undefined;
     const hasError =
       this.state.rangeView !== undefined &&
       (this.state.rangeView.maxErrorMessage !== undefined ||
@@ -240,7 +246,7 @@ export class MultiICEPlot extends React.PureComponent<
                     }
                   }}
                   label={localization.WhatIfTab.minLabel}
-                  value={this.state.rangeView.min.toString()}
+                  value={this.state.rangeView.min?.toString()}
                   onIncrement={this.onMinRangeChanged.bind(this, 1)}
                   onDecrement={this.onMinRangeChanged.bind(this, -1)}
                   onValidate={this.onMinRangeChanged.bind(this, 0)}
@@ -260,7 +266,7 @@ export class MultiICEPlot extends React.PureComponent<
                     }
                   }}
                   label={localization.WhatIfTab.maxLabel}
-                  value={this.state.rangeView.max.toString()}
+                  value={this.state.rangeView.max?.toString()}
                   onIncrement={this.onMaxRangeChanged.bind(this, 1)}
                   onDecrement={this.onMaxRangeChanged.bind(this, -1)}
                   onValidate={this.onMaxRangeChanged.bind(this, 0)}
@@ -280,7 +286,7 @@ export class MultiICEPlot extends React.PureComponent<
                     }
                   }}
                   label={localization.WhatIfTab.stepsLabel}
-                  value={this.state.rangeView.steps.toString()}
+                  value={this.state.rangeView.steps?.toString()}
                   onIncrement={this.onStepsRangeChanged.bind(this, 1)}
                   onDecrement={this.onStepsRangeChanged.bind(this, -1)}
                   onValidate={this.onStepsRangeChanged.bind(this, 0)}
@@ -311,10 +317,7 @@ export class MultiICEPlot extends React.PureComponent<
         )}
         {plotlyProps !== undefined && !hasOutgoingRequest && !hasError && (
           <div className={classNames.chartWrapper}>
-            <AccessibleChart
-              plotlyProps={plotlyProps}
-              theme={getTheme() as any}
-            />
+            <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
           </div>
         )}
       </div>
@@ -331,17 +334,24 @@ export class MultiICEPlot extends React.PureComponent<
 
   private onMinRangeChanged(delta: number, stringVal: string): string | void {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (delta === 0) {
+    if (!rangeView) {
+      return;
+    }
+    if (delta === 0 || rangeView.min === undefined) {
       const numberVal = +stringVal;
       if (Number.isNaN(numberVal)) {
-        return rangeView.min.toString();
+        return rangeView.min?.toString();
       }
       rangeView.min = numberVal;
     } else {
       rangeView.min += delta;
     }
-    if (+rangeView.max <= rangeView.min) {
-      return this.state.rangeView.min.toString();
+    if (
+      rangeView.max !== undefined &&
+      rangeView.min !== undefined &&
+      rangeView.max <= rangeView.min
+    ) {
+      return rangeView.min?.toString();
     }
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
@@ -359,17 +369,24 @@ export class MultiICEPlot extends React.PureComponent<
 
   private onMaxRangeChanged(delta: number, stringVal: string): string | void {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (delta === 0) {
+    if (!rangeView) {
+      return;
+    }
+    if (delta === 0 || rangeView.max === undefined) {
       const numberVal = +stringVal;
       if (Number.isNaN(numberVal)) {
-        return rangeView.max.toString();
+        return rangeView.max?.toString();
       }
       rangeView.max = numberVal;
     } else {
       rangeView.max += delta;
     }
-    if (rangeView.max <= rangeView.min) {
-      return this.state.rangeView.max.toString();
+    if (
+      rangeView.max !== undefined &&
+      rangeView.min !== undefined &&
+      rangeView.max <= rangeView.min
+    ) {
+      return rangeView.max.toString();
     }
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
@@ -387,17 +404,20 @@ export class MultiICEPlot extends React.PureComponent<
 
   private onStepsRangeChanged(delta: number, stringVal: string): string | void {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (delta === 0) {
+    if (!rangeView) {
+      return;
+    }
+    if (delta === 0 || rangeView.steps === undefined) {
       const numberVal = +stringVal;
       if (!Number.isInteger(numberVal)) {
-        return rangeView.steps.toString();
+        return rangeView.steps?.toString();
       }
       rangeView.steps = numberVal;
     } else {
       rangeView.steps += delta;
     }
     if (rangeView.steps <= 0) {
-      return this.state.rangeView.steps.toString();
+      return rangeView.steps.toString();
     }
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
@@ -420,6 +440,9 @@ export class MultiICEPlot extends React.PureComponent<
     value?: string
   ): void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
+    if (!rangeView) {
+      return;
+    }
     const currentSelectedKeys = rangeView.selectedOptionKeys || [];
     if (option) {
       // User selected/de-selected an existing option
@@ -434,7 +457,7 @@ export class MultiICEPlot extends React.PureComponent<
         ...currentSelectedKeys,
         newOption.key as string
       ];
-      rangeView.categoricalOptions.push(newOption);
+      rangeView.categoricalOptions?.push(newOption);
     }
     const xAxisArray = this.buildRange(rangeView);
     this.setState({ rangeView, xAxisArray }, () => {
@@ -457,6 +480,10 @@ export class MultiICEPlot extends React.PureComponent<
   };
 
   private fetchData(): void {
+    if (!this.props.invokeModel) {
+      return;
+    }
+    const invokeModel = this.props.invokeModel;
     this.state.abortControllers.forEach((abortController) => {
       if (abortController !== undefined) {
         abortController.abort();
@@ -468,9 +495,9 @@ export class MultiICEPlot extends React.PureComponent<
       newController[index] = abortController;
       this.setState({ abortControllers: newController });
       const permutations = this.buildDataSpans(row, this.state.xAxisArray);
-      return this.props.invokeModel(permutations, abortController.signal);
+      return invokeModel(permutations, abortController.signal);
     });
-    const yAxes = this.props.datapoints.map(() => undefined);
+    const yAxes = undefined;
 
     this.setState({ yAxes, errorMessage: undefined }, async () => {
       try {
@@ -493,7 +520,7 @@ export class MultiICEPlot extends React.PureComponent<
             errorMessage: localization.formatString(
               localization.IcePlot.errorPrefix,
               err.message
-            ) as string
+            )
           });
         }
       }
@@ -504,15 +531,22 @@ export class MultiICEPlot extends React.PureComponent<
     row: Array<string | number>,
     range: Array<string | number>
   ): Array<Array<number | string>> {
+    if (!this.state.rangeView) {
+      return [];
+    }
+    const rangeView = this.state.rangeView;
     return range.map((val: number | string) => {
       const copy = _.cloneDeep(row);
-      copy[this.state.rangeView.featureIndex] = val;
+      copy[rangeView.featureIndex] = val;
       return copy;
     });
   }
 
-  private buildRangeView(featureKey: string): IRangeView {
+  private buildRangeView(featureKey: string): IRangeView | undefined {
     const summary = this.props.jointDataset.metaDict[featureKey];
+    if (!summary || summary.index === undefined || !summary.featureRange) {
+      return undefined;
+    }
     if (summary.treatAsCategorical) {
       // Columns that are passed in as categorical strings should be strings when passed to predict
       if (summary.isCategorical) {
@@ -520,7 +554,7 @@ export class MultiICEPlot extends React.PureComponent<
           key: featureKey,
           featureIndex: summary.index,
           selectedOptionKeys: summary.sortedCategoricalValues,
-          categoricalOptions: summary.sortedCategoricalValues.map((text) => {
+          categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
             return { key: text, text };
           }),
           type: RangeTypes.categorical
@@ -531,8 +565,8 @@ export class MultiICEPlot extends React.PureComponent<
       return {
         key: featureKey,
         featureIndex: summary.index,
-        selectedOptionKeys: summary.sortedCategoricalValues.map((x) => +x),
-        categoricalOptions: summary.sortedCategoricalValues.map((text) => {
+        selectedOptionKeys: summary.sortedCategoricalValues?.map((x) => +x),
+        categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
           return { key: +text, text: text.toString() };
         }),
         type: RangeTypes.categorical
@@ -541,14 +575,14 @@ export class MultiICEPlot extends React.PureComponent<
     return {
       key: featureKey,
       featureIndex: summary.index,
-      min: summary.featureRange.min,
-      max: summary.featureRange.max,
+      min: summary.featureRange?.min,
+      max: summary.featureRange?.max,
       steps: 20,
       type: summary.featureRange.rangeType
     };
   }
 
-  private buildRange(rangeView: IRangeView): number[] | string[] {
+  private buildRange(rangeView: IRangeView | undefined): number[] | string[] {
     if (
       rangeView === undefined ||
       rangeView.minErrorMessage !== undefined ||
@@ -557,9 +591,9 @@ export class MultiICEPlot extends React.PureComponent<
     ) {
       return [];
     }
-    const min = rangeView.min;
-    const max = rangeView.max;
-    const steps = rangeView.steps;
+    const min = toNumber(rangeView.min);
+    const max = toNumber(rangeView.max);
+    const steps = toNumber(rangeView.steps);
 
     if (
       rangeView.type === RangeTypes.categorical &&

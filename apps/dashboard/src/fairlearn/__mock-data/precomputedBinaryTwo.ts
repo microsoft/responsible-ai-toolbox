@@ -1,4 +1,6 @@
-export const precomputedBinaryTwo = {
+import { IFairnessData, PredictionTypes } from "@responsible-ai/fairlearn";
+
+export const precomputedBinaryTwo: IFairnessData = {
   trueY: [
     0,
     0,
@@ -3058,5 +3060,5 @@ export const precomputedBinaryTwo = {
       binLabels: ["Group 0", "Group 1"]
     }
   ],
-  predictionType: "binaryClassification"
+  predictionType: PredictionTypes.binaryClassification
 };

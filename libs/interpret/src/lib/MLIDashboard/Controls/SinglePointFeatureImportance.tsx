@@ -8,7 +8,11 @@ import {
 } from "office-ui-fabric-react";
 import _ from "lodash";
 
-import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import {
+  IExplanationContext,
+  ModelTypes,
+  ILocalExplanation
+} from "../IExplanationContext";
 import {
   IBarChartConfig,
   FeatureKeys,
@@ -59,9 +63,11 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       localExplanation !== undefined &&
       localExplanation.values !== undefined
     ) {
-      const featuresByClassMatrix = this.getFeatureByClassMatrix();
-      const sortVector = this.getSortVector();
-      const defaultVisibleClasses: number[] =
+      const featuresByClassMatrix = this.getFeatureByClassMatrix(
+        localExplanation
+      );
+      const sortVector = this.getSortVector(localExplanation);
+      const defaultVisibleClasses =
         this.state.selectedSorting !== FeatureKeys.absoluteGlobal &&
         this.state.selectedSorting !== FeatureKeys.absoluteLocal
           ? [this.state.selectedSorting]
@@ -125,7 +131,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
             </div>
             <BarChart
               intercept={
-                this.props.explanationContext.localExplanation.intercepts
+                this.props.explanationContext.localExplanation?.intercepts
               }
               featureByClassMatrix={featuresByClassMatrix}
               sortedIndexVector={sortVector}
@@ -158,12 +164,11 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     return <NoDataMessage explanationStrings={explanationStrings} />;
   }
 
-  private getSortVector(): number[] {
-    const localExplanation = this.props.explanationContext.localExplanation;
+  private getSortVector(localExplanation: ILocalExplanation): number[] {
     if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
       return ModelExplanationUtils.buildSortedVector(
         this.props.explanationContext.globalExplanation
-          .perClassFeatureImportances
+          ?.perClassFeatureImportances || []
       );
     } else if (this.state.selectedSorting === FeatureKeys.absoluteLocal) {
       return ModelExplanationUtils.buildSortedVector(
@@ -176,10 +181,10 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     );
   }
 
-  private getFeatureByClassMatrix(): number[][] {
-    const result = this.props.explanationContext.localExplanation.values[
-      this.props.selectedRow
-    ];
+  private getFeatureByClassMatrix(
+    localExplanation: ILocalExplanation
+  ): number[][] {
+    const result = localExplanation.values[this.props.selectedRow];
     // Binary classifier just has feature importance for class 0 stored, class one is equal and oposite.
     if (
       this.props.explanationContext.modelMetadata.modelType ===
@@ -251,8 +256,10 @@ export class SinglePointFeatureImportance extends React.PureComponent<
 
   private onSortSelect = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    this.setState({ selectedSorting: item.key as any });
+    if (item) {
+      this.setState({ selectedSorting: item.key as FeatureSortingKey });
+    }
   };
 }

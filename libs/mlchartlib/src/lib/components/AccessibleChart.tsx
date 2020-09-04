@@ -15,7 +15,7 @@ export interface IPlotlyAnimateProps {
 
 export interface IAccessibleChartProps {
   plotlyProps: IPlotlyProperty;
-  theme: string | ITheme;
+  theme: string | ITheme | undefined;
   themeOverride?: Partial<IPlotlyTheme>;
   relayoutArg?: Partial<Plotly.Layout>;
   animateArg?: IPlotlyAnimateProps;
@@ -25,8 +25,8 @@ export interface IAccessibleChartProps {
 
 export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   public guid: string = v4();
-  private timer: number;
-  private plotlyRef: Plotly.PlotlyHTMLElement;
+  private timer: number | undefined;
+  private plotlyRef: Plotly.PlotlyHTMLElement | undefined;
   private isClickHandled = false;
 
   public componentDidMount(): void {

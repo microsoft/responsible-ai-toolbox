@@ -11,7 +11,7 @@ import {
 } from "office-ui-fabric-react";
 
 import React from "react";
-import { IBinnedResponse } from "../IBinnedResponse";
+import { IBinnedResponse } from "../../util/IBinnedResponse";
 import { IWizardTabProps } from "../IWizardTabProps";
 import { localization } from "../../Localization/localization";
 import { BinDialog } from "./BinDialog";
@@ -61,7 +61,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
                 ] as INumericRange
               }
               bins={this.props.featureBins[this.state.editingFeatureIndex]}
-              dataset={this.props.dashboardContext.dataset}
+              dataset={this.props.dashboardContext.dataset || []}
               index={this.state.editingFeatureIndex}
               onSave={this.onBinSave}
               onCancel={this.hideModal}
@@ -112,9 +112,12 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
 
   private readonly _onRenderCell = (
     styles: IProcessedStyleSet<IFeatureTabStyles>,
-    item: IBinnedResponse,
-    index: number | undefined
+    item?: IBinnedResponse,
+    index?: number | undefined
   ): JSX.Element => {
+    if (item === undefined || index === undefined) {
+      return <div />;
+    }
     return (
       <div
         key={index}
@@ -138,31 +141,27 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           </Text>
           {item.rangeType === RangeTypes.categorical && (
             <Text variant={"mediumPlus"} className={styles.valueCount} block>
-              {
-                localization.formatString(
-                  localization.Feature.summaryCategoricalCount,
-                  item.array.length
-                ) as string
-              }
+              {localization.formatString(
+                localization.Feature.summaryCategoricalCount,
+                item.array.length
+              )}
             </Text>
           )}
           {item.rangeType !== RangeTypes.categorical && (
             <Text variant={"mediumPlus"} className={styles.valueCount} block>
-              {
-                localization.formatString(
-                  localization.Feature.summaryNumericCount,
-                  (this.props.dashboardContext.modelMetadata.featureRanges[
-                    index
-                  ] as INumericRange).min,
-                  (this.props.dashboardContext.modelMetadata.featureRanges[
-                    index
-                  ] as INumericRange).max,
-                  item.labelArray.length
-                ) as string
-              }
+              {localization.formatString(
+                localization.Feature.summaryNumericCount,
+                (this.props.dashboardContext.modelMetadata.featureRanges[
+                  index
+                ] as INumericRange).min,
+                (this.props.dashboardContext.modelMetadata.featureRanges[
+                  index
+                ] as INumericRange).max,
+                item.labelArray.length
+              )}
             </Text>
           )}
-          {!this.props.dashboardContext.modelMetadata.featureIsCategorical[
+          {!this.props.dashboardContext.modelMetadata.featureIsCategorical?.[
             index
           ] && (
             <ActionButton
@@ -204,7 +203,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
                 <ActionButton
                   className={styles.expandButton}
                   iconProps={{ iconName: "ChevronUpMed" }}
-                  onClick={this.updateExpandedList.bind(this)}
+                  onClick={this.updateExpandedList.bind(this, undefined)}
                 >
                   {localization.Feature.hideCategories}
                 </ActionButton>
@@ -217,8 +216,8 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   };
 
   private readonly updateExpandedList = (value?: number): void => {
-    this.setState(() => {
-      return { expandedBins: [value] };
-    });
+    if (value !== undefined) {
+      this.setState({ expandedBins: [value] });
+    }
   };
 }
