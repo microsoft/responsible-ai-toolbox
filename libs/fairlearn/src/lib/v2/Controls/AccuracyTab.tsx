@@ -3,12 +3,12 @@ import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 import { IAccuracyPickerPropsV2 } from "../FairnessWizard";
 import { PredictionTypes } from "../../IFairnessProps";
-import { IWizardTabProps } from "../IWizardTabProps";
+import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { localization } from "../../Localization/localization";
+import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
+import { WizardFooter } from "../../components/WizardFooter";
 import { AccuracyTabStyles } from "./AccuracyTab.styles";
-import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { TileList } from "./TileList";
-import { WizardFooter } from "./WizardFooter";
 
 export interface IAccuracyPickingTabProps extends IWizardTabProps {
   accuracyPickerProps: IAccuracyPickerPropsV2;
