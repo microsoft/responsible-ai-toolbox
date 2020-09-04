@@ -537,22 +537,21 @@ export class NewExplanationDashboard extends React.PureComponent<
               explanationMethod={this.props.explanationMethod}
             />
           )}
-          {this.state.activeGlobalTab === globalTabKeys.whatIfTab &&
-            this.state.requestPredictions && (
-              <WhatIfTab
-                jointDataset={this.state.jointDataset}
-                metadata={this.state.modelMetadata}
-                cohorts={this.state.cohorts}
-                onChange={this.onWhatIfConfigChanged}
-                chartProps={this.state.whatIfChartConfig}
-                invokeModel={this.state.requestPredictions}
-                editCohort={this.openCohort}
-                selectedWeightVector={this.state.selectedWeightVector}
-                weightOptions={this.weightVectorOptions}
-                weightLabels={this.weightVectorLabels}
-                onWeightChange={this.onWeightVectorChange}
-              />
-            )}
+          {this.state.activeGlobalTab === globalTabKeys.whatIfTab && (
+            <WhatIfTab
+              jointDataset={this.state.jointDataset}
+              metadata={this.state.modelMetadata}
+              cohorts={this.state.cohorts}
+              onChange={this.onWhatIfConfigChanged}
+              chartProps={this.state.whatIfChartConfig}
+              invokeModel={this.state.requestPredictions}
+              editCohort={this.openCohort}
+              selectedWeightVector={this.state.selectedWeightVector}
+              weightOptions={this.weightVectorOptions}
+              weightLabels={this.weightVectorLabels}
+              onWeightChange={this.onWeightVectorChange}
+            />
+          )}
         </div>
       </div>
     );
