@@ -1,0 +1,7 @@
+import { IExplanationDashboardData } from "@responsible-ai/interpret";
+import { irisData } from "./irisData";
+
+export const irisNoFeatures: IExplanationDashboardData = {
+  ...irisData,
+  dataSummary: { ...irisData.dataSummary, featureNames: undefined }
+};

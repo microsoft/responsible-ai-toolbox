@@ -58,8 +58,6 @@ export class GlobalOnlyChart extends React.PureComponent<
 
   public constructor(props: IGlobalOnlyChartProps) {
     super(props);
-    console.log("GlobalOnlyChart");
-    console.log(this.perClassExplanationDimension, this.globalSeries);
 
     this.classOptions = this.props.metadata.classNames.map(
       (className, index) => {
@@ -81,7 +79,6 @@ export class GlobalOnlyChart extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    console.log("GlobalOnlyChart render");
     const classNames = globalTabStyles();
     const maxStartingK = Math.max(0, this.featureDimension - this.state.topK);
     return (
