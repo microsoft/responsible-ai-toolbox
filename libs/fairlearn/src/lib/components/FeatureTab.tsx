@@ -6,7 +6,9 @@ import {
   Text,
   DetailsList,
   SelectionMode,
-  IColumn
+  IColumn,
+  Selection,
+  ISelection
 } from "office-ui-fabric-react";
 
 import React from "react";
@@ -33,8 +35,20 @@ interface IState {
 
 export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   private columns: IColumn[];
+  private selection: ISelection;
   public constructor(props: IFeatureTabProps) {
     super(props);
+    this.selection = new Selection({
+      onSelectionChanged: (): void => {
+        const select = this.selection.getSelectedIndices()[0];
+        if (
+          select !== undefined &&
+          select !== this.props.selectedFeatureIndex
+        ) {
+          this.props.selectedFeatureChange(select);
+        }
+      }
+    });
     this.state = {
       expandedBins: new Set<number>(),
       editingFeatureIndex: undefined
@@ -53,6 +67,15 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         onRender: this.renderSubGroupCell
       }
     ];
+  }
+  public componentDidMount(): void {
+    setImmediate(() => {
+      this.selection.setIndexSelected(
+        this.props.selectedFeatureIndex,
+        true,
+        false
+      );
+    });
   }
 
   public render(): React.ReactNode {
@@ -94,6 +117,9 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             items={this.props.featureBins}
             columns={this.columns}
             selectionMode={SelectionMode.single}
+            selection={this.selection}
+            selectionPreservedOnEmptyClick={true}
+            getKey={this.getKey}
           />
           <WizardFooter onNext={this.props.onNext} />
         </Stack>
@@ -104,6 +130,10 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
       </Stack>
     );
   }
+
+  private readonly getKey = (item: IBinnedResponse): string => {
+    return this.props.featureBins.indexOf(item).toString();
+  };
 
   private readonly hideModal = (): void => {
     this.setState({ editingFeatureIndex: undefined });

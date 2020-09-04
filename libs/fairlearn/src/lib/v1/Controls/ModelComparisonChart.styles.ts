@@ -93,16 +93,12 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       flex: 1
     },
     textSection: {
-      color: theme.semanticColors.bodyText,
       paddingBottom: "5px"
     },
     radio: {
       paddingBottom: "30px",
-      paddingLeft: "75px",
-      backgroundColor: theme.semanticColors.bodyBackground
+      paddingLeft: "75px"
     },
-    radioOptions: {
-      color: theme.semanticColors.bodyText
-    }
+    radioOptions: {}
   });
 };
