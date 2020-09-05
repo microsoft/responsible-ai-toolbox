@@ -120,6 +120,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             selection={this.selection}
             selectionPreservedOnEmptyClick={true}
             getKey={this.getKey}
+            setKey="set"
           />
           <WizardFooter onNext={this.props.onNext} />
         </Stack>
