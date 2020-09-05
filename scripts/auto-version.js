@@ -19,6 +19,19 @@ function getTargetVersion(local, npmVersions) {
   if (!semver.valid(latest)) {
     throw new Error(`Invalid latest version on npm ${latest}`);
   }
+  if (semver.major(latest) > semver.major(local)) {
+    throw new Error(
+      `Remote has greater major version. ${latest} > ${local}, update local major version first`
+    );
+  }
+  if (
+    semver.major(latest) === semver.major(local) &&
+    semver.minor(latest) > semver.minor(local)
+  ) {
+    throw new Error(
+      `Remote has greater minor version. ${latest} > ${local}, update local minor version first`
+    );
+  }
   if (semver.gte(latest, local)) {
     const target = semver.inc(latest, "patch");
     console.log(
