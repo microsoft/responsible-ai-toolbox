@@ -66,6 +66,8 @@ jobs:
           path: dist
       - name: Install yarn
         run: npm install yarn -g
+      - name: Install
+        run: yarn install --frozen-lock-file
       - name: bump version
         run: yarn auto-version ${{ matrix.package }}
       - id: publish
