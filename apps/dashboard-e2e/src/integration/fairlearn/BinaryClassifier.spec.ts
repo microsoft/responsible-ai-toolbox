@@ -1,4 +1,4 @@
-import { getSpan } from "../../support/App";
+import { getSpan } from "../../support/getSpan";
 
 describe("dashboard", () => {
   beforeEach(() => {

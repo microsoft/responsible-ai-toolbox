@@ -1,4 +1,4 @@
-import { getMenu } from "../support/App";
+import { getMenu } from "../support/getMenu";
 const topMenu = "#TopMenuBar";
 describe("dashboard", () => {
   beforeEach(() => cy.visit("/"));
