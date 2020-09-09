@@ -1,31 +1,17 @@
 import { toNumber } from "lodash";
+import { BarChart } from "../../../support/BarChart";
 import { getMenu } from "../../../support/getMenu";
-import { Bar } from "../../../support/Bar";
 
-function getSvgWidth(): number | undefined {
-  return cy.$$("#FeatureImportanceBar svg").width();
-}
-function getFeatureBars(): Cypress.Chainable<Array<Bar | undefined>> {
-  return cy
-    .get("#FeatureImportanceBar svg .plot .trace.bars .points .point path")
-    .then((e) => Bar.getCoordinates(e));
-}
-function getVisibleBars(): Cypress.Chainable<Array<Bar | undefined>> {
-  const svgWidth = getSvgWidth() || 0;
-  return getFeatureBars().then((bs) => {
-    return bs.filter((bar) => (bar && bar.x + bar.w < svgWidth) || false);
-  });
-}
 function getTopKValue(): number {
   return toNumber(cy.$$("#TopKSetting input").val());
 }
 
 export function describeGlobalExplanationChart(): void {
   describe("Global explanation chart", () => {
-    let bars: Cypress.Chainable<Array<Bar | undefined>>;
+    let barChart: BarChart;
     beforeEach(() => {
       getMenu("Aggregate Feature Importance", "#DashboardPivot").click();
-      bars = getFeatureBars();
+      barChart = new BarChart("#FeatureImportanceBar");
     });
     it("should have y axis label", () => {
       cy.get('#FeatureImportanceBar div[class*="rotatedVerticalBox"]').should(
@@ -49,7 +35,7 @@ export function describeGlobalExplanationChart(): void {
       ).should("have.length", 14);
     });
     it("should have valid coordinates", () => {
-      bars.each((bar, idx) => {
+      barChart.Bars.each((bar, idx) => {
         expect(
           bar,
           `The ${idx}th bar should have correct coordinates`
@@ -57,15 +43,15 @@ export function describeGlobalExplanationChart(): void {
       });
     });
     it("should be sorted by x", () => {
-      bars.then((arr) => {
-        const sorted = Bar.sortByX(arr);
+      barChart.Bars.then((arr) => {
+        const sorted = BarChart.sortByX(arr);
         expect(sorted).to.deep.eq(arr);
       });
-      it("should be sorted by heigh", () => {
-        bars.then((arr) => {
-          const sorted = Bar.sortByH(arr);
-          expect(sorted).to.deep.eq(arr);
-        });
+    });
+    it("should be sorted by heigh", () => {
+      barChart.Bars.then((arr) => {
+        const sorted = BarChart.sortByH(arr);
+        expect(sorted).to.deep.eq(arr);
       });
     });
 
@@ -81,9 +67,9 @@ export function describeGlobalExplanationChart(): void {
         cy.get("#GlobalExplanationSettingsCallout").should("not.exist");
       });
 
-      it("chart should match setting", () => {
+      it("chart bars should match top K setting", () => {
         const topK = getTopKValue();
-        getVisibleBars().should("have.length", topK);
+        barChart.VisibleBars.should("have.length", topK);
       });
     });
   });
