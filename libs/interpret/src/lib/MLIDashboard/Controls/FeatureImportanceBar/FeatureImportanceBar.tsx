@@ -82,7 +82,10 @@ export class FeatureImportanceBar extends React.PureComponent<
       return <LoadingSpinner />;
     }
     return (
-      <div className={featureImportanceBarStyles.chartWithVertical}>
+      <div
+        id="FeatureImportanceBar"
+        className={featureImportanceBarStyles.chartWithVertical}
+      >
         <div className={featureImportanceBarStyles.verticalAxis}>
           <div className={featureImportanceBarStyles.rotatedVerticalBox}>
             <div>
