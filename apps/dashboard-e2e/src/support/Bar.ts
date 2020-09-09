@@ -10,7 +10,7 @@ function getCoordinate(element: HTMLElement): Bar | undefined {
     return undefined;
   }
   const [, ...strCords] = exec;
-  const [left, bottom, right, top, bottom2] = strCords.map(Number);
+  const [left, bottom, top, right, bottom2] = strCords.map(Number);
   if (bottom !== bottom2) {
     return undefined;
   }

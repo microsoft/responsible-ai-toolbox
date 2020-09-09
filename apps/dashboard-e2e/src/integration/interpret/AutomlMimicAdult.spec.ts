@@ -1,5 +1,9 @@
-import { describeAggregateFeatureImportance } from "./describeAggregateFeatureImportance";
+import { AggregateFeatureImportanceDescriber } from "./aggregateFeatureImportance/AggregateFeatureImportanceDescriber";
 
+const aggregateFeatureImportanceDescriber = new AggregateFeatureImportanceDescriber(
+  "automlMimicAdult"
+);
 describe("AutomlMimicAdult", () => {
-  describeAggregateFeatureImportance("automlMimicAdult");
+  aggregateFeatureImportanceDescriber.describeTabHeader();
+  aggregateFeatureImportanceDescriber.describeGlobalExplanationChart();
 });
