@@ -191,7 +191,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           localization.formatString(localization.BarChart.classLabel, className)
         );
       }
-      if (!isNaN(+xValue)) {
+      if (!Number.isNaN(+xValue)) {
         const numericFormatter =
           rangeType === RangeTypes.numeric
             ? { minimumFractionDigits: 3 }
@@ -562,15 +562,15 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           if (Array.isArray(fetchedData)) {
             this.setState({ fetchedData, abortController: undefined });
           }
-        } catch (err) {
-          if (err.name === "AbortError") {
+        } catch (error) {
+          if (error.name === "AbortError") {
             return;
           }
-          if (err.name === "PythonError") {
+          if (error.name === "PythonError") {
             this.setState({
               errorMessage: localization.formatString(
                 localization.IcePlot.errorPrefix,
-                err.message
+                error.message
               )
             });
           }

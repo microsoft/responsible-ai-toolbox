@@ -48,7 +48,7 @@ export interface IModelComparisonProps {
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
   onEditConfigs: () => void;
-  onChartClick?: (data: any) => void;
+  onChartClick?: (data?: any) => void;
 }
 
 export interface IState {

@@ -8,7 +8,7 @@ export class FormatMetrics {
     sigDigits = 3
   ): string => {
     if (value === null || value === undefined) {
-      return NaN.toString();
+      return Number.NaN.toString();
     }
     const styleObject: Intl.NumberFormatOptions = {
       maximumSignificantDigits: sigDigits

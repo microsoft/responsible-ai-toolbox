@@ -1836,12 +1836,13 @@ export class WhatIfTab extends React.PureComponent<
           const predictionVector = fetchedData[0];
           let predictedClass = 0;
           let maxProb = Number.MIN_SAFE_INTEGER;
-          for (let i = 0; i < predictionVector.length; i++) {
-            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
-              predictionVector[i];
-            if (predictionVector[i] > maxProb) {
+          for (const [i, element] of predictionVector.entries()) {
+            fetchingReference[
+              JointDataset.ProbabilityYRoot + i.toString()
+            ] = element;
+            if (element > maxProb) {
               predictedClass = i;
-              maxProb = predictionVector[i];
+              maxProb = element;
             }
           }
           fetchingReference[JointDataset.PredictedYLabel] = predictedClass;
@@ -1856,15 +1857,15 @@ export class WhatIfTab extends React.PureComponent<
           );
         }
         this.setState({ request: undefined });
-      } catch (err) {
-        if (err.name === "AbortError") {
+      } catch (error) {
+        if (error.name === "AbortError") {
           return;
         }
-        if (err.name === "PythonError") {
+        if (error.name === "PythonError") {
           alert(
             localization.formatString(
               localization.IcePlot.errorPrefix,
-              err.message
+              error.message
             )
           );
         }

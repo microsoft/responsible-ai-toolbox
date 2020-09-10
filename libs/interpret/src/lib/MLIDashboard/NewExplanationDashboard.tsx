@@ -359,7 +359,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     length: number,
     baseString: string
   ): string[] {
-    return Array.from(Array(length).keys()).map((i) =>
+    return [...new Array(length).keys()].map((i) =>
       localization.formatString(baseString, i.toString())
     );
   }

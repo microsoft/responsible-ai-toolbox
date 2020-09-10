@@ -9,7 +9,7 @@ export class DefaultSelectionFunctions {
   ): void {
     const selectedPoints =
       selections.length === 0
-        ? null
+        ? undefined
         : plotlyProps.data.map((trace) => {
             const selectedIndexes: number[] = [];
             if (trace.customdata) {

@@ -60,7 +60,9 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    const bins = value.bins.slice().filter((x) => x !== undefined && !isNaN(x));
+    const bins = value.bins
+      .slice()
+      .filter((x) => x !== undefined && !Number.isNaN(x));
 
     const min = _.min(bins);
     const max = _.max(bins);

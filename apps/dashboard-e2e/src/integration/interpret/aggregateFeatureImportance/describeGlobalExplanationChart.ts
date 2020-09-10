@@ -21,12 +21,12 @@ export function describeGlobalExplanationChart(): void {
     });
     it("should have x axis label", () => {
       const columns = ["Column6", "Column5", "Column1", "Column13"];
-      for (let i = 0; i < columns.length; i++) {
+      for (const [i, column] of columns.entries()) {
         cy.get(
           `#FeatureImportanceBar svg g.xaxislayer-above g.xtick:nth-child(${
             i + 1
           }) text`
-        ).should("contain.text", columns[i]);
+        ).should("contain.text", column);
       }
     });
     it("should have 14 bars", () => {

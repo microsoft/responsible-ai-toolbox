@@ -15,7 +15,9 @@
     "jsx-a11y",
     "react",
     "react-hooks",
-    "filenames"
+    "filenames",
+    "eslint-plugin-unicorn",
+    "eslint-plugin-eslint-comments"
   ],
   "env": {
     "browser": true,
@@ -31,9 +33,11 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "eslint-comments/no-use": ["error", { "allow": [] }],
     "import/no-unresolved": "off",
     "import/order": "error",
     "filenames/match-regex": "error",
@@ -361,6 +365,12 @@
     "no-useless-constructor": "error"
   },
   "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
     {
       "files": ["*.tsx"],
       "rules": {

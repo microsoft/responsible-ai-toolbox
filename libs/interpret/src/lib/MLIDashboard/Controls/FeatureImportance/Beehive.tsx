@@ -162,21 +162,19 @@ export class Beehive extends React.PureComponent<
               const predictedClassIndex = data.testDataset.predictedY
                 ? data.testDataset.predictedY[rowIndex]
                 : undefined;
-              const predictedClass = data.testDataset.predictedY
-                ? isClassifier && predictedClassIndex !== undefined
-                  ? data.modelMetadata.classNames[predictedClassIndex] ||
-                    `class ${predictedClassIndex}`
-                  : predictedClassIndex
-                : undefined;
+              const predictedClass = Beehive.getPredictedClass(
+                data,
+                isClassifier,
+                predictedClassIndex
+              );
               const trueClassIndex = data.testDataset.trueY
                 ? data.testDataset.trueY[rowIndex]
                 : undefined;
-              const trueClass = data.testDataset.trueY
-                ? isClassifier && trueClassIndex !== undefined
-                  ? data.modelMetadata.classNames[trueClassIndex] ||
-                    `class ${trueClassIndex}`
-                  : trueClassIndex
-                : undefined;
+              const trueClass = Beehive.getTrueClass(
+                data,
+                isClassifier,
+                trueClassIndex
+              );
               return {
                 rowIndex: rowIndex.toString(),
                 normalizedFeatureValue:
@@ -289,12 +287,63 @@ export class Beehive extends React.PureComponent<
     };
   }
 
+  private static getTrueClass(
+    data: IExplanationContext,
+    isClassifier: boolean,
+    trueClassIndex: number | undefined
+  ): string | number | undefined {
+    if (data.testDataset.trueY) {
+      if (isClassifier && trueClassIndex !== undefined) {
+        return (
+          data.modelMetadata.classNames[trueClassIndex] ||
+          `class ${trueClassIndex}`
+        );
+      }
+      return trueClassIndex;
+    }
+    return undefined;
+  }
+
+  private static getPredictedClass(
+    data: IExplanationContext,
+    isClassifier: boolean,
+    predictedClassIndex: number | undefined
+  ): string | number | undefined {
+    if (data.testDataset.predictedY) {
+      if (isClassifier && predictedClassIndex !== undefined) {
+        return (
+          data.modelMetadata.classNames[predictedClassIndex] ||
+          `class ${predictedClassIndex}`
+        );
+      }
+      return predictedClassIndex;
+    }
+    return undefined;
+  }
+
+  private static getFormattedImportance(
+    data: IExplanationContext,
+    rowIndex: number,
+    featureIndex: number
+  ): string | number {
+    if (!data.localExplanation?.flattenedValues) {
+      return "";
+    }
+    if ((data.localExplanation?.flattenedValues?.length || 0) > 500) {
+      return data.localExplanation.flattenedValues[rowIndex][featureIndex];
+    }
+    return data.localExplanation.flattenedValues[rowIndex][
+      featureIndex
+    ].toLocaleString(undefined, {
+      minimumFractionDigits: 3
+    });
+  }
+
   private static buildTooltip(
     data: IExplanationContext,
     rowIndex: number,
     featureIndex: number
   ): string {
-    const isLarge = (data.localExplanation?.flattenedValues?.length || 0) > 500;
     const result = [];
     // The formatString imputes are keys to loc object. This is because format string tries to use them as keys first, and only uses the passed in string after
     // trowing an exception in a try block. This is very slow for repeated calls.
@@ -313,15 +362,11 @@ export class Beehive extends React.PureComponent<
       );
     }
     // formatting strings is slow, only do for small numbers
-    const formattedImportance = !data.localExplanation?.flattenedValues
-      ? ""
-      : isLarge
-      ? data.localExplanation.flattenedValues[rowIndex][featureIndex]
-      : data.localExplanation.flattenedValues[rowIndex][
-          featureIndex
-        ].toLocaleString(undefined, {
-          minimumFractionDigits: 3
-        });
+    const formattedImportance = Beehive.getFormattedImportance(
+      data,
+      rowIndex,
+      featureIndex
+    );
     result.push(
       localization.formatString(
         "AggregateImportance.importanceLabel",

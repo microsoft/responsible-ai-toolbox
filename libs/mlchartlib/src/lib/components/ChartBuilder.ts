@@ -116,8 +116,7 @@ export class ChartBuilder {
       }
       if (datum.sizeAccessor) {
         const size =
-          (row.size * (datum.maxMarkerSize || 40) ** 2) /
-          (2.0 * maxBubbleValue);
+          (row.size * (datum.maxMarkerSize || 40) ** 2) / (2 * maxBubbleValue);
         (series.marker!.size as number[]).push(Math.abs(size));
       }
       if (datum.datapointLevelAccessors !== undefined) {

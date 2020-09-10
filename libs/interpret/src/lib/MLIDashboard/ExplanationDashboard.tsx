@@ -111,12 +111,10 @@ export class ExplanationDashboard extends React.Component<
     const numClasses = input.length;
     const numRows = input[0].length;
     const numFeatures = input[0][0].length;
-    const result: number[][][] = Array(numRows)
+    const result: number[][][] = new Array(numRows)
       .fill(0)
       .map(() =>
-        Array(numFeatures)
-          .fill(0)
-          .map(() => Array(numClasses).fill(0))
+        new Array(numFeatures).fill(0).map(() => new Array(numClasses).fill(0))
       );
     input.forEach((rowByFeature, classIndex) => {
       rowByFeature.forEach((featureArray, rowIndex) => {
@@ -604,7 +602,7 @@ export class ExplanationDashboard extends React.Component<
           !localExp.every((classArray: number[] | number[][]) =>
             classArray.every(
               (rowArray: number | number[]) =>
-                rowArray instanceof Array && rowArray.length === featureLength
+                Array.isArray(rowArray) && rowArray.length === featureLength
             )
           )
         ) {
@@ -815,7 +813,7 @@ export class ExplanationDashboard extends React.Component<
     length: number,
     baseString: string
   ): string[] {
-    return Array.from(Array(length).keys()).map((i) =>
+    return [...new Array(length).keys()].map((i) =>
       localization.formatString(baseString, i.toString())
     );
   }
@@ -841,7 +839,7 @@ export class ExplanationDashboard extends React.Component<
         let selectedRow: number | undefined;
         if (selections && selections.length > 0) {
           const numericValue = Number.parseInt(selections[0]);
-          if (!isNaN(numericValue)) {
+          if (!Number.isNaN(numericValue)) {
             selectedRow = numericValue;
           }
         }

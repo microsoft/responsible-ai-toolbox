@@ -566,7 +566,7 @@ export class ScatterUtils {
     if (selectedRow === undefined) {
       plotlyProps.data.forEach((trace) => {
         _.set(trace, "marker.line.width", [0]);
-        _.set(trace, "selectedpoints", null);
+        _.set(trace, "selectedpoints", undefined);
       });
       return _.cloneDeep(plotlyProps);
     }
