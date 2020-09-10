@@ -839,7 +839,7 @@ export class ExplanationDashboard extends React.Component<
         let selectedRow: number | undefined;
         if (selections && selections.length > 0) {
           const numericValue = Number.parseInt(selections[0]);
-          if (!isNaN(numericValue)) {
+          if (!Number.isNaN(numericValue)) {
             selectedRow = numericValue;
           }
         }

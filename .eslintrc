@@ -16,7 +16,8 @@
     "react",
     "react-hooks",
     "filenames",
-    "eslint-plugin-unicorn"
+    "eslint-plugin-unicorn",
+    "eslint-plugin-eslint-comments"
   ],
   "env": {
     "browser": true,
@@ -33,9 +34,10 @@
     "plugin:import/warnings",
     "prettier",
     "prettier/@typescript-eslint",
-    "./.unicorn.eslintrc"
+    "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "eslint-comments/no-use": ["error", { "allow": [] }],
     "import/no-unresolved": "off",
     "import/order": "error",
     "filenames/match-regex": "error",
