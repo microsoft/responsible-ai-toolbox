@@ -366,6 +366,12 @@
   },
   "overrides": [
     {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
       "files": ["*.tsx"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-Z][A-z]+$"]]
