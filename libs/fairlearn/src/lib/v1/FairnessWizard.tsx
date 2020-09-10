@@ -12,7 +12,10 @@ import React from "react";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
 import { WizardBuilder } from "../util/WizardBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
-import { IFairnessContext } from "../util/IFairnessContext";
+import {
+  IFairnessContext,
+  IRunTimeFairnessContext
+} from "../util/IFairnessContext";
 import { IAccuracyOption, AccuracyOptions } from "../util/AccuracyMetrics";
 import { MetricsCache } from "../util/MetricsCache";
 import { FeatureTab } from "../components/FeatureTab";
@@ -124,20 +127,7 @@ export class FairnessWizardV1 extends React.PureComponent<
       fairnessContext.groupNames = featureBins[0].labelArray;
     }
 
-    accuracyMetrics =
-      fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
-        ? this.props.supportedBinaryClassificationAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          )
-        : fairnessContext.modelMetadata.PredictionType ===
-          PredictionTypes.regression
-        ? this.props.supportedRegressionAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          )
-        : this.props.supportedProbabilityAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          );
+    accuracyMetrics = this.getAccuracyMetrics(fairnessContext);
     accuracyMetrics = accuracyMetrics.filter((metric) => !!metric);
 
     this.state = {
@@ -295,6 +285,30 @@ export class FairnessWizardV1 extends React.PureComponent<
             />
           )}
       </Stack>
+    );
+  }
+
+  private getAccuracyMetrics(
+    fairnessContext: IRunTimeFairnessContext
+  ): IAccuracyOption[] {
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.binaryClassification
+    ) {
+      return this.props.supportedBinaryClassificationAccuracyKeys.map(
+        (key) => AccuracyOptions[key]
+      );
+    }
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.regression
+    ) {
+      return this.props.supportedRegressionAccuracyKeys.map(
+        (key) => AccuracyOptions[key]
+      );
+    }
+    return this.props.supportedProbabilityAccuracyKeys.map(
+      (key) => AccuracyOptions[key]
     );
   }
 

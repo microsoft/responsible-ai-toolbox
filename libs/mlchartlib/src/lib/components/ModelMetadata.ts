@@ -52,7 +52,7 @@ export class ModelMetadata {
     testData?: any[][],
     categoricalMap?: { [key: number]: string[] }
   ): boolean[] | undefined {
-    const featureIndexArray = Array.from(Array(featureLength).keys());
+    const featureIndexArray = [...new Array(featureLength).keys()];
     if (categoricalMap) {
       return featureIndexArray.map((i) => categoricalMap[i] !== undefined);
     }

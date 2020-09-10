@@ -358,12 +358,7 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.accuracyPickerProps.selectedAccuracyKey
           );
         });
-      const disparityMetric = this.state.disparityInOutcomes
-        ? this.props.dashboardContext.modelMetadata.PredictionType ===
-          PredictionTypes.binaryClassification
-          ? "selection_rate"
-          : "average"
-        : this.props.accuracyPickerProps.selectedAccuracyKey;
+      const disparityMetric = this.getDisparityMetric();
       const disparityPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
@@ -384,6 +379,19 @@ export class ModelComparisonChart extends React.PureComponent<
     } catch {
       // todo;
     }
+  }
+
+  private getDisparityMetric(): string {
+    if (this.state.disparityInOutcomes) {
+      if (
+        this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.binaryClassification
+      ) {
+        return "selection_rate";
+      }
+      return "average";
+    }
+    return this.props.accuracyPickerProps.selectedAccuracyKey;
   }
 
   private readonly disparityChanged = (

@@ -146,13 +146,12 @@ export class AxisConfigDialog extends React.PureComponent<
     const selectedMeta = this.props.jointDataset.metaDict[
       this.state.selectedColumn.property
     ];
-    const isDataColumn =
-      this.state.selectedColumn.property.indexOf(JointDataset.DataLabelRoot) !==
-      -1;
-    const isProbabilityColumn =
-      this.state.selectedColumn.property.indexOf(
-        JointDataset.ProbabilityYRoot
-      ) !== -1;
+    const isDataColumn = this.state.selectedColumn.property.includes(
+      JointDataset.DataLabelRoot
+    );
+    const isProbabilityColumn = this.state.selectedColumn.property.includes(
+      JointDataset.ProbabilityYRoot
+    );
     const minVal =
       selectedMeta.treatAsCategorical || !selectedMeta.featureRange
         ? 0
@@ -360,10 +359,10 @@ export class AxisConfigDialog extends React.PureComponent<
     if (key === undefined) {
       return ColumnCategories.none;
     }
-    if (key.indexOf(JointDataset.DataLabelRoot) !== -1) {
+    if (key.includes(JointDataset.DataLabelRoot)) {
       return JointDataset.DataLabelRoot;
     }
-    if (key.indexOf(JointDataset.ProbabilityYRoot) !== -1) {
+    if (key.includes(JointDataset.ProbabilityYRoot)) {
       return JointDataset.ProbabilityYRoot;
     }
     return key;

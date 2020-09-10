@@ -421,12 +421,10 @@ export class JointDataset {
     const numClasses = input.length;
     const numRows = input[0].length;
     const numFeatures = input[0][0].length;
-    const result: number[][][] = Array(numRows)
+    const result: number[][][] = new Array(numRows)
       .fill(0)
       .map(() =>
-        Array(numFeatures)
-          .fill(0)
-          .map(() => Array(numClasses).fill(0))
+        new Array(numFeatures).fill(0).map(() => new Array(numClasses).fill(0))
       );
     input.forEach((rowByFeature, classIndex) => {
       rowByFeature.forEach((featureArray, rowIndex) => {

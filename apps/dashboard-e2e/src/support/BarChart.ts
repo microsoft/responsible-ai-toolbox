@@ -59,7 +59,7 @@ export class BarChart {
   private getCoordinates(
     barElements: JQuery<HTMLElement>
   ): Array<IBar | undefined> {
-    return barElements.get().map(this.getCoordinate);
+    return barElements.get().map((b) => this.getCoordinate(b));
   }
 
   private readonly getCoordinate = (element: HTMLElement): IBar | undefined => {
@@ -72,7 +72,7 @@ export class BarChart {
       return undefined;
     }
     const [, ...strCords] = exec;
-    const [left, bottom, top, right, bottom2] = strCords.map(Number);
+    const [left, bottom, top, right, bottom2] = strCords.map((s) => Number(s));
     if (bottom !== bottom2) {
       return undefined;
     }

@@ -42,9 +42,9 @@ export class ModelExplanationUtils {
             });
           });
         },
-        Array(featureLength)
+        new Array(featureLength)
           .fill(0)
-          .map(() => Array(classLength).fill(0))
+          .map(() => new Array(classLength).fill(0))
       )
       .map((classArray) => classArray.map((value) => value / rowLength));
   }

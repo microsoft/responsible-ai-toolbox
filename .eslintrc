@@ -15,7 +15,8 @@
     "jsx-a11y",
     "react",
     "react-hooks",
-    "filenames"
+    "filenames",
+    "eslint-plugin-unicorn"
   ],
   "env": {
     "browser": true,
@@ -31,7 +32,8 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "./.unicorn.eslintrc"
   ],
   "rules": {
     "import/no-unresolved": "off",

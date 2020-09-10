@@ -480,9 +480,7 @@ export class CohortEditor extends React.PureComponent<
     const meta = this.props.jointDataset.metaDict[key];
     if (meta.treatAsCategorical && meta.sortedCategoricalValues) {
       filter.method = FilterMethods.includes;
-      filter.arg = Array.from(
-        Array(meta.sortedCategoricalValues.length).keys()
-      );
+      filter.arg = [...new Array(meta.sortedCategoricalValues.length).keys()];
     } else {
       filter.method = FilterMethods.lessThan;
       filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
@@ -622,7 +620,7 @@ export class CohortEditor extends React.PureComponent<
         ? 1
         : (selectedMeta.featureRange.max - selectedMeta.featureRange.min) / 10;
     const isDataColumn =
-      openedFilter.column.indexOf(JointDataset.DataLabelRoot) !== -1;
+      openedFilter.column.includes(JointDataset.DataLabelRoot);
     let categoricalOptions: IComboBoxOption[] | undefined;
 
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
