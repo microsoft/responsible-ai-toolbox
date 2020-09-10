@@ -89,7 +89,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
         }
       }
     ];
-    return <CommandBar items={items} id="topMenuBar" />;
+    return <CommandBar items={items} id="TopMenuBar" />;
   }
   private getOptions(
     labels: readonly string[],

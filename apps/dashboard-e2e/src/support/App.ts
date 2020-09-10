@@ -8,19 +8,6 @@ export function getLink(
   return cy.get(`a[href$="#${href}"]`);
 }
 
-export function getMenu(
-  text: string,
-  container = ""
-): Cypress.Chainable<JQuery<HTMLButtonElement>> {
-  return cy.get(`${container} button:contains("${text}")`);
-}
-
-export function getSpan(
-  text: string
-): Cypress.Chainable<JQuery<HTMLSpanElement>> {
-  return cy.get("span").contains(text);
-}
-
 export function selectDataset(name: string): void {
   cy.get("#datasetSelector").select(name);
 }

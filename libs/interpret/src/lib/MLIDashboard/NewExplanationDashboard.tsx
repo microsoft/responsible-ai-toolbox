@@ -491,6 +491,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             linkSize={PivotLinkSize.normal}
             headersOnly={true}
             styles={{ root: classNames.pivotLabelWrapper }}
+            id="DashboardPivot"
           >
             {this.pivotItems.map((props) => (
               <PivotItem key={props.itemKey} {...props} />
