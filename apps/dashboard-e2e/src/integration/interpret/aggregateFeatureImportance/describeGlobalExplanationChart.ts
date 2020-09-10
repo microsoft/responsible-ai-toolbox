@@ -66,10 +66,26 @@ export function describeGlobalExplanationChart(): void {
         cy.get("#GlobalExplanationSettingsButton").click();
         cy.get("#GlobalExplanationSettingsCallout").should("not.exist");
       });
-
+      it("should increase top K setting", () => {
+        const topK = getTopKValue();
+        cy.get("#TopKSetting input")
+          .focus()
+          .type("{uparrow}")
+          .then(() => {
+            barChart.VisibleBars.should("have.length", topK + 1);
+          });
+      });
       it("chart bars should match top K setting", () => {
         const topK = getTopKValue();
         barChart.VisibleBars.should("have.length", topK);
+      });
+      it("should show box chart", () => {
+        cy.get(
+          '#GlobalExplanationSettingsCallout #ChartTypeSelection label:contains("Box")'
+        )
+          .click({ force: true })
+          .get("#FeatureImportanceBar svg .plot .trace.boxes path")
+          .should("exist");
       });
     });
   });
