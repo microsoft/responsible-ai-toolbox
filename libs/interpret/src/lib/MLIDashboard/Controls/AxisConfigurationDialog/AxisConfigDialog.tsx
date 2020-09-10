@@ -152,22 +152,8 @@ export class AxisConfigDialog extends React.PureComponent<
     const isProbabilityColumn = this.state.selectedColumn.property.includes(
       JointDataset.ProbabilityYRoot
     );
-    const minVal =
-      selectedMeta.treatAsCategorical || !selectedMeta.featureRange
-        ? 0
-        : Number.isInteger(selectedMeta.featureRange.min)
-        ? selectedMeta.featureRange.min
-        : (Math.round(selectedMeta.featureRange.min * 10000) / 10000).toFixed(
-            4
-          );
-    const maxVal =
-      selectedMeta.treatAsCategorical || !selectedMeta.featureRange
-        ? 0
-        : Number.isInteger(selectedMeta.featureRange.max)
-        ? selectedMeta.featureRange.max
-        : (Math.round(selectedMeta.featureRange.max * 10000) / 10000).toFixed(
-            4
-          );
+    const minVal = this.getMinValue(selectedMeta);
+    const maxVal = this.getMaxValue(selectedMeta);
 
     return (
       <Callout
@@ -352,6 +338,30 @@ export class AxisConfigDialog extends React.PureComponent<
           className={styles.selectButton}
         />
       </Callout>
+    );
+  }
+
+  private getMinValue(selectedMeta: IJointMeta): number | string {
+    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+      return 0;
+    }
+    if (Number.isInteger(selectedMeta.featureRange.min)) {
+      return selectedMeta.featureRange.min;
+    }
+    return (Math.round(selectedMeta.featureRange.min * 10000) / 10000).toFixed(
+      4
+    );
+  }
+
+  private getMaxValue(selectedMeta: IJointMeta): number | string {
+    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+      return 0;
+    }
+    if (Number.isInteger(selectedMeta.featureRange.max)) {
+      return selectedMeta.featureRange.max;
+    }
+    return (Math.round(selectedMeta.featureRange.max * 10000) / 10000).toFixed(
+      4
     );
   }
 

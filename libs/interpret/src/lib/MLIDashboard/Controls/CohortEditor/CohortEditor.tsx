@@ -619,8 +619,9 @@ export class CohortEditor extends React.PureComponent<
       !selectedMeta.featureRange
         ? 1
         : (selectedMeta.featureRange.max - selectedMeta.featureRange.min) / 10;
-    const isDataColumn =
-      openedFilter.column.includes(JointDataset.DataLabelRoot);
+    const isDataColumn = openedFilter.column.includes(
+      JointDataset.DataLabelRoot
+    );
     let categoricalOptions: IComboBoxOption[] | undefined;
 
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
