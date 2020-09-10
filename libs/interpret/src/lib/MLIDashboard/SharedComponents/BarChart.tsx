@@ -147,7 +147,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     if (classByFeatureMatrix.length > 0) {
       classByFeatureMatrix.forEach((singleSeries, classIndex) => {
         const visible =
-          this.props.defaultVisibleClasses === undefined ||
+          this.props.defaultVisibleClasses !== undefined &&
           !this.props.defaultVisibleClasses.includes(classIndex)
             ? "legendonly"
             : true;
