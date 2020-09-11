@@ -850,6 +850,9 @@ export class ExplanationDashboard extends React.Component<
   }
 
   public componentDidUpdate(prevProps: IExplanationDashboardProps): void {
+    if (this.props.locale && prevProps.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
+    }
     if (_.isEqual(prevProps, this.props)) {
       return;
     }
