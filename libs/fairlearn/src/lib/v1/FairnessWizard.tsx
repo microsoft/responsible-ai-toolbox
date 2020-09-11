@@ -148,6 +148,15 @@ export class FairnessWizardV1 extends React.PureComponent<
     };
   }
 
+  public componentDidUpdate(prev: IFairnessProps): void {
+    if (prev.theme !== this.props.theme) {
+      loadTheme(this.props.theme || defaultTheme);
+    }
+    if (this.props.locale && prev.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
+    }
+  }
+
   public render(): React.ReactNode {
     const styles = FairnessWizardStyles();
     const accuracyPickerProps = {

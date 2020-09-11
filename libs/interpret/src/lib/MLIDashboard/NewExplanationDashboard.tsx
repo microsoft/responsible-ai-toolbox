@@ -409,6 +409,15 @@ export class NewExplanationDashboard extends React.PureComponent<
     return result;
   }
 
+  public componentDidUpdate(prev: IExplanationDashboardProps): void {
+    if (prev.theme !== this.props.theme) {
+      loadTheme(this.props.theme || defaultTheme);
+    }
+    if (this.props.locale && prev.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
+    }
+  }
+
   public render(): React.ReactNode {
     const cohortIDs = this.state.cohorts.map((cohort) =>
       cohort.getCohortID().toString()
