@@ -510,23 +510,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         AccuracyOptions[underpredictionKey].title
       ];
 
-      const InsightsIcon = (): JSX.Element => (
-        <Icon
-          iconName="CRMCustomerInsightsApp"
-          className={styles.insightsIcon}
-        />
-      );
-      const DownloadIcon = (): JSX.Element => (
-        <Icon iconName="Download" className={styles.downloadIcon} />
-      );
-
-      const ChevronUp = (): JSX.Element => (
-        <Icon iconName="ChevronUp" className={styles.chevronIcon} />
-      );
-      const ChevronDown = (): JSX.Element => (
-        <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-      );
-
       const cancelIcon: IIconProps = { iconName: "Cancel" };
 
       mainChart = (
@@ -558,8 +541,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               className={styles.expandAttributes}
               onClick={this.expandAttributes}
             >
-              {(this.state.expandAttributes && <ChevronUp />) ||
-                (!this.state.expandAttributes && <ChevronDown />)}
+              {(this.state.expandAttributes && (
+                <Icon iconName="ChevronUp" className={styles.chevronIcon} />
+              )) ||
+                (!this.state.expandAttributes && (
+                  <Icon iconName="ChevronDown" className={styles.chevronIcon} />
+                ))}
               <Text>
                 {(this.state.expandAttributes &&
                   localization.Report.collapseSensitiveAttributes) ||
@@ -669,14 +656,17 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           </div>
           <div className={styles.mainRight}>
             <div className={styles.insights}>
-              <InsightsIcon />
+              <Icon
+                iconName="CRMCustomerInsightsApp"
+                className={styles.insightsIcon}
+              />
               <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.insights}
               </Text>
             </div>
             <div className={styles.insightsText}>{localization.loremIpsum}</div>
             <div className={styles.downloadReport}>
-              <DownloadIcon />
+              <Icon iconName="Download" className={styles.downloadIcon} />
               <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.downloadReport}
               </Text>

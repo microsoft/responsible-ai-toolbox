@@ -306,16 +306,6 @@ export class ModelComparisonChart extends React.PureComponent<
         props.layout.yaxis.title = parityMetricTitle;
       }
 
-      const InsightsIcon = (): JSX.Element => (
-        <Icon
-          iconName="CRMCustomerInsightsApp"
-          className={styles.insightsIcon}
-        />
-      );
-      const DownloadIcon = (): JSX.Element => (
-        <Icon iconName="Download" className={styles.downloadIcon} />
-      );
-
       const cancelIcon: IIconProps = { iconName: "Cancel" };
 
       mainChart = (
@@ -394,7 +384,10 @@ export class ModelComparisonChart extends React.PureComponent<
           </div>
           <div className={styles.mainRight}>
             <div className={styles.insights}>
-              <InsightsIcon />
+              <Icon
+                iconName="CRMCustomerInsightsApp"
+                className={styles.insightsIcon}
+              />
               <Text className={styles.insights} block>
                 {localization.ModelComparison.insights}
               </Text>
@@ -411,7 +404,7 @@ export class ModelComparisonChart extends React.PureComponent<
               </Text>
             </div>
             <div className={styles.downloadReport}>
-              <DownloadIcon />
+              <Icon iconName="Download" className={styles.downloadIcon} />
               <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.downloadReport}
               </Text>

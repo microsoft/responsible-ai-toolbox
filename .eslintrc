@@ -81,12 +81,17 @@
         "prefix": ["T"]
       },
       {
-        "selector": ["class", "enum", "typeAlias"],
+        "selector": "typeLike",
         "format": ["PascalCase"]
       },
       {
-        "selector": ["variable"],
-        "format": ["camelCase"]
+        "selector": ["variable", "function"],
+        "format": ["camelCase"],
+        "filter": {
+          // you can expand this regex to add more allowed names
+          "regex": "^(.*Styles)$",
+          "match": false
+        }
       }
     ],
     "camelcase": [

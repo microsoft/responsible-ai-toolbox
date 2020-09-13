@@ -13,7 +13,7 @@ import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { AccuracyOptions } from "../util/AccuracyMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { ChartColors } from "./ChartColors";
+import { chartColors } from "./ChartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { localization } from "./../Localization/localization";
@@ -153,7 +153,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           ),
           name: localization.Metrics.overprediction,
           width: 0.5,
-          fillcolor: ChartColors[0],
+          fillcolor: chartColors[0],
           orientation: "h",
           type: "bar",
           hoverinfo: "skip",
@@ -167,7 +167,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           ),
           name: localization.Metrics.underprediction,
           width: 0.5,
-          fillcolor: ChartColors[1],
+          fillcolor: chartColors[1],
           orientation: "h",
           type: "bar",
           hoverinfo: "skip",
@@ -208,7 +208,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
           ),
           name: outcomeMetric.title,
-          fillcolor: ChartColors[0],
+          fillcolor: chartColors[0],
           orientation: "h",
           type: "bar",
           textposition: "inside",
@@ -223,7 +223,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           <div className={styles.textRow}>
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: ChartColors[1] }}
+              style={{ backgroundColor: chartColors[1] }}
             />
             <div>
               <Text block>{localization.Report.underestimationError}</Text>
@@ -235,7 +235,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           <div className={styles.textRow}>
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: ChartColors[0] }}
+              style={{ backgroundColor: chartColors[0] }}
             />
             <div>
               <Text block>{localization.Report.overestimationError}</Text>
@@ -272,7 +272,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           ),
           name: localization.Metrics.overprediction,
           width: 0.5,
-          fillcolor: ChartColors[0],
+          fillcolor: chartColors[0],
           orientation: "h",
           type: "bar",
           textposition: "inside",
@@ -286,7 +286,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           ),
           name: localization.Metrics.underprediction,
           width: 0.5,
-          fillcolor: ChartColors[1],
+          fillcolor: chartColors[1],
           orientation: "h",
           type: "bar",
           textposition: "inside",
@@ -328,7 +328,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           y: this.props.dashboardContext.binVector,
           text: opportunityText,
           type: "box",
-          color: ChartColors[0],
+          color: chartColors[0],
           boxmean: true,
           orientation: "h",
           boxpoints: "all",
@@ -343,14 +343,14 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           <div className={styles.textRow}>
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: ChartColors[0] }}
+              style={{ backgroundColor: chartColors[0] }}
             />
             <Text block>{localization.Report.overestimationError}</Text>
           </div>
           <div className={styles.textRow}>
             <div
               className={styles.colorBlock}
-              style={{ backgroundColor: ChartColors[1] }}
+              style={{ backgroundColor: chartColors[1] }}
             />
             <Text block>{localization.Report.underestimationError}</Text>
           </div>
@@ -406,7 +406,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           y: this.props.dashboardContext.binVector,
           text: accuracyText,
           type: "box",
-          color: ChartColors[0],
+          color: chartColors[0],
           orientation: "h",
           boxmean: true,
           hoveron: "points",
@@ -422,7 +422,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           y: this.props.dashboardContext.binVector,
           text: opportunityText,
           type: "box",
-          color: ChartColors[0],
+          color: chartColors[0],
           boxmean: true,
           orientation: "h",
           hoveron: "points",
