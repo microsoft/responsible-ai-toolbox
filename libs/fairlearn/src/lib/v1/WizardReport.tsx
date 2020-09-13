@@ -10,7 +10,7 @@ import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 import React from "react";
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { AccuracyOptions } from "../util/AccuracyMetrics";
+import { accuracyOptions } from "../util/AccuracyMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { chartColors } from "../util/chartColors";
@@ -130,7 +130,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       PredictionTypes.binaryClassification
         ? "selection_rate"
         : "average";
-    const outcomeMetric = AccuracyOptions[outcomeKey];
+    const outcomeMetric = accuracyOptions[outcomeKey];
 
     const accuracyPlot = _.cloneDeep(WizardReport.barPlotlyProps);
     const opportunityPlot = _.cloneDeep(WizardReport.barPlotlyProps);
@@ -459,7 +459,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       accuracyKey
     );
     const selectedMetric =
-      AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+      accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
       this.props.accuracyPickerProps.accuracyOptions.find(
         (metric) =>
           metric.key === this.props.accuracyPickerProps.selectedAccuracyKey

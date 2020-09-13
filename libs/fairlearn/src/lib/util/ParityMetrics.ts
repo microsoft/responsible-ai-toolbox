@@ -13,7 +13,7 @@ export enum ParityModes {
   "ratio"
 }
 
-export const ParityOptions: { [key: string]: IParityOption } = {
+export const parityOptions: { [key: string]: IParityOption } = {
   selection_rate: {
     key: "selection_rate",
     title: localization.Metrics.parityDifference,

@@ -23,7 +23,7 @@ import {
 } from "office-ui-fabric-react";
 
 import React from "react";
-import { AccuracyOptions } from "../../util/AccuracyMetrics";
+import { accuracyOptions } from "../../util/AccuracyMetrics";
 import {
   IAccuracyPickerPropsV2,
   IFeatureBinPickerPropsV2,
@@ -34,7 +34,7 @@ import { IFairnessContext } from "../../util/IFairnessContext";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
 import { MetricsCache } from "../../util/MetricsCache";
-import { ParityOptions } from "../../util/ParityMetrics";
+import { parityOptions } from "../../util/ParityMetrics";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 const theme = getTheme();
@@ -150,7 +150,7 @@ export class ModelComparisonChart extends React.PureComponent<
         return { key: x, text: x };
       }
     );
-    const accuracyOptions: IDropdownOption[] = this.props.accuracyPickerProps.accuracyOptions.map(
+    const accuracyDropDown: IDropdownOption[] = this.props.accuracyPickerProps.accuracyOptions.map(
       (x) => {
         return { key: x.key, text: x.title };
       }
@@ -246,7 +246,7 @@ export class ModelComparisonChart extends React.PureComponent<
         this.props.accuracyPickerProps.selectedAccuracyKey
       );
       const selectedMetric =
-        AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+        accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
         this.props.accuracyPickerProps.accuracyOptions.find(
           (metric) =>
             metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
@@ -298,7 +298,7 @@ export class ModelComparisonChart extends React.PureComponent<
 
       const accuracyMetricTitle = selectedMetric.title;
       const parityMetricTitle =
-        ParityOptions[this.props.parityPickerProps.selectedParityKey].title;
+        parityOptions[this.props.parityPickerProps.selectedParityKey].title;
       if (props.layout?.xaxis) {
         props.layout.xaxis.title = accuracyMetricTitle;
       }
@@ -439,7 +439,7 @@ export class ModelComparisonChart extends React.PureComponent<
             defaultSelectedKey={
               this.props.accuracyPickerProps.selectedAccuracyKey
             }
-            options={accuracyOptions}
+            options={accuracyDropDown}
             disabled={false}
             onChange={this.accuracyChanged}
             styles={dropdownStyles}
@@ -471,7 +471,7 @@ export class ModelComparisonChart extends React.PureComponent<
           );
         });
       const parityOption =
-        ParityOptions[this.props.parityPickerProps.selectedParityKey];
+        parityOptions[this.props.parityPickerProps.selectedParityKey];
       const disparityMetric =
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.binaryClassification

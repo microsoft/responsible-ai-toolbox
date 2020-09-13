@@ -19,7 +19,7 @@ import {
 } from "office-ui-fabric-react";
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { AccuracyOptions } from "../util/AccuracyMetrics";
+import { accuracyOptions } from "../util/AccuracyMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { chartColors } from "../util/chartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
@@ -157,7 +157,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       PredictionTypes.binaryClassification
         ? "selection_rate"
         : "average";
-    const outcomeMetric = AccuracyOptions[outcomeKey];
+    const outcomeMetric = accuracyOptions[outcomeKey];
 
     const overpredicitonKey = "overprediction";
     const underpredictionKey = "underprediction";
@@ -450,7 +450,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       //   accuracyKey
       // );
       const selectedMetric =
-        AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+        accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
         this.props.accuracyPickerProps.accuracyOptions.find(
           (metric) =>
             metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
@@ -503,11 +503,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         (
           this.props.accuracyPickerProps.accuracyOptions.find(
             (a) => a.key === accuracyKey
-          ) || AccuracyOptions[accuracyKey]
+          ) || accuracyOptions[accuracyKey]
         ).title,
-        AccuracyOptions[outcomeKey].title,
-        AccuracyOptions[overpredicitonKey].title,
-        AccuracyOptions[underpredictionKey].title
+        accuracyOptions[outcomeKey].title,
+        accuracyOptions[overpredicitonKey].title,
+        accuracyOptions[underpredictionKey].title
       ];
 
       const cancelIcon: IIconProps = { iconName: "Cancel" };

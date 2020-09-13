@@ -11,7 +11,7 @@ export interface IAccuracyOption {
   alwaysUpperCase?: boolean;
 }
 
-export const AccuracyOptions: { [key: string]: IAccuracyOption } = {
+export const accuracyOptions: { [key: string]: IAccuracyOption } = {
   accuracy_score: {
     key: "accuracy_score",
     title: localization.Metrics.accuracyScore,

@@ -16,7 +16,7 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
-import { AccuracyOptions } from "../../util/AccuracyMetrics";
+import { accuracyOptions } from "../../util/AccuracyMetrics";
 import {
   IAccuracyPickerPropsV1,
   IFeatureBinPickerPropsV1,
@@ -196,7 +196,7 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.accuracyPickerProps.selectedAccuracyKey
     );
     const selectedMetric =
-      AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+      accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
       this.props.accuracyPickerProps.accuracyOptions.find(
         (metric) =>
           metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
