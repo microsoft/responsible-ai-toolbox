@@ -47,27 +47,27 @@ import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import {
   IFeatureImportanceConfig,
-  GlobalFeatureImportanceId,
-  BarId,
+  globalFeatureImportanceId,
+  barId,
   FeatureImportanceWrapper
 } from "./Controls/FeatureImportance/FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
 import {
-  LocalBarId,
+  localBarId,
   SinglePointFeatureImportance
 } from "./Controls/SinglePointFeatureImportance";
 import {
   ExplanationExploration,
-  ExplanationScatterId
+  explanationScatterId
 } from "./Controls/Scatter/ExplanationExploration";
 import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
 import {
   DataExploration,
-  DataScatterId
+  dataScatterId
 } from "./Controls/Scatter/DataExploration";
 import { PerturbationExploration } from "./Controls/PerturbationExploration";
 import { ICEPlot } from "./Controls/ICEPlot";
-const RowIndex = "rowIndex";
+const rowIndex = "rowIndex";
 
 export interface IDashboardContext {
   explanationContext: IExplanationContext;
@@ -131,11 +131,11 @@ export class ExplanationDashboard extends React.Component<
   ) => IDropdownOption[] = memoize(
     (explanationContext: IExplanationContext): IDropdownOption[] => {
       const result: IDropdownOption[] = [
-        { key: WeightVectors.absAvg, text: localization.absoluteAverage }
+        { key: WeightVectors.AbsAvg, text: localization.absoluteAverage }
       ];
       if (explanationContext.testDataset.predictedY) {
         result.push({
-          key: WeightVectors.predicted,
+          key: WeightVectors.Predicted,
           text: localization.predictedClass
         });
       }
@@ -192,7 +192,7 @@ export class ExplanationDashboard extends React.Component<
     return 1;
   });
 
-  private readonly selectionContext = new SelectionContext(RowIndex, 1);
+  private readonly selectionContext = new SelectionContext(rowIndex, 1);
   private selectionSubscription: string | undefined;
 
   private pivotItems: IPivotItemProps[];
@@ -255,8 +255,8 @@ export class ExplanationDashboard extends React.Component<
       dashboardContext: {
         weightContext: {
           selectedKey: props.predictedY
-            ? WeightVectors.predicted
-            : WeightVectors.absAvg,
+            ? WeightVectors.Predicted
+            : WeightVectors.AbsAvg,
           onSelection: this.onClassSelect,
           options: ExplanationDashboard.buildWeightDropdownOptions(
             explanationContext
@@ -276,17 +276,17 @@ export class ExplanationDashboard extends React.Component<
           ? 1
           : 0,
       configs: {
-        [BarId]: {
-          displayMode: FeatureImportanceModes.bar,
+        [barId]: {
+          displayMode: FeatureImportanceModes.Bar,
           topK: defaultTopK,
-          id: BarId
+          id: barId
         },
-        [GlobalFeatureImportanceId]: {
-          displayMode: FeatureImportanceModes.beehive,
+        [globalFeatureImportanceId]: {
+          displayMode: FeatureImportanceModes.Beehive,
           topK: defaultTopK,
-          id: GlobalFeatureImportanceId
+          id: globalFeatureImportanceId
         },
-        [LocalBarId]: { topK: defaultTopK }
+        [localBarId]: { topK: defaultTopK }
       },
       selectedRow: undefined
     };
@@ -307,7 +307,7 @@ export class ExplanationDashboard extends React.Component<
       if (props.telemetryHook !== undefined) {
         props.telemetryHook({
           message: "Invalid inputs",
-          level: TelemetryLevels.error,
+          level: TelemetryLevels.Error,
           context: errorMessage
         });
       }
@@ -339,8 +339,8 @@ export class ExplanationDashboard extends React.Component<
       testDataset
     ) {
       const weighting = props.predictedY
-        ? WeightVectors.predicted
-        : WeightVectors.absAvg;
+        ? WeightVectors.Predicted
+        : WeightVectors.AbsAvg;
       const localFeatureMatrix = ExplanationDashboard.buildLocalFeatureMatrix(
         props.precomputedExplanations.localFeatureImportance.scores,
         modelMetadata.modelType
@@ -641,19 +641,19 @@ export class ExplanationDashboard extends React.Component<
     modelType: ModelTypes
   ): number[][][] {
     switch (modelType) {
-      case ModelTypes.regression: {
+      case ModelTypes.Regression: {
         return (localExplanationRaw as number[][]).map((featureArray) =>
           featureArray.map((val) => [val])
         );
       }
-      case ModelTypes.binary: {
+      case ModelTypes.Binary: {
         return ExplanationDashboard.transposeLocalImportanceMatrix(
           localExplanationRaw as number[][][]
         ).map((featuresByClasses) =>
           featuresByClasses.map((classArray) => classArray.slice(0, 1))
         );
       }
-      case ModelTypes.multiclass:
+      case ModelTypes.Multiclass:
       default: {
         return ExplanationDashboard.transposeLocalImportanceMatrix(
           localExplanationRaw as number[][][]
@@ -672,8 +672,8 @@ export class ExplanationDashboard extends React.Component<
       return undefined;
     }
     switch (modelType) {
-      case ModelTypes.regression:
-      case ModelTypes.binary: {
+      case ModelTypes.Regression:
+      case ModelTypes.Binary: {
         // no need to flatten what is already flat
         return localExplanations.map((featuresByClasses) => {
           return featuresByClasses.map((classArray) => {
@@ -681,21 +681,21 @@ export class ExplanationDashboard extends React.Component<
           });
         });
       }
-      case ModelTypes.multiclass:
+      case ModelTypes.Multiclass:
       default: {
         return localExplanations.map((featuresByClasses, rowIndex) => {
           return featuresByClasses.map((classArray) => {
             switch (weightVector) {
-              case WeightVectors.equal: {
+              case WeightVectors.Equal: {
                 return classArray.reduce((a, b) => a + b) / classArray.length;
               }
-              case WeightVectors.predicted: {
+              case WeightVectors.Predicted: {
                 if (testData.predictedY) {
                   return classArray[testData.predictedY[rowIndex]];
                 }
                 return 0;
               }
-              case WeightVectors.absAvg: {
+              case WeightVectors.AbsAvg: {
                 return (
                   classArray.reduce((a, b) => a + Math.abs(b), 0) /
                   classArray.length
@@ -821,15 +821,15 @@ export class ExplanationDashboard extends React.Component<
   private static getModelType(props: IExplanationDashboardProps): ModelTypes {
     // If python gave us a hint, use it
     if (props.modelInformation.method === "regressor") {
-      return ModelTypes.regression;
+      return ModelTypes.Regression;
     }
     switch (ExplanationDashboard.getClassLength(props)) {
       case 1:
-        return ModelTypes.regression;
+        return ModelTypes.Regression;
       case 2:
-        return ModelTypes.binary;
+        return ModelTypes.Binary;
       default:
-        return ModelTypes.multiclass;
+        return ModelTypes.Multiclass;
     }
   }
 
@@ -862,8 +862,8 @@ export class ExplanationDashboard extends React.Component<
     );
     if (newState.dashboardContext.explanationContext.localExplanation) {
       (newState.configs[
-        GlobalFeatureImportanceId
-      ] as IFeatureImportanceConfig).displayMode = FeatureImportanceModes.box;
+        globalFeatureImportanceId
+      ] as IFeatureImportanceConfig).displayMode = FeatureImportanceModes.Box;
     }
     this.setState(newState);
     this.fetchExplanations();
@@ -910,7 +910,7 @@ export class ExplanationDashboard extends React.Component<
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 plotlyProps={
-                  this.state.configs[DataScatterId] as IPlotlyProperty
+                  this.state.configs[dataScatterId] as IPlotlyProperty
                 }
                 onChange={this.onConfigChanged}
                 messages={
@@ -926,7 +926,7 @@ export class ExplanationDashboard extends React.Component<
                 theme={this.props.theme}
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
-                config={this.state.configs[BarId] as IFeatureImportanceConfig}
+                config={this.state.configs[barId] as IFeatureImportanceConfig}
                 onChange={this.onConfigChanged}
                 messages={
                   this.props.stringParams
@@ -942,7 +942,7 @@ export class ExplanationDashboard extends React.Component<
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 plotlyProps={
-                  this.state.configs[ExplanationScatterId] as IPlotlyProperty
+                  this.state.configs[explanationScatterId] as IPlotlyProperty
                 }
                 onChange={this.onConfigChanged}
                 messages={
@@ -960,7 +960,7 @@ export class ExplanationDashboard extends React.Component<
                 selectedRow={this.state.selectedRow}
                 config={
                   this.state.configs[
-                    GlobalFeatureImportanceId
+                    globalFeatureImportanceId
                   ] as IFeatureImportanceConfig
                 }
                 onChange={this.onConfigChanged}
@@ -1048,7 +1048,7 @@ export class ExplanationDashboard extends React.Component<
                         }
                         selectedRow={this.state.selectedRow}
                         config={
-                          this.state.configs[LocalBarId] as IBarChartConfig
+                          this.state.configs[localBarId] as IBarChartConfig
                         }
                         onChange={this.onConfigChanged}
                         messages={

@@ -9,37 +9,37 @@ export interface IParityOption {
 }
 
 export enum ParityModes {
-  "difference",
-  "ratio"
+  Difference = "difference",
+  Ratio = "ratio"
 }
 
-export const ParityOptions: { [key: string]: IParityOption } = {
+export const parityOptions: { [key: string]: IParityOption } = {
   selection_rate: {
     key: "selection_rate",
     title: localization.Metrics.parityDifference,
     description: localization.Metrics.parityDifferenceDescription,
     parityMetric: "selection_rate",
-    parityMode: ParityModes.difference
+    parityMode: ParityModes.Difference
   },
   selection_rate_ratio: {
     key: "selection_rate_ratio",
     title: localization.Metrics.parityRatio,
     description: localization.Metrics.parityRatioDescription,
     parityMetric: "selection_rate",
-    parityMode: ParityModes.ratio
+    parityMode: ParityModes.Ratio
   },
   zero_one_loss: {
     key: "zero_one_loss",
     title: localization.Metrics.errorRateDifference,
     description: localization.Metrics.errorRateDifferenceDescription,
     parityMetric: "zero_one_loss",
-    parityMode: ParityModes.difference
+    parityMode: ParityModes.Difference
   },
   recall_score: {
     key: "recall_score",
     title: localization.Metrics.equalOpportunityDifference,
     description: localization.Metrics.equalOpportunityDifferenceDescription,
     parityMetric: "recall_score",
-    parityMode: ParityModes.difference
+    parityMode: ParityModes.Difference
   }
 };

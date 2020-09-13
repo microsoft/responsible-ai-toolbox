@@ -51,7 +51,7 @@ import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
+import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
@@ -182,7 +182,7 @@ export class WhatIfTab extends React.PureComponent<
     if (!this.props.jointDataset.hasDataset) {
       return;
     }
-    if (this.props.metadata.modelType === ModelTypes.multiclass) {
+    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           text: this.props.weightLabels[option],
@@ -372,7 +372,7 @@ export class WhatIfTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .filteredData.length;
     const canRenderChart =
-      cohortLength < NewExplanationDashboardRowErrorSize ||
+      cohortLength < newExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {
@@ -562,9 +562,9 @@ export class WhatIfTab extends React.PureComponent<
                   <AxisConfigDialog
                     jointDataset={this.props.jointDataset}
                     orderedGroupTitles={[
-                      ColumnCategories.index,
-                      ColumnCategories.dataset,
-                      ColumnCategories.outcome
+                      ColumnCategories.Index,
+                      ColumnCategories.Dataset,
+                      ColumnCategories.Outcome
                     ]}
                     selectedColumn={this.props.chartProps.yAxis}
                     canBin={false}
@@ -581,9 +581,9 @@ export class WhatIfTab extends React.PureComponent<
                   <AxisConfigDialog
                     jointDataset={this.props.jointDataset}
                     orderedGroupTitles={[
-                      ColumnCategories.index,
-                      ColumnCategories.dataset,
-                      ColumnCategories.outcome
+                      ColumnCategories.Index,
+                      ColumnCategories.Dataset,
+                      ColumnCategories.Outcome
                     ]}
                     selectedColumn={this.props.chartProps.xAxis}
                     canBin={
@@ -809,7 +809,7 @@ export class WhatIfTab extends React.PureComponent<
         );
       } else {
         const yAxisLabels: string[] = [localization.featureImportance];
-        if (this.props.metadata.modelType !== ModelTypes.regression) {
+        if (this.props.metadata.modelType !== ModelTypes.Regression) {
           yAxisLabels.push(
             this.props.weightLabels[this.props.selectedWeightVector]
           );
@@ -863,7 +863,7 @@ export class WhatIfTab extends React.PureComponent<
                   selectedKey={this.state.sortingSeriesIndex}
                   onChange={this.setSortIndex}
                 />
-                {this.props.metadata.modelType === ModelTypes.multiclass && (
+                {this.props.metadata.modelType === ModelTypes.Multiclass && (
                   <div>
                     <div className={classNames.multiclassWeightLabel}>
                       <Text
@@ -1015,7 +1015,7 @@ export class WhatIfTab extends React.PureComponent<
                 calloutProps={FabricStyles.calloutProps}
                 styles={FabricStyles.limitedSizeMenuDropdown}
               />
-              {this.props.metadata.modelType === ModelTypes.multiclass && (
+              {this.props.metadata.modelType === ModelTypes.Multiclass && (
                 <ComboBox
                   autoComplete={"on"}
                   className={classNames.iceClassSelection}
@@ -1059,7 +1059,7 @@ export class WhatIfTab extends React.PureComponent<
   private buildExistingPredictionLabels(
     classNames: IProcessedStyleSet<IWhatIfTabStyles>
   ): React.ReactNode {
-    if (this.props.metadata.modelType !== ModelTypes.regression) {
+    if (this.props.metadata.modelType !== ModelTypes.Regression) {
       const row = this.props.jointDataset.getRow(
         this.state.selectedWhatIfRootIndex
       );
@@ -1248,7 +1248,7 @@ export class WhatIfTab extends React.PureComponent<
   private buildCustomPredictionLabels(
     classNames: IProcessedStyleSet<IWhatIfTabStyles>
   ): React.ReactNode {
-    if (this.props.metadata.modelType !== ModelTypes.regression) {
+    if (this.props.metadata.modelType !== ModelTypes.Regression) {
       const predictedClass = this.props.jointDataset.hasPredictedY
         ? this.temporaryPoint?.[JointDataset.PredictedYLabel]
         : undefined;
@@ -1882,7 +1882,7 @@ export class WhatIfTab extends React.PureComponent<
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
     plotlyProps.data[0].type = chartProps.chartType;
-    plotlyProps.data[0].mode = PlotlyMode.markers;
+    plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       symbol: indexes.map((i) =>
         this.state.selectedPointsIndexes.includes(i) ? "square" : "circle"
@@ -1901,7 +1901,7 @@ export class WhatIfTab extends React.PureComponent<
 
     plotlyProps.data[1] = {
       type: "scatter",
-      mode: PlotlyMode.markers,
+      mode: PlotlyMode.Markers,
       marker: {
         symbol: "star",
         size: 12,
@@ -1914,7 +1914,7 @@ export class WhatIfTab extends React.PureComponent<
 
     plotlyProps.data[2] = {
       type: "scatter",
-      mode: PlotlyMode.markers,
+      mode: PlotlyMode.Markers,
       text: "Editable What-If point",
       hoverinfo: "text",
       marker: {

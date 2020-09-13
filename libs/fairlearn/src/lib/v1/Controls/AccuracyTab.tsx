@@ -31,11 +31,11 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
             {localization.formatString(
               localization.Accuracy.body,
               this.props.dashboardContext.modelMetadata.PredictionType !==
-                PredictionTypes.regression
+                PredictionTypes.Regression
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
               this.props.dashboardContext.modelMetadata.PredictionType ===
-                PredictionTypes.binaryClassification
+                PredictionTypes.BinaryClassification
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
               this.props.dashboardContext.predictions.length === 1

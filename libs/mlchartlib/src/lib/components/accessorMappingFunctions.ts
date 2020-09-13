@@ -18,8 +18,8 @@ const stringify = (value: any[], _datum: IData, args: any[]): string => {
   return result.join("<br>");
 };
 
-export const AccessorMappingFunctions: {
+export const accessorMappingFunctions: {
   [key: string]: (value: any[], datum: IData, args: any[]) => any;
 } = {
-  [AccessorMappingFunctionNames.stringifyText]: stringify
+  [AccessorMappingFunctionNames.StringifyText]: stringify
 };

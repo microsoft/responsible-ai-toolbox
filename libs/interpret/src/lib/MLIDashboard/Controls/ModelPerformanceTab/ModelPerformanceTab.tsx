@@ -25,7 +25,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
-import { CohortKey } from "../../CohortKey";
+import { cohortKey } from "../../cohortKey";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
@@ -114,7 +114,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     let yLabelIndexes: number[] | undefined;
     const yMeta = jointData.metaDict[chartProps.yAxis.property];
     const yAxisName = yMeta.label;
-    if (chartProps.yAxis.property === CohortKey) {
+    if (chartProps.yAxis.property === cohortKey) {
       rawX = [];
       rawY = [];
       yLabels = [];
@@ -241,7 +241,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
     const cohortOptions =
-      this.props.chartProps.yAxis.property !== CohortKey
+      this.props.chartProps.yAxis.property !== cohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })
@@ -272,8 +272,8 @@ export class ModelPerformanceTab extends React.PureComponent<
             <AxisConfigDialog
               jointDataset={this.props.jointDataset}
               orderedGroupTitles={[
-                ColumnCategories.cohort,
-                ColumnCategories.dataset
+                ColumnCategories.Cohort,
+                ColumnCategories.Dataset
               ]}
               selectedColumn={this.props.chartProps.yAxis}
               canBin={
@@ -293,7 +293,7 @@ export class ModelPerformanceTab extends React.PureComponent<
           {this.state.xDialogOpen && (
             <AxisConfigDialog
               jointDataset={this.props.jointDataset}
-              orderedGroupTitles={[ColumnCategories.outcome]}
+              orderedGroupTitles={[ColumnCategories.Outcome]}
               selectedColumn={this.props.chartProps.xAxis}
               canBin={false}
               mustBin={false}
@@ -338,7 +338,7 @@ export class ModelPerformanceTab extends React.PureComponent<
                     theme={getTheme() as any}
                   />
                 </div>
-                {this.props.metadata.modelType !== ModelTypes.multiclass && (
+                {this.props.metadata.modelType !== ModelTypes.Multiclass && (
                   <div className={classNames.rightPanel}>
                     {!this.props.jointDataset.hasTrueY && (
                       <div className={classNames.missingParametersPlaceholder}>
@@ -468,11 +468,11 @@ export class ModelPerformanceTab extends React.PureComponent<
   private generateDefaultChartAxes(): void {
     let bestModelMetricKey: string;
     if (
-      this.props.metadata.modelType === ModelTypes.binary &&
+      this.props.metadata.modelType === ModelTypes.Binary &&
       this.props.jointDataset.hasPredictedProbabilities
     ) {
       bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
-    } else if (this.props.metadata.modelType === ModelTypes.regression) {
+    } else if (this.props.metadata.modelType === ModelTypes.Regression) {
       if (
         this.props.jointDataset.hasPredictedY &&
         this.props.jointDataset.hasTrueY
@@ -491,7 +491,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         ? ChartTypes.Histogram
         : ChartTypes.Box,
       yAxis: {
-        property: CohortKey,
+        property: cohortKey,
         options: {}
       },
       xAxis: {
@@ -508,7 +508,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     if (!this.props.chartProps) {
       return [];
     }
-    if (this.props.chartProps.yAxis.property === CohortKey) {
+    if (this.props.chartProps.yAxis.property === cohortKey) {
       const indexes = this.props.cohorts.map((cohort) =>
         cohort.unwrap(JointDataset.IndexLabel)
       );

@@ -7,7 +7,7 @@ import _ from "lodash";
 import { localization } from "../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
-import { CohortKey } from "./CohortKey";
+import { cohortKey } from "./cohortKey";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
@@ -25,12 +25,12 @@ export interface IJointDatasetArgs {
 }
 
 export enum ColumnCategories {
-  outcome = "outcome",
-  dataset = "dataset",
-  index = "index",
-  explanation = "explanation",
-  cohort = "cohort",
-  none = "none"
+  Outcome = "outcome",
+  Dataset = "dataset",
+  Index = "index",
+  Explanation = "explanation",
+  Cohort = "cohort",
+  None = "none"
 }
 
 export enum ClassificationEnum {
@@ -123,7 +123,7 @@ export class JointDataset {
             isCategorical: true,
             treatAsCategorical: true,
             sortedCategoricalValues: sortedUnique,
-            category: ColumnCategories.dataset,
+            category: ColumnCategories.Dataset,
             index: colIndex
           };
         } else {
@@ -134,7 +134,7 @@ export class JointDataset {
             featureRange: args.metadata.featureRanges[
               colIndex
             ] as INumericRange,
-            category: ColumnCategories.dataset,
+            category: ColumnCategories.Dataset,
             index: colIndex
           };
         }
@@ -165,26 +165,26 @@ export class JointDataset {
       this.metaDict[JointDataset.PredictedYLabel] = {
         label: localization.ExplanationScatter.predictedY,
         abbridgedLabel: localization.ExplanationScatter.predictedY,
-        isCategorical: args.metadata.modelType !== ModelTypes.regression,
-        treatAsCategorical: args.metadata.modelType !== ModelTypes.regression,
+        isCategorical: args.metadata.modelType !== ModelTypes.Regression,
+        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression,
         sortedCategoricalValues:
-          args.metadata.modelType !== ModelTypes.regression
+          args.metadata.modelType !== ModelTypes.Regression
             ? args.metadata.classNames
             : undefined,
-        category: ColumnCategories.outcome
+        category: ColumnCategories.Outcome
       };
-      if (args.metadata.modelType === ModelTypes.regression) {
+      if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.PredictedYLabel].featureRange = {
           min: Math.min(...args.predictedY),
           max: Math.max(...args.predictedY),
-          rangeType: RangeTypes.numeric
+          rangeType: RangeTypes.Numeric
         };
       }
       this.hasPredictedY = true;
     }
     if (args.predictedProbabilities) {
       const predictedProbabilities = args.predictedProbabilities;
-      if (args.metadata.modelType !== ModelTypes.regression) {
+      if (args.metadata.modelType !== ModelTypes.Regression) {
         args.predictedProbabilities.forEach((predictionArray, index) => {
           predictionArray.forEach((val, classIndex) => {
             if (this.dataDict) {
@@ -211,11 +211,11 @@ export class JointDataset {
             isCategorical: false,
             treatAsCategorical: false,
             sortedCategoricalValues: undefined,
-            category: ColumnCategories.outcome,
+            category: ColumnCategories.Outcome,
             featureRange: {
               min: Math.min(...projection),
               max: Math.max(...projection),
-              rangeType: RangeTypes.numeric
+              rangeType: RangeTypes.Numeric
             }
           };
         });
@@ -233,19 +233,19 @@ export class JointDataset {
       this.metaDict[JointDataset.TrueYLabel] = {
         label: localization.ExplanationScatter.trueY,
         abbridgedLabel: localization.ExplanationScatter.trueY,
-        isCategorical: args.metadata.modelType !== ModelTypes.regression,
-        treatAsCategorical: args.metadata.modelType !== ModelTypes.regression,
+        isCategorical: args.metadata.modelType !== ModelTypes.Regression,
+        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression,
         sortedCategoricalValues:
-          args.metadata.modelType !== ModelTypes.regression
+          args.metadata.modelType !== ModelTypes.Regression
             ? args.metadata.classNames
             : undefined,
-        category: ColumnCategories.outcome
+        category: ColumnCategories.Outcome
       };
-      if (args.metadata.modelType === ModelTypes.regression) {
+      if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.TrueYLabel].featureRange = {
           min: Math.min(...args.trueY),
           max: Math.max(...args.trueY),
-          rangeType: RangeTypes.numeric
+          rangeType: RangeTypes.Numeric
         };
       }
       this.hasTrueY = true;
@@ -256,7 +256,7 @@ export class JointDataset {
         JointDataset.setErrorMetrics(row, this._modelMeta.modelType);
       });
       // Set appropriate metadata
-      if (args.metadata.modelType === ModelTypes.regression && this.dataDict) {
+      if (args.metadata.modelType === ModelTypes.Regression && this.dataDict) {
         const regressionErrorArray = this.dataDict.map(
           (row) => row[JointDataset.RegressionError]
         );
@@ -265,15 +265,15 @@ export class JointDataset {
           abbridgedLabel: localization.Columns.error,
           isCategorical: false,
           sortedCategoricalValues: undefined,
-          category: ColumnCategories.outcome,
+          category: ColumnCategories.Outcome,
           featureRange: {
-            rangeType: RangeTypes.numeric,
+            rangeType: RangeTypes.Numeric,
             min: Math.min(...regressionErrorArray),
             max: Math.max(...regressionErrorArray)
           }
         };
       }
-      if (args.metadata.modelType === ModelTypes.binary) {
+      if (args.metadata.modelType === ModelTypes.Binary) {
         this.metaDict[JointDataset.ClassificationError] = {
           label: localization.Columns.classificationOutcome,
           abbridgedLabel: localization.Columns.classificationOutcome,
@@ -285,7 +285,7 @@ export class JointDataset {
             localization.Columns.falseNegative,
             localization.Columns.truePositive
           ],
-          category: ColumnCategories.outcome
+          category: ColumnCategories.Outcome
         };
       }
     }
@@ -299,7 +299,7 @@ export class JointDataset {
       // this._localExplanationIndexesComputed = new Array(
       //   this.localExplanationFeatureCount
       // ).fill(false);
-      this.buildLocalFlattenMatrix(WeightVectors.absAvg);
+      this.buildLocalFlattenMatrix(WeightVectors.AbsAvg);
       this.hasLocalExplanations = true;
     }
     if (this.dataDict === undefined) {
@@ -371,12 +371,12 @@ export class JointDataset {
     row: { [key: string]: any },
     modelType: ModelTypes
   ): void {
-    if (modelType === ModelTypes.regression) {
+    if (modelType === ModelTypes.Regression) {
       row[JointDataset.RegressionError] =
         row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel];
       return;
     }
-    if (modelType === ModelTypes.binary) {
+    if (modelType === ModelTypes.Binary) {
       // sum pred and 2*true to map to ints 0 - 3,
       // 0: TN
       // 1: FP
@@ -394,19 +394,19 @@ export class JointDataset {
     modelType: ModelTypes
   ): number[][][] {
     switch (modelType) {
-      case ModelTypes.regression: {
+      case ModelTypes.Regression: {
         return (localExplanationRaw as number[][]).map((featureArray) =>
           featureArray.map((val) => [val])
         );
       }
-      case ModelTypes.binary: {
+      case ModelTypes.Binary: {
         return JointDataset.transposeLocalImportanceMatrix(
           localExplanationRaw as number[][][]
         ).map((featuresByClasses) =>
           featuresByClasses.map((classArray) => classArray.slice(0, 1))
         );
       }
-      case ModelTypes.multiclass:
+      case ModelTypes.Multiclass:
       default: {
         return JointDataset.transposeLocalImportanceMatrix(
           localExplanationRaw as number[][][]
@@ -481,7 +481,7 @@ export class JointDataset {
     // use filtered data for user provided binCount
     let binCount = 5;
     if (binCountIn === undefined) {
-      if (featureRange.rangeType === RangeTypes.integer) {
+      if (featureRange.rangeType === RangeTypes.Integer) {
         const uniqueValues = _.uniq(this.dataDict?.map((row) => row[key]));
         binCount = Math.min(5, uniqueValues.length);
       }
@@ -495,7 +495,7 @@ export class JointDataset {
       return;
     }
     // make uniform bins in these cases
-    if (featureRange.rangeType === RangeTypes.numeric || delta < binCount - 1) {
+    if (featureRange.rangeType === RangeTypes.Numeric || delta < binCount - 1) {
       const binDelta = delta / binCount;
       const array = new Array(binCount).fill(0).map((_, index) => {
         return index !== binCount - 1
@@ -555,8 +555,8 @@ export class JointDataset {
       Number.MIN_SAFE_INTEGER
     );
     switch (this._modelMeta.modelType) {
-      case ModelTypes.regression:
-      case ModelTypes.binary: {
+      case ModelTypes.Regression:
+      case ModelTypes.Binary: {
         // no need to flatten what is already flat
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
@@ -578,20 +578,20 @@ export class JointDataset {
         });
         break;
       }
-      case ModelTypes.multiclass: {
+      case ModelTypes.Multiclass: {
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
             // this._localExplanationIndexesComputed[rowIndex] = false;
             let value: number;
             switch (weightVector) {
-              case WeightVectors.equal: {
+              case WeightVectors.Equal: {
                 value = classArray.reduce((a, b) => a + b) / classArray.length;
                 break;
               }
               // case WeightVectors.predicted: {
               //     return classArray[this.predictedY[rowIndex]];
               // }
-              case WeightVectors.absAvg: {
+              case WeightVectors.AbsAvg: {
                 value =
                   classArray.reduce((a, b) => a + Math.abs(b), 0) /
                   classArray.length;
@@ -634,11 +634,11 @@ export class JointDataset {
         ),
         isCategorical: false,
         featureRange: {
-          rangeType: RangeTypes.numeric,
+          rangeType: RangeTypes.Numeric,
           min: featuresMinArray[featureIndex],
           max: featuresMaxArray[featureIndex]
         },
-        category: ColumnCategories.explanation
+        category: ColumnCategories.Explanation
       };
       this.binDict[key] = undefined;
     });
@@ -675,25 +675,25 @@ export class JointDataset {
       abbridgedLabel: localization.ExplanationScatter.index,
       isCategorical: false,
       featureRange: {
-        rangeType: RangeTypes.integer,
+        rangeType: RangeTypes.Integer,
         min: 0,
         max: arr.length - 1
       },
-      category: ColumnCategories.index
+      category: ColumnCategories.Index
     };
-    this.metaDict[CohortKey] = {
+    this.metaDict[cohortKey] = {
       label: localization.Cohort.cohort,
       abbridgedLabel: localization.Cohort.cohort,
       isCategorical: true,
       treatAsCategorical: true,
-      category: ColumnCategories.cohort
+      category: ColumnCategories.Cohort
     };
-    this.metaDict[ColumnCategories.none] = {
+    this.metaDict[ColumnCategories.None] = {
       label: localization.Columns.none,
       abbridgedLabel: localization.Columns.none,
       isCategorical: true,
       treatAsCategorical: true,
-      category: ColumnCategories.none
+      category: ColumnCategories.None
     };
   }
 }

@@ -77,7 +77,7 @@ export class BinningControl extends React.PureComponent<
         </div>
         {!!this.state && (
           <div className={binningControlStyles.rangeView}>
-            {this.state.type === RangeTypes.categorical && (
+            {this.state.type === RangeTypes.Categorical && (
               <ComboBox
                 multiSelect
                 selectedKey={this.state.selectedOptionKeys}
@@ -88,7 +88,7 @@ export class BinningControl extends React.PureComponent<
                 styles={FabricStyles.defaultDropdownStyle}
               />
             )}
-            {this.state.type !== RangeTypes.categorical && (
+            {this.state.type !== RangeTypes.Categorical && (
               <div className={binningControlStyles.featurePicker}>
                 <TextField
                   label={localization.IcePlot.minimumInputLabel}
@@ -139,10 +139,10 @@ export class BinningControl extends React.PureComponent<
     rangeView.min = newValue;
     if (
       Number.isNaN(val) ||
-      (this.state.type === RangeTypes.integer && !Number.isInteger(val))
+      (this.state.type === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       rangeView.minErrorMessage =
-        this.state.type === RangeTypes.integer
+        this.state.type === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
       this.setState(rangeView);
@@ -163,10 +163,10 @@ export class BinningControl extends React.PureComponent<
     rangeView.max = newValue;
     if (
       Number.isNaN(val) ||
-      (this.state.type === RangeTypes.integer && !Number.isInteger(val))
+      (this.state.type === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       rangeView.maxErrorMessage =
-        this.state.type === RangeTypes.integer
+        this.state.type === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
       this.setState(rangeView);
@@ -251,7 +251,7 @@ export class BinningControl extends React.PureComponent<
         categoricalOptions: summary.uniqueValues.map((text) => {
           return { key: text, text };
         }),
-        type: RangeTypes.categorical
+        type: RangeTypes.Categorical
       };
     }
     const summary = this.props.modelMetadata.featureRanges[
@@ -288,14 +288,14 @@ export class BinningControl extends React.PureComponent<
     const steps = toNumber(this.state.steps);
 
     if (
-      this.state.type === RangeTypes.categorical &&
+      this.state.type === RangeTypes.Categorical &&
       Array.isArray(this.state.selectedOptionKeys)
     ) {
       this.props.onChange({
         hasError: false,
         array: this.state.selectedOptionKeys,
         featureIndex: this.state.featureIndex,
-        rangeType: RangeTypes.categorical
+        rangeType: RangeTypes.Categorical
       });
     } else if (
       !Number.isNaN(min) &&
@@ -305,7 +305,7 @@ export class BinningControl extends React.PureComponent<
       const delta = steps > 0 ? (max - min) / steps : max - min;
       const array = _.uniq(
         Array.from({ length: steps }, (_, i) =>
-          this.state.type === RangeTypes.integer
+          this.state.type === RangeTypes.Integer
             ? Math.round(min + i * delta)
             : min + i * delta
         )

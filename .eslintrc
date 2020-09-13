@@ -62,14 +62,35 @@
         ]
       }
     ],
+
     "@typescript-eslint/naming-convention": [
       "error",
       {
+        "selector": "parameter",
+        "format": ["camelCase"],
+        "leadingUnderscore": "allow"
+      },
+      {
         "selector": "interface",
         "format": ["PascalCase"],
-        "custom": {
-          "regex": "^I[A-Z]",
-          "match": true
+        "prefix": ["I"]
+      },
+      {
+        "selector": "typeParameter",
+        "format": ["PascalCase"],
+        "prefix": ["T"]
+      },
+      {
+        "selector": ["typeLike", "enumMember"],
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": ["variable", "function"],
+        "format": ["camelCase"],
+        "filter": {
+          // styles match component name
+          "regex": "^(.*Styles)$",
+          "match": false
         }
       }
     ],

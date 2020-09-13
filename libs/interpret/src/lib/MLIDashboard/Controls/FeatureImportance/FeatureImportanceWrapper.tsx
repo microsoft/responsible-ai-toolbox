@@ -10,8 +10,8 @@ import { Beehive } from "./Beehive";
 import { Violin } from "./Violin";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
-export const BarId = "bar_id";
-export const GlobalFeatureImportanceId = "global_feature_id";
+export const barId = "bar_id";
+export const globalFeatureImportanceId = "global_feature_id";
 
 export interface IFeatureImportanceConfig extends IBarChartConfig {
   displayMode: FeatureImportanceModes;
@@ -39,31 +39,31 @@ export class FeatureImportanceWrapper extends React.PureComponent<
         ? [
             {
               text: localization.FeatureImportanceWrapper.boxText,
-              key: FeatureImportanceModes.box
+              key: FeatureImportanceModes.Box
             },
             {
               text: localization.FeatureImportanceWrapper.beehiveText,
-              key: FeatureImportanceModes.beehive
+              key: FeatureImportanceModes.Beehive
             },
             {
               text: localization.FeatureImportanceWrapper.violinText,
-              key: FeatureImportanceModes.violin
+              key: FeatureImportanceModes.Violin
             }
           ]
         : [];
 
     switch (this.props.config.displayMode) {
-      case FeatureImportanceModes.bar:
+      case FeatureImportanceModes.Bar:
         return (
           <FeatureImportanceBar
             {...this.props}
             chartTypeOptions={chartTypeOptions}
           />
         );
-      case FeatureImportanceModes.beehive:
+      case FeatureImportanceModes.Beehive:
         return <Beehive {...this.props} chartTypeOptions={chartTypeOptions} />;
-      case FeatureImportanceModes.violin:
-      case FeatureImportanceModes.box:
+      case FeatureImportanceModes.Violin:
+      case FeatureImportanceModes.Box:
       default:
         return <Violin {...this.props} chartTypeOptions={chartTypeOptions} />;
     }

@@ -105,7 +105,7 @@ export class Beehive extends React.PureComponent<
             plotlyPath: "text"
           }
         },
-        mode: PlotlyMode.markers,
+        mode: PlotlyMode.Markers,
         type: "scattergl",
         yAccessor: "featureImportance",
         xAccessor: "ditheredFeatureIndex"
@@ -154,7 +154,7 @@ export class Beehive extends React.PureComponent<
           ? Beehive.populateMappers(data)
           : undefined;
       const isClassifier =
-        data.modelMetadata.modelType !== ModelTypes.regression;
+        data.modelMetadata.modelType !== ModelTypes.Regression;
       return sortVector
         .map((featureIndex, sortVectorIndex) => {
           return (
@@ -229,7 +229,7 @@ export class Beehive extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (explanationContext.modelMetadata.modelType === ModelTypes.binary) {
+      if (explanationContext.modelMetadata.modelType === ModelTypes.Binary) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -373,7 +373,7 @@ export class Beehive extends React.PureComponent<
         formattedImportance
       )
     );
-    if (data.modelMetadata.modelType === ModelTypes.regression) {
+    if (data.modelMetadata.modelType === ModelTypes.Regression) {
       if (data.testDataset.predictedY) {
         result.push(
           localization.formatString(
@@ -461,7 +461,7 @@ export class Beehive extends React.PureComponent<
             <ComboBox
               label={localization.FeatureImportanceWrapper.chartType}
               className={beehiveStyles.pathSelector}
-              selectedKey={FeatureImportanceModes.beehive}
+              selectedKey={FeatureImportanceModes.Beehive}
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
               ariaLabel={"chart type picker"}
@@ -514,7 +514,7 @@ export class Beehive extends React.PureComponent<
               />
             </div>
             {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType === ModelTypes.multiclass && (
+              .modelType === ModelTypes.Multiclass && (
               <div>
                 <div className={beehiveStyles.selectorLabel}>
                   <span>{localization.CrossClass.label}</span>
@@ -639,7 +639,7 @@ export class Beehive extends React.PureComponent<
             {localization.FeatureImportanceWrapper.globalImportanceExplanation}
           </span>
           {this.props.dashboardContext.explanationContext.modelMetadata
-            .modelType === ModelTypes.multiclass && (
+            .modelType === ModelTypes.Multiclass && (
             <span>
               {
                 localization.FeatureImportanceWrapper
@@ -659,7 +659,7 @@ export class Beehive extends React.PureComponent<
   private buildColorOptions(): IComboBoxOption[] {
     const isRegression =
       this.props.dashboardContext.explanationContext.modelMetadata.modelType ===
-      ModelTypes.regression;
+      ModelTypes.Regression;
     const result: IComboBoxOption[] = [
       {
         key: "none",

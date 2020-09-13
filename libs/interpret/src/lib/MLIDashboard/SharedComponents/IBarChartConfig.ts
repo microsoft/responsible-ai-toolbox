@@ -1,6 +1,6 @@
 export enum FeatureKeys {
-  absoluteGlobal = "absoluteGlobal",
-  absoluteLocal = "absoluteLocal"
+  AbsoluteGlobal = "absoluteGlobal",
+  AbsoluteLocal = "absoluteLocal"
 }
 
 export type FeatureSortingKey = number | FeatureKeys;

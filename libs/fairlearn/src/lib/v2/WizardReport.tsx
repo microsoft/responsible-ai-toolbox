@@ -19,9 +19,9 @@ import {
 } from "office-ui-fabric-react";
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { AccuracyOptions } from "../util/AccuracyMetrics";
+import { accuracyOptions } from "../util/AccuracyMetrics";
 import { ParityModes } from "../util/ParityMetrics";
-import { ChartColors } from "./ChartColors";
+import { chartColors } from "../util/chartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { localization } from "./../Localization/localization";
@@ -85,7 +85,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     layout: {
       autosize: true,
       barmode: "relative",
-      colorway: ChartColors,
+      colorway: chartColors,
       font: {
         size: 10
       },
@@ -154,10 +154,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const accuracyKey = this.props.accuracyPickerProps.selectedAccuracyKey;
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
+      PredictionTypes.BinaryClassification
         ? "selection_rate"
         : "average";
-    const outcomeMetric = AccuracyOptions[outcomeKey];
+    const outcomeMetric = accuracyOptions[outcomeKey];
 
     const overpredicitonKey = "overprediction";
     const underpredictionKey = "underprediction";
@@ -183,7 +183,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     } else {
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.binaryClassification
+        PredictionTypes.BinaryClassification
       ) {
         accuracyPlot.data = [
           {
@@ -194,7 +194,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             ),
             name: localization.Metrics.overprediction,
             width: 0.5,
-            color: ChartColors[0],
+            color: chartColors[0],
             orientation: "h",
             type: "bar",
             textposition: "auto",
@@ -208,7 +208,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             ),
             name: localization.Metrics.underprediction,
             width: 0.5,
-            color: ChartColors[1],
+            color: chartColors[1],
             orientation: "h",
             type: "bar",
             textposition: "auto",
@@ -248,7 +248,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
             ),
             name: outcomeMetric.title,
-            color: ChartColors[0],
+            color: chartColors[0],
             orientation: "h",
             type: "bar",
             textposition: "auto",
@@ -303,7 +303,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.probability
+        PredictionTypes.Probability
       ) {
         accuracyPlot.data = [
           {
@@ -314,7 +314,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             ),
             name: localization.Metrics.overprediction,
             width: 0.5,
-            color: ChartColors[0],
+            color: chartColors[0],
             orientation: "h",
             type: "bar",
             textposition: "auto",
@@ -328,7 +328,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             ),
             name: localization.Metrics.underprediction,
             width: 0.5,
-            color: ChartColors[1],
+            color: chartColors[1],
             orientation: "h",
             type: "bar",
             textposition: "auto",
@@ -369,7 +369,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             y: this.props.dashboardContext.binVector,
             text: opportunityText,
             type: "box",
-            color: ChartColors[0],
+            color: chartColors[0],
             boxmean: true,
             orientation: "h",
             boxpoints: "all",
@@ -382,7 +382,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.regression
+        PredictionTypes.Regression
       ) {
         const opportunityText = this.state.metrics.predictions?.map((val) => {
           return localization.formatString(
@@ -412,7 +412,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             y: this.props.dashboardContext.binVector,
             text: accuracyText,
             type: "box",
-            color: ChartColors[0],
+            color: chartColors[0],
             orientation: "h",
             boxmean: true,
             hoveron: "points",
@@ -428,7 +428,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             y: this.props.dashboardContext.binVector,
             text: opportunityText,
             type: "box",
-            color: ChartColors[0],
+            color: chartColors[0],
             boxmean: true,
             orientation: "h",
             hoveron: "points",
@@ -450,7 +450,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       //   accuracyKey
       // );
       const selectedMetric =
-        AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+        accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
         this.props.accuracyPickerProps.accuracyOptions.find(
           (metric) =>
             metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
@@ -503,29 +503,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         (
           this.props.accuracyPickerProps.accuracyOptions.find(
             (a) => a.key === accuracyKey
-          ) || AccuracyOptions[accuracyKey]
+          ) || accuracyOptions[accuracyKey]
         ).title,
-        AccuracyOptions[outcomeKey].title,
-        AccuracyOptions[overpredicitonKey].title,
-        AccuracyOptions[underpredictionKey].title
+        accuracyOptions[outcomeKey].title,
+        accuracyOptions[overpredicitonKey].title,
+        accuracyOptions[underpredictionKey].title
       ];
-
-      const InsightsIcon = (): JSX.Element => (
-        <Icon
-          iconName="CRMCustomerInsightsApp"
-          className={styles.insightsIcon}
-        />
-      );
-      const DownloadIcon = (): JSX.Element => (
-        <Icon iconName="Download" className={styles.downloadIcon} />
-      );
-
-      const ChevronUp = (): JSX.Element => (
-        <Icon iconName="ChevronUp" className={styles.chevronIcon} />
-      );
-      const ChevronDown = (): JSX.Element => (
-        <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-      );
 
       const cancelIcon: IIconProps = { iconName: "Cancel" };
 
@@ -558,8 +541,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               className={styles.expandAttributes}
               onClick={this.expandAttributes}
             >
-              {(this.state.expandAttributes && <ChevronUp />) ||
-                (!this.state.expandAttributes && <ChevronDown />)}
+              {(this.state.expandAttributes && (
+                <Icon iconName="ChevronUp" className={styles.chevronIcon} />
+              )) ||
+                (!this.state.expandAttributes && (
+                  <Icon iconName="ChevronDown" className={styles.chevronIcon} />
+                ))}
               <Text>
                 {(this.state.expandAttributes &&
                   localization.Report.collapseSensitiveAttributes) ||
@@ -640,7 +627,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               <div className={styles.textRow}>
                 <div
                   className={styles.colorBlock}
-                  style={{ backgroundColor: ChartColors[1] }}
+                  style={{ backgroundColor: chartColors[1] }}
                 />
                 <div>
                   <div className={styles.legendTitle}>
@@ -654,7 +641,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               <div className={styles.textRow}>
                 <div
                   className={styles.colorBlock}
-                  style={{ backgroundColor: ChartColors[0] }}
+                  style={{ backgroundColor: chartColors[0] }}
                 />
                 <div>
                   <div className={styles.legendTitle}>
@@ -669,14 +656,17 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           </div>
           <div className={styles.mainRight}>
             <div className={styles.insights}>
-              <InsightsIcon />
+              <Icon
+                iconName="CRMCustomerInsightsApp"
+                className={styles.insightsIcon}
+              />
               <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.insights}
               </Text>
             </div>
             <div className={styles.insightsText}>{localization.loremIpsum}</div>
             <div className={styles.downloadReport}>
-              <DownloadIcon />
+              <Icon iconName="Download" className={styles.downloadIcon} />
               <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.downloadReport}
               </Text>
@@ -795,10 +785,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.featureBinPickerProps.selectedBinIndex,
         this.props.selectedModelIndex,
         this.props.accuracyPickerProps.selectedAccuracyKey,
-        ParityModes.difference
+        ParityModes.Difference
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
-        case PredictionTypes.binaryClassification: {
+        case PredictionTypes.BinaryClassification: {
           binnedUnderprediction = (
             await this.props.metricsCache.getMetric(
               this.props.dashboardContext.binVector,
@@ -842,11 +832,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "selection_rate",
-            ParityModes.difference
+            ParityModes.Difference
           );
           break;
         }
-        case PredictionTypes.probability: {
+        case PredictionTypes.Probability: {
           predictions = this.props.dashboardContext.predictions[
             this.props.selectedModelIndex
           ];
@@ -877,11 +867,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "average",
-            ParityModes.difference
+            ParityModes.Difference
           );
           break;
         }
-        case PredictionTypes.regression:
+        case PredictionTypes.Regression:
         default: {
           predictions = this.props.dashboardContext.predictions[
             this.props.selectedModelIndex
@@ -900,7 +890,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "average",
-            ParityModes.difference
+            ParityModes.Difference
           );
           break;
         }

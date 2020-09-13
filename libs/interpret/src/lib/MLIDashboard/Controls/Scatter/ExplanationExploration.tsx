@@ -19,7 +19,7 @@ import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import { scatterStyles } from "./Scatter.styles";
 
-export const ExplanationScatterId = "explanation_scatter_id";
+export const explanationScatterId = "explanation_scatter_id";
 
 export interface IExplanationExplorationState {
   isCalloutVisible: boolean;
@@ -75,7 +75,7 @@ export class ExplanationExploration extends React.PureComponent<
       const weightContext = this.props.dashboardContext.weightContext;
       const includeWeightDropdown =
         this.props.dashboardContext.explanationContext.modelMetadata
-          .modelType === ModelTypes.multiclass;
+          .modelType === ModelTypes.Multiclass;
       let plotProp = ScatterUtils.populatePlotlyProps(
         projectedData,
         _.cloneDeep(this.plotlyProps)
@@ -217,7 +217,7 @@ export class ExplanationExploration extends React.PureComponent<
         this.props,
         this.plotlyProps,
         item,
-        ExplanationScatterId
+        explanationScatterId
       );
     }
   };
@@ -231,7 +231,7 @@ export class ExplanationExploration extends React.PureComponent<
         this.props,
         this.plotlyProps,
         item,
-        ExplanationScatterId
+        explanationScatterId
       );
     }
   };
@@ -247,7 +247,7 @@ export class ExplanationExploration extends React.PureComponent<
         this.props,
         this.plotlyProps,
         item,
-        ExplanationScatterId
+        explanationScatterId
       );
     }
   };

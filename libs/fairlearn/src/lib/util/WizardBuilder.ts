@@ -20,8 +20,8 @@ import {
   IFairnessContext,
   IFairnessModelMetadata
 } from "./IFairnessContext";
-import { IAccuracyOption, AccuracyOptions } from "./AccuracyMetrics";
-import { IParityOption, ParityOptions } from "./ParityMetrics";
+import { IAccuracyOption, accuracyOptions } from "./AccuracyMetrics";
+import { IParityOption, parityOptions } from "./ParityMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IBinnedResponse } from "./IBinnedResponse";
 
@@ -97,7 +97,7 @@ export class WizardBuilder {
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
       return {
         uniqueValues: binMeta.binLabels,
-        rangeType: RangeTypes.categorical
+        rangeType: RangeTypes.Categorical
       } as ICategoricalRange;
     });
     return {
@@ -143,7 +143,7 @@ export class WizardBuilder {
       featureIsCategorical,
       props.dataSummary?.categoricalMap
     );
-    const PredictionType = this.determinePredictionType(
+    const predictionType = this.determinePredictionType(
       props.trueY,
       props.predictedY,
       props.predictionType
@@ -154,7 +154,7 @@ export class WizardBuilder {
       classNames,
       featureIsCategorical,
       featureRanges,
-      PredictionType
+      PredictionType: predictionType
     };
   }
 
@@ -173,9 +173,9 @@ export class WizardBuilder {
     specifiedType?: PredictionType
   ): PredictionType {
     if (
-      specifiedType === PredictionTypes.binaryClassification ||
-      specifiedType === PredictionTypes.probability ||
-      specifiedType === PredictionTypes.regression
+      specifiedType === PredictionTypes.BinaryClassification ||
+      specifiedType === PredictionTypes.Probability ||
+      specifiedType === PredictionTypes.Regression
     ) {
       return specifiedType;
     }
@@ -184,15 +184,15 @@ export class WizardBuilder {
     );
     const trueIsBinary = _.uniq(trueY).length < 3;
     if (!trueIsBinary) {
-      return PredictionTypes.regression;
+      return PredictionTypes.Regression;
     }
     if (_.uniq(_.flatten(predictedY)).length < 3) {
-      return PredictionTypes.binaryClassification;
+      return PredictionTypes.BinaryClassification;
     }
     if (predictedIsPossibleProba) {
-      return PredictionTypes.probability;
+      return PredictionTypes.Probability;
     }
-    return PredictionTypes.regression;
+    return PredictionTypes.Regression;
   }
 
   public static buildAccuracyListForPrecomputedMetrics(
@@ -201,7 +201,7 @@ export class WizardBuilder {
     const customMetrics: IAccuracyOption[] = [];
     const providedMetrics: IAccuracyOption[] = [];
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      const metric = AccuracyOptions[key];
+      const metric = accuracyOptions[key];
       if (metric !== undefined) {
         if (metric.userVisible) {
           providedMetrics.push(metric);
@@ -234,7 +234,7 @@ export class WizardBuilder {
     const customMetrics: IParityOption[] = [];
     const providedMetrics: IParityOption[] = [];
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      const metric = ParityOptions[key];
+      const metric = parityOptions[key];
       if (metric !== undefined) {
         providedMetrics.push(metric);
       }
@@ -263,7 +263,7 @@ export class WizardBuilder {
     }
     return dataset.map((row) => {
       const featureValue = row[value.featureIndex];
-      if (value.rangeType === RangeTypes.categorical) {
+      if (value.rangeType === RangeTypes.Categorical) {
         // this handles categorical, as well as integers when user requests to treat as categorical
         return value.array.indexOf(featureValue);
       }

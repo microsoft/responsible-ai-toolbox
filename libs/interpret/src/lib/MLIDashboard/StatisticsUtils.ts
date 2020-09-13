@@ -95,14 +95,14 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes
 ): ILabeledStatistic[][] => {
-  if (modelType === ModelTypes.binary) {
+  if (modelType === ModelTypes.Binary) {
     const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
     return selectionIndexes.map((selectionArray) => {
       const outcomeSubset = selectionArray.map((i) => outcomes[i]);
       return generateBinaryStats(outcomeSubset);
     });
   }
-  if (modelType === ModelTypes.regression) {
+  if (modelType === ModelTypes.Regression) {
     const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
     const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
     const errors = jointDataset.unwrap(JointDataset.RegressionError);

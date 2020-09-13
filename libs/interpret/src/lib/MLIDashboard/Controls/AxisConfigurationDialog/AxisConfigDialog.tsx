@@ -23,7 +23,7 @@ import { localization } from "../../../Localization/localization";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { FabricStyles } from "../../FabricStyles";
-import { CohortKey } from "../../CohortKey";
+import { cohortKey } from "../../cohortKey";
 import {
   axisControlCallout,
   axisControlDialogStyles,
@@ -59,7 +59,7 @@ export class AxisConfigDialog extends React.PureComponent<
   private _leftSelection: Selection;
 
   private readonly leftItems = [
-    CohortKey,
+    cohortKey,
     JointDataset.IndexLabel,
     JointDataset.DataLabelRoot,
     JointDataset.PredictedYLabel,
@@ -67,12 +67,12 @@ export class AxisConfigDialog extends React.PureComponent<
     JointDataset.ClassificationError,
     JointDataset.RegressionError,
     JointDataset.ProbabilityYRoot,
-    ColumnCategories.none
+    ColumnCategories.None
   ].reduce((previousValue: Array<{ key: string; title: string }>, key) => {
     const metaVal = this.props.jointDataset.metaDict[key];
     if (
       key === JointDataset.DataLabelRoot &&
-      this.props.orderedGroupTitles.includes(ColumnCategories.dataset) &&
+      this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
       this.props.jointDataset.hasDataset
     ) {
       previousValue.push({ key, title: localization.Columns.dataset });
@@ -80,7 +80,7 @@ export class AxisConfigDialog extends React.PureComponent<
     }
     if (
       key === JointDataset.ProbabilityYRoot &&
-      this.props.orderedGroupTitles.includes(ColumnCategories.outcome) &&
+      this.props.orderedGroupTitles.includes(ColumnCategories.Outcome) &&
       this.props.jointDataset.hasPredictedProbabilities
     ) {
       previousValue.push({
@@ -190,18 +190,18 @@ export class AxisConfigDialog extends React.PureComponent<
               ]}
             />
           </div>
-          {this.state.selectedColumn.property === CohortKey && (
+          {this.state.selectedColumn.property === cohortKey && (
             <div className={styles.rightHalf}>
               <Text>{localization.AxisConfigDialog.groupByCohort}</Text>
             </div>
           )}
-          {this.state.selectedColumn.property === ColumnCategories.none && (
+          {this.state.selectedColumn.property === ColumnCategories.None && (
             <div className={styles.rightHalf}>
               <Text>{localization.AxisConfigDialog.countHelperText}</Text>
             </div>
           )}
-          {this.state.selectedColumn.property !== CohortKey &&
-            this.state.selectedColumn.property !== ColumnCategories.none && (
+          {this.state.selectedColumn.property !== cohortKey &&
+            this.state.selectedColumn.property !== ColumnCategories.None && (
               <div className={styles.rightHalf}>
                 {isDataColumn && (
                   <ComboBox
@@ -227,7 +227,7 @@ export class AxisConfigDialog extends React.PureComponent<
                 )}
                 {selectedMeta.featureRange &&
                   selectedMeta.featureRange.rangeType ===
-                    RangeTypes.integer && (
+                    RangeTypes.Integer && (
                     <Checkbox
                       key={this.state.selectedColumn.property}
                       className={styles.treatCategorical}
@@ -367,7 +367,7 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private extractSelectionKey(key: string): string {
     if (key === undefined) {
-      return ColumnCategories.none;
+      return ColumnCategories.None;
     }
     if (key.includes(JointDataset.DataLabelRoot)) {
       return JointDataset.DataLabelRoot;
@@ -510,7 +510,7 @@ export class AxisConfigDialog extends React.PureComponent<
       return;
     }
     let property = this._leftSelection.getSelection()[0].key as string;
-    if (property === ColumnCategories.none) {
+    if (property === ColumnCategories.None) {
       this.setState({
         selectedColumn: {
           property,

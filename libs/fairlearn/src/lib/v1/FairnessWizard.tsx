@@ -16,7 +16,7 @@ import {
   IFairnessContext,
   IRunTimeFairnessContext
 } from "../util/IFairnessContext";
-import { IAccuracyOption, AccuracyOptions } from "../util/AccuracyMetrics";
+import { IAccuracyOption, accuracyOptions } from "../util/AccuracyMetrics";
 import { MetricsCache } from "../util/MetricsCache";
 import { FeatureTab } from "../components/FeatureTab";
 import { AccuracyTab } from "./Controls/AccuracyTab";
@@ -94,7 +94,7 @@ export class FairnessWizardV1 extends React.PureComponent<
             array: initialBin.binLabels,
             labelArray: initialBin.binLabels,
             featureIndex: index,
-            rangeType: RangeTypes.categorical
+            rangeType: RangeTypes.Categorical
           };
         }
       );
@@ -302,22 +302,22 @@ export class FairnessWizardV1 extends React.PureComponent<
   ): IAccuracyOption[] {
     if (
       fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
+      PredictionTypes.BinaryClassification
     ) {
       return this.props.supportedBinaryClassificationAccuracyKeys.map(
-        (key) => AccuracyOptions[key]
+        (key) => accuracyOptions[key]
       );
     }
     if (
       fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.regression
+      PredictionTypes.Regression
     ) {
       return this.props.supportedRegressionAccuracyKeys.map(
-        (key) => AccuracyOptions[key]
+        (key) => accuracyOptions[key]
       );
     }
     return this.props.supportedProbabilityAccuracyKeys.map(
-      (key) => AccuracyOptions[key]
+      (key) => accuracyOptions[key]
     );
   }
 

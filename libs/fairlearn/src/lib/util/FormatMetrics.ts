@@ -1,4 +1,4 @@
-import { AccuracyOptions } from "../util/AccuracyMetrics";
+import { accuracyOptions } from "../util/AccuracyMetrics";
 
 export class FormatMetrics {
   public static formatNumbers = (
@@ -13,7 +13,7 @@ export class FormatMetrics {
     const styleObject: Intl.NumberFormatOptions = {
       maximumSignificantDigits: sigDigits
     };
-    if (AccuracyOptions[key] && AccuracyOptions[key].isPercentage && !isRatio) {
+    if (accuracyOptions[key] && accuracyOptions[key].isPercentage && !isRatio) {
       styleObject.style = "percent";
     }
     return value.toLocaleString(undefined, styleObject);

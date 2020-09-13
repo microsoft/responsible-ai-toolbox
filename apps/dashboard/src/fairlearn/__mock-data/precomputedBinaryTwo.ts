@@ -3060,5 +3060,5 @@ export const precomputedBinaryTwo: IFairnessData = {
       binLabels: ["Group 0", "Group 1"]
     }
   ],
-  predictionType: PredictionTypes.binaryClassification
+  predictionType: PredictionTypes.BinaryClassification
 };

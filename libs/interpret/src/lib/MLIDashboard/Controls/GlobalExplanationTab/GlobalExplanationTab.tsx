@@ -30,7 +30,7 @@ import { Cohort } from "../../Cohort";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
-import { ExplainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
+import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
@@ -87,7 +87,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   private weightOptions: IDropdownOption[] | undefined;
   private readonly hasDataset = this.props.jointDataset.hasDataset;
   private readonly explainerCalloutInfo = this.props.explanationMethod
-    ? ExplainerCalloutDictionary[this.props.explanationMethod]
+    ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
 
   public constructor(props: IGlobalExplanationTabProps) {
@@ -123,7 +123,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (this.props.globalBarSettings === undefined) {
       this.setDefaultSettings();
     }
-    if (this.props.metadata.modelType === ModelTypes.multiclass) {
+    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           text: this.props.weightLabels[option],
@@ -310,7 +310,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               selectedKey={this.state.sortingSeriesIndex}
               onChange={this.setSortIndex}
             />
-            {this.props.metadata.modelType === ModelTypes.multiclass &&
+            {this.props.metadata.modelType === ModelTypes.Multiclass &&
               this.weightOptions && (
                 <div>
                   <div className={classNames.multiclassWeightLabel}>

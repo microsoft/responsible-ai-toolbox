@@ -72,7 +72,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
               classIndex % FabricStyles.plotlyColorPalette.length
             ];
           const lowerBounds: IData = {
-            mode: PlotlyMode.lines,
+            mode: PlotlyMode.Lines,
             type: "scatter",
             line: {
               shape: "hv",
@@ -83,7 +83,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             y: coordinates.lowerBounds?.[classIndex]
           };
           const centerlineSeries: IData = {
-            mode: PlotlyMode.lines,
+            mode: PlotlyMode.Lines,
             type: "scatter",
             fill: "tonexty",
             fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
@@ -97,7 +97,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             y: scores
           };
           const upperbounds: IData = {
-            mode: PlotlyMode.lines,
+            mode: PlotlyMode.Lines,
             type: "scatter",
             fill: "tonexty",
             fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,

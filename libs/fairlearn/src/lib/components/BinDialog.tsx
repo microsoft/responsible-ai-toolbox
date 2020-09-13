@@ -44,14 +44,14 @@ export class BinDialog extends React.PureComponent<
         </Text>
         <div className={styles.main}>
           <div className={styles.controls}>
-            {this.props.range.rangeType === RangeTypes.integer && (
+            {this.props.range.rangeType === RangeTypes.Integer && (
               <Checkbox
                 label={localization.BinDialog.makeCategorical}
-                checked={this.state.rangeType === RangeTypes.categorical}
+                checked={this.state.rangeType === RangeTypes.Categorical}
                 onChange={this.toggleCategorical}
               />
             )}
-            {this.state.rangeType !== RangeTypes.categorical && (
+            {this.state.rangeType !== RangeTypes.Categorical && (
               <div className={styles.binCounter}>
                 <SpinButton
                   styles={{
@@ -121,7 +121,7 @@ export class BinDialog extends React.PureComponent<
           this.props.dataset
         )
       );
-    } else if (this.props.bins.rangeType === RangeTypes.integer) {
+    } else if (this.props.bins.rangeType === RangeTypes.Integer) {
       this.setState(this.props.bins);
     } else {
       this.setState(

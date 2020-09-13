@@ -15,8 +15,8 @@ import {
   IRunTimeFairnessContext
 } from "../util/IFairnessContext";
 import { WizardBuilder } from "../util/WizardBuilder";
-import { AccuracyOptions, IAccuracyOption } from "../util/AccuracyMetrics";
-import { IParityOption, ParityOptions } from "../util/ParityMetrics";
+import { accuracyOptions, IAccuracyOption } from "../util/AccuracyMetrics";
+import { IParityOption, parityOptions } from "../util/ParityMetrics";
 import { MetricsCache } from "../util/MetricsCache";
 import { FeatureTab } from "../components/FeatureTab";
 import { AccuracyTab } from "./Controls/AccuracyTab";
@@ -99,7 +99,7 @@ export class FairnessWizardV2 extends React.PureComponent<
             array: initialBin.binLabels,
             labelArray: initialBin.binLabels,
             featureIndex: index,
-            rangeType: RangeTypes.categorical
+            rangeType: RangeTypes.Categorical
           };
         }
       );
@@ -137,7 +137,7 @@ export class FairnessWizardV2 extends React.PureComponent<
     accuracyMetrics = accuracyMetrics.filter((metric) => !!metric);
 
     // TODO
-    parityMetrics = Object.values(ParityOptions);
+    parityMetrics = Object.values(parityOptions);
 
     this.state = {
       showIntro: true,
@@ -309,22 +309,22 @@ export class FairnessWizardV2 extends React.PureComponent<
   ): IAccuracyOption[] {
     if (
       fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
+      PredictionTypes.BinaryClassification
     ) {
       return this.props.supportedBinaryClassificationAccuracyKeys.map(
-        (key) => AccuracyOptions[key]
+        (key) => accuracyOptions[key]
       );
     }
     if (
       fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.regression
+      PredictionTypes.Regression
     ) {
       return this.props.supportedRegressionAccuracyKeys.map(
-        (key) => AccuracyOptions[key]
+        (key) => accuracyOptions[key]
       );
     }
     return this.props.supportedProbabilityAccuracyKeys.map(
-      (key) => AccuracyOptions[key]
+      (key) => accuracyOptions[key]
     );
   }
 
