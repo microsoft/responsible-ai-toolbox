@@ -91,7 +91,7 @@ export class ModelComparisonChart extends React.PureComponent<
             plotlyPath: "customdata"
           }
         },
-        mode: PlotlyMode.textMarkers,
+        mode: PlotlyMode.TextMarkers,
         marker: {
           size: 14
         },
