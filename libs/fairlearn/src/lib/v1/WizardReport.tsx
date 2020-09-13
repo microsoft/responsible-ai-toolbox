@@ -13,7 +13,7 @@ import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { AccuracyOptions } from "../util/AccuracyMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { chartColors } from "./ChartColors";
+import { chartColors } from "../util/chartColors";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { localization } from "./../Localization/localization";
