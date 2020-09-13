@@ -10,8 +10,8 @@ import { Beehive } from "./Beehive";
 import { Violin } from "./Violin";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
-export const BarId = "bar_id";
-export const GlobalFeatureImportanceId = "global_feature_id";
+export const barId = "bar_id";
+export const globalFeatureImportanceId = "global_feature_id";
 
 export interface IFeatureImportanceConfig extends IBarChartConfig {
   displayMode: FeatureImportanceModes;

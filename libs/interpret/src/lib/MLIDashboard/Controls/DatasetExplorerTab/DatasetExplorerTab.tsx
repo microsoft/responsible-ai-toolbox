@@ -30,7 +30,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
-import { CohortKey } from "../../CohortKey";
+import { cohortKey } from "../../CohortKey";
 import {
   datasetExplorerTabStyles,
   IDatasetExplorerTabStyles
@@ -480,7 +480,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       this.props.cohorts[this.state.selectedCohortIndex]
     );
     const cohortOptions =
-      this.props.chartProps.xAxis.property !== CohortKey
+      this.props.chartProps.xAxis.property !== cohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })

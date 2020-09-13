@@ -28,7 +28,7 @@ import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 import { singlePointFeatureImportanceStyles } from "./SinglePointFeatureImportance.styles";
 
-export const LocalBarId = "local_bar_id";
+export const localBarId = "local_bar_id";
 
 export interface ISinglePointFeatureImportanceProps {
   explanationContext: IExplanationContext;
@@ -251,7 +251,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
   private setTopK = (newValue: number): void => {
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.topK = newValue;
-    this.props.onChange(newConfig, LocalBarId);
+    this.props.onChange(newConfig, localBarId);
   };
 
   private onSortSelect = (

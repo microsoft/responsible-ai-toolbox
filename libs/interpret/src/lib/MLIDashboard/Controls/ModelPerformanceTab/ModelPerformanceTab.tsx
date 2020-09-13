@@ -25,7 +25,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
-import { CohortKey } from "../../CohortKey";
+import { cohortKey } from "../../CohortKey";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
@@ -114,7 +114,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     let yLabelIndexes: number[] | undefined;
     const yMeta = jointData.metaDict[chartProps.yAxis.property];
     const yAxisName = yMeta.label;
-    if (chartProps.yAxis.property === CohortKey) {
+    if (chartProps.yAxis.property === cohortKey) {
       rawX = [];
       rawY = [];
       yLabels = [];
@@ -241,7 +241,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
     const cohortOptions =
-      this.props.chartProps.yAxis.property !== CohortKey
+      this.props.chartProps.yAxis.property !== cohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })
@@ -491,7 +491,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         ? ChartTypes.Histogram
         : ChartTypes.Box,
       yAxis: {
-        property: CohortKey,
+        property: cohortKey,
         options: {}
       },
       xAxis: {
@@ -508,7 +508,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     if (!this.props.chartProps) {
       return [];
     }
-    if (this.props.chartProps.yAxis.property === CohortKey) {
+    if (this.props.chartProps.yAxis.property === cohortKey) {
       const indexes = this.props.cohorts.map((cohort) =>
         cohort.unwrap(JointDataset.IndexLabel)
       );

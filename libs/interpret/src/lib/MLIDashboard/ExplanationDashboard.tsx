@@ -47,27 +47,27 @@ import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import {
   IFeatureImportanceConfig,
-  GlobalFeatureImportanceId,
-  BarId,
+  globalFeatureImportanceId,
+  barId,
   FeatureImportanceWrapper
 } from "./Controls/FeatureImportance/FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
 import {
-  LocalBarId,
+  localBarId,
   SinglePointFeatureImportance
 } from "./Controls/SinglePointFeatureImportance";
 import {
   ExplanationExploration,
-  ExplanationScatterId
+  explanationScatterId
 } from "./Controls/Scatter/ExplanationExploration";
 import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
 import {
   DataExploration,
-  DataScatterId
+  dataScatterId
 } from "./Controls/Scatter/DataExploration";
 import { PerturbationExploration } from "./Controls/PerturbationExploration";
 import { ICEPlot } from "./Controls/ICEPlot";
-const RowIndex = "rowIndex";
+const rowIndex = "rowIndex";
 
 export interface IDashboardContext {
   explanationContext: IExplanationContext;
@@ -192,7 +192,7 @@ export class ExplanationDashboard extends React.Component<
     return 1;
   });
 
-  private readonly selectionContext = new SelectionContext(RowIndex, 1);
+  private readonly selectionContext = new SelectionContext(rowIndex, 1);
   private selectionSubscription: string | undefined;
 
   private pivotItems: IPivotItemProps[];
@@ -276,17 +276,17 @@ export class ExplanationDashboard extends React.Component<
           ? 1
           : 0,
       configs: {
-        [BarId]: {
+        [barId]: {
           displayMode: FeatureImportanceModes.bar,
           topK: defaultTopK,
-          id: BarId
+          id: barId
         },
-        [GlobalFeatureImportanceId]: {
+        [globalFeatureImportanceId]: {
           displayMode: FeatureImportanceModes.beehive,
           topK: defaultTopK,
-          id: GlobalFeatureImportanceId
+          id: globalFeatureImportanceId
         },
-        [LocalBarId]: { topK: defaultTopK }
+        [localBarId]: { topK: defaultTopK }
       },
       selectedRow: undefined
     };
@@ -862,7 +862,7 @@ export class ExplanationDashboard extends React.Component<
     );
     if (newState.dashboardContext.explanationContext.localExplanation) {
       (newState.configs[
-        GlobalFeatureImportanceId
+        globalFeatureImportanceId
       ] as IFeatureImportanceConfig).displayMode = FeatureImportanceModes.box;
     }
     this.setState(newState);
@@ -910,7 +910,7 @@ export class ExplanationDashboard extends React.Component<
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 plotlyProps={
-                  this.state.configs[DataScatterId] as IPlotlyProperty
+                  this.state.configs[dataScatterId] as IPlotlyProperty
                 }
                 onChange={this.onConfigChanged}
                 messages={
@@ -926,7 +926,7 @@ export class ExplanationDashboard extends React.Component<
                 theme={this.props.theme}
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
-                config={this.state.configs[BarId] as IFeatureImportanceConfig}
+                config={this.state.configs[barId] as IFeatureImportanceConfig}
                 onChange={this.onConfigChanged}
                 messages={
                   this.props.stringParams
@@ -942,7 +942,7 @@ export class ExplanationDashboard extends React.Component<
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 plotlyProps={
-                  this.state.configs[ExplanationScatterId] as IPlotlyProperty
+                  this.state.configs[explanationScatterId] as IPlotlyProperty
                 }
                 onChange={this.onConfigChanged}
                 messages={
@@ -960,7 +960,7 @@ export class ExplanationDashboard extends React.Component<
                 selectedRow={this.state.selectedRow}
                 config={
                   this.state.configs[
-                    GlobalFeatureImportanceId
+                    globalFeatureImportanceId
                   ] as IFeatureImportanceConfig
                 }
                 onChange={this.onConfigChanged}
@@ -1048,7 +1048,7 @@ export class ExplanationDashboard extends React.Component<
                         }
                         selectedRow={this.state.selectedRow}
                         config={
-                          this.state.configs[LocalBarId] as IBarChartConfig
+                          this.state.configs[localBarId] as IBarChartConfig
                         }
                         onChange={this.onConfigChanged}
                         messages={

@@ -7,7 +7,7 @@ import _ from "lodash";
 import { localization } from "../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
-import { CohortKey } from "./CohortKey";
+import { cohortKey } from "./CohortKey";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
@@ -681,7 +681,7 @@ export class JointDataset {
       },
       category: ColumnCategories.index
     };
-    this.metaDict[CohortKey] = {
+    this.metaDict[cohortKey] = {
       label: localization.Cohort.cohort,
       abbridgedLabel: localization.Cohort.cohort,
       isCategorical: true,
