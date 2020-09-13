@@ -22,13 +22,13 @@ export class ModelMetadata {
         if (categoricalMap && categoricalMap[featureIndex] !== undefined) {
           return {
             uniqueValues: categoricalMap[featureIndex],
-            rangeType: RangeTypes.categorical
+            rangeType: RangeTypes.Categorical
           } as ICategoricalRange;
         }
         const featureVector = testData.map((row) => row[featureIndex]);
         return {
           uniqueValues: _.uniq(featureVector),
-          rangeType: RangeTypes.categorical
+          rangeType: RangeTypes.Categorical
         } as ICategoricalRange;
       }
       const featureVector = testData.map((row) => row[featureIndex]);
@@ -36,8 +36,8 @@ export class ModelMetadata {
         min: Math.min(...featureVector),
         max: Math.max(...featureVector),
         rangeType: featureVector.every((val) => Number.isInteger(val))
-          ? RangeTypes.integer
-          : RangeTypes.numeric
+          ? RangeTypes.Integer
+          : RangeTypes.Numeric
       } as INumericRange;
     });
   }

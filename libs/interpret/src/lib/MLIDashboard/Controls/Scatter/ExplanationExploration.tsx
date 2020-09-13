@@ -75,7 +75,7 @@ export class ExplanationExploration extends React.PureComponent<
       const weightContext = this.props.dashboardContext.weightContext;
       const includeWeightDropdown =
         this.props.dashboardContext.explanationContext.modelMetadata
-          .modelType === ModelTypes.multiclass;
+          .modelType === ModelTypes.Multiclass;
       let plotProp = ScatterUtils.populatePlotlyProps(
         projectedData,
         _.cloneDeep(this.plotlyProps)

@@ -68,8 +68,8 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       );
       const sortVector = this.getSortVector(localExplanation);
       const defaultVisibleClasses =
-        this.state.selectedSorting !== FeatureKeys.absoluteGlobal &&
-        this.state.selectedSorting !== FeatureKeys.absoluteLocal
+        this.state.selectedSorting !== FeatureKeys.AbsoluteGlobal &&
+        this.state.selectedSorting !== FeatureKeys.AbsoluteLocal
           ? [this.state.selectedSorting]
           : undefined;
       return (
@@ -165,12 +165,12 @@ export class SinglePointFeatureImportance extends React.PureComponent<
   }
 
   private getSortVector(localExplanation: ILocalExplanation): number[] {
-    if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
+    if (this.state.selectedSorting === FeatureKeys.AbsoluteGlobal) {
       return ModelExplanationUtils.buildSortedVector(
         this.props.explanationContext.globalExplanation
           ?.perClassFeatureImportances || []
       );
-    } else if (this.state.selectedSorting === FeatureKeys.absoluteLocal) {
+    } else if (this.state.selectedSorting === FeatureKeys.AbsoluteLocal) {
       return ModelExplanationUtils.buildSortedVector(
         localExplanation.values[this.props.selectedRow]
       );
@@ -188,7 +188,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     // Binary classifier just has feature importance for class 0 stored, class one is equal and oposite.
     if (
       this.props.explanationContext.modelMetadata.modelType ===
-        ModelTypes.binary &&
+        ModelTypes.Binary &&
       this.props.explanationContext.testDataset.predictedY !== undefined &&
       this.props.explanationContext.testDataset.predictedY[
         this.props.selectedRow
@@ -204,7 +204,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
   private buildSortOptions(): IDropdownOption[] {
     const result: IDropdownOption[] = [
       {
-        key: FeatureKeys.absoluteGlobal,
+        key: FeatureKeys.AbsoluteGlobal,
         text: localization.BarChart.absoluteGlobal
       }
     ];
@@ -213,16 +213,16 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     // }
     if (
       this.props.explanationContext.modelMetadata.modelType !==
-      ModelTypes.multiclass
+      ModelTypes.Multiclass
     ) {
       result.push({
-        key: FeatureKeys.absoluteLocal,
+        key: FeatureKeys.AbsoluteLocal,
         text: localization.BarChart.absoluteLocal
       });
     }
     if (
       this.props.explanationContext.modelMetadata.modelType ===
-      ModelTypes.multiclass
+      ModelTypes.Multiclass
     ) {
       result.push(
         ...this.props.explanationContext.modelMetadata.classNames.map(
@@ -238,14 +238,14 @@ export class SinglePointFeatureImportance extends React.PureComponent<
 
   private getDefaultSorting(): FeatureSortingKey {
     if (!this.props.explanationContext.testDataset.predictedY) {
-      return FeatureKeys.absoluteGlobal;
+      return FeatureKeys.AbsoluteGlobal;
     }
     return this.props.explanationContext.modelMetadata.modelType ===
-      ModelTypes.multiclass
+      ModelTypes.Multiclass
       ? this.props.explanationContext.testDataset.predictedY[
           this.props.selectedRow
         ]
-      : FeatureKeys.absoluteLocal;
+      : FeatureKeys.AbsoluteLocal;
   }
 
   private setTopK = (newValue: number): void => {

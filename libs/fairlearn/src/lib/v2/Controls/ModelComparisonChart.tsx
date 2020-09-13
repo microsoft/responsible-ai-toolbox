@@ -474,7 +474,7 @@ export class ModelComparisonChart extends React.PureComponent<
         parityOptions[this.props.parityPickerProps.selectedParityKey];
       const disparityMetric =
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.binaryClassification
+        PredictionTypes.BinaryClassification
           ? parityOption.parityMetric
           : "average";
       const parityMode = parityOption.parityMode;

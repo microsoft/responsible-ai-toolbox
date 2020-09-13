@@ -302,7 +302,7 @@ export class FairnessWizardV1 extends React.PureComponent<
   ): IAccuracyOption[] {
     if (
       fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
+      PredictionTypes.BinaryClassification
     ) {
       return this.props.supportedBinaryClassificationAccuracyKeys.map(
         (key) => accuracyOptions[key]
@@ -310,7 +310,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
     if (
       fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.regression
+      PredictionTypes.Regression
     ) {
       return this.props.supportedRegressionAccuracyKeys.map(
         (key) => accuracyOptions[key]

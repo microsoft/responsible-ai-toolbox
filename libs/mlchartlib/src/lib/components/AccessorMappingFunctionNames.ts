@@ -1,3 +1,3 @@
 export enum AccessorMappingFunctionNames {
-  stringifyText = "string"
+  StringifyText = "string"
 }

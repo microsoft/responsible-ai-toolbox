@@ -123,7 +123,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (this.props.globalBarSettings === undefined) {
       this.setDefaultSettings();
     }
-    if (this.props.metadata.modelType === ModelTypes.multiclass) {
+    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           text: this.props.weightLabels[option],
@@ -310,7 +310,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               selectedKey={this.state.sortingSeriesIndex}
               onChange={this.setSortIndex}
             />
-            {this.props.metadata.modelType === ModelTypes.multiclass &&
+            {this.props.metadata.modelType === ModelTypes.Multiclass &&
               this.weightOptions && (
                 <div>
                   <div className={classNames.multiclassWeightLabel}>

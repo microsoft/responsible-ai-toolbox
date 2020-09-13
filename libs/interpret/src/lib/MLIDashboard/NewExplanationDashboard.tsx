@@ -83,10 +83,10 @@ export interface ISelectorConfig {
 }
 
 enum GlobalTabKeys {
-  modelPerformance = "modelPerformance",
-  dataExploration = "dataExploration",
-  explanationTab = "explanationTab",
-  whatIfTab = "whatIfTab"
+  ModelPerformance = "modelPerformance",
+  DataExploration = "dataExploration",
+  ExplanationTab = "explanationTab",
+  WhatIfTab = "whatIfTab"
 }
 
 export class NewExplanationDashboard extends React.PureComponent<
@@ -164,10 +164,10 @@ export class NewExplanationDashboard extends React.PureComponent<
     this.validatePredictMethod();
 
     this.weightVectorLabels = {
-      [WeightVectors.absAvg]: localization.absoluteAverage
+      [WeightVectors.AbsAvg]: localization.absoluteAverage
     };
-    if (this.state.modelMetadata.modelType === ModelTypes.multiclass) {
-      this.weightVectorOptions.push(WeightVectors.absAvg);
+    if (this.state.modelMetadata.modelType === ModelTypes.Multiclass) {
+      this.weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     this.state.modelMetadata.classNames.forEach((name, index) => {
       this.weightVectorLabels[index] = localization.formatString(
@@ -179,19 +179,19 @@ export class NewExplanationDashboard extends React.PureComponent<
 
     this.pivotItems.push({
       headerText: localization.modelPerformance,
-      itemKey: GlobalTabKeys.modelPerformance
+      itemKey: GlobalTabKeys.ModelPerformance
     });
     this.pivotItems.push({
       headerText: localization.datasetExplorer,
-      itemKey: GlobalTabKeys.dataExploration
+      itemKey: GlobalTabKeys.DataExploration
     });
     this.pivotItems.push({
       headerText: localization.aggregateFeatureImportance,
-      itemKey: GlobalTabKeys.explanationTab
+      itemKey: GlobalTabKeys.ExplanationTab
     });
     this.pivotItems.push({
       headerText: localization.individualAndWhatIf,
-      itemKey: GlobalTabKeys.whatIfTab
+      itemKey: GlobalTabKeys.WhatIfTab
     });
   }
 
@@ -232,14 +232,14 @@ export class NewExplanationDashboard extends React.PureComponent<
     ) {
       props.telemetryHook({
         message: "Invalid inputs",
-        level: TelemetryLevels.error,
+        level: TelemetryLevels.Error,
         context: validationCheck.errorStrings.length
       });
     }
     return {
       cohorts,
       validationWarnings: validationCheck.errorStrings,
-      activeGlobalTab: GlobalTabKeys.modelPerformance,
+      activeGlobalTab: GlobalTabKeys.ModelPerformance,
       jointDataset,
       modelMetadata,
       modelChartConfig: undefined,
@@ -255,8 +255,8 @@ export class NewExplanationDashboard extends React.PureComponent<
       showingDatasizeWarning:
         jointDataset.datasetRowCount > NewExplanationDashboard.ROW_WARNING_SIZE,
       selectedWeightVector:
-        modelMetadata.modelType === ModelTypes.multiclass
-          ? WeightVectors.absAvg
+        modelMetadata.modelType === ModelTypes.Multiclass
+          ? WeightVectors.AbsAvg
           : 0
     };
   }
@@ -367,15 +367,15 @@ export class NewExplanationDashboard extends React.PureComponent<
   private static getModelType(props: IExplanationDashboardProps): ModelTypes {
     // If python gave us a hint, use it
     if (props.modelInformation.method === "regressor") {
-      return ModelTypes.regression;
+      return ModelTypes.Regression;
     }
     switch (NewExplanationDashboard.getClassLength(props)) {
       case 1:
-        return ModelTypes.regression;
+        return ModelTypes.Regression;
       case 2:
-        return ModelTypes.binary;
+        return ModelTypes.Binary;
       default:
-        return ModelTypes.multiclass;
+        return ModelTypes.Multiclass;
     }
   }
 
@@ -506,7 +506,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               <PivotItem key={props.itemKey} {...props} />
             ))}
           </Pivot>
-          {this.state.activeGlobalTab === GlobalTabKeys.modelPerformance && (
+          {this.state.activeGlobalTab === GlobalTabKeys.ModelPerformance && (
             <ModelPerformanceTab
               jointDataset={this.state.jointDataset}
               metadata={this.state.modelMetadata}
@@ -515,7 +515,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               cohorts={this.state.cohorts}
             />
           )}
-          {this.state.activeGlobalTab === GlobalTabKeys.dataExploration && (
+          {this.state.activeGlobalTab === GlobalTabKeys.DataExploration && (
             <DatasetExplorerTab
               jointDataset={this.state.jointDataset}
               metadata={this.state.modelMetadata}
@@ -525,7 +525,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               editCohort={this.openCohort}
             />
           )}
-          {this.state.activeGlobalTab === GlobalTabKeys.explanationTab && (
+          {this.state.activeGlobalTab === GlobalTabKeys.ExplanationTab && (
             <GlobalExplanationTab
               globalBarSettings={this.state.globalBarConfig}
               sortVector={this.state.sortVector}
@@ -547,7 +547,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               explanationMethod={this.props.explanationMethod}
             />
           )}
-          {this.state.activeGlobalTab === GlobalTabKeys.whatIfTab && (
+          {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
             <WhatIfTab
               jointDataset={this.state.jointDataset}
               metadata={this.state.modelMetadata}

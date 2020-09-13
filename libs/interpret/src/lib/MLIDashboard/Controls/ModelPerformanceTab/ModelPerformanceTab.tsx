@@ -272,8 +272,8 @@ export class ModelPerformanceTab extends React.PureComponent<
             <AxisConfigDialog
               jointDataset={this.props.jointDataset}
               orderedGroupTitles={[
-                ColumnCategories.cohort,
-                ColumnCategories.dataset
+                ColumnCategories.Cohort,
+                ColumnCategories.Dataset
               ]}
               selectedColumn={this.props.chartProps.yAxis}
               canBin={
@@ -293,7 +293,7 @@ export class ModelPerformanceTab extends React.PureComponent<
           {this.state.xDialogOpen && (
             <AxisConfigDialog
               jointDataset={this.props.jointDataset}
-              orderedGroupTitles={[ColumnCategories.outcome]}
+              orderedGroupTitles={[ColumnCategories.Outcome]}
               selectedColumn={this.props.chartProps.xAxis}
               canBin={false}
               mustBin={false}
@@ -338,7 +338,7 @@ export class ModelPerformanceTab extends React.PureComponent<
                     theme={getTheme() as any}
                   />
                 </div>
-                {this.props.metadata.modelType !== ModelTypes.multiclass && (
+                {this.props.metadata.modelType !== ModelTypes.Multiclass && (
                   <div className={classNames.rightPanel}>
                     {!this.props.jointDataset.hasTrueY && (
                       <div className={classNames.missingParametersPlaceholder}>
@@ -468,11 +468,11 @@ export class ModelPerformanceTab extends React.PureComponent<
   private generateDefaultChartAxes(): void {
     let bestModelMetricKey: string;
     if (
-      this.props.metadata.modelType === ModelTypes.binary &&
+      this.props.metadata.modelType === ModelTypes.Binary &&
       this.props.jointDataset.hasPredictedProbabilities
     ) {
       bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
-    } else if (this.props.metadata.modelType === ModelTypes.regression) {
+    } else if (this.props.metadata.modelType === ModelTypes.Regression) {
       if (
         this.props.jointDataset.hasPredictedY &&
         this.props.jointDataset.hasTrueY

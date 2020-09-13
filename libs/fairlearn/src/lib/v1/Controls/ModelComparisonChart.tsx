@@ -367,7 +367,7 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
             disparityMetric,
-            ParityModes.difference
+            ParityModes.Difference
           );
         });
 
@@ -385,7 +385,7 @@ export class ModelComparisonChart extends React.PureComponent<
     if (this.state.disparityInOutcomes) {
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.binaryClassification
+        PredictionTypes.BinaryClassification
       ) {
         return "selection_rate";
       }

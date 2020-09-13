@@ -3,9 +3,9 @@ import { IconButton, Text } from "office-ui-fabric-react";
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 
 export enum SortingState {
-  ascending = "ascending",
-  descending = "descending",
-  none = "none"
+  Ascending = "ascending",
+  Descending = "descending",
+  None = "none"
 }
 
 export interface ILegendItem {

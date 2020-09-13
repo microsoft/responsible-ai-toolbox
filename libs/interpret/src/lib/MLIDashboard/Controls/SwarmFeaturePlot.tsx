@@ -60,7 +60,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (metadata.modelType === ModelTypes.binary) {
+      if (metadata.modelType === ModelTypes.Binary) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -120,7 +120,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
     data: [
       {
         hoverinfo: "text",
-        mode: PlotlyMode.markers,
+        mode: PlotlyMode.Markers,
         type: "scattergl"
       }
     ] as any,

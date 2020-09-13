@@ -154,7 +154,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const accuracyKey = this.props.accuracyPickerProps.selectedAccuracyKey;
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
+      PredictionTypes.BinaryClassification
         ? "selection_rate"
         : "average";
     const outcomeMetric = accuracyOptions[outcomeKey];
@@ -183,7 +183,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     } else {
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.binaryClassification
+        PredictionTypes.BinaryClassification
       ) {
         accuracyPlot.data = [
           {
@@ -303,7 +303,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.probability
+        PredictionTypes.Probability
       ) {
         accuracyPlot.data = [
           {
@@ -382,7 +382,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.regression
+        PredictionTypes.Regression
       ) {
         const opportunityText = this.state.metrics.predictions?.map((val) => {
           return localization.formatString(
@@ -785,10 +785,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.featureBinPickerProps.selectedBinIndex,
         this.props.selectedModelIndex,
         this.props.accuracyPickerProps.selectedAccuracyKey,
-        ParityModes.difference
+        ParityModes.Difference
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
-        case PredictionTypes.binaryClassification: {
+        case PredictionTypes.BinaryClassification: {
           binnedUnderprediction = (
             await this.props.metricsCache.getMetric(
               this.props.dashboardContext.binVector,
@@ -832,11 +832,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "selection_rate",
-            ParityModes.difference
+            ParityModes.Difference
           );
           break;
         }
-        case PredictionTypes.probability: {
+        case PredictionTypes.Probability: {
           predictions = this.props.dashboardContext.predictions[
             this.props.selectedModelIndex
           ];
@@ -867,11 +867,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "average",
-            ParityModes.difference
+            ParityModes.Difference
           );
           break;
         }
-        case PredictionTypes.regression:
+        case PredictionTypes.Regression:
         default: {
           predictions = this.props.dashboardContext.predictions[
             this.props.selectedModelIndex
@@ -890,7 +890,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "average",
-            ParityModes.difference
+            ParityModes.Difference
           );
           break;
         }

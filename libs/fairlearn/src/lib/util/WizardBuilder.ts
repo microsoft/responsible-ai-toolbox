@@ -173,9 +173,9 @@ export class WizardBuilder {
     specifiedType?: PredictionType
   ): PredictionType {
     if (
-      specifiedType === PredictionTypes.binaryClassification ||
-      specifiedType === PredictionTypes.probability ||
-      specifiedType === PredictionTypes.regression
+      specifiedType === PredictionTypes.BinaryClassification ||
+      specifiedType === PredictionTypes.Probability ||
+      specifiedType === PredictionTypes.Regression
     ) {
       return specifiedType;
     }
@@ -184,15 +184,15 @@ export class WizardBuilder {
     );
     const trueIsBinary = _.uniq(trueY).length < 3;
     if (!trueIsBinary) {
-      return PredictionTypes.regression;
+      return PredictionTypes.Regression;
     }
     if (_.uniq(_.flatten(predictedY)).length < 3) {
-      return PredictionTypes.binaryClassification;
+      return PredictionTypes.BinaryClassification;
     }
     if (predictedIsPossibleProba) {
-      return PredictionTypes.probability;
+      return PredictionTypes.Probability;
     }
-    return PredictionTypes.regression;
+    return PredictionTypes.Regression;
   }
 
   public static buildAccuracyListForPrecomputedMetrics(

@@ -39,6 +39,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "Buildable",
     "Callout",
     "Chainable",
     "Fairlearn",
@@ -48,12 +49,15 @@
     "Plotly",
     "Unmount",
     "automl",
+    "bgcolor",
+    "camelcase",
     "cssmodule",
     "jmespath",
     "mlchartlib",
     "multiclass",
     "nrwl",
     "relayout",
+    "shap",
     "uifabric"
   ]
 }

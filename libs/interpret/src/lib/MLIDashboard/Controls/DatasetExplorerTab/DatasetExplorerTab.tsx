@@ -148,7 +148,7 @@ export class DatasetExplorerTab extends React.PureComponent<
           cohort.sort(chartProps.colorAxis.property);
         }
         plotlyProps.data[0].type = chartProps.chartType;
-        plotlyProps.data[0].mode = PlotlyMode.markers;
+        plotlyProps.data[0].mode = PlotlyMode.Markers;
         if (chartProps.xAxis) {
           if (
             jointData.metaDict[chartProps.xAxis.property].treatAsCategorical
@@ -284,7 +284,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         ];
         if (
           chartProps.yAxis &&
-          chartProps.yAxis.property !== ColumnCategories.none
+          chartProps.yAxis.property !== ColumnCategories.None
         ) {
           const rawColor = cohort.unwrap(chartProps.yAxis.property, true);
           const styles = yMeta.sortedCategoricalValues?.map((label, index) => {
@@ -356,7 +356,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       case ChartTypes.Histogram: {
         hovertemplate += xName + ": %{text}<br>";
         if (
-          chartProps.yAxis.property !== ColumnCategories.none &&
+          chartProps.yAxis.property !== ColumnCategories.None &&
           jointData.metaDict[chartProps.yAxis.property].treatAsCategorical
         ) {
           hovertemplate += yName + ": %{customdata.Y}<br>";
@@ -445,7 +445,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     }
     if (
       chartProps.chartType === ChartTypes.Histogram &&
-      chartProps.yAxis.property !== ColumnCategories.none
+      chartProps.yAxis.property !== ColumnCategories.None
     ) {
       const yMeta = jointData.metaDict[chartProps.yAxis.property];
       if (yMeta.treatAsCategorical) {
@@ -492,12 +492,12 @@ export class DatasetExplorerTab extends React.PureComponent<
       cohortLength < newExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
-      ColumnCategories.index,
-      ColumnCategories.dataset,
-      ColumnCategories.outcome
+      ColumnCategories.Index,
+      ColumnCategories.Dataset,
+      ColumnCategories.Outcome
     ];
     if (this.props.chartProps.chartType !== ChartTypes.Scatter) {
-      yAxisCategories.push(ColumnCategories.none);
+      yAxisCategories.push(ColumnCategories.None);
     }
     const isHistogram =
       this.props.chartProps.chartType !== ChartTypes.Scatter &&
@@ -546,9 +546,9 @@ export class DatasetExplorerTab extends React.PureComponent<
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={[
-                  ColumnCategories.index,
-                  ColumnCategories.dataset,
-                  ColumnCategories.outcome
+                  ColumnCategories.Index,
+                  ColumnCategories.Dataset,
+                  ColumnCategories.Outcome
                 ]}
                 selectedColumn={this.props.chartProps.xAxis}
                 canBin={
@@ -571,9 +571,9 @@ export class DatasetExplorerTab extends React.PureComponent<
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={[
-                  ColumnCategories.index,
-                  ColumnCategories.dataset,
-                  ColumnCategories.outcome
+                  ColumnCategories.Index,
+                  ColumnCategories.Dataset,
+                  ColumnCategories.Outcome
                 ]}
                 selectedColumn={this.props.chartProps.colorAxis}
                 canBin={true}
@@ -744,7 +744,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       return;
     }
     newProps.chartType = item.key as ChartTypes;
-    if (newProps.yAxis.property === ColumnCategories.none) {
+    if (newProps.yAxis.property === ColumnCategories.None) {
       newProps.yAxis = this.generateDefaultYAxis();
     }
     this.props.onChange(newProps);
@@ -842,7 +842,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       if (
         this.props.jointDataset.metaDict[colorAxis.property]
           .treatAsCategorical &&
-        colorAxis.property !== ColumnCategories.none
+        colorAxis.property !== ColumnCategories.None
       ) {
         this.props.cohorts[this.state.selectedCohortIndex].sort(
           colorAxis.property

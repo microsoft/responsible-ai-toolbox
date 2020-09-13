@@ -69,11 +69,11 @@ export class MetricsCache {
     if (
       min === undefined ||
       max === undefined ||
-      (max === 0 && disparityMethod === ParityModes.ratio)
+      (max === 0 && disparityMethod === ParityModes.Ratio)
     ) {
       return Number.NaN;
     }
-    return disparityMethod === ParityModes.difference ? max - min : min / max;
+    return disparityMethod === ParityModes.Difference ? max - min : min / max;
   }
 
   public clearCache(binIndex?: number): void {

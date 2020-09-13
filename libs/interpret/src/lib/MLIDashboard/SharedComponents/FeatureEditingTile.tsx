@@ -102,10 +102,10 @@ export class FeatureEditingTile extends React.Component<
     let errorMessage: string | undefined;
     if (
       Number.isNaN(val) ||
-      (this.props.rangeType === RangeTypes.integer && !Number.isInteger(val))
+      (this.props.rangeType === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       errorMessage =
-        this.props.rangeType === RangeTypes.integer
+        this.props.rangeType === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
     }
