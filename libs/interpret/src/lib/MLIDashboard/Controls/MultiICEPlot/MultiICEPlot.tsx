@@ -15,7 +15,7 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
-import { IsTwoDimArray } from "@responsible-ai/core-ui";
+import { isTwoDimArray } from "@responsible-ai/core-ui";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
@@ -102,7 +102,7 @@ export class MultiICEPlot extends React.PureComponent<
     const data: Data[] = map<number[] | number[][]>(
       yData,
       (singleRow: number[] | number[][], rowIndex: number) => {
-        const transposedY: number[][] = IsTwoDimArray(singleRow)
+        const transposedY: number[][] = isTwoDimArray(singleRow)
           ? ModelExplanationUtils.transpose2DArray(singleRow)
           : [singleRow];
         const predictionLabel =

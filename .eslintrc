@@ -88,7 +88,7 @@
         "selector": ["variable", "function"],
         "format": ["camelCase"],
         "filter": {
-          // you can expand this regex to add more allowed names
+          // styles matches component name
           "regex": "^(.*Styles)$",
           "match": false
         }

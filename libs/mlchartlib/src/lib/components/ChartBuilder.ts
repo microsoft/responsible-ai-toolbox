@@ -2,7 +2,7 @@ import { Data, Datum } from "plotly.js";
 import jmespath from "jmespath";
 import _ from "lodash";
 import { IData } from "./IData";
-import { AccessorMappingFunctions } from "./AccessorMappingFunctions";
+import { accessorMappingFunctions } from "./accessorMappingFunctions";
 
 export class ChartBuilder {
   public static buildPlotlySeries<T>(
@@ -125,7 +125,7 @@ export class ChartBuilder {
           const plotlyPath = accessor.plotlyPath;
           let value =
             accessor.mapFunction !== undefined
-              ? AccessorMappingFunctions[accessor.mapFunction!](
+              ? accessorMappingFunctions[accessor.mapFunction!](
                   row[key],
                   datum,
                   accessor.mapArgs || []
