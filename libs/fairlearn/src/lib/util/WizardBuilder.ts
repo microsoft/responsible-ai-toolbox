@@ -97,7 +97,7 @@ export class WizardBuilder {
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
       return {
         uniqueValues: binMeta.binLabels,
-        rangeType: RangeTypes.categorical
+        rangeType: RangeTypes.Categorical
       } as ICategoricalRange;
     });
     return {
@@ -263,7 +263,7 @@ export class WizardBuilder {
     }
     return dataset.map((row) => {
       const featureValue = row[value.featureIndex];
-      if (value.rangeType === RangeTypes.categorical) {
+      if (value.rangeType === RangeTypes.Categorical) {
         // this handles categorical, as well as integers when user requests to treat as categorical
         return value.array.indexOf(featureValue);
       }

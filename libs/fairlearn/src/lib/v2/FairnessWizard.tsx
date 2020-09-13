@@ -99,7 +99,7 @@ export class FairnessWizardV2 extends React.PureComponent<
             array: initialBin.binLabels,
             labelArray: initialBin.binLabels,
             featureIndex: index,
-            rangeType: RangeTypes.categorical
+            rangeType: RangeTypes.Categorical
           };
         }
       );
