@@ -1,10 +1,10 @@
-export type PartialRequired<T, K extends keyof T> = Omit<T, K> &
-  { [P in K]-?: T[K] };
+export type PartialRequired<T, TK extends keyof T> = Omit<T, TK> &
+  { [P in TK]-?: T[TK] };
 export type PartialRequired2<
   T,
-  K extends keyof T,
-  L extends keyof Pick<T, K>[K]
-> = Omit<T, K> &
+  TK extends keyof T,
+  TK2 extends keyof Pick<T, TK>[TK]
+> = Omit<T, TK> &
   {
-    [P in K]-?: PartialRequired<T[P], L>;
+    [P in TK]-?: PartialRequired<T[P], TK2>;
   };

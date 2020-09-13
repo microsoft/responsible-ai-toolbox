@@ -43,7 +43,7 @@ import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];
-  activeGlobalTab: globalTabKeys;
+  activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
@@ -82,7 +82,7 @@ export interface ISelectorConfig {
   };
 }
 
-enum globalTabKeys {
+enum GlobalTabKeys {
   modelPerformance = "modelPerformance",
   dataExploration = "dataExploration",
   explanationTab = "explanationTab",
@@ -179,19 +179,19 @@ export class NewExplanationDashboard extends React.PureComponent<
 
     this.pivotItems.push({
       headerText: localization.modelPerformance,
-      itemKey: globalTabKeys.modelPerformance
+      itemKey: GlobalTabKeys.modelPerformance
     });
     this.pivotItems.push({
       headerText: localization.datasetExplorer,
-      itemKey: globalTabKeys.dataExploration
+      itemKey: GlobalTabKeys.dataExploration
     });
     this.pivotItems.push({
       headerText: localization.aggregateFeatureImportance,
-      itemKey: globalTabKeys.explanationTab
+      itemKey: GlobalTabKeys.explanationTab
     });
     this.pivotItems.push({
       headerText: localization.individualAndWhatIf,
-      itemKey: globalTabKeys.whatIfTab
+      itemKey: GlobalTabKeys.whatIfTab
     });
   }
 
@@ -239,7 +239,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     return {
       cohorts,
       validationWarnings: validationCheck.errorStrings,
-      activeGlobalTab: globalTabKeys.modelPerformance,
+      activeGlobalTab: GlobalTabKeys.modelPerformance,
       jointDataset,
       modelMetadata,
       modelChartConfig: undefined,
@@ -506,7 +506,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               <PivotItem key={props.itemKey} {...props} />
             ))}
           </Pivot>
-          {this.state.activeGlobalTab === globalTabKeys.modelPerformance && (
+          {this.state.activeGlobalTab === GlobalTabKeys.modelPerformance && (
             <ModelPerformanceTab
               jointDataset={this.state.jointDataset}
               metadata={this.state.modelMetadata}
@@ -515,7 +515,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               cohorts={this.state.cohorts}
             />
           )}
-          {this.state.activeGlobalTab === globalTabKeys.dataExploration && (
+          {this.state.activeGlobalTab === GlobalTabKeys.dataExploration && (
             <DatasetExplorerTab
               jointDataset={this.state.jointDataset}
               metadata={this.state.modelMetadata}
@@ -525,7 +525,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               editCohort={this.openCohort}
             />
           )}
-          {this.state.activeGlobalTab === globalTabKeys.explanationTab && (
+          {this.state.activeGlobalTab === GlobalTabKeys.explanationTab && (
             <GlobalExplanationTab
               globalBarSettings={this.state.globalBarConfig}
               sortVector={this.state.sortVector}
@@ -547,7 +547,7 @@ export class NewExplanationDashboard extends React.PureComponent<
               explanationMethod={this.props.explanationMethod}
             />
           )}
-          {this.state.activeGlobalTab === globalTabKeys.whatIfTab && (
+          {this.state.activeGlobalTab === GlobalTabKeys.whatIfTab && (
             <WhatIfTab
               jointDataset={this.state.jointDataset}
               metadata={this.state.modelMetadata}
@@ -606,7 +606,7 @@ export class NewExplanationDashboard extends React.PureComponent<
 
   private handleGlobalTabClick = (item?: PivotItem): void => {
     if (item?.props.itemKey) {
-      const index: globalTabKeys = globalTabKeys[item.props.itemKey];
+      const index: GlobalTabKeys = GlobalTabKeys[item.props.itemKey];
       this.setState({ activeGlobalTab: index });
     }
   };
