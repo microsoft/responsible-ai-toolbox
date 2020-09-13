@@ -30,13 +30,13 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
-import { cohortKey } from "../../CohortKey";
+import { cohortKey } from "../../cohortKey";
+import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import {
   datasetExplorerTabStyles,
   IDatasetExplorerTabStyles
 } from "./DatasetExplorerTab.styles";
 
-export const newExplanationDashboardRowErrorSize = 10000;
 export interface IDatasetExplorerTabProps {
   chartProps?: IGenericChartProps;
   theme?: string;

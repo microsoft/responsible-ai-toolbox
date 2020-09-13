@@ -25,7 +25,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
-import { cohortKey } from "../../CohortKey";
+import { cohortKey } from "../../cohortKey";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {

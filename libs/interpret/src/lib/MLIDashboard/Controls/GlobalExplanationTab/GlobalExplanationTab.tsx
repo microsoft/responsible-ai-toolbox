@@ -30,7 +30,7 @@ import { Cohort } from "../../Cohort";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
-import { explainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
+import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";

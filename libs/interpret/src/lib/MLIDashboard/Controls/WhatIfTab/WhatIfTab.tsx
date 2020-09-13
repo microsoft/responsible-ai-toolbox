@@ -51,7 +51,7 @@ import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
+import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
@@ -372,7 +372,7 @@ export class WhatIfTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .filteredData.length;
     const canRenderChart =
-      cohortLength < NewExplanationDashboardRowErrorSize ||
+      cohortLength < newExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {
