@@ -155,7 +155,7 @@ export class ModelComparisonChart extends React.PureComponent<
         return { key: x.key, text: x.title };
       }
     );
-    const parityOptions: IDropdownOption[] = this.props.parityPickerProps.parityOptions.map(
+    const parityDropdown: IDropdownOption[] = this.props.parityPickerProps.parityOptions.map(
       (x) => {
         return { key: x.key, text: x.title };
       }
@@ -447,7 +447,7 @@ export class ModelComparisonChart extends React.PureComponent<
           <Dropdown
             className={styles.dropDown}
             defaultSelectedKey={this.props.parityPickerProps.selectedParityKey}
-            options={parityOptions}
+            options={parityDropdown}
             disabled={false}
             onChange={this.parityChanged}
             styles={dropdownStyles}

@@ -606,8 +606,7 @@ export class NewExplanationDashboard extends React.PureComponent<
 
   private handleGlobalTabClick = (item?: PivotItem): void => {
     if (item?.props.itemKey) {
-      const index: GlobalTabKeys = GlobalTabKeys[item.props.itemKey];
-      this.setState({ activeGlobalTab: index });
+      this.setState({ activeGlobalTab: item.props.itemKey as GlobalTabKeys });
     }
   };
 
