@@ -30,7 +30,7 @@ import { Cohort } from "../../Cohort";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
-import { ExplainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
+import { explainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
@@ -87,7 +87,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   private weightOptions: IDropdownOption[] | undefined;
   private readonly hasDataset = this.props.jointDataset.hasDataset;
   private readonly explainerCalloutInfo = this.props.explanationMethod
-    ? ExplainerCalloutDictionary[this.props.explanationMethod]
+    ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
 
   public constructor(props: IGlobalExplanationTabProps) {

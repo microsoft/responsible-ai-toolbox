@@ -21,7 +21,6 @@ import {
   ChoiceGroup,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
-
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
@@ -32,12 +31,12 @@ import { IGenericChartProps } from "../../IGenericChartProps";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
 import { CohortKey } from "../../CohortKey";
-import { NewExplanationDashboardRowErrorSize } from "../../NewExplanationDashboardRowErrorSize";
 import {
   datasetExplorerTabStyles,
   IDatasetExplorerTabStyles
 } from "./DatasetExplorerTab.styles";
 
+export const newExplanationDashboardRowErrorSize = 10000;
 export interface IDatasetExplorerTabProps {
   chartProps?: IGenericChartProps;
   theme?: string;
@@ -490,7 +489,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .filteredData.length;
     const canRenderChart =
-      cohortLength < NewExplanationDashboardRowErrorSize ||
+      cohortLength < newExplanationDashboardRowErrorSize ||
       this.props.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
       ColumnCategories.index,
