@@ -64,15 +64,15 @@ export class CohortEditor extends React.PureComponent<
   ICohortEditorState
 > {
   private static filterMethodLabels: { [key in FilterMethods]: string } = {
-    [FilterMethods.equal]: localization.FilterOperations.equals,
-    [FilterMethods.greaterThan]: localization.FilterOperations.greaterThan,
-    [FilterMethods.greaterThanEqualTo]:
+    [FilterMethods.Equal]: localization.FilterOperations.equals,
+    [FilterMethods.GreaterThan]: localization.FilterOperations.greaterThan,
+    [FilterMethods.GreaterThanEqualTo]:
       localization.FilterOperations.greaterThanEquals,
-    [FilterMethods.lessThan]: localization.FilterOperations.lessThan,
-    [FilterMethods.lessThanEqualTo]:
+    [FilterMethods.LessThan]: localization.FilterOperations.lessThan,
+    [FilterMethods.LessThanEqualTo]:
       localization.FilterOperations.lessThanEquals,
-    [FilterMethods.includes]: localization.FilterOperations.includes,
-    [FilterMethods.inTheRangeOf]: localization.FilterOperations.inTheRangeOf
+    [FilterMethods.Includes]: localization.FilterOperations.includes,
+    [FilterMethods.InTheRangeOf]: localization.FilterOperations.inTheRangeOf
   };
   private _leftSelection: Selection;
   private readonly dataArray: IComboBoxOption[] = new Array(
@@ -112,27 +112,27 @@ export class CohortEditor extends React.PureComponent<
 
   private comparisonOptions: IComboBoxOption[] = [
     {
-      key: FilterMethods.equal,
+      key: FilterMethods.Equal,
       text: localization.Filters.equalComparison
     },
     {
-      key: FilterMethods.greaterThan,
+      key: FilterMethods.GreaterThan,
       text: localization.Filters.greaterThanComparison
     },
     {
-      key: FilterMethods.greaterThanEqualTo,
+      key: FilterMethods.GreaterThanEqualTo,
       text: localization.Filters.greaterThanEqualToComparison
     },
     {
-      key: FilterMethods.lessThan,
+      key: FilterMethods.LessThan,
       text: localization.Filters.lessThanComparison
     },
     {
-      key: FilterMethods.lessThanEqualTo,
+      key: FilterMethods.LessThanEqualTo,
       text: localization.Filters.lessThanEqualToComparison
     },
     {
-      key: FilterMethods.inTheRangeOf,
+      key: FilterMethods.InTheRangeOf,
       text: localization.Filters.inTheRangeOf
     }
   ];
@@ -309,7 +309,7 @@ export class CohortEditor extends React.PureComponent<
       this.setState({
         openedFilter: {
           arg: [],
-          method: FilterMethods.includes,
+          method: FilterMethods.Includes,
           column: openedFilter.column
         }
       });
@@ -320,7 +320,7 @@ export class CohortEditor extends React.PureComponent<
             this.props.jointDataset.metaDict[openedFilter.column].featureRange
               ?.max || Number.MAX_SAFE_INTEGER
           ],
-          method: FilterMethods.lessThan,
+          method: FilterMethods.LessThan,
           column: openedFilter.column
         }
       });
@@ -410,7 +410,7 @@ export class CohortEditor extends React.PureComponent<
       return;
     }
     const openedFilter = this.state.openedFilter;
-    if ((item.key as FilterMethods) === FilterMethods.inTheRangeOf) {
+    if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
       const meta = this.props.jointDataset.metaDict[openedFilter.column]
         .featureRange;
@@ -445,7 +445,7 @@ export class CohortEditor extends React.PureComponent<
       const numberVal = +stringVal;
       if (
         (!Number.isInteger(numberVal) &&
-          column.featureRange?.rangeType === RangeTypes.integer) ||
+          column.featureRange?.rangeType === RangeTypes.Integer) ||
         numberVal > max ||
         numberVal < min
       ) {
@@ -479,12 +479,10 @@ export class CohortEditor extends React.PureComponent<
     const filter: IFilter = { column: key } as IFilter;
     const meta = this.props.jointDataset.metaDict[key];
     if (meta.treatAsCategorical && meta.sortedCategoricalValues) {
-      filter.method = FilterMethods.includes;
-      filter.arg = Array.from(
-        Array(meta.sortedCategoricalValues.length).keys()
-      );
+      filter.method = FilterMethods.Includes;
+      filter.arg = [...new Array(meta.sortedCategoricalValues.length).keys()];
     } else {
-      filter.method = FilterMethods.lessThan;
+      filter.method = FilterMethods.LessThan;
       filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
     }
     this.setState({
@@ -583,7 +581,7 @@ export class CohortEditor extends React.PureComponent<
       stringArgs = filter.arg.toString();
     }
 
-    if (filter.method === FilterMethods.inTheRangeOf) {
+    if (filter.method === FilterMethods.InTheRangeOf) {
       // example: Age [30,40]
       label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
         localization.FilterOperations.inTheRangeOf,
@@ -617,12 +615,13 @@ export class CohortEditor extends React.PureComponent<
     const selectedMeta = this.props.jointDataset.metaDict[openedFilter.column];
     const numericDelta =
       selectedMeta.treatAsCategorical ||
-      selectedMeta.featureRange?.rangeType === RangeTypes.integer ||
+      selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
       !selectedMeta.featureRange
         ? 1
         : (selectedMeta.featureRange.max - selectedMeta.featureRange.min) / 10;
-    const isDataColumn =
-      openedFilter.column.indexOf(JointDataset.DataLabelRoot) !== -1;
+    const isDataColumn = openedFilter.column.includes(
+      JointDataset.DataLabelRoot
+    );
     let categoricalOptions: IComboBoxOption[] | undefined;
 
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
@@ -656,7 +655,7 @@ export class CohortEditor extends React.PureComponent<
           />
         )}
         {selectedMeta.featureRange &&
-          selectedMeta.featureRange.rangeType === RangeTypes.integer && (
+          selectedMeta.featureRange.rangeType === RangeTypes.Integer && (
             <Checkbox
               key={openedFilter.column}
               className={styles.treatCategorical}
@@ -708,7 +707,7 @@ export class CohortEditor extends React.PureComponent<
               calloutProps={FabricStyles.calloutProps}
             />
             {selectedMeta.featureRange &&
-              (openedFilter.method === FilterMethods.inTheRangeOf ? (
+              (openedFilter.method === FilterMethods.InTheRangeOf ? (
                 <div className={styles.valueSpinButtonDiv}>
                   <SpinButton
                     labelPosition={Position.top}

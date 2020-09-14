@@ -130,19 +130,19 @@ export class Cohort {
         this.filters.every((filter) => {
           const rowVal = row[filter.column];
           switch (filter.method) {
-            case FilterMethods.equal:
+            case FilterMethods.Equal:
               return rowVal === filter.arg[0];
-            case FilterMethods.greaterThan:
+            case FilterMethods.GreaterThan:
               return rowVal > filter.arg[0];
-            case FilterMethods.greaterThanEqualTo:
+            case FilterMethods.GreaterThanEqualTo:
               return rowVal >= filter.arg[0];
-            case FilterMethods.lessThan:
+            case FilterMethods.LessThan:
               return rowVal < filter.arg[0];
-            case FilterMethods.lessThanEqualTo:
+            case FilterMethods.LessThanEqualTo:
               return rowVal <= filter.arg[0];
-            case FilterMethods.includes:
+            case FilterMethods.Includes:
               return (filter.arg as number[]).includes(rowVal);
-            case FilterMethods.inTheRangeOf:
+            case FilterMethods.InTheRangeOf:
               return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
             default:
               return false;

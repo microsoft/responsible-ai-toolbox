@@ -15,7 +15,9 @@
     "jsx-a11y",
     "react",
     "react-hooks",
-    "filenames"
+    "filenames",
+    "eslint-plugin-unicorn",
+    "eslint-plugin-eslint-comments"
   ],
   "env": {
     "browser": true,
@@ -31,9 +33,11 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "eslint-comments/no-use": ["error", { "allow": [] }],
     "import/no-unresolved": "off",
     "import/order": "error",
     "filenames/match-regex": "error",
@@ -58,14 +62,35 @@
         ]
       }
     ],
+
     "@typescript-eslint/naming-convention": [
       "error",
       {
+        "selector": "parameter",
+        "format": ["camelCase"],
+        "leadingUnderscore": "allow"
+      },
+      {
         "selector": "interface",
         "format": ["PascalCase"],
-        "custom": {
-          "regex": "^I[A-Z]",
-          "match": true
+        "prefix": ["I"]
+      },
+      {
+        "selector": "typeParameter",
+        "format": ["PascalCase"],
+        "prefix": ["T"]
+      },
+      {
+        "selector": ["typeLike", "enumMember"],
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": ["variable", "function"],
+        "format": ["camelCase"],
+        "filter": {
+          // styles match component name
+          "regex": "^(.*Styles)$",
+          "match": false
         }
       }
     ],
@@ -361,6 +386,12 @@
     "no-useless-constructor": "error"
   },
   "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
     {
       "files": ["*.tsx"],
       "rules": {

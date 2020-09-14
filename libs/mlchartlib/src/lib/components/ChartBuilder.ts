@@ -2,7 +2,7 @@ import { Data, Datum } from "plotly.js";
 import jmespath from "jmespath";
 import _ from "lodash";
 import { IData } from "./IData";
-import { AccessorMappingFunctions } from "./AccessorMappingFunctions";
+import { accessorMappingFunctions } from "./accessorMappingFunctions";
 
 export class ChartBuilder {
   public static buildPlotlySeries<T>(
@@ -116,8 +116,7 @@ export class ChartBuilder {
       }
       if (datum.sizeAccessor) {
         const size =
-          (row.size * (datum.maxMarkerSize || 40) ** 2) /
-          (2.0 * maxBubbleValue);
+          (row.size * (datum.maxMarkerSize || 40) ** 2) / (2 * maxBubbleValue);
         (series.marker!.size as number[]).push(Math.abs(size));
       }
       if (datum.datapointLevelAccessors !== undefined) {
@@ -126,7 +125,7 @@ export class ChartBuilder {
           const plotlyPath = accessor.plotlyPath;
           let value =
             accessor.mapFunction !== undefined
-              ? AccessorMappingFunctions[accessor.mapFunction!](
+              ? accessorMappingFunctions[accessor.mapFunction!](
                   row[key],
                   datum,
                   accessor.mapArgs || []

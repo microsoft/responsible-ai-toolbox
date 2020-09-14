@@ -6,15 +6,15 @@ export interface IDatasetSummary {
 }
 
 export enum PredictionTypes {
-  binaryClassification = "binaryClassification",
-  regression = "regression",
-  probability = "probability"
+  BinaryClassification = "binaryClassification",
+  Regression = "regression",
+  Probability = "probability"
 }
 
 export type PredictionType =
-  | PredictionTypes.binaryClassification
-  | PredictionTypes.probability
-  | PredictionTypes.regression;
+  | PredictionTypes.BinaryClassification
+  | PredictionTypes.Probability
+  | PredictionTypes.Regression;
 
 export interface IMetricResponse {
   global: number;

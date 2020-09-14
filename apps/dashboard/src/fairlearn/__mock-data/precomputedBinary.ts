@@ -117,7 +117,7 @@ export const precomputedBinary: IFairnessData = {
       featureBinName: "serious real feature"
     }
   ],
-  predictionType: PredictionTypes.binaryClassification,
+  predictionType: PredictionTypes.BinaryClassification,
   // feel free to come up with a better name
   customMetrics: [
     {

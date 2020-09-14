@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  SpinButton,
   ComboBox,
   IComboBox,
   IComboBoxOption,
@@ -11,8 +10,6 @@ import {
   IconButton,
   DirectionalHint,
   Callout,
-  ChoiceGroup,
-  IChoiceGroupOption,
   CommandBarButton,
   Link,
   Slider
@@ -33,10 +30,11 @@ import { Cohort } from "../../Cohort";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
-import { ExplainerCalloutDictionary } from "../ExplainerCallouts/ExplainerCalloutDictionary";
+import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
+import { Settings } from "./Settings";
 
 export interface IGlobalBarSettings {
   topK: number;
@@ -67,12 +65,13 @@ export interface IGlobalExplanationTabProps {
 interface IGlobalExplanationTabState {
   startingK: number;
   topK: number;
+  minK: number;
+  maxK: number;
   sortingSeriesIndex: number;
   sortArray: number[];
   seriesIsActive: boolean[];
   selectedCohortIndex: number;
   selectedFeatureIndex?: number;
-  calloutVisible: boolean;
   dependenceTooltipVisible: boolean;
   crossClassInfoVisible: boolean;
   explanationTooltipVisible: boolean;
@@ -85,27 +84,11 @@ export class GlobalExplanationTab extends React.PureComponent<
 > {
   private cohortSeries: IGlobalSeries[];
   private activeSeries: IGlobalSeries[];
-  private chartOptions: IChoiceGroupOption[] = [
-    {
-      key: ChartTypes.Bar,
-      text: localization.FeatureImportanceWrapper.barText
-    },
-    { key: ChartTypes.Box, text: localization.FeatureImportanceWrapper.boxText }
-  ];
   private weightOptions: IDropdownOption[] | undefined;
-  private readonly minK = Math.min(
-    4,
-    this.props.jointDataset.localExplanationFeatureCount
-  );
-  private readonly maxK = Math.min(
-    30,
-    this.props.jointDataset.localExplanationFeatureCount
-  );
   private readonly hasDataset = this.props.jointDataset.hasDataset;
   private readonly explainerCalloutInfo = this.props.explanationMethod
-    ? ExplainerCalloutDictionary[this.props.explanationMethod]
+    ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
-  private readonly _chartConfigId = "chart-connfig-button";
 
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
@@ -116,16 +99,21 @@ export class GlobalExplanationTab extends React.PureComponent<
       return;
     }
 
+    const minK = Math.min(
+      4,
+      this.props.jointDataset.localExplanationFeatureCount
+    );
     this.state = {
       startingK: 0,
-      topK: this.minK,
+      topK: minK,
+      minK,
+      maxK: Math.min(30, this.props.jointDataset.localExplanationFeatureCount),
       selectedCohortIndex: 0,
       sortingSeriesIndex: 0,
       sortArray: ModelExplanationUtils.getSortIndices(
         this.props.cohorts[0].calculateAverageImportance()
       ).reverse(),
       seriesIsActive: props.cohorts.map(() => true),
-      calloutVisible: false,
       dependenceTooltipVisible: false,
       crossClassInfoVisible: false,
       explanationTooltipVisible: false,
@@ -135,7 +123,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (this.props.globalBarSettings === undefined) {
       this.setDefaultSettings();
     }
-    if (this.props.metadata.modelType === ModelTypes.multiclass) {
+    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           text: this.props.weightLabels[option],
@@ -271,71 +259,14 @@ export class GlobalExplanationTab extends React.PureComponent<
               </div>
             </Callout>
           )}
-          <IconButton
-            className={classNames.chartEditorButton}
-            onClick={this.toggleCalloutOpen}
-            iconProps={{ iconName: "Settings" }}
-            id={this._chartConfigId}
+          <Settings
+            minK={this.state.minK}
+            maxK={this.state.maxK}
+            topK={this.state.topK}
+            setTopK={this.setTopK}
+            chartType={this.state.chartType}
+            onChartTypeChange={this.onChartTypeChange}
           />
-          {this.state.calloutVisible && (
-            <Callout
-              doNotLayer={true}
-              className={classNames.callout}
-              gapSpace={0}
-              target={"#" + this._chartConfigId}
-              isBeakVisible={false}
-              onDismiss={this.closeCallout}
-              directionalHint={DirectionalHint.bottomRightEdge}
-              setInitialFocus={true}
-              styles={{ container: FabricStyles.calloutContainer }}
-            >
-              <Text variant="medium" className={classNames.boldText}>
-                {localization.DatasetExplorer.chartType}
-              </Text>
-              <ChoiceGroup
-                selectedKey={this.state.chartType}
-                options={this.chartOptions}
-                onChange={this.onChartTypeChange}
-              />
-              <SpinButton
-                className={classNames.topK}
-                styles={{
-                  spinButtonWrapper: { maxWidth: "100px" },
-                  labelWrapper: { alignSelf: "center" },
-                  root: {
-                    float: "right",
-                    selectors: {
-                      "> div": {
-                        maxWidth: "110px"
-                      }
-                    }
-                  }
-                }}
-                label={localization.AggregateImportance.topKFeatures}
-                min={this.minK}
-                max={this.maxK}
-                value={this.state.topK.toString()}
-                onIncrement={this.setNumericValue.bind(
-                  this,
-                  1,
-                  this.maxK,
-                  this.minK
-                )}
-                onDecrement={this.setNumericValue.bind(
-                  this,
-                  -1,
-                  this.maxK,
-                  this.minK
-                )}
-                onValidate={this.setNumericValue.bind(
-                  this,
-                  0,
-                  this.maxK,
-                  this.minK
-                )}
-              />
-            </Callout>
-          )}
         </div>
         <div className={classNames.globalChartWithLegend}>
           <FeatureImportanceBar
@@ -379,7 +310,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               selectedKey={this.state.sortingSeriesIndex}
               onChange={this.setSortIndex}
             />
-            {this.props.metadata.modelType === ModelTypes.multiclass &&
+            {this.props.metadata.modelType === ModelTypes.Multiclass &&
               this.weightOptions && (
                 <div>
                   <div className={classNames.multiclassWeightLabel}>
@@ -562,10 +493,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.setState({ topK: newValue });
   };
 
-  private toggleCalloutOpen = (): void => {
-    this.setState({ calloutVisible: !this.state.calloutVisible });
-  };
-
   private toggleDependencePlotTooltip = (): void => {
     this.setState({
       dependenceTooltipVisible: !this.state.dependenceTooltipVisible
@@ -582,39 +509,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     });
   };
 
-  private closeCallout = (): void => {
-    this.setState({ calloutVisible: false });
-  };
-
-  private onChartTypeChange = (
-    _event?: React.FormEvent,
-    item?: IChoiceGroupOption
-  ): void => {
-    if (item?.key !== undefined) {
-      this.setState({ chartType: item.key as ChartTypes });
-    }
-  };
-
-  private readonly setNumericValue = (
-    delta: number,
-    max: number,
-    min: number,
-    stringVal: string
-  ): string | void => {
-    if (delta === 0) {
-      const number = +stringVal;
-      if (!Number.isInteger(number) || number > max || number < min) {
-        return this.state.topK.toString();
-      }
-      this.setTopK(number);
-    } else {
-      const prevVal = this.state.topK;
-      const newVal = prevVal + delta;
-      if (newVal > max || newVal < min) {
-        return prevVal.toString();
-      }
-      this.setTopK(newVal);
-    }
+  private onChartTypeChange = (chartType: ChartTypes): void => {
+    this.setState({ chartType });
   };
 
   private toggleActivation(index: number): void {

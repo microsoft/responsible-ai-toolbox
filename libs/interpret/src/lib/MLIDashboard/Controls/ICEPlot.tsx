@@ -84,9 +84,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         return {
           hoverinfo: "text",
           mode:
-            rangeType === RangeTypes.categorical
-              ? PlotlyMode.markers
-              : PlotlyMode.linesMarkers,
+            rangeType === RangeTypes.Categorical
+              ? PlotlyMode.Markers
+              : PlotlyMode.LinesMarkers,
           text: ICEPlot.buildTextArray(
             modelType,
             featureName,
@@ -119,7 +119,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           yaxis: {
             automargin: true,
             title:
-              modelType === ModelTypes.regression
+              modelType === ModelTypes.Regression
                 ? localization.IcePlot.prediction
                 : localization.IcePlot.predictedProbability
           },
@@ -186,20 +186,20 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         return undefined;
       }
       const result = [];
-      if (modelType !== ModelTypes.regression) {
+      if (modelType !== ModelTypes.Regression) {
         result.push(
           localization.formatString(localization.BarChart.classLabel, className)
         );
       }
-      if (!isNaN(+xValue)) {
+      if (!Number.isNaN(+xValue)) {
         const numericFormatter =
-          rangeType === RangeTypes.numeric
+          rangeType === RangeTypes.Numeric
             ? { minimumFractionDigits: 3 }
             : undefined;
         xValue = xValue.toLocaleString(undefined, numericFormatter);
       }
       result.push(`${featureName}: ${xValue}`);
-      if (modelType === ModelTypes.regression) {
+      if (modelType === ModelTypes.Regression) {
         result.push(
           localization.formatString(
             localization.IcePlot.predictionLabel,
@@ -256,7 +256,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         ? this.props.explanationContext.modelMetadata.featureRanges[
             this.state.requestFeatureIndex
           ].rangeType
-        : RangeTypes.categorical;
+        : RangeTypes.Categorical;
     const plotlyProps = ICEPlot.buildPlotlyProps(
       this.props.explanationContext.modelMetadata.modelType,
       this.state.requestFeatureIndex !== undefined
@@ -295,7 +295,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             </div>
             {this.state.rangeView !== undefined && (
               <div className={iCEPlotStyles.rangeView}>
-                {this.state.rangeView.type === RangeTypes.categorical && (
+                {this.state.rangeView.type === RangeTypes.Categorical && (
                   <ComboBox
                     multiSelect
                     selectedKey={
@@ -308,7 +308,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     styles={FabricStyles.defaultDropdownStyle}
                   />
                 )}
-                {this.state.rangeView.type !== RangeTypes.categorical && (
+                {this.state.rangeView.type !== RangeTypes.Categorical && (
                   <div className={iCEPlotStyles.parameterSet}>
                     <TextField
                       label={localization.IcePlot.minimumInputLabel}
@@ -382,7 +382,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           categoricalOptions: summary.uniqueValues.map((text) => {
             return { key: text, text };
           }),
-          type: RangeTypes.categorical
+          type: RangeTypes.Categorical
         };
       }
     }
@@ -428,10 +428,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     rangeView.min = val;
     if (
       Number.isNaN(val) ||
-      (rangeView.type === RangeTypes.integer && !Number.isInteger(val))
+      (rangeView.type === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       rangeView.minErrorMessage =
-        rangeView.type === RangeTypes.integer
+        rangeView.type === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
       this.setState({ rangeView });
@@ -455,10 +455,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     rangeView.max = val;
     if (
       Number.isNaN(val) ||
-      (rangeView.type === RangeTypes.integer && !Number.isInteger(val))
+      (rangeView.type === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       rangeView.maxErrorMessage =
-        rangeView.type === RangeTypes.integer
+        rangeView.type === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
       this.setState({ rangeView });
@@ -562,15 +562,15 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           if (Array.isArray(fetchedData)) {
             this.setState({ fetchedData, abortController: undefined });
           }
-        } catch (err) {
-          if (err.name === "AbortError") {
+        } catch (error) {
+          if (error.name === "AbortError") {
             return;
           }
-          if (err.name === "PythonError") {
+          if (error.name === "PythonError") {
             this.setState({
               errorMessage: localization.formatString(
                 localization.IcePlot.errorPrefix,
-                err.message
+                error.message
               )
             });
           }
@@ -594,7 +594,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     const rangeView = this.state.rangeView;
 
     if (
-      this.state.rangeView.type === RangeTypes.categorical &&
+      this.state.rangeView.type === RangeTypes.Categorical &&
       Array.isArray(this.state.rangeView.selectedOptionKeys)
     ) {
       return this.state.rangeView.selectedOptionKeys;
@@ -606,7 +606,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       const delta = steps > 0 ? (max - min) / steps : max - min;
       return _.uniq(
         Array.from({ length: steps }, (_x, i) =>
-          rangeView.type === RangeTypes.integer
+          rangeView.type === RangeTypes.Integer
             ? Math.round(min + i * delta)
             : min + i * delta
         )

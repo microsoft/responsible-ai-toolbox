@@ -8,7 +8,7 @@ import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import { scatterStyles } from "./Scatter.styles";
 
-export const DataScatterId = "data_scatter_id";
+export const dataScatterId = "data_scatter_id";
 
 export class DataExploration extends React.PureComponent<IScatterProps> {
   private plotlyProps: IPlotlyProperty;
@@ -132,7 +132,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
         this.props,
         this.plotlyProps,
         item,
-        DataScatterId
+        dataScatterId
       );
     }
   };
@@ -146,7 +146,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
         this.props,
         this.plotlyProps,
         item,
-        DataScatterId
+        dataScatterId
       );
     }
   };
@@ -162,7 +162,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
         this.props,
         this.plotlyProps,
         item,
-        DataScatterId
+        dataScatterId
       );
     }
   };

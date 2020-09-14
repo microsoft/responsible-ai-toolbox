@@ -72,7 +72,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
               classIndex % FabricStyles.plotlyColorPalette.length
             ];
           const lowerBounds: IData = {
-            mode: PlotlyMode.lines,
+            mode: PlotlyMode.Lines,
             type: "scatter",
             line: {
               shape: "hv",
@@ -83,7 +83,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             y: coordinates.lowerBounds?.[classIndex]
           };
           const centerlineSeries: IData = {
-            mode: PlotlyMode.lines,
+            mode: PlotlyMode.Lines,
             type: "scatter",
             fill: "tonexty",
             fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
@@ -97,7 +97,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             y: scores
           };
           const upperbounds: IData = {
-            mode: PlotlyMode.lines,
+            mode: PlotlyMode.Lines,
             type: "scatter",
             fill: "tonexty",
             fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
@@ -140,17 +140,11 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
         );
 
       const feature = ebmObject.featureList[featureIndex];
-      const data: IData[] = !feature
-        ? []
-        : !isCategorical
-        ? EbmExplanation.buildContinuousSeries(
-            feature,
-            explanationContext.modelMetadata.classNames
-          )
-        : EbmExplanation.buildCategoricalSeries(
-            feature,
-            explanationContext.modelMetadata.classNames
-          );
+      const data: IData[] = EbmExplanation.getData(
+        feature,
+        isCategorical,
+        explanationContext
+      );
       return {
         config: { displaylogo: false, responsive: true, displayModeBar: false },
         data,
@@ -196,6 +190,26 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
       selectedFeature: 0
     };
   }
+  private static getData(
+    feature: IMultiClassBoundedCoordinates | undefined,
+    isCategorical: boolean | undefined,
+    explanationContext: IExplanationContext
+  ): IData[] {
+    if (!feature) {
+      return [];
+    }
+    if (!isCategorical) {
+      return EbmExplanation.buildContinuousSeries(
+        feature,
+        explanationContext.modelMetadata.classNames
+      );
+    }
+    return EbmExplanation.buildCategoricalSeries(
+      feature,
+      explanationContext.modelMetadata.classNames
+    );
+  }
+
   public render(): React.ReactNode {
     const plotlyProps = EbmExplanation.buildPlotlyProps(
       this.state.selectedFeature,

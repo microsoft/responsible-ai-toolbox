@@ -1,5 +1,5 @@
-import { getMenu } from "../support/App";
-const topMenu = "#topMenuBar";
+import { getMenu } from "../support/getMenu";
+const topMenu = "#TopMenuBar";
 describe("dashboard", () => {
   beforeEach(() => cy.visit("/"));
 

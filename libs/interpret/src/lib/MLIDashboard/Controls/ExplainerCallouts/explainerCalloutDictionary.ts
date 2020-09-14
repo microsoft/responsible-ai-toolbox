@@ -32,7 +32,7 @@ const pfiExplanation: IExplainerInfo = {
     "https://christophm.github.io/interpretable-ml-book/feature-importance.html"
 };
 
-export const ExplainerCalloutDictionary: { [key: string]: IExplainerInfo } = {
+export const explainerCalloutDictionary: { [key: string]: IExplainerInfo } = {
   shap_deep: shapExplanation,
   shap_tree: shapExplanation,
   shap_kernel: shapExplanation,

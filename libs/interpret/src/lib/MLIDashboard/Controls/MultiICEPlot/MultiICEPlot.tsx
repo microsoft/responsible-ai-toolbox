@@ -15,7 +15,7 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
-import { IsTwoDimArray } from "@responsible-ai/core-ui";
+import { isTwoDimArray } from "@responsible-ai/core-ui";
 import { JointDataset } from "../../JointDataset";
 import { IRangeView } from "../ICEPlot";
 import { localization } from "../../../Localization/localization";
@@ -69,7 +69,7 @@ export class MultiICEPlot extends React.PureComponent<
     metadata: IExplanationModelMetadata,
     selectedClass: number
   ): string {
-    if (metadata.modelType === ModelTypes.regression) {
+    if (metadata.modelType === ModelTypes.Regression) {
       return localization.IcePlot.prediction;
     }
     return (
@@ -102,11 +102,11 @@ export class MultiICEPlot extends React.PureComponent<
     const data: Data[] = map<number[] | number[][]>(
       yData,
       (singleRow: number[] | number[][], rowIndex: number) => {
-        const transposedY: number[][] = IsTwoDimArray(singleRow)
+        const transposedY: number[][] = isTwoDimArray(singleRow)
           ? ModelExplanationUtils.transpose2DArray(singleRow)
           : [singleRow];
         const predictionLabel =
-          metadata.modelType === ModelTypes.regression
+          metadata.modelType === ModelTypes.Regression
             ? localization.IcePlot.prediction
             : localization.IcePlot.predictedProbability +
               ": " +
@@ -114,9 +114,9 @@ export class MultiICEPlot extends React.PureComponent<
         const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
         return {
           mode:
-            rangeType === RangeTypes.categorical
-              ? PlotlyMode.markers
-              : PlotlyMode.linesMarkers,
+            rangeType === RangeTypes.Categorical
+              ? PlotlyMode.Markers
+              : PlotlyMode.LinesMarkers,
           type: "scatter",
           hovertemplate,
           hoverinfo: "all",
@@ -215,7 +215,7 @@ export class MultiICEPlot extends React.PureComponent<
       <div className={classNames.iceWrapper}>
         {this.state.rangeView !== undefined && (
           <div className={classNames.controlArea}>
-            {this.state.rangeView.type === RangeTypes.categorical && (
+            {this.state.rangeView.type === RangeTypes.Categorical && (
               <ComboBox
                 multiSelect
                 selectedKey={
@@ -229,7 +229,7 @@ export class MultiICEPlot extends React.PureComponent<
                 calloutProps={FabricStyles.calloutProps}
               />
             )}
-            {this.state.rangeView.type !== RangeTypes.categorical && (
+            {this.state.rangeView.type !== RangeTypes.Categorical && (
               <div className={classNames.parameterList}>
                 <SpinButton
                   styles={{
@@ -511,15 +511,15 @@ export class MultiICEPlot extends React.PureComponent<
             abortControllers: this.props.datapoints.map(() => undefined)
           });
         }
-      } catch (err) {
-        if (err.name === "AbortError") {
+      } catch (error) {
+        if (error.name === "AbortError") {
           return;
         }
-        if (err.name === "PythonError") {
+        if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
               localization.IcePlot.errorPrefix,
-              err.message
+              error.message
             )
           });
         }
@@ -557,7 +557,7 @@ export class MultiICEPlot extends React.PureComponent<
           categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
             return { key: text, text };
           }),
-          type: RangeTypes.categorical
+          type: RangeTypes.Categorical
         };
       }
       // Columns that were integers that are flagged in the UX as categorical should still be integers when
@@ -569,7 +569,7 @@ export class MultiICEPlot extends React.PureComponent<
         categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
           return { key: +text, text: text.toString() };
         }),
-        type: RangeTypes.categorical
+        type: RangeTypes.Categorical
       };
     }
     return {
@@ -596,7 +596,7 @@ export class MultiICEPlot extends React.PureComponent<
     const steps = toNumber(rangeView.steps);
 
     if (
-      rangeView.type === RangeTypes.categorical &&
+      rangeView.type === RangeTypes.Categorical &&
       Array.isArray(rangeView.selectedOptionKeys)
     ) {
       return rangeView.selectedOptionKeys as string[];
@@ -608,7 +608,7 @@ export class MultiICEPlot extends React.PureComponent<
       const delta = steps > 0 ? (max - min) / steps : max - min;
       return _.uniq(
         Array.from({ length: steps }, (_, i) =>
-          rangeView.type === RangeTypes.integer
+          rangeView.type === RangeTypes.Integer
             ? Math.round(min + i * delta)
             : min + i * delta
         )

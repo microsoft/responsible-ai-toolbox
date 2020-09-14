@@ -1,15 +1,15 @@
 import { IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 
 export enum WeightVectors {
-  equal = "equal",
-  absAvg = "absAvg",
-  predicted = "predicted"
+  Equal = "equal",
+  AbsAvg = "absAvg",
+  Predicted = "predicted"
 }
 export type WeightVectorOption =
   | number
-  | WeightVectors.equal
-  | WeightVectors.predicted
-  | WeightVectors.absAvg;
+  | WeightVectors.Equal
+  | WeightVectors.Predicted
+  | WeightVectors.AbsAvg;
 
 export interface IWeightedDropdownContext {
   options: IComboBoxOption[];

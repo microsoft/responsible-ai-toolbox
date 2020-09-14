@@ -16,7 +16,7 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
-import { AccuracyOptions } from "../../util/AccuracyMetrics";
+import { accuracyOptions } from "../../util/AccuracyMetrics";
 import {
   IAccuracyPickerPropsV1,
   IFeatureBinPickerPropsV1,
@@ -78,7 +78,7 @@ export class ModelComparisonChart extends React.PureComponent<
             plotlyPath: "customdata"
           }
         },
-        mode: PlotlyMode.markers,
+        mode: PlotlyMode.Markers,
         marker: {
           size: 14
         },
@@ -196,7 +196,7 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.accuracyPickerProps.selectedAccuracyKey
     );
     const selectedMetric =
-      AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+      accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
       this.props.accuracyPickerProps.accuracyOptions.find(
         (metric) =>
           metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
@@ -358,12 +358,7 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.accuracyPickerProps.selectedAccuracyKey
           );
         });
-      const disparityMetric = this.state.disparityInOutcomes
-        ? this.props.dashboardContext.modelMetadata.PredictionType ===
-          PredictionTypes.binaryClassification
-          ? "selection_rate"
-          : "average"
-        : this.props.accuracyPickerProps.selectedAccuracyKey;
+      const disparityMetric = this.getDisparityMetric();
       const disparityPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
@@ -372,7 +367,7 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
             disparityMetric,
-            ParityModes.difference
+            ParityModes.Difference
           );
         });
 
@@ -384,6 +379,19 @@ export class ModelComparisonChart extends React.PureComponent<
     } catch {
       // todo;
     }
+  }
+
+  private getDisparityMetric(): string {
+    if (this.state.disparityInOutcomes) {
+      if (
+        this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.BinaryClassification
+      ) {
+        return "selection_rate";
+      }
+      return "average";
+    }
+    return this.props.accuracyPickerProps.selectedAccuracyKey;
   }
 
   private readonly disparityChanged = (

@@ -87,7 +87,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
     }
     const plotlyProps = this.generatePlotlyProps();
     const yAxisLabel =
-      this.props.metadata.modelType === ModelTypes.regression
+      this.props.metadata.modelType === ModelTypes.Regression
         ? this.props.jointDataset.metaDict[this.props.chartProps.xAxis.property]
             .label
         : this.props.jointDataset.metaDict[this.props.chartProps.xAxis.property]
@@ -150,7 +150,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       return dict;
     });
     plotlyProps.data[0].type = chartProps.chartType;
-    plotlyProps.data[0].mode = PlotlyMode.markers;
+    plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: FabricStyles.fabricColorPalette[this.props.cohortIndex]
     };

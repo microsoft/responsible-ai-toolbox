@@ -27,7 +27,7 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
   }
 
   private makePredictionLabel(): string {
-    if (this.props.modelType === ModelTypes.regression) {
+    if (this.props.modelType === ModelTypes.Regression) {
       return localization.formatString(
         localization.PredictionLabel.predictedValueLabel,
         this.props.prediction.toLocaleString(undefined, {

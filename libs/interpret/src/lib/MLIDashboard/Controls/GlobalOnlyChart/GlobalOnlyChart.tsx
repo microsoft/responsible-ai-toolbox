@@ -65,13 +65,13 @@ export class GlobalOnlyChart extends React.PureComponent<
       }
     );
     this.classOptions.unshift({
-      key: FeatureKeys.absoluteGlobal,
+      key: FeatureKeys.AbsoluteGlobal,
       text: localization.BarChart.absoluteGlobal
     });
     this.state = {
       startingK: 0,
       topK: this.minK,
-      sortingSeriesKey: FeatureKeys.absoluteGlobal,
+      sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
       sortArray: ModelExplanationUtils.buildSortedVector(
         this.props.globalImportance || []
       ).reverse()

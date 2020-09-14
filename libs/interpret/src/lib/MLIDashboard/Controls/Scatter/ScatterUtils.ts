@@ -140,10 +140,10 @@ export class ScatterUtils {
           data: {
             isCategorical:
               explanationContext.modelMetadata.modelType !==
-              ModelTypes.regression,
+              ModelTypes.Regression,
             sortProperty:
               explanationContext.modelMetadata.modelType !==
-              ModelTypes.regression
+              ModelTypes.Regression
                 ? "PredictedYClassIndex"
                 : undefined
           }
@@ -172,10 +172,10 @@ export class ScatterUtils {
           data: {
             isCategorical:
               explanationContext.modelMetadata.modelType !==
-              ModelTypes.regression,
+              ModelTypes.Regression,
             sortProperty:
               explanationContext.modelMetadata.modelType !==
-              ModelTypes.regression
+              ModelTypes.Regression
                 ? "TrueYClassIndex"
                 : undefined
           }
@@ -223,7 +223,7 @@ export class ScatterUtils {
               explanationContext.testDataset.predictedY[rowIndex];
             if (
               explanationContext.modelMetadata.modelType ===
-              ModelTypes.regression
+              ModelTypes.Regression
             ) {
               result.PredictedY = rawPrediction;
             } else {
@@ -236,7 +236,7 @@ export class ScatterUtils {
             const rawTruth = explanationContext.testDataset.trueY[rowIndex];
             if (
               explanationContext.modelMetadata.modelType ===
-              ModelTypes.regression
+              ModelTypes.Regression
             ) {
               result.TrueY = rawTruth;
             } else {
@@ -261,13 +261,13 @@ export class ScatterUtils {
             plotlyPath: "customdata"
           },
           text: {
-            mapFunction: AccessorMappingFunctionNames.stringifyText,
+            mapFunction: AccessorMappingFunctionNames.StringifyText,
             path: [],
             plotlyPath: "text"
           }
         },
         hoverinfo: "text",
-        mode: PlotlyMode.markers,
+        mode: PlotlyMode.Markers,
         type: "scattergl"
       }
     ],
@@ -336,9 +336,9 @@ export class ScatterUtils {
       data: {
         isCategorical:
           hasPredictedY &&
-          exp.modelMetadata.modelType !== ModelTypes.regression,
+          exp.modelMetadata.modelType !== ModelTypes.Regression,
         sortProperty:
-          hasPredictedY && exp.modelMetadata.modelType !== ModelTypes.regression
+          hasPredictedY && exp.modelMetadata.modelType !== ModelTypes.Regression
             ? "PredictedYClassIndex"
             : undefined
       }
@@ -435,7 +435,7 @@ export class ScatterUtils {
     ];
 
     const yAxisLabel =
-      modelData.modelType === ModelTypes.binary
+      modelData.modelType === ModelTypes.Binary
         ? localization.formatString(
             localization.ExplanationScatter.importanceLabel,
             modelData.featureNames[maxIndex]
@@ -566,7 +566,7 @@ export class ScatterUtils {
     if (selectedRow === undefined) {
       plotlyProps.data.forEach((trace) => {
         _.set(trace, "marker.line.width", [0]);
-        _.set(trace, "selectedpoints", null);
+        _.set(trace, "selectedpoints", undefined);
       });
       return _.cloneDeep(plotlyProps);
     }
@@ -610,7 +610,7 @@ export class ScatterUtils {
     modelMetadata: IExplanationModelMetadata
   ): string {
     if (
-      modelMetadata.modelType === ModelTypes.binary &&
+      modelMetadata.modelType === ModelTypes.Binary &&
       item.data.isFeatureImportance
     ) {
       // Add the first class's name to the text for binary case, to clarify

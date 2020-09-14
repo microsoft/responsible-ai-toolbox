@@ -251,15 +251,15 @@ export class PerturbationExploration extends React.Component<
             abortController: undefined
           });
         }
-      } catch (err) {
-        if (err.name === "AbortError") {
+      } catch (error) {
+        if (error.name === "AbortError") {
           return;
         }
-        if (err.name === "PythonError") {
+        if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
               localization.IcePlot.errorPrefix,
-              err.message
+              error.message
             ) as string
           });
         }

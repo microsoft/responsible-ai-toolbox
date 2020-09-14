@@ -60,18 +60,20 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    const bins = value.bins.slice().filter((x) => x !== undefined && !isNaN(x));
+    const bins = value.bins
+      .slice()
+      .filter((x) => x !== undefined && !Number.isNaN(x));
 
     const min = _.min(bins);
     const max = _.max(bins);
     if (
       min === undefined ||
       max === undefined ||
-      (max === 0 && disparityMethod === ParityModes.ratio)
+      (max === 0 && disparityMethod === ParityModes.Ratio)
     ) {
       return Number.NaN;
     }
-    return disparityMethod === ParityModes.difference ? max - min : min / max;
+    return disparityMethod === ParityModes.Difference ? max - min : min / max;
   }
 
   public clearCache(binIndex?: number): void {

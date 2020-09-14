@@ -13,6 +13,12 @@
       "rules": {
         "filenames/match-regex": ["error", "^environment(\\.[a-z]+)?$"]
       }
+    },
+    {
+      "files": ["**/__mock_data/*.ts"],
+      "rules": {
+        "max-lines": "off"
+      }
     }
   ]
 }

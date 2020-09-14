@@ -2,9 +2,9 @@ import { IModelMetadata } from "@responsible-ai/mlchartlib";
 import { JointDataset } from "./JointDataset";
 
 export enum ModelTypes {
-  regression = "regression",
-  binary = "binary",
-  multiclass = "multiclass"
+  Regression = "regression",
+  Binary = "binary",
+  Multiclass = "multiclass"
 }
 
 export interface IExplanationContext {

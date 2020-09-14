@@ -12,8 +12,11 @@ import React from "react";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
 import { WizardBuilder } from "../util/WizardBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
-import { IFairnessContext } from "../util/IFairnessContext";
-import { IAccuracyOption, AccuracyOptions } from "../util/AccuracyMetrics";
+import {
+  IFairnessContext,
+  IRunTimeFairnessContext
+} from "../util/IFairnessContext";
+import { IAccuracyOption, accuracyOptions } from "../util/AccuracyMetrics";
 import { MetricsCache } from "../util/MetricsCache";
 import { FeatureTab } from "../components/FeatureTab";
 import { AccuracyTab } from "./Controls/AccuracyTab";
@@ -91,7 +94,7 @@ export class FairnessWizardV1 extends React.PureComponent<
             array: initialBin.binLabels,
             labelArray: initialBin.binLabels,
             featureIndex: index,
-            rangeType: RangeTypes.categorical
+            rangeType: RangeTypes.Categorical
           };
         }
       );
@@ -124,20 +127,7 @@ export class FairnessWizardV1 extends React.PureComponent<
       fairnessContext.groupNames = featureBins[0].labelArray;
     }
 
-    accuracyMetrics =
-      fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
-        ? this.props.supportedBinaryClassificationAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          )
-        : fairnessContext.modelMetadata.PredictionType ===
-          PredictionTypes.regression
-        ? this.props.supportedRegressionAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          )
-        : this.props.supportedProbabilityAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          );
+    accuracyMetrics = this.getAccuracyMetrics(fairnessContext);
     accuracyMetrics = accuracyMetrics.filter((metric) => !!metric);
 
     this.state = {
@@ -156,6 +146,15 @@ export class FairnessWizardV1 extends React.PureComponent<
         this.props.requestMetrics
       )
     };
+  }
+
+  public componentDidUpdate(prev: IFairnessProps): void {
+    if (prev.theme !== this.props.theme) {
+      loadTheme(this.props.theme || defaultTheme);
+    }
+    if (this.props.locale && prev.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
+    }
   }
 
   public render(): React.ReactNode {
@@ -295,6 +294,30 @@ export class FairnessWizardV1 extends React.PureComponent<
             />
           )}
       </Stack>
+    );
+  }
+
+  private getAccuracyMetrics(
+    fairnessContext: IRunTimeFairnessContext
+  ): IAccuracyOption[] {
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+    ) {
+      return this.props.supportedBinaryClassificationAccuracyKeys.map(
+        (key) => accuracyOptions[key]
+      );
+    }
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.Regression
+    ) {
+      return this.props.supportedRegressionAccuracyKeys.map(
+        (key) => accuracyOptions[key]
+      );
+    }
+    return this.props.supportedProbabilityAccuracyKeys.map(
+      (key) => accuracyOptions[key]
     );
   }
 

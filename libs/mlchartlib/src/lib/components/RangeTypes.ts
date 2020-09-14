@@ -1,5 +1,5 @@
 export enum RangeTypes {
-  categorical = "categorical",
-  integer = "integer",
-  numeric = "numeric"
+  Categorical = "categorical",
+  Integer = "integer",
+  Numeric = "numeric"
 }

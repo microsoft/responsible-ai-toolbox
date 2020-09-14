@@ -41,7 +41,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     super(props);
     this.sortOptions = this.buildSortOptions();
     this.state = {
-      selectedSorting: FeatureKeys.absoluteGlobal,
+      selectedSorting: FeatureKeys.AbsoluteGlobal,
       isCalloutVisible: false
     };
   }
@@ -163,7 +163,7 @@ export class FeatureImportanceBar extends React.PureComponent<
   }
 
   private getSortVector = (featureByClassMatrix: number[][]): number[] => {
-    if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
+    if (this.state.selectedSorting === FeatureKeys.AbsoluteGlobal) {
       return ModelExplanationUtils.buildSortedVector(featureByClassMatrix);
     }
     return ModelExplanationUtils.buildSortedVector(
@@ -185,7 +185,7 @@ export class FeatureImportanceBar extends React.PureComponent<
   private buildSortOptions = (): IDropdownOption[] => {
     if (
       this.props.dashboardContext.explanationContext.modelMetadata.modelType !==
-        ModelTypes.multiclass ||
+        ModelTypes.Multiclass ||
       this.props.dashboardContext.explanationContext.globalExplanation ===
         undefined ||
       this.props.dashboardContext.explanationContext.globalExplanation
@@ -195,7 +195,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     }
     const result: IDropdownOption[] = [
       {
-        key: FeatureKeys.absoluteGlobal,
+        key: FeatureKeys.AbsoluteGlobal,
         text: localization.BarChart.absoluteGlobal
       }
     ];

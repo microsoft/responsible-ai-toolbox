@@ -14,5 +14,5 @@ ReactDOM.render(
       <Route path={App.route} render={renderApp} />
     </HashRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.querySelector("#root")
 );

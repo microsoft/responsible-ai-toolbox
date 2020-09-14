@@ -13,12 +13,12 @@ export class BinnedResponseBuilder {
     index: number,
     sensitiveFeatures: any[][]
   ): IBinnedResponse {
-    if (featureRange.rangeType === RangeTypes.categorical) {
+    if (featureRange.rangeType === RangeTypes.Categorical) {
       return {
         hasError: false,
         array: (featureRange as ICategoricalRange).uniqueValues,
         featureIndex: index,
-        rangeType: RangeTypes.categorical,
+        rangeType: RangeTypes.Categorical,
         labelArray: (featureRange as ICategoricalRange).uniqueValues
       };
     }
@@ -30,7 +30,7 @@ export class BinnedResponseBuilder {
       hasError: false,
       array: uniqueValues,
       featureIndex: index,
-      rangeType: RangeTypes.categorical,
+      rangeType: RangeTypes.Categorical,
       labelArray: uniqueValues.map((num) => num.toString())
     };
   }
@@ -43,7 +43,7 @@ export class BinnedResponseBuilder {
   ): IBinnedResponse {
     let binCount: number;
     if (binCountIn === undefined) {
-      if (featureRange.rangeType === RangeTypes.integer) {
+      if (featureRange.rangeType === RangeTypes.Integer) {
         const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
           sensitiveFeatures,
           index
@@ -61,12 +61,12 @@ export class BinnedResponseBuilder {
         hasError: false,
         array: [featureRange.max],
         featureIndex: index,
-        rangeType: RangeTypes.categorical,
+        rangeType: RangeTypes.Categorical,
         labelArray: [featureRange.max.toString()]
       };
     }
     // make uniform bins in these cases
-    if (featureRange.rangeType === RangeTypes.numeric || delta < binCount - 1) {
+    if (featureRange.rangeType === RangeTypes.Numeric || delta < binCount - 1) {
       const binDelta = delta / binCount;
       const array = new Array(binCount).fill(0).map((_, index) => {
         return index !== binCount - 1
@@ -87,7 +87,7 @@ export class BinnedResponseBuilder {
         hasError: false,
         array,
         featureIndex: index,
-        rangeType: RangeTypes.numeric,
+        rangeType: RangeTypes.Numeric,
         labelArray
       };
     }
@@ -118,7 +118,7 @@ export class BinnedResponseBuilder {
       hasError: false,
       array,
       featureIndex: index,
-      rangeType: RangeTypes.integer,
+      rangeType: RangeTypes.Integer,
       labelArray
     };
   }
@@ -128,14 +128,14 @@ export class BinnedResponseBuilder {
     index: number,
     sensitiveFeatures: any[][]
   ): IBinnedResponse {
-    if (featureRange.rangeType === RangeTypes.categorical) {
+    if (featureRange.rangeType === RangeTypes.Categorical) {
       return BinnedResponseBuilder.buildCategorical(
         featureRange,
         index,
         sensitiveFeatures
       );
     }
-    if (featureRange.rangeType === RangeTypes.integer) {
+    if (featureRange.rangeType === RangeTypes.Integer) {
       const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
         sensitiveFeatures,
         index
