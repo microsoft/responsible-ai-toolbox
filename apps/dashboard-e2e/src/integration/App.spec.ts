@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getMenu } from "../support/getMenu";
 const topMenu = "#TopMenuBar";
 describe("dashboard", () => {

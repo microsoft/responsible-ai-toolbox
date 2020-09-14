@@ -39,7 +39,6 @@ All pull requests needs to abide by the following criteria to be accepted:
 - support for localization in code (translations need not be provided)
 - tests for added / changed functionality
 
-
 ## Development process
 
 For all further steps `yarn install` is a prerequisite.

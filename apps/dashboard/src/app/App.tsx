@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 import { ITheme } from "office-ui-fabric-react";

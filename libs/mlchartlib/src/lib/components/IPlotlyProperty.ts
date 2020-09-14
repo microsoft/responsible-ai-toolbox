@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Config, Layout } from "plotly.js";
 import { IData } from "./IData";
 

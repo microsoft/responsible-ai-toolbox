@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";

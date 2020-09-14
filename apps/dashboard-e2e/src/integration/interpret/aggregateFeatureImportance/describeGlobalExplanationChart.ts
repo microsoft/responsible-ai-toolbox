@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { toNumber } from "lodash";
 import { BarChart } from "../../../support/BarChart";
 import { getMenu } from "../../../support/getMenu";
