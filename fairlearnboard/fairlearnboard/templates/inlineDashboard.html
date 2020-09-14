@@ -4,7 +4,7 @@
     <a href="{{local_url}}" target="_blank">Open in new tab</a>
 {% endif %}
 <div style="height: 1000px;" id="{{app_id}}"></div>
-<script type="text/javascript">{{ main_js}}</script>
+<script type="text/javascript">{{ main_js }}</script>
 <script defer type="text/javascript">
 (function universalLoad(root, callback) {
       if(typeof exports === 'object' && typeof module === 'object') {
@@ -25,7 +25,7 @@
         callback(root['inline-fairlearn-dashboard']);
       }
     })(this, function(fairlearnInline) {
-        var data = {{fairness_input|safe}};
+        var data = {{ fairness_input | safe }};
         //data.predictionUrl = data.predictionUrl ? data.predictionUrl : undefined;
         fairlearnInline.RenderDashboard("{{app_id}}", data);
     });

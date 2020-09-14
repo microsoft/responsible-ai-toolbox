@@ -274,7 +274,7 @@ export class App extends React.Component<any, any> {
                   App.supportedProbabilityAccuracyKeys
                 }
                 stringParams={{ contextualHelp: App.messages }}
-                requestMetrics={this.generateRandomMetrics.bind(this)}
+                requestMetrics={this.calculateMetrics.bind(this)}
                 theme={theme}
                 locale={this.state.language}
                 key={Date.now()}
@@ -284,6 +284,28 @@ export class App extends React.Component<any, any> {
         </div>
       </div>
     );
+  }
+
+  private calculateMetrics(postData): Promise<IMetricResponse> {
+    return fetch("http://localhost:5000/1/metrics", {
+      method: "post",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((resp) => {
+        if (resp.status >= 200 && resp.status < 300) {
+          return resp.json();
+        }
+        return Promise.reject(new Error(resp.statusText));
+      })
+      .then((json) => {
+        if (json.error !== undefined) {
+          throw new Error(json.error);
+        }
+        return Promise.resolve(json.data);
+      });
   }
 
   private generateRandomMetrics(data, signal): Promise<IMetricResponse> {

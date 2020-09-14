@@ -26,9 +26,9 @@ from fairlearn.metrics import (
     # Issue #37 tracks the addition of new metrics.
     # f1_score_group_summary,
     # log_loss_group_summary,
-    )
+)
 
-from IPython.display import display
+from IPython.display import display, HTML
 from scipy.sparse import issparse
 import copy
 import numpy as np
@@ -36,21 +36,7 @@ import pandas as pd
 import threading
 import os
 from jinja2 import Environment, PackageLoader
-
-
-class DashboardService(FlaskHelper):
-    app = FlaskHelper.app
-
-    @app.route('/')
-    def hello():
-        return "No global list view supported at this time."
-    
-    @app.route('/<id>')
-    def fairness_visual(id):
-        if id in FairlearnDashboard.fairness_inputs:
-            return generate_inline_html(FairlearnDashboard.fairness_inputs[id], None)
-        else:
-            return "Unknown model id."
+from flask import jsonify, request
 
 
 class FairlearnDashboard(object):
@@ -75,6 +61,149 @@ class FairlearnDashboard(object):
     model_count = 0
     _service = None
 
+    # The following mappings should match those in the GroupMetricSet
+    # Issue 269 has been opened to track the work for unifying the two
+    _metric_methods = {
+        "accuracy_score": {
+            "model_type": ["classification"],
+            "function": accuracy_score_group_summary
+        },
+        "balanced_accuracy_score": {
+            "model_type": ["classification"],
+            "function": roc_auc_score_group_summary
+        },
+        "precision_score": {
+            "model_type": ["classification"],
+            "function": precision_score_group_summary
+        },
+        "recall_score": {
+            "model_type": ["classification"],
+            "function": recall_score_group_summary
+        },
+        "zero_one_loss": {
+            "model_type": [],
+            "function": zero_one_loss_group_summary
+        },
+        "specificity_score": {
+            "model_type": [],
+            "function": true_negative_rate_group_summary
+        },
+        "miss_rate": {
+            "model_type": [],
+            "function": false_negative_rate_group_summary
+        },
+        "fallout_rate": {
+            "model_type": [],
+            "function": false_positive_rate_group_summary
+        },
+        "false_positive_over_total": {
+            "model_type": [],
+            "function": false_positive_rate_group_summary
+        },
+        "false_negative_over_total": {
+            "model_type": [],
+            "function": false_negative_rate_group_summary
+        },
+        "selection_rate": {
+            "model_type": [],
+            "function": selection_rate_group_summary
+        },
+        "auc": {
+            "model_type": ["probability"],
+            "function": roc_auc_score_group_summary
+        },
+        "root_mean_squared_error": {
+            "model_type": ["regression", "probability"],
+            "function": _root_mean_squared_error_group_summary
+        },
+        "balanced_root_mean_squared_error": {
+            "model_type": ["probability"],
+            "function": _balanced_root_mean_squared_error_group_summary
+        },
+        "mean_squared_error": {
+            "model_type": ["regression", "probability"],
+            "function": mean_squared_error_group_summary
+        },
+        "mean_absolute_error": {
+            "model_type": ["regression", "probability"],
+            "function": mean_absolute_error_group_summary
+        },
+        "r2_score": {
+            "model_type": ["regression"],
+            "function": r2_score_group_summary
+        },
+        # Issue #37 tracks the addition of new metrics.
+        # "f1_score": {
+        #     "model_type": ["classification"],
+        #     "function": f1_score_group_summary
+        # },
+        # "log_loss": {
+        #     "model_type": ["probability"],
+        #     "function": log_loss_group_summary
+        # },
+        "overprediction": {
+            "model_type": [],
+            "function": _mean_overprediction_group_summary
+        },
+        "underprediction": {
+            "model_type": [],
+            "function": _mean_underprediction_group_summary
+        },
+        "average": {
+            "model_type": [],
+            "function": mean_prediction_group_summary
+        }
+    }
+
+    classification_methods = [method[0] for method in _metric_methods.items()
+                              if "classification" in method[1]["model_type"]]
+    regression_methods = [method[0] for method in _metric_methods.items()
+                          if "regression" in method[1]["model_type"]]
+    probability_methods = [method[0] for method in _metric_methods.items()
+                           if "probability" in method[1]["model_type"]]
+
+    @FlaskHelper.app.route('/')
+    def hello():
+        return "No global list view supported at this time."
+
+    @FlaskHelper.app.route('/<id>')
+    def fairness_visual(id):
+        if id in FairlearnDashboard.fairness_inputs:
+            return generate_inline_html(FairlearnDashboard.fairness_inputs[id], None)
+        else:
+            return "Unknown model id."
+
+    @FlaskHelper.app.route('/<id>/metrics', methods=['POST'])
+    def fairness_metrics_calculation(id):
+        try:
+            data = request.get_json(force=True)
+            if id in FairlearnDashboard.fairness_inputs:
+                data.update(FairlearnDashboard.fairness_inputs[id])
+
+                if type(data["binVector"][0]) == np.int32:
+                    data['binVector'] = [str(int(bin)) for bin in data['binVector']]
+
+                method = FairlearnDashboard._metric_methods \
+                    .get(data["metricKey"]).get("function")
+                prediction = method(
+                    data['true_y'],
+                    data['predicted_ys'][data["modelIndex"]],
+                    sensitive_features=data["binVector"])
+                return jsonify({
+                    "global": prediction.overall,
+                    "bins": prediction.by_group
+                })
+        except Exception as ex:
+            import sys, traceback
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+
+            return jsonify({
+                "error": str(ex),
+                "stacktrace": str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback))),
+                "locals": str(locals()),
+            })
+            #raise ValueError("Error while making request")
+
     def __init__(
             self, *,
             sensitive_features,
@@ -86,107 +215,6 @@ class FairlearnDashboard(object):
         """Initialize the Fairlearn Dashboard."""
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
-
-        # The following mappings should match those in the GroupMetricSet
-        # Issue 269 has been opened to track the work for unifying the two
-        self._metric_methods = {
-            "accuracy_score": {
-                "model_type": ["classification"],
-                "function": accuracy_score_group_summary
-            },
-            "balanced_accuracy_score": {
-                "model_type": ["classification"],
-                "function": roc_auc_score_group_summary
-            },
-            "precision_score": {
-                "model_type": ["classification"],
-                "function": precision_score_group_summary
-            },
-            "recall_score": {
-                "model_type": ["classification"],
-                "function": recall_score_group_summary
-            },
-            "zero_one_loss": {
-                "model_type": [],
-                "function": zero_one_loss_group_summary
-            },
-            "specificity_score": {
-                "model_type": [],
-                "function": true_negative_rate_group_summary
-            },
-            "miss_rate": {
-                "model_type": [],
-                "function": false_negative_rate_group_summary
-            },
-            "fallout_rate": {
-                "model_type": [],
-                "function": false_positive_rate_group_summary
-            },
-            "false_positive_over_total": {
-                "model_type": [],
-                "function": false_positive_rate_group_summary
-            },
-            "false_negative_over_total": {
-                "model_type": [],
-                "function": false_negative_rate_group_summary
-            },
-            "selection_rate": {
-                "model_type": [],
-                "function": selection_rate_group_summary
-            },
-            "auc": {
-                "model_type": ["probability"],
-                "function": roc_auc_score_group_summary
-            },
-            "root_mean_squared_error": {
-                "model_type": ["regression", "probability"],
-                "function": _root_mean_squared_error_group_summary
-            },
-            "balanced_root_mean_squared_error": {
-                "model_type": ["probability"],
-                "function": _balanced_root_mean_squared_error_group_summary
-            },
-            "mean_squared_error": {
-                "model_type": ["regression", "probability"],
-                "function": mean_squared_error_group_summary
-            },
-            "mean_absolute_error": {
-                "model_type": ["regression", "probability"],
-                "function": mean_absolute_error_group_summary
-            },
-            "r2_score": {
-                "model_type": ["regression"],
-                "function": r2_score_group_summary
-            },
-            # Issue #37 tracks the addition of new metrics.
-            # "f1_score": {
-            #     "model_type": ["classification"],
-            #     "function": f1_score_group_summary
-            # },
-            # "log_loss": {
-            #     "model_type": ["probability"],
-            #     "function": log_loss_group_summary
-            # },
-            "overprediction": {
-                "model_type": [],
-                "function": _mean_overprediction_group_summary
-            },
-            "underprediction": {
-                "model_type": [],
-                "function": _mean_underprediction_group_summary
-            },
-            "average": {
-                "model_type": [],
-                "function": mean_prediction_group_summary
-            }
-        }
-
-        classification_methods = [method[0] for method in self._metric_methods.items()
-                                  if "classification" in method[1]["model_type"]]
-        regression_methods = [method[0] for method in self._metric_methods.items()
-                              if "regression" in method[1]["model_type"]]
-        probability_methods = [method[0] for method in self._metric_methods.items()
-                               if "probability" in method[1]["model_type"]]
 
         dataset = self._sanitize_data_shape(sensitive_features)
         model_names = None
@@ -209,79 +237,58 @@ class FairlearnDashboard(object):
             raise ValueError("Sensitive features shape does not match true y "
                              "shape")
 
+        fairness_input = {
+            "true_y": self._y_true,
+            "predicted_ys": self._y_pred,
+            "dataset": dataset,
+            "classification_methods": FairlearnDashboard.classification_methods,
+            "regression_methods": FairlearnDashboard.regression_methods,
+            "probability_methods": FairlearnDashboard.probability_methods,
+        }
+
+        if model_names is not None:
+            fairness_input['model_names'] = model_names
+
+        if locale is not None:
+            fairness_input['locale'] = locale
+
         if sensitive_feature_names is not None:
             sensitive_feature_names = self._convert_to_list(
                 sensitive_feature_names)
             if np.shape(dataset)[1] != np.shape(sensitive_feature_names)[0]:
                 raise Warning("Feature names shape does not match dataset, "
                               "ignoring")
+            fairness_input["features"] = sensitive_feature_names
 
         self._load_local_js()
 
-
         if FairlearnDashboard._service is None:
             try:
-                FairlearnDashboard._service = DashboardService(port=port)
-                self._thread = threading.Thread(
-                    target=FairlearnDashboard._service.run,
-                    daemon=True)
-                self._thread.start()
+                FairlearnDashboard._service = FlaskHelper(port=port)
             except Exception as e:
                 FairlearnDashboard._service = None
                 raise e
-
-        fairness_input = {
-            "true_y": self._y_true,
-            "predicted_ys": self._y_pred,
-            "dataset": dataset,
-            "features": sensitive_feature_names,
-            "classification_methods": classification_methods,
-            "regression_methods": regression_methods,
-            "probability_methods": probability_methods,
-            "model_names": model_names,
-            "locale": locale
-        }
 
         FairlearnDashboard.model_count += 1
         model_count = FairlearnDashboard.model_count
 
         FairlearnDashboard.fairness_inputs[str(model_count)] = fairness_input
 
-        html = generate_inline_html(
-            fairness_input,
-            f"{FairlearnDashboard._service.env.base_url}/{model_count}")
-        FairlearnDashboard._service.env.display(html)
+        local_url = f"{FairlearnDashboard._service.env.base_url}/{model_count}"
+        metrics_url = f"{local_url}/metrics"
+
+        fairness_input['metricsUrl'] = metrics_url
+
+        html = generate_inline_html(fairness_input, local_url)
+        # TODO
+        # FairlearnDashboard._service.env.display(html)
+        display(HTML(html))
 
     def _load_local_js(self):
         script_path = os.path.dirname(os.path.abspath(__file__))
         js_path = os.path.join(script_path, "static", "index.js")
         with open(js_path, "r", encoding="utf-8") as f:
             FairlearnDashboard._dashboard_js = f.read()
-
-    def _on_request(self, change):
-        try:
-            new = change.new
-            for id in new:  # noqa: A001
-                try:
-                    if id not in response:
-                        data = new[id]
-                        method = self._metric_methods.get(data["metricKey"]).get("function")
-                        binVector = data["binVector"]
-                        prediction = method(
-                            self._y_true,
-                            self._y_pred[data["modelIndex"]],
-                            sensitive_features=binVector)
-                        response[id] = {
-                                "global": prediction.overall,
-                                "bins": prediction.by_group
-                                }
-                except Exception as ed:
-                    response[id] = {
-                        "error": ed,
-                        "global": 0,
-                        "bins": []}
-        except Exception:
-            raise ValueError("Error while making request")
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)
@@ -308,6 +315,6 @@ def generate_inline_html(fairness_input, local_url):
     return FairlearnDashboard.default_template.render(
         fairness_input=fairness_input,
         main_js=FairlearnDashboard._dashboard_js,
-        app_id='app_123',
+        app_id='app_fairness',
         local_url=local_url,
         has_local_url=local_url is not None)

@@ -1,9 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import 'babel-polyfill';
 
 
 import { FairnessWizardV2 } from '@responsible-ai/fairlearn';
+
+let calculateMetrics = (postData) => {
+  if (data.withCredentials) {
+      var headers_data = {
+          'Accept': 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'Content-Type': 'application/json',
+      }
+      axios.defaults.withCredentials = true
+      var axios_options = { headers: headers_data, withCredentials: true }
+      return axios.post(data.metricsUrl, JSON.stringify(postData), axios_options)
+          .then((response) => {
+              return response.data
+          })
+          .catch(function (error) {
+              throw new Error(error)
+          })
+  } else {
+      return fetch(data.metricsUrl, {method: "post", body: JSON.stringify(postData), headers: {
+          'Content-Type': 'application/json'
+        }}).then(resp => {
+          if (resp.status >= 200 && resp.status < 300) {
+            return resp.json()
+          }
+          return Promise.reject(new Error(resp.statusText))
+        }).then(json => {
+          if (json.error !== undefined) {
+            throw new Error(json.error)
+          }
+          return Promise.resolve(json.data)
+        })
+  }
+}
 
 const RenderDashboard = (divId, data) => {
     ReactDOM.render(<FairnessWizardV2
@@ -21,7 +54,7 @@ const RenderDashboard = (divId, data) => {
       supportedProbabilityAccuracyKeys={data.probability_methods}
       locale={data.locale}
       key={new Date()}
-      theme={theme}
+      requestMetrics={calculateMetrics}
     />, document.getElementById(divId));
 }
   

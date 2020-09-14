@@ -35,7 +35,6 @@ var config = {
     usedExports: true
   },
 
-  //target: 'node',
   node: {
     fs: "empty"
   }
