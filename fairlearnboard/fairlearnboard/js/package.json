@@ -2,14 +2,14 @@
   "name": "inline-fairlearn-dashboard",
   "version": "1.0.0",
   "description": "Host for component to be consumed as npm package",
+  "license": "MIT",
+  "author": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "start http://localhost:7777/ & webpack-dev-server"
+    "start": "start http://localhost:7777/ & webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "@babel/core": "7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",

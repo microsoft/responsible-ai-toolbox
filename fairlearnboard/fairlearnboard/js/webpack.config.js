@@ -1,31 +1,31 @@
 var path = require("path");
 
 var config = {
-  entry: './main.js',
+  entry: "./main.js",
 
   output: {
-    path: path.resolve(__dirname, '..', 'static'),
-    filename: 'index.js',
+    path: path.resolve(__dirname, "..", "static"),
+    filename: "index.js",
     library: "inline-fairlearn-dashboard",
-    libraryTarget: 'umd',
+    libraryTarget: "umd",
     umdNamedDefine: true
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   module: {
     rules: [
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.css$/, use: ["style-loader", "css-loader"] },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: "babel-loader"
         }
       },
       {
         test: /\.js?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: "babel-loader"
         }
       }
     ]
@@ -38,6 +38,6 @@ var config = {
   node: {
     fs: "empty"
   }
-}
+};
 
 module.exports = [config];

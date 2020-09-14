@@ -1,33 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <title>Fairlearn Dashboard</title>
 {% if has_local_url %}
-    <a href="{{local_url}}" target="_blank">Open in new tab</a>
+<a href="{{local_url}}" target="_blank">Open in new tab</a>
 {% endif %}
 <div style="height: 1000px;" id="{{app_id}}"></div>
-<script type="text/javascript">{{ main_js }}</script>
+<script type="text/javascript">
+  {
+    {
+      main_js;
+    }
+  }
+</script>
 <script defer type="text/javascript">
-(function universalLoad(root, callback) {
-      if(typeof exports === 'object' && typeof module === 'object') {
-        // CommonJS2
-        var fairlearnInline = require('inline-fairlearn-dashboard');
-        callback(fairlearnInline);
-      } else if(typeof define === 'function' && define.amd) {
-        // AMD
-        require(['inline-fairlearn-dashboard'], function(fairlearnInline) {
+  (function universalLoad(root, callback) {
+        if(typeof exports === 'object' && typeof module === 'object') {
+          // CommonJS2
+          var fairlearnInline = require('inline-fairlearn-dashboard');
           callback(fairlearnInline);
-        });
-      } else if(typeof exports === 'object') {
-        // CommonJS
-        var fairlearnInline = require('inline-fairlearn-dashboard');
-        callback(fairlearnInline);
-      } else {
-        // Browser
-        callback(root['inline-fairlearn-dashboard']);
-      }
-    })(this, function(fairlearnInline) {
-        var data = {{ fairness_input | safe }};
-        //data.predictionUrl = data.predictionUrl ? data.predictionUrl : undefined;
-        fairlearnInline.RenderDashboard("{{app_id}}", data);
-    });
-
+        } else if(typeof define === 'function' && define.amd) {
+          // AMD
+          require(['inline-fairlearn-dashboard'], function(fairlearnInline) {
+            callback(fairlearnInline);
+          });
+        } else if(typeof exports === 'object') {
+          // CommonJS
+          var fairlearnInline = require('inline-fairlearn-dashboard');
+          callback(fairlearnInline);
+        } else {
+          // Browser
+          callback(root['inline-fairlearn-dashboard']);
+        }
+      })(this, function(fairlearnInline) {
+          var data = {{ fairness_input | safe }};
+          //data.predictionUrl = data.predictionUrl ? data.predictionUrl : undefined;
+          fairlearnInline.RenderDashboard("{{app_id}}", data);
+      });
 </script>
