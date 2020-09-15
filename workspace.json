@@ -52,7 +52,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/interpret/jest.config.js",
-            "tsConfig": "libs/interpret/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -108,7 +107,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/fairlearn/jest.config.js",
-            "tsConfig": "libs/fairlearn/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -163,7 +161,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/core-ui/jest.config.js",
-            "tsConfig": "libs/core-ui/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -218,7 +215,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/mlchartlib/jest.config.js",
-            "tsConfig": "libs/mlchartlib/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -306,7 +302,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/dashboard/jest.config.js",
-            "tsConfig": "apps/dashboard/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }

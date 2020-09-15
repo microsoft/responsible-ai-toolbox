@@ -4,10 +4,14 @@
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
-    "project": "./tsconfig.base.json"
+    "project": "./tsconfig.*?.json"
   },
   "ignorePatterns": ["**/*"],
-  "settings": { "react": { "version": "detect" } },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "plugins": [
     "@typescript-eslint",
     "@nrwl/nx",
@@ -47,18 +51,27 @@
       ],
       2
     ],
-    "eslint-comments/no-use": ["error", { "allow": [] }],
+    "eslint-comments/no-use": [
+      "error",
+      {
+        "allow": []
+      }
+    ],
     "import/no-unresolved": "off",
     "import/order": "error",
     "filenames/match-regex": "error",
     "filenames/match-exported": "error",
     "filenames/no-index": "error",
-    // "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/explicit-member-accessibility": ["error"],
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/explicit-module-boundary-types": "error",
-    "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "array-simple"
+      }
+    ],
     "@typescript-eslint/member-ordering": ["error"],
     "@typescript-eslint/no-for-in-array": "error",
     "@typescript-eslint/unbound-method": "error",
@@ -68,11 +81,13 @@
         "enforceBuildableLibDependency": true,
         "allow": [],
         "depConstraints": [
-          { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+          {
+            "sourceTag": "*",
+            "onlyDependOnLibsWithTags": ["*"]
+          }
         ]
       }
     ],
-
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -98,7 +113,6 @@
         "selector": ["variable", "function"],
         "format": ["camelCase"],
         "filter": {
-          // styles match component name
           "regex": "^(.*Styles)$",
           "match": false
         }
@@ -183,7 +197,13 @@
     "no-invalid-regexp": "error",
     "no-iterator": "error",
     "no-label-var": "error",
-    "no-labels": ["error", { "allowLoop": true, "allowSwitch": false }],
+    "no-labels": [
+      "error",
+      {
+        "allowLoop": true,
+        "allowSwitch": false
+      }
+    ],
     "no-lone-blocks": "error",
     "no-loop-func": "error",
     "no-mixed-operators": [
@@ -330,12 +350,23 @@
     "import/first": "error",
     "import/no-amd": "error",
     "import/no-webpack-loader-syntax": "error",
-    "react/forbid-foreign-prop-types": ["error", { "allowInPropTypes": true }],
+    "react/forbid-foreign-prop-types": [
+      "error",
+      {
+        "allowInPropTypes": true
+      }
+    ],
     "react/jsx-no-comment-textnodes": "error",
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-no-target-blank": "error",
     "react/jsx-no-undef": "error",
-    "react/jsx-pascal-case": ["error", { "allowAllCaps": true, "ignore": [] }],
+    "react/jsx-pascal-case": [
+      "error",
+      {
+        "allowAllCaps": true,
+        "ignore": []
+      }
+    ],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/no-danger-with-children": "error",
@@ -351,7 +382,9 @@
     "jsx-a11y/anchor-has-content": "error",
     "jsx-a11y/anchor-is-valid": [
       "error",
-      { "aspects": ["noHref", "invalidHref"] }
+      {
+        "aspects": ["noHref", "invalidHref"]
+      }
     ],
     "jsx-a11y/aria-activedescendant-has-tabindex": "error",
     "jsx-a11y/aria-props": "error",
@@ -412,26 +445,22 @@
       "files": ["*.ts"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-z]+$"]],
-        // turn off for function overload
         "no-dupe-class-members": "off"
       }
     },
     {
-      //e2e only contains ts
       "files": ["*.spec.ts"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.spec$"]]
       }
     },
     {
-      // ut for react and ts
       "files": ["*.test.tsx", "*.test.ts"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.test$"]]
       }
     },
     {
-      // style in js
       "files": ["*.styles.ts"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.styles$"]]
@@ -450,7 +479,6 @@
       }
     },
     {
-      //top level index is allowed
       "files": ["src/index.ts"],
       "rules": {
         "filenames/no-index": "off"
