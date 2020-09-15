@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { CommandBarButton, PrimaryButton, Text } from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../../Localization/localization";

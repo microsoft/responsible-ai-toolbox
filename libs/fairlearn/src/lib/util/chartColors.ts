@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getTheme } from "office-ui-fabric-react";
 
 const theme = getTheme();

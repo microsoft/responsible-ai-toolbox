@@ -1,0 +1,10 @@
+# Run Component Governance to register all dependencies.
+
+trigger:
+  - master
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - task: ComponentGovernanceComponentDetection@0

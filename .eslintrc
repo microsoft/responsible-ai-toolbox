@@ -17,7 +17,8 @@
     "react-hooks",
     "filenames",
     "eslint-plugin-unicorn",
-    "eslint-plugin-eslint-comments"
+    "eslint-plugin-eslint-comments",
+    "header"
   ],
   "env": {
     "browser": true,
@@ -37,6 +38,15 @@
     "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "header/header": [
+      2,
+      "line",
+      [
+        " Copyright (c) Microsoft Corporation.",
+        " Licensed under the MIT License."
+      ],
+      2
+    ],
     "eslint-comments/no-use": ["error", { "allow": [] }],
     "import/no-unresolved": "off",
     "import/order": "error",

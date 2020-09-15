@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Data, Datum } from "plotly.js";
 import jmespath from "jmespath";
 import _ from "lodash";

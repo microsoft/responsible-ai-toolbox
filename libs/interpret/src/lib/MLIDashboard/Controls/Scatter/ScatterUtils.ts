@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import memoize from "memoize-one";
 import { PartialRequired2 } from "@responsible-ai/core-ui";
