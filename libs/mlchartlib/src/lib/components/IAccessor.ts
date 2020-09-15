@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { AccessorMappingFunctionNames } from "./AccessorMappingFunctionNames";
 
 export interface IAccessor {

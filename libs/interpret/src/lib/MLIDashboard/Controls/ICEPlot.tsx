@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
 import {

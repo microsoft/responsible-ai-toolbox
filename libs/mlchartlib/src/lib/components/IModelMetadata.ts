@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { INumericRange } from "./INumericRange";
 import { ICategoricalRange } from "./ICategoricalRange";
 

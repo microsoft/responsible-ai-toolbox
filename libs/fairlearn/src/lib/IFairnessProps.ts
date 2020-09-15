@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Never } from "@responsible-ai/core-ui";
 export interface IDatasetSummary {
   featureNames?: string[];

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import { INumericRange } from "./INumericRange";
 import { ICategoricalRange } from "./ICategoricalRange";

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export function getSpan(
   text: string
 ): Cypress.Chainable<JQuery<HTMLSpanElement>> {

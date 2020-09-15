@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum FilterMethods {
   GreaterThan = "greater",
   GreaterThanEqualTo = "greater and equal",

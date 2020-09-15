@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { localization } from "./../Localization/localization";
 
 export interface IAccuracyOption {
