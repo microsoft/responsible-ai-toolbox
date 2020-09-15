@@ -1,3 +1,5 @@
+# Run Component Governance to register all dependencies.
+
 trigger:
 - master
 
