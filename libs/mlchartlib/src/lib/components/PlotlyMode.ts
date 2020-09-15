@@ -1,10 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum PlotlyMode {
-  lines = "lines",
-  markers = "markers",
-  text = "text",
-  linesMarkers = "lines+markers",
-  textMarkers = "text+markers",
-  textLines = "text+lines",
-  textLinesMarkers = "text+lines+markers",
-  none = "none"
+  Lines = "lines",
+  Markers = "markers",
+  Text = "text",
+  LinesMarkers = "lines+markers",
+  TextMarkers = "text+markers",
+  TextLines = "text+lines",
+  TextLinesMarkers = "text+lines+markers",
+  None = "none"
 }

@@ -1,11 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum FilterMethods {
-  greaterThan = "greater",
-  greaterThanEqualTo = "greater and equal",
-  lessThan = "less",
-  lessThanEqualTo = "less and equal",
-  equal = "equal",
-  includes = "includes",
-  inTheRangeOf = "in the range of"
+  GreaterThan = "greater",
+  GreaterThanEqualTo = "greater and equal",
+  LessThan = "less",
+  LessThanEqualTo = "less and equal",
+  Equal = "equal",
+  Includes = "includes",
+  InTheRangeOf = "in the range of"
 }
 
 export interface IFilter {

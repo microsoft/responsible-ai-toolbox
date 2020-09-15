@@ -1,15 +1,18 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum TelemetryLevels {
-  error = "Error",
-  warning = "Warning",
-  info = "Info",
-  trace = "Trace"
+  Error = "Error",
+  Warning = "Warning",
+  Info = "Info",
+  Trace = "Trace"
 }
 
 export type TelemetryLevel =
-  | TelemetryLevels.error
-  | TelemetryLevels.warning
-  | TelemetryLevels.info
-  | TelemetryLevels.trace;
+  | TelemetryLevels.Error
+  | TelemetryLevels.Warning
+  | TelemetryLevels.Info
+  | TelemetryLevels.Trace;
 
 export interface ITelemetryMessage {
   level: TelemetryLevel;

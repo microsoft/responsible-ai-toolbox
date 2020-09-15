@@ -22,6 +22,10 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[javascript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -39,6 +43,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "Buildable",
     "Callout",
     "Chainable",
     "Fairlearn",
@@ -47,11 +52,16 @@
     "Parens",
     "Plotly",
     "Unmount",
+    "automl",
+    "bgcolor",
+    "camelcase",
     "cssmodule",
     "jmespath",
     "mlchartlib",
+    "multiclass",
     "nrwl",
     "relayout",
+    "shap",
     "uifabric"
   ]
 }

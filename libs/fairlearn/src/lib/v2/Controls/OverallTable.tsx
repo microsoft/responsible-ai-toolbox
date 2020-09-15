@@ -1,10 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { localization } from "../../Localization/localization";
 import { OverallTableStyles } from "./OverallTable.styles";
 
 export interface IOverallTableProps {
   binValues: number[];
-  formattedBinValues: string[][];
+  formattedBinValues: Array<string[] | undefined>;
   binLabels: string[];
   metricLabels: string[];
   expandAttributes: boolean;
@@ -55,7 +58,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
               </div>
             </div>
             {this.props.binLabels.map((label, index) => {
-              if (this.props.expandAttributes)
+              if (this.props.expandAttributes) {
                 return (
                   <div className={styles.binBox} key={index}>
                     <div className={styles.binLabel}>{label}</div>
@@ -65,6 +68,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                                 </Stack> */}
                   </div>
                 );
+              }
               return <div style={{ display: "none" }}></div>;
             })}
           </div>
@@ -77,13 +81,14 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                 <div className={styles.metricBox}>
                   {this.props.overallMetrics[index]}
                 </div>
-                {this.props.formattedBinValues[index].map((value, index) => {
-                  if (this.props.expandAttributes)
+                {this.props.formattedBinValues[index]?.map((value, index) => {
+                  if (this.props.expandAttributes) {
                     return (
                       <div className={styles.metricBox} key={index}>
                         {value !== undefined ? value : "empty"}
                       </div>
                     );
+                  }
                   return <div style={{ display: "none" }}></div>;
                 })}
               </div>

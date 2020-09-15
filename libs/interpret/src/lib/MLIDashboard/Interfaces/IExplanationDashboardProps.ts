@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";
 
@@ -16,20 +19,24 @@ import { ITelemetryMessage } from "./ITelemetryMessage";
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
 
-export interface IExplanationDashboardProps {
+export interface IExplanationDashboardData {
   modelInformation: IModelInformation;
   dataSummary: IDatasetSummary;
   testData?: any[][];
   predictedY?: number[];
   probabilityY?: number[][];
   trueY?: number[];
+  explanationMethod?: string;
+
   precomputedExplanations?: IPrecomputedExplanations;
+}
+
+export interface IExplanationDashboardProps extends IExplanationDashboardData {
   theme?: any;
   locale?: string;
   stringParams?: IStringsParam;
   shouldInitializeIcons?: boolean;
   iconUrl?: string;
-  explanationMethod?: string;
   telemetryHook?: (message: ITelemetryMessage) => void;
   requestPredictions?: (
     request: any[],
@@ -66,7 +73,7 @@ export interface IPrecomputedExplanations {
 
 export interface IBoundedCoordinates {
   type: string;
-  names: number[];
+  names: number[] | string[];
   scores: number[] | number[][];
   scores_range?: number[];
   upper_bounds?: number[] | number[][];

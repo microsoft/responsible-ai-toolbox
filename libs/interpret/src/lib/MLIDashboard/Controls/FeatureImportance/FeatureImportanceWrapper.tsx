@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { SelectionContext } from "@responsible-ai/mlchartlib";
 import { IComboBoxOption } from "office-ui-fabric-react";
@@ -10,8 +13,8 @@ import { Beehive } from "./Beehive";
 import { Violin } from "./Violin";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
-export const BarId = "bar_id";
-export const GlobalFeatureImportanceId = "global_feature_id";
+export const barId = "bar_id";
+export const globalFeatureImportanceId = "global_feature_id";
 
 export interface IFeatureImportanceConfig extends IBarChartConfig {
   displayMode: FeatureImportanceModes;
@@ -22,7 +25,7 @@ export interface IGlobalFeatureImportanceProps {
   dashboardContext: IDashboardContext;
   config: IFeatureImportanceConfig;
   selectionContext: SelectionContext;
-  selectedRow: number;
+  selectedRow?: number;
   chartTypeOptions?: IComboBoxOption[];
   messages?: HelpMessageDict;
   theme?: string;
@@ -39,33 +42,33 @@ export class FeatureImportanceWrapper extends React.PureComponent<
         ? [
             {
               text: localization.FeatureImportanceWrapper.boxText,
-              key: FeatureImportanceModes.box
+              key: FeatureImportanceModes.Box
             },
             {
               text: localization.FeatureImportanceWrapper.beehiveText,
-              key: FeatureImportanceModes.beehive
+              key: FeatureImportanceModes.Beehive
             },
             {
               text: localization.FeatureImportanceWrapper.violinText,
-              key: FeatureImportanceModes.violin
+              key: FeatureImportanceModes.Violin
             }
           ]
         : [];
 
     switch (this.props.config.displayMode) {
-      case FeatureImportanceModes.bar:
+      case FeatureImportanceModes.Bar:
         return (
           <FeatureImportanceBar
             {...this.props}
             chartTypeOptions={chartTypeOptions}
           />
         );
-      case FeatureImportanceModes.beehive:
+      case FeatureImportanceModes.Beehive:
         return <Beehive {...this.props} chartTypeOptions={chartTypeOptions} />;
-      case FeatureImportanceModes.violin:
-      case FeatureImportanceModes.box:
-        return <Violin {...this.props} chartTypeOptions={chartTypeOptions} />;
+      case FeatureImportanceModes.Violin:
+      case FeatureImportanceModes.Box:
       default:
+        return <Violin {...this.props} chartTypeOptions={chartTypeOptions} />;
     }
   }
 }

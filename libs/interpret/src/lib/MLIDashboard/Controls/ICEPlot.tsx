@@ -1,4 +1,7 @@
-import _ from "lodash";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
 import {
   ComboBox,
@@ -71,8 +74,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       featureName: string,
       classNames: string[],
       rangeType: RangeTypes,
-      xData: Array<number | string>,
-      yData: number[] | number[][]
+      xData?: Array<number | string>,
+      yData?: number[] | number[][]
     ): IPlotlyProperty | undefined => {
       if (yData === undefined || xData === undefined) {
         return undefined;
@@ -84,9 +87,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         return {
           hoverinfo: "text",
           mode:
-            rangeType === RangeTypes.categorical
-              ? PlotlyMode.markers
-              : PlotlyMode.linesMarkers,
+            rangeType === RangeTypes.Categorical
+              ? PlotlyMode.Markers
+              : PlotlyMode.LinesMarkers,
           text: ICEPlot.buildTextArray(
             modelType,
             featureName,
@@ -119,7 +122,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           yaxis: {
             automargin: true,
             title:
-              modelType === ModelTypes.regression
+              modelType === ModelTypes.Regression
                 ? localization.IcePlot.prediction
                 : localization.IcePlot.predictedProbability
           },
@@ -179,27 +182,27 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     xData: Array<number | string>,
     yData: number[],
     className: string
-  ): string[] {
+  ): Array<string | undefined> {
     return xData.map((xValue, index) => {
       const yDatum = yData[index];
       if (yDatum === undefined) {
         return undefined;
       }
       const result = [];
-      if (modelType !== ModelTypes.regression) {
+      if (modelType !== ModelTypes.Regression) {
         result.push(
           localization.formatString(localization.BarChart.classLabel, className)
         );
       }
-      if (!isNaN(+xValue)) {
+      if (!Number.isNaN(+xValue)) {
         const numericFormatter =
-          rangeType === RangeTypes.numeric
+          rangeType === RangeTypes.Numeric
             ? { minimumFractionDigits: 3 }
             : undefined;
         xValue = xValue.toLocaleString(undefined, numericFormatter);
       }
       result.push(`${featureName}: ${xValue}`);
-      if (modelType === ModelTypes.regression) {
+      if (modelType === ModelTypes.Regression) {
         result.push(
           localization.formatString(
             localization.IcePlot.predictionLabel,
@@ -256,12 +259,14 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         ? this.props.explanationContext.modelMetadata.featureRanges[
             this.state.requestFeatureIndex
           ].rangeType
-        : RangeTypes.categorical;
+        : RangeTypes.Categorical;
     const plotlyProps = ICEPlot.buildPlotlyProps(
       this.props.explanationContext.modelMetadata.modelType,
-      this.props.explanationContext.modelMetadata.featureNames[
-        this.state.requestFeatureIndex
-      ],
+      this.state.requestFeatureIndex !== undefined
+        ? this.props.explanationContext.modelMetadata.featureNames[
+            this.state.requestFeatureIndex
+          ]
+        : "",
       this.props.explanationContext.modelMetadata.classNames,
       featureRange,
       this.state.requestedRange,
@@ -293,7 +298,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             </div>
             {this.state.rangeView !== undefined && (
               <div className={iCEPlotStyles.rangeView}>
-                {this.state.rangeView.type === RangeTypes.categorical && (
+                {this.state.rangeView.type === RangeTypes.Categorical && (
                   <ComboBox
                     multiSelect
                     selectedKey={
@@ -306,26 +311,26 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     styles={FabricStyles.defaultDropdownStyle}
                   />
                 )}
-                {this.state.rangeView.type !== RangeTypes.categorical && (
+                {this.state.rangeView.type !== RangeTypes.Categorical && (
                   <div className={iCEPlotStyles.parameterSet}>
                     <TextField
                       label={localization.IcePlot.minimumInputLabel}
                       styles={FabricStyles.textFieldStyle}
-                      value={this.state.rangeView.min.toString()}
+                      value={this.state.rangeView.min?.toString()}
                       onChange={this.onMinRangeChanged}
                       errorMessage={this.state.rangeView.minErrorMessage}
                     />
                     <TextField
                       label={localization.IcePlot.maximumInputLabel}
                       styles={FabricStyles.textFieldStyle}
-                      value={this.state.rangeView.max.toString()}
+                      value={this.state.rangeView.max?.toString()}
                       onChange={this.onMaxRangeChanged}
                       errorMessage={this.state.rangeView.maxErrorMessage}
                     />
                     <TextField
                       label={localization.IcePlot.stepInputLabel}
                       styles={FabricStyles.textFieldStyle}
-                      value={this.state.rangeView.steps.toString()}
+                      value={this.state.rangeView.steps?.toString()}
                       onChange={this.onStepsRangeChanged}
                       errorMessage={this.state.rangeView.stepsErrorMessage}
                     />
@@ -366,7 +371,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
 
   private buildRangeView(featureIndex: number): IRangeView {
     if (
-      this.props.explanationContext.modelMetadata.featureIsCategorical[
+      this.props.explanationContext.modelMetadata.featureIsCategorical?.[
         featureIndex
       ]
     ) {
@@ -380,28 +385,30 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           categoricalOptions: summary.uniqueValues.map((text) => {
             return { key: text, text };
           }),
-          type: RangeTypes.categorical
+          type: RangeTypes.Categorical
         };
       }
-    } else {
-      const summary = this.props.explanationContext.modelMetadata.featureRanges[
-        featureIndex
-      ] as INumericRange;
-      return {
-        featureIndex,
-        min: summary.min,
-        max: summary.max,
-        steps: 20,
-        type: summary.rangeType
-      };
     }
+    const summary = this.props.explanationContext.modelMetadata.featureRanges[
+      featureIndex
+    ] as INumericRange;
+    return {
+      featureIndex,
+      min: summary.min,
+      max: summary.max,
+      steps: 20,
+      type: summary.rangeType
+    };
   }
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item: IDropdownOption
+    item?: IDropdownOption
   ): void => {
     if (this.props.invokeModel === undefined) {
+      return;
+    }
+    if (item?.key === undefined) {
       return;
     }
     this.setState(
@@ -413,19 +420,21 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   };
 
   private onMinRangeChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state.rangeView);
-    rangeView.min = +newValue;
+    if (!rangeView) {
+      return;
+    }
+    rangeView.min = val;
     if (
       Number.isNaN(val) ||
-      (this.state.rangeView.type === RangeTypes.integer &&
-        !Number.isInteger(val))
+      (rangeView.type === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       rangeView.minErrorMessage =
-        this.state.rangeView.type === RangeTypes.integer
+        rangeView.type === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
       this.setState({ rangeView });
@@ -438,19 +447,21 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   };
 
   private onMaxRangeChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state.rangeView);
-    rangeView.max = +newValue;
+    if (!rangeView) {
+      return;
+    }
+    rangeView.max = val;
     if (
       Number.isNaN(val) ||
-      (this.state.rangeView.type === RangeTypes.integer &&
-        !Number.isInteger(val))
+      (rangeView.type === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       rangeView.maxErrorMessage =
-        this.state.rangeView.type === RangeTypes.integer
+        rangeView.type === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
       this.setState({ rangeView });
@@ -463,12 +474,15 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   };
 
   private onStepsRangeChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state.rangeView);
-    rangeView.steps = +newValue;
+    if (!rangeView) {
+      return;
+    }
+    rangeView.steps = val;
     if (!Number.isInteger(val)) {
       rangeView.stepsErrorMessage = localization.IcePlot.integerError;
       this.setState({ rangeView });
@@ -487,6 +501,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     value?: string
   ): void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
+    if (!rangeView) {
+      return;
+    }
     const currentSelectedKeys = rangeView.selectedOptionKeys || [];
     if (option) {
       // User selected/de-selected an existing option
@@ -501,7 +518,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         ...currentSelectedKeys,
         newOption.key as string
       ];
-      rangeView.categoricalOptions.push(newOption);
+      rangeView.categoricalOptions?.push(newOption);
     }
     this.setState({ rangeView }, () => {
       this.fetchData();
@@ -526,6 +543,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     if (this.state.abortController !== undefined) {
       this.state.abortController.abort();
     }
+    if (!this.state.rangeView || !this.props.invokeModel) {
+      return;
+    }
     const abortController = new AbortController();
     const requestedRange = this.buildRange();
     const promise = this.props.invokeModel(
@@ -545,16 +565,16 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           if (Array.isArray(fetchedData)) {
             this.setState({ fetchedData, abortController: undefined });
           }
-        } catch (err) {
-          if (err.name === "AbortError") {
+        } catch (error) {
+          if (error.name === "AbortError") {
             return;
           }
-          if (err.name === "PythonError") {
+          if (error.name === "PythonError") {
             this.setState({
               errorMessage: localization.formatString(
                 localization.IcePlot.errorPrefix,
-                err.message
-              ) as string
+                error.message
+              )
             });
           }
         }
@@ -571,12 +591,13 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     ) {
       return [];
     }
-    const min = +this.state.rangeView.min;
-    const max = +this.state.rangeView.max;
-    const steps = +this.state.rangeView.steps;
+    const min = toNumber(this.state.rangeView.min);
+    const max = toNumber(this.state.rangeView.max);
+    const steps = toNumber(this.state.rangeView.steps);
+    const rangeView = this.state.rangeView;
 
     if (
-      this.state.rangeView.type === RangeTypes.categorical &&
+      this.state.rangeView.type === RangeTypes.Categorical &&
       Array.isArray(this.state.rangeView.selectedOptionKeys)
     ) {
       return this.state.rangeView.selectedOptionKeys;
@@ -588,7 +609,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       const delta = steps > 0 ? (max - min) / steps : max - min;
       return _.uniq(
         Array.from({ length: steps }, (_x, i) =>
-          this.state.rangeView.type === RangeTypes.integer
+          rangeView.type === RangeTypes.Integer
             ? Math.round(min + i * delta)
             : min + i * delta
         )
@@ -598,12 +619,19 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   }
 
   private buildDataSpans(): Array<Array<number | string>> {
+    if (
+      !this.props.explanationContext.testDataset.dataset ||
+      !this.state.rangeView
+    ) {
+      return [];
+    }
+    const rangeView = this.state.rangeView;
     const selectedRow = this.props.explanationContext.testDataset.dataset[
       this.props.datapointIndex
     ];
     return this.buildRange().map((val) => {
       const copy = _.cloneDeep(selectedRow);
-      copy[this.state.rangeView.featureIndex] = val;
+      copy[rangeView.featureIndex] = val;
       return copy;
     });
   }

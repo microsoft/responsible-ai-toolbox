@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum FeatureImportanceModes {
-  bar = "bar",
-  beehive = "beehive",
-  violin = "violin",
-  box = "box"
+  Bar = "bar",
+  Beehive = "beehive",
+  Violin = "violin",
+  Box = "box"
 }

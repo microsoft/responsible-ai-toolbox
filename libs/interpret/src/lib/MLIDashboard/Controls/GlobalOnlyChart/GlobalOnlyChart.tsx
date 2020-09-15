@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
@@ -39,18 +42,19 @@ export class GlobalOnlyChart extends React.PureComponent<
       ? [
           {
             name: localization.BarChart.absoluteGlobal,
-            unsortedAggregateY: this.props.globalImportance.map(
-              (classArray) => classArray[0]
-            ),
+            unsortedAggregateY:
+              this.props.globalImportance?.map((classArray) => classArray[0]) ||
+              [],
             colorIndex: 0
           }
         ]
       : this.props.metadata.classNames.map((name, index) => {
           return {
             name,
-            unsortedAggregateY: this.props.globalImportance.map(
-              (classArray) => classArray[index]
-            ),
+            unsortedAggregateY:
+              this.props.globalImportance?.map(
+                (classArray) => classArray[index]
+              ) || [],
             colorIndex: index
           };
         });
@@ -64,15 +68,15 @@ export class GlobalOnlyChart extends React.PureComponent<
       }
     );
     this.classOptions.unshift({
-      key: FeatureKeys.absoluteGlobal,
+      key: FeatureKeys.AbsoluteGlobal,
       text: localization.BarChart.absoluteGlobal
     });
     this.state = {
       startingK: 0,
       topK: this.minK,
-      sortingSeriesKey: FeatureKeys.absoluteGlobal,
+      sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
       sortArray: ModelExplanationUtils.buildSortedVector(
-        this.props.globalImportance
+        this.props.globalImportance || []
       ).reverse()
     };
   }

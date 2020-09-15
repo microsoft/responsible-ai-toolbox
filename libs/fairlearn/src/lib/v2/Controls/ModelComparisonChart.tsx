@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import {
   AccessibleChart,
@@ -23,19 +26,19 @@ import {
 } from "office-ui-fabric-react";
 
 import React from "react";
-import { AccuracyOptions } from "../AccuracyMetrics";
+import { accuracyOptions } from "../../util/AccuracyMetrics";
 import {
   IAccuracyPickerPropsV2,
   IFeatureBinPickerPropsV2,
   IParityPickerPropsV2
 } from "../FairnessWizard";
-import { FormatMetrics } from "../FormatMetrics";
-import { IFairnessContext } from "../IFairnessContext";
+import { FormatMetrics } from "../../util/FormatMetrics";
+import { IFairnessContext } from "../../util/IFairnessContext";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { MetricsCache } from "../MetricsCache";
-import { ParityOptions } from "../ParityMetrics";
-import { ModelComparisionChartStyles } from "./ModelComparisionChart.styles";
+import { MetricsCache } from "../../util/MetricsCache";
+import { parityOptions } from "../../util/ParityMetrics";
+import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 const theme = getTheme();
 export interface IModelComparisonProps {
@@ -48,7 +51,7 @@ export interface IModelComparisonProps {
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
   onEditConfigs: () => void;
-  onChartClick?: (data: any) => void;
+  onChartClick?: (data?: any) => void;
 }
 
 export interface IState {
@@ -91,7 +94,7 @@ export class ModelComparisonChart extends React.PureComponent<
             plotlyPath: "customdata"
           }
         },
-        mode: PlotlyMode.textMarkers,
+        mode: PlotlyMode.TextMarkers,
         marker: {
           size: 14
         },
@@ -150,12 +153,12 @@ export class ModelComparisonChart extends React.PureComponent<
         return { key: x, text: x };
       }
     );
-    const accuracyOptions: IDropdownOption[] = this.props.accuracyPickerProps.accuracyOptions.map(
+    const accuracyDropDown: IDropdownOption[] = this.props.accuracyPickerProps.accuracyOptions.map(
       (x) => {
         return { key: x.key, text: x.title };
       }
     );
-    const parityOptions: IDropdownOption[] = this.props.parityPickerProps.parityOptions.map(
+    const parityDropdown: IDropdownOption[] = this.props.parityPickerProps.parityOptions.map(
       (x) => {
         return { key: x.key, text: x.title };
       }
@@ -178,7 +181,7 @@ export class ModelComparisonChart extends React.PureComponent<
       }
     };
 
-    const styles = ModelComparisionChartStyles();
+    const styles = ModelComparisonChartStyles();
 
     let mainChart;
     if (
@@ -195,9 +198,10 @@ export class ModelComparisonChart extends React.PureComponent<
         />
       );
     } else {
+      const { disparityArray } = this.state;
       const data = this.state.accuracyArray.map((accuracy, index) => {
         return {
-          Parity: this.state.disparityArray[index],
+          Parity: disparityArray[index],
           Accuracy: accuracy,
           index
         };
@@ -206,9 +210,9 @@ export class ModelComparisonChart extends React.PureComponent<
       let maxAccuracy: number = Number.MIN_SAFE_INTEGER;
       let maxDisparity: number = Number.MIN_SAFE_INTEGER;
       let minDisparity: number = Number.MAX_SAFE_INTEGER;
-      let minAccuracyIndex: number;
-      let maxAccuracyIndex: number;
-      let minDisparityIndex: number;
+      let minAccuracyIndex = 0;
+      let maxAccuracyIndex = 0;
+      let minDisparityIndex = 0;
       this.state.accuracyArray.forEach((value, index) => {
         if (value >= maxAccuracy) {
           maxAccuracyIndex = index;
@@ -244,15 +248,12 @@ export class ModelComparisonChart extends React.PureComponent<
         maxDisparity,
         this.props.accuracyPickerProps.selectedAccuracyKey
       );
-      let selectedMetric =
-        AccuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey];
-      // handle custom metric case
-      if (selectedMetric === undefined) {
-        selectedMetric = this.props.accuracyPickerProps.accuracyOptions.find(
+      const selectedMetric =
+        accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
+        this.props.accuracyPickerProps.accuracyOptions.find(
           (metric) =>
             metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
         );
-      }
 
       const insights2 = localization.formatString(
         localization.ModelComparison.insightsText2,
@@ -290,7 +291,9 @@ export class ModelComparisonChart extends React.PureComponent<
       const props = _.cloneDeep(this.plotlyProps);
       props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
         (series) => {
-          series.name = this.props.dashboardContext.modelNames[series.name];
+          if (series.name) {
+            series.name = this.props.dashboardContext.modelNames[series.name];
+          }
           series.text = this.props.dashboardContext.modelNames;
           return series;
         }
@@ -298,19 +301,13 @@ export class ModelComparisonChart extends React.PureComponent<
 
       const accuracyMetricTitle = selectedMetric.title;
       const parityMetricTitle =
-        ParityOptions[this.props.parityPickerProps.selectedParityKey].title;
-      props.layout.xaxis.title = accuracyMetricTitle;
-      props.layout.yaxis.title = parityMetricTitle;
-
-      const InsightsIcon = (): JSX.Element => (
-        <Icon
-          iconName="CRMCustomerInsightsApp"
-          className={styles.insightsIcon}
-        />
-      );
-      const DownloadIcon = (): JSX.Element => (
-        <Icon iconName="Download" className={styles.downloadIcon} />
-      );
+        parityOptions[this.props.parityPickerProps.selectedParityKey].title;
+      if (props.layout?.xaxis) {
+        props.layout.xaxis.title = accuracyMetricTitle;
+      }
+      if (props.layout?.yaxis) {
+        props.layout.yaxis.title = parityMetricTitle;
+      }
 
       const cancelIcon: IIconProps = { iconName: "Cancel" };
 
@@ -390,7 +387,10 @@ export class ModelComparisonChart extends React.PureComponent<
           </div>
           <div className={styles.mainRight}>
             <div className={styles.insights}>
-              <InsightsIcon />
+              <Icon
+                iconName="CRMCustomerInsightsApp"
+                className={styles.insightsIcon}
+              />
               <Text className={styles.insights} block>
                 {localization.ModelComparison.insights}
               </Text>
@@ -407,7 +407,7 @@ export class ModelComparisonChart extends React.PureComponent<
               </Text>
             </div>
             <div className={styles.downloadReport}>
-              <DownloadIcon />
+              <Icon iconName="Download" className={styles.downloadIcon} />
               <Text style={{ verticalAlign: "middle" }}>
                 {localization.ModelComparison.downloadReport}
               </Text>
@@ -442,7 +442,7 @@ export class ModelComparisonChart extends React.PureComponent<
             defaultSelectedKey={
               this.props.accuracyPickerProps.selectedAccuracyKey
             }
-            options={accuracyOptions}
+            options={accuracyDropDown}
             disabled={false}
             onChange={this.accuracyChanged}
             styles={dropdownStyles}
@@ -450,7 +450,7 @@ export class ModelComparisonChart extends React.PureComponent<
           <Dropdown
             className={styles.dropDown}
             defaultSelectedKey={this.props.parityPickerProps.selectedParityKey}
-            options={parityOptions}
+            options={parityDropdown}
             disabled={false}
             onChange={this.parityChanged}
             styles={dropdownStyles}
@@ -474,10 +474,10 @@ export class ModelComparisonChart extends React.PureComponent<
           );
         });
       const parityOption =
-        ParityOptions[this.props.parityPickerProps.selectedParityKey];
+        parityOptions[this.props.parityPickerProps.selectedParityKey];
       const disparityMetric =
         this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.binaryClassification
+        PredictionTypes.BinaryClassification
           ? parityOption.parityMetric
           : "average";
       const parityMode = parityOption.parityMode;
@@ -504,9 +504,12 @@ export class ModelComparisonChart extends React.PureComponent<
   }
 
   private readonly featureChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
-    option: IDropdownOption
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
   ): void => {
+    if (!option) {
+      return;
+    }
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
       this.props.featureBinPickerProps.selectedBinIndex = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
@@ -521,9 +524,12 @@ export class ModelComparisonChart extends React.PureComponent<
   };
 
   private readonly accuracyChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
-    option: IDropdownOption
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
   ): void => {
+    if (!option) {
+      return;
+    }
     const accuracyKey = option.key.toString();
     if (this.state.accuracyKey !== accuracyKey) {
       this.props.accuracyPickerProps.onAccuracyChange(accuracyKey);
@@ -532,9 +538,12 @@ export class ModelComparisonChart extends React.PureComponent<
   };
 
   private readonly parityChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
-    option: IDropdownOption
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
   ): void => {
+    if (!option) {
+      return;
+    }
     const parityKey = option.key.toString();
     if (this.state.parityKey !== parityKey) {
       this.props.parityPickerProps.onParityChange(parityKey);

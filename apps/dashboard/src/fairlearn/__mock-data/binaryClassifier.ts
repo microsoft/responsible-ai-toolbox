@@ -1,4 +1,9 @@
-export const binaryClassifier = {
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { IFairnessData } from "@responsible-ai/fairlearn";
+
+export const binaryClassifier: IFairnessData = {
   trueY: [1, 0, 1, 1, 0, 1, 0, 0],
   predictedY: [
     [1, 0, 0, 1, 1, 1, 1, 0],

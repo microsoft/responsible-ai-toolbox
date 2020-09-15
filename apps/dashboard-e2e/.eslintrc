@@ -13,6 +13,13 @@
       "rules": {
         "filenames/no-index": "off"
       }
+    },
+    {
+      "files": ["src/support/commands.ts"],
+      "rules": {
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/naming-convention": "off"
+      }
     }
   ],
   "extends": ["plugin:cypress/recommended", "../../.eslintrc"],

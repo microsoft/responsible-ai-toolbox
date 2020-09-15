@@ -1,11 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { Stack, StackItem, Separator } from "office-ui-fabric-react";
 
 import { localization } from "../../Localization/localization";
-import { IWizardTabProps } from "../IWizardTabProps";
+import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { IParityPickerPropsV1 } from "../FairnessWizard";
-import { DataSpecificationBlade } from "./DataSpecificationBlade";
-import { WizardFooter } from "./WizardFooter";
+import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
+import { WizardFooter } from "../../components/WizardFooter";
 import { TileList, ITileProp } from "./TileList";
 
 export interface IParityTabProps extends IWizardTabProps {
@@ -48,7 +51,7 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
           </Stack>
         </StackItem>
         <DataSpecificationBlade
-          numberRows={this.props.dashboardContext.dataset.length}
+          numberRows={this.props.dashboardContext.dataset?.length || 0}
           featureNames={this.props.dashboardContext.modelMetadata.featureNames}
         />
       </Stack>

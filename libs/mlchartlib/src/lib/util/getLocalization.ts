@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   default as LocalizedStringsClass,
   LocalizedStrings
@@ -29,7 +32,10 @@ export type ILocalizationConfig<T> = { en: T } & {
 };
 
 export type ILocalization<T> = Omit<LocalizedStrings<T>, "formatString"> & {
-  formatString(str: string, ...values: Array<string | number>): string;
+  formatString(
+    str: string,
+    ...values: Array<string | number | undefined>
+  ): string;
 };
 
 export function getLocalization<T>(
@@ -58,7 +64,7 @@ export function getLocalization<T>(
   const originalFormat = localization.formatString.bind(localization);
   localization.formatString = (
     str: string,
-    ...values: Array<string | number>
+    ...values: Array<string | number | undefined>
   ): string => {
     const par = [...values];
     for (let i = 0; i < par.length; i++) {

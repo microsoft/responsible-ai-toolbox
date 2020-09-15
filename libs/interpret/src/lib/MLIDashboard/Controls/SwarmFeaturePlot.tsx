@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import memoize from "memoize-one";
 import {
@@ -60,7 +63,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (metadata.modelType === ModelTypes.binary) {
+      if (metadata.modelType === ModelTypes.Binary) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -108,8 +111,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
       plotlyProps.data[0].y = y;
       return plotlyProps;
     },
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    _.isEqual
+    _.isEqual.bind(window)
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {
@@ -121,7 +123,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
     data: [
       {
         hoverinfo: "text",
-        mode: PlotlyMode.markers,
+        mode: PlotlyMode.Markers,
         type: "scattergl"
       }
     ] as any,

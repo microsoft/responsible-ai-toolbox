@@ -1,7 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import moment from "moment";
-
-export const NonNumericPlaceholder = "-";
 
 export function formatValue(value: unknown): string {
   if (typeof value === "string") {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import {
   Callout,
@@ -19,7 +22,7 @@ import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { ScatterUtils, IScatterProps } from "./ScatterUtils";
 import { scatterStyles } from "./Scatter.styles";
 
-export const ExplanationScatterId = "explanation_scatter_id";
+export const explanationScatterId = "explanation_scatter_id";
 
 export interface IExplanationExplorationState {
   isCalloutVisible: boolean;
@@ -35,17 +38,29 @@ export class ExplanationExploration extends React.PureComponent<
   public constructor(props: IScatterProps) {
     super(props);
     this.state = { isCalloutVisible: false };
+    this.plotlyProps =
+      this.props.plotlyProps !== undefined
+        ? _.cloneDeep(this.props.plotlyProps)
+        : ScatterUtils.defaultExplanationPlotlyProps(
+            this.props.dashboardContext.explanationContext
+          );
   }
 
   public render(): React.ReactNode {
     if (
       this.props.dashboardContext.explanationContext.testDataset &&
+      this.props.dashboardContext.explanationContext.testDataset.dataset &&
       this.props.dashboardContext.explanationContext.localExplanation &&
       this.props.dashboardContext.explanationContext.localExplanation.values
     ) {
-      const projectedData = ScatterUtils.projectData(
-        this.props.dashboardContext.explanationContext
-      );
+      const projectedData = ScatterUtils.projectData({
+        ...this.props.dashboardContext.explanationContext,
+        testDataset: {
+          ...this.props.dashboardContext.explanationContext.testDataset,
+          dataset: this.props.dashboardContext.explanationContext.testDataset
+            .dataset
+        }
+      });
       this.plotlyProps =
         this.props.plotlyProps !== undefined
           ? _.cloneDeep(this.props.plotlyProps)
@@ -63,7 +78,7 @@ export class ExplanationExploration extends React.PureComponent<
       const weightContext = this.props.dashboardContext.weightContext;
       const includeWeightDropdown =
         this.props.dashboardContext.explanationContext.modelMetadata
-          .modelType === ModelTypes.multiclass;
+          .modelType === ModelTypes.Multiclass;
       let plotProp = ScatterUtils.populatePlotlyProps(
         projectedData,
         _.cloneDeep(this.plotlyProps)
@@ -198,40 +213,46 @@ export class ExplanationExploration extends React.PureComponent<
 
   private onXSelected = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    ScatterUtils.updateNewXAccessor(
-      this.props,
-      this.plotlyProps,
-      item,
-      ExplanationScatterId
-    );
+    if (item) {
+      ScatterUtils.updateNewXAccessor(
+        this.props,
+        this.plotlyProps,
+        item,
+        explanationScatterId
+      );
+    }
   };
 
   private onYSelected = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    ScatterUtils.updateNewYAccessor(
-      this.props,
-      this.plotlyProps,
-      item,
-      ExplanationScatterId
-    );
+    if (item) {
+      ScatterUtils.updateNewYAccessor(
+        this.props,
+        this.plotlyProps,
+        item,
+        explanationScatterId
+      );
+    }
   };
 
   // Color is done in one of two ways: if categorical, we set the groupBy property, creating a series per class
   // If it is numeric, we set the color property and display a color bar. when setting one, clear the other.
   private onColorSelected = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    ScatterUtils.updateColorAccessor(
-      this.props,
-      this.plotlyProps,
-      item,
-      ExplanationScatterId
-    );
+    if (item) {
+      ScatterUtils.updateColorAccessor(
+        this.props,
+        this.plotlyProps,
+        item,
+        explanationScatterId
+      );
+    }
   };
 
   private onIconClick = (): void => {

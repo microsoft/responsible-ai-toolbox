@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export * from "./lib/components/AccessibleChart";
 export * from "./lib/components/AccessorMappingFunctionNames";
-export * from "./lib/components/AccessorMappingFunctions";
+export * from "./lib/components/accessorMappingFunctions";
 export * from "./lib/components/ChartBuilder";
 export * from "./lib/components/DefaultSelectionFunctions";
 export * from "./lib/components/IAccessor";

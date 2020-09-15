@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Data } from "plotly.js";
 import { IAccessor } from "./IAccessor";
 

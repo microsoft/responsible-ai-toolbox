@@ -1,4 +1,9 @@
-export const precomputedBinary = {
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { IFairnessData, PredictionTypes } from "@responsible-ai/fairlearn";
+
+export const precomputedBinary: IFairnessData = {
   trueY: [1, 0, 1, 1, 0, 1, 0, 0],
   predictedY: [
     [1, 0, 0, 1, 1, 1, 1, 0],
@@ -115,7 +120,7 @@ export const precomputedBinary = {
       featureBinName: "serious real feature"
     }
   ],
-  predictionType: "binaryClassification",
+  predictionType: PredictionTypes.BinaryClassification,
   // feel free to come up with a better name
   customMetrics: [
     {

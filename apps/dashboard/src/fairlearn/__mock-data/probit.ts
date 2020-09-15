@@ -1,4 +1,9 @@
-export const probit = {
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { IFairnessData } from "@responsible-ai/fairlearn";
+
+export const probit: IFairnessData = {
   trueY: [1, 1, 1, 1, 0, 0, 0, 0],
   predictedY: [
     [0.9, 0.92, 0.47, 0.22, 0.01, 0.05, 0.1, 0.2],

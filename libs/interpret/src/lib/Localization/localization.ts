@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getLocalization } from "@responsible-ai/mlchartlib";
 import cs from "./cs-CZ.json";
 import de from "./de-DE.json";

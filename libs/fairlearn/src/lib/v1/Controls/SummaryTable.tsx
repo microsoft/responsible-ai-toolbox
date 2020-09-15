@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Stack, Text } from "office-ui-fabric-react";
 
 import React from "react";
@@ -5,7 +8,7 @@ import { localization } from "../../Localization/localization";
 import { SummaryTableStyles } from "./SummaryTable.styles";
 
 export interface ISummaryTableProps {
-  binValues: number[];
+  binValues: number[] | undefined;
   formattedBinValues: string[];
   binLabels: string[];
   metricLabel: string;
@@ -15,11 +18,11 @@ export interface ISummaryTableProps {
 export class SummaryTable extends React.PureComponent<ISummaryTableProps> {
   public render(): React.ReactNode {
     const styles = SummaryTableStyles();
-    let minIndexes = [];
-    let maxIndexes = [];
+    let minIndexes: number[] = [];
+    let maxIndexes: number[] = [];
     let minValue = Number.MAX_SAFE_INTEGER;
     let maxValue = Number.MIN_SAFE_INTEGER;
-    this.props.binValues.forEach((value, index) => {
+    this.props.binValues?.forEach((value, index) => {
       if (value >= maxValue) {
         if (value === maxValue) {
           maxIndexes.push(index);

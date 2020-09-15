@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import {
@@ -23,7 +26,7 @@ import { localization } from "../../../Localization/localization";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { FabricStyles } from "../../FabricStyles";
-import { CohortKey } from "../../CohortKey";
+import { cohortKey } from "../../cohortKey";
 import {
   axisControlCallout,
   axisControlDialogStyles,
@@ -59,7 +62,7 @@ export class AxisConfigDialog extends React.PureComponent<
   private _leftSelection: Selection;
 
   private readonly leftItems = [
-    CohortKey,
+    cohortKey,
     JointDataset.IndexLabel,
     JointDataset.DataLabelRoot,
     JointDataset.PredictedYLabel,
@@ -67,34 +70,38 @@ export class AxisConfigDialog extends React.PureComponent<
     JointDataset.ClassificationError,
     JointDataset.RegressionError,
     JointDataset.ProbabilityYRoot,
-    ColumnCategories.none
-  ]
-    .map((key) => {
-      const metaVal = this.props.jointDataset.metaDict[key];
-      if (
-        key === JointDataset.DataLabelRoot &&
-        this.props.orderedGroupTitles.includes(ColumnCategories.dataset) &&
-        this.props.jointDataset.hasDataset
-      ) {
-        return { key, title: localization.Columns.dataset };
-      }
-      if (
-        key === JointDataset.ProbabilityYRoot &&
-        this.props.orderedGroupTitles.includes(ColumnCategories.outcome) &&
-        this.props.jointDataset.hasPredictedProbabilities
-      ) {
-        return { key, title: localization.Columns.predictedProbabilities };
-      }
-      if (
-        metaVal === undefined ||
-        !this.props.orderedGroupTitles.includes(metaVal.category)
-      ) {
-        return undefined;
-      }
+    ColumnCategories.None
+  ].reduce((previousValue: Array<{ key: string; title: string }>, key) => {
+    const metaVal = this.props.jointDataset.metaDict[key];
+    if (
+      key === JointDataset.DataLabelRoot &&
+      this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
+      this.props.jointDataset.hasDataset
+    ) {
+      previousValue.push({ key, title: localization.Columns.dataset });
+      return previousValue;
+    }
+    if (
+      key === JointDataset.ProbabilityYRoot &&
+      this.props.orderedGroupTitles.includes(ColumnCategories.Outcome) &&
+      this.props.jointDataset.hasPredictedProbabilities
+    ) {
+      previousValue.push({
+        key,
+        title: localization.Columns.predictedProbabilities
+      });
+      return previousValue;
+    }
+    if (
+      metaVal === undefined ||
+      !this.props.orderedGroupTitles.includes(metaVal.category)
+    ) {
+      return previousValue;
+    }
 
-      return { key, title: metaVal.abbridgedLabel };
-    })
-    .filter((obj) => obj !== undefined);
+    previousValue.push({ key, title: metaVal.abbridgedLabel });
+    return previousValue;
+  }, []);
 
   private readonly dataArray: IComboBoxOption[] = new Array(
     this.props.jointDataset.datasetFeatureCount
@@ -142,23 +149,14 @@ export class AxisConfigDialog extends React.PureComponent<
     const selectedMeta = this.props.jointDataset.metaDict[
       this.state.selectedColumn.property
     ];
-    const isDataColumn =
-      this.state.selectedColumn.property.indexOf(JointDataset.DataLabelRoot) !==
-      -1;
-    const isProbabilityColumn =
-      this.state.selectedColumn.property.indexOf(
-        JointDataset.ProbabilityYRoot
-      ) !== -1;
-    const minVal = selectedMeta.treatAsCategorical
-      ? 0
-      : Number.isInteger(selectedMeta.featureRange.min)
-      ? selectedMeta.featureRange.min
-      : (Math.round(selectedMeta.featureRange.min * 10000) / 10000).toFixed(4);
-    const maxVal = selectedMeta.treatAsCategorical
-      ? 0
-      : Number.isInteger(selectedMeta.featureRange.max)
-      ? selectedMeta.featureRange.max
-      : (Math.round(selectedMeta.featureRange.max * 10000) / 10000).toFixed(4);
+    const isDataColumn = this.state.selectedColumn.property.includes(
+      JointDataset.DataLabelRoot
+    );
+    const isProbabilityColumn = this.state.selectedColumn.property.includes(
+      JointDataset.ProbabilityYRoot
+    );
+    const minVal = this.getMinValue(selectedMeta);
+    const maxVal = this.getMaxValue(selectedMeta);
 
     return (
       <Callout
@@ -195,18 +193,18 @@ export class AxisConfigDialog extends React.PureComponent<
               ]}
             />
           </div>
-          {this.state.selectedColumn.property === CohortKey && (
+          {this.state.selectedColumn.property === cohortKey && (
             <div className={styles.rightHalf}>
               <Text>{localization.AxisConfigDialog.groupByCohort}</Text>
             </div>
           )}
-          {this.state.selectedColumn.property === ColumnCategories.none && (
+          {this.state.selectedColumn.property === ColumnCategories.None && (
             <div className={styles.rightHalf}>
               <Text>{localization.AxisConfigDialog.countHelperText}</Text>
             </div>
           )}
-          {this.state.selectedColumn.property !== CohortKey &&
-            this.state.selectedColumn.property !== ColumnCategories.none && (
+          {this.state.selectedColumn.property !== cohortKey &&
+            this.state.selectedColumn.property !== ColumnCategories.None && (
               <div className={styles.rightHalf}>
                 {isDataColumn && (
                   <ComboBox
@@ -232,7 +230,7 @@ export class AxisConfigDialog extends React.PureComponent<
                 )}
                 {selectedMeta.featureRange &&
                   selectedMeta.featureRange.rangeType ===
-                    RangeTypes.integer && (
+                    RangeTypes.Integer && (
                     <Checkbox
                       key={this.state.selectedColumn.property}
                       className={styles.treatCategorical}
@@ -246,7 +244,7 @@ export class AxisConfigDialog extends React.PureComponent<
                     <Text variant={"small"} className={styles.featureText}>
                       {`${localization.formatString(
                         localization.Filters.uniqueValues,
-                        selectedMeta.sortedCategoricalValues.length
+                        selectedMeta.sortedCategoricalValues?.length
                       )}`}
                     </Text>
                     {this.props.canDither && (
@@ -346,23 +344,50 @@ export class AxisConfigDialog extends React.PureComponent<
     );
   }
 
+  private getMinValue(selectedMeta: IJointMeta): number | string {
+    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+      return 0;
+    }
+    if (Number.isInteger(selectedMeta.featureRange.min)) {
+      return selectedMeta.featureRange.min;
+    }
+    return (Math.round(selectedMeta.featureRange.min * 10000) / 10000).toFixed(
+      4
+    );
+  }
+
+  private getMaxValue(selectedMeta: IJointMeta): number | string {
+    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+      return 0;
+    }
+    if (Number.isInteger(selectedMeta.featureRange.max)) {
+      return selectedMeta.featureRange.max;
+    }
+    return (Math.round(selectedMeta.featureRange.max * 10000) / 10000).toFixed(
+      4
+    );
+  }
+
   private extractSelectionKey(key: string): string {
     if (key === undefined) {
-      return ColumnCategories.none;
+      return ColumnCategories.None;
     }
-    if (key.indexOf(JointDataset.DataLabelRoot) !== -1) {
+    if (key.includes(JointDataset.DataLabelRoot)) {
       return JointDataset.DataLabelRoot;
     }
-    if (key.indexOf(JointDataset.ProbabilityYRoot) !== -1) {
+    if (key.includes(JointDataset.ProbabilityYRoot)) {
       return JointDataset.ProbabilityYRoot;
     }
     return key;
   }
 
   private readonly setAsCategorical = (
-    _: React.FormEvent<HTMLElement>,
-    checked: boolean
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
   ): void => {
+    if (checked === undefined) {
+      return;
+    }
     this.props.jointDataset.setTreatAsCategorical(
       this.state.selectedColumn.property,
       checked
@@ -374,9 +399,12 @@ export class AxisConfigDialog extends React.PureComponent<
   };
 
   private readonly shouldBinClicked = (
-    _: React.FormEvent<HTMLElement>,
-    checked: boolean
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
   ): void => {
+    if (checked === undefined) {
+      return;
+    }
     const property = this.state.selectedColumn.property;
     if (checked === false) {
       this.setState({
@@ -414,7 +442,7 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private readonly _onRenderDetailsHeader = (
     styles: IProcessedStyleSet<IAxisControlDialogStyles>
-  ): React.ReactNode => {
+  ): JSX.Element => {
     return (
       <div className={styles.filterHeader}>
         {localization.AxisConfigDialog.selectFilter}
@@ -448,7 +476,7 @@ export class AxisConfigDialog extends React.PureComponent<
         number > AxisConfigDialog.MAX_HIST_COLS ||
         number < AxisConfigDialog.MIN_HIST_COLS
       ) {
-        return this.state.binCount.toString();
+        return this.state.binCount?.toString();
       }
       this.setState({ binCount: number });
     } else {
@@ -485,7 +513,7 @@ export class AxisConfigDialog extends React.PureComponent<
       return;
     }
     let property = this._leftSelection.getSelection()[0].key as string;
-    if (property === ColumnCategories.none) {
+    if (property === ColumnCategories.None) {
       this.setState({
         selectedColumn: {
           property,
@@ -508,10 +536,12 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private readonly setSelectedProperty = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    const property = item.key as string;
-    this.setDefaultStateForKey(property);
+    if (typeof item?.key === "string") {
+      const property = item.key;
+      this.setDefaultStateForKey(property);
+    }
   };
 
   private _getBinCountForProperty(key: string): number | undefined {

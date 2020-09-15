@@ -1,14 +1,17 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 import { IAccuracyPickerPropsV2 } from "../FairnessWizard";
 import { PredictionTypes } from "../../IFairnessProps";
-import { IWizardTabProps } from "../IWizardTabProps";
+import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { localization } from "../../Localization/localization";
+import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
+import { WizardFooter } from "../../components/WizardFooter";
 import { AccuracyTabStyles } from "./AccuracyTab.styles";
-import { DataSpecificationBlade } from "./DataSpecificationBlade";
 import { TileList } from "./TileList";
-import { WizardFooter } from "./WizardFooter";
 
 export interface IAccuracyPickingTabProps extends IWizardTabProps {
   accuracyPickerProps: IAccuracyPickerPropsV2;
@@ -31,11 +34,11 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
             {localization.formatString(
               localization.Accuracy.body,
               this.props.dashboardContext.modelMetadata.PredictionType !==
-                PredictionTypes.regression
+                PredictionTypes.Regression
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
               this.props.dashboardContext.modelMetadata.PredictionType ===
-                PredictionTypes.binaryClassification
+                PredictionTypes.BinaryClassification
                 ? localization.Accuracy.binary
                 : localization.Accuracy.continuous,
               this.props.dashboardContext.predictions.length === 1

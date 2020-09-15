@@ -1,12 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import {
   TextField,
   ComboBox,
   IComboBox,
-  IDropdownOption
+  IComboBoxOption
 } from "office-ui-fabric-react";
 
 import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { toNumber } from "lodash";
 import { FabricStyles } from "../FabricStyles";
 import { localization } from "../../Localization/localization";
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
@@ -21,7 +25,7 @@ export interface IFeatureEditingTileProps {
 }
 
 export interface IFeatureEditingTileState {
-  value: string;
+  value?: string;
   errorMessage?: string;
 }
 
@@ -29,7 +33,7 @@ export class FeatureEditingTile extends React.Component<
   IFeatureEditingTileProps,
   IFeatureEditingTileState
 > {
-  private options: IDropdownOption[] =
+  private options =
     this.props.enumeratedValues !== undefined
       ? this.props.enumeratedValues.map((value) => {
           return { text: value, key: value };
@@ -94,17 +98,17 @@ export class FeatureEditingTile extends React.Component<
   }
 
   private onValueChanged = (
-    _ev: React.FormEvent<HTMLInputElement>,
+    _ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    const val = +newValue;
+    const val = toNumber(newValue);
     let errorMessage: string | undefined;
     if (
       Number.isNaN(val) ||
-      (this.props.rangeType === RangeTypes.integer && !Number.isInteger(val))
+      (this.props.rangeType === RangeTypes.Integer && !Number.isInteger(val))
     ) {
       errorMessage =
-        this.props.rangeType === RangeTypes.integer
+        this.props.rangeType === RangeTypes.Integer
           ? localization.IcePlot.integerError
           : localization.IcePlot.numericError;
     }
@@ -114,12 +118,14 @@ export class FeatureEditingTile extends React.Component<
 
   private onComboSelected = (
     _event: React.FormEvent<IComboBox>,
-    item: IDropdownOption,
-    _index: number,
-    userProvidedValue: string
+    option?: IComboBoxOption | undefined,
+    _index?: number | undefined,
+    value?: string | undefined
   ): void => {
-    const newVal = item !== undefined ? item.text : userProvidedValue;
-    this.props.onEdit(this.props.index, newVal);
+    const newVal = option ? option.text : value;
+    if (newVal) {
+      this.props.onEdit(this.props.index, newVal);
+    }
     this.setState({ value: newVal });
   };
 }

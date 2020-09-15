@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import Plotly from "plotly.js";
 import { v4 } from "uuid";
@@ -117,7 +120,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     const sortedIndexVector = this.props.sortedIndexVector
       .slice(-1 * this.props.topK)
       .reverse();
-    const baseSeries = {
+    const baseSeries: IPlotlyProperty = {
       config: {
         displaylogo: false,
         responsive: true,
@@ -148,7 +151,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       classByFeatureMatrix.forEach((singleSeries, classIndex) => {
         const visible =
           this.props.defaultVisibleClasses !== undefined &&
-          this.props.defaultVisibleClasses.indexOf(classIndex) === -1
+          !this.props.defaultVisibleClasses.includes(classIndex)
             ? "legendonly"
             : true;
         const x = sortedIndexVector.map((_, index) => index);
@@ -157,7 +160,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           sortedIndexVector,
           singleSeries,
           this.props.modelMetadata.featureNames,
-          this.props.modelMetadata.modelType === ModelTypes.multiclass
+          this.props.modelMetadata.modelType === ModelTypes.Multiclass
             ? this.props.modelMetadata.classNames[classIndex]
             : undefined,
           this.props.additionalRowData
@@ -168,7 +171,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           text.unshift(
             BarChart.buildInterceptTooltip(
               this.props.intercept[classIndex],
-              this.props.modelMetadata.modelType === ModelTypes.multiclass
+              this.props.modelMetadata.modelType === ModelTypes.Multiclass
                 ? this.props.modelMetadata.classNames[classIndex]
                 : undefined
             )
@@ -182,7 +185,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           type: "bar",
           visible,
           name:
-            this.props.modelMetadata.modelType === ModelTypes.multiclass
+            this.props.modelMetadata.modelType === ModelTypes.Multiclass
               ? this.props.modelMetadata.classNames[classIndex]
               : "",
           x,

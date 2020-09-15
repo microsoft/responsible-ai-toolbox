@@ -1,7 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
+import { PartialRequired } from "@responsible-ai/core-ui";
 import { localization } from "../../../Localization/localization";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { FabricStyles } from "../../FabricStyles";
@@ -11,7 +15,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureBarProps {
-  jointDataset: JointDataset;
+  jointDataset: JointDataset | undefined;
   chartType: ChartTypes;
   yAxisLabels: string[];
   sortArray: number[];
@@ -25,7 +29,7 @@ export interface IFeatureBarProps {
 }
 
 export interface IFeatureBarState {
-  plotlyProps: IPlotlyProperty;
+  plotlyProps: IPlotlyProperty | undefined;
 }
 
 export class FeatureImportanceBar extends React.PureComponent<
@@ -50,17 +54,19 @@ export class FeatureImportanceBar extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const relayoutArg = {
+    const relayoutArg: Partial<Plotly.Layout> = {
       "xaxis.range": [
         this.props.startingK - 0.5,
         this.props.startingK + this.props.topK - 0.5
       ]
     };
     const plotlyProps = this.state.plotlyProps;
-    _.set(plotlyProps, "layout.xaxis.range", [
-      this.props.startingK - 0.5,
-      this.props.startingK + this.props.topK - 0.5
-    ]);
+    if (plotlyProps) {
+      _.set(plotlyProps, "layout.xaxis.range", [
+        this.props.startingK - 0.5,
+        this.props.startingK + this.props.topK - 0.5
+      ]);
+    }
 
     if (
       !this.props.unsortedSeries ||
@@ -79,7 +85,10 @@ export class FeatureImportanceBar extends React.PureComponent<
       return <LoadingSpinner />;
     }
     return (
-      <div className={featureImportanceBarStyles.chartWithVertical}>
+      <div
+        id="FeatureImportanceBar"
+        className={featureImportanceBarStyles.chartWithVertical}
+      >
         <div className={featureImportanceBarStyles.verticalAxis}>
           <div className={featureImportanceBarStyles.rotatedVerticalBox}>
             <div>
@@ -96,12 +105,14 @@ export class FeatureImportanceBar extends React.PureComponent<
             </div>
           </div>
         </div>
-        <AccessibleChart
-          plotlyProps={plotlyProps}
-          theme={getTheme() as any}
-          relayoutArg={relayoutArg as any}
-          onClickHandler={this.selectPointFromChart}
-        />
+        {plotlyProps && (
+          <AccessibleChart
+            plotlyProps={plotlyProps}
+            theme={getTheme()}
+            relayoutArg={relayoutArg}
+            onClickHandler={this.selectPointFromChart}
+          />
+        )}
       </div>
     );
   }
@@ -115,7 +126,7 @@ export class FeatureImportanceBar extends React.PureComponent<
 
   private buildBarPlotlyProps(): IPlotlyProperty {
     const sortedIndexVector = this.props.sortArray;
-    const baseSeries = {
+    const baseSeries: PartialRequired<IPlotlyProperty, "layout"> = {
       config: {
         displaylogo: false,
         responsive: true,
@@ -201,22 +212,23 @@ export class FeatureImportanceBar extends React.PureComponent<
         } as any);
       });
     } else if (this.props.chartType === ChartTypes.Box) {
-      baseSeries.layout.boxmode = "group";
+      _.set(baseSeries.layout, "boxmode", "group");
       this.props.unsortedSeries.forEach((series) => {
         baseSeries.data.push({
           type: "box",
           boxmean: true,
           name: series.name,
           x: sortedIndexVector
-            .map((sortIndex, xIndex) =>
-              series.unsortedIndividualY[sortIndex].map(() => xIndex)
+            .map(
+              (sortIndex, xIndex) =>
+                series.unsortedIndividualY?.[sortIndex].map(() => xIndex) || []
             )
             .reduce((prev, curr) => {
               prev.push(...curr);
               return prev;
             }, []),
           y: sortedIndexVector
-            .map((index) => series.unsortedIndividualY[index])
+            .map((index) => series.unsortedIndividualY?.[index] || [])
             .reduce((prev, curr) => {
               prev.push(...curr);
               return prev;

@@ -15,7 +15,10 @@
     "jsx-a11y",
     "react",
     "react-hooks",
-    "filenames"
+    "filenames",
+    "eslint-plugin-unicorn",
+    "eslint-plugin-eslint-comments",
+    "header"
   ],
   "env": {
     "browser": true,
@@ -31,9 +34,20 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "header/header": [
+      2,
+      "line",
+      [
+        " Copyright (c) Microsoft Corporation.",
+        " Licensed under the MIT License."
+      ],
+      2
+    ],
+    "eslint-comments/no-use": ["error", { "allow": [] }],
     "import/no-unresolved": "off",
     "import/order": "error",
     "filenames/match-regex": "error",
@@ -58,14 +72,35 @@
         ]
       }
     ],
+
     "@typescript-eslint/naming-convention": [
       "error",
       {
+        "selector": "parameter",
+        "format": ["camelCase"],
+        "leadingUnderscore": "allow"
+      },
+      {
         "selector": "interface",
         "format": ["PascalCase"],
-        "custom": {
-          "regex": "^I[A-Z]",
-          "match": true
+        "prefix": ["I"]
+      },
+      {
+        "selector": "typeParameter",
+        "format": ["PascalCase"],
+        "prefix": ["T"]
+      },
+      {
+        "selector": ["typeLike", "enumMember"],
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": ["variable", "function"],
+        "format": ["camelCase"],
+        "filter": {
+          // styles match component name
+          "regex": "^(.*Styles)$",
+          "match": false
         }
       }
     ],
@@ -107,6 +142,9 @@
         ]
       }
     ],
+    "complexity": "warn",
+    "curly": ["error", "all"],
+    "max-lines": "warn",
     "no-else-return": "error",
     "no-useless-call": "error",
     "object-shorthand": "error",
@@ -359,6 +397,12 @@
   },
   "overrides": [
     {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
       "files": ["*.tsx"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-Z][A-z]+$"]]
@@ -367,7 +411,9 @@
     {
       "files": ["*.ts"],
       "rules": {
-        "filenames/match-regex": ["error", ["^[A-z]+$"]]
+        "filenames/match-regex": ["error", ["^[A-z]+$"]],
+        // turn off for function overload
+        "no-dupe-class-members": "off"
       }
     },
     {

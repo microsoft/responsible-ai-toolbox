@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import React from "react";
 import { ICategoricalRange } from "@responsible-ai/mlchartlib";
@@ -140,10 +143,10 @@ export class PerturbationExploration extends React.Component<
           )}
         <div className={perturbationExplorationStyles.tileScroller}>
           {_.cloneDeep(
-            this.props.explanationContext.testDataset.dataset[
+            this.props.explanationContext.testDataset.dataset?.[
               this.props.datapointIndex
             ]
-          ).map((featureValue, featureIndex) => {
+          )?.map((featureValue, featureIndex) => {
             return (
               <FeatureEditingTile
                 key={featureIndex}
@@ -184,7 +187,7 @@ export class PerturbationExploration extends React.Component<
     // unset in the case that the user reverts.
     if (
       val ===
-      this.props.explanationContext.testDataset.dataset[
+      this.props.explanationContext.testDataset.dataset?.[
         this.props.datapointIndex
       ][featureIndex]
     ) {
@@ -198,6 +201,12 @@ export class PerturbationExploration extends React.Component<
   };
 
   private fetchData(): void {
+    if (
+      !this.props.explanationContext.testDataset.dataset ||
+      !this.props.invokeModel
+    ) {
+      return;
+    }
     if (this.state.abortController !== undefined) {
       this.state.abortController.abort();
     }
@@ -245,15 +254,15 @@ export class PerturbationExploration extends React.Component<
             abortController: undefined
           });
         }
-      } catch (err) {
-        if (err.name === "AbortError") {
+      } catch (error) {
+        if (error.name === "AbortError") {
           return;
         }
-        if (err.name === "PythonError") {
+        if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
               localization.IcePlot.errorPrefix,
-              err.message
+              error.message
             ) as string
           });
         }

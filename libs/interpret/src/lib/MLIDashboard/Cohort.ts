@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IFilter, FilterMethods } from "./Interfaces/IFilter";
 import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
@@ -5,11 +8,10 @@ import { ModelExplanationUtils } from "./ModelExplanationUtils";
 export class Cohort {
   private static _cohortIndex = 0;
 
-  public rowCount = 0;
   public filteredData: Array<{ [key: string]: number }>;
   private readonly cohortIndex: number;
-  private cachedAverageImportance: number[];
-  private cachedTransposedLocalFeatureImportances: number[][];
+  private cachedAverageImportance: number[] | undefined;
+  private cachedTransposedLocalFeatureImportances: number[][] | undefined;
   private currentSortKey: string | undefined;
   private currentSortReversed = false;
   public constructor(
@@ -20,7 +22,7 @@ export class Cohort {
     this.cohortIndex = Cohort._cohortIndex;
     this.name = name;
     Cohort._cohortIndex += 1;
-    this.applyFilters();
+    this.filteredData = this.applyFilters();
   }
 
   public updateFilter(filter: IFilter, index?: number): void {
@@ -29,7 +31,7 @@ export class Cohort {
     }
 
     this.filters[index] = filter;
-    this.applyFilters();
+    this.filteredData = this.applyFilters();
   }
 
   // An id to track if a change requiring re-render has occurred.
@@ -39,11 +41,11 @@ export class Cohort {
 
   public deleteFilter(index: number): void {
     this.filters.splice(index, 1);
-    this.applyFilters();
+    this.filteredData = this.applyFilters();
   }
 
   public getRow(index: number): { [key: string]: number } {
-    return { ...this.jointDataset.dataDict[index] };
+    return { ...this.jointDataset.dataDict?.[index] };
   }
 
   public sort(
@@ -80,7 +82,7 @@ export class Cohort {
       }
       return this.filteredData.map((row) => {
         const rowValue = row[key];
-        return binVector.findIndex((upperLimit) => upperLimit >= rowValue);
+        return binVector?.findIndex((upperLimit) => upperLimit >= rowValue);
       });
     }
     return this.filteredData.map((row) => row[key]);
@@ -124,31 +126,32 @@ export class Cohort {
     this.cachedTransposedLocalFeatureImportances = undefined;
   }
 
-  private applyFilters(): void {
+  private applyFilters(): Array<{ [key: string]: number }> {
     this.clearCachedImportances();
-    this.filteredData = this.jointDataset.dataDict.filter((row) =>
-      this.filters.every((filter) => {
-        const rowVal = row[filter.column];
-        switch (filter.method) {
-          case FilterMethods.equal:
-            return rowVal === filter.arg[0];
-          case FilterMethods.greaterThan:
-            return rowVal > filter.arg[0];
-          case FilterMethods.greaterThanEqualTo:
-            return rowVal >= filter.arg[0];
-          case FilterMethods.lessThan:
-            return rowVal < filter.arg[0];
-          case FilterMethods.lessThanEqualTo:
-            return rowVal <= filter.arg[0];
-          case FilterMethods.includes:
-            return (filter.arg as number[]).includes(rowVal);
-          case FilterMethods.inTheRangeOf:
-            return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
-          default:
-            return false;
-        }
-      })
+    return (
+      this.jointDataset.dataDict?.filter((row) =>
+        this.filters.every((filter) => {
+          const rowVal = row[filter.column];
+          switch (filter.method) {
+            case FilterMethods.Equal:
+              return rowVal === filter.arg[0];
+            case FilterMethods.GreaterThan:
+              return rowVal > filter.arg[0];
+            case FilterMethods.GreaterThanEqualTo:
+              return rowVal >= filter.arg[0];
+            case FilterMethods.LessThan:
+              return rowVal < filter.arg[0];
+            case FilterMethods.LessThanEqualTo:
+              return rowVal <= filter.arg[0];
+            case FilterMethods.Includes:
+              return (filter.arg as number[]).includes(rowVal);
+            case FilterMethods.InTheRangeOf:
+              return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+            default:
+              return false;
+          }
+        })
+      ) || []
     );
-    this.rowCount = this.filteredData.length;
   }
 }

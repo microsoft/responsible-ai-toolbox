@@ -1,4 +1,9 @@
-export const regression = {
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { IFairnessData } from "@responsible-ai/fairlearn";
+
+export const regression: IFairnessData = {
   trueY: [
     1.1,
     1.7,

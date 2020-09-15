@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum FeatureKeys {
-  absoluteGlobal = "absoluteGlobal",
-  absoluteLocal = "absoluteLocal"
+  AbsoluteGlobal = "absoluteGlobal",
+  AbsoluteLocal = "absoluteLocal"
 }
 
 export type FeatureSortingKey = number | FeatureKeys;

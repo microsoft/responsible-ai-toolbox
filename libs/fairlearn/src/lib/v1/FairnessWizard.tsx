@@ -1,10 +1,8 @@
-import { initializeIcons } from "@uifabric/icons";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
-import {
-  ICategoricalRange,
-  ModelMetadata,
-  RangeTypes
-} from "@responsible-ai/mlchartlib";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
 import {
   Pivot,
   PivotItem,
@@ -14,25 +12,23 @@ import {
   loadTheme
 } from "office-ui-fabric-react";
 import React from "react";
+import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
+import { WizardBuilder } from "../util/WizardBuilder";
+import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
-  IFairnessPropsV1,
-  PredictionType,
-  PredictionTypes
-} from "../IFairnessProps";
-import { AccuracyOptions, IAccuracyOption } from "./AccuracyMetrics";
-import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
+  IFairnessContext,
+  IRunTimeFairnessContext
+} from "../util/IFairnessContext";
+import { IAccuracyOption, accuracyOptions } from "../util/AccuracyMetrics";
+import { MetricsCache } from "../util/MetricsCache";
+import { FeatureTab } from "../components/FeatureTab";
 import { AccuracyTab } from "./Controls/AccuracyTab";
-import { FeatureTab } from "./Controls/FeatureTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
-import { IBinnedResponse } from "./IBinnedResponse";
-import { IFairnessContext, IFairnessModelMetadata } from "./IFairnessContext";
 import { localization } from "./../Localization/localization";
-import { MetricsCache } from "./MetricsCache";
 import { WizardReport } from "./WizardReport";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
-
 import { defaultTheme } from "./Themes";
 
 export interface IAccuracyPickerPropsV1 {
@@ -77,14 +73,12 @@ const flights = {
 };
 
 export class FairnessWizardV1 extends React.PureComponent<
-  IFairnessPropsV1,
+  IFairnessProps,
   IWizardStateV1
 > {
-  private static iconsInitialized = false;
-
-  public constructor(props: IFairnessPropsV1) {
+  public constructor(props: IFairnessProps) {
     super(props);
-    FairnessWizardV1.initializeIcons(props);
+    WizardBuilder.initializeIcons(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -93,7 +87,9 @@ export class FairnessWizardV1 extends React.PureComponent<
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
       // we must assume that the same accuracy metrics are provided across models and bins
-      accuracyMetrics = this.buildAccuracyListForPrecomputedMetrics();
+      accuracyMetrics = WizardBuilder.buildAccuracyListForPrecomputedMetrics(
+        this.props
+      );
       const readonlyFeatureBins = this.props.precomputedFeatureBins.map(
         (initialBin, index) => {
           return {
@@ -101,7 +97,7 @@ export class FairnessWizardV1 extends React.PureComponent<
             array: initialBin.binLabels,
             labelArray: initialBin.binLabels,
             featureIndex: index,
-            rangeType: RangeTypes.categorical
+            rangeType: RangeTypes.Categorical
           };
         }
       );
@@ -110,8 +106,8 @@ export class FairnessWizardV1 extends React.PureComponent<
         selectedAccuracyKey: accuracyMetrics[0].key,
         parityMetrics: accuracyMetrics,
         selectedParityKey: accuracyMetrics[0].key,
-        dashboardContext: FairnessWizardV1.buildPrecomputedFairnessContext(
-          props
+        dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
+          this.props
         ),
         activeTabKey: featureBinTabKey,
         featureBins: readonlyFeatureBins,
@@ -121,31 +117,20 @@ export class FairnessWizardV1 extends React.PureComponent<
       };
       return;
     }
-    const fairnessContext = FairnessWizardV1.buildInitialFairnessContext(props);
+    const fairnessContext = WizardBuilder.buildInitialFairnessContext(
+      this.props
+    );
 
-    const featureBins = this.buildFeatureBins(fairnessContext);
+    const featureBins = WizardBuilder.buildFeatureBins(fairnessContext);
     if (featureBins.length > 0) {
-      fairnessContext.binVector = this.generateBinVectorForBin(
+      fairnessContext.binVector = WizardBuilder.generateBinVectorForBin(
         featureBins[0],
         fairnessContext.dataset
       );
       fairnessContext.groupNames = featureBins[0].labelArray;
     }
 
-    accuracyMetrics =
-      fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.binaryClassification
-        ? this.props.supportedBinaryClassificationAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          )
-        : fairnessContext.modelMetadata.PredictionType ===
-          PredictionTypes.regression
-        ? this.props.supportedRegressionAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          )
-        : this.props.supportedProbabilityAccuracyKeys.map(
-            (key) => AccuracyOptions[key]
-          );
+    accuracyMetrics = this.getAccuracyMetrics(fairnessContext);
     accuracyMetrics = accuracyMetrics.filter((metric) => !!metric);
 
     this.state = {
@@ -166,172 +151,13 @@ export class FairnessWizardV1 extends React.PureComponent<
     };
   }
 
-  private static initializeIcons(props: IFairnessPropsV1): void {
-    if (
-      FairnessWizardV1.iconsInitialized === false &&
-      props.shouldInitializeIcons !== false
-    ) {
-      initializeIcons(props.iconUrl);
-      FairnessWizardV1.iconsInitialized = true;
+  public componentDidUpdate(prev: IFairnessProps): void {
+    if (prev.theme !== this.props.theme) {
+      loadTheme(this.props.theme || defaultTheme);
     }
-  }
-
-  private static buildModelNames(props: IFairnessPropsV1): string[] {
-    return !!props.modelNames &&
-      props.modelNames.length === props.predictedY.length
-      ? props.modelNames
-      : props.predictedY.map((_, modelIndex) => `Model ${modelIndex}`);
-  }
-
-  private static buildInitialFairnessContext(
-    props: IFairnessPropsV1
-  ): IFairnessContext {
-    return {
-      dataset: props.testData,
-      trueY: props.trueY,
-      predictions: props.predictedY,
-      binVector: [],
-      groupNames: [],
-      modelMetadata: FairnessWizardV1.buildModelMetadata(props),
-      modelNames: FairnessWizardV1.buildModelNames(props)
-    };
-  }
-
-  private static buildPrecomputedFairnessContext(
-    props: IFairnessPropsV1
-  ): IFairnessContext {
-    return {
-      dataset: undefined,
-      trueY: props.trueY,
-      predictions: props.predictedY,
-      binVector: props.precomputedFeatureBins[0].binVector,
-      groupNames: props.precomputedFeatureBins[0].binLabels,
-      modelMetadata: FairnessWizardV1.buildPrecomputedModelMetadata(props),
-      modelNames: FairnessWizardV1.buildModelNames(props)
-    };
-  }
-
-  private static getClassLength(props: IFairnessPropsV1): number {
-    return _.uniq(props.trueY).length;
-  }
-
-  private static buildPrecomputedModelMetadata(
-    props: IFairnessPropsV1
-  ): IFairnessModelMetadata {
-    let featureNames = props.dataSummary.featureNames;
-    if (!featureNames) {
-      featureNames = props.precomputedFeatureBins.map((binObject, index) => {
-        return (
-          binObject.featureBinName ||
-          localization.formatString(localization.defaultFeatureNames, index)
-        );
-      }) as string[];
+    if (this.props.locale && prev.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
     }
-    const classNames =
-      props.dataSummary.classNames ||
-      FairnessWizardV1.buildIndexedNames(
-        FairnessWizardV1.getClassLength(props),
-        localization.defaultClassNames
-      );
-    const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
-      return {
-        uniqueValues: binMeta.binLabels,
-        rangeType: RangeTypes.categorical
-      } as ICategoricalRange;
-    });
-    return {
-      featureNames,
-      featureNamesAbridged: featureNames,
-      classNames,
-      featureIsCategorical: props.precomputedFeatureBins.map(() => true),
-      featureRanges,
-      PredictionType: props.predictionType
-    };
-  }
-
-  private static buildModelMetadata(
-    props: IFairnessPropsV1
-  ): IFairnessModelMetadata {
-    let featureNames = props.dataSummary.featureNames;
-    if (!featureNames) {
-      let featureLength = 0;
-      if (props.testData && props.testData[0] !== undefined) {
-        featureLength = props.testData[0].length;
-      }
-      featureNames =
-        featureLength === 1
-          ? [localization.defaultSingleFeatureName]
-          : FairnessWizardV1.buildIndexedNames(
-              featureLength,
-              localization.defaultFeatureNames
-            );
-    }
-    const classNames =
-      props.dataSummary.classNames ||
-      FairnessWizardV1.buildIndexedNames(
-        FairnessWizardV1.getClassLength(props),
-        localization.defaultClassNames
-      );
-    const featureIsCategorical = ModelMetadata.buildIsCategorical(
-      featureNames.length,
-      props.testData,
-      props.dataSummary.categoricalMap
-    );
-    const featureRanges = ModelMetadata.buildFeatureRanges(
-      props.testData,
-      featureIsCategorical,
-      props.dataSummary.categoricalMap
-    );
-    const PredictionType = FairnessWizardV1.determinePredictionType(
-      props.trueY,
-      props.predictedY,
-      props.predictionType
-    );
-    return {
-      featureNames,
-      featureNamesAbridged: featureNames,
-      classNames,
-      featureIsCategorical,
-      featureRanges,
-      PredictionType
-    };
-  }
-
-  private static buildIndexedNames(
-    length: number,
-    baseString: string
-  ): string[] {
-    return Array.from(Array(length).keys()).map(
-      (i) => localization.formatString(baseString, i.toString()) as string
-    );
-  }
-
-  private static determinePredictionType(
-    trueY: number[],
-    predictedY: number[][],
-    specifiedType?: PredictionType
-  ): PredictionType {
-    if (
-      specifiedType === PredictionTypes.binaryClassification ||
-      specifiedType === PredictionTypes.probability ||
-      specifiedType === PredictionTypes.regression
-    ) {
-      return specifiedType;
-    }
-    const predictedIsPossibleProba = predictedY.every((predictionVector) =>
-      predictionVector.every((x) => x >= 0 && x <= 1)
-    );
-    const trueIsBinary = _.uniq(trueY).length < 3;
-    if (!trueIsBinary) {
-      return PredictionTypes.regression;
-    }
-    if (_.uniq(_.flatten(predictedY)).length < 3) {
-      return PredictionTypes.binaryClassification;
-    }
-    if (predictedIsPossibleProba) {
-      return PredictionTypes.probability;
-    }
-    return PredictionTypes.regression;
   }
 
   public render(): React.ReactNode {
@@ -474,40 +300,29 @@ export class FairnessWizardV1 extends React.PureComponent<
     );
   }
 
-  private readonly buildAccuracyListForPrecomputedMetrics = (): IAccuracyOption[] => {
-    const customMetrics: IAccuracyOption[] = [];
-    const providedMetrics: IAccuracyOption[] = [];
-    Object.keys(this.props.precomputedMetrics[0][0]).forEach((key) => {
-      const metric = AccuracyOptions[key];
-      if (metric !== undefined) {
-        if (metric.userVisible) {
-          providedMetrics.push(metric);
-        }
-      } else {
-        const customIndex = this.props.customMetrics.findIndex(
-          (metric) => metric.id === key
-        );
-        const customMetric =
-          customIndex !== -1
-            ? this.props.customMetrics[customIndex]
-            : { id: key };
-
-        customMetrics.push({
-          key,
-          title:
-            customMetric.name ||
-            (localization.formatString(
-              localization.defaultCustomMetricName,
-              customMetrics.length
-            ) as string),
-          isMinimization: true,
-          isPercentage: true,
-          description: customMetric.description
-        });
-      }
-    });
-    return customMetrics.concat(providedMetrics);
-  };
+  private getAccuracyMetrics(
+    fairnessContext: IRunTimeFairnessContext
+  ): IAccuracyOption[] {
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+    ) {
+      return this.props.supportedBinaryClassificationAccuracyKeys.map(
+        (key) => accuracyOptions[key]
+      );
+    }
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.Regression
+    ) {
+      return this.props.supportedRegressionAccuracyKeys.map(
+        (key) => accuracyOptions[key]
+      );
+    }
+    return this.props.supportedProbabilityAccuracyKeys.map(
+      (key) => accuracyOptions[key]
+    );
+  }
 
   private readonly setTab = (key: string): void => {
     this.setState({ activeTabKey: key });
@@ -550,8 +365,10 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
   };
 
-  private readonly handleTabClick = (item: PivotItem): void => {
-    this.setState({ activeTabKey: item.props.itemKey });
+  private readonly handleTabClick = (item: PivotItem | undefined): void => {
+    if (item && item.props.itemKey) {
+      this.setState({ activeTabKey: item.props.itemKey });
+    }
   };
 
   private readonly binningSet = (value: IBinnedResponse): void => {
@@ -560,7 +377,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
     const newContext = _.cloneDeep(this.state.dashboardContext);
 
-    newContext.binVector = this.generateBinVectorForBin(
+    newContext.binVector = WizardBuilder.generateBinVectorForBin(
       value,
       this.state.dashboardContext.dataset
     );
@@ -569,34 +386,6 @@ export class FairnessWizardV1 extends React.PureComponent<
     this.setState({
       dashboardContext: newContext,
       selectedBinIndex: value.featureIndex
-    });
-  };
-
-  private generateBinVectorForBin(
-    value: IBinnedResponse,
-    dataset: any[][]
-  ): number[] {
-    return dataset.map((row) => {
-      const featureValue = row[value.featureIndex];
-      if (value.rangeType === RangeTypes.categorical) {
-        // this handles categorical, as well as integers when user requests to treat as categorical
-        return value.array.indexOf(featureValue);
-      }
-      return value.array.findIndex((upperLimit) => {
-        return upperLimit >= featureValue;
-      });
-    });
-  }
-
-  private readonly buildFeatureBins = (
-    fairnessContext: IFairnessContext
-  ): IBinnedResponse[] => {
-    return fairnessContext.modelMetadata.featureNames.map((_, index) => {
-      return BinnedResponseBuilder.buildDefaultBin(
-        fairnessContext.modelMetadata.featureRanges[index],
-        index,
-        fairnessContext.dataset
-      );
     });
   };
 

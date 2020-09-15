@@ -139,11 +139,13 @@
             "project": "libs/core-ui/package.json",
             "entryFile": "libs/core-ui/src/index.ts",
             "external": [
+              "jmespath",
               "lodash",
+              "moment",
               "office-ui-fabric-react",
               "plotly.js",
-              "react-dom",
               "react",
+              "react-dom",
               "uuid"
             ],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",

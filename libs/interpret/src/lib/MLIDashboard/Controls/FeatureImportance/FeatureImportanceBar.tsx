@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import _ from "lodash";
 import {
   ComboBox,
@@ -12,7 +15,7 @@ import {
 import React from "react";
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
-import { ModelTypes } from "../../IExplanationContext";
+import { ModelTypes, IGlobalExplanation } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import {
   FeatureSortingKey,
@@ -23,6 +26,7 @@ import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import { FeatureImportanceModes } from "./FeatureImportanceModes";
 
 export interface IFeatureImportanceBarState {
   selectedSorting: FeatureSortingKey;
@@ -40,7 +44,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     super(props);
     this.sortOptions = this.buildSortOptions();
     this.state = {
-      selectedSorting: FeatureKeys.absoluteGlobal,
+      selectedSorting: FeatureKeys.AbsoluteGlobal,
       isCalloutVisible: false
     };
   }
@@ -53,7 +57,9 @@ export class FeatureImportanceBar extends React.PureComponent<
       (globalExplanation.flattenedFeatureImportances !== undefined ||
         globalExplanation.perClassFeatureImportances !== undefined)
     ) {
-      const featuresByClassMatrix = this.getFeatureByClassMatrix();
+      const featuresByClassMatrix = this.getFeatureByClassMatrix(
+        globalExplanation
+      );
       const sortVector = this.getSortVector(featuresByClassMatrix);
 
       return (
@@ -135,7 +141,7 @@ export class FeatureImportanceBar extends React.PureComponent<
             theme={this.props.theme}
             intercept={
               this.props.dashboardContext.explanationContext.globalExplanation
-                .intercepts
+                ?.intercepts
             }
             featureByClassMatrix={featuresByClassMatrix}
             sortedIndexVector={sortVector}
@@ -160,7 +166,7 @@ export class FeatureImportanceBar extends React.PureComponent<
   }
 
   private getSortVector = (featureByClassMatrix: number[][]): number[] => {
-    if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
+    if (this.state.selectedSorting === FeatureKeys.AbsoluteGlobal) {
       return ModelExplanationUtils.buildSortedVector(featureByClassMatrix);
     }
     return ModelExplanationUtils.buildSortedVector(
@@ -169,20 +175,20 @@ export class FeatureImportanceBar extends React.PureComponent<
     );
   };
 
-  private getFeatureByClassMatrix = (): number[][] => {
+  private getFeatureByClassMatrix = (
+    globalExplanation: IGlobalExplanation
+  ): number[][] => {
     return (
-      this.props.dashboardContext.explanationContext.globalExplanation
-        .perClassFeatureImportances ||
-      this.props.dashboardContext.explanationContext.globalExplanation.flattenedFeatureImportances.map(
-        (value) => [value]
-      )
+      globalExplanation.perClassFeatureImportances ||
+      globalExplanation.flattenedFeatureImportances?.map((value) => [value]) ||
+      []
     );
   };
 
   private buildSortOptions = (): IDropdownOption[] => {
     if (
       this.props.dashboardContext.explanationContext.modelMetadata.modelType !==
-        ModelTypes.multiclass ||
+        ModelTypes.Multiclass ||
       this.props.dashboardContext.explanationContext.globalExplanation ===
         undefined ||
       this.props.dashboardContext.explanationContext.globalExplanation
@@ -192,7 +198,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     }
     const result: IDropdownOption[] = [
       {
-        key: FeatureKeys.absoluteGlobal,
+        key: FeatureKeys.AbsoluteGlobal,
         text: localization.BarChart.absoluteGlobal
       }
     ];
@@ -215,18 +221,22 @@ export class FeatureImportanceBar extends React.PureComponent<
 
   private setChart = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    const newConfig = _.cloneDeep(this.props.config);
-    newConfig.displayMode = item.key as any;
-    this.props.onChange(newConfig, this.props.config.id);
+    if (item?.key !== undefined) {
+      const newConfig = _.cloneDeep(this.props.config);
+      newConfig.displayMode = item.key as FeatureImportanceModes;
+      this.props.onChange(newConfig, this.props.config.id);
+    }
   };
 
   private onSortSelect = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    this.setState({ selectedSorting: item.key as any });
+    if (item?.key !== undefined) {
+      this.setState({ selectedSorting: item.key as FeatureSortingKey });
+    }
   };
 
   private onIconClick = (): void => {

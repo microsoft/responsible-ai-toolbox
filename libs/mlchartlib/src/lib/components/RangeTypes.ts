@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum RangeTypes {
-  categorical = "categorical",
-  integer = "integer",
-  numeric = "numeric"
+  Categorical = "categorical",
+  Integer = "integer",
+  Numeric = "numeric"
 }

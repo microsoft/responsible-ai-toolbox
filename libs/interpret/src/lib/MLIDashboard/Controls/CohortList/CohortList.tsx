@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { CommandBarButton, PrimaryButton, Text } from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../../Localization/localization";
@@ -23,11 +26,11 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
     const classNames = cohortListStyles();
 
     let modelType: string;
-    if (this.props.metadata.modelType === ModelTypes.binary) {
+    if (this.props.metadata.modelType === ModelTypes.Binary) {
       modelType = localization.CohortBanner.binaryClassifier;
-    } else if (this.props.metadata.modelType === ModelTypes.multiclass) {
+    } else if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       modelType = localization.CohortBanner.multiclassClassifier;
-    } else if (this.props.metadata.modelType === ModelTypes.regression) {
+    } else {
       modelType = localization.CohortBanner.regressor;
     }
     return (
@@ -79,7 +82,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                       root: classNames.commandButton,
                       menuIcon: classNames.menuIcon
                     }}
-                    disabled={this.props.jointDataset.dataDict.length === 0}
+                    disabled={!this.props.jointDataset.dataDict?.length}
                     menuIconProps={{ iconName: "More" }}
                     menuProps={{
                       items: [
@@ -104,7 +107,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                 >
                   {localization.formatString(
                     localization.CohortBanner.datapoints,
-                    cohort.rowCount
+                    cohort.filteredData.length
                   )}
                 </Text>
                 <Text
@@ -121,7 +124,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
             );
           })}
           <PrimaryButton
-            disabled={this.props.jointDataset.dataDict.length === 0}
+            disabled={!this.props.jointDataset.dataDict?.length}
             onClick={this.props.editCohort.bind(
               this,
               this.props.cohorts.length

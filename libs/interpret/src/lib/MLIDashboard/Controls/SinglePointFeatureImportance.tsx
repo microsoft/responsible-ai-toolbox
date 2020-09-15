@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import {
   IDropdownOption,
@@ -8,7 +11,11 @@ import {
 } from "office-ui-fabric-react";
 import _ from "lodash";
 
-import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import {
+  IExplanationContext,
+  ModelTypes,
+  ILocalExplanation
+} from "../IExplanationContext";
 import {
   IBarChartConfig,
   FeatureKeys,
@@ -24,7 +31,7 @@ import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 import { singlePointFeatureImportanceStyles } from "./SinglePointFeatureImportance.styles";
 
-export const LocalBarId = "local_bar_id";
+export const localBarId = "local_bar_id";
 
 export interface ISinglePointFeatureImportanceProps {
   explanationContext: IExplanationContext;
@@ -59,11 +66,13 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       localExplanation !== undefined &&
       localExplanation.values !== undefined
     ) {
-      const featuresByClassMatrix = this.getFeatureByClassMatrix();
-      const sortVector = this.getSortVector();
-      const defaultVisibleClasses: number[] =
-        this.state.selectedSorting !== FeatureKeys.absoluteGlobal &&
-        this.state.selectedSorting !== FeatureKeys.absoluteLocal
+      const featuresByClassMatrix = this.getFeatureByClassMatrix(
+        localExplanation
+      );
+      const sortVector = this.getSortVector(localExplanation);
+      const defaultVisibleClasses =
+        this.state.selectedSorting !== FeatureKeys.AbsoluteGlobal &&
+        this.state.selectedSorting !== FeatureKeys.AbsoluteLocal
           ? [this.state.selectedSorting]
           : undefined;
       return (
@@ -125,7 +134,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
             </div>
             <BarChart
               intercept={
-                this.props.explanationContext.localExplanation.intercepts
+                this.props.explanationContext.localExplanation?.intercepts
               }
               featureByClassMatrix={featuresByClassMatrix}
               sortedIndexVector={sortVector}
@@ -158,14 +167,13 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     return <NoDataMessage explanationStrings={explanationStrings} />;
   }
 
-  private getSortVector(): number[] {
-    const localExplanation = this.props.explanationContext.localExplanation;
-    if (this.state.selectedSorting === FeatureKeys.absoluteGlobal) {
+  private getSortVector(localExplanation: ILocalExplanation): number[] {
+    if (this.state.selectedSorting === FeatureKeys.AbsoluteGlobal) {
       return ModelExplanationUtils.buildSortedVector(
         this.props.explanationContext.globalExplanation
-          .perClassFeatureImportances
+          ?.perClassFeatureImportances || []
       );
-    } else if (this.state.selectedSorting === FeatureKeys.absoluteLocal) {
+    } else if (this.state.selectedSorting === FeatureKeys.AbsoluteLocal) {
       return ModelExplanationUtils.buildSortedVector(
         localExplanation.values[this.props.selectedRow]
       );
@@ -176,14 +184,14 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     );
   }
 
-  private getFeatureByClassMatrix(): number[][] {
-    const result = this.props.explanationContext.localExplanation.values[
-      this.props.selectedRow
-    ];
+  private getFeatureByClassMatrix(
+    localExplanation: ILocalExplanation
+  ): number[][] {
+    const result = localExplanation.values[this.props.selectedRow];
     // Binary classifier just has feature importance for class 0 stored, class one is equal and oposite.
     if (
       this.props.explanationContext.modelMetadata.modelType ===
-        ModelTypes.binary &&
+        ModelTypes.Binary &&
       this.props.explanationContext.testDataset.predictedY !== undefined &&
       this.props.explanationContext.testDataset.predictedY[
         this.props.selectedRow
@@ -199,7 +207,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
   private buildSortOptions(): IDropdownOption[] {
     const result: IDropdownOption[] = [
       {
-        key: FeatureKeys.absoluteGlobal,
+        key: FeatureKeys.AbsoluteGlobal,
         text: localization.BarChart.absoluteGlobal
       }
     ];
@@ -208,16 +216,16 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     // }
     if (
       this.props.explanationContext.modelMetadata.modelType !==
-      ModelTypes.multiclass
+      ModelTypes.Multiclass
     ) {
       result.push({
-        key: FeatureKeys.absoluteLocal,
+        key: FeatureKeys.AbsoluteLocal,
         text: localization.BarChart.absoluteLocal
       });
     }
     if (
       this.props.explanationContext.modelMetadata.modelType ===
-      ModelTypes.multiclass
+      ModelTypes.Multiclass
     ) {
       result.push(
         ...this.props.explanationContext.modelMetadata.classNames.map(
@@ -233,26 +241,28 @@ export class SinglePointFeatureImportance extends React.PureComponent<
 
   private getDefaultSorting(): FeatureSortingKey {
     if (!this.props.explanationContext.testDataset.predictedY) {
-      return FeatureKeys.absoluteGlobal;
+      return FeatureKeys.AbsoluteGlobal;
     }
     return this.props.explanationContext.modelMetadata.modelType ===
-      ModelTypes.multiclass
+      ModelTypes.Multiclass
       ? this.props.explanationContext.testDataset.predictedY[
           this.props.selectedRow
         ]
-      : FeatureKeys.absoluteLocal;
+      : FeatureKeys.AbsoluteLocal;
   }
 
   private setTopK = (newValue: number): void => {
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.topK = newValue;
-    this.props.onChange(newConfig, LocalBarId);
+    this.props.onChange(newConfig, localBarId);
   };
 
   private onSortSelect = (
     _event: React.FormEvent<IComboBox>,
-    item: IComboBoxOption
+    item?: IComboBoxOption
   ): void => {
-    this.setState({ selectedSorting: item.key as any });
+    if (item) {
+      this.setState({ selectedSorting: item.key as FeatureSortingKey });
+    }
   };
 }
