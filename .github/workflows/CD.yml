@@ -50,7 +50,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-        package: [core-ui, mlchartlib, fairlearn, interpret]
+        package: [core-ui, mlchartlib, fairness, interpret]
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}

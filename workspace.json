@@ -57,9 +57,9 @@
         }
       }
     },
-    "fairlearn": {
-      "root": "libs/fairlearn",
-      "sourceRoot": "libs/fairlearn/src",
+    "fairness": {
+      "root": "libs/fairness",
+      "sourceRoot": "libs/fairness/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -68,19 +68,19 @@
           "options": {
             "linter": "eslint",
             "tsConfig": [
-              "libs/fairlearn/tsconfig.lib.json",
-              "libs/fairlearn/tsconfig.spec.json"
+              "libs/fairness/tsconfig.lib.json",
+              "libs/fairness/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/fairlearn/**/*"]
+            "exclude": ["**/node_modules/**", "!libs/fairness/**/*"]
           }
         },
         "build": {
           "builder": "@nrwl/web:package",
           "options": {
-            "outputPath": "dist/libs/fairlearn",
-            "tsConfig": "libs/fairlearn/tsconfig.lib.json",
-            "project": "libs/fairlearn/package.json",
-            "entryFile": "libs/fairlearn/src/index.ts",
+            "outputPath": "dist/libs/fairness",
+            "tsConfig": "libs/fairness/tsconfig.lib.json",
+            "project": "libs/fairness/package.json",
+            "entryFile": "libs/fairness/src/index.ts",
             "external": [
               "jmespath",
               "localized-strings",
@@ -106,7 +106,7 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/fairlearn/jest.config.js",
+            "jestConfig": "libs/fairness/jest.config.js",
             "passWithNoTests": true
           }
         }
