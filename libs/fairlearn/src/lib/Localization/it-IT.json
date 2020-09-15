@@ -33,7 +33,7 @@
     "body": "Le metriche di disparità quantificano la variazione del comportamento del modello in tutte le funzionalità selezionate. Esistono due tipi di metriche di disparità: altro da aggiungere...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Documentazione"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Benvenuti in",
-    "fairlearnDashboard": "Dashboard Fairlearn",
-    "introBody": "Il dashboard Fairlearn consente di valutare i compromessi tra prestazioni ed equità dei modelli",
+    "fairnessDashboard": "Dashboard Fairness",
+    "introBody": "Il dashboard Fairness consente di valutare i compromessi tra prestazioni ed equità dei modelli",
     "explanatoryStep": "Per configurare la valutazione, è necessario specificare una caratteristica sensibile e una metrica delle prestazioni.",
     "getStarted": "Attività iniziali",
     "features": "Caratteristiche sensibili",

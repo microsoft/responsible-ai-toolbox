@@ -33,7 +33,7 @@
     "body": "Fark ölçümleri, modelinizin seçilen özelliklerde gösterdiği davranışın varyasyon miktarını ölçer. İki tür fark ölçümü vardır. Daha fazla ölçüm kullanıma sunulacak..."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Belgeler"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Hoş geldiniz",
-    "fairlearnDashboard": "Fairlearn panosu",
-    "introBody": "Fairlearn panosu, modellerinizin performansı ve eşitliği arasındaki karşılaştırmaları değerlendirmenizi sağlar",
+    "fairnessDashboard": "Fairness panosu",
+    "introBody": "Fairness panosu, modellerinizin performansı ve eşitliği arasındaki karşılaştırmaları değerlendirmenizi sağlar",
     "explanatoryStep": "Değerlendirmeyi ayarlamak için hassas bir özellik ve performans ölçümü belirtmeniz gerekir.",
     "getStarted": "Kullanmaya başlayın",
     "features": "Hassas özellikler",

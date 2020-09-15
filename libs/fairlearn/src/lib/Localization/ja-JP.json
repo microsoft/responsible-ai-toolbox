@@ -33,7 +33,7 @@
     "body": "不均衡メトリックは、選択した特徴量間のモデルの動作のバリエーションを定量化します。次の 2 種類の不均衡メトリックがあり、さらに増える予定です。"
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "ドキュメント"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "ようこそ:",
-    "fairlearnDashboard": "Fairlearn ダッシュボード",
-    "introBody": "Fairlearn ダッシュボードを使用すると、モデルのパフォーマンスと公平性との間のトレードオフを評価できます",
+    "fairnessDashboard": "Fairness ダッシュボード",
+    "introBody": "Fairness ダッシュボードを使用すると、モデルのパフォーマンスと公平性との間のトレードオフを評価できます",
     "explanatoryStep": "評価を設定するには、重要な特徴量とパフォーマンス メトリックを指定する必要があります。",
     "getStarted": "はじめに",
     "features": "重要な特徴量",

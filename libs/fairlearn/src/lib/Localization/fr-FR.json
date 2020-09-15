@@ -33,7 +33,7 @@
     "body": "Les métriques de disparité quantifient la variation du comportement de votre modèle sur les caractéristiques sélectionnées. Il existe deux types de métriques de disparité : d'autres sont à venir..."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Documentation"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Bienvenue dans :",
-    "fairlearnDashboard": "Tableau de bord Fairlearn",
-    "introBody": "Le tableau de bord Fairlearn vous permet d'évaluer les compromis entre les performances et l'équité de vos modèles",
+    "fairnessDashboard": "Tableau de bord Fairness",
+    "introBody": "Le tableau de bord Fairness vous permet d'évaluer les compromis entre les performances et l'équité de vos modèles",
     "explanatoryStep": "Pour configurer l'évaluation, vous devez spécifier une caractéristique sensible et une métrique de performances.",
     "getStarted": "Démarrer",
     "features": "Caractéristiques sensibles",

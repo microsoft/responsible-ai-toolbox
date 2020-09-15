@@ -33,7 +33,7 @@
     "body": "Metryki rozbieżności określają wartość odchylenia dla zachowania modelu w ramach wybranych cech. Istnieją dwa rodzaje metryk rozbieżności: informacje zostaną uzupełnione...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Dokumentacja"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Witamy w",
-    "fairlearnDashboard": "Pulpit nawigacyjny Fairlearn",
-    "introBody": "Pulpit nawigacyjny Fairlearn umożliwia ocenę kompromisów między wydajnością i atrakcyjnością modeli",
+    "fairnessDashboard": "Pulpit nawigacyjny Fairness",
+    "introBody": "Pulpit nawigacyjny Fairness umożliwia ocenę kompromisów między wydajnością i atrakcyjnością modeli",
     "explanatoryStep": "Aby skonfigurować ocenę, należy określić cechę wrażliwą i metrykę wydajności.",
     "getStarted": "Rozpocznij",
     "features": "Cechy wrażliwe",

@@ -33,7 +33,7 @@
     "body": "Az egyenlőtlenségi metrikák számszerűsítik a modell viselkedésének variációját a kiválasztott jellemzők tekintetében. Kétféle egyenlőtlenségi metrika létezik: hamarosan...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Dokumentáció"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Üdvözöli a",
-    "fairlearnDashboard": "Fairlearn irányítópult",
-    "introBody": "A Fairlearn-irányítópult lehetővé teszi a modellek teljesítménye és a méltányossága közötti kompromisszumok értékelését",
+    "fairnessDashboard": "Fairness irányítópult",
+    "introBody": "A Fairness-irányítópult lehetővé teszi a modellek teljesítménye és a méltányossága közötti kompromisszumok értékelését",
     "explanatoryStep": "Az értékelés beállításához meg kell adnia egy érzékeny jellemzőt és egy teljesítménymutatót.",
     "getStarted": "Első lépések",
     "features": "Érzékeny jellemzők",

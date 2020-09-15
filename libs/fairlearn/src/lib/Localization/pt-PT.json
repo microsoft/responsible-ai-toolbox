@@ -33,7 +33,7 @@
     "body": "As métricas de disparidade quantificam a variação do comportamento do seu modelo nas funcionalidades selecionadas. Há dois tipos de métricas de disparidade: mais novidades em breve...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Documentação"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Bem-vindo ao",
-    "fairlearnDashboard": "Dashboard do Fairlearn",
-    "introBody": "O dashboard do Fairlearn permite avaliar compromissos entre desempenho e equidade dos seus modelos",
+    "fairnessDashboard": "Dashboard do Fairness",
+    "introBody": "O dashboard do Fairness permite avaliar compromissos entre desempenho e equidade dos seus modelos",
     "explanatoryStep": "Para configurar a avaliação, é necessário especificar uma funcionalidade sensível e uma métrica de desempenho.",
     "getStarted": "Introdução",
     "features": "Funcionalidades sensíveis",

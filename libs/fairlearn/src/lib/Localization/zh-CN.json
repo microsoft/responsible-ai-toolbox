@@ -33,7 +33,7 @@
     "body": "差异指标量化了模型在所选特征之间的行为变化。有两种类型的差异指标: 即将推出更多..."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "文档"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "欢迎使用",
-    "fairlearnDashboard": "Fairlearn 仪表板",
-    "introBody": "借助 Fairlearn 仪表板，可以评估模型的性能和公平性之间的权衡",
+    "fairnessDashboard": "Fairness 仪表板",
+    "introBody": "借助 Fairness 仪表板，可以评估模型的性能和公平性之间的权衡",
     "explanatoryStep": "若要设置评估，需要指定一个敏感特征和一个性能指标。",
     "getStarted": "开始使用",
     "features": "敏感特征",

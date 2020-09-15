@@ -33,7 +33,7 @@
     "body": "差距指標會在所選功能間量化模型行為的變化。有兩種差距指標: 即將推出更多...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "文件"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "歡迎使用",
-    "fairlearnDashboard": "Fairlearn 儀表板",
-    "introBody": "Fairlearn 儀表板可讓您評定模型成效與公平性之間的權衡",
+    "fairnessDashboard": "Fairness 儀表板",
+    "introBody": "Fairness 儀表板可讓您評定模型成效與公平性之間的權衡",
     "explanatoryStep": "若要設定評定，您必須指定敏感性特徵和成效指標。",
     "getStarted": "立即開始",
     "features": "敏感性特徵",

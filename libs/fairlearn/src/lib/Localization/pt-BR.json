@@ -33,7 +33,7 @@
     "body": "As métricas de disparidade quantificam a variação do comportamento do seu modelo nos recursos selecionados. Há dois tipos de métricas de disparidade: mais em breve...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Documentação"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Bem-vindo(a) a",
-    "fairlearnDashboard": "Painel do Fairlearn",
-    "introBody": "O painel do Fairlearn permite que você avalie as compensações entre o desempenho e a equidade dos seus modelos",
+    "fairnessDashboard": "Painel do Fairness",
+    "introBody": "O painel do Fairness permite que você avalie as compensações entre o desempenho e a equidade dos seus modelos",
     "explanatoryStep": "Para configurar a avaliação, é necessário especificar um recurso confidencial e uma métrica de desempenho.",
     "getStarted": "Introdução",
     "features": "Recursos confidenciais",

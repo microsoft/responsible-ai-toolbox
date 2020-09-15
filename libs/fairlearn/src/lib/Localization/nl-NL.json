@@ -33,7 +33,7 @@
     "body": "Met de verschilwaarden wordt de variatie van het gedrag van uw model op geselecteerde functies gekwantificeerd. Er zijn twee soorten verschilwaarden: wordt vervolgd...."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Documentatie"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Welkom bij",
-    "fairlearnDashboard": "Fairlearn-dashboard",
-    "introBody": "Met het Fairlearn-dashboard kunt u de compromissen tussen prestaties en verdeling van uw modellen evalueren",
+    "fairnessDashboard": "Fairness-dashboard",
+    "introBody": "Met het Fairness-dashboard kunt u de compromissen tussen prestaties en verdeling van uw modellen evalueren",
     "explanatoryStep": "Als u de evaluatie wilt instellen, moet u een gevoelige functie en metrische prestatiegegevens opgeven.",
     "getStarted": "Aan de slag",
     "features": "Gevoelige functies",

@@ -9,7 +9,7 @@ import {
   IMetricRequest,
   IFairnessData,
   IFairnessProps
-} from "@responsible-ai/fairlearn";
+} from "@responsible-ai/fairness";
 import { ITheme } from "office-ui-fabric-react";
 
 interface IAppProps {

@@ -33,7 +33,7 @@
     "body": "Metriky nekonzistence vyjadřují proměnlivost chování modelu mezi vybranými příznaky. Existují dva druhy metrik nekonzistence: další připravujeme..."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Dokumentace"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Vítá vás",
-    "fairlearnDashboard": "Řídicí panel Fairlearn",
-    "introBody": "Řídicí panel Fairlearn umožňuje posoudit kompromisy mezi výkonem a nestranností modelů.",
+    "fairnessDashboard": "Řídicí panel Fairness",
+    "introBody": "Řídicí panel Fairness umožňuje posoudit kompromisy mezi výkonem a nestranností modelů.",
     "explanatoryStep": "Pokud chcete nastavit posouzení, musí se zadat citlivý příznak a metrika výkonu.",
     "getStarted": "Začínáme",
     "features": "Citlivé příznaky",

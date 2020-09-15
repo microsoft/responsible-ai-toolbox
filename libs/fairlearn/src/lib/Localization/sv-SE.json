@@ -33,7 +33,7 @@
     "body": "Diskrepansmått kvantifierar variationer i dina modellers beteende för valda funktioner. Det finns två olika typer av diskrepansmått: mer kommer..."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Dokumentation"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Välkommen till",
-    "fairlearnDashboard": "Fairlearn-instrumentpanel",
-    "introBody": "Med Fairlearn-instrumentpanelen kan du utvärdera kompromisser mellan prestanda och rättvisa för dina modeller",
+    "fairnessDashboard": "Fairness-instrumentpanel",
+    "introBody": "Med Fairness-instrumentpanelen kan du utvärdera kompromisser mellan prestanda och rättvisa för dina modeller",
     "explanatoryStep": "Om du vill konfigurera utvärderingen måste du ange en känslig funktion och ett prestandamått.",
     "getStarted": "Kom igång",
     "features": "Känsliga funktioner",

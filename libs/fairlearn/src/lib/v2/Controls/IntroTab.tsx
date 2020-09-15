@@ -27,7 +27,7 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
               {localization.Intro.welcome}
             </Text>
             <Text className={styles.firstSectionSubtitle} block>
-              {localization.Intro.fairlearnDashboard}
+              {localization.Intro.fairnessDashboard}
             </Text>
             <Text className={styles.firstSectionBody} variant={"large"} block>
               {localization.Intro.introBody}

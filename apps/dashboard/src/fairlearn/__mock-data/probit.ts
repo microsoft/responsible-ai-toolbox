@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFairnessData } from "@responsible-ai/fairlearn";
+import { IFairnessData } from "@responsible-ai/fairness";
 
 export const probit: IFairnessData = {
   trueY: [1, 1, 1, 1, 0, 0, 0, 0],

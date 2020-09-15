@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 module.exports = {
-  name: "fairlearn",
+  name: "fairness",
   preset: "../../jest.config.js",
   transform: {
     "^.+\\.[tj]sx?$": [
@@ -11,5 +11,5 @@ module.exports = {
     ]
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  coverageDirectory: "../../coverage/libs/fairlearn"
+  coverageDirectory: "../../coverage/libs/fairness"
 };

@@ -33,7 +33,7 @@
     "body": "Abweichungsmetriken quantifizieren die Variation des Modellverhaltens für die ausgewählten Features. Es gibt zwei Arten von Abweichungsmetriken: Weitere Informationen folgen..."
   },
   "Header": {
-    "title": "Fairlearn",
+    "title": "Fairness",
     "documentation": "Dokumentation"
   },
   "Footer": {
@@ -42,8 +42,8 @@
   },
   "Intro": {
     "welcome": "Willkommen beim",
-    "fairlearnDashboard": "Fairlearn-Dashboard",
-    "introBody": "Mit dem Fairlearn-Dashboard können Sie Kompromisse zwischen Leistung und Fairness Ihrer Modelle bewerten.",
+    "fairnessDashboard": "Fairness-Dashboard",
+    "introBody": "Mit dem Fairness-Dashboard können Sie Kompromisse zwischen Leistung und Fairness Ihrer Modelle bewerten.",
     "explanatoryStep": "Um die Bewertung einzurichten, müssen Sie ein sensibles Feature und eine Leistungsmetrik angeben.",
     "getStarted": "Erste Schritte",
     "features": "Sensible Features",
