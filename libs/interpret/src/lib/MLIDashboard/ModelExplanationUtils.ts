@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export class ModelExplanationUtils {
   public static getSortIndices(input: number[]): number[] {
     const augmented = input.map((val, index) => [val, index]);

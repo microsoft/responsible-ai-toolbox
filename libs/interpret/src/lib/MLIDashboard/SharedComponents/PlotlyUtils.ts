@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { IDropdownOption } from "office-ui-fabric-react";
 import _ from "lodash";

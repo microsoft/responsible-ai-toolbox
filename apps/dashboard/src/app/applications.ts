@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
 import { IFairnessData } from "@responsible-ai/fairlearn";
 import { binaryClassifier } from "../fairlearn/__mock-data/binaryClassifier";

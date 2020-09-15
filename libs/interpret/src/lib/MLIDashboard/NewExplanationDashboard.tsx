@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import memoize from "memoize-one";

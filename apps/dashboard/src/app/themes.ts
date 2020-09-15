@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { createTheme } from "office-ui-fabric-react";
 
 const darkTheme = createTheme({

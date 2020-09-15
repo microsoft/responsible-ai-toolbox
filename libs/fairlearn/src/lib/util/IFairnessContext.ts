@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
 import { PredictionType } from "../IFairnessProps";
 

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { initializeIcons } from "office-ui-fabric-react";
 import {
   ModelMetadata,

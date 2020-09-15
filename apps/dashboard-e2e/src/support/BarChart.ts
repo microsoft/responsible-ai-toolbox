@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 const cordReg = /M([\d.]+),([\d.]+)V([\d.]+)H([\d.]+)V([\d.]+)Z/;
 
 export interface IBar {

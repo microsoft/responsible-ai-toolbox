@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import Plotly from "plotly.js";
 import { v4 } from "uuid";

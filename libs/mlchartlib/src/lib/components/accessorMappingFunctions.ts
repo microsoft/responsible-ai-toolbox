@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IData } from "./IData";
 import { AccessorMappingFunctionNames } from "./AccessorMappingFunctionNames";
 

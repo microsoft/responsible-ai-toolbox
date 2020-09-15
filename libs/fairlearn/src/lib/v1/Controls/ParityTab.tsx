@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from "react";
 import { Stack, StackItem, Separator } from "office-ui-fabric-react";
 
