@@ -5,7 +5,7 @@ import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 import { ITheme } from "office-ui-fabric-react";
 import { App as Interpret } from "../interpret/App";
-import { App as Fairlearn } from "../fairlearn/App";
+import { App as Fairness } from "../fairness/App";
 import { themes } from "./themes";
 import { languages } from "./languages";
 import { generateRoute } from "./generateRoute";
@@ -62,8 +62,8 @@ export class App extends React.Component<IAppSetting, IAppState> {
               }
             />
           )}
-          {this.state.application === "fairlearn" && (
-            <Fairlearn
+          {this.state.application === "fairness" && (
+            <Fairness
               dataset={
                 applications[this.state.application].datasets[
                   this.state.dataset

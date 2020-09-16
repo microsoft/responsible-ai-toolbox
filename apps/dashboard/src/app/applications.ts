@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
-import { IFairnessData } from "@responsible-ai/fairlearn";
-import { binaryClassifier } from "../fairlearn/__mock-data/binaryClassifier";
-import { regression } from "../fairlearn/__mock-data/regression";
-import { probit } from "../fairlearn/__mock-data/probit";
-import { precomputedBinary } from "../fairlearn/__mock-data/precomputedBinary";
-import { precomputedBinaryTwo } from "../fairlearn/__mock-data/precomputedBinaryTwo";
+import { IFairnessData } from "@responsible-ai/fairness";
+import { binaryClassifier } from "../fairness/__mock-data/binaryClassifier";
+import { regression } from "../fairness/__mock-data/regression";
+import { probit } from "../fairness/__mock-data/probit";
+import { precomputedBinary } from "../fairness/__mock-data/precomputedBinary";
+import { precomputedBinaryTwo } from "../fairness/__mock-data/precomputedBinaryTwo";
 import { automlMimicAdult } from "../interpret/__mock_data/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data/bostonDataGlobal";
@@ -43,12 +43,12 @@ export interface IFairLearnSetting {
   versions: { [key: string]: 1 | 2 };
 }
 
-export const applicationKeys = <const>["interpret", "fairlearn"];
+export const applicationKeys = <const>["interpret", "fairness"];
 
 export type IApplications = {
   [key in typeof applicationKeys[number]]: unknown;
 } & {
-  fairlearn: IFairLearnSetting & IDataSet<IFairLearnDataSet>;
+  fairness: IFairLearnSetting & IDataSet<IFairLearnDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
 };
 
@@ -72,7 +72,7 @@ export const applications: IApplications = <const>{
       largeFeatureCount: { data: largeFeatureCount, classDimension: 2 }
     }
   },
-  fairlearn: {
+  fairness: {
     versions: { "Version-1": 1, "Version-2": 2 },
     datasets: {
       binaryClassifier: { data: binaryClassifier },
