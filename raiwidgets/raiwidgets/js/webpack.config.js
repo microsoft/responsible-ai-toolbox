@@ -6,7 +6,7 @@ var config = {
   output: {
     path: path.resolve(__dirname, "..", "static"),
     filename: "index.js",
-    library: "inline-fairlearn-dashboard",
+    library: "inline-fairness-dashboard",
     libraryTarget: "umd",
     umdNamedDefine: true
   },

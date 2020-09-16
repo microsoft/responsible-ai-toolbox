@@ -1,4 +1,4 @@
-# Requirements for Fairlearn development
+# Requirements for raiwidgets development
 
 # Required for environment
 autopep8
