@@ -4,10 +4,10 @@
 /dist
 /tmp
 /out-tsc
-/fairlearnboard/fairlearnboard/js/dist/*
-/fairlearnboard/fairlearnboard/js/lib/*
-/fairlearnboard/fairlearnboard/js/node_modules/*
-/fairlearnboard/fairlearnboard.egg-info/*
+/raiwidgets/raiwidgets/js/dist/*
+/raiwidgets/raiwidgets/js/lib/*
+/raiwidgets/raiwidgets/js/node_modules/*
+/raiwidgets/raiwidgets.egg-info/*
 
 # dependencies
 /node_modules/
