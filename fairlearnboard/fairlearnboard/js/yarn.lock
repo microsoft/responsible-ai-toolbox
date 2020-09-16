@@ -894,21 +894,6 @@
     parse-rect "^1.2.0"
     pick-by-alias "^1.2.0"
 
-"@responsible-ai/fairlearn@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@responsible-ai/fairlearn/-/fairlearn-0.1.1.tgz#f064bd4e206fb18881885d01d38b1fc65ab74459"
-  integrity sha512-hUrHewqsJKX7Tx8m6hfiC0sIPa4pnNHgK9qJPtzYnDyWvrJlEEHGAN4IKEDlQChOMIRIC5P4jzL78HQe/fGoAQ==
-  dependencies:
-    "@responsible-ai/mlchartlib" "0.0.5"
-    jmespath "^0.15.0"
-    localized-strings "^0.2.4"
-    lodash "^4.17.11"
-    moment "^2.24.0"
-    office-ui-fabric-react "^7.117.0"
-    plotly.js "^1.48.0"
-    react "^16.12.0"
-    uuid "^3.3.2"
-
 "@responsible-ai/mlchartlib@0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@responsible-ai/mlchartlib/-/mlchartlib-0.0.5.tgz#3619c292e3dabf7daf46360ca96e6dce34aecac9"

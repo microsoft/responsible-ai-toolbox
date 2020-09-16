@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>Fairlearn Dashboard</title>
+<title>Fairness Dashboard</title>
 {% if has_local_url %}
 <a href="{{local_url}}" target="_blank">Open in new tab</a>
 {% endif %}
@@ -15,24 +15,24 @@
   (function universalLoad(root, callback) {
         if(typeof exports === 'object' && typeof module === 'object') {
           // CommonJS2
-          var fairlearnInline = require('inline-fairlearn-dashboard');
-          callback(fairlearnInline);
+          var fairnessInline = require('inline-fairness-dashboard');
+          callback(fairnessInline);
         } else if(typeof define === 'function' && define.amd) {
           // AMD
-          require(['inline-fairlearn-dashboard'], function(fairlearnInline) {
-            callback(fairlearnInline);
+          require(['inline-fairness-dashboard'], function(fairnessInline) {
+            callback(fairnessInline);
           });
         } else if(typeof exports === 'object') {
           // CommonJS
-          var fairlearnInline = require('inline-fairlearn-dashboard');
-          callback(fairlearnInline);
+          var fairnessInline = require('inline-fairness-dashboard');
+          callback(fairnessInline);
         } else {
           // Browser
-          callback(root['inline-fairlearn-dashboard']);
+          callback(root['inline-fairness-dashboard']);
         }
-      })(this, function(fairlearnInline) {
+      })(this, function(fairnessInline) {
           var data = {{ fairness_input | safe }};
           //data.predictionUrl = data.predictionUrl ? data.predictionUrl : undefined;
-          fairlearnInline.RenderDashboard("{{app_id}}", data);
+          fairnessInline.RenderDashboard("{{app_id}}", data);
       });
 </script>

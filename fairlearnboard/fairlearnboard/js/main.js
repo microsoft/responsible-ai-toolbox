@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import axios from "axios";
 import "babel-polyfill";
 
-import { FairnessWizardV2 } from "@responsible-ai/fairlearn";
+import { FairnessWizardV2 } from "@responsible-ai/fairness";
 
 let calculateMetrics = (postData) => {
   if (data.withCredentials) {

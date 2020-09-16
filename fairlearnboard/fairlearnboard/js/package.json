@@ -1,5 +1,5 @@
 {
-  "name": "inline-fairlearn-dashboard",
+  "name": "inline-fairness-dashboard",
   "version": "1.0.0",
   "description": "Host for component to be consumed as npm package",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "@babel/plugin-transform-runtime": "7.11.5",
     "@babel/preset-env": "7.4.3",
     "@babel/preset-react": "7.0.0",
-    "@responsible-ai/fairlearn": "0.1.1",
+    "@responsible-ai/fairness": "0.1.4",
     "axios": "^0.19.2",
     "babel-loader": "8.0.5",
     "babel-polyfill": "^6.26.0",

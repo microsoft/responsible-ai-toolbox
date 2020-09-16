@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-"""Defines the Fairlearn dashboard class."""
+"""Defines the fairness dashboard class."""
 
 from rai_core_flask import FlaskHelper, environment_detector
 from fairlearn.metrics import (
@@ -39,7 +39,7 @@ from jinja2 import Environment, PackageLoader
 from flask import jsonify, request
 
 
-class FairlearnDashboard(object):
+class FairnessDashboard(object):
     """The dashboard class, wraps the dashboard component.
 
     :param sensitive_features:  A matrix of feature vector examples (# examples x # features),
@@ -168,8 +168,8 @@ class FairlearnDashboard(object):
 
     @FlaskHelper.app.route('/<id>')
     def fairness_visual(id):
-        if id in FairlearnDashboard.fairness_inputs:
-            return generate_inline_html(FairlearnDashboard.fairness_inputs[id], None)
+        if id in FairnessDashboard.fairness_inputs:
+            return generate_inline_html(FairnessDashboard.fairness_inputs[id], None)
         else:
             return "Unknown model id."
 
@@ -177,13 +177,13 @@ class FairlearnDashboard(object):
     def fairness_metrics_calculation(id):
         try:
             data = request.get_json(force=True)
-            if id in FairlearnDashboard.fairness_inputs:
-                data.update(FairlearnDashboard.fairness_inputs[id])
+            if id in FairnessDashboard.fairness_inputs:
+                data.update(FairnessDashboard.fairness_inputs[id])
 
                 if type(data["binVector"][0]) == np.int32:
                     data['binVector'] = [str(bin_) for bin_ in data['binVector']]
 
-                method = FairlearnDashboard._metric_methods \
+                method = FairnessDashboard._metric_methods \
                     .get(data["metricKey"]).get("function")
                 prediction = method(
                     data['true_y'],
@@ -202,7 +202,6 @@ class FairlearnDashboard(object):
                 "stacktrace": str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback))),
                 "locals": str(locals()),
             })
-            #raise ValueError("Error while making request")
 
     def __init__(
             self, *,
@@ -212,7 +211,7 @@ class FairlearnDashboard(object):
             sensitive_feature_names=None,
             locale=None,
             port=None):
-        """Initialize the Fairlearn Dashboard."""
+        """Initialize the fairness Dashboard."""
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
 
@@ -241,9 +240,9 @@ class FairlearnDashboard(object):
             "true_y": self._y_true,
             "predicted_ys": self._y_pred,
             "dataset": dataset,
-            "classification_methods": FairlearnDashboard.classification_methods,
-            "regression_methods": FairlearnDashboard.regression_methods,
-            "probability_methods": FairlearnDashboard.probability_methods,
+            "classification_methods": FairnessDashboard.classification_methods,
+            "regression_methods": FairnessDashboard.regression_methods,
+            "probability_methods": FairnessDashboard.probability_methods,
         }
 
         if model_names is not None:
@@ -262,33 +261,33 @@ class FairlearnDashboard(object):
 
         self._load_local_js()
 
-        if FairlearnDashboard._service is None:
+        if FairnessDashboard._service is None:
             try:
-                FairlearnDashboard._service = FlaskHelper(port=port)
+                FairnessDashboard._service = FlaskHelper(port=port)
             except Exception as e:
-                FairlearnDashboard._service = None
+                FairnessDashboard._service = None
                 raise e
 
-        FairlearnDashboard.model_count += 1
-        model_count = FairlearnDashboard.model_count
+        FairnessDashboard.model_count += 1
+        model_count = FairnessDashboard.model_count
 
-        FairlearnDashboard.fairness_inputs[str(model_count)] = fairness_input
+        FairnessDashboard.fairness_inputs[str(model_count)] = fairness_input
 
-        local_url = f"{FairlearnDashboard._service.env.base_url}/{model_count}"
+        local_url = f"{FairnessDashboard._service.env.base_url}/{model_count}"
         metrics_url = f"{local_url}/metrics"
 
         fairness_input['metricsUrl'] = metrics_url
 
         html = generate_inline_html(fairness_input, local_url)
         # TODO
-        # FairlearnDashboard._service.env.display(html)
+        # FairnessDashboard._service.env.display(html)
         display(HTML(html))
 
     def _load_local_js(self):
         script_path = os.path.dirname(os.path.abspath(__file__))
         js_path = os.path.join(script_path, "static", "index.js")
         with open(js_path, "r", encoding="utf-8") as f:
-            FairlearnDashboard._dashboard_js = f.read()
+            FairnessDashboard._dashboard_js = f.read()
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)
@@ -312,9 +311,9 @@ class FairlearnDashboard(object):
 
 
 def generate_inline_html(fairness_input, local_url):
-    return FairlearnDashboard.default_template.render(
+    return FairnessDashboard.default_template.render(
         fairness_input=fairness_input,
-        main_js=FairlearnDashboard._dashboard_js,
+        main_js=FairnessDashboard._dashboard_js,
         app_id='app_fairness',
         local_url=local_url,
         has_local_url=local_url is not None)
