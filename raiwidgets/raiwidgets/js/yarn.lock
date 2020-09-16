@@ -894,10 +894,31 @@
     parse-rect "^1.2.0"
     pick-by-alias "^1.2.0"
 
-"@responsible-ai/mlchartlib@0.0.5":
+"@responsible-ai/core-ui@0.0.5":
   version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@responsible-ai/mlchartlib/-/mlchartlib-0.0.5.tgz#3619c292e3dabf7daf46360ca96e6dce34aecac9"
-  integrity sha512-a8sSPBu2L450nKA7Gh1c38iq6kQ6jHYpZG1ygj5M9n7R2QHtreD5B6zlS5VpZobKS0zoQ4cfj7hF/36W3x5dCA==
+  resolved "https://registry.yarnpkg.com/@responsible-ai/core-ui/-/core-ui-0.0.5.tgz#e11b301d53fff24da4798b823cd2f9271f04fa71"
+  integrity sha512-ZO9RuOX7lQrpmdToNPDqUBAg7O8Y/rqxGuRm3OA23zLAtwjGV9zYyouitHTXcZOw2Upsss6ou6Sfdb4GmxfWoQ==
+
+"@responsible-ai/fairness@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@responsible-ai/fairness/-/fairness-0.1.4.tgz#f86ecb2034128a84d0628815723e51019cc3922f"
+  integrity sha512-S2Dxm+uTBAC1Gw2655YVuDfml2/RgPKtMasZag2l91haUEh0Fi/4HdZEfIoR3NpaBb7nmBJpO1soJUGmkHYWhQ==
+  dependencies:
+    "@responsible-ai/core-ui" "0.0.5"
+    "@responsible-ai/mlchartlib" "0.0.6"
+    jmespath "^0.15.0"
+    localized-strings "^0.2.4"
+    lodash "^4.17.11"
+    moment "^2.24.0"
+    office-ui-fabric-react "^7.117.0"
+    plotly.js "^1.48.0"
+    react "^16.12.0"
+    uuid "^8.3.0"
+
+"@responsible-ai/mlchartlib@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@responsible-ai/mlchartlib/-/mlchartlib-0.0.6.tgz#fe385c73385c8e01bb883b5dc0b7ef2d7486d968"
+  integrity sha512-wKPGdgQXAa7JqG8ruteJ81A/4gMtCvAwbMld+FEkfibCOFmhUYub5/2JCNnS588fF08sfPBlHRV5sQC3nudHUQ==
   dependencies:
     jmespath "^0.15.0"
     localized-strings "^0.2.4"
@@ -8118,6 +8139,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
+  integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
 
 v8-compile-cache@^2.0.2:
   version "2.1.1"
