@@ -163,7 +163,7 @@ class FairlearnDashboard(object):
                            if "probability" in method[1]["model_type"]]
 
     @FlaskHelper.app.route('/')
-    def hello():
+    def list():
         return "No global list view supported at this time."
 
     @FlaskHelper.app.route('/<id>')
@@ -181,7 +181,7 @@ class FairlearnDashboard(object):
                 data.update(FairlearnDashboard.fairness_inputs[id])
 
                 if type(data["binVector"][0]) == np.int32:
-                    data['binVector'] = [str(int(bin)) for bin in data['binVector']]
+                    data['binVector'] = [str(bin_) for bin_ in data['binVector']]
 
                 method = FairlearnDashboard._metric_methods \
                     .get(data["metricKey"]).get("function")
@@ -191,7 +191,7 @@ class FairlearnDashboard(object):
                     sensitive_features=data["binVector"])
                 return jsonify({
                     "global": prediction.overall,
-                    "bins": prediction.by_group
+                    "bins": {str(bin_): value for bin_, value in prediction.by_group.items()}
                 })
         except Exception as ex:
             import sys, traceback
