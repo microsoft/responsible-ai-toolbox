@@ -9,7 +9,7 @@ import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart
 export function describeGlobalExplanationBoxChart(
   dataShape: IDataSetShape
 ): void {
-  describe("Global explanation bar chart", () => {
+  describe("Box chart", () => {
     const props = {
       chart: (undefined as unknown) as BoxChart,
       dataShape

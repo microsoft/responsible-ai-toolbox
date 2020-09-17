@@ -3,7 +3,8 @@
 
 import { Chart } from "./Chart";
 
-const cordReg = /M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)V([\d.]+)H([\d.]+)ZM([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)/;
+const boxReg = /M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)V([\d.]+)H([\d.]+)ZM([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)/;
+const meanReg = /M([\d.]+),([\d.]+)H([\d.]+)/;
 
 export interface IBox {
   readonly left: number;
@@ -13,26 +14,69 @@ export interface IBox {
   readonly q2: number;
   readonly q3: number;
   readonly top: number;
+  readonly mean: number;
 }
 export class BoxChart extends Chart<IBox> {
   public get Elements(): IBox[] {
-    return cy
-      .$$(`${this.container} svg .plot .trace.boxes > path.box`)
-      .get()
-      .map((b, i) => this.getCoordinate(b, i));
+    const boxElements = this.getBoxElements();
+    const meanElements = this.getMeanElements();
+    const pointElements = this.getPointElements();
+    if (boxElements.length !== meanElements.length) {
+      throw new Error(
+        `boxElements: ${boxElements.length} does not match meanElements: ${meanElements.length}`
+      );
+    }
+    if (boxElements.length !== pointElements.length) {
+      throw new Error(
+        `boxElements: ${boxElements.length} does not match pointElements: ${pointElements.length}`
+      );
+    }
+    return boxElements.map((b, i) => this.getCoordinate(i, b, meanElements[i]));
   }
-
   private readonly getCoordinate = (
-    element: HTMLElement,
-    idx: number
+    idx: number,
+    boxElement: HTMLElement,
+    meanElement: HTMLElement
   ): IBox => {
-    const d = element.getAttribute("d");
+    const boxCoordinate = this.getBoxCoordinate(idx, boxElement);
+    const meanCoordinate = this.getMeanCoordinate(idx, meanElement);
+    if (boxCoordinate.left !== meanCoordinate.left) {
+      throw new Error(
+        `left for box: ${boxCoordinate.left} does not match left for mean: ${meanCoordinate.left} `
+      );
+    }
+    if (boxCoordinate.right !== meanCoordinate.right) {
+      throw new Error(
+        `right for box: ${boxCoordinate.right} does not match right for mean: ${meanCoordinate.right} `
+      );
+    }
+    if (boxCoordinate.bottom < meanCoordinate.mean) {
+      throw new Error(
+        `mean: ${meanCoordinate.mean} is out of bottom: ${boxCoordinate.bottom} `
+      );
+    }
+    if (boxCoordinate.top > meanCoordinate.mean) {
+      throw new Error(
+        `mean: ${meanCoordinate.mean} is out of top: ${boxCoordinate.top} `
+      );
+    }
+    return {
+      ...boxCoordinate,
+      ...meanCoordinate
+    };
+  };
+
+  private readonly getBoxCoordinate = (
+    idx: number,
+    boxElement: HTMLElement
+  ): Pick<IBox, "left" | "right" | "q1" | "q2" | "q3" | "top" | "bottom"> => {
+    const d = boxElement.getAttribute("d");
     if (!d) {
       throw new Error(
         `${idx}th path element in svg does not have "d" attribute`
       );
     }
-    const exec = cordReg.exec(d);
+    const exec = boxReg.exec(d);
     if (!exec) {
       throw new Error(
         `${idx}th path element in svg have invalid "d" attribute`
@@ -48,15 +92,15 @@ export class BoxChart extends Chart<IBox> {
       right2,
       q3,
       left3,
-      center1,
+      center,
       q12,
       bottom,
       center2,
       q32,
       top,
-      sLeft1,
+      sLeft,
       bottom2,
-      sRight1,
+      sRight,
       sLeft2,
       top2,
       sRight2
@@ -82,14 +126,14 @@ export class BoxChart extends Chart<IBox> {
     if (q1 !== q12) {
       throw new Error(`q1: ${q1}, ${q12} do not match`);
     }
-    if (center1 !== center2) {
-      throw new Error(`center: ${center1}, ${center2} do not match`);
+    if (center !== center2) {
+      throw new Error(`center: ${center}, ${center2} do not match`);
     }
-    if (sLeft1 !== sLeft2) {
-      throw new Error(`sleft: ${sLeft1}, ${sLeft2} do not match`);
+    if (sLeft !== sLeft2) {
+      throw new Error(`sleft: ${sLeft}, ${sLeft2} do not match`);
     }
-    if (sRight1 !== sRight2) {
-      throw new Error(`sright: ${sRight1}, ${sRight2} do not match`);
+    if (sRight !== sRight2) {
+      throw new Error(`sright: ${sRight}, ${sRight2} do not match`);
     }
     if (q1 > bottom) {
       throw new Error(`q1: ${q1} is greater than bottom: ${bottom} `);
@@ -103,6 +147,50 @@ export class BoxChart extends Chart<IBox> {
     if (top > q3) {
       throw new Error(`top: ${top} is greater than q3: ${q3} `);
     }
+    if (Math.round(((left + right) / 2) * 100) / 100 !== center) {
+      throw new Error(
+        `center: ${center}, is not in the middle of left: ${left} and right ${right}`
+      );
+    }
+    if (Math.round(((sLeft + sRight) / 2) * 100) / 100 !== center) {
+      throw new Error(
+        `center: ${center}, is not in the middle of sLeft: ${sLeft} and right ${sRight}`
+      );
+    }
     return { left, right, bottom, q1, q2, q3, top };
   };
+
+  private readonly getMeanCoordinate = (
+    idx: number,
+    meanElement: HTMLElement
+  ): Pick<IBox, "left" | "right" | "mean"> => {
+    const d = meanElement.getAttribute("d");
+    if (!d) {
+      throw new Error(
+        `${idx}th path element in svg does not have "d" attribute`
+      );
+    }
+    const exec = meanReg.exec(d);
+    if (!exec) {
+      throw new Error(
+        `${idx}th path element in svg have invalid "d" attribute`
+      );
+    }
+    const [, ...strCords] = exec;
+    const [left, mean, right] = strCords.map((s) => Number(s));
+    return { left, right, mean };
+  };
+
+  private getBoxElements(): HTMLElement[] {
+    return cy.$$(`${this.container} svg .plot .trace.boxes > path.box`).get();
+  }
+
+  private getMeanElements(): HTMLElement[] {
+    console.log(`${this.container} svg .plot .trace.boxes > path.mean`);
+    return cy.$$(`${this.container} svg .plot .trace.boxes > path.mean`).get();
+  }
+
+  private getPointElements(): HTMLElement[] {
+    return cy.$$(`${this.container} svg .plot .trace.boxes > g.points`).get();
+  }
 }
