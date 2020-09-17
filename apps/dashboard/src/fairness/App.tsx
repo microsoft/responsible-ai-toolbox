@@ -72,7 +72,7 @@ export class App extends React.Component<IAppProps> {
     }
   }
 
-  private calculateMetrics(postData): Promise<IMetricResponse> {
+  private calculateMetrics(postData: IMetricRequest): Promise<IMetricResponse> {
     return fetch("http://localhost:5000/1/metrics", {
       method: "post",
       body: JSON.stringify(postData),
@@ -94,7 +94,7 @@ export class App extends React.Component<IAppProps> {
       });
   }
 
-  private generateRandomMetrics(
+  /*private generateRandomMetrics(
     request: IMetricRequest,
     abortSignal?: AbortSignal
   ): Promise<IMetricResponse> {
@@ -118,5 +118,5 @@ export class App extends React.Component<IAppProps> {
       }
     });
     return promise;
-  }
+  }*/
 }

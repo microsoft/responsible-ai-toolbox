@@ -4,13 +4,7 @@
 <a href="{{local_url}}" target="_blank">Open in new tab</a>
 {% endif %}
 <div style="height: 1000px;" id="{{app_id}}"></div>
-<script type="text/javascript">
-  {
-    {
-      main_js;
-    }
-  }
-</script>
+<script type="text/javascript"> {{ main_js }}; </script>
 <script defer type="text/javascript">
   (function universalLoad(root, callback) {
         if(typeof exports === 'object' && typeof module === 'object') {

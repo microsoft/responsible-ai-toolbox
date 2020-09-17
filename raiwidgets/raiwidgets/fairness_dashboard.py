@@ -28,21 +28,22 @@ from fairlearn.metrics import (
     # log_loss_group_summary,
 )
 
-from IPython.display import display, HTML
-from scipy.sparse import issparse
 import copy
-import numpy as np
-import pandas as pd
-import threading
-import os
-from jinja2 import Environment, PackageLoader
 from flask import jsonify, request
+from IPython.display import display, HTML
+from jinja2 import Environment, PackageLoader
+import json
+import numpy as np
+import os
+import pandas as pd
+from scipy.sparse import issparse
+import threading
 
 
 class FairnessDashboard(object):
     """The dashboard class, wraps the dashboard component.
 
-    :param sensitive_features:  A matrix of feature vector examples (# examples x # features),
+    :param sensitive_features: A matrix of feature vector examples (# examples x # features),
         these can be from the initial dataset, or reserved from training.
     :type sensitive_features: numpy.array or list[][] or pandas.DataFrame or pandas.Series
     :param y_true: The true labels or values for the provided dataset.
@@ -189,10 +190,10 @@ class FairnessDashboard(object):
                     data['true_y'],
                     data['predicted_ys'][data["modelIndex"]],
                     sensitive_features=data["binVector"])
-                return jsonify({
+                return jsonify({"data": {
                     "global": prediction.overall,
-                    "bins": {str(bin_): value for bin_, value in prediction.by_group.items()}
-                })
+                    "bins": list(prediction.by_group.values())
+                }})
         except Exception as ex:
             import sys, traceback
             exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -214,7 +215,7 @@ class FairnessDashboard(object):
         """Initialize the fairness Dashboard."""
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
-
+        
         dataset = self._sanitize_data_shape(sensitive_features)
         model_names = None
         if isinstance(y_pred, dict):
@@ -267,16 +268,19 @@ class FairnessDashboard(object):
             except Exception as e:
                 FairnessDashboard._service = None
                 raise e
-
+        
         FairnessDashboard.model_count += 1
         model_count = FairnessDashboard.model_count
-
-        FairnessDashboard.fairness_inputs[str(model_count)] = fairness_input
 
         local_url = f"{FairnessDashboard._service.env.base_url}/{model_count}"
         metrics_url = f"{local_url}/metrics"
 
         fairness_input['metricsUrl'] = metrics_url
+
+        # TODO
+        fairness_input['withCredentials'] = False
+
+        FairnessDashboard.fairness_inputs[str(model_count)] = fairness_input
 
         html = generate_inline_html(fairness_input, local_url)
         # TODO
@@ -312,7 +316,7 @@ class FairnessDashboard(object):
 
 def generate_inline_html(fairness_input, local_url):
     return FairnessDashboard.default_template.render(
-        fairness_input=fairness_input,
+        fairness_input=json.dumps(fairness_input),
         main_js=FairnessDashboard._dashboard_js,
         app_id='app_fairness',
         local_url=local_url,
