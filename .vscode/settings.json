@@ -1,4 +1,6 @@
 {
+  "git.enableCommitSigning": true,
+  "git.alwaysSignOff": true,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

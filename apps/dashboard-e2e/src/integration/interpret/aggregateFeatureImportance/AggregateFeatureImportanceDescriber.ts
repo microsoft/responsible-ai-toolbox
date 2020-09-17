@@ -2,12 +2,17 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../support/getMenu";
-import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
+import { IDataSetShape } from "../IDataSetShape";
+import { describeGlobalExplanationBarChart } from "./describeGlobalExplanationBarChart";
+import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBoxChart";
 
 const testName = "Aggregate Feature Importance";
 
 export class AggregateFeatureImportanceDescriber {
-  public constructor(public dataset: string) {
+  public constructor(
+    private datasetName: string,
+    private datasetShape: IDataSetShape
+  ) {
     return;
   }
   public describeTabHeader(): void {
@@ -23,12 +28,13 @@ export class AggregateFeatureImportanceDescriber {
   public describeGlobalExplanationChart(): void {
     describe(testName, () => {
       this.beforeEach();
-      describeGlobalExplanationChart();
+      describeGlobalExplanationBarChart(this.datasetShape);
+      describeGlobalExplanationBoxChart(this.datasetShape);
     });
   }
   private beforeEach(): void {
     beforeEach(() => {
-      cy.visit(`#/interpret/${this.dataset}/light/english/Version-2`);
+      cy.visit(`#/interpret/${this.datasetName}/light/english/Version-2`);
     });
   }
 }

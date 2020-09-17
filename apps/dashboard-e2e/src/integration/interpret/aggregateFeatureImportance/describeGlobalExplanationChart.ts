@@ -2,20 +2,17 @@
 // Licensed under the MIT License.
 
 import { toNumber } from "lodash";
-import { BarChart } from "../../../support/BarChart";
-import { getMenu } from "../../../support/getMenu";
+import { Chart, IChartElement } from "../../../support/Chart";
+import { IDataSetShape } from "../IDataSetShape";
 
 function getTopKValue(): number {
   return toNumber(cy.$$("#TopKSetting input").val());
 }
 
-export function describeGlobalExplanationChart(): void {
+export function describeGlobalExplanationChart<
+  TElement extends IChartElement
+>(props: { chart: Chart<TElement>; dataShape: IDataSetShape }): void {
   describe("Global explanation chart", () => {
-    let barChart: BarChart;
-    beforeEach(() => {
-      getMenu("Aggregate Feature Importance", "#DashboardPivot").click();
-      barChart = new BarChart("#FeatureImportanceBar");
-    });
     it("should have y axis label", () => {
       cy.get('#FeatureImportanceBar div[class*="rotatedVerticalBox"]').should(
         "contain.text",
@@ -32,30 +29,8 @@ export function describeGlobalExplanationChart(): void {
         ).should("contain.text", column);
       }
     });
-    it("should have 14 bars", () => {
-      cy.get(
-        "#FeatureImportanceBar svg .plot .trace.bars .points .point path"
-      ).should("have.length", 14);
-    });
-    it("should have valid coordinates", () => {
-      barChart.Bars.each((bar, idx) => {
-        expect(
-          bar,
-          `The ${idx}th bar should have correct coordinates`
-        ).not.to.equal(undefined);
-      });
-    });
-    it("should be sorted by x", () => {
-      barChart.Bars.then((arr) => {
-        const sorted = BarChart.sortByX(arr);
-        expect(sorted).to.deep.eq(arr);
-      });
-    });
-    it("should be sorted by heigh", () => {
-      barChart.Bars.then((arr) => {
-        const sorted = BarChart.sortByH(arr);
-        expect(sorted).to.deep.eq(arr);
-      });
+    it(`should have ${props.dataShape.totalFeatures} elements`, () => {
+      expect(props.chart.Elements).length(props.dataShape.totalFeatures);
     });
 
     describe("Chart Settings", () => {
@@ -69,26 +44,18 @@ export function describeGlobalExplanationChart(): void {
         cy.get("#GlobalExplanationSettingsButton").click();
         cy.get("#GlobalExplanationSettingsCallout").should("not.exist");
       });
+      it("chart elements should match top K setting", () => {
+        const topK = getTopKValue();
+        expect(props.chart.VisibleElements).length(topK);
+      });
       it("should increase top K setting", () => {
         const topK = getTopKValue();
         cy.get("#TopKSetting input")
           .focus()
           .type("{uparrow}")
           .then(() => {
-            barChart.VisibleBars.should("have.length", topK + 1);
+            expect(props.chart.VisibleElements).length(topK + 1);
           });
-      });
-      it("chart bars should match top K setting", () => {
-        const topK = getTopKValue();
-        barChart.VisibleBars.should("have.length", topK);
-      });
-      it("should show box chart", () => {
-        cy.get(
-          '#GlobalExplanationSettingsCallout #ChartTypeSelection label:contains("Box")'
-        )
-          .click({ force: true })
-          .get("#FeatureImportanceBar svg .plot .trace.boxes path")
-          .should("exist");
       });
     });
   });
