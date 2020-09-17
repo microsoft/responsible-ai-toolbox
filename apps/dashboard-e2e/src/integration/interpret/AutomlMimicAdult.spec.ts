@@ -4,7 +4,10 @@
 import { AggregateFeatureImportanceDescriber } from "./aggregateFeatureImportance/AggregateFeatureImportanceDescriber";
 
 const aggregateFeatureImportanceDescriber = new AggregateFeatureImportanceDescriber(
-  "automlMimicAdult"
+  "automlMimicAdult",
+  {
+    totalFeatures: 14
+  }
 );
 describe("AutomlMimicAdult", () => {
   aggregateFeatureImportanceDescriber.describeTabHeader();
