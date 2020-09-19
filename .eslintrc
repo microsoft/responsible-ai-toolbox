@@ -460,7 +460,7 @@
     {
       "files": ["*.spec.ts"],
       "rules": {
-        "filenames/match-regex": ["error", ["^[A-z]+\\.spec$"]]
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.spec$"]]
       }
     },
     {
