@@ -131,7 +131,7 @@ export class FeatureImportanceBar extends React.PureComponent<
         displaylogo: false,
         responsive: true,
         displayModeBar: false
-      } as Plotly.Config,
+      },
       data: [],
       layout: {
         autosize: true,
@@ -161,7 +161,7 @@ export class FeatureImportanceBar extends React.PureComponent<
           gridcolor: "#e5e5e5"
         },
         showlegend: false
-      } as any
+      }
     };
 
     const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
@@ -236,7 +236,7 @@ export class FeatureImportanceBar extends React.PureComponent<
           marker: {
             color: FabricStyles.fabricColorPalette[series.colorIndex]
           }
-        } as any);
+        });
       });
     }
 

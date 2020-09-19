@@ -4,7 +4,7 @@
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
 export const breastCancerData: IExplanationDashboardData = {
-  modelInformation: { modelClass: "blackbox", method: "regressor" },
+  modelInformation: { modelClass: "blackbox", method: "classifier" },
   dataSummary: {
     classNames: ["malignant", "benign"],
     featureNames: [
