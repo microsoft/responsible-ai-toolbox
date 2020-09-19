@@ -4,6 +4,7 @@
 import { BarChart } from "../../../support/BarChart";
 import { getMenu } from "../../../support/getMenu";
 import { IDataSetShape } from "../IDataSetShape";
+
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
 
 export function describeGlobalExplanationBarChart(

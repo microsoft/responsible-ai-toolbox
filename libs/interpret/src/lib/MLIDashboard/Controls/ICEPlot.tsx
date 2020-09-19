@@ -1,6 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  AccessibleChart,
+  ICategoricalRange,
+  INumericRange,
+  IPlotlyProperty,
+  PlotlyMode,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
 import {
@@ -10,23 +18,16 @@ import {
   IDropdownOption,
   TextField
 } from "office-ui-fabric-react";
-
 import { Data } from "plotly.js";
 import React from "react";
-import {
-  AccessibleChart,
-  ICategoricalRange,
-  INumericRange,
-  IPlotlyProperty,
-  PlotlyMode,
-  RangeTypes
-} from "@responsible-ai/mlchartlib";
+
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
-import { HelpMessageDict } from "../Interfaces/IStringsParam";
+
 import { iCEPlotStyles } from "./ICEPlot.styles";
 
 export interface IIcePlotProps {

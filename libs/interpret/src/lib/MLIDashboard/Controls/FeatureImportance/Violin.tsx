@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  ChartBuilder,
+  AccessibleChart,
+  IPlotlyProperty
+} from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
 import {
@@ -13,25 +18,21 @@ import {
   IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
-
 import React from "react";
-import {
-  ChartBuilder,
-  AccessibleChart,
-  IPlotlyProperty
-} from "@responsible-ai/mlchartlib";
+
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
-import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import {
   FeatureKeys,
   FeatureSortingKey
 } from "../../SharedComponents/IBarChartConfig";
-import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { violinStyles } from "./Violin.styles";
 
 export enum GroupByOptions {

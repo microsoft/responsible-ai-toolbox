@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import _, { toNumber, map } from "lodash";
+import { isTwoDimArray } from "@responsible-ai/core-ui";
 import {
   IPlotlyProperty,
   RangeTypes,
   AccessibleChart,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
+import _, { toNumber, map } from "lodash";
 import {
   IComboBox,
   IComboBoxOption,
@@ -18,17 +18,19 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
-import { isTwoDimArray } from "@responsible-ai/core-ui";
-import { JointDataset } from "../../JointDataset";
-import { IRangeView } from "../ICEPlot";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
-import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+import { FabricStyles } from "../../FabricStyles";
 import {
   ModelTypes,
   IExplanationModelMetadata
 } from "../../IExplanationContext";
-import { FabricStyles } from "../../FabricStyles";
+import { JointDataset } from "../../JointDataset";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+import { IRangeView } from "../ICEPlot";
+
 import { multiIcePlotStyles } from "./MultiICEPlot.styles";
 
 export interface IMultiICEPlotProps {

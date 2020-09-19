@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import {
   AccessibleChart,
   ChartBuilder,
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   ActionButton,
   PrimaryButton,
@@ -24,20 +24,21 @@ import {
   IIconProps,
   Icon
 } from "office-ui-fabric-react";
-
 import React from "react";
+
+import { PredictionTypes } from "../../IFairnessProps";
+import { localization } from "../../Localization/localization";
 import { accuracyOptions } from "../../util/AccuracyMetrics";
+import { FormatMetrics } from "../../util/FormatMetrics";
+import { IFairnessContext } from "../../util/IFairnessContext";
+import { MetricsCache } from "../../util/MetricsCache";
+import { parityOptions } from "../../util/ParityMetrics";
 import {
   IAccuracyPickerPropsV2,
   IFeatureBinPickerPropsV2,
   IParityPickerPropsV2
 } from "../FairnessWizard";
-import { FormatMetrics } from "../../util/FormatMetrics";
-import { IFairnessContext } from "../../util/IFairnessContext";
-import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
-import { MetricsCache } from "../../util/MetricsCache";
-import { parityOptions } from "../../util/ParityMetrics";
+
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 const theme = getTheme();

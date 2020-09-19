@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeIcons } from "office-ui-fabric-react";
 import {
   ModelMetadata,
   ICategoricalRange,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import { initializeIcons } from "office-ui-fabric-react";
+
 import {
   IFairnessProps,
   IFairnessBaseData,
@@ -18,15 +19,16 @@ import {
   IPreComputedData
 } from "../IFairnessProps";
 import { localization } from "../Localization/localization";
+
+import { IAccuracyOption, accuracyOptions } from "./AccuracyMetrics";
+import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
+import { IBinnedResponse } from "./IBinnedResponse";
 import {
   IRunTimeFairnessContext,
   IFairnessContext,
   IFairnessModelMetadata
 } from "./IFairnessContext";
-import { IAccuracyOption, accuracyOptions } from "./AccuracyMetrics";
 import { IParityOption, parityOptions } from "./ParityMetrics";
-import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
-import { IBinnedResponse } from "./IBinnedResponse";
 
 export class WizardBuilder {
   private static iconsInitialized = false;

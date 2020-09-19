@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { localization } from "../../../Localization/localization";
-import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { ChartTypes } from "../../ChartTypes";
-import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
+import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
+import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
 export interface IGlobalOnlyChartProps {
   metadata: IExplanationModelMetadata;

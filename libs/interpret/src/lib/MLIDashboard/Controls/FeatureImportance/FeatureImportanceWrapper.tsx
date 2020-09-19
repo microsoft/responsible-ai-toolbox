@@ -1,17 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { SelectionContext } from "@responsible-ai/mlchartlib";
 import { IComboBoxOption } from "office-ui-fabric-react";
-import { IDashboardContext } from "../../ExplanationDashboard";
-import { IBarChartConfig } from "../../SharedComponents/IBarChartConfig";
-import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
-import { FeatureImportanceBar } from "./FeatureImportanceBar";
+import { IDashboardContext } from "../../ExplanationDashboard";
+import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { IBarChartConfig } from "../../SharedComponents/IBarChartConfig";
+
 import { Beehive } from "./Beehive";
-import { Violin } from "./Violin";
+import { FeatureImportanceBar } from "./FeatureImportanceBar";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
+import { Violin } from "./Violin";
 
 export const barId = "bar_id";
 export const globalFeatureImportanceId = "global_feature_id";

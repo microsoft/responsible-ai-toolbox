@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   getTheme,
   ActionButton,
@@ -8,18 +10,17 @@ import {
   SpinnerSize,
   Text
 } from "office-ui-fabric-react";
-import _ from "lodash";
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-
 import React from "react";
+
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { accuracyOptions } from "../util/AccuracyMetrics";
-import { ParityModes } from "../util/ParityMetrics";
-import { FormatMetrics } from "../util/FormatMetrics";
 import { chartColors } from "../util/chartColors";
+import { FormatMetrics } from "../util/FormatMetrics";
+import { ParityModes } from "../util/ParityMetrics";
+
+import { localization } from "./../Localization/localization";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
-import { localization } from "./../Localization/localization";
 import { WizardReportStyles } from "./WizardReport.styles";
 
 const theme = getTheme();

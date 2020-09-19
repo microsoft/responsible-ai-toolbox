@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Data, Datum } from "plotly.js";
 import jmespath from "jmespath";
 import _ from "lodash";
-import { IData } from "./IData";
+import { Data, Datum } from "plotly.js";
+
 import { accessorMappingFunctions } from "./accessorMappingFunctions";
+import { IData } from "./IData";
 
 export class ChartBuilder {
   public static buildPlotlySeries<T>(

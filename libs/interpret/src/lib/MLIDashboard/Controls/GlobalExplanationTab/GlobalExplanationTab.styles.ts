@@ -7,6 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "office-ui-fabric-react";
+
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IGlobalTabStyles {

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import _ from "lodash";
 import {
   IDropdownOption,
   Slider,
@@ -9,26 +9,27 @@ import {
   IComboBox,
   IComboBoxOption
 } from "office-ui-fabric-react";
-import _ from "lodash";
+import React from "react";
 
+import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
 import {
   IExplanationContext,
   ModelTypes,
   ILocalExplanation
 } from "../IExplanationContext";
+import { HelpMessageDict } from "../Interfaces/IStringsParam";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import { BarChart } from "../SharedComponents/BarChart";
 import {
   IBarChartConfig,
   FeatureKeys,
   FeatureSortingKey
 } from "../SharedComponents/IBarChartConfig";
-import { localization } from "../../Localization/localization";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
-import { BarChart } from "../SharedComponents/BarChart";
-import { FabricStyles } from "../FabricStyles";
-import { HelpMessageDict } from "../Interfaces/IStringsParam";
-import { PredictionLabel } from "../SharedComponents/PredictionLabel";
 import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
+import { PredictionLabel } from "../SharedComponents/PredictionLabel";
+
 import { singlePointFeatureImportanceStyles } from "./SinglePointFeatureImportance.styles";
 
 export const localBarId = "local_bar_id";

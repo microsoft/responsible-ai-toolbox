@@ -1,18 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { toNumber } from "lodash";
 import {
   TextField,
   ComboBox,
   IComboBox,
   IComboBoxOption
 } from "office-ui-fabric-react";
+import React from "react";
 
-import { RangeTypes } from "@responsible-ai/mlchartlib";
-import { toNumber } from "lodash";
-import { FabricStyles } from "../FabricStyles";
 import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
+
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
 
 export interface IFeatureEditingTileProps {

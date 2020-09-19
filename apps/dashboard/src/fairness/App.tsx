@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   FairnessWizardV1,
   FairnessWizardV2,
@@ -11,6 +10,7 @@ import {
   IFairnessProps
 } from "@responsible-ai/fairness";
 import { ITheme } from "office-ui-fabric-react";
+import React from "react";
 
 interface IAppProps {
   dataset: IFairnessData;

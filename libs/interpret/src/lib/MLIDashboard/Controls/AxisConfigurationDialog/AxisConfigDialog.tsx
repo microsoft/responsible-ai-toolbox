@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   Text,
   IProcessedStyleSet,
@@ -22,11 +22,13 @@ import {
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
+
 import { localization } from "../../../Localization/localization";
+import { cohortKey } from "../../cohortKey";
+import { FabricStyles } from "../../FabricStyles";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-import { FabricStyles } from "../../FabricStyles";
-import { cohortKey } from "../../cohortKey";
+
 import {
   axisControlCallout,
   axisControlDialogStyles,

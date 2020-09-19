@@ -1,17 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
 import _ from "lodash";
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import {
-  ActionButton,
-  IconButton,
-  PrimaryButton
-} from "office-ui-fabric-react/lib/Button";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
-import { Text } from "office-ui-fabric-react/lib/Text";
-import React from "react";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -20,16 +12,26 @@ import {
   IIconProps,
   Icon
 } from "office-ui-fabric-react";
+import {
+  ActionButton,
+  IconButton,
+  PrimaryButton
+} from "office-ui-fabric-react/lib/Button";
+import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
+import { Text } from "office-ui-fabric-react/lib/Text";
+import React from "react";
+
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { FormatMetrics } from "../util/FormatMetrics";
 import { accuracyOptions } from "../util/AccuracyMetrics";
-import { ParityModes } from "../util/ParityMetrics";
 import { chartColors } from "../util/chartColors";
-import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
-import { SummaryTable } from "./Controls/SummaryTable";
+import { FormatMetrics } from "../util/FormatMetrics";
+import { ParityModes } from "../util/ParityMetrics";
+
 import { localization } from "./../Localization/localization";
-import { WizardReportStyles } from "./WizardReport.styles";
+import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OverallTable } from "./Controls/OverallTable";
+import { SummaryTable } from "./Controls/SummaryTable";
+import { WizardReportStyles } from "./WizardReport.styles";
 
 const theme = getTheme();
 interface IMetrics {

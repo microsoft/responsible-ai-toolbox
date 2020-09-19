@@ -7,6 +7,7 @@ import {
   mergeStyleSets,
   IStyle
 } from "office-ui-fabric-react";
+
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IWhatIfTabStyles {

@@ -1,23 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import memoize from "memoize-one";
-import _ from "lodash";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import {
   AccessibleChart,
   IPlotlyProperty,
   IData,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import memoize from "memoize-one";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
 import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
   IFeatureValueExplanation
 } from "../IExplanationContext";
-import { localization } from "../../Localization/localization";
-import { FabricStyles } from "../FabricStyles";
 
 export interface IEbmProps {
   explanationContext: IExplanationContext;

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   Pivot,
   PivotItem,
@@ -11,25 +11,27 @@ import {
   loadTheme
 } from "office-ui-fabric-react";
 import React from "react";
+
+import { FeatureTab } from "../components/FeatureTab";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
+import { accuracyOptions, IAccuracyOption } from "../util/AccuracyMetrics";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
   IFairnessContext,
   IRunTimeFairnessContext
 } from "../util/IFairnessContext";
-import { WizardBuilder } from "../util/WizardBuilder";
-import { accuracyOptions, IAccuracyOption } from "../util/AccuracyMetrics";
-import { IParityOption, parityOptions } from "../util/ParityMetrics";
 import { MetricsCache } from "../util/MetricsCache";
-import { FeatureTab } from "../components/FeatureTab";
+import { IParityOption, parityOptions } from "../util/ParityMetrics";
+import { WizardBuilder } from "../util/WizardBuilder";
+
+import { localization } from "./../Localization/localization";
 import { AccuracyTab } from "./Controls/AccuracyTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
-import { localization } from "./../Localization/localization";
-import { WizardReport } from "./WizardReport";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { defaultTheme } from "./Themes";
+import { WizardReport } from "./WizardReport";
 
 export interface IAccuracyPickerPropsV2 {
   accuracyOptions: IAccuracyOption[];

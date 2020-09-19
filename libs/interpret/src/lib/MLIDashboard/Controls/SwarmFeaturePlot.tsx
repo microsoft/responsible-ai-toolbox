@@ -1,20 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import memoize from "memoize-one";
 import {
   IPlotlyProperty,
   PlotlyMode,
   AccessibleChart
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../Localization/localization";
+import { Cohort } from "../Cohort";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { JointDataset } from "../JointDataset";
-import { localization } from "../../Localization/localization";
 import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
-import { Cohort } from "../Cohort";
 
 export interface ISwarmFeaturePlotProps {
   topK: number;

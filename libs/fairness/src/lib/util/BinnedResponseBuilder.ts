@@ -7,6 +7,7 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+
 import { IBinnedResponse } from "./IBinnedResponse";
 
 export class BinnedResponseBuilder {

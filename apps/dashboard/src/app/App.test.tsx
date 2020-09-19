@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { shallow } from "enzyme";
+import React from "react";
 
 import { App } from "./App";
 

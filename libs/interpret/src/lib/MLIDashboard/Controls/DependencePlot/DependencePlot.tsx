@@ -1,24 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   AccessibleChart,
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
-import { getTheme, Text } from "office-ui-fabric-react";
 import _ from "lodash";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { JointDataset } from "../../JointDataset";
+import { getTheme, Text } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../../Localization/localization";
+import { Cohort } from "../../Cohort";
+import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
-import { localization } from "../../../Localization/localization";
-import { Cohort } from "../../Cohort";
-import { FabricStyles } from "../../FabricStyles";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
+import { JointDataset } from "../../JointDataset";
+
 import { dependencePlotStyles } from "./DependencePlot.styles";
 
 export interface IDependecePlotProps {

@@ -7,14 +7,16 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+
 import { localization } from "../Localization/localization";
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
-import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+
 import { cohortKey } from "./cohortKey";
+import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
 } from "./Interfaces/IExplanationDashboardProps";
+import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];

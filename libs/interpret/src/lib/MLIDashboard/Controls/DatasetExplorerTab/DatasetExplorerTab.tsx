@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import Plotly from "plotly.js";
-import React from "react";
 import {
   AccessibleChart,
   IPlotlyProperty,
@@ -24,17 +22,21 @@ import {
   ChoiceGroup,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
+import Plotly from "plotly.js";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
-import { FabricStyles } from "../../FabricStyles";
-import { JointDataset, ColumnCategories } from "../../JointDataset";
-import { IExplanationModelMetadata } from "../../IExplanationContext";
-import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
 import { cohortKey } from "../../cohortKey";
+import { FabricStyles } from "../../FabricStyles";
+import { IExplanationModelMetadata } from "../../IExplanationContext";
+import { IGenericChartProps } from "../../IGenericChartProps";
+import { JointDataset, ColumnCategories } from "../../JointDataset";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
+
 import {
   datasetExplorerTabStyles,
   IDatasetExplorerTabStyles

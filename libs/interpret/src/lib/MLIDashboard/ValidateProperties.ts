@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { localization } from "../Localization/localization";
-import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+
 import { IExplanationModelMetadata } from "./IExplanationContext";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 
 export class ValidateProperties {
   public readonly errorStrings: string[] = [];

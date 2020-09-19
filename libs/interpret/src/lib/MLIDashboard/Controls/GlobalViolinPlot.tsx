@@ -1,21 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import memoize from "memoize-one";
 import {
   IPlotlyProperty,
   AccessibleChart,
   IData
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
-import { IExplanationModelMetadata } from "../IExplanationContext";
-import { JointDataset } from "../JointDataset";
+import React from "react";
+
 import { localization } from "../../Localization/localization";
-import { LoadingSpinner } from "../SharedComponents";
 import { Cohort } from "../Cohort";
 import { FabricStyles } from "../FabricStyles";
+import { IExplanationModelMetadata } from "../IExplanationContext";
+import { JointDataset } from "../JointDataset";
+import { LoadingSpinner } from "../SharedComponents";
 
 export interface IGlobalViolinPlotProps {
   topK: number;

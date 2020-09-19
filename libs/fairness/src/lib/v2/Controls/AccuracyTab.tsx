@@ -4,12 +4,14 @@
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
-import { IAccuracyPickerPropsV2 } from "../FairnessWizard";
-import { PredictionTypes } from "../../IFairnessProps";
-import { IWizardTabProps } from "../../components/IWizardTabProps";
-import { localization } from "../../Localization/localization";
+
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
+import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
+import { PredictionTypes } from "../../IFairnessProps";
+import { localization } from "../../Localization/localization";
+import { IAccuracyPickerPropsV2 } from "../FairnessWizard";
+
 import { AccuracyTabStyles } from "./AccuracyTab.styles";
 import { TileList } from "./TileList";
 

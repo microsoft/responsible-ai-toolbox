@@ -1,17 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
-import { ITheme } from "office-ui-fabric-react";
-import { App as Interpret } from "../interpret/App";
+
 import { App as Fairness } from "../fairness/App";
-import { themes } from "./themes";
-import { languages } from "./languages";
-import { generateRoute } from "./generateRoute";
-import { applications, IApplications, applicationKeys } from "./applications";
-import { IAppSetting, routeKey } from "./IAppSetting";
+import { App as Interpret } from "../interpret/App";
+
 import { AppHeader } from "./AppHeader";
+import { applications, IApplications, applicationKeys } from "./applications";
+import { generateRoute } from "./generateRoute";
+import { IAppSetting, routeKey } from "./IAppSetting";
+import { languages } from "./languages";
+import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
   application: keyof IApplications;
