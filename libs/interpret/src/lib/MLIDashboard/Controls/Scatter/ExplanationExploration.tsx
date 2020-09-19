@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {

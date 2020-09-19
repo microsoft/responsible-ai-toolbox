@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
 import {

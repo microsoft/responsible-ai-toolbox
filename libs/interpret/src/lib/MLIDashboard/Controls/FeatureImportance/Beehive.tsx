@@ -34,7 +34,6 @@ import { beehiveStyles } from "./Beehive.styles";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
 import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 
-
 export interface IBeehiveState {
   calloutContent?: React.ReactNode;
   calloutId?: string;
