@@ -13,6 +13,7 @@ import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
 import { breastCancerData } from "../interpret/__mock_data__/breastCancerData";
+import { ebmData } from "../interpret/__mock_data__/ebmData";
 import { ibmData } from "../interpret/__mock_data__/ibmData";
 import { ibmDataInconsistent } from "../interpret/__mock_data__/ibmDataInconsistent";
 import { ibmNoClass } from "../interpret/__mock_data__/ibmNoClass";
@@ -68,7 +69,7 @@ export const applications: IApplications = <const>{
       breastCancer: { data: breastCancerData, classDimension: 2 },
       ibmNoClass: { data: ibmNoClass, classDimension: 2 },
       irisNoFeature: { data: irisNoFeatures, classDimension: 3 },
-      ebmData: { data: ibmData, classDimension: 2 },
+      ebmData: { data: ebmData, classDimension: 2 },
       irisNoData: { data: irisNoData, classDimension: 3 },
       largeFeatureCount: { data: largeFeatureCount, classDimension: 2 }
     }
