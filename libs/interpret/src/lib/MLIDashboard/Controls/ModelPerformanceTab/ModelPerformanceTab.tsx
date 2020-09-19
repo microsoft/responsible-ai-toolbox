@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -10,25 +11,24 @@ import {
   Icon,
   Text
 } from "office-ui-fabric-react";
-import _ from "lodash";
-
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { Transform } from "plotly.js";
+import React from "react";
 
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
+import { cohortKey } from "../../cohortKey";
+import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
-import { cohortKey } from "../../cohortKey";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
+
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {

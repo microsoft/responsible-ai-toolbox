@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { toNumber } from "lodash";
+
 import { Chart, IChartElement } from "../../../support/Chart";
 import { IDataSetShape } from "../IDataSetShape";
 

@@ -1,17 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { PartialRequired } from "@responsible-ai/core-ui";
+import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
-import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
-import { PartialRequired } from "@responsible-ai/core-ui";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
-import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
-import { ChartTypes } from "../../ChartTypes";
+
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureBarProps {

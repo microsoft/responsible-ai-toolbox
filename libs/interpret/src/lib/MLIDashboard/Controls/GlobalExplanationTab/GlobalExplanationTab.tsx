@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   ComboBox,
   IComboBox,
@@ -17,24 +16,26 @@ import {
   Link,
   Slider
 } from "office-ui-fabric-react";
+import React from "react";
 
-import { JointDataset } from "../../JointDataset";
+import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
+import { Cohort } from "../../Cohort";
+import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
-import { localization } from "../../../Localization/localization";
-import { DependencePlot } from "../DependencePlot/DependencePlot";
-import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { FabricStyles } from "../../FabricStyles";
-import { Cohort } from "../../Cohort";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
+import { JointDataset } from "../../JointDataset";
+import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
+import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
+
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
 import { Settings } from "./Settings";

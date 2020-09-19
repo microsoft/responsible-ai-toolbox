@@ -2,6 +2,13 @@
 // Licensed under the MIT License.
 
 import {
+  AccessibleChart,
+  IPlotlyProperty,
+  PlotlyMode,
+  IData
+} from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import {
   IProcessedStyleSet,
   getTheme,
   ChoiceGroup,
@@ -27,34 +34,28 @@ import {
   SearchBox,
   TextField
 } from "office-ui-fabric-react";
-import _ from "lodash";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
-
 import React from "react";
+
 import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
+import { IGenericChartProps } from "../../IGenericChartProps";
+import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { ColumnCategories, JointDataset } from "../../JointDataset";
-import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
-import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
+import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
-import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
+import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
+
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {

@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _, { toNumber } from "lodash";
 import {
   ICategoricalRange,
   IModelMetadata,
   INumericRange,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
+import _, { toNumber } from "lodash";
 import {
   ComboBox,
   IComboBox,
@@ -16,8 +16,10 @@ import {
   TextField
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
+
 import { binningControlStyles } from "./BinningControl.styles";
 
 export interface IBinningProps {

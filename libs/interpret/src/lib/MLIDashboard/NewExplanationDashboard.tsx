@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import { initializeIcons } from "@uifabric/icons";
+import _ from "lodash";
 import memoize from "memoize-one";
 import {
   IPivotItemProps,
@@ -16,26 +17,21 @@ import {
   Text,
   Link
 } from "office-ui-fabric-react";
-import _ from "lodash";
+import React from "react";
 
-import { initializeIcons } from "@uifabric/icons";
 import { localization } from "../Localization/localization";
-import { JointDataset } from "./JointDataset";
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
+
+import { Cohort } from "./Cohort";
+import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
+import { CohortList } from "./Controls/CohortList/CohortList";
+import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import {
   GlobalExplanationTab,
   IGlobalBarSettings
 } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
-import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
-import { Cohort } from "./Cohort";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
-import { defaultTheme } from "./Themes";
-import { CohortList } from "./Controls/CohortList/CohortList";
-import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
-import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
-import { ValidateProperties } from "./ValidateProperties";
-import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
-import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
+import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { IGenericChartProps } from "./IGenericChartProps";
 import {
   IExplanationDashboardProps,
@@ -43,6 +39,11 @@ import {
   ISingleClassLocalFeatureImportance
 } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
+import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { JointDataset } from "./JointDataset";
+import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
+import { defaultTheme } from "./Themes";
+import { ValidateProperties } from "./ValidateProperties";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];

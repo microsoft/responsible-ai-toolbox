@@ -3,10 +3,11 @@
 
 import { PrimaryButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
+
 import { localization } from "../../Localization/localization";
 
-import { ReactComponent } from "./IntroTabIcon.svg";
 import { IntroTabStyles } from "./IntroTab.styles";
+import { ReactComponent } from "./IntroTabIcon.svg";
 
 export interface IIntroTabProps {
   onNext: () => void;

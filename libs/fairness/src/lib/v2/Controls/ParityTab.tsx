@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { Stack, StackItem, Text } from "office-ui-fabric-react";
+import React from "react";
 
-import { localization } from "../../Localization/localization";
-import { IWizardTabProps } from "../../components/IWizardTabProps";
-import { IParityPickerPropsV2 } from "../FairnessWizard";
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
+import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
-import { TileList, ITileProp } from "./TileList";
+import { localization } from "../../Localization/localization";
+import { IParityPickerPropsV2 } from "../FairnessWizard";
+
 import { ParityTabStyles } from "./ParityTab.styles";
+import { TileList, ITileProp } from "./TileList";
 
 export interface IParityTabProps extends IWizardTabProps {
   parityPickerProps: IParityPickerPropsV2;

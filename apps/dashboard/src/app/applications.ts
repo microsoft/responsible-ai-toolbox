@@ -1,26 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IExplanationDashboardData } from "@responsible-ai/interpret";
 import { IFairnessData } from "@responsible-ai/fairness";
+import { IExplanationDashboardData } from "@responsible-ai/interpret";
+
 import { binaryClassifier } from "../fairness/__mock-data/binaryClassifier";
-import { regression } from "../fairness/__mock-data/regression";
-import { probit } from "../fairness/__mock-data/probit";
 import { precomputedBinary } from "../fairness/__mock-data/precomputedBinary";
 import { precomputedBinaryTwo } from "../fairness/__mock-data/precomputedBinaryTwo";
+import { probit } from "../fairness/__mock-data/probit";
+import { regression } from "../fairness/__mock-data/regression";
 import { automlMimicAdult } from "../interpret/__mock_data/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data/bostonDataGlobal";
-import { irisData } from "../interpret/__mock_data/irisData";
-import { irisGlobal } from "../interpret/__mock_data/irisGlobal";
-import { irisDataGlobal } from "../interpret/__mock_data/irisDataGlobal";
+import { breastCancerData } from "../interpret/__mock_data/breastCancerData";
 import { ibmData } from "../interpret/__mock_data/ibmData";
 import { ibmDataInconsistent } from "../interpret/__mock_data/ibmDataInconsistent";
-import { breastCancerData } from "../interpret/__mock_data/breastCancerData";
-import { irisNoData } from "../interpret/__mock_data/irisNoData";
-import { largeFeatureCount } from "../interpret/__mock_data/largeFeatureCount";
 import { ibmNoClass } from "../interpret/__mock_data/ibmNoClass";
+import { irisData } from "../interpret/__mock_data/irisData";
+import { irisDataGlobal } from "../interpret/__mock_data/irisDataGlobal";
+import { irisGlobal } from "../interpret/__mock_data/irisGlobal";
+import { irisNoData } from "../interpret/__mock_data/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data/irisNoFeatures";
+import { largeFeatureCount } from "../interpret/__mock_data/largeFeatureCount";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;

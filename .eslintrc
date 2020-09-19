@@ -58,7 +58,16 @@
       }
     ],
     "import/no-unresolved": "off",
-    "import/order": "error",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
     "filenames/match-regex": "error",
     "filenames/match-exported": "error",
     "filenames/no-index": "error",

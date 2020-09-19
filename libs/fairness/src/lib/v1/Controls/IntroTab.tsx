@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import { ActionButton, Stack, Text } from "office-ui-fabric-react";
-
 import React from "react";
+
 import { localization } from "../../Localization/localization";
+
 import { IntroTabStyles } from "./IntroTab.styles";
 
 export interface IIntroTabProps {

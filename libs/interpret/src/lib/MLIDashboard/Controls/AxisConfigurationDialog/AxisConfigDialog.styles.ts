@@ -10,6 +10,7 @@ import {
   mergeStyleSets,
   ICalloutContentStyles
 } from "office-ui-fabric-react";
+
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IAxisControlDialogStyles {

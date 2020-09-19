@@ -3,6 +3,7 @@
 
 import { Icon, Text, IProcessedStyleSet } from "office-ui-fabric-react";
 import React from "react";
+
 import { TileListStyles, ITilesListStyles } from "./TileList.styles";
 
 export interface ITileProp {

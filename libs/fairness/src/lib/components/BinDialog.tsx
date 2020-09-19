@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   DefaultButton,
   PrimaryButton,
@@ -10,11 +10,12 @@ import {
   SpinButton,
   Text
 } from "office-ui-fabric-react";
-
 import React from "react";
+
+import { localization } from "../Localization/localization";
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
-import { localization } from "../Localization/localization";
+
 import { BinDialogStyles } from "./BinDialog.styles";
 
 export interface IBinDialogProps {

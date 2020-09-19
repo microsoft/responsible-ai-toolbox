@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
-import memoize from "memoize-one";
 import { PartialRequired2 } from "@responsible-ai/core-ui";
 import {
   AccessorMappingFunctionNames,
@@ -11,6 +9,8 @@ import {
   PlotlyMode,
   SelectionContext
 } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import memoize from "memoize-one";
 import {
   IComboBoxOption,
   DropdownMenuItemType,

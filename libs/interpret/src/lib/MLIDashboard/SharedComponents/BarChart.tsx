@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import Plotly from "plotly.js";
-import { v4 } from "uuid";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import Plotly from "plotly.js";
+import React from "react";
+import { v4 } from "uuid";
+
 import { localization } from "../../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+
 import { barChartStyles } from "./BarChart.styles";
 
 export interface IBarChartProps {

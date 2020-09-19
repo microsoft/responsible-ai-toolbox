@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   CommandBar,
   ICommandBarItemProps,
   IContextualMenuItem
 } from "office-ui-fabric-react";
-import { languages } from "./languages";
+import React from "react";
+
 import { applications, IApplications } from "./applications";
 import { IAppSetting } from "./IAppSetting";
+import { languages } from "./languages";
 import { themes } from "./themes";
 
 export interface IAppHeaderProps extends Required<IAppSetting> {

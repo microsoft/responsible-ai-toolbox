@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IPlotlyProperty,
+  SelectionContext,
+  ModelMetadata
+} from "@responsible-ai/mlchartlib";
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
@@ -15,14 +20,34 @@ import {
   PivotLinkSize,
   IPivotItemProps
 } from "office-ui-fabric-react";
-
 import React from "react";
-import {
-  IPlotlyProperty,
-  SelectionContext,
-  ModelMetadata
-} from "@responsible-ai/mlchartlib";
+
 import { localization } from "../Localization/localization";
+
+import { EbmExplanation } from "./Controls/EbmExplanation";
+import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
+import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
+import {
+  IFeatureImportanceConfig,
+  globalFeatureImportanceId,
+  barId,
+  FeatureImportanceWrapper
+} from "./Controls/FeatureImportance/FeatureImportanceWrapper";
+import { ICEPlot } from "./Controls/ICEPlot";
+import { PerturbationExploration } from "./Controls/PerturbationExploration";
+import {
+  DataExploration,
+  dataScatterId
+} from "./Controls/Scatter/DataExploration";
+import {
+  ExplanationExploration,
+  explanationScatterId
+} from "./Controls/Scatter/ExplanationExploration";
+import {
+  localBarId,
+  SinglePointFeatureImportance
+} from "./Controls/SinglePointFeatureImportance";
+import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import { FabricStyles } from "./FabricStyles";
 import {
   IExplanationContext,
@@ -36,40 +61,16 @@ import {
   IMultiClassBoundedCoordinates
 } from "./IExplanationContext";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import {
   IWeightedDropdownContext,
   WeightVectorOption,
   WeightVectors
 } from "./IWeightedDropdownContext";
+import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
-import { EbmExplanation } from "./Controls/EbmExplanation";
-import { JointDataset } from "./JointDataset";
-import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 
-import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
-import {
-  IFeatureImportanceConfig,
-  globalFeatureImportanceId,
-  barId,
-  FeatureImportanceWrapper
-} from "./Controls/FeatureImportance/FeatureImportanceWrapper";
-import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
-import {
-  localBarId,
-  SinglePointFeatureImportance
-} from "./Controls/SinglePointFeatureImportance";
-import {
-  ExplanationExploration,
-  explanationScatterId
-} from "./Controls/Scatter/ExplanationExploration";
-import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
-import {
-  DataExploration,
-  dataScatterId
-} from "./Controls/Scatter/DataExploration";
-import { PerturbationExploration } from "./Controls/PerturbationExploration";
-import { ICEPlot } from "./Controls/ICEPlot";
 const rowIndex = "rowIndex";
 
 export interface IDashboardContext {
