@@ -16,7 +16,7 @@ import { irisGlobal } from "../interpret/__mock_data/irisGlobal";
 import { irisDataGlobal } from "../interpret/__mock_data/irisDataGlobal";
 import { ibmData } from "../interpret/__mock_data/ibmData";
 import { ibmDataInconsistent } from "../interpret/__mock_data/ibmDataInconsistent";
-import { breastCancerData } from "../interpret/__mock_data/dummyData";
+import { breastCancerData } from "../interpret/__mock_data/breastCancerData";
 import { irisNoData } from "../interpret/__mock_data/irisNoData";
 import { largeFeatureCount } from "../interpret/__mock_data/largeFeatureCount";
 import { ibmNoClass } from "../interpret/__mock_data/ibmNoClass";
