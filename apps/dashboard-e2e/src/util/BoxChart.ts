@@ -149,12 +149,12 @@ export class BoxChart extends Chart<IBox> {
     if (top > q3) {
       throw new Error(`box${idx} top: ${top} is greater than q3: ${q3} `);
     }
-    if (Math.round(((left + right) / 2) * 100) / 100 !== center) {
+    if (Math.abs(Math.round(((left + right) / 2) * 100) / 100 - center) > 1) {
       throw new Error(
         `box${idx} center: ${center}, is not in the middle of left: ${left} and right ${right}`
       );
     }
-    if (Math.round(((sLeft + sRight) / 2) * 100) / 100 !== center) {
+    if (Math.abs(Math.round(((sLeft + sRight) / 2) * 100) / 100 - center) > 1) {
       throw new Error(
         `box${idx} center: ${center}, is not in the middle of sLeft: ${sLeft} and right ${sRight}`
       );
