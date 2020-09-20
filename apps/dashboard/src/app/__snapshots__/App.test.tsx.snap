@@ -509,6 +509,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     />
   </div>
   <Redirect
+    push={true}
     to="/interpret/automlMimicAdult/light/english/Version-1"
   />
 </Fragment>
