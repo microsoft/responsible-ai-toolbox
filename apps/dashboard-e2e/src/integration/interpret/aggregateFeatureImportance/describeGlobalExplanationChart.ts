@@ -3,8 +3,8 @@
 
 import { toNumber } from "lodash";
 
-import { Chart, IChartElement } from "../../../support/Chart";
-import { IDataSetShape } from "../IDataSetShape";
+import { Chart, IChartElement } from "../../../util/Chart";
+import { IInterpretData } from "../IInterpretData";
 
 function getTopKValue(): number {
   return toNumber(cy.$$("#TopKSetting input").val());
@@ -12,7 +12,7 @@ function getTopKValue(): number {
 
 export function describeGlobalExplanationChart<
   TElement extends IChartElement
->(props: { chart: Chart<TElement>; dataShape: IDataSetShape }): void {
+>(props: { chart: Chart<TElement>; dataShape: IInterpretData }): void {
   describe("Global explanation chart", () => {
     it("should have y axis label", () => {
       cy.get('#FeatureImportanceBar div[class*="rotatedVerticalBox"]').should(
@@ -21,7 +21,7 @@ export function describeGlobalExplanationChart<
       );
     });
     it("should have x axis label", () => {
-      const columns = ["Column6", "Column5", "Column1", "Column13"];
+      const columns = props.dataShape.featureNames.slice(0, 4);
       for (const [i, column] of columns.entries()) {
         cy.get(
           `#FeatureImportanceBar svg g.xaxislayer-above g.xtick:nth-child(${
@@ -30,34 +30,37 @@ export function describeGlobalExplanationChart<
         ).should("contain.text", column);
       }
     });
-    it(`should have ${props.dataShape.totalFeatures} elements`, () => {
-      expect(props.chart.Elements).length(props.dataShape.totalFeatures);
+    it(`should have ${props.dataShape.featureNames.length} elements`, () => {
+      expect(props.chart.Elements).length(props.dataShape.featureNames.length);
     });
-
-    describe("Chart Settings", () => {
-      beforeEach(() => {
-        cy.get("#GlobalExplanationSettingsButton").click();
+    if (!props.dataShape.noLocalImportance) {
+      describe("Chart Settings", () => {
+        beforeEach(() => {
+          cy.get("#GlobalExplanationSettingsButton").click();
+        });
+        it("should display settings", () => {
+          cy.get("#GlobalExplanationSettingsCallout").should("exist");
+        });
+        it("should be able to hide settings", () => {
+          cy.get("#GlobalExplanationSettingsButton").click();
+          cy.get("#GlobalExplanationSettingsCallout").should("not.exist");
+        });
+        it("chart elements should match top K setting", () => {
+          const topK = getTopKValue();
+          expect(props.chart.VisibleElements).length(topK);
+        });
+        it("should increase top K setting", () => {
+          const topK = getTopKValue();
+          cy.get("#TopKSetting input")
+            .focus()
+            .type("{uparrow}")
+            .then(() => {
+              expect(props.chart.VisibleElements).length(
+                Math.min(topK + 1, props.dataShape.featureNames.length)
+              );
+            });
+        });
       });
-      it("should display settings", () => {
-        cy.get("#GlobalExplanationSettingsCallout").should("exist");
-      });
-      it("should be able to hide settings", () => {
-        cy.get("#GlobalExplanationSettingsButton").click();
-        cy.get("#GlobalExplanationSettingsCallout").should("not.exist");
-      });
-      it("chart elements should match top K setting", () => {
-        const topK = getTopKValue();
-        expect(props.chart.VisibleElements).length(topK);
-      });
-      it("should increase top K setting", () => {
-        const topK = getTopKValue();
-        cy.get("#TopKSetting input")
-          .focus()
-          .type("{uparrow}")
-          .then(() => {
-            expect(props.chart.VisibleElements).length(topK + 1);
-          });
-      });
-    });
+    }
   });
 }
