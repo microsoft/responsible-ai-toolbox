@@ -17,14 +17,14 @@ export const binningControlStyles: IProcessedStyleSet<IBinningControlStyles> = m
   IBinningControlStyles
 >({
   featurePicker: {
+    borderBottom: "1px solid grey",
     display: "flex",
-    padding: "3px 15px",
     justifyContent: "space-between",
-    borderBottom: "1px solid grey"
+    padding: "3px 15px"
   },
+  parameterSet: { display: "flex" },
   rangeView: {
     display: "flex",
     justifyContent: "flex-end"
-  },
-  parameterSet: { display: "flex" }
+  }
 });

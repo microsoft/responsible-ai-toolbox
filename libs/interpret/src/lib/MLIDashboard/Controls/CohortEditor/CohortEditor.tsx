@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   Text,
   TextField,
@@ -26,12 +26,14 @@ import {
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
+
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
+import { FabricStyles } from "../../FabricStyles";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../JointDataset";
 import { CohortList } from "../CohortList/CohortList";
-import { FabricStyles } from "../../FabricStyles";
+
 import {
   cohortEditorCallout,
   cohortEditorStyles,
@@ -144,14 +146,14 @@ export class CohortEditor extends React.PureComponent<
   public constructor(props: ICohortEditorProps) {
     super(props);
     this.state = {
-      openedFilter: undefined,
+      cohortName: this.props.cohortName,
       filterIndex: this.props.filterList.length,
       filters: this.props.filterList,
-      cohortName: this.props.cohortName
+      openedFilter: undefined
     };
     this._leftSelection = new Selection({
-      selectionMode: SelectionMode.single,
-      onSelectionChanged: this._setSelection
+      onSelectionChanged: this._setSelection,
+      selectionMode: SelectionMode.single
     });
     this._leftSelection.setItems(this.leftItems);
     this._isInitialized = true;
@@ -225,10 +227,10 @@ export class CohortEditor extends React.PureComponent<
                 setKey={"set"}
                 columns={[
                   {
+                    fieldName: "title",
                     key: "col1",
-                    name: "name",
                     minWidth: 150,
-                    fieldName: "title"
+                    name: "name"
                   }
                 ]}
               />
@@ -312,8 +314,8 @@ export class CohortEditor extends React.PureComponent<
       this.setState({
         openedFilter: {
           arg: [],
-          method: FilterMethods.Includes,
-          column: openedFilter.column
+          column: openedFilter.column,
+          method: FilterMethods.Includes
         }
       });
     } else {
@@ -323,8 +325,8 @@ export class CohortEditor extends React.PureComponent<
             this.props.jointDataset.metaDict[openedFilter.column].featureRange
               ?.max || Number.MAX_SAFE_INTEGER
           ],
-          method: FilterMethods.LessThan,
-          column: openedFilter.column
+          column: openedFilter.column,
+          method: FilterMethods.LessThan
         }
       });
     }
@@ -399,8 +401,8 @@ export class CohortEditor extends React.PureComponent<
     this.setState({
       openedFilter: {
         arg: selectedVals,
-        method: openedFilter.method,
-        column: openedFilter.column
+        column: openedFilter.column,
+        method: openedFilter.method
       }
     });
   };
@@ -426,8 +428,8 @@ export class CohortEditor extends React.PureComponent<
     this.setState({
       openedFilter: {
         arg: openedFilter.arg,
-        method: item.key as FilterMethods,
-        column: openedFilter.column
+        column: openedFilter.column,
+        method: item.key as FilterMethods
       }
     });
   };
@@ -472,8 +474,8 @@ export class CohortEditor extends React.PureComponent<
     this.setState({
       openedFilter: {
         arg: openArg,
-        method: this.state.openedFilter.method,
-        column: this.state.openedFilter.column
+        column: this.state.openedFilter.column,
+        method: this.state.openedFilter.method
       }
     });
   };
@@ -497,9 +499,9 @@ export class CohortEditor extends React.PureComponent<
     const filters = [...this.state.filters];
     filters[index] = filter;
     this.setState({
+      filterIndex: this.state.filters.length,
       filters,
-      openedFilter: undefined,
-      filterIndex: this.state.filters.length
+      openedFilter: undefined
     });
   }
 

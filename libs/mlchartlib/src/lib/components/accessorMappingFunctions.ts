@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IData } from "./IData";
 import { AccessorMappingFunctionNames } from "./AccessorMappingFunctionNames";
+import { IData } from "./IData";
 
 // No one hates 'any' more than me, but it is the strongest type we can say given it is the result of
 // a jmes query.

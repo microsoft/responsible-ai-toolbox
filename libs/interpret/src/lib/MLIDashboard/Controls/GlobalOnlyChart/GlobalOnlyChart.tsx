@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { localization } from "../../../Localization/localization";
-import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
-import { ChartTypes } from "../../ChartTypes";
-import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
+import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
+import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
 export interface IGlobalOnlyChartProps {
   metadata: IExplanationModelMetadata;
@@ -41,21 +42,21 @@ export class GlobalOnlyChart extends React.PureComponent<
     this.perClassExplanationDimension === 1
       ? [
           {
+            colorIndex: 0,
             name: localization.BarChart.absoluteGlobal,
             unsortedAggregateY:
               this.props.globalImportance?.map((classArray) => classArray[0]) ||
-              [],
-            colorIndex: 0
+              []
           }
         ]
       : this.props.metadata.classNames.map((name, index) => {
           return {
+            colorIndex: index,
             name,
             unsortedAggregateY:
               this.props.globalImportance?.map(
                 (classArray) => classArray[index]
-              ) || [],
-            colorIndex: index
+              ) || []
           };
         });
 
@@ -72,12 +73,12 @@ export class GlobalOnlyChart extends React.PureComponent<
       text: localization.BarChart.absoluteGlobal
     });
     this.state = {
-      startingK: 0,
-      topK: this.minK,
-      sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
       sortArray: ModelExplanationUtils.buildSortedVector(
         this.props.globalImportance || []
-      ).reverse()
+      ).reverse(),
+      sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
+      startingK: 0,
+      topK: this.minK
     };
   }
 

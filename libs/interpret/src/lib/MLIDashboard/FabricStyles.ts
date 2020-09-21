@@ -40,11 +40,11 @@ export class FabricStyles {
         display: "inline-flex",
         width: "100%"
       },
-      root: {
-        flex: 1
-      },
       label: {
         padding: "5px 10px 0 10px"
+      },
+      root: {
+        flex: 1
       }
     },
     FabricStyles.limitedSizeMenuDropdown
@@ -55,25 +55,25 @@ export class FabricStyles {
     Partial<IComboBoxStyles>
   >(
     {
+      callout: {
+        maxHeight: "256px",
+        minWidth: "200px"
+      },
       container: {
         display: "inline-flex",
         flexWrap: "wrap",
         width: "150px"
       },
-      root: {
-        flex: 1,
-        minWidth: "150px"
-      },
       label: {
         paddingRight: "10px"
-      },
-      callout: {
-        maxHeight: "256px",
-        minWidth: "200px"
       },
       optionsContainerWrapper: {
         maxHeight: "256px",
         minWidth: "200px"
+      },
+      root: {
+        flex: 1,
+        minWidth: "150px"
       }
     },
     FabricStyles.limitedSizeMenuDropdown
@@ -95,8 +95,8 @@ export class FabricStyles {
   public static calloutTitle: IStyle = [
     getTheme().fonts.xLarge,
     {
-      margin: 0,
-      fontWeight: FontWeights.semilight
+      fontWeight: FontWeights.semilight,
+      margin: 0
     }
   ];
   public static calloutInner: IStyle = {
@@ -105,11 +105,11 @@ export class FabricStyles {
   };
 
   public static chartEditorButton: IStyle = {
-    color: getTheme().semanticColors.accentButtonText,
     backgroundColor: getTheme().semanticColors.accentButtonBackground,
-    borderWidth: "1px",
+    borderColor: getTheme().semanticColors.buttonBorder,
     borderStyle: "solid",
-    borderColor: getTheme().semanticColors.buttonBorder
+    borderWidth: "1px",
+    color: getTheme().semanticColors.accentButtonText
   };
 
   public static calloutContainer: IStyle = {
@@ -119,30 +119,30 @@ export class FabricStyles {
   public static calloutProps: ICalloutProps = {
     doNotLayer: true,
     styles: {
+      calloutMain: {
+        maxHeight: "400px"
+      },
       container: mergeStyles([
         FabricStyles.calloutContainer,
         {
           position: "fixed"
         }
-      ]),
-      calloutMain: {
-        maxHeight: "400px"
-      }
+      ])
     }
   };
 
   public static placeholderItalic: IStyle = {
+    color: getTheme().semanticColors.disabledBodyText,
     fontStyle: "italic",
-    padding: "0 0 5px 5px",
-    color: getTheme().semanticColors.disabledBodyText
+    padding: "0 0 5px 5px"
   };
 
   public static missingParameterPlaceholderSpacer: IStyle = {
+    boxShadow: getTheme().effects.elevation4,
     margin: "25px auto 0 auto",
     maxWidth: "400px",
     padding: "23px",
-    width: "fit-content",
-    boxShadow: getTheme().effects.elevation4
+    width: "fit-content"
   };
 
   public static faintText: IStyle = {
@@ -150,16 +150,16 @@ export class FabricStyles {
   };
 
   public static plotlyColorPalette: IRGBColor[] = [
-    { r: 31, g: 119, b: 180 }, // muted blue
-    { r: 255, g: 127, b: 14 }, // safety orange
-    { r: 44, g: 160, b: 44 }, // cooked asparagus green
-    { r: 214, g: 39, b: 40 }, // brick red
-    { r: 148, g: 103, b: 189 }, // muted purple
-    { r: 140, g: 86, b: 75 }, // chestnut brown
-    { r: 227, g: 119, b: 194 }, // raspberry yogurt pink
-    { r: 127, g: 127, b: 127 }, // middle gray
-    { r: 188, g: 189, b: 34 }, // curry yellow-green
-    { r: 23, g: 190, b: 207 } // blue-teal
+    { b: 180, g: 119, r: 31 }, // muted blue
+    { b: 14, g: 127, r: 255 }, // safety orange
+    { b: 44, g: 160, r: 44 }, // cooked asparagus green
+    { b: 40, g: 39, r: 214 }, // brick red
+    { b: 189, g: 103, r: 148 }, // muted purple
+    { b: 75, g: 86, r: 140 }, // chestnut brown
+    { b: 194, g: 119, r: 227 }, // raspberry yogurt pink
+    { b: 127, g: 127, r: 127 }, // middle gray
+    { b: 34, g: 189, r: 188 }, // curry yellow-green
+    { b: 207, g: 190, r: 23 } // blue-teal
   ];
 
   public static plotlyColorHexPalette: string[] = [
@@ -208,44 +208,44 @@ export class FabricStyles {
     "Segoe UI, Segoe UI Web (West European),  Roboto, Helvetica Neue, sans-serif";
 
   public static verticalTabsStyle: Partial<IPivotStyles> = {
-    root: {
-      height: "100%",
-      width: "100px",
-      display: "flex",
-      flexDirection: "column"
-    },
-    text: {
-      whiteSpace: "normal",
-      lineHeight: "28px"
-    },
     link: {
-      flex: 1,
       backgroundColor: "#f4f4f4",
+      flex: 1,
       selectors: {
+        "&:focus, &:focus:not(:last-child)": {
+          border: "3px solid rgb(102, 102, 102)"
+        },
         "&:not(:last-child)": {
           borderBottom: "1px solid grey"
         },
         ".ms-Button-flexContainer": {
           justifyContent: "center"
-        },
-        "&:focus, &:focus:not(:last-child)": {
-          border: "3px solid rgb(102, 102, 102)"
         }
       }
     },
     linkIsSelected: {
       flex: 1,
       selectors: {
+        "&:focus, &:focus:not(:last-child)": {
+          border: "3px solid rgb(235, 235, 235)"
+        },
         "&:not(:last-child)": {
           borderBottom: "1px solid grey"
         },
         ".ms-Button-flexContainer": {
           justifyContent: "center"
-        },
-        "&:focus, &:focus:not(:last-child)": {
-          border: "3px solid rgb(235, 235, 235)"
         }
       }
+    },
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      width: "100px"
+    },
+    text: {
+      lineHeight: "28px",
+      whiteSpace: "normal"
     }
   };
 
@@ -254,13 +254,13 @@ export class FabricStyles {
       minWidth: "150px",
       padding: "0 5px"
     },
-    wrapper: {
-      display: "inline-flex"
-    },
     subComponentStyles: {
       label: {
         padding: "5px 10px 0 10px"
       }
+    },
+    wrapper: {
+      display: "inline-flex"
     }
   };
 }

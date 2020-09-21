@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Data } from "plotly.js";
+
 import { IAccessor } from "./IAccessor";
 
 export interface IData extends Data {

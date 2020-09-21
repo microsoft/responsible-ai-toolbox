@@ -1,4 +1,6 @@
 {
+  "git.enableCommitSigning": true,
+  "git.alwaysSignOff": true,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -46,7 +48,7 @@
     "Buildable",
     "Callout",
     "Chainable",
-    "Fairlearn",
+    "Fairness",
     "Importances",
     "Overprediction",
     "Parens",

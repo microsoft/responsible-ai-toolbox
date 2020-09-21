@@ -3,6 +3,7 @@
 
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
+
 import { IPlotlyProperty } from "./IPlotlyProperty";
 
 export interface IPlotlyTheme {

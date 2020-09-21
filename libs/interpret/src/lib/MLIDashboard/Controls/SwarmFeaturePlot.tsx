@@ -1,20 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import memoize from "memoize-one";
 import {
   IPlotlyProperty,
   PlotlyMode,
   AccessibleChart
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../Localization/localization";
+import { Cohort } from "../Cohort";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { JointDataset } from "../JointDataset";
-import { localization } from "../../Localization/localization";
 import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
-import { Cohort } from "../Cohort";
 
 export interface ISwarmFeaturePlotProps {
   topK: number;
@@ -117,8 +118,8 @@ export class SwarmFeaturePlot extends React.PureComponent<
   private static BasePlotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
-      displayModeBar: false
+      displayModeBar: false,
+      responsive: true
     } as any,
     data: [
       {
@@ -128,24 +129,24 @@ export class SwarmFeaturePlot extends React.PureComponent<
       }
     ] as any,
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
       hovermode: "closest",
       margin: {
-        t: 10,
         b: 30,
-        r: 210
+        r: 210,
+        t: 10
       },
       showlegend: false,
+      xaxis: {
+        automargin: true
+      },
       yaxis: {
         automargin: true,
         title: localization.featureImportance
-      },
-      xaxis: {
-        automargin: true
       }
     } as any
   };

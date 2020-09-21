@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _, { toNumber } from "lodash";
 import {
   ICategoricalRange,
   IModelMetadata,
   INumericRange,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
+import _, { toNumber } from "lodash";
 import {
   ComboBox,
   IComboBox,
@@ -16,8 +16,10 @@ import {
   TextField
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
+
 import { binningControlStyles } from "./BinningControl.styles";
 
 export interface IBinningProps {
@@ -249,11 +251,11 @@ export class BinningControl extends React.PureComponent<
         featureIndex
       ] as ICategoricalRange;
       return {
-        featureIndex,
-        selectedOptionKeys: summary.uniqueValues,
         categoricalOptions: summary.uniqueValues.map((text) => {
           return { key: text, text };
         }),
+        featureIndex,
+        selectedOptionKeys: summary.uniqueValues,
         type: RangeTypes.Categorical
       };
     }
@@ -262,8 +264,8 @@ export class BinningControl extends React.PureComponent<
     ] as INumericRange;
     return {
       featureIndex,
-      min: summary.min.toString(),
       max: summary.max.toString(),
+      min: summary.min.toString(),
       steps:
         this.props.defaultSteps !== undefined
           ? this.props.defaultSteps.toString()
@@ -280,9 +282,9 @@ export class BinningControl extends React.PureComponent<
       this.state.stepsErrorMessage !== undefined
     ) {
       this.props.onChange({
-        hasError: true,
         array: [],
         featureIndex: this.state.featureIndex,
+        hasError: true,
         rangeType: undefined
       });
     }
@@ -295,9 +297,9 @@ export class BinningControl extends React.PureComponent<
       Array.isArray(this.state.selectedOptionKeys)
     ) {
       this.props.onChange({
-        hasError: false,
         array: this.state.selectedOptionKeys,
         featureIndex: this.state.featureIndex,
+        hasError: false,
         rangeType: RangeTypes.Categorical
       });
     } else if (
@@ -314,16 +316,16 @@ export class BinningControl extends React.PureComponent<
         )
       );
       this.props.onChange({
-        hasError: false,
         array,
         featureIndex: this.state.featureIndex,
+        hasError: false,
         rangeType: this.state.type
       });
     } else {
       this.props.onChange({
-        hasError: true,
         array: [],
         featureIndex: this.state.featureIndex,
+        hasError: true,
         rangeType: undefined
       });
     }

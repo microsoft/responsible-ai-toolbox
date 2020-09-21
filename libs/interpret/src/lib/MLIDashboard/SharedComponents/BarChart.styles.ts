@@ -16,8 +16,8 @@ export const barChartStyles: IProcessedStyleSet<IBarChartStyles> = mergeStyleSet
   IBarChartStyles
 >({
   barChart: {
-    width: "100%",
-    flex: 1
+    flex: 1,
+    width: "100%"
   },
   centered: {
     margin: "auto"

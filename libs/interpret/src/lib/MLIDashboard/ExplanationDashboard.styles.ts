@@ -23,44 +23,54 @@ export interface IExplanationDashboardStyles {
 export const explanationDashboardStyles: IProcessedStyleSet<IExplanationDashboardStyles> = mergeStyleSets<
   IExplanationDashboardStyles
 >({
-  explainerDashboard: {
-    width: "100%",
-    height: "100%"
-  },
   chartsWrapper: {
-    flexGrow: 1,
     display: "flex",
-    overflow: "hidden",
-    width: "100%",
+    flexDirection: "column",
+    flexGrow: 1,
     height: "100%",
-    flexDirection: "column"
+    overflow: "hidden",
+    width: "100%"
+  },
+  clearButton: {
+    flex: 1
+  },
+  explainerDashboard: {
+    height: "100%",
+    width: "100%"
   },
   globalChartsWrapper: {
-    width: "100%",
-    height: "55%",
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
+    height: "55%",
+    width: "100%"
   },
   localChartsWrapper: {
-    width: "100%",
-    borderTopWidth: "2px",
     borderTopStyle: "solid",
+    borderTopWidth: "2px",
     boxSizing: "border-box",
-    height: "45%"
+    height: "45%",
+    width: "100%"
+  },
+  localCommands: {
+    borderBottomStyle: "solid",
+    borderBottomWidth: "1px",
+    display: "flex",
+    flexDirection: "row",
+    width: "100%"
   },
   localPlaceholder: {
-    height: "100px",
-    display: "flex",
     alignItems: "center",
-    fontSize: "25px"
+    display: "flex",
+    fontSize: "25px",
+    height: "100px"
   },
   placeholderText: {
-    margin: "auto",
     fontFamily: `Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
       sans-serif`,
-    padding: "40px",
-    lineHeight: "35px"
+    lineHeight: "35px",
+    margin: "auto",
+    padding: "40px"
   },
   tabbedViewer: {
     display: "flex",
@@ -71,15 +81,5 @@ export const explanationDashboardStyles: IProcessedStyleSet<IExplanationDashboar
     display: "flex",
     flexDirection: "column",
     width: "100%"
-  },
-  localCommands: {
-    display: "flex",
-    width: "100%",
-    flexDirection: "row",
-    borderBottomWidth: "1px",
-    borderBottomStyle: "solid"
-  },
-  clearButton: {
-    flex: 1
   }
 });

@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   ComboBox,
   IComboBox,
@@ -17,24 +16,26 @@ import {
   Link,
   Slider
 } from "office-ui-fabric-react";
+import React from "react";
 
-import { JointDataset } from "../../JointDataset";
+import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
+import { Cohort } from "../../Cohort";
+import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
-import { localization } from "../../../Localization/localization";
-import { DependencePlot } from "../DependencePlot/DependencePlot";
-import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { FabricStyles } from "../../FabricStyles";
-import { Cohort } from "../../Cohort";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
+import { JointDataset } from "../../JointDataset";
+import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
+import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
+
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
 import { Settings } from "./Settings";
@@ -107,20 +108,20 @@ export class GlobalExplanationTab extends React.PureComponent<
       this.props.jointDataset.localExplanationFeatureCount
     );
     this.state = {
-      startingK: 0,
-      topK: minK,
-      minK,
+      chartType: ChartTypes.Bar,
+      crossClassInfoVisible: false,
+      dependenceTooltipVisible: false,
+      explanationTooltipVisible: false,
       maxK: Math.min(30, this.props.jointDataset.localExplanationFeatureCount),
+      minK,
       selectedCohortIndex: 0,
-      sortingSeriesIndex: 0,
+      seriesIsActive: props.cohorts.map(() => true),
       sortArray: ModelExplanationUtils.getSortIndices(
         this.props.cohorts[0].calculateAverageImportance()
       ).reverse(),
-      seriesIsActive: props.cohorts.map(() => true),
-      dependenceTooltipVisible: false,
-      crossClassInfoVisible: false,
-      explanationTooltipVisible: false,
-      chartType: ChartTypes.Bar
+      sortingSeriesIndex: 0,
+      startingK: 0,
+      topK: minK
     };
 
     if (this.props.globalBarSettings === undefined) {
@@ -129,8 +130,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
-          text: this.props.weightLabels[option],
-          key: option
+          key: option,
+          text: this.props.weightLabels[option]
         };
       });
     }
@@ -298,9 +299,9 @@ export class GlobalExplanationTab extends React.PureComponent<
             <InteractiveLegend
               items={this.cohortSeries.map((row, rowIndex) => {
                 return {
-                  name: row.name,
-                  color: FabricStyles.fabricColorPalette[row.colorIndex],
                   activated: this.state.seriesIsActive[rowIndex],
+                  color: FabricStyles.fabricColorPalette[row.colorIndex],
+                  name: row.name,
                   onClick: this.toggleActivation.bind(this, rowIndex)
                 };
               })}
@@ -526,10 +527,10 @@ export class GlobalExplanationTab extends React.PureComponent<
   private getGlobalSeries(): IGlobalSeries[] {
     return this.props.cohorts.map((cohort, i) => {
       return {
+        colorIndex: i,
         name: cohort.name,
-        unsortedIndividualY: cohort.transposedLocalFeatureImportances(),
         unsortedAggregateY: cohort.calculateAverageImportance(),
-        colorIndex: i
+        unsortedIndividualY: cohort.transposedLocalFeatureImportances()
       };
     });
   }
@@ -572,7 +573,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       const sortArray = ModelExplanationUtils.getSortIndices(
         this.cohortSeries[newIndex].unsortedAggregateY
       ).reverse();
-      this.setState({ sortingSeriesIndex: newIndex, sortArray });
+      this.setState({ sortArray, sortingSeriesIndex: newIndex });
     }
   };
 
@@ -612,15 +613,15 @@ export class GlobalExplanationTab extends React.PureComponent<
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
-        property: xKey,
         options: {
-          dither: xIsDithered,
-          bin: false
-        }
+          bin: false,
+          dither: xIsDithered
+        },
+        property: xKey
       },
       yAxis: {
-        property: yKey,
-        options: {}
+        options: {},
+        property: yKey
       }
     };
     this.props.onDependenceChange(chartProps);

@@ -3,6 +3,7 @@
 
 import { CommandBarButton, PrimaryButton, Text } from "office-ui-fabric-react";
 import React from "react";
+
 import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
 import {
@@ -10,6 +11,7 @@ import {
   ModelTypes
 } from "../../IExplanationContext";
 import { JointDataset } from "../../JointDataset";
+
 import { cohortListStyles } from "./CohortList.styles";
 
 export interface ICohortListProps {
@@ -79,8 +81,8 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                     ariaLabel="More items"
                     role="menuitem"
                     styles={{
-                      root: classNames.commandButton,
-                      menuIcon: classNames.menuIcon
+                      menuIcon: classNames.menuIcon,
+                      root: classNames.commandButton
                     }}
                     disabled={!this.props.jointDataset.dataDict?.length}
                     menuIconProps={{ iconName: "More" }}

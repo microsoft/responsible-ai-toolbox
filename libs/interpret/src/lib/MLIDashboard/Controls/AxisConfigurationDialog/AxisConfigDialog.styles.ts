@@ -10,6 +10,7 @@ import {
   mergeStyleSets,
   ICalloutContentStyles
 } from "office-ui-fabric-react";
+
 import { FabricStyles } from "../../FabricStyles";
 
 export interface IAxisControlDialogStyles {
@@ -31,65 +32,65 @@ export const axisControlDialogStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IAxisControlDialogStyles>({
-    wrapper: {
-      flex: 1,
-      width: "100%",
-      display: "flex",
-      flexDirection: "row",
-      padding: "30px 40px 25px 30px",
-      boxSizing: "border-box"
+    detailedList: {
+      height: "100%",
+      overflowX: "visible",
+      width: "100%"
+    },
+    featureComboBox: {
+      height: "56px",
+      marginBottom: "10px",
+      width: "180px"
+    },
+    featureText: {
+      color: theme.semanticColors.bodySubtext
+    },
+    filterHeader: {
+      color: theme.semanticColors.bodyTextChecked,
+      fontSize: FontSizes.medium,
+      fontWeight: FontWeights.semibold
     },
     leftHalf: {
       width: "213px"
     },
     rightHalf: {
+      background: theme.semanticColors.bodyBackgroundChecked,
+      borderRadius: "5px",
       boxSizing: "border-box",
+      display: "inline-flex",
+      flexDirection: "column",
       marginLeft: "25px",
       padding: "20px 25px",
-      display: "inline-flex",
-      width: "255px",
-      flexDirection: "column",
-      background: theme.semanticColors.bodyBackgroundChecked,
-      borderRadius: "5px"
-    },
-    filterHeader: {
-      fontWeight: FontWeights.semibold,
-      fontSize: FontSizes.medium,
-      color: theme.semanticColors.bodyTextChecked
-    },
-    detailedList: {
-      height: "100%",
-      width: "100%",
-      overflowX: "visible"
-    },
-    featureText: {
-      color: theme.semanticColors.bodySubtext
-    },
-    featureComboBox: {
-      width: "180px",
-      height: "56px",
-      marginBottom: "10px"
-    },
-    treatCategorical: {
-      width: "180px",
-      height: "20px",
-      marginBottom: "10px"
-    },
-    spinButton: {
-      width: "55px",
-      height: "36px"
+      width: "255px"
     },
     selectButton: {
-      marginRight: "27px",
-      marginBottom: "15px",
+      alignSelf: "flex-end",
       height: "32px",
-      width: "70px",
-      alignSelf: "flex-end"
+      marginBottom: "15px",
+      marginRight: "27px",
+      width: "70px"
+    },
+    spinButton: {
+      height: "36px",
+      width: "55px"
     },
     statsArea: {
       display: "flex",
-      padding: "3px 20px 3px 0",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
+      padding: "3px 20px 3px 0"
+    },
+    treatCategorical: {
+      height: "20px",
+      marginBottom: "10px",
+      width: "180px"
+    },
+    wrapper: {
+      boxSizing: "border-box",
+      display: "flex",
+      flex: 1,
+      flexDirection: "row",
+      padding: "30px 40px 25px 30px",
+      width: "100%"
     }
   });
 };
@@ -97,19 +98,19 @@ export const axisControlDialogStyles: () => IProcessedStyleSet<
 export const axisControlCallout: () => ICalloutContentStyles = () => {
   const theme = getTheme();
   return {
-    container: FabricStyles.calloutContainer,
-    root: {},
     beak: {},
     beakCurtain: {},
     calloutMain: {
-      overflowY: "visible",
-      width: "560px",
+      borderRadius: "2px",
+      boxShadow: theme.effects.elevation64,
+      display: "flex",
+      flexDirection: "column",
       height: "fit-content",
       minHeight: "340px",
-      boxShadow: theme.effects.elevation64,
-      borderRadius: "2px",
-      display: "flex",
-      flexDirection: "column"
-    }
+      overflowY: "visible",
+      width: "560px"
+    },
+    container: FabricStyles.calloutContainer,
+    root: {}
   };
 };

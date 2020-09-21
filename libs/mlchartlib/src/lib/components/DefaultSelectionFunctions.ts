@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import Plotly from "plotly.js";
+
 import { IPlotlyProperty } from "./IPlotlyProperty";
 
 export class DefaultSelectionFunctions {

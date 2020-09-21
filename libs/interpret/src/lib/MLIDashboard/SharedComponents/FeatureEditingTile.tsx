@@ -1,18 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { toNumber } from "lodash";
 import {
   TextField,
   ComboBox,
   IComboBox,
   IComboBoxOption
 } from "office-ui-fabric-react";
+import React from "react";
 
-import { RangeTypes } from "@responsible-ai/mlchartlib";
-import { toNumber } from "lodash";
-import { FabricStyles } from "../FabricStyles";
 import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
+
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
 
 export interface IFeatureEditingTileProps {
@@ -36,7 +37,7 @@ export class FeatureEditingTile extends React.Component<
   private options =
     this.props.enumeratedValues !== undefined
       ? this.props.enumeratedValues.map((value) => {
-          return { text: value, key: value };
+          return { key: value, text: value };
         })
       : undefined;
 
@@ -50,8 +51,8 @@ export class FeatureEditingTile extends React.Component<
   public componentDidUpdate(prevProps: IFeatureEditingTileProps): void {
     if (this.props.defaultValue !== prevProps.defaultValue) {
       this.setState({
-        value: this.props.defaultValue.toString(),
-        errorMessage: undefined
+        errorMessage: undefined,
+        value: this.props.defaultValue.toString()
       });
     }
   }
@@ -113,7 +114,7 @@ export class FeatureEditingTile extends React.Component<
           : localization.IcePlot.numericError;
     }
     this.props.onEdit(this.props.index, val, errorMessage);
-    this.setState({ value: newValue, errorMessage });
+    this.setState({ errorMessage, value: newValue });
   };
 
   private onComboSelected = (

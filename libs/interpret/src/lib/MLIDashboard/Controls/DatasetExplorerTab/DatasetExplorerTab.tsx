@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import Plotly from "plotly.js";
-import React from "react";
 import {
   AccessibleChart,
   IPlotlyProperty,
@@ -24,17 +22,21 @@ import {
   ChoiceGroup,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
+import Plotly from "plotly.js";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
-import { FabricStyles } from "../../FabricStyles";
-import { JointDataset, ColumnCategories } from "../../JointDataset";
-import { IExplanationModelMetadata } from "../../IExplanationContext";
-import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { Cohort } from "../../Cohort";
 import { cohortKey } from "../../cohortKey";
+import { FabricStyles } from "../../FabricStyles";
+import { IExplanationModelMetadata } from "../../IExplanationContext";
+import { IGenericChartProps } from "../../IGenericChartProps";
+import { JointDataset, ColumnCategories } from "../../JointDataset";
+import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
+
 import {
   datasetExplorerTabStyles,
   IDatasetExplorerTabStyles
@@ -63,38 +65,38 @@ export class DatasetExplorerTab extends React.PureComponent<
   IDatasetExplorerTabState
 > {
   public static basePlotlyProperties: IPlotlyProperty = {
-    config: { displaylogo: false, responsive: true, displayModeBar: false },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
-      margin: {
-        t: 0,
-        l: 20,
-        b: 20,
-        r: 0
-      },
       hovermode: "closest",
+      margin: {
+        b: 20,
+        l: 20,
+        r: 0,
+        t: 0
+      },
       showlegend: false,
+      xaxis: {
+        color: FabricStyles.chartAxisColor,
+        mirror: true,
+        tickfont: {
+          family: FabricStyles.fontFamilies,
+          size: 11
+        },
+        zeroline: true
+      },
       yaxis: {
         automargin: true,
         color: FabricStyles.chartAxisColor,
+        gridcolor: "#e5e5e5",
+        showgrid: true,
         tickfont: {
           family: "Roboto, Helvetica Neue, sans-serif",
-          size: 11
-        },
-        zeroline: true,
-        showgrid: true,
-        gridcolor: "#e5e5e5"
-      },
-      xaxis: {
-        mirror: true,
-        color: FabricStyles.chartAxisColor,
-        tickfont: {
-          family: FabricStyles.fontFamilies,
           size: 11
         },
         zeroline: true
@@ -118,11 +120,11 @@ export class DatasetExplorerTab extends React.PureComponent<
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
     this.state = {
-      xDialogOpen: false,
-      yDialogOpen: false,
-      colorDialogOpen: false,
       calloutVisible: false,
-      selectedCohortIndex: 0
+      colorDialogOpen: false,
+      selectedCohortIndex: 0,
+      xDialogOpen: false,
+      yDialogOpen: false
     };
     if (!this.props.jointDataset.hasDataset) {
       return;
@@ -213,18 +215,18 @@ export class DatasetExplorerTab extends React.PureComponent<
               return {
                 target: index,
                 value: {
-                  name: label,
                   marker: {
                     color: FabricStyles.fabricColorPalette[index]
-                  }
+                  },
+                  name: label
                 }
               };
             });
             plotlyProps.data[0].transforms = [
               {
-                type: "groupby",
                 groups: rawColor,
-                styles
+                styles,
+                type: "groupby"
               }
             ];
             if (plotlyProps.layout) {
@@ -280,9 +282,9 @@ export class DatasetExplorerTab extends React.PureComponent<
         _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
         const transforms: Array<Partial<Plotly.Transform>> = [
           {
-            type: "aggregate",
+            aggregations: [{ func: "sum", target: "y" }],
             groups: rawX,
-            aggregations: [{ target: "y", func: "sum" }]
+            type: "aggregate"
           }
         ];
         if (
@@ -294,17 +296,17 @@ export class DatasetExplorerTab extends React.PureComponent<
             return {
               target: index,
               value: {
-                name: label,
                 marker: {
                   color: FabricStyles.fabricColorPalette[index]
-                }
+                },
+                name: label
               }
             };
           });
           transforms.push({
-            type: "groupby",
             groups: rawColor,
-            styles
+            styles,
+            type: "groupby"
           });
         }
         plotlyProps.data[0].transforms = transforms;
@@ -896,17 +898,17 @@ export class DatasetExplorerTab extends React.PureComponent<
   private generateDefaultChartAxes(): void {
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Histogram,
-      xAxis: {
-        property: JointDataset.IndexLabel,
-        options: {}
-      },
-      yAxis: this.generateDefaultYAxis(),
       colorAxis: {
+        options: {},
         property: this.props.jointDataset.hasPredictedY
           ? JointDataset.PredictedYLabel
-          : JointDataset.IndexLabel,
-        options: {}
-      }
+          : JointDataset.IndexLabel
+      },
+      xAxis: {
+        options: {},
+        property: JointDataset.IndexLabel
+      },
+      yAxis: this.generateDefaultYAxis()
     };
     this.props.onChange(chartProps);
   }
@@ -916,11 +918,11 @@ export class DatasetExplorerTab extends React.PureComponent<
     const yIsDithered = this.props.jointDataset.metaDict[yKey]
       .treatAsCategorical;
     return {
-      property: yKey,
       options: {
-        dither: yIsDithered,
-        bin: false
-      }
+        bin: false,
+        dither: yIsDithered
+      },
+      property: yKey
     };
   }
 }

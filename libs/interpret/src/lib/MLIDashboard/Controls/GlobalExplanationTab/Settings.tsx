@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { toNumber, isInteger } from "lodash";
 import {
   IconButton,
   DirectionalHint,
@@ -11,10 +11,12 @@ import {
   Callout,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
-import { toNumber, isInteger } from "lodash";
-import { FabricStyles } from "../../FabricStyles";
-import { ChartTypes } from "../../ChartTypes";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
+import { FabricStyles } from "../../FabricStyles";
+
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 
 interface ISettingsProps {
@@ -79,7 +81,6 @@ export class Settings extends React.Component<ISettingsProps, ISettingsState> {
             <SpinButton
               className={classNames.topK}
               styles={{
-                spinButtonWrapper: { maxWidth: "100px" },
                 labelWrapper: { alignSelf: "center" },
                 root: {
                   float: "right",
@@ -88,7 +89,8 @@ export class Settings extends React.Component<ISettingsProps, ISettingsState> {
                       maxWidth: "110px"
                     }
                   }
-                }
+                },
+                spinButtonWrapper: { maxWidth: "100px" }
               }}
               label={localization.AggregateImportance.topKFeatures}
               min={this.props.minK}

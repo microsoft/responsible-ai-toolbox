@@ -2,6 +2,13 @@
 // Licensed under the MIT License.
 
 import {
+  AccessibleChart,
+  IPlotlyProperty,
+  PlotlyMode,
+  IData
+} from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import {
   IProcessedStyleSet,
   getTheme,
   ChoiceGroup,
@@ -27,34 +34,28 @@ import {
   SearchBox,
   TextField
 } from "office-ui-fabric-react";
-import _ from "lodash";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
-
 import React from "react";
+
 import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
+import { IGenericChartProps } from "../../IGenericChartProps";
+import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { ColumnCategories, JointDataset } from "../../JointDataset";
-import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
-import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
+import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
+import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
-import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
+import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
+
 import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
@@ -101,21 +102,21 @@ export class WhatIfTab extends React.PureComponent<
   IWhatIfTabState
 > {
   public static basePlotlyProperties: IPlotlyProperty = {
-    config: { displaylogo: false, responsive: true, displayModeBar: false },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
-      margin: {
-        t: 10,
-        l: 10,
-        b: 20,
-        r: 0
-      },
       hovermode: "closest",
+      margin: {
+        b: 20,
+        l: 10,
+        r: 0,
+        t: 10
+      },
       showlegend: false,
       yaxis: {
         automargin: true
@@ -165,12 +166,12 @@ export class WhatIfTab extends React.PureComponent<
           })
         : undefined;
       return {
-        key,
-        text: meta.abbridgedLabel,
         data: {
           categoricalOptions: options,
           fullLabel: meta.label.toLowerCase()
-        }
+        },
+        key,
+        text: meta.abbridgedLabel
       };
     });
   private classOptions: IDropdownOption[] = this.props.metadata.classNames.map(
@@ -188,34 +189,34 @@ export class WhatIfTab extends React.PureComponent<
     if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
-          text: this.props.weightLabels[option],
-          key: option
+          key: option,
+          text: this.props.weightLabels[option]
         };
       });
     }
     this.state = {
-      isPanelOpen: this.props.invokeModel !== undefined,
-      xDialogOpen: false,
-      yDialogOpen: false,
-      selectedWhatIfRootIndex: 0,
-      editingDataCustomIndex: undefined,
-      customPoints: [],
-      selectedCohortIndex: 0,
-      request: undefined,
-      filteredFeatureList: this.featuresOption,
-      selectedPointsIndexes: [],
-      pointIsActive: [],
+      crossClassInfoVisible: false,
       customPointIsActive: [],
-      startingK: 0,
-      topK: 4,
+      customPoints: [],
+      editingDataCustomIndex: undefined,
+      filteredFeatureList: this.featuresOption,
+      iceTooltipVisible: false,
+      isPanelOpen: this.props.invokeModel !== undefined,
+      pointIsActive: [],
+      request: undefined,
+      secondaryChartChoice: WhatIfTab.featureImportanceKey,
+      selectedCohortIndex: 0,
+      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
+      selectedICEClass: 0,
+      selectedPointsIndexes: [],
+      selectedWhatIfRootIndex: 0,
+      showSelectionWarning: false,
       sortArray: [],
       sortingSeriesIndex: undefined,
-      secondaryChartChoice: WhatIfTab.featureImportanceKey,
-      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
-      showSelectionWarning: false,
-      selectedICEClass: 0,
-      crossClassInfoVisible: false,
-      iceTooltipVisible: false
+      startingK: 0,
+      topK: 4,
+      xDialogOpen: false,
+      yDialogOpen: false
     };
 
     if (props.chartProps === undefined) {
@@ -260,15 +261,15 @@ export class WhatIfTab extends React.PureComponent<
               localization.WhatIfTab.rowLabel,
               rowIndex.toString()
             ),
+            unsortedAggregateY: JointDataset.localExplanationSlice(
+              row,
+              this.props.jointDataset.localExplanationFeatureCount
+            ) as number[],
             unsortedFeatureValues: JointDataset.datasetSlice(
               row,
               this.props.jointDataset.metaDict,
               this.props.jointDataset.localExplanationFeatureCount
-            ),
-            unsortedAggregateY: JointDataset.localExplanationSlice(
-              row,
-              this.props.jointDataset.localExplanationFeatureCount
-            ) as number[]
+            )
           };
         }
       );
@@ -348,7 +349,7 @@ export class WhatIfTab extends React.PureComponent<
       this.testableDatapointNames = includedNames;
       this.forceUpdate();
     }
-    this.setState({ sortingSeriesIndex, sortArray });
+    this.setState({ sortArray, sortingSeriesIndex });
   }
 
   public render(): React.ReactNode {
@@ -706,9 +707,9 @@ export class WhatIfTab extends React.PureComponent<
                     items={this.selectedFeatureImportance.map(
                       (row, rowIndex) => {
                         return {
-                          name: row.name,
-                          color: FabricStyles.fabricColorPalette[rowIndex],
                           activated: this.state.pointIsActive[rowIndex],
+                          color: FabricStyles.fabricColorPalette[rowIndex],
+                          name: row.name,
                           onClick: this.toggleActivation.bind(this, rowIndex),
                           onDelete: this.toggleSelectionOfPoint.bind(
                             this,
@@ -740,12 +741,12 @@ export class WhatIfTab extends React.PureComponent<
                   <InteractiveLegend
                     items={this.state.customPoints.map((row, rowIndex) => {
                       return {
-                        name: row[WhatIfTab.namePath],
+                        activated: this.state.customPointIsActive[rowIndex],
                         color:
                           FabricStyles.fabricColorPalette[
                             rowIndex + WhatIfTab.MAX_SELECTION + 1
                           ],
-                        activated: this.state.customPointIsActive[rowIndex],
+                        name: row[WhatIfTab.namePath],
                         onClick: this.toggleCustomActivation.bind(
                           this,
                           rowIndex
@@ -1512,7 +1513,7 @@ export class WhatIfTab extends React.PureComponent<
     const sortArray = ModelExplanationUtils.getSortIndices(
       this.includedFeatureImportance[newIndex].unsortedAggregateY
     ).reverse();
-    this.setState({ sortingSeriesIndex: newIndex, sortArray });
+    this.setState({ sortArray, sortingSeriesIndex: newIndex });
   };
 
   private setWeightOption = (
@@ -1568,8 +1569,8 @@ export class WhatIfTab extends React.PureComponent<
       this.validationErrors[key] = undefined;
     });
     this.setState({
-      selectedWhatIfRootIndex: index,
-      editingDataCustomIndex: undefined
+      editingDataCustomIndex: undefined,
+      selectedWhatIfRootIndex: index
     });
   }
 
@@ -1580,8 +1581,8 @@ export class WhatIfTab extends React.PureComponent<
       this.validationErrors[key] = undefined;
     });
     this.setState({
-      selectedWhatIfRootIndex: this.temporaryPoint[JointDataset.IndexLabel],
-      editingDataCustomIndex: index
+      editingDataCustomIndex: index,
+      selectedWhatIfRootIndex: this.temporaryPoint[JointDataset.IndexLabel]
     });
     this.openPanel();
   }
@@ -1592,7 +1593,7 @@ export class WhatIfTab extends React.PureComponent<
       customPoints.splice(index, 1);
       const customPointIsActive = [...prevState.customPointIsActive];
       customPointIsActive.splice(index, 1);
-      return { customPoints, customPointIsActive };
+      return { customPointIsActive, customPoints };
     });
   }
 
@@ -1677,9 +1678,9 @@ export class WhatIfTab extends React.PureComponent<
     customPointIsActive.push(true);
     this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
     this.setState({
-      editingDataCustomIndex,
+      customPointIsActive,
       customPoints,
-      customPointIsActive
+      editingDataCustomIndex
     });
   };
 
@@ -1808,8 +1809,8 @@ export class WhatIfTab extends React.PureComponent<
       pointIsActive.splice(indexOf, 1);
     }
     this.setState({
-      selectedPointsIndexes: newSelections,
       pointIsActive,
+      selectedPointsIndexes: newSelections,
       showSelectionWarning: false
     });
   }
@@ -1887,9 +1888,6 @@ export class WhatIfTab extends React.PureComponent<
     plotlyProps.data[0].type = chartProps.chartType;
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
-      symbol: indexes.map((i) =>
-        this.state.selectedPointsIndexes.includes(i) ? "square" : "circle"
-      ) as any,
       color: indexes.map((rowIndex) => {
         const selectionIndex = this.state.selectedPointsIndexes.indexOf(
           rowIndex
@@ -1899,31 +1897,28 @@ export class WhatIfTab extends React.PureComponent<
         }
         return FabricStyles.fabricColorPalette[selectionIndex];
       }) as any,
-      size: 8
+      size: 8,
+      symbol: indexes.map((i) =>
+        this.state.selectedPointsIndexes.includes(i) ? "square" : "circle"
+      ) as any
     };
 
     plotlyProps.data[1] = {
-      type: "scatter",
-      mode: PlotlyMode.Markers,
       marker: {
-        symbol: "star",
-        size: 12,
         color: this.state.customPoints.map(
           (_, i) =>
             FabricStyles.fabricColorPalette[WhatIfTab.MAX_SELECTION + 1 + i]
-        )
-      }
+        ),
+        size: 12,
+        symbol: "star"
+      },
+      mode: PlotlyMode.Markers,
+      type: "scatter"
     };
 
     plotlyProps.data[2] = {
-      type: "scatter",
-      mode: PlotlyMode.Markers,
-      text: "Editable What-If point",
       hoverinfo: "text",
       marker: {
-        opacity: 0.5,
-        symbol: "star",
-        size: 12,
         color: "rgba(0,0,0,0)",
         line: {
           color:
@@ -1931,8 +1926,14 @@ export class WhatIfTab extends React.PureComponent<
               WhatIfTab.MAX_SELECTION + 1 + this.state.customPoints.length
             ],
           width: 2
-        }
-      }
+        },
+        opacity: 0.5,
+        size: 12,
+        symbol: "star"
+      },
+      mode: PlotlyMode.Markers,
+      text: "Editable What-If point",
+      type: "scatter"
     };
 
     if (chartProps.xAxis) {
@@ -2052,17 +2053,17 @@ export class WhatIfTab extends React.PureComponent<
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
+        options: {},
         property: this.props.jointDataset.hasPredictedProbabilities
           ? JointDataset.ProbabilityYRoot + "0"
-          : JointDataset.IndexLabel,
-        options: {}
+          : JointDataset.IndexLabel
       },
       yAxis: {
-        property: yKey,
         options: {
-          dither: yIsDithered,
-          bin: false
-        }
+          bin: false,
+          dither: yIsDithered
+        },
+        property: yKey
       }
     };
     this.props.onChange(chartProps);

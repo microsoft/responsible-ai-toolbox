@@ -73,7 +73,7 @@ yarn lintfix
 To build a specific app run
 
 ```
-yarn build <app-name>  // e.g. fairlearn, interpret
+yarn build <app-name>  // e.g. fairness, interpret
 ```
 
 or alternatively `yarn buildall` to build all of them. Since most apps have

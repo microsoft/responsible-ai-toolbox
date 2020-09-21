@@ -1,15 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React from "react";
-import { ICategoricalRange } from "@responsible-ai/mlchartlib";
+
 import { localization } from "../../Localization/localization";
 import { IExplanationContext } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
+import { FeatureEditingTile } from "../SharedComponents/FeatureEditingTile";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 import { PredictionLabel } from "../SharedComponents/PredictionLabel";
-import { FeatureEditingTile } from "../SharedComponents/FeatureEditingTile";
+
 import { perturbationExplorationStyles } from "./PerturbationExploration.styles";
 
 export interface IPerturbationExplorationProps {
@@ -38,11 +40,11 @@ export class PerturbationExploration extends React.Component<
   public constructor(props: IPerturbationExplorationProps) {
     super(props);
     this.state = {
-      perturbedDictionary: {},
+      abortController: undefined,
       featureErrors: new Array(
         props.explanationContext.modelMetadata.featureNames.length
       ),
-      abortController: undefined
+      perturbedDictionary: {}
     };
 
     this.fetchData = _.debounce(this.fetchData.bind(this), 500);
@@ -54,11 +56,11 @@ export class PerturbationExploration extends React.Component<
         this.state.abortController.abort();
       }
       this.setState({
-        perturbedDictionary: {},
+        abortController: undefined,
         featureErrors: new Array(
           this.props.explanationContext.modelMetadata.featureNames.length
         ),
-        abortController: undefined,
+        perturbedDictionary: {},
         prediction: undefined,
         predictionProbabilities: undefined
       });
@@ -195,7 +197,7 @@ export class PerturbationExploration extends React.Component<
     } else {
       perturbedDictionary[featureIndex] = val;
     }
-    this.setState({ perturbedDictionary, featureErrors }, () => {
+    this.setState({ featureErrors, perturbedDictionary }, () => {
       this.fetchData();
     });
   };
@@ -244,14 +246,14 @@ export class PerturbationExploration extends React.Component<
             }
           }
           this.setState({
+            abortController: undefined,
             prediction: predictedClass,
-            predictionProbabilities: predictionVector,
-            abortController: undefined
+            predictionProbabilities: predictionVector
           });
         } else {
           this.setState({
-            prediction: fetchedData[0],
-            abortController: undefined
+            abortController: undefined,
+            prediction: fetchedData[0]
           });
         }
       } catch (error) {

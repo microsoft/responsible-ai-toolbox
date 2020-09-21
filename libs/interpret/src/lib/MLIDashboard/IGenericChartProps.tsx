@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ISelectorConfig } from "./NewExplanationDashboard";
 import { ChartTypes } from "./ChartTypes";
+import { ISelectorConfig } from "./NewExplanationDashboard";
 
 export interface IGenericChartProps {
   chartType: ChartTypes;

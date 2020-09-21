@@ -26,71 +26,71 @@ export const interactiveLegendStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IInteractiveLegendStyles>({
-    root: {
-      paddingTop: "8px",
-      paddingBottom: "8px"
-    },
-    item: {
-      height: "34px",
-      display: "flex",
-      flexDirection: "row",
+    clickTarget: {
       alignItems: "center",
-      marginBottom: "1px"
+      cursor: "pointer",
+      display: "flex",
+      flex: "1",
+      flexDirection: "row"
+    },
+    colorBox: {
+      borderRadius: "6px",
+      cursor: "pointer",
+      display: "inline-block",
+      height: "12px",
+      margin: "11px 4px 11px 8px",
+      width: "12px"
+    },
+    deleteButton: {
+      color: theme.semanticColors.errorText,
+      display: "inline-block",
+      width: "16px"
     },
     disabledItem: {
-      height: "34px",
+      alignItems: "center",
       backgroundColor: theme.semanticColors.disabledBackground,
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      height: "34px",
       marginBottom: "1px"
     },
+    editButton: {
+      color: theme.semanticColors.buttonText,
+      display: "inline-block",
+      width: "16px"
+    },
+    inactiveColorBox: {
+      borderRadius: "6px",
+      cursor: "pointer",
+      display: "inline-block",
+      height: "12px",
+      margin: "11px 4px 11px 8px",
+      opacity: 0.4,
+      width: "12px"
+    },
     inactiveItem: {
-      height: "34px",
+      alignItems: "center",
       color: theme.semanticColors.primaryButtonTextDisabled,
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      height: "34px",
       marginBottom: "1px"
     },
-    colorBox: {
-      margin: "11px 4px 11px 8px",
-      width: "12px",
-      height: "12px",
-      display: "inline-block",
-      borderRadius: "6px",
-      cursor: "pointer"
-    },
-    inactiveColorBox: {
-      margin: "11px 4px 11px 8px",
-      width: "12px",
-      height: "12px",
-      display: "inline-block",
-      borderRadius: "6px",
-      opacity: 0.4,
-      cursor: "pointer"
-    },
-    label: {
-      display: "inline-block",
-      flex: "1",
-      cursor: "pointer"
-    },
-    editButton: {
-      width: "16px",
-      display: "inline-block",
-      color: theme.semanticColors.buttonText
-    },
-    deleteButton: {
-      width: "16px",
-      display: "inline-block",
-      color: theme.semanticColors.errorText
-    },
-    clickTarget: {
+    item: {
+      alignItems: "center",
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
+      height: "34px",
+      marginBottom: "1px"
+    },
+    label: {
       cursor: "pointer",
+      display: "inline-block",
       flex: "1"
+    },
+    root: {
+      paddingBottom: "8px",
+      paddingTop: "8px"
     }
   });
 };
