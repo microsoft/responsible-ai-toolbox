@@ -18,16 +18,16 @@ export const explanationDashboardStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IExplanationDashboardStyles>({
+    page: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      color: theme.semanticColors.bodyText,
+      maxHeight: "1000px"
+    },
     pivotLabelWrapper: {
-      justifyContent: "space-between",
       display: "flex",
       flexDirection: "row",
+      justifyContent: "space-between",
       padding: "0 30px"
-    },
-    page: {
-      maxHeight: "1000px",
-      backgroundColor: theme.semanticColors.bodyBackground,
-      color: theme.semanticColors.bodyText
     }
   });
 };

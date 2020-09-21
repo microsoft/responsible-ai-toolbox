@@ -54,20 +54,20 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
       }
     });
     this.state = {
-      expandedBins: new Set<number>(),
-      editingFeatureIndex: undefined
+      editingFeatureIndex: undefined,
+      expandedBins: new Set<number>()
     };
     this.columns = [
       {
         key: "feature",
-        name: localization.Intro.features,
         minWidth: 75,
+        name: localization.Intro.features,
         onRender: this.renderFeatureNameCell
       },
       {
         key: "subgroup",
-        name: localization.Feature.subgroups,
         minWidth: 130,
+        name: localization.Feature.subgroups,
         onRender: this.renderSubGroupCell
       }
     ];

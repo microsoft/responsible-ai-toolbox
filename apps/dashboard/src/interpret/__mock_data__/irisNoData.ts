@@ -4,7 +4,6 @@
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
 export const irisNoData: IExplanationDashboardData = {
-  modelInformation: { modelClass: "blackbox", method: "classifier" },
   dataSummary: {
     classNames: ["setosa", "versicolor", "virginica"],
     featureNames: [
@@ -14,6 +13,7 @@ export const irisNoData: IExplanationDashboardData = {
       "petal width (cm)"
     ]
   },
+  modelInformation: { method: "classifier", modelClass: "blackbox" },
   //globalExplanation: {intercept: 1, scores:[0.017800017217248786, 0.011517443776666336, 0.32944454026478104, 0.08439875569117994]},
   precomputedExplanations: {
     localFeatureImportance: {

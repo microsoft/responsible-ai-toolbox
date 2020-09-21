@@ -93,12 +93,11 @@ export class Beehive extends React.PureComponent<
   private static BasePlotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
-      displayModeBar: false
+      displayModeBar: false,
+      responsive: true
     },
     data: [
       {
-        hoverinfo: "text",
         datapointLevelAccessors: {
           customdata: {
             path: ["rowIndex"],
@@ -109,30 +108,31 @@ export class Beehive extends React.PureComponent<
             plotlyPath: "text"
           }
         },
+        hoverinfo: "text",
         mode: PlotlyMode.Markers,
         type: "scattergl",
-        yAccessor: "featureImportance",
-        xAccessor: "ditheredFeatureIndex"
+        xAccessor: "ditheredFeatureIndex",
+        yAccessor: "featureImportance"
       }
     ],
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
       hovermode: "closest",
       margin: {
-        t: 10,
-        b: 30
+        b: 30,
+        t: 10
       },
       showlegend: false,
+      xaxis: {
+        automargin: true
+      },
       yaxis: {
         automargin: true,
         title: localization.featureImportance
-      },
-      xaxis: {
-        automargin: true
       }
     }
   };
@@ -180,7 +180,10 @@ export class Beehive extends React.PureComponent<
                 trueClassIndex
               );
               return {
-                rowIndex: rowIndex.toString(),
+                ditheredFeatureIndex:
+                  sortVectorIndex + (0.2 * Math.random() - 0.1),
+                featureImportance: row[featureIndex],
+                featureIndex: sortVectorIndex,
                 normalizedFeatureValue:
                   mappers !== undefined &&
                   data.testDataset.dataset?.[rowIndex][featureIndex]
@@ -188,15 +191,12 @@ export class Beehive extends React.PureComponent<
                         data.testDataset.dataset[rowIndex][featureIndex]
                       )
                     : undefined,
-                featureIndex: sortVectorIndex,
-                ditheredFeatureIndex:
-                  sortVectorIndex + (0.2 * Math.random() - 0.1),
-                featureImportance: row[featureIndex],
                 predictedClass,
                 predictedClassIndex,
-                trueClassIndex,
+                rowIndex: rowIndex.toString(),
+                tooltip: Beehive.buildTooltip(data, rowIndex, featureIndex),
                 trueClass,
-                tooltip: Beehive.buildTooltip(data, rowIndex, featureIndex)
+                trueClassIndex
               };
             }) || []
           );
@@ -286,8 +286,8 @@ export class Beehive extends React.PureComponent<
     const selectedColorIndex =
       this.colorOptions.length > 1 && this.rowCount < 500 ? 1 : 0;
     this.state = {
-      selectedColorOption: this.colorOptions[selectedColorIndex].key as string,
-      plotlyProps: undefined
+      plotlyProps: undefined,
+      selectedColorOption: this.colorOptions[selectedColorIndex].key as string
     };
   }
 
@@ -497,7 +497,7 @@ export class Beehive extends React.PureComponent<
                     title={localization.AggregateImportance.topKInfo}
                     onClick={this.showGlobalSortInfo}
                     styles={{
-                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                      root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                     }}
                   />
                 )}
@@ -528,7 +528,7 @@ export class Beehive extends React.PureComponent<
                     title={localization.CrossClass.info}
                     onClick={this.showCrossClassInfo}
                     styles={{
-                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                      root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                     }}
                   />
                 </div>
@@ -672,33 +672,33 @@ export class Beehive extends React.PureComponent<
     ];
     if (this.props.dashboardContext.explanationContext.testDataset.dataset) {
       result.push({
+        data: { isCategorical: false, isNormalized: true },
         key: "normalizedFeatureValue",
-        text: localization.AggregateImportance.scaledFeatureValue,
-        data: { isCategorical: false, isNormalized: true }
+        text: localization.AggregateImportance.scaledFeatureValue
       });
     }
     if (this.props.dashboardContext.explanationContext.testDataset.predictedY) {
       result.push({
-        key: "predictedClass",
-        text: isRegression
-          ? localization.AggregateImportance.predictedValue
-          : localization.AggregateImportance.predictedClass,
         data: {
           isCategorical: !isRegression,
           sortProperty: !isRegression ? "predictedClassIndex" : undefined
-        }
+        },
+        key: "predictedClass",
+        text: isRegression
+          ? localization.AggregateImportance.predictedValue
+          : localization.AggregateImportance.predictedClass
       });
     }
     if (this.props.dashboardContext.explanationContext.testDataset.trueY) {
       result.push({
-        key: "trueClass",
-        text: isRegression
-          ? localization.AggregateImportance.trueValue
-          : localization.AggregateImportance.trueClass,
         data: {
           isCategorical: !isRegression,
           sortProperty: !isRegression ? "trueClassIndex" : undefined
-        }
+        },
+        key: "trueClass",
+        text: isRegression
+          ? localization.AggregateImportance.trueValue
+          : localization.AggregateImportance.trueClass
       });
     }
     return result;
@@ -728,8 +728,8 @@ export class Beehive extends React.PureComponent<
       return;
     }
     this.setState({
-      selectedColorOption: item.key as string,
-      plotlyProps: undefined
+      plotlyProps: undefined,
+      selectedColorOption: item.key as string
     });
   };
 

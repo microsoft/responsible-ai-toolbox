@@ -55,33 +55,33 @@ export type IApplications = {
 };
 
 export const applications: IApplications = <const>{
-  interpret: {
-    versions: { "Version-1": 1, "Version-2": 2 },
-    datasets: {
-      automlMimicAdult: { data: automlMimicAdult, classDimension: 3 },
-      bostonData: { data: bostonData, classDimension: 1 },
-      bostonDataGlobal: { data: bostonDataGlobal, classDimension: 1 },
-      breastCancerData: { data: breastCancerData, classDimension: 2 },
-      ebmData: { data: ebmData, classDimension: 2 },
-      ibmData: { data: ibmData, classDimension: 2 },
-      ibmDataInconsistent: { data: ibmDataInconsistent, classDimension: 2 },
-      ibmNoClass: { data: ibmNoClass, classDimension: 2 },
-      irisData: { data: irisData, classDimension: 3 },
-      irisDataGlobal: { data: irisDataGlobal, classDimension: 3 },
-      irisGlobal: { data: irisGlobal, classDimension: 3 },
-      irisNoData: { data: irisNoData, classDimension: 3 },
-      irisNoFeatures: { data: irisNoFeatures, classDimension: 3 },
-      largeFeatureCount: { data: largeFeatureCount, classDimension: 2 }
-    }
-  },
   fairness: {
-    versions: { "Version-1": 1, "Version-2": 2 },
     datasets: {
       binaryClassifier: { data: binaryClassifier },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
       probit: { data: probit },
       regression: { data: regression }
-    }
+    },
+    versions: { "Version-1": 1, "Version-2": 2 }
+  },
+  interpret: {
+    datasets: {
+      automlMimicAdult: { classDimension: 3, data: automlMimicAdult },
+      bostonData: { classDimension: 1, data: bostonData },
+      bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },
+      breastCancerData: { classDimension: 2, data: breastCancerData },
+      ebmData: { classDimension: 2, data: ebmData },
+      ibmData: { classDimension: 2, data: ibmData },
+      ibmDataInconsistent: { classDimension: 2, data: ibmDataInconsistent },
+      ibmNoClass: { classDimension: 2, data: ibmNoClass },
+      irisData: { classDimension: 3, data: irisData },
+      irisDataGlobal: { classDimension: 3, data: irisDataGlobal },
+      irisGlobal: { classDimension: 3, data: irisGlobal },
+      irisNoData: { classDimension: 3, data: irisNoData },
+      irisNoFeatures: { classDimension: 3, data: irisNoFeatures },
+      largeFeatureCount: { classDimension: 2, data: largeFeatureCount }
+    },
+    versions: { "Version-1": 1, "Version-2": 2 }
   }
 };

@@ -123,24 +123,24 @@ export class JointDataset {
             .concat()
             .sort();
           this.metaDict[key] = {
-            label: args.metadata.featureNames[colIndex],
             abbridgedLabel: args.metadata.featureNamesAbridged[colIndex],
-            isCategorical: true,
-            treatAsCategorical: true,
-            sortedCategoricalValues: sortedUnique,
             category: ColumnCategories.Dataset,
-            index: colIndex
+            index: colIndex,
+            isCategorical: true,
+            label: args.metadata.featureNames[colIndex],
+            sortedCategoricalValues: sortedUnique,
+            treatAsCategorical: true
           };
         } else {
           this.metaDict[key] = {
-            label: args.metadata.featureNames[colIndex],
             abbridgedLabel: args.metadata.featureNamesAbridged[colIndex],
-            isCategorical: false,
+            category: ColumnCategories.Dataset,
             featureRange: args.metadata.featureRanges[
               colIndex
             ] as INumericRange,
-            category: ColumnCategories.Dataset,
-            index: colIndex
+            index: colIndex,
+            isCategorical: false,
+            label: args.metadata.featureNames[colIndex]
           };
         }
       });
@@ -168,20 +168,20 @@ export class JointDataset {
         }
       });
       this.metaDict[JointDataset.PredictedYLabel] = {
-        label: localization.ExplanationScatter.predictedY,
         abbridgedLabel: localization.ExplanationScatter.predictedY,
+        category: ColumnCategories.Outcome,
         isCategorical: args.metadata.modelType !== ModelTypes.Regression,
-        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression,
+        label: localization.ExplanationScatter.predictedY,
         sortedCategoricalValues:
           args.metadata.modelType !== ModelTypes.Regression
             ? args.metadata.classNames
             : undefined,
-        category: ColumnCategories.Outcome
+        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression
       };
       if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.PredictedYLabel].featureRange = {
-          min: Math.min(...args.predictedY),
           max: Math.max(...args.predictedY),
+          min: Math.min(...args.predictedY),
           rangeType: RangeTypes.Numeric
         };
       }
@@ -211,17 +211,17 @@ export class JointDataset {
           this.metaDict[
             JointDataset.ProbabilityYRoot + classIndex.toString()
           ] = {
-            label,
             abbridgedLabel: label,
-            isCategorical: false,
-            treatAsCategorical: false,
-            sortedCategoricalValues: undefined,
             category: ColumnCategories.Outcome,
             featureRange: {
-              min: Math.min(...projection),
               max: Math.max(...projection),
+              min: Math.min(...projection),
               rangeType: RangeTypes.Numeric
-            }
+            },
+            isCategorical: false,
+            label,
+            sortedCategoricalValues: undefined,
+            treatAsCategorical: false
           };
         });
         this.hasPredictedProbabilities = true;
@@ -236,20 +236,20 @@ export class JointDataset {
         }
       });
       this.metaDict[JointDataset.TrueYLabel] = {
-        label: localization.ExplanationScatter.trueY,
         abbridgedLabel: localization.ExplanationScatter.trueY,
+        category: ColumnCategories.Outcome,
         isCategorical: args.metadata.modelType !== ModelTypes.Regression,
-        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression,
+        label: localization.ExplanationScatter.trueY,
         sortedCategoricalValues:
           args.metadata.modelType !== ModelTypes.Regression
             ? args.metadata.classNames
             : undefined,
-        category: ColumnCategories.Outcome
+        treatAsCategorical: args.metadata.modelType !== ModelTypes.Regression
       };
       if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.TrueYLabel].featureRange = {
-          min: Math.min(...args.trueY),
           max: Math.max(...args.trueY),
+          min: Math.min(...args.trueY),
           rangeType: RangeTypes.Numeric
         };
       }
@@ -266,31 +266,31 @@ export class JointDataset {
           (row) => row[JointDataset.RegressionError]
         );
         this.metaDict[JointDataset.RegressionError] = {
-          label: localization.Columns.regressionError,
           abbridgedLabel: localization.Columns.error,
-          isCategorical: false,
-          sortedCategoricalValues: undefined,
           category: ColumnCategories.Outcome,
           featureRange: {
-            rangeType: RangeTypes.Numeric,
+            max: Math.max(...regressionErrorArray),
             min: Math.min(...regressionErrorArray),
-            max: Math.max(...regressionErrorArray)
-          }
+            rangeType: RangeTypes.Numeric
+          },
+          isCategorical: false,
+          label: localization.Columns.regressionError,
+          sortedCategoricalValues: undefined
         };
       }
       if (args.metadata.modelType === ModelTypes.Binary) {
         this.metaDict[JointDataset.ClassificationError] = {
-          label: localization.Columns.classificationOutcome,
           abbridgedLabel: localization.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
           isCategorical: true,
-          treatAsCategorical: true,
+          label: localization.Columns.classificationOutcome,
           sortedCategoricalValues: [
             localization.Columns.trueNegative,
             localization.Columns.falsePositive,
             localization.Columns.falseNegative,
             localization.Columns.truePositive
           ],
-          category: ColumnCategories.Outcome
+          treatAsCategorical: true
         };
       }
     }
@@ -629,21 +629,21 @@ export class JointDataset {
       const key =
         JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
       this.metaDict[key] = {
-        label: localization.formatString(
-          localization.featureImportanceOf,
-          featureLabel
-        ),
         abbridgedLabel: localization.formatString(
           localization.featureImportanceOf,
           featureLabel
         ),
-        isCategorical: false,
+        category: ColumnCategories.Explanation,
         featureRange: {
-          rangeType: RangeTypes.Numeric,
+          max: featuresMaxArray[featureIndex],
           min: featuresMinArray[featureIndex],
-          max: featuresMaxArray[featureIndex]
+          rangeType: RangeTypes.Numeric
         },
-        category: ColumnCategories.Explanation
+        isCategorical: false,
+        label: localization.formatString(
+          localization.featureImportanceOf,
+          featureLabel
+        )
       };
       this.binDict[key] = undefined;
     });
@@ -676,29 +676,29 @@ export class JointDataset {
       return {};
     });
     this.metaDict[JointDataset.IndexLabel] = {
-      label: localization.ExplanationScatter.index,
       abbridgedLabel: localization.ExplanationScatter.index,
-      isCategorical: false,
+      category: ColumnCategories.Index,
       featureRange: {
-        rangeType: RangeTypes.Integer,
+        max: arr.length - 1,
         min: 0,
-        max: arr.length - 1
+        rangeType: RangeTypes.Integer
       },
-      category: ColumnCategories.Index
+      isCategorical: false,
+      label: localization.ExplanationScatter.index
     };
     this.metaDict[cohortKey] = {
-      label: localization.Cohort.cohort,
       abbridgedLabel: localization.Cohort.cohort,
+      category: ColumnCategories.Cohort,
       isCategorical: true,
-      treatAsCategorical: true,
-      category: ColumnCategories.Cohort
+      label: localization.Cohort.cohort,
+      treatAsCategorical: true
     };
     this.metaDict[ColumnCategories.None] = {
-      label: localization.Columns.none,
       abbridgedLabel: localization.Columns.none,
+      category: ColumnCategories.None,
       isCategorical: true,
-      treatAsCategorical: true,
-      category: ColumnCategories.None
+      label: localization.Columns.none,
+      treatAsCategorical: true
     };
   }
 }

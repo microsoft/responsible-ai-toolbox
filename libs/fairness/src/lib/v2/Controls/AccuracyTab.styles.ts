@@ -23,6 +23,14 @@ export const AccuracyTabStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IAccuracyTabStyles>({
+    frame: {
+      height: "100%"
+    },
+    header: {
+      color: theme.semanticColors.bodyText,
+      fontWeight: FontWeights.semibold,
+      margin: "26px 0"
+    },
     iconClass: {
       fontSize: "20px",
       position: "absolute",
@@ -32,24 +40,16 @@ export const AccuracyTabStyles: () => IProcessedStyleSet<
     itemsList: {
       overflowY: "auto"
     },
-    frame: {
-      height: "100%"
-    },
     main: {
+      flex: 1,
       height: "100%",
-      maxWidth: "750px",
-      flex: 1
-    },
-    header: {
-      color: theme.semanticColors.bodyText,
-      fontWeight: FontWeights.semibold,
-      margin: "26px 0"
+      maxWidth: "750px"
     },
     textBody: {
-      paddingTop: "12px",
-      fontWeight: FontWeights.semilight,
       color: theme.semanticColors.bodyText,
-      paddingBottom: "50px"
+      fontWeight: FontWeights.semilight,
+      paddingBottom: "50px",
+      paddingTop: "12px"
     }
   });
 };

@@ -36,43 +36,43 @@ export interface IDependecePlotProps {
 
 export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
   public static basePlotlyProperties: IPlotlyProperty = {
-    config: { displaylogo: false, responsive: true, displayModeBar: false },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
-      margin: {
-        t: 10,
-        l: 10,
-        b: 20,
-        r: 10
-      },
       hovermode: "closest",
-      showlegend: false,
-      yaxis: {
-        automargin: true,
-        color: FabricStyles.chartAxisColor,
-        tickfont: {
-          family: "Roboto, Helvetica Neue, sans-serif",
-          size: 11
-        },
-        zeroline: true,
-        showgrid: true,
-        gridcolor: "#e5e5e5"
+      margin: {
+        b: 20,
+        l: 10,
+        r: 10,
+        t: 10
       },
+      showlegend: false,
       xaxis: {
         automargin: true,
         color: FabricStyles.chartAxisColor,
+        gridcolor: "#e5e5e5",
+        showgrid: true,
         tickfont: {
           family: "Roboto, Helvetica Neue, sans-serif",
           size: 11
         },
-        zeroline: true,
+        zeroline: true
+      },
+      yaxis: {
+        automargin: true,
+        color: FabricStyles.chartAxisColor,
+        gridcolor: "#e5e5e5",
         showgrid: true,
-        gridcolor: "#e5e5e5"
+        tickfont: {
+          family: "Roboto, Helvetica Neue, sans-serif",
+          size: 11
+        },
+        zeroline: true
       }
     }
   };

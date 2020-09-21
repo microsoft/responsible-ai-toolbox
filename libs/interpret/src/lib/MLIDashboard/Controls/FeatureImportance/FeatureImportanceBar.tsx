@@ -46,8 +46,8 @@ export class FeatureImportanceBar extends React.PureComponent<
     super(props);
     this.sortOptions = this.buildSortOptions();
     this.state = {
-      selectedSorting: FeatureKeys.AbsoluteGlobal,
-      isCalloutVisible: false
+      isCalloutVisible: false,
+      selectedSorting: FeatureKeys.AbsoluteGlobal
     };
   }
 
@@ -90,7 +90,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                   title={localization.AggregateImportance.topKInfo}
                   onClick={this.onIconClick}
                   styles={{
-                    root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                    root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                   }}
                 />
               </div>

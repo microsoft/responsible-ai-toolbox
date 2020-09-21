@@ -130,12 +130,14 @@ export class AxisConfigDialog extends React.PureComponent<
   public constructor(props: IAxisConfigProps) {
     super(props);
     this.state = {
-      selectedColumn: _.cloneDeep(this.props.selectedColumn),
-      binCount: this._getBinCountForProperty(this.props.selectedColumn.property)
+      binCount: this._getBinCountForProperty(
+        this.props.selectedColumn.property
+      ),
+      selectedColumn: _.cloneDeep(this.props.selectedColumn)
     };
     this._leftSelection = new Selection({
-      selectionMode: SelectionMode.single,
-      onSelectionChanged: this._setSelection
+      onSelectionChanged: this._setSelection,
+      selectionMode: SelectionMode.single
     });
     this._leftSelection.setItems(this.leftItems);
     this._leftSelection.setKeySelected(
@@ -191,7 +193,7 @@ export class AxisConfigDialog extends React.PureComponent<
               selectionPreservedOnEmptyClick={true}
               setKey={"set"}
               columns={[
-                { key: "col1", name: "name", minWidth: 200, fieldName: "title" }
+                { fieldName: "title", key: "col1", minWidth: 200, name: "name" }
               ]}
             />
           </div>
@@ -410,24 +412,24 @@ export class AxisConfigDialog extends React.PureComponent<
     const property = this.state.selectedColumn.property;
     if (checked === false) {
       this.setState({
+        binCount: undefined,
         selectedColumn: {
-          property,
           options: {
             bin: checked
-          }
-        },
-        binCount: undefined
+          },
+          property
+        }
       });
     } else {
       const binCount = this._getBinCountForProperty(property);
       this.setState({
+        binCount,
         selectedColumn: {
-          property,
           options: {
             bin: checked
-          }
-        },
-        binCount
+          },
+          property
+        }
       });
     }
   };
@@ -458,10 +460,10 @@ export class AxisConfigDialog extends React.PureComponent<
   ): void => {
     this.setState({
       selectedColumn: {
-        property: this.state.selectedColumn.property,
         options: {
           dither: checked
-        }
+        },
+        property: this.state.selectedColumn.property
       }
     });
   };
@@ -500,13 +502,13 @@ export class AxisConfigDialog extends React.PureComponent<
       this.props.jointDataset.metaDict[property].treatAsCategorical;
     const binCount = this._getBinCountForProperty(property);
     this.setState({
+      binCount,
       selectedColumn: {
-        property,
         options: {
           dither
-        }
-      },
-      binCount
+        },
+        property
+      }
     });
   }
 
@@ -517,13 +519,13 @@ export class AxisConfigDialog extends React.PureComponent<
     let property = this._leftSelection.getSelection()[0].key as string;
     if (property === ColumnCategories.None) {
       this.setState({
+        binCount: undefined,
         selectedColumn: {
-          property,
           options: {
             dither: false
-          }
-        },
-        binCount: undefined
+          },
+          property
+        }
       });
       return;
     }

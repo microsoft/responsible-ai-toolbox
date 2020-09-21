@@ -53,13 +53,13 @@ export class WizardBuilder {
     props: IRunTimeFairnessData
   ): IRunTimeFairnessContext {
     return {
-      dataset: props.testData,
-      trueY: props.trueY,
-      predictions: props.predictedY,
       binVector: [],
+      dataset: props.testData,
       groupNames: [],
       modelMetadata: this.buildModelMetadata(props),
-      modelNames: this.buildModelNames(props)
+      modelNames: this.buildModelNames(props),
+      predictions: props.predictedY,
+      trueY: props.trueY
     };
   }
 
@@ -67,13 +67,13 @@ export class WizardBuilder {
     props: IPreComputedFairnessData
   ): IFairnessContext {
     return {
-      dataset: undefined,
-      trueY: props.trueY,
-      predictions: props.predictedY,
       binVector: props.precomputedFeatureBins[0].binVector,
+      dataset: undefined,
       groupNames: props.precomputedFeatureBins[0].binLabels,
       modelMetadata: this.buildPrecomputedModelMetadata(props),
-      modelNames: this.buildModelNames(props)
+      modelNames: this.buildModelNames(props),
+      predictions: props.predictedY,
+      trueY: props.trueY
     };
   }
 
@@ -101,15 +101,15 @@ export class WizardBuilder {
       );
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
       return {
-        uniqueValues: binMeta.binLabels,
-        rangeType: RangeTypes.Categorical
+        rangeType: RangeTypes.Categorical,
+        uniqueValues: binMeta.binLabels
       } as ICategoricalRange;
     });
     return {
-      featureNames,
-      featureNamesAbridged: featureNames,
       classNames,
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
+      featureNames,
+      featureNamesAbridged: featureNames,
       featureRanges,
       PredictionType: props.predictionType
     };
@@ -154,10 +154,10 @@ export class WizardBuilder {
       props.predictionType
     );
     return {
-      featureNames,
-      featureNamesAbridged: featureNames,
       classNames,
       featureIsCategorical,
+      featureNames,
+      featureNamesAbridged: featureNames,
       featureRanges,
       PredictionType: predictionType
     };
@@ -217,16 +217,16 @@ export class WizardBuilder {
         );
 
         customMetrics.push({
+          description: customMetric?.description,
+          isMinimization: true,
+          isPercentage: true,
           key,
           title:
             customMetric?.name ||
             localization.formatString(
               localization.defaultCustomMetricName,
               customMetrics.length
-            ),
-          isMinimization: true,
-          isPercentage: true,
-          description: customMetric?.description
+            )
         });
       }
     });

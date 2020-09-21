@@ -11,39 +11,39 @@ export interface IExplainerInfo {
 
 // The list of known explanations is an enumerated list of python strings that interpret outputs
 const shapExplanation: IExplainerInfo = {
-  title: localization.ExplanationSummary.shapTitle,
   description: localization.ExplanationSummary.shapDescription,
-  linkUrl: "https://github.com/slundberg/shap"
+  linkUrl: "https://github.com/slundberg/shap",
+  title: localization.ExplanationSummary.shapTitle
 };
 
 const limeExplanation: IExplainerInfo = {
-  title: localization.ExplanationSummary.limeTitle,
   description: localization.ExplanationSummary.limeDescription,
-  linkUrl: "https://github.com/marcotcr/lime"
+  linkUrl: "https://github.com/marcotcr/lime",
+  title: localization.ExplanationSummary.limeTitle
 };
 
 const mimicExplanation: IExplainerInfo = {
-  title: localization.ExplanationSummary.mimicTitle,
   description: localization.ExplanationSummary.mimicDescription,
-  linkUrl: "https://christophm.github.io/interpretable-ml-book/global.html"
+  linkUrl: "https://christophm.github.io/interpretable-ml-book/global.html",
+  title: localization.ExplanationSummary.mimicTitle
 };
 
 const pfiExplanation: IExplainerInfo = {
-  title: localization.ExplanationSummary.pfiTitle,
   description: localization.ExplanationSummary.pfiDescription,
   linkUrl:
-    "https://christophm.github.io/interpretable-ml-book/feature-importance.html"
+    "https://christophm.github.io/interpretable-ml-book/feature-importance.html",
+  title: localization.ExplanationSummary.pfiTitle
 };
 
 export const explainerCalloutDictionary: { [key: string]: IExplainerInfo } = {
-  shap_deep: shapExplanation,
-  shap_tree: shapExplanation,
-  shap_kernel: shapExplanation,
-  shap: shapExplanation,
   lime: limeExplanation,
-  "mimic.lightgbm": mimicExplanation,
   mimic: mimicExplanation,
-  "mimic.sgd": mimicExplanation,
+  "mimic.lightgbm": mimicExplanation,
   "mimic.linear": mimicExplanation,
-  pfi: pfiExplanation
+  "mimic.sgd": mimicExplanation,
+  pfi: pfiExplanation,
+  shap: shapExplanation,
+  shap_deep: shapExplanation,
+  shap_kernel: shapExplanation,
+  shap_tree: shapExplanation
 };

@@ -3,8 +3,8 @@
 
 export const languages = <const>{
   english: "en-EN",
-  spanish: "es-ES",
   german: "de",
+  japanese: "ja",
   simplifiedChinese: "zh-CN",
-  japanese: "ja"
+  spanish: "es-ES"
 };

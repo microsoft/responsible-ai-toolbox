@@ -62,10 +62,10 @@ export class MultiICEPlot extends React.PureComponent<
     const rangeView = this.buildRangeView(this.props.feature);
     const xAxisArray = this.buildRange(rangeView);
     this.state = {
-      yAxes: [],
       abortControllers: [],
       rangeView,
-      xAxisArray
+      xAxisArray,
+      yAxes: []
     };
 
     this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
@@ -118,19 +118,6 @@ export class MultiICEPlot extends React.PureComponent<
               metadata.classNames[selectedClass];
         const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
         return {
-          mode:
-            rangeType === RangeTypes.Categorical
-              ? PlotlyMode.Markers
-              : PlotlyMode.LinesMarkers,
-          type: "scatter",
-          hovertemplate,
-          hoverinfo: "all",
-          x: xData,
-          y: transposedY[selectedClass],
-          marker: {
-            color: colors[rowIndex]
-          },
-          name: rowNames[rowIndex],
           customdata: transposedY[selectedClass].map((predY) => {
             return {
               Name: rowNames[rowIndex],
@@ -138,33 +125,46 @@ export class MultiICEPlot extends React.PureComponent<
                 maximumFractionDigits: 3
               })
             };
-          })
+          }),
+          hoverinfo: "all",
+          hovertemplate,
+          marker: {
+            color: colors[rowIndex]
+          },
+          mode:
+            rangeType === RangeTypes.Categorical
+              ? PlotlyMode.Markers
+              : PlotlyMode.LinesMarkers,
+          name: rowNames[rowIndex],
+          type: "scatter",
+          x: xData,
+          y: transposedY[selectedClass]
         };
       }
     ) as any;
     return {
-      config: { displaylogo: false, responsive: true, displayModeBar: false },
+      config: { displaylogo: false, displayModeBar: false, responsive: true },
       data,
       layout: {
-        dragmode: false,
         autosize: true,
+        dragmode: false,
         font: {
           size: 10
         },
-        margin: {
-          t: 10,
-          b: 30,
-          r: 10
-        },
         hovermode: "closest",
+        margin: {
+          b: 30,
+          r: 10,
+          t: 10
+        },
         showlegend: false,
+        xaxis: {
+          automargin: true,
+          title: featureName
+        },
         yaxis: {
           automargin: true,
           title: MultiICEPlot.buildYAxis(metadata, selectedClass)
-        },
-        xaxis: {
-          title: featureName,
-          automargin: true
         }
       }
     };
@@ -238,7 +238,6 @@ export class MultiICEPlot extends React.PureComponent<
               <div className={classNames.parameterList}>
                 <SpinButton
                   styles={{
-                    spinButtonWrapper: { maxWidth: "68px" },
                     labelWrapper: { alignSelf: "center" },
                     root: {
                       display: "inline-flex",
@@ -248,7 +247,8 @@ export class MultiICEPlot extends React.PureComponent<
                           maxWidth: "78px"
                         }
                       }
-                    }
+                    },
+                    spinButtonWrapper: { maxWidth: "68px" }
                   }}
                   label={localization.WhatIfTab.minLabel}
                   value={this.state.rangeView.min?.toString()}
@@ -258,7 +258,6 @@ export class MultiICEPlot extends React.PureComponent<
                 />
                 <SpinButton
                   styles={{
-                    spinButtonWrapper: { maxWidth: "68px" },
                     labelWrapper: { alignSelf: "center" },
                     root: {
                       display: "inline-flex",
@@ -268,7 +267,8 @@ export class MultiICEPlot extends React.PureComponent<
                           maxWidth: "78px"
                         }
                       }
-                    }
+                    },
+                    spinButtonWrapper: { maxWidth: "68px" }
                   }}
                   label={localization.WhatIfTab.maxLabel}
                   value={this.state.rangeView.max?.toString()}
@@ -278,7 +278,6 @@ export class MultiICEPlot extends React.PureComponent<
                 />
                 <SpinButton
                   styles={{
-                    spinButtonWrapper: { maxWidth: "68px" },
                     labelWrapper: { alignSelf: "center" },
                     root: {
                       display: "inline-flex",
@@ -288,7 +287,8 @@ export class MultiICEPlot extends React.PureComponent<
                           maxWidth: "78px"
                         }
                       }
-                    }
+                    },
+                    spinButtonWrapper: { maxWidth: "68px" }
                   }}
                   label={localization.WhatIfTab.stepsLabel}
                   value={this.state.rangeView.steps?.toString()}
@@ -361,10 +361,10 @@ export class MultiICEPlot extends React.PureComponent<
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
       {
+        abortControllers: [new AbortController()],
         rangeView,
         xAxisArray,
-        yAxes: undefined,
-        abortControllers: [new AbortController()]
+        yAxes: undefined
       },
       () => {
         this.debounceFetchData();
@@ -396,10 +396,10 @@ export class MultiICEPlot extends React.PureComponent<
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
       {
+        abortControllers: [new AbortController()],
         rangeView,
         xAxisArray,
-        yAxes: undefined,
-        abortControllers: [new AbortController()]
+        yAxes: undefined
       },
       () => {
         this.debounceFetchData();
@@ -427,10 +427,10 @@ export class MultiICEPlot extends React.PureComponent<
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
       {
+        abortControllers: [new AbortController()],
         rangeView,
         xAxisArray,
-        yAxes: undefined,
-        abortControllers: [new AbortController()]
+        yAxes: undefined
       },
       () => {
         this.debounceFetchData();
@@ -504,7 +504,7 @@ export class MultiICEPlot extends React.PureComponent<
     });
     const yAxes = undefined;
 
-    this.setState({ yAxes, errorMessage: undefined }, async () => {
+    this.setState({ errorMessage: undefined, yAxes }, async () => {
       try {
         const fetchedData = await Promise.all(promises);
         if (
@@ -512,8 +512,8 @@ export class MultiICEPlot extends React.PureComponent<
           fetchedData.every((prediction) => Array.isArray(prediction))
         ) {
           this.setState({
-            yAxes: fetchedData,
-            abortControllers: this.props.datapoints.map(() => undefined)
+            abortControllers: this.props.datapoints.map(() => undefined),
+            yAxes: fetchedData
           });
         }
       } catch (error) {
@@ -556,32 +556,32 @@ export class MultiICEPlot extends React.PureComponent<
       // Columns that are passed in as categorical strings should be strings when passed to predict
       if (summary.isCategorical) {
         return {
-          key: featureKey,
-          featureIndex: summary.index,
-          selectedOptionKeys: summary.sortedCategoricalValues,
           categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
             return { key: text, text };
           }),
+          featureIndex: summary.index,
+          key: featureKey,
+          selectedOptionKeys: summary.sortedCategoricalValues,
           type: RangeTypes.Categorical
         };
       }
       // Columns that were integers that are flagged in the UX as categorical should still be integers when
       // calling predict on the model.
       return {
-        key: featureKey,
-        featureIndex: summary.index,
-        selectedOptionKeys: summary.sortedCategoricalValues?.map((x) => +x),
         categoricalOptions: summary.sortedCategoricalValues?.map((text) => {
           return { key: +text, text: text.toString() };
         }),
+        featureIndex: summary.index,
+        key: featureKey,
+        selectedOptionKeys: summary.sortedCategoricalValues?.map((x) => +x),
         type: RangeTypes.Categorical
       };
     }
     return {
-      key: featureKey,
       featureIndex: summary.index,
-      min: summary.featureRange?.min,
+      key: featureKey,
       max: summary.featureRange?.max,
+      min: summary.featureRange?.min,
       steps: 20,
       type: summary.featureRange.rangeType
     };

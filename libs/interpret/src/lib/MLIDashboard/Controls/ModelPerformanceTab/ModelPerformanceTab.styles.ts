@@ -41,41 +41,101 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IModelPerformanceTabStyles>({
-    page: {
-      width: "100%",
-      height: "100%",
-      padding: "16px 0 0 14px",
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column"
+    boldText: {
+      fontWeight: "600",
+      paddingBottom: "5px"
     },
-    infoWithText: {
-      display: "flex",
-      flexDirection: "row",
-      width: "100%",
-      boxSizing: "border-box",
-      paddingLeft: "25px"
-    },
-    infoIcon: {
-      width: "23px",
-      height: "23px",
-      fontSize: "23px"
-    },
-    helperText: {
-      paddingRight: "160px",
-      paddingLeft: "15px"
+    chart: {
+      flexGrow: "1"
     },
     chartWithAxes: {
-      display: "flex",
-      flexGrow: "1",
       boxSizing: "border-box",
-      paddingTop: "30px",
-      flexDirection: "column"
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: "1",
+      paddingTop: "30px"
     },
     chartWithVertical: {
       display: "flex",
-      flexGrow: "1",
-      flexDirection: "row"
+      flexDirection: "row",
+      flexGrow: "1"
+    },
+    cohortPickerLabel: {
+      fontWeight: "600",
+      paddingRight: "8px"
+    },
+    cohortPickerWrapper: {
+      alignItems: "center",
+      display: "flex",
+      flexDirection: "row",
+      height: "32px",
+      paddingLeft: "63px",
+      paddingTop: "13px"
+    },
+    faintText: [FabricStyles.faintText],
+    helperText: {
+      paddingLeft: "15px",
+      paddingRight: "160px"
+    },
+    horizontalAxis: {
+      flex: 1,
+      textAlign: "center"
+    },
+    horizontalAxisWithPadding: {
+      display: "flex",
+      flexDirection: "row",
+      paddingBottom: "30px"
+    },
+    infoIcon: {
+      fontSize: "23px",
+      height: "23px",
+      width: "23px"
+    },
+    infoWithText: {
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "row",
+      paddingLeft: "25px",
+      width: "100%"
+    },
+    missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
+    missingParametersPlaceholderNeutralSpacer: [
+      FabricStyles.missingParameterPlaceholderSpacer,
+      {
+        backgroundColor: theme.semanticColors.bodyBackground
+      }
+    ],
+    missingParametersPlaceholderSpacer: [
+      FabricStyles.missingParameterPlaceholderSpacer
+    ],
+    paddingDiv: {
+      width: "50px"
+    },
+    page: {
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      padding: "16px 0 0 14px",
+      width: "100%"
+    },
+    rightPanel: {
+      backgroundColor: theme.semanticColors.bodyBackgroundChecked,
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      justifyContent: "space-evenly",
+      padding: "10px 15px 11px 30px",
+      width: "195px"
+    },
+    rotatedVerticalBox: {
+      marginLeft: "28px",
+      position: "absolute",
+      textAlign: "center",
+      top: "50%",
+      transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
+      width: "max-content"
     },
     scrollableWrapper: {
       flexGrow: "1",
@@ -83,87 +143,27 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<
       overflowY: "auto"
     },
     scrollContent: {
-      width: "100%",
+      alignItems: "stretch",
       display: "flex",
       flexDirection: "row",
-      alignItems: "stretch",
-      height: "500px"
-    },
-    chart: {
-      flexGrow: "1"
-    },
-    rightPanel: {
-      width: "195px",
-      height: "100%",
-      backgroundColor: theme.semanticColors.bodyBackgroundChecked,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-evenly",
-      padding: "10px 15px 11px 30px",
-      boxSizing: "border-box"
+      height: "500px",
+      width: "100%"
     },
     statsBox: {
-      height: "120px",
+      backgroundColor: theme.semanticColors.bodyBackground,
+      boxShadow: theme.effects.elevation4,
       boxSizing: "border-box",
-      padding: "0 10px 0 20px",
       display: "flex",
       flexDirection: "column",
+      height: "120px",
       justifyContent: "center",
-      boxShadow: theme.effects.elevation4,
-      backgroundColor: theme.semanticColors.bodyBackground
+      padding: "0 10px 0 20px"
     },
     verticalAxis: {
+      height: "auto",
       position: "relative",
       top: "0px",
-      height: "auto",
       width: "64px"
-    },
-    rotatedVerticalBox: {
-      transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
-      marginLeft: "28px",
-      position: "absolute",
-      top: "50%",
-      textAlign: "center",
-      width: "max-content"
-    },
-    horizontalAxisWithPadding: {
-      display: "flex",
-      paddingBottom: "30px",
-      flexDirection: "row"
-    },
-    paddingDiv: {
-      width: "50px"
-    },
-    horizontalAxis: {
-      flex: 1,
-      textAlign: "center"
-    },
-    cohortPickerWrapper: {
-      paddingLeft: "63px",
-      paddingTop: "13px",
-      height: "32px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center"
-    },
-    cohortPickerLabel: {
-      fontWeight: "600",
-      paddingRight: "8px"
-    },
-    boldText: {
-      fontWeight: "600",
-      paddingBottom: "5px"
-    },
-    missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer
-    ],
-    missingParametersPlaceholderNeutralSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer,
-      {
-        backgroundColor: theme.semanticColors.bodyBackground
-      }
-    ],
-    faintText: [FabricStyles.faintText]
+    }
   });
 };

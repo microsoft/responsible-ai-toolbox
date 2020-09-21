@@ -60,7 +60,6 @@ export class ModelComparisonChart extends React.PureComponent<
   private readonly plotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
       modeBarButtonsToRemove: [
         "toggleSpikelines",
         "hoverClosestCartesian",
@@ -73,7 +72,8 @@ export class ModelComparisonChart extends React.PureComponent<
         "zoomOut2d",
         "autoScale2d",
         "resetScale2d"
-      ]
+      ],
+      responsive: true
     },
     data: [
       {
@@ -83,14 +83,14 @@ export class ModelComparisonChart extends React.PureComponent<
             plotlyPath: "customdata"
           }
         },
-        mode: PlotlyMode.Markers,
+        hoverinfo: "text",
         marker: {
           size: 14
         },
+        mode: PlotlyMode.Markers,
         type: "scatter",
         xAccessor: "Accuracy",
-        yAccessor: "Parity",
-        hoverinfo: "text"
+        yAccessor: "Parity"
       }
     ],
     layout: {
@@ -98,17 +98,17 @@ export class ModelComparisonChart extends React.PureComponent<
       font: {
         size: 10
       },
-      margin: {
-        t: 4,
-        r: 0
-      },
       hovermode: "closest",
+      margin: {
+        r: 0,
+        t: 4
+      },
       xaxis: {
         automargin: true,
         fixedrange: true,
-        mirror: true,
         linecolor: theme.semanticColors.disabledBorder,
         linewidth: 1,
+        mirror: true,
         title: {
           text: "Error"
         }
@@ -149,9 +149,9 @@ export class ModelComparisonChart extends React.PureComponent<
     const { disparityArray } = this.state;
     const data = this.state.accuracyArray.map((accuracy, index) => {
       return {
-        Parity: disparityArray[index],
         Accuracy: accuracy,
-        index
+        index,
+        Parity: disparityArray[index]
       };
     });
 
@@ -330,16 +330,16 @@ export class ModelComparisonChart extends React.PureComponent<
             options={[
               {
                 key: "accuracy",
+                styles: { choiceFieldWrapper: styles.radioOptions },
                 text: localization.formatString(
                   localization.ModelComparison.disparityInAccuracy,
                   metricTitleAppropriateCase
-                ),
-                styles: { choiceFieldWrapper: styles.radioOptions }
+                )
               },
               {
                 key: "outcomes",
-                text: localization.ModelComparison.disparityInOutcomes,
-                styles: { choiceFieldWrapper: styles.radioOptions }
+                styles: { choiceFieldWrapper: styles.radioOptions },
+                text: localization.ModelComparison.disparityInOutcomes
               }
             ]}
             onChange={this.disparityChanged}
@@ -405,7 +405,7 @@ export class ModelComparisonChart extends React.PureComponent<
   ): void => {
     const disparityInOutcomes = option?.key !== "accuracy";
     if (this.state.disparityInOutcomes !== disparityInOutcomes) {
-      this.setState({ disparityInOutcomes, disparityArray: undefined });
+      this.setState({ disparityArray: undefined, disparityInOutcomes });
     }
   };
   // TODO: Reuse if multiselect re-enters design

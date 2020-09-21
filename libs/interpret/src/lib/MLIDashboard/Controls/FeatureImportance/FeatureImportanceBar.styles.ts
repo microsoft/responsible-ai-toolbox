@@ -20,16 +20,31 @@ export interface IFeatureImportanceBarStyles {
 export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBarStyles> = mergeStyleSets<
   IFeatureImportanceBarStyles
 >({
-  featureBarExplanationChart: {
-    width: "100%",
-    flex: 1,
+  calloutInfo: {
     display: "flex",
     flexDirection: "column",
-    height: "100%"
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    maxWidth: "300px",
+    padding: "30px"
   },
-  topControls: {
+  featureBarExplanationChart: {
     display: "flex",
-    padding: "3px 15px"
+    flex: 1,
+    flexDirection: "column",
+    height: "100%",
+    width: "100%"
+  },
+  featureSlider: {
+    flex: 1
+  },
+  labelText: {
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
+      sans-serif`,
+    fontSize: "14px",
+    lineHeight: "14px",
+    margin: "7px 0 0 4px"
   },
   sliderControl: {
     flex: 1,
@@ -39,23 +54,8 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
     display: "flex",
     flexDirection: "row"
   },
-  labelText: {
-    lineHeight: "14px",
-    margin: "7px 0 0 4px",
-    fontSize: "14px",
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-      sans-serif`
-  },
-  featureSlider: {
-    flex: 1
-  },
-  calloutInfo: {
+  topControls: {
     display: "flex",
-    flexDirection: "column",
-    maxWidth: "300px",
-    padding: "30px",
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`
+    padding: "3px 15px"
   }
 });

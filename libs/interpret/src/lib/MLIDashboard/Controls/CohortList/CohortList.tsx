@@ -81,8 +81,8 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                     ariaLabel="More items"
                     role="menuitem"
                     styles={{
-                      root: classNames.commandButton,
-                      menuIcon: classNames.menuIcon
+                      menuIcon: classNames.menuIcon,
+                      root: classNames.commandButton
                     }}
                     disabled={!this.props.jointDataset.dataDict?.length}
                     menuIconProps={{ iconName: "More" }}

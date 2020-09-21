@@ -17,16 +17,16 @@ export const predictionLabelStyles: IProcessedStyleSet<IPredictionLabelStyles> =
   IPredictionLabelStyles
 >({
   predictionArea: {
+    alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    alignItems: "center",
     fontSize: "20px"
   },
   predictionLabel: {},
   probabilityLabel: {
-    margin: "auto",
-    padding: "5px",
     fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    margin: "auto",
+    padding: "5px"
   }
 });

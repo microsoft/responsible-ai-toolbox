@@ -19,39 +19,39 @@ export interface IPerturbationExplorationStyles {
 export const perturbationExplorationStyles: IProcessedStyleSet<IPerturbationExplorationStyles> = mergeStyleSets<
   IPerturbationExplorationStyles
 >({
+  flexFull: {
+    flex: 1
+  },
   flexWrapper: {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden"
   },
-  loadingMessage: {
-    display: "flex",
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
-    fontSize: "20px",
-    borderBottom: "1px solid",
-    padding: "5px 10px"
-  },
   labelGroup: {
+    borderBottom: "1px solid",
     display: "flex",
     fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
           -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
-    fontSize: "20px",
-    borderBottom: "1px solid"
+    fontSize: "20px"
   },
   labelGroupLabel: {
-    width: "150px",
     alignSelf: "center",
-    paddingLeft: "10px"
+    paddingLeft: "10px",
+    width: "150px"
   },
-  flexFull: {
-    flex: 1
+  loadingMessage: {
+    borderBottom: "1px solid",
+    display: "flex",
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    fontSize: "20px",
+    padding: "5px 10px"
   },
   tileScroller: {
-    flex: 1,
-    overflowY: "auto",
     display: "flex",
+    flex: 1,
     flexDirection: "row",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    overflowY: "auto"
   }
 });

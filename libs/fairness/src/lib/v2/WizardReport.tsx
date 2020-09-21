@@ -66,7 +66,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   private static barPlotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
       modeBarButtonsToRemove: [
         "toggleSpikelines",
         "hoverClosestCartesian",
@@ -79,7 +78,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         "zoomOut2d",
         "autoScale2d",
         "resetScale2d"
-      ]
+      ],
+      responsive: true
     },
     data: [
       {
@@ -94,31 +94,31 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       font: {
         size: 10
       },
+      hovermode: "closest",
       margin: {
-        t: 4,
+        b: 20,
         l: 0,
         r: 0,
-        b: 20
+        t: 4
       },
-      showlegend: false,
-      hovermode: "closest",
       plot_bgcolor: theme.semanticColors.bodyFrameBackground,
+      showlegend: false,
       xaxis: {
-        fixedrange: true,
         autorange: true,
-        mirror: true,
+        fixedrange: true,
         linecolor: theme.semanticColors.disabledBorder,
-        linewidth: 1
+        linewidth: 1,
+        mirror: true
       },
       yaxis: {
-        fixedrange: true,
-        showticklabels: false,
-        showgrid: true,
+        autorange: "reversed",
         dtick: 1,
-        tick0: 0.5,
+        fixedrange: true,
         gridcolor: theme.semanticColors.disabledBorder,
         gridwidth: 1,
-        autorange: "reversed"
+        showgrid: true,
+        showticklabels: false,
+        tick0: 0.5
       }
     } as any
   };
@@ -127,15 +127,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const styles = WizardReportStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
-      title: { borderWidth: "1px", borderRadius: "5px" }
+      title: { borderRadius: "5px", borderWidth: "1px" }
     };
 
     const iconButtonStyles = {
       root: {
         color: theme.semanticColors.bodyText,
         marginLeft: "auto",
-        marginTop: "4px",
-        marginRight: "2px"
+        marginRight: "2px",
+        marginTop: "4px"
       },
       rootHovered: {
         color: theme.semanticColors.bodyBackgroundHovered
@@ -192,53 +192,53 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       ) {
         accuracyPlot.data = [
           {
-            x: this.state.metrics.binnedOverprediction,
-            y: nameIndex,
+            color: chartColors[0],
+            hoverinfo: "skip",
+            name: localization.Metrics.overprediction,
+            orientation: "h",
             text: this.state.metrics.binnedOverprediction?.map((num) =>
               FormatMetrics.formatNumbers(num, "accuracy_score", false, 2)
             ),
-            name: localization.Metrics.overprediction,
-            width: 0.5,
-            color: chartColors[0],
-            orientation: "h",
-            type: "bar",
             textposition: "auto",
-            hoverinfo: "skip"
+            type: "bar",
+            width: 0.5,
+            x: this.state.metrics.binnedOverprediction,
+            y: nameIndex
           } as any,
           {
-            x: this.state.metrics.binnedUnderprediction?.map((x) => -1 * x),
-            y: nameIndex,
+            color: chartColors[1],
+            hoverinfo: "skip",
+            name: localization.Metrics.underprediction,
+            orientation: "h",
             text: this.state.metrics.binnedUnderprediction?.map((num) =>
               FormatMetrics.formatNumbers(num, "accuracy_score", false, 2)
             ),
-            name: localization.Metrics.underprediction,
-            width: 0.5,
-            color: chartColors[1],
-            orientation: "h",
-            type: "bar",
             textposition: "auto",
-            hoverinfo: "skip"
+            type: "bar",
+            width: 0.5,
+            x: this.state.metrics.binnedUnderprediction?.map((x) => -1 * x),
+            y: nameIndex
           }
         ];
         if (accuracyPlot.layout) {
           accuracyPlot.layout.annotations = [
             {
+              font: { color: theme.semanticColors.bodySubtext, size: 10 },
+              showarrow: false,
               text: localization.Report.underestimationError,
               x: 0.02,
-              y: 1,
-              yref: "paper",
               xref: "paper",
-              showarrow: false,
-              font: { color: theme.semanticColors.bodySubtext, size: 10 }
+              y: 1,
+              yref: "paper"
             },
             {
+              font: { color: theme.semanticColors.bodySubtext, size: 10 },
+              showarrow: false,
               text: localization.Report.overestimationError,
               x: 0.98,
-              y: 1,
-              yref: "paper",
               xref: "paper",
-              showarrow: false,
-              font: { color: theme.semanticColors.bodySubtext, size: 10 }
+              y: 1,
+              yref: "paper"
             }
           ];
         }
@@ -247,17 +247,17 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         }
         opportunityPlot.data = [
           {
-            x: this.state.metrics.binnedOutcome,
-            y: nameIndex,
+            color: chartColors[0],
+            hoverinfo: "skip",
+            name: outcomeMetric.title,
+            orientation: "h",
             text: this.state.metrics.binnedOutcome.map((num) =>
               FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
             ),
-            name: outcomeMetric.title,
-            color: chartColors[0],
-            orientation: "h",
-            type: "bar",
             textposition: "auto",
-            hoverinfo: "skip"
+            type: "bar",
+            x: this.state.metrics.binnedOutcome,
+            y: nameIndex
           } as any
         ];
         if (opportunityPlot.layout?.xaxis) {
@@ -312,53 +312,53 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       ) {
         accuracyPlot.data = [
           {
-            x: this.state.metrics.binnedOverprediction,
-            y: nameIndex,
+            color: chartColors[0],
+            hoverinfo: "skip",
+            name: localization.Metrics.overprediction,
+            orientation: "h",
             text: this.state.metrics.binnedOverprediction?.map((num) =>
               FormatMetrics.formatNumbers(num, "overprediction", false, 2)
             ),
-            name: localization.Metrics.overprediction,
-            width: 0.5,
-            color: chartColors[0],
-            orientation: "h",
-            type: "bar",
             textposition: "auto",
-            hoverinfo: "skip"
+            type: "bar",
+            width: 0.5,
+            x: this.state.metrics.binnedOverprediction,
+            y: nameIndex
           } as any,
           {
-            x: this.state.metrics.binnedUnderprediction?.map((x) => -1 * x),
-            y: nameIndex,
+            color: chartColors[1],
+            hoverinfo: "skip",
+            name: localization.Metrics.underprediction,
+            orientation: "h",
             text: this.state.metrics.binnedUnderprediction?.map((num) =>
               FormatMetrics.formatNumbers(num, "underprediction", false, 2)
             ),
-            name: localization.Metrics.underprediction,
-            width: 0.5,
-            color: chartColors[1],
-            orientation: "h",
-            type: "bar",
             textposition: "auto",
-            hoverinfo: "skip"
+            type: "bar",
+            width: 0.5,
+            x: this.state.metrics.binnedUnderprediction?.map((x) => -1 * x),
+            y: nameIndex
           }
         ];
         if (accuracyPlot.layout) {
           accuracyPlot.layout.annotations = [
             {
+              font: { color: theme.semanticColors.bodySubtext, size: 10 },
+              showarrow: false,
               text: localization.Report.underestimationError,
               x: 0.1,
-              y: 1,
-              yref: "paper",
               xref: "paper",
-              showarrow: false,
-              font: { color: theme.semanticColors.bodySubtext, size: 10 }
+              y: 1,
+              yref: "paper"
             },
             {
+              font: { color: theme.semanticColors.bodySubtext, size: 10 },
+              showarrow: false,
               text: localization.Report.overestimationError,
               x: 0.9,
-              y: 1,
-              yref: "paper",
               xref: "paper",
-              showarrow: false,
-              font: { color: theme.semanticColors.bodySubtext, size: 10 }
+              y: 1,
+              yref: "paper"
             }
           ];
         }
@@ -370,18 +370,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         });
         opportunityPlot.data = [
           {
-            x: this.state.metrics.predictions,
-            y: this.props.dashboardContext.binVector,
-            text: opportunityText,
-            type: "box",
-            color: chartColors[0],
             boxmean: true,
-            orientation: "h",
             boxpoints: "all",
+            color: chartColors[0],
             hoverinfo: "text",
             hoveron: "points",
             jitter: 0.4,
-            pointpos: 0
+            orientation: "h",
+            pointpos: 0,
+            text: opportunityText,
+            type: "box",
+            x: this.state.metrics.predictions,
+            y: this.props.dashboardContext.binVector
           } as any
         ];
       }
@@ -413,34 +413,34 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         );
         accuracyPlot.data = [
           {
-            x: this.state.metrics.errors,
-            y: this.props.dashboardContext.binVector,
+            boxmean: true,
+            boxpoints: "all",
+            color: chartColors[0],
+            hoverinfo: "text",
+            hoveron: "points",
+            jitter: 0.4,
+            orientation: "h",
+            pointpos: 0,
             text: accuracyText,
             type: "box",
-            color: chartColors[0],
-            orientation: "h",
-            boxmean: true,
-            hoveron: "points",
-            hoverinfo: "text",
-            boxpoints: "all",
-            jitter: 0.4,
-            pointpos: 0
+            x: this.state.metrics.errors,
+            y: this.props.dashboardContext.binVector
           } as any
         ];
         opportunityPlot.data = [
           {
-            x: this.state.metrics.predictions,
-            y: this.props.dashboardContext.binVector,
+            boxmean: true,
+            boxpoints: "all",
+            color: chartColors[0],
+            hoverinfo: "text",
+            hoveron: "points",
+            jitter: 0.4,
+            orientation: "h",
+            pointpos: 0,
             text: opportunityText,
             type: "box",
-            color: chartColors[0],
-            boxmean: true,
-            orientation: "h",
-            hoveron: "points",
-            boxpoints: "all",
-            hoverinfo: "text",
-            jitter: 0.4,
-            pointpos: 0
+            x: this.state.metrics.predictions,
+            y: this.props.dashboardContext.binVector
           } as any
         ];
         accuracyChartHeader = localization.Report.distributionOfErrors;
@@ -902,18 +902,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       this.setState({
         metrics: {
-          globalAccuracy: accuracy.global,
-          binnedAccuracy: accuracy.bins,
           accuracyDisparity,
-          globalOutcome: outcomes.global,
+          binnedAccuracy: accuracy.bins,
           binnedOutcome: outcomes.bins,
-          outcomeDisparity,
-          predictions,
+          binnedOverprediction,
+          binnedUnderprediction,
           errors,
+          globalAccuracy: accuracy.global,
+          globalOutcome: outcomes.global,
           globalOverprediction: overallOverprediction,
           globalUnderprediction: overallUnderprediction,
-          binnedOverprediction,
-          binnedUnderprediction
+          outcomeDisparity,
+          predictions
         }
       });
     } catch {

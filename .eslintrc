@@ -22,7 +22,8 @@
     "filenames",
     "eslint-plugin-unicorn",
     "eslint-plugin-eslint-comments",
-    "header"
+    "header",
+    "sort-keys-fix"
   ],
   "env": {
     "browser": true,
@@ -42,8 +43,13 @@
     "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "sort-keys-fix/sort-keys-fix": [
+      "error",
+      "asc",
+      { "caseSensitive": false, "natural": true }
+    ],
     "header/header": [
-      2,
+      "error",
       "line",
       [
         " Copyright (c) Microsoft Corporation.",

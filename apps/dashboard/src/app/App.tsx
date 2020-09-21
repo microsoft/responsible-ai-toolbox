@@ -41,13 +41,13 @@ export class App extends React.Component<IAppSetting, IAppState> {
         <AppHeader onSettingChanged={this.onSettingChanged} {...this.state} />
         <div
           style={{
+            backgroundColor: theme.semanticColors.bodyBackground,
             borderColor: "gray",
-            borderWidth: 10,
             borderStyle: "solid",
+            borderWidth: 10,
             height: "calc(100% - 70px)",
             minHeight: "500px",
-            width: "calc(100%-20px)",
-            backgroundColor: theme.semanticColors.bodyBackground
+            width: "calc(100%-20px)"
           }}
           key={this.state.iteration}
         >
@@ -115,19 +115,19 @@ export class App extends React.Component<IAppSetting, IAppState> {
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
-      theme:
-        !props.theme || !themes[props.theme]
-          ? Object.keys(themes)[0]
-          : props.theme,
+      iteration: props.iteration + 1,
       language:
         !props.language || !languages[props.language]
           ? Object.keys(languages)[0]
           : props.language,
+      theme:
+        !props.theme || !themes[props.theme]
+          ? Object.keys(themes)[0]
+          : props.theme,
       version:
         !props.version || !applications[application].versions[props.version]
           ? Object.keys(applications[application].versions)[0]
-          : props.version,
-      iteration: props.iteration + 1
+          : props.version
     };
   }
 }
