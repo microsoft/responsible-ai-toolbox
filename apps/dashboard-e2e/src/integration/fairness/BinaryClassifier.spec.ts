@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSpan } from "../../support/getSpan";
+import { getSpan } from "../../util/getSpan";
 
 describe("dashboard", () => {
   beforeEach(() => {

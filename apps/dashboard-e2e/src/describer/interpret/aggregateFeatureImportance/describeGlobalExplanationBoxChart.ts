@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BoxChart } from "../../../support/BoxChart";
-import { getMenu } from "../../../support/getMenu";
-import { IDataSetShape } from "../IDataSetShape";
+import { BoxChart } from "../../../util/BoxChart";
+import { getMenu } from "../../../util/getMenu";
+import { IInterpretData } from "../IInterpretData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
 
 export function describeGlobalExplanationBoxChart(
-  dataShape: IDataSetShape
+  dataShape: IInterpretData
 ): void {
   describe("Box chart", () => {
     const props = {

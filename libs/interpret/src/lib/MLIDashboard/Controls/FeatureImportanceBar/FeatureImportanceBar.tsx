@@ -216,25 +216,25 @@ export class FeatureImportanceBar extends React.PureComponent<
     } else if (this.props.chartType === ChartTypes.Box) {
       _.set(baseSeries.layout, "boxmode", "group");
       this.props.unsortedSeries.forEach((series) => {
+        const base: number[] = [];
+        const x = base.concat(
+          ...sortedIndexVector.map(
+            (sortIndex, xIndex) =>
+              series.unsortedIndividualY?.[sortIndex].map(() => xIndex) || []
+          )
+        );
+        const y = base.concat(
+          ...sortedIndexVector.map(
+            (index) => series.unsortedIndividualY?.[index] || []
+          )
+        );
+        console.log(x, y);
         baseSeries.data.push({
           type: "box",
           boxmean: true,
           name: series.name,
-          x: sortedIndexVector
-            .map(
-              (sortIndex, xIndex) =>
-                series.unsortedIndividualY?.[sortIndex].map(() => xIndex) || []
-            )
-            .reduce((prev, curr) => {
-              prev.push(...curr);
-              return prev;
-            }, []),
-          y: sortedIndexVector
-            .map((index) => series.unsortedIndividualY?.[index] || [])
-            .reduce((prev, curr) => {
-              prev.push(...curr);
-              return prev;
-            }, []),
+          x,
+          y,
           marker: {
             color: FabricStyles.fabricColorPalette[series.colorIndex]
           }

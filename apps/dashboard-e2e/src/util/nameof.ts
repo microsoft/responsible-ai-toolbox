@@ -1,6 +1,4 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface IDataSetShape {
-  totalFeatures: number;
-}
+export const nameof = <T>(name: keyof T): keyof T => name;

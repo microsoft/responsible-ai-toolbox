@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
@@ -25,6 +26,13 @@ export class App extends React.Component<IAppSetting, IAppState> {
   public constructor(props: IAppSetting) {
     super(props);
     this.state = this.getState({ ...this.props, iteration: 0 });
+  }
+  public componentDidUpdate(prevProps: IAppSetting): void {
+    if (!_.isEqual(prevProps, this.props)) {
+      this.setState(
+        this.getState({ ...this.props, iteration: this.state.iteration })
+      );
+    }
   }
   public render(): React.ReactNode {
     const theme: ITheme = themes[this.state.theme];
@@ -81,7 +89,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
             />
           )}
         </div>
-        <Redirect to={generatePath(App.route, this.state)} />
+        <Redirect to={generatePath(App.route, this.state)} push={true} />
       </>
     );
   }

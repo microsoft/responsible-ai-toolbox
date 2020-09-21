@@ -4,24 +4,25 @@
 import { IFairnessData } from "@responsible-ai/fairness";
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
-import { binaryClassifier } from "../fairness/__mock-data/binaryClassifier";
-import { precomputedBinary } from "../fairness/__mock-data/precomputedBinary";
-import { precomputedBinaryTwo } from "../fairness/__mock-data/precomputedBinaryTwo";
-import { probit } from "../fairness/__mock-data/probit";
-import { regression } from "../fairness/__mock-data/regression";
-import { automlMimicAdult } from "../interpret/__mock_data/automlMimicAdult";
-import { bostonData } from "../interpret/__mock_data/bostonData";
-import { bostonDataGlobal } from "../interpret/__mock_data/bostonDataGlobal";
-import { breastCancerData } from "../interpret/__mock_data/breastCancerData";
-import { ibmData } from "../interpret/__mock_data/ibmData";
-import { ibmDataInconsistent } from "../interpret/__mock_data/ibmDataInconsistent";
-import { ibmNoClass } from "../interpret/__mock_data/ibmNoClass";
-import { irisData } from "../interpret/__mock_data/irisData";
-import { irisDataGlobal } from "../interpret/__mock_data/irisDataGlobal";
-import { irisGlobal } from "../interpret/__mock_data/irisGlobal";
-import { irisNoData } from "../interpret/__mock_data/irisNoData";
-import { irisNoFeatures } from "../interpret/__mock_data/irisNoFeatures";
-import { largeFeatureCount } from "../interpret/__mock_data/largeFeatureCount";
+import { binaryClassifier } from "../fairness/__mock_data__/binaryClassifier";
+import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
+import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
+import { probit } from "../fairness/__mock_data__/probit";
+import { regression } from "../fairness/__mock_data__/regression";
+import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
+import { bostonData } from "../interpret/__mock_data__/bostonData";
+import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
+import { breastCancerData } from "../interpret/__mock_data__/breastCancerData";
+import { ebmData } from "../interpret/__mock_data__/ebmData";
+import { ibmData } from "../interpret/__mock_data__/ibmData";
+import { ibmDataInconsistent } from "../interpret/__mock_data__/ibmDataInconsistent";
+import { ibmNoClass } from "../interpret/__mock_data__/ibmNoClass";
+import { irisData } from "../interpret/__mock_data__/irisData";
+import { irisDataGlobal } from "../interpret/__mock_data__/irisDataGlobal";
+import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
+import { irisNoData } from "../interpret/__mock_data__/irisNoData";
+import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
+import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;
@@ -60,16 +61,16 @@ export const applications: IApplications = <const>{
       automlMimicAdult: { data: automlMimicAdult, classDimension: 3 },
       bostonData: { data: bostonData, classDimension: 1 },
       bostonDataGlobal: { data: bostonDataGlobal, classDimension: 1 },
-      irisData: { data: irisData, classDimension: 3 },
-      irisGlobal: { data: irisGlobal, classDimension: 3 },
-      irisDataGlobal: { data: irisDataGlobal, classDimension: 3 },
+      breastCancerData: { data: breastCancerData, classDimension: 2 },
+      ebmData: { data: ebmData, classDimension: 2 },
       ibmData: { data: ibmData, classDimension: 2 },
       ibmDataInconsistent: { data: ibmDataInconsistent, classDimension: 2 },
-      breastCancer: { data: breastCancerData, classDimension: 2 },
       ibmNoClass: { data: ibmNoClass, classDimension: 2 },
-      irisNoFeature: { data: irisNoFeatures, classDimension: 3 },
-      ebmData: { data: ibmData, classDimension: 2 },
+      irisData: { data: irisData, classDimension: 3 },
+      irisDataGlobal: { data: irisDataGlobal, classDimension: 3 },
+      irisGlobal: { data: irisGlobal, classDimension: 3 },
       irisNoData: { data: irisNoData, classDimension: 3 },
+      irisNoFeatures: { data: irisNoFeatures, classDimension: 3 },
       largeFeatureCount: { data: largeFeatureCount, classDimension: 2 }
     }
   },
@@ -77,10 +78,10 @@ export const applications: IApplications = <const>{
     versions: { "Version-1": 1, "Version-2": 2 },
     datasets: {
       binaryClassifier: { data: binaryClassifier },
-      regression: { data: regression },
-      probit: { data: probit },
       precomputedBinary: { data: precomputedBinary },
-      precomputedBinaryTwo: { data: precomputedBinaryTwo }
+      precomputedBinaryTwo: { data: precomputedBinaryTwo },
+      probit: { data: probit },
+      regression: { data: regression }
     }
   }
 };

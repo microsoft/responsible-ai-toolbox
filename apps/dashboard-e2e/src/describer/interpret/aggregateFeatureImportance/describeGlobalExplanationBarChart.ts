@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BarChart } from "../../../support/BarChart";
-import { getMenu } from "../../../support/getMenu";
-import { IDataSetShape } from "../IDataSetShape";
+import { BarChart } from "../../../util/BarChart";
+import { getMenu } from "../../../util/getMenu";
+import { IInterpretData } from "../IInterpretData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
 
 export function describeGlobalExplanationBarChart(
-  dataShape: IDataSetShape
+  dataShape: IInterpretData
 ): void {
   describe("Bar chart", () => {
     const props = {
