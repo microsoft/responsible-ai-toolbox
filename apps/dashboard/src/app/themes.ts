@@ -85,7 +85,7 @@ const darkContrastTheme = createTheme({
 });
 
 export const themes = <const>{
-  dark: darkTheme,
-  darkHiContrast: darkContrastTheme,
-  light: lightTheme
+  "1 - light": lightTheme,
+  "2 - dark": darkTheme,
+  "3 - darkHiContrast": darkContrastTheme
 };
