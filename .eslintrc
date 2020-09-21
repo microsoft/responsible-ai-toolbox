@@ -43,7 +43,11 @@
     "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
-    "sort-keys-fix/sort-keys-fix": "error",
+    "sort-keys-fix/sort-keys-fix": [
+      "error",
+      "asc",
+      { "caseSensitive": false, "natural": true }
+    ],
     "header/header": [
       "error",
       "line",

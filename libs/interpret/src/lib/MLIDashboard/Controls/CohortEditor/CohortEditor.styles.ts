@@ -52,18 +52,6 @@ export const cohortEditorStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<ICohortEditorStyles>({
-    addFilterButton: {
-      backgroundColor: theme.semanticColors.buttonBackground,
-      border: "1px solid",
-      borderColor: theme.semanticColors.buttonBorder,
-      borderRadius: "2px",
-      boxSizing: "border-box",
-      height: "32px",
-      marginLeft: "32px",
-      marginTop: "53px",
-      padding: "0px",
-      width: "98px"
-    },
     addedFilter: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semibold,
@@ -77,6 +65,18 @@ export const cohortEditorStyles: () => IProcessedStyleSet<
       marginRight: "40px",
       marginTop: "5px",
       overflowY: "auto"
+    },
+    addFilterButton: {
+      backgroundColor: theme.semanticColors.buttonBackground,
+      border: "1px solid",
+      borderColor: theme.semanticColors.buttonBorder,
+      borderRadius: "2px",
+      boxSizing: "border-box",
+      height: "32px",
+      marginLeft: "32px",
+      marginTop: "53px",
+      padding: "0px",
+      width: "98px"
     },
     cancelFilterButton: {
       height: "32px",

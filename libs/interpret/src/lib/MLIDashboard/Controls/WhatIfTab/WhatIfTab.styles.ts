@@ -109,6 +109,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     ],
     calloutTitle: [FabricStyles.calloutTitle],
     calloutWrapper: [FabricStyles.calloutWrapper],
+    chartsArea: {
+      flex: 1
+    },
     chartWithAxes: {
       boxSizing: "border-box",
       display: "flex",
@@ -120,9 +123,6 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "row",
       flexGrow: "1"
-    },
-    chartsArea: {
-      flex: 1
     },
     choiceBoxArea: {
       alignItems: "baseline",

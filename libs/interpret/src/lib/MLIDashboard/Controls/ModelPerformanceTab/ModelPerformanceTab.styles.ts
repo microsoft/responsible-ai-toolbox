@@ -137,17 +137,17 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
       width: "max-content"
     },
+    scrollableWrapper: {
+      flexGrow: "1",
+      maxHeight: "700px",
+      overflowY: "auto"
+    },
     scrollContent: {
       alignItems: "stretch",
       display: "flex",
       flexDirection: "row",
       height: "500px",
       width: "100%"
-    },
-    scrollableWrapper: {
-      flexGrow: "1",
-      maxHeight: "700px",
-      overflowY: "auto"
     },
     statsBox: {
       backgroundColor: theme.semanticColors.bodyBackground,

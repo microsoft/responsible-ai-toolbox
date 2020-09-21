@@ -255,7 +255,7 @@ export class ScatterUtils {
     _.isEqual.bind(window)
   );
   private static baseScatterProperties: IPlotlyProperty = {
-    config: { displayModeBar: false, displaylogo: false, responsive: true },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [
       {
         datapointLevelAccessors: {

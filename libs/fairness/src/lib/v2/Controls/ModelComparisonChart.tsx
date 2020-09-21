@@ -203,8 +203,8 @@ export class ModelComparisonChart extends React.PureComponent<
       const data = this.state.accuracyArray.map((accuracy, index) => {
         return {
           Accuracy: accuracy,
-          Parity: disparityArray[index],
-          index
+          index,
+          Parity: disparityArray[index]
         };
       });
       let minAccuracy: number = Number.MAX_SAFE_INTEGER;

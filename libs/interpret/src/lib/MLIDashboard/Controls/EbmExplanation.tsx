@@ -150,7 +150,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
         explanationContext
       );
       return {
-        config: { displayModeBar: false, displaylogo: false, responsive: true },
+        config: { displaylogo: false, displayModeBar: false, responsive: true },
         data,
         layout: {
           autosize: true,

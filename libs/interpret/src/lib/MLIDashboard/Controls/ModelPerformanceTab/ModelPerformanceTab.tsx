@@ -76,7 +76,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     // In this view, y will always be categorical (including a binned numberic variable), and could be
     // iterations over the cohorts. We can set y and the y labels before the rest of the char properties.
     const plotlyProps: IPlotlyProperty = {
-      config: { displayModeBar: false, displaylogo: false, responsive: true },
+      config: { displaylogo: false, displayModeBar: false, responsive: true },
       data: [{}],
       layout: {
         autosize: true,

@@ -106,7 +106,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         };
       }) as any;
       return {
-        config: { displayModeBar: false, displaylogo: false, responsive: true },
+        config: { displaylogo: false, displayModeBar: false, responsive: true },
         data,
         layout: {
           autosize: true,
@@ -170,8 +170,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       abortController: undefined,
       fetchedData: undefined,
       rangeView: undefined,
-      requestFeatureIndex: undefined,
-      requestedRange: undefined
+      requestedRange: undefined,
+      requestFeatureIndex: undefined
     };
     this.fetchData = _.debounce(this.fetchData.bind(this), 500);
   }
@@ -557,8 +557,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       {
         abortController,
         errorMessage: undefined,
-        requestFeatureIndex: this.state.rangeView.featureIndex,
-        requestedRange
+        requestedRange,
+        requestFeatureIndex: this.state.rangeView.featureIndex
       },
       async () => {
         try {

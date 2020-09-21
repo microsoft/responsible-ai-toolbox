@@ -130,8 +130,8 @@ export class FeatureImportanceBar extends React.PureComponent<
     const sortedIndexVector = this.props.sortArray;
     const baseSeries: PartialRequired<IPlotlyProperty, "layout"> = {
       config: {
-        displayModeBar: false,
         displaylogo: false,
+        displayModeBar: false,
         responsive: true
       },
       data: [],

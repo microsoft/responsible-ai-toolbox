@@ -143,7 +143,7 @@ export class MultiICEPlot extends React.PureComponent<
       }
     ) as any;
     return {
-      config: { displayModeBar: false, displaylogo: false, responsive: true },
+      config: { displaylogo: false, displayModeBar: false, responsive: true },
       data,
       layout: {
         autosize: true,

@@ -92,8 +92,8 @@ export class Beehive extends React.PureComponent<
 
   private static BasePlotlyProps: IPlotlyProperty = {
     config: {
-      displayModeBar: false,
       displaylogo: false,
+      displayModeBar: false,
       responsive: true
     },
     data: [

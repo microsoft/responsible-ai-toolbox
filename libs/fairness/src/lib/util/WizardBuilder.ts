@@ -106,12 +106,12 @@ export class WizardBuilder {
       } as ICategoricalRange;
     });
     return {
-      PredictionType: props.predictionType,
       classNames,
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
       featureNames,
       featureNamesAbridged: featureNames,
-      featureRanges
+      featureRanges,
+      PredictionType: props.predictionType
     };
   }
 
@@ -154,12 +154,12 @@ export class WizardBuilder {
       props.predictionType
     );
     return {
-      PredictionType: predictionType,
       classNames,
       featureIsCategorical,
       featureNames,
       featureNamesAbridged: featureNames,
-      featureRanges
+      featureRanges,
+      PredictionType: predictionType
     };
   }
 

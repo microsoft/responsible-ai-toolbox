@@ -28,11 +28,6 @@ export const dependencePlotStyles: () => IProcessedStyleSet<
   IDependencePlotStyles
 > = () => {
   return mergeStyleSets<IDependencePlotStyles>({
-    DependencePlot: {
-      display: "flex",
-      flexDirection: "row",
-      flexGrow: "1"
-    },
     chart: {
       flex: 1,
       height: "100%"
@@ -48,6 +43,11 @@ export const dependencePlotStyles: () => IProcessedStyleSet<
       flexDirection: "row",
       height: "400px",
       width: "100%"
+    },
+    DependencePlot: {
+      display: "flex",
+      flexDirection: "row",
+      flexGrow: "1"
     },
     faintText: {
       fontWeight: "350" as any

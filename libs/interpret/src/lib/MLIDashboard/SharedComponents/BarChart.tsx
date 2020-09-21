@@ -124,8 +124,8 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       .reverse();
     const baseSeries: IPlotlyProperty = {
       config: {
-        displayModeBar: false,
         displaylogo: false,
+        displayModeBar: false,
         responsive: true
       } as Plotly.Config,
       data: [],

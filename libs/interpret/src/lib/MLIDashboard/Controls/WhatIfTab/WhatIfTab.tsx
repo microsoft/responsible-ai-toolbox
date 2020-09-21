@@ -102,7 +102,7 @@ export class WhatIfTab extends React.PureComponent<
   IWhatIfTabState
 > {
   public static basePlotlyProperties: IPlotlyProperty = {
-    config: { displayModeBar: false, displaylogo: false, responsive: true },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],
     layout: {
       autosize: true,

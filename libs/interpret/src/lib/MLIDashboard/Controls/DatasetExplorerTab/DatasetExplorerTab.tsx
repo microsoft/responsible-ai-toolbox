@@ -65,7 +65,7 @@ export class DatasetExplorerTab extends React.PureComponent<
   IDatasetExplorerTabState
 > {
   public static basePlotlyProperties: IPlotlyProperty = {
-    config: { displayModeBar: false, displaylogo: false, responsive: true },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],
     layout: {
       autosize: true,

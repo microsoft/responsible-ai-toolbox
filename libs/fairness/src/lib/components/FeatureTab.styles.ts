@@ -88,12 +88,12 @@ export const FeatureTabStyles: () => IProcessedStyleSet<
       },
       width: "100%"
     },
+    itemsList: {
+      overflowY: "auto"
+    },
     itemTitle: {
       color: theme.semanticColors.listText,
       margin: 0
-    },
-    itemsList: {
-      overflowY: "auto"
     },
     main: {
       flex: 1,
