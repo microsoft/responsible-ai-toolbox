@@ -72,7 +72,6 @@ export class ModelComparisonChart extends React.PureComponent<
   private readonly plotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
       modeBarButtonsToRemove: [
         "toggleSpikelines",
         "hoverClosestCartesian",
@@ -85,7 +84,8 @@ export class ModelComparisonChart extends React.PureComponent<
         "zoomOut2d",
         "autoScale2d",
         "resetScale2d"
-      ]
+      ],
+      responsive: true
     },
     data: [
       {
@@ -95,34 +95,34 @@ export class ModelComparisonChart extends React.PureComponent<
             plotlyPath: "customdata"
           }
         },
-        mode: PlotlyMode.TextMarkers,
+        hoverinfo: "text",
         marker: {
           size: 14
         },
+        mode: PlotlyMode.TextMarkers,
         textposition: "top",
         type: "scatter",
         xAccessor: "Accuracy",
-        yAccessor: "Parity",
-        hoverinfo: "text"
+        yAccessor: "Parity"
       } as any
     ],
     layout: {
       autosize: true,
-      plot_bgcolor: theme.semanticColors.bodyFrameBackground,
       font: {
         size: 10
       },
-      margin: {
-        t: 4,
-        r: 0
-      },
       hovermode: "closest",
+      margin: {
+        r: 0,
+        t: 4
+      },
+      plot_bgcolor: theme.semanticColors.bodyFrameBackground,
       xaxis: {
         automargin: true,
         fixedrange: true,
-        mirror: true,
         linecolor: theme.semanticColors.disabledBorder,
         linewidth: 1,
+        mirror: true,
         showgrid: false,
         title: {
           text: "Error"
@@ -142,9 +142,9 @@ export class ModelComparisonChart extends React.PureComponent<
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
-      showModalIntro: this.props.showIntro,
       accuracyKey: this.props.accuracyPickerProps.selectedAccuracyKey,
-      parityKey: this.props.parityPickerProps.selectedParityKey
+      parityKey: this.props.parityPickerProps.selectedParityKey,
+      showModalIntro: this.props.showIntro
     };
   }
 
@@ -174,8 +174,8 @@ export class ModelComparisonChart extends React.PureComponent<
       root: {
         color: theme.semanticColors.bodyText,
         marginLeft: "auto",
-        marginTop: "4px",
-        marginRight: "2px"
+        marginRight: "2px",
+        marginTop: "4px"
       },
       rootHovered: {
         color: theme.semanticColors.bodyBackgroundHovered
@@ -202,8 +202,8 @@ export class ModelComparisonChart extends React.PureComponent<
       const { disparityArray } = this.state;
       const data = this.state.accuracyArray.map((accuracy, index) => {
         return {
-          Parity: disparityArray[index],
           Accuracy: accuracy,
+          Parity: disparityArray[index],
           index
         };
       });
@@ -517,9 +517,9 @@ export class ModelComparisonChart extends React.PureComponent<
         featureKey
       );
       this.setState({
-        featureKey,
         accuracyArray: undefined,
-        disparityArray: undefined
+        disparityArray: undefined,
+        featureKey
       });
     }
   };
@@ -534,7 +534,7 @@ export class ModelComparisonChart extends React.PureComponent<
     const accuracyKey = option.key.toString();
     if (this.state.accuracyKey !== accuracyKey) {
       this.props.accuracyPickerProps.onAccuracyChange(accuracyKey);
-      this.setState({ accuracyKey, accuracyArray: undefined });
+      this.setState({ accuracyArray: undefined, accuracyKey });
     }
   };
 
@@ -548,7 +548,7 @@ export class ModelComparisonChart extends React.PureComponent<
     const parityKey = option.key.toString();
     if (this.state.parityKey !== parityKey) {
       this.props.parityPickerProps.onParityChange(parityKey);
-      this.setState({ parityKey, disparityArray: undefined });
+      this.setState({ disparityArray: undefined, parityKey });
     }
   };
 

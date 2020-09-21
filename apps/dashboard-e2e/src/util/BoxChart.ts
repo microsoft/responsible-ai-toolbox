@@ -159,7 +159,7 @@ export class BoxChart extends Chart<IBox> {
         `box${idx} center: ${center}, is not in the middle of sLeft: ${sLeft} and right ${sRight}`
       );
     }
-    return { left, right, bottom, q1, q2, q3, top };
+    return { bottom, left, q1, q2, q3, right, top };
   };
 
   private readonly getMeanCoordinate = (
@@ -180,7 +180,7 @@ export class BoxChart extends Chart<IBox> {
     }
     const [, ...strCords] = exec;
     const [left, mean, right] = strCords.map((s) => Number(s));
-    return { left, right, mean };
+    return { left, mean, right };
   };
 
   private getBoxElements(): HTMLElement[] {

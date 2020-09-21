@@ -19,19 +19,19 @@ export const DataSpecificationBladeStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IDataSpecificationBladeStyles>({
+    frame: {
+      boxSizing: "content-box",
+      paddingLeft: "60px",
+      paddingTop: "35px",
+      width: "120px"
+    },
+    text: {
+      color: theme.semanticColors.bodyText
+    },
     title: {
       color: theme.semanticColors.bodyText,
       height: "20px",
       paddingBottom: "10px"
-    },
-    frame: {
-      paddingTop: "35px",
-      paddingLeft: "60px",
-      width: "120px",
-      boxSizing: "content-box"
-    },
-    text: {
-      color: theme.semanticColors.bodyText
     }
   });
 };

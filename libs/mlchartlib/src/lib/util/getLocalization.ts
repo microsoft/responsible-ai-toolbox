@@ -42,9 +42,9 @@ export function getLocalization<T>(
   lang: ILocalizationConfig<T>
 ): ILocalization<T> {
   const localization = new LocalizedStringsClass({
-    en: lang.en,
     cs: lang.cs,
     de: lang.de,
+    en: lang.en,
     es: lang.es,
     fr: lang.fr,
     hu: lang.hu,

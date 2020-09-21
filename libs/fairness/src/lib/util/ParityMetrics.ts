@@ -17,32 +17,32 @@ export enum ParityModes {
 }
 
 export const parityOptions: { [key: string]: IParityOption } = {
+  recall_score: {
+    description: localization.Metrics.equalOpportunityDifferenceDescription,
+    key: "recall_score",
+    parityMetric: "recall_score",
+    parityMode: ParityModes.Difference,
+    title: localization.Metrics.equalOpportunityDifference
+  },
   selection_rate: {
-    key: "selection_rate",
-    title: localization.Metrics.parityDifference,
     description: localization.Metrics.parityDifferenceDescription,
+    key: "selection_rate",
     parityMetric: "selection_rate",
-    parityMode: ParityModes.Difference
+    parityMode: ParityModes.Difference,
+    title: localization.Metrics.parityDifference
   },
   selection_rate_ratio: {
-    key: "selection_rate_ratio",
-    title: localization.Metrics.parityRatio,
     description: localization.Metrics.parityRatioDescription,
+    key: "selection_rate_ratio",
     parityMetric: "selection_rate",
-    parityMode: ParityModes.Ratio
+    parityMode: ParityModes.Ratio,
+    title: localization.Metrics.parityRatio
   },
   zero_one_loss: {
-    key: "zero_one_loss",
-    title: localization.Metrics.errorRateDifference,
     description: localization.Metrics.errorRateDifferenceDescription,
+    key: "zero_one_loss",
     parityMetric: "zero_one_loss",
-    parityMode: ParityModes.Difference
-  },
-  recall_score: {
-    key: "recall_score",
-    title: localization.Metrics.equalOpportunityDifference,
-    description: localization.Metrics.equalOpportunityDifferenceDescription,
-    parityMetric: "recall_score",
-    parityMode: ParityModes.Difference
+    parityMode: ParityModes.Difference,
+    title: localization.Metrics.errorRateDifference
   }
 };

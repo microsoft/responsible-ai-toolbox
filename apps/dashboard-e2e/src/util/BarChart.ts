@@ -44,6 +44,6 @@ export class BarChart extends Chart<IBar> {
     if (bottom !== bottom2) {
       throw new Error(`${idx}th path element in svg is not a rectangle`);
     }
-    return { left, bottom, right, top };
+    return { bottom, left, right, top };
   };
 }

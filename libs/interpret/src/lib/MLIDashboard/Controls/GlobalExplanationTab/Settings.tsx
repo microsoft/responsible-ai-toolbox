@@ -81,7 +81,6 @@ export class Settings extends React.Component<ISettingsProps, ISettingsState> {
             <SpinButton
               className={classNames.topK}
               styles={{
-                spinButtonWrapper: { maxWidth: "100px" },
                 labelWrapper: { alignSelf: "center" },
                 root: {
                   float: "right",
@@ -90,7 +89,8 @@ export class Settings extends React.Component<ISettingsProps, ISettingsState> {
                       maxWidth: "110px"
                     }
                   }
-                }
+                },
+                spinButtonWrapper: { maxWidth: "100px" }
               }}
               label={localization.AggregateImportance.topKFeatures}
               min={this.props.minK}

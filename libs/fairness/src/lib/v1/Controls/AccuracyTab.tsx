@@ -54,7 +54,6 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
                 items={this.props.accuracyPickerProps.accuracyOptions.map(
                   (accuracy) => {
                     return {
-                      title: accuracy.title,
                       description: accuracy.description,
                       onSelect: this.props.accuracyPickerProps.onAccuracyChange.bind(
                         this,
@@ -62,7 +61,8 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
                       ),
                       selected:
                         this.props.accuracyPickerProps.selectedAccuracyKey ===
-                        accuracy.key
+                        accuracy.key,
+                      title: accuracy.title
                     };
                   }
                 )}

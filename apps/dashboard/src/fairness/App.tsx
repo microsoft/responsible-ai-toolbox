@@ -47,21 +47,21 @@ export class App extends React.Component<IAppProps> {
   private static messages = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
     LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
-    TestReq: [{ displayText: "TestReq" }],
-    PredictorReq: [{ displayText: "PredictorReq" }]
+    PredictorReq: [{ displayText: "PredictorReq" }],
+    TestReq: [{ displayText: "TestReq" }]
   };
 
   public render(): React.ReactNode {
     const dashboardProps: IFairnessProps = {
       ...this.props.dataset,
+      locale: this.props.language,
+      requestMetrics: this.generateRandomMetrics.bind(this),
+      stringParams: { contextualHelp: App.messages },
       supportedBinaryClassificationAccuracyKeys:
         App.supportedBinaryClassificationAccuracyKeys,
-      supportedRegressionAccuracyKeys: App.supportedRegressionAccuracyKeys,
       supportedProbabilityAccuracyKeys: App.supportedProbabilityAccuracyKeys,
-      stringParams: { contextualHelp: App.messages },
-      requestMetrics: this.generateRandomMetrics.bind(this),
-      theme: this.props.theme,
-      locale: this.props.language
+      supportedRegressionAccuracyKeys: App.supportedRegressionAccuracyKeys,
+      theme: this.props.theme
     };
     switch (this.props.version) {
       case 1:
@@ -84,8 +84,8 @@ export class App extends React.Component<IAppProps> {
     const promise = new Promise<IMetricResponse>((resolve, reject) => {
       const timeout = setTimeout(() => {
         resolve({
-          global: Math.random(),
-          bins
+          bins,
+          global: Math.random()
         });
       }, 300);
       if (abortSignal) {

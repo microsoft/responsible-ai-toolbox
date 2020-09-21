@@ -130,39 +130,39 @@ export class FeatureImportanceBar extends React.PureComponent<
     const sortedIndexVector = this.props.sortArray;
     const baseSeries: PartialRequired<IPlotlyProperty, "layout"> = {
       config: {
+        displayModeBar: false,
         displaylogo: false,
-        responsive: true,
-        displayModeBar: false
+        responsive: true
       },
       data: [],
       layout: {
         autosize: true,
         dragmode: false,
-        margin: { t: 10, r: 10, b: 30, l: 0 },
         hovermode: "closest",
+        margin: { b: 30, l: 0, r: 10, t: 10 },
+        showlegend: false,
         xaxis: {
           automargin: true,
           color: FabricStyles.chartAxisColor,
+          showgrid: false,
           tickfont: {
+            color: FabricStyles.chartAxisColor,
             family: "Roboto, Helvetica Neue, sans-serif",
-            size: 11,
-            color: FabricStyles.chartAxisColor
-          },
-          showgrid: false
+            size: 11
+          }
         },
         yaxis: {
           automargin: true,
           color: FabricStyles.chartAxisColor,
-          tickfont: {
-            family: "Roboto, Helvetica Neue, sans-serif",
-            size: 11,
-            color: FabricStyles.chartAxisColor
-          },
-          zeroline: true,
+          gridcolor: "#e5e5e5",
           showgrid: true,
-          gridcolor: "#e5e5e5"
-        },
-        showlegend: false
+          tickfont: {
+            color: FabricStyles.chartAxisColor,
+            family: "Roboto, Helvetica Neue, sans-serif",
+            size: 11
+          },
+          zeroline: true
+        }
       }
     };
 
@@ -181,10 +181,6 @@ export class FeatureImportanceBar extends React.PureComponent<
 
       this.props.unsortedSeries.forEach((series, seriesIndex) => {
         baseSeries.data.push({
-          hoverinfo: "all",
-          orientation: "v",
-          type: "bar",
-          name: series.name,
           customdata: sortedIndexVector.map((index) => {
             return {
               Name: series.name,
@@ -199,9 +195,8 @@ export class FeatureImportanceBar extends React.PureComponent<
                 : undefined
             };
           }),
-          text: xText,
-          x,
-          y: sortedIndexVector.map((index) => series.unsortedAggregateY[index]),
+          hoverinfo: "all",
+          hovertemplate,
           marker: {
             color: sortedIndexVector.map((index) =>
               index === this.props.selectedFeatureIndex &&
@@ -210,7 +205,12 @@ export class FeatureImportanceBar extends React.PureComponent<
                 : FabricStyles.fabricColorPalette[series.colorIndex]
             )
           },
-          hovertemplate
+          name: series.name,
+          orientation: "v",
+          text: xText,
+          type: "bar",
+          x,
+          y: sortedIndexVector.map((index) => series.unsortedAggregateY[index])
         } as any);
       });
     } else if (this.props.chartType === ChartTypes.Box) {
@@ -230,14 +230,14 @@ export class FeatureImportanceBar extends React.PureComponent<
         );
         console.log(x, y);
         baseSeries.data.push({
-          type: "box",
           boxmean: true,
-          name: series.name,
-          x,
-          y,
           marker: {
             color: FabricStyles.fabricColorPalette[series.colorIndex]
-          }
+          },
+          name: series.name,
+          type: "box",
+          x,
+          y
         });
       });
     }

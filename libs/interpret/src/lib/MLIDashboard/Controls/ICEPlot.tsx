@@ -91,6 +91,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             rangeType === RangeTypes.Categorical
               ? PlotlyMode.Markers
               : PlotlyMode.LinesMarkers,
+          name: classNames[classIndex],
           text: ICEPlot.buildTextArray(
             modelType,
             featureName,
@@ -101,35 +102,34 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           ),
           type: "scatter",
           x: xData,
-          y: singleClassValue,
-          name: classNames[classIndex]
+          y: singleClassValue
         };
       }) as any;
       return {
-        config: { displaylogo: false, responsive: true, displayModeBar: false },
+        config: { displayModeBar: false, displaylogo: false, responsive: true },
         data,
         layout: {
-          dragmode: false,
           autosize: true,
+          dragmode: false,
           font: {
             size: 10
           },
-          margin: {
-            t: 10,
-            b: 30
-          },
           hovermode: "closest",
+          margin: {
+            b: 30,
+            t: 10
+          },
           showlegend: transposedY.length > 1,
+          xaxis: {
+            automargin: true,
+            title: featureName
+          },
           yaxis: {
             automargin: true,
             title:
               modelType === ModelTypes.Regression
                 ? localization.IcePlot.prediction
                 : localization.IcePlot.predictedProbability
-          },
-          xaxis: {
-            title: featureName,
-            automargin: true
           }
         } as any
       };
@@ -167,10 +167,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       );
     }
     this.state = {
-      requestFeatureIndex: undefined,
-      fetchedData: undefined,
       abortController: undefined,
+      fetchedData: undefined,
       rangeView: undefined,
+      requestFeatureIndex: undefined,
       requestedRange: undefined
     };
     this.fetchData = _.debounce(this.fetchData.bind(this), 500);
@@ -381,11 +381,11 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       ] as ICategoricalRange;
       if (summary.uniqueValues) {
         return {
-          featureIndex,
-          selectedOptionKeys: summary.uniqueValues,
           categoricalOptions: summary.uniqueValues.map((text) => {
             return { key: text, text };
           }),
+          featureIndex,
+          selectedOptionKeys: summary.uniqueValues,
           type: RangeTypes.Categorical
         };
       }
@@ -395,8 +395,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     ] as INumericRange;
     return {
       featureIndex,
-      min: summary.min,
       max: summary.max,
+      min: summary.min,
       steps: 20,
       type: summary.rangeType
     };
@@ -556,15 +556,15 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     this.setState(
       {
         abortController,
-        requestedRange,
+        errorMessage: undefined,
         requestFeatureIndex: this.state.rangeView.featureIndex,
-        errorMessage: undefined
+        requestedRange
       },
       async () => {
         try {
           const fetchedData = await promise;
           if (Array.isArray(fetchedData)) {
-            this.setState({ fetchedData, abortController: undefined });
+            this.setState({ abortController: undefined, fetchedData });
           }
         } catch (error) {
           if (error.name === "AbortError") {

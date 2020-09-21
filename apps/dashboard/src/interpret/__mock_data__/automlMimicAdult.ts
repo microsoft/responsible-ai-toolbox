@@ -4,8 +4,8 @@
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
 export const automlMimicAdult: IExplanationDashboardData = {
-  modelInformation: { modelClass: "blackbox", method: "classifier" },
   dataSummary: {
+    classNames: [" <=50K", " >50K"],
     featureNames: [
       "Column1",
       "Column2",
@@ -21,9 +21,9 @@ export const automlMimicAdult: IExplanationDashboardData = {
       "Column12",
       "Column13",
       "Column14"
-    ],
-    classNames: [" <=50K", " >50K"]
+    ]
   },
+  modelInformation: { method: "classifier", modelClass: "blackbox" },
   precomputedExplanations: {
     localFeatureImportance: {
       intercept: [2.017027712531668, -2.017027712531668],

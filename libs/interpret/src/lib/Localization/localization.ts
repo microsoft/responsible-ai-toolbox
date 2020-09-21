@@ -23,9 +23,9 @@ import zhcn from "./zh-CN.json";
 import zhtw from "./zh-TW.json";
 
 export const localization = getLocalization({
-  en,
   cs,
   de,
+  en,
   es,
   fr,
   hu,

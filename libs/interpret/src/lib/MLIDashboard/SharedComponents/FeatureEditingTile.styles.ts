@@ -17,33 +17,33 @@ export interface IFeatureEditingTileStyles {
 export const featureEditingTileStyles: IProcessedStyleSet<IFeatureEditingTileStyles> = mergeStyleSets<
   IFeatureEditingTileStyles
 >({
+  edited: {
+    border: "2px solid #0078d4",
+    borderRadius: "5px",
+    padding: "3px"
+  },
+  error: {
+    border: "2px solid #a80000",
+    borderRadius: "5px",
+    padding: "3px"
+  },
   tile: {
     backgroundColor: "whitesmoke",
-    margin: "15px",
-    width: "200px",
-    minHeight: "120px",
-    boxSizing: "border-box",
     boxShadow: "0 0 15px -2px #ccc",
-    padding: "5px",
+    boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    margin: "15px",
+    minHeight: "120px",
+    padding: "5px",
+    width: "200px"
   },
   tileLabel: {
     fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
           -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
-    overflowWrap: "break-word",
     fontSize: "20px",
+    overflowWrap: "break-word",
     padding: "3px 4px 15px 4px"
-  },
-  edited: {
-    border: "2px solid #0078d4",
-    padding: "3px",
-    borderRadius: "5px"
-  },
-  error: {
-    border: "2px solid #a80000",
-    padding: "3px",
-    borderRadius: "5px"
   }
 });

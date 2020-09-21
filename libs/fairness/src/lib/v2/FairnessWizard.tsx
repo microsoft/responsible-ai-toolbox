@@ -100,28 +100,33 @@ export class FairnessWizardV2 extends React.PureComponent<
       const readonlyFeatureBins = this.props.precomputedFeatureBins.map(
         (initialBin, index) => {
           return {
-            hasError: false,
             array: initialBin.binLabels,
-            labelArray: initialBin.binLabels,
             featureIndex: index,
+            hasError: false,
+            labelArray: initialBin.binLabels,
             rangeType: RangeTypes.Categorical
           };
         }
       );
       this.state = {
-        showIntro: true,
         accuracyMetrics,
-        selectedAccuracyKey: accuracyMetrics[0].key,
-        parityMetrics,
-        selectedParityKey: parityMetrics[0].key,
+        activeTabKey: featureBinTabKey,
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
         ),
-        activeTabKey: featureBinTabKey,
         featureBins: readonlyFeatureBins,
+        metricCache: new MetricsCache(
+          0,
+          0,
+          undefined,
+          props.precomputedMetrics
+        ),
+        parityMetrics,
+        selectedAccuracyKey: accuracyMetrics[0].key,
         selectedBinIndex: 0,
         selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-        metricCache: new MetricsCache(0, 0, undefined, props.precomputedMetrics)
+        selectedParityKey: parityMetrics[0].key,
+        showIntro: true
       };
       return;
     }
@@ -145,21 +150,21 @@ export class FairnessWizardV2 extends React.PureComponent<
     parityMetrics = Object.values(parityOptions);
 
     this.state = {
-      showIntro: true,
       accuracyMetrics,
-      selectedAccuracyKey: accuracyMetrics[0].key,
-      parityMetrics,
-      selectedParityKey: parityMetrics[0].key,
-      dashboardContext: fairnessContext,
       activeTabKey: introTabKey,
+      dashboardContext: fairnessContext,
       featureBins,
-      selectedBinIndex: 0,
-      selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
       metricCache: new MetricsCache(
         featureBins.length,
         this.props.predictedY.length,
         this.props.requestMetrics
-      )
+      ),
+      parityMetrics,
+      selectedAccuracyKey: accuracyMetrics[0].key,
+      selectedBinIndex: 0,
+      selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
+      selectedParityKey: parityMetrics[0].key,
+      showIntro: true
     };
   }
 
@@ -176,18 +181,18 @@ export class FairnessWizardV2 extends React.PureComponent<
     const styles = FairnessWizardStyles();
     const accuracyPickerProps = {
       accuracyOptions: this.state.accuracyMetrics,
-      selectedAccuracyKey: this.state.selectedAccuracyKey,
-      onAccuracyChange: this.setAccuracyKey
+      onAccuracyChange: this.setAccuracyKey,
+      selectedAccuracyKey: this.state.selectedAccuracyKey
     };
     const parityPickerProps = {
+      onParityChange: this.setParityKey,
       parityOptions: this.state.parityMetrics,
-      selectedParityKey: this.state.selectedParityKey,
-      onParityChange: this.setParityKey
+      selectedParityKey: this.state.selectedParityKey
     };
     const featureBinPickerProps = {
       featureBins: this.state.featureBins,
-      selectedBinIndex: this.state.selectedBinIndex,
-      onBinChange: this.setBinIndex
+      onBinChange: this.setBinIndex,
+      selectedBinIndex: this.state.selectedBinIndex
     };
     if (this.state.featureBins.length === 0) {
       return (

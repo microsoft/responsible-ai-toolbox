@@ -29,23 +29,48 @@ export const cohortListStyles: () => IProcessedStyleSet<
   const theme = getTheme();
   return mergeStyleSets<ICohortListStyles>({
     banner: {
+      backgroundColor: theme.palette.neutralPrimary,
       boxSizing: "border-box",
-      height: "105px",
-      paddingTop: "10px",
-      paddingLeft: "34px",
+      color: theme.palette.white,
       display: "flex",
       flexDirection: "row",
-      width: "100%",
-      color: theme.palette.white,
-      backgroundColor: theme.palette.neutralPrimary
+      height: "105px",
+      paddingLeft: "34px",
+      paddingTop: "10px",
+      width: "100%"
     },
-    summaryLabel: {
-      fontVariant: "small-caps",
-      fontWeight: "300",
-      marginBottom: "2px"
+    cohortBox: {
+      boxSizing: "border-box",
+      display: "inline-block",
+      paddingRight: "10px",
+      width: "150px"
+    },
+    cohortLabel: {
+      flexGrow: 1
+    },
+    cohortLabelWrapper: {
+      display: "flex",
+      flexDirection: "row",
+      maxWidth: "100%"
+    },
+    cohortList: {},
+    commandButton: {
+      alignSelf: "stretch",
+      backgroundColor: "transparent",
+      height: 20,
+      padding: "4px 0",
+      width: 20
     },
     mediumText: {
       maxWidth: "200px"
+    },
+    menuIcon: {
+      color: theme.palette.white,
+      fontSize: "20px"
+    },
+    overflowButton: {
+      backgroundColor: theme.palette.neutralPrimary,
+      border: "none"
     },
     summaryBox: {
       width: "141px"
@@ -54,35 +79,10 @@ export const cohortListStyles: () => IProcessedStyleSet<
       fontSize: "11px",
       lineHeight: "19px"
     },
-    cohortList: {},
-    cohortBox: {
-      width: "150px",
-      boxSizing: "border-box",
-      paddingRight: "10px",
-      display: "inline-block"
-    },
-    cohortLabelWrapper: {
-      maxWidth: "100%",
-      display: "flex",
-      flexDirection: "row"
-    },
-    cohortLabel: {
-      flexGrow: 1
-    },
-    overflowButton: {
-      backgroundColor: theme.palette.neutralPrimary,
-      border: "none"
-    },
-    commandButton: {
-      width: 20,
-      height: 20,
-      padding: "4px 0",
-      alignSelf: "stretch",
-      backgroundColor: "transparent"
-    },
-    menuIcon: {
-      color: theme.palette.white,
-      fontSize: "20px"
+    summaryLabel: {
+      fontVariant: "small-caps",
+      fontWeight: "300",
+      marginBottom: "2px"
     }
   });
 };

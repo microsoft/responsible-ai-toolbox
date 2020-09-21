@@ -49,7 +49,7 @@ export class ParityPicker extends React.PureComponent<
               title={"TODO"}
               ariaLabel="Info"
               onClick={this.onOpen}
-              styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
+              styles={{ root: { color: "rgb(0, 120, 212)", marginBottom: -3 } }}
             />
           </div>
           <ComboBox

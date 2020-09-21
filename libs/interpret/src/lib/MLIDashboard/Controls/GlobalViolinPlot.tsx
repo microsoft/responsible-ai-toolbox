@@ -81,36 +81,36 @@ export class GlobalViolinPlot extends React.PureComponent<
 
   private static BasePlotlyProps: IPlotlyProperty = {
     config: {
+      displayModeBar: false,
       displaylogo: false,
-      responsive: true,
-      displayModeBar: false
+      responsive: true
     } as any,
     data: [
       {
-        type: "violin",
         scalemode: "count",
-        spanmode: "hard"
+        spanmode: "hard",
+        type: "violin"
       }
     ] as any,
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
       hovermode: "closest",
       margin: {
-        t: 10,
         b: 30,
-        r: 210
+        r: 210,
+        t: 10
       },
       showlegend: false,
+      xaxis: {
+        automargin: true
+      },
       yaxis: {
         automargin: true,
         title: localization.featureImportance
-      },
-      xaxis: {
-        automargin: true
       }
     } as any
   };

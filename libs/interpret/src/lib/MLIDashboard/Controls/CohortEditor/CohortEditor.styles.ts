@@ -52,224 +52,228 @@ export const cohortEditorStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<ICohortEditorStyles>({
-    cohortEditor: {
-      overflowY: "auto",
-      width: "560px",
-      height: "610px",
-      maxHeight: "610px !important",
-      ////elevation64 is used for dialogs/panels
-      boxShadow: theme.effects.elevation64,
-      borderRadius: "2px"
-    },
-    wrapper: {
-      height: "344px",
-      display: "flex",
-      marginTop: "7px"
-    },
-    leftHalf: {
-      height: "344px",
-      marginLeft: "40px",
-      width: "213px"
-    },
-    rightHalf: {
-      display: "flex",
-      width: "255px",
-      height: "344px,",
-      flexDirection: "column",
-      background: theme.semanticColors.bodyBackgroundChecked,
-      marginRight: "27px",
-      marginLeft: "25px",
-      marginTop: "0px",
-      borderRadius: "5px"
-    },
-    detailedList: {
-      marginTop: "28px",
-      height: "160px",
-      width: "197px",
-      overflowX: "visible"
-    },
-    filterHeader: {
-      fontWeight: FontWeights.semibold,
-      fontSize: FontSizes.medium,
-      color: theme.semanticColors.bodyTextChecked
-    },
     addFilterButton: {
-      width: "98px",
-      height: "32px",
-      marginLeft: "32px",
-      marginTop: "53px",
       backgroundColor: theme.semanticColors.buttonBackground,
       border: "1px solid",
       borderColor: theme.semanticColors.buttonBorder,
-      boxSizing: "border-box",
       borderRadius: "2px",
-      padding: "0px"
-    },
-    featureTextDiv: {
-      marginTop: "3px",
-      display: "flex",
-      flexDirection: "column"
-    },
-    featureComboBox: {
-      width: "180px",
-      height: "56px",
-      margin: "21px 45px 1px 30px"
-    },
-    operationComboBox: {
-      width: "180px",
-      height: "56px",
-      margin: "9px 45px 10px 30px"
-    },
-    valueSpinButton: {
-      width: "180px",
-      height: "36px",
-      marginLeft: "30px",
-      marginRight: "45px"
-    },
-    valueSpinButtonDiv: {
-      marginTop: "10px",
-      display: "flex",
-      flexDirection: "row"
-    },
-    minSpinBox: {
-      width: "64px",
-      height: "36px",
-      paddingRight: "26px",
-      marginLeft: "30px"
-    },
-    maxSpinBox: {
-      width: "64px",
-      height: "36px"
-    },
-    featureText: {
-      width: "180px",
-      height: "20px",
-      marginLeft: "30px",
-      color: theme.semanticColors.bodySubtext,
-      textAlign: "left"
-    },
-    treatCategorical: {
-      width: "180px",
-      height: "20px",
-      margin: "9px 45px 1px 30px"
-    },
-    defaultText: {
-      marginTop: "105px",
-      marginRight: "35px",
-      marginLeft: "35px",
-      textAlign: "center",
-      color: theme.semanticColors.bodySubtext
-    },
-    existingFilter: {
-      border: "1px solid",
-      borderColor: theme.semanticColors.link,
       boxSizing: "border-box",
-      borderRadius: "3px",
-      display: "inline-flex",
-      flexDirection: "row",
-      height: "25px"
-    },
-    filterLabel: {
-      padding: "1px 9px 6px 11px",
-      minWidth: "75px",
-      maxWidth: "90px",
-      color: theme.semanticColors.link,
-      height: "25px",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis"
-    },
-    defaultFilterList: {
-      color: theme.semanticColors.bodySubtext,
-      marginLeft: "10px"
-    },
-    container: {
-      display: "flex",
-      flexDirection: "column",
-      width: "560px",
-      height: "610px",
-      overflowY: "auto"
+      height: "32px",
+      marginLeft: "32px",
+      marginTop: "53px",
+      padding: "0px",
+      width: "98px"
     },
     addedFilter: {
-      fontWeight: FontWeights.semibold,
       color: theme.semanticColors.bodyText,
-      marginLeft: "45px",
+      fontWeight: FontWeights.semibold,
       height: "30px",
+      marginLeft: "45px",
       width: "178px"
     },
     addedFilterDiv: {
-      marginRight: "40px",
-      marginLeft: "45px",
-      marginTop: "5px",
       height: "80px",
+      marginLeft: "45px",
+      marginRight: "40px",
+      marginTop: "5px",
       overflowY: "auto"
-    },
-    filterIcon: {
-      height: "25px",
-      width: "25px"
-    },
-    cohortName: {
-      width: "180px",
-      height: "56px",
-      marginLeft: "37px",
-      alignSelf: "flex-start"
-    },
-    saveCohort: {
-      alignSelf: "flex-end",
-      marginRight: "27px",
-      width: "62px",
-      height: "32px"
-    },
-    saveAndDeleteDiv: {
-      display: "flex",
-      flexDirection: "row",
-      marginTop: "18px"
-    },
-    deleteCohort: {
-      alignSelf: "flex-start",
-      marginRight: "17px",
-      marginLeft: "374px",
-      width: "80px",
-      height: "32px",
-      borderColor: theme.palette.red,
-      color: theme.palette.red,
-      selectors: {
-        ":hover": {
-          background: theme.palette.red,
-          color: theme.palette.white
-        },
-        ":active": {
-          background: theme.palette.red,
-          color: theme.palette.white
-        }
-      }
-    },
-    saveAndCancelDiv: {
-      display: "flex",
-      flexDirection: "row",
-      marginTop: "53px",
-      marginLeft: "32px"
-    },
-    saveFilterButton: {
-      height: "32px",
-      width: "68px",
-      marginRight: "15px"
     },
     cancelFilterButton: {
       height: "32px",
       width: "68px"
     },
     closeIcon: {
-      height: "32px",
-      width: "40px",
-      marginRight: "1px",
       alignSelf: "flex-end",
       color: theme.semanticColors.buttonText,
+      height: "32px",
+      marginRight: "1px",
       selectors: {
         ":hover": {
           color: theme.semanticColors.buttonTextHovered
         }
-      }
+      },
+      width: "40px"
+    },
+    cohortEditor: {
+      borderRadius: "2px",
+
+      ////elevation64 is used for dialogs/panels
+      boxShadow: theme.effects.elevation64,
+
+      height: "610px",
+
+      maxHeight: "610px !important",
+
+      overflowY: "auto",
+      width: "560px"
+    },
+    cohortName: {
+      alignSelf: "flex-start",
+      height: "56px",
+      marginLeft: "37px",
+      width: "180px"
+    },
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      height: "610px",
+      overflowY: "auto",
+      width: "560px"
+    },
+    defaultFilterList: {
+      color: theme.semanticColors.bodySubtext,
+      marginLeft: "10px"
+    },
+    defaultText: {
+      color: theme.semanticColors.bodySubtext,
+      marginLeft: "35px",
+      marginRight: "35px",
+      marginTop: "105px",
+      textAlign: "center"
+    },
+    deleteCohort: {
+      alignSelf: "flex-start",
+      borderColor: theme.palette.red,
+      color: theme.palette.red,
+      height: "32px",
+      marginLeft: "374px",
+      marginRight: "17px",
+      selectors: {
+        ":active": {
+          background: theme.palette.red,
+          color: theme.palette.white
+        },
+        ":hover": {
+          background: theme.palette.red,
+          color: theme.palette.white
+        }
+      },
+      width: "80px"
+    },
+    detailedList: {
+      height: "160px",
+      marginTop: "28px",
+      overflowX: "visible",
+      width: "197px"
+    },
+    existingFilter: {
+      border: "1px solid",
+      borderColor: theme.semanticColors.link,
+      borderRadius: "3px",
+      boxSizing: "border-box",
+      display: "inline-flex",
+      flexDirection: "row",
+      height: "25px"
+    },
+    featureComboBox: {
+      height: "56px",
+      margin: "21px 45px 1px 30px",
+      width: "180px"
+    },
+    featureText: {
+      color: theme.semanticColors.bodySubtext,
+      height: "20px",
+      marginLeft: "30px",
+      textAlign: "left",
+      width: "180px"
+    },
+    featureTextDiv: {
+      display: "flex",
+      flexDirection: "column",
+      marginTop: "3px"
+    },
+    filterHeader: {
+      color: theme.semanticColors.bodyTextChecked,
+      fontSize: FontSizes.medium,
+      fontWeight: FontWeights.semibold
+    },
+    filterIcon: {
+      height: "25px",
+      width: "25px"
+    },
+    filterLabel: {
+      color: theme.semanticColors.link,
+      height: "25px",
+      maxWidth: "90px",
+      minWidth: "75px",
+      overflow: "hidden",
+      padding: "1px 9px 6px 11px",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap"
+    },
+    leftHalf: {
+      height: "344px",
+      marginLeft: "40px",
+      width: "213px"
+    },
+    maxSpinBox: {
+      height: "36px",
+      width: "64px"
+    },
+    minSpinBox: {
+      height: "36px",
+      marginLeft: "30px",
+      paddingRight: "26px",
+      width: "64px"
+    },
+    operationComboBox: {
+      height: "56px",
+      margin: "9px 45px 10px 30px",
+      width: "180px"
+    },
+    rightHalf: {
+      background: theme.semanticColors.bodyBackgroundChecked,
+      borderRadius: "5px",
+      display: "flex",
+      flexDirection: "column",
+      height: "344px,",
+      marginLeft: "25px",
+      marginRight: "27px",
+      marginTop: "0px",
+      width: "255px"
+    },
+    saveAndCancelDiv: {
+      display: "flex",
+      flexDirection: "row",
+      marginLeft: "32px",
+      marginTop: "53px"
+    },
+    saveAndDeleteDiv: {
+      display: "flex",
+      flexDirection: "row",
+      marginTop: "18px"
+    },
+    saveCohort: {
+      alignSelf: "flex-end",
+      height: "32px",
+      marginRight: "27px",
+      width: "62px"
+    },
+    saveFilterButton: {
+      height: "32px",
+      marginRight: "15px",
+      width: "68px"
+    },
+    treatCategorical: {
+      height: "20px",
+      margin: "9px 45px 1px 30px",
+      width: "180px"
+    },
+    valueSpinButton: {
+      height: "36px",
+      marginLeft: "30px",
+      marginRight: "45px",
+      width: "180px"
+    },
+    valueSpinButtonDiv: {
+      display: "flex",
+      flexDirection: "row",
+      marginTop: "10px"
+    },
+    wrapper: {
+      display: "flex",
+      height: "344px",
+      marginTop: "7px"
     }
   });
 };
@@ -281,14 +285,14 @@ export const tooltipHostStyles: Partial<ITooltipHostStyles> = {
 const cohortEditor = cohortEditorStyles();
 export const cohortEditorCallout: () => ICalloutContentStyles = () => {
   return {
+    beak: {},
+    beakCurtain: {},
+    calloutMain: cohortEditor.cohortEditor,
     container: {
       zIndex: 15
     },
     root: {
       top: "-22px !important"
-    },
-    beak: {},
-    beakCurtain: {},
-    calloutMain: cohortEditor.cohortEditor
+    }
   };
 };

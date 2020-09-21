@@ -20,34 +20,34 @@ export interface IICEPlotStyles {
 export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> = mergeStyleSets<
   IICEPlotStyles
 >({
+  chartWrapper: { height: "100%" },
+  featurePicker: {
+    borderBottom: "1px solid grey",
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "3px 15px"
+  },
   iceWrapper: {
     display: "flex",
-    flexDirection: "column",
-    flex: 1
+    flex: 1,
+    flexDirection: "column"
   },
   loading: {
-    margin: "auto",
     fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
           -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
-    padding: "40px",
-    fontSize: "25px"
+    fontSize: "25px",
+    margin: "auto",
+    padding: "40px"
   },
-  featurePicker: {
-    display: "flex",
-    padding: "3px 15px",
-    justifyContent: "space-between",
-    borderBottom: "1px solid grey"
+  parameterSet: {
+    display: "flex"
   },
   rangeView: {
     display: "flex",
     justifyContent: "flex-end"
   },
-  parameterSet: {
-    display: "flex"
-  },
   secondWrapper: {
-    width: "100%",
-    flex: 1
-  },
-  chartWrapper: { height: "100%" }
+    flex: 1,
+    width: "100%"
+  }
 });

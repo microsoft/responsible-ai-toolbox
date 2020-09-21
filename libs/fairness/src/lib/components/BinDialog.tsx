@@ -59,7 +59,6 @@ export class BinDialog extends React.PureComponent<
               <div className={styles.binCounter}>
                 <SpinButton
                   styles={{
-                    spinButtonWrapper: { maxWidth: "98px" },
                     labelWrapper: { alignSelf: "center" },
                     root: {
                       display: "inline-flex",
@@ -69,7 +68,8 @@ export class BinDialog extends React.PureComponent<
                           maxWidth: "108px"
                         }
                       }
-                    }
+                    },
+                    spinButtonWrapper: { maxWidth: "98px" }
                   }}
                   label={localization.BinDialog.numberOfBins}
                   min={BinDialog.minBins}

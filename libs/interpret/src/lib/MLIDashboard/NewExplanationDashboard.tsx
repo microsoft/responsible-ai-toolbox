@@ -219,11 +219,11 @@ export class NewExplanationDashboard extends React.PureComponent<
     }
     const jointDataset = new JointDataset({
       dataset: props.testData,
-      predictedY: props.predictedY,
-      predictedProbabilities: props.probabilityY,
-      trueY: props.trueY,
       localExplanations,
-      metadata: modelMetadata
+      metadata: modelMetadata,
+      predictedProbabilities: props.probabilityY,
+      predictedY: props.predictedY,
+      trueY: props.trueY
     });
     const globalProps = NewExplanationDashboard.buildGlobalProperties(props);
     // consider taking filters in as param arg for programatic users
@@ -235,33 +235,33 @@ export class NewExplanationDashboard extends React.PureComponent<
       props.telemetryHook !== undefined
     ) {
       props.telemetryHook({
-        message: "Invalid inputs",
+        context: validationCheck.errorStrings.length,
         level: TelemetryLevels.Error,
-        context: validationCheck.errorStrings.length
+        message: "Invalid inputs"
       });
     }
     return {
-      cohorts,
-      validationWarnings: validationCheck.errorStrings,
       activeGlobalTab: GlobalTabKeys.ModelPerformance,
-      jointDataset,
-      modelMetadata,
-      modelChartConfig: undefined,
+      cohorts,
       dataChartConfig: undefined,
-      whatIfChartConfig: undefined,
       dependenceProps: undefined,
       globalBarConfig: undefined,
-      globalImportanceIntercept: globalProps.globalImportanceIntercept,
       globalImportance: globalProps.globalImportance,
+      globalImportanceIntercept: globalProps.globalImportanceIntercept,
       isGlobalImportanceDerivedFromLocal:
         globalProps.isGlobalImportanceDerivedFromLocal,
-      sortVector: undefined,
-      showingDatasizeWarning:
-        jointDataset.datasetRowCount > NewExplanationDashboard.ROW_WARNING_SIZE,
+      jointDataset,
+      modelChartConfig: undefined,
+      modelMetadata,
       selectedWeightVector:
         modelMetadata.modelType === ModelTypes.Multiclass
           ? WeightVectors.AbsAvg
-          : 0
+          : 0,
+      showingDatasizeWarning:
+        jointDataset.datasetRowCount > NewExplanationDashboard.ROW_WARNING_SIZE,
+      sortVector: undefined,
+      validationWarnings: validationCheck.errorStrings,
+      whatIfChartConfig: undefined
     };
   }
   private static initializeIcons(props: IExplanationDashboardProps): void {
@@ -350,10 +350,10 @@ export class NewExplanationDashboard extends React.PureComponent<
       props.dataSummary.categoricalMap
     );
     return {
-      featureNames,
-      featureNamesAbridged,
       classNames,
       featureIsCategorical,
+      featureNames,
+      featureNamesAbridged,
       featureRanges,
       modelType
     };

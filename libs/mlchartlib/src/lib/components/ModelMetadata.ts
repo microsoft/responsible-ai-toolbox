@@ -25,20 +25,20 @@ export class ModelMetadata {
       if (isCategorical) {
         if (categoricalMap && categoricalMap[featureIndex] !== undefined) {
           return {
-            uniqueValues: categoricalMap[featureIndex],
-            rangeType: RangeTypes.Categorical
+            rangeType: RangeTypes.Categorical,
+            uniqueValues: categoricalMap[featureIndex]
           } as ICategoricalRange;
         }
         const featureVector = testData.map((row) => row[featureIndex]);
         return {
-          uniqueValues: _.uniq(featureVector),
-          rangeType: RangeTypes.Categorical
+          rangeType: RangeTypes.Categorical,
+          uniqueValues: _.uniq(featureVector)
         } as ICategoricalRange;
       }
       const featureVector = testData.map((row) => row[featureIndex]);
       return {
-        min: Math.min(...featureVector),
         max: Math.max(...featureVector),
+        min: Math.min(...featureVector),
         rangeType: featureVector.every((val) => Number.isInteger(val))
           ? RangeTypes.Integer
           : RangeTypes.Numeric

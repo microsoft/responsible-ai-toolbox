@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 module.exports = {
+  coverageDirectory: "../../coverage/libs/interpret",
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
   name: "interpret",
   preset: "../../jest.config.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",
-      { cwd: __dirname, configFile: "./babel-jest.config.json" }
+      { configFile: "./babel-jest.config.json", cwd: __dirname }
     ]
-  },
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  coverageDirectory: "../../coverage/libs/interpret"
+  }
 };

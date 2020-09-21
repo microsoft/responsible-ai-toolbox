@@ -137,7 +137,7 @@ export class ExplanationExploration extends React.PureComponent<
                     title={localization.CrossClass.info}
                     onClick={this.onIconClick}
                     styles={{
-                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                      root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                     }}
                   />
                 </div>

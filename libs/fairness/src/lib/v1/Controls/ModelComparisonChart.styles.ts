@@ -32,80 +32,80 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IModelComparisonChartStyles>({
-    frame: {
+    chart: {
       flex: 1,
+      padding: "60px 0 0 0"
+    },
+    editButton: {
+      color: theme.semanticColors.buttonText
+    },
+    frame: {
       display: "flex",
+      flex: 1,
       flexDirection: "column"
     },
-    spinner: {
-      margin: "auto",
-      padding: "40px"
-    },
     header: {
+      alignItems: "center",
       backgroundColor: theme.semanticColors.bodyFrameBackground,
-      padding: "0 90px",
-      height: "90px",
       display: "inline-flex",
       flexDirection: "row",
+      height: "90px",
       justifyContent: "space-between",
-      alignItems: "center"
+      padding: "0 90px"
     },
     headerTitle: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semibold
     },
-    editButton: {
-      color: theme.semanticColors.buttonText
+    insights: {
+      color: theme.semanticColors.bodyText,
+      padding: "18px 0",
+      textTransform: "uppercase"
+    },
+    insightsText: {
+      borderBottom: "1px solid",
+      borderColor: theme.semanticColors.bodyDivider,
+      paddingBottom: "18px",
+      paddingRight: "15px"
     },
     main: {
-      height: "100%",
-      flex: 1,
+      backgroundColor: theme.semanticColors.bodyBackground,
       display: "inline-flex",
+      flex: 1,
       flexDirection: "row",
-      backgroundColor: theme.semanticColors.bodyBackground
+      height: "100%"
     },
     mainRight: {
       padding: "30px 0 0 35px",
       width: "300px"
     },
-    rightTitle: {
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "18px",
-      borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider
+    radio: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      paddingBottom: "30px",
+      paddingLeft: "75px"
+    },
+    radioOptions: {
+      color: theme.semanticColors.bodyText
     },
     rightText: {
-      padding: "16px 15px 30px 0",
-      color: theme.semanticColors.bodyText,
       borderBottom: "0.5px dashed",
-      borderColor: theme.semanticColors.bodyDivider
-    },
-    insights: {
-      textTransform: "uppercase",
+      borderColor: theme.semanticColors.bodyDivider,
       color: theme.semanticColors.bodyText,
-      padding: "18px 0"
+      padding: "16px 15px 30px 0"
     },
-    insightsText: {
-      paddingBottom: "18px",
-      paddingRight: "15px",
+    rightTitle: {
       borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider
+      borderColor: theme.semanticColors.bodyDivider,
+      color: theme.semanticColors.bodyText,
+      paddingBottom: "18px"
     },
-    chart: {
-      padding: "60px 0 0 0",
-      flex: 1
+    spinner: {
+      margin: "auto",
+      padding: "40px"
     },
     textSection: {
       color: theme.semanticColors.bodyText,
       paddingBottom: "5px"
-    },
-    radio: {
-      paddingBottom: "30px",
-      paddingLeft: "75px",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    radioOptions: {
-      color: theme.semanticColors.bodyText
     }
   });
 };

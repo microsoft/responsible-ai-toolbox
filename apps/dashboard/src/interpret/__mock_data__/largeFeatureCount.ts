@@ -10,8 +10,8 @@ const perPointExplanation = new Array(numRows).fill(0).map(() => {
 });
 
 export const largeFeatureCount: IExplanationDashboardData = {
-  modelInformation: { modelClass: "blackbox", method: "classifier" },
   dataSummary: {},
+  modelInformation: { method: "classifier", modelClass: "blackbox" },
   precomputedExplanations: {
     localFeatureImportance: {
       intercept: [0.2, -0.2, 0.1],

@@ -28,13 +28,35 @@ export const OverallTableStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IOverallTableStyles>({
-    minMaxLabel: {
-      padding: "1px 9px",
-      marginTop: "4px",
-      fontSize: "10px",
-      lineHeight: "20px",
-      fontWeight: "400",
-      backgroundColor: theme.semanticColors.bodyBackground
+    binBox: {
+      borderBottom: "0.5px solid",
+      borderBottomColor: theme.semanticColors.inputBorder,
+      display: "flex",
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "center",
+      width: "130px"
+    },
+    binLabel: {
+      fontSize: "12px",
+      fontWeight: "normal",
+      lineHeight: "16px"
+    },
+    binTitle: {
+      fontSize: "12px",
+      fontWeight: "600",
+      lineHeight: "16px"
+    },
+    flexCol: {
+      borderTop: "0.5px solid",
+      borderTopColor: theme.semanticColors.inputBorder,
+      display: "flex",
+      flex: 1,
+      flexDirection: "column"
+    },
+    frame: {
+      display: "flex",
+      paddingBottom: "19px"
     },
     groupCol: {
       display: "inline-flex",
@@ -44,41 +66,20 @@ export const OverallTableStyles: () => IProcessedStyleSet<
     },
     groupLabel: {
       fontSize: "12px",
-      lineHeight: "12px",
       fontWeight: "500",
-      height: "26px"
-    },
-    flexCol: {
-      display: "flex",
-      flex: 1,
-      flexDirection: "column",
-      borderTop: "0.5px solid",
-      borderTopColor: theme.semanticColors.inputBorder
-    },
-    binBox: {
-      flex: 1,
-      width: "130px",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      borderBottom: "0.5px solid",
-      borderBottomColor: theme.semanticColors.inputBorder
-    },
-    binTitle: {
-      fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "600"
-    },
-    binLabel: {
-      fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "normal"
-    },
-    sensitiveAttributes: {
-      fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "normal",
       height: "26px",
+      lineHeight: "12px"
+    },
+    metricBox: {
+      borderBottom: "0.5px solid",
+      borderBottomColor: theme.semanticColors.inputBorder,
+      display: "flex",
+      flex: 1,
+      flexDirection: "column",
+      fontSize: "12px",
+      fontWeight: "normal",
+      justifyContent: "center",
+      lineHeight: "16px",
       paddingLeft: "10px"
     },
     metricCol: {
@@ -89,26 +90,25 @@ export const OverallTableStyles: () => IProcessedStyleSet<
     },
     metricLabel: {
       fontSize: "11px",
-      lineHeight: "16px",
       fontWeight: "600",
       height: "26px",
+      lineHeight: "16px",
       paddingLeft: "10px"
     },
-    metricBox: {
-      flex: 1,
-      paddingLeft: "10px",
-      fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "normal",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      borderBottom: "0.5px solid",
-      borderBottomColor: theme.semanticColors.inputBorder
+    minMaxLabel: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      fontSize: "10px",
+      fontWeight: "400",
+      lineHeight: "20px",
+      marginTop: "4px",
+      padding: "1px 9px"
     },
-    frame: {
-      paddingBottom: "19px",
-      display: "flex"
+    sensitiveAttributes: {
+      fontSize: "12px",
+      fontWeight: "normal",
+      height: "26px",
+      lineHeight: "16px",
+      paddingLeft: "10px"
     }
   });
 };

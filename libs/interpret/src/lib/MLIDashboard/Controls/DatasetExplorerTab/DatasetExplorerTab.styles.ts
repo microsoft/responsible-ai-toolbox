@@ -45,139 +45,139 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IDatasetExplorerTabStyles>({
-    page: {
-      width: "100%",
-      height: "100%",
-      padding: "16px 0 0 14px",
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column"
-    },
-    infoWithText: {
-      display: "flex",
-      flexDirection: "row",
-      width: "100%",
-      boxSizing: "border-box",
-      paddingLeft: "25px"
-    },
-    infoIcon: {
-      width: "23px",
-      height: "23px",
-      fontSize: "23px"
-    },
-    helperText: {
-      paddingRight: "160px",
-      paddingLeft: "15px"
-    },
-    chartWithAxes: {
-      display: "flex",
-      flexGrow: "1",
-      boxSizing: "border-box",
-      paddingTop: "30px",
-      flexDirection: "column",
-      paddingRight: "10px"
-    },
-    chartWithVertical: {
-      display: "flex",
-      flexGrow: "1",
-      flexDirection: "row",
-      position: "relative"
-    },
-    chart: {
-      flexGrow: "1"
-    },
-    mainArea: {
-      width: "100%",
-      height: "600px",
-      display: "flex",
-      flexDirection: "row"
-    },
-    legendAndText: {
-      width: "195px",
-      height: "100%"
-    },
-    verticalAxis: {
-      position: "relative",
-      top: "0px",
-      height: "auto",
-      width: "64px"
-    },
-    rotatedVerticalBox: {
-      transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
-      marginLeft: "28px",
-      position: "absolute",
-      top: "50%",
-      textAlign: "center",
-      width: "max-content"
-    },
-    horizontalAxisWithPadding: {
-      display: "flex",
-      paddingBottom: "30px",
-      flexDirection: "row"
-    },
-    paddingDiv: {
-      width: "50px"
-    },
-    horizontalAxis: {
-      flex: 1,
-      textAlign: "center"
-    },
-    cohortPickerWrapper: {
-      paddingLeft: "63px",
-      paddingTop: "13px",
-      height: "32px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center"
-    },
-    cohortPickerLabel: {
-      fontWeight: "600",
-      paddingRight: "8px"
-    },
     boldText: {
       fontWeight: "600",
       paddingBottom: "5px"
     },
-    colorBox: {
-      margin: "11px 4px 11px 8px",
-      width: "12px",
-      height: "12px",
-      display: "inline-block",
-      borderRadius: "6px",
-      cursor: "pointer"
-    },
-    legendLabel: {
-      display: "inline-block",
-      flex: "1"
-    },
-    legendItem: {
-      height: "28px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center"
-    },
-    legend: {},
     callout: {
-      width: "200px",
+      backgroundColor: theme.semanticColors.bodyBackground,
       boxSizing: "border-box",
       display: "flex",
       flexDirection: "column",
       padding: "10px 20px",
-      backgroundColor: theme.semanticColors.bodyBackground
+      width: "200px"
+    },
+    chart: {
+      flexGrow: "1"
     },
     chartEditorButton: [
       FabricStyles.chartEditorButton,
       {
         position: "absolute",
-        zIndex: 10,
-        right: "10px"
+        right: "10px",
+        zIndex: 10
       }
     ],
+    chartWithAxes: {
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: "1",
+      paddingRight: "10px",
+      paddingTop: "30px"
+    },
+    chartWithVertical: {
+      display: "flex",
+      flexDirection: "row",
+      flexGrow: "1",
+      position: "relative"
+    },
+    cohortPickerLabel: {
+      fontWeight: "600",
+      paddingRight: "8px"
+    },
+    cohortPickerWrapper: {
+      alignItems: "center",
+      display: "flex",
+      flexDirection: "row",
+      height: "32px",
+      paddingLeft: "63px",
+      paddingTop: "13px"
+    },
+    colorBox: {
+      borderRadius: "6px",
+      cursor: "pointer",
+      display: "inline-block",
+      height: "12px",
+      margin: "11px 4px 11px 8px",
+      width: "12px"
+    },
+    faintText: [FabricStyles.faintText],
+    helperText: {
+      paddingLeft: "15px",
+      paddingRight: "160px"
+    },
+    horizontalAxis: {
+      flex: 1,
+      textAlign: "center"
+    },
+    horizontalAxisWithPadding: {
+      display: "flex",
+      flexDirection: "row",
+      paddingBottom: "30px"
+    },
+    infoIcon: {
+      fontSize: "23px",
+      height: "23px",
+      width: "23px"
+    },
+    infoWithText: {
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "row",
+      paddingLeft: "25px",
+      width: "100%"
+    },
+    legend: {},
+    legendAndText: {
+      height: "100%",
+      width: "195px"
+    },
+    legendItem: {
+      alignItems: "center",
+      display: "flex",
+      flexDirection: "row",
+      height: "28px"
+    },
+    legendLabel: {
+      display: "inline-block",
+      flex: "1"
+    },
+    mainArea: {
+      display: "flex",
+      flexDirection: "row",
+      height: "600px",
+      width: "100%"
+    },
     missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
     missingParametersPlaceholderSpacer: [
       FabricStyles.missingParameterPlaceholderSpacer
     ],
-    faintText: [FabricStyles.faintText],
-    smallItalic: [FabricStyles.placeholderItalic]
+    paddingDiv: {
+      width: "50px"
+    },
+    page: {
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      padding: "16px 0 0 14px",
+      width: "100%"
+    },
+    rotatedVerticalBox: {
+      marginLeft: "28px",
+      position: "absolute",
+      textAlign: "center",
+      top: "50%",
+      transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
+      width: "max-content"
+    },
+    smallItalic: [FabricStyles.placeholderItalic],
+    verticalAxis: {
+      height: "auto",
+      position: "relative",
+      top: "0px",
+      width: "64px"
+    }
   });
 };

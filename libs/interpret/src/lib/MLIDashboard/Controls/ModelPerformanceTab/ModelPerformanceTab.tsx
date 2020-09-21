@@ -55,9 +55,9 @@ export class ModelPerformanceTab extends React.PureComponent<
   public constructor(props: IModelPerformanceTabProps) {
     super(props);
     this.state = {
+      selectedCohortIndex: 0,
       xDialogOpen: false,
-      yDialogOpen: false,
-      selectedCohortIndex: 0
+      yDialogOpen: false
     };
     if (!this.props.jointDataset.hasPredictedY) {
       return;
@@ -76,38 +76,38 @@ export class ModelPerformanceTab extends React.PureComponent<
     // In this view, y will always be categorical (including a binned numberic variable), and could be
     // iterations over the cohorts. We can set y and the y labels before the rest of the char properties.
     const plotlyProps: IPlotlyProperty = {
-      config: { displaylogo: false, responsive: true, displayModeBar: false },
+      config: { displayModeBar: false, displaylogo: false, responsive: true },
       data: [{}],
       layout: {
-        dragmode: false,
         autosize: true,
-        margin: {
-          l: 10,
-          t: 25,
-          b: 20
-        },
+        dragmode: false,
         hovermode: "closest",
+        margin: {
+          b: 20,
+          l: 10,
+          t: 25
+        },
         showlegend: false,
+        xaxis: {
+          color: FabricStyles.chartAxisColor,
+          gridcolor: "#e5e5e5",
+          mirror: true,
+          showgrid: true,
+          showline: true,
+          side: "bottom",
+          tickfont: {
+            family: FabricStyles.fontFamilies,
+            size: 11
+          }
+        },
         yaxis: {
           automargin: true,
           color: FabricStyles.chartAxisColor,
-          tickfont: {
-            family: FabricStyles.fontFamilies,
-            size: 11
-          },
-          showline: true
-        },
-        xaxis: {
-          side: "bottom",
-          mirror: true,
-          color: FabricStyles.chartAxisColor,
-          tickfont: {
-            family: FabricStyles.fontFamilies,
-            size: 11
-          },
           showline: true,
-          showgrid: true,
-          gridcolor: "#e5e5e5"
+          tickfont: {
+            family: FabricStyles.fontFamilies,
+            size: 11
+          }
         }
       } as any
     };
@@ -189,23 +189,23 @@ export class ModelPerformanceTab extends React.PureComponent<
           return {
             target: index,
             value: {
-              name: label,
               marker: {
                 color: FabricStyles.fabricColorPalette[index]
-              }
+              },
+              name: label
             }
           };
         });
         const transforms: Array<Partial<Transform>> = [
           {
-            type: "aggregate",
+            aggregations: [{ func: "sum", target: "x" }],
             groups: rawY,
-            aggregations: [{ target: "x", func: "sum" }]
+            type: "aggregate"
           },
           {
-            type: "groupby",
             groups: rawX,
-            styles
+            styles,
+            type: "groupby"
           }
         ];
         if (plotlyProps.layout) {
@@ -493,15 +493,15 @@ export class ModelPerformanceTab extends React.PureComponent<
         .isCategorical
         ? ChartTypes.Histogram
         : ChartTypes.Box,
-      yAxis: {
-        property: cohortKey,
-        options: {}
-      },
       xAxis: {
-        property: bestModelMetricKey,
         options: {
           bin: false
-        }
+        },
+        property: bestModelMetricKey
+      },
+      yAxis: {
+        options: {},
+        property: cohortKey
       }
     };
     this.props.onChange(chartProps);

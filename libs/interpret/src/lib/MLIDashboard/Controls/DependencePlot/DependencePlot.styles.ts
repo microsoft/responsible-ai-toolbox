@@ -30,38 +30,31 @@ export const dependencePlotStyles: () => IProcessedStyleSet<
   return mergeStyleSets<IDependencePlotStyles>({
     DependencePlot: {
       display: "flex",
-      flexGrow: "1",
-      flexDirection: "row"
+      flexDirection: "row",
+      flexGrow: "1"
+    },
+    chart: {
+      flex: 1,
+      height: "100%"
     },
     chartWithAxes: {
       display: "flex",
       flex: "1",
-      padding: "5px 20px 0 20px",
-      flexDirection: "column"
-    },
-    chart: {
-      height: "100%",
-      flex: 1
+      flexDirection: "column",
+      padding: "5px 20px 0 20px"
     },
     chartWithVertical: {
-      height: "400px",
-      width: "100%",
       display: "flex",
-      flexDirection: "row"
+      flexDirection: "row",
+      height: "400px",
+      width: "100%"
     },
-    verticalAxis: {
-      position: "relative",
-      top: "0px",
-      height: "auto",
-      width: "50px"
+    faintText: {
+      fontWeight: "350" as any
     },
-    rotatedVerticalBox: {
-      transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
-      marginLeft: "15px",
-      position: "absolute",
-      top: "50%",
-      textAlign: "center",
-      width: "max-content"
+    horizontalAxis: {
+      flex: 1,
+      textAlign: "center"
     },
     horizontalAxisWithPadding: {
       display: "flex",
@@ -70,28 +63,35 @@ export const dependencePlotStyles: () => IProcessedStyleSet<
     paddingDiv: {
       width: "50px"
     },
-    horizontalAxis: {
-      flex: 1,
-      textAlign: "center"
+    placeholder: {
+      maxWidth: "70%"
     },
     placeholderWrapper: {
       margin: "100px auto 0 auto"
     },
-    placeholder: {
-      maxWidth: "70%"
+    rotatedVerticalBox: {
+      marginLeft: "15px",
+      position: "absolute",
+      textAlign: "center",
+      top: "50%",
+      transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
+      width: "max-content"
     },
     secondaryChartPlacolderBox: {
-      height: "400px",
-      flex: 1
+      flex: 1,
+      height: "400px"
     },
     secondaryChartPlacolderSpacer: {
+      boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.2)",
       margin: "25px auto 0 auto",
       padding: "23px",
-      width: "fit-content",
-      boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.2)"
+      width: "fit-content"
     },
-    faintText: {
-      fontWeight: "350" as any
+    verticalAxis: {
+      height: "auto",
+      position: "relative",
+      top: "0px",
+      width: "50px"
     }
   });
 };

@@ -256,18 +256,6 @@ export class ExplanationDashboard extends React.Component<
     }
 
     this.state = {
-      dashboardContext: {
-        weightContext: {
-          selectedKey: props.predictedY
-            ? WeightVectors.Predicted
-            : WeightVectors.AbsAvg,
-          onSelection: this.onClassSelect,
-          options: ExplanationDashboard.buildWeightDropdownOptions(
-            explanationContext
-          )
-        },
-        explanationContext
-      },
       activeGlobalTab:
         this.pivotItems.length > 0 && this.pivotItems[0].itemKey
           ? ExplanationDashboard.globalTabKeys.indexOf(
@@ -282,15 +270,27 @@ export class ExplanationDashboard extends React.Component<
       configs: {
         [barId]: {
           displayMode: FeatureImportanceModes.Bar,
-          topK: defaultTopK,
-          id: barId
+          id: barId,
+          topK: defaultTopK
         },
         [globalFeatureImportanceId]: {
           displayMode: FeatureImportanceModes.Beehive,
-          topK: defaultTopK,
-          id: globalFeatureImportanceId
+          id: globalFeatureImportanceId,
+          topK: defaultTopK
         },
         [localBarId]: { topK: defaultTopK }
+      },
+      dashboardContext: {
+        explanationContext,
+        weightContext: {
+          onSelection: this.onClassSelect,
+          options: ExplanationDashboard.buildWeightDropdownOptions(
+            explanationContext
+          ),
+          selectedKey: props.predictedY
+            ? WeightVectors.Predicted
+            : WeightVectors.AbsAvg
+        }
       },
       selectedRow: undefined
     };
@@ -299,8 +299,8 @@ export class ExplanationDashboard extends React.Component<
     props: IExplanationDashboardProps
   ): IExplanationContext {
     const explanationGenerators: IExplanationGenerators = {
-      requestPredictions: props.requestPredictions,
-      requestLocalFeatureExplanations: props.requestLocalFeatureExplanations
+      requestLocalFeatureExplanations: props.requestLocalFeatureExplanations,
+      requestPredictions: props.requestPredictions
     };
     const modelMetadata = ExplanationDashboard.buildModelMetadata(props);
     const errorMessage = ExplanationDashboard.validateInputs(
@@ -310,22 +310,22 @@ export class ExplanationDashboard extends React.Component<
     if (errorMessage !== undefined) {
       if (props.telemetryHook !== undefined) {
         props.telemetryHook({
-          message: "Invalid inputs",
+          context: errorMessage,
           level: TelemetryLevels.Error,
-          context: errorMessage
+          message: "Invalid inputs"
         });
       }
       return {
-        modelMetadata,
-        explanationGenerators,
-        localExplanation: undefined,
-        testDataset: {},
-        jointDataset: undefined,
-        globalExplanation: undefined,
-        isGlobalDerived: false,
-        ebmExplanation: undefined,
         customVis: undefined,
-        inputError: errorMessage
+        ebmExplanation: undefined,
+        explanationGenerators,
+        globalExplanation: undefined,
+        inputError: errorMessage,
+        isGlobalDerived: false,
+        jointDataset: undefined,
+        localExplanation: undefined,
+        modelMetadata,
+        testDataset: {}
       };
     }
     const testDataset: ITestDataset = {
@@ -362,9 +362,9 @@ export class ExplanationDashboard extends React.Component<
       //         props.precomputedExplanations.localFeatureImportance.intercept) as number[];
       // }
       localExplanation = {
-        values: localFeatureMatrix,
         flattenedValues: flattenedFeatureMatrix,
-        intercepts
+        intercepts,
+        values: localFeatureMatrix
       };
     }
 
@@ -414,6 +414,9 @@ export class ExplanationDashboard extends React.Component<
       props.precomputedExplanations.ebmGlobalExplanation !== undefined
     ) {
       ebmExplanation = {
+        displayParameters: {
+          interpolation: "vh"
+        },
         featureList: props.precomputedExplanations.ebmGlobalExplanation.feature_list
           .map((featureExplanation) => {
             if (featureExplanation.type !== "univariate") {
@@ -426,41 +429,38 @@ export class ExplanationDashboard extends React.Component<
               )
             ) {
               return {
-                type: "univariate",
-                scores: featureExplanation.scores,
-                names: featureExplanation.names,
                 lowerBounds: featureExplanation.lower_bounds
                   ? featureExplanation.lower_bounds
                   : undefined,
+                names: featureExplanation.names,
+                scores: featureExplanation.scores,
+                type: "univariate",
                 upperBounds: featureExplanation.upper_bounds
                   ? featureExplanation.upper_bounds
                   : undefined
               } as IMultiClassBoundedCoordinates;
             }
             return {
-              type: "univariate",
-              scores: [featureExplanation.scores],
-              names: featureExplanation.names,
               lowerBounds: featureExplanation.lower_bounds
                 ? [featureExplanation.lower_bounds]
                 : undefined,
+              names: featureExplanation.names,
+              scores: [featureExplanation.scores],
+              type: "univariate",
               upperBounds: featureExplanation.upper_bounds
                 ? [featureExplanation.upper_bounds]
                 : undefined
             } as IMultiClassBoundedCoordinates;
           })
-          .filter((featureExplanation) => featureExplanation !== undefined),
-        displayParameters: {
-          interpolation: "vh"
-        }
+          .filter((featureExplanation) => featureExplanation !== undefined)
       };
     }
 
     const jointDataset = new JointDataset({
       dataset: props.testData,
+      metadata: modelMetadata,
       predictedY: props.predictedY,
-      trueY: props.trueY,
-      metadata: modelMetadata
+      trueY: props.trueY
     });
     const customVis =
       props.precomputedExplanations && props.precomputedExplanations.customVis
@@ -468,15 +468,15 @@ export class ExplanationDashboard extends React.Component<
         : undefined;
 
     return {
-      modelMetadata,
-      jointDataset,
+      customVis,
+      ebmExplanation,
       explanationGenerators,
-      localExplanation,
-      testDataset,
       globalExplanation,
       isGlobalDerived,
-      ebmExplanation,
-      customVis
+      jointDataset,
+      localExplanation,
+      modelMetadata,
+      testDataset
     };
   }
 
@@ -804,10 +804,10 @@ export class ExplanationDashboard extends React.Component<
       props.dataSummary.categoricalMap
     );
     return {
-      featureNames,
-      featureNamesAbridged,
       classNames,
       featureIsCategorical,
+      featureNames,
+      featureNamesAbridged,
       featureRanges,
       modelType
     };
@@ -1153,9 +1153,9 @@ export class ExplanationDashboard extends React.Component<
             );
             const newState = _.cloneDeep(prevState);
             newState.dashboardContext.explanationContext.localExplanation = {
-              values: localFeatureMatrix,
               flattenedValues: flattenedFeatureMatrix,
-              percentComplete: undefined
+              percentComplete: undefined,
+              values: localFeatureMatrix
             };
             if (
               prevState.dashboardContext.explanationContext
@@ -1195,10 +1195,15 @@ export class ExplanationDashboard extends React.Component<
       return {
         dashboardContext: {
           explanationContext: {
-            modelMetadata:
-              prevState.dashboardContext.explanationContext.modelMetadata,
-            testDataset:
-              prevState.dashboardContext.explanationContext.testDataset,
+            explanationGenerators:
+              prevState.dashboardContext.explanationContext
+                .explanationGenerators,
+            globalExplanation:
+              prevState.dashboardContext.explanationContext.globalExplanation,
+            isGlobalDerived:
+              prevState.dashboardContext.explanationContext.isGlobalDerived,
+            jointDataset:
+              prevState.dashboardContext.explanationContext.jointDataset,
             localExplanation: {
               flattenedValues: flattenedFeatureMatrix,
               intercepts:
@@ -1208,15 +1213,10 @@ export class ExplanationDashboard extends React.Component<
                 prevState.dashboardContext.explanationContext.localExplanation
                   ?.values || []
             },
-            globalExplanation:
-              prevState.dashboardContext.explanationContext.globalExplanation,
-            explanationGenerators:
-              prevState.dashboardContext.explanationContext
-                .explanationGenerators,
-            isGlobalDerived:
-              prevState.dashboardContext.explanationContext.isGlobalDerived,
-            jointDataset:
-              prevState.dashboardContext.explanationContext.jointDataset
+            modelMetadata:
+              prevState.dashboardContext.explanationContext.modelMetadata,
+            testDataset:
+              prevState.dashboardContext.explanationContext.testDataset
           },
           weightContext: newWeightContext
         }

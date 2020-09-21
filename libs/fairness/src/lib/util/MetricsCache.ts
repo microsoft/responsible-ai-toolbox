@@ -36,8 +36,8 @@ export class MetricsCache {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
-        metricKey: key,
         binVector: binIndexVector,
+        metricKey: key,
         modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;
@@ -55,8 +55,8 @@ export class MetricsCache {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
-        metricKey: key,
         binVector: binIndexVector,
+        metricKey: key,
         modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;

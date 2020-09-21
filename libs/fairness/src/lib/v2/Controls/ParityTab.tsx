@@ -42,13 +42,13 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
                       this.props.parityPickerProps.selectedParityKey ===
                       parity.key;
                     return {
-                      title: parity.title,
                       description: parity.description,
                       onSelect: this.props.parityPickerProps.onParityChange.bind(
                         this,
                         parity.key
                       ),
-                      selected
+                      selected,
+                      title: parity.title
                     };
                   }
                 )}
