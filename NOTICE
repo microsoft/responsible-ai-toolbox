@@ -2988,14 +2988,13 @@ THIS SOFTWARE.
 
 ---------------------------------------------------------
 
-type 1.2.0 - ISC
+type 2.1.0 - ISC
 https://github.com/medikoo/type#readme
 
-Copyright (c) 2019, Mariusz Nowak, medikoo, medikoo.com
 
 ISC License
 
-Copyright (c) 2019, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2019-2020, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -3014,13 +3013,14 @@ PERFORMANCE OF THIS SOFTWARE.
 
 ---------------------------------------------------------
 
-type 2.1.0 - ISC
+type 1.2.0 - ISC
 https://github.com/medikoo/type#readme
 
+Copyright (c) 2019, Mariusz Nowak, medikoo, medikoo.com
 
 ISC License
 
-Copyright (c) 2019-2020, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2019, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -4221,7 +4221,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-atob-lite 2.0.0 - MIT
+atob-lite 1.0.0 - MIT
 https://github.com/hughsk/atob-lite
 
 
@@ -4249,7 +4249,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-atob-lite 1.0.0 - MIT
+atob-lite 2.0.0 - MIT
 https://github.com/hughsk/atob-lite
 
 
@@ -4395,16 +4395,16 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-binary-search-bounds 1.0.0 - MIT
-https://github.com/mikolalysenko/binary-search-bounds
+binary-search-bounds 2.0.4 - MIT
+https://github.com/mikolalysenko/binary-search-bounds#readme
 
-(c) 2013 Mikola Lysenko.
-Copyright (c) 2013 Mikola Lysenko
+(c) 2013-2015 Mikola Lysenko.
+Copyright (c) 2013-2015 Mikola Lysenko
 
 
 The MIT License (MIT)
 
-Copyright (c) 2013 Mikola Lysenko
+Copyright (c) 2013-2015 Mikola Lysenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4429,16 +4429,16 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-binary-search-bounds 2.0.4 - MIT
-https://github.com/mikolalysenko/binary-search-bounds#readme
+binary-search-bounds 1.0.0 - MIT
+https://github.com/mikolalysenko/binary-search-bounds
 
-(c) 2013-2015 Mikola Lysenko.
-Copyright (c) 2013-2015 Mikola Lysenko
+(c) 2013 Mikola Lysenko.
+Copyright (c) 2013 Mikola Lysenko
 
 
 The MIT License (MIT)
 
-Copyright (c) 2013-2015 Mikola Lysenko
+Copyright (c) 2013 Mikola Lysenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -9476,6 +9476,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
+isarray 0.0.1 - MIT
+https://github.com/juliangruber/isarray
+
+Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
+
+MIT License
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
 isarray 1.0.0 - MIT
 https://github.com/juliangruber/isarray
 
@@ -9522,25 +9541,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-isarray 0.0.1 - MIT
-https://github.com/juliangruber/isarray
-
-Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
@@ -9627,7 +9627,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-is-buffer 1.1.6 - MIT
+is-buffer 2.0.4 - MIT
 https://github.com/feross/is-buffer#readme
 
 Copyright (c) Feross Aboukhadijeh
@@ -9660,7 +9660,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-is-buffer 2.0.4 - MIT
+is-buffer 1.1.6 - MIT
 https://github.com/feross/is-buffer#readme
 
 Copyright (c) Feross Aboukhadijeh
@@ -13160,36 +13160,7 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-readable-stream 1.0.34 - MIT
-
-
-Copyright Joyent, Inc. and other Node contributors.
-
-Copyright Joyent, Inc. and other Node contributors. All rights reserved.
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to
-deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-sell copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-IN THE SOFTWARE.
-
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-readable-stream 3.6.0 - MIT
+readable-stream 2.3.7 - MIT
 https://github.com/nodejs/readable-stream#readme
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -13247,7 +13218,36 @@ IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-readable-stream 2.3.7 - MIT
+readable-stream 1.0.34 - MIT
+
+
+Copyright Joyent, Inc. and other Node contributors.
+
+Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
+
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+readable-stream 3.6.0 - MIT
 https://github.com/nodejs/readable-stream#readme
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -14924,7 +14924,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-string_decoder 1.3.0 - MIT
+string_decoder 1.1.1 - MIT
 https://github.com/nodejs/string_decoder
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -14983,7 +14983,7 @@ IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-string_decoder 1.1.1 - MIT
+string_decoder 1.3.0 - MIT
 https://github.com/nodejs/string_decoder
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -15538,7 +15538,7 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-to-px 1.1.0 - MIT
+to-px 1.0.1 - MIT
 https://github.com/mikolalysenko/to-px
 
 (c) 2015 Mikola Lysenko.
@@ -15572,7 +15572,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-to-px 1.0.1 - MIT
+to-px 1.1.0 - MIT
 https://github.com/mikolalysenko/to-px
 
 (c) 2015 Mikola Lysenko.
