@@ -1,7 +1,7 @@
 # Run Component Governance to register all dependencies.
 
 trigger:
-  - master
+  - main
 
 pool:
   vmImage: "ubuntu-latest"

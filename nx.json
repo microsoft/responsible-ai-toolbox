@@ -1,7 +1,7 @@
 {
   "npmScope": "responsible-ai",
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "implicitDependencies": {
     "workspace.json": "*",
