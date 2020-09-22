@@ -42,6 +42,12 @@ jobs:
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
+      - name: Upload yarn error
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: yarn-error.log-${{ matrix.node-version }}
+          path: yarn-error.log
       - id: publish_url
         run: |
           echo "::set-output name=url::https://${{env.blob_account}}.blob.core.windows.net/${{env.blob_container}}/${{env.blob_path}}/index.html"
