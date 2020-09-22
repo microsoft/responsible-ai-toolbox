@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: raiwidgets
+Version: 0.1.0.dev0
+Summary: Interactive visualizations to assess fairness in Machine Learning
+Home-page: https://github.com/microsoft/responsible-ai-core
+Author: Roman Lutz, Ke Xu, Brandon Horn
+Author-email: fairlearn@microsoft.com
+License: UNKNOWN
+Description: # raiwidgets
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
