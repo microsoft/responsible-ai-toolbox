@@ -20,7 +20,7 @@ interface IAppProps {
 }
 
 export class App extends React.Component<IAppProps> {
-  private static supportedBinaryClassificationAccuracyKeys = [
+  private static supportedBinaryClassificationPerformanceKeys = [
     "accuracy_score",
     "balanced_accuracy_score",
     "precision_score",
@@ -28,14 +28,14 @@ export class App extends React.Component<IAppProps> {
     "f1_score"
   ];
 
-  private static supportedRegressionAccuracyKeys = [
+  private static supportedRegressionPerformanceKeys = [
     "mean_absolute_error",
     "r2_score",
     "mean_squared_error",
     "root_mean_squared_error"
   ];
 
-  private static supportedProbabilityAccuracyKeys = [
+  private static supportedProbabilityPerformanceKeys = [
     "auc",
     "root_mean_squared_error",
     "balanced_root_mean_squared_error",
@@ -57,10 +57,12 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       requestMetrics: this.generateRandomMetrics.bind(this),
       stringParams: { contextualHelp: App.messages },
-      supportedBinaryClassificationAccuracyKeys:
-        App.supportedBinaryClassificationAccuracyKeys,
-      supportedProbabilityAccuracyKeys: App.supportedProbabilityAccuracyKeys,
-      supportedRegressionAccuracyKeys: App.supportedRegressionAccuracyKeys,
+      supportedBinaryClassificationPerformanceKeys:
+        App.supportedBinaryClassificationPerformanceKeys,
+      supportedProbabilityPerformanceKeys:
+        App.supportedProbabilityPerformanceKeys,
+      supportedRegressionPerformanceKeys:
+        App.supportedRegressionPerformanceKeys,
       theme: this.props.theme
     };
     switch (this.props.version) {

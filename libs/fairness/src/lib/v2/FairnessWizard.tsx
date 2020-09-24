@@ -14,7 +14,6 @@ import React from "react";
 
 import { FeatureTab } from "../components/FeatureTab";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
-import { accuracyOptions, IAccuracyOption } from "../util/AccuracyMetrics";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
   IFairnessContext,
@@ -22,21 +21,25 @@ import {
 } from "../util/IFairnessContext";
 import { MetricsCache } from "../util/MetricsCache";
 import { IParityOption, parityOptions } from "../util/ParityMetrics";
+import {
+  performanceOptions,
+  IPerformanceOption
+} from "../util/PerformanceMetrics";
 import { WizardBuilder } from "../util/WizardBuilder";
 
 import { localization } from "./../Localization/localization";
-import { AccuracyTab } from "./Controls/AccuracyTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
+import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { defaultTheme } from "./Themes";
 import { WizardReport } from "./WizardReport";
 
-export interface IAccuracyPickerPropsV2 {
-  accuracyOptions: IAccuracyOption[];
-  selectedAccuracyKey: string;
-  onAccuracyChange: (newKey: string) => void;
+export interface IPerformancePickerPropsV2 {
+  performanceOptions: IPerformanceOption[];
+  selectedPerformanceKey: string;
+  onPerformanceChange: (newKey: string) => void;
 }
 
 export interface IParityPickerPropsV2 {
@@ -56,9 +59,9 @@ export interface IWizardStateV2 {
   activeTabKey: string;
   selectedModelId?: number;
   dashboardContext: IFairnessContext;
-  accuracyMetrics: IAccuracyOption[];
+  performanceMetrics: IPerformanceOption[];
   parityMetrics: IParityOption[];
-  selectedAccuracyKey: string;
+  selectedPerformanceKey: string;
   selectedParityKey: string;
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
@@ -67,7 +70,7 @@ export interface IWizardStateV2 {
 
 const introTabKey = "introTab";
 const featureBinTabKey = "featureBinTab";
-const accuracyTabKey = "accuracyTab";
+const performanceTabKey = "performanceTab";
 const disparityTabKey = "disparityTab";
 const reportTabKey = "reportTab";
 
@@ -85,13 +88,13 @@ export class FairnessWizardV2 extends React.PureComponent<
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
-    let accuracyMetrics: IAccuracyOption[];
+    let performanceMetrics: IPerformanceOption[];
     let parityMetrics: IParityOption[];
     loadTheme(props.theme || defaultTheme);
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
-      // we must assume that the same accuracy metrics are provided across models and bins
-      accuracyMetrics = WizardBuilder.buildAccuracyListForPrecomputedMetrics(
+      // we must assume that the same performance metrics are provided across models and bins
+      performanceMetrics = WizardBuilder.buildPerformanceListForPrecomputedMetrics(
         this.props
       );
       parityMetrics = WizardBuilder.buildParityListForPrecomputedMetrics(
@@ -109,7 +112,6 @@ export class FairnessWizardV2 extends React.PureComponent<
         }
       );
       this.state = {
-        accuracyMetrics,
         activeTabKey: featureBinTabKey,
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
@@ -122,10 +124,11 @@ export class FairnessWizardV2 extends React.PureComponent<
           props.precomputedMetrics
         ),
         parityMetrics,
-        selectedAccuracyKey: accuracyMetrics[0].key,
+        performanceMetrics,
         selectedBinIndex: 0,
         selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
         selectedParityKey: parityMetrics[0].key,
+        selectedPerformanceKey: performanceMetrics[0].key,
         showIntro: true
       };
       return;
@@ -143,14 +146,13 @@ export class FairnessWizardV2 extends React.PureComponent<
       fairnessContext.groupNames = featureBins[0].labelArray;
     }
 
-    accuracyMetrics = this.getAccuracyMetrics(fairnessContext);
-    accuracyMetrics = accuracyMetrics.filter((metric) => !!metric);
+    performanceMetrics = this.getPerformanceMetrics(fairnessContext);
+    performanceMetrics = performanceMetrics.filter((metric) => !!metric);
 
     // TODO
     parityMetrics = Object.values(parityOptions);
 
     this.state = {
-      accuracyMetrics,
       activeTabKey: introTabKey,
       dashboardContext: fairnessContext,
       featureBins,
@@ -160,10 +162,11 @@ export class FairnessWizardV2 extends React.PureComponent<
         this.props.requestMetrics
       ),
       parityMetrics,
-      selectedAccuracyKey: accuracyMetrics[0].key,
+      performanceMetrics,
       selectedBinIndex: 0,
       selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
       selectedParityKey: parityMetrics[0].key,
+      selectedPerformanceKey: performanceMetrics[0].key,
       showIntro: true
     };
   }
@@ -179,10 +182,10 @@ export class FairnessWizardV2 extends React.PureComponent<
 
   public render(): React.ReactNode {
     const styles = FairnessWizardStyles();
-    const accuracyPickerProps = {
-      accuracyOptions: this.state.accuracyMetrics,
-      onAccuracyChange: this.setAccuracyKey,
-      selectedAccuracyKey: this.state.selectedAccuracyKey
+    const performancePickerProps = {
+      onPerformanceChange: this.setPerformanceKey,
+      performanceOptions: this.state.performanceMetrics,
+      selectedPerformanceKey: this.state.selectedPerformanceKey
     };
     const parityPickerProps = {
       onParityChange: this.setParityKey,
@@ -220,7 +223,7 @@ export class FairnessWizardV2 extends React.PureComponent<
           </StackItem>
         )}
         {(this.state.activeTabKey === featureBinTabKey ||
-          this.state.activeTabKey === accuracyTabKey ||
+          this.state.activeTabKey === performanceTabKey ||
           this.state.activeTabKey === disparityTabKey) && (
           <Stack.Item grow={2} className={styles.body}>
             <Pivot
@@ -243,18 +246,18 @@ export class FairnessWizardV2 extends React.PureComponent<
                   selectedFeatureChange={this.setBinIndex}
                   selectedFeatureIndex={this.state.selectedBinIndex}
                   featureBins={this.state.featureBins.filter((x) => !!x)}
-                  onNext={this.setTab.bind(this, accuracyTabKey)}
+                  onNext={this.setTab.bind(this, performanceTabKey)}
                   saveBin={this.saveBin}
                 />
               </PivotItem>
               <PivotItem
-                headerText={localization.accuracyMetric}
-                itemKey={accuracyTabKey}
+                headerText={localization.performanceMetric}
+                itemKey={performanceTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >
-                <AccuracyTab
+                <PerformanceTab
                   dashboardContext={this.state.dashboardContext}
-                  accuracyPickerProps={accuracyPickerProps}
+                  performancePickerProps={performancePickerProps}
                   onNext={this.setTab.bind(
                     this,
                     flights.skipDisparity ? reportTabKey : disparityTabKey
@@ -272,7 +275,7 @@ export class FairnessWizardV2 extends React.PureComponent<
                     dashboardContext={this.state.dashboardContext}
                     parityPickerProps={parityPickerProps}
                     onNext={this.setTab.bind(this, reportTabKey)}
-                    onPrevious={this.setTab.bind(this, accuracyTabKey)}
+                    onPrevious={this.setTab.bind(this, performanceTabKey)}
                   />
                 </PivotItem>
               )}
@@ -286,7 +289,7 @@ export class FairnessWizardV2 extends React.PureComponent<
               dashboardContext={this.state.dashboardContext}
               metricsCache={this.state.metricCache}
               modelCount={this.props.predictedY.length}
-              accuracyPickerProps={accuracyPickerProps}
+              performancePickerProps={performancePickerProps}
               onChartClick={this.onSelectModel}
               parityPickerProps={parityPickerProps}
               featureBinPickerProps={featureBinPickerProps}
@@ -303,7 +306,7 @@ export class FairnessWizardV2 extends React.PureComponent<
               metricsCache={this.state.metricCache}
               onChartClick={this.onSelectModel}
               modelCount={this.props.predictedY.length}
-              accuracyPickerProps={accuracyPickerProps}
+              performancePickerProps={performancePickerProps}
               parityPickerProps={parityPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               onHideIntro={this.hideIntro.bind(this)}
@@ -314,27 +317,27 @@ export class FairnessWizardV2 extends React.PureComponent<
     );
   }
 
-  private getAccuracyMetrics(
+  private getPerformanceMetrics(
     fairnessContext: IRunTimeFairnessContext
-  ): IAccuracyOption[] {
+  ): IPerformanceOption[] {
     if (
       fairnessContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
     ) {
-      return this.props.supportedBinaryClassificationAccuracyKeys.map(
-        (key) => accuracyOptions[key]
+      return this.props.supportedBinaryClassificationPerformanceKeys.map(
+        (key) => performanceOptions[key]
       );
     }
     if (
       fairnessContext.modelMetadata.PredictionType ===
       PredictionTypes.Regression
     ) {
-      return this.props.supportedRegressionAccuracyKeys.map(
-        (key) => accuracyOptions[key]
+      return this.props.supportedRegressionPerformanceKeys.map(
+        (key) => performanceOptions[key]
       );
     }
-    return this.props.supportedProbabilityAccuracyKeys.map(
-      (key) => accuracyOptions[key]
+    return this.props.supportedProbabilityPerformanceKeys.map(
+      (key) => performanceOptions[key]
     );
   }
 
@@ -356,8 +359,8 @@ export class FairnessWizardV2 extends React.PureComponent<
     }
   };
 
-  private readonly setAccuracyKey = (key: string): void => {
-    const value: Partial<IWizardStateV2> = { selectedAccuracyKey: key };
+  private readonly setPerformanceKey = (key: string): void => {
+    const value: Partial<IWizardStateV2> = { selectedPerformanceKey: key };
     if (flights.skipDisparity) {
       value.selectedParityKey = key;
     }

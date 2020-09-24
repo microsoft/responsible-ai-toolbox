@@ -9,7 +9,7 @@ import {
   FontWeights
 } from "office-ui-fabric-react";
 
-export interface IAccuracyTabStyles {
+export interface IPerformanceTabStyles {
   iconClass: IStyle;
   itemsList: IStyle;
   frame: IStyle;
@@ -18,11 +18,11 @@ export interface IAccuracyTabStyles {
   textBody: IStyle;
 }
 
-export const AccuracyTabStyles: () => IProcessedStyleSet<
-  IAccuracyTabStyles
+export const PerformanceTabStyles: () => IProcessedStyleSet<
+  IPerformanceTabStyles
 > = () => {
   const theme = getTheme();
-  return mergeStyleSets<IAccuracyTabStyles>({
+  return mergeStyleSets<IPerformanceTabStyles>({
     frame: {
       height: "100%"
     },
@@ -48,7 +48,7 @@ export const AccuracyTabStyles: () => IProcessedStyleSet<
     textBody: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semilight,
-      paddingBottom: "50px",
+      paddingBottom: "12px",
       paddingTop: "12px"
     }
   });
