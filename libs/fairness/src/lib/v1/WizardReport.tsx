@@ -13,10 +13,10 @@ import {
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
+import { performanceOptions } from "../util/PerformanceMetrics";
 import { chartColors } from "../util/chartColors";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
-import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { localization } from "./../Localization/localization";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
@@ -776,15 +776,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       this.setState({
         metrics: {
+          performanceDisparity,
+          binnedPerformance: performance.bins,
           binnedOutcome: outcomes.bins,
           binnedOverprediction,
-          binnedPerformance: performance.bins,
           binnedUnderprediction,
           errors,
-          globalOutcome: outcomes.global,
           globalPerformance: performance.global,
+          globalOutcome: outcomes.global,
           outcomeDisparity,
-          performanceDisparity,
           predictions
         }
       });

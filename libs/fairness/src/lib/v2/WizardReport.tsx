@@ -777,10 +777,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     try {
       // let binnedFNR: number[];
       // let binnedFPR: number[];
-      let overallOverprediction: number | undefined;
-      let overallUnderprediction: number | undefined;
-      let binnedOverprediction: number[] | undefined;
-      let binnedUnderprediction: number[] | undefined;
+      let overallFalsePositiveRate: number | undefined;
+      let overallFalseNegativeRate: number | undefined;
+      let binnedFalsePositiveRate: number[] | undefined;
+      let binnedFalseNegativeRate: number[] | undefined;
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
@@ -800,36 +800,36 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
-          binnedUnderprediction = (
+          binnedFalseNegativeRate = (
             await this.props.metricsCache.getMetric(
               this.props.dashboardContext.binVector,
               this.props.featureBinPickerProps.selectedBinIndex,
               this.props.selectedModelIndex,
-              "underprediction"
+              "false_negative_rate"
             )
           ).bins;
-          overallUnderprediction = (
+          overallFalseNegativeRate = (
             await this.props.metricsCache.getMetric(
               this.props.dashboardContext.binVector,
               this.props.featureBinPickerProps.selectedBinIndex,
               this.props.selectedModelIndex,
-              "underprediction"
+              "false_negative_rate"
             )
           ).global;
-          binnedOverprediction = (
+          binnedFalsePositiveRate = (
             await this.props.metricsCache.getMetric(
               this.props.dashboardContext.binVector,
               this.props.featureBinPickerProps.selectedBinIndex,
               this.props.selectedModelIndex,
-              "overprediction"
+              "false_positive_rate"
             )
           ).bins;
-          overallOverprediction = (
+          overallFalsePositiveRate = (
             await this.props.metricsCache.getMetric(
               this.props.dashboardContext.binVector,
               this.props.featureBinPickerProps.selectedBinIndex,
               this.props.selectedModelIndex,
-              "overprediction"
+              "false_positive_rate"
             )
           ).global;
           outcomes = await this.props.metricsCache.getMetric(
