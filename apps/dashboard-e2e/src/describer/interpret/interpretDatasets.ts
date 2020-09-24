@@ -131,6 +131,8 @@ const interpretDatasets = {
     ]
   },
   ibmDataInconsistent: {
+    errorMessage:
+      "Inconsistent dimensions. Predicted probability[0] has dimensions 2, expected 1",
     featureNames: [
       "OverTime",
       "JobRole",

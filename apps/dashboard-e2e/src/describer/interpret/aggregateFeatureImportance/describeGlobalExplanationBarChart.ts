@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { BarChart } from "../../../util/BarChart";
-import { getMenu } from "../../../util/getMenu";
 import { IInterpretData } from "../IInterpretData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
@@ -16,7 +15,6 @@ export function describeGlobalExplanationBarChart(
       dataShape
     };
     beforeEach(() => {
-      getMenu("Aggregate Feature Importance", "#DashboardPivot").click();
       props.chart = new BarChart("#FeatureImportanceBar");
     });
     it("should be sorted by heigh", () => {

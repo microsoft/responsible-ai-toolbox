@@ -10,12 +10,11 @@ import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBo
 const testName = "Aggregate Feature Importance";
 
 export function describeAggregateFeatureImportance(
-  datasetName: string,
   datasetShape: IInterpretData
 ): void {
   describe(testName, () => {
     beforeEach(() => {
-      cy.visit(`#/interpret/${datasetName}/light/english/Version-2`);
+      getMenu("Aggregate Feature Importance", "#DashboardPivot").click();
     });
     it("Tab Header should exist", () => {
       getMenu("Aggregate Feature Importance", "#DashboardPivot").should(
