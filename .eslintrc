@@ -138,6 +138,8 @@
       {
         "allow": [
           "accuracy_score",
+          "false_negative_rate",
+          "false_positive_rate",
           "balanced_accuracy_score",
           "balanced_root_mean_squared_error",
           "error_y",

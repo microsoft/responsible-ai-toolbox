@@ -28,11 +28,11 @@ import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { performanceOptions } from "../../util/PerformanceMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
 import { parityOptions } from "../../util/ParityMetrics";
+import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV2,
   IFeatureBinPickerPropsV2,
@@ -142,8 +142,8 @@ export class ModelComparisonChart extends React.PureComponent<
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
-      performanceKey: this.props.performancePickerProps.selectedPerformanceKey,
       parityKey: this.props.parityPickerProps.selectedParityKey,
+      performanceKey: this.props.performancePickerProps.selectedPerformanceKey,
       showModalIntro: this.props.showIntro
     };
   }
@@ -202,9 +202,9 @@ export class ModelComparisonChart extends React.PureComponent<
       const { disparityArray } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
-          Performance: performance,
           index,
-          Parity: disparityArray[index]
+          Parity: disparityArray[index],
+          Performance: performance
         };
       });
       let minPerformance: number = Number.MAX_SAFE_INTEGER;
@@ -498,7 +498,7 @@ export class ModelComparisonChart extends React.PureComponent<
         (metric) => metric.global
       );
       const disparityArray = await Promise.all(disparityPromises);
-      this.setState({ performanceArray, disparityArray });
+      this.setState({ disparityArray, performanceArray });
     } catch {
       // todo;
     }
@@ -517,9 +517,9 @@ export class ModelComparisonChart extends React.PureComponent<
         featureKey
       );
       this.setState({
-        performanceArray: undefined,
         disparityArray: undefined,
-        featureKey
+        featureKey,
+        performanceArray: undefined
       });
     }
   };

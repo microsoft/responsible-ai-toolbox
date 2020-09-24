@@ -22,11 +22,11 @@ import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { performanceOptions } from "../../util/PerformanceMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
 import { ParityModes } from "../../util/ParityMetrics";
+import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV1,
   IFeatureBinPickerPropsV1,
@@ -149,9 +149,9 @@ export class ModelComparisonChart extends React.PureComponent<
     const { disparityArray } = this.state;
     const data = this.state.performanceArray.map((performance, index) => {
       return {
-        Performance: performance,
         index,
-        Parity: disparityArray[index]
+        Parity: disparityArray[index],
+        Performance: performance
       };
     });
 
@@ -380,7 +380,7 @@ export class ModelComparisonChart extends React.PureComponent<
         (metric) => metric.global
       );
       const disparityArray = await Promise.all(disparityPromises);
-      this.setState({ performanceArray, disparityArray });
+      this.setState({ disparityArray, performanceArray });
     } catch {
       // todo;
     }

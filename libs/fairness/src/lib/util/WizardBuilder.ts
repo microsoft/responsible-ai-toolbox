@@ -20,7 +20,6 @@ import {
 } from "../IFairnessProps";
 import { localization } from "../Localization/localization";
 
-import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IBinnedResponse } from "./IBinnedResponse";
 import {
@@ -29,6 +28,7 @@ import {
   IFairnessModelMetadata
 } from "./IFairnessContext";
 import { IParityOption, parityOptions } from "./ParityMetrics";
+import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 
 export class WizardBuilder {
   private static iconsInitialized = false;

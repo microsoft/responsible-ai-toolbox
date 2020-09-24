@@ -22,10 +22,10 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { performanceOptions } from "../util/PerformanceMetrics";
 import { chartColors } from "../util/chartColors";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
+import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { localization } from "./../Localization/localization";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
@@ -902,17 +902,17 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       this.setState({
         metrics: {
-          performanceDisparity,
-          binnedPerformance: performance.bins,
           binnedOutcome: outcomes.bins,
           binnedOverprediction,
+          binnedPerformance: performance.bins,
           binnedUnderprediction,
           errors,
-          globalPerformance: performance.global,
           globalOutcome: outcomes.global,
           globalOverprediction: overallOverprediction,
+          globalPerformance: performance.global,
           globalUnderprediction: overallUnderprediction,
           outcomeDisparity,
+          performanceDisparity,
           predictions
         }
       });

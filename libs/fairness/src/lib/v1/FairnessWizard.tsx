@@ -15,20 +15,20 @@ import React from "react";
 
 import { FeatureTab } from "../components/FeatureTab";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
-import { IPerformanceOption, performanceOptions } from "../util/PerformanceMetrics";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
   IFairnessContext,
   IRunTimeFairnessContext
 } from "../util/IFairnessContext";
 import { MetricsCache } from "../util/MetricsCache";
+import { IPerformanceOption, performanceOptions } from "../util/PerformanceMetrics";
 import { WizardBuilder } from "../util/WizardBuilder";
 
 import { localization } from "./../Localization/localization";
-import { PerformanceTab } from "./Controls/PerformanceTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
+import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { defaultTheme } from "./Themes";
 import { WizardReport } from "./WizardReport";
@@ -104,7 +104,6 @@ export class FairnessWizardV1 extends React.PureComponent<
         }
       );
       this.state = {
-        performanceMetrics,
         activeTabKey: featureBinTabKey,
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
@@ -117,10 +116,11 @@ export class FairnessWizardV1 extends React.PureComponent<
           props.precomputedMetrics
         ),
         parityMetrics: performanceMetrics,
-        selectedPerformanceKey: performanceMetrics[0].key,
+        performanceMetrics,
         selectedBinIndex: 0,
         selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-        selectedParityKey: performanceMetrics[0].key
+        selectedParityKey: performanceMetrics[0].key,
+        selectedPerformanceKey: performanceMetrics[0].key
       };
       return;
     }
@@ -141,7 +141,6 @@ export class FairnessWizardV1 extends React.PureComponent<
     performanceMetrics = performanceMetrics.filter((metric) => !!metric);
 
     this.state = {
-      performanceMetrics,
       activeTabKey: introTabKey,
       dashboardContext: fairnessContext,
       featureBins,
@@ -151,10 +150,11 @@ export class FairnessWizardV1 extends React.PureComponent<
         this.props.requestMetrics
       ),
       parityMetrics: performanceMetrics,
-      selectedPerformanceKey: performanceMetrics[0].key,
+      performanceMetrics,
       selectedBinIndex: 0,
       selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-      selectedParityKey: performanceMetrics[0].key
+      selectedParityKey: performanceMetrics[0].key,
+      selectedPerformanceKey: performanceMetrics[0].key
     };
   }
 
@@ -170,8 +170,8 @@ export class FairnessWizardV1 extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = FairnessWizardStyles();
     const performancePickerProps = {
-      performanceOptions: this.state.performanceMetrics,
       onPerformanceChange: this.setPerformanceKey,
+      performanceOptions: this.state.performanceMetrics,
       selectedPerformanceKey: this.state.selectedPerformanceKey
     };
     const parityPickerProps = {
