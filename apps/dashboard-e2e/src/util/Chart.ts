@@ -20,6 +20,13 @@ export abstract class Chart<TElement extends IChartElement> {
     }
     return this.Elements.filter((b) => b && b.right < svgWidth);
   }
+  protected getHtmlElements(selector: string): HTMLElement[] {
+    return cy
+      .$$(
+        `${this.container} svg g.cartesianlayer > g.subplot.xy > .plot ${selector}`
+      )
+      .get();
+  }
   private getSvgWidth(): number | undefined {
     return cy.$$(`${this.container} svg`).width();
   }

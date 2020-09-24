@@ -1,32 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Chart } from "./Chart";
+import { Chart, IChartElement } from "./Chart";
 
-const cordReg = /M([\d.]+),([\d.]+)V([\d.]+)H([\d.]+)V([\d.]+)Z/;
+const cordReg = /^M([\d.]+),([\d.]+)V([\d.]+)H([\d.]+)V([\d.]+)Z$/;
 
-export interface IBar {
-  readonly left: number;
-  readonly right: number;
-  readonly top: number;
-  readonly bottom: number;
-}
-export class BarChart extends Chart<IBar> {
-  public get Elements(): IBar[] {
+export class BarChart extends Chart<IChartElement> {
+  public get Elements(): IChartElement[] {
     return cy
       .$$(`${this.container} svg .plot .trace.bars .points .point path`)
       .get()
       .map((b, i) => this.getCoordinate(b, i));
   }
 
-  public sortByH(): IBar[] {
+  public sortByH(): IChartElement[] {
     return this.Elements.sort((a, b) => a.top - b.top);
   }
 
   private readonly getCoordinate = (
     element: HTMLElement,
     idx: number
-  ): IBar => {
+  ): IChartElement => {
     const d = element.getAttribute("d");
     if (!d) {
       throw new Error(
