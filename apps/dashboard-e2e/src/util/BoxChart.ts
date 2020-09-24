@@ -1,19 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Chart } from "./Chart";
+import { Chart, IChartElement } from "./Chart";
 
-const boxReg = /M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)V([\d.]+)H([\d.]+)ZM([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)/;
-const meanReg = /M([\d.]+),([\d.]+)H([\d.]+)/;
+const boxReg = /^M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)V([\d.]+)H([\d.]+)ZM([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)$/;
+const meanReg = /^M([\d.]+),([\d.]+)H([\d.]+)$/;
 
-export interface IBox {
-  readonly left: number;
-  readonly right: number;
-  readonly bottom: number;
+export interface IBox extends IChartElement {
   readonly q1: number;
   readonly q2: number;
   readonly q3: number;
-  readonly top: number;
   readonly mean: number;
 }
 export class BoxChart extends Chart<IBox> {
@@ -184,15 +180,14 @@ export class BoxChart extends Chart<IBox> {
   };
 
   private getBoxElements(): HTMLElement[] {
-    return cy.$$(`${this.container} svg .plot .trace.boxes > path.box`).get();
+    return this.getHtmlElements(".trace.boxes > path.box");
   }
 
   private getMeanElements(): HTMLElement[] {
-    console.log(`${this.container} svg .plot .trace.boxes > path.mean`);
-    return cy.$$(`${this.container} svg .plot .trace.boxes > path.mean`).get();
+    return this.getHtmlElements(".trace.boxes > path.mean");
   }
 
   private getPointElements(): HTMLElement[] {
-    return cy.$$(`${this.container} svg .plot .trace.boxes > g.points`).get();
+    return this.getHtmlElements(".trace.boxes > g.points");
   }
 }

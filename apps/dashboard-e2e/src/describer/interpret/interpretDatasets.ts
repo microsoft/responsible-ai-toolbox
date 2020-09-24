@@ -20,7 +20,8 @@ const interpretDatasets = {
       "Column3",
       "Column4",
       "Column14"
-    ]
+    ],
+    noDataset: true
   },
   bostonData: {
     featureNames: [

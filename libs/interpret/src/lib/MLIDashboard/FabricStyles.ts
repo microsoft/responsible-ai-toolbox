@@ -37,14 +37,7 @@ export class FabricStyles {
   >(
     {
       container: {
-        display: "inline-flex",
         width: "100%"
-      },
-      label: {
-        padding: "5px 10px 0 10px"
-      },
-      root: {
-        flex: 1
       }
     },
     FabricStyles.limitedSizeMenuDropdown
