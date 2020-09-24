@@ -13,23 +13,23 @@ import {
 import React from "react";
 
 import { localization } from "../../Localization/localization";
-import { IAccuracyPickerPropsV1 } from "../FairnessWizard";
+import { IPerformancePickerPropsV1 } from "../FairnessWizard";
 
 interface IState {
   showCallout: boolean;
 }
 
-export class AccuracyPicker extends React.PureComponent<
-  IAccuracyPickerPropsV1,
+export class PerformancePicker extends React.PureComponent<
+  IPerformancePickerPropsV1,
   IState
 > {
-  private _accuracyDropdownHelpId = "_accuracyDropdownHelpId";
-  public constructor(props: IAccuracyPickerPropsV1) {
+  private _performanceDropdownHelpId = "_performanceDropdownHelpId";
+  public constructor(props: IPerformancePickerPropsV1) {
     super(props);
     this.state = { showCallout: false };
   }
   public render(): React.ReactNode {
-    const options: IDropdownOption[] = this.props.accuracyOptions.map(
+    const options: IDropdownOption[] = this.props.performanceOptions.map(
       (option) => {
         return {
           key: option.key,
@@ -43,7 +43,7 @@ export class AccuracyPicker extends React.PureComponent<
           <div>
             <span>{"TODO"}</span>
             <IconButton
-              id={this._accuracyDropdownHelpId}
+              id={this._performanceDropdownHelpId}
               iconProps={{ iconName: "Info" }}
               title={"TODO"}
               ariaLabel="Info"
@@ -52,16 +52,16 @@ export class AccuracyPicker extends React.PureComponent<
             />
           </div>
           <ComboBox
-            selectedKey={this.props.selectedAccuracyKey}
-            onChange={this.onAccuracyChange}
+            selectedKey={this.props.selectedPerformanceKey}
+            onChange={this.onPerformanceChange}
             options={options}
-            ariaLabel={"Accuracy selector"}
+            ariaLabel={"Performance selector"}
             useComboBoxAsMenuWidth={true}
           />
         </div>
         {this.state.showCallout && (
           <Callout
-            target={"#" + this._accuracyDropdownHelpId}
+            target={"#" + this._performanceDropdownHelpId}
             setInitialFocus={true}
             onDismiss={this.onDismiss}
             role="alertdialog"
@@ -85,12 +85,12 @@ export class AccuracyPicker extends React.PureComponent<
     this.setState({ showCallout: true });
   };
 
-  private readonly onAccuracyChange = (
+  private readonly onPerformanceChange = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
-      this.props.onAccuracyChange(item.key);
+      this.props.onPerformanceChange(item.key);
     }
   };
 }

@@ -20,7 +20,6 @@ import {
 } from "../IFairnessProps";
 import { localization } from "../Localization/localization";
 
-import { IAccuracyOption, accuracyOptions } from "./AccuracyMetrics";
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IBinnedResponse } from "./IBinnedResponse";
 import {
@@ -29,6 +28,7 @@ import {
   IFairnessModelMetadata
 } from "./IFairnessContext";
 import { IParityOption, parityOptions } from "./ParityMetrics";
+import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 
 export class WizardBuilder {
   private static iconsInitialized = false;
@@ -200,13 +200,13 @@ export class WizardBuilder {
     return PredictionTypes.Regression;
   }
 
-  public static buildAccuracyListForPrecomputedMetrics(
+  public static buildPerformanceListForPrecomputedMetrics(
     props: IPreComputedFairnessData
-  ): IAccuracyOption[] {
-    const customMetrics: IAccuracyOption[] = [];
-    const providedMetrics: IAccuracyOption[] = [];
+  ): IPerformanceOption[] {
+    const customMetrics: IPerformanceOption[] = [];
+    const providedMetrics: IPerformanceOption[] = [];
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      const metric = accuracyOptions[key];
+      const metric = performanceOptions[key];
       if (metric !== undefined) {
         if (metric.userVisible) {
           providedMetrics.push(metric);
