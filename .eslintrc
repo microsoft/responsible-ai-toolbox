@@ -138,13 +138,13 @@
       {
         "allow": [
           "accuracy_score",
-          "false_negative_rate",
-          "false_positive_rate",
           "balanced_accuracy_score",
           "balanced_root_mean_squared_error",
           "error_y",
           "f1_score",
           "fallout_rate",
+          "false_negative_rate",
+          "false_positive_rate",
           "feature_list",
           "log_loss",
           "lower_bounds",
