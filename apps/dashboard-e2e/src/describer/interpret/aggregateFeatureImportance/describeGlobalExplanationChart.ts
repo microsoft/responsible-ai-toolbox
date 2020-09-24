@@ -4,6 +4,8 @@
 import { toNumber } from "lodash";
 
 import { Chart, IChartElement } from "../../../util/Chart";
+import { getComboBoxValue, selectComboBox } from "../../../util/comboBox";
+import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
 function getTopKValue(): number {
@@ -61,6 +63,36 @@ export function describeGlobalExplanationChart<
             });
         });
       });
+
+      if (!props.dataShape.noDataset) {
+        const dependencePlotChart = new ScatterChart("#DependencePlot");
+        describe("DependencePlot", () => {
+          beforeEach(() => {
+            selectComboBox("#DependencePlotFeatureSelection", 0);
+          });
+          it("should render", () => {
+            expect(dependencePlotChart.Elements.length).greaterThan(0);
+          });
+          it("should have x axis match selected value", () => {
+            cy.get('#DependencePlot div[class^="horizontalAxis-"]').should(
+              "contain.text",
+              getComboBoxValue("#DependencePlotFeatureSelection")
+            );
+          });
+          it("should have y axis match selected value", () => {
+            cy.get('#DependencePlot div[class^="rotatedVerticalBox-"]').should(
+              "contain.text",
+              getComboBoxValue("#DependencePlotFeatureSelection")
+            );
+          });
+          it("should have y axis for feature importance", () => {
+            cy.get('#DependencePlot div[class^="rotatedVerticalBox-"]').should(
+              "contain.text",
+              "Feature importance of"
+            );
+          });
+        });
+      }
     }
   });
 }
