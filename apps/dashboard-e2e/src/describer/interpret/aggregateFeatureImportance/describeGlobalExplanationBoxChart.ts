@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { BoxChart } from "../../../util/BoxChart";
-import { getMenu } from "../../../util/getMenu";
 import { IInterpretData } from "../IInterpretData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
@@ -16,9 +15,7 @@ export function describeGlobalExplanationBoxChart(
       dataShape
     };
     beforeEach(() => {
-      getMenu("Aggregate Feature Importance", "#DashboardPivot")
-        .click()
-        .get("#GlobalExplanationSettingsButton")
+      cy.get("#GlobalExplanationSettingsButton")
         .click()
         .get(
           '#GlobalExplanationSettingsCallout #ChartTypeSelection label:contains("Box")'

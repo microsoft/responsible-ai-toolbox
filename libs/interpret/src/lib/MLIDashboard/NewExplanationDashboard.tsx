@@ -60,7 +60,7 @@ export interface INewExplanationDashboardState {
   isGlobalImportanceDerivedFromLocal: boolean;
   sortVector?: number[];
   validationWarnings: string[];
-  showingDatasizeWarning: boolean;
+  showingDataSizeWarning: boolean;
   editingCohortIndex?: number;
   selectedWeightVector: WeightVectorOption;
   requestPredictions?: (
@@ -257,7 +257,7 @@ export class NewExplanationDashboard extends React.PureComponent<
         modelMetadata.modelType === ModelTypes.Multiclass
           ? WeightVectors.AbsAvg
           : 0,
-      showingDatasizeWarning:
+      showingDataSizeWarning:
         jointDataset.datasetRowCount > NewExplanationDashboard.ROW_WARNING_SIZE,
       sortVector: undefined,
       validationWarnings: validationCheck.errorStrings,
@@ -448,32 +448,29 @@ export class NewExplanationDashboard extends React.PureComponent<
     }
     return (
       <div className={classNames.page} style={{ maxHeight: "1000px" }}>
-        {this.state.showingDatasizeWarning && (
+        {this.state.showingDataSizeWarning && (
           <MessageBar
             onDismiss={this.clearSizeWarning}
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <div>
-              <Text>{localization.ValidationErrors.datasizeWarning}</Text>
-              <Link onClick={this.openCohort.bind(this, 0)}>
-                {localization.ValidationErrors.addFilters}
-              </Link>
-            </div>
+            <Text>{localization.ValidationErrors.datasizeWarning}</Text>
+            <Link onClick={this.openCohort.bind(this, 0)}>
+              {localization.ValidationErrors.addFilters}
+            </Link>
           </MessageBar>
         )}
         {this.state.validationWarnings.length !== 0 && (
           <MessageBar
+            id="ErrorMessage"
             onDismiss={this.clearWarning}
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <div>
-              <Text block>{localization.ValidationErrors.errorHeader}</Text>
-              {this.state.validationWarnings.map((message) => {
-                return <Text block>{message}</Text>;
-              })}
-            </div>
+            <Text>{localization.ValidationErrors.errorHeader}</Text>
+            {this.state.validationWarnings.map((message) => {
+              return <Text block>{message}</Text>;
+            })}
           </MessageBar>
         )}
         <CohortList
@@ -653,7 +650,7 @@ export class NewExplanationDashboard extends React.PureComponent<
   };
 
   private clearSizeWarning = (): void => {
-    this.setState({ showingDatasizeWarning: false });
+    this.setState({ showingDataSizeWarning: false });
   };
 
   private openCohort = (index: number): void => {
