@@ -53,6 +53,7 @@ jobs:
         package: [core-ui, mlchartlib, fairness, interpret]
 
     steps:
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -62,12 +63,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dist
+      - name: Install yarn
+        run: npm install yarn -g
+      - name: bump version
+        run: yarn auto-version ${{ matrix.package }}
       - id: publish
         name: NPM Publish
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.KE_NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
+          dry-run: true
       - if: steps.publish.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
