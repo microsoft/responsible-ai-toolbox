@@ -25,7 +25,7 @@ export const precomputedBinary: IFairnessData = {
       binLabels: ["under 30", "30 to 45", "over 45"],
       binVector: [0, 1, 2, 0, 0, 1, 2, 1, 0, 1, 2, 2],
       featureBinName: "age"
-    },
+    }
   ],
 
   precomputedMetrics: [
@@ -76,7 +76,7 @@ export const precomputedBinary: IFairnessData = {
           bins: [0.25, 0.25, 0.25],
           global: 0.25
         }
-      },
+      }
     ],
     // age
     [
@@ -125,13 +125,13 @@ export const precomputedBinary: IFairnessData = {
           bins: [0, 0.25, 0],
           global: 0.08333
         }
-      },
+      }
     ]
   ],
 
   predictedY: [
     [1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0],
-    [1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0],
+    [1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0]
   ],
 
   predictionType: PredictionTypes.BinaryClassification,

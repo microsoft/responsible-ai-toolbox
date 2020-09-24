@@ -201,10 +201,13 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.performancePickerProps.selectedPerformanceKey
     );
     const selectedMetric =
-      performanceOptions[this.props.performancePickerProps.selectedPerformanceKey] ||
+      performanceOptions[
+        this.props.performancePickerProps.selectedPerformanceKey
+      ] ||
       this.props.performancePickerProps.performanceOptions.find(
         (metric) =>
-          metric.key === this.props.performancePickerProps.selectedPerformanceKey
+          metric.key ===
+          this.props.performancePickerProps.selectedPerformanceKey
       ) ||
       this.props.performancePickerProps.performanceOptions[0];
     const insights2 = localization.formatString(

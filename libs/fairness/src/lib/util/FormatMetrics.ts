@@ -16,7 +16,11 @@ export class FormatMetrics {
     const styleObject: Intl.NumberFormatOptions = {
       maximumSignificantDigits: sigDigits
     };
-    if (performanceOptions[key] && performanceOptions[key].isPercentage && !isRatio) {
+    if (
+      performanceOptions[key] &&
+      performanceOptions[key].isPercentage &&
+      !isRatio
+    ) {
       styleObject.style = "percent";
     }
     return value.toLocaleString(undefined, styleObject);

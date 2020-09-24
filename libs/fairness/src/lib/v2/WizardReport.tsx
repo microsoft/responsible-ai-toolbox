@@ -156,7 +156,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       106;
     const areaHeights = Math.max(300, alternateHeight);
 
-    const performanceKey = this.props.performancePickerProps.selectedPerformanceKey;
+    const performanceKey = this.props.performancePickerProps
+      .selectedPerformanceKey;
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -455,10 +456,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       //   performanceKey
       // );
       const selectedMetric =
-        performanceOptions[this.props.performancePickerProps.selectedPerformanceKey] ||
+        performanceOptions[
+          this.props.performancePickerProps.selectedPerformanceKey
+        ] ||
         this.props.performancePickerProps.performanceOptions.find(
           (metric) =>
-            metric.key === this.props.performancePickerProps.selectedPerformanceKey
+            metric.key ===
+            this.props.performancePickerProps.selectedPerformanceKey
         );
 
       const globalOutcomeString = FormatMetrics.formatNumbers(
@@ -619,7 +623,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 binValues={this.state.metrics.binnedPerformance}
               />
               <div className={styles.chartWrapper}>
-                <div className={styles.chartHeader}>{performanceChartHeader}</div>
+                <div className={styles.chartHeader}>
+                  {performanceChartHeader}
+                </div>
                 <div className={styles.chartBody}>
                   <AccessibleChart
                     plotlyProps={performancePlot}

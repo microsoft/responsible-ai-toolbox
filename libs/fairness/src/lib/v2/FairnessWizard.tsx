@@ -21,7 +21,10 @@ import {
 } from "../util/IFairnessContext";
 import { MetricsCache } from "../util/MetricsCache";
 import { IParityOption, parityOptions } from "../util/ParityMetrics";
-import { performanceOptions, IPerformanceOption } from "../util/PerformanceMetrics";
+import {
+  performanceOptions,
+  IPerformanceOption
+} from "../util/PerformanceMetrics";
 import { WizardBuilder } from "../util/WizardBuilder";
 
 import { localization } from "./../Localization/localization";
