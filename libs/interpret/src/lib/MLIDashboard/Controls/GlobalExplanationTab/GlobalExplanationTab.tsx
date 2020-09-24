@@ -417,7 +417,10 @@ export class GlobalExplanationTab extends React.PureComponent<
                 </Callout>
               )}
             </div>
-            <div className={classNames.secondaryChartAndLegend}>
+            <div
+              id="DependencePlot"
+              className={classNames.secondaryChartAndLegend}
+            >
               <DependencePlot
                 chartProps={this.props.dependenceProps}
                 cohortIndex={this.state.selectedCohortIndex}
@@ -431,19 +434,13 @@ export class GlobalExplanationTab extends React.PureComponent<
                 }
               />
               <div className={classNames.legendAndSort}>
-                <Text
-                  variant={"medium"}
-                  block
-                  className={classNames.cohortLegend}
-                >
-                  {localization.GlobalTab.viewDependencePlotFor}
-                </Text>
                 {featureOptions && (
                   <ComboBox
-                    useComboBoxAsMenuWidth={true}
+                    id="DependencePlotFeatureSelection"
+                    label={localization.GlobalTab.viewDependencePlotFor}
                     options={featureOptions}
                     allowFreeform={false}
-                    autoComplete={"on"}
+                    autoComplete="on"
                     placeholder={
                       localization.GlobalTab
                         .dependencePlotFeatureSelectPlaceholder
@@ -458,15 +455,9 @@ export class GlobalExplanationTab extends React.PureComponent<
                     styles={FabricStyles.defaultDropdownStyle}
                   />
                 )}
-                <Text
-                  variant={"medium"}
-                  block
-                  className={classNames.cohortLegendWithTop}
-                >
-                  {localization.GlobalTab.datasetCohortSelector}
-                </Text>
                 {cohortOptions && (
                   <Dropdown
+                    label={localization.GlobalTab.datasetCohortSelector}
                     options={cohortOptions}
                     selectedKey={this.state.selectedCohortIndex}
                     onChange={this.setSelectedCohort}
