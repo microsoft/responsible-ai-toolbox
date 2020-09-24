@@ -59,8 +59,10 @@ export class App extends React.Component<IAppProps> {
       stringParams: { contextualHelp: App.messages },
       supportedBinaryClassificationPerformanceKeys:
         App.supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys: App.supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys: App.supportedRegressionPerformanceKeys,
+      supportedProbabilityPerformanceKeys:
+        App.supportedProbabilityPerformanceKeys,
+      supportedRegressionPerformanceKeys:
+        App.supportedRegressionPerformanceKeys,
       theme: this.props.theme
     };
     switch (this.props.version) {

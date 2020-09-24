@@ -128,7 +128,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       106;
     const areaHeights = Math.max(460, alternateHeight);
 
-    const performanceKey = this.props.performancePickerProps.selectedPerformanceKey;
+    const performanceKey = this.props.performancePickerProps
+      .selectedPerformanceKey;
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -388,22 +389,24 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           val
         );
       });
-      const performanceText = this.state.metrics.predictions?.map((val, index) => {
-        return `${localization.formatString(
-          localization.Report.tooltipError,
-          FormatMetrics.formatNumbers(
-            this.state.metrics?.errors
-              ? this.state.metrics.errors[index]
-              : undefined,
-            "average",
-            false,
-            3
-          )
-        )}<br>${localization.formatString(
-          localization.Report.tooltipPrediction,
-          FormatMetrics.formatNumbers(val, "average", false, 3)
-        )}`;
-      });
+      const performanceText = this.state.metrics.predictions?.map(
+        (val, index) => {
+          return `${localization.formatString(
+            localization.Report.tooltipError,
+            FormatMetrics.formatNumbers(
+              this.state.metrics?.errors
+                ? this.state.metrics.errors[index]
+                : undefined,
+              "average",
+              false,
+              3
+            )
+          )}<br>${localization.formatString(
+            localization.Report.tooltipPrediction,
+            FormatMetrics.formatNumbers(val, "average", false, 3)
+          )}`;
+        }
+      );
       performancePlot.data = [
         {
           boxmean: true,
@@ -463,10 +466,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       performanceKey
     );
     const selectedMetric =
-      performanceOptions[this.props.performancePickerProps.selectedPerformanceKey] ||
+      performanceOptions[
+        this.props.performancePickerProps.selectedPerformanceKey
+      ] ||
       this.props.performancePickerProps.performanceOptions.find(
         (metric) =>
-          metric.key === this.props.performancePickerProps.selectedPerformanceKey
+          metric.key ===
+          this.props.performancePickerProps.selectedPerformanceKey
       );
 
     const globalOutcomeString = FormatMetrics.formatNumbers(
@@ -561,7 +567,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               {performanceChartHeader}
             </Text>
             <div className={styles.chartBody}>
-              <AccessibleChart plotlyProps={performancePlot} theme={undefined} />
+              <AccessibleChart
+                plotlyProps={performancePlot}
+                theme={undefined}
+              />
             </div>
           </div>
           <div className={styles.mainRight}>

@@ -250,10 +250,13 @@ export class ModelComparisonChart extends React.PureComponent<
         this.props.performancePickerProps.selectedPerformanceKey
       );
       const selectedMetric =
-        performanceOptions[this.props.performancePickerProps.selectedPerformanceKey] ||
+        performanceOptions[
+          this.props.performancePickerProps.selectedPerformanceKey
+        ] ||
         this.props.performancePickerProps.performanceOptions.find(
           (metric) =>
-            metric.key === this.props.performancePickerProps.selectedPerformanceKey
+            metric.key ===
+            this.props.performancePickerProps.selectedPerformanceKey
         );
 
       const insights2 = localization.formatString(
@@ -273,7 +276,9 @@ export class ModelComparisonChart extends React.PureComponent<
           : formattedMaxPerformance,
         FormatMetrics.formatNumbers(
           this.state.disparityArray[
-            selectedMetric.isMinimization ? minPerformanceIndex : maxPerformanceIndex
+            selectedMetric.isMinimization
+              ? minPerformanceIndex
+              : maxPerformanceIndex
           ],
           this.props.performancePickerProps.selectedPerformanceKey
         )
