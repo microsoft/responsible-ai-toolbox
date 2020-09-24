@@ -28,13 +28,13 @@ import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { accuracyOptions } from "../../util/AccuracyMetrics";
+import { performanceOptions } from "../../util/PerformanceMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
 import { parityOptions } from "../../util/ParityMetrics";
 import {
-  IAccuracyPickerPropsV2,
+  IPerformancePickerPropsV2,
   IFeatureBinPickerPropsV2,
   IParityPickerPropsV2
 } from "../FairnessWizard";
@@ -47,7 +47,7 @@ export interface IModelComparisonProps {
   dashboardContext: IFairnessContext;
   metricsCache: MetricsCache;
   modelCount: number;
-  accuracyPickerProps: IAccuracyPickerPropsV2;
+  performancePickerProps: IPerformancePickerPropsV2;
   parityPickerProps: IParityPickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
@@ -59,9 +59,9 @@ export interface IState {
   showModalIntro?: boolean;
   showModalHelp?: boolean;
   featureKey?: string;
-  accuracyKey?: string;
+  performanceKey?: string;
   parityKey?: string;
-  accuracyArray?: number[];
+  performanceArray?: number[];
   disparityArray?: number[];
 }
 
@@ -102,7 +102,7 @@ export class ModelComparisonChart extends React.PureComponent<
         mode: PlotlyMode.TextMarkers,
         textposition: "top",
         type: "scatter",
-        xAccessor: "Accuracy",
+        xAccessor: "Performance",
         yAccessor: "Parity"
       } as any
     ],
@@ -142,7 +142,7 @@ export class ModelComparisonChart extends React.PureComponent<
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
-      accuracyKey: this.props.accuracyPickerProps.selectedAccuracyKey,
+      performanceKey: this.props.performancePickerProps.selectedPerformanceKey,
       parityKey: this.props.parityPickerProps.selectedParityKey,
       showModalIntro: this.props.showIntro
     };
@@ -154,7 +154,7 @@ export class ModelComparisonChart extends React.PureComponent<
         return { key: x, text: x };
       }
     );
-    const accuracyDropDown: IDropdownOption[] = this.props.accuracyPickerProps.accuracyOptions.map(
+    const performanceDropDown: IDropdownOption[] = this.props.performancePickerProps.performanceOptions.map(
       (x) => {
         return { key: x.key, text: x.title };
       }
@@ -187,7 +187,7 @@ export class ModelComparisonChart extends React.PureComponent<
     let mainChart;
     if (
       !this.state ||
-      this.state.accuracyArray === undefined ||
+      this.state.performanceArray === undefined ||
       this.state.disparityArray === undefined
     ) {
       this.loadData();
@@ -200,28 +200,28 @@ export class ModelComparisonChart extends React.PureComponent<
       );
     } else {
       const { disparityArray } = this.state;
-      const data = this.state.accuracyArray.map((accuracy, index) => {
+      const data = this.state.performanceArray.map((performance, index) => {
         return {
-          Accuracy: accuracy,
+          Performance: performance,
           index,
           Parity: disparityArray[index]
         };
       });
-      let minAccuracy: number = Number.MAX_SAFE_INTEGER;
-      let maxAccuracy: number = Number.MIN_SAFE_INTEGER;
+      let minPerformance: number = Number.MAX_SAFE_INTEGER;
+      let maxPerformance: number = Number.MIN_SAFE_INTEGER;
       let maxDisparity: number = Number.MIN_SAFE_INTEGER;
       let minDisparity: number = Number.MAX_SAFE_INTEGER;
-      let minAccuracyIndex = 0;
-      let maxAccuracyIndex = 0;
+      let minPerformanceIndex = 0;
+      let maxPerformanceIndex = 0;
       let minDisparityIndex = 0;
-      this.state.accuracyArray.forEach((value, index) => {
-        if (value >= maxAccuracy) {
-          maxAccuracyIndex = index;
-          maxAccuracy = value;
+      this.state.performanceArray.forEach((value, index) => {
+        if (value >= maxPerformance) {
+          maxPerformanceIndex = index;
+          maxPerformance = value;
         }
-        if (value <= minAccuracy) {
-          minAccuracyIndex = index;
-          minAccuracy = value;
+        if (value <= minPerformance) {
+          minPerformanceIndex = index;
+          minPerformance = value;
         }
       });
       this.state.disparityArray.forEach((value, index) => {
@@ -233,34 +233,34 @@ export class ModelComparisonChart extends React.PureComponent<
           minDisparity = value;
         }
       });
-      const formattedMinAccuracy = FormatMetrics.formatNumbers(
-        minAccuracy,
-        this.props.accuracyPickerProps.selectedAccuracyKey
+      const formattedMinPerformance = FormatMetrics.formatNumbers(
+        minPerformance,
+        this.props.performancePickerProps.selectedPerformanceKey
       );
-      const formattedMaxAccuracy = FormatMetrics.formatNumbers(
-        maxAccuracy,
-        this.props.accuracyPickerProps.selectedAccuracyKey
+      const formattedMaxPerformance = FormatMetrics.formatNumbers(
+        maxPerformance,
+        this.props.performancePickerProps.selectedPerformanceKey
       );
       const formattedMinDisparity = FormatMetrics.formatNumbers(
         minDisparity,
-        this.props.accuracyPickerProps.selectedAccuracyKey
+        this.props.performancePickerProps.selectedPerformanceKey
       );
       const formattedMaxDisparity = FormatMetrics.formatNumbers(
         maxDisparity,
-        this.props.accuracyPickerProps.selectedAccuracyKey
+        this.props.performancePickerProps.selectedPerformanceKey
       );
       const selectedMetric =
-        accuracyOptions[this.props.accuracyPickerProps.selectedAccuracyKey] ||
-        this.props.accuracyPickerProps.accuracyOptions.find(
+        performanceOptions[this.props.performancePickerProps.selectedPerformanceKey] ||
+        this.props.performancePickerProps.performanceOptions.find(
           (metric) =>
-            metric.key === this.props.accuracyPickerProps.selectedAccuracyKey
+            metric.key === this.props.performancePickerProps.selectedPerformanceKey
         );
 
       const insights2 = localization.formatString(
         localization.ModelComparison.insightsText2,
         selectedMetric.title,
-        formattedMinAccuracy,
-        formattedMaxAccuracy,
+        formattedMinPerformance,
+        formattedMaxPerformance,
         formattedMinDisparity,
         formattedMaxDisparity
       );
@@ -269,13 +269,13 @@ export class ModelComparisonChart extends React.PureComponent<
         localization.ModelComparison.insightsText3,
         selectedMetric.title.toLowerCase(),
         selectedMetric.isMinimization
-          ? formattedMinAccuracy
-          : formattedMaxAccuracy,
+          ? formattedMinPerformance
+          : formattedMaxPerformance,
         FormatMetrics.formatNumbers(
           this.state.disparityArray[
-            selectedMetric.isMinimization ? minAccuracyIndex : maxAccuracyIndex
+            selectedMetric.isMinimization ? minPerformanceIndex : maxPerformanceIndex
           ],
-          this.props.accuracyPickerProps.selectedAccuracyKey
+          this.props.performancePickerProps.selectedPerformanceKey
         )
       );
 
@@ -283,8 +283,8 @@ export class ModelComparisonChart extends React.PureComponent<
         localization.ModelComparison.insightsText4,
         selectedMetric.title.toLowerCase(),
         FormatMetrics.formatNumbers(
-          this.state.accuracyArray[minDisparityIndex],
-          this.props.accuracyPickerProps.selectedAccuracyKey
+          this.state.performanceArray[minDisparityIndex],
+          this.props.performancePickerProps.selectedPerformanceKey
         ),
         formattedMinDisparity
       );
@@ -300,11 +300,11 @@ export class ModelComparisonChart extends React.PureComponent<
         }
       );
 
-      const accuracyMetricTitle = selectedMetric.title;
+      const performanceMetricTitle = selectedMetric.title;
       const parityMetricTitle =
         parityOptions[this.props.parityPickerProps.selectedParityKey].title;
       if (props.layout?.xaxis) {
-        props.layout.xaxis.title = accuracyMetricTitle;
+        props.layout.xaxis.title = performanceMetricTitle;
       }
       if (props.layout?.yaxis) {
         props.layout.yaxis.title = parityMetricTitle;
@@ -441,11 +441,11 @@ export class ModelComparisonChart extends React.PureComponent<
           <Dropdown
             className={styles.dropDown}
             defaultSelectedKey={
-              this.props.accuracyPickerProps.selectedAccuracyKey
+              this.props.performancePickerProps.selectedPerformanceKey
             }
-            options={accuracyDropDown}
+            options={performanceDropDown}
             disabled={false}
-            onChange={this.accuracyChanged}
+            onChange={this.performanceChanged}
             styles={dropdownStyles}
           />
           <Dropdown
@@ -464,14 +464,14 @@ export class ModelComparisonChart extends React.PureComponent<
 
   private async loadData(): Promise<void> {
     try {
-      const accuracyPromises = new Array(this.props.modelCount)
+      const performancePromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
           return this.props.metricsCache.getMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
-            this.props.accuracyPickerProps.selectedAccuracyKey
+            this.props.performancePickerProps.selectedPerformanceKey
           );
         });
       const parityOption =
@@ -494,11 +494,11 @@ export class ModelComparisonChart extends React.PureComponent<
           );
         });
 
-      const accuracyArray = (await Promise.all(accuracyPromises)).map(
+      const performanceArray = (await Promise.all(performancePromises)).map(
         (metric) => metric.global
       );
       const disparityArray = await Promise.all(disparityPromises);
-      this.setState({ accuracyArray, disparityArray });
+      this.setState({ performanceArray, disparityArray });
     } catch {
       // todo;
     }
@@ -517,24 +517,24 @@ export class ModelComparisonChart extends React.PureComponent<
         featureKey
       );
       this.setState({
-        accuracyArray: undefined,
+        performanceArray: undefined,
         disparityArray: undefined,
         featureKey
       });
     }
   };
 
-  private readonly accuracyChanged = (
+  private readonly performanceChanged = (
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
     if (!option) {
       return;
     }
-    const accuracyKey = option.key.toString();
-    if (this.state.accuracyKey !== accuracyKey) {
-      this.props.accuracyPickerProps.onAccuracyChange(accuracyKey);
-      this.setState({ accuracyArray: undefined, accuracyKey });
+    const performanceKey = option.key.toString();
+    if (this.state.performanceKey !== performanceKey) {
+      this.props.performancePickerProps.onPerformanceChange(performanceKey);
+      this.setState({ performanceArray: undefined, performanceKey });
     }
   };
 

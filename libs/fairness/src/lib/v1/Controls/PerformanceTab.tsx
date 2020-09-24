@@ -10,18 +10,18 @@ import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { IAccuracyPickerPropsV1 } from "../FairnessWizard";
+import { IPerformancePickerPropsV1 } from "../FairnessWizard";
 
-import { AccuracyTabStyles } from "./AccuracyTab.styles";
+import { PerformanceTabStyles } from "./PerformanceTab.styles";
 import { TileList } from "./TileList";
 
-export interface IAccuracyPickingTabProps extends IWizardTabProps {
-  accuracyPickerProps: IAccuracyPickerPropsV1;
+export interface IPerformancePickingTabProps extends IWizardTabProps {
+  performancePickerProps: IPerformancePickerPropsV1;
 }
 
-export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
+export class PerformanceTab extends React.PureComponent<IPerformancePickingTabProps> {
   public render(): React.ReactNode {
-    const styles = AccuracyTabStyles();
+    const styles = PerformanceTabStyles();
     return (
       <Stack
         horizontal
@@ -30,39 +30,39 @@ export class AccuracyTab extends React.PureComponent<IAccuracyPickingTabProps> {
       >
         <Stack className={styles.main}>
           <Text className={styles.header} block>
-            {localization.Accuracy.header}
+            {localization.Performance.header}
           </Text>
           <Text className={styles.textBody} block>
             {localization.formatString(
-              localization.Accuracy.body,
+              localization.Performance.body,
               this.props.dashboardContext.modelMetadata.PredictionType !==
                 PredictionTypes.Regression
-                ? localization.Accuracy.binary
-                : localization.Accuracy.continuous,
+                ? localization.Performance.binary
+                : localization.Performance.continuous,
               this.props.dashboardContext.modelMetadata.PredictionType ===
                 PredictionTypes.BinaryClassification
-                ? localization.Accuracy.binary
-                : localization.Accuracy.continuous,
+                ? localization.Performance.binary
+                : localization.Performance.continuous,
               this.props.dashboardContext.predictions.length === 1
-                ? localization.Accuracy.modelMakes
-                : localization.Accuracy.modelsMake
+                ? localization.Performance.modelMakes
+                : localization.Performance.modelsMake
             )}
           </Text>
           <StackItem grow={2} className={styles.itemsList}>
             <FocusZone shouldFocusOnMount={true}>
               <TileList
-                items={this.props.accuracyPickerProps.accuracyOptions.map(
-                  (accuracy) => {
+                items={this.props.performancePickerProps.performanceOptions.map(
+                  (performance) => {
                     return {
-                      description: accuracy.description,
-                      onSelect: this.props.accuracyPickerProps.onAccuracyChange.bind(
+                      description: performance.description,
+                      onSelect: this.props.performancePickerProps.onPerformanceChange.bind(
                         this,
-                        accuracy.key
+                        performance.key
                       ),
                       selected:
-                        this.props.accuracyPickerProps.selectedAccuracyKey ===
-                        accuracy.key,
-                      title: accuracy.title
+                        this.props.performancePickerProps.selectedPerformanceKey ===
+                        performance.key,
+                      title: performance.title
                     };
                   }
                 )}

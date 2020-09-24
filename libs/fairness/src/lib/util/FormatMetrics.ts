@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { accuracyOptions } from "../util/AccuracyMetrics";
+import { performanceOptions } from "../util/PerformanceMetrics";
 
 export class FormatMetrics {
   public static formatNumbers = (
@@ -16,7 +16,7 @@ export class FormatMetrics {
     const styleObject: Intl.NumberFormatOptions = {
       maximumSignificantDigits: sigDigits
     };
-    if (accuracyOptions[key] && accuracyOptions[key].isPercentage && !isRatio) {
+    if (performanceOptions[key] && performanceOptions[key].isPercentage && !isRatio) {
       styleObject.style = "percent";
     }
     return value.toLocaleString(undefined, styleObject);
