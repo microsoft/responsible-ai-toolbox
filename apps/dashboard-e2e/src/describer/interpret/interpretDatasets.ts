@@ -38,7 +38,8 @@ const interpretDatasets = {
       "RAD",
       "ZN",
       "CHAS"
-    ]
+    ],
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"]
   },
   bostonDataGlobal: {
     featureNames: [
@@ -56,6 +57,7 @@ const interpretDatasets = {
       "ZN",
       "CHAS"
     ],
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     noLocalImportance: true
   },
   breastCancerData: {
@@ -90,10 +92,12 @@ const interpretDatasets = {
       "worst concavity",
       "concavity error",
       "radius error"
-    ]
+    ],
+    datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"]
   },
   ebmData: {
     featureNames: ["Age", "Employment"],
+    datasetBarLabel: ["0", "1"],
     noFeatureImportance: true
   },
   ibmData: {
@@ -128,7 +132,8 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ]
+    ],
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"]
   },
   ibmDataInconsistent: {
     errorMessage:
@@ -164,7 +169,8 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ]
+    ],
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"]
   },
   ibmNoClass: {
     featureNames: [
@@ -198,7 +204,8 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ]
+    ],
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"]
   },
   irisData: {
     featureNames: [
@@ -206,7 +213,8 @@ const interpretDatasets = {
       "petal width (cm)",
       "sepal length (cm)",
       "sepal width (cm)"
-    ]
+    ],
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"]
   },
   irisDataGlobal: {
     featureNames: [
@@ -215,6 +223,7 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     noLocalImportance: true
   },
   irisGlobal: {
@@ -237,7 +246,8 @@ const interpretDatasets = {
     noDatasetExplorer: true
   },
   irisNoFeatures: {
-    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
+    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"],
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"]
   }
 };
 const withType: {
