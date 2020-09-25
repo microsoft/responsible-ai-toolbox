@@ -21,6 +21,7 @@ const interpretDatasets = {
       "Column4",
       "Column14"
     ],
+    noDataset: true,
     noDatasetExplorer: true
   },
   bostonData: {
@@ -243,6 +244,7 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
+    noDataset: true,
     noDatasetExplorer: true
   },
   irisNoFeatures: {
