@@ -24,6 +24,7 @@ const interpretDatasets = {
     noDatasetExplorer: true
   },
   bostonData: {
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     featureNames: [
       "LSTAT",
       "RM",
@@ -38,10 +39,10 @@ const interpretDatasets = {
       "RAD",
       "ZN",
       "CHAS"
-    ],
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"]
+    ]
   },
   bostonDataGlobal: {
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     featureNames: [
       "LSTAT",
       "RM",
@@ -57,10 +58,10 @@ const interpretDatasets = {
       "ZN",
       "CHAS"
     ],
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     noLocalImportance: true
   },
   breastCancerData: {
+    datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"],
     featureNames: [
       "worst area",
       "worst perimeter",
@@ -92,15 +93,15 @@ const interpretDatasets = {
       "worst concavity",
       "concavity error",
       "radius error"
-    ],
-    datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"]
+    ]
   },
   ebmData: {
-    featureNames: ["Age", "Employment"],
     datasetBarLabel: ["0", "1"],
+    featureNames: ["Age", "Employment"],
     noFeatureImportance: true
   },
   ibmData: {
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     featureNames: [
       "OverTime",
       "JobRole",
@@ -132,10 +133,10 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ],
-    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"]
+    ]
   },
   ibmDataInconsistent: {
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     errorMessage:
       "Inconsistent dimensions. Predicted probability[0] has dimensions 2, expected 1",
     featureNames: [
@@ -169,10 +170,10 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ],
-    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"]
+    ]
   },
   ibmNoClass: {
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     featureNames: [
       "OverTime",
       "JobRole",
@@ -204,26 +205,25 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ],
-    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"]
+    ]
   },
   irisData: {
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     featureNames: [
       "petal length (cm)",
       "petal width (cm)",
       "sepal length (cm)",
       "sepal width (cm)"
-    ],
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"]
+    ]
   },
   irisDataGlobal: {
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     featureNames: [
       "petal length (cm)",
       "petal width (cm)",
       "sepal length (cm)",
       "sepal width (cm)"
     ],
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     noLocalImportance: true
   },
   irisGlobal: {
@@ -246,8 +246,8 @@ const interpretDatasets = {
     noDatasetExplorer: true
   },
   irisNoFeatures: {
-    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"],
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"]
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
+    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
   }
 };
 const withType: {

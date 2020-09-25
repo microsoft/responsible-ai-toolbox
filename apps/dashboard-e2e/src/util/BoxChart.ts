@@ -29,13 +29,13 @@ export class BoxChart extends Chart<IBox> {
       );
     }
     return boxElements.map((b, i) =>
-      this.getCoordinate(i, b, hasMeanElements ? meanElements[i] : null)
+      this.getCoordinate(i, b, hasMeanElements ? meanElements[i] : undefined)
     );
   }
   private readonly getCoordinate = (
     idx: number,
     boxElement: HTMLElement,
-    meanElement: HTMLElement | null
+    meanElement: HTMLElement | undefined
   ): IBox => {
     const boxCoordinate = this.getBoxCoordinate(idx, boxElement);
     const meanCoordinate =
