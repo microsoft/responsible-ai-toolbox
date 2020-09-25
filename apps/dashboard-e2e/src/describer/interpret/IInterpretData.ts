@@ -6,6 +6,7 @@ export interface IInterpretData {
   featureNames: string[];
   noDataset?: boolean;
   datasetBarLabel?: string[];
+  noDataset?: boolean;
   noFeatureImportance?: boolean;
   noLocalImportance?: boolean;
 }
