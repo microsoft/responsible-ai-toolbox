@@ -4,7 +4,9 @@ const fs = require("fs-extra");
 const semver = require("semver");
 const fetch = require("./fetch");
 
-function getTargetVersion(local, npmVersions) {
+async function getTargetVersion(name, localVersion) {
+  const local = localVersion || "0.0.1";
+  const npmVersions = await fetch(name);
   if (!semver.valid(local)) {
     throw new Error(`Invalid version in package.json ${local}`);
   }
@@ -70,18 +72,9 @@ async function bump(workspace, pkgFolderName) {
   ) {
     throw new Error(`outputPath for "${pkgFolderName}" is not set.`);
   }
-  const outPkgPath = path.join(
-    setting.architect.build.options.outputPath,
-    "package.json"
-  );
-  if (!fs.existsSync(outPkgPath)) {
-    throw new Error(`Package "${pkgFolderName}" is not built yet.`);
-  }
-  const local = pkgSetting.version || "0.0.1";
-  const npmVersions = await fetch(pkgSetting.name);
-  const target = getTargetVersion(local, npmVersions);
+  const target = await getTargetVersion(pkgSetting.name, pkgSetting.version);
   pkgSetting.version = target;
-  fs.writeJSONSync(outPkgPath, pkgSetting, { spaces: 2 });
+  fs.writeJSONSync(packagePath, pkgSetting, { spaces: 2 });
 }
 
 async function main() {
