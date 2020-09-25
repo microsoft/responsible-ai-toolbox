@@ -105,7 +105,7 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private readonly chartAndConfigsId = "chart-and-axis-config-id";
-  private readonly _chartConfigId = "chart-config-button";
+  private readonly _chartConfigId = "DatasetExplorerSettingsButton";
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Histogram,
@@ -589,7 +589,10 @@ export class DatasetExplorerTab extends React.PureComponent<
                 target={`#${this.chartAndConfigsId}`}
               />
             )}
-            <div className={classNames.chartWithVertical}>
+            <div
+              className={classNames.chartWithVertical}
+              id="DatasetExplorerChart"
+            >
               <div className={classNames.verticalAxis}>
                 <div className={classNames.rotatedVerticalBox}>
                   <div>

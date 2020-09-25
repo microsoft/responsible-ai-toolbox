@@ -10,14 +10,15 @@ export interface IBox extends IChartElement {
   readonly q1: number;
   readonly q2: number;
   readonly q3: number;
-  readonly mean: number;
+  readonly mean?: number;
 }
 export class BoxChart extends Chart<IBox> {
   public get Elements(): IBox[] {
     const boxElements = this.getBoxElements();
     const meanElements = this.getMeanElements();
     const pointElements = this.getPointElements();
-    if (boxElements.length !== meanElements.length) {
+    const hasMeanElements = meanElements.length > 0;
+    if (hasMeanElements && boxElements.length !== meanElements.length) {
       throw new Error(
         `boxElements: ${boxElements.length} does not match meanElements: ${meanElements.length}`
       );
@@ -27,21 +28,24 @@ export class BoxChart extends Chart<IBox> {
         `boxElements: ${boxElements.length} does not match pointElements: ${pointElements.length}`
       );
     }
-    return boxElements.map((b, i) => this.getCoordinate(i, b, meanElements[i]));
+    return boxElements.map((b, i) =>
+      this.getCoordinate(i, b, hasMeanElements ? meanElements[i] : null)
+    );
   }
   private readonly getCoordinate = (
     idx: number,
     boxElement: HTMLElement,
-    meanElement: HTMLElement
+    meanElement: HTMLElement | null
   ): IBox => {
     const boxCoordinate = this.getBoxCoordinate(idx, boxElement);
-    const meanCoordinate = this.getMeanCoordinate(idx, meanElement);
-    if (boxCoordinate.left !== meanCoordinate.left) {
+    const meanCoordinate =
+      meanElement && this.getMeanCoordinate(idx, meanElement);
+    if (meanCoordinate && boxCoordinate.left !== meanCoordinate.left) {
       throw new Error(
         `box${idx} left: ${boxCoordinate.left} does not match left for mean: ${meanCoordinate.left} `
       );
     }
-    if (boxCoordinate.right !== meanCoordinate.right) {
+    if (meanCoordinate && boxCoordinate.right !== meanCoordinate.right) {
       throw new Error(
         `box${idx} right: ${boxCoordinate.right} does not match right for mean: ${meanCoordinate.right} `
       );
@@ -56,10 +60,9 @@ export class BoxChart extends Chart<IBox> {
     //     `box${idx} mean: ${meanCoordinate.mean} is out of top: ${boxCoordinate.top} `
     //   );
     // }
-    return {
-      ...boxCoordinate,
-      ...meanCoordinate
-    };
+    return meanCoordinate
+      ? { ...boxCoordinate, ...meanCoordinate }
+      : { ...boxCoordinate };
   };
 
   private readonly getBoxCoordinate = (

@@ -5,6 +5,7 @@ export interface IInterpretData {
   errorMessage?: string;
   featureNames: string[];
   noDataset?: boolean;
+  datasetBarLabel?: string[];
   noFeatureImportance?: boolean;
   noLocalImportance?: boolean;
 }
