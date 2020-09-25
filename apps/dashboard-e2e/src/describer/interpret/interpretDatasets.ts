@@ -21,7 +21,7 @@ const interpretDatasets = {
       "Column4",
       "Column14"
     ],
-    noDataset: true
+    noDatasetExplorer: true
   },
   bostonData: {
     featureNames: [
@@ -224,7 +224,8 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
-    noLocalImportance: true
+    noLocalImportance: true,
+    noDatasetExplorer: true
   },
   irisNoData: {
     featureNames: [
@@ -232,7 +233,8 @@ const interpretDatasets = {
       "petal width (cm)",
       "sepal length (cm)",
       "sepal width (cm)"
-    ]
+    ],
+    noDatasetExplorer: true
   },
   irisNoFeatures: {
     featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
