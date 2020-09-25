@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ScatterChart } from "../../../util/ScatterChart";
 import { getMenu } from "../../../util/getMenu";
+import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
 export function describeIndividualDatapoints(dataShape: IInterpretData): void {
