@@ -3,7 +3,7 @@
 
 import { localization } from "./../Localization/localization";
 
-export interface IAccuracyOption {
+export interface IPerformanceOption {
   key: string;
   title: string;
   isMinimization: boolean;
@@ -14,7 +14,7 @@ export interface IAccuracyOption {
   alwaysUpperCase?: boolean;
 }
 
-export const accuracyOptions: { [key: string]: IAccuracyOption } = {
+export const performanceOptions: { [key: string]: IPerformanceOption } = {
   accuracy_score: {
     description: localization.Metrics.accuracyDescription,
     isMinimization: false,
@@ -70,19 +70,19 @@ export const accuracyOptions: { [key: string]: IAccuracyOption } = {
     key: "fallout_rate",
     title: localization.Metrics.falloutRate
   },
-  false_negative_over_total: {
-    description: localization.loremIpsum,
+  false_negative_rate: {
+    description: localization.Metrics.falseNegativeRateDescription,
     isMinimization: true,
     isPercentage: true,
-    key: "false_negative_over_total",
-    title: localization.Metrics.falloutRate
+    key: "false_negative_rate",
+    title: localization.Metrics.falseNegativeRate
   },
-  false_positive_over_total: {
-    description: localization.loremIpsum,
+  false_positive_rate: {
+    description: localization.Metrics.falsePositiveRateDescription,
     isMinimization: true,
     isPercentage: true,
-    key: "false_positive_over_total",
-    title: localization.Metrics.falloutRate
+    key: "false_positive_rate",
+    title: localization.Metrics.falsePositiveRate
   },
   log_loss: {
     description: localization.loremIpsum,

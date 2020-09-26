@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 export interface IInterpretData {
+  errorMessage?: string;
   featureNames: string[];
-  noLocalImportance?: boolean;
-  noFeatureImportance?: boolean;
+  datasetBarLabel?: string[];
   noDataset?: boolean;
+  noFeatureImportance?: boolean;
+  noLocalImportance?: boolean;
 }

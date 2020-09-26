@@ -24,6 +24,7 @@ const interpretDatasets = {
     noDataset: true
   },
   bostonData: {
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     featureNames: [
       "LSTAT",
       "RM",
@@ -41,6 +42,7 @@ const interpretDatasets = {
     ]
   },
   bostonDataGlobal: {
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     featureNames: [
       "LSTAT",
       "RM",
@@ -59,6 +61,7 @@ const interpretDatasets = {
     noLocalImportance: true
   },
   breastCancerData: {
+    datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"],
     featureNames: [
       "worst area",
       "worst perimeter",
@@ -93,10 +96,12 @@ const interpretDatasets = {
     ]
   },
   ebmData: {
+    datasetBarLabel: ["0", "1"],
     featureNames: ["Age", "Employment"],
     noFeatureImportance: true
   },
   ibmData: {
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     featureNames: [
       "OverTime",
       "JobRole",
@@ -131,6 +136,9 @@ const interpretDatasets = {
     ]
   },
   ibmDataInconsistent: {
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
+    errorMessage:
+      "Inconsistent dimensions. Predicted probability[0] has dimensions 2, expected 1",
     featureNames: [
       "OverTime",
       "JobRole",
@@ -165,6 +173,7 @@ const interpretDatasets = {
     ]
   },
   ibmNoClass: {
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
     featureNames: [
       "OverTime",
       "JobRole",
@@ -199,6 +208,7 @@ const interpretDatasets = {
     ]
   },
   irisData: {
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     featureNames: [
       "petal length (cm)",
       "petal width (cm)",
@@ -207,6 +217,7 @@ const interpretDatasets = {
     ]
   },
   irisDataGlobal: {
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     featureNames: [
       "petal length (cm)",
       "petal width (cm)",
@@ -222,6 +233,7 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
+    noDataset: true,
     noLocalImportance: true
   },
   irisNoData: {
@@ -230,9 +242,11 @@ const interpretDatasets = {
       "petal width (cm)",
       "sepal length (cm)",
       "sepal width (cm)"
-    ]
+    ],
+    noDataset: true
   },
   irisNoFeatures: {
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
   }
 };
