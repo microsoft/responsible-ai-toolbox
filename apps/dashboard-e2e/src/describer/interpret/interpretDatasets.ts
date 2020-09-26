@@ -21,8 +21,7 @@ const interpretDatasets = {
       "Column4",
       "Column14"
     ],
-    noDataset: true,
-    noDatasetExplorer: true
+    noDataset: true
   },
   bostonData: {
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
@@ -234,8 +233,7 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
-    noDatasetExplorer: true,
-    noLocalImportance: true
+    noDataset: true
   },
   irisNoData: {
     featureNames: [
@@ -244,8 +242,7 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
-    noDataset: true,
-    noDatasetExplorer: true
+    noDataset: true
   },
   irisNoFeatures: {
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],

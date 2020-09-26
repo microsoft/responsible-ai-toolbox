@@ -25,7 +25,7 @@ export function describeInterpret(name: keyof typeof interpretDatasets): void {
     if (!interpretDatasets[name].noFeatureImportance) {
       describeAggregateFeatureImportance(interpretDatasets[name]);
     }
-    if (!interpretDatasets[name].noDatasetExplorer) {
+    if (!interpretDatasets[name].noDataset) {
       describeDatasetExplorer(interpretDatasets[name]);
     }
   });

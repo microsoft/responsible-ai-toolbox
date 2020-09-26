@@ -8,5 +8,4 @@ export interface IInterpretData {
   noDataset?: boolean;
   noFeatureImportance?: boolean;
   noLocalImportance?: boolean;
-  noDatasetExplorer?: boolean;
 }

@@ -48,7 +48,7 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
           }
         }
       });
-      if (!props.dataShape.noDatasetExplorer) {
+      if (!props.dataShape.noDataset) {
         describe("Chart Settings", () => {
           beforeEach(() => {
             cy.get("#DatasetExplorerSettingsButton").click();
