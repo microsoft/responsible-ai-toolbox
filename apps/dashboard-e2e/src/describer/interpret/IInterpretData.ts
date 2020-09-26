@@ -4,7 +4,6 @@
 export interface IInterpretData {
   errorMessage?: string;
   featureNames: string[];
-  noDataset?: boolean;
   datasetBarLabel?: string[];
   noDataset?: boolean;
   noFeatureImportance?: boolean;

@@ -233,7 +233,8 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
-    noDataset: true
+    noDataset: true,
+    noLocalImportance: true
   },
   irisNoData: {
     featureNames: [

@@ -629,6 +629,7 @@ export class DatasetExplorerTab extends React.PureComponent<
               />
               {this.state.calloutVisible && (
                 <Callout
+                  id="DatasetExplorerCallout"
                   doNotLayer={true}
                   className={classNames.callout}
                   gapSpace={0}
@@ -643,6 +644,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                     {localization.DatasetExplorer.chartType}
                   </Text>
                   <ChoiceGroup
+                    id="ChartTypeSelection"
                     selectedKey={this.props.chartProps.chartType}
                     options={this.chartOptions}
                     onChange={this.onChartTypeChange}
