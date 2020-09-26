@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { describeAggregateFeatureImportance } from "./aggregateFeatureImportance/describeAggregateFeatureImportance";
+import { describeDatasetExplorer } from "./datasetExplorer/describeDatasetExplorer";
 import { interpretDatasets } from "./interpretDatasets";
 
 export function describeInterpret(name: keyof typeof interpretDatasets): void {
@@ -23,6 +24,9 @@ export function describeInterpret(name: keyof typeof interpretDatasets): void {
     }
     if (!interpretDatasets[name].noFeatureImportance) {
       describeAggregateFeatureImportance(interpretDatasets[name]);
+    }
+    if (!interpretDatasets[name].noDataset) {
+      describeDatasetExplorer(interpretDatasets[name]);
     }
   });
 }
