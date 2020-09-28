@@ -876,7 +876,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           binnedPerformance: performance.bins,
           binnedUnderprediction,
           errors,
-          
           globalOutcome: outcomes.global,
           globalOverprediction,
           globalPerformance: performance.global,

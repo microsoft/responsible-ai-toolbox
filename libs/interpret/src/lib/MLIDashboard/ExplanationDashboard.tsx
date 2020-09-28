@@ -70,6 +70,7 @@ import {
 import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
+import { validateInputs } from "./validateInputs";
 
 const rowIndex = "rowIndex";
 
@@ -303,10 +304,7 @@ export class ExplanationDashboard extends React.Component<
       requestPredictions: props.requestPredictions
     };
     const modelMetadata = ExplanationDashboard.buildModelMetadata(props);
-    const errorMessage = ExplanationDashboard.validateInputs(
-      props,
-      modelMetadata
-    );
+    const errorMessage = validateInputs(props, modelMetadata);
     if (errorMessage !== undefined) {
       if (props.telemetryHook !== undefined) {
         props.telemetryHook({
@@ -488,156 +486,6 @@ export class ExplanationDashboard extends React.Component<
       initializeIcons(props.iconUrl);
       ExplanationDashboard.iconsInitialized = true;
     }
-  }
-
-  private static validateInputs(
-    props: IExplanationDashboardProps,
-    modelMetadata: IExplanationModelMetadata
-  ): string | undefined {
-    const classLength = modelMetadata.classNames.length;
-    const featureLength = modelMetadata.featureNames.length;
-    let rowLength: number | undefined;
-    if (props.trueY) {
-      rowLength = props.trueY.length;
-    }
-    if (props.predictedY) {
-      const length = props.predictedY.length;
-      if (rowLength === undefined) {
-        rowLength = length;
-      }
-      if (length !== rowLength) {
-        return `Inconsistent dimensions. Predicted y has dimension [${length}], expected [${rowLength}]`;
-      }
-    }
-    if (props.probabilityY) {
-      if (!Array.isArray(props.probabilityY)) {
-        return `Predicted probability not an array. Expected array of dimension [${rowLength} x ${classLength}]`;
-      }
-      const length = props.probabilityY.length;
-      if (rowLength === undefined) {
-        rowLength = length;
-      }
-      if (length !== rowLength) {
-        return `Inconsistent dimensions. Predicted y has length [${length}], expected [${rowLength}]`;
-      }
-      if (length === 0) {
-        return "Predicted probability input not a non-empty array";
-      }
-      const cLength = props.probabilityY[0].length;
-      if (cLength !== classLength) {
-        return `Inconsistent dimensions. Predicted probability has dimensions [${length} x ${cLength}], expected [${rowLength} x ${classLength}]`;
-      }
-      if (!props.probabilityY.every((row) => row.length === classLength)) {
-        return "Inconsistent dimensions. Predicted probability has rows of varying length";
-      }
-    }
-    if (props.testData) {
-      if (!Array.isArray(props.testData)) {
-        return `Eval dataset not an array. Expected array of dimension [${rowLength} x ${featureLength}]`;
-      }
-      const length = props.testData.length;
-      if (rowLength === undefined) {
-        rowLength = length;
-      }
-      if (length !== rowLength) {
-        return `Inconsistent dimensions. Eval dataset has length [${length}], expected [${rowLength}]`;
-      }
-      if (length === 0) {
-        return "Eval dataset not a non-empty array";
-      }
-      const fLength = props.testData[0].length;
-      if (fLength !== featureLength) {
-        return `Inconsistent dimensions. Eval dataset has dimensions [${length} x ${fLength}], expected [${rowLength} x ${featureLength}]`;
-      }
-      if (!props.testData.every((row) => row.length === featureLength)) {
-        return "Inconsistent dimensions. Eval dataset has rows of varying length";
-      }
-    }
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.localFeatureImportance &&
-      props.precomputedExplanations.localFeatureImportance.scores
-    ) {
-      const localExp =
-        props.precomputedExplanations.localFeatureImportance.scores;
-      if (!Array.isArray(localExp)) {
-        return `Local explanation not an array. Expected array of dimension [${classLength} x ${rowLength} x ${featureLength}]`;
-      }
-      // explanation will be 2d in case of regression models. 3 for classifier
-      let expDim = 2;
-      if (
-        (localExp as number[][][]).every((dim1) => {
-          return dim1.every((dim2) => Array.isArray(dim2));
-        })
-      ) {
-        expDim = 3;
-      }
-      if (expDim === 3) {
-        const cLength = localExp.length;
-        if (classLength !== cLength) {
-          return `Inconsistent dimensions. Local Explanation has class length [${cLength}], expected [${classLength}]`;
-        }
-        if (cLength === 0) {
-          return "Local explanation not a non-empty array";
-        }
-        const rLength = localExp[0].length;
-        if (rLength === 0) {
-          return "Local explanation not a non-empty array";
-        }
-        if (rowLength === undefined) {
-          rowLength = rLength;
-        }
-        if (rLength !== rowLength) {
-          return `Inconsistent dimensions. Local explanations has dimensions [${cLength} x ${rLength}], expected [${classLength} x ${rowLength}]`;
-        }
-        if (
-          !localExp.every(
-            (classArray: number[] | number[][]) =>
-              classArray.length === rowLength
-          )
-        ) {
-          return "Inconsistent dimensions. Local explanation has rows of varying length";
-        }
-        const fLength = (localExp[0][0] as number[]).length;
-        if (fLength !== featureLength) {
-          return `Inconsistent dimensions. Local explanations has dimensions [${cLength} x ${rLength} x ${fLength}], expected [${classLength} x ${rowLength} x ${featureLength}]`;
-        }
-        if (
-          !localExp.every((classArray: number[] | number[][]) =>
-            classArray.every(
-              (rowArray: number | number[]) =>
-                Array.isArray(rowArray) && rowArray.length === featureLength
-            )
-          )
-        ) {
-          return "Inconsistent dimensions. Local explanation has rows of varying length";
-        }
-      } else {
-        const length = localExp.length;
-        if (rowLength === undefined) {
-          rowLength = length;
-        }
-        if (length !== rowLength) {
-          return `Inconsistent dimensions. Local Explanation has row length [${length}], expected [${rowLength}]`;
-        }
-        if (length === 0) {
-          return "Local explanation not a non-empty array";
-        }
-        const fLength = (localExp[0] as number[]).length;
-        if (fLength !== featureLength) {
-          return `Inconsistent dimensions. Local explanations has dimensions [${length} x ${fLength}], expected [${rowLength} x ${featureLength}]`;
-        }
-        if (
-          !localExp.every(
-            (rowArray: number[] | number[][]) =>
-              rowArray.length === featureLength
-          )
-        ) {
-          return "Inconsistent dimensions. Local explanation has rows of varying length";
-        }
-      }
-    }
-    return undefined;
   }
 
   private static buildLocalFeatureMatrix(

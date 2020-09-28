@@ -9,7 +9,6 @@ env:
   blob_path:
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
 
@@ -28,6 +27,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install yarn
         run: npm install yarn -g
+      - name: Install
+        run: yarn install --frozen-lock-file
+      - name: bump version
+        run: yarn auto-version
       - name: CI
         run: yarn ci
       - name: Upload a Build result
@@ -62,12 +65,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dist
+          path: dist
       - id: publish
         name: NPM Publish
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.KE_NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
+          dry-run: false
       - if: steps.publish.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
