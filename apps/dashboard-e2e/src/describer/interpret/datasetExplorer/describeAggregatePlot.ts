@@ -5,6 +5,8 @@ import { BoxChart } from "../../../util/BoxChart";
 import { getMenu } from "../../../util/getMenu";
 import { IInterpretData } from "../IInterpretData";
 
+import { describeAxisConfigDialog } from "./describeAxisConfigDialog";
+
 export function describeAggregatePlot(dataShape: IInterpretData): void {
   describe("Aggregate plot", () => {
     const props = {
@@ -31,11 +33,11 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
           "Y-value"
         );
       });
-      // it("should have x axis label", () => {
-      //   cy.get(
-      //     '#DatasetExplorerChart div[class*="horizontalAxis"] span[class*="boldText-"]'
-      //   ).should("contain.text", "X-value");
-      // });
+      it("should have x axis label", () => {
+        cy.get(
+          '#DatasetExplorerChart div[class*="horizontalAxis"] span[class*="boldText-"]'
+        ).should("contain.text", "X-value");
+      });
       it("should have x axis bar label", () => {
         const columns = props.dataShape.datasetBarLabel;
         if (columns) {
@@ -62,6 +64,7 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
           });
         });
       }
+      describeAxisConfigDialog(false);
     });
   });
 }
