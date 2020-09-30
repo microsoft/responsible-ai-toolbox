@@ -104,7 +104,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     } as any
   };
 
-  private readonly chartAndConfigsId = "chart-and-axis-config-id";
+  private readonly chartAndConfigsId = "DatasetExplorerChart";
   private readonly _chartConfigId = "DatasetExplorerSettingsButton";
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
@@ -530,8 +530,8 @@ export class DatasetExplorerTab extends React.PureComponent<
             />
           )}
         </div>
-        <div className={classNames.mainArea}>
-          <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
+        <div className={classNames.mainArea} id={this.chartAndConfigsId}>
+          <div className={classNames.chartWithAxes} id={"XYColorConfigDialog"}>
             {this.state.yDialogOpen && (
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
@@ -589,10 +589,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                 target={`#${this.chartAndConfigsId}`}
               />
             )}
-            <div
-              className={classNames.chartWithVertical}
-              id="DatasetExplorerChart"
-            >
+            <div className={classNames.chartWithVertical}>
               <div className={classNames.verticalAxis}>
                 <div className={classNames.rotatedVerticalBox}>
                   <div>
