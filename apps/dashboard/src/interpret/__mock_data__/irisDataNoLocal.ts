@@ -5,14 +5,10 @@ import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
 import { irisData } from "./irisData";
 
-export const irisGlobal: IExplanationDashboardData = {
+export const irisDataNoLocal: IExplanationDashboardData = {
   ...irisData,
   precomputedExplanations: {
     ...irisData.precomputedExplanations,
     localFeatureImportance: undefined
-  },
-  predictedY: undefined,
-  probabilityY: undefined,
-  testData: undefined,
-  trueY: undefined
+  }
 };

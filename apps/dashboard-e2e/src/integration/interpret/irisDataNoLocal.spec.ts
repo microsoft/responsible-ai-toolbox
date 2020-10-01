@@ -3,4 +3,4 @@
 
 import { describeInterpret } from "../../describer/interpret/describeInterpret";
 
-describeInterpret("irisDataGlobal");
+describeInterpret("irisDataNoLocal");

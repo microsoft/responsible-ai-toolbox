@@ -254,7 +254,7 @@ const interpretDatasets = {
       "sepal width (cm)"
     ]
   },
-  irisDataGlobal: {
+  irisDataNoLocal: {
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     featureNames: [
       "petal length (cm)",

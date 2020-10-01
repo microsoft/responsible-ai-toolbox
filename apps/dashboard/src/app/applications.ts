@@ -20,7 +20,7 @@ import { ibmData } from "../interpret/__mock_data__/ibmData";
 import { ibmDataInconsistent } from "../interpret/__mock_data__/ibmDataInconsistent";
 import { ibmNoClass } from "../interpret/__mock_data__/ibmNoClass";
 import { irisData } from "../interpret/__mock_data__/irisData";
-import { irisDataGlobal } from "../interpret/__mock_data__/irisDataGlobal";
+import { irisDataNoLocal } from "../interpret/__mock_data__/irisDataNoLocal";
 import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
@@ -80,7 +80,7 @@ export const applications: IApplications = <const>{
       ibmDataInconsistent: { classDimension: 2, data: ibmDataInconsistent },
       ibmNoClass: { classDimension: 2, data: ibmNoClass },
       irisData: { classDimension: 3, data: irisData },
-      irisDataGlobal: { classDimension: 3, data: irisDataGlobal },
+      irisDataNoLocal: { classDimension: 3, data: irisDataNoLocal },
       irisGlobal: { classDimension: 3, data: irisGlobal },
       irisNoData: { classDimension: 3, data: irisNoData },
       irisNoFeatures: { classDimension: 3, data: irisNoFeatures },
