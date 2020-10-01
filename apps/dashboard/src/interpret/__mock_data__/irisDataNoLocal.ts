@@ -3,12 +3,12 @@
 
 import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
-import { bostonData } from "./bostonData";
+import { irisData } from "./irisData";
 
-export const bostonDataGlobal: IExplanationDashboardData = {
-  ...bostonData,
+export const irisDataNoLocal: IExplanationDashboardData = {
+  ...irisData,
   precomputedExplanations: {
-    ...bostonData.precomputedExplanations,
+    ...irisData.precomputedExplanations,
     localFeatureImportance: undefined
   }
 };
