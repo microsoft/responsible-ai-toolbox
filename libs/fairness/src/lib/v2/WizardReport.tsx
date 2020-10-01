@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import { IData, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
-import _ from "lodash";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -19,6 +18,7 @@ import {
 } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
+import { Config, Layout } from "plotly.js";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
@@ -30,11 +30,12 @@ import { performanceOptions } from "../util/PerformanceMetrics";
 import { localization } from "./../Localization/localization";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OverallTable } from "./Controls/OverallTable";
+import { PerformancePlot } from "./Controls/PerformancePlot";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { WizardReportStyles } from "./WizardReport.styles";
 
 const theme = getTheme();
-interface IMetrics {
+export interface IMetrics {
   performance: IMetricResponse;
   performanceDisparity: number;
   outcomes: IMetricResponse;
@@ -60,67 +61,67 @@ export interface IReportProps extends IModelComparisonProps {
   selectedModelIndex: number;
 }
 
-export class WizardReport extends React.PureComponent<IReportProps, IState> {
-  private static barPlotlyProps: IPlotlyProperty = {
-    config: {
-      displaylogo: false,
-      modeBarButtonsToRemove: [
-        "toggleSpikelines",
-        "hoverClosestCartesian",
-        "hoverCompareCartesian",
-        "zoom2d",
-        "pan2d",
-        "select2d",
-        "lasso2d",
-        "zoomIn2d",
-        "zoomOut2d",
-        "autoScale2d",
-        "resetScale2d"
-      ],
-      responsive: true
-    },
-    data: [
-      {
-        orientation: "h",
-        type: "bar"
-      } as any
+export class BarPlotlyProps implements IPlotlyProperty {
+  public config?: Partial<Config> | undefined = {
+    displaylogo: false,
+    modeBarButtonsToRemove: [
+      "toggleSpikelines",
+      "hoverClosestCartesian",
+      "hoverCompareCartesian",
+      "zoom2d",
+      "pan2d",
+      "select2d",
+      "lasso2d",
+      "zoomIn2d",
+      "zoomOut2d",
+      "autoScale2d",
+      "resetScale2d"
     ],
-    layout: {
-      autosize: true,
-      barmode: "relative",
-      colorway: chartColors,
-      font: {
-        size: 10
-      },
-      hovermode: "closest",
-      margin: {
-        b: 20,
-        l: 0,
-        r: 0,
-        t: 4
-      },
-      plot_bgcolor: theme.semanticColors.bodyFrameBackground,
-      showlegend: false,
-      xaxis: {
-        autorange: true,
-        fixedrange: true,
-        linecolor: theme.semanticColors.disabledBorder,
-        linewidth: 1,
-        mirror: true
-      },
-      yaxis: {
-        autorange: "reversed",
-        dtick: 1,
-        fixedrange: true,
-        gridcolor: theme.semanticColors.disabledBorder,
-        gridwidth: 1,
-        showgrid: true,
-        showticklabels: false,
-        tick0: 0.5
-      }
-    } as any
+    responsive: true
   };
+  public data: IData[] = [
+    {
+      orientation: "h",
+      type: "bar"
+    } as any
+  ];
+  public layout: Partial<Layout> | undefined = {
+    autosize: true,
+    barmode: "relative",
+    colorway: chartColors,
+    font: {
+      size: 10
+    },
+    hovermode: "closest",
+    margin: {
+      b: 20,
+      l: 0,
+      r: 0,
+      t: 4
+    },
+    plot_bgcolor: theme.semanticColors.bodyFrameBackground,
+    showlegend: false,
+    xaxis: {
+      autorange: true,
+      fixedrange: true,
+      linecolor: theme.semanticColors.disabledBorder,
+      linewidth: 1,
+      mirror: true
+    },
+    yaxis: {
+      autorange: "reversed",
+      dtick: 1,
+      fixedrange: true,
+      gridcolor: theme.semanticColors.disabledBorder,
+      gridwidth: 1,
+      showgrid: true,
+      showticklabels: false,
+      tick0: 0.5
+    }
+  };
+}
 
+export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
     const styles = WizardReportStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
@@ -154,8 +155,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       106;
     const areaHeights = Math.max(300, alternateHeight);
 
-    const performancePlot = _.cloneDeep(WizardReport.barPlotlyProps);
-    const opportunityPlot = _.cloneDeep(WizardReport.barPlotlyProps);
+    const opportunityPlot = new BarPlotlyProps();
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
     // let howToReadPerformanceSection: React.ReactNode;
     // let howToReadOutcomesSection: React.ReactNode;
@@ -187,62 +187,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.BinaryClassification
       ) {
-        performancePlot.data = [
-          {
-            color: chartColors[0],
-            hoverinfo: "skip",
-            name: localization.Metrics.falsePositiveRate,
-            orientation: "h",
-            text: this.state.metrics.falsePositiveRates?.bins.map((num) =>
-              FormatMetrics.formatNumbers(num, "false_positive_rate", false, 2)
-            ),
-            textposition: "auto",
-            type: "bar",
-            width: 0.5,
-            x: this.state.metrics.falsePositiveRates?.bins,
-            y: nameIndex
-          } as any,
-          {
-            color: chartColors[1],
-            hoverinfo: "skip",
-            name: localization.Metrics.falseNegativeRate,
-            orientation: "h",
-            text: this.state.metrics.falseNegativeRates?.bins.map((num) =>
-              FormatMetrics.formatNumbers(num, "false_negative_rate", false, 2)
-            ),
-            textposition: "auto",
-            type: "bar",
-            width: 0.5,
-            x: this.state.metrics.falseNegativeRates?.bins.map((x) => -1 * x),
-            y: nameIndex
-          }
-        ];
-        // Annotations for both sides of the chart
-        if (performancePlot.layout) {
-          performancePlot.layout.annotations = [
-            {
-              font: { color: theme.semanticColors.bodySubtext, size: 10 },
-              showarrow: false,
-              text: localization.Report.falseNegativeRate,
-              x: 0.02,
-              xref: "paper",
-              y: 1,
-              yref: "paper"
-            },
-            {
-              font: { color: theme.semanticColors.bodySubtext, size: 10 },
-              showarrow: false,
-              text: localization.Report.falsePositiveRate,
-              x: 0.98,
-              xref: "paper",
-              y: 1,
-              yref: "paper"
-            }
-          ];
-        }
-        if (performancePlot.layout?.xaxis) {
-          performancePlot.layout.xaxis.tickformat = ",.0%";
-        }
         // TODO: this plot doesn't actually exist, does it?
         opportunityPlot.data = [
           {
@@ -309,58 +253,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.Probability
       ) {
-        performancePlot.data = [
-          {
-            color: chartColors[0],
-            hoverinfo: "skip",
-            name: localization.Metrics.overprediction,
-            orientation: "h",
-            text: this.state.metrics.overpredictions?.bins.map((num) =>
-              FormatMetrics.formatNumbers(num, "overprediction", false, 2)
-            ),
-            textposition: "auto",
-            type: "bar",
-            width: 0.5,
-            x: this.state.metrics.overpredictions?.bins,
-            y: nameIndex
-          } as any,
-          {
-            color: chartColors[1],
-            hoverinfo: "skip",
-            name: localization.Metrics.underprediction,
-            orientation: "h",
-            text: this.state.metrics.underpredictions?.bins.map((num) =>
-              FormatMetrics.formatNumbers(num, "underprediction", false, 2)
-            ),
-            textposition: "auto",
-            type: "bar",
-            width: 0.5,
-            x: this.state.metrics.underpredictions?.bins.map((x) => -1 * x),
-            y: nameIndex
-          }
-        ];
-        if (performancePlot.layout) {
-          performancePlot.layout.annotations = [
-            {
-              font: { color: theme.semanticColors.bodySubtext, size: 10 },
-              showarrow: false,
-              text: localization.Report.underestimationError,
-              x: 0.1,
-              xref: "paper",
-              y: 1,
-              yref: "paper"
-            },
-            {
-              font: { color: theme.semanticColors.bodySubtext, size: 10 },
-              showarrow: false,
-              text: localization.Report.overestimationError,
-              x: 0.9,
-              xref: "paper",
-              y: 1,
-              yref: "paper"
-            }
-          ];
-        }
         // TODO: this plot doesn't exist anymore, does it?
         const opportunityText = this.state.metrics.predictions?.map((val) => {
           return localization.formatString(
@@ -395,38 +287,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             val
           );
         });
-        const performanceText = this.state.metrics.predictions?.map(
-          (val, index) => {
-            return `${localization.formatString(
-              localization.Report.tooltipError,
-              FormatMetrics.formatNumbers(
-                this.state.metrics?.errors?.[index],
-                "average",
-                false,
-                3
-              )
-            )}<br>${localization.formatString(
-              localization.Report.tooltipPrediction,
-              FormatMetrics.formatNumbers(val, "average", false, 3)
-            )}`;
-          }
-        );
-        performancePlot.data = [
-          {
-            boxmean: true,
-            boxpoints: "all",
-            color: chartColors[0],
-            hoverinfo: "text",
-            hoveron: "points",
-            jitter: 0.4,
-            orientation: "h",
-            pointpos: 0,
-            text: performanceText,
-            type: "box",
-            x: this.state.metrics.errors,
-            y: this.props.dashboardContext.binVector
-          } as any
-        ];
         opportunityPlot.data = [
           {
             boxmean: true,
@@ -666,8 +526,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                   {performanceChartHeader}
                 </div>
                 <div className={styles.chartBody}>
-                  <AccessibleChart
-                    plotlyProps={performancePlot}
+                  <PerformancePlot
+                    dashboardContext={this.props.dashboardContext}
+                    metrics={this.state.metrics}
+                    nameIndex={nameIndex}
                     theme={undefined}
                   />
                 </div>
