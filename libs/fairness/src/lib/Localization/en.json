@@ -119,6 +119,8 @@
     "underpredictionExplanation": "(predicted = 0, true = 1)",
     "overpredictionExplanation": "(predicted = 1, true = 0)",
     "overestimationError": "Overprediction",
+    "falseNegativeRate": "False negative rate",
+    "falsePositiveRate": "False positive rate",
     "classificationOutcomesHowToRead": "The bar chart shows the selection rate in each group, meaning the fraction of points classified as 1.",
     "regressionOutcomesHowToRead": "Box plots show the distribution of predictions in each group. Individual data points are overlaid on top.",
     "classificationPerformanceHowToRead1": "The bar chart shows the distribution of errors in each group.",
