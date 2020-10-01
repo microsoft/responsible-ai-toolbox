@@ -5,10 +5,9 @@ import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
 import { bostonData } from "./bostonData";
 
-export const bostonDataGlobal: IExplanationDashboardData = {
+export const bostonDataNoY: IExplanationDashboardData = {
   ...bostonData,
-  precomputedExplanations: {
-    ...bostonData.precomputedExplanations,
-    localFeatureImportance: undefined
-  }
+  predictedY: undefined,
+  probabilityY: undefined,
+  trueY: undefined
 };

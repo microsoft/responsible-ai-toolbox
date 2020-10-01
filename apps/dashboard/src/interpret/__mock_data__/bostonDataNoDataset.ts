@@ -5,10 +5,7 @@ import { IExplanationDashboardData } from "@responsible-ai/interpret";
 
 import { bostonData } from "./bostonData";
 
-export const bostonDataGlobal: IExplanationDashboardData = {
+export const bostonDataNoDataset: IExplanationDashboardData = {
   ...bostonData,
-  precomputedExplanations: {
-    ...bostonData.precomputedExplanations,
-    localFeatureImportance: undefined
-  }
+  testData: undefined
 };

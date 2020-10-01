@@ -12,6 +12,8 @@ import { regression } from "../fairness/__mock_data__/regression";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
+import { bostonDataNoDataset } from "../interpret/__mock_data__/bostonDataNoDataset";
+import { bostonDataNoY } from "../interpret/__mock_data__/bostonDataNoY";
 import { breastCancerData } from "../interpret/__mock_data__/breastCancerData";
 import { ebmData } from "../interpret/__mock_data__/ebmData";
 import { ibmData } from "../interpret/__mock_data__/ibmData";
@@ -70,6 +72,8 @@ export const applications: IApplications = <const>{
       automlMimicAdult: { classDimension: 3, data: automlMimicAdult },
       bostonData: { classDimension: 1, data: bostonData },
       bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },
+      bostonDataNoDataset: { classDimension: 1, data: bostonDataNoDataset },
+      bostonDataNoY: { classDimension: 1, data: bostonDataNoY },
       breastCancerData: { classDimension: 2, data: breastCancerData },
       ebmData: { classDimension: 2, data: ebmData },
       ibmData: { classDimension: 2, data: ibmData },

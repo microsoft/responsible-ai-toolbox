@@ -60,6 +60,44 @@ const interpretDatasets = {
     ],
     noLocalImportance: true
   },
+  bostonDataNoDataset: {
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
+    featureNames: [
+      "LSTAT",
+      "RM",
+      "PTRATIO",
+      "NOX",
+      "DIS",
+      "AGE",
+      "TAX",
+      "CRIM",
+      "B",
+      "INDUS",
+      "RAD",
+      "ZN",
+      "CHAS"
+    ],
+    noDataset: true
+  },
+  bostonDataNoY: {
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
+    featureNames: [
+      "LSTAT",
+      "RM",
+      "PTRATIO",
+      "NOX",
+      "DIS",
+      "AGE",
+      "TAX",
+      "CRIM",
+      "B",
+      "INDUS",
+      "RAD",
+      "ZN",
+      "CHAS"
+    ],
+    noY: true
+  },
   breastCancerData: {
     datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"],
     featureNames: [
