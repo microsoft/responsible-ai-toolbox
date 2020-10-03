@@ -139,7 +139,7 @@ export class WhatIfTab extends React.PureComponent<
     { key: WhatIfTab.IceKey, text: localization.WhatIfTab.icePlot }
   ];
 
-  private readonly chartAndConfigsId = "chart-and-axis-config-id";
+  private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
   private includedFeatureImportance: IGlobalSeries[] = [];
   private selectedFeatureImportance: IGlobalSeries[] = [];

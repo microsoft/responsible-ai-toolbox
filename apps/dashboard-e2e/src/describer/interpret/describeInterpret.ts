@@ -3,6 +3,7 @@
 
 import { describeAggregateFeatureImportance } from "./aggregateFeatureImportance/describeAggregateFeatureImportance";
 import { describeDatasetExplorer } from "./datasetExplorer/describeDatasetExplorer";
+import { describeIndividualFeatureImportance } from "./individualFeatureImportance/describeIndividualFeatureImportance";
 import { interpretDatasets } from "./interpretDatasets";
 
 export function describeInterpret(name: keyof typeof interpretDatasets): void {
@@ -27,6 +28,7 @@ export function describeInterpret(name: keyof typeof interpretDatasets): void {
     }
     if (!interpretDatasets[name].noDataset) {
       describeDatasetExplorer(interpretDatasets[name]);
+      describeIndividualFeatureImportance(interpretDatasets[name]);
     }
   });
 }

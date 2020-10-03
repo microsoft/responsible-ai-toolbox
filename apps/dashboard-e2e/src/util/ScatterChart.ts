@@ -11,9 +11,9 @@ export interface IScatter extends IChartElement {
 }
 export class ScatterChart extends Chart<IScatter> {
   public get Elements(): IScatter[] {
-    return this.getHtmlElements(".trace.scatter .points path").map((b, i) =>
-      this.getCoordinate(b, i)
-    );
+    return this.getHtmlElements(
+      ".trace.scatter:eq(0) .points path"
+    ).map((b, i) => this.getCoordinate(b, i));
   }
 
   public sortByH(): IScatter[] {
