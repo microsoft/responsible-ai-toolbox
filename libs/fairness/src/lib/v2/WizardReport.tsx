@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IData, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
 import {
   IDropdownStyles,
@@ -18,7 +17,6 @@ import {
 } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { Config, Layout } from "plotly.js";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
@@ -28,27 +26,13 @@ import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { localization } from "./../Localization/localization";
+import { BarPlotlyProps } from "./BarPlotlyProps";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OverallTable } from "./Controls/OverallTable";
 import { PerformancePlot } from "./Controls/PerformancePlot";
 import { SummaryTable } from "./Controls/SummaryTable";
+import { IMetrics } from "./IMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
-
-const theme = getTheme();
-export interface IMetrics {
-  performance: IMetricResponse;
-  performanceDisparity: number;
-  outcomes: IMetricResponse;
-  outcomeDisparity: number;
-  // Optional, based on model type
-  falsePositiveRates?: IMetricResponse;
-  falseNegativeRates?: IMetricResponse;
-  overpredictions?: IMetricResponse;
-  underpredictions?: IMetricResponse;
-  // different length, raw unbinned errors and predictions
-  errors?: number[];
-  predictions?: number[];
-}
 
 export interface IState {
   metrics?: IMetrics;
@@ -61,68 +45,9 @@ export interface IReportProps extends IModelComparisonProps {
   selectedModelIndex: number;
 }
 
-export class BarPlotlyProps implements IPlotlyProperty {
-  public config?: Partial<Config> | undefined = {
-    displaylogo: false,
-    modeBarButtonsToRemove: [
-      "toggleSpikelines",
-      "hoverClosestCartesian",
-      "hoverCompareCartesian",
-      "zoom2d",
-      "pan2d",
-      "select2d",
-      "lasso2d",
-      "zoomIn2d",
-      "zoomOut2d",
-      "autoScale2d",
-      "resetScale2d"
-    ],
-    responsive: true
-  };
-  public data: IData[] = [
-    {
-      orientation: "h",
-      type: "bar"
-    } as any
-  ];
-  public layout: Partial<Layout> | undefined = {
-    autosize: true,
-    barmode: "relative",
-    colorway: chartColors,
-    font: {
-      size: 10
-    },
-    hovermode: "closest",
-    margin: {
-      b: 20,
-      l: 0,
-      r: 0,
-      t: 4
-    },
-    plot_bgcolor: theme.semanticColors.bodyFrameBackground,
-    showlegend: false,
-    xaxis: {
-      autorange: true,
-      fixedrange: true,
-      linecolor: theme.semanticColors.disabledBorder,
-      linewidth: 1,
-      mirror: true
-    },
-    yaxis: {
-      autorange: "reversed",
-      dtick: 1,
-      fixedrange: true,
-      gridcolor: theme.semanticColors.disabledBorder,
-      gridwidth: 1,
-      showgrid: true,
-      showticklabels: false,
-      tick0: 0.5
-    }
-  };
-}
-
 export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
+    const theme = getTheme();
     const styles = WizardReportStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },

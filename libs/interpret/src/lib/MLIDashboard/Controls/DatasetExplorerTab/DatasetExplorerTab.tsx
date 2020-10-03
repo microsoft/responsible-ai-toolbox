@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   getTheme,
@@ -18,7 +18,6 @@ import { localization } from "../../../Localization/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { cohortKey } from "../../cohortKey";
-import { FabricStyles } from "../../FabricStyles";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
@@ -51,46 +50,6 @@ export class DatasetExplorerTab extends React.PureComponent<
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
 > {
-  public static basePlotlyProperties: IPlotlyProperty = {
-    config: { displaylogo: false, displayModeBar: false, responsive: true },
-    data: [{}],
-    layout: {
-      autosize: true,
-      dragmode: false,
-      font: {
-        size: 10
-      },
-      hovermode: "closest",
-      margin: {
-        b: 20,
-        l: 20,
-        r: 0,
-        t: 0
-      },
-      showlegend: false,
-      xaxis: {
-        color: FabricStyles.chartAxisColor,
-        mirror: true,
-        tickfont: {
-          family: FabricStyles.fontFamilies,
-          size: 11
-        },
-        zeroline: true
-      },
-      yaxis: {
-        automargin: true,
-        color: FabricStyles.chartAxisColor,
-        gridcolor: "#e5e5e5",
-        showgrid: true,
-        tickfont: {
-          family: "Roboto, Helvetica Neue, sans-serif",
-          size: 11
-        },
-        zeroline: true
-      }
-    } as any
-  };
-
   private readonly chartAndConfigsId = "DatasetExplorerChart";
 
   public constructor(props: IDatasetExplorerTabProps) {

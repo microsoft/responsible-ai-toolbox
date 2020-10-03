@@ -11,7 +11,8 @@ import { localization } from "../../Localization/localization";
 import { chartColors } from "../../util/chartColors";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
-import { IState, IMetrics, BarPlotlyProps } from "../WizardReport";
+import { BarPlotlyProps } from "../BarPlotlyProps";
+import { IMetrics } from "../IMetrics";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
@@ -21,8 +22,7 @@ interface IPerformancePlotProps {
 }
 
 export class PerformancePlot extends React.PureComponent<
-  IPerformancePlotProps,
-  IState
+  IPerformancePlotProps
 > {
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();

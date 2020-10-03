@@ -10,16 +10,16 @@ import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ColumnCategories, JointDataset } from "../../JointDataset";
 
+import { basePlotlyProperties } from "./basePlotlyProperties";
 import { buildCustomData } from "./buildCustomData";
 import { buildHoverTemplate } from "./buildHoverTemplate";
-import { DatasetExplorerTab } from "./DatasetExplorerTab";
 
 export function generatePlotlyProps(
   jointData: JointDataset,
   chartProps: IGenericChartProps,
   cohort: Cohort
 ): IPlotlyProperty {
-  const plotlyProps = _.cloneDeep(DatasetExplorerTab.basePlotlyProperties);
+  const plotlyProps = _.cloneDeep(basePlotlyProperties);
   plotlyProps.data[0].hoverinfo = "all";
 
   switch (chartProps.chartType) {
