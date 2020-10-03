@@ -9,17 +9,11 @@ export function describeAxisConfigDialog(hasColorAxis: boolean): void {
       ).click();
     });
     it("should display settings dialog", () => {
-      cy.get('#XYColorConfigDialog div[class*="ms-Callout-container"]').should(
-        "exist"
-      );
+      cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
     });
     it("should be able to hide settings", () => {
-      cy.get(
-        '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
-      ).click();
-      cy.get('#XYColorConfigDialog div[class*="ms-Callout-container"]').should(
-        "not.exist"
-      );
+      cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
+      cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
     });
   });
   describe("X Axis settings dialog", () => {
@@ -29,17 +23,11 @@ export function describeAxisConfigDialog(hasColorAxis: boolean): void {
       ).click();
     });
     it("should display settings dialog", () => {
-      cy.get('#XYColorConfigDialog div[class*="ms-Callout-container"]').should(
-        "exist"
-      );
+      cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
     });
     it("should be able to hide settings", () => {
-      cy.get(
-        '#DatasetExplorerChart div[class*="horizontalAxis"] button'
-      ).click();
-      cy.get('#XYColorConfigDialog div[class*="ms-Callout-container"]').should(
-        "not.exist"
-      );
+      cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
+      cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
     });
   });
   if (hasColorAxis) {
@@ -50,17 +38,11 @@ export function describeAxisConfigDialog(hasColorAxis: boolean): void {
         ).click();
       });
       it("should display settings dialog", () => {
-        cy.get(
-          '#XYColorConfigDialog div[class*="ms-Callout-container"]'
-        ).should("exist");
+        cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
       });
       it("should be able to hide settings", () => {
-        cy.get(
-          '#DatasetExplorerChart div[class*="legendAndText"] button'
-        ).click();
-        cy.get(
-          '#XYColorConfigDialog div[class*="ms-Callout-container"]'
-        ).should("not.exist");
+        cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
+        cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
       });
     });
   }

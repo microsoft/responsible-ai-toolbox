@@ -68,7 +68,6 @@ export interface IWhatIfTabProps {
   weightLabels: any;
   onChange: (config: IGenericChartProps) => void;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  editCohort: (index: number) => void;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
@@ -86,7 +85,6 @@ export interface IWhatIfTabState {
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  startingK: number;
   topK: number;
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
@@ -213,7 +211,6 @@ export class WhatIfTab extends React.PureComponent<
       showSelectionWarning: false,
       sortArray: [],
       sortingSeriesIndex: undefined,
-      startingK: 0,
       topK: 4,
       xDialogOpen: false,
       yDialogOpen: false
@@ -578,7 +575,6 @@ export class WhatIfTab extends React.PureComponent<
                     }
                     onAccept={this.onYSet}
                     onCancel={this.setYOpen.bind(this, false)}
-                    target={`#${this.chartAndConfigsId}`}
                   />
                 )}
                 {this.state.xDialogOpen && (
@@ -605,19 +601,11 @@ export class WhatIfTab extends React.PureComponent<
                     }
                     onAccept={this.onXSet}
                     onCancel={this.setXOpen.bind(this, false)}
-                    target={`#${this.chartAndConfigsId}`}
                   />
                 )}
                 <div className={classNames.chartWithVertical}>
                   <div className={classNames.verticalAxis}>
                     <div className={classNames.rotatedVerticalBox}>
-                      <Text
-                        block
-                        variant="mediumPlus"
-                        className={classNames.boldText}
-                      >
-                        {localization.Charts.yValue}
-                      </Text>
                       <DefaultButton
                         onClick={this.setYOpen.bind(this, true)}
                         text={
@@ -647,9 +635,6 @@ export class WhatIfTab extends React.PureComponent<
                         >
                           {localization.ValidationErrors.datasizeError}
                         </Text>
-                        <PrimaryButton onClick={this.editCohort}>
-                          {localization.ValidationErrors.addFilters}
-                        </PrimaryButton>
                       </div>
                     </div>
                   )}
@@ -665,13 +650,6 @@ export class WhatIfTab extends React.PureComponent<
                   <div className={classNames.paddingDiv}></div>
                   <div className={classNames.horizontalAxis}>
                     <div>
-                      <Text
-                        block
-                        variant="mediumPlus"
-                        className={classNames.boldText}
-                      >
-                        {localization.Charts.xValue}
-                      </Text>
                       <DefaultButton
                         onClick={this.setXOpen.bind(this, true)}
                         text={
@@ -774,10 +752,6 @@ export class WhatIfTab extends React.PureComponent<
     );
   }
 
-  private editCohort = (): void => {
-    this.props.editCohort(this.state.selectedCohortIndex);
-  };
-
   private buildSecondaryArea(
     classNames: IProcessedStyleSet<IWhatIfTabStyles>
   ): React.ReactNode {
@@ -818,28 +792,24 @@ export class WhatIfTab extends React.PureComponent<
             this.props.weightLabels[this.props.selectedWeightVector]
           );
         }
-        const maxStartingK = Math.max(
-          0,
-          this.props.jointDataset.localExplanationFeatureCount - this.state.topK
-        );
         secondaryPlot = (
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
               <Text variant="medium" className={classNames.sliderLabel}>
                 {localization.formatString(
                   localization.GlobalTab.topAtoB,
-                  this.state.startingK + 1,
-                  this.state.startingK + this.state.topK
+                  1,
+                  this.state.topK
                 )}
               </Text>
               <Slider
                 className={classNames.startingK}
                 ariaLabel={localization.AggregateImportance.topKFeatures}
-                max={maxStartingK}
-                min={0}
+                max={this.props.jointDataset.localExplanationFeatureCount}
+                min={1}
                 step={1}
-                value={this.state.startingK}
-                onChange={this.setStartingK}
+                value={this.state.topK}
+                onChange={this.setTopK}
                 showValue={false}
               />
             </div>
@@ -849,7 +819,6 @@ export class WhatIfTab extends React.PureComponent<
                 yAxisLabels={yAxisLabels}
                 chartType={ChartTypes.Bar}
                 sortArray={this.state.sortArray}
-                startingK={this.state.startingK}
                 unsortedX={this.props.metadata.featureNamesAbridged}
                 unsortedSeries={this.includedFeatureImportance}
                 topK={this.state.topK}
@@ -1439,8 +1408,8 @@ export class WhatIfTab extends React.PureComponent<
     );
   }
 
-  private setStartingK = (newValue: number): void => {
-    this.setState({ startingK: newValue });
+  private setTopK = (newValue: number): void => {
+    this.setState({ topK: newValue });
   };
 
   private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {

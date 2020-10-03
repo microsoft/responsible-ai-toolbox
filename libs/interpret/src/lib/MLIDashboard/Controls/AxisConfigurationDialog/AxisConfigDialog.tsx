@@ -5,35 +5,25 @@ import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   Text,
-  IProcessedStyleSet,
   PrimaryButton,
-  Callout,
-  Target,
-  DirectionalHint,
   Checkbox,
   ComboBox,
   IComboBox,
   IComboBoxOption,
-  DetailsList,
-  Selection,
-  SelectionMode,
-  CheckboxVisibility,
-  SpinButton
+  SpinButton,
+  Panel,
+  Stack,
+  ChoiceGroup,
+  IChoiceGroupOption,
+  DefaultButton
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
 import { localization } from "../../../Localization/localization";
 import { cohortKey } from "../../cohortKey";
-import { FabricStyles } from "../../FabricStyles";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-
-import {
-  axisControlCallout,
-  axisControlDialogStyles,
-  IAxisControlDialogStyles
-} from "./AxisConfigDialog.styles";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;
@@ -44,12 +34,12 @@ export interface IAxisConfigProps {
   canDither: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
-  target: Target;
 }
 
 export interface IAxisConfigState {
   selectedColumn: ISelectorConfig;
   binCount?: number;
+  selectedFilterGroup?: string;
 }
 
 export class AxisConfigDialog extends React.PureComponent<
@@ -59,9 +49,6 @@ export class AxisConfigDialog extends React.PureComponent<
   private static readonly MIN_HIST_COLS = 2;
   private static readonly MAX_HIST_COLS = 40;
   private static readonly DEFAULT_BIN_COUNT = 5;
-  private _isInitialized = false;
-
-  private _leftSelection: Selection;
 
   private readonly leftItems = [
     cohortKey,
@@ -133,23 +120,14 @@ export class AxisConfigDialog extends React.PureComponent<
       binCount: this._getBinCountForProperty(
         this.props.selectedColumn.property
       ),
-      selectedColumn: _.cloneDeep(this.props.selectedColumn)
+      selectedColumn: _.cloneDeep(this.props.selectedColumn),
+      selectedFilterGroup: this.extractSelectionKey(
+        this.props.selectedColumn.property
+      )
     };
-    this._leftSelection = new Selection({
-      onSelectionChanged: this._setSelection,
-      selectionMode: SelectionMode.single
-    });
-    this._leftSelection.setItems(this.leftItems);
-    this._leftSelection.setKeySelected(
-      this.extractSelectionKey(this.props.selectedColumn.property),
-      true,
-      false
-    );
-    this._isInitialized = true;
   }
 
   public render(): React.ReactNode {
-    const styles = axisControlDialogStyles();
     const selectedMeta = this.props.jointDataset.metaDict[
       this.state.selectedColumn.property
     ];
@@ -163,89 +141,66 @@ export class AxisConfigDialog extends React.PureComponent<
     const maxVal = this.getMaxValue(selectedMeta);
 
     return (
-      <Callout
+      <Panel
+        id="AxisConfigPanel"
         onDismiss={this.props.onCancel}
-        preventDismissOnScroll={true}
-        doNotLayer={true}
-        setInitialFocus={true}
-        hidden={false}
-        styles={axisControlCallout()}
-        coverTarget
-        target={this.props.target}
-        isBeakVisible={false}
-        gapSpace={30}
-        directionalHint={DirectionalHint.topCenter}
+        isOpen={true}
+        onRenderFooter={this.renderFooter}
+        isFooterAtBottom
       >
-        <div className={styles.wrapper}>
-          <div className={styles.leftHalf}>
-            <DetailsList
-              className={styles.detailedList}
-              items={this.leftItems}
-              ariaLabelForSelectionColumn="Toggle selection"
-              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-              checkButtonAriaLabel="Row checkbox"
-              onRenderDetailsHeader={this._onRenderDetailsHeader.bind(
-                this,
-                styles
-              )}
-              checkboxVisibility={CheckboxVisibility.hidden}
-              selection={this._leftSelection}
-              selectionPreservedOnEmptyClick={true}
-              setKey={"set"}
-              columns={[
-                { fieldName: "title", key: "col1", minWidth: 200, name: "name" }
-              ]}
+        <Stack tokens={{ childrenGap: "l1" }}>
+          <Stack.Item>
+            <ChoiceGroup
+              label={localization.AxisConfigDialog.selectFilter}
+              options={this.leftItems.map((i) => ({
+                key: i.key,
+                text: i.title
+              }))}
+              onChange={this.filterGroupChanged}
+              selectedKey={this.state.selectedFilterGroup}
             />
-          </div>
+          </Stack.Item>
           {this.state.selectedColumn.property === cohortKey && (
-            <div className={styles.rightHalf}>
+            <Stack.Item>
               <Text>{localization.AxisConfigDialog.groupByCohort}</Text>
-            </div>
+            </Stack.Item>
           )}
           {this.state.selectedColumn.property === ColumnCategories.None && (
-            <div className={styles.rightHalf}>
+            <Stack.Item>
               <Text>{localization.AxisConfigDialog.countHelperText}</Text>
-            </div>
+            </Stack.Item>
           )}
           {this.state.selectedColumn.property !== cohortKey &&
             this.state.selectedColumn.property !== ColumnCategories.None && (
-              <div className={styles.rightHalf}>
+              <Stack>
                 {isDataColumn && (
                   <ComboBox
                     options={this.dataArray}
-                    styles={FabricStyles.limitedSizeMenuDropdown}
-                    calloutProps={FabricStyles.calloutProps}
                     onChange={this.setSelectedProperty}
                     label={localization.AxisConfigDialog.selectFeature}
-                    className={styles.featureComboBox}
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
                 {isProbabilityColumn && (
                   <ComboBox
                     options={this.classArray}
-                    styles={FabricStyles.limitedSizeMenuDropdown}
-                    calloutProps={FabricStyles.calloutProps}
                     onChange={this.setSelectedProperty}
                     label={localization.AxisConfigDialog.selectClass}
-                    className={styles.featureComboBox}
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
-                {selectedMeta.featureRange &&
-                  selectedMeta.featureRange.rangeType ===
-                    RangeTypes.Integer && (
-                    <Checkbox
-                      key={this.state.selectedColumn.property}
-                      className={styles.treatCategorical}
-                      label={localization.AxisConfigDialog.TreatAsCategorical}
-                      checked={selectedMeta.treatAsCategorical}
-                      onChange={this.setAsCategorical}
-                    />
-                  )}
-                {selectedMeta.treatAsCategorical && (
-                  <div>
-                    <Text variant={"small"} className={styles.featureText}>
+                {selectedMeta.featureRange?.rangeType ===
+                  RangeTypes.Integer && (
+                  <Checkbox
+                    key={this.state.selectedColumn.property}
+                    label={localization.AxisConfigDialog.TreatAsCategorical}
+                    checked={selectedMeta.treatAsCategorical}
+                    onChange={this.setAsCategorical}
+                  />
+                )}
+                {selectedMeta.treatAsCategorical ? (
+                  <>
+                    <Text variant={"small"}>
                       {`${localization.formatString(
                         localization.Filters.uniqueValues,
                         selectedMeta.sortedCategoricalValues?.length
@@ -259,34 +214,21 @@ export class AxisConfigDialog extends React.PureComponent<
                         onChange={this.ditherChecked}
                       />
                     )}
-                  </div>
-                )}
-                {!selectedMeta.treatAsCategorical && (
-                  <div>
-                    <div className={styles.statsArea}>
-                      <Text
-                        variant={"small"}
-                        className={styles.featureText}
-                        nowrap
-                        block
-                      >
-                        {localization.formatString(
-                          localization.Filters.min,
-                          minVal
-                        )}
-                      </Text>
-                      <Text
-                        variant={"small"}
-                        className={styles.featureText}
-                        nowrap
-                        block
-                      >
-                        {localization.formatString(
-                          localization.Filters.max,
-                          maxVal
-                        )}
-                      </Text>
-                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Text variant={"small"} nowrap block>
+                      {localization.formatString(
+                        localization.Filters.min,
+                        minVal
+                      )}
+                    </Text>
+                    <Text variant={"small"} nowrap block>
+                      {localization.formatString(
+                        localization.Filters.max,
+                        maxVal
+                      )}
+                    </Text>
                     {this.props.canBin && !this.props.mustBin && (
                       <Checkbox
                         key={this.state.selectedColumn.property}
@@ -299,7 +241,6 @@ export class AxisConfigDialog extends React.PureComponent<
                       this.state.selectedColumn.options.bin) &&
                       this.state.binCount !== undefined && (
                         <SpinButton
-                          className={styles.spinButton}
                           labelPosition={Position.top}
                           label={localization.AxisConfigDialog.numOfBins}
                           min={AxisConfigDialog.MIN_HIST_COLS}
@@ -334,19 +275,27 @@ export class AxisConfigDialog extends React.PureComponent<
                           onChange={this.ditherChecked}
                         />
                       )}
-                  </div>
+                  </>
                 )}
-              </div>
+              </Stack>
             )}
-        </div>
-        <PrimaryButton
-          text={localization.AxisConfigDialog.select}
-          onClick={this.saveState}
-          className={styles.selectButton}
-        />
-      </Callout>
+        </Stack>
+      </Panel>
     );
   }
+
+  private renderFooter = (): JSX.Element => {
+    return (
+      <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
+        <PrimaryButton onClick={this.saveState}>
+          {localization.AxisConfigDialog.select}
+        </PrimaryButton>
+        <DefaultButton onClick={this.props.onCancel}>
+          {localization.CohortEditor.cancel}
+        </DefaultButton>
+      </Stack>
+    );
+  };
 
   private getMinValue(selectedMeta: IJointMeta): number | string {
     if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
@@ -444,16 +393,6 @@ export class AxisConfigDialog extends React.PureComponent<
     this.props.onAccept(this.state.selectedColumn);
   };
 
-  private readonly _onRenderDetailsHeader = (
-    styles: IProcessedStyleSet<IAxisControlDialogStyles>
-  ): JSX.Element => {
-    return (
-      <div className={styles.filterHeader}>
-        {localization.AxisConfigDialog.selectFilter}
-      </div>
-    );
-  };
-
   private readonly ditherChecked = (
     _ev?: React.FormEvent<HTMLElement | HTMLInputElement>,
     checked?: boolean
@@ -512,11 +451,15 @@ export class AxisConfigDialog extends React.PureComponent<
     });
   }
 
-  private readonly _setSelection = (): void => {
-    if (!this._isInitialized) {
+  private readonly filterGroupChanged = (
+    _ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
+    option?: IChoiceGroupOption | undefined
+  ): void => {
+    if (typeof option?.key !== "string") {
       return;
     }
-    let property = this._leftSelection.getSelection()[0].key as string;
+    this.setState({ selectedFilterGroup: option.key });
+    let property = option.key;
     if (property === ColumnCategories.None) {
       this.setState({
         binCount: undefined,

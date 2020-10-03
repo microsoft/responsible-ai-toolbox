@@ -1,4 +1,5 @@
 {
+  "calloutTitle": "Click for info",
   "selectPoint": "Select a point to see its local explanation",
   "_selectPoint.comment": "Prompts the user to select a point",
   "defaultClassNames": "Class {0}",

@@ -18,3 +18,4 @@ export * from "./lib/components/PlotlyThemes";
 export * from "./lib/components/RangeTypes";
 export * from "./lib/components/SelectionContext";
 export * from "./lib/util/getLocalization";
+export * from "./lib/util/roundDecimal";

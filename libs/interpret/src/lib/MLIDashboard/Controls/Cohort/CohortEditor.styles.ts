@@ -37,7 +37,6 @@ export interface ICohortEditorStyles {
   addedFilterDiv: IStyle;
   filterIcon: IStyle;
   cohortName: IStyle;
-  saveCohort: IStyle;
   deleteCohort: IStyle;
   saveAndCancelDiv: IStyle;
   saveFilterButton: IStyle;
@@ -132,12 +131,8 @@ export const cohortEditorStyles: () => IProcessedStyleSet<
       textAlign: "center"
     },
     deleteCohort: {
-      alignSelf: "flex-start",
       borderColor: theme.palette.red,
       color: theme.palette.red,
-      height: "32px",
-      marginLeft: "374px",
-      marginRight: "17px",
       selectors: {
         ":active": {
           background: theme.palette.red,
@@ -147,8 +142,7 @@ export const cohortEditorStyles: () => IProcessedStyleSet<
           background: theme.palette.red,
           color: theme.palette.white
         }
-      },
-      width: "80px"
+      }
     },
     detailedList: {
       height: "160px",
@@ -242,12 +236,6 @@ export const cohortEditorStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "row",
       marginTop: "18px"
-    },
-    saveCohort: {
-      alignSelf: "flex-end",
-      height: "32px",
-      marginRight: "27px",
-      width: "62px"
     },
     saveFilterButton: {
       height: "32px",

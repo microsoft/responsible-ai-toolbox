@@ -24,7 +24,6 @@ export interface IFeatureBarProps {
   selectedFeatureIndex?: number;
   selectedSeriesIndex?: number;
   topK: number;
-  startingK: number;
   unsortedX: string[];
   unsortedSeries: IGlobalSeries[];
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
@@ -57,17 +56,11 @@ export class FeatureImportanceBar extends React.PureComponent<
 
   public render(): React.ReactNode {
     const relayoutArg: Partial<Plotly.Layout> = {
-      "xaxis.range": [
-        this.props.startingK - 0.5,
-        this.props.startingK + this.props.topK - 0.5
-      ]
+      "xaxis.range": [-0.5, +this.props.topK - 0.5]
     };
     const plotlyProps = this.state.plotlyProps;
     if (plotlyProps) {
-      _.set(plotlyProps, "layout.xaxis.range", [
-        this.props.startingK - 0.5,
-        this.props.startingK + this.props.topK - 0.5
-      ]);
+      _.set(plotlyProps, "layout.xaxis.range", [-0.5, +this.props.topK - 0.5]);
     }
 
     if (
