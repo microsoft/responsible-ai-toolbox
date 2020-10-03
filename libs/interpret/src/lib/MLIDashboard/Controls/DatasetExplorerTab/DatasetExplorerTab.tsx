@@ -53,11 +53,15 @@ export interface IDatasetExplorerTabProps {
 }
 
 export interface IDatasetExplorerTabState {
-  xDialogOpen: boolean;
-  yDialogOpen: boolean;
-  colorDialogOpen: boolean;
+  dialogStatus: DialogStatus;
   selectedCohortIndex: number;
   calloutVisible: boolean;
+}
+
+interface DialogStatus {
+  XAxis: boolean;
+  YAxis: boolean;
+  Color: boolean;
 }
 
 export class DatasetExplorerTab extends React.PureComponent<
@@ -116,15 +120,18 @@ export class DatasetExplorerTab extends React.PureComponent<
       text: localization.DatasetExplorer.individualDatapoints
     }
   ];
+  private readonly defaultDialogStatus: DialogStatus = {
+    Color: false,
+    XAxis: false,
+    YAxis: false
+  };
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
     this.state = {
       calloutVisible: false,
-      colorDialogOpen: false,
-      selectedCohortIndex: 0,
-      xDialogOpen: false,
-      yDialogOpen: false
+      dialogStatus: this.defaultDialogStatus,
+      selectedCohortIndex: 0
     };
     if (!this.props.jointDataset.hasDataset) {
       return;
@@ -532,7 +539,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         </div>
         <div className={classNames.mainArea} id={this.chartAndConfigsId}>
           <div className={classNames.chartWithAxes} id={"XYColorConfigDialog"}>
-            {this.state.yDialogOpen && (
+            {this.state.dialogStatus.YAxis && (
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={yAxisCategories}
@@ -543,11 +550,11 @@ export class DatasetExplorerTab extends React.PureComponent<
                   this.props.chartProps.chartType === ChartTypes.Scatter
                 }
                 onAccept={this.onYSet}
-                onCancel={this.setYOpen.bind(this, false)}
+                onCancel={this.setDialogOpen.bind(this)}
                 target={`#${this.chartAndConfigsId}`}
               />
             )}
-            {this.state.xDialogOpen && (
+            {this.state.dialogStatus.XAxis && (
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={[
@@ -568,27 +575,28 @@ export class DatasetExplorerTab extends React.PureComponent<
                   this.props.chartProps.chartType === ChartTypes.Scatter
                 }
                 onAccept={this.onXSet}
-                onCancel={this.setXOpen.bind(this, false)}
+                onCancel={this.setDialogOpen.bind(this)}
                 target={`#${this.chartAndConfigsId}`}
               />
             )}
-            {this.state.colorDialogOpen && this.props.chartProps.colorAxis && (
-              <AxisConfigDialog
-                jointDataset={this.props.jointDataset}
-                orderedGroupTitles={[
-                  ColumnCategories.Index,
-                  ColumnCategories.Dataset,
-                  ColumnCategories.Outcome
-                ]}
-                selectedColumn={this.props.chartProps.colorAxis}
-                canBin={true}
-                mustBin={false}
-                canDither={false}
-                onAccept={this.onColorSet}
-                onCancel={this.setColorOpen.bind(this, false)}
-                target={`#${this.chartAndConfigsId}`}
-              />
-            )}
+            {this.state.dialogStatus.Color &&
+              this.props.chartProps.colorAxis && (
+                <AxisConfigDialog
+                  jointDataset={this.props.jointDataset}
+                  orderedGroupTitles={[
+                    ColumnCategories.Index,
+                    ColumnCategories.Dataset,
+                    ColumnCategories.Outcome
+                  ]}
+                  selectedColumn={this.props.chartProps.colorAxis}
+                  canBin={true}
+                  mustBin={false}
+                  canDither={false}
+                  onAccept={this.onColorSet}
+                  onCancel={this.setDialogOpen.bind(this)}
+                  target={`#${this.chartAndConfigsId}`}
+                />
+              )}
             <div className={classNames.chartWithVertical}>
               <div className={classNames.verticalAxis}>
                 <div className={classNames.rotatedVerticalBox}>
@@ -603,7 +611,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                         : localization.Charts.yValue}
                     </Text>
                     <DefaultButton
-                      onClick={this.setYOpen.bind(this, true)}
+                      onClick={this.setDialogOpen.bind(this, "YAxis")}
                       text={
                         this.props.jointDataset.metaDict[
                           this.props.chartProps.yAxis.property
@@ -685,7 +693,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                     {localization.Charts.xValue}
                   </Text>
                   <DefaultButton
-                    onClick={this.setXOpen.bind(this, true)}
+                    onClick={this.setDialogOpen.bind(this, "XAxis")}
                     text={
                       this.props.jointDataset.metaDict[
                         this.props.chartProps.xAxis.property
@@ -707,7 +715,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             </Text>
             {this.props.chartProps.chartType === ChartTypes.Scatter && (
               <DefaultButton
-                onClick={this.setColorOpen.bind(this, true)}
+                onClick={this.setDialogOpen.bind(this, "Color")}
                 text={
                   this.props.chartProps.colorAxis &&
                   this.props.jointDataset.metaDict[
@@ -757,28 +765,18 @@ export class DatasetExplorerTab extends React.PureComponent<
     this.props.onChange(newProps);
   };
 
-  private readonly setXOpen = (val: boolean): void => {
-    if (val && this.state.xDialogOpen === false) {
-      this.setState({ xDialogOpen: true });
+  private readonly setDialogOpen = (key?: string): void => {
+    const val: DialogStatus = {
+      Color: false,
+      XAxis: false,
+      YAxis: false
+    };
+    if (key && this.state.dialogStatus[key] === false) {
+      val[key] = true;
+      this.setState({ dialogStatus: val });
       return;
     }
-    this.setState({ xDialogOpen: false });
-  };
-
-  private readonly setColorOpen = (val: boolean): void => {
-    if (val && this.state.colorDialogOpen === false) {
-      this.setState({ colorDialogOpen: true });
-      return;
-    }
-    this.setState({ colorDialogOpen: false });
-  };
-
-  private readonly setYOpen = (val: boolean): void => {
-    if (val && this.state.yDialogOpen === false) {
-      this.setState({ yDialogOpen: true });
-      return;
-    }
-    this.setState({ yDialogOpen: false });
+    this.setState({ dialogStatus: val });
   };
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -788,7 +786,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
     this.props.onChange(newProps);
-    this.setState({ xDialogOpen: false });
+    this.setState({ dialogStatus: this.defaultDialogStatus });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
@@ -798,7 +796,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
     this.props.onChange(newProps);
-    this.setState({ yDialogOpen: false });
+    this.setState({ dialogStatus: this.defaultDialogStatus });
   };
 
   private onColorSet = (value: ISelectorConfig): void => {
@@ -808,7 +806,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.colorAxis = value;
     this.props.onChange(newProps);
-    this.setState({ colorDialogOpen: false });
+    this.setState({ dialogStatus: this.defaultDialogStatus });
   };
 
   private toggleCalloutOpen = (): void => {
