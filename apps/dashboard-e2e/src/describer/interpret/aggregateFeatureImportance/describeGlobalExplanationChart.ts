@@ -8,8 +8,13 @@ import { getComboBoxValue, selectComboBox } from "../../../util/comboBox";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
+const topKLabelReg = /^Top 1-(\d+) features$/;
 function getTopKValue(): number {
-  return toNumber(cy.$$("#TopKSetting input").val());
+  const exec = topKLabelReg.exec(cy.$$("#TopKSliderContainer label").text());
+  if (!exec || !exec[1]) {
+    throw new Error("Cannot find top k label");
+  }
+  return toNumber(exec[1]);
 }
 
 export function describeGlobalExplanationChart<
@@ -37,25 +42,15 @@ export function describeGlobalExplanationChart<
     });
     if (!props.dataShape.noLocalImportance) {
       describe("Chart Settings", () => {
-        beforeEach(() => {
-          cy.get("#GlobalExplanationSettingsButton").click();
-        });
-        it("should display settings", () => {
-          cy.get("#GlobalExplanationSettingsCallout").should("exist");
-        });
-        it("should be able to hide settings", () => {
-          cy.get("#GlobalExplanationSettingsButton").click();
-          cy.get("#GlobalExplanationSettingsCallout").should("not.exist");
-        });
         it("chart elements should match top K setting", () => {
           const topK = getTopKValue();
           expect(props.chart.VisibleElements).length(topK);
         });
         it("should increase top K setting", () => {
           const topK = getTopKValue();
-          cy.get("#TopKSetting input")
+          cy.get("#TopKSliderContainer .ms-Slider-slideBox")
             .focus()
-            .type("{uparrow}")
+            .type("{rightarrow}")
             .then(() => {
               expect(props.chart.VisibleElements).length(
                 Math.min(topK + 1, props.dataShape.featureNames.length)

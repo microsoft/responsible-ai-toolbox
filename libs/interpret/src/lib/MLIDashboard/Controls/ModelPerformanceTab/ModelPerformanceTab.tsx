@@ -290,7 +290,6 @@ export class ModelPerformanceTab extends React.PureComponent<
               canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYOpen.bind(this, false)}
-              target={`#${this.chartAndConfigsId}`}
             />
           )}
           {this.state.xDialogOpen && (
@@ -303,20 +302,12 @@ export class ModelPerformanceTab extends React.PureComponent<
               canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXOpen.bind(this, false)}
-              target={`#${this.chartAndConfigsId}`}
             />
           )}
           <div className={classNames.chartWithVertical}>
             <div className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
                 <div>
-                  <Text
-                    block
-                    variant="mediumPlus"
-                    className={classNames.boldText}
-                  >
-                    {localization.Charts.yValue}
-                  </Text>
                   <DefaultButton
                     onClick={this.setYOpen.bind(this, true)}
                     text={
@@ -387,15 +378,6 @@ export class ModelPerformanceTab extends React.PureComponent<
             <div className={classNames.paddingDiv}></div>
             <div className={classNames.horizontalAxis}>
               <div>
-                <Text
-                  block
-                  variant="mediumPlus"
-                  className={classNames.boldText}
-                >
-                  {this.props.chartProps.chartType === ChartTypes.Histogram
-                    ? localization.Charts.numberOfDatapoints
-                    : localization.Charts.xValue}
-                </Text>
                 <DefaultButton
                   onClick={this.setXOpen.bind(this, true)}
                   text={

@@ -15,14 +15,7 @@ export function describeGlobalExplanationBoxChart(
       dataShape
     };
     beforeEach(() => {
-      cy.get("#GlobalExplanationSettingsButton")
-        .click()
-        .get(
-          '#GlobalExplanationSettingsCallout #ChartTypeSelection label:contains("Box")'
-        )
-        .click({ force: true })
-        .get("#GlobalExplanationSettingsButton")
-        .click();
+      cy.get('#ChartTypeSelection label:contains("Box")').click();
       props.chart = new BoxChart("#FeatureImportanceBar");
     });
     describeGlobalExplanationChart(props);

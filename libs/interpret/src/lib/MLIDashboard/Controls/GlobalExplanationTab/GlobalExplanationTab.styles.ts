@@ -4,8 +4,7 @@
 import {
   IStyle,
   mergeStyleSets,
-  IProcessedStyleSet,
-  getTheme
+  IProcessedStyleSet
 } from "office-ui-fabric-react";
 
 import { FabricStyles } from "../../FabricStyles";
@@ -29,17 +28,7 @@ export interface IGlobalTabStyles {
   missingParametersPlaceholderSpacer: IStyle;
   faintText: IStyle;
   chartEditorButton: IStyle;
-  callout: IStyle;
   boldText: IStyle;
-  calloutWrapper: IStyle;
-  calloutHeader: IStyle;
-  calloutTitle: IStyle;
-  calloutInner: IStyle;
-  calloutActions: IStyle;
-  calloutLink: IStyle;
-  infoButton: IStyle;
-  multiclassWeightLabel: IStyle;
-  multiclassWeightLabelText: IStyle;
   cohortLegendWithTop: IStyle;
   rightJustifiedContainer: IStyle;
 }
@@ -47,37 +36,12 @@ export interface IGlobalTabStyles {
 export const globalTabStyles: () => IProcessedStyleSet<
   IGlobalTabStyles
 > = () => {
-  const theme = getTheme();
   const rightMarginWidth = "200px";
   return mergeStyleSets<IGlobalTabStyles>({
     boldText: {
       fontWeight: "600",
       paddingBottom: "5px"
     },
-    callout: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column",
-      padding: "10px 20px",
-      width: "200px"
-    },
-    calloutActions: {
-      marginTop: 20,
-      position: "relative",
-      whiteSpace: "nowrap",
-      width: "100%"
-    },
-    calloutHeader: [FabricStyles.calloutHeader],
-    calloutInner: [FabricStyles.calloutInner],
-    calloutLink: [
-      theme.fonts.medium,
-      {
-        color: theme.palette.neutralPrimary
-      }
-    ],
-    calloutTitle: [FabricStyles.calloutTitle],
-    calloutWrapper: [FabricStyles.calloutWrapper],
     chartEditorButton: [
       FabricStyles.chartEditorButton,
       {
@@ -113,11 +77,6 @@ export const globalTabStyles: () => IProcessedStyleSet<
       paddingLeft: "15px",
       paddingRight: "120px"
     },
-    infoButton: {
-      margin: "5px",
-      padding: "8px 10px",
-      width: "fit-content"
-    },
     infoIcon: {
       fontSize: "23px",
       height: "23px",
@@ -141,14 +100,6 @@ export const globalTabStyles: () => IProcessedStyleSet<
     missingParametersPlaceholderSpacer: [
       FabricStyles.missingParameterPlaceholderSpacer
     ],
-    multiclassWeightLabel: {
-      display: "inline-flex",
-      paddingTop: "10px"
-    },
-    multiclassWeightLabelText: {
-      fontWeight: "600",
-      paddingTop: "5px"
-    },
     page: {
       boxSizing: "border-box",
       display: "flex",

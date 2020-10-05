@@ -19,7 +19,6 @@ export interface IGlobalOnlyChartProps {
 }
 
 export interface IGlobalOnlyChartState {
-  startingK: number;
   topK: number;
   sortingSeriesKey: number | string;
   sortArray: number[];
@@ -77,14 +76,12 @@ export class GlobalOnlyChart extends React.PureComponent<
         this.props.globalImportance || []
       ).reverse(),
       sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
-      startingK: 0,
       topK: this.minK
     };
   }
 
   public render(): React.ReactNode {
     const classNames = globalTabStyles();
-    const maxStartingK = Math.max(0, this.featureDimension - this.state.topK);
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
@@ -97,18 +94,18 @@ export class GlobalOnlyChart extends React.PureComponent<
           <Text variant="medium" className={classNames.sliderLabel}>
             {localization.formatString(
               localization.GlobalTab.topAtoB,
-              this.state.startingK + 1,
-              this.state.startingK + this.state.topK
+              +1,
+              +this.state.topK
             )}
           </Text>
           <Slider
             className={classNames.startingK}
             ariaLabel={localization.AggregateImportance.topKFeatures}
-            max={maxStartingK}
-            min={0}
+            max={this.featureDimension}
+            min={1}
             step={1}
-            value={this.state.startingK}
-            onChange={this.setStartingK}
+            value={this.state.topK}
+            onChange={this.setTopK}
             showValue={false}
           />
         </div>
@@ -118,7 +115,6 @@ export class GlobalOnlyChart extends React.PureComponent<
             yAxisLabels={[localization.GlobalTab.aggregateFeatureImportance]}
             sortArray={this.state.sortArray}
             chartType={ChartTypes.Bar}
-            startingK={this.state.startingK}
             unsortedX={this.props.metadata.featureNamesAbridged}
             unsortedSeries={this.globalSeries}
             topK={this.state.topK}
@@ -128,20 +124,7 @@ export class GlobalOnlyChart extends React.PureComponent<
     );
   }
 
-  private setStartingK = (newValue: number): void => {
-    this.setState({ startingK: newValue });
+  private setTopK = (newValue: number): void => {
+    this.setState({ topK: newValue });
   };
-
-  // private setSortIndex(_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void {
-  //     const newIndex = item.key;
-  //     const sortArray = this.getSortVector(newIndex).reverse();
-  //     this.setState({ sortingSeriesKey: newIndex, sortArray });
-  // }
-
-  // private getSortVector(newIndex: string | number): number[] {
-  //     if (newIndex === FeatureKeys.absoluteGlobal) {
-  //         return ModelExplanationUtils.buildSortedVector(this.props.globalImportance);
-  //     }
-  //     return ModelExplanationUtils.buildSortedVector(this.props.globalImportance, newIndex as number);
-  // }
 }
