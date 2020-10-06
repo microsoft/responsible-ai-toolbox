@@ -74,7 +74,8 @@ export class App extends React.Component<IAppProps> {
     }
   }
 
-  private calculateMetrics(postData: IMetricRequest): Promise<IMetricResponse> {
+  // calculateMetrics can be used with local flask server for debugging
+  /*private calculateMetrics(postData: IMetricRequest): Promise<IMetricResponse> {
     return fetch("http://localhost:5000/1/metrics", {
       method: "post",
       body: JSON.stringify(postData),
@@ -94,9 +95,9 @@ export class App extends React.Component<IAppProps> {
         }
         return Promise.resolve(json.data);
       });
-  }
+  }*/
 
-  /*private generateRandomMetrics(
+  private generateRandomMetrics(
     request: IMetricRequest,
     abortSignal?: AbortSignal
   ): Promise<IMetricResponse> {
@@ -120,5 +121,5 @@ export class App extends React.Component<IAppProps> {
       }
     });
     return promise;
-  }*/
+  }
 }
