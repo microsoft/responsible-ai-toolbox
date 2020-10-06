@@ -554,7 +554,10 @@ export class WhatIfTab extends React.PureComponent<
                 />
               </div>
             )}
-            <div className={classNames.topArea}>
+            <div
+              className={classNames.topArea}
+              id={"IndividualFeatureContainer"}
+            >
               <div
                 className={classNames.chartWithAxes}
                 id={this.chartAndConfigsId}

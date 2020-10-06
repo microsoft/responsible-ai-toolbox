@@ -21,5 +21,19 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
     it("should render right number of points", () => {
       expect(props.chart.Elements.length).equals(dataShape.datapoint);
     });
+
+    describe("Click first datapoint", () => {
+      it("should select none by default", () => {
+        cy.get(
+          '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
+        ).should("not.exist");
+      });
+      it("should select the first point", () => {
+        props.chart.clickNthPoint(0);
+        cy.get(
+          '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
+        ).should("contain.text", "Row");
+      });
+    });
   });
 }
