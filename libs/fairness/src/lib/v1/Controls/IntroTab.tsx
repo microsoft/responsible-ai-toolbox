@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import { ActionButton, Stack, Text } from "office-ui-fabric-react";
-
 import React from "react";
+
 import { localization } from "../../Localization/localization";
+
 import { IntroTabStyles } from "./IntroTab.styles";
 
 export interface IIntroTabProps {
@@ -48,10 +49,10 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
                 <Text variant={"large"} className={styles.numericLabel}>
                   02
                 </Text>
-                <Text variant={"large"}>{localization.Intro.accuracy}</Text>
+                <Text variant={"large"}>{localization.Intro.performance}</Text>
               </div>
               <Text className={styles.explanatoryText} block>
-                {localization.Intro.accuracyInfo}
+                {localization.Intro.performanceInfo}
               </Text>
             </div>
           </div>

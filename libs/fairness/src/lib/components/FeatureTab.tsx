@@ -13,16 +13,17 @@ import {
   Selection,
   ISelection
 } from "office-ui-fabric-react";
-
 import React from "react";
-import { IBinnedResponse } from "../util/IBinnedResponse";
+
 import { localization } from "../Localization/localization";
-import { IWizardTabProps } from "./IWizardTabProps";
+import { IBinnedResponse } from "../util/IBinnedResponse";
+
 import { BinDialog } from "./BinDialog";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
-import { WizardFooter } from "./WizardFooter";
 import { FeatureTabStyles } from "./FeatureTab.styles";
 import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
+import { IWizardTabProps } from "./IWizardTabProps";
+import { WizardFooter } from "./WizardFooter";
 
 export interface IFeatureTabProps extends IWizardTabProps {
   featureBins: IBinnedResponse[];
@@ -53,20 +54,20 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
       }
     });
     this.state = {
-      expandedBins: new Set<number>(),
-      editingFeatureIndex: undefined
+      editingFeatureIndex: undefined,
+      expandedBins: new Set<number>()
     };
     this.columns = [
       {
         key: "feature",
-        name: localization.Intro.features,
         minWidth: 75,
+        name: localization.Intro.features,
         onRender: this.renderFeatureNameCell
       },
       {
         key: "subgroup",
-        name: localization.Feature.subgroups,
         minWidth: 130,
+        name: localization.Feature.subgroups,
         onRender: this.renderSubGroupCell
       }
     ];

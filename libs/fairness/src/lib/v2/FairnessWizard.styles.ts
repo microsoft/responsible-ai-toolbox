@@ -22,33 +22,33 @@ export const FairnessWizardStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IFairnessWizardStyles>({
+    body: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      display: "flex",
+      flex: 1,
+      flexDirection: "column"
+    },
+    errorMessage: {
+      fontSize: "18px",
+      padding: "50px"
+    },
     frame: {
       minHeight: "800px",
       minWidth: "800px"
-    },
-    thinHeader: {
-      height: "36px",
-      backgroundColor: theme.semanticColors.bodyBackground,
-      color: theme.semanticColors.bodyText
     },
     headerLeft: {
       padding: "20px"
     },
     pivot: {
-      flex: 1,
       display: "flex",
+      flex: 1,
       flexDirection: "column",
       padding: "30px 90px 0 82px"
     },
-    body: {
-      flex: 1,
-      display: "flex",
-      flexDirection: "column",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    errorMessage: {
-      padding: "50px",
-      fontSize: "18px"
+    thinHeader: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      color: theme.semanticColors.bodyText,
+      height: "36px"
     }
   });
 };

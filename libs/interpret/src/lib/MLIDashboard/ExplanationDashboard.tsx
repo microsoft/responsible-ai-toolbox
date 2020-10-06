@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IPlotlyProperty,
+  SelectionContext,
+  ModelMetadata
+} from "@responsible-ai/mlchartlib";
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
@@ -15,14 +20,34 @@ import {
   PivotLinkSize,
   IPivotItemProps
 } from "office-ui-fabric-react";
-
 import React from "react";
-import {
-  IPlotlyProperty,
-  SelectionContext,
-  ModelMetadata
-} from "@responsible-ai/mlchartlib";
+
 import { localization } from "../Localization/localization";
+
+import { EbmExplanation } from "./Controls/EbmExplanation";
+import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
+import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
+import {
+  IFeatureImportanceConfig,
+  globalFeatureImportanceId,
+  barId,
+  FeatureImportanceWrapper
+} from "./Controls/FeatureImportance/FeatureImportanceWrapper";
+import { ICEPlot } from "./Controls/ICEPlot";
+import { PerturbationExploration } from "./Controls/PerturbationExploration";
+import {
+  DataExploration,
+  dataScatterId
+} from "./Controls/Scatter/DataExploration";
+import {
+  ExplanationExploration,
+  explanationScatterId
+} from "./Controls/Scatter/ExplanationExploration";
+import {
+  localBarId,
+  SinglePointFeatureImportance
+} from "./Controls/SinglePointFeatureImportance";
+import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import { FabricStyles } from "./FabricStyles";
 import {
   IExplanationContext,
@@ -36,40 +61,17 @@ import {
   IMultiClassBoundedCoordinates
 } from "./IExplanationContext";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import {
   IWeightedDropdownContext,
   WeightVectorOption,
   WeightVectors
 } from "./IWeightedDropdownContext";
+import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
-import { EbmExplanation } from "./Controls/EbmExplanation";
-import { JointDataset } from "./JointDataset";
-import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
+import { validateInputs } from "./validateInputs";
 
-import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
-import {
-  IFeatureImportanceConfig,
-  globalFeatureImportanceId,
-  barId,
-  FeatureImportanceWrapper
-} from "./Controls/FeatureImportance/FeatureImportanceWrapper";
-import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
-import {
-  localBarId,
-  SinglePointFeatureImportance
-} from "./Controls/SinglePointFeatureImportance";
-import {
-  ExplanationExploration,
-  explanationScatterId
-} from "./Controls/Scatter/ExplanationExploration";
-import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
-import {
-  DataExploration,
-  dataScatterId
-} from "./Controls/Scatter/DataExploration";
-import { PerturbationExploration } from "./Controls/PerturbationExploration";
-import { ICEPlot } from "./Controls/ICEPlot";
 const rowIndex = "rowIndex";
 
 export interface IDashboardContext {
@@ -255,18 +257,6 @@ export class ExplanationDashboard extends React.Component<
     }
 
     this.state = {
-      dashboardContext: {
-        weightContext: {
-          selectedKey: props.predictedY
-            ? WeightVectors.Predicted
-            : WeightVectors.AbsAvg,
-          onSelection: this.onClassSelect,
-          options: ExplanationDashboard.buildWeightDropdownOptions(
-            explanationContext
-          )
-        },
-        explanationContext
-      },
       activeGlobalTab:
         this.pivotItems.length > 0 && this.pivotItems[0].itemKey
           ? ExplanationDashboard.globalTabKeys.indexOf(
@@ -281,15 +271,27 @@ export class ExplanationDashboard extends React.Component<
       configs: {
         [barId]: {
           displayMode: FeatureImportanceModes.Bar,
-          topK: defaultTopK,
-          id: barId
+          id: barId,
+          topK: defaultTopK
         },
         [globalFeatureImportanceId]: {
           displayMode: FeatureImportanceModes.Beehive,
-          topK: defaultTopK,
-          id: globalFeatureImportanceId
+          id: globalFeatureImportanceId,
+          topK: defaultTopK
         },
         [localBarId]: { topK: defaultTopK }
+      },
+      dashboardContext: {
+        explanationContext,
+        weightContext: {
+          onSelection: this.onClassSelect,
+          options: ExplanationDashboard.buildWeightDropdownOptions(
+            explanationContext
+          ),
+          selectedKey: props.predictedY
+            ? WeightVectors.Predicted
+            : WeightVectors.AbsAvg
+        }
       },
       selectedRow: undefined
     };
@@ -298,33 +300,30 @@ export class ExplanationDashboard extends React.Component<
     props: IExplanationDashboardProps
   ): IExplanationContext {
     const explanationGenerators: IExplanationGenerators = {
-      requestPredictions: props.requestPredictions,
-      requestLocalFeatureExplanations: props.requestLocalFeatureExplanations
+      requestLocalFeatureExplanations: props.requestLocalFeatureExplanations,
+      requestPredictions: props.requestPredictions
     };
     const modelMetadata = ExplanationDashboard.buildModelMetadata(props);
-    const errorMessage = ExplanationDashboard.validateInputs(
-      props,
-      modelMetadata
-    );
+    const errorMessage = validateInputs(props, modelMetadata);
     if (errorMessage !== undefined) {
       if (props.telemetryHook !== undefined) {
         props.telemetryHook({
-          message: "Invalid inputs",
+          context: errorMessage,
           level: TelemetryLevels.Error,
-          context: errorMessage
+          message: "Invalid inputs"
         });
       }
       return {
-        modelMetadata,
-        explanationGenerators,
-        localExplanation: undefined,
-        testDataset: {},
-        jointDataset: undefined,
-        globalExplanation: undefined,
-        isGlobalDerived: false,
-        ebmExplanation: undefined,
         customVis: undefined,
-        inputError: errorMessage
+        ebmExplanation: undefined,
+        explanationGenerators,
+        globalExplanation: undefined,
+        inputError: errorMessage,
+        isGlobalDerived: false,
+        jointDataset: undefined,
+        localExplanation: undefined,
+        modelMetadata,
+        testDataset: {}
       };
     }
     const testDataset: ITestDataset = {
@@ -361,9 +360,9 @@ export class ExplanationDashboard extends React.Component<
       //         props.precomputedExplanations.localFeatureImportance.intercept) as number[];
       // }
       localExplanation = {
-        values: localFeatureMatrix,
         flattenedValues: flattenedFeatureMatrix,
-        intercepts
+        intercepts,
+        values: localFeatureMatrix
       };
     }
 
@@ -413,6 +412,9 @@ export class ExplanationDashboard extends React.Component<
       props.precomputedExplanations.ebmGlobalExplanation !== undefined
     ) {
       ebmExplanation = {
+        displayParameters: {
+          interpolation: "vh"
+        },
         featureList: props.precomputedExplanations.ebmGlobalExplanation.feature_list
           .map((featureExplanation) => {
             if (featureExplanation.type !== "univariate") {
@@ -425,41 +427,38 @@ export class ExplanationDashboard extends React.Component<
               )
             ) {
               return {
-                type: "univariate",
-                scores: featureExplanation.scores,
-                names: featureExplanation.names,
                 lowerBounds: featureExplanation.lower_bounds
                   ? featureExplanation.lower_bounds
                   : undefined,
+                names: featureExplanation.names,
+                scores: featureExplanation.scores,
+                type: "univariate",
                 upperBounds: featureExplanation.upper_bounds
                   ? featureExplanation.upper_bounds
                   : undefined
               } as IMultiClassBoundedCoordinates;
             }
             return {
-              type: "univariate",
-              scores: [featureExplanation.scores],
-              names: featureExplanation.names,
               lowerBounds: featureExplanation.lower_bounds
                 ? [featureExplanation.lower_bounds]
                 : undefined,
+              names: featureExplanation.names,
+              scores: [featureExplanation.scores],
+              type: "univariate",
               upperBounds: featureExplanation.upper_bounds
                 ? [featureExplanation.upper_bounds]
                 : undefined
             } as IMultiClassBoundedCoordinates;
           })
-          .filter((featureExplanation) => featureExplanation !== undefined),
-        displayParameters: {
-          interpolation: "vh"
-        }
+          .filter((featureExplanation) => featureExplanation !== undefined)
       };
     }
 
     const jointDataset = new JointDataset({
       dataset: props.testData,
+      metadata: modelMetadata,
       predictedY: props.predictedY,
-      trueY: props.trueY,
-      metadata: modelMetadata
+      trueY: props.trueY
     });
     const customVis =
       props.precomputedExplanations && props.precomputedExplanations.customVis
@@ -467,15 +466,15 @@ export class ExplanationDashboard extends React.Component<
         : undefined;
 
     return {
-      modelMetadata,
-      jointDataset,
+      customVis,
+      ebmExplanation,
       explanationGenerators,
-      localExplanation,
-      testDataset,
       globalExplanation,
       isGlobalDerived,
-      ebmExplanation,
-      customVis
+      jointDataset,
+      localExplanation,
+      modelMetadata,
+      testDataset
     };
   }
 
@@ -487,156 +486,6 @@ export class ExplanationDashboard extends React.Component<
       initializeIcons(props.iconUrl);
       ExplanationDashboard.iconsInitialized = true;
     }
-  }
-
-  private static validateInputs(
-    props: IExplanationDashboardProps,
-    modelMetadata: IExplanationModelMetadata
-  ): string | undefined {
-    const classLength = modelMetadata.classNames.length;
-    const featureLength = modelMetadata.featureNames.length;
-    let rowLength: number | undefined;
-    if (props.trueY) {
-      rowLength = props.trueY.length;
-    }
-    if (props.predictedY) {
-      const length = props.predictedY.length;
-      if (rowLength === undefined) {
-        rowLength = length;
-      }
-      if (length !== rowLength) {
-        return `Inconsistent dimensions. Predicted y has dimension [${length}], expected [${rowLength}]`;
-      }
-    }
-    if (props.probabilityY) {
-      if (!Array.isArray(props.probabilityY)) {
-        return `Predicted probability not an array. Expected array of dimension [${rowLength} x ${classLength}]`;
-      }
-      const length = props.probabilityY.length;
-      if (rowLength === undefined) {
-        rowLength = length;
-      }
-      if (length !== rowLength) {
-        return `Inconsistent dimensions. Predicted y has length [${length}], expected [${rowLength}]`;
-      }
-      if (length === 0) {
-        return "Predicted probability input not a non-empty array";
-      }
-      const cLength = props.probabilityY[0].length;
-      if (cLength !== classLength) {
-        return `Inconsistent dimensions. Predicted probability has dimensions [${length} x ${cLength}], expected [${rowLength} x ${classLength}]`;
-      }
-      if (!props.probabilityY.every((row) => row.length === classLength)) {
-        return "Inconsistent dimensions. Predicted probability has rows of varying length";
-      }
-    }
-    if (props.testData) {
-      if (!Array.isArray(props.testData)) {
-        return `Eval dataset not an array. Expected array of dimension [${rowLength} x ${featureLength}]`;
-      }
-      const length = props.testData.length;
-      if (rowLength === undefined) {
-        rowLength = length;
-      }
-      if (length !== rowLength) {
-        return `Inconsistent dimensions. Eval dataset has length [${length}], expected [${rowLength}]`;
-      }
-      if (length === 0) {
-        return "Eval dataset not a non-empty array";
-      }
-      const fLength = props.testData[0].length;
-      if (fLength !== featureLength) {
-        return `Inconsistent dimensions. Eval dataset has dimensions [${length} x ${fLength}], expected [${rowLength} x ${featureLength}]`;
-      }
-      if (!props.testData.every((row) => row.length === featureLength)) {
-        return "Inconsistent dimensions. Eval dataset has rows of varying length";
-      }
-    }
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.localFeatureImportance &&
-      props.precomputedExplanations.localFeatureImportance.scores
-    ) {
-      const localExp =
-        props.precomputedExplanations.localFeatureImportance.scores;
-      if (!Array.isArray(localExp)) {
-        return `Local explanation not an array. Expected array of dimension [${classLength} x ${rowLength} x ${featureLength}]`;
-      }
-      // explanation will be 2d in case of regression models. 3 for classifier
-      let expDim = 2;
-      if (
-        (localExp as number[][][]).every((dim1) => {
-          return dim1.every((dim2) => Array.isArray(dim2));
-        })
-      ) {
-        expDim = 3;
-      }
-      if (expDim === 3) {
-        const cLength = localExp.length;
-        if (classLength !== cLength) {
-          return `Inconsistent dimensions. Local Explanation has class length [${cLength}], expected [${classLength}]`;
-        }
-        if (cLength === 0) {
-          return "Local explanation not a non-empty array";
-        }
-        const rLength = localExp[0].length;
-        if (rLength === 0) {
-          return "Local explanation not a non-empty array";
-        }
-        if (rowLength === undefined) {
-          rowLength = rLength;
-        }
-        if (rLength !== rowLength) {
-          return `Inconsistent dimensions. Local explanations has dimensions [${cLength} x ${rLength}], expected [${classLength} x ${rowLength}]`;
-        }
-        if (
-          !localExp.every(
-            (classArray: number[] | number[][]) =>
-              classArray.length === rowLength
-          )
-        ) {
-          return "Inconsistent dimensions. Local explanation has rows of varying length";
-        }
-        const fLength = (localExp[0][0] as number[]).length;
-        if (fLength !== featureLength) {
-          return `Inconsistent dimensions. Local explanations has dimensions [${cLength} x ${rLength} x ${fLength}], expected [${classLength} x ${rowLength} x ${featureLength}]`;
-        }
-        if (
-          !localExp.every((classArray: number[] | number[][]) =>
-            classArray.every(
-              (rowArray: number | number[]) =>
-                Array.isArray(rowArray) && rowArray.length === featureLength
-            )
-          )
-        ) {
-          return "Inconsistent dimensions. Local explanation has rows of varying length";
-        }
-      } else {
-        const length = localExp.length;
-        if (rowLength === undefined) {
-          rowLength = length;
-        }
-        if (length !== rowLength) {
-          return `Inconsistent dimensions. Local Explanation has row length [${length}], expected [${rowLength}]`;
-        }
-        if (length === 0) {
-          return "Local explanation not a non-empty array";
-        }
-        const fLength = (localExp[0] as number[]).length;
-        if (fLength !== featureLength) {
-          return `Inconsistent dimensions. Local explanations has dimensions [${length} x ${fLength}], expected [${rowLength} x ${featureLength}]`;
-        }
-        if (
-          !localExp.every(
-            (rowArray: number[] | number[][]) =>
-              rowArray.length === featureLength
-          )
-        ) {
-          return "Inconsistent dimensions. Local explanation has rows of varying length";
-        }
-      }
-    }
-    return undefined;
   }
 
   private static buildLocalFeatureMatrix(
@@ -803,10 +652,10 @@ export class ExplanationDashboard extends React.Component<
       props.dataSummary.categoricalMap
     );
     return {
-      featureNames,
-      featureNamesAbridged,
       classNames,
       featureIsCategorical,
+      featureNames,
+      featureNamesAbridged,
       featureRanges,
       modelType
     };
@@ -1152,9 +1001,9 @@ export class ExplanationDashboard extends React.Component<
             );
             const newState = _.cloneDeep(prevState);
             newState.dashboardContext.explanationContext.localExplanation = {
-              values: localFeatureMatrix,
               flattenedValues: flattenedFeatureMatrix,
-              percentComplete: undefined
+              percentComplete: undefined,
+              values: localFeatureMatrix
             };
             if (
               prevState.dashboardContext.explanationContext
@@ -1194,10 +1043,15 @@ export class ExplanationDashboard extends React.Component<
       return {
         dashboardContext: {
           explanationContext: {
-            modelMetadata:
-              prevState.dashboardContext.explanationContext.modelMetadata,
-            testDataset:
-              prevState.dashboardContext.explanationContext.testDataset,
+            explanationGenerators:
+              prevState.dashboardContext.explanationContext
+                .explanationGenerators,
+            globalExplanation:
+              prevState.dashboardContext.explanationContext.globalExplanation,
+            isGlobalDerived:
+              prevState.dashboardContext.explanationContext.isGlobalDerived,
+            jointDataset:
+              prevState.dashboardContext.explanationContext.jointDataset,
             localExplanation: {
               flattenedValues: flattenedFeatureMatrix,
               intercepts:
@@ -1207,15 +1061,10 @@ export class ExplanationDashboard extends React.Component<
                 prevState.dashboardContext.explanationContext.localExplanation
                   ?.values || []
             },
-            globalExplanation:
-              prevState.dashboardContext.explanationContext.globalExplanation,
-            explanationGenerators:
-              prevState.dashboardContext.explanationContext
-                .explanationGenerators,
-            isGlobalDerived:
-              prevState.dashboardContext.explanationContext.isGlobalDerived,
-            jointDataset:
-              prevState.dashboardContext.explanationContext.jointDataset
+            modelMetadata:
+              prevState.dashboardContext.explanationContext.modelMetadata,
+            testDataset:
+              prevState.dashboardContext.explanationContext.testDataset
           },
           weightContext: newWeightContext
         }

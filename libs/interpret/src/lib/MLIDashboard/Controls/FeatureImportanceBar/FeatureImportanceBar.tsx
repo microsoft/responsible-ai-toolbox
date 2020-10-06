@@ -1,17 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { PartialRequired } from "@responsible-ai/core-ui";
+import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
-import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
-import { PartialRequired } from "@responsible-ai/core-ui";
+import React from "react";
+
 import { localization } from "../../../Localization/localization";
-import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
-import { ChartTypes } from "../../ChartTypes";
+
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
 
 export interface IFeatureBarProps {
@@ -22,7 +24,6 @@ export interface IFeatureBarProps {
   selectedFeatureIndex?: number;
   selectedSeriesIndex?: number;
   topK: number;
-  startingK: number;
   unsortedX: string[];
   unsortedSeries: IGlobalSeries[];
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
@@ -55,17 +56,11 @@ export class FeatureImportanceBar extends React.PureComponent<
 
   public render(): React.ReactNode {
     const relayoutArg: Partial<Plotly.Layout> = {
-      "xaxis.range": [
-        this.props.startingK - 0.5,
-        this.props.startingK + this.props.topK - 0.5
-      ]
+      "xaxis.range": [-0.5, +this.props.topK - 0.5]
     };
     const plotlyProps = this.state.plotlyProps;
     if (plotlyProps) {
-      _.set(plotlyProps, "layout.xaxis.range", [
-        this.props.startingK - 0.5,
-        this.props.startingK + this.props.topK - 0.5
-      ]);
+      _.set(plotlyProps, "layout.xaxis.range", [-0.5, +this.props.topK - 0.5]);
     }
 
     if (
@@ -129,39 +124,39 @@ export class FeatureImportanceBar extends React.PureComponent<
     const baseSeries: PartialRequired<IPlotlyProperty, "layout"> = {
       config: {
         displaylogo: false,
-        responsive: true,
-        displayModeBar: false
-      } as Plotly.Config,
+        displayModeBar: false,
+        responsive: true
+      },
       data: [],
       layout: {
         autosize: true,
         dragmode: false,
-        margin: { t: 10, r: 10, b: 30, l: 0 },
         hovermode: "closest",
+        margin: { b: 30, l: 0, r: 10, t: 10 },
+        showlegend: false,
         xaxis: {
           automargin: true,
           color: FabricStyles.chartAxisColor,
+          showgrid: false,
           tickfont: {
+            color: FabricStyles.chartAxisColor,
             family: "Roboto, Helvetica Neue, sans-serif",
-            size: 11,
-            color: FabricStyles.chartAxisColor
-          },
-          showgrid: false
+            size: 11
+          }
         },
         yaxis: {
           automargin: true,
           color: FabricStyles.chartAxisColor,
-          tickfont: {
-            family: "Roboto, Helvetica Neue, sans-serif",
-            size: 11,
-            color: FabricStyles.chartAxisColor
-          },
-          zeroline: true,
+          gridcolor: "#e5e5e5",
           showgrid: true,
-          gridcolor: "#e5e5e5"
-        },
-        showlegend: false
-      } as any
+          tickfont: {
+            color: FabricStyles.chartAxisColor,
+            family: "Roboto, Helvetica Neue, sans-serif",
+            size: 11
+          },
+          zeroline: true
+        }
+      }
     };
 
     const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
@@ -179,10 +174,6 @@ export class FeatureImportanceBar extends React.PureComponent<
 
       this.props.unsortedSeries.forEach((series, seriesIndex) => {
         baseSeries.data.push({
-          hoverinfo: "all",
-          orientation: "v",
-          type: "bar",
-          name: series.name,
           customdata: sortedIndexVector.map((index) => {
             return {
               Name: series.name,
@@ -197,9 +188,8 @@ export class FeatureImportanceBar extends React.PureComponent<
                 : undefined
             };
           }),
-          text: xText,
-          x,
-          y: sortedIndexVector.map((index) => series.unsortedAggregateY[index]),
+          hoverinfo: "all",
+          hovertemplate,
           marker: {
             color: sortedIndexVector.map((index) =>
               index === this.props.selectedFeatureIndex &&
@@ -208,35 +198,40 @@ export class FeatureImportanceBar extends React.PureComponent<
                 : FabricStyles.fabricColorPalette[series.colorIndex]
             )
           },
-          hovertemplate
+          name: series.name,
+          orientation: "v",
+          text: xText,
+          type: "bar",
+          x,
+          y: sortedIndexVector.map((index) => series.unsortedAggregateY[index])
         } as any);
       });
     } else if (this.props.chartType === ChartTypes.Box) {
       _.set(baseSeries.layout, "boxmode", "group");
       this.props.unsortedSeries.forEach((series) => {
+        const base: number[] = [];
+        const x = base.concat(
+          ...sortedIndexVector.map(
+            (sortIndex, xIndex) =>
+              series.unsortedIndividualY?.[sortIndex].map(() => xIndex) || []
+          )
+        );
+        const y = base.concat(
+          ...sortedIndexVector.map(
+            (index) => series.unsortedIndividualY?.[index] || []
+          )
+        );
+        console.log(x, y);
         baseSeries.data.push({
-          type: "box",
           boxmean: true,
-          name: series.name,
-          x: sortedIndexVector
-            .map(
-              (sortIndex, xIndex) =>
-                series.unsortedIndividualY?.[sortIndex].map(() => xIndex) || []
-            )
-            .reduce((prev, curr) => {
-              prev.push(...curr);
-              return prev;
-            }, []),
-          y: sortedIndexVector
-            .map((index) => series.unsortedIndividualY?.[index] || [])
-            .reduce((prev, curr) => {
-              prev.push(...curr);
-              return prev;
-            }, []),
           marker: {
             color: FabricStyles.fabricColorPalette[series.colorIndex]
-          }
-        } as any);
+          },
+          name: series.name,
+          type: "box",
+          x,
+          y
+        });
       });
     }
 

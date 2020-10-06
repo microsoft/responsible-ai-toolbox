@@ -24,17 +24,32 @@ export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> = mergeStyleSets<
   IBeehiveStyles
 >({
   aggregateChart: {
-    width: "100%",
+    display: "flex",
+    flexDirection: "column",
     height: "100%",
-    display: "flex",
-    flexDirection: "column"
+    width: "100%"
   },
-  topControls: {
+  calloutButton: {
+    maxWidth: "100px"
+  },
+  calloutInfo: {
     display: "flex",
-    padding: "3px 15px"
+    flexDirection: "column",
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    maxWidth: "300px",
+    padding: "30px"
   },
   featureSlider: {
     flex: 1
+  },
+  labelText: {
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
+      sans-serif`,
+    fontSize: "14px",
+    lineHeight: "14px",
+    margin: "7px 0 0 4px"
   },
   pathSelector: {
     margin: "0 5px 0 0"
@@ -42,10 +57,10 @@ export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> = mergeStyleSets<
   selectorLabel: {
     display: "flex",
     flexDirection: "row",
-    marginTop: "5px",
     fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
               -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-              sans-serif`
+              sans-serif`,
+    marginTop: "5px"
   },
   sliderControl: {
     flex: 1,
@@ -55,23 +70,8 @@ export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> = mergeStyleSets<
     display: "flex",
     flexDirection: "row"
   },
-  labelText: {
-    lineHeight: "14px",
-    margin: "7px 0 0 4px",
-    fontSize: "14px",
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-      sans-serif`
-  },
-  calloutInfo: {
+  topControls: {
     display: "flex",
-    flexDirection: "column",
-    maxWidth: "300px",
-    padding: "30px",
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`
-  },
-  calloutButton: {
-    maxWidth: "100px"
+    padding: "3px 15px"
   }
 });

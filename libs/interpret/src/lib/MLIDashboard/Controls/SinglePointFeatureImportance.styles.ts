@@ -18,23 +18,23 @@ export const singlePointFeatureImportanceStyles: IProcessedStyleSet<ISinglePoint
   ISinglePointFeatureImportanceStyles
 >({
   featureBarExplanationChart: {
-    width: "100%",
+    display: "flex",
     flex: 1,
-    display: "flex",
     flexDirection: "column",
-    height: "100%"
-  },
-  topControls: {
-    display: "flex",
-    padding: "3px 15px"
+    height: "100%",
+    width: "100%"
   },
   featureSlider: {
     flex: 1
   },
   localSummary: {
-    width: "100%",
     display: "flex",
+    flex: 1,
     flexDirection: "column",
-    flex: 1
+    width: "100%"
+  },
+  topControls: {
+    display: "flex",
+    padding: "3px 15px"
   }
 });

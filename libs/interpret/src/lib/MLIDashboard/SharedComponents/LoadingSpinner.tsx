@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react";
+import React from "react";
+
 import { localization } from "../../Localization/localization";
+
 import { loadingSpinnerStyles } from "./LoadingSpinner.styles";
 
 export class LoadingSpinner extends React.PureComponent {

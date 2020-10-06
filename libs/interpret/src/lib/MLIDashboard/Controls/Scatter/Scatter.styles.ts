@@ -21,46 +21,46 @@ export interface IScatterStyles {
 export const scatterStyles: IProcessedStyleSet<IScatterStyles> = mergeStyleSets<
   IScatterStyles
 >({
-  explanationChart: {
-    width: "100%",
-    height: "100%",
-    flex: "1",
-    display: "flex",
-    flexDirection: "column"
+  calloutButton: {
+    maxWidth: "100px"
   },
-  topControls: {
+  calloutInfo: {
     display: "flex",
-    padding: "3px 15px",
-    justifyContent: "space-between"
+    flexDirection: "column",
+    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
+    maxWidth: "300px",
+    padding: "30px"
+  },
+  explanationChart: {
+    display: "flex",
+    flex: "1",
+    flexDirection: "column",
+    height: "100%",
+    width: "100%"
+  },
+  labelText: {
+    fontFamily: ` "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
+      sans-serif`,
+    fontSize: "14px",
+    lineHeight: "14px",
+    marginRight: "-16px",
+    maxWidth: "84px"
   },
   selector: {
     display: "flex"
+  },
+  selectorComboBox: {
+    maxWidth: "208px"
   },
   selectorLabel: {
     display: "flex",
     flexDirection: "row"
   },
-  labelText: {
-    maxWidth: "84px",
-    lineHeight: "14px",
-    marginRight: "-16px",
-    fontSize: "14px",
-    fontFamily: ` "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-      sans-serif`
-  },
-  selectorComboBox: {
-    maxWidth: "208px"
-  },
-  calloutInfo: {
+  topControls: {
     display: "flex",
-    flexDirection: "column",
-    maxWidth: "300px",
-    padding: "30px",
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`
-  },
-  calloutButton: {
-    maxWidth: "100px"
+    justifyContent: "space-between",
+    padding: "3px 15px"
   }
 });

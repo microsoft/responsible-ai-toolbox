@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { IDropdownOption } from "office-ui-fabric-react";
 import _ from "lodash";
+import { IDropdownOption } from "office-ui-fabric-react";
+
 import { IExplanationModelMetadata } from "../IExplanationContext";
 
 export class PlotlyUtils {

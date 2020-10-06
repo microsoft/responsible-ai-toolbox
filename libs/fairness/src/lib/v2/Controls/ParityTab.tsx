@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { Stack, StackItem, Text } from "office-ui-fabric-react";
+import React from "react";
 
-import { localization } from "../../Localization/localization";
-import { IWizardTabProps } from "../../components/IWizardTabProps";
-import { IParityPickerPropsV2 } from "../FairnessWizard";
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
+import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
-import { TileList, ITileProp } from "./TileList";
+import { localization } from "../../Localization/localization";
+import { IParityPickerPropsV2 } from "../FairnessWizard";
+
 import { ParityTabStyles } from "./ParityTab.styles";
+import { TileList, ITileProp } from "./TileList";
 
 export interface IParityTabProps extends IWizardTabProps {
   parityPickerProps: IParityPickerPropsV2;
@@ -28,7 +29,7 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
         <StackItem grow={2}>
           <Stack className={styles.main}>
             <Text className={styles.header} block>
-              {localization.Accuracy.header}
+              {localization.Performance.header}
             </Text>
             <Text className={styles.textBody} block>
               {localization.Parity.body}
@@ -41,13 +42,13 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
                       this.props.parityPickerProps.selectedParityKey ===
                       parity.key;
                     return {
-                      title: parity.title,
                       description: parity.description,
                       onSelect: this.props.parityPickerProps.onParityChange.bind(
                         this,
                         parity.key
                       ),
-                      selected
+                      selected,
+                      title: parity.title
                     };
                   }
                 )}

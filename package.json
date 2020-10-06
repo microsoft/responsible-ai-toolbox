@@ -12,6 +12,7 @@
     "affected:libs": "nx affected:libs",
     "affected:lint": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx affected:lint",
     "affected:test": "nx affected:test",
+    "auto-version": "node ./scripts/auto-version.js",
     "build": "nx build",
     "buildall": "nx run-many --target=build --all",
     "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn e2eall && yarn buildall",
@@ -35,6 +36,7 @@
     "workspace-schematic": "nx workspace-schematic"
   },
   "dependencies": {
+    "eslint-plugin-sort-keys-fix": "^1.1.1",
     "jmespath": "^0.15.0",
     "localized-strings": "^0.2.4",
     "lodash": "^4.17.11",
@@ -95,8 +97,10 @@
     "eslint-plugin-unicorn": "21.0.0",
     "jest": "26.2.2",
     "jest-canvas-mock": "2.2.0",
+    "node-fetch": "2.6.1",
     "prettier": "2.0.5",
     "prettier-plugin-packagejson": "2.2.5",
+    "semver": "7.3.2",
     "serve": "11.3.2",
     "ts-jest": "26.1.4",
     "ts-node": "8.10.2",

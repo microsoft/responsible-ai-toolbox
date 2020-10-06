@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import { initializeIcons } from "@uifabric/icons";
+import _ from "lodash";
 import memoize from "memoize-one";
 import {
   IPivotItemProps,
@@ -14,28 +15,22 @@ import {
   MessageBar,
   MessageBarType,
   Text,
-  Link
+  Stack
 } from "office-ui-fabric-react";
-import _ from "lodash";
+import React from "react";
 
-import { initializeIcons } from "@uifabric/icons";
 import { localization } from "../Localization/localization";
-import { JointDataset } from "./JointDataset";
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
+
+import { Cohort } from "./Cohort";
+import { CohortBar } from "./Controls/Cohort/CohortBar";
+import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import {
   GlobalExplanationTab,
   IGlobalBarSettings
 } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
-import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
-import { Cohort } from "./Cohort";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
-import { defaultTheme } from "./Themes";
-import { CohortList } from "./Controls/CohortList/CohortList";
-import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
-import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
-import { ValidateProperties } from "./ValidateProperties";
-import { CohortEditor, ICohort } from "./Controls/CohortEditor/CohortEditor";
-import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
+import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { IGenericChartProps } from "./IGenericChartProps";
 import {
   IExplanationDashboardProps,
@@ -43,6 +38,11 @@ import {
   ISingleClassLocalFeatureImportance
 } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
+import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { JointDataset } from "./JointDataset";
+import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
+import { defaultTheme } from "./Themes";
+import { ValidateProperties } from "./ValidateProperties";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];
@@ -59,8 +59,7 @@ export interface INewExplanationDashboardState {
   isGlobalImportanceDerivedFromLocal: boolean;
   sortVector?: number[];
   validationWarnings: string[];
-  showingDatasizeWarning: boolean;
-  editingCohortIndex?: number;
+  showingDataSizeWarning: boolean;
   selectedWeightVector: WeightVectorOption;
   requestPredictions?: (
     request: any[],
@@ -218,11 +217,11 @@ export class NewExplanationDashboard extends React.PureComponent<
     }
     const jointDataset = new JointDataset({
       dataset: props.testData,
-      predictedY: props.predictedY,
-      predictedProbabilities: props.probabilityY,
-      trueY: props.trueY,
       localExplanations,
-      metadata: modelMetadata
+      metadata: modelMetadata,
+      predictedProbabilities: props.probabilityY,
+      predictedY: props.predictedY,
+      trueY: props.trueY
     });
     const globalProps = NewExplanationDashboard.buildGlobalProperties(props);
     // consider taking filters in as param arg for programatic users
@@ -234,33 +233,33 @@ export class NewExplanationDashboard extends React.PureComponent<
       props.telemetryHook !== undefined
     ) {
       props.telemetryHook({
-        message: "Invalid inputs",
+        context: validationCheck.errorStrings.length,
         level: TelemetryLevels.Error,
-        context: validationCheck.errorStrings.length
+        message: "Invalid inputs"
       });
     }
     return {
-      cohorts,
-      validationWarnings: validationCheck.errorStrings,
       activeGlobalTab: GlobalTabKeys.ModelPerformance,
-      jointDataset,
-      modelMetadata,
-      modelChartConfig: undefined,
+      cohorts,
       dataChartConfig: undefined,
-      whatIfChartConfig: undefined,
       dependenceProps: undefined,
       globalBarConfig: undefined,
-      globalImportanceIntercept: globalProps.globalImportanceIntercept,
       globalImportance: globalProps.globalImportance,
+      globalImportanceIntercept: globalProps.globalImportanceIntercept,
       isGlobalImportanceDerivedFromLocal:
         globalProps.isGlobalImportanceDerivedFromLocal,
-      sortVector: undefined,
-      showingDatasizeWarning:
-        jointDataset.datasetRowCount > NewExplanationDashboard.ROW_WARNING_SIZE,
+      jointDataset,
+      modelChartConfig: undefined,
+      modelMetadata,
       selectedWeightVector:
         modelMetadata.modelType === ModelTypes.Multiclass
           ? WeightVectors.AbsAvg
-          : 0
+          : 0,
+      showingDataSizeWarning:
+        jointDataset.datasetRowCount > NewExplanationDashboard.ROW_WARNING_SIZE,
+      sortVector: undefined,
+      validationWarnings: validationCheck.errorStrings,
+      whatIfChartConfig: undefined
     };
   }
   private static initializeIcons(props: IExplanationDashboardProps): void {
@@ -349,10 +348,10 @@ export class NewExplanationDashboard extends React.PureComponent<
       props.dataSummary.categoricalMap
     );
     return {
-      featureNames,
-      featureNamesAbridged,
       classNames,
       featureIsCategorical,
+      featureNames,
+      featureNamesAbridged,
       featureRanges,
       modelType
     };
@@ -426,146 +425,111 @@ export class NewExplanationDashboard extends React.PureComponent<
       cohort.getCohortID().toString()
     );
     const classNames = explanationDashboardStyles();
-    let cohortForEdit: ICohort | undefined;
-    if (this.state.editingCohortIndex !== undefined) {
-      if (this.state.editingCohortIndex === this.state.cohorts.length) {
-        cohortForEdit = {
-          cohortName: localization.formatString(
-            localization.CohortEditor.placeholderName,
-            this.state.editingCohortIndex
-          ),
-          filterList: []
-        };
-      } else {
-        cohortForEdit = {
-          cohortName: this.state.cohorts[this.state.editingCohortIndex].name,
-          filterList: [
-            ...this.state.cohorts[this.state.editingCohortIndex].filters
-          ]
-        };
-      }
-    }
     return (
       <div className={classNames.page} style={{ maxHeight: "1000px" }}>
-        {this.state.showingDatasizeWarning && (
+        {this.state.showingDataSizeWarning && (
           <MessageBar
             onDismiss={this.clearSizeWarning}
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <div>
-              <Text>{localization.ValidationErrors.datasizeWarning}</Text>
-              <Link onClick={this.openCohort.bind(this, 0)}>
-                {localization.ValidationErrors.addFilters}
-              </Link>
-            </div>
+            <Text>{localization.ValidationErrors.datasizeWarning}</Text>
           </MessageBar>
         )}
         {this.state.validationWarnings.length !== 0 && (
           <MessageBar
+            id="ErrorMessage"
             onDismiss={this.clearWarning}
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <div>
-              <Text block>{localization.ValidationErrors.errorHeader}</Text>
-              {this.state.validationWarnings.map((message) => {
-                return <Text block>{message}</Text>;
-              })}
-            </div>
+            <Text>{localization.ValidationErrors.errorHeader}</Text>
+            {this.state.validationWarnings.map((message) => {
+              return <Text block>{message}</Text>;
+            })}
           </MessageBar>
         )}
-        <CohortList
-          cohorts={this.state.cohorts}
-          jointDataset={this.state.jointDataset}
-          metadata={this.state.modelMetadata}
-          editCohort={this.openCohort}
-          cloneAndEdit={this.cloneAndOpenCohort}
-        />
-        {cohortForEdit !== undefined && (
-          <CohortEditor
-            jointDataset={this.state.jointDataset}
-            filterList={cohortForEdit.filterList}
-            cohortName={cohortForEdit.cohortName}
-            onSave={this.onCohortChange}
-            onCancel={this.closeCohortEditor}
-            onDelete={this.deleteCohort}
-            isNewCohort={
-              this.state.editingCohortIndex === this.state.cohorts.length
-            }
-            deleteIsDisabled={this.state.cohorts.length === 1}
-          />
-        )}
-        <div className={NewExplanationDashboard.classNames.pivotWrapper}>
-          <Pivot
-            selectedKey={this.state.activeGlobalTab}
-            onLinkClick={this.handleGlobalTabClick}
-            linkSize={PivotLinkSize.normal}
-            headersOnly={true}
-            styles={{ root: classNames.pivotLabelWrapper }}
-            id="DashboardPivot"
-          >
-            {this.pivotItems.map((props) => (
-              <PivotItem key={props.itemKey} {...props} />
-            ))}
-          </Pivot>
-          {this.state.activeGlobalTab === GlobalTabKeys.ModelPerformance && (
-            <ModelPerformanceTab
-              jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              chartProps={this.state.modelChartConfig}
-              onChange={this.onModelConfigChanged}
+        <Stack horizontal={true}>
+          <Stack.Item>
+            <CohortBar
               cohorts={this.state.cohorts}
-            />
-          )}
-          {this.state.activeGlobalTab === GlobalTabKeys.DataExploration && (
-            <DatasetExplorerTab
+              onCohortsChange={this.onCohortsChange}
               jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              chartProps={this.state.dataChartConfig}
-              onChange={this.onConfigChanged}
-              cohorts={this.state.cohorts}
-              editCohort={this.openCohort}
+              modelMetadata={this.state.modelMetadata}
             />
-          )}
-          {this.state.activeGlobalTab === GlobalTabKeys.ExplanationTab && (
-            <GlobalExplanationTab
-              globalBarSettings={this.state.globalBarConfig}
-              sortVector={this.state.sortVector}
-              dependenceProps={this.state.dependenceProps}
-              jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              globalImportance={this.state.globalImportance}
-              isGlobalDerivedFromLocal={
-                this.state.isGlobalImportanceDerivedFromLocal
-              }
-              onChange={this.setGlobalBarSettings}
-              onDependenceChange={this.onDependenceChange}
-              cohorts={this.state.cohorts}
-              cohortIDs={cohortIDs}
-              selectedWeightVector={this.state.selectedWeightVector}
-              weightOptions={this.weightVectorOptions}
-              weightLabels={this.weightVectorLabels}
-              onWeightChange={this.onWeightVectorChange}
-              explanationMethod={this.props.explanationMethod}
-            />
-          )}
-          {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
-            <WhatIfTab
-              jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              cohorts={this.state.cohorts}
-              onChange={this.onWhatIfConfigChanged}
-              chartProps={this.state.whatIfChartConfig}
-              invokeModel={this.state.requestPredictions}
-              editCohort={this.openCohort}
-              selectedWeightVector={this.state.selectedWeightVector}
-              weightOptions={this.weightVectorOptions}
-              weightLabels={this.weightVectorLabels}
-              onWeightChange={this.onWeightVectorChange}
-            />
-          )}
-        </div>
+          </Stack.Item>
+          <Stack.Item>
+            <div className={NewExplanationDashboard.classNames.pivotWrapper}>
+              <Pivot
+                selectedKey={this.state.activeGlobalTab}
+                onLinkClick={this.handleGlobalTabClick}
+                linkSize={PivotLinkSize.normal}
+                headersOnly={true}
+                styles={{ root: classNames.pivotLabelWrapper }}
+                id="DashboardPivot"
+              >
+                {this.pivotItems.map((props) => (
+                  <PivotItem key={props.itemKey} {...props} />
+                ))}
+              </Pivot>
+              {this.state.activeGlobalTab ===
+                GlobalTabKeys.ModelPerformance && (
+                <ModelPerformanceTab
+                  jointDataset={this.state.jointDataset}
+                  metadata={this.state.modelMetadata}
+                  chartProps={this.state.modelChartConfig}
+                  onChange={this.onModelConfigChanged}
+                  cohorts={this.state.cohorts}
+                />
+              )}
+              {this.state.activeGlobalTab === GlobalTabKeys.DataExploration && (
+                <DatasetExplorerTab
+                  jointDataset={this.state.jointDataset}
+                  metadata={this.state.modelMetadata}
+                  chartProps={this.state.dataChartConfig}
+                  onChange={this.onConfigChanged}
+                  cohorts={this.state.cohorts}
+                />
+              )}
+              {this.state.activeGlobalTab === GlobalTabKeys.ExplanationTab && (
+                <GlobalExplanationTab
+                  globalBarSettings={this.state.globalBarConfig}
+                  sortVector={this.state.sortVector}
+                  dependenceProps={this.state.dependenceProps}
+                  jointDataset={this.state.jointDataset}
+                  metadata={this.state.modelMetadata}
+                  globalImportance={this.state.globalImportance}
+                  isGlobalDerivedFromLocal={
+                    this.state.isGlobalImportanceDerivedFromLocal
+                  }
+                  onChange={this.setGlobalBarSettings}
+                  onDependenceChange={this.onDependenceChange}
+                  cohorts={this.state.cohorts}
+                  cohortIDs={cohortIDs}
+                  selectedWeightVector={this.state.selectedWeightVector}
+                  weightOptions={this.weightVectorOptions}
+                  weightLabels={this.weightVectorLabels}
+                  onWeightChange={this.onWeightVectorChange}
+                  explanationMethod={this.props.explanationMethod}
+                />
+              )}
+              {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
+                <WhatIfTab
+                  jointDataset={this.state.jointDataset}
+                  metadata={this.state.modelMetadata}
+                  cohorts={this.state.cohorts}
+                  onChange={this.onWhatIfConfigChanged}
+                  chartProps={this.state.whatIfChartConfig}
+                  invokeModel={this.state.requestPredictions}
+                  selectedWeightVector={this.state.selectedWeightVector}
+                  weightOptions={this.weightVectorOptions}
+                  weightLabels={this.weightVectorLabels}
+                  onWeightChange={this.onWeightVectorChange}
+                />
+              )}
+            </div>
+          </Stack.Item>
+        </Stack>{" "}
       </div>
     );
   }
@@ -617,20 +581,8 @@ export class NewExplanationDashboard extends React.PureComponent<
     this.setState({ globalBarConfig: settings });
   };
 
-  // private setSortVector(): void {
-  //     this.setState({
-  //         sortVector: ModelExplanationUtils.getSortIndices(
-  //             this.state.cohorts[0].calculateAverageImportance(),
-  //         ).reverse(),
-  //     });
-  // }
-
-  private onCohortChange = (newCohort: Cohort): void => {
-    const prevCohorts = [...this.state.cohorts];
-    if (this.state.editingCohortIndex) {
-      prevCohorts[this.state.editingCohortIndex] = newCohort;
-    }
-    this.setState({ cohorts: prevCohorts, editingCohortIndex: undefined });
+  private onCohortsChange = (cohorts: Cohort[]): void => {
+    this.setState({ cohorts });
   };
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
@@ -639,40 +591,11 @@ export class NewExplanationDashboard extends React.PureComponent<
     this.setState({ selectedWeightVector: weightOption });
   };
 
-  private deleteCohort = (): void => {
-    const prevCohorts = [...this.state.cohorts];
-    if (this.state.editingCohortIndex) {
-      prevCohorts.splice(this.state.editingCohortIndex, 1);
-    }
-    this.setState({ cohorts: prevCohorts });
-  };
-
   private clearWarning = (): void => {
     this.setState({ validationWarnings: [] });
   };
 
   private clearSizeWarning = (): void => {
-    this.setState({ showingDatasizeWarning: false });
-  };
-
-  private openCohort = (index: number): void => {
-    this.setState({ editingCohortIndex: index });
-  };
-
-  private cloneAndOpenCohort = (index: number): void => {
-    const source = this.state.cohorts[index];
-    const cohorts = [...this.state.cohorts];
-    cohorts.push(
-      new Cohort(
-        source.name + localization.CohortBanner.copy,
-        this.state.jointDataset,
-        [...source.filters]
-      )
-    );
-    this.setState({ cohorts, editingCohortIndex: this.state.cohorts.length });
-  };
-
-  private closeCohortEditor = (): void => {
-    this.setState({ editingCohortIndex: undefined });
+    this.setState({ showingDataSizeWarning: false });
   };
 }

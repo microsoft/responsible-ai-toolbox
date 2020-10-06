@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import React from "react";
+
 import { localization } from "../../Localization/localization";
 import { IHelpMessage } from "../Interfaces/IStringsParam";
+
 import { noDataMessageStyles } from "./NoDataMessage.styles";
 
 export class NoDataMessage extends React.PureComponent<{

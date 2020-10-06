@@ -22,7 +22,8 @@
     "filenames",
     "eslint-plugin-unicorn",
     "eslint-plugin-eslint-comments",
-    "header"
+    "header",
+    "sort-keys-fix"
   ],
   "env": {
     "browser": true,
@@ -42,8 +43,13 @@
     "./.eslintrc.unicorn.eslintrc"
   ],
   "rules": {
+    "sort-keys-fix/sort-keys-fix": [
+      "error",
+      "asc",
+      { "caseSensitive": false, "natural": true }
+    ],
     "header/header": [
-      2,
+      "error",
       "line",
       [
         " Copyright (c) Microsoft Corporation.",
@@ -58,7 +64,16 @@
       }
     ],
     "import/no-unresolved": "off",
-    "import/order": "error",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
     "filenames/match-regex": "error",
     "filenames/match-exported": "error",
     "filenames/no-index": "error",
@@ -128,8 +143,8 @@
           "error_y",
           "f1_score",
           "fallout_rate",
-          "false_negative_over_total",
-          "false_positive_over_total",
+          "false_negative_rate",
+          "false_positive_rate",
           "feature_list",
           "log_loss",
           "lower_bounds",
@@ -451,7 +466,7 @@
     {
       "files": ["*.spec.ts"],
       "rules": {
-        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.spec$"]]
+        "filenames/match-regex": ["error", ["^[A-z]+\\.spec$"]]
       }
     },
     {

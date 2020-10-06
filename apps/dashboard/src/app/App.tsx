@@ -1,17 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import _ from "lodash";
+import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
-import { ITheme } from "office-ui-fabric-react";
-import { App as Interpret } from "../interpret/App";
+
 import { App as Fairness } from "../fairness/App";
-import { themes } from "./themes";
-import { languages } from "./languages";
-import { generateRoute } from "./generateRoute";
-import { applications, IApplications, applicationKeys } from "./applications";
-import { IAppSetting, routeKey } from "./IAppSetting";
+import { App as Interpret } from "../interpret/App";
+
 import { AppHeader } from "./AppHeader";
+import { applications, IApplications, applicationKeys } from "./applications";
+import { generateRoute } from "./generateRoute";
+import { IAppSetting, routeKey } from "./IAppSetting";
+import { languages } from "./languages";
+import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
   application: keyof IApplications;
@@ -24,6 +27,13 @@ export class App extends React.Component<IAppSetting, IAppState> {
     super(props);
     this.state = this.getState({ ...this.props, iteration: 0 });
   }
+  public componentDidUpdate(prevProps: IAppSetting): void {
+    if (!_.isEqual(prevProps, this.props)) {
+      this.setState(
+        this.getState({ ...this.props, iteration: this.state.iteration })
+      );
+    }
+  }
   public render(): React.ReactNode {
     const theme: ITheme = themes[this.state.theme];
     return (
@@ -31,13 +41,13 @@ export class App extends React.Component<IAppSetting, IAppState> {
         <AppHeader onSettingChanged={this.onSettingChanged} {...this.state} />
         <div
           style={{
+            backgroundColor: theme.semanticColors.bodyBackground,
             borderColor: "gray",
-            borderWidth: 10,
             borderStyle: "solid",
+            borderWidth: 10,
             height: "calc(100% - 70px)",
             minHeight: "500px",
-            width: "calc(100%-20px)",
-            backgroundColor: theme.semanticColors.bodyBackground
+            width: "calc(100%-20px)"
           }}
           key={this.state.iteration}
         >
@@ -79,7 +89,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
             />
           )}
         </div>
-        <Redirect to={generatePath(App.route, this.state)} />
+        <Redirect to={generatePath(App.route, this.state)} push={true} />
       </>
     );
   }
@@ -105,19 +115,19 @@ export class App extends React.Component<IAppSetting, IAppState> {
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
-      theme:
-        !props.theme || !themes[props.theme]
-          ? Object.keys(themes)[0]
-          : props.theme,
+      iteration: props.iteration + 1,
       language:
         !props.language || !languages[props.language]
           ? Object.keys(languages)[0]
           : props.language,
+      theme:
+        !props.theme || !themes[props.theme]
+          ? Object.keys(themes)[0]
+          : props.theme,
       version:
         !props.version || !applications[application].versions[props.version]
           ? Object.keys(applications[application].versions)[0]
-          : props.version,
-      iteration: props.iteration + 1
+          : props.version
     };
   }
 }

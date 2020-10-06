@@ -23,6 +23,15 @@ export const ParityTabStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IParityTabStyles>({
+    frame: {
+      height: "100%",
+      width: "750px"
+    },
+    header: {
+      color: theme.semanticColors.bodyText,
+      fontWeight: FontWeights.semibold,
+      margin: "26px 0"
+    },
     iconClass: {
       fontSize: "20px",
       position: "absolute",
@@ -32,25 +41,16 @@ export const ParityTabStyles: () => IProcessedStyleSet<
     itemsList: {
       overflowY: "auto"
     },
-    frame: {
-      width: "750px",
-      height: "100%"
-    },
     main: {
+      flex: 1,
       height: "100%",
-      minWidth: "550px",
-      flex: 1
-    },
-    header: {
-      color: theme.semanticColors.bodyText,
-      fontWeight: FontWeights.semibold,
-      margin: "26px 0"
+      minWidth: "550px"
     },
     textBody: {
-      fontWeight: FontWeights.semilight,
       color: theme.semanticColors.bodyText,
-      paddingTop: "12px",
-      paddingBottom: "50px"
+      fontWeight: FontWeights.semilight,
+      paddingBottom: "50px",
+      paddingTop: "12px"
     }
   });
 };

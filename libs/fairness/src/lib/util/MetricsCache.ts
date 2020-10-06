@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
+
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
+
 import { ParityModes } from "./ParityMetrics";
 
 export class MetricsCache {
@@ -34,8 +36,8 @@ export class MetricsCache {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
-        metricKey: key,
         binVector: binIndexVector,
+        metricKey: key,
         modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;
@@ -53,8 +55,8 @@ export class MetricsCache {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
-        metricKey: key,
         binVector: binIndexVector,
+        metricKey: key,
         modelIndex
       });
       this.cache[featureIndex][modelIndex][key] = value;

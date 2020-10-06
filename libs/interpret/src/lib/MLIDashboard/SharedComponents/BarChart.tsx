@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import Plotly from "plotly.js";
-import { v4 } from "uuid";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
+import Plotly from "plotly.js";
+import React from "react";
+import { v4 } from "uuid";
+
 import { localization } from "../../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
+import { ModelExplanationUtils } from "../ModelExplanationUtils";
+
 import { barChartStyles } from "./BarChart.styles";
 
 export interface IBarChartProps {
@@ -123,27 +125,27 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     const baseSeries: IPlotlyProperty = {
       config: {
         displaylogo: false,
-        responsive: true,
-        displayModeBar: false
+        displayModeBar: false,
+        responsive: true
       } as Plotly.Config,
       data: [],
       layout: {
         autosize: true,
-        dragmode: false,
         barmode: this.props.barmode,
+        dragmode: false,
         font: {
           size: 10
         },
-        margin: { t: 10, r: 10, b: 30 },
         hovermode: "closest",
+        margin: { b: 30, r: 10, t: 10 },
+        showlegend: classByFeatureMatrix.length > 1,
         xaxis: {
           automargin: true
         },
         yaxis: {
           automargin: true,
           title: localization.featureImportance
-        },
-        showlegend: classByFeatureMatrix.length > 1
+        }
       } as any
     };
 
@@ -181,16 +183,16 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         const orientation = "v";
         baseSeries.data.push({
           hoverinfo: "text",
-          orientation,
-          type: "bar",
-          visible,
           name:
             this.props.modelMetadata.modelType === ModelTypes.Multiclass
               ? this.props.modelMetadata.classNames[classIndex]
               : "",
+          orientation,
+          text,
+          type: "bar",
+          visible,
           x,
-          y,
-          text
+          y
         } as any);
       });
     }

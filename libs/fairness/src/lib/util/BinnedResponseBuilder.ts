@@ -7,6 +7,7 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+
 import { IBinnedResponse } from "./IBinnedResponse";
 
 export class BinnedResponseBuilder {
@@ -18,11 +19,11 @@ export class BinnedResponseBuilder {
   ): IBinnedResponse {
     if (featureRange.rangeType === RangeTypes.Categorical) {
       return {
-        hasError: false,
         array: (featureRange as ICategoricalRange).uniqueValues,
         featureIndex: index,
-        rangeType: RangeTypes.Categorical,
-        labelArray: (featureRange as ICategoricalRange).uniqueValues
+        hasError: false,
+        labelArray: (featureRange as ICategoricalRange).uniqueValues,
+        rangeType: RangeTypes.Categorical
       };
     }
     const uniqueValues = BinnedResponseBuilder.getIntegerUniqueValues(
@@ -30,11 +31,11 @@ export class BinnedResponseBuilder {
       index
     );
     return {
-      hasError: false,
       array: uniqueValues,
       featureIndex: index,
-      rangeType: RangeTypes.Categorical,
-      labelArray: uniqueValues.map((num) => num.toString())
+      hasError: false,
+      labelArray: uniqueValues.map((num) => num.toString()),
+      rangeType: RangeTypes.Categorical
     };
   }
 
@@ -61,11 +62,11 @@ export class BinnedResponseBuilder {
     const delta = featureRange.max - featureRange.min;
     if (delta === 0 || binCount === 0) {
       return {
-        hasError: false,
         array: [featureRange.max],
         featureIndex: index,
-        rangeType: RangeTypes.Categorical,
-        labelArray: [featureRange.max.toString()]
+        hasError: false,
+        labelArray: [featureRange.max.toString()],
+        rangeType: RangeTypes.Categorical
       };
     }
     // make uniform bins in these cases
@@ -87,11 +88,11 @@ export class BinnedResponseBuilder {
         return label;
       });
       return {
-        hasError: false,
         array,
         featureIndex: index,
-        rangeType: RangeTypes.Numeric,
-        labelArray
+        hasError: false,
+        labelArray,
+        rangeType: RangeTypes.Numeric
       };
     }
     // handle integer case, increment delta since we include the ends as discrete values
@@ -118,11 +119,11 @@ export class BinnedResponseBuilder {
       return label;
     });
     return {
-      hasError: false,
       array,
       featureIndex: index,
-      rangeType: RangeTypes.Integer,
-      labelArray
+      hasError: false,
+      labelArray,
+      rangeType: RangeTypes.Integer
     };
   }
 

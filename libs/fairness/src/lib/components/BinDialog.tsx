@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   DefaultButton,
   PrimaryButton,
@@ -10,11 +10,12 @@ import {
   SpinButton,
   Text
 } from "office-ui-fabric-react";
-
 import React from "react";
+
+import { localization } from "../Localization/localization";
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
-import { localization } from "../Localization/localization";
+
 import { BinDialogStyles } from "./BinDialog.styles";
 
 export interface IBinDialogProps {
@@ -58,7 +59,6 @@ export class BinDialog extends React.PureComponent<
               <div className={styles.binCounter}>
                 <SpinButton
                   styles={{
-                    spinButtonWrapper: { maxWidth: "98px" },
                     labelWrapper: { alignSelf: "center" },
                     root: {
                       display: "inline-flex",
@@ -68,7 +68,8 @@ export class BinDialog extends React.PureComponent<
                           maxWidth: "108px"
                         }
                       }
-                    }
+                    },
+                    spinButtonWrapper: { maxWidth: "98px" }
                   }}
                   label={localization.BinDialog.numberOfBins}
                   min={BinDialog.minBins}

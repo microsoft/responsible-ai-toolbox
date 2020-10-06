@@ -42,5 +42,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# compiled Python files
-*.pyc
+# Python
+**.pyc
+**/__pycache__/*

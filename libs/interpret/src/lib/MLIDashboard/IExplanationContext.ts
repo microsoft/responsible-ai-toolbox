@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
+
 import { JointDataset } from "./JointDataset";
 
 export enum ModelTypes {

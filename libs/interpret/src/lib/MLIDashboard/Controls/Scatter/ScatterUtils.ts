@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
-import memoize from "memoize-one";
 import { PartialRequired2 } from "@responsible-ai/core-ui";
 import {
   AccessorMappingFunctionNames,
@@ -11,6 +9,8 @@ import {
   PlotlyMode,
   SelectionContext
 } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import memoize from "memoize-one";
 import {
   IComboBoxOption,
   DropdownMenuItemType,
@@ -77,69 +77,67 @@ export class ScatterUtils {
       const result: IDropdownOption[] = [];
       if (includeFeatureImportance) {
         result.push({
+          itemType: DropdownMenuItemType.Header,
           key: "Header0",
-          text: localization.featureImportance,
-          itemType: DropdownMenuItemType.Header
+          text: localization.featureImportance
         });
         explanationContext.modelMetadata.featureNames.forEach(
           (featureName, index) => {
             result.push({
+              data: { isCategorical: false, isFeatureImportance: true },
               key: `LocalExplanation[${index}]`,
               text: localization.formatString(
                 localization.ExplanationScatter.importanceLabel,
                 featureName
-              ),
-              data: { isCategorical: false, isFeatureImportance: true }
+              )
             });
           }
         );
       }
       result.push({
+        itemType: DropdownMenuItemType.Divider,
         key: "divider1",
-        text: "-",
-        itemType: DropdownMenuItemType.Divider
+        text: "-"
       });
       result.push({
+        itemType: DropdownMenuItemType.Header,
         key: "Header1",
-        text: localization.ExplanationScatter.dataGroupLabel,
-        itemType: DropdownMenuItemType.Header
+        text: localization.ExplanationScatter.dataGroupLabel
       });
       explanationContext.modelMetadata.featureNames.forEach(
         (featureName, index) => {
           result.push({
+            data: {
+              isCategorical:
+                explanationContext.modelMetadata.featureIsCategorical?.[index]
+            },
             key: `TrainingData[${index}]`,
             text: includeFeatureImportance
               ? localization.formatString(
                   localization.ExplanationScatter.dataLabel,
                   featureName
                 )
-              : featureName,
-            data: {
-              isCategorical:
-                explanationContext.modelMetadata.featureIsCategorical?.[index]
-            }
+              : featureName
           });
         }
       );
       result.push({
+        data: { isCategorical: false },
         key: "Index",
-        text: localization.ExplanationScatter.index,
-        data: { isCategorical: false }
+        text: localization.ExplanationScatter.index
       });
       result.push({
+        itemType: DropdownMenuItemType.Divider,
         key: "divider2",
-        text: "-",
-        itemType: DropdownMenuItemType.Divider
+        text: "-"
       });
       result.push({
+        itemType: DropdownMenuItemType.Header,
         key: "Header2",
-        text: localization.ExplanationScatter.output,
-        itemType: DropdownMenuItemType.Header
+        text: localization.ExplanationScatter.output
       });
       if (explanationContext.testDataset.predictedY) {
         result.push({
-          key: "PredictedY",
-          text: localization.ExplanationScatter.predictedY,
           data: {
             isCategorical:
               explanationContext.modelMetadata.modelType !==
@@ -149,7 +147,9 @@ export class ScatterUtils {
               ModelTypes.Regression
                 ? "PredictedYClassIndex"
                 : undefined
-          }
+          },
+          key: "PredictedY",
+          text: localization.ExplanationScatter.predictedY
         });
       }
       if (explanationContext.testDataset.probabilityY) {
@@ -159,19 +159,17 @@ export class ScatterUtils {
             className = `class ${index}`;
           }
           result.push({
+            data: { isCategorical: false },
             key: `ProbabilityY[${index}]`,
             text: localization.formatString(
               localization.ExplanationScatter.probabilityLabel,
               className
-            ),
-            data: { isCategorical: false }
+            )
           });
         });
       }
       if (explanationContext.testDataset.trueY) {
         result.push({
-          key: "TrueY",
-          text: localization.ExplanationScatter.trueY,
           data: {
             isCategorical:
               explanationContext.modelMetadata.modelType !==
@@ -181,7 +179,9 @@ export class ScatterUtils {
               ModelTypes.Regression
                 ? "TrueYClassIndex"
                 : undefined
-          }
+          },
+          key: "TrueY",
+          text: localization.ExplanationScatter.trueY
         });
       }
       return result;
@@ -207,8 +207,8 @@ export class ScatterUtils {
       return explanationContext.testDataset.dataset.map(
         (featuresArray, rowIndex) => {
           const result: IProjectedData = {
-            TrainingData: featuresArray,
-            Index: rowIndex.toString()
+            Index: rowIndex.toString(),
+            TrainingData: featuresArray
           };
           if (
             explanationContext.localExplanation &&
@@ -255,7 +255,7 @@ export class ScatterUtils {
     _.isEqual.bind(window)
   );
   private static baseScatterProperties: IPlotlyProperty = {
-    config: { displaylogo: false, responsive: true, displayModeBar: false },
+    config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [
       {
         datapointLevelAccessors: {
@@ -275,15 +275,15 @@ export class ScatterUtils {
       }
     ],
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
+      hovermode: "closest",
       margin: {
         t: 10
       },
-      hovermode: "closest",
       showlegend: false,
       yaxis: {
         automargin: true
@@ -332,10 +332,6 @@ export class ScatterUtils {
     const yAccessor = `TrainingData[${maxIndex}]`;
     const colorAccessor = hasPredictedY ? "PredictedY" : "Index";
     const colorOption = {
-      key: colorAccessor,
-      text: hasPredictedY
-        ? localization.ExplanationScatter.predictedY
-        : localization.ExplanationScatter.index,
       data: {
         isCategorical:
           hasPredictedY &&
@@ -344,7 +340,11 @@ export class ScatterUtils {
           hasPredictedY && exp.modelMetadata.modelType !== ModelTypes.Regression
             ? "PredictedYClassIndex"
             : undefined
-      }
+      },
+      key: colorAccessor,
+      text: hasPredictedY
+        ? localization.ExplanationScatter.predictedY
+        : localization.ExplanationScatter.index
     };
     const modelData = exp.modelMetadata;
     const colorbarTitle = ScatterUtils.formatItemTextForAxis(
@@ -403,11 +403,11 @@ export class ScatterUtils {
     const xAccessor = `TrainingData[${maxIndex}]`;
     const colorAccessor = `TrainingData[${secondIndex}]`;
     const colorOption = {
-      key: colorAccessor,
-      text: exp.modelMetadata.featureNames[secondIndex],
       data: {
         isCategorical: exp.modelMetadata.featureIsCategorical?.[secondIndex]
-      }
+      },
+      key: colorAccessor,
+      text: exp.modelMetadata.featureNames[secondIndex]
     };
     const modelData = exp.modelMetadata;
     const colorbarTitle = ScatterUtils.formatItemTextForAxis(

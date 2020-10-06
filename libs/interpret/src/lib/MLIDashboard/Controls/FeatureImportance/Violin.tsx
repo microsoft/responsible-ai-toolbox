@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  ChartBuilder,
+  AccessibleChart,
+  IPlotlyProperty
+} from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
 import {
@@ -13,25 +18,21 @@ import {
   IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
-
 import React from "react";
-import {
-  ChartBuilder,
-  AccessibleChart,
-  IPlotlyProperty
-} from "@responsible-ai/mlchartlib";
+
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
-import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
-import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import {
   FeatureKeys,
   FeatureSortingKey
 } from "../../SharedComponents/IBarChartConfig";
-import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
+import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
+import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { violinStyles } from "./Violin.styles";
 
 export enum GroupByOptions {
@@ -70,12 +71,12 @@ export class Violin extends React.PureComponent<
         data.localExplanation?.flattenedValues?.map(
           (featureArray, rowIndex) => {
             return {
+              class: data.modelMetadata.classNames[classesArray[rowIndex]],
+              classIndex: classesArray[rowIndex],
               x: sortVector.map(
                 (featureIndex) => data.modelMetadata.featureNames[featureIndex]
               ),
-              y: sortVector.map((featureIndex) => featureArray[featureIndex]),
-              classIndex: classesArray[rowIndex],
-              class: data.modelMetadata.classNames[classesArray[rowIndex]]
+              y: sortVector.map((featureIndex) => featureArray[featureIndex])
             };
           }
         ) || [];
@@ -120,8 +121,8 @@ export class Violin extends React.PureComponent<
           const rowItems = featuresByRows[featureIndex].map(
             (value, rowIndex) => {
               return {
-                y: value,
-                class: data.modelMetadata.classNames[classesArray[rowIndex]]
+                class: data.modelMetadata.classNames[classesArray[rowIndex]],
+                y: value
               };
             }
           );
@@ -192,44 +193,44 @@ export class Violin extends React.PureComponent<
   private static violinPlotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
-      displayModeBar: false
+      displayModeBar: false,
+      responsive: true
     } as any,
     data: [
       {
-        type: "violin" as any,
-        yAccessor: "y",
-        hoveron: "points+kde",
-        groupBy: "class",
-        meanline: {
-          visible: true
-        },
         box: {
           visible: true
         },
+        groupBy: "class",
+        hoveron: "points+kde",
+        meanline: {
+          visible: true
+        },
         scalemode: "count",
+        span: [0],
         spanmode: "hard",
-        span: [0]
+        type: "violin" as any,
+        yAccessor: "y"
       }
     ] as any[],
     layout: {
-      dragmode: false,
       autosize: true,
+      dragmode: false,
       font: {
         size: 10
       },
       hovermode: "closest",
-      margin: {
-        t: 10,
-        b: 30
-      },
       legend: {
         tracegroupgap: 0
       },
+      margin: {
+        b: 30,
+        t: 10
+      },
       showlegend: true,
-      violinmode: "group",
       violingap: 40,
       violingroupgap: 0,
+      violinmode: "group",
       xaxis: {
         automargin: true
       },
@@ -243,33 +244,33 @@ export class Violin extends React.PureComponent<
   private static boxPlotlyProps: IPlotlyProperty = {
     config: {
       displaylogo: false,
-      responsive: true,
-      displayModeBar: false
+      displayModeBar: false,
+      responsive: true
     } as any,
     data: [
       {
+        boxmean: "sd",
+        boxpoints: "Outliers",
+        groupBy: "class",
         type: "box" as any,
         xAccessor: "x",
         xAccessorPrefix: "sort_by(@, &classIndex)",
-        yAccessor: "y",
-        groupBy: "class",
-        boxpoints: "Outliers",
-        boxmean: "sd"
+        yAccessor: "y"
       }
     ] as any[],
     layout: {
-      dragmode: false,
       autosize: true,
+      boxmode: "group",
+      dragmode: false,
       font: {
         size: 10
       },
       hovermode: "closest",
       margin: {
-        t: 10,
-        b: 30
+        b: 30,
+        t: 10
       },
       showlegend: true,
-      boxmode: "group",
       xaxis: {
         automargin: true
       },
@@ -288,14 +289,14 @@ export class Violin extends React.PureComponent<
     super(props);
     this.groupByOptions = this.buildGroupOptions();
     this.state = {
-      selectedSorting: FeatureKeys.AbsoluteGlobal,
       groupBy:
         props.dashboardContext.explanationContext.modelMetadata.modelType ===
           ModelTypes.Regression ||
         props.dashboardContext.explanationContext.testDataset.predictedY ===
           undefined
           ? GroupByOptions.None
-          : GroupByOptions.PredictedY
+          : GroupByOptions.PredictedY,
+      selectedSorting: FeatureKeys.AbsoluteGlobal
     };
   }
 
@@ -371,7 +372,7 @@ export class Violin extends React.PureComponent<
                   ariaLabel="Info"
                   onClick={this.showGlobalSortInfo}
                   styles={{
-                    root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                    root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                   }}
                 />
               </div>
@@ -403,7 +404,7 @@ export class Violin extends React.PureComponent<
                     ariaLabel="Info"
                     onClick={this.showCrossClassInfo}
                     styles={{
-                      root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                      root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                     }}
                   />
                 </div>

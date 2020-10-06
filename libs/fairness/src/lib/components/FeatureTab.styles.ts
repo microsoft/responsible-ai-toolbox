@@ -34,75 +34,14 @@ export const FeatureTabStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IFeatureTabStyles>({
-    itemCell: {
-      display: "flex",
-      flexDirection: "row",
-      padding: "20px 0",
-      width: "100%",
-      cursor: "pointer",
-      boxSizing: "border-box",
-      borderBottom: "1px solid",
-      borderBottomColor: theme.semanticColors.bodyDivider,
-      selectors: {
-        "&:hover": {
-          background: theme.semanticColors.listItemBackgroundHovered
-        }
-      }
-    },
-    iconClass: {
-      fontSize: FontSizes.large,
-      color: theme.semanticColors.accentButtonBackground
-    },
-    itemsList: {
-      overflowY: "auto"
-    },
-    frame: {
-      height: "100%"
-    },
-    main: {
-      height: "100%",
-      maxWidth: "700px",
-      flex: 1
-    },
-    header: {
-      color: theme.semanticColors.bodyText,
-      fontWeight: FontWeights.semibold,
-      margin: "26px 0"
-    },
-    textBody: {
-      paddingTop: "12px",
-      fontWeight: FontWeights.semilight,
-      color: theme.semanticColors.bodyText
-    },
-    tableHeader: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingBottom: "15px",
-      color: theme.semanticColors.bodyText,
-      borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider
-    },
-    itemTitle: {
-      margin: 0,
-      color: theme.semanticColors.listText
-    },
-    valueCount: {
-      paddingTop: "15px",
-      color: theme.semanticColors.bodyText
-    },
-    iconWrapper: {
-      paddingTop: "4px",
-      paddingLeft: "5px",
-      width: "30px"
-    },
-    featureDescriptionSection: {
-      flex: 1,
-      paddingRight: "20px",
-      minHeight: "75px"
-    },
     binSection: {
       width: "130px"
+    },
+    category: {
+      color: theme.semanticColors.bodyText,
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap"
     },
     expandButton: {
       paddingLeft: 0,
@@ -112,14 +51,75 @@ export const FeatureTabStyles: () => IProcessedStyleSet<
         }
       }
     },
-    category: {
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      color: theme.semanticColors.bodyText
+    featureDescriptionSection: {
+      flex: 1,
+      minHeight: "75px",
+      paddingRight: "20px"
+    },
+    frame: {
+      height: "100%"
+    },
+    header: {
+      color: theme.semanticColors.bodyText,
+      fontWeight: FontWeights.semibold,
+      margin: "26px 0"
+    },
+    iconClass: {
+      color: theme.semanticColors.accentButtonBackground,
+      fontSize: FontSizes.large
+    },
+    iconWrapper: {
+      paddingLeft: "5px",
+      paddingTop: "4px",
+      width: "30px"
+    },
+    itemCell: {
+      borderBottom: "1px solid",
+      borderBottomColor: theme.semanticColors.bodyDivider,
+      boxSizing: "border-box",
+      cursor: "pointer",
+      display: "flex",
+      flexDirection: "row",
+      padding: "20px 0",
+      selectors: {
+        "&:hover": {
+          background: theme.semanticColors.listItemBackgroundHovered
+        }
+      },
+      width: "100%"
+    },
+    itemsList: {
+      overflowY: "auto"
+    },
+    itemTitle: {
+      color: theme.semanticColors.listText,
+      margin: 0
+    },
+    main: {
+      flex: 1,
+      height: "100%",
+      maxWidth: "700px"
     },
     subgroupHeader: {
       width: "130px"
+    },
+    tableHeader: {
+      borderBottom: "1px solid",
+      borderColor: theme.semanticColors.bodyDivider,
+      color: theme.semanticColors.bodyText,
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingBottom: "15px"
+    },
+    textBody: {
+      color: theme.semanticColors.bodyText,
+      fontWeight: FontWeights.semilight,
+      paddingTop: "12px"
+    },
+    valueCount: {
+      color: theme.semanticColors.bodyText,
+      paddingTop: "15px"
     }
   });
 };

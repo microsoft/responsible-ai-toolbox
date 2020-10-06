@@ -13,20 +13,22 @@ import {
   IconButton
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ModelTypes, IGlobalExplanation } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
+import { BarChart } from "../../SharedComponents/BarChart";
 import {
   FeatureSortingKey,
   FeatureKeys
 } from "../../SharedComponents/IBarChartConfig";
-import { BarChart } from "../../SharedComponents/BarChart";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
-import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 import { FeatureImportanceModes } from "./FeatureImportanceModes";
+import { IGlobalFeatureImportanceProps } from "./FeatureImportanceWrapper";
 
 export interface IFeatureImportanceBarState {
   selectedSorting: FeatureSortingKey;
@@ -44,8 +46,8 @@ export class FeatureImportanceBar extends React.PureComponent<
     super(props);
     this.sortOptions = this.buildSortOptions();
     this.state = {
-      selectedSorting: FeatureKeys.AbsoluteGlobal,
-      isCalloutVisible: false
+      isCalloutVisible: false,
+      selectedSorting: FeatureKeys.AbsoluteGlobal
     };
   }
 
@@ -88,7 +90,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                   title={localization.AggregateImportance.topKInfo}
                   onClick={this.onIconClick}
                   styles={{
-                    root: { marginBottom: -3, color: "rgb(0, 120, 212)" }
+                    root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
                   }}
                 />
               </div>

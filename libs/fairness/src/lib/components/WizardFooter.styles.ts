@@ -17,26 +17,26 @@ export const WizardFooterStyles: () => IProcessedStyleSet<
   IWizardFooterStyles
 > = () => {
   return mergeStyleSets<IWizardFooterStyles>({
+    back: {
+      fontSize: "18px",
+      fontWeight: "400",
+      height: "44px",
+      lineHeight: "24px",
+      padding: "12px"
+    },
     frame: {
       display: "inline-flex",
       flexDirection: "row-reverse",
-      paddingTop: "10px",
-      paddingBottom: "10px"
+      paddingBottom: "10px",
+      paddingTop: "10px"
     },
     next: {
-      height: "44px",
-      padding: "12px",
       fontSize: "18px",
-      lineHeight: "24px",
       fontWeight: "400",
-      marginLeft: "10px"
-    },
-    back: {
       height: "44px",
-      padding: "12px",
-      fontSize: "18px",
       lineHeight: "24px",
-      fontWeight: "400"
+      marginLeft: "10px",
+      padding: "12px"
     }
   });
 };

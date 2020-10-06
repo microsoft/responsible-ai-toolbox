@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   CommandBar,
   ICommandBarItemProps,
   IContextualMenuItem
 } from "office-ui-fabric-react";
-import { languages } from "./languages";
+import React from "react";
+
 import { applications, IApplications } from "./applications";
 import { IAppSetting } from "./IAppSetting";
+import { languages } from "./languages";
 import { themes } from "./themes";
 
 export interface IAppHeaderProps extends Required<IAppSetting> {
@@ -33,63 +34,63 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
   public render(): React.ReactNode {
     const items: ICommandBarItemProps[] = [
       {
-        key: "application",
-        text: `Application - ${this.props.application}`,
         iconProps: {
           iconName: "AllApps"
         },
+        key: "application",
         subMenuProps: {
           items: this.getOptions(
             Object.keys(applications),
             this.onApplicationSelect
           )
-        }
+        },
+        text: `Application - ${this.props.application}`
       },
       {
-        key: "version",
-        text: `Version - ${this.props.version}`,
         iconProps: {
           iconName: "NumberField"
         },
+        key: "version",
         subMenuProps: {
           items: this.getOptions(
             Object.keys(applications[this.props.application].versions),
             this.onVersionSelect
           )
-        }
+        },
+        text: `Version - ${this.props.version}`
       },
       {
-        key: "dataset",
-        text: `Dataset - ${this.props.dataset}`,
         iconProps: {
           iconName: "Database"
         },
+        key: "dataset",
         subMenuProps: {
           items: this.getOptions(
             Object.keys(applications[this.props.application].datasets),
             this.onDatasetSelect
           )
-        }
+        },
+        text: `Dataset - ${this.props.dataset}`
       },
       {
-        key: "theme",
-        text: `Theme - ${this.props.theme}`,
         iconProps: {
           iconName: "ColorSolid"
         },
+        key: "theme",
         subMenuProps: {
           items: this.getOptions(Object.keys(themes), this.onThemeSelect)
-        }
+        },
+        text: `Theme - ${this.props.theme}`
       },
       {
-        key: "language",
-        text: `Language - ${this.props.language}`,
         iconProps: {
           iconName: "PlainText"
         },
+        key: "language",
         subMenuProps: {
           items: this.getOptions(Object.keys(languages), this.onLanguageSelect)
-        }
+        },
+        text: `Language - ${this.props.language}`
       }
     ];
     return <CommandBar items={items} id="TopMenuBar" />;
@@ -102,10 +103,10 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     ) => boolean | void
   ): IContextualMenuItem[] {
     return labels.map((l) => ({
-      text: l,
-      key: l,
       data: l,
-      onClick
+      key: l,
+      onClick,
+      text: l
     }));
   }
 

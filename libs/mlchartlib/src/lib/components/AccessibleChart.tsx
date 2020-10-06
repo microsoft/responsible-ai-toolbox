@@ -2,14 +2,15 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
-import Plotly from "plotly.js";
 import { ITheme } from "office-ui-fabric-react";
+import Plotly from "plotly.js";
 import React from "react";
 import { v4 } from "uuid";
-import { formatValue } from "./DisplayFormatters";
-import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
-import { IPlotlyProperty } from "./IPlotlyProperty";
+
 import { accessibleChartStyles } from "./AccessibleChart.styles";
+import { formatValue } from "./DisplayFormatters";
+import { IPlotlyProperty } from "./IPlotlyProperty";
+import { PlotlyThemes, IPlotlyTheme } from "./PlotlyThemes";
 
 export interface IPlotlyAnimateProps {
   props: Partial<IPlotlyProperty>;

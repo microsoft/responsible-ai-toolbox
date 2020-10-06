@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { ActionButton, Text } from "office-ui-fabric-react";
-import { IBinnedResponse } from "../util/IBinnedResponse";
+import React from "react";
+
 import { localization } from "../Localization/localization";
+import { IBinnedResponse } from "../util/IBinnedResponse";
+
 import { FeatureTabStyles } from "./FeatureTab.styles";
 
 interface IFeatureTabSubGroupProps {

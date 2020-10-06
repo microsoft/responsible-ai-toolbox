@@ -18,30 +18,30 @@ export interface IFeatureImportanceBarStyles {
 export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBarStyles> = mergeStyleSets<
   IFeatureImportanceBarStyles
 >({
+  boldText: {
+    fontWeight: "600"
+  },
   chartWithVertical: {
     display: "flex",
-    flexGrow: "1",
-    flexDirection: "row"
+    flexDirection: "row",
+    flexGrow: "1"
   },
   noData: {
     flex: "1",
     margin: "100px auto 0 auto"
   },
-  verticalAxis: {
-    position: "relative",
-    top: "0px",
-    height: "auto",
-    width: "64px"
-  },
   rotatedVerticalBox: {
-    transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
     marginLeft: "28px",
     position: "absolute",
-    top: "50%",
     textAlign: "center",
+    top: "50%",
+    transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
     width: "max-content"
   },
-  boldText: {
-    fontWeight: "600"
+  verticalAxis: {
+    height: "auto",
+    position: "relative",
+    top: "0px",
+    width: "64px"
   }
 });

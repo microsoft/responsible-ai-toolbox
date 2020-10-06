@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   IconButton,
   DefaultButton,
@@ -11,6 +10,7 @@ import {
   IDropdownOption,
   Callout
 } from "office-ui-fabric-react";
+import React from "react";
 
 import { localization } from "../../Localization/localization";
 import { IParityPickerPropsV1 } from "../FairnessWizard";
@@ -49,7 +49,7 @@ export class ParityPicker extends React.PureComponent<
               title={"TODO"}
               ariaLabel="Info"
               onClick={this.onOpen}
-              styles={{ root: { marginBottom: -3, color: "rgb(0, 120, 212)" } }}
+              styles={{ root: { color: "rgb(0, 120, 212)", marginBottom: -3 } }}
             />
           </div>
           <ComboBox

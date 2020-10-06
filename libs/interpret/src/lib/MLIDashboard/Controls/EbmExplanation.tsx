@@ -1,23 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-import memoize from "memoize-one";
-import _ from "lodash";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import {
   AccessibleChart,
   IPlotlyProperty,
   IData,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import memoize from "memoize-one";
+import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import React from "react";
+
+import { localization } from "../../Localization/localization";
+import { FabricStyles } from "../FabricStyles";
 import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
   IFeatureValueExplanation
 } from "../IExplanationContext";
-import { localization } from "../../Localization/localization";
-import { FabricStyles } from "../FabricStyles";
 
 export interface IEbmProps {
   explanationContext: IExplanationContext;
@@ -36,13 +37,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     (coordinates: IMultiClassBoundedCoordinates): IData[] => {
       return coordinates.scores.map((scores, classIndex) => {
         return {
-          orientation: "v",
-          type: "bar",
-          x: coordinates.names,
-          y: scores,
           error_y: {
-            type: "data",
-            symmetric: false,
             array:
               coordinates.upperBounds !== undefined
                 ? coordinates.upperBounds[classIndex].map(
@@ -53,8 +48,14 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
               ? coordinates.lowerBounds[classIndex].map(
                   (lowerVal, index) => scores[index] - lowerVal
                 )
-              : undefined
-          }
+              : undefined,
+            symmetric: false,
+            type: "data"
+          },
+          orientation: "v",
+          type: "bar",
+          x: coordinates.names,
+          y: scores
         } as IData;
       });
     }
@@ -75,42 +76,42 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
               classIndex % FabricStyles.plotlyColorPalette.length
             ];
           const lowerBounds: IData = {
-            mode: PlotlyMode.Lines,
-            type: "scatter",
             line: {
-              shape: "hv",
-              color: "transparent"
+              color: "transparent",
+              shape: "hv"
             },
+            mode: PlotlyMode.Lines,
             name: classes[classIndex],
+            type: "scatter",
             x: coordinates.names,
             y: coordinates.lowerBounds?.[classIndex]
           };
           const centerlineSeries: IData = {
-            mode: PlotlyMode.Lines,
-            type: "scatter",
             fill: "tonexty",
             fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
-            line: {
-              shape: "hv",
-              color: `rgb(${color.r}, ${color.g}, ${color.b})`
-            },
-            name: classes[classIndex],
             legendgroup: classes[classIndex],
+            line: {
+              color: `rgb(${color.r}, ${color.g}, ${color.b})`,
+              shape: "hv"
+            },
+            mode: PlotlyMode.Lines,
+            name: classes[classIndex],
+            type: "scatter",
             x: coordinates.names,
             y: scores
           };
           const upperbounds: IData = {
-            mode: PlotlyMode.Lines,
-            type: "scatter",
             fill: "tonexty",
             fillcolor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`,
-            line: {
-              shape: "hv",
-              color: "transparent"
-            },
-            name: classes[classIndex],
             legendgroup: classes[classIndex],
+            line: {
+              color: "transparent",
+              shape: "hv"
+            },
+            mode: PlotlyMode.Lines,
+            name: classes[classIndex],
             showlegend: false,
+            type: "scatter",
             x: coordinates.names,
             y: coordinates.upperBounds?.[classIndex]
           } as any;
@@ -149,20 +150,24 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
         explanationContext
       );
       return {
-        config: { displaylogo: false, responsive: true, displayModeBar: false },
+        config: { displaylogo: false, displayModeBar: false, responsive: true },
         data,
         layout: {
-          dragmode: false,
           autosize: true,
+          dragmode: false,
           font: {
             size: 10
           },
-          margin: {
-            t: 10,
-            b: 30
-          },
           hovermode: "closest",
+          margin: {
+            b: 30,
+            t: 10
+          },
           showlegend: false,
+          xaxis: {
+            automargin: true,
+            title: featureName
+          },
           yaxis: {
             automargin: true,
             title:
@@ -170,10 +175,6 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
               ebmObject.displayParameters.yAxisLabel
                 ? ebmObject.displayParameters.yAxisLabel
                 : localization.IcePlot.predictedProbability
-          },
-          xaxis: {
-            title: featureName,
-            automargin: true
           }
         } as any
       };

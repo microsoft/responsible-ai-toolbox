@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { getLocalization } from "@responsible-ai/mlchartlib";
+
 import cs from "./cs-CZ.json";
 import de from "./de-DE.json";
 import en from "./en.json";
@@ -22,9 +23,9 @@ import zhcn from "./zh-CN.json";
 import zhtw from "./zh-TW.json";
 
 export const localization = getLocalization({
-  en,
   cs,
   de,
+  en,
   es,
   fr,
   hu,

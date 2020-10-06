@@ -62,21 +62,108 @@ export const WizardReportStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IWizardReportStyles>({
-    spinner: {
+    bannerWrapper: {
+      display: "inline-flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingBottom: "15px",
+      paddingTop: "18px",
+      width: "100%"
+    },
+    chartBody: {
+      flex: 1
+    },
+    chartHeader: {
+      color: theme.semanticColors.bodyText,
+      height: "23px",
+      paddingLeft: "10px"
+    },
+    chartWrapper: {
+      display: "flex",
+      flex: "1 0 40%",
+      flexDirection: "column"
+    },
+    chevronIcon: {
+      height: "6",
+      marginRight: "10px",
+      verticalAlign: "middle",
+      width: "9"
+    },
+    closeButton: {
+      color: theme.semanticColors.bodyText,
+      float: "right",
+      fontFamily: "Arial",
+      fontSize: "20px",
+      fontWeight: "400",
+      lineHeight: "20px",
+      paddingLeft: "20px"
+    },
+    colorBlock: {
+      height: "15px",
+      marginRight: "9px",
+      width: "15px"
+    },
+    doneButton: {
+      color: theme.semanticColors.bodyText,
+      fontSize: FontSizes.large,
+      fontWeight: FontWeights.regular,
+      height: "44px",
+      lineHeight: "24px",
       margin: "auto",
-      padding: "40px"
+      padding: "12px"
+    },
+    downloadIcon: {
+      height: "18",
+      marginRight: "10px",
+      verticalAlign: "middle",
+      width: "17"
+    },
+    downloadReport: {
+      color: theme.semanticColors.bodyText,
+      fontSize: "12px",
+      fontWeight: "normal",
+      lineHeight: "16px",
+      paddingBottom: "20px",
+      paddingLeft: "0px",
+      paddingTop: "20px"
+    },
+    dropDown: {
+      display: "inline-block",
+      margin: "10px 0px"
+    },
+    equalizedOdds: {
+      color: theme.semanticColors.bodyText,
+      float: "left",
+      fontSize: "18px",
+      fontWeight: "normal",
+      lineHeight: "22px",
+      paddingLeft: "100px",
+      paddingTop: "30px"
+    },
+    expandAttributes: {
+      color: theme.semanticColors.bodyText,
+      fontSize: "12px",
+      fontWeight: "normal",
+      height: "26px",
+      lineHeight: "16px",
+      marginBottom: "20px",
+      marginLeft: "100px"
+    },
+    firstMetricLabel: {
+      borderRight: "1px solid",
+      borderRightColor: theme.semanticColors.bodyDivider,
+      color: theme.semanticColors.bodyText,
+      lineHeight: "16px",
+      marginRight: "20px",
+      maxWidth: "120px",
+      padding: "8px 12px 0 12px"
+    },
+    groupLabel: {
+      color: theme.semanticColors.bodyText
     },
     header: {
-      padding: "0 100px 20px 100px",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    multimodelButton: {
-      marginTop: "20px",
-      padding: 0
-    },
-    headerTitle: {
-      paddingTop: "10px",
-      color: theme.semanticColors.bodyText
+      backgroundColor: theme.semanticColors.bodyBackground,
+      padding: "0 100px 20px 100px"
     },
     headerBanner: {
       display: "flex"
@@ -84,206 +171,89 @@ export const WizardReportStyles: () => IProcessedStyleSet<
     headerOptions: {
       backgroundColor: theme.semanticColors.bodyBackground
     },
-    bannerWrapper: {
-      width: "100%",
-      paddingTop: "18px",
-      paddingBottom: "15px",
-      display: "inline-flex",
-      flexDirection: "row",
-      justifyContent: "space-between"
-    },
-    metricText: {
+    headerTitle: {
       color: theme.semanticColors.bodyText,
-      paddingRight: "12px",
-      fontWeight: FontWeights.light,
-      lineHeight: "44px",
-      fontSize: "36px"
+      paddingTop: "10px"
     },
-    firstMetricLabel: {
+    howTo: {
+      paddingLeft: "100px",
+      paddingTop: "20px"
+    },
+    infoButton: {
+      border: "1px solid",
+      borderRadius: "50%",
       color: theme.semanticColors.bodyText,
-      padding: "8px 12px 0 12px",
-      maxWidth: "120px",
-      borderRight: "1px solid",
-      borderRightColor: theme.semanticColors.bodyDivider,
-      marginRight: "20px",
-      lineHeight: "16px"
+      float: "left",
+      fontSize: "12px",
+      fontWeight: "600",
+      height: "15px",
+      lineHeight: "14px",
+      marginLeft: "250px",
+      marginRight: "3px",
+      marginTop: "3px",
+      textAlign: "center",
+      width: "15px"
     },
-    metricLabel: {
+    insights: {
       color: theme.semanticColors.bodyText,
-      paddingTop: "8px",
-      maxWidth: "130px"
+      display: "inline",
+      padding: "18px 0",
+      textTransform: "uppercase"
     },
-    expandAttributes: {
+    insightsIcon: {
+      height: "28",
+      marginRight: "10px",
+      verticalAlign: "middle",
+      width: "24"
+    },
+    insightsText: {
+      borderBottom: "1px solid",
+      borderBottomColor: theme.semanticColors.bodyDivider,
+      color: theme.semanticColors.bodyText,
+      marginTop: "20px",
+      paddingBottom: "18px",
+      paddingRight: "15px"
+    },
+    legendPanel: {
+      marginLeft: "100px"
+    },
+    legendSubtitle: {
+      color: theme.semanticColors.bodySubtext,
+      fontSize: "9px",
+      fontStyle: "italic",
+      lineHeight: "12x"
+    },
+    legendTitle: {
       color: theme.semanticColors.bodyText,
       fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "normal",
-      height: "26px",
-      marginLeft: "100px",
-      marginBottom: "20px"
-    },
-    overallArea: {
-      display: "flex",
-      flexDirection: "row",
-      padding: "20px 0 0 100px",
-      color: theme.semanticColors.bodyText,
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    presentationArea: {
-      display: "flex",
-      flexDirection: "row",
-      padding: "20px 0 30px 100px",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    chartWrapper: {
-      flex: "1 0 40%",
-      display: "flex",
-      flexDirection: "column"
-    },
-    chartBody: {
-      flex: 1
-    },
-    chartHeader: {
-      height: "23px",
-      paddingLeft: "10px",
-      color: theme.semanticColors.bodyText
+      lineHeight: "16px"
     },
     main: {
       display: "flex",
       flexDirection: "row"
     },
     mainLeft: {
-      width: "75%",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    dropDown: {
-      margin: "10px 0px",
-      display: "inline-block"
+      backgroundColor: theme.semanticColors.bodyBackground,
+      width: "75%"
     },
     mainRight: {
-      minWidth: "200px",
-      paddingLeft: "35px",
+      backgroundColor: theme.semanticColors.bodyBackground,
       flexBasis: "300px",
       flexShrink: 1,
-      backgroundColor: theme.semanticColors.bodyBackground
+      minWidth: "200px",
+      paddingLeft: "35px"
     },
-    rightTitle: {
+    metricLabel: {
       color: theme.semanticColors.bodyText,
-      paddingBottom: "11px",
-      borderBottom: "1px solid",
-      borderBottomColor: theme.semanticColors.bodyDivider
+      maxWidth: "130px",
+      paddingTop: "8px"
     },
-    rightText: {
-      padding: "16px 15px 30px 0",
+    metricText: {
       color: theme.semanticColors.bodyText,
-      borderBottom: "0.5px dashed",
-      borderBottomColor: theme.semanticColors.bodyDivider
-    },
-    insights: {
-      textTransform: "uppercase",
-      color: theme.semanticColors.bodyText,
-      padding: "18px 0",
-      display: "inline"
-    },
-    insightsIcon: {
-      verticalAlign: "middle",
-      marginRight: "10px",
-      width: "24",
-      height: "28"
-    },
-    insightsText: {
-      marginTop: "20px",
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "18px",
-      paddingRight: "15px",
-      borderBottom: "1px solid",
-      borderBottomColor: theme.semanticColors.bodyDivider
-    },
-    downloadIcon: {
-      verticalAlign: "middle",
-      marginRight: "10px",
-      width: "17",
-      height: "18"
-    },
-    chevronIcon: {
-      verticalAlign: "middle",
-      marginRight: "10px",
-      width: "9",
-      height: "6"
-    },
-    downloadReport: {
-      color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "normal",
-      paddingTop: "20px",
-      paddingBottom: "20px",
-      paddingLeft: "0px"
-    },
-    tableWrapper: {
-      paddingBottom: "20px"
-    },
-    textRow: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      paddingBottom: "7px",
-      color: theme.semanticColors.bodyText
-    },
-    infoButton: {
-      color: theme.semanticColors.bodyText,
-      float: "left",
-      width: "15px",
-      height: "15px",
-      textAlign: "center",
-      fontSize: "12px",
-      lineHeight: "14px",
-      fontWeight: "600",
-      borderRadius: "50%",
-      border: "1px solid",
-      marginTop: "3px",
-      marginRight: "3px",
-      marginLeft: "250px"
-    },
-    closeButton: {
-      color: theme.semanticColors.bodyText,
-      float: "right",
-      fontFamily: "Arial",
-      fontSize: "20px",
-      lineHeight: "20px",
-      fontWeight: "400",
-      paddingLeft: "20px"
-    },
-    doneButton: {
-      margin: "auto",
-      height: "44px",
-      padding: "12px",
-      lineHeight: "24px",
-      color: theme.semanticColors.bodyText,
-      fontSize: FontSizes.large,
-      fontWeight: FontWeights.regular
-    },
-    equalizedOdds: {
-      color: theme.semanticColors.bodyText,
-      float: "left",
-      fontSize: "18px",
-      lineHeight: "22px",
-      fontWeight: "normal",
-      paddingTop: "30px",
-      paddingLeft: "100px"
-    },
-    howTo: {
-      paddingTop: "20px",
-      paddingLeft: "100px"
-    },
-    colorBlock: {
-      width: "15px",
-      height: "15px",
-      marginRight: "9px"
-    },
-    multimodelSection: {
-      display: "flex",
-      flexDirection: "row"
+      fontSize: "36px",
+      fontWeight: FontWeights.light,
+      lineHeight: "44px",
+      paddingRight: "12px"
     },
     modalContentHelp: {
       float: "left",
@@ -295,27 +265,57 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       wordWrap: "break-word"
     },
     modelLabel: {
-      fontSize: "24px",
       alignSelf: "center",
-      paddingTop: "16px",
-      color: theme.semanticColors.bodyText
-    },
-    groupLabel: {
-      color: theme.semanticColors.bodyText
-    },
-    legendPanel: {
-      marginLeft: "100px"
-    },
-    legendTitle: {
       color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      lineHeight: "16px"
+      fontSize: "24px",
+      paddingTop: "16px"
     },
-    legendSubtitle: {
-      color: theme.semanticColors.bodySubtext,
-      fontSize: "9px",
-      lineHeight: "12x",
-      fontStyle: "italic"
+    multimodelButton: {
+      marginTop: "20px",
+      padding: 0
+    },
+    multimodelSection: {
+      display: "flex",
+      flexDirection: "row"
+    },
+    overallArea: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      color: theme.semanticColors.bodyText,
+      display: "flex",
+      flexDirection: "row",
+      padding: "20px 0 0 100px"
+    },
+    presentationArea: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      display: "flex",
+      flexDirection: "row",
+      padding: "20px 0 30px 100px"
+    },
+    rightText: {
+      borderBottom: "0.5px dashed",
+      borderBottomColor: theme.semanticColors.bodyDivider,
+      color: theme.semanticColors.bodyText,
+      padding: "16px 15px 30px 0"
+    },
+    rightTitle: {
+      borderBottom: "1px solid",
+      borderBottomColor: theme.semanticColors.bodyDivider,
+      color: theme.semanticColors.bodyText,
+      paddingBottom: "11px"
+    },
+    spinner: {
+      margin: "auto",
+      padding: "40px"
+    },
+    tableWrapper: {
+      paddingBottom: "20px"
+    },
+    textRow: {
+      alignItems: "center",
+      color: theme.semanticColors.bodyText,
+      display: "flex",
+      flexDirection: "row",
+      paddingBottom: "7px"
     }
   });
 };

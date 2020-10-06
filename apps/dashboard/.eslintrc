@@ -15,7 +15,7 @@
       }
     },
     {
-      "files": ["**/__mock_data/*.ts"],
+      "files": ["**/__mock_data__/*.ts"],
       "rules": {
         "max-lines": "off"
       }

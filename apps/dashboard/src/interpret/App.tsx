@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   NewExplanationDashboard,
   ExplanationDashboard,
@@ -11,6 +10,7 @@ import {
   HelpMessageDict
 } from "@responsible-ai/interpret";
 import { ITheme } from "office-ui-fabric-react";
+import React from "react";
 
 interface IAppProps {
   dataset: IExplanationDashboardData;
@@ -26,13 +26,15 @@ export class App extends React.Component<IAppProps> {
     LocalOrGlobalAndTestReq: [
       { displayText: "LocalOrGlobalAndTestReq", format: "text" }
     ],
-    TestReq: [{ displayText: "TestReq", format: "text" }],
-    PredictorReq: [{ displayText: "PredictorReq", format: "text" }]
+    PredictorReq: [{ displayText: "PredictorReq", format: "text" }],
+    TestReq: [{ displayText: "TestReq", format: "text" }]
   };
 
   public render(): React.ReactNode {
     const dashboardProp: IExplanationDashboardProps = {
       ...this.props.dataset,
+      explanationMethod: "mimic",
+      locale: this.props.language,
       requestPredictions:
         this.props.classDimension === 1
           ? this.generateRandomScore
@@ -41,9 +43,7 @@ export class App extends React.Component<IAppProps> {
       telemetryHook: (er: ITelemetryMessage): void => {
         console.error(er.message);
       },
-      theme: this.props.theme,
-      explanationMethod: "mimic",
-      locale: this.props.language
+      theme: this.props.theme
     };
     switch (this.props.version) {
       case 1:

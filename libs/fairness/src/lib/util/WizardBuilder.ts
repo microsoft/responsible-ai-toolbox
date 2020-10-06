@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeIcons } from "office-ui-fabric-react";
 import {
   ModelMetadata,
   ICategoricalRange,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import { initializeIcons } from "office-ui-fabric-react";
+
 import {
   IFairnessProps,
   IFairnessBaseData,
@@ -18,15 +19,16 @@ import {
   IPreComputedData
 } from "../IFairnessProps";
 import { localization } from "../Localization/localization";
+
+import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
+import { IBinnedResponse } from "./IBinnedResponse";
 import {
   IRunTimeFairnessContext,
   IFairnessContext,
   IFairnessModelMetadata
 } from "./IFairnessContext";
-import { IAccuracyOption, accuracyOptions } from "./AccuracyMetrics";
 import { IParityOption, parityOptions } from "./ParityMetrics";
-import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
-import { IBinnedResponse } from "./IBinnedResponse";
+import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 
 export class WizardBuilder {
   private static iconsInitialized = false;
@@ -51,13 +53,13 @@ export class WizardBuilder {
     props: IRunTimeFairnessData
   ): IRunTimeFairnessContext {
     return {
-      dataset: props.testData,
-      trueY: props.trueY,
-      predictions: props.predictedY,
       binVector: [],
+      dataset: props.testData,
       groupNames: [],
       modelMetadata: this.buildModelMetadata(props),
-      modelNames: this.buildModelNames(props)
+      modelNames: this.buildModelNames(props),
+      predictions: props.predictedY,
+      trueY: props.trueY
     };
   }
 
@@ -65,13 +67,13 @@ export class WizardBuilder {
     props: IPreComputedFairnessData
   ): IFairnessContext {
     return {
-      dataset: undefined,
-      trueY: props.trueY,
-      predictions: props.predictedY,
       binVector: props.precomputedFeatureBins[0].binVector,
+      dataset: undefined,
       groupNames: props.precomputedFeatureBins[0].binLabels,
       modelMetadata: this.buildPrecomputedModelMetadata(props),
-      modelNames: this.buildModelNames(props)
+      modelNames: this.buildModelNames(props),
+      predictions: props.predictedY,
+      trueY: props.trueY
     };
   }
 
@@ -99,15 +101,15 @@ export class WizardBuilder {
       );
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
       return {
-        uniqueValues: binMeta.binLabels,
-        rangeType: RangeTypes.Categorical
+        rangeType: RangeTypes.Categorical,
+        uniqueValues: binMeta.binLabels
       } as ICategoricalRange;
     });
     return {
-      featureNames,
-      featureNamesAbridged: featureNames,
       classNames,
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
+      featureNames,
+      featureNamesAbridged: featureNames,
       featureRanges,
       PredictionType: props.predictionType
     };
@@ -152,10 +154,10 @@ export class WizardBuilder {
       props.predictionType
     );
     return {
-      featureNames,
-      featureNamesAbridged: featureNames,
       classNames,
       featureIsCategorical,
+      featureNames,
+      featureNamesAbridged: featureNames,
       featureRanges,
       PredictionType: predictionType
     };
@@ -198,13 +200,13 @@ export class WizardBuilder {
     return PredictionTypes.Regression;
   }
 
-  public static buildAccuracyListForPrecomputedMetrics(
+  public static buildPerformanceListForPrecomputedMetrics(
     props: IPreComputedFairnessData
-  ): IAccuracyOption[] {
-    const customMetrics: IAccuracyOption[] = [];
-    const providedMetrics: IAccuracyOption[] = [];
+  ): IPerformanceOption[] {
+    const customMetrics: IPerformanceOption[] = [];
+    const providedMetrics: IPerformanceOption[] = [];
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      const metric = accuracyOptions[key];
+      const metric = performanceOptions[key];
       if (metric !== undefined) {
         if (metric.userVisible) {
           providedMetrics.push(metric);
@@ -215,16 +217,16 @@ export class WizardBuilder {
         );
 
         customMetrics.push({
+          description: customMetric?.description,
+          isMinimization: true,
+          isPercentage: true,
           key,
           title:
             customMetric?.name ||
             localization.formatString(
               localization.defaultCustomMetricName,
               customMetrics.length
-            ),
-          isMinimization: true,
-          isPercentage: true,
-          description: customMetric?.description
+            )
         });
       }
     });

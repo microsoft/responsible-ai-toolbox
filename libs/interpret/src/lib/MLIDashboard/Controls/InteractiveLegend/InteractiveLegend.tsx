@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import { IconButton, Text } from "office-ui-fabric-react";
+import React from "react";
+
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 
 export enum SortingState {

@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -10,25 +11,24 @@ import {
   Icon,
   Text
 } from "office-ui-fabric-react";
-import _ from "lodash";
-
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { Transform } from "plotly.js";
+import React from "react";
 
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { localization } from "../../../Localization/localization";
+import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
+import { cohortKey } from "../../cohortKey";
+import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../IExplanationContext";
+import { IGenericChartProps } from "../../IGenericChartProps";
 import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
-import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
-import { cohortKey } from "../../cohortKey";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
+
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
@@ -55,9 +55,9 @@ export class ModelPerformanceTab extends React.PureComponent<
   public constructor(props: IModelPerformanceTabProps) {
     super(props);
     this.state = {
+      selectedCohortIndex: 0,
       xDialogOpen: false,
-      yDialogOpen: false,
-      selectedCohortIndex: 0
+      yDialogOpen: false
     };
     if (!this.props.jointDataset.hasPredictedY) {
       return;
@@ -76,38 +76,38 @@ export class ModelPerformanceTab extends React.PureComponent<
     // In this view, y will always be categorical (including a binned numberic variable), and could be
     // iterations over the cohorts. We can set y and the y labels before the rest of the char properties.
     const plotlyProps: IPlotlyProperty = {
-      config: { displaylogo: false, responsive: true, displayModeBar: false },
+      config: { displaylogo: false, displayModeBar: false, responsive: true },
       data: [{}],
       layout: {
-        dragmode: false,
         autosize: true,
-        margin: {
-          l: 10,
-          t: 25,
-          b: 20
-        },
+        dragmode: false,
         hovermode: "closest",
+        margin: {
+          b: 20,
+          l: 10,
+          t: 25
+        },
         showlegend: false,
+        xaxis: {
+          color: FabricStyles.chartAxisColor,
+          gridcolor: "#e5e5e5",
+          mirror: true,
+          showgrid: true,
+          showline: true,
+          side: "bottom",
+          tickfont: {
+            family: FabricStyles.fontFamilies,
+            size: 11
+          }
+        },
         yaxis: {
           automargin: true,
           color: FabricStyles.chartAxisColor,
-          tickfont: {
-            family: FabricStyles.fontFamilies,
-            size: 11
-          },
-          showline: true
-        },
-        xaxis: {
-          side: "bottom",
-          mirror: true,
-          color: FabricStyles.chartAxisColor,
-          tickfont: {
-            family: FabricStyles.fontFamilies,
-            size: 11
-          },
           showline: true,
-          showgrid: true,
-          gridcolor: "#e5e5e5"
+          tickfont: {
+            family: FabricStyles.fontFamilies,
+            size: 11
+          }
         }
       } as any
     };
@@ -189,23 +189,23 @@ export class ModelPerformanceTab extends React.PureComponent<
           return {
             target: index,
             value: {
-              name: label,
               marker: {
                 color: FabricStyles.fabricColorPalette[index]
-              }
+              },
+              name: label
             }
           };
         });
         const transforms: Array<Partial<Transform>> = [
           {
-            type: "aggregate",
+            aggregations: [{ func: "sum", target: "x" }],
             groups: rawY,
-            aggregations: [{ target: "x", func: "sum" }]
+            type: "aggregate"
           },
           {
-            type: "groupby",
             groups: rawX,
-            styles
+            styles,
+            type: "groupby"
           }
         ];
         if (plotlyProps.layout) {
@@ -290,7 +290,6 @@ export class ModelPerformanceTab extends React.PureComponent<
               canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYOpen.bind(this, false)}
-              target={`#${this.chartAndConfigsId}`}
             />
           )}
           {this.state.xDialogOpen && (
@@ -303,20 +302,12 @@ export class ModelPerformanceTab extends React.PureComponent<
               canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXOpen.bind(this, false)}
-              target={`#${this.chartAndConfigsId}`}
             />
           )}
           <div className={classNames.chartWithVertical}>
             <div className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
                 <div>
-                  <Text
-                    block
-                    variant="mediumPlus"
-                    className={classNames.boldText}
-                  >
-                    {localization.Charts.yValue}
-                  </Text>
                   <DefaultButton
                     onClick={this.setYOpen.bind(this, true)}
                     text={
@@ -387,15 +378,6 @@ export class ModelPerformanceTab extends React.PureComponent<
             <div className={classNames.paddingDiv}></div>
             <div className={classNames.horizontalAxis}>
               <div>
-                <Text
-                  block
-                  variant="mediumPlus"
-                  className={classNames.boldText}
-                >
-                  {this.props.chartProps.chartType === ChartTypes.Histogram
-                    ? localization.Charts.numberOfDatapoints
-                    : localization.Charts.xValue}
-                </Text>
                 <DefaultButton
                   onClick={this.setXOpen.bind(this, true)}
                   text={
@@ -493,15 +475,15 @@ export class ModelPerformanceTab extends React.PureComponent<
         .isCategorical
         ? ChartTypes.Histogram
         : ChartTypes.Box,
-      yAxis: {
-        property: cohortKey,
-        options: {}
-      },
       xAxis: {
-        property: bestModelMetricKey,
         options: {
           bin: false
-        }
+        },
+        property: bestModelMetricKey
+      },
+      yAxis: {
+        options: {},
+        property: cohortKey
       }
     };
     this.props.onChange(chartProps);

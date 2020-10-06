@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
 import {
   FairnessWizardV1,
   FairnessWizardV2,
@@ -11,6 +10,7 @@ import {
   IFairnessProps
 } from "@responsible-ai/fairness";
 import { ITheme } from "office-ui-fabric-react";
+import React from "react";
 
 interface IAppProps {
   dataset: IFairnessData;
@@ -20,7 +20,7 @@ interface IAppProps {
 }
 
 export class App extends React.Component<IAppProps> {
-  private static supportedBinaryClassificationAccuracyKeys = [
+  private static supportedBinaryClassificationPerformanceKeys = [
     "accuracy_score",
     "balanced_accuracy_score",
     "precision_score",
@@ -28,14 +28,14 @@ export class App extends React.Component<IAppProps> {
     "f1_score"
   ];
 
-  private static supportedRegressionAccuracyKeys = [
+  private static supportedRegressionPerformanceKeys = [
     "mean_absolute_error",
     "r2_score",
     "mean_squared_error",
     "root_mean_squared_error"
   ];
 
-  private static supportedProbabilityAccuracyKeys = [
+  private static supportedProbabilityPerformanceKeys = [
     "auc",
     "root_mean_squared_error",
     "balanced_root_mean_squared_error",
@@ -47,21 +47,23 @@ export class App extends React.Component<IAppProps> {
   private static messages = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
     LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
-    TestReq: [{ displayText: "TestReq" }],
-    PredictorReq: [{ displayText: "PredictorReq" }]
+    PredictorReq: [{ displayText: "PredictorReq" }],
+    TestReq: [{ displayText: "TestReq" }]
   };
 
   public render(): React.ReactNode {
     const dashboardProps: IFairnessProps = {
       ...this.props.dataset,
-      supportedBinaryClassificationAccuracyKeys:
-        App.supportedBinaryClassificationAccuracyKeys,
-      supportedRegressionAccuracyKeys: App.supportedRegressionAccuracyKeys,
-      supportedProbabilityAccuracyKeys: App.supportedProbabilityAccuracyKeys,
+      locale: this.props.language,
+      requestMetrics: this.generateRandomMetrics.bind(this),
       stringParams: { contextualHelp: App.messages },
-      requestMetrics: this.calculateMetrics.bind(this),
-      theme: this.props.theme,
-      locale: this.props.language
+      supportedBinaryClassificationPerformanceKeys:
+        App.supportedBinaryClassificationPerformanceKeys,
+      supportedProbabilityPerformanceKeys:
+        App.supportedProbabilityPerformanceKeys,
+      supportedRegressionPerformanceKeys:
+        App.supportedRegressionPerformanceKeys,
+      theme: this.props.theme
     };
     switch (this.props.version) {
       case 1:
@@ -106,8 +108,8 @@ export class App extends React.Component<IAppProps> {
     const promise = new Promise<IMetricResponse>((resolve, reject) => {
       const timeout = setTimeout(() => {
         resolve({
-          global: Math.random(),
-          bins
+          bins,
+          global: Math.random()
         });
       }, 300);
       if (abortSignal) {

@@ -46,68 +46,115 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IModelComparisonChartStyles>({
-    frame: {
+    chart: {
       flex: 1,
+      padding: "0px 0 0 0"
+    },
+    doneButton: {
+      color: theme.semanticColors.bodyText,
+      fontSize: FontSizes.large,
+      fontWeight: FontWeights.regular,
+      height: "44px",
+      lineHeight: "24px",
+      margin: "auto",
+      padding: "12px"
+    },
+    downloadIcon: {
+      height: "18",
+      marginRight: "10px",
+      verticalAlign: "middle",
+      width: "17"
+    },
+    downloadReport: {
+      color: theme.semanticColors.bodyText,
+      fontSize: "12px",
+      fontWeight: "normal",
+      lineHeight: "16px",
+      paddingBottom: "20px",
+      paddingLeft: "0px",
+      paddingTop: "20px"
+    },
+    dropDown: {
+      display: "inline-block",
+      margin: "10px 10px 10px 0px"
+    },
+    editButton: {
+      color: theme.semanticColors.buttonText
+    },
+    frame: {
       display: "flex",
+      flex: 1,
       flexDirection: "column"
     },
-    spinner: {
-      margin: "auto",
-      padding: "40px"
-    },
     header: {
+      alignItems: "center",
       backgroundColor: theme.semanticColors.bodyBackground,
-      padding: "0 90px",
-      height: "90px",
       display: "inline-flex",
       flexDirection: "row",
+      height: "90px",
       justifyContent: "space-between",
-      alignItems: "center"
-    },
-    headerTitle: {
-      fontSize: "24px",
-      color: theme.semanticColors.bodyText,
-      fontWeight: FontWeights.semibold
+      padding: "0 90px"
     },
     headerOptions: {
       backgroundColor: theme.semanticColors.bodyBackground,
       padding: "0 100px"
     },
-    dropDown: {
-      margin: "10px 10px 10px 0px",
-      display: "inline-block"
+    headerTitle: {
+      color: theme.semanticColors.bodyText,
+      fontSize: "24px",
+      fontWeight: FontWeights.semibold
+    },
+    howTo: {
+      paddingLeft: "100px",
+      paddingTop: "20px"
     },
     infoButton: {
-      color: theme.semanticColors.bodyText,
-      float: "left",
-      width: "15px",
-      height: "15px",
-      textAlign: "center",
-      fontSize: "12px",
-      lineHeight: "14px",
-      fontWeight: "600",
-      borderRadius: "50%",
       border: "1px solid",
-      marginTop: "3px",
-      marginRight: "3px"
-    },
-    doneButton: {
-      margin: "auto",
-      height: "44px",
-      padding: "12px",
-      lineHeight: "24px",
+      borderRadius: "50%",
       color: theme.semanticColors.bodyText,
-      fontSize: FontSizes.large,
-      fontWeight: FontWeights.regular
-    },
-    modalContentIntro: {
       float: "left",
-      width: "250px"
-    },
-    modalContentIntroText: {
-      padding: "0px 20px",
+      fontSize: "12px",
+      fontWeight: "600",
+      height: "15px",
+      lineHeight: "14px",
+      marginRight: "3px",
+      marginTop: "3px",
       textAlign: "center",
-      wordWrap: "break-word"
+      width: "15px"
+    },
+    insights: {
+      color: theme.semanticColors.bodyText,
+      display: "inline",
+      padding: "18px 10px",
+      textTransform: "uppercase"
+    },
+    insightsIcon: {
+      height: "28",
+      marginRight: "10px",
+      verticalAlign: "middle",
+      width: "24"
+    },
+    insightsText: {
+      borderBottom: "1px solid",
+      borderColor: theme.semanticColors.bodyDivider,
+      marginTop: "20px",
+      paddingBottom: "18px",
+      paddingRight: "15px"
+    },
+    main: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      display: "inline-flex",
+      flex: 1,
+      flexDirection: "row",
+      height: "100%"
+    },
+    mainLeft: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      width: "75%"
+    },
+    mainRight: {
+      padding: "30px 0 0 35px",
+      width: "300px"
     },
     modalContentHelp: {
       float: "left",
@@ -118,89 +165,42 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       textAlign: "center",
       wordWrap: "break-word"
     },
-    editButton: {
-      color: theme.semanticColors.buttonText
+    modalContentIntro: {
+      float: "left",
+      width: "250px"
     },
-    howTo: {
-      paddingTop: "20px",
-      paddingLeft: "100px"
+    modalContentIntroText: {
+      padding: "0px 20px",
+      textAlign: "center",
+      wordWrap: "break-word"
     },
-    main: {
-      height: "100%",
-      flex: 1,
-      display: "inline-flex",
-      flexDirection: "row",
-      backgroundColor: theme.semanticColors.bodyBackground
+    radio: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      paddingBottom: "30px",
+      paddingLeft: "75px"
     },
-    mainLeft: {
-      width: "75%",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    mainRight: {
-      padding: "30px 0 0 35px",
-      width: "300px"
-    },
-    rightTitle: {
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "18px",
-      borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider
+    radioOptions: {
+      color: theme.semanticColors.bodyText
     },
     rightText: {
-      padding: "16px 15px 30px 0",
-      color: theme.semanticColors.bodyText,
       borderBottom: "0.5px dashed",
-      borderColor: theme.semanticColors.bodyDivider
-    },
-    insights: {
-      textTransform: "uppercase",
+      borderColor: theme.semanticColors.bodyDivider,
       color: theme.semanticColors.bodyText,
-      padding: "18px 10px",
-      display: "inline"
+      padding: "16px 15px 30px 0"
     },
-    insightsIcon: {
-      verticalAlign: "middle",
-      marginRight: "10px",
-      width: "24",
-      height: "28"
-    },
-    insightsText: {
-      marginTop: "20px",
-      paddingBottom: "18px",
-      paddingRight: "15px",
+    rightTitle: {
       borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider
-    },
-    downloadIcon: {
-      verticalAlign: "middle",
-      marginRight: "10px",
-      width: "17",
-      height: "18"
-    },
-    downloadReport: {
+      borderColor: theme.semanticColors.bodyDivider,
       color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      lineHeight: "16px",
-      fontWeight: "normal",
-      paddingTop: "20px",
-      paddingBottom: "20px",
-      paddingLeft: "0px"
+      paddingBottom: "18px"
     },
-    chart: {
-      padding: "0px 0 0 0",
-      flex: 1
+    spinner: {
+      margin: "auto",
+      padding: "40px"
     },
     textSection: {
       color: theme.semanticColors.bodyText,
       paddingBottom: "5px"
-    },
-    radio: {
-      paddingBottom: "30px",
-      paddingLeft: "75px",
-      backgroundColor: theme.semanticColors.bodyBackground
-    },
-    radioOptions: {
-      color: theme.semanticColors.bodyText
     }
   });
 };

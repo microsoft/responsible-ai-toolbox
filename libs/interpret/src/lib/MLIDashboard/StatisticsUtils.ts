@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { localization } from "../Localization/localization";
-import { ClassificationEnum, JointDataset } from "./JointDataset";
+
 import { ModelTypes } from "./IExplanationContext";
+import { ClassificationEnum, JointDataset } from "./JointDataset";
 
 export interface ILabeledStatistic {
   label: string;

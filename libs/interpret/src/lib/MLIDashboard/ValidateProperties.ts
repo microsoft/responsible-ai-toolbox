@@ -1,9 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { isThreeDimArray, isTwoDimArray } from "@responsible-ai/core-ui";
+
 import { localization } from "../Localization/localization";
-import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+
 import { IExplanationModelMetadata } from "./IExplanationContext";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 
 export class ValidateProperties {
   public readonly errorStrings: string[] = [];
@@ -16,358 +19,180 @@ export class ValidateProperties {
   ) {
     this.classLength = modelMetadata.classNames.length;
     this.featureLength = modelMetadata.featureNames.length;
+    this.rowLength =
+      props.trueY?.length ||
+      props.predictedY?.length ||
+      props.probabilityY?.length ||
+      props.testData?.length;
     this.validateProps();
+  }
+
+  private validate<T>(
+    y: T[] | undefined,
+    length: number | undefined,
+    fieldName: string
+  ): boolean {
+    if (!Array.isArray(y)) {
+      this.errorStrings.push(
+        localization.formatString(
+          localization.ValidationErrors.notArray,
+          fieldName,
+          length
+        )
+      );
+      return false;
+    }
+    if (length === undefined) {
+      return true;
+    }
+    if (y.length !== length) {
+      this.errorStrings.push(
+        localization.formatString(
+          localization.ValidationErrors.inconsistentDimensions,
+          fieldName,
+          y.length,
+          length
+        )
+      );
+      return false;
+    }
+    return true;
+  }
+
+  private validate1D<T>(
+    y: T[] | undefined,
+    length: number | undefined,
+    fieldName: string
+  ): boolean {
+    if (y === undefined) {
+      return true;
+    }
+    return this.validate(y, length, fieldName);
+  }
+  private validate2D<T>(
+    y: T[][] | undefined,
+    length: [number | undefined, number],
+    fieldName: string
+  ): boolean {
+    if (y === undefined) {
+      return true;
+    }
+    if (!this.validate1D(y, length[0], fieldName)) {
+      return false;
+    }
+    for (const [i, element] of y.entries()) {
+      if (!this.validate1D(element, length[1], `${fieldName}[${i}]`)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  private validate3D<T>(
+    y: T[][][] | undefined,
+    length: [number | undefined, number | undefined, number],
+    fieldName: string
+  ): boolean {
+    if (y === undefined) {
+      return true;
+    }
+    if (!this.validate1D(y, length[0], fieldName)) {
+      return false;
+    }
+    for (const [i, element] of y.entries()) {
+      if (
+        !this.validate2D(element, [length[1], length[2]], `${fieldName}[${i}]`)
+      ) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // Mutates the passed in props arg, removing any properties that are incompatible.
   private validateProps(): void {
-    if (this.props.trueY) {
-      this.rowLength = this.props.trueY.length;
-    }
-    if (this.props.predictedY) {
-      this.validatePredictedY();
-    }
-    if (this.props.probabilityY) {
-      this.validatePredictPro();
-    }
-    if (this.props.testData) {
-      this.validateTestData();
-    }
     if (
-      this.props.precomputedExplanations &&
-      this.props.precomputedExplanations.localFeatureImportance &&
-      this.props.precomputedExplanations.localFeatureImportance.scores
+      !this.validate1D(
+        this.props.predictedY,
+        this.rowLength,
+        localization.ValidationErrors.predictedY
+      )
     ) {
-      this.validateLocalExplanation();
-    }
-  }
-
-  private validatePredictedY(): void {
-    const length = this.props.predictedY?.length;
-    if (this.rowLength === undefined) {
-      this.rowLength = length;
-    }
-    if (length !== this.rowLength) {
       this.props.predictedY = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.inconsistentDimensions,
-          localization.ValidationErrors.predictedY,
-          length?.toString(),
-          this.rowLength?.toString()
-        )
-      );
-    }
-  }
-
-  private validatePredictPro(): void {
-    if (!Array.isArray(this.props.probabilityY)) {
-      this.props.probabilityY = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.notArray,
-          localization.ValidationErrors.predictedProbability,
-          `${this.rowLength || 0} x ${this.classLength}`
-        )
-      );
-      return;
-    }
-    const rowLength = this.props.probabilityY.length;
-    if (this.rowLength === undefined) {
-      this.rowLength = rowLength;
-    }
-    if (rowLength !== this.rowLength) {
-      this.props.probabilityY = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.inconsistentDimensions,
-          localization.ValidationErrors.predictedProbability,
-          rowLength.toString(),
-          this.rowLength.toString()
-        )
-      );
-      return;
-    }
-    if (rowLength === 0) {
-      this.props.probabilityY = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.notNonEmpty,
-          localization.ValidationErrors.predictedProbability
-        )
-      );
-      return;
-    }
-    const classLength = this.props.probabilityY[0].length;
-    if (classLength !== this.classLength) {
-      this.props.probabilityY = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.inconsistentDimensions,
-          localization.ValidationErrors.predictedProbability,
-          `[${rowLength} x ${classLength}]`,
-          `[${this.rowLength} x ${this.classLength}]`
-        )
-      );
-      return;
     }
     if (
-      !this.props.probabilityY.every((row) => row.length === this.classLength)
+      !this.validate2D(
+        this.props.probabilityY,
+        [this.rowLength, this.classLength],
+        localization.ValidationErrors.predictedProbability
+      )
     ) {
       this.props.probabilityY = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.varyingLength,
-          localization.ValidationErrors.predictedProbability
-        )
-      );
-      return;
-    }
-  }
-
-  private validateTestData(): void {
-    if (!Array.isArray(this.props.testData)) {
-      this.props.testData = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.notArray,
-          localization.ValidationErrors.evalData,
-          `${this.rowLength || 0} x ${this.classLength}`
-        )
-      );
-      return;
-    }
-    const rowLength = this.props.testData.length;
-    if (this.rowLength === undefined) {
-      this.rowLength = rowLength;
-    }
-    if (rowLength !== this.rowLength) {
-      this.props.testData = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.inconsistentDimensions,
-          localization.ValidationErrors.evalData,
-          rowLength.toString(),
-          this.rowLength.toString()
-        )
-      );
-      return;
-    }
-    if (rowLength === 0) {
-      this.props.testData = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.notNonEmpty,
-          localization.ValidationErrors.evalData
-        )
-      );
-      return;
-    }
-    const featureLength = this.props.testData[0].length;
-    if (featureLength !== this.featureLength) {
-      this.props.testData = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.inconsistentDimensions,
-          localization.ValidationErrors.evalData,
-          `[${rowLength} x ${featureLength}]`,
-          `[${this.rowLength} x ${this.featureLength}]`
-        )
-      );
-      return;
     }
     if (
-      !this.props.testData.every((row) => row.length === this.featureLength)
+      !this.validate2D(
+        this.props.testData,
+        [this.rowLength, this.featureLength],
+        localization.ValidationErrors.evalData
+      )
     ) {
       this.props.testData = undefined;
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.varyingLength,
-          localization.ValidationErrors.evalData
-        )
-      );
+    }
+    this.validateGlobalExplanation();
+
+    this.validateLocalExplanation();
+  }
+
+  private validateGlobalExplanation(): void {
+    if (!this.props.precomputedExplanations?.globalFeatureImportance?.scores) {
       return;
     }
-  }
-
-  private nullifyLocalFeatureImportance(): void {
-    if (this.props.precomputedExplanations) {
-      this.props.precomputedExplanations.localFeatureImportance = undefined;
+    const globalExp = this.props.precomputedExplanations
+      ?.globalFeatureImportance?.scores;
+    if (isTwoDimArray(globalExp)) {
+      if (
+        !this.validate2D(
+          globalExp,
+          [this.featureLength, this.classLength],
+          localization.ValidationErrors.localFeatureImportance
+        )
+      ) {
+        this.props.precomputedExplanations.globalFeatureImportance = undefined;
+      }
+    } else if (
+      !this.validate1D(
+        globalExp,
+        this.featureLength,
+        localization.ValidationErrors.localFeatureImportance
+      )
+    ) {
+      this.props.precomputedExplanations.globalFeatureImportance = undefined;
     }
   }
-
   private validateLocalExplanation(): void {
-    const localExp = this.props.precomputedExplanations?.localFeatureImportance
-      ?.scores;
-    if (!Array.isArray(localExp)) {
-      this.nullifyLocalFeatureImportance();
-      this.errorStrings.push(
-        localization.formatString(
-          localization.ValidationErrors.notArray,
-          localization.ValidationErrors.localFeatureImportance,
-          `${this.rowLength || 0} x ${this.featureLength} x ${this.classLength}`
-        )
-      );
+    if (!this.props.precomputedExplanations?.localFeatureImportance?.scores) {
       return;
     }
-    // explanation will be 2d in case of regression models. 3 for classifier
-    let explanationDimension = 2;
-    if (
-      (localExp as number[][][]).every((dim1) => {
-        return dim1.every((dim2) => Array.isArray(dim2));
-      })
-    ) {
-      explanationDimension = 3;
-    }
-    if (explanationDimension === 3) {
-      const classLength = localExp.length;
-      if (this.classLength !== classLength) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.inconsistentDimensions,
-            localization.ValidationErrors.localFeatureImportance,
-            classLength.toString(),
-            this.classLength.toString()
-          )
-        );
-        return;
-      }
-      if (classLength === 0) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.notNonEmpty,
-            localization.ValidationErrors.localFeatureImportance
-          )
-        );
-        return;
-      }
-      const rowLength = localExp[0].length;
-      if (rowLength === 0) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.notNonEmpty,
-            localization.ValidationErrors.localFeatureImportance
-          )
-        );
-        return;
-      }
-      if (this.rowLength === undefined) {
-        this.rowLength = rowLength;
-      }
-      if (rowLength !== this.rowLength) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.inconsistentDimensions,
-            localization.ValidationErrors.localFeatureImportance,
-            `${classLength} x ${rowLength}`,
-            `${this.classLength} x ${this.rowLength}`
-          )
-        );
-        return;
-      }
+    const localExp = this.props.precomputedExplanations.localFeatureImportance
+      .scores;
+    if (isThreeDimArray(localExp)) {
       if (
-        !localExp.every(
-          (classArray: number[] | number[][]) =>
-            classArray.length === this.rowLength
+        !this.validate3D(
+          localExp,
+          [this.classLength, this.rowLength, this.featureLength],
+          localization.ValidationErrors.localFeatureImportance
         )
       ) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.varyingLength,
-            localization.ValidationErrors.localFeatureImportance
-          )
-        );
-        return;
+        this.props.precomputedExplanations.localFeatureImportance = undefined;
       }
-      const featureLength = (localExp[0][0] as number[]).length;
-      if (featureLength !== this.featureLength) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.inconsistentDimensions,
-            localization.ValidationErrors.localFeatureImportance,
-            `${classLength} x ${rowLength} x ${featureLength}`,
-            `${this.classLength} x ${this.rowLength} x ${this.featureLength}`
-          )
-        );
-        return;
-      }
+    } else if (isTwoDimArray(localExp)) {
       if (
-        !localExp.every((classArray: number[] | number[][]) =>
-          classArray.every(
-            (rowArray: number | number[]) =>
-              Array.isArray(rowArray) && rowArray.length === this.featureLength
-          )
+        !this.validate2D(
+          localExp,
+          [this.rowLength, this.featureLength],
+          localization.ValidationErrors.localFeatureImportance
         )
       ) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.varyingLength,
-            localization.ValidationErrors.localFeatureImportance
-          )
-        );
-        return;
-      }
-    } else {
-      const rowLength = localExp.length;
-      if (this.rowLength === undefined) {
-        this.rowLength = rowLength;
-      }
-      if (rowLength !== this.rowLength) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.inconsistentDimensions,
-            localization.ValidationErrors.localFeatureImportance,
-            `${rowLength}`,
-            `${this.rowLength}`
-          )
-        );
-        return;
-      }
-      if (rowLength === 0) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.notNonEmpty,
-            localization.ValidationErrors.localFeatureImportance
-          )
-        );
-        return;
-      }
-      const featureLength = (localExp[0] as number[]).length;
-      if (featureLength !== this.featureLength) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.inconsistentDimensions,
-            localization.ValidationErrors.localFeatureImportance,
-            `${rowLength} x ${featureLength}`,
-            `${this.rowLength} x ${this.featureLength}`
-          )
-        );
-        return;
-      }
-      if (
-        !localExp.every(
-          (rowArray: number[] | number[][]) =>
-            rowArray.length === this.featureLength
-        )
-      ) {
-        this.nullifyLocalFeatureImportance();
-        this.errorStrings.push(
-          localization.formatString(
-            localization.ValidationErrors.varyingLength,
-            localization.ValidationErrors.localFeatureImportance
-          )
-        );
-        return;
+        this.props.precomputedExplanations.localFeatureImportance = undefined;
       }
     }
   }
