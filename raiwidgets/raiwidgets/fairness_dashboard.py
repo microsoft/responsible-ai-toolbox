@@ -1,9 +1,11 @@
-# Copyright (c) Microsoft Corporation and contributors.
+# Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
 """Defines the fairness dashboard class."""
 
-from rai_core_flask import FlaskHelper, environment_detector
+# TODO: use environment_detector
+# https://github.com/microsoft/responsible-ai-widgets/issues/92
+from rai_core_flask import FlaskHelper  # , environment_detector
 from fairlearn.metrics import (
     true_negative_rate_group_summary,
     false_positive_rate_group_summary,
@@ -28,7 +30,6 @@ from fairlearn.metrics import (
     # log_loss_group_summary,
 )
 
-import copy
 from flask import jsonify, request
 from IPython.display import display, HTML
 from jinja2 import Environment, PackageLoader
@@ -37,20 +38,21 @@ import numpy as np
 import os
 import pandas as pd
 from scipy.sparse import issparse
-import threading
 
 
 class FairnessDashboard(object):
     """The dashboard class, wraps the dashboard component.
 
-    :param sensitive_features: A matrix of feature vector examples (# examples x # features),
-        these can be from the initial dataset, or reserved from training.
-    :type sensitive_features: numpy.array or list[][] or pandas.DataFrame or pandas.Series
+    :param sensitive_features: A matrix of feature vector examples
+        (# examples x # features), these can be from the initial dataset,
+        or reserved from training.
+    :type sensitive_features: numpy.array or list[][] or pandas.DataFrame
+        or pandas.Series
     :param y_true: The true labels or values for the provided dataset.
     :type y_true: numpy.array or list[]
-    :param y_pred: Array of output predictions from models to be evaluated. Can be a single
-        array of predictions, or a 2D list over multiple models. Can be a dictionary
-        of named model predictions.
+    :param y_pred: Array of output predictions from models to be evaluated.
+        Can be a single array of predictions, or a 2D list over multiple
+        models. Can be a dictionary of named model predictions.
     :type y_pred: numpy.array or list[][] or list[] or dict {string: list[]}
     :param sensitive_feature_names: Feature names
     :type sensitive_feature_names: numpy.array or list[]
@@ -170,7 +172,8 @@ class FairnessDashboard(object):
     @FlaskHelper.app.route('/<id>')
     def fairness_visual(id):
         if id in FairnessDashboard.fairness_inputs:
-            return generate_inline_html(FairnessDashboard.fairness_inputs[id], None)
+            return generate_inline_html(
+                FairnessDashboard.fairness_inputs[id], None)
         else:
             return "Unknown model id."
 
@@ -182,7 +185,8 @@ class FairnessDashboard(object):
                 data.update(FairnessDashboard.fairness_inputs[id])
 
                 if type(data["binVector"][0]) == np.int32:
-                    data['binVector'] = [str(bin_) for bin_ in data['binVector']]
+                    data['binVector'] = [
+                        str(bin_) for bin_ in data['binVector']]
 
                 method = FairnessDashboard._metric_methods \
                     .get(data["metricKey"]).get("function")
@@ -195,12 +199,14 @@ class FairnessDashboard(object):
                     "bins": list(prediction.by_group.values())
                 }})
         except Exception as ex:
-            import sys, traceback
+            import sys
+            import traceback
             exc_type, exc_value, exc_traceback = sys.exc_info()
 
             return jsonify({
                 "error": str(ex),
-                "stacktrace": str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback))),
+                "stacktrace": str(repr(traceback.format_exception(
+                    exc_type, exc_value, exc_traceback))),
                 "locals": str(locals()),
             })
 
@@ -215,7 +221,7 @@ class FairnessDashboard(object):
         """Initialize the fairness Dashboard."""
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
-        
+
         dataset = self._sanitize_data_shape(sensitive_features)
         model_names = None
         if isinstance(y_pred, dict):
@@ -268,7 +274,7 @@ class FairnessDashboard(object):
             except Exception as e:
                 FairnessDashboard._service = None
                 raise e
-        
+
         FairnessDashboard.model_count += 1
         model_count = FairnessDashboard.model_count
 
@@ -283,7 +289,7 @@ class FairnessDashboard(object):
         FairnessDashboard.fairness_inputs[str(model_count)] = fairness_input
 
         html = generate_inline_html(fairness_input, local_url)
-        # TODO
+        # TODO https://github.com/microsoft/responsible-ai-widgets/issues/92
         # FairnessDashboard._service.env.display(html)
         display(HTML(html))
 

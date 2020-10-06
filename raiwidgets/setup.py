@@ -1,4 +1,4 @@
-# Copyright (c) Microsoft Corporation and contributors.
+# Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
 import setuptools
@@ -17,7 +17,7 @@ setuptools.setup(
     version=raiwidgets.__version__,
     author="Roman Lutz, Ilya Matiach, Ke Xu, Brandon Horn",
     author_email="fairlearn@microsoft.com",
-    description="Interactive visualizations to assess fairness, explain " \
+    description="Interactive visualizations to assess fairness, explain "
                 "models, and analyze errors in Machine Learning",
     long_description=long_description,
     long_description_content_type="text/markdown",

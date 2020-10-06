@@ -1,4 +1,4 @@
-# Copyright (c) Microsoft Corporation and contributors.
+# Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
 """Package for the fairness, explanation, and error analysis widgets."""
