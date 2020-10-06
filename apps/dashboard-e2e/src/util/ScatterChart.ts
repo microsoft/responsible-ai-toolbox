@@ -19,6 +19,35 @@ export class ScatterChart extends Chart<IScatter> {
   public sortByH(): IScatter[] {
     return this.Elements.sort((a, b) => a.top - b.top);
   }
+  public clickNthPoint(idx: number): void {
+    cy.viewport(1280, 720);
+    cy.scrollTo("top");
+    const offset = this.getNthPointOffset(idx);
+    if (!offset) {
+      return;
+    }
+    cy.get("#IndividualFeatureImportanceChart .nsewdrag.drag").trigger(
+      "mousedown",
+      {
+        clientX: offset.left,
+        clientY: offset.top,
+        eventConstructor: "MouseEvent",
+        force: true
+      }
+    );
+    cy.document().then((doc) => {
+      const event = new MouseEvent("mouseup", {
+        bubbles: true,
+        clientX: offset.left,
+        clientY: offset.top
+      });
+      doc.dispatchEvent(event);
+    });
+  }
+
+  private getNthPointOffset(idx: number): JQuery.Coordinates | undefined {
+    return cy.$$(`.trace.scatter:eq(0) .points path:eq(${idx})`).offset();
+  }
 
   private readonly getCoordinate = (
     element: HTMLElement,
