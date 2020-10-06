@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-"""Package for the fairness dashboard widget."""
+"""Package for the fairness, explanation, and error analysis widgets."""
 
 from .fairness_dashboard import FairnessDashboard
 

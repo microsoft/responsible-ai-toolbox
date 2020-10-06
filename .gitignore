@@ -45,3 +45,4 @@ Thumbs.db
 # Python
 **.pyc
 **/__pycache__/*
+**-checkpoint.ipynb
