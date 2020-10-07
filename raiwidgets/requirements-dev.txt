@@ -10,8 +10,4 @@ flake8-logging-format
 flake8-rst-docstrings
 requirements-parser
 
-# Required for test
-# Pin pytest due to VS Code issue
-pytest==5.0.1
-pytest-cov
 wheel

@@ -6,29 +6,7 @@
 # TODO: use environment_detector
 # https://github.com/microsoft/responsible-ai-widgets/issues/92
 from rai_core_flask import FlaskHelper  # , environment_detector
-from fairlearn.metrics import (
-    true_negative_rate_group_summary,
-    false_positive_rate_group_summary,
-    false_negative_rate_group_summary,
-    _root_mean_squared_error_group_summary,
-    _balanced_root_mean_squared_error_group_summary,
-    mean_prediction_group_summary,
-    selection_rate_group_summary,
-    _mean_overprediction_group_summary,
-    _mean_underprediction_group_summary,
-
-    accuracy_score_group_summary,
-    precision_score_group_summary,
-    recall_score_group_summary,
-    roc_auc_score_group_summary,
-    zero_one_loss_group_summary,
-    mean_absolute_error_group_summary,
-    mean_squared_error_group_summary,
-    r2_score_group_summary,
-    # Issue #37 tracks the addition of new metrics.
-    # f1_score_group_summary,
-    # log_loss_group_summary,
-)
+from .fairness_metric_calculation import FairnessMetricModule
 
 from flask import jsonify, request
 from IPython.display import display, HTML
@@ -64,107 +42,6 @@ class FairnessDashboard(object):
     model_count = 0
     _service = None
 
-    # The following mappings should match those in the GroupMetricSet
-    # Issue 269 has been opened to track the work for unifying the two
-    _metric_methods = {
-        "accuracy_score": {
-            "model_type": ["classification"],
-            "function": accuracy_score_group_summary
-        },
-        "balanced_accuracy_score": {
-            "model_type": ["classification"],
-            "function": roc_auc_score_group_summary
-        },
-        "precision_score": {
-            "model_type": ["classification"],
-            "function": precision_score_group_summary
-        },
-        "recall_score": {
-            "model_type": ["classification"],
-            "function": recall_score_group_summary
-        },
-        "zero_one_loss": {
-            "model_type": [],
-            "function": zero_one_loss_group_summary
-        },
-        "specificity_score": {
-            "model_type": [],
-            "function": true_negative_rate_group_summary
-        },
-        "miss_rate": {
-            "model_type": [],
-            "function": false_negative_rate_group_summary
-        },
-        "fallout_rate": {
-            "model_type": [],
-            "function": false_positive_rate_group_summary
-        },
-        "false_positive_over_total": {
-            "model_type": [],
-            "function": false_positive_rate_group_summary
-        },
-        "false_negative_over_total": {
-            "model_type": [],
-            "function": false_negative_rate_group_summary
-        },
-        "selection_rate": {
-            "model_type": [],
-            "function": selection_rate_group_summary
-        },
-        "auc": {
-            "model_type": ["probability"],
-            "function": roc_auc_score_group_summary
-        },
-        "root_mean_squared_error": {
-            "model_type": ["regression", "probability"],
-            "function": _root_mean_squared_error_group_summary
-        },
-        "balanced_root_mean_squared_error": {
-            "model_type": ["probability"],
-            "function": _balanced_root_mean_squared_error_group_summary
-        },
-        "mean_squared_error": {
-            "model_type": ["regression", "probability"],
-            "function": mean_squared_error_group_summary
-        },
-        "mean_absolute_error": {
-            "model_type": ["regression", "probability"],
-            "function": mean_absolute_error_group_summary
-        },
-        "r2_score": {
-            "model_type": ["regression"],
-            "function": r2_score_group_summary
-        },
-        # Issue #37 tracks the addition of new metrics.
-        # "f1_score": {
-        #     "model_type": ["classification"],
-        #     "function": f1_score_group_summary
-        # },
-        # "log_loss": {
-        #     "model_type": ["probability"],
-        #     "function": log_loss_group_summary
-        # },
-        "overprediction": {
-            "model_type": [],
-            "function": _mean_overprediction_group_summary
-        },
-        "underprediction": {
-            "model_type": [],
-            "function": _mean_underprediction_group_summary
-        },
-        "average": {
-            "model_type": [],
-            "function": mean_prediction_group_summary
-        }
-    }
-
-    classification_methods = [method[0] for method in _metric_methods.items()
-                              if "classification" in method[1]["model_type"]]
-    regression_methods = [method[0] for method in _metric_methods.items()
-                          if "regression" in method[1]["model_type"]]
-    probability_methods = [method[0] for method in _metric_methods.items()
-                           if "probability" in method[1]["model_type"]]
-
     @FlaskHelper.app.route('/')
     def list():
         return "No global list view supported at this time."
@@ -188,7 +65,7 @@ class FairnessDashboard(object):
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                method = FairnessDashboard._metric_methods \
+                method = fairness_metrics_module._metric_methods \
                     .get(data["metricKey"]).get("function")
                 prediction = method(
                     data['true_y'],
@@ -217,8 +94,15 @@ class FairnessDashboard(object):
             y_pred,
             sensitive_feature_names=None,
             locale=None,
-            port=None):
+            port=None,
+            fairness_metric_module=None,
+            fairness_metric_mapping=None):
         """Initialize the fairness Dashboard."""
+
+        FairnessDashboard.fairness_metrics_module = FairnessMetricModule(
+            module_name=fairness_metric_module,
+            mapping=fairness_metric_mapping)
+
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
 
@@ -247,9 +131,15 @@ class FairnessDashboard(object):
             "true_y": self._y_true,
             "predicted_ys": self._y_pred,
             "dataset": dataset,
-            "classification_methods": FairnessDashboard.classification_methods,
-            "regression_methods": FairnessDashboard.regression_methods,
-            "probability_methods": FairnessDashboard.probability_methods,
+            "classification_methods":
+                FairnessDashboard.fairness_metrics_module.
+                classification_methods,
+            "regression_methods":
+                FairnessDashboard.fairness_metrics_module.
+                regression_methods,
+            "probability_methods":
+                FairnessDashboard.fairness_metrics_module.
+                probability_methods,
         }
 
         if model_names is not None:
