@@ -5,7 +5,6 @@ import "babel-polyfill";
 
 import { FairnessWizardV2 } from "@responsible-ai/fairness";
 
-
 const RenderDashboard = (divId, data) => {
   let calculateMetrics = (postData) => {
     if (data.withCredentials) {
