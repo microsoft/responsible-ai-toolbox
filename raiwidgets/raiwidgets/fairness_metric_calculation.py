@@ -7,6 +7,7 @@ import importlib
 FAIRLEARN_NOT_INSTALLED_ERROR_MESSAGE = "fairlearn is not installed. " \
     "Either install fairlearn or provide another fairness metric module."
 
+
 class FairnessMetricModule:
     def __init__(self, module_name=None, mapping=None):
         if module_name is None:

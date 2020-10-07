@@ -65,8 +65,8 @@ class FairnessDashboard(object):
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                method = fairness_metrics_module._metric_methods \
-                    .get(data["metricKey"]).get("function")
+                method = FairnessDashboard.fairness_metrics_module. \
+                    _metric_methods.get(data["metricKey"]).get("function")
                 prediction = method(
                     data['true_y'],
                     data['predicted_ys'][data["modelIndex"]],
