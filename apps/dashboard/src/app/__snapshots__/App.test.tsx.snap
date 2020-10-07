@@ -26,7 +26,6 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     }
   >
     <App
-      classDimension={3}
       dataset={
         Object {
           "dataSummary": Object {
