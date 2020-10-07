@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import setuptools
-import raiwidgets
 
 # Fetch ReadMe
 with open("README.md", "r") as fh:
@@ -13,8 +12,8 @@ with open('requirements.txt') as f:
     install_requires = [line.strip() for line in f]
 
 setuptools.setup(
-    name=raiwidgets.__name__,
-    version=raiwidgets.__version__,
+    name="raiwidgets",
+    version="0.1.0-dev",
     author="Roman Lutz, Ilya Matiach, Ke Xu, Brandon Horn",
     author_email="fairlearn@microsoft.com",
     description="Interactive visualizations to assess fairness, explain "
