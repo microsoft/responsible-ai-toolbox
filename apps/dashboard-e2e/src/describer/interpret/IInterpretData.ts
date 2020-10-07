@@ -9,5 +9,6 @@ export interface IInterpretData {
   noDataset?: boolean;
   noFeatureImportance?: boolean;
   noLocalImportance?: boolean;
+  noPredict?: boolean;
   noY?: boolean;
 }

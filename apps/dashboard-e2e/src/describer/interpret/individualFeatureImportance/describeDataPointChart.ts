@@ -6,6 +6,7 @@ import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
 import { describeSubBarChart } from "./describeSubBarChart";
+import { describeSubLineChart } from "./describeSubLineChart";
 
 export function describeDataPointChart(dataShape: IInterpretData): void {
   describe("Individual datapoints chart", () => {
@@ -56,6 +57,9 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
 
     if (!dataShape.noLocalImportance && !dataShape.noFeatureImportance) {
       describeSubBarChart(dataShape);
+    }
+    if (!dataShape.noPredict) {
+      describeSubLineChart(dataShape);
     }
   });
 }

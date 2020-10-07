@@ -1018,8 +1018,8 @@ export class WhatIfTab extends React.PureComponent<
     }
 
     return (
-      <div>
-        <div className={classNames.choiceBoxArea}>
+      <div id="subPlotContainer">
+        <div className={classNames.choiceBoxArea} id="subPlotChoice">
           <Text variant="medium" className={classNames.boldText}>
             {localization.WhatIfTab.showLabel}
           </Text>

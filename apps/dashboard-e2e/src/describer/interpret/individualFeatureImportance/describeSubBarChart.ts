@@ -22,9 +22,10 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
       props.chart.clickNthPoint(0);
     });
     it("should have right number of bars", () => {
-      cy.get("svg .plot .points .point path")
-        .its("length")
-        .should("be", props.dataShape.featureNames.length);
+      cy.get("svg .plot .points .point path").should(
+        "have.length",
+        props.dataShape.featureNames.length
+      );
     });
     it("should have y axis with matched value", () => {
       cy.get('#FeatureImportanceBar div[class^="rotatedVerticalBox-"]').should(
