@@ -167,9 +167,8 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     expandedPanel: {
       boxShadow:
         "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
-      display: "flex",
-      flexDirection: "column",
       marginTop: "10px",
+      paddingRight: "40px",
       width: "250px"
     },
     faintText: [FabricStyles.faintText],
@@ -195,10 +194,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "column",
       flexGrow: 1,
-      maxHeight: "400px",
-      overflowY: "auto",
-      paddingLeft: "10px",
-      paddingRight: "10px"
+      flexShrink: 1,
+      maxHeight: "350px",
+      overflowY: "auto"
     },
     featureSearch: {
       marginBottom: "8px",

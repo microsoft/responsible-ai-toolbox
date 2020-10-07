@@ -7,6 +7,8 @@ import {
   Dropdown,
   IChoiceGroupOption,
   IDropdownOption,
+  Label,
+  Stack,
   Text
 } from "office-ui-fabric-react";
 import React from "react";
@@ -66,13 +68,9 @@ export class SidePanel extends React.Component<
   public render(): React.ReactNode {
     const classNames = globalTabStyles();
     return (
-      <div className={classNames.legendAndSort}>
-        <Text variant={"mediumPlus"} block className={classNames.cohortLegend}>
-          {localization.GlobalTab.datasetCohorts}
-        </Text>
-        <Text variant={"small"} className={classNames.legendHelpText}>
-          {localization.GlobalTab.legendHelpText}
-        </Text>
+      <Stack className={classNames.legendAndSort}>
+        <Label>{localization.GlobalTab.datasetCohorts}</Label>
+        <Text variant={"small"}>{localization.GlobalTab.legendHelpText}</Text>
         <InteractiveLegend
           items={this.props.cohortSeries.map((row, rowIndex) => {
             return {
@@ -83,18 +81,14 @@ export class SidePanel extends React.Component<
             };
           })}
         />
-        <Text variant={"medium"} className={classNames.cohortLegend}>
-          {localization.GlobalTab.sortBy}
-        </Text>
-        <InteractiveLegend
-          items={this.props.cohortSeries.map((row, rowIndex) => {
-            return {
-              activated: this.props.sortingSeriesIndex === rowIndex,
-              color: FabricStyles.fabricColorPalette[row.colorIndex],
-              name: row.name,
-              onClick: (): void => this.props.setSortIndex(rowIndex)
-            };
-          })}
+        <Dropdown
+          label={localization.GlobalTab.sortBy}
+          selectedKey={this.props.sortingSeriesIndex}
+          options={this.props.cohortSeries.map((row, rowIndex) => ({
+            key: rowIndex,
+            text: row.name
+          }))}
+          onChange={this.onSortChange}
         />
         <ChoiceGroup
           label={localization.DatasetExplorer.chartType}
@@ -127,9 +121,18 @@ export class SidePanel extends React.Component<
               />
             </div>
           )}
-      </div>
+      </Stack>
     );
   }
+
+  private onSortChange = (
+    _event?: React.FormEvent,
+    item?: IDropdownOption
+  ): void => {
+    if (typeof item?.key === "number") {
+      this.props.setSortIndex(item.key);
+    }
+  };
 
   private onChartTypeChange = (
     _event?: React.FormEvent,

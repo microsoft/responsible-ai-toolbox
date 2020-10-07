@@ -17,7 +17,7 @@ interface IAppProps {
   theme: ITheme;
   language: string;
   version: 1 | 2;
-  classDimension: number;
+  classDimension?: 1 | 2 | 3;
 }
 
 export class App extends React.Component<IAppProps> {
@@ -35,10 +35,9 @@ export class App extends React.Component<IAppProps> {
       ...this.props.dataset,
       explanationMethod: "mimic",
       locale: this.props.language,
-      requestPredictions:
-        this.props.classDimension === 1
-          ? this.generateRandomScore
-          : this.generateRandomProbs.bind(this, this.props.classDimension),
+      requestPredictions: !this.props.classDimension
+        ? undefined
+        : this.requestPredictions,
       stringParams: { contextualHelp: this.messages },
       telemetryHook: (er: ITelemetryMessage): void => {
         console.error(er.message);
@@ -53,6 +52,15 @@ export class App extends React.Component<IAppProps> {
         return <NewExplanationDashboard {...dashboardProp} />;
     }
   }
+
+  private requestPredictions = (
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any[]> => {
+    return !this.props.classDimension || this.props.classDimension === 1
+      ? this.generateRandomScore(data, signal)
+      : this.generateRandomProbs(this.props.classDimension, data, signal);
+  };
 
   private generateRandomScore = (
     data: any[],
@@ -72,7 +80,7 @@ export class App extends React.Component<IAppProps> {
   };
 
   private generateRandomProbs(
-    classDimensions: number,
+    classDimensions: 2 | 3,
     data: any[],
     signal: AbortSignal
   ): Promise<any[]> {
