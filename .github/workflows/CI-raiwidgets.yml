@@ -22,7 +22,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r raiwidgets/requirements-dev.txt
-          pip install -e raiwidgets/
+          pip install raiwidgets/
 
       - name: flake8
         run: flake8
