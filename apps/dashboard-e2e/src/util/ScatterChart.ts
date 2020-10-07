@@ -35,6 +35,7 @@ export class ScatterChart extends Chart<IScatter> {
         force: true
       }
     );
+    cy.waitFor("body > div.dragover");
     cy.document().then((doc) => {
       const event = new MouseEvent("mouseup", {
         bubbles: true,
