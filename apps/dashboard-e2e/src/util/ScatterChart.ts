@@ -20,7 +20,6 @@ export class ScatterChart extends Chart<IScatter> {
     return this.Elements.sort((a, b) => a.top - b.top);
   }
   public clickNthPoint(idx: number): void {
-    cy.scrollTo("top");
     const offset = this.getNthPointOffset(idx);
     if (!offset) {
       return;
