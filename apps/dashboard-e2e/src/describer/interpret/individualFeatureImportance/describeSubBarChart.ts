@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { BarChart } from "../../../util/BarChart";
-import { getMenu } from "../../../util/getMenu";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
@@ -14,10 +13,6 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
   };
   describe("Sub bar chart", () => {
     beforeEach(() => {
-      getMenu(
-        "Individual Feature Importance & What-If",
-        "#DashboardPivot"
-      ).click();
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
       props.chart.clickNthPoint(0);
     });

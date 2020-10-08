@@ -18,6 +18,7 @@
   "globalImportance": "Global Importance",
   "_globalImportance.comment": "Label for tab showing bar chart of importance of features at a global level",
   "explanationExploration": "Explanation Exploration",
+  "individualImportance": "Individual Feature Importance",
   "individualAndWhatIf": "Individual Feature Importance & What-If",
   "_individualAndWhatIf.comment": "tab label for feature importances of single rows, and 'what if?' which allows seeing hypothetical results",
   "_explanationExploration.comment": "Label for tab showing scatter plot of dataset and importance of features data",
@@ -299,7 +300,7 @@
     "_editCohort.comment": "button text to edit the filters defining an existing cohort",
     "duplicateCohort": "Duplicate Cohort",
     "_duplicateCohort.comment": "button text to copy an existing cohort",
-    "addCohort": "Add Cohort",
+    "addCohort": "New Cohort",
     "_addCohort.comment": "button text to create a new cohort",
     "copy": " copy",
     "_copy.comment": "suffix attached to name of cohort created by copying other cohort, by default."

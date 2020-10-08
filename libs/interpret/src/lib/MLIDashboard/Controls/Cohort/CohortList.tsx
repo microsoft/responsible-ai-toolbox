@@ -46,11 +46,12 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
             )}
             text={localization.CohortBanner.addCohort}
             iconProps={{ iconName: "Add" }}
+            styles={{ label: { whiteSpace: "nowrap" } }}
           />
         </Stack.Item>
         <Stack>
           <Stack.Item>
-            <Text variant={"xSmall"}>
+            <Text variant={"small"}>
               {localization.CohortBanner.dataStatistics.toUpperCase()}
             </Text>
           </Stack.Item>
@@ -58,7 +59,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
             <Text>{modelType}</Text>
           </Stack.Item>
           <Stack.Item>
-            <Text>
+            <Text variant={"xSmall"}>
               {localization.formatString(
                 localization.CohortBanner.datapoints,
                 this.props.jointDataset.datasetRowCount
@@ -66,7 +67,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
             </Text>
           </Stack.Item>
           <Stack.Item>
-            <Text>
+            <Text variant={"xSmall"}>
               {localization.formatString(
                 localization.CohortBanner.features,
                 this.props.jointDataset.datasetFeatureCount
@@ -76,7 +77,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
         </Stack>
         <Stack>
           <Stack.Item>
-            <Text variant={"xSmall"}>
+            <Text variant={"small"}>
               {localization.CohortBanner.datasetCohorts.toUpperCase()}
             </Text>
           </Stack.Item>
