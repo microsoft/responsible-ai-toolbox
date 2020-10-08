@@ -33,7 +33,13 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
           }
         }
       });
-      describeAxisConfigDialog(false);
+      if (dataShape.defaultXAxis && dataShape.defaultYAxis) {
+        describeAxisConfigDialog(
+          dataShape.defaultXAxis,
+          dataShape.defaultYAxis,
+          false
+        );
+      }
     });
   });
 }
