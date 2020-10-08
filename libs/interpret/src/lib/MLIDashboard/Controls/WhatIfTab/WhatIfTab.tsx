@@ -347,11 +347,6 @@ export class WhatIfTab extends React.PureComponent<
     console.log(this.props.invokeModel);
     return (
       <div className={classNames.page}>
-        <Text>
-          12312
-          {typeof this.props.invokeModel}
-        </Text>
-
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
