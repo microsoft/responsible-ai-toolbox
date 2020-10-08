@@ -82,7 +82,7 @@ const interpretDatasets = {
     noDataset: true
   },
   bostonDataNoPredict: {
-    datapoint: 114,
+    datapoint: 102,
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     featureNames: [
       "LSTAT",
@@ -103,7 +103,7 @@ const interpretDatasets = {
     noY: true
   },
   bostonDataNoY: {
-    datapoint: 114,
+    datapoint: 102,
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     featureNames: [
       "LSTAT",

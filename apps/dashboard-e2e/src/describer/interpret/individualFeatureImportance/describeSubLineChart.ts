@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getMenu } from "../../../util/getMenu";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
@@ -12,10 +11,6 @@ export function describeSubLineChart(dataShape: IInterpretData): void {
   };
   describe("Sub line chart", () => {
     beforeEach(() => {
-      getMenu(
-        "Individual Feature Importance & What-If",
-        "#DashboardPivot"
-      ).click();
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
       props.chart.clickNthPoint(0);
 
