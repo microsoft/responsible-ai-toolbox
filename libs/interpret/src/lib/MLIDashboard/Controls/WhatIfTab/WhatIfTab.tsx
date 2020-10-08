@@ -770,7 +770,10 @@ export class WhatIfTab extends React.PureComponent<
     if (this.state.secondaryChartChoice === WhatIfTab.featureImportanceKey) {
       if (!this.props.jointDataset.hasLocalExplanations) {
         secondaryPlot = (
-          <div className={classNames.missingParametersPlaceholder}>
+          <div
+            className={classNames.missingParametersPlaceholder}
+            id="noFeatureImportanceInfo"
+          >
             <div className={classNames.missingParametersPlaceholderSpacer}>
               <Text variant="large" className={classNames.faintText}>
                 {localization.WhatIfTab.featureImportanceLackingParameters}
@@ -780,7 +783,10 @@ export class WhatIfTab extends React.PureComponent<
         );
       } else if (this.includedFeatureImportance.length === 0) {
         secondaryPlot = (
-          <div className={classNames.missingParametersPlaceholder}>
+          <div
+            className={classNames.missingParametersPlaceholder}
+            id="noPointSelectedInfo"
+          >
             <div className={classNames.missingParametersPlaceholderSpacer}>
               <Text variant="large" className={classNames.faintText}>
                 {localization.WhatIfTab.featureImportanceGetStartedText}
@@ -1012,8 +1018,8 @@ export class WhatIfTab extends React.PureComponent<
     }
 
     return (
-      <div>
-        <div className={classNames.choiceBoxArea}>
+      <div id="subPlotContainer">
+        <div className={classNames.choiceBoxArea} id="subPlotChoice">
           <Text variant="medium" className={classNames.boldText}>
             {localization.WhatIfTab.showLabel}
           </Text>
