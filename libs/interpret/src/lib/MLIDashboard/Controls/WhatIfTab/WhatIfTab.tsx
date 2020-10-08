@@ -89,7 +89,6 @@ export interface IWhatIfTabState {
   selectedICEClass: number;
   crossClassInfoVisible: boolean;
   iceTooltipVisible: boolean;
-  secondaryPlotChoices: IChoiceGroupOption[];
 }
 
 export class WhatIfTab extends React.PureComponent<
@@ -151,18 +150,6 @@ export class WhatIfTab extends React.PureComponent<
         };
       });
     }
-    const secondaryPlotChoices = [
-      {
-        key: WhatIfConstants.featureImportanceKey,
-        text: localization.WhatIfTab.featureImportancePlot
-      }
-    ];
-    if (this.props.invokeModel) {
-      secondaryPlotChoices.push({
-        key: WhatIfConstants.IceKey,
-        text: localization.WhatIfTab.icePlot
-      });
-    }
     this.state = {
       crossClassInfoVisible: false,
       customPointIsActive: [],
@@ -174,7 +161,6 @@ export class WhatIfTab extends React.PureComponent<
       pointIsActive: [],
       request: undefined,
       secondaryChartChoice: WhatIfConstants.featureImportanceKey,
-      secondaryPlotChoices,
       selectedCohortIndex: 0,
       selectedFeatureKey: JointDataset.DataLabelRoot + "0",
       selectedICEClass: 0,
@@ -358,8 +344,14 @@ export class WhatIfTab extends React.PureComponent<
         return { key: index, text: cohort.name };
       }
     );
+    console.log(this.props.invokeModel);
     return (
       <div className={classNames.page}>
+        <Text>
+          12312
+          {typeof this.props.invokeModel}
+        </Text>
+
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
@@ -870,6 +862,18 @@ export class WhatIfTab extends React.PureComponent<
       );
     }
 
+    const secondaryPlotChoices = [
+      {
+        key: WhatIfConstants.featureImportanceKey,
+        text: localization.WhatIfTab.featureImportancePlot
+      }
+    ];
+    if (this.props.invokeModel) {
+      secondaryPlotChoices.push({
+        key: WhatIfConstants.IceKey,
+        text: localization.WhatIfTab.icePlot
+      });
+    }
     return (
       <div id="subPlotContainer">
         <div className={classNames.choiceBoxArea} id="subPlotChoice">
@@ -881,7 +885,7 @@ export class WhatIfTab extends React.PureComponent<
             styles={{
               flexContainer: classNames.choiceGroupFlexContainer
             }}
-            options={this.state.secondaryPlotChoices}
+            options={secondaryPlotChoices}
             selectedKey={this.state.secondaryChartChoice}
             onChange={this.setSecondaryChart}
           />
