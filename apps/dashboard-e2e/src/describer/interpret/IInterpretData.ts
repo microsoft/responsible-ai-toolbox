@@ -6,6 +6,8 @@ export interface IInterpretData {
   featureNames: string[];
   datasetBarLabel?: string[];
   datapoint?: number;
+  defaultXAxis?: string;
+  defaultYAxis?: string;
   noDataset?: boolean;
   noFeatureImportance?: boolean;
   noLocalImportance?: boolean;

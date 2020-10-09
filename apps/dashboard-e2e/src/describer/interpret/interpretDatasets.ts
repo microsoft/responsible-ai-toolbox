@@ -26,6 +26,8 @@ const interpretDatasets = {
   bostonData: {
     datapoint: 102,
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
+    defaultXAxis: "Index",
+    defaultYAxis: "CRIM",
     featureNames: [
       "LSTAT",
       "RM",
@@ -45,6 +47,8 @@ const interpretDatasets = {
   bostonDataGlobal: {
     datapoint: 102,
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
+    defaultXAxis: "Index",
+    defaultYAxis: "CRIM",
     featureNames: [
       "LSTAT",
       "RM",
@@ -105,6 +109,8 @@ const interpretDatasets = {
   bostonDataNoY: {
     datapoint: 102,
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
+    defaultXAxis: "Index",
+    defaultYAxis: "CRIM",
     featureNames: [
       "LSTAT",
       "RM",
@@ -125,6 +131,8 @@ const interpretDatasets = {
   breastCancerData: {
     datapoint: 114,
     datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"],
+    defaultXAxis: "Index",
+    defaultYAxis: "mean radius",
     featureNames: [
       "worst area",
       "worst perimeter",
@@ -161,12 +169,16 @@ const interpretDatasets = {
   ebmData: {
     datapoint: 2,
     datasetBarLabel: ["0", "1"],
+    defaultXAxis: "Index",
+    defaultYAxis: "Age",
     featureNames: ["Age", "Employment"],
     noFeatureImportance: true
   },
   ibmData: {
     datapoint: 20,
     datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
+    defaultXAxis: "Index",
+    defaultYAxis: "Age",
     featureNames: [
       "OverTime",
       "JobRole",
@@ -203,6 +215,8 @@ const interpretDatasets = {
   ibmDataInconsistent: {
     datapoint: 20,
     datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
+    defaultXAxis: "Index",
+    defaultYAxis: "Age",
     errorMessage:
       "Inconsistent dimensions. Predicted probability[0] has dimensions 2, expected 1",
     featureNames: [
@@ -241,6 +255,8 @@ const interpretDatasets = {
   ibmNoClass: {
     datapoint: 20,
     datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
+    defaultXAxis: "Index",
+    defaultYAxis: "Age",
     featureNames: [
       "OverTime",
       "JobRole",
@@ -277,6 +293,8 @@ const interpretDatasets = {
   irisData: {
     datapoint: 30,
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
+    defaultXAxis: "Index",
+    defaultYAxis: "sepal length (cm)",
     featureNames: [
       "petal length (cm)",
       "petal width (cm)",
@@ -287,6 +305,8 @@ const interpretDatasets = {
   irisDataNoLocal: {
     datapoint: 30,
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
+    defaultXAxis: "Index",
+    defaultYAxis: "sepal length (cm)",
     featureNames: [
       "petal length (cm)",
       "petal width (cm)",
@@ -317,6 +337,8 @@ const interpretDatasets = {
   irisNoFeatures: {
     datapoint: 30,
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
+    defaultXAxis: "Index",
+    defaultYAxis: "Feature 0",
     featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
   }
 };
