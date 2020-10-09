@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from "react";
-
 import { localization } from "@responsible-ai/localization";
+import React from "react";
 
 import { OverallTableStyles } from "./OverallTable.styles";
 

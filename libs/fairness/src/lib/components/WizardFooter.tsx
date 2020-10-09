@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
   PrimaryButton
 } from "office-ui-fabric-react/lib/Button";
 import React from "react";
-
-import { localization } from "@responsible-ai/localization";
 
 import { WizardFooterStyles } from "./WizardFooter.styles";
 

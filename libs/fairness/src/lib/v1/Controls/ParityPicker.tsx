@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   IconButton,
   DefaultButton,
@@ -12,7 +13,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { IParityPickerPropsV1 } from "../FairnessWizard";
 
 interface IState {

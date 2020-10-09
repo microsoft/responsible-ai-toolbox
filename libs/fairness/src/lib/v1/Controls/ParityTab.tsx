@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Stack, StackItem, Separator } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
-import { localization } from "@responsible-ai/localization";
 import { IParityPickerPropsV1 } from "../FairnessWizard";
 
 import { TileList, ITileProp } from "./TileList";

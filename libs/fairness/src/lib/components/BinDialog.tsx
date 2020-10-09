@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -12,7 +13,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 

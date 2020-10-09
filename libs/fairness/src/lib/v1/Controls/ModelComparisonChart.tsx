@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ChartBuilder,
@@ -21,7 +22,6 @@ import {
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "@responsible-ai/localization";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
   PrimaryButton,
@@ -9,7 +10,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { Cohort } from "../../Cohort";
 import {
   IExplanationModelMetadata,

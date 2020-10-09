@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
@@ -9,7 +10,6 @@ import { DataSpecificationBlade } from "../../components/DataSpecificationBlade"
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "@responsible-ai/localization";
 import { IPerformancePickerPropsV1 } from "../FairnessWizard";
 
 import { PerformanceTabStyles } from "./PerformanceTab.styles";

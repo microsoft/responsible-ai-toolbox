@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { ActionButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "@responsible-ai/localization";
 
 import { IntroTabStyles } from "./IntroTab.styles";
 

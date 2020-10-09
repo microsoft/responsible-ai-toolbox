@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   Callout as FabricCallout,
   CommandBarButton,
@@ -10,7 +11,6 @@ import {
 import React from "react";
 import { v4 } from "uuid";
 
-import { localization } from "@responsible-ai/localization";
 import { FabricStyles } from "../../FabricStyles";
 
 import { labelWithCalloutStyles } from "./LabelWithCallout.styles";
