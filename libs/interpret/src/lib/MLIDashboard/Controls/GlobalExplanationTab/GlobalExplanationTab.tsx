@@ -181,7 +181,7 @@ export class GlobalExplanationTab extends React.PureComponent<
           id="TopKSliderContainer"
         >
           <Slider
-            label={localization.Interpret.formatString(
+            label={localization.formatString(
               localization.Interpret.GlobalTab.topAtoB,
               1,
               this.state.topK
@@ -217,7 +217,9 @@ export class GlobalExplanationTab extends React.PureComponent<
         <div className={classNames.globalChartWithLegend}>
           <FeatureImportanceBar
             jointDataset={this.props.jointDataset}
-            yAxisLabels={[localization.GlobalTab.aggregateFeatureImportance]}
+            yAxisLabels={[
+              localization.Interpret.GlobalTab.aggregateFeatureImportance
+            ]}
             sortArray={this.state.sortArray}
             chartType={this.state.chartType}
             unsortedX={this.props.metadata.featureNamesAbridged}

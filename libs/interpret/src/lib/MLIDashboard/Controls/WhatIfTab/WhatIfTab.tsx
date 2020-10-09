@@ -644,7 +644,9 @@ export class WhatIfTab extends React.PureComponent<
           </div>
         );
       } else {
-        const yAxisLabels: string[] = [localization.featureImportance];
+        const yAxisLabels: string[] = [
+          localization.Interpret.featureImportance
+        ];
         if (this.props.metadata.modelType !== ModelTypes.Regression) {
           yAxisLabels.push(
             this.props.weightLabels[this.props.selectedWeightVector]
@@ -654,7 +656,7 @@ export class WhatIfTab extends React.PureComponent<
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
               <Text variant="medium" className={classNames.sliderLabel}>
-                {localization.Interpret.formatString(
+                {localization.formatString(
                   localization.Interpret.GlobalTab.topAtoB,
                   1,
                   this.state.topK

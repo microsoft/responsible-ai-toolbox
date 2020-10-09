@@ -105,17 +105,13 @@ export class CohortEditorFilterList extends React.Component<
 
     if (filter.method === FilterMethods.InTheRangeOf) {
       // example: Age [30,40]
-      label = `${
-        selectedFilter.abbridgedLabel
-      } ${localization.Interpret.formatString(
+      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
         localization.Interpret.FilterOperations.inTheRangeOf,
         stringArgs
       )}`;
     } else {
       // example: Age < 30
-      label = `${
-        selectedFilter.abbridgedLabel
-      } ${localization.Interpret.formatString(
+      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
         this.filterMethodLabels[filter.method],
         stringArgs
       )}`;

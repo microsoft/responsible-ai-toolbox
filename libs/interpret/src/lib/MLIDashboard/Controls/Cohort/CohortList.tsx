@@ -60,7 +60,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
           </Stack.Item>
           <Stack.Item>
             <Text variant={"xSmall"}>
-              {localization.Interpret.formatString(
+              {localization.formatString(
                 localization.Interpret.CohortBanner.datapoints,
                 this.props.jointDataset.datasetRowCount
               )}
@@ -68,7 +68,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
           </Stack.Item>
           <Stack.Item>
             <Text variant={"xSmall"}>
-              {localization.Interpret.formatString(
+              {localization.formatString(
                 localization.Interpret.CohortBanner.features,
                 this.props.jointDataset.datasetFeatureCount
               )}
@@ -117,7 +117,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                   </Stack.Item>
                   <Stack.Item>
                     <Text variant={"xSmall"}>
-                      {localization.Interpret.formatString(
+                      {localization.formatString(
                         localization.Interpret.CohortBanner.datapoints,
                         cohort.filteredData.length
                       )}
@@ -125,7 +125,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                   </Stack.Item>
                   <Stack.Item>
                     <Text variant={"xSmall"}>
-                      {localization.Interpret.formatString(
+                      {localization.formatString(
                         localization.Interpret.CohortBanner.filters,
                         cohort.filters.length
                       )}

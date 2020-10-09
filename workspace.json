@@ -352,6 +352,36 @@
             "exclude": ["**/node_modules/**", "!libs/localization/**/*"]
           }
         },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/localization",
+            "tsConfig": "libs/localization/tsconfig.lib.json",
+            "project": "libs/localization/package.json",
+            "entryFile": "libs/localization/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {

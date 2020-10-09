@@ -140,7 +140,7 @@ export class CohortEditorFilter extends React.Component<
         {selectedMeta.treatAsCategorical ? (
           <>
             <Text variant={"small"}>
-              {`${localization.Interpret.formatString(
+              {`${localization.formatString(
                 localization.Interpret.Filters.uniqueValues,
                 selectedMeta.sortedCategoricalValues?.length
               )}`}
@@ -160,10 +160,10 @@ export class CohortEditorFilter extends React.Component<
         ) : (
           <>
             <Text block nowrap variant={"small"}>
-              {`${localization.Interpret.formatString(
+              {`${localization.formatString(
                 localization.Interpret.Filters.min,
                 minVal
-              )} ${localization.Interpret.formatString(
+              )} ${localization.formatString(
                 localization.Interpret.Filters.max,
                 maxVal
               )}`}

@@ -212,7 +212,7 @@ export class AxisConfigDialog extends React.PureComponent<
                 {selectedMeta.treatAsCategorical ? (
                   <>
                     <Text variant={"small"}>
-                      {`${localization.Interpret.formatString(
+                      {`${localization.formatString(
                         localization.Interpret.Filters.uniqueValues,
                         selectedMeta.sortedCategoricalValues?.length
                       )}`}
@@ -231,13 +231,13 @@ export class AxisConfigDialog extends React.PureComponent<
                 ) : (
                   <>
                     <Text variant={"small"} nowrap block>
-                      {localization.Interpret.formatString(
+                      {localization.formatString(
                         localization.Interpret.Filters.min,
                         minVal
                       )}
                     </Text>
                     <Text variant={"small"} nowrap block>
-                      {localization.Interpret.formatString(
+                      {localization.formatString(
                         localization.Interpret.Filters.max,
                         maxVal
                       )}

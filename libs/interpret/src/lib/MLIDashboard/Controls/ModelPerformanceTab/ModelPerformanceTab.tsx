@@ -360,7 +360,7 @@ export class ModelPerformanceTab extends React.PureComponent<
                             {stats.map((labeledStat, statIndex) => {
                               return (
                                 <Text block key={statIndex}>
-                                  {localization.Interpret.formatString(
+                                  {localization.formatString(
                                     labeledStat.label,
                                     labeledStat.stat.toLocaleString(undefined, {
                                       maximumFractionDigits: 3

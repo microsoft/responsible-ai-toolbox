@@ -92,7 +92,7 @@ export class GlobalOnlyChart extends React.PureComponent<
         </div>
         <div className={classNames.globalChartControls}>
           <Text variant="medium" className={classNames.sliderLabel}>
-            {localization.Interpret.formatString(
+            {localization.formatString(
               localization.Interpret.GlobalTab.topAtoB,
               +1,
               +this.state.topK
@@ -112,7 +112,9 @@ export class GlobalOnlyChart extends React.PureComponent<
         <div className={classNames.globalChartWithLegend}>
           <FeatureImportanceBar
             jointDataset={undefined}
-            yAxisLabels={[localization.GlobalTab.aggregateFeatureImportance]}
+            yAxisLabels={[
+              localization.Interpret.GlobalTab.aggregateFeatureImportance
+            ]}
             sortArray={this.state.sortArray}
             chartType={ChartTypes.Bar}
             unsortedX={this.props.metadata.featureNamesAbridged}
