@@ -4,6 +4,10 @@
 /dist
 /tmp
 /out-tsc
+/raiwidgets/raiwidgets/js/dist/*
+/raiwidgets/raiwidgets/js/lib/*
+/raiwidgets/raiwidgets/js/node_modules/*
+/raiwidgets/raiwidgets.egg-info/*
 
 # dependencies
 /node_modules/
@@ -41,3 +45,4 @@ Thumbs.db
 # Python
 **.pyc
 **/__pycache__/*
+**-checkpoint.ipynb

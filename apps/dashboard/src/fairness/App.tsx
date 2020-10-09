@@ -74,6 +74,29 @@ export class App extends React.Component<IAppProps> {
     }
   }
 
+  // calculateMetrics can be used with local flask server for debugging
+  /*private calculateMetrics(postData: IMetricRequest): Promise<IMetricResponse> {
+    return fetch("http://localhost:5000/1/metrics", {
+      method: "post",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((resp) => {
+        if (resp.status >= 200 && resp.status < 300) {
+          return resp.json();
+        }
+        return Promise.reject(new Error(resp.statusText));
+      })
+      .then((json) => {
+        if (json.error !== undefined) {
+          throw new Error(json.error);
+        }
+        return Promise.resolve(json.data);
+      });
+  }*/
+
   private generateRandomMetrics(
     request: IMetricRequest,
     abortSignal?: AbortSignal
