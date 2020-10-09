@@ -205,7 +205,7 @@ export class CohortEditor extends React.PureComponent<
 
   private _getErrorMessage = (): string | undefined => {
     if (this.state.cohortName.length <= 0) {
-      return localization.CohortEditor.cohortNameError;
+      return localization.Interpret.CohortEditor.cohortNameError;
     }
     return undefined;
   };

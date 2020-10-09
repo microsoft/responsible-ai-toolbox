@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Text } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "@responsible-ai/localization";
 
 import { DataSpecificationBladeStyles } from "./DataSpecificationBlade.styles";
 
@@ -25,15 +24,15 @@ export class DataSpecificationBlade extends React.PureComponent<
         </Text>
         <Text variant={"small"} className={styles.text} block>
           {this.props.featureNames.length === 1
-            ? localization.singleAttributeCount
-            : localization.formatString(
-                localization.attributesCount,
+            ? localization.Fairness.singleAttributeCount
+            : localization.Fairness.formatString(
+                localization.Fairness.attributesCount,
                 this.props.featureNames.length
               )}
         </Text>
         <Text variant={"small"} className={styles.text} block>
           {localization.formatString(
-            localization.instanceCount,
+            localization.Fairness.instanceCount,
             this.props.numberRows
           )}
         </Text>

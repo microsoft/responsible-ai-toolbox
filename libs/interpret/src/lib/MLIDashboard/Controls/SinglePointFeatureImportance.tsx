@@ -209,7 +209,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     const result: IDropdownOption[] = [
       {
         key: FeatureKeys.AbsoluteGlobal,
-        text: localization.BarChart.absoluteGlobal
+        text: localization.Interpret.BarChart.absoluteGlobal
       }
     ];
     // if (!this.props.explanationContext.testDataset.predictedY) {
@@ -221,7 +221,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     ) {
       result.push({
         key: FeatureKeys.AbsoluteLocal,
-        text: localization.BarChart.absoluteLocal
+        text: localization.Interpret.BarChart.absoluteLocal
       });
     }
     if (

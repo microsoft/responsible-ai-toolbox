@@ -62,27 +62,27 @@ export class CohortEditorFilter extends React.Component<
   private comparisonOptions: IComboBoxOption[] = [
     {
       key: FilterMethods.Equal,
-      text: localization.Filters.equalComparison
+      text: localization.Interpret.Filters.equalComparison
     },
     {
       key: FilterMethods.GreaterThan,
-      text: localization.Filters.greaterThanComparison
+      text: localization.Interpret.Filters.greaterThanComparison
     },
     {
       key: FilterMethods.GreaterThanEqualTo,
-      text: localization.Filters.greaterThanEqualToComparison
+      text: localization.Interpret.Filters.greaterThanEqualToComparison
     },
     {
       key: FilterMethods.LessThan,
-      text: localization.Filters.lessThanComparison
+      text: localization.Interpret.Filters.lessThanComparison
     },
     {
       key: FilterMethods.LessThanEqualTo,
-      text: localization.Filters.lessThanEqualToComparison
+      text: localization.Interpret.Filters.lessThanEqualToComparison
     },
     {
       key: FilterMethods.InTheRangeOf,
-      text: localization.Filters.inTheRangeOf
+      text: localization.Interpret.Filters.inTheRangeOf
     }
   ];
   public render(): React.ReactNode {
@@ -141,7 +141,7 @@ export class CohortEditorFilter extends React.Component<
           <>
             <Text variant={"small"}>
               {`${localization.formatString(
-                localization.Filters.uniqueValues,
+                localization.Interpret.Filters.uniqueValues,
                 selectedMeta.sortedCategoricalValues?.length
               )}`}
             </Text>
@@ -161,10 +161,10 @@ export class CohortEditorFilter extends React.Component<
           <>
             <Text block nowrap variant={"small"}>
               {`${localization.formatString(
-                localization.Filters.min,
+                localization.Interpret.Filters.min,
                 minVal
               )} ${localization.formatString(
-                localization.Filters.max,
+                localization.Interpret.Filters.max,
                 maxVal
               )}`}
             </Text>

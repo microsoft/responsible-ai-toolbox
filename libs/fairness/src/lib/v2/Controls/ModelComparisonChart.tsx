@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ChartBuilder,
@@ -27,7 +28,6 @@ import {
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "@responsible-ai/localization";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
@@ -259,8 +259,8 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.performancePickerProps.selectedPerformanceKey
         );
 
-      const insights2 = localization.formatString(
-        localization.ModelComparison.insightsText2,
+      const insights2 = localization.Fairness.formatString(
+        localization.Fairness.ModelComparison.insightsText2,
         selectedMetric.title,
         formattedMinPerformance,
         formattedMaxPerformance,
@@ -268,8 +268,8 @@ export class ModelComparisonChart extends React.PureComponent<
         formattedMaxDisparity
       );
 
-      const insights3 = localization.formatString(
-        localization.ModelComparison.insightsText3,
+      const insights3 = localization.Fairness.formatString(
+        localization.Fairness.ModelComparison.insightsText3,
         selectedMetric.title.toLowerCase(),
         selectedMetric.isMinimization
           ? formattedMinPerformance
@@ -284,8 +284,8 @@ export class ModelComparisonChart extends React.PureComponent<
         )
       );
 
-      const insights4 = localization.formatString(
-        localization.ModelComparison.insightsText4,
+      const insights4 = localization.Fairness.formatString(
+        localization.Fairness.ModelComparison.insightsText4,
         selectedMetric.title.toLowerCase(),
         FormatMetrics.formatNumbers(
           this.state.performanceArray[minDisparityIndex],

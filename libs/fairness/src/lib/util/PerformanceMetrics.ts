@@ -16,192 +16,192 @@ export interface IPerformanceOption {
 
 export const performanceOptions: { [key: string]: IPerformanceOption } = {
   accuracy_score: {
-    description: localization.Metrics.accuracyDescription,
+    description: localization.Fairness.Metrics.accuracyDescription,
     isMinimization: false,
     isPercentage: true,
     key: "accuracy_score",
-    title: localization.Metrics.accuracyScore,
+    title: localization.Fairness.Metrics.accuracyScore,
     userVisible: true
   },
   auc: {
-    description: localization.Metrics.aucDescription,
+    description: localization.Fairness.Metrics.aucDescription,
     isMinimization: false,
     isPercentage: false,
     key: "auc",
-    title: localization.Metrics.auc,
+    title: localization.Fairness.Metrics.auc,
     userVisible: true
   },
   average: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: false,
     isPercentage: false,
     key: "average",
-    title: localization.Metrics.average
+    title: localization.Fairness.Metrics.average
   },
   balanced_accuracy_score: {
-    description: localization.Metrics.balancedAccuracyDescription,
+    description: localization.Fairness.Metrics.balancedAccuracyDescription,
     isMinimization: false,
     isPercentage: true,
     key: "balanced_accuracy_score",
-    title: localization.Metrics.balancedAccuracy,
+    title: localization.Fairness.Metrics.balancedAccuracy,
     userVisible: true
   },
   balanced_root_mean_squared_error: {
-    description: localization.Metrics.balancedRMSEDescription,
+    description: localization.Fairness.Metrics.balancedRMSEDescription,
     isMinimization: true,
     isPercentage: false,
     key: "balanced_root_mean_squared_error",
-    title: localization.Metrics.balancedRootMeanSquaredError,
+    title: localization.Fairness.Metrics.balancedRootMeanSquaredError,
     userVisible: true
   },
   f1_score: {
     alwaysUpperCase: true,
-    description: localization.Metrics.f1ScoreDescription,
+    description: localization.Fairness.Metrics.f1ScoreDescription,
     isMinimization: false,
     isPercentage: false,
     key: "f1_score",
-    title: localization.Metrics.f1Score,
+    title: localization.Fairness.Metrics.f1Score,
     userVisible: true
   },
   fallout_rate: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: true,
     key: "fallout_rate",
-    title: localization.Metrics.falloutRate
+    title: localization.Fairness.Metrics.falloutRate
   },
   false_negative_rate: {
-    description: localization.Metrics.falseNegativeRateDescription,
+    description: localization.Fairness.Metrics.falseNegativeRateDescription,
     isMinimization: true,
     isPercentage: true,
     key: "false_negative_rate",
-    title: localization.Metrics.falseNegativeRate
+    title: localization.Fairness.Metrics.falseNegativeRate
   },
   false_positive_rate: {
-    description: localization.Metrics.falsePositiveRateDescription,
+    description: localization.Fairness.Metrics.falsePositiveRateDescription,
     isMinimization: true,
     isPercentage: true,
     key: "false_positive_rate",
-    title: localization.Metrics.falsePositiveRate
+    title: localization.Fairness.Metrics.falsePositiveRate
   },
   log_loss: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: false,
     key: "log_loss",
-    title: localization.Metrics.logLoss
+    title: localization.Fairness.Metrics.logLoss
   },
   max_error: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: false,
     key: "max_error",
-    title: localization.Metrics.maxError
+    title: localization.Fairness.Metrics.maxError
   },
   mean_absolute_error: {
-    description: localization.Metrics.meanAbsoluteErrorDescription,
+    description: localization.Fairness.Metrics.meanAbsoluteErrorDescription,
     isMinimization: true,
     isPercentage: false,
     key: "mean_absolute_error",
-    title: localization.Metrics.meanAbsoluteError,
+    title: localization.Fairness.Metrics.meanAbsoluteError,
     userVisible: true
   },
   mean_squared_error: {
-    description: localization.Metrics.mseDescription,
+    description: localization.Fairness.Metrics.mseDescription,
     isMinimization: true,
     isPercentage: false,
     key: "mean_squared_error",
-    title: localization.Metrics.meanSquaredError,
+    title: localization.Fairness.Metrics.meanSquaredError,
     userVisible: true
   },
   mean_squared_log_error: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: false,
     key: "mean_squared_log_error",
-    title: localization.Metrics.meanSquaredLogError
+    title: localization.Fairness.Metrics.meanSquaredLogError
   },
   median_absolute_error: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: false,
     key: "median_absolute_error",
-    title: localization.Metrics.medianAbsoluteError
+    title: localization.Fairness.Metrics.medianAbsoluteError
   },
   miss_rate: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: true,
     key: "miss_rate",
-    title: localization.Metrics.missRate
+    title: localization.Fairness.Metrics.missRate
   },
   overprediction: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: false,
     key: "overprediction",
-    title: localization.Metrics.overprediction
+    title: localization.Fairness.Metrics.overprediction
   },
   precision_score: {
-    description: localization.Metrics.precisionDescription,
+    description: localization.Fairness.Metrics.precisionDescription,
     isMinimization: false,
     isPercentage: true,
     key: "precision_score",
-    title: localization.Metrics.precisionScore,
+    title: localization.Fairness.Metrics.precisionScore,
     userVisible: true
   },
   r2_score: {
     alwaysUpperCase: true,
-    description: localization.Metrics.r2Description,
+    description: localization.Fairness.Metrics.r2Description,
     isMinimization: false,
     isPercentage: false,
     key: "r2_score",
-    title: localization.Metrics.r2_score,
+    title: localization.Fairness.Metrics.r2_score,
     userVisible: true
   },
   recall_score: {
-    description: localization.Metrics.recallDescription,
+    description: localization.Fairness.Metrics.recallDescription,
     isMinimization: false,
     isPercentage: true,
     key: "recall_score",
-    title: localization.Metrics.recallScore,
+    title: localization.Fairness.Metrics.recallScore,
     userVisible: true
   },
   root_mean_squared_error: {
     alwaysUpperCase: true,
-    description: localization.Metrics.rmseDescription,
+    description: localization.Fairness.Metrics.rmseDescription,
     isMinimization: true,
     isPercentage: false,
     key: "root_mean_squared_error",
-    title: localization.Metrics.rms_error,
+    title: localization.Fairness.Metrics.rms_error,
     userVisible: true
   },
   selection_rate: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: false,
     isPercentage: true,
     key: "selection_rate",
-    title: localization.Metrics.selectionRate
+    title: localization.Fairness.Metrics.selectionRate
   },
   specificity_score: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: false,
     isPercentage: true,
     key: "specificity_score",
-    title: localization.Metrics.specificityScore
+    title: localization.Fairness.Metrics.specificityScore
   },
   underprediction: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: false,
     key: "underprediction",
-    title: localization.Metrics.underprediction
+    title: localization.Fairness.Metrics.underprediction
   },
   zero_one_loss: {
-    description: localization.loremIpsum,
+    description: localization.Fairness.loremIpsum,
     isMinimization: true,
     isPercentage: true,
     key: "zero_one_loss",
-    title: localization.Metrics.zeroOneLoss
+    title: localization.Fairness.Metrics.zeroOneLoss
   }
 };

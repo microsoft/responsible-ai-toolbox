@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { ActionButton, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 
 import { FeatureTabStyles } from "./FeatureTab.styles";
@@ -49,8 +49,8 @@ export class FeatureTabSubGroup extends React.Component<
               onClick={this.toggle}
             >
               {this.state.expanded
-                ? localization.Feature.hideCategories
-                : localization.Feature.showCategories}
+                ? localization.Fairness.Feature.hideCategories
+                : localization.Fairness.Feature.showCategories}
             </ActionButton>
           )}
         </div>

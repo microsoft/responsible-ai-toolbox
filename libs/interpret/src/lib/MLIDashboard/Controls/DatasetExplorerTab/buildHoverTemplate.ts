@@ -35,7 +35,8 @@ export function buildHoverTemplate(
           ": %{customdata.Color}<br>";
       }
       hovertemplate +=
-        localization.Charts.rowIndex + ": %{customdata.AbsoluteIndex}<br>";
+        localization.Interpret.Charts.rowIndex +
+        ": %{customdata.AbsoluteIndex}<br>";
       break;
     }
     case ChartTypes.Histogram: {
@@ -47,7 +48,7 @@ export function buildHoverTemplate(
         hovertemplate += yName + ": %{customdata.Y}<br>";
       }
       hovertemplate += localization.formatString(
-        localization.Charts.countTooltipPrefix,
+        localization.Interpret.Charts.countTooltipPrefix,
         "%{y}<br>"
       );
       break;

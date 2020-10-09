@@ -236,7 +236,7 @@ export class Violin extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };
@@ -276,7 +276,7 @@ export class Violin extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };
@@ -503,7 +503,10 @@ export class Violin extends React.PureComponent<
       return [];
     }
     const result: IDropdownOption[] = [
-      { key: GroupByOptions.None, text: localization.Violin.groupNone }
+      {
+        key: GroupByOptions.None,
+        text: localization.Interpret.Violin.groupNone
+      }
     ];
     if (
       this.props.dashboardContext.explanationContext.testDataset &&
@@ -512,7 +515,7 @@ export class Violin extends React.PureComponent<
     ) {
       result.push({
         key: GroupByOptions.PredictedY,
-        text: localization.Violin.groupPredicted
+        text: localization.Interpret.Violin.groupPredicted
       });
     }
     if (
@@ -522,7 +525,7 @@ export class Violin extends React.PureComponent<
     ) {
       result.push({
         key: GroupByOptions.TrueY,
-        text: localization.Violin.groupTrue
+        text: localization.Interpret.Violin.groupTrue
       });
     }
     return result;
@@ -577,7 +580,7 @@ export class Violin extends React.PureComponent<
             .modelType === ModelTypes.Multiclass && (
             <span>
               {
-                localization.FeatureImportanceWrapper
+                localization.Interpret.FeatureImportanceWrapper
                   .multiclassImportanceAddendum
               }
             </span>

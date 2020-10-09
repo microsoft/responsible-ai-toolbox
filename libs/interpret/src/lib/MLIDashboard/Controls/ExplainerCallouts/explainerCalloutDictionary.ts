@@ -11,28 +11,28 @@ export interface IExplainerInfo {
 
 // The list of known explanations is an enumerated list of python strings that interpret outputs
 const shapExplanation: IExplainerInfo = {
-  description: localization.ExplanationSummary.shapDescription,
+  description: localization.Interpret.ExplanationSummary.shapDescription,
   linkUrl: "https://github.com/slundberg/shap",
-  title: localization.ExplanationSummary.shapTitle
+  title: localization.Interpret.ExplanationSummary.shapTitle
 };
 
 const limeExplanation: IExplainerInfo = {
-  description: localization.ExplanationSummary.limeDescription,
+  description: localization.Interpret.ExplanationSummary.limeDescription,
   linkUrl: "https://github.com/marcotcr/lime",
-  title: localization.ExplanationSummary.limeTitle
+  title: localization.Interpret.ExplanationSummary.limeTitle
 };
 
 const mimicExplanation: IExplainerInfo = {
-  description: localization.ExplanationSummary.mimicDescription,
+  description: localization.Interpret.ExplanationSummary.mimicDescription,
   linkUrl: "https://christophm.github.io/interpretable-ml-book/global.html",
-  title: localization.ExplanationSummary.mimicTitle
+  title: localization.Interpret.ExplanationSummary.mimicTitle
 };
 
 const pfiExplanation: IExplainerInfo = {
-  description: localization.ExplanationSummary.pfiDescription,
+  description: localization.Interpret.ExplanationSummary.pfiDescription,
   linkUrl:
     "https://christophm.github.io/interpretable-ml-book/feature-importance.html",
-  title: localization.ExplanationSummary.pfiTitle
+  title: localization.Interpret.ExplanationSummary.pfiTitle
 };
 
 export const explainerCalloutDictionary: { [key: string]: IExplainerInfo } = {

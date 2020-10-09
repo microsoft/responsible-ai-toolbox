@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { isTwoDimArray } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
   RangeTypes,
@@ -20,7 +21,6 @@ import {
 import { Data } from "plotly.js";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { FabricStyles } from "../../FabricStyles";
 import {
   ModelTypes,
@@ -75,13 +75,13 @@ export class MultiICEPlot extends React.PureComponent<
     selectedClass: number
   ): string {
     if (metadata.modelType === ModelTypes.Regression) {
-      return localization.IcePlot.prediction;
+      return localization.Interpret.IcePlot.prediction;
     }
     return (
-      localization.IcePlot.predictedProbability +
+      localization.Interpret.IcePlot.predictedProbability +
       "<br>" +
       localization.formatString(
-        localization.WhatIfTab.classLabel,
+        localization.Interpret.WhatIfTab.classLabel,
         metadata.classNames[selectedClass]
       )
     );
@@ -112,8 +112,8 @@ export class MultiICEPlot extends React.PureComponent<
           : [singleRow];
         const predictionLabel =
           metadata.modelType === ModelTypes.Regression
-            ? localization.IcePlot.prediction
-            : localization.IcePlot.predictedProbability +
+            ? localization.Interpret.IcePlot.prediction
+            : localization.Interpret.IcePlot.predictedProbability +
               ": " +
               metadata.classNames[selectedClass];
         const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
@@ -523,7 +523,7 @@ export class MultiICEPlot extends React.PureComponent<
         if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
-              localization.IcePlot.errorPrefix,
+              localization.Interpret.IcePlot.errorPrefix,
               error.message
             )
           });

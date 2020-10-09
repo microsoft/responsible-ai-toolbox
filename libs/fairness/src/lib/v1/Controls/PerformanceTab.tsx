@@ -36,18 +36,18 @@ export class PerformanceTab extends React.PureComponent<
           </Text>
           <Text className={styles.textBody} block>
             {localization.formatString(
-              localization.Performance.body,
+              localization.Fairness.Performance.body,
               this.props.dashboardContext.modelMetadata.PredictionType !==
                 PredictionTypes.Regression
-                ? localization.Performance.binary
-                : localization.Performance.continuous,
+                ? localization.Fairness.Performance.binary
+                : localization.Fairness.Performance.continuous,
               this.props.dashboardContext.modelMetadata.PredictionType ===
                 PredictionTypes.BinaryClassification
-                ? localization.Performance.binary
-                : localization.Performance.continuous,
+                ? localization.Fairness.Performance.binary
+                : localization.Fairness.Performance.continuous,
               this.props.dashboardContext.predictions.length === 1
-                ? localization.Performance.modelMakes
-                : localization.Performance.modelsMake
+                ? localization.Fairness.Performance.modelMakes
+                : localization.Fairness.Performance.modelsMake
             )}
           </Text>
           <StackItem grow={2} className={styles.itemsList}>

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   ModelMetadata,
   ICategoricalRange,
@@ -18,7 +19,6 @@ import {
   PredictionTypes,
   IPreComputedData
 } from "../IFairnessProps";
-import { localization } from "@responsible-ai/localization";
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IBinnedResponse } from "./IBinnedResponse";
@@ -89,7 +89,10 @@ export class WizardBuilder {
       featureNames = props.precomputedFeatureBins.map((binObject, index) => {
         return (
           binObject.featureBinName ||
-          localization.formatString(localization.defaultFeatureNames, index)
+          localization.Fairness.formatString(
+            localization.defaultFeatureNames,
+            index
+          )
         );
       });
     }
@@ -97,7 +100,7 @@ export class WizardBuilder {
       props.dataSummary?.classNames ||
       this.buildIndexedNames(
         this.getClassLength(props),
-        localization.defaultClassNames
+        localization.Fairness.defaultClassNames
       );
     const featureRanges = props.precomputedFeatureBins.map((binMeta) => {
       return {
@@ -129,14 +132,14 @@ export class WizardBuilder {
           ? [localization.defaultSingleFeatureName]
           : this.buildIndexedNames(
               featureLength,
-              localization.defaultFeatureNames
+              localization.Fairness.defaultFeatureNames
             );
     }
     const classNames =
       props.dataSummary?.classNames ||
       this.buildIndexedNames(
         this.getClassLength(props),
-        localization.defaultClassNames
+        localization.Fairness.defaultClassNames
       );
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
       featureNames.length,
@@ -168,7 +171,7 @@ export class WizardBuilder {
     baseString: string
   ): string[] {
     return [...new Array(length).keys()].map((i) =>
-      localization.formatString(baseString, i.toString())
+      localization.Fairness.formatString(baseString, i.toString())
     );
   }
 
@@ -223,8 +226,8 @@ export class WizardBuilder {
           key,
           title:
             customMetric?.name ||
-            localization.formatString(
-              localization.defaultCustomMetricName,
+            localization.Fairness.formatString(
+              localization.Fairness.defaultCustomMetricName,
               customMetrics.length
             )
         });

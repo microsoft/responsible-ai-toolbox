@@ -87,8 +87,8 @@ export class SwarmFeaturePlot extends React.PureComponent<
           ];
           _.set(plotlyProps.data[0], "marker.colorbar.tickvals", [0, 1]);
           _.set(plotlyProps.data[0], "marker.colorbar.ticktext", [
-            localization.AggregateImportance.low,
-            localization.AggregateImportance.high
+            localization.Interpret.AggregateImportance.low,
+            localization.Interpret.AggregateImportance.high
           ]);
         } else {
           _.set(plotlyProps.data[0], "marker.opacity", 0.6);
@@ -146,7 +146,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };

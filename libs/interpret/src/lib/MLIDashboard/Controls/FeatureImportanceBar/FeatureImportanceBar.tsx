@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import { PartialRequired } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";
@@ -164,9 +164,10 @@ export class FeatureImportanceBar extends React.PureComponent<
       baseSeries.layout.barmode = "group";
       let hovertemplate = this.props.unsortedSeries[0].unsortedFeatureValues
         ? "%{text}: %{customdata.Yvalue}<br>"
-        : localization.Charts.featurePrefix + ": %{text}<br>";
+        : localization.Interpret.Charts.featurePrefix + ": %{text}<br>";
       hovertemplate +=
-        localization.Charts.importancePrefix + ": %{customdata.Yformatted}<br>";
+        localization.Interpret.Charts.importancePrefix +
+        ": %{customdata.Yformatted}<br>";
       hovertemplate += "%{customdata.Name}<br>";
       hovertemplate += "<extra></extra>";
 

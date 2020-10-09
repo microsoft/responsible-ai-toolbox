@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import {
   ActionButton,
@@ -15,7 +16,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 
 import { BinDialog } from "./BinDialog";
@@ -61,13 +61,13 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
       {
         key: "feature",
         minWidth: 75,
-        name: localization.Intro.features,
+        name: localization.Fairness.Intro.features,
         onRender: this.renderFeatureNameCell
       },
       {
         key: "subgroup",
         minWidth: 130,
-        name: localization.Feature.subgroups,
+        name: localization.Fairness.Feature.subgroups,
         onRender: this.renderSubGroupCell
       }
     ];
@@ -169,7 +169,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         {item.rangeType === RangeTypes.Categorical && (
           <Text variant={"mediumPlus"} className={styles.valueCount} block>
             {localization.formatString(
-              localization.Feature.summaryCategoricalCount,
+              localization.Fairness.Feature.summaryCategoricalCount,
               item.array.length
             )}
           </Text>
@@ -177,7 +177,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         {item.rangeType !== RangeTypes.Categorical && (
           <Text variant={"mediumPlus"} className={styles.valueCount} block>
             {localization.formatString(
-              localization.Feature.summaryNumericCount,
+              localization.Fairness.Feature.summaryNumericCount,
               (this.props.dashboardContext.modelMetadata.featureRanges[
                 index
               ] as INumericRange).min,

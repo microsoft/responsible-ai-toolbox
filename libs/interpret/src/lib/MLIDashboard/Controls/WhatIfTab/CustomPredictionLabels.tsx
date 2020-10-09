@@ -206,7 +206,7 @@ export class CustomPredictionLabels extends React.Component<
           ].toLocaleString(undefined, {
             maximumFractionDigits: 3
           })
-        : localization.WhatIfTab.loading;
+        : localization.Interpret.WhatIfTab.loading;
     return (
       <div className={classNames.customPredictBlock}>
         <div>

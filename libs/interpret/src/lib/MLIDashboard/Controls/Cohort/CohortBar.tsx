@@ -38,7 +38,7 @@ export class CohortBar extends React.Component<
       if (this.state.editingCohortIndex === this.props.cohorts.length) {
         cohortForEdit = {
           cohortName: localization.formatString(
-            localization.CohortEditor.placeholderName,
+            localization.Interpret.CohortEditor.placeholderName,
             this.state.editingCohortIndex
           ),
           filterList: []
@@ -101,7 +101,7 @@ export class CohortBar extends React.Component<
     const cohorts = [...this.props.cohorts];
     cohorts.push(
       new Cohort(
-        source.name + localization.CohortBanner.copy,
+        source.name + localization.Interpret.CohortBanner.copy,
         this.props.jointDataset,
         [...source.filters]
       )

@@ -182,7 +182,7 @@ export class GlobalExplanationTab extends React.PureComponent<
         >
           <Slider
             label={localization.formatString(
-              localization.GlobalTab.topAtoB,
+              localization.Interpret.GlobalTab.topAtoB,
               1,
               this.state.topK
             )}
@@ -285,7 +285,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                     allowFreeform={false}
                     autoComplete="on"
                     placeholder={
-                      localization.GlobalTab
+                      localization.Interpret.GlobalTab
                         .dependencePlotFeatureSelectPlaceholder
                     }
                     selectedKey={

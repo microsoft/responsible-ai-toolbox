@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
   AccessibleChart,
@@ -11,7 +12,6 @@ import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { Cohort } from "../Cohort";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationModelMetadata } from "../IExplanationContext";
@@ -110,7 +110,7 @@ export class GlobalViolinPlot extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };

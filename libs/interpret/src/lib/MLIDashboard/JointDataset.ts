@@ -167,10 +167,10 @@ export class JointDataset {
         }
       });
       this.metaDict[JointDataset.PredictedYLabel] = {
-        abbridgedLabel: localization.ExplanationScatter.predictedY,
+        abbridgedLabel: localization.Interpret.ExplanationScatter.predictedY,
         category: ColumnCategories.Outcome,
         isCategorical: args.metadata.modelType !== ModelTypes.Regression,
-        label: localization.ExplanationScatter.predictedY,
+        label: localization.Interpret.ExplanationScatter.predictedY,
         sortedCategoricalValues:
           args.metadata.modelType !== ModelTypes.Regression
             ? args.metadata.classNames
@@ -201,7 +201,7 @@ export class JointDataset {
         // create metadata for each class
         args.metadata.classNames.forEach((className, classIndex) => {
           const label = localization.formatString(
-            localization.ExplanationScatter.probabilityLabel,
+            localization.Interpret.ExplanationScatter.probabilityLabel,
             className
           );
           const projection = predictedProbabilities.map(
@@ -235,10 +235,10 @@ export class JointDataset {
         }
       });
       this.metaDict[JointDataset.TrueYLabel] = {
-        abbridgedLabel: localization.ExplanationScatter.trueY,
+        abbridgedLabel: localization.Interpret.ExplanationScatter.trueY,
         category: ColumnCategories.Outcome,
         isCategorical: args.metadata.modelType !== ModelTypes.Regression,
-        label: localization.ExplanationScatter.trueY,
+        label: localization.Interpret.ExplanationScatter.trueY,
         sortedCategoricalValues:
           args.metadata.modelType !== ModelTypes.Regression
             ? args.metadata.classNames
@@ -265,7 +265,7 @@ export class JointDataset {
           (row) => row[JointDataset.RegressionError]
         );
         this.metaDict[JointDataset.RegressionError] = {
-          abbridgedLabel: localization.Columns.error,
+          abbridgedLabel: localization.Interpret.Columns.error,
           category: ColumnCategories.Outcome,
           featureRange: {
             max: Math.max(...regressionErrorArray),
@@ -273,21 +273,21 @@ export class JointDataset {
             rangeType: RangeTypes.Numeric
           },
           isCategorical: false,
-          label: localization.Columns.regressionError,
+          label: localization.Interpret.Columns.regressionError,
           sortedCategoricalValues: undefined
         };
       }
       if (args.metadata.modelType === ModelTypes.Binary) {
         this.metaDict[JointDataset.ClassificationError] = {
-          abbridgedLabel: localization.Columns.classificationOutcome,
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
           isCategorical: true,
-          label: localization.Columns.classificationOutcome,
+          label: localization.Interpret.Columns.classificationOutcome,
           sortedCategoricalValues: [
-            localization.Columns.trueNegative,
-            localization.Columns.falsePositive,
-            localization.Columns.falseNegative,
-            localization.Columns.truePositive
+            localization.Interpret.Columns.trueNegative,
+            localization.Interpret.Columns.falsePositive,
+            localization.Interpret.Columns.falseNegative,
+            localization.Interpret.Columns.truePositive
           ],
           treatAsCategorical: true
         };
@@ -629,7 +629,7 @@ export class JointDataset {
         JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
       this.metaDict[key] = {
         abbridgedLabel: localization.formatString(
-          localization.featureImportanceOf,
+          localization.Interpret.featureImportanceOf,
           featureLabel
         ),
         category: ColumnCategories.Explanation,
@@ -640,7 +640,7 @@ export class JointDataset {
         },
         isCategorical: false,
         label: localization.formatString(
-          localization.featureImportanceOf,
+          localization.Interpret.featureImportanceOf,
           featureLabel
         )
       };
@@ -675,7 +675,7 @@ export class JointDataset {
       return {};
     });
     this.metaDict[JointDataset.IndexLabel] = {
-      abbridgedLabel: localization.ExplanationScatter.index,
+      abbridgedLabel: localization.Interpret.ExplanationScatter.index,
       category: ColumnCategories.Index,
       featureRange: {
         max: arr.length - 1,
@@ -683,20 +683,20 @@ export class JointDataset {
         rangeType: RangeTypes.Integer
       },
       isCategorical: false,
-      label: localization.ExplanationScatter.index
+      label: localization.Interpret.ExplanationScatter.index
     };
     this.metaDict[cohortKey] = {
-      abbridgedLabel: localization.Cohort.cohort,
+      abbridgedLabel: localization.Interpret.Cohort.cohort,
       category: ColumnCategories.Cohort,
       isCategorical: true,
-      label: localization.Cohort.cohort,
+      label: localization.Interpret.Cohort.cohort,
       treatAsCategorical: true
     };
     this.metaDict[ColumnCategories.None] = {
-      abbridgedLabel: localization.Columns.none,
+      abbridgedLabel: localization.Interpret.Columns.none,
       category: ColumnCategories.None,
       isCategorical: true,
-      label: localization.Columns.none,
+      label: localization.Interpret.Columns.none,
       treatAsCategorical: true
     };
   }

@@ -67,7 +67,10 @@ export class AxisConfigDialog extends React.PureComponent<
       this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
       this.props.jointDataset.hasDataset
     ) {
-      previousValue.push({ key, title: localization.Columns.dataset });
+      previousValue.push({
+        key,
+        title: localization.Interpret.Columns.dataset
+      });
       return previousValue;
     }
     if (
@@ -77,7 +80,7 @@ export class AxisConfigDialog extends React.PureComponent<
     ) {
       previousValue.push({
         key,
-        title: localization.Columns.predictedProbabilities
+        title: localization.Interpret.Columns.predictedProbabilities
       });
       return previousValue;
     }
@@ -202,7 +205,7 @@ export class AxisConfigDialog extends React.PureComponent<
                   <>
                     <Text variant={"small"}>
                       {`${localization.formatString(
-                        localization.Filters.uniqueValues,
+                        localization.Interpret.Filters.uniqueValues,
                         selectedMeta.sortedCategoricalValues?.length
                       )}`}
                     </Text>
@@ -219,13 +222,13 @@ export class AxisConfigDialog extends React.PureComponent<
                   <>
                     <Text variant={"small"} nowrap block>
                       {localization.formatString(
-                        localization.Filters.min,
+                        localization.Interpret.Filters.min,
                         minVal
                       )}
                     </Text>
                     <Text variant={"small"} nowrap block>
                       {localization.formatString(
-                        localization.Filters.max,
+                        localization.Interpret.Filters.max,
                         maxVal
                       )}
                     </Text>

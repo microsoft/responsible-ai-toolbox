@@ -213,7 +213,7 @@ export class WhatIfTab extends React.PureComponent<
             colorIndex,
             id: rowIndex,
             name: localization.formatString(
-              localization.WhatIfTab.rowLabel,
+              localization.Interpret.WhatIfTab.rowLabel,
               rowIndex.toString()
             ),
             unsortedAggregateY: JointDataset.localExplanationSlice(
@@ -646,7 +646,7 @@ export class WhatIfTab extends React.PureComponent<
             <div className={classNames.featureImportanceControls}>
               <Text variant="medium" className={classNames.sliderLabel}>
                 {localization.formatString(
-                  localization.GlobalTab.topAtoB,
+                  localization.Interpret.GlobalTab.topAtoB,
                   1,
                   this.state.topK
                 )}
@@ -860,13 +860,13 @@ export class WhatIfTab extends React.PureComponent<
     const secondaryPlotChoices = [
       {
         key: WhatIfConstants.featureImportanceKey,
-        text: localization.WhatIfTab.featureImportancePlot
+        text: localization.Interpret.WhatIfTab.featureImportancePlot
       }
     ];
     if (this.props.invokeModel) {
       secondaryPlotChoices.push({
         key: WhatIfConstants.IceKey,
-        text: localization.WhatIfTab.icePlot
+        text: localization.Interpret.WhatIfTab.icePlot
       });
     }
     return (
@@ -924,7 +924,7 @@ export class WhatIfTab extends React.PureComponent<
         return {
           key: index,
           text: localization.formatString(
-            localization.WhatIfTab.rowLabel,
+            localization.Interpret.WhatIfTab.rowLabel,
             index.toString()
           )
         };
@@ -1007,7 +1007,7 @@ export class WhatIfTab extends React.PureComponent<
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.props.jointDataset.getRow(index);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
-      localization.WhatIf.defaultCustomRootName,
+      localization.Interpret.WhatIf.defaultCustomRootName,
       index
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
@@ -1065,7 +1065,8 @@ export class WhatIfTab extends React.PureComponent<
       // because " " evaluates to 0 in js
       const isWhitespaceOnly = /^\s*$/.test(newValue);
       if (Number.isNaN(asNumber) || isWhitespaceOnly) {
-        this.validationErrors[key] = localization.WhatIfTab.nonNumericValue;
+        this.validationErrors[key] =
+          localization.Interpret.WhatIfTab.nonNumericValue;
         this.forceUpdate();
       } else {
         editingData[key] = asNumber;
@@ -1140,7 +1141,7 @@ export class WhatIfTab extends React.PureComponent<
     }
     this.temporaryPoint = this.props.jointDataset.getRow(indexes[0]);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
-      localization.WhatIf.defaultCustomRootName,
+      localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
@@ -1317,7 +1318,7 @@ export class WhatIfTab extends React.PureComponent<
         if (error.name === "PythonError") {
           alert(
             localization.formatString(
-              localization.IcePlot.errorPrefix,
+              localization.Interpret.IcePlot.errorPrefix,
               error.message
             )
           );
@@ -1491,7 +1492,8 @@ export class WhatIfTab extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate += localization.Charts.rowIndex + ": %{customdata.Index}<br>";
+    hovertemplate +=
+      localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;

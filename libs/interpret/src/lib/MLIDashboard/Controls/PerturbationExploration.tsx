@@ -263,7 +263,7 @@ export class PerturbationExploration extends React.Component<
         if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
-              localization.IcePlot.errorPrefix,
+              localization.Interpret.IcePlot.errorPrefix,
               error.message
             ) as string
           });

@@ -35,11 +35,11 @@ export class SidePanel extends React.Component<ISidePanelProps> {
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Histogram,
-      text: localization.DatasetExplorer.aggregatePlots
+      text: localization.Interpret.DatasetExplorer.aggregatePlots
     },
     {
       key: ChartTypes.Scatter,
-      text: localization.DatasetExplorer.individualDatapoints
+      text: localization.Interpret.DatasetExplorer.individualDatapoints
     }
   ];
   public render(): React.ReactNode {

@@ -201,7 +201,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     const result: IDropdownOption[] = [
       {
         key: FeatureKeys.AbsoluteGlobal,
-        text: localization.BarChart.absoluteGlobal
+        text: localization.Interpret.BarChart.absoluteGlobal
       }
     ];
     result.push(

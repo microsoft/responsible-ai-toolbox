@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   IPlotlyProperty,
@@ -12,7 +13,6 @@ import memoize from "memoize-one";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { FabricStyles } from "../FabricStyles";
 import {
   IExplanationContext,
@@ -174,7 +174,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
               ebmObject.displayParameters &&
               ebmObject.displayParameters.yAxisLabel
                 ? ebmObject.displayParameters.yAxisLabel
-                : localization.IcePlot.predictedProbability
+                : localization.Interpret.IcePlot.predictedProbability
           }
         } as any
       };

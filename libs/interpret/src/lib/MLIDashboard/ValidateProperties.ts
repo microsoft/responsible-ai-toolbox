@@ -34,7 +34,7 @@ export class ValidateProperties {
     if (!Array.isArray(y)) {
       this.errorStrings.push(
         localization.formatString(
-          localization.ValidationErrors.notArray,
+          localization.Interpret.ValidationErrors.notArray,
           fieldName,
           length
         )
@@ -47,7 +47,7 @@ export class ValidateProperties {
     if (y.length !== length) {
       this.errorStrings.push(
         localization.formatString(
-          localization.ValidationErrors.inconsistentDimensions,
+          localization.Interpret.ValidationErrors.inconsistentDimensions,
           fieldName,
           y.length,
           length
@@ -113,7 +113,7 @@ export class ValidateProperties {
       !this.validate1D(
         this.props.predictedY,
         this.rowLength,
-        localization.ValidationErrors.predictedY
+        localization.Interpret.ValidationErrors.predictedY
       )
     ) {
       this.props.predictedY = undefined;
@@ -122,7 +122,7 @@ export class ValidateProperties {
       !this.validate2D(
         this.props.probabilityY,
         [this.rowLength, this.classLength],
-        localization.ValidationErrors.predictedProbability
+        localization.Interpret.ValidationErrors.predictedProbability
       )
     ) {
       this.props.probabilityY = undefined;
@@ -131,7 +131,7 @@ export class ValidateProperties {
       !this.validate2D(
         this.props.testData,
         [this.rowLength, this.featureLength],
-        localization.ValidationErrors.evalData
+        localization.Interpret.ValidationErrors.evalData
       )
     ) {
       this.props.testData = undefined;
@@ -152,7 +152,7 @@ export class ValidateProperties {
         !this.validate2D(
           globalExp,
           [this.featureLength, this.classLength],
-          localization.ValidationErrors.localFeatureImportance
+          localization.Interpret.ValidationErrors.localFeatureImportance
         )
       ) {
         this.props.precomputedExplanations.globalFeatureImportance = undefined;
@@ -161,7 +161,7 @@ export class ValidateProperties {
       !this.validate1D(
         globalExp,
         this.featureLength,
-        localization.ValidationErrors.localFeatureImportance
+        localization.Interpret.ValidationErrors.localFeatureImportance
       )
     ) {
       this.props.precomputedExplanations.globalFeatureImportance = undefined;
@@ -178,7 +178,7 @@ export class ValidateProperties {
         !this.validate3D(
           localExp,
           [this.classLength, this.rowLength, this.featureLength],
-          localization.ValidationErrors.localFeatureImportance
+          localization.Interpret.ValidationErrors.localFeatureImportance
         )
       ) {
         this.props.precomputedExplanations.localFeatureImportance = undefined;
@@ -188,7 +188,7 @@ export class ValidateProperties {
         !this.validate2D(
           localExp,
           [this.rowLength, this.featureLength],
-          localization.ValidationErrors.localFeatureImportance
+          localization.Interpret.ValidationErrors.localFeatureImportance
         )
       ) {
         this.props.precomputedExplanations.localFeatureImportance = undefined;

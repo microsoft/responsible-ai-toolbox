@@ -44,15 +44,15 @@ export class FeatureImportanceWrapper extends React.PureComponent<
         ? [
             {
               key: FeatureImportanceModes.Box,
-              text: localization.FeatureImportanceWrapper.boxText
+              text: localization.Interpret.FeatureImportanceWrapper.boxText
             },
             {
               key: FeatureImportanceModes.Beehive,
-              text: localization.FeatureImportanceWrapper.beehiveText
+              text: localization.Interpret.FeatureImportanceWrapper.beehiveText
             },
             {
               key: FeatureImportanceModes.Violin,
-              text: localization.FeatureImportanceWrapper.violinText
+              text: localization.Interpret.FeatureImportanceWrapper.violinText
             }
           ]
         : [];

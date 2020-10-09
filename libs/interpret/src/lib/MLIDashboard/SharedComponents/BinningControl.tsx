@@ -148,8 +148,8 @@ export class BinningControl extends React.PureComponent<
     ) {
       rangeView.minErrorMessage =
         this.state.type === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
       this.setState(rangeView);
     } else {
       rangeView.minErrorMessage = undefined;
@@ -172,8 +172,8 @@ export class BinningControl extends React.PureComponent<
     ) {
       rangeView.maxErrorMessage =
         this.state.type === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
       this.setState(rangeView);
     } else {
       rangeView.maxErrorMessage = undefined;
@@ -191,7 +191,7 @@ export class BinningControl extends React.PureComponent<
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.steps = newValue;
     if (!Number.isInteger(val)) {
-      rangeView.stepsErrorMessage = localization.IcePlot.integerError;
+      rangeView.stepsErrorMessage = localization.Interpret.IcePlot.integerError;
       this.setState(rangeView);
     } else {
       rangeView.stepsErrorMessage = undefined;

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   IPlotlyProperty,
@@ -10,7 +11,6 @@ import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import {
@@ -202,7 +202,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
       }
       const rawY: number[] = cohort.unwrap(chartProps.yAxis.property);
-      const yLabel = localization.Charts.featureImportance;
+      const yLabel = localization.Interpret.Charts.featureImportance;
       plotlyProps.data[0].y = rawY;
       rawY.forEach((val, index) => {
         customdata[index]["Yformatted"] = val.toLocaleString(undefined, {
@@ -216,7 +216,8 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       customdata[i]["AbsoluteIndex"] = absoluteIndex;
     });
     hovertemplate +=
-      localization.Charts.rowIndex + ": %{customdata.AbsoluteIndex}<br>";
+      localization.Interpret.Charts.rowIndex +
+      ": %{customdata.AbsoluteIndex}<br>";
     hovertemplate += "<extra></extra>";
     plotlyProps.data[0].customdata = customdata as any;
     plotlyProps.data[0].hovertemplate = hovertemplate;

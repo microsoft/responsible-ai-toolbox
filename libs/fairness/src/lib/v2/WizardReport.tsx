@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { getTheme } from "@uifabric/styling";
 import {
   IDropdownStyles,
@@ -25,7 +26,6 @@ import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
-import { localization } from "@responsible-ai/localization";
 import { BarPlotlyProps } from "./BarPlotlyProps";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OverallTable } from "./Controls/OverallTable";
@@ -180,8 +180,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       ) {
         // TODO: this plot doesn't exist anymore, does it?
         const opportunityText = this.state.metrics.predictions?.map((val) => {
-          return localization.formatString(
-            localization.Report.tooltipPrediction,
+          return localization.Fairness.formatString(
+            localization.Fairness.Report.tooltipPrediction,
             FormatMetrics.formatNumbers(val, "average", false, 3)
           );
         });
@@ -207,8 +207,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         PredictionTypes.Regression
       ) {
         const opportunityText = this.state.metrics.predictions?.map((val) => {
-          return localization.formatString(
-            localization.Report.tooltipPrediction,
+          return localization.Fairness.formatString(
+            localization.Fairness.Report.tooltipPrediction,
             val
           );
         });
@@ -228,7 +228,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             y: this.props.dashboardContext.binVector
           } as any
         ];
-        performanceChartHeader = localization.Report.distributionOfErrors;
+        performanceChartHeader =
+          localization.Fairness.Report.distributionOfErrors;
       }
 
       // define task-specific metrics to show by default
@@ -382,9 +383,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 ))}
               <Text>
                 {(this.state.expandAttributes &&
-                  localization.Report.collapseSensitiveAttributes) ||
+                  localization.Fairness.Report.collapseSensitiveAttributes) ||
                   (!this.state.expandAttributes &&
-                    localization.Report.expandSensitiveAttributes)}
+                    localization.Fairness.Report.expandSensitiveAttributes)}
               </Text>
             </div>
             <div className={styles.equalizedOdds}>

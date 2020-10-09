@@ -29,23 +29,23 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   const total = outcomes.length;
   return [
     {
-      label: localization.Statistics.accuracy,
+      label: localization.Interpret.Statistics.accuracy,
       stat: (truePosCount + trueNegCount) / total
     },
     {
-      label: localization.Statistics.precision,
+      label: localization.Interpret.Statistics.precision,
       stat: truePosCount / (truePosCount + trueNegCount)
     },
     {
-      label: localization.Statistics.recall,
+      label: localization.Interpret.Statistics.recall,
       stat: truePosCount / (truePosCount + falseNegCount)
     },
     {
-      label: localization.Statistics.fpr,
+      label: localization.Interpret.Statistics.fpr,
       stat: falsePosCount / (trueNegCount + falsePosCount)
     },
     {
-      label: localization.Statistics.fnr,
+      label: localization.Interpret.Statistics.fnr,
       stat: falseNegCount / (truePosCount + falseNegCount)
     }
   ];
@@ -73,15 +73,15 @@ const generateRegressionStats: (
   }, 0);
   return [
     {
-      label: localization.Statistics.mse,
+      label: localization.Interpret.Statistics.mse,
       stat: residualSumOfSquares / count
     },
     {
-      label: localization.Statistics.rSquared,
+      label: localization.Interpret.Statistics.rSquared,
       stat: 1 - residualSumOfSquares / totalSumOfSquares
     },
     {
-      label: localization.Statistics.meanPrediction,
+      label: localization.Interpret.Statistics.meanPrediction,
       stat:
         predYs.reduce((prev, curr) => {
           return prev + curr;

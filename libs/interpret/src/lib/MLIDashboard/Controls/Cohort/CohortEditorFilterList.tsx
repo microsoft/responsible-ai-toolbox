@@ -26,15 +26,17 @@ export class CohortEditorFilterList extends React.Component<
   ICohortEditorFilterList
 > {
   private filterMethodLabels: { [key in FilterMethods]: string } = {
-    [FilterMethods.Equal]: localization.FilterOperations.equals,
-    [FilterMethods.GreaterThan]: localization.FilterOperations.greaterThan,
+    [FilterMethods.Equal]: localization.Interpret.FilterOperations.equals,
+    [FilterMethods.GreaterThan]:
+      localization.Interpret.FilterOperations.greaterThan,
     [FilterMethods.GreaterThanEqualTo]:
-      localization.FilterOperations.greaterThanEquals,
-    [FilterMethods.LessThan]: localization.FilterOperations.lessThan,
+      localization.Interpret.FilterOperations.greaterThanEquals,
+    [FilterMethods.LessThan]: localization.Interpret.FilterOperations.lessThan,
     [FilterMethods.LessThanEqualTo]:
-      localization.FilterOperations.lessThanEquals,
-    [FilterMethods.Includes]: localization.FilterOperations.includes,
-    [FilterMethods.InTheRangeOf]: localization.FilterOperations.inTheRangeOf
+      localization.Interpret.FilterOperations.lessThanEquals,
+    [FilterMethods.Includes]: localization.Interpret.FilterOperations.includes,
+    [FilterMethods.InTheRangeOf]:
+      localization.Interpret.FilterOperations.inTheRangeOf
   };
   public render(): React.ReactNode {
     return (
@@ -89,7 +91,7 @@ export class CohortEditorFilterList extends React.Component<
         const otherValues = selectedValues.slice(0, 3).toString();
         const countOtherValues = selectedValues.length - 3;
         stringArgs = localization.formatString(
-          localization.FilterOperations.overflowFilterArgs,
+          localization.Interpret.FilterOperations.overflowFilterArgs,
           otherValues,
           countOtherValues.toString()
         );
@@ -104,7 +106,7 @@ export class CohortEditorFilterList extends React.Component<
     if (filter.method === FilterMethods.InTheRangeOf) {
       // example: Age [30,40]
       label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
-        localization.FilterOperations.inTheRangeOf,
+        localization.Interpret.FilterOperations.inTheRangeOf,
         stringArgs
       )}`;
     } else {

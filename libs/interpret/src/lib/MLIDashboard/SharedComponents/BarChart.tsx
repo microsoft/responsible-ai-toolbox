@@ -39,13 +39,13 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       const result = [];
       result.push(
         localization.formatString(
-          localization.AggregateImportance.featureLabel,
+          localization.Interpret.AggregateImportance.featureLabel,
           featureNames[index] || "unknown feature"
         )
       );
       result.push(
         localization.formatString(
-          localization.AggregateImportance.importanceLabel,
+          localization.Interpret.AggregateImportance.importanceLabel,
           importanceVector[index].toLocaleString(undefined, {
             minimumFractionDigits: 3
           })
@@ -54,7 +54,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       if (rowDataArray && rowDataArray.length > index) {
         result.push(
           localization.formatString(
-            localization.AggregateImportance.valueLabel,
+            localization.Interpret.AggregateImportance.valueLabel,
             rowDataArray[index]
           )
         );
@@ -76,7 +76,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     result.push(localization.intercept);
     result.push(
       localization.formatString(
-        localization.AggregateImportance.importanceLabel,
+        localization.Interpret.AggregateImportance.importanceLabel,
         value.toLocaleString(undefined, { minimumFractionDigits: 3 })
       )
     );
@@ -144,7 +144,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         },
         yaxis: {
           automargin: true,
-          title: localization.featureImportance
+          title: localization.Interpret.featureImportance
         }
       } as any
     };

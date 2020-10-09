@@ -77,8 +77,8 @@ export class ExistingPredictionLabels extends React.Component<
         });
         const tooltipTitle =
           predictedProbs.length > WhatIfConstants.MAX_CLASSES_TOOLTIP
-            ? localization.WhatIfTab.tooltipTitleMany
-            : localization.WhatIfTab.tooltipTitleFew;
+            ? localization.Interpret.WhatIfTab.tooltipTitleMany
+            : localization.Interpret.WhatIfTab.tooltipTitleFew;
         const tooltipProps: ITooltipProps = {
           onRenderContent: () => (
             <div className={classNames.tooltipWrapper}>

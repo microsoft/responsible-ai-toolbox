@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
   ChoiceGroup,
@@ -13,7 +14,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
@@ -54,9 +54,12 @@ export class SidePanel extends React.Component<
   private chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Bar,
-      text: localization.FeatureImportanceWrapper.barText
+      text: localization.Interpret.FeatureImportanceWrapper.barText
     },
-    { key: ChartTypes.Box, text: localization.FeatureImportanceWrapper.boxText }
+    {
+      key: ChartTypes.Box,
+      text: localization.Interpret.FeatureImportanceWrapper.boxText
+    }
   ];
   public constructor(props: ISidePanelProps) {
     super(props);

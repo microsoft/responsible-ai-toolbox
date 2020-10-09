@@ -110,8 +110,8 @@ export class FeatureEditingTile extends React.Component<
     ) {
       errorMessage =
         this.props.rangeType === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
     }
     this.props.onEdit(this.props.index, val, errorMessage);
     this.setState({ errorMessage, value: newValue });

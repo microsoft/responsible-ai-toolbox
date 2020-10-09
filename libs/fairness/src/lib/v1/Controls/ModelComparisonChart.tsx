@@ -210,8 +210,8 @@ export class ModelComparisonChart extends React.PureComponent<
           this.props.performancePickerProps.selectedPerformanceKey
       ) ||
       this.props.performancePickerProps.performanceOptions[0];
-    const insights2 = localization.formatString(
-      localization.ModelComparison.insightsText2,
+    const insights2 = localization.Fairness.formatString(
+      localization.Fairness.ModelComparison.insightsText2,
       selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
@@ -221,8 +221,8 @@ export class ModelComparisonChart extends React.PureComponent<
     const metricTitleAppropriateCase = selectedMetric.alwaysUpperCase
       ? selectedMetric.title
       : selectedMetric.title.toLowerCase();
-    const insights3 = localization.formatString(
-      localization.ModelComparison.insightsText3,
+    const insights3 = localization.Fairness.formatString(
+      localization.Fairness.ModelComparison.insightsText3,
       metricTitleAppropriateCase,
       selectedMetric.isMinimization
         ? formattedMinPerformance
@@ -239,8 +239,8 @@ export class ModelComparisonChart extends React.PureComponent<
       )
     );
 
-    const insights4 = localization.formatString(
-      localization.ModelComparison.insightsText4,
+    const insights4 = localization.Fairness.formatString(
+      localization.Fairness.ModelComparison.insightsText4,
       metricTitleAppropriateCase,
       FormatMetrics.formatNumbers(
         this.state.performanceArray[minDisparityIndex],
@@ -249,13 +249,13 @@ export class ModelComparisonChart extends React.PureComponent<
       formattedMinDisparity
     );
 
-    const howToReadText = localization.formatString(
-      localization.ModelComparison.howToReadText,
+    const howToReadText = localization.Fairness.formatString(
+      localization.Fairness.ModelComparison.howToReadText,
       this.props.modelCount.toString(),
       metricTitleAppropriateCase,
       selectedMetric.isMinimization
-        ? localization.ModelComparison.lower
-        : localization.ModelComparison.higher
+        ? localization.Fairness.ModelComparison.lower
+        : localization.Fairness.ModelComparison.higher
     );
 
     const props = _.cloneDeep(this.plotlyProps);
@@ -272,9 +272,9 @@ export class ModelComparisonChart extends React.PureComponent<
     }
     if (props.layout?.yaxis) {
       props.layout.yaxis.title = this.state.disparityInOutcomes
-        ? localization.ModelComparison.disparityInOutcomes
-        : localization.formatString(
-            localization.ModelComparison.disparityInPerformance,
+        ? localization.Fairness.ModelComparison.disparityInOutcomes
+        : localization.Fairness.formatString(
+            localization.Fairness.ModelComparison.disparityInPerformance,
             metricTitleAppropriateCase
           );
     }
@@ -334,15 +334,15 @@ export class ModelComparisonChart extends React.PureComponent<
               {
                 key: "performance",
                 styles: { choiceFieldWrapper: styles.radioOptions },
-                text: localization.formatString(
-                  localization.ModelComparison.disparityInPerformance,
+                text: localization.Fairness.formatString(
+                  localization.Fairness.ModelComparison.disparityInPerformance,
                   metricTitleAppropriateCase
                 )
               },
               {
                 key: "outcomes",
                 styles: { choiceFieldWrapper: styles.radioOptions },
-                text: localization.ModelComparison.disparityInOutcomes
+                text: localization.Fairness.ModelComparison.disparityInOutcomes
               }
             ]}
             onChange={this.disparityChanged}

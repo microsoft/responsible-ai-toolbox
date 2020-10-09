@@ -29,11 +29,11 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
   public render(): React.ReactNode {
     let modelType: string;
     if (this.props.metadata.modelType === ModelTypes.Binary) {
-      modelType = localization.CohortBanner.binaryClassifier;
+      modelType = localization.Interpret.CohortBanner.binaryClassifier;
     } else if (this.props.metadata.modelType === ModelTypes.Multiclass) {
-      modelType = localization.CohortBanner.multiclassClassifier;
+      modelType = localization.Interpret.CohortBanner.multiclassClassifier;
     } else {
-      modelType = localization.CohortBanner.regressor;
+      modelType = localization.Interpret.CohortBanner.regressor;
     }
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
@@ -61,7 +61,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
           <Stack.Item>
             <Text variant={"xSmall"}>
               {localization.formatString(
-                localization.CohortBanner.datapoints,
+                localization.Interpret.CohortBanner.datapoints,
                 this.props.jointDataset.datasetRowCount
               )}
             </Text>
@@ -69,7 +69,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
           <Stack.Item>
             <Text variant={"xSmall"}>
               {localization.formatString(
-                localization.CohortBanner.features,
+                localization.Interpret.CohortBanner.features,
                 this.props.jointDataset.datasetFeatureCount
               )}
             </Text>
@@ -98,12 +98,15 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                         items: [
                           {
                             key: "item4",
-                            name: localization.CohortBanner.editCohort,
+                            name:
+                              localization.Interpret.CohortBanner.editCohort,
                             onClick: (): void => this.props.editCohort(index)
                           },
                           {
                             key: "item5",
-                            name: localization.CohortBanner.duplicateCohort,
+                            name:
+                              localization.Interpret.CohortBanner
+                                .duplicateCohort,
                             onClick: (): void => this.props.cloneAndEdit(index)
                           }
                         ]
@@ -115,7 +118,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                   <Stack.Item>
                     <Text variant={"xSmall"}>
                       {localization.formatString(
-                        localization.CohortBanner.datapoints,
+                        localization.Interpret.CohortBanner.datapoints,
                         cohort.filteredData.length
                       )}
                     </Text>
@@ -123,7 +126,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
                   <Stack.Item>
                     <Text variant={"xSmall"}>
                       {localization.formatString(
-                        localization.CohortBanner.filters,
+                        localization.Interpret.CohortBanner.filters,
                         cohort.filters.length
                       )}
                     </Text>

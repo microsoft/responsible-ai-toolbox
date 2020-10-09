@@ -135,12 +135,15 @@ export class ExplanationDashboard extends React.Component<
   ) => IDropdownOption[] = memoize(
     (explanationContext: IExplanationContext): IDropdownOption[] => {
       const result: IDropdownOption[] = [
-        { key: WeightVectors.AbsAvg, text: localization.absoluteAverage }
+        {
+          key: WeightVectors.AbsAvg,
+          text: localization.Interpret.absoluteAverage
+        }
       ];
       if (explanationContext.testDataset.predictedY) {
         result.push({
           key: WeightVectors.Predicted,
-          text: localization.predictedClass
+          text: localization.Interpret.predictedClass
         });
       }
       explanationContext.modelMetadata.classNames.forEach((name, index) => {
@@ -217,13 +220,13 @@ export class ExplanationDashboard extends React.Component<
     this.pivotItems = [];
     if (explanationContext.testDataset.dataset !== undefined) {
       this.pivotItems.push({
-        headerText: localization.dataExploration,
+        headerText: localization.Interpret.dataExploration,
         itemKey: ExplanationDashboard.globalTabKeys[0]
       });
     }
     if (explanationContext.globalExplanation !== undefined) {
       this.pivotItems.push({
-        headerText: localization.globalImportance,
+        headerText: localization.Interpret.globalImportance,
         itemKey: ExplanationDashboard.globalTabKeys[1]
       });
     }
@@ -232,25 +235,25 @@ export class ExplanationDashboard extends React.Component<
       explanationContext.testDataset.dataset !== undefined
     ) {
       this.pivotItems.push({
-        headerText: localization.explanationExploration,
+        headerText: localization.Interpret.explanationExploration,
         itemKey: ExplanationDashboard.globalTabKeys[2]
       });
     }
     if (explanationContext.localExplanation !== undefined) {
       this.pivotItems.push({
-        headerText: localization.summaryImportance,
+        headerText: localization.Interpret.summaryImportance,
         itemKey: ExplanationDashboard.globalTabKeys[3]
       });
     }
     if (explanationContext.ebmExplanation !== undefined) {
       this.pivotItems.push({
-        headerText: localization.summaryImportance,
+        headerText: localization.Interpret.summaryImportance,
         itemKey: ExplanationDashboard.globalTabKeys[4]
       });
     }
     if (explanationContext.customVis !== undefined) {
       this.pivotItems.push({
-        headerText: localization.summaryImportance,
+        headerText: localization.Interpret.summaryImportance,
         itemKey: ExplanationDashboard.globalTabKeys[5]
       });
     }
@@ -628,7 +631,7 @@ export class ExplanationDashboard extends React.Component<
       }
       featureNames = ExplanationDashboard.buildIndexedNames(
         featureLength,
-        localization.defaultFeatureNames
+        localization.Interpret.defaultFeatureNames
       );
       featureNamesAbridged = featureNames;
     }
@@ -637,7 +640,7 @@ export class ExplanationDashboard extends React.Component<
     if (!classNames || classNames.length !== classLength) {
       classNames = ExplanationDashboard.buildIndexedNames(
         classLength,
-        localization.defaultClassNames
+        localization.Interpret.defaultClassNames
       );
     }
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
