@@ -37,6 +37,7 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
         describeAxisConfigDialog(
           dataShape.defaultXAxis,
           dataShape.defaultYAxis,
+          !!dataShape.noY,
           false
         );
       }

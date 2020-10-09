@@ -34,6 +34,7 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
       describeAxisConfigDialog(
         dataShape.defaultXAxis,
         dataShape.defaultYAxis,
+        !!dataShape.noY,
         true
       );
     }
