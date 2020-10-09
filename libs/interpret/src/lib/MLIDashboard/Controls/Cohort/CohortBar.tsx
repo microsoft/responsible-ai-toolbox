@@ -3,7 +3,7 @@
 
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { Cohort } from "../../Cohort";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { JointDataset } from "../../JointDataset";

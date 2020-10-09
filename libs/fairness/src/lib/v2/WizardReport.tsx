@@ -25,7 +25,7 @@ import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
-import { localization } from "./../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { BarPlotlyProps } from "./BarPlotlyProps";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OverallTable } from "./Controls/OverallTable";

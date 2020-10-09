@@ -7,7 +7,7 @@ import {
 } from "office-ui-fabric-react/lib/Button";
 import React from "react";
 
-import { localization } from "../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 
 import { WizardFooterStyles } from "./WizardFooter.styles";
 

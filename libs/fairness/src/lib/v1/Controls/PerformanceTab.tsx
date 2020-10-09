@@ -9,7 +9,7 @@ import { DataSpecificationBlade } from "../../components/DataSpecificationBlade"
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { IPerformancePickerPropsV1 } from "../FairnessWizard";
 
 import { PerformanceTabStyles } from "./PerformanceTab.styles";

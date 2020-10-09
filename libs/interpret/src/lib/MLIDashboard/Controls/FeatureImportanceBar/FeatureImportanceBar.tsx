@@ -7,7 +7,7 @@ import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import { JointDataset } from "../../JointDataset";

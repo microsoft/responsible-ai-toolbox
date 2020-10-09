@@ -17,7 +17,7 @@ import {
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { Cohort } from "../../Cohort";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../JointDataset";

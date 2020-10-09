@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
@@ -17,8 +18,6 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "../Localization/localization";
 
 import { Cohort } from "./Cohort";
 import { CohortBar } from "./Controls/Cohort/CohortBar";

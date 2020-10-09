@@ -11,7 +11,7 @@ import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { Cohort } from "../Cohort";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationModelMetadata } from "../IExplanationContext";

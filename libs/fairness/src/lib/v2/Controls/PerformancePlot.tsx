@@ -7,7 +7,7 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { chartColors } from "../../util/chartColors";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";

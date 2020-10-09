@@ -18,7 +18,7 @@ import {
   PredictionTypes,
   IPreComputedData
 } from "../IFairnessProps";
-import { localization } from "../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IBinnedResponse } from "./IBinnedResponse";

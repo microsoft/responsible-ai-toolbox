@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ICategoricalRange,
@@ -21,7 +22,6 @@ import {
 import { Data } from "plotly.js";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";

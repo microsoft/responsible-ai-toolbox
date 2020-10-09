@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { v4 } from "uuid";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { FabricStyles } from "../../FabricStyles";
 
 import { labelWithCalloutStyles } from "./LabelWithCallout.styles";

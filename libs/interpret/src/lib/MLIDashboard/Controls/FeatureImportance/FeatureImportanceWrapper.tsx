@@ -5,7 +5,7 @@ import { SelectionContext } from "@responsible-ai/mlchartlib";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { IDashboardContext } from "../../ExplanationDashboard";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IBarChartConfig } from "../../SharedComponents/IBarChartConfig";

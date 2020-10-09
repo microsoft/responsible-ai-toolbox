@@ -20,7 +20,7 @@ import {
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { cohortKey } from "../../cohortKey";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";

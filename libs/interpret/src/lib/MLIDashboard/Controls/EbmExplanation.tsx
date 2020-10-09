@@ -12,7 +12,7 @@ import memoize from "memoize-one";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { FabricStyles } from "../FabricStyles";
 import {
   IExplanationContext,

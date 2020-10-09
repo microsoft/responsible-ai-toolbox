@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
   SelectionContext,
@@ -21,8 +22,6 @@ import {
   IPivotItemProps
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "../Localization/localization";
 
 import { EbmExplanation } from "./Controls/EbmExplanation";
 import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";

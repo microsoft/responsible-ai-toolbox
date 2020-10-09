@@ -14,7 +14,7 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { cohortKey } from "../../cohortKey";

@@ -7,7 +7,7 @@ import React from "react";
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { IParityPickerPropsV1 } from "../FairnessWizard";
 
 import { TileList, ITileProp } from "./TileList";

@@ -17,7 +17,7 @@ import {
   IDropdownOption
 } from "office-ui-fabric-react";
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { IDashboardContext } from "../../ExplanationDashboard";
 import {
   IExplanationContext,

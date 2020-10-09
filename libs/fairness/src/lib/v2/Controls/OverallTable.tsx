@@ -3,7 +3,7 @@
 
 import React from "react";
 
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 
 import { OverallTableStyles } from "./OverallTable.styles";
 
