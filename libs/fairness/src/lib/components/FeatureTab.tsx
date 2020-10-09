@@ -112,10 +112,10 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         </Modal>
         <Stack className={styles.main}>
           <Text variant={"mediumPlus"} className={styles.header} block>
-            {localization.Feature.header}
+            {localization.Fairness.Feature.header}
           </Text>
           <Text className={styles.textBody} block>
-            {localization.Feature.body}
+            {localization.Fairness.Feature.body}
           </Text>
           <DetailsList
             items={this.props.featureBins}
@@ -196,7 +196,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             iconProps={{ iconName: "Edit" }}
             onClick={this.editBins.bind(this, index)}
           >
-            {localization.Feature.editBinning}
+            {localization.Fairness.Feature.editBinning}
           </ActionButton>
         )}
       </>

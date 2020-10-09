@@ -23,13 +23,13 @@ export class WizardFooter extends React.PureComponent<IWizardFooterProps> {
       <div className={styles.frame}>
         <PrimaryButton
           className={styles.next}
-          text={localization.Footer.next}
+          text={localization.Fairness.Footer.next}
           onClick={this.props.onNext}
         />
         {!!this.props.onPrevious && (
           <DefaultButton
             className={styles.back}
-            text={localization.Footer.back}
+            text={localization.Fairness.Footer.back}
             onClick={this.props.onPrevious}
           />
         )}

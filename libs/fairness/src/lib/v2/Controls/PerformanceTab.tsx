@@ -32,7 +32,7 @@ export class PerformanceTab extends React.PureComponent<
       >
         <Stack className={styles.main}>
           <Text className={styles.header} block>
-            {localization.Performance.header}
+            {localization.Fairness.Performance.header}
           </Text>
           <Text className={styles.textBody} block>
             {localization.formatString(

@@ -89,8 +89,8 @@ export class WizardBuilder {
       featureNames = props.precomputedFeatureBins.map((binObject, index) => {
         return (
           binObject.featureBinName ||
-          localization.Fairness.formatString(
-            localization.defaultFeatureNames,
+          localization.formatString(
+            localization.Fairness.defaultFeatureNames,
             index
           )
         );
@@ -129,7 +129,7 @@ export class WizardBuilder {
       }
       featureNames =
         featureLength === 1
-          ? [localization.defaultSingleFeatureName]
+          ? [localization.Fairness.defaultSingleFeatureName]
           : this.buildIndexedNames(
               featureLength,
               localization.Fairness.defaultFeatureNames
@@ -171,7 +171,7 @@ export class WizardBuilder {
     baseString: string
   ): string[] {
     return [...new Array(length).keys()].map((i) =>
-      localization.Fairness.formatString(baseString, i.toString())
+      localization.formatString(baseString, i.toString())
     );
   }
 
@@ -226,7 +226,7 @@ export class WizardBuilder {
           key,
           title:
             customMetric?.name ||
-            localization.Fairness.formatString(
+            localization.formatString(
               localization.Fairness.defaultCustomMetricName,
               customMetrics.length
             )

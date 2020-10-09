@@ -20,12 +20,12 @@ export class DataSpecificationBlade extends React.PureComponent<
     return (
       <div className={styles.frame}>
         <Text variant={"small"} className={styles.title} block>
-          {localization.dataSpecifications}
+          {localization.Fairness.dataSpecifications}
         </Text>
         <Text variant={"small"} className={styles.text} block>
           {this.props.featureNames.length === 1
             ? localization.Fairness.singleAttributeCount
-            : localization.Fairness.formatString(
+            : localization.formatString(
                 localization.Fairness.attributesCount,
                 this.props.featureNames.length
               )}

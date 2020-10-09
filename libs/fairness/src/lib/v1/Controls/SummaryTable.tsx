@@ -55,12 +55,12 @@ export class SummaryTable extends React.PureComponent<ISummaryTableProps> {
                   <Stack horizontal>
                     {minIndexes.includes(index) && (
                       <Text variant={"xSmall"} className={styles.minMaxLabel}>
-                        {localization.Report.minTag}
+                        {localization.Fairness.Report.minTag}
                       </Text>
                     )}
                     {maxIndexes.includes(index) && (
                       <Text variant={"xSmall"} className={styles.minMaxLabel}>
-                        {localization.Report.maxTag}
+                        {localization.Fairness.Report.maxTag}
                       </Text>
                     )}
                   </Stack>

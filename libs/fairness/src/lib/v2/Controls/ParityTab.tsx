@@ -29,10 +29,10 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
         <StackItem grow={2}>
           <Stack className={styles.main}>
             <Text className={styles.header} block>
-              {localization.Performance.header}
+              {localization.Fairness.Performance.header}
             </Text>
             <Text className={styles.textBody} block>
-              {localization.Parity.body}
+              {localization.Fairness.Parity.body}
             </Text>
             <StackItem grow={2} className={styles.itemsList}>
               <TileList

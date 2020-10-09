@@ -68,7 +68,7 @@ export class PerformancePicker extends React.PureComponent<
           >
             <div>
               <DefaultButton onClick={this.onDismiss}>
-                {localization.close}
+                {localization.Fairness.close}
               </DefaultButton>
             </div>
           </Callout>
