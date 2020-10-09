@@ -30,6 +30,13 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
         expect(props.chart.Elements.length).greaterThan(0);
       });
     });
-    describeAxisConfigDialog(true);
+    if (dataShape.defaultXAxis && dataShape.defaultYAxis) {
+      describeAxisConfigDialog(
+        dataShape.defaultXAxis,
+        dataShape.defaultYAxis,
+        !!dataShape.noY,
+        true
+      );
+    }
   });
 }

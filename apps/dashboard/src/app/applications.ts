@@ -28,7 +28,7 @@ import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount"
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;
-  classDimension: number;
+  classDimension?: 1 | 2 | 3;
 }
 
 export interface IFairLearnDataSet {
@@ -69,10 +69,11 @@ export const applications: IApplications = <const>{
   },
   interpret: {
     datasets: {
-      automlMimicAdult: { classDimension: 3, data: automlMimicAdult },
+      automlMimicAdult: { data: automlMimicAdult },
       bostonData: { classDimension: 1, data: bostonData },
       bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },
       bostonDataNoDataset: { classDimension: 1, data: bostonDataNoDataset },
+      bostonDataNoPredict: { classDimension: undefined, data: bostonData },
       bostonDataNoY: { classDimension: 1, data: bostonDataNoY },
       breastCancerData: { classDimension: 2, data: breastCancerData },
       ebmData: { classDimension: 2, data: ebmData },

@@ -10,7 +10,6 @@ import {
   PivotItem,
   Pivot,
   PivotLinkSize,
-  mergeStyleSets,
   loadTheme,
   MessageBar,
   MessageBarType,
@@ -97,12 +96,6 @@ export class NewExplanationDashboard extends React.PureComponent<
 > {
   private static iconsInitialized = false;
   private static ROW_WARNING_SIZE = 6000;
-
-  private static readonly classNames = mergeStyleSets({
-    pivotWrapper: {
-      display: "contents"
-    }
-  });
 
   private static getClassLength: (
     props: IExplanationDashboardProps
@@ -192,7 +185,9 @@ export class NewExplanationDashboard extends React.PureComponent<
       itemKey: GlobalTabKeys.ExplanationTab
     });
     this.pivotItems.push({
-      headerText: localization.individualAndWhatIf,
+      headerText: this.props.requestPredictions
+        ? localization.individualAndWhatIf
+        : localization.individualImportance,
       itemKey: GlobalTabKeys.WhatIfTab
     });
   }
@@ -459,13 +454,12 @@ export class NewExplanationDashboard extends React.PureComponent<
             />
           </Stack.Item>
           <Stack.Item>
-            <div className={NewExplanationDashboard.classNames.pivotWrapper}>
+            <div>
               <Pivot
                 selectedKey={this.state.activeGlobalTab}
                 onLinkClick={this.handleGlobalTabClick}
                 linkSize={PivotLinkSize.normal}
                 headersOnly={true}
-                styles={{ root: classNames.pivotLabelWrapper }}
                 id="DashboardPivot"
               >
                 {this.pivotItems.map((props) => (
