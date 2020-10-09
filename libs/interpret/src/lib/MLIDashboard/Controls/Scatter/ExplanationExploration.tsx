@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -13,7 +14,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ModelTypes } from "../../IExplanationContext";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
@@ -94,7 +94,7 @@ export class ExplanationExploration extends React.PureComponent<
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onXSelected}
-                label={localization.ExplanationScatter.xValue}
+                label={localization.Interpret.ExplanationScatter.xValue}
                 ariaLabel="x picker"
                 selectedKey={this.plotlyProps.data[0].xAccessor}
                 useComboBoxAsMenuWidth={true}
@@ -105,7 +105,7 @@ export class ExplanationExploration extends React.PureComponent<
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onColorSelected}
-                label={localization.ExplanationScatter.colorValue}
+                label={localization.Interpret.ExplanationScatter.colorValue}
                 ariaLabel="color picker"
                 selectedKey={initialColorOption}
                 useComboBoxAsMenuWidth={true}
@@ -118,7 +118,7 @@ export class ExplanationExploration extends React.PureComponent<
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onYSelected}
-                label={localization.ExplanationScatter.yValue}
+                label={localization.Interpret.ExplanationScatter.yValue}
                 ariaLabel="y picker"
                 selectedKey={this.plotlyProps.data[0].yAccessor}
                 useComboBoxAsMenuWidth={true}
@@ -129,12 +129,12 @@ export class ExplanationExploration extends React.PureComponent<
               <div className={scatterStyles.selector}>
                 <div className={scatterStyles.selectorLabel}>
                   <div className={scatterStyles.labelText}>
-                    {localization.CrossClass.label}
+                    {localization.Interpret.CrossClass.label}
                   </div>
                   <IconButton
                     id={this.iconId}
                     iconProps={{ iconName: "Info" }}
-                    title={localization.CrossClass.info}
+                    title={localization.Interpret.CrossClass.info}
                     onClick={this.onIconClick}
                     styles={{
                       root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
@@ -162,18 +162,22 @@ export class ExplanationExploration extends React.PureComponent<
             >
               <div className={scatterStyles.calloutInfo}>
                 <div>
-                  <span>{localization.CrossClass.overviewInfo}</span>
+                  <span>{localization.Interpret.CrossClass.overviewInfo}</span>
                   <ul>
-                    <li>{localization.CrossClass.absoluteValInfo}</li>
-                    <li>{localization.CrossClass.predictedClassInfo}</li>
-                    <li>{localization.CrossClass.enumeratedClassInfo}</li>
+                    <li>{localization.Interpret.CrossClass.absoluteValInfo}</li>
+                    <li>
+                      {localization.Interpret.CrossClass.predictedClassInfo}
+                    </li>
+                    <li>
+                      {localization.Interpret.CrossClass.enumeratedClassInfo}
+                    </li>
                   </ul>
                 </div>
                 <DefaultButton
                   onClick={this.onDismiss}
                   className={scatterStyles.calloutButton}
                 >
-                  {localization.CrossClass.close}
+                  {localization.Interpret.CrossClass.close}
                 </DefaultButton>
               </div>
             </Callout>

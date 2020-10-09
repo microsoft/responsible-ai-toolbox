@@ -72,8 +72,10 @@ export class SidePanel extends React.Component<
     const classNames = globalTabStyles();
     return (
       <Stack className={classNames.legendAndSort}>
-        <Label>{localization.GlobalTab.datasetCohorts}</Label>
-        <Text variant={"small"}>{localization.GlobalTab.legendHelpText}</Text>
+        <Label>{localization.Interpret.GlobalTab.datasetCohorts}</Label>
+        <Text variant={"small"}>
+          {localization.Interpret.GlobalTab.legendHelpText}
+        </Text>
         <InteractiveLegend
           items={this.props.cohortSeries.map((row, rowIndex) => {
             return {
@@ -85,7 +87,7 @@ export class SidePanel extends React.Component<
           })}
         />
         <Dropdown
-          label={localization.GlobalTab.sortBy}
+          label={localization.Interpret.GlobalTab.sortBy}
           selectedKey={this.props.sortingSeriesIndex}
           options={this.props.cohortSeries.map((row, rowIndex) => ({
             key: rowIndex,
@@ -94,7 +96,7 @@ export class SidePanel extends React.Component<
           onChange={this.onSortChange}
         />
         <ChoiceGroup
-          label={localization.DatasetExplorer.chartType}
+          label={localization.Interpret.DatasetExplorer.chartType}
           selectedKey={this.props.chartType}
           options={this.chartOptions}
           onChange={this.onChartTypeChange}
@@ -104,16 +106,22 @@ export class SidePanel extends React.Component<
           this.state.weightOptions && (
             <div>
               <LabelWithCallout
-                calloutTitle={localization.CrossClass.crossClassWeights}
-                label={localization.GlobalTab.weightOptions}
+                calloutTitle={
+                  localization.Interpret.CrossClass.crossClassWeights
+                }
+                label={localization.Interpret.GlobalTab.weightOptions}
               >
-                <Text>{localization.CrossClass.overviewInfo}</Text>
+                <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
                 <ul>
                   <li>
-                    <Text>{localization.CrossClass.absoluteValInfo}</Text>
+                    <Text>
+                      {localization.Interpret.CrossClass.absoluteValInfo}
+                    </Text>
                   </li>
                   <li>
-                    <Text>{localization.CrossClass.enumeratedClassInfo}</Text>
+                    <Text>
+                      {localization.Interpret.CrossClass.enumeratedClassInfo}
+                    </Text>
                   </li>
                 </ul>
               </LabelWithCallout>

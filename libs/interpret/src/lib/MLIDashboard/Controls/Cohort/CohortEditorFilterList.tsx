@@ -41,7 +41,7 @@ export class CohortEditorFilterList extends React.Component<
   public render(): React.ReactNode {
     return (
       <>
-        <Label>{localization.CohortEditor.addedFilters}</Label>
+        <Label>{localization.Interpret.CohortEditor.addedFilters}</Label>
         {this.props.filters.length > 0 ? (
           this.props.filters.map((filter, index) => {
             return (
@@ -61,7 +61,7 @@ export class CohortEditorFilterList extends React.Component<
         ) : (
           <div>
             <Text variant={"smallPlus"}>
-              {localization.CohortEditor.noAddedFilters}
+              {localization.Interpret.CohortEditor.noAddedFilters}
             </Text>
           </div>
         )}
@@ -105,13 +105,17 @@ export class CohortEditorFilterList extends React.Component<
 
     if (filter.method === FilterMethods.InTheRangeOf) {
       // example: Age [30,40]
-      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
+      label = `${
+        selectedFilter.abbridgedLabel
+      } ${localization.Interpret.formatString(
         localization.Interpret.FilterOperations.inTheRangeOf,
         stringArgs
       )}`;
     } else {
       // example: Age < 30
-      label = `${selectedFilter.abbridgedLabel} ${localization.formatString(
+      label = `${
+        selectedFilter.abbridgedLabel
+      } ${localization.Interpret.formatString(
         this.filterMethodLabels[filter.method],
         stringArgs
       )}`;

@@ -73,7 +73,7 @@ export class BinningControl extends React.PureComponent<
           <ComboBox
             options={this.props.featureOptions}
             onChange={this.onFeatureSelected}
-            label={localization.IcePlot.featurePickerLabel}
+            label={localization.Interpret.IcePlot.featurePickerLabel}
             ariaLabel="feature picker"
             selectedKey={this.state ? this.state.featureIndex : undefined}
             useComboBoxAsMenuWidth={true}
@@ -96,21 +96,21 @@ export class BinningControl extends React.PureComponent<
             {this.state.type !== RangeTypes.Categorical && (
               <div className={binningControlStyles.featurePicker}>
                 <TextField
-                  label={localization.IcePlot.minimumInputLabel}
+                  label={localization.Interpret.IcePlot.minimumInputLabel}
                   styles={FabricStyles.textFieldStyle}
                   value={this.state.min}
                   onChange={this.onMinRangeChanged}
                   errorMessage={this.state.minErrorMessage}
                 />
                 <TextField
-                  label={localization.IcePlot.maximumInputLabel}
+                  label={localization.Interpret.IcePlot.maximumInputLabel}
                   styles={FabricStyles.textFieldStyle}
                   value={this.state.max}
                   onChange={this.onMaxRangeChanged}
                   errorMessage={this.state.maxErrorMessage}
                 />
                 <TextField
-                  label={localization.IcePlot.stepInputLabel}
+                  label={localization.Interpret.IcePlot.stepInputLabel}
                   styles={FabricStyles.textFieldStyle}
                   value={this.state.steps}
                   onChange={this.onStepsRangeChanged}

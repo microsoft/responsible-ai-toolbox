@@ -96,8 +96,10 @@ export class CohortEditor extends React.PureComponent<
           <Stack.Item>
             <TextField
               value={this.state.cohortName}
-              label={localization.CohortEditor.cohortNameLabel}
-              placeholder={localization.CohortEditor.cohortNamePlaceholder}
+              label={localization.Interpret.CohortEditor.cohortNameLabel}
+              placeholder={
+                localization.Interpret.CohortEditor.cohortNamePlaceholder
+              }
               onGetErrorMessage={this._getErrorMessage}
               validateOnLoad={false}
               onChange={this.setCohortName}
@@ -106,7 +108,7 @@ export class CohortEditor extends React.PureComponent<
           <Stack.Item>
             <ChoiceGroup
               options={this.leftItems}
-              label={localization.CohortEditor.selectFilter}
+              label={localization.Interpret.CohortEditor.selectFilter}
               onChange={this.onFilterCategoryChange}
               selectedKey={this.state.selectedFilterCategory}
             />
@@ -114,7 +116,7 @@ export class CohortEditor extends React.PureComponent<
           <Stack.Item>
             {!openedFilter ? (
               <Text variant={"medium"}>
-                {localization.CohortEditor.defaultFilterState}
+                {localization.Interpret.CohortEditor.defaultFilterState}
               </Text>
             ) : (
               <CohortEditorFilter
@@ -155,14 +157,14 @@ export class CohortEditor extends React.PureComponent<
             onClick={this.deleteCohort}
             className={styles.deleteCohort}
           >
-            {localization.CohortEditor.delete}
+            {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
         )}
         <PrimaryButton onClick={this.saveCohort}>
-          {localization.CohortEditor.save}
+          {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton onClick={this.props.onCancel}>
-          {localization.CohortEditor.cancel}
+          {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
     );

@@ -108,7 +108,7 @@ export class PerturbationExploration extends React.Component<
         )}
         {this.state.abortController && !hasErrors && (
           <div className={perturbationExplorationStyles.loadingMessage}>
-            {localization.PerturbationExploration.loadingMessage}
+            {localization.Interpret.PerturbationExploration.loadingMessage}
           </div>
         )}
         {this.state.errorMessage && (
@@ -119,7 +119,7 @@ export class PerturbationExploration extends React.Component<
         )}
         {hasErrors && (
           <div className={perturbationExplorationStyles.loadingMessage}>
-            {localization.IcePlot.topLevelErrorMessage}
+            {localization.Interpret.IcePlot.topLevelErrorMessage}
           </div>
         )}
         {!hasErrors &&
@@ -127,7 +127,10 @@ export class PerturbationExploration extends React.Component<
           this.state.abortController === undefined && (
             <div className={perturbationExplorationStyles.labelGroup}>
               <div className={perturbationExplorationStyles.labelGroupLabel}>
-                {localization.PerturbationExploration.perturbationLabel}
+                {
+                  localization.Interpret.PerturbationExploration
+                    .perturbationLabel
+                }
               </div>
               <div className={perturbationExplorationStyles.flexFull}>
                 <PredictionLabel

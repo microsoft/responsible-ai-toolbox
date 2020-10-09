@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -20,7 +21,6 @@ import {
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { cohortKey } from "../../cohortKey";
 import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
@@ -154,7 +154,7 @@ export class AxisConfigDialog extends React.PureComponent<
         <Stack tokens={{ childrenGap: "l1" }}>
           <Stack.Item>
             <ChoiceGroup
-              label={localization.AxisConfigDialog.selectFilter}
+              label={localization.Interpret.AxisConfigDialog.selectFilter}
               options={this.leftItems.map((i) => ({
                 key: i.key,
                 text: i.title
@@ -165,12 +165,16 @@ export class AxisConfigDialog extends React.PureComponent<
           </Stack.Item>
           {this.state.selectedColumn.property === cohortKey && (
             <Stack.Item>
-              <Text>{localization.AxisConfigDialog.groupByCohort}</Text>
+              <Text>
+                {localization.Interpret.AxisConfigDialog.groupByCohort}
+              </Text>
             </Stack.Item>
           )}
           {this.state.selectedColumn.property === ColumnCategories.None && (
             <Stack.Item>
-              <Text>{localization.AxisConfigDialog.countHelperText}</Text>
+              <Text>
+                {localization.Interpret.AxisConfigDialog.countHelperText}
+              </Text>
             </Stack.Item>
           )}
           {this.state.selectedColumn.property !== cohortKey &&
@@ -180,7 +184,9 @@ export class AxisConfigDialog extends React.PureComponent<
                   <ComboBox
                     options={this.dataArray}
                     onChange={this.setSelectedProperty}
-                    label={localization.AxisConfigDialog.selectFeature}
+                    label={
+                      localization.Interpret.AxisConfigDialog.selectFeature
+                    }
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
@@ -188,7 +194,7 @@ export class AxisConfigDialog extends React.PureComponent<
                   <ComboBox
                     options={this.classArray}
                     onChange={this.setSelectedProperty}
-                    label={localization.AxisConfigDialog.selectClass}
+                    label={localization.Interpret.AxisConfigDialog.selectClass}
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
@@ -196,7 +202,9 @@ export class AxisConfigDialog extends React.PureComponent<
                   RangeTypes.Integer && (
                   <Checkbox
                     key={this.state.selectedColumn.property}
-                    label={localization.AxisConfigDialog.TreatAsCategorical}
+                    label={
+                      localization.Interpret.AxisConfigDialog.TreatAsCategorical
+                    }
                     checked={selectedMeta.treatAsCategorical}
                     onChange={this.setAsCategorical}
                   />
@@ -204,7 +212,7 @@ export class AxisConfigDialog extends React.PureComponent<
                 {selectedMeta.treatAsCategorical ? (
                   <>
                     <Text variant={"small"}>
-                      {`${localization.formatString(
+                      {`${localization.Interpret.formatString(
                         localization.Interpret.Filters.uniqueValues,
                         selectedMeta.sortedCategoricalValues?.length
                       )}`}
@@ -212,7 +220,9 @@ export class AxisConfigDialog extends React.PureComponent<
                     {this.props.canDither && (
                       <Checkbox
                         key={this.state.selectedColumn.property}
-                        label={localization.AxisConfigDialog.ditherLabel}
+                        label={
+                          localization.Interpret.AxisConfigDialog.ditherLabel
+                        }
                         checked={this.state.selectedColumn.options.dither}
                         onChange={this.ditherChecked}
                       />
@@ -221,13 +231,13 @@ export class AxisConfigDialog extends React.PureComponent<
                 ) : (
                   <>
                     <Text variant={"small"} nowrap block>
-                      {localization.formatString(
+                      {localization.Interpret.formatString(
                         localization.Interpret.Filters.min,
                         minVal
                       )}
                     </Text>
                     <Text variant={"small"} nowrap block>
-                      {localization.formatString(
+                      {localization.Interpret.formatString(
                         localization.Interpret.Filters.max,
                         maxVal
                       )}
@@ -235,7 +245,7 @@ export class AxisConfigDialog extends React.PureComponent<
                     {this.props.canBin && !this.props.mustBin && (
                       <Checkbox
                         key={this.state.selectedColumn.property}
-                        label={localization.AxisConfigDialog.binLabel}
+                        label={localization.Interpret.AxisConfigDialog.binLabel}
                         checked={this.state.selectedColumn.options.bin}
                         onChange={this.shouldBinClicked}
                       />
@@ -245,7 +255,9 @@ export class AxisConfigDialog extends React.PureComponent<
                       this.state.binCount !== undefined && (
                         <SpinButton
                           labelPosition={Position.top}
-                          label={localization.AxisConfigDialog.numOfBins}
+                          label={
+                            localization.Interpret.AxisConfigDialog.numOfBins
+                          }
                           min={AxisConfigDialog.MIN_HIST_COLS}
                           max={AxisConfigDialog.MAX_HIST_COLS}
                           value={this.state.binCount.toString()}
@@ -273,7 +285,9 @@ export class AxisConfigDialog extends React.PureComponent<
                       this.props.canDither && (
                         <Checkbox
                           key={this.state.selectedColumn.property}
-                          label={localization.AxisConfigDialog.ditherLabel}
+                          label={
+                            localization.Interpret.AxisConfigDialog.ditherLabel
+                          }
                           checked={this.state.selectedColumn.options.dither}
                           onChange={this.ditherChecked}
                         />
@@ -291,10 +305,10 @@ export class AxisConfigDialog extends React.PureComponent<
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
         <PrimaryButton onClick={this.saveState}>
-          {localization.AxisConfigDialog.select}
+          {localization.Interpret.AxisConfigDialog.select}
         </PrimaryButton>
         <DefaultButton onClick={this.props.onCancel}>
-          {localization.CohortEditor.cancel}
+          {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
     );

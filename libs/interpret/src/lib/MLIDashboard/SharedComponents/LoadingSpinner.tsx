@@ -13,7 +13,7 @@ export class LoadingSpinner extends React.PureComponent {
       <Spinner
         className={loadingSpinnerStyles.explanationSpinner}
         size={SpinnerSize.large}
-        label={localization.BarChart.calculatingExplanation}
+        label={localization.Interpret.BarChart.calculatingExplanation}
       />
     );
   }

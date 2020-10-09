@@ -117,25 +117,25 @@ export class CustomPredictionLabels extends React.Component<
             <div className={classNames.tooltipWrapper}>
               <div className={classNames.tooltipTitle}>
                 <Text variant="large">
-                  {localization.WhatIfTab.whatIfTooltipTitle}
+                  {localization.Interpret.WhatIfTab.whatIfTooltipTitle}
                 </Text>
               </div>
               <div className={classNames.tooltipTable}>
                 <div className={classNames.tooltipColumn}>
                   <Text className={classNames.boldText}>
-                    {localization.WhatIfTab.classPickerLabel}
+                    {localization.Interpret.WhatIfTab.classPickerLabel}
                   </Text>
                   {tooltipClasses}
                 </div>
                 <div className={classNames.tooltipColumn}>
                   <Text block className={classNames.boldText}>
-                    {localization.WhatIfTab.probabilityLabel}
+                    {localization.Interpret.WhatIfTab.probabilityLabel}
                   </Text>
                   {tooltipProbs}
                 </div>
                 <div className={classNames.tooltipColumn}>
                   <Text block className={classNames.boldText}>
-                    {localization.WhatIfTab.deltaLabel}
+                    {localization.Interpret.WhatIfTab.deltaLabel}
                   </Text>
                   {tooltipDeltas}
                 </div>
@@ -160,13 +160,13 @@ export class CustomPredictionLabels extends React.Component<
             <div>
               <div>
                 <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.newPredictedClass}
+                  {localization.Interpret.WhatIfTab.newPredictedClass}
                 </Text>
                 <Text variant="small">{predictedClassName}</Text>
               </div>
               <div>
                 <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.newProbability}
+                  {localization.Interpret.WhatIfTab.newProbability}
                 </Text>
                 <Text variant="small">
                   {predictedProb.toLocaleString(undefined, {
@@ -190,10 +190,14 @@ export class CustomPredictionLabels extends React.Component<
           </div>
           <div>
             <div>
-              <Text variant="small">{localization.WhatIfTab.loading}</Text>
+              <Text variant="small">
+                {localization.Interpret.WhatIfTab.loading}
+              </Text>
             </div>
             <div>
-              <Text variant="small">{localization.WhatIfTab.loading}</Text>
+              <Text variant="small">
+                {localization.Interpret.WhatIfTab.loading}
+              </Text>
             </div>
           </div>
         </div>
@@ -211,7 +215,7 @@ export class CustomPredictionLabels extends React.Component<
       <div className={classNames.customPredictBlock}>
         <div>
           <Text className={classNames.boldText} variant="small">
-            {localization.WhatIfTab.newPredictedValue}
+            {localization.Interpret.WhatIfTab.newPredictedValue}
           </Text>
           <Text variant="small">{predictedValueString}</Text>
         </div>

@@ -192,7 +192,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       const result = [];
       if (modelType !== ModelTypes.Regression) {
         result.push(
-          localization.formatString(localization.BarChart.classLabel, className)
+          localization.formatString(
+            localization.Interpret.BarChart.classLabel,
+            className
+          )
         );
       }
       if (!Number.isNaN(+xValue)) {
@@ -286,7 +289,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
               <ComboBox
                 options={this.featuresOption}
                 onChange={this.onFeatureSelected}
-                label={localization.IcePlot.featurePickerLabel}
+                label={localization.Interpret.IcePlot.featurePickerLabel}
                 ariaLabel="feature picker"
                 selectedKey={
                   this.state.rangeView
@@ -315,21 +318,21 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 {this.state.rangeView.type !== RangeTypes.Categorical && (
                   <div className={iCEPlotStyles.parameterSet}>
                     <TextField
-                      label={localization.IcePlot.minimumInputLabel}
+                      label={localization.Interpret.IcePlot.minimumInputLabel}
                       styles={FabricStyles.textFieldStyle}
                       value={this.state.rangeView.min?.toString()}
                       onChange={this.onMinRangeChanged}
                       errorMessage={this.state.rangeView.minErrorMessage}
                     />
                     <TextField
-                      label={localization.IcePlot.maximumInputLabel}
+                      label={localization.Interpret.IcePlot.maximumInputLabel}
                       styles={FabricStyles.textFieldStyle}
                       value={this.state.rangeView.max?.toString()}
                       onChange={this.onMaxRangeChanged}
                       errorMessage={this.state.rangeView.maxErrorMessage}
                     />
                     <TextField
-                      label={localization.IcePlot.stepInputLabel}
+                      label={localization.Interpret.IcePlot.stepInputLabel}
                       styles={FabricStyles.textFieldStyle}
                       value={this.state.rangeView.steps?.toString()}
                       onChange={this.onStepsRangeChanged}
@@ -343,7 +346,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         </div>
         {this.state.abortController !== undefined && (
           <div className={iCEPlotStyles.loading}>
-            {localization.IcePlot.loadingMessage}
+            {localization.Interpret.IcePlot.loadingMessage}
           </div>
         )}
         {this.state.errorMessage && (
@@ -351,9 +354,11 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         )}
         {plotlyProps === undefined &&
           this.state.abortController === undefined && (
-            <div>{localization.IcePlot.submitPrompt}</div>
+            <div>{localization.Interpret.IcePlot.submitPrompt}</div>
           )}
-        {hasError && <div>{localization.IcePlot.topLevelErrorMessage}</div>}
+        {hasError && (
+          <div>{localization.Interpret.IcePlot.topLevelErrorMessage}</div>
+        )}
         {plotlyProps !== undefined &&
           this.state.abortController === undefined &&
           !hasError && (

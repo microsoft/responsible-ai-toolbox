@@ -61,7 +61,10 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       }
       if (className) {
         result.push(
-          localization.formatString(localization.BarChart.classLabel, className)
+          localization.formatString(
+            localization.Interpret.BarChart.classLabel,
+            className
+          )
         );
       }
       return result.join("<br>");
@@ -73,7 +76,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     className?: string
   ): string {
     const result = [];
-    result.push(localization.intercept);
+    result.push(localization.Interpret.intercept);
     result.push(
       localization.formatString(
         localization.Interpret.AggregateImportance.importanceLabel,
@@ -82,7 +85,10 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     );
     if (className) {
       result.push(
-        localization.formatString(localization.BarChart.classLabel, className)
+        localization.formatString(
+          localization.Interpret.BarChart.classLabel,
+          className
+        )
       );
     }
     return result.join("<br>");
@@ -106,7 +112,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     }
     return (
       <div className={barChartStyles.centered}>
-        {localization.BarChart.noData}
+        {localization.Interpret.BarChart.noData}
       </div>
     );
   }
@@ -201,7 +207,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     );
     const tickvals = sortedIndexVector.map((_, index) => index);
     if (this.props.intercept) {
-      ticktext.unshift(localization.intercept);
+      ticktext.unshift(localization.Interpret.intercept);
       tickvals.unshift(-1);
     }
     _.set(baseSeries, "layout.xaxis.ticktext", ticktext);

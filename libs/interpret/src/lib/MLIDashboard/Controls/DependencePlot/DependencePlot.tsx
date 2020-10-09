@@ -84,7 +84,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         <div className={classNames.secondaryChartPlacolderBox}>
           <div className={classNames.secondaryChartPlacolderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.DependencePlot.placeholder}
+              {localization.Interpret.DependencePlot.placeholder}
             </Text>
           </div>
         </div>
@@ -106,7 +106,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
             <div className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
                 <Text variant={"medium"} block>
-                  {localization.DependencePlot.featureImportanceOf}
+                  {localization.Interpret.DependencePlot.featureImportanceOf}
                 </Text>
                 <Text variant={"medium"}>{yAxisLabel}</Text>
               </div>

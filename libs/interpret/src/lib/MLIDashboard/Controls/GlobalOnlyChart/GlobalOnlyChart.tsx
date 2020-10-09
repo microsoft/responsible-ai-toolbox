@@ -87,12 +87,12 @@ export class GlobalOnlyChart extends React.PureComponent<
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
-            {localization.GlobalOnlyChart.helperText}
+            {localization.Interpret.GlobalOnlyChart.helperText}
           </Text>
         </div>
         <div className={classNames.globalChartControls}>
           <Text variant="medium" className={classNames.sliderLabel}>
-            {localization.formatString(
+            {localization.Interpret.formatString(
               localization.Interpret.GlobalTab.topAtoB,
               +1,
               +this.state.topK
@@ -100,7 +100,7 @@ export class GlobalOnlyChart extends React.PureComponent<
           </Text>
           <Slider
             className={classNames.startingK}
-            ariaLabel={localization.AggregateImportance.topKFeatures}
+            ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
             max={this.featureDimension}
             min={1}
             step={1}

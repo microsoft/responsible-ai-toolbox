@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -14,7 +15,6 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { cohortKey } from "../../cohortKey";
@@ -177,7 +177,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         const x = new Array(rawY.length).fill(1);
         plotlyProps.data[0].text = rawY.map((index) => yLabels?.[index] || "");
         plotlyProps.data[0].hoverinfo = "all";
-        plotlyProps.data[0].hovertemplate = ` ${yAxisName}:%{y}<br> ${localization.Charts.count}: %{x}<br>`;
+        plotlyProps.data[0].hovertemplate = ` ${yAxisName}:%{y}<br> ${localization.Interpret.Charts.count}: %{x}<br>`;
         plotlyProps.data[0].y = rawY;
         plotlyProps.data[0].x = x;
         plotlyProps.data[0].marker = {};
@@ -226,7 +226,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         <div className={classNames.missingParametersPlaceholder}>
           <div className={classNames.missingParametersPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.ModelPerformance.missingParameters}
+              {localization.Interpret.ModelPerformance.missingParameters}
             </Text>
           </div>
         </div>
@@ -254,13 +254,13 @@ export class ModelPerformanceTab extends React.PureComponent<
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
-            {localization.ModelPerformance.helperText}
+            {localization.Interpret.ModelPerformance.helperText}
           </Text>
         </div>
         {cohortOptions && (
           <div className={classNames.cohortPickerWrapper}>
             <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
-              {localization.ModelPerformance.cohortPickerLabel}
+              {localization.Interpret.ModelPerformance.cohortPickerLabel}
             </Text>
             <Dropdown
               styles={{ dropdown: { width: 150 } }}
@@ -345,7 +345,10 @@ export class ModelPerformanceTab extends React.PureComponent<
                             variant="large"
                             className={classNames.faintText}
                           >
-                            {localization.ModelPerformance.missingTrueY}
+                            {
+                              localization.Interpret.ModelPerformance
+                                .missingTrueY
+                            }
                           </Text>
                         </div>
                       </div>
@@ -357,7 +360,7 @@ export class ModelPerformanceTab extends React.PureComponent<
                             {stats.map((labeledStat, statIndex) => {
                               return (
                                 <Text block key={statIndex}>
-                                  {localization.formatString(
+                                  {localization.Interpret.formatString(
                                     labeledStat.label,
                                     labeledStat.stat.toLocaleString(undefined, {
                                       maximumFractionDigits: 3

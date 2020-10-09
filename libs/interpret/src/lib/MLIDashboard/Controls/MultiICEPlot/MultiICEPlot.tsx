@@ -250,7 +250,7 @@ export class MultiICEPlot extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "68px" }
                   }}
-                  label={localization.WhatIfTab.minLabel}
+                  label={localization.Interpret.WhatIfTab.minLabel}
                   value={this.state.rangeView.min?.toString()}
                   onIncrement={this.onMinRangeChanged.bind(this, 1)}
                   onDecrement={this.onMinRangeChanged.bind(this, -1)}
@@ -270,7 +270,7 @@ export class MultiICEPlot extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "68px" }
                   }}
-                  label={localization.WhatIfTab.maxLabel}
+                  label={localization.Interpret.WhatIfTab.maxLabel}
                   value={this.state.rangeView.max?.toString()}
                   onIncrement={this.onMaxRangeChanged.bind(this, 1)}
                   onDecrement={this.onMaxRangeChanged.bind(this, -1)}
@@ -290,7 +290,7 @@ export class MultiICEPlot extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "68px" }
                   }}
-                  label={localization.WhatIfTab.stepsLabel}
+                  label={localization.Interpret.WhatIfTab.stepsLabel}
                   value={this.state.rangeView.steps?.toString()}
                   onIncrement={this.onStepsRangeChanged.bind(this, 1)}
                   onDecrement={this.onStepsRangeChanged.bind(this, -1)}
@@ -302,7 +302,7 @@ export class MultiICEPlot extends React.PureComponent<
         )}
         {hasOutgoingRequest && (
           <div className={classNames.placeholder}>
-            <Text>{localization.IcePlot.loadingMessage}</Text>
+            <Text>{localization.Interpret.IcePlot.loadingMessage}</Text>
           </div>
         )}
         {this.state.errorMessage && (
@@ -312,12 +312,12 @@ export class MultiICEPlot extends React.PureComponent<
         )}
         {plotlyProps === undefined && !hasOutgoingRequest && (
           <div className={classNames.placeholder}>
-            <Text>{localization.IcePlot.submitPrompt}</Text>
+            <Text>{localization.Interpret.IcePlot.submitPrompt}</Text>
           </div>
         )}
         {hasError && (
           <div className={classNames.placeholder}>
-            <Text>{localization.IcePlot.topLevelErrorMessage}</Text>
+            <Text>{localization.Interpret.IcePlot.topLevelErrorMessage}</Text>
           </div>
         )}
         {plotlyProps !== undefined && !hasOutgoingRequest && !hasError && (

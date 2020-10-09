@@ -18,7 +18,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "rootDir": ".",
+    "rootDirs": [".", "../../libs/localization/src"],
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,

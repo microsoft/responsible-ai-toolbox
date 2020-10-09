@@ -847,7 +847,7 @@ export class ExplanationDashboard extends React.Component<
               {this.state.selectedRow === undefined && (
                 <div className={explanationDashboardStyles.localPlaceholder}>
                   <div className={explanationDashboardStyles.placeholderText}>
-                    {localization.selectPoint}
+                    {localization.Interpret.selectPoint}
                   </div>
                 </div>
               )}
@@ -866,7 +866,7 @@ export class ExplanationDashboard extends React.Component<
                     styles={FabricStyles.verticalTabsStyle}
                   >
                     <PivotItem
-                      headerText={localization.localFeatureImportance}
+                      headerText={localization.Interpret.localFeatureImportance}
                       itemKey={ExplanationDashboard.localTabKeys[0]}
                     />
                     {this.props.requestPredictions !== undefined &&
@@ -874,7 +874,9 @@ export class ExplanationDashboard extends React.Component<
                         .dataset &&
                       this.props.requestPredictions && (
                         <PivotItem
-                          headerText={localization.perturbationExploration}
+                          headerText={
+                            localization.Interpret.perturbationExploration
+                          }
                           itemKey={ExplanationDashboard.localTabKeys[1]}
                         />
                       )}{" "}
@@ -882,7 +884,7 @@ export class ExplanationDashboard extends React.Component<
                       this.state.dashboardContext.explanationContext.testDataset
                         .dataset && (
                         <PivotItem
-                          headerText={localization.ice}
+                          headerText={localization.Interpret.ice}
                           itemKey={ExplanationDashboard.localTabKeys[2]}
                         />
                       )}
@@ -892,7 +894,7 @@ export class ExplanationDashboard extends React.Component<
                       <PrimaryButton
                         className={explanationDashboardStyles.clearButton}
                         onClick={this.onClearSelection}
-                        text={localization.clearSelection}
+                        text={localization.Interpret.clearSelection}
                       />
                     </div>
                     {this.state.activeLocalTab === 0 && (

@@ -123,7 +123,7 @@ export class CohortEditorFilter extends React.Component<
             styles={FabricStyles.limitedSizeMenuDropdown}
             options={this.dataArray}
             onChange={this.props.setSelectedProperty}
-            label={localization.CohortEditor.selectFilter}
+            label={localization.Interpret.CohortEditor.selectFilter}
             selectedKey={this.props.openedFilter.column}
             calloutProps={FabricStyles.calloutProps}
           />
@@ -132,7 +132,7 @@ export class CohortEditorFilter extends React.Component<
           selectedMeta.featureRange.rangeType === RangeTypes.Integer && (
             <Checkbox
               key={this.props.openedFilter.column}
-              label={localization.CohortEditor.TreatAsCategorical}
+              label={localization.Interpret.CohortEditor.TreatAsCategorical}
               checked={selectedMeta.treatAsCategorical}
               onChange={this.props.setAsCategorical}
             />
@@ -140,7 +140,7 @@ export class CohortEditorFilter extends React.Component<
         {selectedMeta.treatAsCategorical ? (
           <>
             <Text variant={"small"}>
-              {`${localization.formatString(
+              {`${localization.Interpret.formatString(
                 localization.Interpret.Filters.uniqueValues,
                 selectedMeta.sortedCategoricalValues?.length
               )}`}
@@ -148,7 +148,7 @@ export class CohortEditorFilter extends React.Component<
             <ComboBox
               key={this.props.openedFilter.column}
               multiSelect
-              label={localization.Filters.categoricalIncludeValues}
+              label={localization.Interpret.Filters.categoricalIncludeValues}
               selectedKey={this.props.openedFilter.arg}
               onChange={this.props.setCategoricalValues}
               options={categoricalOptions}
@@ -160,16 +160,16 @@ export class CohortEditorFilter extends React.Component<
         ) : (
           <>
             <Text block nowrap variant={"small"}>
-              {`${localization.formatString(
+              {`${localization.Interpret.formatString(
                 localization.Interpret.Filters.min,
                 minVal
-              )} ${localization.formatString(
+              )} ${localization.Interpret.formatString(
                 localization.Interpret.Filters.max,
                 maxVal
               )}`}
             </Text>
             <ComboBox
-              label={localization.Filters.numericalComparison}
+              label={localization.Interpret.Filters.numericalComparison}
               selectedKey={this.props.openedFilter.method}
               onChange={this.props.setComparison}
               options={this.comparisonOptions}
@@ -182,7 +182,7 @@ export class CohortEditorFilter extends React.Component<
                   <SpinButton
                     labelPosition={Position.top}
                     value={this.props.openedFilter.arg[0].toString()}
-                    label={localization.Filters.minimum}
+                    label={localization.Interpret.Filters.minimum}
                     min={selectedMeta.featureRange.min}
                     max={selectedMeta.featureRange.max}
                     onIncrement={(value): void => {
@@ -208,7 +208,7 @@ export class CohortEditorFilter extends React.Component<
                   <SpinButton
                     labelPosition={Position.top}
                     value={this.props.openedFilter.arg[1].toString()}
-                    label={localization.Filters.maximum}
+                    label={localization.Interpret.Filters.maximum}
                     min={selectedMeta.featureRange.min}
                     max={selectedMeta.featureRange.max}
                     onIncrement={(value): void => {
@@ -235,7 +235,7 @@ export class CohortEditorFilter extends React.Component<
               ) : (
                 <SpinButton
                   labelPosition={Position.top}
-                  label={localization.Filters.numericValue}
+                  label={localization.Interpret.Filters.numericValue}
                   min={selectedMeta.featureRange.min}
                   max={selectedMeta.featureRange.max}
                   value={this.props.openedFilter.arg[0].toString()}
@@ -267,7 +267,7 @@ export class CohortEditorFilter extends React.Component<
             <>
               <Stack.Item>
                 <PrimaryButton
-                  text={localization.CohortEditor.save}
+                  text={localization.Interpret.CohortEditor.save}
                   onClick={(): void =>
                     this.props.saveState(this.props.filterIndex)
                   }
@@ -275,7 +275,7 @@ export class CohortEditorFilter extends React.Component<
               </Stack.Item>
               <Stack.Item>
                 <DefaultButton
-                  text={localization.CohortEditor.cancel}
+                  text={localization.Interpret.CohortEditor.cancel}
                   onClick={(): void => this.props.cancelFilter()}
                 />
               </Stack.Item>
@@ -283,7 +283,7 @@ export class CohortEditorFilter extends React.Component<
           ) : (
             <Stack.Item>
               <PrimaryButton
-                text={localization.CohortEditor.addFilter}
+                text={localization.Interpret.CohortEditor.addFilter}
                 onClick={(): void =>
                   this.props.saveState(this.props.filters.length)
                 }

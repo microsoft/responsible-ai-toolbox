@@ -320,7 +320,7 @@ export class WhatIfTab extends React.PureComponent<
         <div className={classNames.missingParametersPlaceholder}>
           <div className={classNames.missingParametersPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.WhatIfTab.missingParameters}
+              {localization.Interpret.WhatIfTab.missingParameters}
             </Text>
           </div>
         </div>
@@ -350,7 +350,7 @@ export class WhatIfTab extends React.PureComponent<
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
-            {localization.WhatIfTab.helperText}
+            {localization.Interpret.WhatIfTab.helperText}
           </Text>
         </div>
         <div className={classNames.mainArea}>
@@ -382,7 +382,7 @@ export class WhatIfTab extends React.PureComponent<
                   variant="mediumPlus"
                   className={classNames.cohortPickerLabel}
                 >
-                  {localization.WhatIfTab.cohortPickerLabel}
+                  {localization.Interpret.WhatIfTab.cohortPickerLabel}
                 </Text>
                 <Dropdown
                   styles={{ dropdown: { width: 150 } }}
@@ -474,7 +474,10 @@ export class WhatIfTab extends React.PureComponent<
                           variant="large"
                           className={classNames.faintText}
                         >
-                          {localization.ValidationErrors.datasizeError}
+                          {
+                            localization.Interpret.ValidationErrors
+                              .datasizeError
+                          }
                         </Text>
                       </div>
                     </div>
@@ -511,7 +514,7 @@ export class WhatIfTab extends React.PureComponent<
               <div className={classNames.legendAndText}>
                 <div className={classNames.legendHlepWrapper}>
                   <Text variant={"small"} className={classNames.legendHelpText}>
-                    {localization.WhatIfTab.scatterLegendText}
+                    {localization.Interpret.WhatIfTab.scatterLegendText}
                   </Text>
                 </div>
                 <Text
@@ -519,7 +522,7 @@ export class WhatIfTab extends React.PureComponent<
                   block
                   className={classNames.legendLabel}
                 >
-                  {localization.WhatIfTab.realPoint}
+                  {localization.Interpret.WhatIfTab.realPoint}
                 </Text>
                 {this.selectedFeatureImportance.length > 0 && (
                   <InteractiveLegend
@@ -541,12 +544,12 @@ export class WhatIfTab extends React.PureComponent<
                 )}
                 {this.state.showSelectionWarning && (
                   <Text variant={"xSmall"} className={classNames.errorText}>
-                    {localization.WhatIfTab.selectionLimit}
+                    {localization.Interpret.WhatIfTab.selectionLimit}
                   </Text>
                 )}
                 {this.selectedFeatureImportance.length === 0 && (
                   <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.WhatIfTab.noneSelectedYet}
+                    {localization.Interpret.WhatIfTab.noneSelectedYet}
                   </Text>
                 )}
                 <Text
@@ -554,7 +557,7 @@ export class WhatIfTab extends React.PureComponent<
                   block
                   className={classNames.legendLabel}
                 >
-                  {localization.WhatIfTab.whatIfDatapoints}
+                  {localization.Interpret.WhatIfTab.whatIfDatapoints}
                 </Text>
                 {this.state.customPoints.length > 0 && (
                   <InteractiveLegend
@@ -581,7 +584,7 @@ export class WhatIfTab extends React.PureComponent<
                 )}
                 {this.state.customPoints.length === 0 && (
                   <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.WhatIfTab.noneCreatedYet}
+                    {localization.Interpret.WhatIfTab.noneCreatedYet}
                   </Text>
                 )}
               </div>
@@ -616,7 +619,10 @@ export class WhatIfTab extends React.PureComponent<
           >
             <div className={classNames.missingParametersPlaceholderSpacer}>
               <Text variant="large" className={classNames.faintText}>
-                {localization.WhatIfTab.featureImportanceLackingParameters}
+                {
+                  localization.Interpret.WhatIfTab
+                    .featureImportanceLackingParameters
+                }
               </Text>
             </div>
           </div>
@@ -629,7 +635,10 @@ export class WhatIfTab extends React.PureComponent<
           >
             <div className={classNames.missingParametersPlaceholderSpacer}>
               <Text variant="large" className={classNames.faintText}>
-                {localization.WhatIfTab.featureImportanceGetStartedText}
+                {
+                  localization.Interpret.WhatIfTab
+                    .featureImportanceGetStartedText
+                }
               </Text>
             </div>
           </div>
@@ -645,7 +654,7 @@ export class WhatIfTab extends React.PureComponent<
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
               <Text variant="medium" className={classNames.sliderLabel}>
-                {localization.formatString(
+                {localization.Interpret.formatString(
                   localization.Interpret.GlobalTab.topAtoB,
                   1,
                   this.state.topK
@@ -653,7 +662,9 @@ export class WhatIfTab extends React.PureComponent<
               </Text>
               <Slider
                 className={classNames.startingK}
-                ariaLabel={localization.AggregateImportance.topKFeatures}
+                ariaLabel={
+                  localization.Interpret.AggregateImportance.topKFeatures
+                }
                 max={this.props.jointDataset.localExplanationFeatureCount}
                 min={1}
                 step={1}
@@ -677,7 +688,7 @@ export class WhatIfTab extends React.PureComponent<
                   variant={"medium"}
                   className={classNames.cohortPickerLabel}
                 >
-                  {localization.GlobalTab.sortBy}
+                  {localization.Interpret.GlobalTab.sortBy}
                 </Text>
                 <Dropdown
                   styles={{ dropdown: { width: 150 } }}
@@ -692,12 +703,12 @@ export class WhatIfTab extends React.PureComponent<
                         variant={"medium"}
                         className={classNames.multiclassWeightLabelText}
                       >
-                        {localization.GlobalTab.weightOptions}
+                        {localization.Interpret.GlobalTab.weightOptions}
                       </Text>
                       <IconButton
                         id={"cross-class-weight-info"}
                         iconProps={{ iconName: "Info" }}
-                        title={localization.CrossClass.info}
+                        title={localization.Interpret.CrossClass.info}
                         onClick={this.toggleCrossClassInfo}
                       />
                     </div>
@@ -721,20 +732,31 @@ export class WhatIfTab extends React.PureComponent<
                         <div className={classNames.calloutWrapper}>
                           <div className={classNames.calloutHeader}>
                             <Text className={classNames.calloutTitle}>
-                              {localization.CrossClass.crossClassWeights}
+                              {
+                                localization.Interpret.CrossClass
+                                  .crossClassWeights
+                              }
                             </Text>
                           </div>
                           <div className={classNames.calloutInner}>
-                            <Text>{localization.CrossClass.overviewInfo}</Text>
+                            <Text>
+                              {localization.Interpret.CrossClass.overviewInfo}
+                            </Text>
                             <ul>
                               <li>
                                 <Text>
-                                  {localization.CrossClass.absoluteValInfo}
+                                  {
+                                    localization.Interpret.CrossClass
+                                      .absoluteValInfo
+                                  }
                                 </Text>
                               </li>
                               <li>
                                 <Text>
-                                  {localization.CrossClass.enumeratedClassInfo}
+                                  {
+                                    localization.Interpret.CrossClass
+                                      .enumeratedClassInfo
+                                  }
                                 </Text>
                               </li>
                             </ul>
@@ -754,7 +776,7 @@ export class WhatIfTab extends React.PureComponent<
         <div className={classNames.missingParametersPlaceholder}>
           <div className={classNames.missingParametersPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.WhatIfTab.iceLackingParameters}
+              {localization.Interpret.WhatIfTab.iceLackingParameters}
             </Text>
           </div>
         </div>
@@ -764,7 +786,7 @@ export class WhatIfTab extends React.PureComponent<
         <div className={classNames.missingParametersPlaceholder}>
           <div className={classNames.missingParametersPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.WhatIfTab.IceGetStartedText}
+              {localization.Interpret.WhatIfTab.IceGetStartedText}
             </Text>
           </div>
         </div>
@@ -777,7 +799,7 @@ export class WhatIfTab extends React.PureComponent<
               iconProps={{ iconName: "Info" }}
               id="explanation-info"
               className={classNames.infoButton}
-              text={localization.Charts.howToRead}
+              text={localization.Interpret.Charts.howToRead}
               onClick={this.toggleICETooltip}
             />
             {this.state.iceTooltipVisible && (
@@ -792,11 +814,13 @@ export class WhatIfTab extends React.PureComponent<
                 <div className={classNames.calloutWrapper}>
                   <div className={classNames.calloutHeader}>
                     <Text className={classNames.calloutTitle}>
-                      {localization.WhatIfTab.icePlot}
+                      {localization.Interpret.WhatIfTab.icePlot}
                     </Text>
                   </div>
                   <div className={classNames.calloutInner}>
-                    <Text>{localization.WhatIfTab.icePlotHelperText}</Text>
+                    <Text>
+                      {localization.Interpret.WhatIfTab.icePlotHelperText}
+                    </Text>
                     <div className={classNames.calloutActions}>
                       <Link
                         className={classNames.calloutLink}
@@ -805,7 +829,7 @@ export class WhatIfTab extends React.PureComponent<
                         }
                         target="_blank"
                       >
-                        {localization.ExplanationSummary.clickHere}
+                        {localization.Interpret.ExplanationSummary.clickHere}
                       </Link>
                     </div>
                   </div>
@@ -830,7 +854,7 @@ export class WhatIfTab extends React.PureComponent<
                 className={classNames.iceFeatureSelection}
                 options={this.featuresOption}
                 onChange={this.onFeatureSelected}
-                label={localization.IcePlot.featurePickerLabel}
+                label={localization.Interpret.IcePlot.featurePickerLabel}
                 ariaLabel="feature picker"
                 selectedKey={this.state.selectedFeatureKey}
                 useComboBoxAsMenuWidth={true}
@@ -843,7 +867,7 @@ export class WhatIfTab extends React.PureComponent<
                   className={classNames.iceClassSelection}
                   options={this.classOptions}
                   onChange={this.onICEClassSelected}
-                  label={localization.WhatIfTab.classPickerLabel}
+                  label={localization.Interpret.WhatIfTab.classPickerLabel}
                   ariaLabel="class picker"
                   selectedKey={this.state.selectedICEClass}
                   useComboBoxAsMenuWidth={true}
@@ -873,7 +897,7 @@ export class WhatIfTab extends React.PureComponent<
       <div id="subPlotContainer">
         <div className={classNames.choiceBoxArea} id="subPlotChoice">
           <Text variant="medium" className={classNames.boldText}>
-            {localization.WhatIfTab.showLabel}
+            {localization.Interpret.WhatIfTab.showLabel}
           </Text>
           <ChoiceGroup
             className={classNames.choiceGroup}

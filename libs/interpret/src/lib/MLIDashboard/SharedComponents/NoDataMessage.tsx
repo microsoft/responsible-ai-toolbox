@@ -15,7 +15,7 @@ export class NoDataMessage extends React.PureComponent<{
     return (
       <div className={noDataMessageStyles.centered}>
         <div className={noDataMessageStyles.primaryMessage}>
-          {localization.BarChart.noData}
+          {localization.Interpret.BarChart.noData}
         </div>
         {this.renderExplanationStrings()}
       </div>

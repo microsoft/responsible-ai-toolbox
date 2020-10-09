@@ -109,7 +109,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
             <div className={singlePointFeatureImportanceStyles.topControls}>
               <Slider
                 className={singlePointFeatureImportanceStyles.featureSlider}
-                label={localization.AggregateImportance.topKFeatures}
+                label={localization.Interpret.AggregateImportance.topKFeatures}
                 max={Math.min(
                   30,
                   this.props.explanationContext.modelMetadata.featureNames
@@ -123,7 +123,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
               />
               {this.sortOptions.length > 1 && (
                 <ComboBox
-                  label={localization.BarChart.sortBy}
+                  label={localization.Interpret.BarChart.sortBy}
                   selectedKey={this.state.selectedSorting}
                   onChange={this.onSortSelect}
                   options={this.sortOptions}

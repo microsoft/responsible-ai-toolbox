@@ -68,7 +68,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
         _.set(
           plotlyProps,
           "layout.yaxis.title",
-          `${localization.featureImportance}<br> ${localization.ExplanationScatter.class} ${metadata.classNames[0]}`
+          `${localization.Interpret.featureImportance}<br> ${localization.Interpret.ExplanationScatter.class} ${metadata.classNames[0]}`
         );
       }
       if (selectedOption === undefined || selectedOption.key === "none") {

@@ -220,7 +220,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     const globalProps = NewExplanationDashboard.buildGlobalProperties(props);
     // consider taking filters in as param arg for programatic users
     const cohorts = [
-      new Cohort(localization.Cohort.defaultLabel, jointDataset, [])
+      new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
     ];
     if (
       validationCheck.errorStrings.length !== 0 &&
@@ -427,7 +427,9 @@ export class NewExplanationDashboard extends React.PureComponent<
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <Text>{localization.ValidationErrors.datasizeWarning}</Text>
+            <Text>
+              {localization.Interpret.ValidationErrors.datasizeWarning}
+            </Text>
           </MessageBar>
         )}
         {this.state.validationWarnings.length !== 0 && (
@@ -437,7 +439,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <Text>{localization.ValidationErrors.errorHeader}</Text>
+            <Text>{localization.Interpret.ValidationErrors.errorHeader}</Text>
             {this.state.validationWarnings.map((message) => {
               return <Text block>{message}</Text>;
             })}

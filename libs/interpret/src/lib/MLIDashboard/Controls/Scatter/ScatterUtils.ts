@@ -618,7 +618,7 @@ export class ScatterUtils {
     ) {
       // Add the first class's name to the text for binary case, to clarify
       const className = modelMetadata.classNames[0];
-      return `${item.text}<br> ${localization.ExplanationScatter.class} : ${className}`;
+      return `${item.text}<br> ${localization.Interpret.ExplanationScatter.class} : ${className}`;
     }
     return item.text;
   }

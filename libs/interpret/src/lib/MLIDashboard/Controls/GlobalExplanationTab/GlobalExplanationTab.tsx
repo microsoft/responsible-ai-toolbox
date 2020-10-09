@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
   ComboBox,
@@ -15,7 +16,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "@responsible-ai/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
@@ -144,7 +144,7 @@ export class GlobalExplanationTab extends React.PureComponent<
         <div className={classNames.missingParametersPlaceholder}>
           <div className={classNames.missingParametersPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.GlobalTab.missingParameters}
+              {localization.Interpret.GlobalTab.missingParameters}
             </Text>
           </div>
         </div>
@@ -173,7 +173,7 @@ export class GlobalExplanationTab extends React.PureComponent<
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
-            {localization.GlobalTab.helperText}
+            {localization.Interpret.GlobalTab.helperText}
           </Text>
         </div>
         <div
@@ -181,13 +181,13 @@ export class GlobalExplanationTab extends React.PureComponent<
           id="TopKSliderContainer"
         >
           <Slider
-            label={localization.formatString(
+            label={localization.Interpret.formatString(
               localization.Interpret.GlobalTab.topAtoB,
               1,
               this.state.topK
             )}
             className={classNames.startingK}
-            ariaLabel={localization.AggregateImportance.topKFeatures}
+            ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
             max={this.props.jointDataset.localExplanationFeatureCount}
             min={1}
             step={1}
@@ -199,14 +199,16 @@ export class GlobalExplanationTab extends React.PureComponent<
         <div className={classNames.rightJustifiedContainer}>
           {this.explainerCalloutInfo && (
             <LabelWithCallout
-              label={localization.ExplanationSummary.whatDoExplanationsMean}
+              label={
+                localization.Interpret.ExplanationSummary.whatDoExplanationsMean
+              }
               calloutTitle={this.explainerCalloutInfo.title}
               type="button"
             >
               <Text block>{this.explainerCalloutInfo.description}</Text>
               {this.explainerCalloutInfo.linkUrl && (
                 <Link href={this.explainerCalloutInfo.linkUrl} target="_blank">
-                  {localization.ExplanationSummary.clickHere}
+                  {localization.Interpret.ExplanationSummary.clickHere}
                 </Link>
               )}
             </LabelWithCallout>
@@ -244,7 +246,7 @@ export class GlobalExplanationTab extends React.PureComponent<
           <div className={classNames.missingParametersPlaceholder}>
             <div className={classNames.missingParametersPlaceholderSpacer}>
               <Text variant="large" className={classNames.faintText}>
-                {localization.GlobalTab.datasetRequired}
+                {localization.Interpret.GlobalTab.datasetRequired}
               </Text>
             </div>
           </div>
@@ -253,11 +255,15 @@ export class GlobalExplanationTab extends React.PureComponent<
           <div>
             <div className={classNames.rightJustifiedContainer}>
               <LabelWithCallout
-                label={localization.Charts.howToRead}
-                calloutTitle={localization.GlobalTab.dependencePlotTitle}
+                label={localization.Interpret.Charts.howToRead}
+                calloutTitle={
+                  localization.Interpret.GlobalTab.dependencePlotTitle
+                }
                 type="button"
               >
-                <Text>{localization.GlobalTab.dependencePlotHelperText}</Text>
+                <Text>
+                  {localization.Interpret.GlobalTab.dependencePlotHelperText}
+                </Text>
               </LabelWithCallout>
             </div>
             <div
@@ -280,7 +286,9 @@ export class GlobalExplanationTab extends React.PureComponent<
                 {featureOptions && (
                   <ComboBox
                     id="DependencePlotFeatureSelection"
-                    label={localization.GlobalTab.viewDependencePlotFor}
+                    label={
+                      localization.Interpret.GlobalTab.viewDependencePlotFor
+                    }
                     options={featureOptions}
                     allowFreeform={false}
                     autoComplete="on"
@@ -300,7 +308,9 @@ export class GlobalExplanationTab extends React.PureComponent<
                 )}
                 {cohortOptions && (
                   <Dropdown
-                    label={localization.GlobalTab.datasetCohortSelector}
+                    label={
+                      localization.Interpret.GlobalTab.datasetCohortSelector
+                    }
                     options={cohortOptions}
                     selectedKey={this.state.selectedCohortIndex}
                     onChange={this.setSelectedCohort}

@@ -224,7 +224,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
       <div>
         <div>
           <ComboBox
-            label={localization.feature}
+            label={localization.Interpret.feature}
             selectedKey={this.state.selectedFeature}
             onChange={this.onFeatureSelect}
             options={this.featureOptions}
