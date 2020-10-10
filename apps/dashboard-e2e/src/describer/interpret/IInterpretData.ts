@@ -8,7 +8,6 @@ export interface IInterpretData {
   datapoint?: number;
   defaultXAxis?: string;
   defaultYAxis?: string;
-  noCohort?: boolean;
   noDataset?: boolean;
   noFeatureImportance?: boolean;
   noLocalImportance?: boolean;
