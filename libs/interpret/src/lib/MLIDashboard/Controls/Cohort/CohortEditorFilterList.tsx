@@ -40,7 +40,7 @@ export class CohortEditorFilterList extends React.Component<
   };
   public render(): React.ReactNode {
     return (
-      <div id="FilterListContainer">
+      <>
         <Label>{localization.Interpret.CohortEditor.addedFilters}</Label>
         {this.props.filters.length > 0 ? (
           this.props.filters.map((filter, index) => {
@@ -48,10 +48,12 @@ export class CohortEditorFilterList extends React.Component<
               <div key={index}>
                 {this.setFilterLabel(filter)}
                 <IconButton
+                  id={`editFilerBtn-${index}`}
                   iconProps={{ iconName: "Edit" }}
                   onClick={(): void => this.props.editFilter(index)}
                 />
                 <IconButton
+                  id={`removeFilterBtn-${index}`}
                   iconProps={{ iconName: "Clear" }}
                   onClick={(): void => this.props.removeFilter(index)}
                 />
@@ -65,7 +67,7 @@ export class CohortEditorFilterList extends React.Component<
             </Text>
           </div>
         )}
-      </div>
+      </>
     );
   }
 

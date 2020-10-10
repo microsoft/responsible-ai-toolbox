@@ -25,7 +25,7 @@ export function describeCreateCohort(): void {
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add Filter")').click();
-    cy.get("#FilterListContainer button:eq(1)").click();
+    cy.get("#removeFilterBtn-0").click();
     cy.get('#cohortEditPanel span:contains("No filters added yet")').should(
       "exist"
     );
