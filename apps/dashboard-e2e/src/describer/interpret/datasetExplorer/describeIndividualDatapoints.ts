@@ -14,13 +14,13 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Dataset Explorer", "#DashboardPivot")
+      getMenu("Dataset explorer", "#DashboardPivot")
         .click()
         .get('#ChartTypeSelection label:contains("Individual datapoints")')
         .click();
       props.chart = new ScatterChart("#DatasetExplorerChart");
     });
-    describe("Dataset Explorer Chart", () => {
+    describe("Dataset explorer Chart", () => {
       it("should have color label", () => {
         cy.get(
           '#DatasetExplorerChart div[class*="legendAndText"] span[class*="boldText"]'

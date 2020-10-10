@@ -220,7 +220,10 @@ export class CohortEditor extends React.PureComponent<
     option?: IChoiceGroupOption | undefined
   ): void => {
     if (typeof option?.key === "string") {
-      this.setState({ selectedFilterCategory: option.key });
+      this.setState({
+        filterIndex: this.state.filters.length,
+        selectedFilterCategory: option.key
+      });
       this.setSelection(option.key);
     }
   };
@@ -241,8 +244,6 @@ export class CohortEditor extends React.PureComponent<
   ): void => {
     if (typeof item?.key === "string") {
       const property = item.key;
-      // reset filterIndex to handle if user clicks on another filter while in edit mode
-      this.setState({ filterIndex: this.state.filters.length });
       this.setDefaultStateForKey(property);
     }
   };
@@ -372,14 +373,16 @@ export class CohortEditor extends React.PureComponent<
     const filters = [...this.state.filters];
     filters[index] = filter;
     this.setState({
-      filterIndex: this.state.filters.length,
       filters,
       openedFilter: undefined
     });
   }
 
   private cancelFilter = (): void => {
-    this.setState({ openedFilter: undefined });
+    this.setState({
+      openedFilter: undefined,
+      selectedFilterCategory: undefined
+    });
   };
 
   private removeFilter = (index: number): void => {

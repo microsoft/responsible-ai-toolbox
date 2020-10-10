@@ -14,13 +14,13 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Dataset Explorer", "#DashboardPivot")
+      getMenu("Dataset explorer", "#DashboardPivot")
         .click()
         .get('#ChartTypeSelection label:contains("Aggregate plots")')
         .click();
       props.chart = new BoxChart("#DatasetExplorerChart");
     });
-    describe("Dataset Explorer Chart", () => {
+    describe("Dataset explorer Chart", () => {
       it("should have x axis bar label", () => {
         const columns = props.dataShape.datasetBarLabel;
         if (columns) {

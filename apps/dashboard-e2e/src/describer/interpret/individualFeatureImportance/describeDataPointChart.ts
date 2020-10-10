@@ -15,7 +15,7 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Individual Feature Importance", "#DashboardPivot").click();
+      getMenu("Individual feature importance", "#DashboardPivot").click();
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {

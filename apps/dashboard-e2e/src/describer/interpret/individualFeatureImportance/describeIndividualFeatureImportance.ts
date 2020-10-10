@@ -13,7 +13,7 @@ export function describeIndividualFeatureImportance(
 ): void {
   describe(testName, () => {
     it("Tab Header should exist", () => {
-      getMenu("Individual Feature Importance", "#DashboardPivot").should(
+      getMenu("Individual feature importance", "#DashboardPivot").should(
         "exist"
       );
     });
