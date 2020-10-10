@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ExpandableText } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -253,9 +254,12 @@ export class ModelPerformanceTab extends React.PureComponent<
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text variant="medium" className={classNames.helperText}>
-            {localization.Interpret.ModelPerformance.helperText}
-          </Text>
+          <ExpandableText
+            collapsedText={
+              localization.Interpret.ModelPerformance.collapsedHelperText
+            }
+            expandedText={localization.Interpret.ModelPerformance.helperText}
+          />
         </div>
         {cohortOptions && (
           <div className={classNames.cohortPickerWrapper}>

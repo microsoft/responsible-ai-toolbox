@@ -1,4 +1,10 @@
 {
+  "Core": {
+    "ExpandableText": {
+      "SeeMore": "see more",
+      "SeeLess": "see less"
+    }
+  },
   "Interpret": {
     "calloutTitle": "Click for info",
     "selectPoint": "Select a point to see its local explanation",
@@ -11,20 +17,20 @@
     "_absoluteAverage.comment": "https://en.wikipedia.org/wiki/Norm_(mathematics) Absolute value norm",
     "predictedClass": "Predicted class",
     "_predictedClass.comment": "Norm based on the predicted class rather than absolute value as above",
-    "datasetExplorer": "Dataset Explorer",
-    "dataExploration": "Dataset Exploration",
-    "_dataExploration.comment": "Label for tab showing scatterplot of dataset and predictions",
-    "aggregateFeatureImportance": "Aggregate Feature Importance",
+    "datasetExplorer": "Dataset explorer",
+    "dataExploration": "Dataset exploration",
+    "_dataExploration.comment": "Label for tab showing scatter plot of dataset and predictions",
+    "aggregateFeatureImportance": "Aggregate feature importance",
     "_aggregateFeatureImportance.comment": "tab label for view of aggregated (summed and averaged) feature importances",
     "globalImportance": "Global Importance",
     "_globalImportance.comment": "Label for tab showing bar chart of importance of features at a global level",
     "explanationExploration": "Explanation Exploration",
-    "individualImportance": "Individual Feature Importance",
-    "individualAndWhatIf": "Individual Feature Importance & What-If",
+    "individualImportance": "Individual feature importance",
+    "individualAndWhatIf": "Individual feature importance & what-if",
     "_individualAndWhatIf.comment": "tab label for feature importances of single rows, and 'what if?' which allows seeing hypothetical results",
     "_explanationExploration.comment": "Label for tab showing scatter plot of dataset and importance of features data",
     "summaryImportance": "Summary Importance",
-    "_summmaryImportance.comment": "Label showing all importance of feature datapoints in scatter plot",
+    "_summaryImportance.comment": "Label showing all importance of feature data points in scatter plot",
     "featureImportance": "Feature Importance",
     "_featureImportance.comment": "Label for feature importance ",
     "featureImportanceOf": "Feature importance of {0}",
@@ -38,7 +44,7 @@
     "feature": "Feature:",
     "intercept": "Intercept",
     "_intercept.comment": "The label for the linear intercept, the bias value",
-    "modelPerformance": "Model Performance",
+    "modelPerformance": "Model performance",
     "_modelPerformance.comment": "tab label to see how well a model predicted values when compared to true",
     "ExplanationScatter": {
       "dataLabel": "Data : {0}",
@@ -255,8 +261,9 @@
       "defaultLabel": "All data"
     },
     "GlobalTab": {
+      "collapsedHelperText": "Explore the top k important features that impact your overall model predictions.",
+      "helperText": "Use the slider to show descending feature importances . Select up to three cohorts to see their feature importances side by side. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
       "_helperText.comment": "paragraph summarizing the view on this page and available actions",
-      "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importance values. Select up to three cohorts to see their feature importance values side by side. Click on any of the feature bars in the graph to see how values of the selected feature impact model prediction.",
       "topAtoB": "Top {0}-{1} features",
       "_topAtoB.comment": "label on a slider, will tell user the index of the features they are currently seeing, like Top 5-10 features",
       "datasetCohorts": "Dataset cohorts",
@@ -269,7 +276,7 @@
       "_viewDependencePlotFor.comment": "label for dropdown to select feature to be shown in a dependence plot (a kind of graph)",
       "datasetCohortSelector": "Select a dataset cohort",
       "_datasetCohortSelector.comment": "label for selecting single cohort",
-      "aggregateFeatureImportance": "Aggregate Feature Importance",
+      "aggregateFeatureImportance": "Aggregate feature importance",
       "_aggregateFeatureImportance.comment": "graph label for aggregated (summed and averaged) feature importances",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
       "_missingParameters.comment": "Show a message if the required feature importance parameter is not provided",
@@ -307,7 +314,8 @@
       "_copy.comment": "suffix attached to name of cohort created by copying other cohort, by default."
     },
     "ModelPerformance": {
-      "helperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions. Select the gear in the graph to change graph type.",
+      "collapsedHelperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics.",
+      "helperText": "You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions. Select the gear in the graph to change graph type.",
       "_helperText.comment": "explains the view on this page and what actions can be taken",
       "modelStatistics": "Model Statistics",
       "_modelStatistics.comment": "label for area listing statistics about model prediction",
@@ -339,7 +347,8 @@
       "howToRead": "How to read this chart"
     },
     "DatasetExplorer": {
-      "helperText": "Explore your dataset statistics by selecting different filters along the X, Y, and color axis to slice your data along different dimensions. Create dataset cohorts above to analyze dataset statistics with filters such as predicted outcome, dataset features and error groups. Use the gear icon in the upper right-hand corner of the graph to change graph types.",
+      "collapsedHelperText": "Learn about the over/underpresentation in your dataset.",
+      "helperText": "Create dataset cohorts to the left to analyze statistics along filters such as predicted outcome, dataset features and error groups. Use the x-axis and color selectors to further slice your dataset into more dimensions.",
       "_helperText.comment": "paragraph summarizing the view on this page and what actions the user can take",
       "colorValue": "Color value",
       "_colorValue.comment": "label on button to set how data is mapped to color in chart",
@@ -361,7 +370,7 @@
       "_placeholder.comment": "placeholder text explaining how to activate this chart, by clicking on a neighboring chart."
     },
     "WhatIfTab": {
-      "helperText": "You can select a datapoint by clicking on the scatterplot to view its local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. Create a hypothetical what-if datapoint by using the panel on the right to perturb features of a known datapoint. Feature importance values are based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
+      "helperText": "Select an individual datapoint by cllicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.",
       "_helperText.comment": "explains what is shown in this tab and what actions are available",
       "panelPlaceholder": "A model is required to make predictions for new data points.",
       "_panelPlaceholder.comment": "message shown to user when they did not give a model as inputs",
@@ -373,19 +382,21 @@
       "_realPoint.comment": "label above the list of points from the dataset",
       "noneSelectedYet": "None selected yet",
       "_noneSelectedYet.comment": "placeholder if no points are selected, where list of points would go",
+      "dataPointInfo": "Data point info",
       "whatIfDatapoints": "What-If datapoints",
       "_whatIfDatapoints.comment": "label above the list of what if (hypothetical) points",
       "noneCreatedYet": "None created yet",
       "_noneCreatedYet.comment": "placeholder if no hypothetical points have been created, goes where list of points would be",
       "showLabel": "Show:",
       "_showLabel.comment": "label on button to pick what additional chart to show",
+      "localFeatureImportanceForPoint": "Local Feature importance of selected data points",
       "featureImportancePlot": "Feature importance plot",
       "_featureImportancePlot.comment": "name of a plot type showing the importance of each feature in making a decision",
       "icePlot": "Individual conditional expectation (ICE) plot",
       "_icePlot.comment": "name of a plot type named Individual Conditional Expectation (ICE)",
       "featureImportanceLackingParameters": "Provide local feature importances to see how each feature impacts individual predictions.",
       "_featureImportanceLackingParameters.comment": "placeholder if no local feature importances passed in",
-      "featureImportanceGetStartedText": "Select a point to view feature importance",
+      "featureImportanceGetStartedText": "Select a point to see its local importance",
       "_featureImportanceGetStartedText.comment": "placeholder to prompt user to click point in neighboring chart to view this chart",
       "iceLackingParameters": "ICE plots require an operationalized model to make predictions for hypothetical datapoints.",
       "_iceLackingParameters.comment": "placeholder text if a required parameter is not passed in, cannot show ICE plot if no model passed in",
@@ -395,7 +406,7 @@
       "_whatIfDatapoint.comment": "header text for area where user writes a hypothetical point's values",
       "whatIfHelpText": "Select a point on the plot or manually enter a known datapoint index to perturb and save as a new What-If point.",
       "_whatIfHelpText.comment": "describe how to create a what-if hypothetical row",
-      "indexLabel": "Data index to perturb",
+      "indexLabel": "Data index",
       "_indexLabel.comment": "label for dropdown for selecting a row by index value",
       "rowLabel": "Row {0}",
       "_rowLabel.comment": "the label for a selected row, with its index number appended",

@@ -15,7 +15,7 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Individual Feature Importance", "#DashboardPivot").click();
+      getMenu("Individual feature importance", "#DashboardPivot").click();
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {
@@ -25,30 +25,26 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
     describe("Scatter chart clickable", () => {
       it("should select none by default", () => {
         cy.get(
-          '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
+          '#IndividualFeatureContainer div[class^="legendAndText"] div[class^="clickTarget"]'
         ).should("not.exist");
       });
       it("should show message on sub chart", () => {
         const message =
           !dataShape.noLocalImportance && !dataShape.noFeatureImportance
-            ? "Select a point to view feature importance"
+            ? "Select a point to see its local importance"
             : "Provide local feature importances to see how each feature impacts individual predictions.";
         const containerId =
           !dataShape.noLocalImportance && !dataShape.noFeatureImportance
             ? "#noPointSelectedInfo"
             : "#noFeatureImportanceInfo";
-        cy.get(
-          `${containerId}  div[class^="missingParametersPlaceholderSpacer"]`
-        ).should("contain.text", message);
+        cy.get(`${containerId}`).should("contain.text", message);
       });
       it("should select the first point", () => {
         props.chart.clickNthPoint(0);
         cy.get(
           '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
         ).should("contain.text", "Row");
-        cy.get(
-          '#noPointSelectedInfo  div[class^="missingParametersPlaceholderSpacer"]'
-        ).should("not.exist");
+        cy.get("#noPointSelectedInfo").should("not.exist");
       });
     });
 

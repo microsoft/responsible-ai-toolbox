@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ExpandableText } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -113,9 +114,12 @@ export class DatasetExplorerTab extends React.PureComponent<
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text variant="medium" className={classNames.helperText}>
-            {localization.Interpret.DatasetExplorer.helperText}
-          </Text>
+          <ExpandableText
+            collapsedText={
+              localization.Interpret.DatasetExplorer.collapsedHelperText
+            }
+            expandedText={localization.Interpret.DatasetExplorer.helperText}
+          />
         </div>
         <div className={classNames.cohortPickerWrapper}>
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>

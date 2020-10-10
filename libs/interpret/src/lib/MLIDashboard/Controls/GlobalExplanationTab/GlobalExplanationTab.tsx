@@ -172,9 +172,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text variant="medium" className={classNames.helperText}>
-            {localization.Interpret.GlobalTab.helperText}
-          </Text>
+          <Text>{localization.Interpret.GlobalTab.helperText}</Text>
         </div>
         <div
           className={classNames.globalChartControls}
