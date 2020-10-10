@@ -48,10 +48,12 @@ export class CohortEditorFilterList extends React.Component<
               <div key={index}>
                 {this.setFilterLabel(filter)}
                 <IconButton
+                  id={`editFilerBtn-${index}`}
                   iconProps={{ iconName: "Edit" }}
                   onClick={(): void => this.props.editFilter(index)}
                 />
                 <IconButton
+                  id={`removeFilterBtn-${index}`}
                   iconProps={{ iconName: "Clear" }}
                   onClick={(): void => this.props.removeFilter(index)}
                 />

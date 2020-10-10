@@ -87,6 +87,7 @@ export class CohortEditor extends React.PureComponent<
 
     return (
       <Panel
+        id="cohortEditPanel"
         isOpen={true}
         onDismiss={this.props.onCancel}
         onRenderFooter={this.renderFooter}

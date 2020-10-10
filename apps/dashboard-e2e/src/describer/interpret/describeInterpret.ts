@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { describeAggregateFeatureImportance } from "./aggregateFeatureImportance/describeAggregateFeatureImportance";
+import { describeCohort } from "./cohort/describeCohort";
 import { describeDatasetExplorer } from "./datasetExplorer/describeDatasetExplorer";
 import { describeIndividualFeatureImportance } from "./individualFeatureImportance/describeIndividualFeatureImportance";
 import { interpretDatasets } from "./interpretDatasets";
@@ -23,6 +24,7 @@ export function describeInterpret(name: keyof typeof interpretDatasets): void {
         cy.get("#ErrorMessage").should("not.exist");
       });
     }
+    describeCohort(interpretDatasets[name]);
     if (!interpretDatasets[name].noFeatureImportance) {
       describeAggregateFeatureImportance(interpretDatasets[name]);
     }
