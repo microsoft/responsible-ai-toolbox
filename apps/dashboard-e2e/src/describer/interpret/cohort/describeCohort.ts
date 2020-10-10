@@ -12,7 +12,11 @@ export function describeCohort(dataShape: IInterpretData): void {
     it("show hide cohort edit panel by default", () => {
       cy.get("#cohortEditPanel").should("not.exist");
     });
-    if (!dataShape.noDataset && !dataShape.noLocalImportance) {
+    if (
+      !dataShape.noDataset ||
+      !dataShape.noLocalImportance ||
+      !dataShape.noY
+    ) {
       it("show cohort edit panel when click create", () => {
         cy.get('button:contains("New Cohort")').click();
         cy.get("#cohortEditPanel").should("exist");
