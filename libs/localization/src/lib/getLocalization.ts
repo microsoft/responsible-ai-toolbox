@@ -5,6 +5,7 @@ import {
   default as LocalizedStringsClass,
   LocalizedStrings
 } from "localized-strings";
+import { mapValues, merge } from "lodash";
 
 export enum Language {
   En = "en",
@@ -41,26 +42,9 @@ export type ILocalization<T> = Omit<LocalizedStrings<T>, "formatString"> & {
 export function getLocalization<T>(
   lang: ILocalizationConfig<T>
 ): ILocalization<T> {
-  const localization = new LocalizedStringsClass({
-    cs: lang.cs,
-    de: lang.de,
-    en: lang.en,
-    es: lang.es,
-    fr: lang.fr,
-    hu: lang.hu,
-    it: lang.it,
-    ja: lang.ja,
-    ko: lang.ko,
-    nl: lang.nl,
-    pl: lang.pl,
-    "pt-BR": lang["pt-BR"],
-    "pt-PT": lang["pt-PT"],
-    ru: lang.ru,
-    sv: lang.sv,
-    tr: lang.tr,
-    "zh-CN": lang["zh-CN"],
-    "zh-TW": lang["zh-TW"]
-  });
+  const localization = new LocalizedStringsClass(
+    mapValues(lang, (v) => merge({}, lang.en, v))
+  );
   const originalFormat = localization.formatString.bind(localization);
   localization.formatString = (
     str: string,
