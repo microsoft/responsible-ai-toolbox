@@ -41,7 +41,7 @@ export interface ICohortEditorState {
   openedFilter?: IFilter;
   filterIndex?: number;
   filters: IFilter[];
-  cohortName: string;
+  cohortName?: string;
   selectedFilterCategory?: string;
 }
 
@@ -58,7 +58,10 @@ export class CohortEditor extends React.PureComponent<
     JointDataset.RegressionError
   ].reduce((previousValue: IChoiceGroupOption[], key: string) => {
     const metaVal = this.props.jointDataset.metaDict[key];
-    if (key === JointDataset.DataLabelRoot) {
+    if (
+      key === JointDataset.DataLabelRoot &&
+      this.props.jointDataset.hasDataset
+    ) {
       previousValue.push({ key, text: "Dataset" });
       return previousValue;
     }
@@ -207,7 +210,7 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private _getErrorMessage = (): string | undefined => {
-    if (this.state.cohortName.length <= 0) {
+    if (!this.state.cohortName?.length) {
       return localization.Interpret.CohortEditor.cohortNameError;
     }
     return undefined;
@@ -394,7 +397,7 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private saveCohort = (): void => {
-    if (this.state.cohortName.length > 0) {
+    if (this.state.cohortName?.length) {
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
@@ -408,8 +411,6 @@ export class CohortEditor extends React.PureComponent<
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    if (newValue) {
-      this.setState({ cohortName: newValue });
-    }
+    this.setState({ cohortName: newValue });
   };
 }
