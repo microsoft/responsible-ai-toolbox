@@ -22,9 +22,9 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
     });
     describe("Dataset explorer Chart", () => {
       it("should have color label", () => {
-        cy.get(
-          '#DatasetExplorerChart div[class*="legendAndText"] span[class*="boldText"]'
-        ).should("contain.text", "Color value");
+        cy.get('#DatasetExplorerChart label:contains("Color value")').should(
+          "exist"
+        );
       });
       it("should render", () => {
         expect(props.chart.Elements.length).greaterThan(0);

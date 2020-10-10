@@ -54,6 +54,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
           <Stack.Item>
             <Label>{localization.Interpret.DatasetExplorer.colorValue}</Label>
             <DefaultButton
+              id="SetColorButton"
               onClick={this.props.setColorOpen}
               text={
                 this.props.chartProps.colorAxis &&

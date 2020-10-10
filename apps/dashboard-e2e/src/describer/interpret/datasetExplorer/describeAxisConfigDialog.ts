@@ -95,9 +95,7 @@ export function describeAxisConfigDialog(
     if (hasColorAxis) {
       describe("Color Axis settings dialog", () => {
         beforeEach(() => {
-          cy.get(
-            '#DatasetExplorerChart div[class*="legendAndText"] button'
-          ).click();
+          cy.get("#DatasetExplorerChart button#SetColorButton").click();
         });
         it("should display settings dialog", () => {
           cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
