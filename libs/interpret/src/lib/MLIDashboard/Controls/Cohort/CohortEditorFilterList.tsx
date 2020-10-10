@@ -40,7 +40,7 @@ export class CohortEditorFilterList extends React.Component<
   };
   public render(): React.ReactNode {
     return (
-      <>
+      <div id="FilterListContainer">
         <Label>{localization.Interpret.CohortEditor.addedFilters}</Label>
         {this.props.filters.length > 0 ? (
           this.props.filters.map((filter, index) => {
@@ -65,7 +65,7 @@ export class CohortEditorFilterList extends React.Component<
             </Text>
           </div>
         )}
-      </>
+      </div>
     );
   }
 
