@@ -127,8 +127,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     choiceBoxArea: {
       alignItems: "baseline",
       display: "flex",
-      flexDirection: "row",
-      paddingLeft: "67px"
+      flexDirection: "row"
     },
     choiceGroup: {
       paddingLeft: "30px"
@@ -285,7 +284,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     },
     page: {
       boxSizing: "border-box",
-      padding: "16px 0 0 14px",
+      padding: "16px 40px 0 14px",
       width: "100%"
     },
     panelIconAndLabel: {

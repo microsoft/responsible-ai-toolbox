@@ -24,7 +24,7 @@ export function describeGlobalExplanationChart<
     it("should have y axis label", () => {
       cy.get('#FeatureImportanceBar div[class*="rotatedVerticalBox"]').should(
         "contain.text",
-        "Aggregate Feature Importance"
+        "Aggregate feature importance"
       );
     });
     it("should have x axis label", () => {

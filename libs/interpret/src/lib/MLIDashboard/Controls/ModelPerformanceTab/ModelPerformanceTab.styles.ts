@@ -116,7 +116,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "column",
       height: "100%",
-      padding: "16px 0 0 14px",
+      padding: "16px 40px 0 14px",
       width: "100%"
     },
     rightPanel: {

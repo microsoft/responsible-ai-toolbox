@@ -27,7 +27,8 @@ import {
   IconButton,
   CommandBarButton,
   Dropdown,
-  IDropdownOption
+  IDropdownOption,
+  Label
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -344,7 +345,6 @@ export class WhatIfTab extends React.PureComponent<
         return { key: index, text: cohort.name };
       }
     );
-    console.log(this.props.invokeModel);
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
@@ -552,13 +552,15 @@ export class WhatIfTab extends React.PureComponent<
                     {localization.Interpret.WhatIfTab.noneSelectedYet}
                   </Text>
                 )}
-                <Text
-                  variant={"small"}
-                  block
-                  className={classNames.legendLabel}
-                >
-                  {localization.Interpret.WhatIfTab.whatIfDatapoints}
-                </Text>
+                {this.props.invokeModel && (
+                  <Text
+                    variant={"small"}
+                    block
+                    className={classNames.legendLabel}
+                  >
+                    {localization.Interpret.WhatIfTab.whatIfDatapoints}
+                  </Text>
+                )}
                 {this.state.customPoints.length > 0 && (
                   <InteractiveLegend
                     items={this.state.customPoints.map((row, rowIndex) => {
@@ -633,14 +635,9 @@ export class WhatIfTab extends React.PureComponent<
             className={classNames.missingParametersPlaceholder}
             id="noPointSelectedInfo"
           >
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {
-                  localization.Interpret.WhatIfTab
-                    .featureImportanceGetStartedText
-                }
-              </Text>
-            </div>
+            <Text variant="large" className={classNames.faintText}>
+              {localization.Interpret.WhatIfTab.featureImportanceGetStartedText}
+            </Text>
           </div>
         );
       } else {
@@ -887,30 +884,34 @@ export class WhatIfTab extends React.PureComponent<
       {
         key: WhatIfConstants.featureImportanceKey,
         text: localization.Interpret.WhatIfTab.featureImportancePlot
-      }
-    ];
-    if (this.props.invokeModel) {
-      secondaryPlotChoices.push({
+      },
+      {
         key: WhatIfConstants.IceKey,
         text: localization.Interpret.WhatIfTab.icePlot
-      });
-    }
+      }
+    ];
     return (
       <div id="subPlotContainer">
-        <div className={classNames.choiceBoxArea} id="subPlotChoice">
-          <Text variant="medium" className={classNames.boldText}>
-            {localization.Interpret.WhatIfTab.showLabel}
-          </Text>
-          <ChoiceGroup
-            className={classNames.choiceGroup}
-            styles={{
-              flexContainer: classNames.choiceGroupFlexContainer
-            }}
-            options={secondaryPlotChoices}
-            selectedKey={this.state.secondaryChartChoice}
-            onChange={this.setSecondaryChart}
-          />
-        </div>
+        {this.props.invokeModel ? (
+          <div className={classNames.choiceBoxArea} id="subPlotChoice">
+            <Text variant="medium" className={classNames.boldText}>
+              {localization.Interpret.WhatIfTab.showLabel}
+            </Text>
+            <ChoiceGroup
+              className={classNames.choiceGroup}
+              styles={{
+                flexContainer: classNames.choiceGroupFlexContainer
+              }}
+              options={secondaryPlotChoices}
+              selectedKey={this.state.secondaryChartChoice}
+              onChange={this.setSecondaryChart}
+            />
+          </div>
+        ) : (
+          <Label>
+            {localization.Interpret.WhatIfTab.localFeatureImportanceForPoint}
+          </Label>
+        )}
         {secondaryPlot}
       </div>
     );

@@ -454,8 +454,8 @@ export class NewExplanationDashboard extends React.PureComponent<
               modelMetadata={this.state.modelMetadata}
             />
           </Stack.Item>
-          <Stack.Item>
-            <div>
+          <Stack.Item grow>
+            <>
               <Pivot
                 selectedKey={this.state.activeGlobalTab}
                 onLinkClick={this.handleGlobalTabClick}
@@ -522,7 +522,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   onWeightChange={this.onWeightVectorChange}
                 />
               )}
-            </div>
+            </>
           </Stack.Item>
         </Stack>{" "}
       </div>

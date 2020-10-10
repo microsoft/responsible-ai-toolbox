@@ -88,7 +88,9 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
             <>
               <Stack.Item>
                 <Label>
-                  {localization.Interpret.WhatIfTab.whatIfDatapoint}
+                  {this.props.invokeModel
+                    ? localization.Interpret.WhatIfTab.whatIfDatapoint
+                    : localization.Interpret.WhatIfTab.dataPointInfo}
                 </Label>
                 <Text variant={"small"}>
                   {localization.Interpret.WhatIfTab.whatIfHelpText}
@@ -109,23 +111,31 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                   metadata={this.props.metadata}
                   selectedWhatIfRootIndex={this.props.selectedWhatIfRootIndex}
                 />
-                <TextField
-                  label={localization.Interpret.WhatIfTab.whatIfNameLabel}
-                  value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
-                  onChange={this.setCustomRowProperty.bind(
-                    this,
-                    WhatIfConstants.namePath,
-                    true
-                  )}
-                  styles={{ fieldGroup: { width: 200 } }}
-                  disabled={inputDisabled}
-                />
-                <CustomPredictionLabels
-                  jointDataset={this.props.jointDataset}
-                  metadata={this.props.metadata}
-                  selectedWhatIfRootIndex={this.props.selectedWhatIfRootIndex}
-                  temporaryPoint={this.props.temporaryPoint}
-                />
+                {this.props.invokeModel && (
+                  <>
+                    <TextField
+                      label={localization.Interpret.WhatIfTab.whatIfNameLabel}
+                      value={
+                        this.props.temporaryPoint?.[WhatIfConstants.namePath]
+                      }
+                      onChange={this.setCustomRowProperty.bind(
+                        this,
+                        WhatIfConstants.namePath,
+                        true
+                      )}
+                      styles={{ fieldGroup: { width: 200 } }}
+                      disabled={inputDisabled}
+                    />
+                    <CustomPredictionLabels
+                      jointDataset={this.props.jointDataset}
+                      metadata={this.props.metadata}
+                      selectedWhatIfRootIndex={
+                        this.props.selectedWhatIfRootIndex
+                      }
+                      temporaryPoint={this.props.temporaryPoint}
+                    />
+                  </>
+                )}
               </Stack.Item>
               <Stack.Item className={classNames.featureList}>
                 <Label>{localization.Interpret.WhatIfTab.featureValues}</Label>
@@ -192,11 +202,11 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                     text={localization.Interpret.WhatIfTab.saveAsNewPoint}
                     onClick={this.props.saveAsPoint}
                   />
-                  <Text variant={"xSmall"}>
-                    {localization.Interpret.WhatIfTab.disclaimer}
-                  </Text>
                 </>
               )}
+              <Text variant={"xSmall"}>
+                {localization.Interpret.WhatIfTab.disclaimer}
+              </Text>
             </>
           )}
         </Stack>
