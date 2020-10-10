@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { ModelTypes } from "../IExplanationContext";
 
 import { predictionLabelStyles } from "./PredictionLabel.styles";
@@ -34,14 +34,14 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
   private makePredictionLabel(): string {
     if (this.props.modelType === ModelTypes.Regression) {
       return localization.formatString(
-        localization.PredictionLabel.predictedValueLabel,
+        localization.Interpret.PredictionLabel.predictedValueLabel,
         this.props.prediction.toLocaleString(undefined, {
           minimumFractionDigits: 3
         })
       );
     }
     return localization.formatString(
-      localization.PredictionLabel.predictedClassLabel,
+      localization.Interpret.PredictionLabel.predictedClassLabel,
       this.props.classNames[this.props.prediction]
     );
   }
@@ -51,7 +51,7 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
       this.props.prediction
     ];
     return localization.formatString(
-      localization.IcePlot.probabilityLabel,
+      localization.Interpret.IcePlot.probabilityLabel,
       probability?.toLocaleString(undefined, { minimumFractionDigits: 3 })
     );
   }

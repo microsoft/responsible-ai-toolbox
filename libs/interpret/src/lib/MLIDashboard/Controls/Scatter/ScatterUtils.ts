@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { PartialRequired2 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import {
   AccessorMappingFunctionNames,
   ChartBuilder,
@@ -17,7 +18,6 @@ import {
   IDropdownOption
 } from "office-ui-fabric-react";
 
-import { localization } from "../../../Localization/localization";
 import { IDashboardContext } from "../../ExplanationDashboard";
 import {
   IExplanationContext,
@@ -79,7 +79,7 @@ export class ScatterUtils {
         result.push({
           itemType: DropdownMenuItemType.Header,
           key: "Header0",
-          text: localization.featureImportance
+          text: localization.Interpret.featureImportance
         });
         explanationContext.modelMetadata.featureNames.forEach(
           (featureName, index) => {
@@ -87,7 +87,7 @@ export class ScatterUtils {
               data: { isCategorical: false, isFeatureImportance: true },
               key: `LocalExplanation[${index}]`,
               text: localization.formatString(
-                localization.ExplanationScatter.importanceLabel,
+                localization.Interpret.ExplanationScatter.importanceLabel,
                 featureName
               )
             });
@@ -102,7 +102,7 @@ export class ScatterUtils {
       result.push({
         itemType: DropdownMenuItemType.Header,
         key: "Header1",
-        text: localization.ExplanationScatter.dataGroupLabel
+        text: localization.Interpret.ExplanationScatter.dataGroupLabel
       });
       explanationContext.modelMetadata.featureNames.forEach(
         (featureName, index) => {
@@ -114,7 +114,7 @@ export class ScatterUtils {
             key: `TrainingData[${index}]`,
             text: includeFeatureImportance
               ? localization.formatString(
-                  localization.ExplanationScatter.dataLabel,
+                  localization.Interpret.ExplanationScatter.dataLabel,
                   featureName
                 )
               : featureName
@@ -124,7 +124,7 @@ export class ScatterUtils {
       result.push({
         data: { isCategorical: false },
         key: "Index",
-        text: localization.ExplanationScatter.index
+        text: localization.Interpret.ExplanationScatter.index
       });
       result.push({
         itemType: DropdownMenuItemType.Divider,
@@ -134,7 +134,7 @@ export class ScatterUtils {
       result.push({
         itemType: DropdownMenuItemType.Header,
         key: "Header2",
-        text: localization.ExplanationScatter.output
+        text: localization.Interpret.ExplanationScatter.output
       });
       if (explanationContext.testDataset.predictedY) {
         result.push({
@@ -149,7 +149,7 @@ export class ScatterUtils {
                 : undefined
           },
           key: "PredictedY",
-          text: localization.ExplanationScatter.predictedY
+          text: localization.Interpret.ExplanationScatter.predictedY
         });
       }
       if (explanationContext.testDataset.probabilityY) {
@@ -162,7 +162,7 @@ export class ScatterUtils {
             data: { isCategorical: false },
             key: `ProbabilityY[${index}]`,
             text: localization.formatString(
-              localization.ExplanationScatter.probabilityLabel,
+              localization.Interpret.ExplanationScatter.probabilityLabel,
               className
             )
           });
@@ -181,7 +181,7 @@ export class ScatterUtils {
                 : undefined
           },
           key: "TrueY",
-          text: localization.ExplanationScatter.trueY
+          text: localization.Interpret.ExplanationScatter.trueY
         });
       }
       return result;
@@ -343,8 +343,8 @@ export class ScatterUtils {
       },
       key: colorAccessor,
       text: hasPredictedY
-        ? localization.ExplanationScatter.predictedY
-        : localization.ExplanationScatter.index
+        ? localization.Interpret.ExplanationScatter.predictedY
+        : localization.Interpret.ExplanationScatter.index
     };
     const modelData = exp.modelMetadata;
     const colorbarTitle = ScatterUtils.formatItemTextForAxis(
@@ -360,15 +360,15 @@ export class ScatterUtils {
       colorAccessor
     ];
     props.data[0].datapointLevelAccessors!["text"].mapArgs = [
-      localization.ExplanationScatter.index,
+      localization.Interpret.ExplanationScatter.index,
       modelData.featureNames[maxIndex],
-      localization.ExplanationScatter.predictedY
+      localization.Interpret.ExplanationScatter.predictedY
     ];
 
     _.set(
       props,
       "layout.xaxis.title.text",
-      localization.ExplanationScatter.index
+      localization.Interpret.ExplanationScatter.index
     );
     _.set(props, "layout.yaxis.title.text", modelData.featureNames[maxIndex]);
 
@@ -424,15 +424,15 @@ export class ScatterUtils {
     ];
     props.data[0].datapointLevelAccessors!["text"].mapArgs = [
       localization.formatString(
-        localization.ExplanationScatter.dataLabel,
+        localization.Interpret.ExplanationScatter.dataLabel,
         modelData.featureNames[maxIndex]
       ),
       localization.formatString(
-        localization.ExplanationScatter.importanceLabel,
+        localization.Interpret.ExplanationScatter.importanceLabel,
         modelData.featureNames[maxIndex]
       ),
       localization.formatString(
-        localization.ExplanationScatter.dataLabel,
+        localization.Interpret.ExplanationScatter.dataLabel,
         modelData.featureNames[secondIndex]
       )
     ];
@@ -440,11 +440,11 @@ export class ScatterUtils {
     const yAxisLabel =
       modelData.modelType === ModelTypes.Binary
         ? localization.formatString(
-            localization.ExplanationScatter.importanceLabel,
+            localization.Interpret.ExplanationScatter.importanceLabel,
             modelData.featureNames[maxIndex]
           ) + ` : ${modelData.classNames[0]}`
         : localization.formatString(
-            localization.ExplanationScatter.importanceLabel,
+            localization.Interpret.ExplanationScatter.importanceLabel,
             modelData.featureNames[maxIndex]
           );
     _.set(props, "layout.yaxis.title.text", yAxisLabel);
@@ -452,7 +452,7 @@ export class ScatterUtils {
       props,
       "layout.xaxis.title.text",
       localization.formatString(
-        localization.ExplanationScatter.dataLabel,
+        localization.Interpret.ExplanationScatter.dataLabel,
         modelData.featureNames[maxIndex]
       )
     );
@@ -618,7 +618,7 @@ export class ScatterUtils {
     ) {
       // Add the first class's name to the text for binary case, to clarify
       const className = modelMetadata.classNames[0];
-      return `${item.text}<br> ${localization.ExplanationScatter.class} : ${className}`;
+      return `${item.text}<br> ${localization.Interpret.ExplanationScatter.class} : ${className}`;
     }
     return item.text;
   }

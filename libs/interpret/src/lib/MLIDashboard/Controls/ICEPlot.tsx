@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ICategoricalRange,
@@ -21,7 +22,6 @@ import {
 import { Data } from "plotly.js";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
@@ -128,8 +128,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
             automargin: true,
             title:
               modelType === ModelTypes.Regression
-                ? localization.IcePlot.prediction
-                : localization.IcePlot.predictedProbability
+                ? localization.Interpret.IcePlot.prediction
+                : localization.Interpret.IcePlot.predictedProbability
           }
         } as any
       };
@@ -192,7 +192,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       const result = [];
       if (modelType !== ModelTypes.Regression) {
         result.push(
-          localization.formatString(localization.BarChart.classLabel, className)
+          localization.formatString(
+            localization.Interpret.BarChart.classLabel,
+            className
+          )
         );
       }
       if (!Number.isNaN(+xValue)) {
@@ -206,14 +209,14 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       if (modelType === ModelTypes.Regression) {
         result.push(
           localization.formatString(
-            localization.IcePlot.predictionLabel,
+            localization.Interpret.IcePlot.predictionLabel,
             yData[index].toLocaleString(undefined, { minimumFractionDigits: 3 })
           )
         );
       } else {
         result.push(
           localization.formatString(
-            localization.IcePlot.probabilityLabel,
+            localization.Interpret.IcePlot.probabilityLabel,
             yData[index].toLocaleString(undefined, { minimumFractionDigits: 3 })
           )
         );
@@ -286,7 +289,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
               <ComboBox
                 options={this.featuresOption}
                 onChange={this.onFeatureSelected}
-                label={localization.IcePlot.featurePickerLabel}
+                label={localization.Interpret.IcePlot.featurePickerLabel}
                 ariaLabel="feature picker"
                 selectedKey={
                   this.state.rangeView
@@ -315,21 +318,21 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                 {this.state.rangeView.type !== RangeTypes.Categorical && (
                   <div className={iCEPlotStyles.parameterSet}>
                     <TextField
-                      label={localization.IcePlot.minimumInputLabel}
+                      label={localization.Interpret.IcePlot.minimumInputLabel}
                       styles={FabricStyles.textFieldStyle}
                       value={this.state.rangeView.min?.toString()}
                       onChange={this.onMinRangeChanged}
                       errorMessage={this.state.rangeView.minErrorMessage}
                     />
                     <TextField
-                      label={localization.IcePlot.maximumInputLabel}
+                      label={localization.Interpret.IcePlot.maximumInputLabel}
                       styles={FabricStyles.textFieldStyle}
                       value={this.state.rangeView.max?.toString()}
                       onChange={this.onMaxRangeChanged}
                       errorMessage={this.state.rangeView.maxErrorMessage}
                     />
                     <TextField
-                      label={localization.IcePlot.stepInputLabel}
+                      label={localization.Interpret.IcePlot.stepInputLabel}
                       styles={FabricStyles.textFieldStyle}
                       value={this.state.rangeView.steps?.toString()}
                       onChange={this.onStepsRangeChanged}
@@ -343,7 +346,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         </div>
         {this.state.abortController !== undefined && (
           <div className={iCEPlotStyles.loading}>
-            {localization.IcePlot.loadingMessage}
+            {localization.Interpret.IcePlot.loadingMessage}
           </div>
         )}
         {this.state.errorMessage && (
@@ -351,9 +354,11 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         )}
         {plotlyProps === undefined &&
           this.state.abortController === undefined && (
-            <div>{localization.IcePlot.submitPrompt}</div>
+            <div>{localization.Interpret.IcePlot.submitPrompt}</div>
           )}
-        {hasError && <div>{localization.IcePlot.topLevelErrorMessage}</div>}
+        {hasError && (
+          <div>{localization.Interpret.IcePlot.topLevelErrorMessage}</div>
+        )}
         {plotlyProps !== undefined &&
           this.state.abortController === undefined &&
           !hasError && (
@@ -436,8 +441,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     ) {
       rangeView.minErrorMessage =
         rangeView.type === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
       this.setState({ rangeView });
     } else {
       rangeView.minErrorMessage = undefined;
@@ -463,8 +468,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     ) {
       rangeView.maxErrorMessage =
         rangeView.type === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
       this.setState({ rangeView });
     } else {
       rangeView.maxErrorMessage = undefined;
@@ -485,7 +490,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     }
     rangeView.steps = val;
     if (!Number.isInteger(val)) {
-      rangeView.stepsErrorMessage = localization.IcePlot.integerError;
+      rangeView.stepsErrorMessage = localization.Interpret.IcePlot.integerError;
       this.setState({ rangeView });
     } else {
       rangeView.stepsErrorMessage = undefined;
@@ -573,7 +578,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           if (error.name === "PythonError") {
             this.setState({
               errorMessage: localization.formatString(
-                localization.IcePlot.errorPrefix,
+                localization.Interpret.IcePlot.errorPrefix,
                 error.message
               )
             });

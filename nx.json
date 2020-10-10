@@ -38,6 +38,9 @@
     "dashboard-e2e": {
       "tags": [],
       "implicitDependencies": ["dashboard"]
+    },
+    "localization": {
+      "tags": []
     }
   }
 }

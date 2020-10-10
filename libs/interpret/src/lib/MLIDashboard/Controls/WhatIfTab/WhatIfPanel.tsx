@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   ComboBox,
   Dropdown,
@@ -17,7 +18,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { JointDataset } from "../../JointDataset";
 
@@ -87,15 +87,17 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
           {this.props.isPanelOpen && (
             <>
               <Stack.Item>
-                <Label>{localization.WhatIfTab.whatIfDatapoint}</Label>
+                <Label>
+                  {localization.Interpret.WhatIfTab.whatIfDatapoint}
+                </Label>
                 <Text variant={"small"}>
-                  {localization.WhatIfTab.whatIfHelpText}
+                  {localization.Interpret.WhatIfTab.whatIfHelpText}
                 </Text>
               </Stack.Item>
               <Stack.Item>
                 {this.props.rowOptions && (
                   <Dropdown
-                    label={localization.WhatIfTab.indexLabel}
+                    label={localization.Interpret.WhatIfTab.indexLabel}
                     options={this.props.rowOptions}
                     selectedKey={this.props.selectedWhatIfRootIndex}
                     onChange={this.props.setSelectedIndex}
@@ -108,7 +110,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                   selectedWhatIfRootIndex={this.props.selectedWhatIfRootIndex}
                 />
                 <TextField
-                  label={localization.WhatIfTab.whatIfNameLabel}
+                  label={localization.Interpret.WhatIfTab.whatIfNameLabel}
                   value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
                   onChange={this.setCustomRowProperty.bind(
                     this,
@@ -126,9 +128,11 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                 />
               </Stack.Item>
               <Stack.Item className={classNames.featureList}>
-                <Label>{localization.WhatIfTab.featureValues}</Label>
+                <Label>{localization.Interpret.WhatIfTab.featureValues}</Label>
                 <SearchBox
-                  placeholder={localization.WhatIf.filterFeaturePlaceholder}
+                  placeholder={
+                    localization.Interpret.WhatIf.filterFeaturePlaceholder
+                  }
                   onChange={this.props.filterFeatures}
                 />
                 {this.props.filteredFeatureList.map((item) => {
@@ -175,7 +179,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                           JointDataset.PredictedYLabel
                         ] === undefined
                       }
-                      text={localization.WhatIfTab.saveChanges}
+                      text={localization.Interpret.WhatIfTab.saveChanges}
                       onClick={this.props.savePoint}
                     />
                   )}
@@ -185,11 +189,11 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                         JointDataset.PredictedYLabel
                       ] === undefined
                     }
-                    text={localization.WhatIfTab.saveAsNewPoint}
+                    text={localization.Interpret.WhatIfTab.saveAsNewPoint}
                     onClick={this.props.saveAsPoint}
                   />
                   <Text variant={"xSmall"}>
-                    {localization.WhatIfTab.disclaimer}
+                    {localization.Interpret.WhatIfTab.disclaimer}
                   </Text>
                 </>
               )}

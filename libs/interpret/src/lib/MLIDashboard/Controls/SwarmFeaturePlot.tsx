@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
   PlotlyMode,
@@ -11,7 +12,6 @@ import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { Cohort } from "../Cohort";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { JointDataset } from "../JointDataset";
@@ -68,7 +68,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
         _.set(
           plotlyProps,
           "layout.yaxis.title",
-          `${localization.featureImportance}<br> ${localization.ExplanationScatter.class} ${metadata.classNames[0]}`
+          `${localization.Interpret.featureImportance}<br> ${localization.Interpret.ExplanationScatter.class} ${metadata.classNames[0]}`
         );
       }
       if (selectedOption === undefined || selectedOption.key === "none") {
@@ -87,8 +87,8 @@ export class SwarmFeaturePlot extends React.PureComponent<
           ];
           _.set(plotlyProps.data[0], "marker.colorbar.tickvals", [0, 1]);
           _.set(plotlyProps.data[0], "marker.colorbar.ticktext", [
-            localization.AggregateImportance.low,
-            localization.AggregateImportance.high
+            localization.Interpret.AggregateImportance.low,
+            localization.Interpret.AggregateImportance.high
           ]);
         } else {
           _.set(plotlyProps.data[0], "marker.opacity", 0.6);
@@ -146,7 +146,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };

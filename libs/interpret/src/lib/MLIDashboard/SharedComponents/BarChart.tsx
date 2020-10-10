@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import Plotly from "plotly.js";
 import React from "react";
 import { v4 } from "uuid";
 
-import { localization } from "../../Localization/localization";
 import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 
@@ -39,13 +39,13 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       const result = [];
       result.push(
         localization.formatString(
-          localization.AggregateImportance.featureLabel,
+          localization.Interpret.AggregateImportance.featureLabel,
           featureNames[index] || "unknown feature"
         )
       );
       result.push(
         localization.formatString(
-          localization.AggregateImportance.importanceLabel,
+          localization.Interpret.AggregateImportance.importanceLabel,
           importanceVector[index].toLocaleString(undefined, {
             minimumFractionDigits: 3
           })
@@ -54,14 +54,17 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       if (rowDataArray && rowDataArray.length > index) {
         result.push(
           localization.formatString(
-            localization.AggregateImportance.valueLabel,
+            localization.Interpret.AggregateImportance.valueLabel,
             rowDataArray[index]
           )
         );
       }
       if (className) {
         result.push(
-          localization.formatString(localization.BarChart.classLabel, className)
+          localization.formatString(
+            localization.Interpret.BarChart.classLabel,
+            className
+          )
         );
       }
       return result.join("<br>");
@@ -73,16 +76,19 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     className?: string
   ): string {
     const result = [];
-    result.push(localization.intercept);
+    result.push(localization.Interpret.intercept);
     result.push(
       localization.formatString(
-        localization.AggregateImportance.importanceLabel,
+        localization.Interpret.AggregateImportance.importanceLabel,
         value.toLocaleString(undefined, { minimumFractionDigits: 3 })
       )
     );
     if (className) {
       result.push(
-        localization.formatString(localization.BarChart.classLabel, className)
+        localization.formatString(
+          localization.Interpret.BarChart.classLabel,
+          className
+        )
       );
     }
     return result.join("<br>");
@@ -106,7 +112,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     }
     return (
       <div className={barChartStyles.centered}>
-        {localization.BarChart.noData}
+        {localization.Interpret.BarChart.noData}
       </div>
     );
   }
@@ -144,7 +150,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         },
         yaxis: {
           automargin: true,
-          title: localization.featureImportance
+          title: localization.Interpret.featureImportance
         }
       } as any
     };
@@ -201,7 +207,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     );
     const tickvals = sortedIndexVector.map((_, index) => index);
     if (this.props.intercept) {
-      ticktext.unshift(localization.intercept);
+      ticktext.unshift(localization.Interpret.intercept);
       tickvals.unshift(-1);
     }
     _.set(baseSeries, "layout.xaxis.ticktext", ticktext);

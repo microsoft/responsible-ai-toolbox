@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "../../Localization/localization";
 
 import { SummaryTableStyles } from "./SummaryTable.styles";
 
@@ -55,12 +54,12 @@ export class SummaryTable extends React.PureComponent<ISummaryTableProps> {
                   <Stack horizontal>
                     {minIndexes.includes(index) && (
                       <Text variant={"xSmall"} className={styles.minMaxLabel}>
-                        {localization.Report.minTag}
+                        {localization.Fairness.Report.minTag}
                       </Text>
                     )}
                     {maxIndexes.includes(index) && (
                       <Text variant={"xSmall"} className={styles.minMaxLabel}>
-                        {localization.Report.maxTag}
+                        {localization.Fairness.Report.maxTag}
                       </Text>
                     )}
                   </Stack>

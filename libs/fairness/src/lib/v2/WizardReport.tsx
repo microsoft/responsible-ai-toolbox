@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { getTheme } from "@uifabric/styling";
 import {
   IDropdownStyles,
@@ -25,7 +26,6 @@ import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
-import { localization } from "./../Localization/localization";
 import { BarPlotlyProps } from "./BarPlotlyProps";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OverallTable } from "./Controls/OverallTable";
@@ -104,7 +104,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         <Spinner
           className={styles.spinner}
           size={SpinnerSize.large}
-          label={localization.calculating}
+          label={localization.Fairness.calculating}
         />
       );
     } else {
@@ -139,9 +139,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         //         style={{ backgroundColor: ChartColors[1] }}
         //       />
         //       <div>
-        //         <Text block>{localization.Report.underestimationError}</Text>
+        //         <Text block>{localization.Fairness.Report.underestimationError}</Text>
         //         <Text block>
-        //           {localization.Report.underpredictionExplanation}
+        //           {localization.Fairness.Report.underpredictionExplanation}
         //         </Text>
         //       </div>
         //     </div>
@@ -151,26 +151,26 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         //         style={{ backgroundColor: ChartColors[0] }}
         //       />
         //       <div>
-        //         <Text block>{localization.Report.overestimationError}</Text>
+        //         <Text block>{localization.Fairness.Report.overestimationError}</Text>
         //         <Text block>
-        //           {localization.Report.overpredictionExplanation}
+        //           {localization.Fairness.Report.overpredictionExplanation}
         //         </Text>
         //       </div>
         //     </div>
         //     <Text block>
-        //       {localization.Report.classificationPerformanceHowToRead1}
+        //       {localization.Fairness.Report.classificationPerformanceHowToRead1}
         //     </Text>
         //     <Text block>
-        //       {localization.Report.classificationPerformanceHowToRead2}
+        //       {localization.Fairness.Report.classificationPerformanceHowToRead2}
         //     </Text>
         //     <Text block>
-        //       {localization.Report.classificationPerformanceHowToRead3}
+        //       {localization.Fairness.Report.classificationPerformanceHowToRead3}
         //     </Text>
         //   </div>
         // );
         // howToReadOutcomesSection = (
         //   <Text className={styles.textRow} block>
-        //     {localization.Report.classificationOutcomesHowToRead}
+        //     {localization.Fairness.Report.classificationOutcomesHowToRead}
         //   </Text>
         // );
       }
@@ -181,7 +181,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         // TODO: this plot doesn't exist anymore, does it?
         const opportunityText = this.state.metrics.predictions?.map((val) => {
           return localization.formatString(
-            localization.Report.tooltipPrediction,
+            localization.Fairness.Report.tooltipPrediction,
             FormatMetrics.formatNumbers(val, "average", false, 3)
           );
         });
@@ -208,7 +208,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       ) {
         const opportunityText = this.state.metrics.predictions?.map((val) => {
           return localization.formatString(
-            localization.Report.tooltipPrediction,
+            localization.Fairness.Report.tooltipPrediction,
             val
           );
         });
@@ -228,7 +228,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             y: this.props.dashboardContext.binVector
           } as any
         ];
-        performanceChartHeader = localization.Report.distributionOfErrors;
+        performanceChartHeader =
+          localization.Fairness.Report.distributionOfErrors;
       }
 
       // define task-specific metrics to show by default
@@ -382,18 +383,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 ))}
               <Text>
                 {(this.state.expandAttributes &&
-                  localization.Report.collapseSensitiveAttributes) ||
+                  localization.Fairness.Report.collapseSensitiveAttributes) ||
                   (!this.state.expandAttributes &&
-                    localization.Report.expandSensitiveAttributes)}
+                    localization.Fairness.Report.expandSensitiveAttributes)}
               </Text>
             </div>
             <div className={styles.equalizedOdds}>
-              <Text>{localization.Report.equalizedOddsDisparity}</Text>
+              <Text>{localization.Fairness.Report.equalizedOddsDisparity}</Text>
             </div>
             <div className={styles.howTo}>
               <ActionButton onClick={this.handleOpenModalHelp}>
                 <div className={styles.infoButton}>i</div>
-                {localization.ModelComparison.howToRead}
+                {localization.Fairness.ModelComparison.howToRead}
               </ActionButton>
               <Modal
                 titleAriaId="intro modal"
@@ -411,13 +412,22 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                   />
                 </div>
                 <p className={styles.modalContentHelpText}>
-                  {localization.Report.classificationPerformanceHowToRead1}
+                  {
+                    localization.Fairness.Report
+                      .classificationPerformanceHowToRead1
+                  }
                   <br />
                   <br />
-                  {localization.Report.classificationPerformanceHowToRead2}
+                  {
+                    localization.Fairness.Report
+                      .classificationPerformanceHowToRead2
+                  }
                   <br />
                   <br />
-                  {localization.Report.classificationPerformanceHowToRead3}
+                  {
+                    localization.Fairness.Report
+                      .classificationPerformanceHowToRead3
+                  }
                   <br />
                   <br />
                 </p>
@@ -426,7 +436,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     className={styles.doneButton}
                     onClick={this.handleCloseModalHelp}
                   >
-                    {localization.done}
+                    {localization.Fairness.done}
                   </PrimaryButton>
                 </div>
               </Modal>
@@ -468,10 +478,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 />
                 <div>
                   <div className={styles.legendTitle}>
-                    {localization.Report.underestimationError}
+                    {localization.Fairness.Report.underestimationError}
                   </div>
                   <div className={styles.legendSubtitle}>
-                    {localization.Report.underpredictionExplanation}
+                    {localization.Fairness.Report.underpredictionExplanation}
                   </div>
                 </div>
               </div>
@@ -482,10 +492,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 />
                 <div>
                   <div className={styles.legendTitle}>
-                    {localization.Report.overestimationError}
+                    {localization.Fairness.Report.overestimationError}
                   </div>
                   <div className={styles.legendSubtitle}>
-                    {localization.Report.overpredictionExplanation}
+                    {localization.Fairness.Report.overpredictionExplanation}
                   </div>
                 </div>
               </div>
@@ -498,14 +508,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 className={styles.insightsIcon}
               />
               <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.insights}
+                {localization.Fairness.ModelComparison.insights}
               </Text>
             </div>
-            <div className={styles.insightsText}>{localization.loremIpsum}</div>
+            <div className={styles.insightsText}>
+              {localization.Fairness.loremIpsum}
+            </div>
             <div className={styles.downloadReport}>
               <Icon iconName="Download" className={styles.downloadIcon} />
               <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.downloadReport}
+                {localization.Fairness.ModelComparison.downloadReport}
               </Text>
             </div>
           </div>
@@ -523,12 +535,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 iconProps={{ iconName: "ChevronLeft" }}
                 onClick={this.clearModelSelection}
               >
-                {localization.Report.backToComparisons}
+                {localization.Fairness.Report.backToComparisons}
               </ActionButton>
             </div>
           )}
           <div className={styles.modelLabel}>
-            {localization.Report.assessmentResults}{" "}
+            {localization.Fairness.Report.assessmentResults}{" "}
             <b>
               {
                 this.props.dashboardContext.modelNames[

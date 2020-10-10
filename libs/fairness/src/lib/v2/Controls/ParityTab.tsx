@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Stack, StackItem, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
-import { localization } from "../../Localization/localization";
 import { IParityPickerPropsV2 } from "../FairnessWizard";
 
 import { ParityTabStyles } from "./ParityTab.styles";
@@ -29,10 +29,10 @@ export class ParityTab extends React.PureComponent<IParityTabProps> {
         <StackItem grow={2}>
           <Stack className={styles.main}>
             <Text className={styles.header} block>
-              {localization.Performance.header}
+              {localization.Fairness.Performance.header}
             </Text>
             <Text className={styles.textBody} block>
-              {localization.Parity.body}
+              {localization.Fairness.Parity.body}
             </Text>
             <StackItem grow={2} className={styles.itemsList}>
               <TileList

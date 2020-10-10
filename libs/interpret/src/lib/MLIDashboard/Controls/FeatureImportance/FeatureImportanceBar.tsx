@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   ComboBox,
@@ -14,7 +15,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { ModelTypes, IGlobalExplanation } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
@@ -70,7 +70,9 @@ export class FeatureImportanceBar extends React.PureComponent<
             {this.props.chartTypeOptions &&
               this.props.chartTypeOptions.length > 1 && (
                 <ComboBox
-                  label={localization.FeatureImportanceWrapper.chartType}
+                  label={
+                    localization.Interpret.FeatureImportanceWrapper.chartType
+                  }
                   selectedKey={this.props.config.displayMode}
                   onChange={this.setChart}
                   options={this.props.chartTypeOptions}
@@ -82,12 +84,12 @@ export class FeatureImportanceBar extends React.PureComponent<
             <div className={featureImportanceBarStyles.sliderControl}>
               <div className={featureImportanceBarStyles.sliderLabel}>
                 <span className={featureImportanceBarStyles.labelText}>
-                  {localization.AggregateImportance.topKFeatures}
+                  {localization.Interpret.AggregateImportance.topKFeatures}
                 </span>
                 <IconButton
                   id={this._iconId}
                   iconProps={{ iconName: "Info" }}
-                  title={localization.AggregateImportance.topKInfo}
+                  title={localization.Interpret.AggregateImportance.topKInfo}
                   onClick={this.onIconClick}
                   styles={{
                     root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
@@ -102,12 +104,14 @@ export class FeatureImportanceBar extends React.PureComponent<
                 value={this.props.config.topK}
                 onChange={this.setTopK}
                 showValue={true}
-                ariaLabel={localization.AggregateImportance.topKFeatures}
+                ariaLabel={
+                  localization.Interpret.AggregateImportance.topKFeatures
+                }
               />
             </div>
             {this.sortOptions.length > 0 && (
               <ComboBox
-                label={localization.BarChart.sortBy}
+                label={localization.Interpret.BarChart.sortBy}
                 selectedKey={this.state.selectedSorting}
                 onChange={this.onSortSelect}
                 options={this.sortOptions}
@@ -126,15 +130,19 @@ export class FeatureImportanceBar extends React.PureComponent<
             >
               <div className={featureImportanceBarStyles.calloutInfo}>
                 <div>
-                  <span>{localization.CrossClass.overviewInfo}</span>
+                  <span>{localization.Interpret.CrossClass.overviewInfo}</span>
                   <ul>
-                    <li>{localization.CrossClass.absoluteValInfo}</li>
-                    <li>{localization.CrossClass.predictedClassInfo}</li>
-                    <li>{localization.CrossClass.enumeratedClassInfo}</li>
+                    <li>{localization.Interpret.CrossClass.absoluteValInfo}</li>
+                    <li>
+                      {localization.Interpret.CrossClass.predictedClassInfo}
+                    </li>
+                    <li>
+                      {localization.Interpret.CrossClass.enumeratedClassInfo}
+                    </li>
                   </ul>
                 </div>
                 <DefaultButton onClick={this.onDismiss}>
-                  {localization.CrossClass.close}
+                  {localization.Interpret.CrossClass.close}
                 </DefaultButton>
               </div>
             </Callout>
@@ -201,7 +209,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     const result: IDropdownOption[] = [
       {
         key: FeatureKeys.AbsoluteGlobal,
-        text: localization.BarChart.absoluteGlobal
+        text: localization.Interpret.BarChart.absoluteGlobal
       }
     ];
     result.push(

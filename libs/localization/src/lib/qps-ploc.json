@@ -1,0 +1,111 @@
+{
+  "Interpret": {
+    "selectPoint": "[pj0ZL][©¥Select a point to see its local explanation !!! !!! !!! !!! ]",
+    "defaultClassNames": "[UtXv6][éÐClass {0} !!! ]",
+    "defaultFeatureNames": "[G3wWC][ÅÛFeature {0} !!! !]",
+    "absoluteAverage": "[O4D5D][¥©Average of absolute value !!! !!! !!]",
+    "predictedClass": "[KT1qT][ËÆPredicted class !!! !!]",
+    "dataExploration": "[lOOHC][ðÇData Exploration !!! !!!]",
+    "globalImportance": "[jTvBo][ÝÂGlobal Importance !!! !!!]",
+    "explanationExploration": "[3kWwz][ïÒExplanation Exploration !!! !!! !]",
+    "summaryImportance": "[g6WS1][¥µSummary Importance !!! !!!]",
+    "featureImportance": "[3or4K][ãÎFeature Importance !!! !!!]",
+    "perturbationExploration": "[pzza7][êÉPerturbation Exploration !!! !!! !]",
+    "localFeatureImportance": "[TdtNk][ÃªLocal Feature Importance !!! !!! !]",
+    "ice": "[prPCi][Í@ICE !!]",
+    "clearSelection": "[zQASF][ÀÜClear selection !!! !!]",
+    "feature": "[tLO6f][íëFeature: !!! ]",
+    "intercept": "[qlPsL][èãIntercept !!! ]",
+    "ExplanationScatter": {
+      "dataLabel": "[BdvbK][çÏData : {0} !!! !]",
+      "importanceLabel": "[FvbvK][îóImportance : {0} !!! !!!]",
+      "predictedY": "[ziHhe][óïPredictedY !!! !]",
+      "index": "[xlfT6][üÅIndex !!!]",
+      "dataGroupLabel": "[AqAUL][ÀäData !!]",
+      "output": "[j8KrV][õÇOutput !!!]",
+      "probabilityLabel": "[PiqyA][ßáProbability : {0} !!! !!!]",
+      "trueY": "[KQRAA][íéTrue Y !!!]",
+      "class": "[VOC3W][âªclass:  !!!]",
+      "xValue": "[sHVVa][ë£X value: !!! ]",
+      "yValue": "[BnzmV][@µY value: !!! ]",
+      "colorValue": "[XnCSF][ÌüColor: !!!]"
+    },
+    "CrossClass": {
+      "label": "[50Sxt][ùéCross-class weighting: !!! !!! !]",
+      "info": "[08bzl][ÖåInformation on cross-class calculation !!! !!! !!! !!]",
+      "overviewInfo": "[PzmI5][ÖãMulticlass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value: !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]",
+      "absoluteValInfo": "[Yv4lf][§ãAverage of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !]",
+      "predictedClassInfo": "[wdPZC][û¢Predicted class: Shows the feature importance value for a given point's predicted class !!! !!! !!! !!! !!! !!! !!! !!!]",
+      "enumeratedClassInfo": "[j44e9][áêEnumerated class names: Shows only the specified class's feature importance values across all data points. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!]",
+      "close": "[zjhsk][ôµClose !!!]"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "[pORh1][ãËScaled Feature Value !!! !!! ]",
+      "low": "[8j80J][ªüLow !!]",
+      "high": "[iPF8V][ÈÇHigh !!]",
+      "featureLabel": "[VfxF0][ÔüFeature: {0} !!! !]",
+      "valueLabel": "[NJ8d6][ÓïFeature value: {0} !!! !!!]",
+      "importanceLabel": "[xMTuc][ÑÔImportance: {0} !!! !!]",
+      "predictedClassTooltip": "[YFF5y][µíPredicted Class: {0} !!! !!! ]",
+      "trueClassTooltip": "[kEOIt][ªÕTrue Class: {0} !!! !!]",
+      "predictedOutputTooltip": "[xxu9k][ýêPredicted Output: {0} !!! !!! ]",
+      "trueOutputTooltip": "[aMYpA][âòTrue Output: {0} !!! !!!]",
+      "topKFeatures": "[HS6IQ][úçTop K Features: !!! !!]",
+      "topKInfo": "[uXrUe][ÔÖHow is top k calculated !!! !!! !]",
+      "predictedValue": "[493X1][ÈäPredicted Value !!! !!]",
+      "predictedClass": "[k8iDy][ßÑPredicted Class !!! !!]",
+      "trueValue": "[xl0EI][ËÿTrue Value !!! !]",
+      "trueClass": "[lj5M0][ªæTrue Class !!! !]",
+      "noColor": "[kzmVi][ÒÃNone !!]",
+      "tooManyRows": "[2WWK2][ýÜThe provided dataset is larger than this chart can support !!! !!! !!! !!! !!! !]"
+    },
+    "BarChart": {
+      "classLabel": "[u2tbv][£ÞClass: {0} !!! !]",
+      "sortBy": "[1ewmW][ËÆSort by !!!]",
+      "noData": "[UNQEN][@ýNo Data !!!]",
+      "absoluteGlobal": "[yIM5x][òßAbsolute global !!! !!]",
+      "absoluteLocal": "[Yc3In][ËáAbsolute local !!! !!]",
+      "calculatingExplanation": "[tCp6t][ÃÇCalculating explanation !!! !!! !]"
+    },
+    "IcePlot": {
+      "numericError": "[DTMTC][âäMust be numeric !!! !!]",
+      "integerError": "[3vWkI][ðòMust be an integer !!! !!!]",
+      "prediction": "[5h8Q3][ðàPrediction !!! !]",
+      "predictedProbability": "[p7F6t][âÖPredicted probability !!! !!! ]",
+      "predictionLabel": "[r59aK][ÒþPrediction: {0} !!! !!]",
+      "probabilityLabel": "[2RSX2][ÊðProbability: {0} !!! !!!]",
+      "noModelError": "[BVZkF][âÀPlease provide an operationalized model to explore predictions in ICE plots. !!! !!! !!! !!! !!! !!! !!! ]",
+      "featurePickerLabel": "[msNZx][ëÖFeature: !!! ]",
+      "minimumInputLabel": "[rZbXm][ïïMinimum: !!! ]",
+      "maximumInputLabel": "[i6zUS][àøMaximum: !!! ]",
+      "stepInputLabel": "[RGx9j][ÌãSteps: !!!]",
+      "loadingMessage": "[xgP7D][ÃøLoading data... !!! !!]",
+      "submitPrompt": "[w1fJh][ÜùSubmit a range to view an ICE plot !!! !!! !!! !]",
+      "topLevelErrorMessage": "[9p4hQ][ïµError in parameter !!! !!!]",
+      "errorPrefix": "[M9P6g][óìError encountered: {0} !!! !!! !]"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "[zMRsK][©éLoading... !!! !]",
+      "perturbationLabel": "[UBaah][ÙýPerturbation: !!! !!]"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "[sDBkT][ÎéPredicted value : {0} !!! !!! ]",
+      "predictedClassLabel": "[qGwXu][ÑèPredicted class : {0} !!! !!! ]"
+    },
+    "Violin": {
+      "groupNone": "[1T5yN][ÔöNo grouping !!! !]",
+      "groupPredicted": "[A3shb][@ÂPredicted Y !!! !]",
+      "groupTrue": "[2GB3k][ÆðTrue Y !!!]",
+      "groupBy": "[QYE75][ØæGroup by !!! ]"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "[54FZM][ÂÝChart type: !!! !]",
+      "violinText": "[ozu6A][ÌüViolin !!!]",
+      "barText": "[BlBG3][ÔýBar !!]",
+      "boxText": "[JuqVX][àËBox !!]",
+      "beehiveText": "[RjWs9][Ö¥Swarm !!!]",
+      "globalImportanceExplanation": "[HxsS0][ÚóGlobal feature importance is calculated by averaging the absolute value of the feature importance of all points (L1 normalization).  !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]",
+      "multiclassImportanceAddendum": "[FpXeR][öïAll points are included in calculating a feature's importance for all classes, no differential weighting is used. So a feature that has large negative importance for many points predicted to not be of 'Class A' will greatly increase that feature's 'Class A'  importance. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { IHelpMessage } from "../Interfaces/IStringsParam";
 
 import { noDataMessageStyles } from "./NoDataMessage.styles";
@@ -15,7 +15,7 @@ export class NoDataMessage extends React.PureComponent<{
     return (
       <div className={noDataMessageStyles.centered}>
         <div className={noDataMessageStyles.primaryMessage}>
-          {localization.BarChart.noData}
+          {localization.Interpret.BarChart.noData}
         </div>
         {this.renderExplanationStrings()}
       </div>

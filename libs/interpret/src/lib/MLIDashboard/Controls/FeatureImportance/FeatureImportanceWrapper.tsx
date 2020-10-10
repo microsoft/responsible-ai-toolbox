@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { SelectionContext } from "@responsible-ai/mlchartlib";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { IDashboardContext } from "../../ExplanationDashboard";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IBarChartConfig } from "../../SharedComponents/IBarChartConfig";
@@ -44,15 +44,15 @@ export class FeatureImportanceWrapper extends React.PureComponent<
         ? [
             {
               key: FeatureImportanceModes.Box,
-              text: localization.FeatureImportanceWrapper.boxText
+              text: localization.Interpret.FeatureImportanceWrapper.boxText
             },
             {
               key: FeatureImportanceModes.Beehive,
-              text: localization.FeatureImportanceWrapper.beehiveText
+              text: localization.Interpret.FeatureImportanceWrapper.beehiveText
             },
             {
               key: FeatureImportanceModes.Violin,
-              text: localization.FeatureImportanceWrapper.violinText
+              text: localization.Interpret.FeatureImportanceWrapper.violinText
             }
           ]
         : [];

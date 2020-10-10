@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
@@ -42,7 +42,7 @@ export class GlobalOnlyChart extends React.PureComponent<
       ? [
           {
             colorIndex: 0,
-            name: localization.BarChart.absoluteGlobal,
+            name: localization.Interpret.BarChart.absoluteGlobal,
             unsortedAggregateY:
               this.props.globalImportance?.map((classArray) => classArray[0]) ||
               []
@@ -69,7 +69,7 @@ export class GlobalOnlyChart extends React.PureComponent<
     );
     this.classOptions.unshift({
       key: FeatureKeys.AbsoluteGlobal,
-      text: localization.BarChart.absoluteGlobal
+      text: localization.Interpret.BarChart.absoluteGlobal
     });
     this.state = {
       sortArray: ModelExplanationUtils.buildSortedVector(
@@ -87,20 +87,20 @@ export class GlobalOnlyChart extends React.PureComponent<
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
           <Text variant="medium" className={classNames.helperText}>
-            {localization.GlobalOnlyChart.helperText}
+            {localization.Interpret.GlobalOnlyChart.helperText}
           </Text>
         </div>
         <div className={classNames.globalChartControls}>
           <Text variant="medium" className={classNames.sliderLabel}>
             {localization.formatString(
-              localization.GlobalTab.topAtoB,
+              localization.Interpret.GlobalTab.topAtoB,
               +1,
               +this.state.topK
             )}
           </Text>
           <Slider
             className={classNames.startingK}
-            ariaLabel={localization.AggregateImportance.topKFeatures}
+            ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
             max={this.featureDimension}
             min={1}
             step={1}
@@ -112,7 +112,9 @@ export class GlobalOnlyChart extends React.PureComponent<
         <div className={classNames.globalChartWithLegend}>
           <FeatureImportanceBar
             jointDataset={undefined}
-            yAxisLabels={[localization.GlobalTab.aggregateFeatureImportance]}
+            yAxisLabels={[
+              localization.Interpret.GlobalTab.aggregateFeatureImportance
+            ]}
             sortArray={this.state.sortArray}
             chartType={ChartTypes.Bar}
             unsortedX={this.props.metadata.featureNamesAbridged}

@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
   PrimaryButton
 } from "office-ui-fabric-react/lib/Button";
 import React from "react";
-
-import { localization } from "../Localization/localization";
 
 import { WizardFooterStyles } from "./WizardFooter.styles";
 
@@ -23,13 +22,13 @@ export class WizardFooter extends React.PureComponent<IWizardFooterProps> {
       <div className={styles.frame}>
         <PrimaryButton
           className={styles.next}
-          text={localization.Footer.next}
+          text={localization.Fairness.Footer.next}
           onClick={this.props.onNext}
         />
         {!!this.props.onPrevious && (
           <DefaultButton
             className={styles.back}
-            text={localization.Footer.back}
+            text={localization.Fairness.Footer.back}
             onClick={this.props.onPrevious}
           />
         )}

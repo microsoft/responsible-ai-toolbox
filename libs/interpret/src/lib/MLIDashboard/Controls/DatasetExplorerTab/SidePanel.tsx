@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   ChoiceGroup,
@@ -10,7 +11,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
@@ -35,11 +35,11 @@ export class SidePanel extends React.Component<ISidePanelProps> {
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Histogram,
-      text: localization.DatasetExplorer.aggregatePlots
+      text: localization.Interpret.DatasetExplorer.aggregatePlots
     },
     {
       key: ChartTypes.Scatter,
-      text: localization.DatasetExplorer.individualDatapoints
+      text: localization.Interpret.DatasetExplorer.individualDatapoints
     }
   ];
   public render(): React.ReactNode {
@@ -48,7 +48,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
     return (
       <div className={classNames.legendAndText}>
         <Text variant={"mediumPlus"} block className={classNames.boldText}>
-          {localization.DatasetExplorer.colorValue}
+          {localization.Interpret.DatasetExplorer.colorValue}
         </Text>
         {this.props.chartProps.chartType === ChartTypes.Scatter && (
           <DefaultButton
@@ -90,14 +90,14 @@ export class SidePanel extends React.Component<ISidePanelProps> {
             })
           ) : (
             <Text variant={"xSmall"} className={classNames.smallItalic}>
-              {localization.DatasetExplorer.noColor}
+              {localization.Interpret.DatasetExplorer.noColor}
             </Text>
           )}
         </div>
 
         <ChoiceGroup
           id="ChartTypeSelection"
-          label={localization.DatasetExplorer.chartType}
+          label={localization.Interpret.DatasetExplorer.chartType}
           selectedKey={this.props.chartProps.chartType}
           options={this.chartOptions}
           onChange={this.props.onChartTypeChange}

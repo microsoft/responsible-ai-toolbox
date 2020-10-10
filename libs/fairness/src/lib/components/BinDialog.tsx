@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -12,7 +13,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../Localization/localization";
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 
@@ -44,13 +44,13 @@ export class BinDialog extends React.PureComponent<
     return (
       <div className={styles.frame}>
         <Text variant={"xLargePlus"} className={styles.header}>
-          {localization.BinDialog.header}
+          {localization.Fairness.BinDialog.header}
         </Text>
         <div className={styles.main}>
           <div className={styles.controls}>
             {this.props.range.rangeType === RangeTypes.Integer && (
               <Checkbox
-                label={localization.BinDialog.makeCategorical}
+                label={localization.Fairness.BinDialog.makeCategorical}
                 checked={this.state.rangeType === RangeTypes.Categorical}
                 onChange={this.toggleCategorical}
               />
@@ -71,7 +71,7 @@ export class BinDialog extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "98px" }
                   }}
-                  label={localization.BinDialog.numberOfBins}
+                  label={localization.Fairness.BinDialog.numberOfBins}
                   min={BinDialog.minBins}
                   max={BinDialog.maxBins}
                   value={this.state.array.length.toString()}
@@ -82,7 +82,7 @@ export class BinDialog extends React.PureComponent<
               </div>
             )}
           </div>
-          <Text>{localization.BinDialog.categoryHeader}</Text>
+          <Text>{localization.Fairness.BinDialog.categoryHeader}</Text>
           <div className={styles.scrollArea}>
             {this.state.labelArray.map((val, i) => {
               return (
@@ -96,12 +96,12 @@ export class BinDialog extends React.PureComponent<
         <div className={styles.buttons}>
           <PrimaryButton
             className={styles.saveButton}
-            text={localization.BinDialog.save}
+            text={localization.Fairness.BinDialog.save}
             onClick={this.onSave}
           />
           <DefaultButton
             className={styles.cancelButton}
-            text={localization.BinDialog.cancel}
+            text={localization.Fairness.BinDialog.cancel}
             onClick={this.props.onCancel}
           />
         </div>

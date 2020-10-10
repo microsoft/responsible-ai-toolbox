@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   ChartBuilder,
   AccessibleChart,
@@ -20,7 +21,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
@@ -236,7 +236,7 @@ export class Violin extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };
@@ -276,7 +276,7 @@ export class Violin extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     } as any
   };
@@ -337,7 +337,7 @@ export class Violin extends React.PureComponent<
         <div className={violinStyles.aggregateChart}>
           <div className={violinStyles.topControls}>
             <ComboBox
-              label={localization.FeatureImportanceWrapper.chartType}
+              label={localization.Interpret.FeatureImportanceWrapper.chartType}
               className={violinStyles.pathSelector}
               selectedKey={this.props.config.displayMode}
               onChange={this.setChart}
@@ -350,7 +350,7 @@ export class Violin extends React.PureComponent<
               .modelType !== ModelTypes.Regression &&
               this.groupByOptions.length > 1 && (
                 <ComboBox
-                  label={localization.Violin.groupBy}
+                  label={localization.Interpret.Violin.groupBy}
                   className={violinStyles.pathSelector}
                   selectedKey={this.state.groupBy}
                   onChange={this.onGroupSelect}
@@ -363,12 +363,12 @@ export class Violin extends React.PureComponent<
             <div className={violinStyles.sliderControl}>
               <div className={violinStyles.sliderLabel}>
                 <span className={violinStyles.labelText}>
-                  {localization.AggregateImportance.topKFeatures}
+                  {localization.Interpret.AggregateImportance.topKFeatures}
                 </span>
                 <IconButton
                   id={this._globalSortIconId}
                   iconProps={{ iconName: "Info" }}
-                  title={localization.CrossClass.info}
+                  title={localization.Interpret.CrossClass.info}
                   ariaLabel="Info"
                   onClick={this.showGlobalSortInfo}
                   styles={{
@@ -395,12 +395,12 @@ export class Violin extends React.PureComponent<
               <div>
                 <div className={violinStyles.selectorLabel}>
                   <span className={violinStyles.selectorSpan}>
-                    {localization.CrossClass.label}
+                    {localization.Interpret.CrossClass.label}
                   </span>
                   <IconButton
                     id={this._crossClassIconId}
                     iconProps={{ iconName: "Info" }}
-                    title={localization.CrossClass.info}
+                    title={localization.Interpret.CrossClass.info}
                     ariaLabel="Info"
                     onClick={this.showCrossClassInfo}
                     styles={{
@@ -433,7 +433,7 @@ export class Violin extends React.PureComponent<
                   className={violinStyles.calloutButton}
                   onClick={this.onDismiss}
                 >
-                  {localization.CrossClass.close}
+                  {localization.Interpret.CrossClass.close}
                 </DefaultButton>
               </div>
             </Callout>
@@ -503,7 +503,10 @@ export class Violin extends React.PureComponent<
       return [];
     }
     const result: IDropdownOption[] = [
-      { key: GroupByOptions.None, text: localization.Violin.groupNone }
+      {
+        key: GroupByOptions.None,
+        text: localization.Interpret.Violin.groupNone
+      }
     ];
     if (
       this.props.dashboardContext.explanationContext.testDataset &&
@@ -512,7 +515,7 @@ export class Violin extends React.PureComponent<
     ) {
       result.push({
         key: GroupByOptions.PredictedY,
-        text: localization.Violin.groupPredicted
+        text: localization.Interpret.Violin.groupPredicted
       });
     }
     if (
@@ -522,7 +525,7 @@ export class Violin extends React.PureComponent<
     ) {
       result.push({
         key: GroupByOptions.TrueY,
-        text: localization.Violin.groupTrue
+        text: localization.Interpret.Violin.groupTrue
       });
     }
     return result;
@@ -552,11 +555,11 @@ export class Violin extends React.PureComponent<
     } else {
       const calloutContent = (
         <div>
-          <span>{localization.CrossClass.overviewInfo}</span>
+          <span>{localization.Interpret.CrossClass.overviewInfo}</span>
           <ul>
-            <li>{localization.CrossClass.absoluteValInfo}</li>
-            <li>{localization.CrossClass.predictedClassInfo}</li>
-            <li>{localization.CrossClass.enumeratedClassInfo}</li>
+            <li>{localization.Interpret.CrossClass.absoluteValInfo}</li>
+            <li>{localization.Interpret.CrossClass.predictedClassInfo}</li>
+            <li>{localization.Interpret.CrossClass.enumeratedClassInfo}</li>
           </ul>
         </div>
       );
@@ -571,13 +574,16 @@ export class Violin extends React.PureComponent<
       const calloutContent = (
         <div>
           <span>
-            {localization.FeatureImportanceWrapper.globalImportanceExplanation}
+            {
+              localization.Interpret.FeatureImportanceWrapper
+                .globalImportanceExplanation
+            }
           </span>
           {this.props.dashboardContext.explanationContext.modelMetadata
             .modelType === ModelTypes.Multiclass && (
             <span>
               {
-                localization.FeatureImportanceWrapper
+                localization.Interpret.FeatureImportanceWrapper
                   .multiclassImportanceAddendum
               }
             </span>

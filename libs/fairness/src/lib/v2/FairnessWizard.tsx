@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -27,7 +28,6 @@ import {
 } from "../util/PerformanceMetrics";
 import { WizardBuilder } from "../util/WizardBuilder";
 
-import { localization } from "./../Localization/localization";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
@@ -237,7 +237,7 @@ export class FairnessWizardV2 extends React.PureComponent<
               onLinkClick={this.handleTabClick}
             >
               <PivotItem
-                headerText={localization.sensitiveFeatures}
+                headerText={localization.Fairness.sensitiveFeatures}
                 itemKey={featureBinTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >
@@ -251,7 +251,7 @@ export class FairnessWizardV2 extends React.PureComponent<
                 />
               </PivotItem>
               <PivotItem
-                headerText={localization.performanceMetric}
+                headerText={localization.Fairness.performanceMetric}
                 itemKey={performanceTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >
@@ -267,7 +267,7 @@ export class FairnessWizardV2 extends React.PureComponent<
               </PivotItem>
               {flights.skipDisparity === false && (
                 <PivotItem
-                  headerText={localization.disparityMetric}
+                  headerText={localization.Fairness.disparityMetric}
                   itemKey={disparityTabKey}
                   style={{ height: "100%", paddingLeft: "8px" }}
                 >

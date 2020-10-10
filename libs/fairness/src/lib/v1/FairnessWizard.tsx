@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -27,7 +28,6 @@ import {
 } from "../util/PerformanceMetrics";
 import { WizardBuilder } from "../util/WizardBuilder";
 
-import { localization } from "./../Localization/localization";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { ParityTab } from "./Controls/ParityTab";
@@ -197,11 +197,13 @@ export class FairnessWizardV1 extends React.PureComponent<
             className={styles.thinHeader}
           >
             {/* <Text variant={"mediumPlus"} className={styles.headerLeft}>
-              {localization.Header.title}
+              {localization.Fairness.Header.title}
             </Text> */}
           </Stack>
           <Stack.Item grow={2} className={styles.body}>
-            <Text variant={"mediumPlus"}>{localization.errorOnInputs}</Text>
+            <Text variant={"mediumPlus"}>
+              {localization.Fairness.errorOnInputs}
+            </Text>
           </Stack.Item>
         </Stack>
       );
@@ -215,7 +217,7 @@ export class FairnessWizardV1 extends React.PureComponent<
           className={styles.thinHeader}
         >
           {/* <Text variant={"mediumPlus"} className={styles.headerLeft}>
-            {localization.Header.title}
+            {localization.Fairness.Header.title}
           </Text> */}
         </Stack>
         {this.state.activeTabKey === introTabKey && (
@@ -238,7 +240,7 @@ export class FairnessWizardV1 extends React.PureComponent<
               onLinkClick={this.handleTabClick}
             >
               <PivotItem
-                headerText={localization.Intro.features}
+                headerText={localization.Fairness.Intro.features}
                 itemKey={featureBinTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >
@@ -252,7 +254,7 @@ export class FairnessWizardV1 extends React.PureComponent<
                 />
               </PivotItem>
               <PivotItem
-                headerText={localization.performanceMetricLegacy}
+                headerText={localization.Fairness.performanceMetricLegacy}
                 itemKey={performanceTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >

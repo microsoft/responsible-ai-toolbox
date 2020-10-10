@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ChartBuilder,
@@ -21,7 +22,6 @@ import {
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
@@ -142,7 +142,7 @@ export class ModelComparisonChart extends React.PureComponent<
         <Spinner
           className={styles.spinner}
           size={SpinnerSize.large}
-          label={localization.calculating}
+          label={localization.Fairness.calculating}
         />
       );
     }
@@ -211,7 +211,7 @@ export class ModelComparisonChart extends React.PureComponent<
       ) ||
       this.props.performancePickerProps.performanceOptions[0];
     const insights2 = localization.formatString(
-      localization.ModelComparison.insightsText2,
+      localization.Fairness.ModelComparison.insightsText2,
       selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
@@ -222,7 +222,7 @@ export class ModelComparisonChart extends React.PureComponent<
       ? selectedMetric.title
       : selectedMetric.title.toLowerCase();
     const insights3 = localization.formatString(
-      localization.ModelComparison.insightsText3,
+      localization.Fairness.ModelComparison.insightsText3,
       metricTitleAppropriateCase,
       selectedMetric.isMinimization
         ? formattedMinPerformance
@@ -240,7 +240,7 @@ export class ModelComparisonChart extends React.PureComponent<
     );
 
     const insights4 = localization.formatString(
-      localization.ModelComparison.insightsText4,
+      localization.Fairness.ModelComparison.insightsText4,
       metricTitleAppropriateCase,
       FormatMetrics.formatNumbers(
         this.state.performanceArray[minDisparityIndex],
@@ -250,12 +250,12 @@ export class ModelComparisonChart extends React.PureComponent<
     );
 
     const howToReadText = localization.formatString(
-      localization.ModelComparison.howToReadText,
+      localization.Fairness.ModelComparison.howToReadText,
       this.props.modelCount.toString(),
       metricTitleAppropriateCase,
       selectedMetric.isMinimization
-        ? localization.ModelComparison.lower
-        : localization.ModelComparison.higher
+        ? localization.Fairness.ModelComparison.lower
+        : localization.Fairness.ModelComparison.higher
     );
 
     const props = _.cloneDeep(this.plotlyProps);
@@ -272,9 +272,9 @@ export class ModelComparisonChart extends React.PureComponent<
     }
     if (props.layout?.yaxis) {
       props.layout.yaxis.title = this.state.disparityInOutcomes
-        ? localization.ModelComparison.disparityInOutcomes
+        ? localization.Fairness.ModelComparison.disparityInOutcomes
         : localization.formatString(
-            localization.ModelComparison.disparityInPerformance,
+            localization.Fairness.ModelComparison.disparityInPerformance,
             metricTitleAppropriateCase
           );
     }
@@ -282,7 +282,7 @@ export class ModelComparisonChart extends React.PureComponent<
       <Stack className={styles.frame}>
         <div className={styles.header}>
           <Text variant={"large"} className={styles.headerTitle} block>
-            {localization.ModelComparison.title}
+            {localization.Fairness.ModelComparison.title}
           </Text>
           <ActionButton
             iconProps={{ iconName: "Edit" }}
@@ -290,7 +290,7 @@ export class ModelComparisonChart extends React.PureComponent<
             className={styles.editButton}
             autoFocus={true}
           >
-            {localization.Report.editConfiguration}
+            {localization.Fairness.Report.editConfiguration}
           </ActionButton>
         </div>
         <div className={styles.main}>
@@ -303,13 +303,13 @@ export class ModelComparisonChart extends React.PureComponent<
           </div>
           <div className={styles.mainRight}>
             <Text className={styles.rightTitle} block>
-              {localization.ModelComparison.howToRead}
+              {localization.Fairness.ModelComparison.howToRead}
             </Text>
             <Text className={styles.rightText} block>
               {howToReadText}
             </Text>
             <Text className={styles.insights} block>
-              {localization.ModelComparison.insightsLegacy}
+              {localization.Fairness.ModelComparison.insightsLegacy}
             </Text>
             <div className={styles.insightsText}>
               <Text className={styles.textSection} block>
@@ -335,18 +335,18 @@ export class ModelComparisonChart extends React.PureComponent<
                 key: "performance",
                 styles: { choiceFieldWrapper: styles.radioOptions },
                 text: localization.formatString(
-                  localization.ModelComparison.disparityInPerformance,
+                  localization.Fairness.ModelComparison.disparityInPerformance,
                   metricTitleAppropriateCase
                 )
               },
               {
                 key: "outcomes",
                 styles: { choiceFieldWrapper: styles.radioOptions },
-                text: localization.ModelComparison.disparityInOutcomes
+                text: localization.Fairness.ModelComparison.disparityInOutcomes
               }
             ]}
             onChange={this.disparityChanged}
-            label={localization.ModelComparison.howToMeasureDisparity}
+            label={localization.Fairness.ModelComparison.howToMeasureDisparity}
             required={false}
           ></ChoiceGroup>
         </div>

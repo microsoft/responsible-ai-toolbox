@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { IExplanationContext } from "../IExplanationContext";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { FeatureEditingTile } from "../SharedComponents/FeatureEditingTile";
@@ -108,7 +108,7 @@ export class PerturbationExploration extends React.Component<
         )}
         {this.state.abortController && !hasErrors && (
           <div className={perturbationExplorationStyles.loadingMessage}>
-            {localization.PerturbationExploration.loadingMessage}
+            {localization.Interpret.PerturbationExploration.loadingMessage}
           </div>
         )}
         {this.state.errorMessage && (
@@ -119,7 +119,7 @@ export class PerturbationExploration extends React.Component<
         )}
         {hasErrors && (
           <div className={perturbationExplorationStyles.loadingMessage}>
-            {localization.IcePlot.topLevelErrorMessage}
+            {localization.Interpret.IcePlot.topLevelErrorMessage}
           </div>
         )}
         {!hasErrors &&
@@ -127,7 +127,10 @@ export class PerturbationExploration extends React.Component<
           this.state.abortController === undefined && (
             <div className={perturbationExplorationStyles.labelGroup}>
               <div className={perturbationExplorationStyles.labelGroupLabel}>
-                {localization.PerturbationExploration.perturbationLabel}
+                {
+                  localization.Interpret.PerturbationExploration
+                    .perturbationLabel
+                }
               </div>
               <div className={perturbationExplorationStyles.flexFull}>
                 <PredictionLabel
@@ -263,7 +266,7 @@ export class PerturbationExploration extends React.Component<
         if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
-              localization.IcePlot.errorPrefix,
+              localization.Interpret.IcePlot.errorPrefix,
               error.message
             ) as string
           });

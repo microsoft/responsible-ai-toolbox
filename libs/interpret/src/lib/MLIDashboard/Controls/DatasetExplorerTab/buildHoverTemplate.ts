@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "../../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
+
 import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ColumnCategories, JointDataset } from "../../JointDataset";
@@ -35,7 +36,8 @@ export function buildHoverTemplate(
           ": %{customdata.Color}<br>";
       }
       hovertemplate +=
-        localization.Charts.rowIndex + ": %{customdata.AbsoluteIndex}<br>";
+        localization.Interpret.Charts.rowIndex +
+        ": %{customdata.AbsoluteIndex}<br>";
       break;
     }
     case ChartTypes.Histogram: {
@@ -47,7 +49,7 @@ export function buildHoverTemplate(
         hovertemplate += yName + ": %{customdata.Y}<br>";
       }
       hovertemplate += localization.formatString(
-        localization.Charts.countTooltipPrefix,
+        localization.Interpret.Charts.countTooltipPrefix,
         "%{y}<br>"
       );
       break;

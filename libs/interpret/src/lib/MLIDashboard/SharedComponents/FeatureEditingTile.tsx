@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
 import {
@@ -11,7 +12,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
@@ -110,8 +110,8 @@ export class FeatureEditingTile extends React.Component<
     ) {
       errorMessage =
         this.props.rangeType === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
     }
     this.props.onEdit(this.props.index, val, errorMessage);
     this.setState({ errorMessage, value: newValue });

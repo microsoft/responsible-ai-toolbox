@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import React from "react";
-
-import { localization } from "../../Localization/localization";
 
 import { OverallTableStyles } from "./OverallTable.styles";
 
@@ -56,7 +55,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
           <div className={styles.flexCol}>
             <div className={styles.binBox}>
               <div className={styles.binTitle}>
-                {localization.Report.overallLabel}
+                {localization.Fairness.Report.overallLabel}
               </div>
             </div>
             {this.props.binLabels.map((label, index) => {
@@ -65,8 +64,8 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                   <div className={styles.binBox} key={index}>
                     <div className={styles.binLabel}>{label}</div>
                     {/* <Stack horizontal>
-                                    {minIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Report.minTag}</div>}
-                                    {maxIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Report.maxTag}</div>}
+                                    {minIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Fairness.Report.minTag}</div>}
+                                    {maxIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Fairness.Report.maxTag}</div>}
                                 </Stack> */}
                   </div>
                 );
