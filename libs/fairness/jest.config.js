@@ -4,12 +4,13 @@
 module.exports = {
   coverageDirectory: "../../coverage/libs/fairness",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  name: "fairness",
-  preset: "../../jest.config.js",
+
+  preset: "../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",
       { configFile: "./babel-jest.config.json", cwd: __dirname }
     ]
-  }
+  },
+  displayName: "fairness"
 };

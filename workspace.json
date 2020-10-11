@@ -8,14 +8,25 @@
       "schematics": {},
       "architect": {
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "libs/interpret/tsconfig.lib.json",
-              "libs/interpret/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/interpret/**/*"]
+            "lintFilePatterns": [
+              "libs/interpret/**/*.js",
+              "libs/interpret/**/*.jsx",
+              "libs/interpret/**/*.ts",
+              "libs/interpret/**/*.tsx",
+              "node_modules/@nrwl/react/typings/cssmodule.d.ts",
+              "node_modules/@nrwl/react/typings/image.d.ts",
+              "libs/interpret/**/*.test.ts",
+              "libs/interpret/**/*.test.tsx",
+              "libs/interpret/**/*.test.js",
+              "libs/interpret/**/*.test.jsx",
+              "libs/interpret/**/*.spec.ts",
+              "libs/interpret/**/*.spec.tsx",
+              "libs/interpret/**/*.spec.js",
+              "libs/interpret/**/*.spec.jsx",
+              "libs/interpret/**/*.d.ts"
+            ]
           }
         },
         "build": {
@@ -45,7 +56,8 @@
                 "input": ".",
                 "output": "."
               }
-            ]
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
           }
         },
         "test": {
@@ -64,14 +76,25 @@
       "schematics": {},
       "architect": {
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "libs/fairness/tsconfig.lib.json",
-              "libs/fairness/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/fairness/**/*"]
+            "lintFilePatterns": [
+              "libs/fairness/**/*.js",
+              "libs/fairness/**/*.jsx",
+              "libs/fairness/**/*.ts",
+              "libs/fairness/**/*.tsx",
+              "node_modules/@nrwl/react/typings/cssmodule.d.ts",
+              "node_modules/@nrwl/react/typings/image.d.ts",
+              "libs/fairness/**/*.test.ts",
+              "libs/fairness/**/*.test.tsx",
+              "libs/fairness/**/*.test.js",
+              "libs/fairness/**/*.test.jsx",
+              "libs/fairness/**/*.spec.ts",
+              "libs/fairness/**/*.spec.tsx",
+              "libs/fairness/**/*.spec.js",
+              "libs/fairness/**/*.spec.jsx",
+              "libs/fairness/**/*.d.ts"
+            ]
           }
         },
         "build": {
@@ -100,7 +123,8 @@
                 "input": ".",
                 "output": "."
               }
-            ]
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
           }
         },
         "test": {
@@ -119,14 +143,25 @@
       "schematics": {},
       "architect": {
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "libs/core-ui/tsconfig.lib.json",
-              "libs/core-ui/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/core-ui/**/*"]
+            "lintFilePatterns": [
+              "libs/core-ui/**/*.js",
+              "libs/core-ui/**/*.jsx",
+              "libs/core-ui/**/*.ts",
+              "libs/core-ui/**/*.tsx",
+              "node_modules/@nrwl/react/typings/cssmodule.d.ts",
+              "node_modules/@nrwl/react/typings/image.d.ts",
+              "libs/core-ui/**/*.test.ts",
+              "libs/core-ui/**/*.test.tsx",
+              "libs/core-ui/**/*.test.js",
+              "libs/core-ui/**/*.test.jsx",
+              "libs/core-ui/**/*.spec.ts",
+              "libs/core-ui/**/*.spec.tsx",
+              "libs/core-ui/**/*.spec.js",
+              "libs/core-ui/**/*.spec.jsx",
+              "libs/core-ui/**/*.d.ts"
+            ]
           }
         },
         "build": {
@@ -154,7 +189,8 @@
                 "input": ".",
                 "output": "."
               }
-            ]
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
           }
         },
         "test": {
@@ -173,14 +209,25 @@
       "schematics": {},
       "architect": {
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "libs/mlchartlib/tsconfig.lib.json",
-              "libs/mlchartlib/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/mlchartlib/**/*"]
+            "lintFilePatterns": [
+              "libs/mlchartlib/**/*.js",
+              "libs/mlchartlib/**/*.jsx",
+              "libs/mlchartlib/**/*.ts",
+              "libs/mlchartlib/**/*.tsx",
+              "node_modules/@nrwl/react/typings/cssmodule.d.ts",
+              "node_modules/@nrwl/react/typings/image.d.ts",
+              "libs/mlchartlib/**/*.test.ts",
+              "libs/mlchartlib/**/*.test.tsx",
+              "libs/mlchartlib/**/*.test.js",
+              "libs/mlchartlib/**/*.test.jsx",
+              "libs/mlchartlib/**/*.spec.ts",
+              "libs/mlchartlib/**/*.spec.tsx",
+              "libs/mlchartlib/**/*.spec.js",
+              "libs/mlchartlib/**/*.spec.jsx",
+              "libs/mlchartlib/**/*.d.ts"
+            ]
           }
         },
         "build": {
@@ -208,7 +255,8 @@
                 "input": ".",
                 "output": "."
               }
-            ]
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
           }
         },
         "test": {
@@ -288,14 +336,25 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "apps/dashboard/tsconfig.app.json",
-              "apps/dashboard/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/dashboard/**/*"]
+            "lintFilePatterns": [
+              "apps/dashboard/**/*.js",
+              "apps/dashboard/**/*.jsx",
+              "apps/dashboard/**/*.ts",
+              "apps/dashboard/**/*.tsx",
+              "node_modules/@nrwl/react/typings/cssmodule.d.ts",
+              "node_modules/@nrwl/react/typings/image.d.ts",
+              "apps/dashboard/**/*.test.ts",
+              "apps/dashboard/**/*.test.tsx",
+              "apps/dashboard/**/*.test.js",
+              "apps/dashboard/**/*.test.jsx",
+              "apps/dashboard/**/*.spec.ts",
+              "apps/dashboard/**/*.spec.tsx",
+              "apps/dashboard/**/*.spec.js",
+              "apps/dashboard/**/*.spec.jsx",
+              "apps/dashboard/**/*.d.ts"
+            ]
           }
         },
         "test": {
@@ -326,11 +385,12 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": ["apps/dashboard-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/dashboard-e2e/**/*"]
+            "lintFilePatterns": [
+              "apps/dashboard-e2e/src/**/*.ts",
+              "apps/dashboard-e2e/src/**/*.js"
+            ]
           }
         }
       }
@@ -342,14 +402,21 @@
       "schematics": {},
       "architect": {
         "lint": {
-          "builder": "@nrwl/linter:lint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "libs/localization/tsconfig.lib.json",
-              "libs/localization/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/localization/**/*"]
+            "lintFilePatterns": [
+              "libs/localization/**/*.js",
+              "libs/localization/**/*.jsx",
+              "libs/localization/**/*.ts",
+              "libs/localization/**/*.tsx",
+              "node_modules/@nrwl/react/typings/cssmodule.d.ts",
+              "node_modules/@nrwl/react/typings/image.d.ts",
+              "libs/localization/**/*.spec.ts",
+              "libs/localization/**/*.spec.tsx",
+              "libs/localization/**/*.spec.js",
+              "libs/localization/**/*.spec.jsx",
+              "libs/localization/**/*.d.ts"
+            ]
           }
         },
         "build": {
@@ -379,7 +446,8 @@
                 "input": ".",
                 "output": "."
               }
-            ]
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
           }
         },
         "test": {

@@ -46,7 +46,10 @@
     "sort-keys-fix/sort-keys-fix": [
       "error",
       "asc",
-      { "caseSensitive": false, "natural": true }
+      {
+        "caseSensitive": false,
+        "natural": true
+      }
     ],
     "header/header": [
       "error",
@@ -80,7 +83,7 @@
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/explicit-member-accessibility": ["error"],
     "@typescript-eslint/explicit-function-return-type": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/array-type": [
       "error",
       {

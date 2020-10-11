@@ -4,12 +4,13 @@
 module.exports = {
   coverageDirectory: "../../coverage/libs/localization",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  name: "localization",
-  preset: "../../jest.config.js",
+
+  preset: "../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",
       { configFile: "./babel-jest.config.json", cwd: __dirname }
     ]
-  }
+  },
+  displayName: "localization"
 };
