@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { isTwoDimArray } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -424,9 +425,7 @@ export class ExplanationDashboard extends React.Component<
             }
             if (
               featureExplanation.scores &&
-              featureExplanation.scores.every((dim1: number | number[]) =>
-                Array.isArray(dim1)
-              )
+              isTwoDimArray(featureExplanation.scores)
             ) {
               return {
                 lowerBounds: featureExplanation.lower_bounds

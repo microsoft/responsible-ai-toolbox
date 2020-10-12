@@ -40,7 +40,9 @@ export class ScatterChart extends Chart<IScatter> {
     });
   }
 
-  private getNthPointOffset(idx: number): JQuery.Coordinates | undefined {
+  private getNthPointOffset(
+    idx: number
+  ): ReturnType<ReturnType<Cypress.cy["$$"]>["offset"]> {
     return cy.$$(`.trace.scatter:eq(0) .points path:eq(${idx})`).offset();
   }
 

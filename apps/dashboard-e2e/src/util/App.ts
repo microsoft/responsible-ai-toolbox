@@ -1,13 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export function getGreeting(): Cypress.Chainable<JQuery<HTMLHeadingElement>> {
+export function getGreeting(): ReturnType<Cypress.cy["get"]> {
   return cy.get("h1");
 }
 
-export function getLink(
-  href: string
-): Cypress.Chainable<JQuery<HTMLAnchorElement>> {
+export function getLink(href: string): ReturnType<Cypress.cy["get"]> {
   return cy.get(`a[href$="#${href}"]`);
 }
 

@@ -4,6 +4,6 @@
 export function getMenu(
   text: string,
   container = ""
-): Cypress.Chainable<JQuery<HTMLButtonElement>> {
+): ReturnType<Cypress.cy["get"]> {
   return cy.get(`${container} button:contains("${text}")`);
 }

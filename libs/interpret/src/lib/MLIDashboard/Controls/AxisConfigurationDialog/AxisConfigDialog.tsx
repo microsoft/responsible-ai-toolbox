@@ -18,7 +18,7 @@ import {
   IChoiceGroupOption,
   DefaultButton
 } from "office-ui-fabric-react";
-import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+import { Position } from "office-ui-fabric-react";
 import React from "react";
 
 import { cohortKey } from "../../cohortKey";

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 declare namespace Cypress {
-  interface Chainable<Subject> {
+  interface Chainable {
     login(email: string, password: string): void;
   }
 }
