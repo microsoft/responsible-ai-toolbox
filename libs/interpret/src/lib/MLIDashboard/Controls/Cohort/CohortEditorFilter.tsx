@@ -9,12 +9,12 @@ import {
   DefaultButton,
   IComboBox,
   IComboBoxOption,
-  Position,
   PrimaryButton,
   SpinButton,
   Stack,
   Text
 } from "office-ui-fabric-react";
+import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
