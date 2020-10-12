@@ -1030,6 +1030,10 @@ export const precomputedBinaryTwo: IFairnessData = {
           bins: [0.3146067415730337, 0.24840764331210186],
           global: 0.27235772357723576
         },
+        false_positive_rate: {
+          bins: [0.4240506329113924, 0.30228136882129275],
+          global: 0.36
+        },
         overprediction: {
           bins: [0.4240506329113924, 0.30228136882129275],
           global: 0.36
@@ -1049,6 +1053,10 @@ export const precomputedBinaryTwo: IFairnessData = {
         specificity_score: {
           bins: [0.32094594594594594, 0.25],
           global: 0.29133858267716534
+        },
+        false_negative_rate: {
+          bins: [0.11814345991561181, 0.1482889733840304],
+          global: 0.134
         },
         underprediction: {
           bins: [0.11814345991561181, 0.1482889733840304],

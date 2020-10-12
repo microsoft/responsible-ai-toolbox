@@ -15,7 +15,6 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { chartColors } from "../util/chartColors";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
@@ -25,7 +24,10 @@ import { ModalHelp } from "./Controls/ModalHelp";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
-import { PerformancePlot } from "./Controls/PerformancePlot";
+import {
+  PerformancePlot,
+  PerformancePlotLegend
+} from "./Controls/PerformancePlot";
 import { IMetrics } from "./IMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
 
@@ -76,6 +78,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ? "selection_rate"
         : "average";
 
+    let performanceChartHeaderString: string = "";
+
     let mainChart;
     if (!this.state || !this.state.metrics) {
       this.loadData();
@@ -97,6 +101,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         outcomeChartModalHelpStrings = [
           localization.Report.classificationOutcomesHowToRead
         ];
+        performanceChartHeaderString =
+          localization.Report.performanceChartHeaderBinaryClassification;
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -110,6 +116,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         outcomeChartModalHelpStrings = [
           localization.Report.regressionOutcomesHowToRead
         ];
+        performanceChartHeaderString =
+          localization.Report.performanceChartHeaderProbability;
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -121,6 +129,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         outcomeChartModalHelpStrings = [
           localization.Report.regressionOutcomesHowToRead
         ];
+        performanceChartHeaderString =
+          localization.Report.performanceChartHeaderRegression;
       }
 
       // define task-specific metrics to show by default
@@ -174,7 +184,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
 
       const disparityMetricString = FormatMetrics.formatNumbers(
-        this.state.metrics.disparities[this.props.parityPickerProps.selectedParityKey],
+        this.state.metrics.disparities[
+          this.props.parityPickerProps.selectedParityKey
+        ],
         performanceKey
       );
 
@@ -275,8 +287,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     localization.Report.expandSensitiveAttributes)}
               </Text>
             </div>
-            <div className={styles.equalizedOdds}>
-              <Text>{localization.Report.equalizedOddsDisparity}</Text>
+            <div className={styles.performanceChartHeader}>
+              <Text>{performanceChartHeaderString}</Text>
             </div>
             <ModalHelp
               theme={theme}
@@ -291,36 +303,19 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               performancePickerProps={this.props.performancePickerProps}
               areaHeights={areaHeights}
             />
-            <div className={styles.legendPanel}>
-              <div className={styles.textRow}>
-                <div
-                  className={styles.colorBlock}
-                  style={{ backgroundColor: chartColors[1] }}
-                />
-                <div>
-                  <div className={styles.legendTitle}>
-                    {localization.Report.underestimationError}
-                  </div>
-                  <div className={styles.legendSubtitle}>
-                    {localization.Report.underpredictionExplanation}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.textRow}>
-                <div
-                  className={styles.colorBlock}
-                  style={{ backgroundColor: chartColors[0] }}
-                />
-                <div>
-                  <div className={styles.legendTitle}>
-                    {localization.Report.overestimationError}
-                  </div>
-                  <div className={styles.legendSubtitle}>
-                    {localization.Report.overpredictionExplanation}
-                  </div>
-                </div>
-              </div>
-            </div>
+            {this.props.dashboardContext.modelMetadata.PredictionType !=
+              PredictionTypes.Regression && (
+              <PerformancePlotLegend
+                showSubtitle={
+                  this.props.dashboardContext.modelMetadata.PredictionType ==
+                  PredictionTypes.BinaryClassification
+                }
+                useOverUnderPrediction={
+                  this.props.dashboardContext.modelMetadata.PredictionType ==
+                  PredictionTypes.Probability
+                }
+              />
+            )}
             <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             <OutcomePlot
               dashboardContext={this.props.dashboardContext}

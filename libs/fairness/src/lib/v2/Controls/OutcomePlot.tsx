@@ -1,5 +1,5 @@
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
-import { ITheme, Text } from "office-ui-fabric-react";
+import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
@@ -27,7 +27,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     const barPlotlyProps = new BarPlotlyProps();
     let styles = WizardReportStyles();
     // let howToReadOutcomesSection: React.ReactNode;
-    let outcomeChartHeader = "";
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -97,7 +96,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       //       </Text>
       //     </div>
       //   );
-      outcomeChartHeader = localization.Report.distributionOfPredictions;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -132,7 +130,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       //       </Text>
       //     </div>
       //   );
-      outcomeChartHeader = localization.Report.distributionOfPredictions;
     }
 
     const formattedBinOutcomeValues = this.props.metrics.outcomes.bins.map(
@@ -156,9 +153,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           binValues={this.props.metrics.outcomes.bins}
         />
         <div className={styles.chartWrapper}>
-          <Text variant={"small"} className={styles.chartHeader} block>
-            {outcomeChartHeader}
-          </Text>
           <div className={styles.chartBody}>
             <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
           </div>

@@ -41,6 +41,10 @@ export const precomputedBinary: IFairnessData = {
           bins: [0.9, 0.97, 0.83],
           global: 0.9
         },
+        false_positive_rate: {
+          bins: [0.25, 0, 0.25],
+          global: 0.16667
+        },
         overprediction: {
           bins: [0.25, 0, 0.25],
           global: 0.16667
@@ -48,6 +52,10 @@ export const precomputedBinary: IFairnessData = {
         selection_rate: {
           bins: [0.5, 0.75, 0.25],
           global: 0.5
+        },
+        false_negative_rate: {
+          bins: [0, 0.5, 0.5],
+          global: 0.33333
         },
         underprediction: {
           bins: [0, 0.5, 0.5],
@@ -64,6 +72,10 @@ export const precomputedBinary: IFairnessData = {
           bins: [0.8, 0.76, 0.84],
           global: 0.8
         },
+        false_positive_rate: {
+          bins: [0.5, 1, 0],
+          global: 0.08333
+        },
         overprediction: {
           bins: [0, 0, 0.25],
           global: 0.08333
@@ -71,6 +83,10 @@ export const precomputedBinary: IFairnessData = {
         selection_rate: {
           bins: [0.5, 0.75, 0.25],
           global: 0.5
+        },
+        false_negative_rate: {
+          bins: [0, 0.33333, 0],
+          global: 0.25
         },
         underprediction: {
           bins: [0.25, 0.25, 0.25],

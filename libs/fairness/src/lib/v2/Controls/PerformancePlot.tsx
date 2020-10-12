@@ -38,12 +38,12 @@ export class PerformancePlot extends React.PureComponent<
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
     const styles = WizardReportStyles();
-    let performanceChartHeader = "";
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
     ) {
+      // TODO don't show chart if FPR, FNR not available
       barPlotlyProps.data = [
         {
           color: chartColors[0],
@@ -111,6 +111,7 @@ export class PerformancePlot extends React.PureComponent<
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Probability
     ) {
+      // TODO don't show chart if Overprediction/Underprediction not available
       barPlotlyProps.data = [
         {
           color: chartColors[0],
@@ -174,6 +175,7 @@ export class PerformancePlot extends React.PureComponent<
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Regression
     ) {
+      // TODO don't show chart if errors not available
       const performanceText = this.props.metrics.predictions?.map(
         (val, index) => {
           return `${localization.formatString(
@@ -206,8 +208,6 @@ export class PerformancePlot extends React.PureComponent<
           y: this.props.dashboardContext.binVector
         } as any
       ];
-      // TODO: should performanceChartHeader only be set in the regression case?
-      performanceChartHeader = localization.Report.distributionOfErrors;
     }
 
     const performanceKey = this.props.performancePickerProps
@@ -242,7 +242,6 @@ export class PerformancePlot extends React.PureComponent<
           binValues={this.props.metrics.performance.bins}
         />
         <div className={styles.chartWrapper}>
-          <div className={styles.chartHeader}>{performanceChartHeader}</div>
           <div className={styles.chartBody}>
             <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
           </div>
@@ -265,6 +264,60 @@ export class PerformancePlot extends React.PureComponent<
             </Text>
           </div>
         </div> */}
+      </div>
+    );
+  }
+}
+
+interface IPerformancePlotLegendProps {
+  showSubtitle: boolean;
+  useOverUnderPrediction: boolean;
+}
+
+export class PerformancePlotLegend extends React.PureComponent<
+  IPerformancePlotLegendProps
+> {
+  public render(): React.ReactNode {
+    const styles = WizardReportStyles();
+
+    return (
+      <div className={styles.legendPanel}>
+        <div className={styles.textRow}>
+          <div
+            className={styles.colorBlock}
+            style={{ backgroundColor: chartColors[1] }}
+          />
+          <div>
+            <div className={styles.legendTitle}>
+              {this.props.useOverUnderPrediction
+                ? localization.Report.underestimationError
+                : localization.Report.falseNegativeRate}
+            </div>
+            {this.props.showSubtitle && (
+              <div className={styles.legendSubtitle}>
+                {localization.Report.underpredictionExplanation}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={styles.textRow}>
+          <div
+            className={styles.colorBlock}
+            style={{ backgroundColor: chartColors[0] }}
+          />
+          <div>
+            <div className={styles.legendTitle}>
+              {this.props.useOverUnderPrediction
+                ? localization.Report.overestimationError
+                : localization.Report.falsePositiveRate}
+            </div>
+            {this.props.showSubtitle && (
+              <div className={styles.legendSubtitle}>
+                {localization.Report.overpredictionExplanation}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
