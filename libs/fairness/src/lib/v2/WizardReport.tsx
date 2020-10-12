@@ -17,7 +17,7 @@ import React from "react";
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { chartColors } from "../util/chartColors";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { ParityModes } from "../util/ParityMetrics";
+import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { localization } from "./../Localization/localization";
@@ -69,6 +69,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
+    const disparityKey = this.props.parityPickerProps.selectedParityKey;
     const outcomeKey: string =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -180,10 +181,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.state.metrics.outcomes.global,
         outcomeKey
       );
-      // const disparityOutcomeString = FormatMetrics.formatNumbers(
-      //   this.state.metrics.outcomeDisparity,
-      //   outcomeKey
-      // );
+      const disparityOutcomeString = FormatMetrics.formatNumbers(
+        this.state.metrics.outcomeDisparity,
+        disparityKey
+      );
 
       const formattedBinPerformanceValues = this.state.metrics.performance.bins.map(
         (value) => FormatMetrics.formatNumbers(value, performanceKey)
@@ -196,7 +197,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       // as any additional metrics that may be relevant for the selected task
       const formattedBinValues = [
         formattedBinPerformanceValues,
-        formattedBinOutcomeValues
+        formattedBinOutcomeValues,
+        formattedBinOutcomeValues.map((_) => "")  // empty entries for disparity outcome column
       ];
       additionalMetrics.forEach((metricObject, metricName) => {
         formattedBinValues.push(
@@ -206,7 +208,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         );
       });
 
-      const overallMetrics = [globalPerformanceString, globalOutcomeString];
+      const overallMetrics = [globalPerformanceString, globalOutcomeString, disparityOutcomeString];
       additionalMetrics.forEach((metricObject, metricName) => {
         overallMetrics.push(
           FormatMetrics.formatNumbers(metricObject?.global, metricName)
@@ -219,7 +221,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             (a) => a.key === performanceKey
           ) || performanceOptions[performanceKey]
         ).title,
-        performanceOptions[outcomeKey].title
+        performanceOptions[outcomeKey].title,
+        (
+          this.props.parityPickerProps.parityOptions.find(
+            (a) => a.key === disparityKey
+          ) || parityOptions[disparityKey]
+        ).title,
       ];
       additionalMetrics.forEach((_, metricName) => {
         metricLabels.push(performanceOptions[metricName].title);
