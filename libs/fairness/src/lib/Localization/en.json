@@ -123,6 +123,7 @@
     "falsePositiveRate": "False positive rate",
     "classificationOutcomesHowToRead": "The bar chart shows the selection rate in each group, meaning the fraction of points classified as 1.",
     "regressionOutcomesHowToRead": "Box plots show the distribution of predictions in each group. Individual data points are overlaid on top.",
+    "classificationPerformanceHowToReadV2": "The bar chart shows the false negative and false positive rates in each group.",
     "classificationPerformanceHowToRead1": "The bar chart shows the distribution of errors in each group.",
     "classificationPerformanceHowToRead2": "Errors are split into overprediction errors (predicting 1 when the true label is 0), and underprediction errors (predicting 0 when the true label is 1).",
     "classificationPerformanceHowToRead3": "The reported rates are obtained by dividing the number of errors by the overall group size.",

@@ -6,15 +6,10 @@ import {
   IDropdownStyles,
   IDropdownOption,
   Dropdown,
-  Modal,
-  IIconProps,
   Icon
 } from "office-ui-fabric-react";
 import {
-  ActionButton,
-  IconButton,
-  PrimaryButton
-} from "office-ui-fabric-react/lib/Button";
+  ActionButton} from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
@@ -26,11 +21,11 @@ import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { localization } from "./../Localization/localization";
-import { BarPlotlyProps } from "./BarPlotlyProps";
+import { ModalHelp } from "./Controls/ModalHelp";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
+import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
 import { PerformancePlot } from "./Controls/PerformancePlot";
-import { SummaryTable } from "./Controls/SummaryTable";
 import { IMetrics } from "./IMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
 
@@ -54,18 +49,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       title: { borderRadius: "5px", borderWidth: "1px" }
     };
 
-    const iconButtonStyles = {
-      root: {
-        color: theme.semanticColors.bodyText,
-        marginLeft: "auto",
-        marginRight: "2px",
-        marginTop: "4px"
-      },
-      rootHovered: {
-        color: theme.semanticColors.bodyBackgroundHovered
-      }
-    };
-
     const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
       (x) => {
         return { key: x, text: x };
@@ -80,12 +63,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       106;
     const areaHeights = Math.max(300, alternateHeight);
 
-    const opportunityPlot = new BarPlotlyProps();
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-    // let howToReadPerformanceSection: React.ReactNode;
-    // let howToReadOutcomesSection: React.ReactNode;
-    let performanceChartHeader = "";
-    // let opportunityChartHeader = "";
+    let performanceChartModalHelpStrings: string[] = [];
+    let outcomeChartModalHelpStrings: string[] = [];
 
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
@@ -94,8 +74,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       PredictionTypes.BinaryClassification
         ? "selection_rate"
         : "average";
-
-    const outcomeMetric = performanceOptions[outcomeKey];
 
     let mainChart;
     if (!this.state || !this.state.metrics) {
@@ -112,123 +90,36 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.BinaryClassification
       ) {
-        // TODO: this plot doesn't actually exist, does it?
-        opportunityPlot.data = [
-          {
-            color: chartColors[0],
-            hoverinfo: "skip",
-            name: outcomeMetric.title,
-            orientation: "h",
-            text: this.state.metrics.outcomes.bins.map((num) =>
-              FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
-            ),
-            textposition: "auto",
-            type: "bar",
-            x: this.state.metrics.outcomes.bins,
-            y: nameIndex
-          } as any
+        performanceChartModalHelpStrings = [
+          localization.Report.classificationPerformanceHowToReadV2
         ];
-        if (opportunityPlot.layout?.xaxis) {
-          opportunityPlot.layout.xaxis.tickformat = ",.0%";
-        }
-        // howToReadPerformanceSection = (
-        //   <div className={styles.rightText}>
-        //     <div className={styles.textRow}>
-        //       <div
-        //         className={styles.colorBlock}
-        //         style={{ backgroundColor: ChartColors[1] }}
-        //       />
-        //       <div>
-        //         <Text block>{localization.Report.underestimationError}</Text>
-        //         <Text block>
-        //           {localization.Report.underpredictionExplanation}
-        //         </Text>
-        //       </div>
-        //     </div>
-        //     <div className={styles.textRow}>
-        //       <div
-        //         className={styles.colorBlock}
-        //         style={{ backgroundColor: ChartColors[0] }}
-        //       />
-        //       <div>
-        //         <Text block>{localization.Report.overestimationError}</Text>
-        //         <Text block>
-        //           {localization.Report.overpredictionExplanation}
-        //         </Text>
-        //       </div>
-        //     </div>
-        //     <Text block>
-        //       {localization.Report.classificationPerformanceHowToRead1}
-        //     </Text>
-        //     <Text block>
-        //       {localization.Report.classificationPerformanceHowToRead2}
-        //     </Text>
-        //     <Text block>
-        //       {localization.Report.classificationPerformanceHowToRead3}
-        //     </Text>
-        //   </div>
-        // );
-        // howToReadOutcomesSection = (
-        //   <Text className={styles.textRow} block>
-        //     {localization.Report.classificationOutcomesHowToRead}
-        //   </Text>
-        // );
+        outcomeChartModalHelpStrings = [
+          localization.Report.classificationOutcomesHowToRead
+        ];
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.Probability
       ) {
-        // TODO: this plot doesn't exist anymore, does it?
-        const opportunityText = this.state.metrics.predictions?.map((val) => {
-          return localization.formatString(
-            localization.Report.tooltipPrediction,
-            FormatMetrics.formatNumbers(val, "average", false, 3)
-          );
-        });
-        opportunityPlot.data = [
-          {
-            boxmean: true,
-            boxpoints: "all",
-            color: chartColors[0],
-            hoverinfo: "text",
-            hoveron: "points",
-            jitter: 0.4,
-            orientation: "h",
-            pointpos: 0,
-            text: opportunityText,
-            type: "box",
-            x: this.state.metrics.predictions,
-            y: this.props.dashboardContext.binVector
-          } as any
+        performanceChartModalHelpStrings = [
+          localization.Report.probabilityPerformanceHowToRead1,
+          localization.Report.probabilityPerformanceHowToRead2,
+          localization.Report.probabilityPerformanceHowToRead3
+        ];
+        outcomeChartModalHelpStrings = [
+          localization.Report.regressionOutcomesHowToRead
         ];
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.Regression
       ) {
-        const opportunityText = this.state.metrics.predictions?.map((val) => {
-          return localization.formatString(
-            localization.Report.tooltipPrediction,
-            val
-          );
-        });
-        opportunityPlot.data = [
-          {
-            boxmean: true,
-            boxpoints: "all",
-            color: chartColors[0],
-            hoverinfo: "text",
-            hoveron: "points",
-            jitter: 0.4,
-            orientation: "h",
-            pointpos: 0,
-            text: opportunityText,
-            type: "box",
-            x: this.state.metrics.predictions,
-            y: this.props.dashboardContext.binVector
-          } as any
+        performanceChartModalHelpStrings = [
+          localization.Report.regressionPerformanceHowToRead
         ];
-        performanceChartHeader = localization.Report.distributionOfErrors;
+        outcomeChartModalHelpStrings = [
+          localization.Report.regressionOutcomesHowToRead
+        ];
       }
 
       // define task-specific metrics to show by default
@@ -284,15 +175,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       //   this.state.metrics.performanceDisparity,
       //   performanceKey
       // );
-      const selectedMetric =
-        performanceOptions[
-          this.props.performancePickerProps.selectedPerformanceKey
-        ] ||
-        this.props.performancePickerProps.performanceOptions.find(
-          (metric) =>
-            metric.key ===
-            this.props.performancePickerProps.selectedPerformanceKey
-        );
 
       const globalOutcomeString = FormatMetrics.formatNumbers(
         this.state.metrics.outcomes.global,
@@ -343,8 +225,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         metricLabels.push(performanceOptions[metricName].title);
       });
 
-      const cancelIcon: IIconProps = { iconName: "Cancel" };
-
       mainChart = (
         <div className={styles.main}>
           <div className={styles.mainLeft}>
@@ -390,76 +270,19 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             <div className={styles.equalizedOdds}>
               <Text>{localization.Report.equalizedOddsDisparity}</Text>
             </div>
-            <div className={styles.howTo}>
-              <ActionButton onClick={this.handleOpenModalHelp}>
-                <div className={styles.infoButton}>i</div>
-                {localization.ModelComparison.howToRead}
-              </ActionButton>
-              <Modal
-                titleAriaId="intro modal"
-                isOpen={this.state.showModalHelp}
-                onDismiss={this.handleCloseModalHelp}
-                isModeless={true}
-                containerClassName={styles.modalContentHelp}
-              >
-                <div style={{ display: "flex" }}>
-                  <IconButton
-                    styles={iconButtonStyles}
-                    iconProps={cancelIcon}
-                    ariaLabel="Close popup modal"
-                    onClick={this.handleCloseModalHelp}
-                  />
-                </div>
-                <p className={styles.modalContentHelpText}>
-                  {localization.Report.classificationPerformanceHowToRead1}
-                  <br />
-                  <br />
-                  {localization.Report.classificationPerformanceHowToRead2}
-                  <br />
-                  <br />
-                  {localization.Report.classificationPerformanceHowToRead3}
-                  <br />
-                  <br />
-                </p>
-                <div style={{ display: "flex", paddingBottom: "20px" }}>
-                  <PrimaryButton
-                    className={styles.doneButton}
-                    onClick={this.handleCloseModalHelp}
-                  >
-                    {localization.done}
-                  </PrimaryButton>
-                </div>
-              </Modal>
-            </div>
-            <div
-              className={styles.presentationArea}
-              style={{ height: `${areaHeights}px` }}
-            >
-              <SummaryTable
-                binGroup={
-                  this.props.dashboardContext.modelMetadata.featureNames[
-                    this.props.featureBinPickerProps.selectedBinIndex
-                  ]
-                }
-                binLabels={this.props.dashboardContext.groupNames}
-                formattedBinValues={formattedBinPerformanceValues}
-                metricLabel={selectedMetric.title}
-                binValues={this.state.metrics.performance.bins}
-              />
-              <div className={styles.chartWrapper}>
-                <div className={styles.chartHeader}>
-                  {performanceChartHeader}
-                </div>
-                <div className={styles.chartBody}>
-                  <PerformancePlot
-                    dashboardContext={this.props.dashboardContext}
-                    metrics={this.state.metrics}
-                    nameIndex={nameIndex}
-                    theme={undefined}
-                  />
-                </div>
-              </div>
-            </div>
+            <ModalHelp
+              theme={theme}
+              strings={performanceChartModalHelpStrings}
+            />
+            <PerformancePlot
+              dashboardContext={this.props.dashboardContext}
+              metrics={this.state.metrics}
+              nameIndex={nameIndex}
+              theme={undefined}
+              featureBinPickerProps={this.props.featureBinPickerProps}
+              performancePickerProps={this.props.performancePickerProps}
+              areaHeights={areaHeights}
+            />
             <div className={styles.legendPanel}>
               <div className={styles.textRow}>
                 <div
@@ -490,24 +313,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 </div>
               </div>
             </div>
-          </div>
-          <div className={styles.mainRight}>
-            <div className={styles.insights}>
-              <Icon
-                iconName="CRMCustomerInsightsApp"
-                className={styles.insightsIcon}
-              />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.insights}
-              </Text>
-            </div>
-            <div className={styles.insightsText}>{localization.loremIpsum}</div>
-            <div className={styles.downloadReport}>
-              <Icon iconName="Download" className={styles.downloadIcon} />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.downloadReport}
-              </Text>
-            </div>
+            <ModalHelp
+              theme={theme}
+              strings={outcomeChartModalHelpStrings}
+            />
+            <OutcomePlot
+              dashboardContext={this.props.dashboardContext}
+              metrics={this.state.metrics}
+              nameIndex={nameIndex}
+              theme={undefined}
+              featureBinPickerProps={this.props.featureBinPickerProps}
+              areaHeights={areaHeights}
+            />
           </div>
         </div>
       );
@@ -574,14 +391,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   //   }
   //   this.props.onEditConfigs();
   // };
-
-  private readonly handleOpenModalHelp = (): void => {
-    this.setState({ showModalHelp: true });
-  };
-
-  private readonly handleCloseModalHelp = (): void => {
-    this.setState({ showModalHelp: false });
-  };
 
   private readonly featureChanged = (
     _: React.FormEvent<HTMLDivElement>,

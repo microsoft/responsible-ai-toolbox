@@ -11,14 +11,24 @@ import { localization } from "../../Localization/localization";
 import { chartColors } from "../../util/chartColors";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
+import { SummaryTable } from "./SummaryTable";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import { IMetrics } from "../IMetrics";
+import { WizardReportStyles } from "../WizardReport.styles";
+import {
+  IFeatureBinPickerPropsV2,
+  IPerformancePickerPropsV2
+} from "../FairnessWizard";
+import { performanceOptions } from "../../util/PerformanceMetrics";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
   nameIndex: number[];
   theme: ITheme | undefined;
+  areaHeights: number;
+  performancePickerProps: IPerformancePickerPropsV2;
+  featureBinPickerProps: IFeatureBinPickerPropsV2;
 }
 
 export class PerformancePlot extends React.PureComponent<
@@ -27,6 +37,8 @@ export class PerformancePlot extends React.PureComponent<
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
+    const styles = WizardReportStyles();
+    let performanceChartHeader = "";
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -194,8 +206,66 @@ export class PerformancePlot extends React.PureComponent<
           y: this.props.dashboardContext.binVector
         } as any
       ];
+      // TODO: should performanceChartHeader only be set in the regression case?
+      performanceChartHeader = localization.Report.distributionOfErrors;
     }
 
-    return <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />;
+    const performanceKey = this.props.performancePickerProps
+      .selectedPerformanceKey;
+    const formattedBinPerformanceValues = this.props.metrics.performance.bins.map(
+      (value) => FormatMetrics.formatNumbers(value, performanceKey)
+    );
+    const selectedMetric =
+      performanceOptions[
+        this.props.performancePickerProps.selectedPerformanceKey
+      ] ||
+      this.props.performancePickerProps.performanceOptions.find(
+        (metric) =>
+          metric.key ===
+          this.props.performancePickerProps.selectedPerformanceKey
+      );
+
+    return (
+      <div
+        className={styles.presentationArea}
+        style={{ height: `${this.props.areaHeights}px` }}
+      >
+        <SummaryTable
+          binGroup={
+            this.props.dashboardContext.modelMetadata.featureNames[
+              this.props.featureBinPickerProps.selectedBinIndex
+            ]
+          }
+          binLabels={this.props.dashboardContext.groupNames}
+          formattedBinValues={formattedBinPerformanceValues}
+          metricLabel={selectedMetric.title}
+          binValues={this.props.metrics.performance.bins}
+        />
+        <div className={styles.chartWrapper}>
+          <div className={styles.chartHeader}>{performanceChartHeader}</div>
+          <div className={styles.chartBody}>
+            <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
+          </div>
+        </div>
+        {/* <div className={styles.mainRight}>
+          <div className={styles.insights}>
+            <Icon
+              iconName="CRMCustomerInsightsApp"
+              className={styles.insightsIcon}
+            />
+            <Text style={{ verticalAlign: "middle" }}>
+              {localization.ModelComparison.insights}
+            </Text>
+          </div>
+          <div className={styles.insightsText}>{localization.loremIpsum}</div>
+          <div className={styles.downloadReport}>
+            <Icon iconName="Download" className={styles.downloadIcon} />
+            <Text style={{ verticalAlign: "middle" }}>
+              {localization.ModelComparison.downloadReport}
+            </Text>
+          </div>
+        </div> */}
+      </div>
+    );
   }
 }
