@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 import { getTheme } from "@uifabric/styling";
+import { Dictionary } from "lodash";
 import {
   IDropdownStyles,
   IDropdownOption,
   Dropdown,
   Icon
 } from "office-ui-fabric-react";
-import {
-  ActionButton} from "office-ui-fabric-react/lib/Button";
+import { ActionButton } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
@@ -172,18 +172,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.state.metrics.performance.global,
         performanceKey
       );
-      // const disparityPerformanceString = FormatMetrics.formatNumbers(
-      //   this.state.metrics.performanceDisparity,
-      //   performanceKey
-      // );
+
+      const disparityMetricString = FormatMetrics.formatNumbers(
+        this.state.metrics.disparities[this.props.parityPickerProps.selectedParityKey],
+        performanceKey
+      );
 
       const globalOutcomeString = FormatMetrics.formatNumbers(
         this.state.metrics.outcomes.global,
         outcomeKey
-      );
-      const disparityOutcomeString = FormatMetrics.formatNumbers(
-        this.state.metrics.outcomeDisparity,
-        disparityKey
       );
 
       const formattedBinPerformanceValues = this.state.metrics.performance.bins.map(
@@ -198,7 +195,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       const formattedBinValues = [
         formattedBinPerformanceValues,
         formattedBinOutcomeValues,
-        formattedBinOutcomeValues.map((_) => "")  // empty entries for disparity outcome column
+        formattedBinOutcomeValues.map((_) => "") // empty entries for disparity outcome column
       ];
       additionalMetrics.forEach((metricObject, metricName) => {
         formattedBinValues.push(
@@ -208,7 +205,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         );
       });
 
-      const overallMetrics = [globalPerformanceString, globalOutcomeString, disparityOutcomeString];
+      const overallMetrics = [
+        globalPerformanceString,
+        globalOutcomeString,
+        disparityMetricString
+      ];
       additionalMetrics.forEach((metricObject, metricName) => {
         overallMetrics.push(
           FormatMetrics.formatNumbers(metricObject?.global, metricName)
@@ -226,7 +227,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           this.props.parityPickerProps.parityOptions.find(
             (a) => a.key === disparityKey
           ) || parityOptions[disparityKey]
-        ).title,
+        ).title
       ];
       additionalMetrics.forEach((_, metricName) => {
         metricLabels.push(performanceOptions[metricName].title);
@@ -320,10 +321,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 </div>
               </div>
             </div>
-            <ModalHelp
-              theme={theme}
-              strings={outcomeChartModalHelpStrings}
-            />
+            <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             <OutcomePlot
               dashboardContext={this.props.dashboardContext}
               metrics={this.state.metrics}
@@ -424,23 +422,23 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
-      let outcomeDisparity: number;
+      let disparities: Dictionary<number> = {};
       const performance = await this.getMetric(
         this.props.performancePickerProps.selectedPerformanceKey
       );
-      const performanceDisparity = await this.getDisparityMetric(
-        this.props.performancePickerProps.selectedPerformanceKey,
-        ParityModes.Difference
+      // TODO: extend disparities to query for all possible kinds of disparities
+      // https://github.com/microsoft/responsible-ai-widgets/issues/65
+      disparities[
+        this.props.parityPickerProps.selectedParityKey
+      ] = await this.getDisparityMetric(
+        this.props.parityPickerProps.selectedParityKey,
+        parityOptions[this.props.parityPickerProps.selectedParityKey].parityMode
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
           falseNegativeRates = await this.getMetric("false_negative_rate");
           falsePositiveRates = await this.getMetric("false_positive_rate");
           outcomes = await this.getMetric("selection_rate");
-          outcomeDisparity = await this.getDisparityMetric(
-            "selection_rate",
-            ParityModes.Difference
-          );
           break;
         }
         case PredictionTypes.Probability: {
@@ -450,10 +448,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           overpredictions = await this.getMetric("overprediction");
           underpredictions = await this.getMetric("underprediction");
           outcomes = await this.getMetric("average");
-          outcomeDisparity = await this.getDisparityMetric(
-            "average",
-            ParityModes.Difference
-          );
           break;
         }
         case PredictionTypes.Regression:
@@ -465,23 +459,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             return predicted - this.props.dashboardContext.trueY[index];
           });
           outcomes = await this.getMetric("average");
-          outcomeDisparity = await this.getDisparityMetric(
-            "average",
-            ParityModes.Difference
-          );
           break;
         }
       }
       this.setState({
         metrics: {
           errors,
+          disparities,
           falseNegativeRates,
           falsePositiveRates,
-          outcomeDisparity,
           outcomes,
           overpredictions,
           performance,
-          performanceDisparity,
           predictions,
           underpredictions
         }

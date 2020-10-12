@@ -1,3 +1,4 @@
+import { Dictionary } from 'lodash';
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -5,9 +6,8 @@ import { IMetricResponse } from "../IFairnessProps";
 
 export interface IMetrics {
   performance: IMetricResponse;
-  performanceDisparity: number;
   outcomes: IMetricResponse;
-  outcomeDisparity: number;
+  disparities: Dictionary<number>;
   // Optional, based on model type
   falsePositiveRates?: IMetricResponse;
   falseNegativeRates?: IMetricResponse;
