@@ -9,7 +9,7 @@ const testName = "Cohort";
 
 export function describeCohort(dataShape: IInterpretData): void {
   describe(testName, () => {
-    it("show hide cohort edit panel by default", () => {
+    it("should hide cohort edit panel by default", () => {
       cy.get("#cohortEditPanel").should("not.exist");
     });
     if (
@@ -17,11 +17,11 @@ export function describeCohort(dataShape: IInterpretData): void {
       !dataShape.noLocalImportance ||
       !dataShape.noY
     ) {
-      it("show cohort edit panel when click create", () => {
+      it("should cohort edit panel when click create", () => {
         cy.get('button:contains("New Cohort")').click();
         cy.get("#cohortEditPanel").should("exist");
       });
-      describeCreateCohort();
+      describeCreateCohort(dataShape);
     }
   });
 }
