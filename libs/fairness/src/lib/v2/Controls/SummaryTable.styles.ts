@@ -52,6 +52,8 @@ export const SummaryTableStyles: () => IProcessedStyleSet<
       paddingBottom: "19px"
     },
     groupCol: {
+      borderRight: "1px solid",
+      borderColor: theme.semanticColors.disabledBorder,
       display: "inline-flex",
       flexDirection: "column",
       height: "100%",

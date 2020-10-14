@@ -79,6 +79,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         : "average";
 
     let performanceChartHeaderString: string = "";
+    let outcomeChartHeaderString: string = "";
 
     let mainChart;
     if (!this.state || !this.state.metrics) {
@@ -103,6 +104,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ];
         performanceChartHeaderString =
           localization.Report.performanceChartHeaderBinaryClassification;
+        outcomeChartHeaderString = localization.Metrics.selectionRate;
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -118,6 +120,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ];
         performanceChartHeaderString =
           localization.Report.performanceChartHeaderProbability;
+        outcomeChartHeaderString = localization.Report.distributionOfPredictions;
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -131,6 +134,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ];
         performanceChartHeaderString =
           localization.Report.performanceChartHeaderRegression;
+        outcomeChartHeaderString = localization.Report.distributionOfPredictions;
       }
 
       // define task-specific metrics to show by default
@@ -287,7 +291,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                     localization.Report.expandSensitiveAttributes)}
               </Text>
             </div>
-            <div className={styles.performanceChartHeader}>
+            <div className={styles.chartSubHeader}>
               <Text>{performanceChartHeaderString}</Text>
             </div>
             <ModalHelp
@@ -316,6 +320,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 }
               />
             )}
+            <div className={styles.chartSubHeader}>
+              <Text>{outcomeChartHeaderString}</Text>
+            </div>
             <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             <OutcomePlot
               dashboardContext={this.props.dashboardContext}

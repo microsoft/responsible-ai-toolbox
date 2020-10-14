@@ -44,7 +44,7 @@ export interface IWizardReportStyles {
   infoButton: IStyle;
   doneButton: IStyle;
   closeButton: IStyle;
-  performanceChartHeader: IStyle;
+  chartSubHeader: IStyle;
   howTo: IStyle;
   colorBlock: IStyle;
   multimodelSection: IStyle;
@@ -131,7 +131,7 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       display: "inline-block",
       margin: "10px 0px"
     },
-    performanceChartHeader: {
+    chartSubHeader: {
       color: theme.semanticColors.bodyText,
       float: "left",
       fontSize: "18px",

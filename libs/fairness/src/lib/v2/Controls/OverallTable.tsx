@@ -65,9 +65,9 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                   <div className={styles.binBox} key={index}>
                     <div className={styles.binLabel}>{label}</div>
                     {/* <Stack horizontal>
-                                    {minIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Report.minTag}</div>}
-                                    {maxIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Report.maxTag}</div>}
-                                </Stack> */}
+                          {minIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Report.minTag}</div>}
+                          {maxIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Report.maxTag}</div>}
+                        </Stack> */}
                   </div>
                 );
               }

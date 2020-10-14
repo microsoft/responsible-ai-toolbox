@@ -153,6 +153,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           binValues={this.props.metrics.outcomes.bins}
         />
         <div className={styles.chartWrapper}>
+          <div className={styles.chartHeader}></div>
           <div className={styles.chartBody}>
             <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
           </div>

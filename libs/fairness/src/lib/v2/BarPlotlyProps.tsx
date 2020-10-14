@@ -50,7 +50,7 @@ export class BarPlotlyProps implements IPlotlyProperty {
     xaxis: {
       autorange: true,
       fixedrange: true,
-      linecolor: theme.semanticColors.disabledBorder,
+      linecolor: theme.semanticColors.inputBorder,
       linewidth: 1,
       mirror: true
     },

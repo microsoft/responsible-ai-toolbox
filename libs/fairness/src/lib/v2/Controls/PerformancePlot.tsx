@@ -242,6 +242,7 @@ export class PerformancePlot extends React.PureComponent<
           binValues={this.props.metrics.performance.bins}
         />
         <div className={styles.chartWrapper}>
+          <div className={styles.chartHeader}></div>
           <div className={styles.chartBody}>
             <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
           </div>
