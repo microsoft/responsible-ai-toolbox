@@ -5,7 +5,6 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
-import memoize from "memoize-one";
 import {
   IPivotItemProps,
   PivotItem,
@@ -95,52 +94,6 @@ export class NewExplanationDashboard extends React.PureComponent<
 > {
   private static iconsInitialized = false;
   private static ROW_WARNING_SIZE = 6000;
-
-  private static getClassLength: (
-    props: IExplanationDashboardProps
-  ) => number = memoize((props: IExplanationDashboardProps): number => {
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.localFeatureImportance &&
-      props.precomputedExplanations.localFeatureImportance.scores
-    ) {
-      const localImportances =
-        props.precomputedExplanations.localFeatureImportance.scores;
-      if (
-        (localImportances as number[][][]).every((dim1) => {
-          return dim1.every((dim2) => Array.isArray(dim2));
-        })
-      ) {
-        return localImportances.length;
-      }
-      // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-      return 1;
-    }
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.globalFeatureImportance &&
-      props.precomputedExplanations.globalFeatureImportance.scores
-    ) {
-      // determine if passed in vaules is 1D or 2D
-      if (
-        (props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][]).every((dim1) => Array.isArray(dim1))
-      ) {
-        return (props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][])[0].length;
-      }
-    }
-    if (
-      props.probabilityY &&
-      Array.isArray(props.probabilityY) &&
-      Array.isArray(props.probabilityY[0]) &&
-      props.probabilityY[0].length > 0
-    ) {
-      return props.probabilityY[0].length;
-    }
-    // default to regression case
-    return 1;
-  });
 
   private pivotItems: IPivotItemProps[] = [];
   private weightVectorOptions: WeightVectorOption[] = [];
