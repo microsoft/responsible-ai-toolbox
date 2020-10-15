@@ -7,7 +7,8 @@ import {
   IDropdownStyles,
   IDropdownOption,
   Dropdown,
-  Icon
+  Icon,
+  Stack
 } from "office-ui-fabric-react";
 import { ActionButton } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
@@ -25,8 +26,7 @@ import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
 import {
-  PerformancePlot,
-  PerformancePlotLegend
+  PerformancePlot
 } from "./Controls/PerformancePlot";
 import { IMetrics } from "./IMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
@@ -66,7 +66,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const areaHeights = Math.max(300, alternateHeight);
 
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-    let performanceChartModalHelpStrings: string[] = [];
     let outcomeChartModalHelpStrings: string[] = [];
 
     const performanceKey = this.props.performancePickerProps
@@ -78,7 +77,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ? "selection_rate"
         : "average";
 
-    let performanceChartHeaderString: string = "";
     let outcomeChartHeaderString: string = "";
 
     let mainChart;
@@ -96,45 +94,30 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.BinaryClassification
       ) {
-        performanceChartModalHelpStrings = [
-          localization.Report.classificationPerformanceHowToReadV2
-        ];
         outcomeChartModalHelpStrings = [
           localization.Report.classificationOutcomesHowToRead
         ];
-        performanceChartHeaderString =
-          localization.Report.performanceChartHeaderBinaryClassification;
         outcomeChartHeaderString = localization.Metrics.selectionRate;
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.Probability
       ) {
-        performanceChartModalHelpStrings = [
-          localization.Report.probabilityPerformanceHowToRead1,
-          localization.Report.probabilityPerformanceHowToRead2,
-          localization.Report.probabilityPerformanceHowToRead3
-        ];
         outcomeChartModalHelpStrings = [
           localization.Report.regressionOutcomesHowToRead
         ];
-        performanceChartHeaderString =
-          localization.Report.performanceChartHeaderProbability;
-        outcomeChartHeaderString = localization.Report.distributionOfPredictions;
+        outcomeChartHeaderString =
+          localization.Report.distributionOfPredictions;
       }
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.Regression
       ) {
-        performanceChartModalHelpStrings = [
-          localization.Report.regressionPerformanceHowToRead
-        ];
         outcomeChartModalHelpStrings = [
           localization.Report.regressionOutcomesHowToRead
         ];
-        performanceChartHeaderString =
-          localization.Report.performanceChartHeaderRegression;
-        outcomeChartHeaderString = localization.Report.distributionOfPredictions;
+        outcomeChartHeaderString =
+          localization.Report.distributionOfPredictions;
       }
 
       // define task-specific metrics to show by default
@@ -250,90 +233,81 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       });
 
       mainChart = (
-        <div className={styles.main}>
-          <div className={styles.mainLeft}>
-            <div
-              className={styles.overallArea}
-              style={{
-                height: this.state.expandAttributes
-                  ? `${150 + 50 * (areaHeights / 150)}px`
-                  : "150px"
-              }}
-            >
-              <OverallTable
-                binGroup={
-                  this.props.dashboardContext.modelMetadata.featureNames[
-                    this.props.featureBinPickerProps.selectedBinIndex
-                  ]
-                }
-                binLabels={this.props.dashboardContext.groupNames}
-                formattedBinValues={formattedBinValues}
-                metricLabels={metricLabels}
-                overallMetrics={overallMetrics}
-                expandAttributes={this.state.expandAttributes}
-                binValues={this.state.metrics.performance.bins}
+        <Stack>
+          <Stack horizontal={true}>
+            <Stack>
+              <div className={styles.mainLeft}>
+                <div
+                  className={styles.overallArea}
+                  style={{
+                    height: this.state.expandAttributes
+                      ? `${150 + 50 * (areaHeights / 150)}px`
+                      : "150px"
+                  }}
+                >
+                  <OverallTable
+                    binGroup={
+                      this.props.dashboardContext.modelMetadata.featureNames[
+                        this.props.featureBinPickerProps.selectedBinIndex
+                      ]
+                    }
+                    binLabels={this.props.dashboardContext.groupNames}
+                    formattedBinValues={formattedBinValues}
+                    metricLabels={metricLabels}
+                    overallMetrics={overallMetrics}
+                    expandAttributes={this.state.expandAttributes}
+                    binValues={this.state.metrics.performance.bins}
+                  />
+                </div>
+                <div
+                  className={styles.expandAttributes}
+                  onClick={this.expandAttributes}
+                >
+                  {(this.state.expandAttributes && (
+                    <Icon iconName="ChevronUp" className={styles.chevronIcon} />
+                  )) ||
+                    (!this.state.expandAttributes && (
+                      <Icon
+                        iconName="ChevronDown"
+                        className={styles.chevronIcon}
+                      />
+                    ))}
+                  <Text>
+                    {(this.state.expandAttributes &&
+                      localization.Report.collapseSensitiveAttributes) ||
+                      (!this.state.expandAttributes &&
+                        localization.Report.expandSensitiveAttributes)}
+                  </Text>
+                </div>
+              </div>
+            </Stack>
+          </Stack>
+          <PerformancePlot
+                dashboardContext={this.props.dashboardContext}
+                metrics={this.state.metrics}
+                nameIndex={nameIndex}
+                theme={undefined}
+                featureBinPickerProps={this.props.featureBinPickerProps}
+                performancePickerProps={this.props.performancePickerProps}
+                areaHeights={areaHeights}
+              />
+          <Stack horizontal={true}>
+            <div className={styles.mainLeft}>
+              <div className={styles.chartHeader}>
+                <Text>{outcomeChartHeaderString}</Text>
+              </div>
+              <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
+              <OutcomePlot
+                dashboardContext={this.props.dashboardContext}
+                metrics={this.state.metrics}
+                nameIndex={nameIndex}
+                theme={undefined}
+                featureBinPickerProps={this.props.featureBinPickerProps}
+                areaHeights={areaHeights}
               />
             </div>
-            <div
-              className={styles.expandAttributes}
-              onClick={this.expandAttributes}
-            >
-              {(this.state.expandAttributes && (
-                <Icon iconName="ChevronUp" className={styles.chevronIcon} />
-              )) ||
-                (!this.state.expandAttributes && (
-                  <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-                ))}
-              <Text>
-                {(this.state.expandAttributes &&
-                  localization.Report.collapseSensitiveAttributes) ||
-                  (!this.state.expandAttributes &&
-                    localization.Report.expandSensitiveAttributes)}
-              </Text>
-            </div>
-            <div className={styles.chartSubHeader}>
-              <Text>{performanceChartHeaderString}</Text>
-            </div>
-            <ModalHelp
-              theme={theme}
-              strings={performanceChartModalHelpStrings}
-            />
-            <PerformancePlot
-              dashboardContext={this.props.dashboardContext}
-              metrics={this.state.metrics}
-              nameIndex={nameIndex}
-              theme={undefined}
-              featureBinPickerProps={this.props.featureBinPickerProps}
-              performancePickerProps={this.props.performancePickerProps}
-              areaHeights={areaHeights}
-            />
-            {this.props.dashboardContext.modelMetadata.PredictionType !=
-              PredictionTypes.Regression && (
-              <PerformancePlotLegend
-                showSubtitle={
-                  this.props.dashboardContext.modelMetadata.PredictionType ==
-                  PredictionTypes.BinaryClassification
-                }
-                useOverUnderPrediction={
-                  this.props.dashboardContext.modelMetadata.PredictionType ==
-                  PredictionTypes.Probability
-                }
-              />
-            )}
-            <div className={styles.chartSubHeader}>
-              <Text>{outcomeChartHeaderString}</Text>
-            </div>
-            <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
-            <OutcomePlot
-              dashboardContext={this.props.dashboardContext}
-              metrics={this.state.metrics}
-              nameIndex={nameIndex}
-              theme={undefined}
-              featureBinPickerProps={this.props.featureBinPickerProps}
-              areaHeights={areaHeights}
-            />
-          </div>
-        </div>
+          </Stack>
+        </Stack>
       );
     }
 

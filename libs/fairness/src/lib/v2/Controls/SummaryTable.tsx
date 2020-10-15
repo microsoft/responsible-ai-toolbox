@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Text } from "office-ui-fabric-react";
+import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { SummaryTableStyles } from "./SummaryTable.styles";
@@ -16,6 +16,7 @@ export interface ISummaryTableProps {
 
 export class SummaryTable extends React.PureComponent<ISummaryTableProps> {
   public render(): React.ReactNode {
+    const theme = getTheme();
     const styles = SummaryTableStyles();
     let minIndexes = [];
     let maxIndexes = [];
@@ -42,9 +43,11 @@ export class SummaryTable extends React.PureComponent<ISummaryTableProps> {
     return (
       <div className={styles.frame}>
         <div className={styles.groupCol}>
-          <Text variant={"small"} className={styles.groupLabel}>
-            {this.props.binGroup}
-          </Text>
+          <div className={styles.groupLabel}>
+            <Text variant={"medium"} color={theme.semanticColors.bodyText}>
+              {this.props.binGroup}
+            </Text>
+          </div>
           <div className={styles.flexCol}>
             {this.props.binLabels.map((label, index) => {
               return (

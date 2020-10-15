@@ -28,7 +28,6 @@ export interface IWizardReportStyles {
   chartBody: IStyle;
   chartHeader: IStyle;
   dropDown: IStyle;
-  main: IStyle;
   mainLeft: IStyle;
   mainRight: IStyle;
   rightTitle: IStyle;
@@ -73,7 +72,7 @@ export const WizardReportStyles: () => IProcessedStyleSet<
     chartBody: {
       flex: 1
     },
-    chartHeader: {
+    chartSubHeader: {
       color: theme.semanticColors.bodyText,
       height: "23px",
       paddingLeft: "10px"
@@ -131,7 +130,7 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       display: "inline-block",
       margin: "10px 0px"
     },
-    chartSubHeader: {
+    chartHeader: {
       color: theme.semanticColors.bodyText,
       float: "left",
       fontSize: "18px",
@@ -228,10 +227,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       fontSize: "12px",
       lineHeight: "16px"
     },
-    main: {
-      display: "flex",
-      flexDirection: "row"
-    },
     mainLeft: {
       backgroundColor: theme.semanticColors.bodyBackground,
       width: "75%"
@@ -289,7 +284,7 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       backgroundColor: theme.semanticColors.bodyBackground,
       display: "flex",
       flexDirection: "row",
-      padding: "20px 0 30px 100px"
+      padding: "20px 0 30px 0"
     },
     rightText: {
       borderBottom: "0.5px dashed",

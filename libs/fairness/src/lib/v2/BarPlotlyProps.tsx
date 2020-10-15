@@ -61,7 +61,7 @@ export class BarPlotlyProps implements IPlotlyProperty {
       gridcolor: theme.semanticColors.disabledBorder,
       gridwidth: 1,
       showgrid: true,
-      showticklabels: false,
+      showticklabels: true,
       tick0: 0.5
     }
   };

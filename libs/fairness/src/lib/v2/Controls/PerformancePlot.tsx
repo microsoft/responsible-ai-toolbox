@@ -3,7 +3,7 @@
 
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme, Text, Icon, Stack, Label } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
@@ -20,6 +20,7 @@ import {
   IPerformancePickerPropsV2
 } from "../FairnessWizard";
 import { performanceOptions } from "../../util/PerformanceMetrics";
+import { ModalHelp } from "./ModalHelp";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
@@ -38,6 +39,8 @@ export class PerformancePlot extends React.PureComponent<
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
     const styles = WizardReportStyles();
+    let performanceChartModalHelpStrings: string[] = [];
+    let performanceChartHeaderString: string = "";
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -106,6 +109,11 @@ export class PerformancePlot extends React.PureComponent<
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
+      performanceChartModalHelpStrings = [
+        localization.Report.classificationPerformanceHowToReadV2
+      ];
+      performanceChartHeaderString =
+        localization.Report.performanceChartHeaderBinaryClassification;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -170,6 +178,13 @@ export class PerformancePlot extends React.PureComponent<
           }
         ];
       }
+      performanceChartModalHelpStrings = [
+        localization.Report.probabilityPerformanceHowToRead1,
+        localization.Report.probabilityPerformanceHowToRead2,
+        localization.Report.probabilityPerformanceHowToRead3
+      ];
+      performanceChartHeaderString =
+        localization.Report.performanceChartHeaderProbability;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -208,6 +223,11 @@ export class PerformancePlot extends React.PureComponent<
           y: this.props.dashboardContext.binVector
         } as any
       ];
+      performanceChartModalHelpStrings = [
+        localization.Report.regressionPerformanceHowToRead
+      ];
+      performanceChartHeaderString =
+        localization.Report.performanceChartHeaderRegression;
     }
 
     const performanceKey = this.props.performancePickerProps
@@ -226,46 +246,75 @@ export class PerformancePlot extends React.PureComponent<
       );
 
     return (
-      <div
-        className={styles.presentationArea}
-        style={{ height: `${this.props.areaHeights}px` }}
-      >
-        <SummaryTable
-          binGroup={
-            this.props.dashboardContext.modelMetadata.featureNames[
-              this.props.featureBinPickerProps.selectedBinIndex
-            ]
-          }
-          binLabels={this.props.dashboardContext.groupNames}
-          formattedBinValues={formattedBinPerformanceValues}
-          metricLabel={selectedMetric.title}
-          binValues={this.props.metrics.performance.bins}
-        />
-        <div className={styles.chartWrapper}>
-          <div className={styles.chartHeader}></div>
-          <div className={styles.chartBody}>
-            <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
+      <Stack tokens={{ padding: "0 0 0 100px" }}>
+        <Stack horizontal={true}>
+          <div className={styles.mainLeft}>
+            <Label>{performanceChartHeaderString}</Label>
+            <div
+              className={styles.presentationArea}
+              style={{ height: `${this.props.areaHeights}px` }}
+            >
+              <SummaryTable
+                binGroup={
+                  this.props.dashboardContext.modelMetadata.featureNames[
+                    this.props.featureBinPickerProps.selectedBinIndex
+                  ]
+                }
+                binLabels={this.props.dashboardContext.groupNames}
+                formattedBinValues={formattedBinPerformanceValues}
+                metricLabel={selectedMetric.title}
+                binValues={this.props.metrics.performance.bins}
+              />
+              <div className={styles.chartWrapper}>
+                <Stack horizontal={true} horizontalAlign={"space-between"}>
+                  <div className={styles.chartSubHeader}></div>
+                  <ModalHelp
+                    theme={theme}
+                    strings={performanceChartModalHelpStrings}
+                  />
+                </Stack>
+                <div className={styles.chartBody}>
+                  <AccessibleChart
+                    plotlyProps={barPlotlyProps}
+                    theme={undefined}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        {/* <div className={styles.mainRight}>
-          <div className={styles.insights}>
-            <Icon
-              iconName="CRMCustomerInsightsApp"
-              className={styles.insightsIcon}
-            />
-            <Text style={{ verticalAlign: "middle" }}>
-              {localization.ModelComparison.insights}
-            </Text>
+          <div className={styles.mainRight}>
+            <div className={styles.insights}>
+              <Icon
+                iconName="CRMCustomerInsightsApp"
+                className={styles.insightsIcon}
+              />
+              <Text style={{ verticalAlign: "middle" }}>
+                {localization.ModelComparison.insights}
+              </Text>
+            </div>
+            <div className={styles.insightsText}>{localization.loremIpsum}</div>
+            <div className={styles.downloadReport}>
+              <Icon iconName="Download" className={styles.downloadIcon} />
+              <Text style={{ verticalAlign: "middle" }}>
+                {localization.ModelComparison.downloadReport}
+              </Text>
+            </div>
           </div>
-          <div className={styles.insightsText}>{localization.loremIpsum}</div>
-          <div className={styles.downloadReport}>
-            <Icon iconName="Download" className={styles.downloadIcon} />
-            <Text style={{ verticalAlign: "middle" }}>
-              {localization.ModelComparison.downloadReport}
-            </Text>
-          </div>
-        </div> */}
-      </div>
+        </Stack>
+        {this.props.dashboardContext.modelMetadata.PredictionType !=
+          PredictionTypes.Regression && (
+          <PerformancePlotLegend
+            showSubtitle={
+              this.props.dashboardContext.modelMetadata.PredictionType ==
+              PredictionTypes.BinaryClassification
+            }
+            useOverUnderPrediction={
+              this.props.dashboardContext.modelMetadata.PredictionType ==
+              PredictionTypes.Probability
+            }
+          />
+        )}
+      </Stack>
     );
   }
 }
@@ -282,7 +331,7 @@ export class PerformancePlotLegend extends React.PureComponent<
     const styles = WizardReportStyles();
 
     return (
-      <div className={styles.legendPanel}>
+      <Stack horizontal={true} tokens={{childrenGap: "l1"}}>
         <div className={styles.textRow}>
           <div
             className={styles.colorBlock}
@@ -319,7 +368,7 @@ export class PerformancePlotLegend extends React.PureComponent<
             )}
           </div>
         </div>
-      </div>
+      </Stack>
     );
   }
 }

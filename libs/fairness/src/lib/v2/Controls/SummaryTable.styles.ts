@@ -61,7 +61,9 @@ export const SummaryTableStyles: () => IProcessedStyleSet<
     },
     groupLabel: {
       color: theme.semanticColors.bodyText,
-      height: "26px"
+      height: "26px",
+      paddingTop: "11px",
+      paddingBottom: "6px"
     },
     metricBox: {
       borderBottom: "0.5px dashed",

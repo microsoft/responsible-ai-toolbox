@@ -4,7 +4,8 @@ import {
   IIconProps,
   ITheme,
   Modal,
-  PrimaryButton
+  PrimaryButton,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../Localization/localization";
@@ -38,7 +39,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
     const cancelIcon: IIconProps = { iconName: "Cancel" };
 
     return (
-      <div className={styles.howTo}>
+      <Stack horizontal={true}>
         <ActionButton onClick={this.handleOpenModalHelp}>
           <div className={styles.infoButton}>i</div>
           {localization.ModelComparison.howToRead}
@@ -77,7 +78,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
             </PrimaryButton>
           </div>
         </Modal>
-      </div>
+      </Stack>
     );
   }
 
