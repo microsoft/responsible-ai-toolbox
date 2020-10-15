@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ExpandableText } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -14,7 +16,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { cohortKey } from "../../cohortKey";
@@ -76,7 +77,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         <div className={classNames.missingParametersPlaceholder}>
           <div className={classNames.missingParametersPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
-              {localization.DatasetExplorer.missingParameters}
+              {localization.Interpret.DatasetExplorer.missingParameters}
             </Text>
           </div>
         </div>
@@ -113,13 +114,16 @@ export class DatasetExplorerTab extends React.PureComponent<
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
           <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text variant="medium" className={classNames.helperText}>
-            {localization.DatasetExplorer.helperText}
-          </Text>
+          <ExpandableText
+            collapsedText={
+              localization.Interpret.DatasetExplorer.collapsedHelperText
+            }
+            expandedText={localization.Interpret.DatasetExplorer.helperText}
+          />
         </div>
         <div className={classNames.cohortPickerWrapper}>
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
-            {localization.ModelPerformance.cohortPickerLabel}
+            {localization.Interpret.ModelPerformance.cohortPickerLabel}
           </Text>
           {cohortOptions && (
             <Dropdown
@@ -218,7 +222,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                       variant="large"
                       className={classNames.faintText}
                     >
-                      {localization.ValidationErrors.datasizeError}
+                      {localization.Interpret.ValidationErrors.datasizeError}
                     </Text>
                   </div>
                 </div>

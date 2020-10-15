@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   DirectionalHint,
   IconButton,
@@ -11,7 +12,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import {
   IExplanationModelMetadata,
   ModelTypes
@@ -77,8 +77,8 @@ export class ExistingPredictionLabels extends React.Component<
         });
         const tooltipTitle =
           predictedProbs.length > WhatIfConstants.MAX_CLASSES_TOOLTIP
-            ? localization.WhatIfTab.tooltipTitleMany
-            : localization.WhatIfTab.tooltipTitleFew;
+            ? localization.Interpret.WhatIfTab.tooltipTitleMany
+            : localization.Interpret.WhatIfTab.tooltipTitleFew;
         const tooltipProps: ITooltipProps = {
           onRenderContent: () => (
             <div className={classNames.tooltipWrapper}>
@@ -88,13 +88,13 @@ export class ExistingPredictionLabels extends React.Component<
               <div className={classNames.tooltipTable}>
                 <div className={classNames.tooltipColumn}>
                   <Text className={classNames.boldText}>
-                    {localization.WhatIfTab.classPickerLabel}
+                    {localization.Interpret.WhatIfTab.classPickerLabel}
                   </Text>
                   {tooltipClasses}
                 </div>
                 <div className={classNames.tooltipColumn}>
                   <Text block className={classNames.boldText}>
-                    {localization.WhatIfTab.probabilityLabel}
+                    {localization.Interpret.WhatIfTab.probabilityLabel}
                   </Text>
                   {tooltipProbs}
                 </div>
@@ -120,7 +120,7 @@ export class ExistingPredictionLabels extends React.Component<
               {trueClass !== undefined && (
                 <div>
                   <Text className={classNames.boldText} variant="small">
-                    {localization.WhatIfTab.trueClass}
+                    {localization.Interpret.WhatIfTab.trueClass}
                   </Text>
                   <Text variant="small">
                     {
@@ -133,13 +133,13 @@ export class ExistingPredictionLabels extends React.Component<
               )}
               <div>
                 <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.predictedClass}
+                  {localization.Interpret.WhatIfTab.predictedClass}
                 </Text>
                 <Text variant="small">{predictedClassName}</Text>
               </div>
               <div>
                 <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.probability}
+                  {localization.Interpret.WhatIfTab.probability}
                 </Text>
                 <Text variant="small">
                   {predictedProb.toLocaleString(undefined, {
@@ -158,7 +158,7 @@ export class ExistingPredictionLabels extends React.Component<
             {trueClass !== undefined && (
               <div>
                 <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.trueClass}
+                  {localization.Interpret.WhatIfTab.trueClass}
                 </Text>
                 <Text variant="small">
                   {
@@ -172,7 +172,7 @@ export class ExistingPredictionLabels extends React.Component<
             {predictedClass !== undefined && (
               <div>
                 <Text className={classNames.boldText} variant="small">
-                  {localization.WhatIfTab.predictedClass}
+                  {localization.Interpret.WhatIfTab.predictedClass}
                 </Text>
                 <Text variant="small">{predictedClassName}</Text>
               </div>
@@ -196,7 +196,7 @@ export class ExistingPredictionLabels extends React.Component<
           {trueValue !== undefined && (
             <div>
               <Text className={classNames.boldText} variant="small">
-                {localization.WhatIfTab.trueValue}
+                {localization.Interpret.WhatIfTab.trueValue}
               </Text>
               <Text variant="small">{trueValue}</Text>
             </div>
@@ -204,7 +204,7 @@ export class ExistingPredictionLabels extends React.Component<
           {predictedValue !== undefined && (
             <div>
               <Text className={classNames.boldText} variant="small">
-                {localization.WhatIfTab.predictedValue}
+                {localization.Interpret.WhatIfTab.predictedValue}
               </Text>
               <Text variant="small">
                 {predictedValue.toLocaleString(undefined, {

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   ICategoricalRange,
   IModelMetadata,
@@ -17,7 +18,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 
 import { binningControlStyles } from "./BinningControl.styles";
@@ -73,7 +73,7 @@ export class BinningControl extends React.PureComponent<
           <ComboBox
             options={this.props.featureOptions}
             onChange={this.onFeatureSelected}
-            label={localization.IcePlot.featurePickerLabel}
+            label={localization.Interpret.IcePlot.featurePickerLabel}
             ariaLabel="feature picker"
             selectedKey={this.state ? this.state.featureIndex : undefined}
             useComboBoxAsMenuWidth={true}
@@ -96,21 +96,21 @@ export class BinningControl extends React.PureComponent<
             {this.state.type !== RangeTypes.Categorical && (
               <div className={binningControlStyles.featurePicker}>
                 <TextField
-                  label={localization.IcePlot.minimumInputLabel}
+                  label={localization.Interpret.IcePlot.minimumInputLabel}
                   styles={FabricStyles.textFieldStyle}
                   value={this.state.min}
                   onChange={this.onMinRangeChanged}
                   errorMessage={this.state.minErrorMessage}
                 />
                 <TextField
-                  label={localization.IcePlot.maximumInputLabel}
+                  label={localization.Interpret.IcePlot.maximumInputLabel}
                   styles={FabricStyles.textFieldStyle}
                   value={this.state.max}
                   onChange={this.onMaxRangeChanged}
                   errorMessage={this.state.maxErrorMessage}
                 />
                 <TextField
-                  label={localization.IcePlot.stepInputLabel}
+                  label={localization.Interpret.IcePlot.stepInputLabel}
                   styles={FabricStyles.textFieldStyle}
                   value={this.state.steps}
                   onChange={this.onStepsRangeChanged}
@@ -148,8 +148,8 @@ export class BinningControl extends React.PureComponent<
     ) {
       rangeView.minErrorMessage =
         this.state.type === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
       this.setState(rangeView);
     } else {
       rangeView.minErrorMessage = undefined;
@@ -172,8 +172,8 @@ export class BinningControl extends React.PureComponent<
     ) {
       rangeView.maxErrorMessage =
         this.state.type === RangeTypes.Integer
-          ? localization.IcePlot.integerError
-          : localization.IcePlot.numericError;
+          ? localization.Interpret.IcePlot.integerError
+          : localization.Interpret.IcePlot.numericError;
       this.setState(rangeView);
     } else {
       rangeView.maxErrorMessage = undefined;
@@ -191,7 +191,7 @@ export class BinningControl extends React.PureComponent<
     const rangeView = _.cloneDeep(this.state) as IBinningState;
     rangeView.steps = newValue;
     if (!Number.isInteger(val)) {
-      rangeView.stepsErrorMessage = localization.IcePlot.integerError;
+      rangeView.stepsErrorMessage = localization.Interpret.IcePlot.integerError;
       this.setState(rangeView);
     } else {
       rangeView.stepsErrorMessage = undefined;

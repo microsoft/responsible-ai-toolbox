@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   IDropdownOption,
@@ -11,7 +12,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../Localization/localization";
 import { FabricStyles } from "../FabricStyles";
 import {
   IExplanationContext,
@@ -109,7 +109,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
             <div className={singlePointFeatureImportanceStyles.topControls}>
               <Slider
                 className={singlePointFeatureImportanceStyles.featureSlider}
-                label={localization.AggregateImportance.topKFeatures}
+                label={localization.Interpret.AggregateImportance.topKFeatures}
                 max={Math.min(
                   30,
                   this.props.explanationContext.modelMetadata.featureNames
@@ -123,7 +123,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
               />
               {this.sortOptions.length > 1 && (
                 <ComboBox
-                  label={localization.BarChart.sortBy}
+                  label={localization.Interpret.BarChart.sortBy}
                   selectedKey={this.state.selectedSorting}
                   onChange={this.onSortSelect}
                   options={this.sortOptions}
@@ -209,7 +209,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     const result: IDropdownOption[] = [
       {
         key: FeatureKeys.AbsoluteGlobal,
-        text: localization.BarChart.absoluteGlobal
+        text: localization.Interpret.BarChart.absoluteGlobal
       }
     ];
     // if (!this.props.explanationContext.testDataset.predictedY) {
@@ -221,7 +221,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     ) {
       result.push({
         key: FeatureKeys.AbsoluteLocal,
-        text: localization.BarChart.absoluteLocal
+        text: localization.Interpret.BarChart.absoluteLocal
       });
     }
     if (

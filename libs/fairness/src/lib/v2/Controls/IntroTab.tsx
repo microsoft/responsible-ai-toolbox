@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { PrimaryButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "../../Localization/localization";
 
 import { IntroTabStyles } from "./IntroTab.styles";
 import { ReactComponent } from "./IntroTabIcon.svg";
@@ -25,13 +24,13 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
             className={styles.firstSectionContainer}
           >
             <Text className={styles.firstSectionTitle} block>
-              {localization.Intro.welcome}
+              {localization.Fairness.Intro.welcome}
             </Text>
             <Text className={styles.firstSectionSubtitle} block>
-              {localization.Intro.fairnessDashboard}
+              {localization.Fairness.Intro.fairnessDashboard}
             </Text>
             <Text className={styles.firstSectionBody} variant={"large"} block>
-              {localization.Intro.introBody}
+              {localization.Fairness.Intro.introBody}
             </Text>
             <div className={styles.firstSectionGraphics}>
               <ReactComponent />
@@ -41,17 +40,19 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
         <div className={styles.lowerSection}>
           <div className={styles.stepsContainer}>
             <Text variant={"large"} className={styles.boldStep}>
-              {localization.Intro.explanatoryStep}
+              {localization.Fairness.Intro.explanatoryStep}
             </Text>
             <div className={styles.explanatoryStep}>
               <div>
                 <Text variant={"large"} className={styles.numericLabel}>
                   01
                 </Text>
-                <Text variant={"large"}>{localization.Intro.features}</Text>
+                <Text variant={"large"}>
+                  {localization.Fairness.Intro.features}
+                </Text>
               </div>
               <Text className={styles.explanatoryText} block>
-                {localization.Intro.featuresInfo}
+                {localization.Fairness.Intro.featuresInfo}
               </Text>
             </div>
             <div className={styles.explanatoryStep}>
@@ -59,10 +60,12 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
                 <Text variant={"large"} className={styles.numericLabel}>
                   02
                 </Text>
-                <Text variant={"large"}>{localization.Intro.performance}</Text>
+                <Text variant={"large"}>
+                  {localization.Fairness.Intro.performance}
+                </Text>
               </div>
               <Text className={styles.explanatoryText} block>
-                {localization.Intro.performanceInfo}
+                {localization.Fairness.Intro.performanceInfo}
               </Text>
             </div>
             <div className={styles.explanatoryStep}>
@@ -70,10 +73,12 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
                 <Text variant={"large"} className={styles.numericLabel}>
                   03
                 </Text>
-                <Text variant={"large"}>{localization.Intro.parity}</Text>
+                <Text variant={"large"}>
+                  {localization.Fairness.Intro.parity}
+                </Text>
               </div>
               <Text className={styles.explanatoryText} block>
-                {localization.Intro.parityInfo}
+                {localization.Fairness.Intro.parityInfo}
               </Text>
             </div>
           </div>
@@ -83,7 +88,7 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
               className={styles.getStarted}
               onClick={this.props.onNext}
             >
-              {localization.Intro.getStarted}
+              {localization.Fairness.Intro.getStarted}
             </PrimaryButton>
           </Stack>
         </div>

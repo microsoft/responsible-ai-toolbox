@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ChartBuilder,
@@ -26,7 +27,6 @@ import {
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
 import { parityOptions } from "../../util/ParityMetrics";
@@ -196,7 +196,7 @@ export class ModelComparisonChart extends React.PureComponent<
         <Spinner
           className={styles.spinner}
           size={SpinnerSize.large}
-          label={localization.calculating}
+          label={localization.Fairness.calculating}
         />
       );
     } else {
@@ -262,20 +262,20 @@ export class ModelComparisonChart extends React.PureComponent<
                   />
                 </div>
                 <p className={styles.modalContentIntroText}>
-                  {localization.ModelComparison.introModalText}
+                  {localization.Fairness.ModelComparison.introModalText}
                 </p>
                 <div style={{ display: "flex", paddingBottom: "20px" }}>
                   <PrimaryButton
                     className={styles.doneButton}
                     onClick={this.handleCloseModalIntro}
                   >
-                    {localization.done}
+                    {localization.Fairness.done}
                   </PrimaryButton>
                 </div>
               </Modal>
               <ActionButton onClick={this.handleOpenModalHelp}>
                 <div className={styles.infoButton}>i</div>
-                {localization.ModelComparison.howToRead}
+                {localization.Fairness.ModelComparison.howToRead}
               </ActionButton>
               <Modal
                 titleAriaId="help modal"
@@ -293,17 +293,17 @@ export class ModelComparisonChart extends React.PureComponent<
                   />
                 </div>
                 <p className={styles.modalContentHelpText}>
-                  {localization.ModelComparison.helpModalText1}
+                  {localization.Fairness.ModelComparison.helpModalText1}
                   <br />
                   <br />
-                  {localization.ModelComparison.helpModalText2}
+                  {localization.Fairness.ModelComparison.helpModalText2}
                 </p>
                 <div style={{ display: "flex", paddingBottom: "20px" }}>
                   <PrimaryButton
                     className={styles.doneButton}
                     onClick={this.handleCloseModalHelp}
                   >
-                    {localization.done}
+                    {localization.Fairness.done}
                   </PrimaryButton>
                 </div>
               </Modal>
@@ -332,7 +332,7 @@ export class ModelComparisonChart extends React.PureComponent<
       <Stack className={styles.frame}>
         <div className={styles.header}>
           <Text variant={"large"} className={styles.headerTitle} block>
-            {localization.ModelComparison.title} <b>assessment</b>
+            {localization.Fairness.ModelComparison.title} <b>assessment</b>
           </Text>
         </div>
         <div className={styles.headerOptions}>

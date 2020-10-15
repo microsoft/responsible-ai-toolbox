@@ -1,21 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   ChoiceGroup,
   DefaultButton,
   IChoiceGroupOption,
+  Label,
+  Stack,
   Text
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ColumnCategories, JointDataset } from "../../JointDataset";
+import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 
@@ -35,74 +38,67 @@ export class SidePanel extends React.Component<ISidePanelProps> {
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Histogram,
-      text: localization.DatasetExplorer.aggregatePlots
+      text: localization.Interpret.DatasetExplorer.aggregatePlots
     },
     {
       key: ChartTypes.Scatter,
-      text: localization.DatasetExplorer.individualDatapoints
+      text: localization.Interpret.DatasetExplorer.individualDatapoints
     }
   ];
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
     const colorSeries = this.buildColorLegend();
     return (
-      <div className={classNames.legendAndText}>
-        <Text variant={"mediumPlus"} block className={classNames.boldText}>
-          {localization.DatasetExplorer.colorValue}
-        </Text>
+      <Stack>
         {this.props.chartProps.chartType === ChartTypes.Scatter && (
-          <DefaultButton
-            onClick={this.props.setColorOpen}
-            text={
-              this.props.chartProps.colorAxis &&
-              this.props.jointDataset.metaDict[
-                this.props.chartProps.colorAxis.property
-              ].abbridgedLabel
-            }
-            title={
-              this.props.chartProps.colorAxis &&
-              this.props.jointDataset.metaDict[
-                this.props.chartProps.colorAxis.property
-              ].label
-            }
-          />
-        )}
-        <div className={classNames.legend}>
-          {colorSeries?.length ? (
-            colorSeries.map((name, i) => {
-              return (
-                <div className={classNames.legendItem} key={i}>
-                  <div
-                    className={classNames.colorBox}
-                    style={{
-                      backgroundColor: FabricStyles.fabricColorPalette[i]
-                    }}
+          <Stack.Item>
+            <Label>{localization.Interpret.DatasetExplorer.colorValue}</Label>
+            <DefaultButton
+              id="SetColorButton"
+              onClick={this.props.setColorOpen}
+              text={
+                this.props.chartProps.colorAxis &&
+                this.props.jointDataset.metaDict[
+                  this.props.chartProps.colorAxis.property
+                ].abbridgedLabel
+              }
+              title={
+                this.props.chartProps.colorAxis &&
+                this.props.jointDataset.metaDict[
+                  this.props.chartProps.colorAxis.property
+                ].label
+              }
+            />
+            <div className={classNames.legendAndText}>
+              <div className={classNames.legend}>
+                {colorSeries?.length ? (
+                  <InteractiveLegend
+                    items={colorSeries.map((name, i) => {
+                      return {
+                        activated: true,
+                        color: FabricStyles.fabricColorPalette[i],
+                        name
+                      };
+                    })}
                   />
-                  <Text
-                    nowrap
-                    variant={"medium"}
-                    className={classNames.legendLabel}
-                  >
-                    {name}
+                ) : (
+                  <Text variant={"xSmall"} className={classNames.smallItalic}>
+                    {localization.Interpret.DatasetExplorer.noColor}
                   </Text>
-                </div>
-              );
-            })
-          ) : (
-            <Text variant={"xSmall"} className={classNames.smallItalic}>
-              {localization.DatasetExplorer.noColor}
-            </Text>
-          )}
-        </div>
+                )}
+              </div>
+            </div>
+          </Stack.Item>
+        )}
 
         <ChoiceGroup
           id="ChartTypeSelection"
-          label={localization.DatasetExplorer.chartType}
+          label={localization.Interpret.DatasetExplorer.chartType}
           selectedKey={this.props.chartProps.chartType}
           options={this.chartOptions}
           onChange={this.props.onChartTypeChange}
         />
-      </div>
+      </Stack>
     );
   }
 

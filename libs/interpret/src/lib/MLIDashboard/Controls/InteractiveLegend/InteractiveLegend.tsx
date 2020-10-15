@@ -19,7 +19,7 @@ export interface ILegendItem {
   sortingState?: SortingState;
   color: string;
   name: string;
-  onClick: () => void;
+  onClick?: () => void;
   onDelete?: () => void;
   onEdit?: () => void;
 }

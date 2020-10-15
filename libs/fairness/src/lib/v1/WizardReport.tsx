@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -18,7 +19,6 @@ import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
-import { localization } from "./../Localization/localization";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { SummaryTable } from "./Controls/SummaryTable";
 import { WizardReportStyles } from "./WizardReport.styles";
@@ -115,7 +115,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         <Spinner
           className={styles.spinner}
           size={SpinnerSize.large}
-          label={localization.calculating}
+          label={localization.Fairness.calculating}
         />
       );
     }
@@ -153,7 +153,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         {
           fillcolor: chartColors[0],
           hoverinfo: "skip",
-          name: localization.Metrics.overprediction,
+          name: localization.Fairness.Metrics.overprediction,
           orientation: "h",
           text: this.state.metrics.binnedOverprediction?.map((num) =>
             FormatMetrics.formatNumbers(num, "accuracy_score", false, 2)
@@ -167,7 +167,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         {
           fillcolor: chartColors[1],
           hoverinfo: "skip",
-          name: localization.Metrics.underprediction,
+          name: localization.Fairness.Metrics.underprediction,
           orientation: "h",
           text: this.state.metrics.binnedUnderprediction?.map((num) =>
             FormatMetrics.formatNumbers(num, "accuracy_score", false, 2)
@@ -185,7 +185,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           {
             font: { color: theme.semanticColors.bodySubtext, size: 10 },
             showarrow: false,
-            text: localization.Report.underestimationError,
+            text: localization.Fairness.Report.underestimationError,
             x: 0.02,
             xref: "paper",
             y: 1,
@@ -194,7 +194,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           {
             font: { color: theme.semanticColors.bodySubtext, size: 10 },
             showarrow: false,
-            text: localization.Report.overestimationError,
+            text: localization.Fairness.Report.overestimationError,
             x: 0.98,
             xref: "paper",
             y: 1,
@@ -231,9 +231,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               style={{ backgroundColor: chartColors[1] }}
             />
             <div>
-              <Text block>{localization.Report.underestimationError}</Text>
               <Text block>
-                {localization.Report.underpredictionExplanation}
+                {localization.Fairness.Report.underestimationError}
+              </Text>
+              <Text block>
+                {localization.Fairness.Report.underpredictionExplanation}
               </Text>
             </div>
           </div>
@@ -243,24 +245,28 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               style={{ backgroundColor: chartColors[0] }}
             />
             <div>
-              <Text block>{localization.Report.overestimationError}</Text>
-              <Text block>{localization.Report.overpredictionExplanation}</Text>
+              <Text block>
+                {localization.Fairness.Report.overestimationError}
+              </Text>
+              <Text block>
+                {localization.Fairness.Report.overpredictionExplanation}
+              </Text>
             </div>
           </div>
           <Text block>
-            {localization.Report.classificationPerformanceHowToRead1}
+            {localization.Fairness.Report.classificationPerformanceHowToRead1}
           </Text>
           <Text block>
-            {localization.Report.classificationPerformanceHowToRead2}
+            {localization.Fairness.Report.classificationPerformanceHowToRead2}
           </Text>
           <Text block>
-            {localization.Report.classificationPerformanceHowToRead3}
+            {localization.Fairness.Report.classificationPerformanceHowToRead3}
           </Text>
         </div>
       );
       howToReadOutcomesSection = (
         <Text className={styles.textRow} block>
-          {localization.Report.classificationOutcomesHowToRead}
+          {localization.Fairness.Report.classificationOutcomesHowToRead}
         </Text>
       );
     }
@@ -272,7 +278,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         {
           fillcolor: chartColors[0],
           hoverinfo: "skip",
-          name: localization.Metrics.overprediction,
+          name: localization.Fairness.Metrics.overprediction,
           orientation: "h",
           text: this.state.metrics.binnedOverprediction?.map((num) =>
             FormatMetrics.formatNumbers(num, "overprediction", false, 2)
@@ -286,7 +292,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         {
           fillcolor: chartColors[1],
           hoverinfo: "skip",
-          name: localization.Metrics.underprediction,
+          name: localization.Fairness.Metrics.underprediction,
           orientation: "h",
           text: this.state.metrics.binnedUnderprediction?.map((num) =>
             FormatMetrics.formatNumbers(num, "underprediction", false, 2)
@@ -304,7 +310,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           {
             font: { color: theme.semanticColors.bodyText, size: 10 },
             showarrow: false,
-            text: localization.Report.underestimationError,
+            text: localization.Fairness.Report.underestimationError,
             x: 0.1,
             xref: "paper",
             y: 1,
@@ -313,7 +319,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           {
             font: { color: theme.semanticColors.bodyText, size: 10 },
             showarrow: false,
-            text: localization.Report.overestimationError,
+            text: localization.Fairness.Report.overestimationError,
             x: 0.9,
             xref: "paper",
             y: 1,
@@ -323,7 +329,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       const opportunityText = this.state.metrics.predictions?.map((val) => {
         return localization.formatString(
-          localization.Report.tooltipPrediction,
+          localization.Fairness.Report.tooltipPrediction,
           FormatMetrics.formatNumbers(val, "average", false, 3)
         );
       });
@@ -350,34 +356,39 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               className={styles.colorBlock}
               style={{ backgroundColor: chartColors[0] }}
             />
-            <Text block>{localization.Report.overestimationError}</Text>
+            <Text block>
+              {localization.Fairness.Report.overestimationError}
+            </Text>
           </div>
           <div className={styles.textRow}>
             <div
               className={styles.colorBlock}
               style={{ backgroundColor: chartColors[1] }}
             />
-            <Text block>{localization.Report.underestimationError}</Text>
+            <Text block>
+              {localization.Fairness.Report.underestimationError}
+            </Text>
           </div>
           <Text className={styles.textRow} block>
-            {localization.Report.probabilityPerformanceHowToRead1}
+            {localization.Fairness.Report.probabilityPerformanceHowToRead1}
           </Text>
           <Text className={styles.textRow} block>
-            {localization.Report.probabilityPerformanceHowToRead2}
+            {localization.Fairness.Report.probabilityPerformanceHowToRead2}
           </Text>
           <Text className={styles.textRow} block>
-            {localization.Report.probabilityPerformanceHowToRead3}
+            {localization.Fairness.Report.probabilityPerformanceHowToRead3}
           </Text>
         </div>
       );
       howToReadOutcomesSection = (
         <div>
           <Text className={styles.textRow} block>
-            {localization.Report.regressionOutcomesHowToRead}
+            {localization.Fairness.Report.regressionOutcomesHowToRead}
           </Text>
         </div>
       );
-      opportunityChartHeader = localization.Report.distributionOfPredictions;
+      opportunityChartHeader =
+        localization.Fairness.Report.distributionOfPredictions;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -385,14 +396,14 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     ) {
       const opportunityText = this.state.metrics.predictions?.map((val) => {
         return localization.formatString(
-          localization.Report.tooltipPrediction,
+          localization.Fairness.Report.tooltipPrediction,
           val
         );
       });
       const performanceText = this.state.metrics.predictions?.map(
         (val, index) => {
           return `${localization.formatString(
-            localization.Report.tooltipError,
+            localization.Fairness.Report.tooltipError,
             FormatMetrics.formatNumbers(
               this.state.metrics?.errors
                 ? this.state.metrics.errors[index]
@@ -402,7 +413,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               3
             )
           )}<br>${localization.formatString(
-            localization.Report.tooltipPrediction,
+            localization.Fairness.Report.tooltipPrediction,
             FormatMetrics.formatNumbers(val, "average", false, 3)
           )}`;
         }
@@ -442,19 +453,21 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       howToReadPerformanceSection = (
         <div>
           <Text className={styles.textRow} block>
-            {localization.Report.regressionPerformanceHowToRead}
+            {localization.Fairness.Report.regressionPerformanceHowToRead}
           </Text>
         </div>
       );
       howToReadOutcomesSection = (
         <div>
           <Text className={styles.textRow} block>
-            {localization.Report.regressionOutcomesHowToRead}
+            {localization.Fairness.Report.regressionOutcomesHowToRead}
           </Text>
         </div>
       );
-      opportunityChartHeader = localization.Report.distributionOfPredictions;
-      performanceChartHeader = localization.Report.distributionOfErrors;
+      opportunityChartHeader =
+        localization.Fairness.Report.distributionOfPredictions;
+      performanceChartHeader =
+        localization.Fairness.Report.distributionOfErrors;
     }
 
     const globalPerformanceString = FormatMetrics.formatNumbers(
@@ -499,7 +512,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 iconProps={{ iconName: "ChevronLeft" }}
                 onClick={this.clearModelSelection}
               >
-                {localization.Report.backToComparisonsLegacy}
+                {localization.Fairness.Report.backToComparisonsLegacy}
               </ActionButton>
               <Text variant={"large"} className={styles.modelLabel}>
                 {
@@ -511,7 +524,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             </div>
           )}
           <Text variant={"mediumPlus"} className={styles.headerTitle}>
-            {localization.Report.title}
+            {localization.Fairness.Report.title}
           </Text>
           <div className={styles.bannerWrapper}>
             <div className={styles.headerBanner}>
@@ -520,7 +533,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               </Text>
               <Text className={styles.firstMetricLabel} block>
                 {localization.formatString(
-                  localization.Report.globalPerformanceText,
+                  localization.Fairness.Report.globalPerformanceText,
                   selectedMetric.alwaysUpperCase
                     ? selectedMetric.title
                     : selectedMetric.title.toLowerCase()
@@ -531,7 +544,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               </Text>
               <Text className={styles.metricLabel} block>
                 {localization.formatString(
-                  localization.Report.performanceDisparityText,
+                  localization.Fairness.Report.performanceDisparityText,
                   selectedMetric.alwaysUpperCase
                     ? selectedMetric.title
                     : selectedMetric.title.toLowerCase()
@@ -543,7 +556,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               onClick={this.onEditConfigs}
               autoFocus={true}
             >
-              {localization.Report.editConfiguration}
+              {localization.Fairness.Report.editConfiguration}
             </ActionButton>
           </div>
         </div>
@@ -575,14 +588,14 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           </div>
           <div className={styles.mainRight}>
             <Text className={styles.rightTitle} block>
-              {localization.ModelComparison.howToRead}
+              {localization.Fairness.ModelComparison.howToRead}
             </Text>
             {howToReadPerformanceSection}
           </div>
         </div>
         <div className={styles.header}>
           <Text variant={"mediumPlus"} className={styles.headerTitle}>
-            {localization.Report.outcomesTitle}
+            {localization.Fairness.Report.outcomesTitle}
           </Text>
           <div className={styles.bannerWrapper}>
             <div className={styles.headerBanner}>
@@ -591,7 +604,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               </Text>
               <Text className={styles.firstMetricLabel} block>
                 {localization.formatString(
-                  localization.Report.globalPerformanceText,
+                  localization.Fairness.Report.globalPerformanceText,
                   outcomeMetric.title.toLowerCase()
                 )}
               </Text>
@@ -600,7 +613,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               </Text>
               <Text className={styles.metricLabel} block>
                 {localization.formatString(
-                  localization.Report.performanceDisparityText,
+                  localization.Fairness.Report.performanceDisparityText,
                   outcomeMetric.title.toLowerCase()
                 )}
               </Text>
@@ -635,7 +648,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           </div>
           <div className={styles.mainRight}>
             <Text className={styles.rightTitle} block>
-              {localization.ModelComparison.howToRead}
+              {localization.Fairness.ModelComparison.howToRead}
             </Text>
             <Text className={styles.rightText} block>
               {howToReadOutcomesSection}

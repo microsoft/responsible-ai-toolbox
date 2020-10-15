@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   ChartBuilder,
   AccessibleChart,
@@ -21,7 +22,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
@@ -132,7 +132,7 @@ export class Beehive extends React.PureComponent<
       },
       yaxis: {
         automargin: true,
-        title: localization.featureImportance
+        title: localization.Interpret.featureImportance
       }
     }
   };
@@ -237,7 +237,7 @@ export class Beehive extends React.PureComponent<
         _.set(
           plotlyProps,
           "layout.yaxis.title",
-          `${localization.featureImportance}<br> ${localization.ExplanationScatter.class} ${explanationContext.modelMetadata.classNames[0]}`
+          `${localization.Interpret.featureImportance}<br> ${localization.Interpret.ExplanationScatter.class} ${explanationContext.modelMetadata.classNames[0]}`
         );
       }
       if (selectedOption === undefined || selectedOption.key === "none") {
@@ -256,8 +256,8 @@ export class Beehive extends React.PureComponent<
           ];
           _.set(plotlyProps.data[0], "marker.colorbar.tickvals", [0, 1]);
           _.set(plotlyProps.data[0], "marker.colorbar.ticktext", [
-            localization.AggregateImportance.low,
-            localization.AggregateImportance.high
+            localization.Interpret.AggregateImportance.low,
+            localization.Interpret.AggregateImportance.high
           ]);
         } else {
           _.set(plotlyProps.data[0], "marker.opacity", 0.6);
@@ -435,7 +435,8 @@ export class Beehive extends React.PureComponent<
           <NoDataMessage
             explanationStrings={[
               {
-                displayText: localization.AggregateImportance.tooManyRows,
+                displayText:
+                  localization.Interpret.AggregateImportance.tooManyRows,
                 format: "text"
               }
             ]}
@@ -463,7 +464,7 @@ export class Beehive extends React.PureComponent<
         <div className={beehiveStyles.aggregateChart}>
           <div className={beehiveStyles.topControls}>
             <ComboBox
-              label={localization.FeatureImportanceWrapper.chartType}
+              label={localization.Interpret.FeatureImportanceWrapper.chartType}
               className={beehiveStyles.pathSelector}
               selectedKey={FeatureImportanceModes.Beehive}
               onChange={this.setChart}
@@ -474,7 +475,7 @@ export class Beehive extends React.PureComponent<
             />
             {this.colorOptions.length > 1 && (
               <ComboBox
-                label={localization.ExplanationScatter.colorValue}
+                label={localization.Interpret.ExplanationScatter.colorValue}
                 className={beehiveStyles.pathSelector}
                 selectedKey={this.state.selectedColorOption}
                 onChange={this.setColor}
@@ -487,14 +488,14 @@ export class Beehive extends React.PureComponent<
             <div className={beehiveStyles.sliderControl}>
               <div className={beehiveStyles.sliderLabel}>
                 <span className={beehiveStyles.labelText}>
-                  {localization.AggregateImportance.topKFeatures}
+                  {localization.Interpret.AggregateImportance.topKFeatures}
                 </span>
                 {this.props.dashboardContext.explanationContext
                   .isGlobalDerived && (
                   <IconButton
                     id={this._globalSortIconId}
                     iconProps={{ iconName: "Info" }}
-                    title={localization.AggregateImportance.topKInfo}
+                    title={localization.Interpret.AggregateImportance.topKInfo}
                     onClick={this.showGlobalSortInfo}
                     styles={{
                       root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
@@ -504,7 +505,9 @@ export class Beehive extends React.PureComponent<
               </div>
               <Slider
                 className={beehiveStyles.featureSlider}
-                ariaLabel={localization.AggregateImportance.topKFeatures}
+                ariaLabel={
+                  localization.Interpret.AggregateImportance.topKFeatures
+                }
                 max={Math.min(
                   Beehive.maxFeatures,
                   this.props.dashboardContext.explanationContext.modelMetadata
@@ -521,11 +524,11 @@ export class Beehive extends React.PureComponent<
               .modelType === ModelTypes.Multiclass && (
               <div>
                 <div className={beehiveStyles.selectorLabel}>
-                  <span>{localization.CrossClass.label}</span>
+                  <span>{localization.Interpret.CrossClass.label}</span>
                   <IconButton
                     id={this._crossClassIconId}
                     iconProps={{ iconName: "Info" }}
-                    title={localization.CrossClass.info}
+                    title={localization.Interpret.CrossClass.info}
                     onClick={this.showCrossClassInfo}
                     styles={{
                       root: { color: "rgb(0, 120, 212)", marginBottom: -3 }
@@ -557,7 +560,7 @@ export class Beehive extends React.PureComponent<
                   onClick={this.onDismiss}
                   className={beehiveStyles.calloutButton}
                 >
-                  {localization.CrossClass.close}
+                  {localization.Interpret.CrossClass.close}
                 </DefaultButton>
               </div>
             </Callout>
@@ -621,11 +624,11 @@ export class Beehive extends React.PureComponent<
     } else {
       const calloutContent = (
         <div>
-          <span>{localization.CrossClass.overviewInfo}</span>
+          <span>{localization.Interpret.CrossClass.overviewInfo}</span>
           <ul>
-            <li>{localization.CrossClass.absoluteValInfo}</li>
-            <li>{localization.CrossClass.predictedClassInfo}</li>
-            <li>{localization.CrossClass.enumeratedClassInfo}</li>
+            <li>{localization.Interpret.CrossClass.absoluteValInfo}</li>
+            <li>{localization.Interpret.CrossClass.predictedClassInfo}</li>
+            <li>{localization.Interpret.CrossClass.enumeratedClassInfo}</li>
           </ul>
         </div>
       );
@@ -640,13 +643,16 @@ export class Beehive extends React.PureComponent<
       const calloutContent = (
         <div>
           <span>
-            {localization.FeatureImportanceWrapper.globalImportanceExplanation}
+            {
+              localization.Interpret.FeatureImportanceWrapper
+                .globalImportanceExplanation
+            }
           </span>
           {this.props.dashboardContext.explanationContext.modelMetadata
             .modelType === ModelTypes.Multiclass && (
             <span>
               {
-                localization.FeatureImportanceWrapper
+                localization.Interpret.FeatureImportanceWrapper
                   .multiclassImportanceAddendum
               }
             </span>
@@ -667,14 +673,14 @@ export class Beehive extends React.PureComponent<
     const result: IComboBoxOption[] = [
       {
         key: "none",
-        text: localization.AggregateImportance.noColor
+        text: localization.Interpret.AggregateImportance.noColor
       }
     ];
     if (this.props.dashboardContext.explanationContext.testDataset.dataset) {
       result.push({
         data: { isCategorical: false, isNormalized: true },
         key: "normalizedFeatureValue",
-        text: localization.AggregateImportance.scaledFeatureValue
+        text: localization.Interpret.AggregateImportance.scaledFeatureValue
       });
     }
     if (this.props.dashboardContext.explanationContext.testDataset.predictedY) {
@@ -685,8 +691,8 @@ export class Beehive extends React.PureComponent<
         },
         key: "predictedClass",
         text: isRegression
-          ? localization.AggregateImportance.predictedValue
-          : localization.AggregateImportance.predictedClass
+          ? localization.Interpret.AggregateImportance.predictedValue
+          : localization.Interpret.AggregateImportance.predictedClass
       });
     }
     if (this.props.dashboardContext.explanationContext.testDataset.trueY) {
@@ -697,8 +703,8 @@ export class Beehive extends React.PureComponent<
         },
         key: "trueClass",
         text: isRegression
-          ? localization.AggregateImportance.trueValue
-          : localization.AggregateImportance.trueClass
+          ? localization.Interpret.AggregateImportance.trueValue
+          : localization.Interpret.AggregateImportance.trueClass
       });
     }
     return result;

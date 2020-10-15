@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
@@ -17,8 +18,6 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { localization } from "../Localization/localization";
 
 import { Cohort } from "./Cohort";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
@@ -159,35 +158,35 @@ export class NewExplanationDashboard extends React.PureComponent<
     this.validatePredictMethod();
 
     this.weightVectorLabels = {
-      [WeightVectors.AbsAvg]: localization.absoluteAverage
+      [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     if (this.state.modelMetadata.modelType === ModelTypes.Multiclass) {
       this.weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     this.state.modelMetadata.classNames.forEach((name, index) => {
       this.weightVectorLabels[index] = localization.formatString(
-        localization.WhatIfTab.classLabel,
+        localization.Interpret.WhatIfTab.classLabel,
         name
       );
       this.weightVectorOptions.push(index);
     });
 
     this.pivotItems.push({
-      headerText: localization.modelPerformance,
+      headerText: localization.Interpret.modelPerformance,
       itemKey: GlobalTabKeys.ModelPerformance
     });
     this.pivotItems.push({
-      headerText: localization.datasetExplorer,
+      headerText: localization.Interpret.datasetExplorer,
       itemKey: GlobalTabKeys.DataExploration
     });
     this.pivotItems.push({
-      headerText: localization.aggregateFeatureImportance,
+      headerText: localization.Interpret.aggregateFeatureImportance,
       itemKey: GlobalTabKeys.ExplanationTab
     });
     this.pivotItems.push({
       headerText: this.props.requestPredictions
-        ? localization.individualAndWhatIf
-        : localization.individualImportance,
+        ? localization.Interpret.individualAndWhatIf
+        : localization.Interpret.individualImportance,
       itemKey: GlobalTabKeys.WhatIfTab
     });
   }
@@ -221,7 +220,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     const globalProps = NewExplanationDashboard.buildGlobalProperties(props);
     // consider taking filters in as param arg for programatic users
     const cohorts = [
-      new Cohort(localization.Cohort.defaultLabel, jointDataset, [])
+      new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
     ];
     if (
       validationCheck.errorStrings.length !== 0 &&
@@ -320,7 +319,7 @@ export class NewExplanationDashboard extends React.PureComponent<
       }
       featureNames = NewExplanationDashboard.buildIndexedNames(
         featureLength,
-        localization.defaultFeatureNames
+        localization.Interpret.defaultFeatureNames
       );
       featureNamesAbridged = featureNames;
     }
@@ -329,7 +328,7 @@ export class NewExplanationDashboard extends React.PureComponent<
     if (!classNames || classNames.length !== classLength) {
       classNames = NewExplanationDashboard.buildIndexedNames(
         classLength,
-        localization.defaultClassNames
+        localization.Interpret.defaultClassNames
       );
     }
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
@@ -428,7 +427,9 @@ export class NewExplanationDashboard extends React.PureComponent<
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <Text>{localization.ValidationErrors.datasizeWarning}</Text>
+            <Text>
+              {localization.Interpret.ValidationErrors.datasizeWarning}
+            </Text>
           </MessageBar>
         )}
         {this.state.validationWarnings.length !== 0 && (
@@ -438,7 +439,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             dismissButtonAriaLabel="Close"
             messageBarType={MessageBarType.warning}
           >
-            <Text>{localization.ValidationErrors.errorHeader}</Text>
+            <Text>{localization.Interpret.ValidationErrors.errorHeader}</Text>
             {this.state.validationWarnings.map((message) => {
               return <Text block>{message}</Text>;
             })}
@@ -453,8 +454,8 @@ export class NewExplanationDashboard extends React.PureComponent<
               modelMetadata={this.state.modelMetadata}
             />
           </Stack.Item>
-          <Stack.Item>
-            <div>
+          <Stack.Item grow>
+            <>
               <Pivot
                 selectedKey={this.state.activeGlobalTab}
                 onLinkClick={this.handleGlobalTabClick}
@@ -521,7 +522,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   onWeightChange={this.onWeightVectorChange}
                 />
               )}
-            </div>
+            </>
           </Stack.Item>
         </Stack>{" "}
       </div>

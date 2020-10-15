@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 
 export interface IParityOption {
   key: string;
@@ -18,31 +18,32 @@ export enum ParityModes {
 
 export const parityOptions: { [key: string]: IParityOption } = {
   recall_score: {
-    description: localization.Metrics.equalOpportunityDifferenceDescription,
+    description:
+      localization.Fairness.Metrics.equalOpportunityDifferenceDescription,
     key: "recall_score",
     parityMetric: "recall_score",
     parityMode: ParityModes.Difference,
-    title: localization.Metrics.equalOpportunityDifference
+    title: localization.Fairness.Metrics.equalOpportunityDifference
   },
   selection_rate: {
-    description: localization.Metrics.parityDifferenceDescription,
+    description: localization.Fairness.Metrics.parityDifferenceDescription,
     key: "selection_rate",
     parityMetric: "selection_rate",
     parityMode: ParityModes.Difference,
-    title: localization.Metrics.parityDifference
+    title: localization.Fairness.Metrics.parityDifference
   },
   selection_rate_ratio: {
-    description: localization.Metrics.parityRatioDescription,
+    description: localization.Fairness.Metrics.parityRatioDescription,
     key: "selection_rate_ratio",
     parityMetric: "selection_rate",
     parityMode: ParityModes.Ratio,
-    title: localization.Metrics.parityRatio
+    title: localization.Fairness.Metrics.parityRatio
   },
   zero_one_loss: {
-    description: localization.Metrics.errorRateDifferenceDescription,
+    description: localization.Fairness.Metrics.errorRateDifferenceDescription,
     key: "zero_one_loss",
     parityMetric: "zero_one_loss",
     parityMode: ParityModes.Difference,
-    title: localization.Metrics.errorRateDifference
+    title: localization.Fairness.Metrics.errorRateDifference
   }
 };

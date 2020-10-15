@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import { Dictionary } from "lodash";
+import { localization } from "@responsible-ai/localization";
+import { getTheme } from "@uifabric/styling";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -16,10 +18,9 @@ import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { ParityModes, parityOptions } from "../util/ParityMetrics";
+import { parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
-import { localization } from "./../Localization/localization";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
@@ -80,7 +81,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         <Spinner
           className={styles.spinner}
           size={SpinnerSize.large}
-          label={localization.calculating}
+          label={localization.Fairness.calculating}
         />
       );
     } else {
@@ -292,12 +293,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 iconProps={{ iconName: "ChevronLeft" }}
                 onClick={this.clearModelSelection}
               >
-                {localization.Report.backToComparisons}
+                {localization.Fairness.Report.backToComparisons}
               </ActionButton>
             </div>
           )}
           <div className={styles.modelLabel}>
-            {localization.Report.assessmentResults}{" "}
+            {localization.Fairness.Report.assessmentResults}{" "}
             <b>
               {
                 this.props.dashboardContext.modelNames[

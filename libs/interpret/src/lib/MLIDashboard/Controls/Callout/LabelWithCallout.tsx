@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   Callout as FabricCallout,
   CommandBarButton,
@@ -10,7 +11,6 @@ import {
 import React from "react";
 import { v4 } from "uuid";
 
-import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 
 import { labelWithCalloutStyles } from "./LabelWithCallout.styles";
@@ -55,7 +55,7 @@ export class LabelWithCallout extends React.Component<
             <IconButton
               id={"cross-class-weight-info"}
               iconProps={{ iconName: "Info" }}
-              title={localization.calloutTitle}
+              title={localization.Interpret.calloutTitle}
               onClick={this.toggleCallout}
             />
           </>

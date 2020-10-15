@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { isTwoDimArray } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
   RangeTypes,
@@ -20,7 +21,6 @@ import {
 import { Data } from "plotly.js";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import {
   ModelTypes,
@@ -75,13 +75,13 @@ export class MultiICEPlot extends React.PureComponent<
     selectedClass: number
   ): string {
     if (metadata.modelType === ModelTypes.Regression) {
-      return localization.IcePlot.prediction;
+      return localization.Interpret.IcePlot.prediction;
     }
     return (
-      localization.IcePlot.predictedProbability +
+      localization.Interpret.IcePlot.predictedProbability +
       "<br>" +
       localization.formatString(
-        localization.WhatIfTab.classLabel,
+        localization.Interpret.WhatIfTab.classLabel,
         metadata.classNames[selectedClass]
       )
     );
@@ -112,8 +112,8 @@ export class MultiICEPlot extends React.PureComponent<
           : [singleRow];
         const predictionLabel =
           metadata.modelType === ModelTypes.Regression
-            ? localization.IcePlot.prediction
-            : localization.IcePlot.predictedProbability +
+            ? localization.Interpret.IcePlot.prediction
+            : localization.Interpret.IcePlot.predictedProbability +
               ": " +
               metadata.classNames[selectedClass];
         const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
@@ -250,7 +250,7 @@ export class MultiICEPlot extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "68px" }
                   }}
-                  label={localization.WhatIfTab.minLabel}
+                  label={localization.Interpret.WhatIfTab.minLabel}
                   value={this.state.rangeView.min?.toString()}
                   onIncrement={this.onMinRangeChanged.bind(this, 1)}
                   onDecrement={this.onMinRangeChanged.bind(this, -1)}
@@ -270,7 +270,7 @@ export class MultiICEPlot extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "68px" }
                   }}
-                  label={localization.WhatIfTab.maxLabel}
+                  label={localization.Interpret.WhatIfTab.maxLabel}
                   value={this.state.rangeView.max?.toString()}
                   onIncrement={this.onMaxRangeChanged.bind(this, 1)}
                   onDecrement={this.onMaxRangeChanged.bind(this, -1)}
@@ -290,7 +290,7 @@ export class MultiICEPlot extends React.PureComponent<
                     },
                     spinButtonWrapper: { maxWidth: "68px" }
                   }}
-                  label={localization.WhatIfTab.stepsLabel}
+                  label={localization.Interpret.WhatIfTab.stepsLabel}
                   value={this.state.rangeView.steps?.toString()}
                   onIncrement={this.onStepsRangeChanged.bind(this, 1)}
                   onDecrement={this.onStepsRangeChanged.bind(this, -1)}
@@ -302,7 +302,7 @@ export class MultiICEPlot extends React.PureComponent<
         )}
         {hasOutgoingRequest && (
           <div className={classNames.placeholder}>
-            <Text>{localization.IcePlot.loadingMessage}</Text>
+            <Text>{localization.Interpret.IcePlot.loadingMessage}</Text>
           </div>
         )}
         {this.state.errorMessage && (
@@ -312,12 +312,12 @@ export class MultiICEPlot extends React.PureComponent<
         )}
         {plotlyProps === undefined && !hasOutgoingRequest && (
           <div className={classNames.placeholder}>
-            <Text>{localization.IcePlot.submitPrompt}</Text>
+            <Text>{localization.Interpret.IcePlot.submitPrompt}</Text>
           </div>
         )}
         {hasError && (
           <div className={classNames.placeholder}>
-            <Text>{localization.IcePlot.topLevelErrorMessage}</Text>
+            <Text>{localization.Interpret.IcePlot.topLevelErrorMessage}</Text>
           </div>
         )}
         {plotlyProps !== undefined && !hasOutgoingRequest && !hasError && (
@@ -523,7 +523,7 @@ export class MultiICEPlot extends React.PureComponent<
         if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
-              localization.IcePlot.errorPrefix,
+              localization.Interpret.IcePlot.errorPrefix,
               error.message
             )
           });

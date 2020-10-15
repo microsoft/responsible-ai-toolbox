@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
@@ -17,7 +18,6 @@ import {
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
-import { localization } from "../../../Localization/localization";
 import { Cohort } from "../../Cohort";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../JointDataset";
@@ -41,7 +41,7 @@ export interface ICohortEditorState {
   openedFilter?: IFilter;
   filterIndex?: number;
   filters: IFilter[];
-  cohortName: string;
+  cohortName?: string;
   selectedFilterCategory?: string;
 }
 
@@ -58,7 +58,10 @@ export class CohortEditor extends React.PureComponent<
     JointDataset.RegressionError
   ].reduce((previousValue: IChoiceGroupOption[], key: string) => {
     const metaVal = this.props.jointDataset.metaDict[key];
-    if (key === JointDataset.DataLabelRoot) {
+    if (
+      key === JointDataset.DataLabelRoot &&
+      this.props.jointDataset.hasDataset
+    ) {
       previousValue.push({ key, text: "Dataset" });
       return previousValue;
     }
@@ -87,6 +90,7 @@ export class CohortEditor extends React.PureComponent<
 
     return (
       <Panel
+        id="cohortEditPanel"
         isOpen={true}
         onDismiss={this.props.onCancel}
         onRenderFooter={this.renderFooter}
@@ -96,8 +100,10 @@ export class CohortEditor extends React.PureComponent<
           <Stack.Item>
             <TextField
               value={this.state.cohortName}
-              label={localization.CohortEditor.cohortNameLabel}
-              placeholder={localization.CohortEditor.cohortNamePlaceholder}
+              label={localization.Interpret.CohortEditor.cohortNameLabel}
+              placeholder={
+                localization.Interpret.CohortEditor.cohortNamePlaceholder
+              }
               onGetErrorMessage={this._getErrorMessage}
               validateOnLoad={false}
               onChange={this.setCohortName}
@@ -106,7 +112,7 @@ export class CohortEditor extends React.PureComponent<
           <Stack.Item>
             <ChoiceGroup
               options={this.leftItems}
-              label={localization.CohortEditor.selectFilter}
+              label={localization.Interpret.CohortEditor.selectFilter}
               onChange={this.onFilterCategoryChange}
               selectedKey={this.state.selectedFilterCategory}
             />
@@ -114,7 +120,7 @@ export class CohortEditor extends React.PureComponent<
           <Stack.Item>
             {!openedFilter ? (
               <Text variant={"medium"}>
-                {localization.CohortEditor.defaultFilterState}
+                {localization.Interpret.CohortEditor.defaultFilterState}
               </Text>
             ) : (
               <CohortEditorFilter
@@ -155,14 +161,14 @@ export class CohortEditor extends React.PureComponent<
             onClick={this.deleteCohort}
             className={styles.deleteCohort}
           >
-            {localization.CohortEditor.delete}
+            {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
         )}
         <PrimaryButton onClick={this.saveCohort}>
-          {localization.CohortEditor.save}
+          {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton onClick={this.props.onCancel}>
-          {localization.CohortEditor.cancel}
+          {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
     );
@@ -204,8 +210,8 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private _getErrorMessage = (): string | undefined => {
-    if (this.state.cohortName.length <= 0) {
-      return localization.CohortEditor.cohortNameError;
+    if (!this.state.cohortName?.length) {
+      return localization.Interpret.CohortEditor.cohortNameError;
     }
     return undefined;
   };
@@ -214,7 +220,10 @@ export class CohortEditor extends React.PureComponent<
     option?: IChoiceGroupOption | undefined
   ): void => {
     if (typeof option?.key === "string") {
-      this.setState({ selectedFilterCategory: option.key });
+      this.setState({
+        filterIndex: this.state.filters.length,
+        selectedFilterCategory: option.key
+      });
       this.setSelection(option.key);
     }
   };
@@ -235,8 +244,6 @@ export class CohortEditor extends React.PureComponent<
   ): void => {
     if (typeof item?.key === "string") {
       const property = item.key;
-      // reset filterIndex to handle if user clicks on another filter while in edit mode
-      this.setState({ filterIndex: this.state.filters.length });
       this.setDefaultStateForKey(property);
     }
   };
@@ -366,14 +373,16 @@ export class CohortEditor extends React.PureComponent<
     const filters = [...this.state.filters];
     filters[index] = filter;
     this.setState({
-      filterIndex: this.state.filters.length,
       filters,
       openedFilter: undefined
     });
   }
 
   private cancelFilter = (): void => {
-    this.setState({ openedFilter: undefined });
+    this.setState({
+      openedFilter: undefined,
+      selectedFilterCategory: undefined
+    });
   };
 
   private removeFilter = (index: number): void => {
@@ -391,7 +400,7 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private saveCohort = (): void => {
-    if (this.state.cohortName.length > 0) {
+    if (this.state.cohortName?.length) {
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
@@ -405,8 +414,6 @@ export class CohortEditor extends React.PureComponent<
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void => {
-    if (newValue) {
-      this.setState({ cohortName: newValue });
-    }
+    this.setState({ cohortName: newValue });
   };
 }

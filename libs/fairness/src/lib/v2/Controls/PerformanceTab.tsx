@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { Text, FocusZone } from "office-ui-fabric-react";
 import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
@@ -9,7 +10,6 @@ import { DataSpecificationBlade } from "../../components/DataSpecificationBlade"
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";
 
 import { PerformanceTabStyles } from "./PerformanceTab.styles";
@@ -32,22 +32,22 @@ export class PerformanceTab extends React.PureComponent<
       >
         <Stack className={styles.main}>
           <Text className={styles.header} block>
-            {localization.Performance.header}
+            {localization.Fairness.Performance.header}
           </Text>
           <Text className={styles.textBody} block>
             {localization.formatString(
-              localization.Performance.body,
+              localization.Fairness.Performance.body,
               this.props.dashboardContext.modelMetadata.PredictionType !==
                 PredictionTypes.Regression
-                ? localization.Performance.binary
-                : localization.Performance.continuous,
+                ? localization.Fairness.Performance.binary
+                : localization.Fairness.Performance.continuous,
               this.props.dashboardContext.modelMetadata.PredictionType ===
                 PredictionTypes.BinaryClassification
-                ? localization.Performance.binary
-                : localization.Performance.continuous,
+                ? localization.Fairness.Performance.binary
+                : localization.Fairness.Performance.continuous,
               this.props.dashboardContext.predictions.length === 1
-                ? localization.Performance.modelMakes
-                : localization.Performance.modelsMake
+                ? localization.Fairness.Performance.modelMakes
+                : localization.Fairness.Performance.modelsMake
             )}
           </Text>
           <StackItem grow={2} className={styles.itemsList}>

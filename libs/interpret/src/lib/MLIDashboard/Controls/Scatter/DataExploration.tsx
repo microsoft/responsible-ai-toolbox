@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { localization } from "../../../Localization/localization";
 import { FabricStyles } from "../../FabricStyles";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 
@@ -70,7 +70,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onXSelected}
-                label={localization.ExplanationScatter.xValue}
+                label={localization.Interpret.ExplanationScatter.xValue}
                 ariaLabel="x picker"
                 selectedKey={this.plotlyProps.data[0].xAccessor}
                 useComboBoxAsMenuWidth={true}
@@ -81,7 +81,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onColorSelected}
-                label={localization.ExplanationScatter.colorValue}
+                label={localization.Interpret.ExplanationScatter.colorValue}
                 ariaLabel="color picker"
                 selectedKey={initialColorOption}
                 useComboBoxAsMenuWidth={true}
@@ -94,7 +94,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
               <ComboBox
                 options={dropdownOptions}
                 onChange={this.onYSelected}
-                label={localization.ExplanationScatter.yValue}
+                label={localization.Interpret.ExplanationScatter.yValue}
                 ariaLabel="y picker"
                 selectedKey={this.plotlyProps.data[0].yAccessor}
                 useComboBoxAsMenuWidth={true}
