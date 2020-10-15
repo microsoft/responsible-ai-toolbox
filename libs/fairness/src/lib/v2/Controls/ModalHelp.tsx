@@ -9,7 +9,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 import { localization } from "../../Localization/localization";
-import { WizardReportStyles } from "../WizardReport.styles";
+import { SharedStyles } from "../Shared.styles";
 
 interface IModalHelpProps {
   theme: ITheme;
@@ -22,7 +22,7 @@ export interface IState {
 
 export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
   public render(): React.ReactNode {
-    const styles = WizardReportStyles();
+    const sharedStyles = SharedStyles();
 
     const iconButtonStyles = {
       root: {
@@ -41,7 +41,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
     return (
       <Stack horizontal={true}>
         <ActionButton onClick={this.handleOpenModalHelp}>
-          <div className={styles.infoButton}>i</div>
+          <div className={sharedStyles.infoButton}>i</div>
           {localization.ModelComparison.howToRead}
         </ActionButton>
         <Modal
@@ -49,7 +49,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
           isOpen={this.state?.showModalHelp}
           onDismiss={this.handleCloseModalHelp}
           isModeless={true}
-          containerClassName={styles.modalContentHelp}
+          containerClassName={sharedStyles.modalContentHelp}
         >
           <div style={{ display: "flex" }}>
             <IconButton
@@ -59,7 +59,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
               onClick={this.handleCloseModalHelp}
             />
           </div>
-          <p className={styles.modalContentHelpText}>
+          <p className={sharedStyles.modalContentHelpText}>
             {this.props.strings.map((text) => (
               // React.Fragment doesn’t create a wrapper element in the DOM.
               <React.Fragment>
@@ -71,7 +71,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
           </p>
           <div style={{ display: "flex", paddingBottom: "20px" }}>
             <PrimaryButton
-              className={styles.doneButton}
+              className={sharedStyles.doneButton}
               onClick={this.handleCloseModalHelp}
             >
               {localization.done}

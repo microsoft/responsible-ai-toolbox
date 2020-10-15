@@ -26,7 +26,6 @@ export interface IModelComparisonChartStyles {
   editButton: IStyle;
   howTo: IStyle;
   main: IStyle;
-  mainLeft: IStyle;
   mainRight: IStyle;
   rightTitle: IStyle;
   rightText: IStyle;
@@ -108,10 +107,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       flex: 1,
       flexDirection: "row",
       height: "100%"
-    },
-    mainLeft: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      width: "75%"
     },
     mainRight: {
       padding: "30px 0 0 35px",

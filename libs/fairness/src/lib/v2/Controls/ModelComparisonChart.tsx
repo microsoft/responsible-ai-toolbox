@@ -36,6 +36,7 @@ import {
   IFeatureBinPickerPropsV2,
   IParityPickerPropsV2
 } from "../FairnessWizard";
+import { SharedStyles } from '../Shared.styles';
 import { Insights } from "./Insights";
 
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
@@ -182,6 +183,7 @@ export class ModelComparisonChart extends React.PureComponent<
     };
 
     const styles = ModelComparisonChartStyles();
+    const sharedStyles = SharedStyles();
 
     let mainChart;
     if (
@@ -242,7 +244,7 @@ export class ModelComparisonChart extends React.PureComponent<
 
       mainChart = (
         <div className={styles.main}>
-          <div className={styles.mainLeft}>
+          <div className={sharedStyles.mainLeft}>
             <div className={styles.howTo}>
               <Modal
                 titleAriaId="intro modal"

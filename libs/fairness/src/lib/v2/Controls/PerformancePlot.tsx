@@ -14,13 +14,14 @@ import { IFairnessContext } from "../../util/IFairnessContext";
 import { SummaryTable } from "./SummaryTable";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import { IMetrics } from "../IMetrics";
-import { WizardReportStyles } from "../WizardReport.styles";
 import {
   IFeatureBinPickerPropsV2,
   IPerformancePickerPropsV2
 } from "../FairnessWizard";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import { ModalHelp } from "./ModalHelp";
+import { SharedStyles } from '../Shared.styles';
+import { PerformancePlotStyles } from './PerformancePlot.styles';
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
@@ -38,7 +39,7 @@ export class PerformancePlot extends React.PureComponent<
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
-    const styles = WizardReportStyles();
+    const sharedStyles = SharedStyles();
     let performanceChartModalHelpStrings: string[] = [];
     let performanceChartHeaderString: string = "";
 
@@ -249,7 +250,7 @@ export class PerformancePlot extends React.PureComponent<
       <Stack tokens={{ padding: "0 0 0 100px" }}>
         <Label>{performanceChartHeaderString}</Label>
         <div
-          className={styles.presentationArea}
+          className={sharedStyles.presentationArea}
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <SummaryTable
@@ -263,15 +264,15 @@ export class PerformancePlot extends React.PureComponent<
             metricLabel={selectedMetric.title}
             binValues={this.props.metrics.performance.bins}
           />
-          <div className={styles.chartWrapper}>
+          <div className={sharedStyles.chartWrapper}>
             <Stack horizontal={true} horizontalAlign={"space-between"}>
-              <div className={styles.chartSubHeader}></div>
+              <div className={sharedStyles.chartSubHeader}></div>
               <ModalHelp
                 theme={theme}
                 strings={performanceChartModalHelpStrings}
               />
             </Stack>
-            <div className={styles.chartBody}>
+            <div className={sharedStyles.chartBody}>
               <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
             </div>
           </div>
@@ -303,13 +304,14 @@ export class PerformancePlotLegend extends React.PureComponent<
   IPerformancePlotLegendProps
 > {
   public render(): React.ReactNode {
-    const styles = WizardReportStyles();
+    const styles = PerformancePlotStyles();
+    const sharedStyles = SharedStyles();
 
     return (
       <Stack horizontal={true} tokens={{ childrenGap: "l1" }}>
-        <div className={styles.textRow}>
+        <div className={sharedStyles.textRow}>
           <div
-            className={styles.colorBlock}
+            className={sharedStyles.colorBlock}
             style={{ backgroundColor: chartColors[1] }}
           />
           <div>
@@ -325,9 +327,9 @@ export class PerformancePlotLegend extends React.PureComponent<
             )}
           </div>
         </div>
-        <div className={styles.textRow}>
+        <div className={sharedStyles.textRow}>
           <div
-            className={styles.colorBlock}
+            className={sharedStyles.colorBlock}
             style={{ backgroundColor: chartColors[0] }}
           />
           <div>

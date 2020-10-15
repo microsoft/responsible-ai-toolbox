@@ -25,6 +25,7 @@ import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
 import { PerformancePlot } from "./Controls/PerformancePlot";
 import { IMetrics } from "./IMetrics";
+import { SharedStyles } from './Shared.styles';
 import { WizardReportStyles } from "./WizardReport.styles";
 
 export interface IState {
@@ -41,6 +42,7 @@ export interface IReportProps extends IModelComparisonProps {
 export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
     const styles = WizardReportStyles();
+    const sharedStyles = SharedStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
       title: { borderRadius: "5px", borderWidth: "1px" }
@@ -196,7 +198,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
       mainChart = (
         <Stack horizontal={true}>
-          <Stack.Item className={styles.mainLeft}>
+          <Stack.Item className={sharedStyles.mainLeft}>
             <Stack tokens={{ childrenGap: "l1" }}>
               <Stack horizontal={true}>
                 <Stack>

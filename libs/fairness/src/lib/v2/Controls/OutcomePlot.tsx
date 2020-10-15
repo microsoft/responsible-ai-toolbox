@@ -9,10 +9,10 @@ import { chartColors } from "../../util/chartColors";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import { IFeatureBinPickerPropsV2 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
-import { WizardReportStyles } from "../WizardReport.styles";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { ModalHelp } from "./ModalHelp";
+import { SharedStyles } from '../Shared.styles';
 
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;
@@ -27,7 +27,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
-    let styles = WizardReportStyles();
+    let sharedStyles = SharedStyles();
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -136,7 +136,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       <Stack tokens={{ padding: "0 0 0 100px" }}>
         <Label>{outcomeChartHeaderString}</Label>
         <div
-          className={styles.presentationArea}
+          className={sharedStyles.presentationArea}
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <SummaryTable
@@ -150,12 +150,12 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
             metricLabel={outcomeMetric.title}
             binValues={this.props.metrics.outcomes.bins}
           />
-          <div className={styles.chartWrapper}>
+          <div className={sharedStyles.chartWrapper}>
             <Stack horizontal={true} horizontalAlign={"space-between"}>
-              <div className={styles.chartSubHeader}></div>
+              <div className={sharedStyles.chartSubHeader}></div>
               <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             </Stack>
-            <div className={styles.chartBody}>
+            <div className={sharedStyles.chartBody}>
               <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
             </div>
           </div>
