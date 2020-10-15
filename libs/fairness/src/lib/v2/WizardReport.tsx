@@ -195,72 +195,95 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       });
 
       mainChart = (
-        <Stack tokens={{ childrenGap: "l1" }}>
-          <Stack horizontal={true}>
-            <Stack>
-              <div className={styles.mainLeft}>
-                <div
-                  className={styles.overallArea}
-                  style={{
-                    height: this.state.expandAttributes
-                      ? `${150 + 50 * (areaHeights / 150)}px`
-                      : "150px"
-                  }}
-                >
-                  <OverallTable
-                    binGroup={
-                      this.props.dashboardContext.modelMetadata.featureNames[
-                        this.props.featureBinPickerProps.selectedBinIndex
-                      ]
-                    }
-                    binLabels={this.props.dashboardContext.groupNames}
-                    formattedBinValues={formattedBinValues}
-                    metricLabels={metricLabels}
-                    overallMetrics={overallMetrics}
-                    expandAttributes={this.state.expandAttributes}
-                    binValues={this.state.metrics.performance.bins}
-                  />
-                </div>
-                <div
-                  className={styles.expandAttributes}
-                  onClick={this.expandAttributes}
-                >
-                  {(this.state.expandAttributes && (
-                    <Icon iconName="ChevronUp" className={styles.chevronIcon} />
-                  )) ||
-                    (!this.state.expandAttributes && (
+        <Stack horizontal={true}>
+          <Stack.Item className={styles.mainLeft}>
+            <Stack tokens={{ childrenGap: "l1" }}>
+              <Stack horizontal={true}>
+                <Stack>
+                  <div
+                    className={styles.overallArea}
+                    style={{
+                      height: this.state.expandAttributes
+                        ? `${150 + 50 * (areaHeights / 150)}px`
+                        : "97px"
+                    }}
+                  >
+                    <OverallTable
+                      binGroup={
+                        this.props.dashboardContext.modelMetadata.featureNames[
+                          this.props.featureBinPickerProps.selectedBinIndex
+                        ]
+                      }
+                      binLabels={this.props.dashboardContext.groupNames}
+                      formattedBinValues={formattedBinValues}
+                      metricLabels={metricLabels}
+                      overallMetrics={overallMetrics}
+                      expandAttributes={this.state.expandAttributes}
+                      binValues={this.state.metrics.performance.bins}
+                    />
+                  </div>
+                  <div
+                    className={styles.expandAttributes}
+                    onClick={this.expandAttributes}
+                  >
+                    {(this.state.expandAttributes && (
                       <Icon
-                        iconName="ChevronDown"
+                        iconName="ChevronUp"
                         className={styles.chevronIcon}
                       />
-                    ))}
-                  <Text>
-                    {(this.state.expandAttributes &&
-                      localization.Report.collapseSensitiveAttributes) ||
-                      (!this.state.expandAttributes &&
-                        localization.Report.expandSensitiveAttributes)}
-                  </Text>
-                </div>
-              </div>
+                    )) ||
+                      (!this.state.expandAttributes && (
+                        <Icon
+                          iconName="ChevronDown"
+                          className={styles.chevronIcon}
+                        />
+                      ))}
+                    <Text>
+                      {(this.state.expandAttributes &&
+                        localization.Report.collapseSensitiveAttributes) ||
+                        (!this.state.expandAttributes &&
+                          localization.Report.expandSensitiveAttributes)}
+                    </Text>
+                  </div>
+                </Stack>
+              </Stack>
+              <PerformancePlot
+                dashboardContext={this.props.dashboardContext}
+                metrics={this.state.metrics}
+                nameIndex={nameIndex}
+                theme={undefined}
+                featureBinPickerProps={this.props.featureBinPickerProps}
+                performancePickerProps={this.props.performancePickerProps}
+                areaHeights={areaHeights}
+              />
+              <OutcomePlot
+                dashboardContext={this.props.dashboardContext}
+                metrics={this.state.metrics}
+                nameIndex={nameIndex}
+                theme={undefined}
+                featureBinPickerProps={this.props.featureBinPickerProps}
+                areaHeights={areaHeights}
+              />
             </Stack>
-          </Stack>
-          <PerformancePlot
-            dashboardContext={this.props.dashboardContext}
-            metrics={this.state.metrics}
-            nameIndex={nameIndex}
-            theme={undefined}
-            featureBinPickerProps={this.props.featureBinPickerProps}
-            performancePickerProps={this.props.performancePickerProps}
-            areaHeights={areaHeights}
-          />
-          <OutcomePlot
-            dashboardContext={this.props.dashboardContext}
-            metrics={this.state.metrics}
-            nameIndex={nameIndex}
-            theme={undefined}
-            featureBinPickerProps={this.props.featureBinPickerProps}
-            areaHeights={areaHeights}
-          />
+          </Stack.Item>
+          <div className={styles.mainRight}>
+            <div className={styles.insights}>
+              <Icon
+                iconName="CRMCustomerInsightsApp"
+                className={styles.insightsIcon}
+              />
+              <Text style={{ verticalAlign: "middle" }}>
+                {localization.ModelComparison.insights}
+              </Text>
+            </div>
+            <div className={styles.insightsText}>{localization.loremIpsum}</div>
+            <div className={styles.downloadReport}>
+              <Icon iconName="Download" className={styles.downloadIcon} />
+              <Text style={{ verticalAlign: "middle" }}>
+                {localization.ModelComparison.downloadReport}
+              </Text>
+            </div>
+          </div>
         </Stack>
       );
     }

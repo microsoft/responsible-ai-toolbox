@@ -3,7 +3,7 @@
 
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
-import { ITheme, Text, Icon, Stack, Label } from "office-ui-fabric-react";
+import { ITheme, Stack, Label } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
@@ -247,60 +247,35 @@ export class PerformancePlot extends React.PureComponent<
 
     return (
       <Stack tokens={{ padding: "0 0 0 100px" }}>
-        <Stack horizontal={true}>
-          <div className={styles.mainLeft}>
-            <Label>{performanceChartHeaderString}</Label>
-            <div
-              className={styles.presentationArea}
-              style={{ height: `${this.props.areaHeights}px` }}
-            >
-              <SummaryTable
-                binGroup={
-                  this.props.dashboardContext.modelMetadata.featureNames[
-                    this.props.featureBinPickerProps.selectedBinIndex
-                  ]
-                }
-                binLabels={this.props.dashboardContext.groupNames}
-                formattedBinValues={formattedBinPerformanceValues}
-                metricLabel={selectedMetric.title}
-                binValues={this.props.metrics.performance.bins}
+        <Label>{performanceChartHeaderString}</Label>
+        <div
+          className={styles.presentationArea}
+          style={{ height: `${this.props.areaHeights}px` }}
+        >
+          <SummaryTable
+            binGroup={
+              this.props.dashboardContext.modelMetadata.featureNames[
+                this.props.featureBinPickerProps.selectedBinIndex
+              ]
+            }
+            binLabels={this.props.dashboardContext.groupNames}
+            formattedBinValues={formattedBinPerformanceValues}
+            metricLabel={selectedMetric.title}
+            binValues={this.props.metrics.performance.bins}
+          />
+          <div className={styles.chartWrapper}>
+            <Stack horizontal={true} horizontalAlign={"space-between"}>
+              <div className={styles.chartSubHeader}></div>
+              <ModalHelp
+                theme={theme}
+                strings={performanceChartModalHelpStrings}
               />
-              <div className={styles.chartWrapper}>
-                <Stack horizontal={true} horizontalAlign={"space-between"}>
-                  <div className={styles.chartSubHeader}></div>
-                  <ModalHelp
-                    theme={theme}
-                    strings={performanceChartModalHelpStrings}
-                  />
-                </Stack>
-                <div className={styles.chartBody}>
-                  <AccessibleChart
-                    plotlyProps={barPlotlyProps}
-                    theme={undefined}
-                  />
-                </div>
-              </div>
+            </Stack>
+            <div className={styles.chartBody}>
+              <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
             </div>
           </div>
-          <div className={styles.mainRight}>
-            <div className={styles.insights}>
-              <Icon
-                iconName="CRMCustomerInsightsApp"
-                className={styles.insightsIcon}
-              />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.insights}
-              </Text>
-            </div>
-            <div className={styles.insightsText}>{localization.loremIpsum}</div>
-            <div className={styles.downloadReport}>
-              <Icon iconName="Download" className={styles.downloadIcon} />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.downloadReport}
-              </Text>
-            </div>
-          </div>
-        </Stack>
+        </div>
         {this.props.dashboardContext.modelMetadata.PredictionType !=
           PredictionTypes.Regression && (
           <PerformancePlotLegend
@@ -331,7 +306,7 @@ export class PerformancePlotLegend extends React.PureComponent<
     const styles = WizardReportStyles();
 
     return (
-      <Stack horizontal={true} tokens={{childrenGap: "l1"}}>
+      <Stack horizontal={true} tokens={{ childrenGap: "l1" }}>
         <div className={styles.textRow}>
           <div
             className={styles.colorBlock}

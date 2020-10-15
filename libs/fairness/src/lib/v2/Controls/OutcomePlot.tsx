@@ -1,12 +1,5 @@
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
-import {
-  getTheme,
-  Icon,
-  ITheme,
-  Label,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
+import { getTheme, ITheme, Label, Stack } from "office-ui-fabric-react";
 import React from "react";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
@@ -35,7 +28,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
     let styles = WizardReportStyles();
-    let howToReadOutcomesSection: React.ReactNode;
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -68,11 +60,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
-      howToReadOutcomesSection = (
-        <Text className={styles.textRow} block>
-          {localization.Report.classificationOutcomesHowToRead}
-        </Text>
-      );
       outcomeChartModalHelpStrings = [
         localization.Report.classificationOutcomesHowToRead
       ];
@@ -104,13 +91,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: this.props.dashboardContext.binVector
         } as any
       ];
-      howToReadOutcomesSection = (
-        <div>
-          <Text className={styles.textRow} block>
-            {localization.Report.regressionOutcomesHowToRead}
-          </Text>
-        </div>
-      );
       outcomeChartModalHelpStrings = [
         localization.Report.regressionOutcomesHowToRead
       ];
@@ -142,13 +122,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: this.props.dashboardContext.binVector
         } as any
       ];
-      howToReadOutcomesSection = (
-        <div>
-          <Text className={styles.textRow} block>
-            {localization.Report.regressionOutcomesHowToRead}
-          </Text>
-        </div>
-      );
       outcomeChartModalHelpStrings = [
         localization.Report.regressionOutcomesHowToRead
       ];
@@ -160,52 +133,31 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     );
 
     return (
-      <Stack horizontal={true} tokens={{ padding: "0 0 0 100px" }}>
-        <div className={styles.mainLeft}>
-          <Label>{outcomeChartHeaderString}</Label>
-          <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
-          <div
-            className={styles.presentationArea}
-            style={{ height: `${this.props.areaHeights}px` }}
-          >
-            <SummaryTable
-              binGroup={
-                this.props.dashboardContext.modelMetadata.featureNames[
-                  this.props.featureBinPickerProps.selectedBinIndex
-                ]
-              }
-              binLabels={this.props.dashboardContext.groupNames}
-              formattedBinValues={formattedBinOutcomeValues}
-              metricLabel={outcomeMetric.title}
-              binValues={this.props.metrics.outcomes.bins}
-            />
-            <div className={styles.chartWrapper}>
+      <Stack tokens={{ padding: "0 0 0 100px" }}>
+        <Label>{outcomeChartHeaderString}</Label>
+        <div
+          className={styles.presentationArea}
+          style={{ height: `${this.props.areaHeights}px` }}
+        >
+          <SummaryTable
+            binGroup={
+              this.props.dashboardContext.modelMetadata.featureNames[
+                this.props.featureBinPickerProps.selectedBinIndex
+              ]
+            }
+            binLabels={this.props.dashboardContext.groupNames}
+            formattedBinValues={formattedBinOutcomeValues}
+            metricLabel={outcomeMetric.title}
+            binValues={this.props.metrics.outcomes.bins}
+          />
+          <div className={styles.chartWrapper}>
+            <Stack horizontal={true} horizontalAlign={"space-between"}>
               <div className={styles.chartSubHeader}></div>
-              <div className={styles.chartBody}>
-                <AccessibleChart
-                  plotlyProps={barPlotlyProps}
-                  theme={undefined}
-                />
-              </div>
+              <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
+            </Stack>
+            <div className={styles.chartBody}>
+              <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
             </div>
-          </div>
-        </div>
-        <div className={styles.mainRight}>
-          <div className={styles.insights}>
-            <Icon
-              iconName="CRMCustomerInsightsApp"
-              className={styles.insightsIcon}
-            />
-            <Text style={{ verticalAlign: "middle" }}>
-              {localization.ModelComparison.insights}
-            </Text>
-          </div>
-          <div className={styles.insightsText}>{howToReadOutcomesSection}</div>
-          <div className={styles.downloadReport}>
-            <Icon iconName="Download" className={styles.downloadIcon} />
-            <Text style={{ verticalAlign: "middle" }}>
-              {localization.ModelComparison.downloadReport}
-            </Text>
           </div>
         </div>
       </Stack>
