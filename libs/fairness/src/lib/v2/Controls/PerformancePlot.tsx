@@ -20,8 +20,8 @@ import {
 } from "../FairnessWizard";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import { ModalHelp } from "./ModalHelp";
-import { SharedStyles } from '../Shared.styles';
-import { PerformancePlotStyles } from './PerformancePlot.styles';
+import { SharedStyles } from "../Shared.styles";
+import { PerformancePlotStyles } from "./PerformancePlot.styles";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;

@@ -206,6 +206,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
     },
     tableWrapper: {
       paddingBottom: "20px"
-    },
+    }
   });
 };

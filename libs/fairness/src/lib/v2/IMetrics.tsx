@@ -1,4 +1,4 @@
-import { Dictionary } from 'lodash';
+import { Dictionary } from "lodash";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 

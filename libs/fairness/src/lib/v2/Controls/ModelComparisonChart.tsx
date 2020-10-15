@@ -21,7 +21,7 @@ import {
   IDropdownOption,
   IDropdownStyles,
   Modal,
-  IIconProps,
+  IIconProps
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -36,7 +36,7 @@ import {
   IFeatureBinPickerPropsV2,
   IParityPickerPropsV2
 } from "../FairnessWizard";
-import { SharedStyles } from '../Shared.styles';
+import { SharedStyles } from "../Shared.styles";
 import { Insights } from "./Insights";
 
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";

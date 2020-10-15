@@ -25,7 +25,7 @@ import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
 import { PerformancePlot } from "./Controls/PerformancePlot";
 import { IMetrics } from "./IMetrics";
-import { SharedStyles } from './Shared.styles';
+import { SharedStyles } from "./Shared.styles";
 import { WizardReportStyles } from "./WizardReport.styles";
 
 export interface IState {

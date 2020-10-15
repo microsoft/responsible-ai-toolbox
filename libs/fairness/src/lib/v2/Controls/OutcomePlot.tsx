@@ -12,7 +12,7 @@ import { IMetrics } from "../IMetrics";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { ModalHelp } from "./ModalHelp";
-import { SharedStyles } from '../Shared.styles';
+import { SharedStyles } from "../Shared.styles";
 
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;

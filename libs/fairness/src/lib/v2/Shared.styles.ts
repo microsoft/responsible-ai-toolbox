@@ -104,6 +104,6 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       padding: "0px 20px",
       textAlign: "center",
       wordWrap: "break-word"
-    },
+    }
   });
 };
