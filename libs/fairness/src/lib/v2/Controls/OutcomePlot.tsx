@@ -2,7 +2,7 @@ import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import { getTheme, ITheme, Label, Stack } from "office-ui-fabric-react";
 import React from "react";
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { SummaryTable } from "../../v2/Controls/SummaryTable";
 import { chartColors } from "../../util/chartColors";
@@ -61,9 +61,9 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
       outcomeChartModalHelpStrings = [
-        localization.Report.classificationOutcomesHowToRead
+        localization.Fairness.Report.classificationOutcomesHowToRead
       ];
-      outcomeChartHeaderString = localization.Metrics.selectionRate;
+      outcomeChartHeaderString = localization.Fairness.Metrics.selectionRate;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ==
@@ -71,7 +71,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     ) {
       const outcomeText = this.props.metrics.predictions?.map((val) => {
         return localization.formatString(
-          localization.Report.tooltipPrediction,
+          localization.Fairness.Report.tooltipPrediction,
           FormatMetrics.formatNumbers(val, "average", false, 3)
         );
       });
@@ -92,9 +92,10 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         } as any
       ];
       outcomeChartModalHelpStrings = [
-        localization.Report.regressionOutcomesHowToRead
+        localization.Fairness.Report.regressionOutcomesHowToRead
       ];
-      outcomeChartHeaderString = localization.Report.distributionOfPredictions;
+      outcomeChartHeaderString =
+        localization.Fairness.Report.distributionOfPredictions;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -102,7 +103,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     ) {
       const outcomeText = this.props.metrics.predictions?.map((val) => {
         return localization.formatString(
-          localization.Report.tooltipPrediction,
+          localization.Fairness.Report.tooltipPrediction,
           val
         );
       });
@@ -123,9 +124,10 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         } as any
       ];
       outcomeChartModalHelpStrings = [
-        localization.Report.regressionOutcomesHowToRead
+        localization.Fairness.Report.regressionOutcomesHowToRead
       ];
-      outcomeChartHeaderString = localization.Report.distributionOfPredictions;
+      outcomeChartHeaderString =
+        localization.Fairness.Report.distributionOfPredictions;
     }
 
     const formattedBinOutcomeValues = this.props.metrics.outcomes.bins.map(

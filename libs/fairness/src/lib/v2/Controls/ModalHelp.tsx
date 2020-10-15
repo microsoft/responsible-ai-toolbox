@@ -8,7 +8,7 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { SharedStyles } from "../Shared.styles";
 
 interface IModalHelpProps {
@@ -42,7 +42,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
       <Stack horizontal={true}>
         <ActionButton onClick={this.handleOpenModalHelp}>
           <div className={sharedStyles.infoButton}>i</div>
-          {localization.ModelComparison.howToRead}
+          {localization.Fairness.ModelComparison.howToRead}
         </ActionButton>
         <Modal
           titleAriaId="intro modal"
@@ -74,7 +74,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
               className={sharedStyles.doneButton}
               onClick={this.handleCloseModalHelp}
             >
-              {localization.done}
+              {localization.Fairness.done}
             </PrimaryButton>
           </div>
         </Modal>

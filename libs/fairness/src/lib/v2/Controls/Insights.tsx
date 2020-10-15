@@ -1,4 +1,4 @@
-import { localization } from "../../Localization/localization";
+import { localization } from "@responsible-ai/localization";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IPerformanceOption } from "../../util/PerformanceMetrics";
 import { InsightsStyles } from "./Insights.styles";
@@ -63,7 +63,7 @@ export class Insights extends React.Component<IInsightsProps> {
     );
 
     const insights2 = localization.formatString(
-      localization.ModelComparison.insightsText2,
+      localization.Fairness.ModelComparison.insightsText2,
       this.props.selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
@@ -72,7 +72,7 @@ export class Insights extends React.Component<IInsightsProps> {
     );
 
     const insights3 = localization.formatString(
-      localization.ModelComparison.insightsText3,
+      localization.Fairness.ModelComparison.insightsText3,
       this.props.selectedMetric.title.toLowerCase(),
       this.props.selectedMetric.isMinimization
         ? formattedMinPerformance
@@ -88,7 +88,7 @@ export class Insights extends React.Component<IInsightsProps> {
     );
 
     const insights4 = localization.formatString(
-      localization.ModelComparison.insightsText4,
+      localization.Fairness.ModelComparison.insightsText4,
       this.props.selectedMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
         this.props.performanceArray[minDisparityIndex],
@@ -105,7 +105,7 @@ export class Insights extends React.Component<IInsightsProps> {
             className={styles.insightsIcon}
           />
           <Text className={styles.insights} block>
-            {localization.ModelComparison.insights}
+            {localization.Fairness.ModelComparison.insights}
           </Text>
         </div>
         <div className={styles.insightsText}>
@@ -122,7 +122,7 @@ export class Insights extends React.Component<IInsightsProps> {
         <div className={styles.downloadReport}>
           <Icon iconName="Download" className={styles.downloadIcon} />
           <Text style={{ verticalAlign: "middle" }}>
-            {localization.ModelComparison.downloadReport}
+            {localization.Fairness.ModelComparison.downloadReport}
           </Text>
         </div>
       </div>

@@ -111,10 +111,10 @@ export class PerformancePlot extends React.PureComponent<
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
       performanceChartModalHelpStrings = [
-        localization.Report.classificationPerformanceHowToReadV2
+        localization.Fairness.Report.classificationPerformanceHowToReadV2
       ];
       performanceChartHeaderString =
-        localization.Report.performanceChartHeaderBinaryClassification;
+        localization.Fairness.Report.performanceChartHeaderBinaryClassification;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -180,12 +180,12 @@ export class PerformancePlot extends React.PureComponent<
         ];
       }
       performanceChartModalHelpStrings = [
-        localization.Report.probabilityPerformanceHowToRead1,
-        localization.Report.probabilityPerformanceHowToRead2,
-        localization.Report.probabilityPerformanceHowToRead3
+        localization.Fairness.Report.probabilityPerformanceHowToRead1,
+        localization.Fairness.Report.probabilityPerformanceHowToRead2,
+        localization.Fairness.Report.probabilityPerformanceHowToRead3
       ];
       performanceChartHeaderString =
-        localization.Report.performanceChartHeaderProbability;
+        localization.Fairness.Report.performanceChartHeaderProbability;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -225,10 +225,10 @@ export class PerformancePlot extends React.PureComponent<
         } as any
       ];
       performanceChartModalHelpStrings = [
-        localization.Report.regressionPerformanceHowToRead
+        localization.Fairness.Report.regressionPerformanceHowToRead
       ];
       performanceChartHeaderString =
-        localization.Report.performanceChartHeaderRegression;
+        localization.Fairness.Report.performanceChartHeaderRegression;
     }
 
     const performanceKey = this.props.performancePickerProps
@@ -317,12 +317,12 @@ export class PerformancePlotLegend extends React.PureComponent<
           <div>
             <div className={styles.legendTitle}>
               {this.props.useOverUnderPrediction
-                ? localization.Report.underestimationError
-                : localization.Report.falseNegativeRate}
+                ? localization.Fairness.Report.underestimationError
+                : localization.Fairness.Report.falseNegativeRate}
             </div>
             {this.props.showSubtitle && (
               <div className={styles.legendSubtitle}>
-                {localization.Report.underpredictionExplanation}
+                {localization.Fairness.Report.underpredictionExplanation}
               </div>
             )}
           </div>
@@ -335,12 +335,12 @@ export class PerformancePlotLegend extends React.PureComponent<
           <div>
             <div className={styles.legendTitle}>
               {this.props.useOverUnderPrediction
-                ? localization.Report.overestimationError
-                : localization.Report.falsePositiveRate}
+                ? localization.Fairness.Report.overestimationError
+                : localization.Fairness.Report.falsePositiveRate}
             </div>
             {this.props.showSubtitle && (
               <div className={styles.legendSubtitle}>
-                {localization.Report.overpredictionExplanation}
+                {localization.Fairness.Report.overpredictionExplanation}
               </div>
             )}
           </div>

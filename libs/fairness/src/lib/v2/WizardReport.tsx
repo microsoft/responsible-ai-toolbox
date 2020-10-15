@@ -3,7 +3,6 @@
 
 import { Dictionary } from "lodash";
 import { localization } from "@responsible-ai/localization";
-import { getTheme } from "@uifabric/styling";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -18,7 +17,7 @@ import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { parityOptions } from "../util/ParityMetrics";
+import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
@@ -243,9 +242,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                       ))}
                     <Text>
                       {(this.state.expandAttributes &&
-                        localization.Report.collapseSensitiveAttributes) ||
+                        localization.Fairness.Report
+                          .collapseSensitiveAttributes) ||
                         (!this.state.expandAttributes &&
-                          localization.Report.expandSensitiveAttributes)}
+                          localization.Fairness.Report
+                            .expandSensitiveAttributes)}
                     </Text>
                   </div>
                 </Stack>
