@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme } from "@uifabric/styling";
 import { Dictionary } from "lodash";
 import {
   IDropdownStyles,
@@ -21,13 +20,10 @@ import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { localization } from "./../Localization/localization";
-import { ModalHelp } from "./Controls/ModalHelp";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
-import {
-  PerformancePlot
-} from "./Controls/PerformancePlot";
+import { PerformancePlot } from "./Controls/PerformancePlot";
 import { IMetrics } from "./IMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
 
@@ -44,7 +40,6 @@ export interface IReportProps extends IModelComparisonProps {
 
 export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
-    const theme = getTheme();
     const styles = WizardReportStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
@@ -66,7 +61,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const areaHeights = Math.max(300, alternateHeight);
 
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-    let outcomeChartModalHelpStrings: string[] = [];
 
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
@@ -76,8 +70,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       PredictionTypes.BinaryClassification
         ? "selection_rate"
         : "average";
-
-    let outcomeChartHeaderString: string = "";
 
     let mainChart;
     if (!this.state || !this.state.metrics) {
@@ -90,36 +82,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         />
       );
     } else {
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.BinaryClassification
-      ) {
-        outcomeChartModalHelpStrings = [
-          localization.Report.classificationOutcomesHowToRead
-        ];
-        outcomeChartHeaderString = localization.Metrics.selectionRate;
-      }
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.Probability
-      ) {
-        outcomeChartModalHelpStrings = [
-          localization.Report.regressionOutcomesHowToRead
-        ];
-        outcomeChartHeaderString =
-          localization.Report.distributionOfPredictions;
-      }
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.Regression
-      ) {
-        outcomeChartModalHelpStrings = [
-          localization.Report.regressionOutcomesHowToRead
-        ];
-        outcomeChartHeaderString =
-          localization.Report.distributionOfPredictions;
-      }
-
       // define task-specific metrics to show by default
       const additionalMetrics: Map<string, IMetricResponse> = new Map();
 
@@ -233,7 +195,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       });
 
       mainChart = (
-        <Stack>
+        <Stack tokens={{ childrenGap: "l1" }}>
           <Stack horizontal={true}>
             <Stack>
               <div className={styles.mainLeft}>
@@ -283,30 +245,22 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             </Stack>
           </Stack>
           <PerformancePlot
-                dashboardContext={this.props.dashboardContext}
-                metrics={this.state.metrics}
-                nameIndex={nameIndex}
-                theme={undefined}
-                featureBinPickerProps={this.props.featureBinPickerProps}
-                performancePickerProps={this.props.performancePickerProps}
-                areaHeights={areaHeights}
-              />
-          <Stack horizontal={true}>
-            <div className={styles.mainLeft}>
-              <div className={styles.chartHeader}>
-                <Text>{outcomeChartHeaderString}</Text>
-              </div>
-              <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
-              <OutcomePlot
-                dashboardContext={this.props.dashboardContext}
-                metrics={this.state.metrics}
-                nameIndex={nameIndex}
-                theme={undefined}
-                featureBinPickerProps={this.props.featureBinPickerProps}
-                areaHeights={areaHeights}
-              />
-            </div>
-          </Stack>
+            dashboardContext={this.props.dashboardContext}
+            metrics={this.state.metrics}
+            nameIndex={nameIndex}
+            theme={undefined}
+            featureBinPickerProps={this.props.featureBinPickerProps}
+            performancePickerProps={this.props.performancePickerProps}
+            areaHeights={areaHeights}
+          />
+          <OutcomePlot
+            dashboardContext={this.props.dashboardContext}
+            metrics={this.state.metrics}
+            nameIndex={nameIndex}
+            theme={undefined}
+            featureBinPickerProps={this.props.featureBinPickerProps}
+            areaHeights={areaHeights}
+          />
         </Stack>
       );
     }

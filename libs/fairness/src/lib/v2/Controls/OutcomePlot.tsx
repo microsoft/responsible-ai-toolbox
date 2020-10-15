@@ -1,5 +1,12 @@
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
-import { ITheme } from "office-ui-fabric-react";
+import {
+  getTheme,
+  Icon,
+  ITheme,
+  Label,
+  Stack,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
@@ -12,6 +19,7 @@ import { IMetrics } from "../IMetrics";
 import { WizardReportStyles } from "../WizardReport.styles";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
+import { ModalHelp } from "./ModalHelp";
 
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;
@@ -25,8 +33,9 @@ interface IOutcomePlotProps {
 export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
+    const theme = getTheme();
     let styles = WizardReportStyles();
-    // let howToReadOutcomesSection: React.ReactNode;
+    let howToReadOutcomesSection: React.ReactNode;
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -34,6 +43,8 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
+    let outcomeChartHeaderString: string = "";
+    let outcomeChartModalHelpStrings: string[] = [];
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -57,11 +68,15 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
-      //   howToReadOutcomesSection = (
-      //     <Text className={styles.textRow} block>
-      //       {localization.Report.classificationOutcomesHowToRead}
-      //     </Text>
-      //   );
+      howToReadOutcomesSection = (
+        <Text className={styles.textRow} block>
+          {localization.Report.classificationOutcomesHowToRead}
+        </Text>
+      );
+      outcomeChartModalHelpStrings = [
+        localization.Report.classificationOutcomesHowToRead
+      ];
+      outcomeChartHeaderString = localization.Metrics.selectionRate;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ==
@@ -89,13 +104,17 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: this.props.dashboardContext.binVector
         } as any
       ];
-      //   howToReadOutcomesSection = (
-      //     <div>
-      //       <Text className={styles.textRow} block>
-      //         {localization.Report.regressionOutcomesHowToRead}
-      //       </Text>
-      //     </div>
-      //   );
+      howToReadOutcomesSection = (
+        <div>
+          <Text className={styles.textRow} block>
+            {localization.Report.regressionOutcomesHowToRead}
+          </Text>
+        </div>
+      );
+      outcomeChartModalHelpStrings = [
+        localization.Report.regressionOutcomesHowToRead
+      ];
+      outcomeChartHeaderString = localization.Report.distributionOfPredictions;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -123,13 +142,17 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: this.props.dashboardContext.binVector
         } as any
       ];
-      //   howToReadOutcomesSection = (
-      //     <div>
-      //       <Text className={styles.textRow} block>
-      //         {localization.Report.regressionOutcomesHowToRead}
-      //       </Text>
-      //     </div>
-      //   );
+      howToReadOutcomesSection = (
+        <div>
+          <Text className={styles.textRow} block>
+            {localization.Report.regressionOutcomesHowToRead}
+          </Text>
+        </div>
+      );
+      outcomeChartModalHelpStrings = [
+        localization.Report.regressionOutcomesHowToRead
+      ];
+      outcomeChartHeaderString = localization.Report.distributionOfPredictions;
     }
 
     const formattedBinOutcomeValues = this.props.metrics.outcomes.bins.map(
@@ -137,28 +160,37 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     );
 
     return (
-      <div
-        className={styles.presentationArea}
-        style={{ height: `${this.props.areaHeights}px` }}
-      >
-        <SummaryTable
-          binGroup={
-            this.props.dashboardContext.modelMetadata.featureNames[
-              this.props.featureBinPickerProps.selectedBinIndex
-            ]
-          }
-          binLabels={this.props.dashboardContext.groupNames}
-          formattedBinValues={formattedBinOutcomeValues}
-          metricLabel={outcomeMetric.title}
-          binValues={this.props.metrics.outcomes.bins}
-        />
-        <div className={styles.chartWrapper}>
-          <div className={styles.chartSubHeader}></div>
-          <div className={styles.chartBody}>
-            <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
+      <Stack horizontal={true} tokens={{ padding: "0 0 0 100px" }}>
+        <div className={styles.mainLeft}>
+          <Label>{outcomeChartHeaderString}</Label>
+          <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
+          <div
+            className={styles.presentationArea}
+            style={{ height: `${this.props.areaHeights}px` }}
+          >
+            <SummaryTable
+              binGroup={
+                this.props.dashboardContext.modelMetadata.featureNames[
+                  this.props.featureBinPickerProps.selectedBinIndex
+                ]
+              }
+              binLabels={this.props.dashboardContext.groupNames}
+              formattedBinValues={formattedBinOutcomeValues}
+              metricLabel={outcomeMetric.title}
+              binValues={this.props.metrics.outcomes.bins}
+            />
+            <div className={styles.chartWrapper}>
+              <div className={styles.chartSubHeader}></div>
+              <div className={styles.chartBody}>
+                <AccessibleChart
+                  plotlyProps={barPlotlyProps}
+                  theme={undefined}
+                />
+              </div>
+            </div>
           </div>
         </div>
-        {/* <div className={styles.mainRight}>
+        <div className={styles.mainRight}>
           <div className={styles.insights}>
             <Icon
               iconName="CRMCustomerInsightsApp"
@@ -175,8 +207,8 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
               {localization.ModelComparison.downloadReport}
             </Text>
           </div>
-        </div> */}
-      </div>
+        </div>
+      </Stack>
     );
   }
 }
