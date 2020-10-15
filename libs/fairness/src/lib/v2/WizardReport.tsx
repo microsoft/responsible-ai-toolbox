@@ -266,24 +266,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               />
             </Stack>
           </Stack.Item>
-          <div className={styles.mainRight}>
-            <div className={styles.insights}>
-              <Icon
-                iconName="CRMCustomerInsightsApp"
-                className={styles.insightsIcon}
-              />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.insights}
-              </Text>
-            </div>
-            <div className={styles.insightsText}>{localization.loremIpsum}</div>
-            <div className={styles.downloadReport}>
-              <Icon iconName="Download" className={styles.downloadIcon} />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.downloadReport}
-              </Text>
-            </div>
-          </div>
+          {/* TODO: define insights for single model view
+          https://github.com/microsoft/responsible-ai-widgets/issues/104
+          <Insights
+            disparityArray={this.state.disparityArray}
+            performanceArray={this.state.performanceArray}
+            selectedMetric={selectedMetric}
+            selectedPerformanceKey={
+              this.props.performancePickerProps.selectedPerformanceKey
+            }
+          /> */}
         </Stack>
       );
     }

@@ -22,13 +22,11 @@ import {
   IDropdownStyles,
   Modal,
   IIconProps,
-  Icon
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
 import { localization } from "../../Localization/localization";
-import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
 import { parityOptions } from "../../util/ParityMetrics";
@@ -38,6 +36,7 @@ import {
   IFeatureBinPickerPropsV2,
   IParityPickerPropsV2
 } from "../FairnessWizard";
+import { Insights } from "./Insights";
 
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
@@ -207,48 +206,7 @@ export class ModelComparisonChart extends React.PureComponent<
           Performance: performance
         };
       });
-      let minPerformance: number = Number.MAX_SAFE_INTEGER;
-      let maxPerformance: number = Number.MIN_SAFE_INTEGER;
-      let maxDisparity: number = Number.MIN_SAFE_INTEGER;
-      let minDisparity: number = Number.MAX_SAFE_INTEGER;
-      let minPerformanceIndex = 0;
-      let maxPerformanceIndex = 0;
-      let minDisparityIndex = 0;
-      this.state.performanceArray.forEach((value, index) => {
-        if (value >= maxPerformance) {
-          maxPerformanceIndex = index;
-          maxPerformance = value;
-        }
-        if (value <= minPerformance) {
-          minPerformanceIndex = index;
-          minPerformance = value;
-        }
-      });
-      this.state.disparityArray.forEach((value, index) => {
-        if (value >= maxDisparity) {
-          maxDisparity = value;
-        }
-        if (value <= minDisparity) {
-          minDisparityIndex = index;
-          minDisparity = value;
-        }
-      });
-      const formattedMinPerformance = FormatMetrics.formatNumbers(
-        minPerformance,
-        this.props.performancePickerProps.selectedPerformanceKey
-      );
-      const formattedMaxPerformance = FormatMetrics.formatNumbers(
-        maxPerformance,
-        this.props.performancePickerProps.selectedPerformanceKey
-      );
-      const formattedMinDisparity = FormatMetrics.formatNumbers(
-        minDisparity,
-        this.props.performancePickerProps.selectedPerformanceKey
-      );
-      const formattedMaxDisparity = FormatMetrics.formatNumbers(
-        maxDisparity,
-        this.props.performancePickerProps.selectedPerformanceKey
-      );
+
       const selectedMetric =
         performanceOptions[
           this.props.performancePickerProps.selectedPerformanceKey
@@ -258,41 +216,6 @@ export class ModelComparisonChart extends React.PureComponent<
             metric.key ===
             this.props.performancePickerProps.selectedPerformanceKey
         );
-
-      const insights2 = localization.formatString(
-        localization.ModelComparison.insightsText2,
-        selectedMetric.title,
-        formattedMinPerformance,
-        formattedMaxPerformance,
-        formattedMinDisparity,
-        formattedMaxDisparity
-      );
-
-      const insights3 = localization.formatString(
-        localization.ModelComparison.insightsText3,
-        selectedMetric.title.toLowerCase(),
-        selectedMetric.isMinimization
-          ? formattedMinPerformance
-          : formattedMaxPerformance,
-        FormatMetrics.formatNumbers(
-          this.state.disparityArray[
-            selectedMetric.isMinimization
-              ? minPerformanceIndex
-              : maxPerformanceIndex
-          ],
-          this.props.performancePickerProps.selectedPerformanceKey
-        )
-      );
-
-      const insights4 = localization.formatString(
-        localization.ModelComparison.insightsText4,
-        selectedMetric.title.toLowerCase(),
-        FormatMetrics.formatNumbers(
-          this.state.performanceArray[minDisparityIndex],
-          this.props.performancePickerProps.selectedPerformanceKey
-        ),
-        formattedMinDisparity
-      );
 
       const props = _.cloneDeep(this.plotlyProps);
       props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
@@ -391,34 +314,14 @@ export class ModelComparisonChart extends React.PureComponent<
               />
             </div>
           </div>
-          <div className={styles.mainRight}>
-            <div className={styles.insights}>
-              <Icon
-                iconName="CRMCustomerInsightsApp"
-                className={styles.insightsIcon}
-              />
-              <Text className={styles.insights} block>
-                {localization.ModelComparison.insights}
-              </Text>
-            </div>
-            <div className={styles.insightsText}>
-              <Text className={styles.textSection} block>
-                {insights2}
-              </Text>
-              <Text className={styles.textSection} block>
-                {insights3}
-              </Text>
-              <Text className={styles.textSection} block>
-                {insights4}
-              </Text>
-            </div>
-            <div className={styles.downloadReport}>
-              <Icon iconName="Download" className={styles.downloadIcon} />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.ModelComparison.downloadReport}
-              </Text>
-            </div>
-          </div>
+          <Insights
+            disparityArray={this.state.disparityArray}
+            performanceArray={this.state.performanceArray}
+            selectedMetric={selectedMetric}
+            selectedPerformanceKey={
+              this.props.performancePickerProps.selectedPerformanceKey
+            }
+          />
         </div>
       );
     }
@@ -481,6 +384,7 @@ export class ModelComparisonChart extends React.PureComponent<
         });
       const parityOption =
         parityOptions[this.props.parityPickerProps.selectedParityKey];
+      // TODO: parity metric only used for regression
       const disparityMetric =
         this.props.dashboardContext.modelMetadata.PredictionType ===
         PredictionTypes.BinaryClassification
