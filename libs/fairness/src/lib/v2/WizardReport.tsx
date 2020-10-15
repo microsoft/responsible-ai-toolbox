@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Dictionary } from "lodash";
 import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -158,7 +158,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       const formattedBinValues = [
         formattedBinPerformanceValues,
         formattedBinOutcomeValues,
-        formattedBinOutcomeValues.map((_) => "") // empty entries for disparity outcome column
+        formattedBinOutcomeValues.map(() => "") // empty entries for disparity outcome column
       ];
       additionalMetrics.forEach((metricObject, metricName) => {
         formattedBinValues.push(
@@ -371,7 +371,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
-      let disparities: Dictionary<number> = {};
+      const disparities: Dictionary<number> = {};
       const performance = await this.getMetric(
         this.props.performancePickerProps.selectedPerformanceKey
       );
@@ -413,8 +413,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       }
       this.setState({
         metrics: {
-          errors,
           disparities,
+          errors,
           falseNegativeRates,
           falsePositiveRates,
           outcomes,

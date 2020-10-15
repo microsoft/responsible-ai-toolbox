@@ -1,18 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import { getTheme, ITheme, Label, Stack } from "office-ui-fabric-react";
 import React from "react";
+
 import { PredictionTypes } from "../../IFairnessProps";
-import { localization } from "@responsible-ai/localization";
-import { IFairnessContext } from "../../util/IFairnessContext";
-import { SummaryTable } from "../../v2/Controls/SummaryTable";
 import { chartColors } from "../../util/chartColors";
+import { FormatMetrics } from "../../util/FormatMetrics";
+import { IFairnessContext } from "../../util/IFairnessContext";
+import { performanceOptions } from "../../util/PerformanceMetrics";
+import { SummaryTable } from "../../v2/Controls/SummaryTable";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import { IFeatureBinPickerPropsV2 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
-import { performanceOptions } from "../../util/PerformanceMetrics";
-import { FormatMetrics } from "../../util/FormatMetrics";
-import { ModalHelp } from "./ModalHelp";
 import { SharedStyles } from "../Shared.styles";
+
+import { ModalHelp } from "./ModalHelp";
 
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;
@@ -27,7 +32,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
-    let sharedStyles = SharedStyles();
+    const sharedStyles = SharedStyles();
     const outcomeKey =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -35,7 +40,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-    let outcomeChartHeaderString: string = "";
+    let outcomeChartHeaderString = "";
     let outcomeChartModalHelpStrings: string[] = [];
 
     if (
@@ -66,7 +71,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       outcomeChartHeaderString = localization.Fairness.Metrics.selectionRate;
     }
     if (
-      this.props.dashboardContext.modelMetadata.PredictionType ==
+      this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Probability
     ) {
       const outcomeText = this.props.metrics.predictions?.map((val) => {

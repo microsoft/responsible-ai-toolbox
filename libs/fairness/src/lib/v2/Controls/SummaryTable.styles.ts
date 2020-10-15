@@ -52,8 +52,8 @@ export const SummaryTableStyles: () => IProcessedStyleSet<
       paddingBottom: "19px"
     },
     groupCol: {
-      borderRight: "1px solid",
       borderColor: theme.semanticColors.disabledBorder,
+      borderRight: "1px solid",
       display: "inline-flex",
       flexDirection: "column",
       height: "100%",
@@ -62,8 +62,8 @@ export const SummaryTableStyles: () => IProcessedStyleSet<
     groupLabel: {
       color: theme.semanticColors.bodyText,
       height: "26px",
-      paddingTop: "11px",
-      paddingBottom: "6px"
+      paddingBottom: "6px",
+      paddingTop: "11px"
     },
     metricBox: {
       borderBottom: "0.5px dashed",

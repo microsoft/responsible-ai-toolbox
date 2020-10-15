@@ -1,10 +1,15 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { localization } from "@responsible-ai/localization";
-import { FormatMetrics } from "../../util/FormatMetrics";
-import { IPerformanceOption } from "../../util/PerformanceMetrics";
-import { InsightsStyles } from "./Insights.styles";
-import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 import { Icon, Text } from "office-ui-fabric-react";
 import React from "react";
+
+import { FormatMetrics } from "../../util/FormatMetrics";
+import { IPerformanceOption } from "../../util/PerformanceMetrics";
+
+import { InsightsStyles } from "./Insights.styles";
+import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 interface IInsightsProps {
   selectedMetric: IPerformanceOption;

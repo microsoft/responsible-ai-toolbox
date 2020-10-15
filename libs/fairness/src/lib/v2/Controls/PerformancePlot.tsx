@@ -11,17 +11,18 @@ import { PredictionTypes } from "../../IFairnessProps";
 import { chartColors } from "../../util/chartColors";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
-import { SummaryTable } from "./SummaryTable";
+import { performanceOptions } from "../../util/PerformanceMetrics";
 import { BarPlotlyProps } from "../BarPlotlyProps";
-import { IMetrics } from "../IMetrics";
 import {
   IFeatureBinPickerPropsV2,
   IPerformancePickerPropsV2
 } from "../FairnessWizard";
-import { performanceOptions } from "../../util/PerformanceMetrics";
-import { ModalHelp } from "./ModalHelp";
+import { IMetrics } from "../IMetrics";
 import { SharedStyles } from "../Shared.styles";
+
+import { ModalHelp } from "./ModalHelp";
 import { PerformancePlotStyles } from "./PerformancePlot.styles";
+import { SummaryTable } from "./SummaryTable";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
@@ -41,7 +42,7 @@ export class PerformancePlot extends React.PureComponent<
     const theme = getTheme();
     const sharedStyles = SharedStyles();
     let performanceChartModalHelpStrings: string[] = [];
-    let performanceChartHeaderString: string = "";
+    let performanceChartHeaderString = "";
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -277,15 +278,15 @@ export class PerformancePlot extends React.PureComponent<
             </div>
           </div>
         </div>
-        {this.props.dashboardContext.modelMetadata.PredictionType !=
+        {this.props.dashboardContext.modelMetadata.PredictionType !==
           PredictionTypes.Regression && (
           <PerformancePlotLegend
             showSubtitle={
-              this.props.dashboardContext.modelMetadata.PredictionType ==
+              this.props.dashboardContext.modelMetadata.PredictionType ===
               PredictionTypes.BinaryClassification
             }
             useOverUnderPrediction={
-              this.props.dashboardContext.modelMetadata.PredictionType ==
+              this.props.dashboardContext.modelMetadata.PredictionType ===
               PredictionTypes.Probability
             }
           />

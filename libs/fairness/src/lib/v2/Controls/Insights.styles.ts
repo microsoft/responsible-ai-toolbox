@@ -19,6 +19,21 @@ export interface IInsightsStyles {
 export const InsightsStyles: () => IProcessedStyleSet<IInsightsStyles> = () => {
   const theme = getTheme();
   return mergeStyleSets<IInsightsStyles>({
+    downloadIcon: {
+      height: "18",
+      marginRight: "10px",
+      verticalAlign: "middle",
+      width: "17"
+    },
+    downloadReport: {
+      color: theme.semanticColors.bodyText,
+      fontSize: "12px",
+      fontWeight: "normal",
+      lineHeight: "16px",
+      paddingBottom: "20px",
+      paddingLeft: "0px",
+      paddingTop: "20px"
+    },
     insights: {
       color: theme.semanticColors.bodyText,
       display: "inline",
@@ -37,21 +52,6 @@ export const InsightsStyles: () => IProcessedStyleSet<IInsightsStyles> = () => {
       marginTop: "20px",
       paddingBottom: "18px",
       paddingRight: "15px"
-    },
-    downloadIcon: {
-      height: "18",
-      marginRight: "10px",
-      verticalAlign: "middle",
-      width: "17"
-    },
-    downloadReport: {
-      color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      fontWeight: "normal",
-      lineHeight: "16px",
-      paddingBottom: "20px",
-      paddingLeft: "0px",
-      paddingTop: "20px"
     }
   });
 };

@@ -37,8 +37,8 @@ import {
   IParityPickerPropsV2
 } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
-import { Insights } from "./Insights";
 
+import { Insights } from "./Insights";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 const theme = getTheme();

@@ -1,3 +1,7 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { localization } from "@responsible-ai/localization";
 import {
   ActionButton,
   IconButton,
@@ -8,7 +12,7 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
-import { localization } from "@responsible-ai/localization";
+
 import { SharedStyles } from "../Shared.styles";
 
 interface IModalHelpProps {

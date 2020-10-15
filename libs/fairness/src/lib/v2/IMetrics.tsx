@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Dictionary } from "lodash";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.

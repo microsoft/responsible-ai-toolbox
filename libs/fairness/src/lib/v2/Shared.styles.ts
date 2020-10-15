@@ -28,11 +28,8 @@ export interface ISharedStyles {
 export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
   const theme = getTheme();
   return mergeStyleSets<ISharedStyles>({
-    presentationArea: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      display: "flex",
-      flexDirection: "row",
-      padding: "20px 0 30px 0"
+    chartBody: {
+      flex: 1
     },
     chartHeader: {
       color: theme.semanticColors.bodyText,
@@ -42,9 +39,6 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       lineHeight: "22px",
       paddingLeft: "100px",
       paddingTop: "30px"
-    },
-    chartBody: {
-      flex: 1
     },
     chartSubHeader: {
       color: theme.semanticColors.bodyText,
@@ -56,21 +50,19 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       flex: "1 0 40%",
       flexDirection: "column"
     },
-    mainLeft: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      width: "75%"
-    },
-    textRow: {
-      alignItems: "center",
-      color: theme.semanticColors.bodyText,
-      display: "flex",
-      flexDirection: "row",
-      paddingBottom: "7px"
-    },
     colorBlock: {
       height: "15px",
       marginRight: "9px",
       width: "15px"
+    },
+    doneButton: {
+      color: theme.semanticColors.bodyText,
+      fontSize: FontSizes.large,
+      fontWeight: FontWeights.regular,
+      height: "44px",
+      lineHeight: "24px",
+      margin: "auto",
+      padding: "12px"
     },
     infoButton: {
       border: "1px solid",
@@ -87,14 +79,9 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       textAlign: "center",
       width: "15px"
     },
-    doneButton: {
-      color: theme.semanticColors.bodyText,
-      fontSize: FontSizes.large,
-      fontWeight: FontWeights.regular,
-      height: "44px",
-      lineHeight: "24px",
-      margin: "auto",
-      padding: "12px"
+    mainLeft: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      width: "75%"
     },
     modalContentHelp: {
       float: "left",
@@ -104,6 +91,19 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       padding: "0px 20px",
       textAlign: "center",
       wordWrap: "break-word"
+    },
+    presentationArea: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      display: "flex",
+      flexDirection: "row",
+      padding: "20px 0 30px 0"
+    },
+    textRow: {
+      alignItems: "center",
+      color: theme.semanticColors.bodyText,
+      display: "flex",
+      flexDirection: "row",
+      paddingBottom: "7px"
     }
   });
 };
