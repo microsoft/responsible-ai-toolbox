@@ -5,13 +5,13 @@ import { IInterpretData } from "../IInterpretData";
 
 export function describeCreateCohort(dataShape: IInterpretData): void {
   it("should have no filter by default", () => {
-    cy.get('button:contains("New Cohort")').click();
+    cy.get('button:contains("New cohort")').click();
     cy.get('#cohortEditPanel span:contains("No filters added yet")').should(
       "exist"
     );
   });
   it("should able to add filter", () => {
-    cy.get('button:contains("New Cohort")').click();
+    cy.get('button:contains("New cohort")').click();
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -22,7 +22,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     );
   });
   it("should able to add multiple filters", () => {
-    cy.get('button:contains("New Cohort")').click();
+    cy.get('button:contains("New cohort")').click();
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -34,7 +34,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     cy.get("#removeFilterBtn-1").should("exist");
   });
   it("should able to delete filter", () => {
-    cy.get('button:contains("New Cohort")').click();
+    cy.get('button:contains("New cohort")').click();
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -45,7 +45,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     );
   });
   it("should show error message with no cohort name", () => {
-    cy.get('button:contains("New Cohort")').click();
+    cy.get('button:contains("New cohort")').click();
 
     cy.get("#cohortEditPanel input:eq(0)").clear();
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -56,7 +56,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     );
   });
   it("should not create cohort with no name", () => {
-    cy.get('button:contains("New Cohort")').click();
+    cy.get('button:contains("New cohort")').click();
 
     cy.get("#cohortEditPanel input:eq(0)").clear();
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -64,8 +64,8 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     cy.get('button:contains("Save")').click();
     cy.get("#cohortEditPanel").should("exist");
   });
-  it("should create new cohort", () => {
-    cy.get('button:contains("New Cohort")').click();
+  it("should create New cohort", () => {
+    cy.get('button:contains("New cohort")').click();
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -75,7 +75,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
   });
   if (dataShape.noDataset) {
     it("should not have options of dataset", () => {
-      cy.get('button:contains("New Cohort")').click();
+      cy.get('button:contains("New cohort")').click();
       cy.get('#cohortEditPanel span:contains("Dataset")').should("not.exist");
     });
   }

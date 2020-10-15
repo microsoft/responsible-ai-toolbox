@@ -10,7 +10,6 @@ import {
   IDropdownOption,
   Dropdown,
   DefaultButton,
-  Icon,
   Text,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
@@ -113,13 +112,12 @@ export class DatasetExplorerTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <Icon iconName="Info" className={classNames.infoIcon} />
           <ExpandableText
-            collapsedText={
-              localization.Interpret.DatasetExplorer.collapsedHelperText
-            }
             expandedText={localization.Interpret.DatasetExplorer.helperText}
-          />
+            iconName="Info"
+          >
+            {localization.Interpret.DatasetExplorer.collapsedHelperText}
+          </ExpandableText>
         </div>
         <div className={classNames.cohortPickerWrapper}>
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>

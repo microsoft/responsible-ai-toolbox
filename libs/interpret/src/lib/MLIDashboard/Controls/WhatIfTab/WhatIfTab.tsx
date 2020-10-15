@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ExpandableText } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -14,7 +15,6 @@ import {
   getTheme,
   ChoiceGroup,
   IChoiceGroupOption,
-  Icon,
   Slider,
   Text,
   ComboBox,
@@ -348,10 +348,9 @@ export class WhatIfTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text variant="medium" className={classNames.helperText}>
+          <ExpandableText iconName="Info">
             {localization.Interpret.WhatIfTab.helperText}
-          </Text>
+          </ExpandableText>
         </div>
         <div className={classNames.mainArea}>
           <WhatIfPanel

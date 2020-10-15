@@ -10,7 +10,6 @@ import {
   DefaultButton,
   IDropdownOption,
   Dropdown,
-  Icon,
   Text
 } from "office-ui-fabric-react";
 import { Transform } from "plotly.js";
@@ -253,13 +252,12 @@ export class ModelPerformanceTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <Icon iconName="Info" className={classNames.infoIcon} />
           <ExpandableText
-            collapsedText={
-              localization.Interpret.ModelPerformance.collapsedHelperText
-            }
+            iconName="Info"
             expandedText={localization.Interpret.ModelPerformance.helperText}
-          />
+          >
+            {localization.Interpret.ModelPerformance.collapsedHelperText}
+          </ExpandableText>
         </div>
         {cohortOptions && (
           <div className={classNames.cohortPickerWrapper}>

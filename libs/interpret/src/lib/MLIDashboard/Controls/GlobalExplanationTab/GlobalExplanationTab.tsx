@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ExpandableText } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
@@ -9,7 +10,6 @@ import {
   IComboBoxOption,
   IDropdownOption,
   Dropdown,
-  Icon,
   Text,
   Link,
   Slider
@@ -171,8 +171,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text>{localization.Interpret.GlobalTab.helperText}</Text>
+          <ExpandableText iconName="Info">
+            {localization.Interpret.GlobalTab.helperText}
+          </ExpandableText>
         </div>
         <div
           className={classNames.globalChartControls}

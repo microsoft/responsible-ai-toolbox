@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text, Link, ITextProps } from "office-ui-fabric-react";
+import { Text, Link, ITextProps, Icon } from "office-ui-fabric-react";
 import React from "react";
 
 export interface IExpandableTextProps extends ITextProps {
-  collapsedText: string;
-  expandedText: string;
+  expandedText?: string;
+  iconName?: string;
 }
 
 interface IExpandableTextState {
@@ -19,32 +19,35 @@ export class ExpandableText extends React.Component<
   IExpandableTextState
 > {
   public render(): React.ReactNode {
-    if (this.state?.expanded) {
-      return (
-        <Text {...this.props}>
-          {this.props.children}
-          {this.props.collapsedText}
-          {this.props.expandedText}
-          <Link onClick={this.collapse}>
-            {localization.Core.ExpandableText.SeeLess}
-          </Link>
-        </Text>
-      );
-    }
     return (
-      <Text>
+      <Text {...this.props}>
+        {this.props.iconName && (
+          <>
+            <Icon iconName={this.props.iconName} />
+            &nbsp;
+          </>
+        )}
         {this.props.children}
-        {this.props.collapsedText}
-        <Link onClick={this.expand}>
-          {localization.Core.ExpandableText.SeeMore}
-        </Link>
+        {this.state?.expanded && (
+          <>
+            &nbsp;
+            {this.props.expandedText}
+          </>
+        )}
+        {this.props.expandedText && (
+          <>
+            &nbsp;
+            <Link onClick={this.toggle}>
+              {this.state?.expanded
+                ? localization.Core.ExpandableText.SeeLess
+                : localization.Core.ExpandableText.SeeMore}
+            </Link>
+          </>
+        )}
       </Text>
     );
   }
-  private readonly collapse = (): void => {
-    this.setState({ expanded: false });
-  };
-  private readonly expand = (): void => {
-    this.setState({ expanded: true });
+  private readonly toggle = (): void => {
+    this.setState((prev) => ({ expanded: !prev.expanded }));
   };
 }
