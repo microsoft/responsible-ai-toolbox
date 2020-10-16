@@ -149,8 +149,8 @@ export class FairnessWizardV2 extends React.PureComponent<
     performanceMetrics = this.getPerformanceMetrics(fairnessContext);
     performanceMetrics = performanceMetrics.filter((metric) => !!metric);
 
-    // TODO
-    parityMetrics = Object.values(parityOptions);
+    parityMetrics = this.getParityMetrics(fairnessContext);
+    parityMetrics = parityMetrics.filter((metric) => !!metric);
 
     this.state = {
       activeTabKey: introTabKey,
@@ -338,6 +338,30 @@ export class FairnessWizardV2 extends React.PureComponent<
     }
     return this.props.supportedProbabilityPerformanceKeys.map(
       (key) => performanceOptions[key]
+    );
+  }
+
+  private getParityMetrics(
+    fairnessContext: IRunTimeFairnessContext
+  ): IParityOption[] {
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+    ) {
+      return this.props.supportedBinaryClassificationParityKeys.map(
+        (key) => parityOptions[key]
+      );
+    }
+    if (
+      fairnessContext.modelMetadata.PredictionType ===
+      PredictionTypes.Regression
+    ) {
+      return this.props.supportedRegressionParityKeys.map(
+        (key) => parityOptions[key]
+      );
+    }
+    return this.props.supportedProbabilityParityKeys.map(
+      (key) => parityOptions[key]
     );
   }
 
