@@ -32,18 +32,17 @@ import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
-  chartProps?: IGenericChartProps;
   theme?: string;
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
   cohorts: Cohort[];
-  onChange: (props: IGenericChartProps) => void;
 }
 
 export interface IModelPerformanceTabState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   selectedCohortIndex: number;
+  chartProps: IGenericChartProps | undefined;
 }
 
 export class ModelPerformanceTab extends React.PureComponent<
@@ -55,15 +54,13 @@ export class ModelPerformanceTab extends React.PureComponent<
   public constructor(props: IModelPerformanceTabProps) {
     super(props);
     this.state = {
+      chartProps: this.generateDefaultChartAxes(),
       selectedCohortIndex: 0,
       xDialogOpen: false,
       yDialogOpen: false
     };
     if (!this.props.jointDataset.hasPredictedY) {
       return;
-    }
-    if (props.chartProps === undefined) {
-      this.generateDefaultChartAxes();
     }
   }
 
@@ -232,19 +229,19 @@ export class ModelPerformanceTab extends React.PureComponent<
         </div>
       );
     }
-    if (this.props.chartProps === undefined) {
+    if (this.state.chartProps === undefined) {
       return <div />;
     }
     const plotlyProps = ModelPerformanceTab.generatePlotlyProps(
       this.props.jointDataset,
-      this.props.chartProps,
+      this.state.chartProps,
       this.props.cohorts,
       this.state.selectedCohortIndex
     );
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
     const cohortOptions =
-      this.props.chartProps.yAxis.property !== cohortKey
+      this.state.chartProps.yAxis.property !== cohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })
@@ -280,16 +277,16 @@ export class ModelPerformanceTab extends React.PureComponent<
                 ColumnCategories.Cohort,
                 ColumnCategories.Dataset
               ]}
-              selectedColumn={this.props.chartProps.yAxis}
+              selectedColumn={this.state.chartProps.yAxis}
               canBin={
-                this.props.chartProps.chartType === ChartTypes.Histogram ||
-                this.props.chartProps.chartType === ChartTypes.Box
+                this.state.chartProps.chartType === ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Box
               }
               mustBin={
-                this.props.chartProps.chartType === ChartTypes.Histogram ||
-                this.props.chartProps.chartType === ChartTypes.Box
+                this.state.chartProps.chartType === ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Box
               }
-              canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYOpen.bind(this, false)}
             />
@@ -298,10 +295,10 @@ export class ModelPerformanceTab extends React.PureComponent<
             <AxisConfigDialog
               jointDataset={this.props.jointDataset}
               orderedGroupTitles={[ColumnCategories.Outcome]}
-              selectedColumn={this.props.chartProps.xAxis}
+              selectedColumn={this.state.chartProps.xAxis}
               canBin={false}
               mustBin={false}
-              canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXOpen.bind(this, false)}
             />
@@ -314,12 +311,12 @@ export class ModelPerformanceTab extends React.PureComponent<
                     onClick={this.setYOpen.bind(this, true)}
                     text={
                       this.props.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
+                        this.state.chartProps.yAxis.property
                       ].abbridgedLabel
                     }
                     title={
                       this.props.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
+                        this.state.chartProps.yAxis.property
                       ].label
                     }
                   />
@@ -387,12 +384,12 @@ export class ModelPerformanceTab extends React.PureComponent<
                   onClick={this.setXOpen.bind(this, true)}
                   text={
                     this.props.jointDataset.metaDict[
-                      this.props.chartProps.xAxis.property
+                      this.state.chartProps.xAxis.property
                     ].abbridgedLabel
                   }
                   title={
                     this.props.jointDataset.metaDict[
-                      this.props.chartProps.xAxis.property
+                      this.state.chartProps.xAxis.property
                     ].label
                   }
                 />
@@ -430,7 +427,7 @@ export class ModelPerformanceTab extends React.PureComponent<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     if (!newProps) {
       return;
     }
@@ -440,22 +437,20 @@ export class ModelPerformanceTab extends React.PureComponent<
       ? ChartTypes.Histogram
       : ChartTypes.Box;
 
-    this.props.onChange(newProps);
-    this.setState({ xDialogOpen: false });
+    this.setState({ chartProps: newProps, xDialogOpen: false });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     if (!newProps) {
       return;
     }
     newProps.yAxis = value;
 
-    this.props.onChange(newProps);
-    this.setState({ yDialogOpen: false });
+    this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
-  private generateDefaultChartAxes(): void {
+  private generateDefaultChartAxes(): IGenericChartProps | undefined {
     let bestModelMetricKey: string;
     if (
       this.props.metadata.modelType === ModelTypes.Binary &&
@@ -491,14 +486,14 @@ export class ModelPerformanceTab extends React.PureComponent<
         property: cohortKey
       }
     };
-    this.props.onChange(chartProps);
+    return chartProps;
   }
 
   private generateMetrics(): ILabeledStatistic[][] {
-    if (!this.props.chartProps) {
+    if (!this.state.chartProps) {
       return [];
     }
-    if (this.props.chartProps.yAxis.property === cohortKey) {
+    if (this.state.chartProps.yAxis.property === cohortKey) {
       const indexes = this.props.cohorts.map((cohort) =>
         cohort.unwrap(JointDataset.IndexLabel)
       );
@@ -509,10 +504,10 @@ export class ModelPerformanceTab extends React.PureComponent<
       );
     }
     const cohort = this.props.cohorts[this.state.selectedCohortIndex];
-    const yValues = cohort.unwrap(this.props.chartProps.yAxis.property, true);
+    const yValues = cohort.unwrap(this.state.chartProps.yAxis.property, true);
     const indexArray = cohort.unwrap(JointDataset.IndexLabel);
     const sortedCategoricalValues = this.props.jointDataset.metaDict[
-      this.props.chartProps.yAxis.property
+      this.state.chartProps.yAxis.property
     ].sortedCategoricalValues;
     const indexes = sortedCategoricalValues?.map((_, labelIndex) => {
       return indexArray.filter((_, index) => {

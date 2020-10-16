@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IOfficeFabricProps } from "@responsible-ai/core-ui";
+
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";
 
@@ -31,12 +33,11 @@ export interface IExplanationDashboardData {
   precomputedExplanations?: IPrecomputedExplanations;
 }
 
-export interface IExplanationDashboardProps extends IExplanationDashboardData {
-  theme?: any;
+export interface IExplanationDashboardProps
+  extends IExplanationDashboardData,
+    IOfficeFabricProps {
   locale?: string;
   stringParams?: IStringsParam;
-  shouldInitializeIcons?: boolean;
-  iconUrl?: string;
   telemetryHook?: (message: ITelemetryMessage) => void;
   requestPredictions?: (
     request: any[],

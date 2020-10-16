@@ -48,6 +48,6 @@ export class ExpandableText extends React.Component<
     );
   }
   private readonly toggle = (): void => {
-    this.setState((prev) => ({ expanded: !prev.expanded }));
+    this.setState((prev) => ({ expanded: !prev?.expanded }));
   };
 }

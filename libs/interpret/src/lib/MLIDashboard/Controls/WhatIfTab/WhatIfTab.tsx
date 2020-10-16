@@ -59,16 +59,15 @@ export interface IWhatIfTabProps {
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
   cohorts: Cohort[];
-  chartProps?: IGenericChartProps;
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
-  onChange: (config: IGenericChartProps) => void;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
 export interface IWhatIfTabState {
+  chartProps?: IGenericChartProps;
   isPanelOpen: boolean;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
@@ -152,6 +151,7 @@ export class WhatIfTab extends React.PureComponent<
       });
     }
     this.state = {
+      chartProps: this.generateDefaultChartAxes(),
       crossClassInfoVisible: false,
       customPointIsActive: [],
       customPoints: [],
@@ -175,9 +175,6 @@ export class WhatIfTab extends React.PureComponent<
       yDialogOpen: false
     };
 
-    if (props.chartProps === undefined) {
-      this.generateDefaultChartAxes();
-    }
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
@@ -327,19 +324,19 @@ export class WhatIfTab extends React.PureComponent<
         </div>
       );
     }
-    if (this.props.chartProps === undefined) {
+    if (this.state.chartProps === undefined) {
       return <div />;
     }
     const plotlyProps = this.generatePlotlyProps(
       this.props.jointDataset,
-      this.props.chartProps,
+      this.state.chartProps,
       this.props.cohorts[this.state.selectedCohortIndex]
     );
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .filteredData.length;
     const canRenderChart =
       cohortLength < newExplanationDashboardRowErrorSize ||
-      this.props.chartProps.chartType !== ChartTypes.Scatter;
+      this.state.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {
         return { key: index, text: cohort.name };
@@ -407,11 +404,11 @@ export class WhatIfTab extends React.PureComponent<
                       ColumnCategories.Dataset,
                       ColumnCategories.Outcome
                     ]}
-                    selectedColumn={this.props.chartProps.yAxis}
+                    selectedColumn={this.state.chartProps.yAxis}
                     canBin={false}
                     mustBin={false}
                     canDither={
-                      this.props.chartProps.chartType === ChartTypes.Scatter
+                      this.state.chartProps.chartType === ChartTypes.Scatter
                     }
                     onAccept={this.onYSet}
                     onCancel={this.setYOpen.bind(this, false)}
@@ -425,19 +422,19 @@ export class WhatIfTab extends React.PureComponent<
                       ColumnCategories.Dataset,
                       ColumnCategories.Outcome
                     ]}
-                    selectedColumn={this.props.chartProps.xAxis}
+                    selectedColumn={this.state.chartProps.xAxis}
                     canBin={
-                      this.props.chartProps.chartType ===
+                      this.state.chartProps.chartType ===
                         ChartTypes.Histogram ||
-                      this.props.chartProps.chartType === ChartTypes.Box
+                      this.state.chartProps.chartType === ChartTypes.Box
                     }
                     mustBin={
-                      this.props.chartProps.chartType ===
+                      this.state.chartProps.chartType ===
                         ChartTypes.Histogram ||
-                      this.props.chartProps.chartType === ChartTypes.Box
+                      this.state.chartProps.chartType === ChartTypes.Box
                     }
                     canDither={
-                      this.props.chartProps.chartType === ChartTypes.Scatter
+                      this.state.chartProps.chartType === ChartTypes.Scatter
                     }
                     onAccept={this.onXSet}
                     onCancel={this.setXOpen.bind(this, false)}
@@ -450,12 +447,12 @@ export class WhatIfTab extends React.PureComponent<
                         onClick={this.setYOpen.bind(this, true)}
                         text={
                           this.props.jointDataset.metaDict[
-                            this.props.chartProps.yAxis.property
+                            this.state.chartProps.yAxis.property
                           ].abbridgedLabel
                         }
                         title={
                           this.props.jointDataset.metaDict[
-                            this.props.chartProps.yAxis.property
+                            this.state.chartProps.yAxis.property
                           ].label
                         }
                       />
@@ -497,12 +494,12 @@ export class WhatIfTab extends React.PureComponent<
                         onClick={this.setXOpen.bind(this, true)}
                         text={
                           this.props.jointDataset.metaDict[
-                            this.props.chartProps.xAxis.property
+                            this.state.chartProps.xAxis.property
                           ].abbridgedLabel
                         }
                         title={
                           this.props.jointDataset.metaDict[
-                            this.props.chartProps.xAxis.property
+                            this.state.chartProps.xAxis.property
                           ].label
                         }
                       />
@@ -1203,23 +1200,21 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    if (!this.props.chartProps) {
+    if (!this.state.chartProps) {
       return;
     }
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
-    this.props.onChange(newProps);
-    this.setState({ xDialogOpen: false });
+    this.setState({ chartProps: newProps, xDialogOpen: false });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    if (!this.props.chartProps) {
+    if (!this.state.chartProps) {
       return;
     }
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
-    this.props.onChange(newProps);
-    this.setState({ yDialogOpen: false });
+    this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
   private filterFeatures = (
@@ -1525,7 +1520,7 @@ export class WhatIfTab extends React.PureComponent<
     trace.hovertemplate = hovertemplate;
   }
 
-  private generateDefaultChartAxes(): void {
+  private generateDefaultChartAxes(): IGenericChartProps | undefined {
     const yKey = JointDataset.DataLabelRoot + "0";
     const yIsDithered = this.props.jointDataset.metaDict[yKey]
       .treatAsCategorical;
@@ -1545,6 +1540,6 @@ export class WhatIfTab extends React.PureComponent<
         property: yKey
       }
     };
-    this.props.onChange(chartProps);
+    return chartProps;
   }
 }
