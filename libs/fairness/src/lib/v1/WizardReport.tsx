@@ -2,7 +2,11 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import {
+  AccessibleChart,
+  IPlotlyProperty,
+  chartColors
+} from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   getTheme,
@@ -14,7 +18,6 @@ import {
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { chartColors } from "../util/chartColors";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
