@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Dictionary } from "lodash";
 import React from "react";
 
 import { Cohort } from "../Cohort";
 import { ITelemetryMessage } from "../Interfaces/ITelemetryMessage";
-import { WeightVectorOption } from "../IWeightedDropdownContext";
 import { JointDataset } from "../JointDataset";
 
 export interface IInterpretContext {
@@ -14,8 +12,6 @@ export interface IInterpretContext {
   globalImportanceIntercept: number[];
   globalImportance: number[][];
   jointDataset: JointDataset;
-  weightVectorLabels: Dictionary<string>;
-  weightVectorOptions: WeightVectorOption[];
   telemetryHook: (message: ITelemetryMessage) => void;
   requestPredictions:
     | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
@@ -36,8 +32,6 @@ const interpretContext = React.createContext<IInterpretContext>({
   jointDataset: {} as JointDataset,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
-  telemetryHook: () => undefined,
-  weightVectorLabels: {},
-  weightVectorOptions: []
+  telemetryHook: () => undefined
 });
 export { interpretContext as InterpretContext };
