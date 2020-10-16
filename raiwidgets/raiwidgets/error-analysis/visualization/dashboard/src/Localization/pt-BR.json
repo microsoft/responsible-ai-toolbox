@@ -1,0 +1,109 @@
+{
+    "selectPoint": "Selecione um ponto para ver sua explicação local",
+    "defaultClassNames": "Classe {0}",
+    "defaultFeatureNames": "Recurso {0}",
+    "absoluteAverage": "Média do valor absoluto",
+    "predictedClass": "Classe prevista",
+    "dataExploration": "Exploração de Dados",
+    "globalImportance": "Importância Global",
+    "explanationExploration": "Exploração de Explicação",
+    "summaryImportance": "Importância do Resumo",
+    "featureImportance": "Importância do Recurso",
+    "perturbationExploration": "Exploração de Perturbação",
+    "localFeatureImportance": "Importância do Recurso Local",
+    "ice": "ICE",
+    "clearSelection": "Limpar seleção",
+    "feature": "Recurso:",
+    "intercept": "Interceptação",
+    "ExplanationScatter": {
+      "dataLabel": "Dados: {0}",
+      "importanceLabel": "Importância: {0}",
+      "predictedY": "YPrevisto",
+      "index": "Índice",
+      "dataGroupLabel": "Dados",
+      "output": "Saída",
+      "probabilityLabel": "Probabilidade: {0}",
+      "trueY": "Y verdadeiro",
+      "class": "classe: ",
+      "xValue": "Valor X:",
+      "yValue": "Valor Y:",
+      "colorValue": "Cor:"
+    },
+    "CrossClass": {
+      "label": "Ponderação entre classes:",
+      "info": "Informações sobre o cálculo entre classes",
+      "overviewInfo": "Os modelos de multiclasse geram um vetor de importância do recurso independente para cada classe. O vetor de importância do recurso de cada classe demonstra quais recursos fizeram uma classe mais ou menos provável. Você pode selecionar como os pesos dos vetores de importância do recurso por classe são resumidos em um único valor:",
+      "absoluteValInfo": "Média do valor absoluto: mostra a soma da importância do recurso em todas as classes possíveis, dividida pelo número de classes",
+      "predictedClassInfo": "Classe prevista: mostra o valor de importância do recurso para a classe prevista de um determinado ponto",
+      "enumeratedClassInfo": "Nomes de classe enumerados: mostra somente os valores de importância do recurso da classe especificada em todos os pontos de dados.",
+      "close": "Fechar"
+    },
+    "AggregateImportance": {
+      "scaledFeatureValue": "Valor de Recurso Dimensionado",
+      "low": "Baixa",
+      "high": "Alta",
+      "featureLabel": "Recurso: {0}",
+      "valueLabel": "Valor do recurso: {0}",
+      "importanceLabel": "Importância: {0}",
+      "predictedClassTooltip": "Classe Prevista: {0}",
+      "trueClassTooltip": "Classe Verdadeira: {0}",
+      "predictedOutputTooltip": "Saída Prevista: {0}",
+      "trueOutputTooltip": "Saída Verdadeira: {0}",
+      "topKFeatures": "K Principais Recursos:",
+      "topKInfo": "Como o k principal é calculado",
+      "predictedValue": "Valor Previsto",
+      "predictedClass": "Classe Prevista",
+      "trueValue": "Valor Verdadeiro",
+      "trueClass": "Classe Verdadeira",
+      "noColor": "Nenhuma",
+      "tooManyRows": "O conjunto de dados fornecido é maior do que este gráfico pode dar suporte"
+    },
+    "BarChart": {
+      "classLabel": "Classe: {0}",
+      "sortBy": "Classificar por",
+      "noData": "Nenhum Dado",
+      "absoluteGlobal": "Global absoluto",
+      "absoluteLocal": "Local absoluto",
+      "calculatingExplanation": "Calculando a explicação"
+    },
+    "IcePlot": {
+      "numericError": "Deve ser numérico",
+      "integerError": "Precisa ser um número inteiro",
+      "prediction": "Previsão",
+      "predictedProbability": "Probabilidade prevista",
+      "predictionLabel": "Previsão: {0}",
+      "probabilityLabel": "Probabilidade: {0}",
+      "noModelError": "Forneça um modelo operacionalizado para explorar previsões em gráficos da ICE.",
+      "featurePickerLabel": "Recurso:",
+      "minimumInputLabel": "Mínimo:",
+      "maximumInputLabel": "Máximo:",
+      "stepInputLabel": "Etapas:",
+      "loadingMessage": "Carregando dados...",
+      "submitPrompt": "Enviar um intervalo para exibir um gráfico da ICE",
+      "topLevelErrorMessage": "Erro no parâmetro",
+      "errorPrefix": "Erro encontrado: {0}"
+    },
+    "PerturbationExploration": {
+      "loadingMessage": "Carregando...",
+      "perturbationLabel": "Perturbação:"
+    },
+    "PredictionLabel": {
+      "predictedValueLabel": "Valor previsto: {0}",
+      "predictedClassLabel": "Classe prevista: {0}"
+    },
+    "Violin": {
+      "groupNone": "Nenhum agrupamento",
+      "groupPredicted": "Y Previsto",
+      "groupTrue": "Y verdadeiro",
+      "groupBy": "Agrupar por"
+    },
+    "FeatureImportanceWrapper": {
+      "chartType": "Tipo de gráfico:",
+      "violinText": "Violino",
+      "barText": "Barra",
+      "boxText": "Quadrado",
+      "beehiveText": "Por nuvem",
+      "globalImportanceExplanation": "A importância do recurso global é calculada pela média do valor absoluto da importância do recurso de todos os pontos (normalização de L1). ",
+      "multiclassImportanceAddendum": "Todos os pontos são incluídos no cálculo da importância de um recurso para todas as classes, nenhum peso diferencial é usado. Portanto, um recurso que tenha grande importância negativa para muitos pontos que estimaram que não seja da 'Classe A' aumentará muito a importância de 'Classe A' do recurso."
+    }
+  }
