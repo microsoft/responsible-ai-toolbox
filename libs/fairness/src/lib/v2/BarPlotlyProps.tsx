@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IData, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import {
+  IData,
+  IPlotlyProperty,
+  chartColors
+} from "@responsible-ai/mlchartlib";
 import { getTheme } from "office-ui-fabric-react";
 import { Config, Layout } from "plotly.js";
 
-import { chartColors } from "../util/chartColors";
 const theme = getTheme();
 export class BarPlotlyProps implements IPlotlyProperty {
   public config?: Partial<Config> | undefined = {

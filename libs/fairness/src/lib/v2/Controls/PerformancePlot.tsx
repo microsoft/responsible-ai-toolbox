@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { AccessibleChart } from "@responsible-ai/mlchartlib";
+import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
 import { ITheme, Stack, Label } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
-import { chartColors } from "../../util/chartColors";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { performanceOptions } from "../../util/PerformanceMetrics";
