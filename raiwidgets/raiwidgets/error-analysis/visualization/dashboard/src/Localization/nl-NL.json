@@ -1,0 +1,109 @@
+{
+  "selectPoint": "Selecteer een punt om de lokale uitleg ervan weer te geven",
+  "defaultClassNames": "Klasse {0}",
+  "defaultFeatureNames": "Functie {0}",
+  "absoluteAverage": "Gemiddelde van absolute waarde",
+  "predictedClass": "Voorspelde klasse",
+  "dataExploration": "Gegevensverkenning",
+  "globalImportance": "Algemene urgentie",
+  "explanationExploration": "Uitlegverkenning",
+  "summaryImportance": "Urgentiesamenvatting",
+  "featureImportance": "Functie-urgentie",
+  "perturbationExploration": "Storingsverkenning",
+  "localFeatureImportance": "Lokale functie-urgentie",
+  "ice": "ICE",
+  "clearSelection": "Selectie wissen",
+  "feature": "Functie:",
+  "intercept": "Snijpunt",
+  "ExplanationScatter": {
+    "dataLabel": "Gegevens: {0}",
+    "importanceLabel": "Urgentie: {0}",
+    "predictedY": "PredictedY",
+    "index": "Index",
+    "dataGroupLabel": "Gegevens",
+    "output": "Uitvoer",
+    "probabilityLabel": "Waarschijnlijkheid: {0}",
+    "trueY": "Ware Y",
+    "class": "klasse: ",
+    "xValue": "X-waarde:",
+    "yValue": "Y-waarde:",
+    "colorValue": "Kleur:"
+  },
+  "CrossClass": {
+    "label": "Weging voor alle klassen:",
+    "info": "Informatie over de berekening van meerdere klassen",
+    "overviewInfo": "Modellen met meerdere klassen genereren een onafhankelijke functie-urgentievector voor elke klasse. De functie-urgentievector van elke klasse geeft aan welke functies een klasse waarschijnlijk of minder waarschijnlijk hebben gemaakt. U kunt selecteren hoe de wegingen van de functie-urgentievector per klasse wordt samengevat in één waarde:",
+    "absoluteValInfo": "Gemiddelde van absolute waarde: hiermee wordt de som van de urgentie van de functie weergegeven voor alle mogelijke klassen, gedeeld door het aantal klassen",
+    "predictedClassInfo": "Voorspelde klasse: hiermee wordt de functie-urgentiewaarde weergegeven voor de voorspelde klasse van een bepaald punt",
+    "enumeratedClassInfo": "Geïnventariseerde klassenamen: hiermee worden alleen de functie-urgentiewaarden van de opgegeven klasse weergegeven voor alle gegevenspunten.",
+    "close": "Sluiten"
+  },
+  "AggregateImportance": {
+    "scaledFeatureValue": "Geschaalde functiewaarde",
+    "low": "Laag",
+    "high": "Hoog",
+    "featureLabel": "Functie: {0}",
+    "valueLabel": "Functiewaarde: {0}",
+    "importanceLabel": "Urgentie: {0}",
+    "predictedClassTooltip": "Voorspelde klasse: {0}",
+    "trueClassTooltip": "Ware klasse: {0}",
+    "predictedOutputTooltip": "Voorspelde uitvoer: {0}",
+    "trueOutputTooltip": "Ware uitvoer: {0}",
+    "topKFeatures": "Belangrijkste K-functies:",
+    "topKInfo": "Hoe wordt TOP k berekend",
+    "predictedValue": "Voorspelde waarde",
+    "predictedClass": "Voorspelde klasse",
+    "trueValue": "Ware waarde",
+    "trueClass": "Ware klasse",
+    "noColor": "Geen",
+    "tooManyRows": "De opgegeven gegevensset is groter dan door deze grafiek wordt ondersteund"
+  },
+  "BarChart": {
+    "classLabel": "Klasse: {0}",
+    "sortBy": "Sorteren op",
+    "noData": "Geen gegevens",
+    "absoluteGlobal": "Absoluut algemeen",
+    "absoluteLocal": "Absoluut lokaal",
+    "calculatingExplanation": "Berekeningsuitleg"
+  },
+  "IcePlot": {
+    "numericError": "Moet numeriek zijn",
+    "integerError": "Moet een geheel getal zijn",
+    "prediction": "Voorspelling",
+    "predictedProbability": "Voorspelde waarschijnlijkheid",
+    "predictionLabel": "Voorspelling: {0}",
+    "probabilityLabel": "Waarschijnlijkheid: {0}",
+    "noModelError": "Geef een operationeel model op om voorspellingen te verkennen in ICE-tekeningen.",
+    "featurePickerLabel": "Functie:",
+    "minimumInputLabel": "Minimum:",
+    "maximumInputLabel": "Maximum:",
+    "stepInputLabel": "Stappen:",
+    "loadingMessage": "Gegevens laden...",
+    "submitPrompt": "Een bereik verzenden om een ICE-tekening weer te geven",
+    "topLevelErrorMessage": "Fout in parameter",
+    "errorPrefix": "Fout aangetroffen: {0}"
+  },
+  "PerturbationExploration": {
+    "loadingMessage": "Laden...",
+    "perturbationLabel": "Storing:"
+  },
+  "PredictionLabel": {
+    "predictedValueLabel": "Voorspelde waarde: {0}",
+    "predictedClassLabel": "Voorspelde klasse: {0}"
+  },
+  "Violin": {
+    "groupNone": "Geen groepering",
+    "groupPredicted": "Voorspelde Y",
+    "groupTrue": "Ware Y",
+    "groupBy": "Groeperen op"
+  },
+  "FeatureImportanceWrapper": {
+    "chartType": "Grafiektype:",
+    "violinText": "Violin",
+    "barText": "Staaf",
+    "boxText": "Vak",
+    "beehiveText": "Swarm",
+    "globalImportanceExplanation": "De algemene functie-urgentie wordt berekend door het gemiddelde te berekenen van de absolute waarde van de functie-urgentie van alle punten (L1-normalisatie). ",
+    "multiclassImportanceAddendum": "Alle punten worden opgenomen in de berekening van de urgentie van een functie voor alle klassen. Er wordt geen differentiële weging gebruikt. Een functie met een grote negatieve urgentie voor veel punten die volgens de voorspelling niet van klasse A zijn, verhoogt het belang van de klasse A-urgentie van die functie aanzienlijk."
+  }
+}
