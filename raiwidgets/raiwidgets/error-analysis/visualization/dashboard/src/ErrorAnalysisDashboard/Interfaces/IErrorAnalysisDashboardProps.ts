@@ -16,72 +16,83 @@ import IStringsParam from "./IStringsParam";
  */
 
 export interface IErrorAnalysisDashboardProps {
-    modelInformation: IModelInformation;
-    dataSummary: IDatasetSummary;
-    testData?: any[][];
-    predictedY?: number[];
-    probabilityY?: number[][];
-    trueY?: number[];
-    precomputedExplanations?: IPrecomputedExplanations;
-    theme?: any;
-    locale?: string;
-    stringParams?: IStringsParam;
-    shouldInitializeIcons?: boolean;
-    iconUrl?: string;
-    features: string[];
-    requestPredictions?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-    requestLocalFeatureExplanations?: (request: any[], abortSignal: AbortSignal, explanationAlgorithm?: string) => Promise<any[]>;
-    requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-    localUrl: string;
+  modelInformation: IModelInformation;
+  dataSummary: IDatasetSummary;
+  testData?: any[][];
+  predictedY?: number[];
+  probabilityY?: number[][];
+  trueY?: number[];
+  precomputedExplanations?: IPrecomputedExplanations;
+  theme?: any;
+  locale?: string;
+  stringParams?: IStringsParam;
+  shouldInitializeIcons?: boolean;
+  iconUrl?: string;
+  features: string[];
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestLocalFeatureExplanations?: (
+    request: any[],
+    abortSignal: AbortSignal,
+    explanationAlgorithm?: string
+  ) => Promise<any[]>;
+  requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  localUrl: string;
 }
 
 export interface IModelInformation {
-    modelClass: "Tree" | "EBM" | "blackbox";
-    method: "classifier" | "regressor";
+  modelClass: "Tree" | "EBM" | "blackbox";
+  method: "classifier" | "regressor";
 }
 
 export interface IDatasetSummary {
-    featureNames?: string[];
-    classNames?: string[];
-    categoricalMap?: {[key: number]: string[]};
+  featureNames?: string[];
+  classNames?: string[];
+  categoricalMap?: { [key: number]: string[] };
 }
 
 export interface IPrecomputedExplanations {
-    localFeatureImportance?: IMultiClassLocalFeatureImportance | ISingleClassLocalFeatureImportance;
-    globalFeatureImportance?: IMultiClassGlobalFeatureImportance | ISingleClassGlobalFeatureImportance;
-    ebmGlobalExplanation?: IEBMGlobalExplanation;
-    customVis?: string;
+  localFeatureImportance?:
+    | IMultiClassLocalFeatureImportance
+    | ISingleClassLocalFeatureImportance;
+  globalFeatureImportance?:
+    | IMultiClassGlobalFeatureImportance
+    | ISingleClassGlobalFeatureImportance;
+  ebmGlobalExplanation?: IEBMGlobalExplanation;
+  customVis?: string;
 }
 
 export interface IBoundedCoordinates {
-    type: string;
-    names: number[];
-    scores: number[] | number[][];
-    scores_range?: number[];
-    upper_bounds?: number[] | number[][];
-    lower_bounds?: number[] | number[][];
+  type: string;
+  names: number[];
+  scores: number[] | number[][];
+  scores_range?: number[];
+  upper_bounds?: number[] | number[][];
+  lower_bounds?: number[] | number[][];
 }
 
 export interface IEBMGlobalExplanation {
-    feature_list: IBoundedCoordinates[];
+  feature_list: IBoundedCoordinates[];
 }
 
 export interface IMultiClassLocalFeatureImportance {
-    scores: number[][][];
-    intercept?: number[];
+  scores: number[][][];
+  intercept?: number[];
 }
 
 export interface ISingleClassLocalFeatureImportance {
-    scores: number[][];
-    intercept?: number;
+  scores: number[][];
+  intercept?: number;
 }
 
 export interface IMultiClassGlobalFeatureImportance {
-    scores: number[][];
-    intercept?: number[];
+  scores: number[][];
+  intercept?: number[];
 }
 
 export interface ISingleClassGlobalFeatureImportance {
-    scores: number[];
-    intercept?: number;
+  scores: number[];
+  intercept?: number;
 }

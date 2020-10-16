@@ -1,1 +1,1 @@
-export * from "./InteractiveLegend"
+export * from "./InteractiveLegend";
