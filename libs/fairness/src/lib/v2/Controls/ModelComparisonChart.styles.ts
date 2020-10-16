@@ -19,8 +19,6 @@ export interface IModelComparisonChartStyles {
   dropDown: IStyle;
   doneButton: IStyle;
   infoButton: IStyle;
-  modalContentIntro: IStyle;
-  modalContentIntroText: IStyle;
   modalContentHelp: IStyle;
   modalContentHelpText: IStyle;
   editButton: IStyle;
@@ -117,15 +115,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       width: "250px"
     },
     modalContentHelpText: {
-      padding: "0px 20px",
-      textAlign: "center",
-      wordWrap: "break-word"
-    },
-    modalContentIntro: {
-      float: "left",
-      width: "250px"
-    },
-    modalContentIntroText: {
       padding: "0px 20px",
       textAlign: "center",
       wordWrap: "break-word"

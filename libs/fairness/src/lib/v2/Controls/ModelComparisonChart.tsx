@@ -246,33 +246,6 @@ export class ModelComparisonChart extends React.PureComponent<
         <div className={styles.main}>
           <div className={sharedStyles.mainLeft}>
             <div className={styles.howTo}>
-              <Modal
-                titleAriaId="intro modal"
-                isOpen={this.state.showModalIntro}
-                onDismiss={this.handleCloseModalIntro}
-                isModeless={true}
-                containerClassName={styles.modalContentIntro}
-              >
-                <div style={{ display: "flex" }}>
-                  <IconButton
-                    styles={iconButtonStyles}
-                    iconProps={cancelIcon}
-                    ariaLabel="Close intro modal"
-                    onClick={this.handleCloseModalIntro}
-                  />
-                </div>
-                <p className={styles.modalContentIntroText}>
-                  {localization.Fairness.ModelComparison.introModalText}
-                </p>
-                <div style={{ display: "flex", paddingBottom: "20px" }}>
-                  <PrimaryButton
-                    className={styles.doneButton}
-                    onClick={this.handleCloseModalIntro}
-                  >
-                    {localization.Fairness.done}
-                  </PrimaryButton>
-                </div>
-              </Modal>
               <ActionButton onClick={this.handleOpenModalHelp}>
                 <div className={styles.infoButton}>i</div>
                 {localization.Fairness.ModelComparison.howToRead}
@@ -293,6 +266,9 @@ export class ModelComparisonChart extends React.PureComponent<
                   />
                 </div>
                 <p className={styles.modalContentHelpText}>
+                  {localization.Fairness.ModelComparison.introModalText}
+                  <br />
+                  <br />
                   {localization.Fairness.ModelComparison.helpModalText1}
                   <br />
                   <br />
@@ -461,11 +437,6 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.parityPickerProps.onParityChange(parityKey);
       this.setState({ disparityArray: undefined, parityKey });
     }
-  };
-
-  private readonly handleCloseModalIntro = (): void => {
-    this.setState({ showModalIntro: false });
-    this.props.onHideIntro();
   };
 
   private readonly handleOpenModalHelp = (): void => {
