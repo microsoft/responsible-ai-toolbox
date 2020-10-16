@@ -17,6 +17,52 @@ export enum ParityModes {
 }
 
 export const parityOptions: { [key: string]: IParityOption } = {
+  demographic_parity_difference: {
+    description:
+      localization.Fairness.Metrics.demographicParityDifferenceDescription,
+    key: "demographic_parity_difference",
+    parityMetric: "selection_rate",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.demographicParityDifference
+  },
+  demographic_parity_ratio: {
+    description:
+      localization.Fairness.Metrics.demographicParityRatioDescription,
+    key: "demographic_parity_ratio",
+    parityMetric: "selection_rate",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.demographicParityRatio
+  },
+  // zero_one_loss is the error rate for binary classification, while
+  // mean_absolute_error is the error rate for probabilistic classification and regression
+  error_rate_difference_binary_classification: {
+    description: localization.Fairness.Metrics.errorRateDifferenceDescription,
+    key: "error_rate_difference_binary_classification",
+    parityMetric: "zero_one_loss",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.errorRateDifference
+  },
+  error_rate_difference_regression: {
+    description: localization.Fairness.Metrics.errorRateDifferenceDescription,
+    key: "error_rate_difference_regression",
+    parityMetric: "mean_absolute_error",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.errorRateDifference
+  },
+  error_rate_ratio_binary_classification: {
+    description: localization.Fairness.Metrics.errorRateRatioDescription,
+    key: "error_rate_ratio_binary_classification",
+    parityMetric: "zero_one_loss",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.errorRateRatio
+  },
+  error_rate_ratio_regression: {
+    description: localization.Fairness.Metrics.errorRateRatioDescription,
+    key: "error_rate_ratio_regression",
+    parityMetric: "mean_absolute_error",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.errorRateRatio
+  },
   true_positive_rate_difference: {
     description:
       localization.Fairness.Metrics.truePositiveRateDifferenceDescription,
@@ -32,49 +78,5 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMetric: "recall_score",
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.truePositiveRateRatio
-  },
-  demographic_parity_difference: {
-    description: localization.Fairness.Metrics.demographicParityDifferenceDescription,
-    key: "demographic_parity_difference",
-    parityMetric: "selection_rate",
-    parityMode: ParityModes.Difference,
-    title: localization.Fairness.Metrics.demographicParityDifference
-  },
-  demographic_parity_ratio: {
-    description: localization.Fairness.Metrics.demographicParityRatioDescription,
-    key: "demographic_parity_ratio",
-    parityMetric: "selection_rate",
-    parityMode: ParityModes.Ratio,
-    title: localization.Fairness.Metrics.demographicParityRatio
-  },
-  // zero_one_loss is the error rate for binary classification, while
-  // mean_absolute_error is the error rate for probabilistic classification and regression
-  error_rate_difference_binary_classification: {
-    description: localization.Fairness.Metrics.errorRateDifferenceDescription,
-    key: "error_rate_difference_binary_classification",
-    parityMetric: "zero_one_loss",
-    parityMode: ParityModes.Difference,
-    title: localization.Fairness.Metrics.errorRateDifference
-  },
-  error_rate_ratio_binary_classification: {
-    description: localization.Fairness.Metrics.errorRateRatioDescription,
-    key: "error_rate_ratio_binary_classification",
-    parityMetric: "zero_one_loss",
-    parityMode: ParityModes.Ratio,
-    title: localization.Fairness.Metrics.errorRateRatio
-  },
-  error_rate_difference_regression: {
-    description: localization.Fairness.Metrics.errorRateDifferenceDescription,
-    key: "error_rate_difference_regression",
-    parityMetric: "mean_absolute_error",
-    parityMode: ParityModes.Difference,
-    title: localization.Fairness.Metrics.errorRateDifference
-  },
-  error_rate_ratio_regression: {
-    description: localization.Fairness.Metrics.errorRateRatioDescription,
-    key: "error_rate_ratio_regression",
-    parityMetric: "mean_absolute_error",
-    parityMode: ParityModes.Ratio,
-    title: localization.Fairness.Metrics.errorRateRatio
   }
 };

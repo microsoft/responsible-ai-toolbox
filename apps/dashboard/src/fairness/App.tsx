@@ -76,17 +76,17 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       requestMetrics: this.generateRandomMetrics.bind(this),
       stringParams: { contextualHelp: App.messages },
-      supportedBinaryClassificationPerformanceKeys:
-        App.supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys:
-        App.supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys:
-        App.supportedRegressionPerformanceKeys,
-      theme: this.props.theme,
       supportedBinaryClassificationParityKeys:
         App.supportedBinaryClassificationParityKeys,
+      supportedBinaryClassificationPerformanceKeys:
+        App.supportedBinaryClassificationPerformanceKeys,
       supportedProbabilityParityKeys: App.supportedProbabilityParityKeys,
-      supportedRegressionParityKeys: App.supportedRegressionParityKeys
+      supportedProbabilityPerformanceKeys:
+        App.supportedProbabilityPerformanceKeys,
+      supportedRegressionParityKeys: App.supportedRegressionParityKeys,
+      supportedRegressionPerformanceKeys:
+        App.supportedRegressionPerformanceKeys,
+      theme: this.props.theme
     };
     switch (this.props.version) {
       case 1:
