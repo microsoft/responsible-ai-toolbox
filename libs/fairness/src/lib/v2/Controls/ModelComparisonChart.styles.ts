@@ -26,15 +26,9 @@ export interface IModelComparisonChartStyles {
   editButton: IStyle;
   howTo: IStyle;
   main: IStyle;
-  mainLeft: IStyle;
   mainRight: IStyle;
   rightTitle: IStyle;
   rightText: IStyle;
-  insights: IStyle;
-  insightsIcon: IStyle;
-  insightsText: IStyle;
-  downloadIcon: IStyle;
-  downloadReport: IStyle;
   chart: IStyle;
   textSection: IStyle;
   radio: IStyle;
@@ -58,21 +52,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       lineHeight: "24px",
       margin: "auto",
       padding: "12px"
-    },
-    downloadIcon: {
-      height: "18",
-      marginRight: "10px",
-      verticalAlign: "middle",
-      width: "17"
-    },
-    downloadReport: {
-      color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      fontWeight: "normal",
-      lineHeight: "16px",
-      paddingBottom: "20px",
-      paddingLeft: "0px",
-      paddingTop: "20px"
     },
     dropDown: {
       display: "inline-block",
@@ -122,35 +101,12 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       textAlign: "center",
       width: "15px"
     },
-    insights: {
-      color: theme.semanticColors.bodyText,
-      display: "inline",
-      padding: "18px 10px",
-      textTransform: "uppercase"
-    },
-    insightsIcon: {
-      height: "28",
-      marginRight: "10px",
-      verticalAlign: "middle",
-      width: "24"
-    },
-    insightsText: {
-      borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider,
-      marginTop: "20px",
-      paddingBottom: "18px",
-      paddingRight: "15px"
-    },
     main: {
       backgroundColor: theme.semanticColors.bodyBackground,
       display: "inline-flex",
       flex: 1,
       flexDirection: "row",
       height: "100%"
-    },
-    mainLeft: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      width: "75%"
     },
     mainRight: {
       padding: "30px 0 0 35px",

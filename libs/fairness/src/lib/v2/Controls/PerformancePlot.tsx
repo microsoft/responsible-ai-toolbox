@@ -4,21 +4,34 @@
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme, Stack, Label } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
 import { chartColors } from "../../util/chartColors";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
+import { performanceOptions } from "../../util/PerformanceMetrics";
 import { BarPlotlyProps } from "../BarPlotlyProps";
+import {
+  IFeatureBinPickerPropsV2,
+  IPerformancePickerPropsV2
+} from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
+import { SharedStyles } from "../Shared.styles";
+
+import { ModalHelp } from "./ModalHelp";
+import { PerformancePlotStyles } from "./PerformancePlot.styles";
+import { SummaryTable } from "./SummaryTable";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
   nameIndex: number[];
   theme: ITheme | undefined;
+  areaHeights: number;
+  performancePickerProps: IPerformancePickerPropsV2;
+  featureBinPickerProps: IFeatureBinPickerPropsV2;
 }
 
 export class PerformancePlot extends React.PureComponent<
@@ -27,11 +40,15 @@ export class PerformancePlot extends React.PureComponent<
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
+    const sharedStyles = SharedStyles();
+    let performanceChartModalHelpStrings: string[] = [];
+    let performanceChartHeaderString = "";
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
     ) {
+      // TODO don't show chart if FPR, FNR not available
       barPlotlyProps.data = [
         {
           color: chartColors[0],
@@ -94,11 +111,17 @@ export class PerformancePlot extends React.PureComponent<
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
+      performanceChartModalHelpStrings = [
+        localization.Fairness.Report.classificationPerformanceHowToReadV2
+      ];
+      performanceChartHeaderString =
+        localization.Fairness.Report.performanceChartHeaderBinaryClassification;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Probability
     ) {
+      // TODO don't show chart if Overprediction/Underprediction not available
       barPlotlyProps.data = [
         {
           color: chartColors[0],
@@ -157,11 +180,19 @@ export class PerformancePlot extends React.PureComponent<
           }
         ];
       }
+      performanceChartModalHelpStrings = [
+        localization.Fairness.Report.probabilityPerformanceHowToRead1,
+        localization.Fairness.Report.probabilityPerformanceHowToRead2,
+        localization.Fairness.Report.probabilityPerformanceHowToRead3
+      ];
+      performanceChartHeaderString =
+        localization.Fairness.Report.performanceChartHeaderProbability;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Regression
     ) {
+      // TODO don't show chart if errors not available
       const performanceText = this.props.metrics.predictions?.map(
         (val, index) => {
           return `${localization.formatString(
@@ -194,8 +225,128 @@ export class PerformancePlot extends React.PureComponent<
           y: this.props.dashboardContext.binVector
         } as any
       ];
+      performanceChartModalHelpStrings = [
+        localization.Fairness.Report.regressionPerformanceHowToRead
+      ];
+      performanceChartHeaderString =
+        localization.Fairness.Report.performanceChartHeaderRegression;
     }
 
-    return <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />;
+    const performanceKey = this.props.performancePickerProps
+      .selectedPerformanceKey;
+    const formattedBinPerformanceValues = this.props.metrics.performance.bins.map(
+      (value) => FormatMetrics.formatNumbers(value, performanceKey)
+    );
+    const selectedMetric =
+      performanceOptions[
+        this.props.performancePickerProps.selectedPerformanceKey
+      ] ||
+      this.props.performancePickerProps.performanceOptions.find(
+        (metric) =>
+          metric.key ===
+          this.props.performancePickerProps.selectedPerformanceKey
+      );
+
+    return (
+      <Stack tokens={{ padding: "0 0 0 100px" }}>
+        <Label>{performanceChartHeaderString}</Label>
+        <div
+          className={sharedStyles.presentationArea}
+          style={{ height: `${this.props.areaHeights}px` }}
+        >
+          <SummaryTable
+            binGroup={
+              this.props.dashboardContext.modelMetadata.featureNames[
+                this.props.featureBinPickerProps.selectedBinIndex
+              ]
+            }
+            binLabels={this.props.dashboardContext.groupNames}
+            formattedBinValues={formattedBinPerformanceValues}
+            metricLabel={selectedMetric.title}
+            binValues={this.props.metrics.performance.bins}
+          />
+          <div className={sharedStyles.chartWrapper}>
+            <Stack horizontal={true} horizontalAlign={"space-between"}>
+              <div className={sharedStyles.chartSubHeader}></div>
+              <ModalHelp
+                theme={theme}
+                strings={performanceChartModalHelpStrings}
+              />
+            </Stack>
+            <div className={sharedStyles.chartBody}>
+              <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
+            </div>
+          </div>
+        </div>
+        {this.props.dashboardContext.modelMetadata.PredictionType !==
+          PredictionTypes.Regression && (
+          <PerformancePlotLegend
+            showSubtitle={
+              this.props.dashboardContext.modelMetadata.PredictionType ===
+              PredictionTypes.BinaryClassification
+            }
+            useOverUnderPrediction={
+              this.props.dashboardContext.modelMetadata.PredictionType ===
+              PredictionTypes.Probability
+            }
+          />
+        )}
+      </Stack>
+    );
+  }
+}
+
+interface IPerformancePlotLegendProps {
+  showSubtitle: boolean;
+  useOverUnderPrediction: boolean;
+}
+
+export class PerformancePlotLegend extends React.PureComponent<
+  IPerformancePlotLegendProps
+> {
+  public render(): React.ReactNode {
+    const styles = PerformancePlotStyles();
+    const sharedStyles = SharedStyles();
+
+    return (
+      <Stack horizontal={true} tokens={{ childrenGap: "l1" }}>
+        <div className={sharedStyles.textRow}>
+          <div
+            className={sharedStyles.colorBlock}
+            style={{ backgroundColor: chartColors[1] }}
+          />
+          <div>
+            <div className={styles.legendTitle}>
+              {this.props.useOverUnderPrediction
+                ? localization.Fairness.Report.underestimationError
+                : localization.Fairness.Report.falseNegativeRate}
+            </div>
+            {this.props.showSubtitle && (
+              <div className={styles.legendSubtitle}>
+                {localization.Fairness.Report.underpredictionExplanation}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={sharedStyles.textRow}>
+          <div
+            className={sharedStyles.colorBlock}
+            style={{ backgroundColor: chartColors[0] }}
+          />
+          <div>
+            <div className={styles.legendTitle}>
+              {this.props.useOverUnderPrediction
+                ? localization.Fairness.Report.overestimationError
+                : localization.Fairness.Report.falsePositiveRate}
+            </div>
+            {this.props.showSubtitle && (
+              <div className={styles.legendSubtitle}>
+                {localization.Fairness.Report.overpredictionExplanation}
+              </div>
+            )}
+          </div>
+        </div>
+      </Stack>
+    );
   }
 }

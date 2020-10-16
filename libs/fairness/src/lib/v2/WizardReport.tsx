@@ -2,36 +2,30 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { getTheme } from "@uifabric/styling";
+import { Dictionary } from "lodash";
 import {
   IDropdownStyles,
   IDropdownOption,
   Dropdown,
-  Modal,
-  IIconProps,
-  Icon
+  Icon,
+  Stack
 } from "office-ui-fabric-react";
-import {
-  ActionButton,
-  IconButton,
-  PrimaryButton
-} from "office-ui-fabric-react/lib/Button";
+import { ActionButton } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { chartColors } from "../util/chartColors";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { ParityModes } from "../util/ParityMetrics";
+import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
-import { BarPlotlyProps } from "./BarPlotlyProps";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
+import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
 import { PerformancePlot } from "./Controls/PerformancePlot";
-import { SummaryTable } from "./Controls/SummaryTable";
 import { IMetrics } from "./IMetrics";
+import { SharedStyles } from "./Shared.styles";
 import { WizardReportStyles } from "./WizardReport.styles";
 
 export interface IState {
@@ -47,23 +41,11 @@ export interface IReportProps extends IModelComparisonProps {
 
 export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
-    const theme = getTheme();
     const styles = WizardReportStyles();
+    const sharedStyles = SharedStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
       title: { borderRadius: "5px", borderWidth: "1px" }
-    };
-
-    const iconButtonStyles = {
-      root: {
-        color: theme.semanticColors.bodyText,
-        marginLeft: "auto",
-        marginRight: "2px",
-        marginTop: "4px"
-      },
-      rootHovered: {
-        color: theme.semanticColors.bodyBackgroundHovered
-      }
     };
 
     const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
@@ -80,22 +62,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       106;
     const areaHeights = Math.max(300, alternateHeight);
 
-    const opportunityPlot = new BarPlotlyProps();
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-    // let howToReadPerformanceSection: React.ReactNode;
-    // let howToReadOutcomesSection: React.ReactNode;
-    let performanceChartHeader = "";
-    // let opportunityChartHeader = "";
 
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
+    const disparityKey = this.props.parityPickerProps.selectedParityKey;
     const outcomeKey: string =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
         ? "selection_rate"
         : "average";
-
-    const outcomeMetric = performanceOptions[outcomeKey];
 
     let mainChart;
     if (!this.state || !this.state.metrics) {
@@ -108,130 +84,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         />
       );
     } else {
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.BinaryClassification
-      ) {
-        // TODO: this plot doesn't actually exist, does it?
-        opportunityPlot.data = [
-          {
-            color: chartColors[0],
-            hoverinfo: "skip",
-            name: outcomeMetric.title,
-            orientation: "h",
-            text: this.state.metrics.outcomes.bins.map((num) =>
-              FormatMetrics.formatNumbers(num, "selection_rate", false, 2)
-            ),
-            textposition: "auto",
-            type: "bar",
-            x: this.state.metrics.outcomes.bins,
-            y: nameIndex
-          } as any
-        ];
-        if (opportunityPlot.layout?.xaxis) {
-          opportunityPlot.layout.xaxis.tickformat = ",.0%";
-        }
-        // howToReadPerformanceSection = (
-        //   <div className={styles.rightText}>
-        //     <div className={styles.textRow}>
-        //       <div
-        //         className={styles.colorBlock}
-        //         style={{ backgroundColor: ChartColors[1] }}
-        //       />
-        //       <div>
-        //         <Text block>{localization.Fairness.Report.underestimationError}</Text>
-        //         <Text block>
-        //           {localization.Fairness.Report.underpredictionExplanation}
-        //         </Text>
-        //       </div>
-        //     </div>
-        //     <div className={styles.textRow}>
-        //       <div
-        //         className={styles.colorBlock}
-        //         style={{ backgroundColor: ChartColors[0] }}
-        //       />
-        //       <div>
-        //         <Text block>{localization.Fairness.Report.overestimationError}</Text>
-        //         <Text block>
-        //           {localization.Fairness.Report.overpredictionExplanation}
-        //         </Text>
-        //       </div>
-        //     </div>
-        //     <Text block>
-        //       {localization.Fairness.Report.classificationPerformanceHowToRead1}
-        //     </Text>
-        //     <Text block>
-        //       {localization.Fairness.Report.classificationPerformanceHowToRead2}
-        //     </Text>
-        //     <Text block>
-        //       {localization.Fairness.Report.classificationPerformanceHowToRead3}
-        //     </Text>
-        //   </div>
-        // );
-        // howToReadOutcomesSection = (
-        //   <Text className={styles.textRow} block>
-        //     {localization.Fairness.Report.classificationOutcomesHowToRead}
-        //   </Text>
-        // );
-      }
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.Probability
-      ) {
-        // TODO: this plot doesn't exist anymore, does it?
-        const opportunityText = this.state.metrics.predictions?.map((val) => {
-          return localization.formatString(
-            localization.Fairness.Report.tooltipPrediction,
-            FormatMetrics.formatNumbers(val, "average", false, 3)
-          );
-        });
-        opportunityPlot.data = [
-          {
-            boxmean: true,
-            boxpoints: "all",
-            color: chartColors[0],
-            hoverinfo: "text",
-            hoveron: "points",
-            jitter: 0.4,
-            orientation: "h",
-            pointpos: 0,
-            text: opportunityText,
-            type: "box",
-            x: this.state.metrics.predictions,
-            y: this.props.dashboardContext.binVector
-          } as any
-        ];
-      }
-      if (
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.Regression
-      ) {
-        const opportunityText = this.state.metrics.predictions?.map((val) => {
-          return localization.formatString(
-            localization.Fairness.Report.tooltipPrediction,
-            val
-          );
-        });
-        opportunityPlot.data = [
-          {
-            boxmean: true,
-            boxpoints: "all",
-            color: chartColors[0],
-            hoverinfo: "text",
-            hoveron: "points",
-            jitter: 0.4,
-            orientation: "h",
-            pointpos: 0,
-            text: opportunityText,
-            type: "box",
-            x: this.state.metrics.predictions,
-            y: this.props.dashboardContext.binVector
-          } as any
-        ];
-        performanceChartHeader =
-          localization.Fairness.Report.distributionOfErrors;
-      }
-
       // define task-specific metrics to show by default
       const additionalMetrics: Map<string, IMetricResponse> = new Map();
 
@@ -281,28 +133,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.state.metrics.performance.global,
         performanceKey
       );
-      // const disparityPerformanceString = FormatMetrics.formatNumbers(
-      //   this.state.metrics.performanceDisparity,
-      //   performanceKey
-      // );
-      const selectedMetric =
-        performanceOptions[
-          this.props.performancePickerProps.selectedPerformanceKey
-        ] ||
-        this.props.performancePickerProps.performanceOptions.find(
-          (metric) =>
-            metric.key ===
-            this.props.performancePickerProps.selectedPerformanceKey
-        );
+
+      const disparityMetricString = FormatMetrics.formatNumbers(
+        this.state.metrics.disparities[
+          this.props.parityPickerProps.selectedParityKey
+        ],
+        performanceKey
+      );
 
       const globalOutcomeString = FormatMetrics.formatNumbers(
         this.state.metrics.outcomes.global,
         outcomeKey
       );
-      // const disparityOutcomeString = FormatMetrics.formatNumbers(
-      //   this.state.metrics.outcomeDisparity,
-      //   outcomeKey
-      // );
 
       const formattedBinPerformanceValues = this.state.metrics.performance.bins.map(
         (value) => FormatMetrics.formatNumbers(value, performanceKey)
@@ -315,7 +157,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       // as any additional metrics that may be relevant for the selected task
       const formattedBinValues = [
         formattedBinPerformanceValues,
-        formattedBinOutcomeValues
+        formattedBinOutcomeValues,
+        formattedBinOutcomeValues.map(() => "") // empty entries for disparity outcome column
       ];
       additionalMetrics.forEach((metricObject, metricName) => {
         formattedBinValues.push(
@@ -325,7 +168,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         );
       });
 
-      const overallMetrics = [globalPerformanceString, globalOutcomeString];
+      const overallMetrics = [
+        globalPerformanceString,
+        globalOutcomeString,
+        disparityMetricString
+      ];
       additionalMetrics.forEach((metricObject, metricName) => {
         overallMetrics.push(
           FormatMetrics.formatNumbers(metricObject?.global, metricName)
@@ -338,190 +185,102 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             (a) => a.key === performanceKey
           ) || performanceOptions[performanceKey]
         ).title,
-        performanceOptions[outcomeKey].title
+        performanceOptions[outcomeKey].title,
+        (
+          this.props.parityPickerProps.parityOptions.find(
+            (a) => a.key === disparityKey
+          ) || parityOptions[disparityKey]
+        ).title
       ];
       additionalMetrics.forEach((_, metricName) => {
         metricLabels.push(performanceOptions[metricName].title);
       });
 
-      const cancelIcon: IIconProps = { iconName: "Cancel" };
-
       mainChart = (
-        <div className={styles.main}>
-          <div className={styles.mainLeft}>
-            <div
-              className={styles.overallArea}
-              style={{
-                height: this.state.expandAttributes
-                  ? `${150 + 50 * (areaHeights / 150)}px`
-                  : "150px"
-              }}
-            >
-              <OverallTable
-                binGroup={
-                  this.props.dashboardContext.modelMetadata.featureNames[
-                    this.props.featureBinPickerProps.selectedBinIndex
-                  ]
-                }
-                binLabels={this.props.dashboardContext.groupNames}
-                formattedBinValues={formattedBinValues}
-                metricLabels={metricLabels}
-                overallMetrics={overallMetrics}
-                expandAttributes={this.state.expandAttributes}
-                binValues={this.state.metrics.performance.bins}
-              />
-            </div>
-            <div
-              className={styles.expandAttributes}
-              onClick={this.expandAttributes}
-            >
-              {(this.state.expandAttributes && (
-                <Icon iconName="ChevronUp" className={styles.chevronIcon} />
-              )) ||
-                (!this.state.expandAttributes && (
-                  <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-                ))}
-              <Text>
-                {(this.state.expandAttributes &&
-                  localization.Fairness.Report.collapseSensitiveAttributes) ||
-                  (!this.state.expandAttributes &&
-                    localization.Fairness.Report.expandSensitiveAttributes)}
-              </Text>
-            </div>
-            <div className={styles.equalizedOdds}>
-              <Text>{localization.Fairness.Report.equalizedOddsDisparity}</Text>
-            </div>
-            <div className={styles.howTo}>
-              <ActionButton onClick={this.handleOpenModalHelp}>
-                <div className={styles.infoButton}>i</div>
-                {localization.Fairness.ModelComparison.howToRead}
-              </ActionButton>
-              <Modal
-                titleAriaId="intro modal"
-                isOpen={this.state.showModalHelp}
-                onDismiss={this.handleCloseModalHelp}
-                isModeless={true}
-                containerClassName={styles.modalContentHelp}
-              >
-                <div style={{ display: "flex" }}>
-                  <IconButton
-                    styles={iconButtonStyles}
-                    iconProps={cancelIcon}
-                    ariaLabel="Close popup modal"
-                    onClick={this.handleCloseModalHelp}
-                  />
-                </div>
-                <p className={styles.modalContentHelpText}>
-                  {
-                    localization.Fairness.Report
-                      .classificationPerformanceHowToRead1
-                  }
-                  <br />
-                  <br />
-                  {
-                    localization.Fairness.Report
-                      .classificationPerformanceHowToRead2
-                  }
-                  <br />
-                  <br />
-                  {
-                    localization.Fairness.Report
-                      .classificationPerformanceHowToRead3
-                  }
-                  <br />
-                  <br />
-                </p>
-                <div style={{ display: "flex", paddingBottom: "20px" }}>
-                  <PrimaryButton
-                    className={styles.doneButton}
-                    onClick={this.handleCloseModalHelp}
+        <Stack horizontal={true}>
+          <Stack.Item className={sharedStyles.mainLeft}>
+            <Stack tokens={{ childrenGap: "l1" }}>
+              <Stack horizontal={true}>
+                <Stack>
+                  <div
+                    className={styles.overallArea}
+                    style={{
+                      height: this.state.expandAttributes
+                        ? `${150 + 50 * (areaHeights / 150)}px`
+                        : "97px"
+                    }}
                   >
-                    {localization.Fairness.done}
-                  </PrimaryButton>
-                </div>
-              </Modal>
-            </div>
-            <div
-              className={styles.presentationArea}
-              style={{ height: `${areaHeights}px` }}
-            >
-              <SummaryTable
-                binGroup={
-                  this.props.dashboardContext.modelMetadata.featureNames[
-                    this.props.featureBinPickerProps.selectedBinIndex
-                  ]
-                }
-                binLabels={this.props.dashboardContext.groupNames}
-                formattedBinValues={formattedBinPerformanceValues}
-                metricLabel={selectedMetric.title}
-                binValues={this.state.metrics.performance.bins}
+                    <OverallTable
+                      binGroup={
+                        this.props.dashboardContext.modelMetadata.featureNames[
+                          this.props.featureBinPickerProps.selectedBinIndex
+                        ]
+                      }
+                      binLabels={this.props.dashboardContext.groupNames}
+                      formattedBinValues={formattedBinValues}
+                      metricLabels={metricLabels}
+                      overallMetrics={overallMetrics}
+                      expandAttributes={this.state.expandAttributes}
+                      binValues={this.state.metrics.performance.bins}
+                    />
+                  </div>
+                  <div
+                    className={styles.expandAttributes}
+                    onClick={this.expandAttributes}
+                  >
+                    {(this.state.expandAttributes && (
+                      <Icon
+                        iconName="ChevronUp"
+                        className={styles.chevronIcon}
+                      />
+                    )) ||
+                      (!this.state.expandAttributes && (
+                        <Icon
+                          iconName="ChevronDown"
+                          className={styles.chevronIcon}
+                        />
+                      ))}
+                    <Text>
+                      {(this.state.expandAttributes &&
+                        localization.Fairness.Report
+                          .collapseSensitiveAttributes) ||
+                        (!this.state.expandAttributes &&
+                          localization.Fairness.Report
+                            .expandSensitiveAttributes)}
+                    </Text>
+                  </div>
+                </Stack>
+              </Stack>
+              <PerformancePlot
+                dashboardContext={this.props.dashboardContext}
+                metrics={this.state.metrics}
+                nameIndex={nameIndex}
+                theme={undefined}
+                featureBinPickerProps={this.props.featureBinPickerProps}
+                performancePickerProps={this.props.performancePickerProps}
+                areaHeights={areaHeights}
               />
-              <div className={styles.chartWrapper}>
-                <div className={styles.chartHeader}>
-                  {performanceChartHeader}
-                </div>
-                <div className={styles.chartBody}>
-                  <PerformancePlot
-                    dashboardContext={this.props.dashboardContext}
-                    metrics={this.state.metrics}
-                    nameIndex={nameIndex}
-                    theme={undefined}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={styles.legendPanel}>
-              <div className={styles.textRow}>
-                <div
-                  className={styles.colorBlock}
-                  style={{ backgroundColor: chartColors[1] }}
-                />
-                <div>
-                  <div className={styles.legendTitle}>
-                    {localization.Fairness.Report.underestimationError}
-                  </div>
-                  <div className={styles.legendSubtitle}>
-                    {localization.Fairness.Report.underpredictionExplanation}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.textRow}>
-                <div
-                  className={styles.colorBlock}
-                  style={{ backgroundColor: chartColors[0] }}
-                />
-                <div>
-                  <div className={styles.legendTitle}>
-                    {localization.Fairness.Report.overestimationError}
-                  </div>
-                  <div className={styles.legendSubtitle}>
-                    {localization.Fairness.Report.overpredictionExplanation}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.mainRight}>
-            <div className={styles.insights}>
-              <Icon
-                iconName="CRMCustomerInsightsApp"
-                className={styles.insightsIcon}
+              <OutcomePlot
+                dashboardContext={this.props.dashboardContext}
+                metrics={this.state.metrics}
+                nameIndex={nameIndex}
+                theme={undefined}
+                featureBinPickerProps={this.props.featureBinPickerProps}
+                areaHeights={areaHeights}
               />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.Fairness.ModelComparison.insights}
-              </Text>
-            </div>
-            <div className={styles.insightsText}>
-              {localization.Fairness.loremIpsum}
-            </div>
-            <div className={styles.downloadReport}>
-              <Icon iconName="Download" className={styles.downloadIcon} />
-              <Text style={{ verticalAlign: "middle" }}>
-                {localization.Fairness.ModelComparison.downloadReport}
-              </Text>
-            </div>
-          </div>
-        </div>
+            </Stack>
+          </Stack.Item>
+          {/* TODO: define insights for single model view
+          https://github.com/microsoft/responsible-ai-widgets/issues/104
+          <Insights
+            disparityArray={this.state.disparityArray}
+            performanceArray={this.state.performanceArray}
+            selectedMetric={selectedMetric}
+            selectedPerformanceKey={
+              this.props.performancePickerProps.selectedPerformanceKey
+            }
+          /> */}
+        </Stack>
       );
     }
 
@@ -587,14 +346,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   //   this.props.onEditConfigs();
   // };
 
-  private readonly handleOpenModalHelp = (): void => {
-    this.setState({ showModalHelp: true });
-  };
-
-  private readonly handleCloseModalHelp = (): void => {
-    this.setState({ showModalHelp: false });
-  };
-
   private readonly featureChanged = (
     _: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
@@ -620,23 +371,23 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
-      let outcomeDisparity: number;
+      const disparities: Dictionary<number> = {};
       const performance = await this.getMetric(
         this.props.performancePickerProps.selectedPerformanceKey
       );
-      const performanceDisparity = await this.getDisparityMetric(
-        this.props.performancePickerProps.selectedPerformanceKey,
-        ParityModes.Difference
+      // TODO: extend disparities to query for all possible kinds of disparities
+      // https://github.com/microsoft/responsible-ai-widgets/issues/65
+      disparities[
+        this.props.parityPickerProps.selectedParityKey
+      ] = await this.getDisparityMetric(
+        this.props.parityPickerProps.selectedParityKey,
+        parityOptions[this.props.parityPickerProps.selectedParityKey].parityMode
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
           falseNegativeRates = await this.getMetric("false_negative_rate");
           falsePositiveRates = await this.getMetric("false_positive_rate");
           outcomes = await this.getMetric("selection_rate");
-          outcomeDisparity = await this.getDisparityMetric(
-            "selection_rate",
-            ParityModes.Difference
-          );
           break;
         }
         case PredictionTypes.Probability: {
@@ -646,10 +397,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           overpredictions = await this.getMetric("overprediction");
           underpredictions = await this.getMetric("underprediction");
           outcomes = await this.getMetric("average");
-          outcomeDisparity = await this.getDisparityMetric(
-            "average",
-            ParityModes.Difference
-          );
           break;
         }
         case PredictionTypes.Regression:
@@ -661,23 +408,18 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             return predicted - this.props.dashboardContext.trueY[index];
           });
           outcomes = await this.getMetric("average");
-          outcomeDisparity = await this.getDisparityMetric(
-            "average",
-            ParityModes.Difference
-          );
           break;
         }
       }
       this.setState({
         metrics: {
+          disparities,
           errors,
           falseNegativeRates,
           falsePositiveRates,
-          outcomeDisparity,
           outcomes,
           overpredictions,
           performance,
-          performanceDisparity,
           predictions,
           underpredictions
         }
