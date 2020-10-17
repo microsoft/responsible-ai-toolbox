@@ -78,5 +78,21 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMetric: "recall_score",
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.truePositiveRateRatio
+  },
+  false_positive_rate_difference: {
+    description:
+      localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
+    key: "false_positive_rate_difference",
+    parityMetric: "false_positive_over_total",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.falsePositiveRateDifference
+  },
+  false_positive_rate_ratio: {
+    description:
+      localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
+    key: "false_positive_rate_ratio",
+    parityMetric: "false_positive_over_total",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.falsePositiveRateRatio
   }
 };

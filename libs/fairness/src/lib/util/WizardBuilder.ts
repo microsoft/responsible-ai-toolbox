@@ -7,7 +7,6 @@ import {
   ICategoricalRange,
   RangeTypes
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import { initializeIcons } from "office-ui-fabric-react";
 
 import {
@@ -241,10 +240,26 @@ export class WizardBuilder {
   ): IParityOption[] {
     const customMetrics: IParityOption[] = [];
     const providedMetrics: IParityOption[] = [];
+    // Every available precomputed metric can potentially be used for multiple parity metrics.
+    // To get all possible ones listed create a mapping from the underlying precomputed metric
+    // to all the parity metrics that can be calculated from it.
+    let allParityMetrics: {
+      [parityMetric: string]: IParityOption[];
+    } = {};
+    Object.values(parityOptions).forEach((parityOption) => {
+      if (parityOption.parityMetric in allParityMetrics) {
+        allParityMetrics[parityOption.parityMetric].push(parityOption);
+      } else {
+        allParityMetrics[parityOption.parityMetric] = [parityOption];
+      }
+    });
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      const metric = parityOptions[key];
-      if (metric !== undefined) {
-        providedMetrics.push(metric);
+      if (key in allParityMetrics) {
+        allParityMetrics[key].forEach((metric) => {
+          if (metric !== undefined) {
+            providedMetrics.push(metric);
+          }
+        });
       }
     });
     return customMetrics.concat(providedMetrics);

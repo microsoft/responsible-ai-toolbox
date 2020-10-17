@@ -691,7 +691,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.selectedModelIndex,
         this.props.performancePickerProps.selectedPerformanceKey
       );
-      const performanceDisparity = await this.props.metricsCache.getDisparityMetric(
+      const performanceDisparity = await this.props.metricsCache.getDisparityMetricV1(
         this.props.dashboardContext.binVector,
         this.props.featureBinPickerProps.selectedBinIndex,
         this.props.selectedModelIndex,
@@ -722,7 +722,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.selectedModelIndex,
             "selection_rate"
           );
-          outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
+          outcomeDisparity = await this.props.metricsCache.getDisparityMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
@@ -757,7 +757,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.selectedModelIndex,
             "average"
           );
-          outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
+          outcomeDisparity = await this.props.metricsCache.getDisparityMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
@@ -780,7 +780,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.selectedModelIndex,
             "average"
           );
-          outcomeDisparity = await this.props.metricsCache.getDisparityMetric(
+          outcomeDisparity = await this.props.metricsCache.getDisparityMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,

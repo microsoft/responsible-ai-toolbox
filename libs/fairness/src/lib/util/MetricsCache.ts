@@ -5,7 +5,7 @@ import _ from "lodash";
 
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 
-import { ParityModes } from "./ParityMetrics";
+import { ParityModes, parityOptions } from "./ParityMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey
@@ -46,6 +46,44 @@ export class MetricsCache {
   }
 
   public async getDisparityMetric(
+    binIndexVector: number[],
+    featureIndex: number,
+    modelIndex: number,
+    key: string,
+    disparityMethod: ParityModes
+  ): Promise<number> {
+    // TODO: make this work for complex fairness metrics like Equalized Odds
+    const metricKey = parityOptions[key].parityMetric;
+    let value = this.cache[featureIndex][modelIndex][metricKey];
+    if (value === undefined && this.fetchMethod) {
+      value = await this.fetchMethod({
+        binVector: binIndexVector,
+        metricKey: metricKey,
+        modelIndex
+      });
+      this.cache[featureIndex][modelIndex][metricKey] = value;
+    }
+    if (!value?.bins) {
+      return Number.NaN;
+    }
+
+    const bins = value.bins
+      .slice()
+      .filter((x) => x !== undefined && !Number.isNaN(x));
+
+    const min = _.min(bins);
+    const max = _.max(bins);
+    if (
+      min === undefined ||
+      max === undefined ||
+      (max === 0 && disparityMethod === ParityModes.Ratio)
+    ) {
+      return Number.NaN;
+    }
+    return disparityMethod === ParityModes.Difference ? max - min : min / max;
+  }
+
+  public async getDisparityMetricV1(
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
