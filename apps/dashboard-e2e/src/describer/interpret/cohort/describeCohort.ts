@@ -18,7 +18,7 @@ export function describeCohort(dataShape: IInterpretData): void {
       !dataShape.noY
     ) {
       it("should cohort edit panel when click create", () => {
-        cy.get('button:contains("New Cohort")').click();
+        cy.get('button:contains("New cohort")').click();
         cy.get("#cohortEditPanel").should("exist");
       });
       describeCreateCohort(dataShape);

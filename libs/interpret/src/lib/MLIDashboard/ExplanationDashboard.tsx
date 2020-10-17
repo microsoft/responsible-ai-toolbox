@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { isTwoDimArray } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -424,9 +425,7 @@ export class ExplanationDashboard extends React.Component<
             }
             if (
               featureExplanation.scores &&
-              featureExplanation.scores.every((dim1: number | number[]) =>
-                Array.isArray(dim1)
-              )
+              isTwoDimArray(featureExplanation.scores)
             ) {
               return {
                 lowerBounds: featureExplanation.lower_bounds
@@ -760,7 +759,7 @@ export class ExplanationDashboard extends React.Component<
             {this.state.activeGlobalTab === 0 && (
               <DataExploration
                 dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme}
+                theme={this.props.theme as any}
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 plotlyProps={
@@ -777,7 +776,7 @@ export class ExplanationDashboard extends React.Component<
             {this.state.activeGlobalTab === 1 && (
               <FeatureImportanceBar
                 dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme}
+                theme={this.props.theme as any}
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 config={this.state.configs[barId] as IFeatureImportanceConfig}
@@ -792,7 +791,7 @@ export class ExplanationDashboard extends React.Component<
             {this.state.activeGlobalTab === 2 && (
               <ExplanationExploration
                 dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme}
+                theme={this.props.theme as any}
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 plotlyProps={
@@ -809,7 +808,7 @@ export class ExplanationDashboard extends React.Component<
             {this.state.activeGlobalTab === 3 && (
               <FeatureImportanceWrapper
                 dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme}
+                theme={this.props.theme as any}
                 selectionContext={this.selectionContext}
                 selectedRow={this.state.selectedRow}
                 config={
@@ -830,7 +829,7 @@ export class ExplanationDashboard extends React.Component<
                 explanationContext={
                   this.state.dashboardContext.explanationContext
                 }
-                theme={this.props.theme}
+                theme={this.props.theme as any}
               />
             )}
             {this.state.activeGlobalTab === 5 && (
@@ -912,7 +911,7 @@ export class ExplanationDashboard extends React.Component<
                             ? this.props.stringParams.contextualHelp
                             : undefined
                         }
-                        theme={this.props.theme}
+                        theme={this.props.theme as any}
                       />
                     )}
                     {this.state.activeLocalTab === 1 && (
@@ -922,7 +921,7 @@ export class ExplanationDashboard extends React.Component<
                         }
                         invokeModel={this.props.requestPredictions}
                         datapointIndex={+this.selectionContext.selectedIds[0]}
-                        theme={this.props.theme}
+                        theme={this.props.theme as any}
                         messages={
                           this.props.stringParams
                             ? this.props.stringParams.contextualHelp
@@ -937,7 +936,7 @@ export class ExplanationDashboard extends React.Component<
                         }
                         invokeModel={this.props.requestPredictions}
                         datapointIndex={+this.selectionContext.selectedIds[0]}
-                        theme={this.props.theme}
+                        theme={this.props.theme as any}
                         messages={
                           this.props.stringParams
                             ? this.props.stringParams.contextualHelp
