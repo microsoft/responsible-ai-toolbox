@@ -473,7 +473,6 @@ export class ModelPerformanceTab extends React.PureComponent<
       bestModelMetricKey = JointDataset.PredictedYLabel;
     } // not handling multiclass at this time
 
-    debugger;
     const chartProps: IGenericChartProps = {
       chartType: this.props.jointDataset.metaDict[bestModelMetricKey]
         .isCategorical
