@@ -333,7 +333,7 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    if (!this.props.jointDataset.hasPredictedY) {
+    if (!this.props.jointDataset.hasDataset) {
       return;
     }
     const chartProps: IGenericChartProps = {

@@ -7,17 +7,15 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import { Cohort } from "./Cohort";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import {
+  GlobalTabKeys,
   IExplanationDashboardProps,
   IMultiClassLocalFeatureImportance,
+  INewExplanationDashboardState,
   ISingleClassLocalFeatureImportance
 } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { WeightVectors } from "./IWeightedDropdownContext";
 import { JointDataset } from "./JointDataset";
-import {
-  INewExplanationDashboardState,
-  GlobalTabKeys
-} from "./NewExplanationDashboard";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 

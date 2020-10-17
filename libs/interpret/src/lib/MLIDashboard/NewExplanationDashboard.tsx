@@ -3,7 +3,7 @@
 
 import { initializeOfficeFabric } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import {
   IPivotItemProps,
   PivotItem,
@@ -24,30 +24,13 @@ import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplore
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
-import { IExplanationModelMetadata } from "./IExplanationContext";
-import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+import {
+  GlobalTabKeys,
+  IExplanationDashboardProps,
+  INewExplanationDashboardState
+} from "./Interfaces/IExplanationDashboardProps";
 import { WeightVectorOption } from "./IWeightedDropdownContext";
-import { JointDataset } from "./JointDataset";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
-
-export interface INewExplanationDashboardState {
-  cohorts: Cohort[];
-  activeGlobalTab: GlobalTabKeys;
-  jointDataset: JointDataset;
-  modelMetadata: IExplanationModelMetadata;
-  globalImportanceIntercept: number[];
-  globalImportance: number[][];
-  isGlobalImportanceDerivedFromLocal: boolean;
-  validationWarnings: string[];
-  showingDataSizeWarning: boolean;
-  selectedWeightVector: WeightVectorOption;
-  requestPredictions?: (
-    request: any[],
-    abortSignal: AbortSignal
-  ) => Promise<any[]>;
-  weightVectorOptions: WeightVectorOption[];
-  weightVectorLabels: Dictionary<string>;
-}
 
 export interface ISelectorConfig {
   property: string;
@@ -57,13 +40,6 @@ export interface ISelectorConfig {
     // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
     bin?: boolean;
   };
-}
-
-export enum GlobalTabKeys {
-  ModelPerformance = "modelPerformance",
-  DataExploration = "dataExploration",
-  ExplanationTab = "explanationTab",
-  WhatIfTab = "whatIfTab"
 }
 
 export class NewExplanationDashboard extends React.PureComponent<
