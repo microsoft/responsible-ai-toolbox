@@ -451,6 +451,9 @@ export class ModelPerformanceTab extends React.PureComponent<
   };
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
+    if (!this.props.jointDataset.hasPredictedY) {
+      return undefined;
+    }
     let bestModelMetricKey: string;
     if (
       this.props.metadata.modelType === ModelTypes.Binary &&
@@ -470,6 +473,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       bestModelMetricKey = JointDataset.PredictedYLabel;
     } // not handling multiclass at this time
 
+    debugger;
     const chartProps: IGenericChartProps = {
       chartType: this.props.jointDataset.metaDict[bestModelMetricKey]
         .isCategorical
