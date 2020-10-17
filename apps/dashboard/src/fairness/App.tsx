@@ -44,6 +44,25 @@ export class App extends React.Component<IAppProps> {
     "mean_absolute_error"
   ];
 
+  private static supportedBinaryClassificationParityKeys = [
+    "demographic_parity_difference",
+    "demographic_parity_ratio",
+    "true_positive_rate_difference",
+    "true_positive_rate_ratio",
+    "error_rate_difference_binary_classification",
+    "error_rate_ratio_binary_classification"
+  ];
+
+  private static supportedRegressionParityKeys = [
+    "error_rate_difference_regression",
+    "error_rate_ratio_regression"
+  ];
+
+  private static supportedProbabilityParityKeys = [
+    "error_rate_difference_regression",
+    "error_rate_ratio_regression"
+  ];
+
   private static messages = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq" }],
     LocalOrGlobalAndTestReq: [{ displayText: "LocalOrGlobalAndTestReq" }],
@@ -57,10 +76,14 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       requestMetrics: this.generateRandomMetrics.bind(this),
       stringParams: { contextualHelp: App.messages },
+      supportedBinaryClassificationParityKeys:
+        App.supportedBinaryClassificationParityKeys,
       supportedBinaryClassificationPerformanceKeys:
         App.supportedBinaryClassificationPerformanceKeys,
+      supportedProbabilityParityKeys: App.supportedProbabilityParityKeys,
       supportedProbabilityPerformanceKeys:
         App.supportedProbabilityPerformanceKeys,
+      supportedRegressionParityKeys: App.supportedRegressionParityKeys,
       supportedRegressionPerformanceKeys:
         App.supportedRegressionPerformanceKeys,
       theme: this.props.theme
