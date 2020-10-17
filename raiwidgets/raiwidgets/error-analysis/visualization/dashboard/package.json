@@ -25,7 +25,7 @@
     "d3-selection": "^1.4.1",
     "jmespath": "^0.15.0",
     "localized-strings": "^0.2.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "memoize-one": "^5.0.2",
     "mlchartlib": "0.1.38-beta2",
     "moment": "^2.24.0",
