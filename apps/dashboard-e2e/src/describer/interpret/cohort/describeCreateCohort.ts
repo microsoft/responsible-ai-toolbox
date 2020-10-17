@@ -15,7 +15,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
 
     cy.get('#cohortEditPanel span:contains("No filters added yet")').should(
       "not.exist"
@@ -26,10 +26,10 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
 
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
 
     cy.get("#removeFilterBtn-1").should("exist");
   });
@@ -38,7 +38,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
     cy.get("#removeFilterBtn-0").click();
     cy.get('#cohortEditPanel span:contains("No filters added yet")').should(
       "exist"
@@ -49,7 +49,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
 
     cy.get("#cohortEditPanel input:eq(0)").clear();
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
 
     cy.get('#cohortEditPanel span:contains("Missing cohort name")').should(
       "exist"
@@ -60,7 +60,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
 
     cy.get("#cohortEditPanel input:eq(0)").clear();
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
     cy.get('button:contains("Save")').click();
     cy.get("#cohortEditPanel").should("exist");
   });
@@ -69,7 +69,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
 
     cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
-    cy.get('button:contains("Add Filter")').click();
+    cy.get('button:contains("Add filter")').click();
     cy.get('button:contains("Save")').click();
     cy.get('span:contains("CohortCreateE2E")').should("exist");
   });
