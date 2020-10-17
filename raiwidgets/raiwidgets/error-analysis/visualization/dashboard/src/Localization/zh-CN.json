@@ -1,0 +1,109 @@
+{
+  "selectPoint": "选择一个点以查看其本地说明",
+  "defaultClassNames": "类 {0}",
+  "defaultFeatureNames": "特征 {0}",
+  "absoluteAverage": "绝对值的平均值",
+  "predictedClass": "预测类",
+  "dataExploration": "数据浏览",
+  "globalImportance": "全局重要性",
+  "explanationExploration": "解释探索",
+  "summaryImportance": "摘要重要性",
+  "featureImportance": "特征重要性",
+  "perturbationExploration": "小改动探索",
+  "localFeatureImportance": "本地特征重要性",
+  "ice": "ICE",
+  "clearSelection": "清除选定内容",
+  "feature": "功能:",
+  "intercept": "截获",
+  "ExplanationScatter": {
+    "dataLabel": "数据: {0}",
+    "importanceLabel": "重要性: {0}",
+    "predictedY": "PredictedY",
+    "index": "索引",
+    "dataGroupLabel": "数据",
+    "output": "输出",
+    "probabilityLabel": "概率: {0}",
+    "trueY": "真实 Y",
+    "class": "类:",
+    "xValue": "X 值:",
+    "yValue": "Y 值:",
+    "colorValue": "颜色:"
+  },
+  "CrossClass": {
+    "label": "交叉类权重:",
+    "info": "有关跨类计算的信息",
+    "overviewInfo": "多类分类模型为每个类生成一个独立的特征重要性向量。每个类的特征重要性向量说明了哪些特征使类的可能性更高或更低。可以选择如何将每个类特征重要性向量的权重汇总为单个值:",
+    "absoluteValInfo": "绝对值的平均值: 显示所有可能类中特征重要性的总和，除以类的数量",
+    "predictedClassInfo": "预测类: 显示给定点的预测类的特征重要性值",
+    "enumeratedClassInfo": "枚举的类名: 仅显示所有数据点中指定的类的特征重要性值。",
+    "close": "关闭"
+  },
+  "AggregateImportance": {
+    "scaledFeatureValue": "缩放的特征值",
+    "low": "低",
+    "high": "高",
+    "featureLabel": "特征: {0}",
+    "valueLabel": "特征值: {0}",
+    "importanceLabel": "重要性: {0}",
+    "predictedClassTooltip": "预测类: {0}",
+    "trueClassTooltip": "真实类: {0}",
+    "predictedOutputTooltip": "预测输出: {0}",
+    "trueOutputTooltip": "真实输出: {0}",
+    "topKFeatures": "前 K 个特征:",
+    "topKInfo": "如何计算 top k",
+    "predictedValue": "预测值",
+    "predictedClass": "预测类",
+    "trueValue": "True 值",
+    "trueClass": "真实类",
+    "noColor": "无",
+    "tooManyRows": "提供的数据集大于此图表可支持的数据集"
+  },
+  "BarChart": {
+    "classLabel": "类: {0}",
+    "sortBy": "排序依据",
+    "noData": "无数据",
+    "absoluteGlobal": "绝对全局",
+    "absoluteLocal": "绝对本地",
+    "calculatingExplanation": "正在计算解释"
+  },
+  "IcePlot": {
+    "numericError": "必须为数值",
+    "integerError": "必须为整数",
+    "prediction": "预测",
+    "predictedProbability": "预测概率",
+    "predictionLabel": "预测: {0}",
+    "probabilityLabel": "概率: {0}",
+    "noModelError": "请提供 operationalized 模型以在 ICE 绘图中浏览预测。",
+    "featurePickerLabel": "功能:",
+    "minimumInputLabel": "最小值:",
+    "maximumInputLabel": "最大值:",
+    "stepInputLabel": "步骤:",
+    "loadingMessage": "正在加载数据...",
+    "submitPrompt": "提交一个范围以查看 ICE 绘图",
+    "topLevelErrorMessage": "参数错误",
+    "errorPrefix": "出现错误: {0}"
+  },
+  "PerturbationExploration": {
+    "loadingMessage": "正在加载...",
+    "perturbationLabel": "小改动:"
+  },
+  "PredictionLabel": {
+    "predictedValueLabel": "预测值: {0}",
+    "predictedClassLabel": "预测类: {0}"
+  },
+  "Violin": {
+    "groupNone": "不进行分组",
+    "groupPredicted": "预测 Y",
+    "groupTrue": "真实 Y",
+    "groupBy": "分组依据"
+  },
+  "FeatureImportanceWrapper": {
+    "chartType": "图表类型:",
+    "violinText": "小提琴",
+    "barText": "条形图",
+    "boxText": "框",
+    "beehiveText": "Swarm",
+    "globalImportanceExplanation": "全局特征重要性是通过对所有点的特征重要性的绝对值求平均值(L1 规范化)计算出来的。",
+    "multiclassImportanceAddendum": "计算所有类的特征重要性时，所有点都包括在内，不使用任何差异权重。因此，对许多预测为非“A 类”的点具有较大负面重要性的特征将大大提高该特征的“A 类”重要性。"
+  }
+}
