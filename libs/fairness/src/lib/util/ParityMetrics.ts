@@ -94,5 +94,19 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMetric: "false_positive_over_total",
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.falsePositiveRateRatio
+  },
+  equalized_odds_difference: {
+    description: localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
+    key: "equalized_odds_difference",
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.equalizedOddsDifference
+  },
+  equalized_odds_ratio: {
+    description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
+    key: "equalized_odds_ratio",
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.equalizedOddsRatio
   }
 };

@@ -781,7 +781,11 @@
       "falsePositiveRateDifference": "False positive rate difference",
       "falsePositiveRateDifferenceDescription": "The maximum difference between false positive rates of any two groups. Also sometimes referred to as fall-out difference.",
       "falsePositiveRateRatio": "False positive rate ratio",
-      "falsePositiveRateRatioDescription": "The minimum ratio between false positive rates of any two groups. Also sometimes referred to as fall-out ratio."
+      "falsePositiveRateRatioDescription": "The minimum ratio between false positive rates of any two groups. Also sometimes referred to as fall-out ratio.",
+      "equalizedOddsDifference": "Equalized odds difference",
+      "equalizedOddsDifferenceDescription": "Either the maximum difference between true positive rates of any two groups or the maximum difference between false positive rates of any two groups, whichever is greater.",
+      "equalizedOddsRatio": "Equalized odds ratio",
+      "equalizedOddsRatioDescription": "Either the minimum ratio between true positive rates of any two groups or the minimum ratio between false positive rates of any two groups, whichever is smaller."
     },
     "BinDialog": {
       "header": "Configure bins",

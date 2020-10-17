@@ -1,4 +1,4 @@
-# Responsible AI Core
+# Responsible AI Widgets
 
 This project provides responsible AI user interfaces for
 [Fairlearn](https://fairlearn.github.io) and
