@@ -3,7 +3,8 @@
 
 """Module for debugging machine learning models.
 
-You can use error analysis tool to dive deeper into why your ML model is predicting incorrectly.
+You can use error analysis tool to dive deeper into why your ML model
+is predicting incorrectly.
 """
 
 # Setup logging infrustructure
