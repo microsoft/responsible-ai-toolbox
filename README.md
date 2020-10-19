@@ -20,4 +20,5 @@ For information on how to contribute please refer to our
 
 - [Ke Xu](https://github.com/KeXu444)
 - [Roman Lutz](https://github.com/romanlutz)
+- [Ilya Matiach](https://github.com/imatiach-msft)
 - [Dawei Li](https://github.com/chnldw)

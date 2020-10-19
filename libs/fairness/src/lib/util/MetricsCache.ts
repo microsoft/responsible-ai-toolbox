@@ -51,7 +51,7 @@ export class MetricsCache {
     modelIndex: number,
     disparityMethod: ParityModes
   ): Promise<number> {
-    const false_positive_rate_metric = await this.getDisparityMetric(
+    const falsePositiveRateMetric = await this.getDisparityMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
@@ -60,7 +60,7 @@ export class MetricsCache {
         : "false_positive_rate_ratio",
       disparityMethod
     );
-    const true_positive_rate_metric = await this.getDisparityMetric(
+    const truePositiveRateMetric = await this.getDisparityMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
@@ -70,18 +70,20 @@ export class MetricsCache {
       disparityMethod
     );
 
-    if (false_positive_rate_metric === Number.NaN || true_positive_rate_metric === Number.NaN){
+    if (
+      falsePositiveRateMetric === Number.NaN ||
+      truePositiveRateMetric === Number.NaN
+    ) {
       return Number.NaN;
     }
-    
-    if (disparityMethod === ParityModes.Difference){
-      let max_metric = max([false_positive_rate_metric, true_positive_rate_metric]);
-      return max_metric === undefined ? Number.NaN : max_metric;
+
+    if (disparityMethod === ParityModes.Difference) {
+      const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
+      return maxMetric === undefined ? Number.NaN : maxMetric;
     }
-    else {
-      let min_metric = min([false_positive_rate_metric, true_positive_rate_metric])
-      return min_metric === undefined ? Number.NaN : min_metric;
-    }
+
+    const minMetric = min([falsePositiveRateMetric, truePositiveRateMetric]);
+    return minMetric === undefined ? Number.NaN : minMetric;
   }
 
   public async getDisparityMetric(
@@ -106,7 +108,7 @@ export class MetricsCache {
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
         binVector: binIndexVector,
-        metricKey: metricKey,
+        metricKey,
         modelIndex
       });
       this.cache[featureIndex][modelIndex][metricKey] = value;

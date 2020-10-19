@@ -33,6 +33,23 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.demographicParityRatio
   },
+
+  equalized_odds_difference: {
+    description:
+      localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
+    key: "equalized_odds_difference",
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.equalizedOddsDifference
+  },
+
+  equalized_odds_ratio: {
+    description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
+    key: "equalized_odds_ratio",
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.equalizedOddsRatio
+  },
   // zero_one_loss is the error rate for binary classification, while
   // mean_absolute_error is the error rate for probabilistic classification and regression
   error_rate_difference_binary_classification: {
@@ -63,22 +80,6 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.errorRateRatio
   },
-  true_positive_rate_difference: {
-    description:
-      localization.Fairness.Metrics.truePositiveRateDifferenceDescription,
-    key: "true_positive_rate_difference",
-    parityMetric: "recall_score",
-    parityMode: ParityModes.Difference,
-    title: localization.Fairness.Metrics.truePositiveRateDifference
-  },
-  true_positive_rate_ratio: {
-    description:
-      localization.Fairness.Metrics.truePositiveRateDifferenceDescription,
-    key: "true_positive_rate_ratio",
-    parityMetric: "recall_score",
-    parityMode: ParityModes.Ratio,
-    title: localization.Fairness.Metrics.truePositiveRateRatio
-  },
   false_positive_rate_difference: {
     description:
       localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
@@ -95,18 +96,20 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.falsePositiveRateRatio
   },
-  equalized_odds_difference: {
-    description: localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
-    key: "equalized_odds_difference",
-    parityMetric: "", // combination of two metrics
+  true_positive_rate_difference: {
+    description:
+      localization.Fairness.Metrics.truePositiveRateDifferenceDescription,
+    key: "true_positive_rate_difference",
+    parityMetric: "recall_score",
     parityMode: ParityModes.Difference,
-    title: localization.Fairness.Metrics.equalizedOddsDifference
+    title: localization.Fairness.Metrics.truePositiveRateDifference
   },
-  equalized_odds_ratio: {
-    description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
-    key: "equalized_odds_ratio",
-    parityMetric: "", // combination of two metrics
+  true_positive_rate_ratio: {
+    description:
+      localization.Fairness.Metrics.truePositiveRateDifferenceDescription,
+    key: "true_positive_rate_ratio",
+    parityMetric: "recall_score",
     parityMode: ParityModes.Ratio,
-    title: localization.Fairness.Metrics.equalizedOddsRatio
+    title: localization.Fairness.Metrics.truePositiveRateRatio
   }
 };
