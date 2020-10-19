@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ExpandableText } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
@@ -9,7 +10,6 @@ import {
   IComboBoxOption,
   IDropdownOption,
   Dropdown,
-  Icon,
   Text,
   Link,
   Slider
@@ -41,10 +41,7 @@ export interface IGlobalBarSettings {
 }
 
 export interface IGlobalExplanationTabProps {
-  globalBarSettings?: IGlobalBarSettings;
-  sortVector?: number[];
   jointDataset: JointDataset;
-  dependenceProps?: IGenericChartProps;
   metadata: IExplanationModelMetadata;
   globalImportance?: number[][];
   isGlobalDerivedFromLocal: boolean;
@@ -54,8 +51,6 @@ export interface IGlobalExplanationTabProps {
   weightOptions: WeightVectorOption[];
   weightLabels: Dictionary<string>;
   explanationMethod?: string;
-  onChange: (props: IGlobalBarSettings) => void;
-  onDependenceChange: (props: IGenericChartProps) => void;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
@@ -70,6 +65,8 @@ interface IGlobalExplanationTabState {
   selectedFeatureIndex?: number;
   crossClassInfoVisible: boolean;
   chartType: ChartTypes;
+  globalBarSettings?: IGlobalBarSettings;
+  dependenceProps?: IGenericChartProps;
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -99,6 +96,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.state = {
       chartType: ChartTypes.Bar,
       crossClassInfoVisible: false,
+      globalBarSettings: this.getDefaultSettings(),
       maxK: Math.min(30, this.props.jointDataset.localExplanationFeatureCount),
       minK,
       selectedCohortIndex: 0,
@@ -110,9 +108,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       topK: minK
     };
 
-    if (this.props.globalBarSettings === undefined) {
-      this.setDefaultSettings();
-    }
     this.cohortSeries = this.getGlobalSeries();
     this.activeSeries = this.getActiveCohortSeries(
       this.state.sortArray.map(() => true)
@@ -151,7 +146,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       );
     }
 
-    if (this.props.globalBarSettings === undefined) {
+    if (this.state.globalBarSettings === undefined) {
       return <div />;
     }
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
@@ -171,8 +166,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <Icon iconName="Info" className={classNames.infoIcon} />
-          <Text>{localization.Interpret.GlobalTab.helperText}</Text>
+          <ExpandableText iconName="Info">
+            {localization.Interpret.GlobalTab.helperText}
+          </ExpandableText>
         </div>
         <div
           className={classNames.globalChartControls}
@@ -271,12 +267,12 @@ export class GlobalExplanationTab extends React.PureComponent<
               className={classNames.secondaryChartAndLegend}
             >
               <DependencePlot
-                chartProps={this.props.dependenceProps}
+                chartProps={this.state.dependenceProps}
                 cohortIndex={this.state.selectedCohortIndex}
                 cohort={this.props.cohorts[this.state.selectedCohortIndex]}
                 jointDataset={this.props.jointDataset}
                 metadata={this.props.metadata}
-                onChange={this.props.onDependenceChange}
+                onChange={this.onDependenceChange}
                 selectedWeight={this.props.selectedWeightVector}
                 selectedWeightLabel={
                   this.props.weightLabels[this.props.selectedWeightVector]
@@ -296,11 +292,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                       localization.Interpret.GlobalTab
                         .dependencePlotFeatureSelectPlaceholder
                     }
-                    selectedKey={
-                      this.props.dependenceProps
-                        ? this.props.dependenceProps.xAxis.property
-                        : undefined
-                    }
+                    selectedKey={this.state.dependenceProps?.xAxis.property}
                     onChange={this.onXSet}
                     calloutProps={FabricStyles.calloutProps}
                     styles={FabricStyles.defaultDropdownStyle}
@@ -376,7 +368,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.setState({ selectedCohortIndex, seriesIsActive });
   }
 
-  private setDefaultSettings(): void {
+  private getDefaultSettings(): IGlobalBarSettings | undefined {
     const result: IGlobalBarSettings = {} as IGlobalBarSettings;
     result.topK = Math.min(
       this.props.jointDataset.localExplanationFeatureCount,
@@ -384,7 +376,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     );
     result.sortOption = "global";
     result.includeOverallGlobal = !this.props.isGlobalDerivedFromLocal;
-    this.props.onChange(result);
+    return result;
   }
 
   private setSortIndex = (newIndex: number): void => {
@@ -431,10 +423,16 @@ export class GlobalExplanationTab extends React.PureComponent<
         property: yKey
       }
     };
-    this.props.onDependenceChange(chartProps);
     this.setState({
+      dependenceProps: chartProps,
       selectedCohortIndex: cohortIndex,
       selectedFeatureIndex: featureIndex
     });
+  };
+
+  private readonly onDependenceChange = (
+    chartProps: IGenericChartProps | undefined
+  ): void => {
+    this.setState({ dependenceProps: chartProps });
   };
 }

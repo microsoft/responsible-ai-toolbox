@@ -18,8 +18,9 @@ from ._internal.constants import DatabricksInterfaceConstants
 try:
     from gevent.pywsgi import WSGIServer
 except ModuleNotFoundError:
-    raise RuntimeError("Error: gevent package is missing, please run 'conda install gevent' or"
-                       "'pip install gevent' or 'pip install interpret-community[visualization]'")
+    raise RuntimeError("Error: gevent package is missing, please run"
+                       " 'conda install gevent' or 'pip install gevent'"
+                       " or 'pip install interpret-community[visualization]'")
 
 
 class ErrorAnalysisDashboard:
@@ -27,15 +28,18 @@ class ErrorAnalysisDashboard:
 
     :param explanation: An object that represents an explanation.
     :type explanation: ExplanationMixin
-    :param model: An object that represents a model. It is assumed that for the classification case
-        it has a method of predict_proba() returning the prediction probabilities for each
-        class and for the regression case a method of predict() returning the prediction value.
+    :param model: An object that represents a model. It is assumed that for
+        the classification case it has a method of predict_proba() returning
+        the prediction probabilities for each class and for the regression
+        case a method of predict() returning the prediction value.
     :type model: object
-    :param dataset:  A matrix of feature vector examples (# examples x # features), the same samples
-        used to build the explanation. Overwrites any existing dataset on the explanation object.
-    :type dataset: numpy.array or list[][]
-    :param true_y: The true labels for the provided dataset. Overwrites any existing dataset on the
+    :param dataset:  A matrix of feature vector examples
+        (# examples x # features), the same samples used to build the
+        explanation. Overwrites any existing dataset on the
         explanation object.
+    :type dataset: numpy.array or list[][]
+    :param true_y: The true labels for the provided dataset. Overwrites
+        any existing dataset on the explanation object.
     :type true_y: numpy.array or list[]
     :param classes: The class names.
     :type classes: numpy.array or list[]
@@ -61,20 +65,19 @@ class ErrorAnalysisDashboard:
             self.ip = 'localhost'
             self.env = "local"
             dashboard_service = ErrorAnalysisDashboard.DashboardService
+            port_available = dashboard_service._local_port_available
             if self.port is None:
                 # Try 100 different ports
                 for port in range(5000, 5100):
-                    available = dashboard_service._local_port_available(self.ip, port, rais=False)
+                    available = port_available(self.ip, port, rais=False)
                     if available:
                         self.port = port
                         return
-                error_message = """Ports 5000 to 5100 not available.
-                    Please specify an open port for use via the 'port' parameter"""
-                raise RuntimeError(
-                    error_message.format(port)
-                )
+                raise RuntimeError("Ports 5000 to 5100 not available."
+                                   "Please specify an open port for use"
+                                   "via the 'port' parameter")
             else:
-                dashboard_service._local_port_available(self.ip, self.port)
+                port_available(self.ip, self.port)
 
         def run(self):
             class devnull:
@@ -96,7 +99,9 @@ class ErrorAnalysisDashboard:
             in_cloud_env = is_cloud_env(detected_envs)
             # First handle known cloud environments
             nbvm_file_path = "/mnt/azmnt/.nbvm"
-            if not (os.path.exists(nbvm_file_path) and os.path.isfile(nbvm_file_path)):
+            exists = os.path.exists(nbvm_file_path)
+            isfile = os.path.isfile(nbvm_file_path)
+            if not (exists and isfile):
                 if not in_cloud_env:
                     return "http://{0}:{1}".format(
                         self.ip,
@@ -105,8 +110,9 @@ class ErrorAnalysisDashboard:
                 self.env = "cloud"
                 return None
             self.env = "cloud"
-            # regex to find items of the form key=value where value will be part of a url
-            # the keys of interest to us are "instance" and domainsuffix"
+            # regex to find items of the form key=value where value
+            # will be part of a url the keys of interest to us
+            # are "instance" and domainsuffix"
             envre = re.compile(r'''^([^\s=]+)=(?:[\s"']*)(.+?)(?:[\s"']*)$''')
             result = {}
             with open(nbvm_file_path) as nbvm_variables:
@@ -120,13 +126,15 @@ class ErrorAnalysisDashboard:
             self.env = "azure"
             instance_name = result["instance"]
             domain_suffix = result["domainsuffix"]
-            return "https://{}-{}.{}".format(instance_name, self.port, domain_suffix)
+            return "https://{}-{}.{}".format(instance_name,
+                                             self.port, domain_suffix)
 
         @staticmethod
         def _local_port_available(ip, port, rais=True):
             """
             Borrowed from:
-            https://stackoverflow.com/questions/19196105/how-to-check-if-a-network-port-is-open-on-linux
+            https://stackoverflow.com/questions/19196105/
+            how-to-check-if-a-network-port-is-open-on-linux
             """
             try:
                 backlog = 5
@@ -136,10 +144,10 @@ class ErrorAnalysisDashboard:
                 sock.close()
             except socket.error:  # pragma: no cover
                 if rais:
-                    error_message = """Port {0} is not available.
-                    Please specify another port for use via the 'port' parameter"""
                     raise RuntimeError(
-                        error_message.format(port)
+                        ("Port {0} is not available. "
+                         "Please specify another port "
+                         "for use via the 'port' parameter").format(port)
                     )
                 else:
                     return False
@@ -151,24 +159,27 @@ class ErrorAnalysisDashboard:
 
         @app.route('/<id>')
         def explanation_visual(id):
-            if id in ErrorAnalysisDashboard.explanations:
-                return generate_inline_html(ErrorAnalysisDashboard.explanations[id])
+            explanations = ErrorAnalysisDashboard.explanations
+            if id in explanations:
+                return generate_inline_html(explanations[id])
             else:
                 return "Unknown model id."
 
         @app.route('/<id>/predict', methods=['POST'])
         def predict(id):
+            explanations = ErrorAnalysisDashboard.explanations
             data = request.get_json(force=True)
-            if id in ErrorAnalysisDashboard.explanations:
-                return jsonify(ErrorAnalysisDashboard.explanations[id].on_predict(data))
+            if id in explanations:
+                return jsonify(explanations[id].on_predict(data))
 
         @app.route('/<id>/tree', methods=['POST'])
         def tree(id):
+            explanations = ErrorAnalysisDashboard.explanations
             data = request.get_json(force=True)
             print("data from response: ")
             print(data)
-            if id in ErrorAnalysisDashboard.explanations:
-                return jsonify(ErrorAnalysisDashboard.explanations[id].debug_ml(data))
+            if id in explanations:
+                return jsonify(explanations[id].debug_ml(data))
 
     def __init__(self, explanation, model=None, *, dataset=None,
                  true_y=None, classes=None, features=None, port=None,
@@ -184,36 +195,43 @@ class ErrorAnalysisDashboard:
         tree_url = None
         if not ErrorAnalysisDashboard.service:
             try:
-                ErrorAnalysisDashboard.service = ErrorAnalysisDashboard.DashboardService(port)
-                self._thread = threading.Thread(target=ErrorAnalysisDashboard.service.run, daemon=True)
+                DashboardService = ErrorAnalysisDashboard.DashboardService
+                ErrorAnalysisDashboard.service = DashboardService(port)
+                run = ErrorAnalysisDashboard.service.run
+                self._thread = threading.Thread(target=run, daemon=True)
                 self._thread.start()
             except Exception as e:
                 ErrorAnalysisDashboard.service = None
                 raise e
         ErrorAnalysisDashboard.model_count += 1
+        model_count = str(ErrorAnalysisDashboard.model_count)
         base_url = ErrorAnalysisDashboard.service.get_base_url()
         if base_url is not None:
             predict_url = "{0}/{1}/predict".format(
                 base_url,
-                str(ErrorAnalysisDashboard.model_count))
+                model_count)
             local_url = "{0}/{1}".format(
                 base_url,
-                str(ErrorAnalysisDashboard.model_count))
+                model_count)
             tree_url = "{0}/{1}/tree".format(
                 base_url,
-                str(ErrorAnalysisDashboard.model_count))
-        explanation_input = ErrorAnalysisDashboardInput(explanation, model, dataset,
-                                                        true_y, classes, features,
+                model_count)
+        explanation_input = ErrorAnalysisDashboardInput(explanation,
+                                                        model, dataset,
+                                                        true_y, classes,
+                                                        features,
                                                         predict_url, tree_url,
                                                         local_url, locale)
-        # Due to auth, predict is only available in separate tab in cloud after login
+        # Due to auth, predict is only available in
+        # separate tab in cloud after login
         if ErrorAnalysisDashboard.service.env == "local":
             explanation_input.enable_predict_url()
         html = generate_inline_html(explanation_input)
         if ErrorAnalysisDashboard.service.env == "azure":
             explanation_input.enable_predict_url()
 
-        ErrorAnalysisDashboard.explanations[str(ErrorAnalysisDashboard.model_count)] = explanation_input
+        explanations = ErrorAnalysisDashboard.explanations
+        explanations[model_count] = explanation_input
 
         if "DATABRICKS_RUNTIME_VERSION" in os.environ:
             _render_databricks(html)
@@ -229,13 +247,17 @@ class ErrorAnalysisDashboard:
 
 def generate_inline_html(explanation_input_object):
     explanation_input = json.dumps(explanation_input_object.dashboard_input)
-    return ErrorAnalysisDashboard.default_template.render(explanation=explanation_input,
-                                                          main_js=ErrorAnalysisDashboard._dashboard_js,
-                                                          app_id='app_1234')
+    default_template = ErrorAnalysisDashboard.default_template
+    dashboard_js = ErrorAnalysisDashboard._dashboard_js
+    return default_template.render(explanation=explanation_input,
+                                   main_js=dashboard_js,
+                                   app_id='app_1234')
 
 
 # NOTE: Code mostly derived from Plotly's databricks render as linked below:
-# https://github.com/plotly/plotly.py/blob/01a78d3fdac14848affcd33ddc4f9ec72d475232/packages/python/plotly/plotly/io/_base_renderers.py
+# https://github.com/plotly/plotly.py/blob/
+# 01a78d3fdac14848affcd33ddc4f9ec72d475232/
+# packages/python/plotly/plotly/io/_base_renderers.py
 def _render_databricks(html):  # pragma: no cover
     import inspect
 

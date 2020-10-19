@@ -9,12 +9,14 @@ logging.basicConfig(level=logging.INFO)
 
 
 def _ensure_cwd_is_error_analysis_root_dir():
-    # To ensure we're in the right directory that there's an error_analysis directory inside the
-    # current working directory as well as the presence of a README.md file.
+    # To ensure we're in the right directory that there's
+    # an error_analysis directory inside the current working
+    # directory as well as the presence of a README.md file.
     if not os.path.exists(os.path.join(os.getcwd(), "error_analysis")) or \
             not os.path.exists(os.path.join(os.getcwd(), "README.md")):
-        raise Exception("Please run this from the error_analysis root directory. "
-                        "Current directory: {}".format(os.getcwd()))
+        raise Exception(("Please run this from the error_analysis "
+                         "root directory. "
+                         "Current directory: {}").format(os.getcwd()))
 
 
 class _LogWrapper:
