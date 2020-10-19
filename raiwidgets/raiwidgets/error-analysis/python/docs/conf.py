@@ -41,7 +41,8 @@ extensions = [
 # eventually we may be able to use intersphinx for these! TODO
 autodoc_mock_imports = ['shap', 'shap.common', 'interpret', 'interpret.utils']
 
-# enable links to objects in the other standard libraries, e.g., list and str in the Python standard library
+# enable links to objects in the other standard libraries, e.g., list and
+# str in the Python standard library
 intersphinx_mapping = {
     'Python': ('https://docs.python.org/3', None),
     'NumPy': ('https://docs.scipy.org/doc/numpy/', None),
