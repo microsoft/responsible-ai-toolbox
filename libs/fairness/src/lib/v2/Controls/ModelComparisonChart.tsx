@@ -26,7 +26,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTypes } from "../../IFairnessProps";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
 import { parityOptions } from "../../util/ParityMetrics";
@@ -362,13 +361,6 @@ export class ModelComparisonChart extends React.PureComponent<
         });
       const parityOption =
         parityOptions[this.props.parityPickerProps.selectedParityKey];
-      // TODO: parity metric only used for regression
-      const disparityMetric =
-        this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.BinaryClassification
-          ? parityOption.parityMetric
-          : "average";
-      const parityMode = parityOption.parityMode;
       const disparityPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
@@ -376,8 +368,8 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
-            disparityMetric,
-            parityMode
+            this.props.parityPickerProps.selectedParityKey,
+            parityOption.parityMode
           );
         });
 

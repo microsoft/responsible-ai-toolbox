@@ -70,28 +70,30 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
                   </div>
                 );
               }
-              return <div style={{ display: "none" }}></div>;
+              return <div style={{ display: "none" }} key={index}></div>;
             })}
           </div>
         </div>
         {this.props.metricLabels.map((metric, index) => {
           return (
-            <div className={styles.metricCol}>
+            <div className={styles.metricCol} key={index}>
               <div className={styles.metricLabel}>{metric}</div>
               <div className={styles.flexCol}>
                 <div className={styles.metricBox}>
                   {this.props.overallMetrics[index]}
                 </div>
-                {this.props.formattedBinValues[index]?.map((value, index) => {
-                  if (this.props.expandAttributes) {
-                    return (
-                      <div className={styles.metricBox} key={index}>
-                        {value !== undefined ? value : "empty"}
-                      </div>
-                    );
+                {this.props.formattedBinValues[index]?.map(
+                  (value, valIndex) => {
+                    if (this.props.expandAttributes) {
+                      return (
+                        <div className={styles.metricBox} key={valIndex}>
+                          {value !== undefined ? value : "empty"}
+                        </div>
+                      );
+                    }
+                    return <div style={{ display: "none" }}></div>;
                   }
-                  return <div style={{ display: "none" }}></div>;
-                })}
+                )}
               </div>
             </div>
           );

@@ -64,9 +64,9 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
             />
           </div>
           <p className={sharedStyles.modalContentHelpText}>
-            {this.props.strings.map((text) => (
+            {this.props.strings.map((text, index) => (
               // React.Fragment doesn’t create a wrapper element in the DOM.
-              <React.Fragment>
+              <React.Fragment key={index}>
                 {text}
                 <br />
                 <br />

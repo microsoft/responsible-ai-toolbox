@@ -33,6 +33,23 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.demographicParityRatio
   },
+
+  equalized_odds_difference: {
+    description:
+      localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
+    key: "equalized_odds_difference",
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.equalizedOddsDifference
+  },
+
+  equalized_odds_ratio: {
+    description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
+    key: "equalized_odds_ratio",
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.equalizedOddsRatio
+  },
   // zero_one_loss is the error rate for binary classification, while
   // mean_absolute_error is the error rate for probabilistic classification and regression
   error_rate_difference_binary_classification: {
@@ -62,6 +79,22 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMetric: "mean_absolute_error",
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.errorRateRatio
+  },
+  false_positive_rate_difference: {
+    description:
+      localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
+    key: "false_positive_rate_difference",
+    parityMetric: "false_positive_over_total",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.falsePositiveRateDifference
+  },
+  false_positive_rate_ratio: {
+    description:
+      localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
+    key: "false_positive_rate_ratio",
+    parityMetric: "false_positive_over_total",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.falsePositiveRateRatio
   },
   true_positive_rate_difference: {
     description:

@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
+import _, { max, min } from "lodash";
 
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 
-import { ParityModes } from "./ParityMetrics";
+import { ParityModes, parityOptions } from "./ParityMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey
@@ -45,7 +45,95 @@ export class MetricsCache {
     return this.cache[featureIndex][modelIndex][key];
   }
 
+  public async getEqualizedOdds(
+    binIndexVector: number[],
+    featureIndex: number,
+    modelIndex: number,
+    disparityMethod: ParityModes
+  ): Promise<number> {
+    const falsePositiveRateMetric = await this.getDisparityMetric(
+      binIndexVector,
+      featureIndex,
+      modelIndex,
+      disparityMethod === ParityModes.Difference
+        ? "false_positive_rate_difference"
+        : "false_positive_rate_ratio",
+      disparityMethod
+    );
+    const truePositiveRateMetric = await this.getDisparityMetric(
+      binIndexVector,
+      featureIndex,
+      modelIndex,
+      disparityMethod === ParityModes.Difference
+        ? "true_positive_rate_difference"
+        : "true_positive_rate_ratio",
+      disparityMethod
+    );
+
+    if (
+      falsePositiveRateMetric === Number.NaN ||
+      truePositiveRateMetric === Number.NaN
+    ) {
+      return Number.NaN;
+    }
+
+    if (disparityMethod === ParityModes.Difference) {
+      const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
+      return maxMetric === undefined ? Number.NaN : maxMetric;
+    }
+
+    const minMetric = min([falsePositiveRateMetric, truePositiveRateMetric]);
+    return minMetric === undefined ? Number.NaN : minMetric;
+  }
+
   public async getDisparityMetric(
+    binIndexVector: number[],
+    featureIndex: number,
+    modelIndex: number,
+    key: string,
+    disparityMethod: ParityModes
+  ): Promise<number> {
+    // Equalized Odds is calculated based on two other fairness metrics.
+    if (key.startsWith("equalized_odds")) {
+      return this.getEqualizedOdds(
+        binIndexVector,
+        featureIndex,
+        modelIndex,
+        disparityMethod
+      );
+    }
+
+    const metricKey = parityOptions[key].parityMetric;
+    let value = this.cache[featureIndex][modelIndex][metricKey];
+    if (value === undefined && this.fetchMethod) {
+      value = await this.fetchMethod({
+        binVector: binIndexVector,
+        metricKey,
+        modelIndex
+      });
+      this.cache[featureIndex][modelIndex][metricKey] = value;
+    }
+    if (!value?.bins) {
+      return Number.NaN;
+    }
+
+    const bins = value.bins
+      .slice()
+      .filter((x) => x !== undefined && !Number.isNaN(x));
+
+    const min = _.min(bins);
+    const max = _.max(bins);
+    if (
+      min === undefined ||
+      max === undefined ||
+      (max === 0 && disparityMethod === ParityModes.Ratio)
+    ) {
+      return Number.NaN;
+    }
+    return disparityMethod === ParityModes.Difference ? max - min : min / max;
+  }
+
+  public async getDisparityMetricV1(
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,

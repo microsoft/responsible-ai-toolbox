@@ -49,6 +49,10 @@ export class App extends React.Component<IAppProps> {
     "demographic_parity_ratio",
     "true_positive_rate_difference",
     "true_positive_rate_ratio",
+    "false_positive_rate_difference",
+    "false_positive_rate_ratio",
+    "equalized_odds_difference",
+    "equalized_odds_ratio",
     "error_rate_difference_binary_classification",
     "error_rate_ratio_binary_classification"
   ];
