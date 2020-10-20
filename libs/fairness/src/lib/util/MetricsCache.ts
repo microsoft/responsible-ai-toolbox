@@ -123,14 +123,31 @@ export class MetricsCache {
 
     const min = _.min(bins);
     const max = _.max(bins);
-    if (
-      min === undefined ||
-      max === undefined ||
-      (max === 0 && disparityMethod === ParityModes.Ratio)
-    ) {
+
+    if (min === undefined || max === undefined) {
       return Number.NaN;
     }
-    return disparityMethod === ParityModes.Difference ? max - min : min / max;
+
+    if (disparityMethod === ParityModes.Min) {
+      return min;
+    }
+
+    if (disparityMethod === ParityModes.Max) {
+      return max;
+    }
+
+    if (disparityMethod === ParityModes.Ratio) {
+      if (max === 0) {
+        return Number.NaN;
+      }
+      return min / max;
+    }
+
+    if (disparityMethod === ParityModes.Difference) {
+      return max - min;
+    }
+
+    return Number.NaN;
   }
 
   public async getDisparityMetricV1(
