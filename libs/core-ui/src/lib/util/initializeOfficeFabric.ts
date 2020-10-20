@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme, createTheme } from "office-ui-fabric-react";
+import {
+  createTheme,
+  initializeIcons as fabricInit,
+  ITheme,
+  loadTheme
+} from "office-ui-fabric-react";
 
 export const defaultTheme: ITheme = createTheme({
   palette: {
@@ -29,3 +34,16 @@ export const defaultTheme: ITheme = createTheme({
     white: "#ffffff"
   }
 });
+
+export interface IOfficeFabricProps {
+  shouldInitializeIcons?: boolean;
+  iconUrl?: string;
+  theme?: ITheme;
+}
+
+export function initializeOfficeFabric(props: IOfficeFabricProps): void {
+  if (props.shouldInitializeIcons !== false) {
+    fabricInit(props.iconUrl);
+  }
+  loadTheme(props.theme || defaultTheme);
+}

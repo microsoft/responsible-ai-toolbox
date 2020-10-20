@@ -1,6 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IOfficeFabricProps } from "@responsible-ai/core-ui";
+import { Dictionary } from "lodash";
+
+import { Cohort } from "../Cohort";
+import { IExplanationModelMetadata } from "../IExplanationContext";
+import { WeightVectorOption } from "../IWeightedDropdownContext";
+import { JointDataset } from "../JointDataset";
+
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";
 
@@ -31,12 +39,11 @@ export interface IExplanationDashboardData {
   precomputedExplanations?: IPrecomputedExplanations;
 }
 
-export interface IExplanationDashboardProps extends IExplanationDashboardData {
-  theme?: any;
+export interface IExplanationDashboardProps
+  extends IExplanationDashboardData,
+    IOfficeFabricProps {
   locale?: string;
   stringParams?: IStringsParam;
-  shouldInitializeIcons?: boolean;
-  iconUrl?: string;
   telemetryHook?: (message: ITelemetryMessage) => void;
   requestPredictions?: (
     request: any[],
@@ -102,4 +109,30 @@ export interface IMultiClassGlobalFeatureImportance {
 export interface ISingleClassGlobalFeatureImportance {
   scores: number[];
   intercept?: number;
+}
+
+export interface INewExplanationDashboardState {
+  cohorts: Cohort[];
+  activeGlobalTab: GlobalTabKeys;
+  jointDataset: JointDataset;
+  modelMetadata: IExplanationModelMetadata;
+  globalImportanceIntercept: number[];
+  globalImportance: number[][];
+  isGlobalImportanceDerivedFromLocal: boolean;
+  validationWarnings: string[];
+  showingDataSizeWarning: boolean;
+  selectedWeightVector: WeightVectorOption;
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  weightVectorOptions: WeightVectorOption[];
+  weightVectorLabels: Dictionary<string>;
+}
+
+export enum GlobalTabKeys {
+  ModelPerformance = "modelPerformance",
+  DataExploration = "dataExploration",
+  ExplanationTab = "explanationTab",
+  WhatIfTab = "whatIfTab"
 }

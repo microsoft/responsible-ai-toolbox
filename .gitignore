@@ -6,11 +6,9 @@
 /out-tsc
 /raiwidgets/raiwidgets/js/dist/*
 /raiwidgets/raiwidgets/js/lib/*
-/raiwidgets/raiwidgets/js/node_modules/*
-/raiwidgets/raiwidgets.egg-info/*
 
 # dependencies
-/node_modules/
+**/node_modules/
 
 # IDEs and editors
 /.idea
@@ -46,3 +44,4 @@ Thumbs.db
 **.pyc
 **/__pycache__/*
 **-checkpoint.ipynb
+**.egg-info/

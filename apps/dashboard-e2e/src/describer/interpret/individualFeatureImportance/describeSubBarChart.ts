@@ -25,7 +25,7 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
     it("should have y axis with matched value", () => {
       cy.get('#FeatureImportanceBar div[class^="rotatedVerticalBox-"]').should(
         "contain.text",
-        "Feature Importance"
+        "Feature importance"
       );
     });
     it("should have right number of x axis labels", () => {

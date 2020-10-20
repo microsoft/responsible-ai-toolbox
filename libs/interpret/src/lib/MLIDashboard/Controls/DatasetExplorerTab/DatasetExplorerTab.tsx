@@ -10,7 +10,6 @@ import {
   IDropdownOption,
   Dropdown,
   DefaultButton,
-  Icon,
   Text,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
@@ -31,12 +30,10 @@ import { generatePlotlyProps } from "./generatePlotlyProps";
 import { SidePanel } from "./SidePanel";
 
 export interface IDatasetExplorerTabProps {
-  chartProps?: IGenericChartProps;
   theme?: string;
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
   cohorts: Cohort[];
-  onChange: (props: IGenericChartProps) => void;
 }
 
 export interface IDatasetExplorerTabState {
@@ -45,6 +42,7 @@ export interface IDatasetExplorerTabState {
   colorDialogOpen: boolean;
   selectedCohortIndex: number;
   calloutVisible: boolean;
+  chartProps?: IGenericChartProps;
 }
 
 export class DatasetExplorerTab extends React.PureComponent<
@@ -57,6 +55,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     super(props);
     this.state = {
       calloutVisible: false,
+      chartProps: this.generateDefaultChartAxes(),
       colorDialogOpen: false,
       selectedCohortIndex: 0,
       xDialogOpen: false,
@@ -64,9 +63,6 @@ export class DatasetExplorerTab extends React.PureComponent<
     };
     if (!this.props.jointDataset.hasDataset) {
       return;
-    }
-    if (props.chartProps === undefined) {
-      this.generateDefaultChartAxes();
     }
   }
   public render(): React.ReactNode {
@@ -83,16 +79,16 @@ export class DatasetExplorerTab extends React.PureComponent<
         </div>
       );
     }
-    if (this.props.chartProps === undefined) {
+    if (this.state.chartProps === undefined) {
       return <div />;
     }
     const plotlyProps = generatePlotlyProps(
       this.props.jointDataset,
-      this.props.chartProps,
+      this.state.chartProps,
       this.props.cohorts[this.state.selectedCohortIndex]
     );
     const cohortOptions =
-      this.props.chartProps.xAxis.property !== cohortKey
+      this.state.chartProps.xAxis.property !== cohortKey
         ? this.props.cohorts.map((cohort, index) => {
             return { key: index, text: cohort.name };
           })
@@ -101,25 +97,24 @@ export class DatasetExplorerTab extends React.PureComponent<
       .filteredData.length;
     const canRenderChart =
       cohortLength < newExplanationDashboardRowErrorSize ||
-      this.props.chartProps.chartType !== ChartTypes.Scatter;
+      this.state.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
       ColumnCategories.Index,
       ColumnCategories.Dataset,
       ColumnCategories.Outcome
     ];
-    if (this.props.chartProps.chartType !== ChartTypes.Scatter) {
+    if (this.state.chartProps.chartType !== ChartTypes.Scatter) {
       yAxisCategories.push(ColumnCategories.None);
     }
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <Icon iconName="Info" className={classNames.infoIcon} />
           <ExpandableText
-            collapsedText={
-              localization.Interpret.DatasetExplorer.collapsedHelperText
-            }
             expandedText={localization.Interpret.DatasetExplorer.helperText}
-          />
+            iconName="Info"
+          >
+            {localization.Interpret.DatasetExplorer.collapsedHelperText}
+          </ExpandableText>
         </div>
         <div className={classNames.cohortPickerWrapper}>
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
@@ -140,11 +135,11 @@ export class DatasetExplorerTab extends React.PureComponent<
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={yAxisCategories}
-                selectedColumn={this.props.chartProps.yAxis}
+                selectedColumn={this.state.chartProps.yAxis}
                 canBin={false}
                 mustBin={false}
                 canDither={
-                  this.props.chartProps.chartType === ChartTypes.Scatter
+                  this.state.chartProps.chartType === ChartTypes.Scatter
                 }
                 onAccept={this.onYSet}
                 onCancel={this.setYOpen.bind(this, false)}
@@ -158,23 +153,23 @@ export class DatasetExplorerTab extends React.PureComponent<
                   ColumnCategories.Dataset,
                   ColumnCategories.Outcome
                 ]}
-                selectedColumn={this.props.chartProps.xAxis}
+                selectedColumn={this.state.chartProps.xAxis}
                 canBin={
-                  this.props.chartProps.chartType === ChartTypes.Histogram ||
-                  this.props.chartProps.chartType === ChartTypes.Box
+                  this.state.chartProps.chartType === ChartTypes.Histogram ||
+                  this.state.chartProps.chartType === ChartTypes.Box
                 }
                 mustBin={
-                  this.props.chartProps.chartType === ChartTypes.Histogram ||
-                  this.props.chartProps.chartType === ChartTypes.Box
+                  this.state.chartProps.chartType === ChartTypes.Histogram ||
+                  this.state.chartProps.chartType === ChartTypes.Box
                 }
                 canDither={
-                  this.props.chartProps.chartType === ChartTypes.Scatter
+                  this.state.chartProps.chartType === ChartTypes.Scatter
                 }
                 onAccept={this.onXSet}
                 onCancel={this.setXOpen.bind(this, false)}
               />
             )}
-            {this.state.colorDialogOpen && this.props.chartProps.colorAxis && (
+            {this.state.colorDialogOpen && this.state.chartProps.colorAxis && (
               <AxisConfigDialog
                 jointDataset={this.props.jointDataset}
                 orderedGroupTitles={[
@@ -182,7 +177,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                   ColumnCategories.Dataset,
                   ColumnCategories.Outcome
                 ]}
-                selectedColumn={this.props.chartProps.colorAxis}
+                selectedColumn={this.state.chartProps.colorAxis}
                 canBin={true}
                 mustBin={false}
                 canDither={false}
@@ -198,12 +193,12 @@ export class DatasetExplorerTab extends React.PureComponent<
                       onClick={this.setYOpen.bind(this, true)}
                       text={
                         this.props.jointDataset.metaDict[
-                          this.props.chartProps.yAxis.property
+                          this.state.chartProps.yAxis.property
                         ].abbridgedLabel
                       }
                       title={
                         this.props.jointDataset.metaDict[
-                          this.props.chartProps.yAxis.property
+                          this.state.chartProps.yAxis.property
                         ].label
                       }
                     />
@@ -236,12 +231,12 @@ export class DatasetExplorerTab extends React.PureComponent<
                     onClick={this.setXOpen.bind(this, true)}
                     text={
                       this.props.jointDataset.metaDict[
-                        this.props.chartProps.xAxis.property
+                        this.state.chartProps.xAxis.property
                       ].abbridgedLabel
                     }
                     title={
                       this.props.jointDataset.metaDict[
-                        this.props.chartProps.xAxis.property
+                        this.state.chartProps.xAxis.property
                       ].label
                     }
                   />
@@ -250,7 +245,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             </div>
           </div>
           <SidePanel
-            chartProps={this.props.chartProps}
+            chartProps={this.state.chartProps}
             cohorts={this.props.cohorts}
             jointDataset={this.props.jointDataset}
             selectedCohortIndex={this.state.selectedCohortIndex}
@@ -275,7 +270,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     _ev?: React.SyntheticEvent<HTMLElement>,
     item?: IChoiceGroupOption
   ): void => {
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     if (item?.key === undefined || !newProps) {
       return;
     }
@@ -283,7 +278,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     if (newProps.yAxis.property === ColumnCategories.None) {
       newProps.yAxis = this.generateDefaultYAxis();
     }
-    this.props.onChange(newProps);
+    this.setState({ chartProps: newProps });
   };
 
   private readonly setXOpen = (val: boolean): void => {
@@ -311,36 +306,36 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    if (!this.props.chartProps) {
+    if (!this.state.chartProps) {
       return;
     }
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
-    this.props.onChange(newProps);
-    this.setState({ xDialogOpen: false });
+    this.setState({ chartProps: newProps, xDialogOpen: false });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    if (!this.props.chartProps) {
+    if (!this.state.chartProps) {
       return;
     }
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
-    this.props.onChange(newProps);
-    this.setState({ yDialogOpen: false });
+    this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
   private onColorSet = (value: ISelectorConfig): void => {
-    if (!this.props.chartProps) {
+    if (!this.state.chartProps) {
       return;
     }
-    const newProps = _.cloneDeep(this.props.chartProps);
+    const newProps = _.cloneDeep(this.state.chartProps);
     newProps.colorAxis = value;
-    this.props.onChange(newProps);
-    this.setState({ colorDialogOpen: false });
+    this.setState({ chartProps: newProps, colorDialogOpen: false });
   };
 
-  private generateDefaultChartAxes(): void {
+  private generateDefaultChartAxes(): IGenericChartProps | undefined {
+    if (!this.props.jointDataset.hasDataset) {
+      return;
+    }
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Histogram,
       colorAxis: {
@@ -355,7 +350,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       },
       yAxis: this.generateDefaultYAxis()
     };
-    this.props.onChange(chartProps);
+    return chartProps;
   }
 
   private generateDefaultYAxis(): ISelectorConfig {
