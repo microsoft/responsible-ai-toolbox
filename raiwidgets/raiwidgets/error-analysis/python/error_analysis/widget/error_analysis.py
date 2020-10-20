@@ -176,10 +176,17 @@ class ErrorAnalysisDashboard:
         def tree(id):
             explanations = ErrorAnalysisDashboard.explanations
             data = request.get_json(force=True)
+            if id in explanations:
+                return jsonify(explanations[id].debug_ml(data))
+
+        @app.route('/<id>/matrix', methods=['POST'])
+        def matrix(id):
+            explanations = ErrorAnalysisDashboard.explanations
+            data = request.get_json(force=True)
             print("data from response: ")
             print(data)
             if id in explanations:
-                return jsonify(explanations[id].debug_ml(data))
+                return jsonify(explanations[id].matrix(data))
 
     def __init__(self, explanation, model=None, *, dataset=None,
                  true_y=None, classes=None, features=None, port=None,
@@ -216,11 +223,15 @@ class ErrorAnalysisDashboard:
             tree_url = "{0}/{1}/tree".format(
                 base_url,
                 model_count)
+            matrix_url = "{0}/{1}/matrix".format(
+                base_url,
+                model_count)
         explanation_input = ErrorAnalysisDashboardInput(explanation,
                                                         model, dataset,
                                                         true_y, classes,
                                                         features,
                                                         predict_url, tree_url,
+                                                        matrix_url,
                                                         local_url, locale)
         # Due to auth, predict is only available in
         # separate tab in cloud after login

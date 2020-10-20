@@ -28,7 +28,7 @@ import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { Navigation } from "./Controls/Navigation/Navigation";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
 import { ValidateProperties } from "./ValidateProperties";
-import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView";
+import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
 import { CohortSettings } from "./Controls/CohortSettings/CohortSettings";
@@ -54,11 +54,7 @@ export interface IErrorAnalysisDashboardState {
   openSettingsPanel: boolean;
   openFeatureList: boolean;
   selectedFeatures: string[];
-  requestPredictions?: (
-    request: any[],
-    abortSignal: AbortSignal
-  ) => Promise<any[]>;
-  requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  errorAnalysisOption: errorAnalysisOptions;
 }
 
 interface IGlobalExplanationProps {
@@ -100,6 +96,11 @@ export enum globalTabKeys {
 export enum viewTypeKeys {
   errorAnalysisView = "errorAnalysisView",
   explanationView = "explanationView"
+}
+
+export enum errorAnalysisOptions {
+  treeMap = "treeMap",
+  heatMap = "heatMap"
 }
 
 export class ErrorAnalysisDashboard extends React.PureComponent<
@@ -365,7 +366,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       openSettingsPanel: false,
       openFeatureList: false,
       selectedFeatures: props.features,
-      requestDebugML: props.requestDebugML
+      errorAnalysisOption: errorAnalysisOptions.treeMap
     };
   }
 
@@ -424,6 +425,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           onFeatureListClick={() => this.setState({ openFeatureList: true })}
           localUrl={this.props.localUrl}
           viewType={this.state.viewType}
+          setErrorDetector={(key: errorAnalysisOptions) =>
+            this.setState({ errorAnalysisOption: key })
+          }
         />
         <div>
           <Customizer settings={{ hostId: this.layerHostId }}>
@@ -436,9 +440,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       ? this.props.stringParams.contextualHelp
                       : undefined
                   }
-                  getTreeNodes={this.state.requestDebugML}
+                  getTreeNodes={this.props.requestDebugML}
+                  getMatrix={this.props.requestMatrix}
                   features={this.props.features}
                   selectedFeatures={this.state.selectedFeatures}
+                  errorAnalysisOption={this.state.errorAnalysisOption}
                 />
               )}
               {this.state.viewType === viewTypeKeys.explanationView && (

@@ -39,6 +39,7 @@ export interface IErrorAnalysisDashboardProps {
     explanationAlgorithm?: string
   ) => Promise<any[]>;
   requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   localUrl: string;
 }
 
