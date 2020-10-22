@@ -13,10 +13,42 @@ export interface IParityOption {
 
 export enum ParityModes {
   Difference = "difference",
-  Ratio = "ratio"
+  Ratio = "ratio",
+  Min = "min",
+  Max = "max"
 }
 
 export const parityOptions: { [key: string]: IParityOption } = {
+  accuracy_score_difference: {
+    description:
+      localization.Fairness.Metrics.accuracyScoreDifferenceDescription,
+    key: "accuracy_score_difference",
+    parityMetric: "accuracy_score",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.accuracyScoreDifference
+  },
+  accuracy_score_min: {
+    description: localization.Fairness.Metrics.accuracyScoreMinDescription,
+    key: "accuracy_score_min",
+    parityMetric: "accuracy_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.accuracyScoreMin
+  },
+  accuracy_score_ratio: {
+    description: localization.Fairness.Metrics.accuracyScoreRatioDescription,
+    key: "accuracy_score_ratio",
+    parityMetric: "accuracy_score",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.accuracyScoreRatio
+  },
+  balanced_accuracy_score_min: {
+    description:
+      localization.Fairness.Metrics.balancedAccuracyScoreMinDescription,
+    key: "balanced_accuracy_score_min",
+    parityMetric: "balanced_accuracy_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.balancedAccuracyScoreMin
+  },
   demographic_parity_difference: {
     description:
       localization.Fairness.Metrics.demographicParityDifferenceDescription,
@@ -33,7 +65,6 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.demographicParityRatio
   },
-
   equalized_odds_difference: {
     description:
       localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
@@ -42,7 +73,6 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Difference,
     title: localization.Fairness.Metrics.equalizedOddsDifference
   },
-
   equalized_odds_ratio: {
     description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
     key: "equalized_odds_ratio",
@@ -80,6 +110,29 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.errorRateRatio
   },
+  f1_score_min: {
+    description: localization.Fairness.Metrics.f1ScoreMinDescription,
+    key: "f1_score_min",
+    parityMetric: "f1_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.f1ScoreMin
+  },
+  false_negative_rate_difference: {
+    description:
+      localization.Fairness.Metrics.falseNegativeRateDifferenceDescription,
+    key: "false_negative_rate_difference",
+    parityMetric: "false_negative_over_total",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.falseNegativeRateDifference
+  },
+  false_negative_rate_ratio: {
+    description:
+      localization.Fairness.Metrics.falseNegativeRateDifferenceDescription,
+    key: "false_negative_rate_ratio",
+    parityMetric: "false_negative_over_total",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.falseNegativeRateRatio
+  },
   false_positive_rate_difference: {
     description:
       localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
@@ -95,6 +148,71 @@ export const parityOptions: { [key: string]: IParityOption } = {
     parityMetric: "false_positive_over_total",
     parityMode: ParityModes.Ratio,
     title: localization.Fairness.Metrics.falsePositiveRateRatio
+  },
+  log_loss_max: {
+    description: localization.Fairness.Metrics.logLossMaxDescription,
+    key: "log_loss_max",
+    parityMetric: "log_loss",
+    parityMode: ParityModes.Max,
+    title: localization.Fairness.Metrics.logLossMax
+  },
+  mean_absolute_error_max: {
+    description: localization.Fairness.Metrics.meanAbsoluteErrorMaxDescription,
+    key: "mean_absolute_error_max",
+    parityMetric: "mean_absolute_error",
+    parityMode: ParityModes.Max,
+    title: localization.Fairness.Metrics.meanAbsoluteErrorMax
+  },
+  mean_squared_error_max: {
+    description: localization.Fairness.Metrics.meanSquaredErrorMaxDescription,
+    key: "mean_squared_error_max",
+    parityMetric: "mean_squared_error",
+    parityMode: ParityModes.Max,
+    title: localization.Fairness.Metrics.meanSquaredErrorMax
+  },
+  precision_score_min: {
+    description: localization.Fairness.Metrics.precisionScoreMinDescription,
+    key: "precision_score_min",
+    parityMetric: "precision_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.precisionScoreMin
+  },
+  r2_score_min: {
+    description: localization.Fairness.Metrics.r2ScoreMinDescription,
+    key: "r2_score_min",
+    parityMetric: "r2_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.r2ScoreMin
+  },
+  recall_score_min: {
+    description: localization.Fairness.Metrics.recallScoreMinDescription,
+    key: "recall_score_min",
+    parityMetric: "recall_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.recallScoreMin
+  },
+  roc_auc_score_min: {
+    description: localization.Fairness.Metrics.ROCAUCScoreMinDescription,
+    key: "roc_auc_score_min",
+    parityMetric: "roc_auc_score",
+    parityMode: ParityModes.Min,
+    title: localization.Fairness.Metrics.ROCAUCScoreMin
+  },
+  true_negative_rate_difference: {
+    description:
+      localization.Fairness.Metrics.trueNegativeRateDifferenceDescription,
+    key: "true_negative_rate_difference",
+    parityMetric: "recall_score",
+    parityMode: ParityModes.Difference,
+    title: localization.Fairness.Metrics.trueNegativeRateDifference
+  },
+  true_negative_rate_ratio: {
+    description:
+      localization.Fairness.Metrics.trueNegativeRateDifferenceDescription,
+    key: "true_negative_rate_ratio",
+    parityMetric: "recall_score",
+    parityMode: ParityModes.Ratio,
+    title: localization.Fairness.Metrics.trueNegativeRateRatio
   },
   true_positive_rate_difference: {
     description:
