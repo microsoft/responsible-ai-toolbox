@@ -25,12 +25,12 @@ export function describeInterpret(name: keyof typeof interpretDatasets): void {
       });
     }
     describeCohort(interpretDatasets[name]);
-    // if (!interpretDatasets[name].noFeatureImportance) {
-    //   describeAggregateFeatureImportance(interpretDatasets[name]);
-    // }
-    // if (!interpretDatasets[name].noDataset) {
-    //   describeDatasetExplorer(interpretDatasets[name]);
-    //   describeIndividualFeatureImportance(interpretDatasets[name]);
-    // }
+    if (!interpretDatasets[name].noFeatureImportance) {
+      describeAggregateFeatureImportance(interpretDatasets[name]);
+    }
+    if (!interpretDatasets[name].noDataset) {
+      describeDatasetExplorer(interpretDatasets[name]);
+      describeIndividualFeatureImportance(interpretDatasets[name]);
+    }
   });
 }

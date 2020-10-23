@@ -9,7 +9,6 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IExplanationDashboardStyles {
-  pivotLabelWrapper: IStyle;
   page: IStyle;
 }
 
@@ -22,12 +21,6 @@ export const explanationDashboardStyles: () => IProcessedStyleSet<
       backgroundColor: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       maxHeight: "1000px"
-    },
-    pivotLabelWrapper: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      padding: "0 30px"
     }
   });
 };
