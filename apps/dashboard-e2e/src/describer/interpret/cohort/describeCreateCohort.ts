@@ -13,7 +13,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
   it("should able to add filter", () => {
     cy.get('button:contains("New cohort")').click();
 
-    cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
+    cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
 
@@ -24,7 +24,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
   it("should able to add multiple filters", () => {
     cy.get('button:contains("New cohort")').click();
 
-    cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
+    cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
 
@@ -36,7 +36,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
   it("should able to delete filter", () => {
     cy.get('button:contains("New cohort")').click();
 
-    cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
+    cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
     cy.get("#removeFilterBtn-0").click();
@@ -67,7 +67,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
   it("should create New cohort", () => {
     cy.get('button:contains("New cohort")').click();
 
-    cy.get("#cohortEditPanel input:eq(0)").type("CohortCreateE2E");
+    cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
     cy.get('button:contains("Save")').click();
