@@ -68,7 +68,7 @@ export class CohortBar extends React.Component<
         fieldName: "name",
         key: "name",
         minWidth: 100,
-        name: "name"
+        name: localization.Interpret.CohortBanner.name
       },
       {
         key: "details",

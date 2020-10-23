@@ -3,7 +3,12 @@
 
 import { limitStringLength } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { PrimaryButton, Stack, Text } from "office-ui-fabric-react";
+import {
+  DefaultButton,
+  PrimaryButton,
+  Stack,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { Cohort } from "../../Cohort";
@@ -40,7 +45,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
           iconProps={{ iconName: "Add" }}
           styles={{ label: { whiteSpace: "nowrap" } }}
         />
-        <PrimaryButton
+        <DefaultButton
           disabled={!this.props.jointDataset.dataDict?.length}
           onClick={this.props.showEditList}
           text={localization.Interpret.CohortBanner.editCohort}
