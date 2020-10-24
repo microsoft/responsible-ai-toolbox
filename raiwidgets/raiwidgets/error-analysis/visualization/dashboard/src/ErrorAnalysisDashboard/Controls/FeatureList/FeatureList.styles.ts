@@ -7,6 +7,7 @@ import {
 
 export interface IFeatureListStyles {
   featureList: IStyle;
+  decisionTree: IStyle;
 }
 
 export const featureListStyles: () => IProcessedStyleSet<
@@ -19,6 +20,10 @@ export const featureListStyles: () => IProcessedStyleSet<
       color: theme.palette.black,
       backgroundColor: theme.palette.white,
       border: "1px solid #C8C8C8"
+    },
+    decisionTree: {
+      fontSize: "18px",
+      color: "#2d394a"
     }
   });
 };

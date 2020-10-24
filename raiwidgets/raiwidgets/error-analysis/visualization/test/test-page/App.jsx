@@ -11,12 +11,11 @@ import { ebmData } from "../__mock_data/ebmData";
 import { irisNoData } from "../__mock_data/irisNoData";
 import { largeFeatureCount } from "../__mock_data/largeFeatureCount";
 import { dummyTreeData } from "../__mock_data/dummyTree";
-import { initializeIcons } from "@uifabric/icons";
+import { dummyMatrixData } from "../__mock_data/dummyMatrix";
 import { createTheme } from "@uifabric/styling";
 
 var ibmNoClass = _.cloneDeep(ibmData);
 ibmNoClass.classNames = undefined;
-// initializeIcons();
 
 var irisNoFeatures = _.cloneDeep(irisData);
 irisNoFeatures.featureNames = undefined;
@@ -206,6 +205,20 @@ class App extends React.Component {
     return promise;
   }
 
+  generateJsonMatrix(data, signal) {
+    let promise = new Promise((resolve, reject) => {
+      let timeout = setTimeout(() => {
+        resolve(_.cloneDeep(dummyMatrixData));
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
+    });
+
+    return promise;
+  }
+
   generateFeatures() {
     return [
       "Feature1",
@@ -314,6 +327,7 @@ class App extends React.Component {
                   classDimension
                 )}
                 requestDebugML={this.generateJsonTree.bind(this)}
+                requestMatrix={this.generateJsonMatrix.bind(this)}
                 localUrl={"https://www.bing.com/"}
                 stringParams={{ contextualHelp: this.messages }}
                 theme={theme}

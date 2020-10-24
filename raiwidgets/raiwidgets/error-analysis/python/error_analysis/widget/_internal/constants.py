@@ -19,6 +19,7 @@ class ErrorAnalysisDashboardInterface(object):
     EBM_EXPLANATION = "ebmGlobalExplanation"
     PREDICTION_URL = "predictionUrl"
     TREE_URL = "treeUrl"
+    MATRIX_URL = "matrixUrl"
     LOCAL_URL = "localUrl"
     MLI_LOCAL_EXPLANATION_KEY = "local_feature_importance"
     MLI_GLOBAL_EXPLANATION_KEY = "global_feature_importance"

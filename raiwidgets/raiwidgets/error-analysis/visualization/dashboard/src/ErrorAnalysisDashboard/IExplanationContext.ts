@@ -66,6 +66,7 @@ export interface IExplanationGenerators {
     explanationAlgorithm?: string
   ) => Promise<any[]>;
   requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
 }
 
 export interface ITestDataset {

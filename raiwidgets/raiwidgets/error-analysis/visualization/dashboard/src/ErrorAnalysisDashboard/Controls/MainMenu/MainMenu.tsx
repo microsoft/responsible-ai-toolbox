@@ -16,6 +16,7 @@ import {
   IDropdownOption
 } from "office-ui-fabric-react/lib/Dropdown";
 import { viewTypeKeys } from "../../ErrorAnalysisDashboard";
+import { errorAnalysisOptions } from "../../ErrorAnalysisDashboard";
 import React from "react";
 
 export interface IMainMenuProps {
@@ -25,20 +26,21 @@ export interface IMainMenuProps {
   onSettingsPanelClick: () => void;
   onFeatureListClick: () => void;
   localUrl: string;
+  setErrorDetector: (key: errorAnalysisOptions) => void;
+}
+
+export interface IMainMenuState {
+  selectedOption: errorAnalysisOptions;
 }
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
-const infoIcon: IIconProps = { iconName: "AnalyticsReport" };
-const featureListIcon: IIconProps = { iconName: "MultiSelectMirrored" };
+const infoIcon: IIconProps = { iconName: "Info" };
+const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 const fullscreenIcon: IIconProps = { iconName: "ScaleVolume" };
 
-const errorAnalysisOptions: IDropdownOption[] = [
-  { key: "treeMap", text: "Tree Map" },
-  { key: "heatMap", text: "Heat Map" }
-];
 const dropdownStyles: Partial<IDropdownStyles> = {
   root: { alignSelf: "center" },
-  dropdown: { width: 200 }
+  dropdown: { width: 100 }
 };
 const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
@@ -50,8 +52,23 @@ const explanationButtonStyle: IButtonStyles = {
   root: { padding: "0px 4px", alignSelf: "center" }
 };
 
-export class MainMenu extends React.PureComponent<IMainMenuProps> {
+export class MainMenu extends React.PureComponent<
+  IMainMenuProps,
+  IMainMenuState
+> {
+  constructor(props: IMainMenuProps) {
+    super(props);
+    this.state = {
+      selectedOption: errorAnalysisOptions.treeMap
+    };
+  }
+
   public render(): React.ReactNode {
+    const errorAnalysisOptionsDropdown: IDropdownOption[] = [
+      { key: errorAnalysisOptions.treeMap, text: "Tree Map" },
+      { key: errorAnalysisOptions.heatMap, text: "Heat Map" }
+    ];
+
     let items: ICommandBarItemProps[] = [];
     if (this.props.viewType == viewTypeKeys.errorAnalysisView) {
       items = [
@@ -67,10 +84,10 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
           text: "Error Detector",
           commandBarButtonAs: () => (
             <Dropdown
-              placeholder="Select error detector"
-              defaultSelectedKey="treeMap"
-              options={errorAnalysisOptions}
+              defaultSelectedKey={this.state.selectedOption}
+              options={errorAnalysisOptionsDropdown}
               styles={dropdownStyles}
+              onChange={this.handleErrorDetectorChanged}
             />
           )
         }
@@ -88,7 +105,10 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
     }
 
     let farItems: ICommandBarItemProps[] = [];
-    if (this.props.viewType == viewTypeKeys.errorAnalysisView) {
+    if (
+      this.props.viewType == viewTypeKeys.errorAnalysisView &&
+      this.state.selectedOption == errorAnalysisOptions.treeMap
+    ) {
       farItems.push({
         key: "featureList",
         text: "Feature List",
@@ -130,7 +150,7 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
           <PrimaryButton
             text="Explanation"
             styles={explanationButtonStyle}
-            onClick={this._handleExplanationButtonClicked.bind(this)}
+            onClick={this.handleExplanationButtonClicked.bind(this)}
             allowDisabledFocus
             disabled={false}
             checked={false}
@@ -152,7 +172,24 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
     );
   }
 
-  private _handleExplanationButtonClicked(): void {
+  private handleExplanationButtonClicked(): void {
     this.props.viewExplanation();
   }
+
+  private handleErrorDetectorChanged = (
+    event: React.FormEvent<HTMLDivElement>,
+    item: IDropdownOption
+  ): void => {
+    if (item.key == errorAnalysisOptions.heatMap) {
+      // Note comparison above is actually string comparison (key is string), we have to set the enum
+      var selectedOption = errorAnalysisOptions.heatMap;
+      this.props.setErrorDetector(selectedOption);
+      this.setState({ selectedOption: selectedOption });
+    } else {
+      // Note comparison above is actually string comparison (key is string), we have to set the enum
+      var selectedOption = errorAnalysisOptions.treeMap;
+      this.props.setErrorDetector(selectedOption);
+      this.setState({ selectedOption: selectedOption });
+    }
+  };
 }
