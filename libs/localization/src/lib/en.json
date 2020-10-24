@@ -288,6 +288,8 @@
       "datasetRequired": "Dependence plots require the evaluation dataset and local feature importance array."
     },
     "CohortBanner": {
+      "details": "Details",
+      "name": "Name",
       "dataStatistics": "Data statistics",
       "_dataStatistics.comment": "label for section containing statistics about the dataset",
       "datapoints": "{0} datapoints",
@@ -304,7 +306,7 @@
       "_multiclassClassifier.comment": "models that output a category, with more than two categories",
       "datasetCohorts": "Dataset cohorts",
       "_datasetCohorts.comment": "a subset of the original data, defined by filtering the data. This is the label for presenting all cohorts the user created",
-      "editCohort": "Edit eohort",
+      "editCohort": "Edit cohort",
       "_editCohort.comment": "button text to edit the filters defining an existing cohort",
       "duplicateCohort": "Duplicate cohort",
       "_duplicateCohort.comment": "button text to copy an existing cohort",

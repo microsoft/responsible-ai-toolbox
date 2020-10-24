@@ -33,7 +33,8 @@ export interface ICohortEditorProps {
   isNewCohort: boolean;
   deleteIsDisabled: boolean;
   onSave: (newCohort: Cohort) => void;
-  onCancel: () => void;
+  closeCohortEditor: () => void;
+  closeCohortEditorPanel: () => void;
   onDelete: () => void;
 }
 
@@ -92,7 +93,7 @@ export class CohortEditor extends React.PureComponent<
       <Panel
         id="cohortEditPanel"
         isOpen={true}
-        onDismiss={this.props.onCancel}
+        onDismiss={this.props.closeCohortEditorPanel}
         onRenderFooter={this.renderFooter}
         isFooterAtBottom
       >
@@ -150,7 +151,6 @@ export class CohortEditor extends React.PureComponent<
       </Panel>
     );
   }
-
   private renderFooter = (): JSX.Element => {
     const styles = cohortEditorStyles();
     return (
@@ -167,7 +167,13 @@ export class CohortEditor extends React.PureComponent<
         <PrimaryButton onClick={this.saveCohort}>
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
-        <DefaultButton onClick={this.props.onCancel}>
+        <DefaultButton
+          onClick={
+            this.props.isNewCohort
+              ? this.props.closeCohortEditorPanel
+              : this.props.closeCohortEditor
+          }
+        >
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
