@@ -631,7 +631,7 @@ export class WhatIfTab extends React.PureComponent<
             className={classNames.missingParametersPlaceholder}
             id="noPointSelectedInfo"
           >
-            <Text variant="large" className={classNames.faintText}>
+            <Text>
               {localization.Interpret.WhatIfTab.featureImportanceGetStartedText}
             </Text>
           </div>
