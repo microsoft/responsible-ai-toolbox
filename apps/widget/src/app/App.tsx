@@ -13,13 +13,17 @@ export interface IAppState {
   config: IAppConfig;
 }
 
-export class App extends React.Component<{}, IAppState> {
+export class App extends React.Component<unknown, IAppState> {
   public render(): React.ReactNode {
     return (
       <Switch>
         <Route path={Fairness.route} render={this.renderFairness} />
       </Switch>
     );
+  }
+  public async componentDidMount(): Promise<void> {
+    const res = await (await fetch(new Request("/getconfig"))).json();
+    this.setState({ config: res });
   }
   private readonly renderFairness = (
     props: RouteComponentProps<IFairnessRouteProps>

@@ -53,22 +53,26 @@ class FairnessDashboard(object):
         mimetype = mimetypes.get(ext, "application/octet-stream")
         return Response(load_widget_file(path), mimetype=mimetype)
 
+    @FlaskHelper.app.route('/getconfig')
+    def get_config():
+        return {
+            "local_url": f"{FairnessDashboard._service.env.base_url}/fairness/model/{FairnessDashboard.model_count}"
+        }
+
     @FlaskHelper.app.route('/fairness')
     def list():
         return "No global list view supported at this time."
 
     @FlaskHelper.app.route('/fairness/model/<id>')
     def fairness_visual(id):
-        if id in FairnessDashboard.fairness_inputs:
-            return load_widget_file("index.html")
-        else:
-            return "Unknown model id."
+        return load_widget_file("index.html")
 
-    @FlaskHelper.app.route('/getconfig')
-    def get_config():
-        return {
-            "local_url": f"{FairnessDashboard._service.env.base_url}/fairness/model/{FairnessDashboard.model_count}"
-        }
+    @FlaskHelper.app.route('/fairness/getmodel/<id>')
+    def fairness_visual(id):
+        if id in FairnessDashboard.fairness_inputs:
+            return FairnessDashboard.fairness_inputs[id]
+        else:
+            return Response("Unknown model id.", status=404)
 
     @FlaskHelper.app.route('/fairness/model/<id>/metrics', methods=['POST'])
     def fairness_metrics_calculation(id):
