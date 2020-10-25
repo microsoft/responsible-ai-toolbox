@@ -4,8 +4,7 @@
 /dist
 /tmp
 /out-tsc
-/raiwidgets/raiwidgets/js/dist/*
-/raiwidgets/raiwidgets/js/lib/*
+/raiwidgets/raiwidgets/widget
 
 # dependencies
 **/node_modules/

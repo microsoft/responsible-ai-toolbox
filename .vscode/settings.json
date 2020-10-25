@@ -65,5 +65,6 @@
     "relayout",
     "shap",
     "uifabric"
-  ]
+  ],
+  "python.pythonPath": "C:\\Users\\xuke\\Miniconda3\\envs\\dev\\python.exe"
 }

@@ -87,6 +87,7 @@ class FlaskHelper(object):
 
         server = WSGIServer((self.ip, self.port), self.app, log=devnull)
         self.app.config["server"] = server
+        self.app.config["CACHE_TYPE"] = "null"
         server.serve_forever()
 
         # Closes server on program exit, including freeing all sockets

@@ -8,7 +8,7 @@
 from rai_core_flask import FlaskHelper  # , environment_detector
 from .fairness_metric_calculation import FairnessMetricModule
 
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from IPython.display import display, HTML
 from jinja2 import Environment, PackageLoader
 import json
@@ -42,19 +42,35 @@ class FairnessDashboard(object):
     model_count = 0
     _service = None
 
-    @FlaskHelper.app.route('/')
+    @FlaskHelper.app.route('/widget/<path:path>')
+    def widget_static(path):
+        mimetypes = {
+            ".css": "text/css",
+            ".html": "text/html",
+            ".js": "application/javascript",
+        }
+        ext = os.path.splitext(path)[1]
+        mimetype = mimetypes.get(ext, "application/octet-stream")
+        return Response(load_widget_file(path), mimetype=mimetype)
+
+    @FlaskHelper.app.route('/fairness')
     def list():
         return "No global list view supported at this time."
 
-    @FlaskHelper.app.route('/<id>')
+    @FlaskHelper.app.route('/fairness/model/<id>')
     def fairness_visual(id):
         if id in FairnessDashboard.fairness_inputs:
-            return generate_inline_html(
-                FairnessDashboard.fairness_inputs[id], None)
+            return load_widget_file("index.html")
         else:
             return "Unknown model id."
 
-    @FlaskHelper.app.route('/<id>/metrics', methods=['POST'])
+    @FlaskHelper.app.route('/getconfig')
+    def get_config():
+        return {
+            "local_url": f"{FairnessDashboard._service.env.base_url}/fairness/model/{FairnessDashboard.model_count}"
+        }
+
+    @FlaskHelper.app.route('/fairness/model/<id>/metrics', methods=['POST'])
     def fairness_metrics_calculation(id):
         try:
             data = request.get_json(force=True)
@@ -156,8 +172,6 @@ class FairnessDashboard(object):
                               "ignoring")
             fairness_input["features"] = sensitive_feature_names
 
-        self._load_local_js()
-
         if FairnessDashboard._service is None:
             try:
                 FairnessDashboard._service = FlaskHelper(port=port)
@@ -168,7 +182,7 @@ class FairnessDashboard(object):
         FairnessDashboard.model_count += 1
         model_count = FairnessDashboard.model_count
 
-        local_url = f"{FairnessDashboard._service.env.base_url}/{model_count}"
+        local_url = f"{FairnessDashboard._service.env.base_url}/fairness/model/{model_count}"
         metrics_url = f"{local_url}/metrics"
 
         fairness_input['metricsUrl'] = metrics_url
@@ -178,16 +192,10 @@ class FairnessDashboard(object):
 
         FairnessDashboard.fairness_inputs[str(model_count)] = fairness_input
 
-        html = generate_inline_html(fairness_input, local_url)
+        html = load_widget_file("index.html")
         # TODO https://github.com/microsoft/responsible-ai-widgets/issues/92
         # FairnessDashboard._service.env.display(html)
         display(HTML(html))
-
-    def _load_local_js(self):
-        script_path = os.path.dirname(os.path.abspath(__file__))
-        js_path = os.path.join(script_path, "static", "index.js")
-        with open(js_path, "r", encoding="utf-8") as f:
-            FairnessDashboard._dashboard_js = f.read()
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)
@@ -210,10 +218,12 @@ class FairnessDashboard(object):
         return array
 
 
-def generate_inline_html(fairness_input, local_url):
-    return FairnessDashboard.default_template.render(
-        fairness_input=json.dumps(fairness_input),
-        main_js=FairnessDashboard._dashboard_js,
-        app_id='app_fairness',
-        local_url=local_url,
-        has_local_url=local_url is not None)
+def get_widget_path(path):
+    script_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(script_path, "widget", path)
+
+
+def load_widget_file(path):
+    js_path = get_widget_path(path)
+    with open(js_path, "r", encoding="utf-8") as f:
+        return f.read()
