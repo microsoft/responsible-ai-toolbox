@@ -35,8 +35,7 @@ class FairnessDashboard(object):
     :param sensitive_feature_names: Feature names
     :type sensitive_feature_names: numpy.array or list[]
     """
-    env = Environment(loader=PackageLoader(__name__, 'templates'))
-    default_template = env.get_template("inlineDashboard.html")
+    env = Environment(loader=PackageLoader(__name__, 'widget'))
     _dashboard_js = None
     fairness_inputs = {}
     model_count = 0
