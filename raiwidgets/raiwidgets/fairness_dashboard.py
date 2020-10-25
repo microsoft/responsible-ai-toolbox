@@ -68,9 +68,9 @@ class FairnessDashboard(object):
         return load_widget_file("index.html")
 
     @FlaskHelper.app.route('/fairness/getmodel/<id>')
-    def fairness_visual(id):
+    def fairness_get_model(id):
         if id in FairnessDashboard.fairness_inputs:
-            return FairnessDashboard.fairness_inputs[id]
+            return json.dump(FairnessDashboard.fairness_inputs[id])
         else:
             return Response("Unknown model id.", status=404)
 

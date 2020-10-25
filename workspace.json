@@ -409,7 +409,7 @@
             "assets": ["apps/widget/src/favicon.ico", "apps/widget/src/assets"],
             "styles": [],
             "scripts": [],
-            "webpackConfig": "@nrwl/react/plugins/webpack"
+            "webpackConfig": "./webpack.config.js"
           },
           "configurations": {
             "production": {
