@@ -400,8 +400,8 @@
         "build": {
           "builder": "@nrwl/web:build",
           "options": {
-            "baseHref": ".",
-            "outputPath": "dist/apps/raiwidgets",
+            "baseHref": "/widget/",
+            "outputPath": "raiwidgets/raiwidgets/widget",
             "index": "apps/widget/src/index.html",
             "main": "apps/widget/src/main.tsx",
             "polyfills": "apps/widget/src/polyfills.ts",

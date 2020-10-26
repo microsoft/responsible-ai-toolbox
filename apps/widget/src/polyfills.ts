@@ -2,4 +2,4 @@
 // Licensed under the MIT License.
 
 import "core-js/stable";
-import "regenerator-runtime/runtime";
+import "regenerator-runtime/runtime.js";

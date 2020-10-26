@@ -63,13 +63,14 @@ class FairnessDashboard(object):
         return "No global list view supported at this time."
 
     @FlaskHelper.app.route('/fairness/model/<id>')
-    def fairness_visual(id):
+    def fairness_visual():
         return load_widget_file("index.html")
 
     @FlaskHelper.app.route('/fairness/getmodel/<id>')
     def fairness_get_model(id):
         if id in FairnessDashboard.fairness_inputs:
-            return json.dump(FairnessDashboard.fairness_inputs[id])
+            model_data = json.dumps(FairnessDashboard.fairness_inputs[id])
+            return model_data
         else:
             return Response("Unknown model id.", status=404)
 

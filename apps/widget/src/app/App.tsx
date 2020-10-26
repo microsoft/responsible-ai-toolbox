@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Spinner } from "office-ui-fabric-react";
 import React from "react";
 import { Route, Switch, RouteComponentProps } from "react-router-dom";
 
@@ -17,7 +16,7 @@ export class App extends React.Component<unknown, IAppState> {
   public render(): React.ReactNode {
     return (
       <Switch>
-        <Route path={Fairness.route} render={this.renderFairness} />
+        <Route path={Fairness.route} render={this.renderFairness} exact />
       </Switch>
     );
   }
@@ -29,7 +28,7 @@ export class App extends React.Component<unknown, IAppState> {
     props: RouteComponentProps<IFairnessRouteProps>
   ): React.ReactNode => {
     if (!this.state?.config) {
-      return <Spinner />;
+      return "Loading";
     }
     return <Fairness {...props.match.params} {...this.state.config} />;
   };
