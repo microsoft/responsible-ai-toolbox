@@ -4,9 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
-  IDropdownStyles,
   IDropdownOption,
-  Dropdown,
   Icon,
   Stack
 } from "office-ui-fabric-react";
@@ -19,6 +17,7 @@ import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
+import { DropdownBar } from "./Controls/DropdownBar";
 
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OutcomePlot } from "./Controls/OutcomePlot";
@@ -31,6 +30,8 @@ import { WizardReportStyles } from "./WizardReport.styles";
 export interface IState {
   metrics?: IMetrics;
   featureKey?: string;
+  parityKey?: string;
+  performanceKey?: string;
   showModalHelp?: boolean;
   expandAttributes: boolean;
 }
@@ -43,16 +44,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
     const styles = WizardReportStyles();
     const sharedStyles = SharedStyles();
-    const dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { width: 180 },
-      title: { borderRadius: "5px", borderWidth: "1px" }
-    };
 
-    const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
-      (x) => {
-        return { key: x, text: x };
-      }
-    );
 
     const alternateHeight =
       this.props.featureBinPickerProps.featureBins[
@@ -308,22 +300,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
               }
             </b>
           </div>
-          <div className={styles.headerOptions}>
-            <Dropdown
-              className={styles.dropDown}
-              // label="Feature"
-              defaultSelectedKey={
-                this.props.dashboardContext.modelMetadata.featureNames[
-                  this.props.featureBinPickerProps.selectedBinIndex
-                ]
-              }
-              options={featureOptions}
-              disabled={false}
-              onChange={this.featureChanged}
-              styles={dropdownStyles}
-            />
-          </div>
         </div>
+        <DropdownBar
+          dashboardContext={this.props.dashboardContext}
+          performancePickerProps={this.props.performancePickerProps}
+          parityPickerProps={this.props.parityPickerProps}
+          featureBinPickerProps={this.props.featureBinPickerProps}
+          parentFeatureChanged={this.featureChanged}
+          parentParityChanged={this.parityChanged}
+          parentPerformanceChanged={this.performanceChanged}
+        />
         {mainChart}
       </div>
     );
@@ -355,10 +341,40 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
-      this.props.featureBinPickerProps.selectedBinIndex = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
+      const index = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
         featureKey
       );
+      this.props.featureBinPickerProps.selectedBinIndex = index;
+      this.props.featureBinPickerProps.onBinChange(index);
       this.setState({ featureKey, metrics: undefined });
+    }
+  };
+
+  private readonly performanceChanged = (
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
+  ): void => {
+    if (!option) {
+      return;
+    }
+    const performanceKey = option.key.toString();
+    if (this.state.performanceKey !== performanceKey) {
+      this.props.performancePickerProps.onPerformanceChange(performanceKey);
+      this.setState({ metrics: undefined, performanceKey });
+    }
+  };
+
+  private readonly parityChanged = (
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
+  ): void => {
+    if (!option) {
+      return;
+    }
+    const parityKey = option.key.toString();
+    if (this.state.parityKey !== parityKey) {
+      this.props.parityPickerProps.onParityChange(parityKey);
+      this.setState({ metrics: undefined, parityKey });
     }
   };
 
