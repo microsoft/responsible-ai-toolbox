@@ -400,12 +400,20 @@
         "build": {
           "builder": "@nrwl/web:build",
           "options": {
-            "deployUrl": "/widget/",
-            "outputPath": "raiwidgets/raiwidgets/widget",
+            "baseHref": ".",
+            "outputPath": "dist/apps/raiwidgets",
             "index": "apps/widget/src/index.html",
             "main": "apps/widget/src/main.tsx",
             "polyfills": "apps/widget/src/polyfills.ts",
             "tsConfig": "apps/widget/tsconfig.app.json",
+            "progress": false,
+            "memoryLimit": 4096,
+            "globals": [
+              {
+                "moduleId": "plotly.js",
+                "global": "Plotly"
+              }
+            ],
             "assets": ["apps/widget/src/favicon.ico", "apps/widget/src/assets"],
             "styles": [],
             "scripts": [],

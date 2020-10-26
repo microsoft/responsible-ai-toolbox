@@ -1,13 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 module.exports = {
+  coverageDirectory: "../../coverage/apps/widget",
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   name: "widget",
   preset: "../../jest.config.js",
   transform: {
     "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nrwl/react/plugins/jest",
     "^.+\\.[tj]sx?$": [
       "babel-jest",
-      { cwd: __dirname, configFile: "./babel-jest.config.json" }
+      { configFile: "./babel-jest.config.json", cwd: __dirname }
     ]
-  },
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "../../coverage/apps/widget"
+  }
 };
