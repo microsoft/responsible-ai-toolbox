@@ -15,8 +15,6 @@ export interface IModelComparisonChartStyles {
   spinner: IStyle;
   header: IStyle;
   headerTitle: IStyle;
-  headerOptions: IStyle;
-  dropDown: IStyle;
   doneButton: IStyle;
   infoButton: IStyle;
   modalContentHelp: IStyle;
@@ -51,10 +49,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       margin: "auto",
       padding: "12px"
     },
-    dropDown: {
-      display: "inline-block",
-      margin: "10px 10px 10px 0px"
-    },
     editButton: {
       color: theme.semanticColors.buttonText
     },
@@ -71,10 +65,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       height: "90px",
       justifyContent: "space-between",
       padding: "0 90px"
-    },
-    headerOptions: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      padding: "0 100px"
     },
     headerTitle: {
       color: theme.semanticColors.bodyText,

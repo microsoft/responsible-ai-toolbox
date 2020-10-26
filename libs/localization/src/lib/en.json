@@ -826,6 +826,11 @@
       "cancel": "Cancel",
       "numberOfBins": "Number of bins:",
       "categoryHeader": "Bin values:"
+    },
+    "DropdownHeaders": {
+      "sensitiveFeature": "Sensitive feature",
+      "performanceMetric": "Performance metric",
+      "disparityMetric": "Disparity metric"
     }
   }
 }
