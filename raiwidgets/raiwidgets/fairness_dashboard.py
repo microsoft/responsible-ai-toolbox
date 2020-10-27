@@ -63,7 +63,7 @@ class FairnessDashboard(object):
         return "No global list view supported at this time."
 
     @FlaskHelper.app.route('/fairness/model/<id>')
-    def fairness_visual():
+    def fairness_visual(id):
         return load_widget_file("index.html")
 
     @FlaskHelper.app.route('/fairness/getmodel/<id>')
