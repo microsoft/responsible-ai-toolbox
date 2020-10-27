@@ -54,8 +54,10 @@ class FairnessDashboard(object):
 
     @FlaskHelper.app.route('/getconfig')
     def get_config():
+        burl = FairnessDashboard._service.env.base_url
+        ct = FairnessDashboard.model_count
         return {
-            "local_url": f"{FairnessDashboard._service.env.base_url}/fairness/model/{FairnessDashboard.model_count}"
+            "local_url": f"{burl}/fairness/model/{ct}"
         }
 
     @FlaskHelper.app.route('/fairness')
@@ -186,7 +188,9 @@ class FairnessDashboard(object):
         FairnessDashboard.model_count += 1
         model_count = FairnessDashboard.model_count
 
-        local_url = f"{FairnessDashboard._service.env.base_url}/fairness/model/{model_count}"
+        burl = FairnessDashboard._service.env.base_url
+
+        local_url = f"{burl}/fairness/model/{model_count}"
         metrics_url = f"{local_url}/metrics"
 
         fairness_input['metricsUrl'] = metrics_url
