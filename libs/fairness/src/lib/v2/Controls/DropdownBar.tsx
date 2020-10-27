@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import { localization } from "@responsible-ai/localization";
 import {
   Stack,
@@ -8,12 +9,14 @@ import {
   IDropdownStyles
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { IFairnessContext } from "../../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,
   IParityPickerPropsV2,
   IFeatureBinPickerPropsV2
 } from "../FairnessWizard";
+
 import { DropdownBarStyles } from "./DropdownBarStyles";
 
 export interface IDropdownBarProps {

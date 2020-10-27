@@ -19,7 +19,8 @@ import {
   SpinnerSize,
   Stack,
   Modal,
-  IIconProps, IDropdownOption
+  IIconProps,
+  IDropdownOption
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -33,8 +34,8 @@ import {
   IParityPickerPropsV2
 } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
-import { DropdownBar } from './DropdownBar';
 
+import { DropdownBar } from "./DropdownBar";
 import { Insights } from "./Insights";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 

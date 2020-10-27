@@ -18,13 +18,13 @@ export const DropdownBarStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IDropdownBarStyles>({
-    headerOptions: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      padding: "0 100px"
-    },
     dropDown: {
       display: "inline-block",
       margin: "10px 10px 10px 0px"
+    },
+    headerOptions: {
+      backgroundColor: theme.semanticColors.bodyBackground,
+      padding: "0 100px"
     }
   });
 };

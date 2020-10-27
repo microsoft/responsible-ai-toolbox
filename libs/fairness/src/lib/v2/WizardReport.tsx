@@ -3,11 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import {
-  IDropdownOption,
-  Icon,
-  Stack
-} from "office-ui-fabric-react";
+import { IDropdownOption, Icon, Stack } from "office-ui-fabric-react";
 import { ActionButton } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
@@ -17,8 +13,8 @@ import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { ParityModes, parityOptions } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
-import { DropdownBar } from "./Controls/DropdownBar";
 
+import { DropdownBar } from "./Controls/DropdownBar";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
 import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
@@ -44,7 +40,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
     const styles = WizardReportStyles();
     const sharedStyles = SharedStyles();
-
 
     const alternateHeight =
       this.props.featureBinPickerProps.featureBins[
