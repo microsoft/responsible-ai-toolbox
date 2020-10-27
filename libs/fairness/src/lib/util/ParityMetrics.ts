@@ -78,18 +78,16 @@ export const parityOptions: { [key: string]: IParityOption } = {
     description:
       localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
     key: "equalized_odds_difference",
-    parityMetric: "",
-    // combination of two metrics
-parityMode: ParityModes.Difference, 
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Difference,
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
     title: localization.Fairness.Metrics.equalizedOddsDifference
   },
   equalized_odds_ratio: {
     description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
     key: "equalized_odds_ratio",
-    parityMetric: "",
-    // combination of two metrics
-parityMode: ParityModes.Ratio, 
+    parityMetric: "", // combination of two metrics
+    parityMode: ParityModes.Ratio,
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
     title: localization.Fairness.Metrics.equalizedOddsRatio
   },
@@ -176,7 +174,10 @@ parityMode: ParityModes.Ratio,
     key: "mean_squared_error_max",
     parityMetric: "mean_squared_error",
     parityMode: ParityModes.Max,
-    supportedTasks: new Set([PredictionTypes.Regression, PredictionTypes.Probability]),
+    supportedTasks: new Set([
+      PredictionTypes.Regression,
+      PredictionTypes.Probability
+    ]),
     title: localization.Fairness.Metrics.meanSquaredErrorMax
   },
   precision_score_min: {
