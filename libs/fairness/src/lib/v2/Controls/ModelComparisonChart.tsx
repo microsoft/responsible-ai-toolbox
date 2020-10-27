@@ -18,11 +18,9 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  Dropdown,
-  IDropdownOption,
-  IDropdownStyles,
   Modal,
-  IIconProps
+  IIconProps,
+  IDropdownOption
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -37,6 +35,7 @@ import {
 } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
 
+import { DropdownBar } from "./DropdownBar";
 import { Insights } from "./Insights";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
@@ -148,27 +147,6 @@ export class ModelComparisonChart extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
-      (x) => {
-        return { key: x, text: x };
-      }
-    );
-    const performanceDropDown: IDropdownOption[] = this.props.performancePickerProps.performanceOptions.map(
-      (x) => {
-        return { key: x.key, text: x.title };
-      }
-    );
-    const parityDropdown: IDropdownOption[] = this.props.parityPickerProps.parityOptions.map(
-      (x) => {
-        return { key: x.key, text: x.title };
-      }
-    );
-
-    const dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { width: 180 },
-      title: { borderRadius: "5px" }
-    };
-
     const iconButtonStyles = {
       root: {
         color: theme.semanticColors.bodyText,
@@ -310,38 +288,15 @@ export class ModelComparisonChart extends React.PureComponent<
             {localization.Fairness.ModelComparison.title} <b>assessment</b>
           </Text>
         </div>
-        <div className={styles.headerOptions}>
-          <Dropdown
-            className={styles.dropDown}
-            defaultSelectedKey={
-              this.props.dashboardContext.modelMetadata.featureNames[
-                this.props.featureBinPickerProps.selectedBinIndex
-              ]
-            }
-            options={featureOptions}
-            disabled={false}
-            onChange={this.featureChanged}
-            styles={dropdownStyles}
-          />
-          <Dropdown
-            className={styles.dropDown}
-            defaultSelectedKey={
-              this.props.performancePickerProps.selectedPerformanceKey
-            }
-            options={performanceDropDown}
-            disabled={false}
-            onChange={this.performanceChanged}
-            styles={dropdownStyles}
-          />
-          <Dropdown
-            className={styles.dropDown}
-            defaultSelectedKey={this.props.parityPickerProps.selectedParityKey}
-            options={parityDropdown}
-            disabled={false}
-            onChange={this.parityChanged}
-            styles={dropdownStyles}
-          />
-        </div>
+        <DropdownBar
+          dashboardContext={this.props.dashboardContext}
+          performancePickerProps={this.props.performancePickerProps}
+          parityPickerProps={this.props.parityPickerProps}
+          featureBinPickerProps={this.props.featureBinPickerProps}
+          parentFeatureChanged={this.featureChanged}
+          parentParityChanged={this.parityChanged}
+          parentPerformanceChanged={this.performanceChanged}
+        />
         {mainChart}
       </Stack>
     );
@@ -392,9 +347,11 @@ export class ModelComparisonChart extends React.PureComponent<
     }
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
-      this.props.featureBinPickerProps.selectedBinIndex = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
+      const index = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
         featureKey
       );
+      this.props.featureBinPickerProps.selectedBinIndex = index;
+      this.props.featureBinPickerProps.onBinChange(index);
       this.setState({
         disparityArray: undefined,
         featureKey,
