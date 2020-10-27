@@ -272,20 +272,23 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
 
     return (
-      <div style={{ height: "100%", overflowY: "auto" }}>
-        <div className={styles.header}>
-          {this.props.modelCount > 1 && (
-            <div className={styles.multimodelSection}>
-              <ActionButton
-                className={styles.multimodelButton}
-                iconProps={{ iconName: "ChevronLeft" }}
-                onClick={this.clearModelSelection}
-              >
-                {localization.Fairness.Report.backToComparisons}
-              </ActionButton>
-            </div>
-          )}
-          <div className={styles.modelLabel}>
+      <Stack style={{ height: "100%", overflowY: "auto" }}>
+        {this.props.modelCount > 1 && (
+          <div
+            className={styles.multimodelSection}
+            style={{ padding: "0 90px" }}
+          >
+            <ActionButton
+              className={styles.multimodelButton}
+              iconProps={{ iconName: "ChevronLeft" }}
+              onClick={this.clearModelSelection}
+            >
+              {localization.Fairness.Report.backToComparisons}
+            </ActionButton>
+          </div>
+        )}
+        <div className={sharedStyles.header} style={{ padding: "0 90px" }}>
+          <Text variant={"large"} className={sharedStyles.headerTitle} block>
             {localization.Fairness.Report.assessmentResults}{" "}
             <b>
               {
@@ -294,7 +297,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 ]
               }
             </b>
-          </div>
+          </Text>
         </div>
         <DropdownBar
           dashboardContext={this.props.dashboardContext}
@@ -306,7 +309,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           parentPerformanceChanged={this.performanceChanged}
         />
         {mainChart}
-      </div>
+      </Stack>
     );
   }
 

@@ -16,6 +16,8 @@ export interface ISharedStyles {
   chartBody: IStyle;
   chartHeader: IStyle;
   chartSubHeader: IStyle;
+  header: IStyle;
+  headerTitle: IStyle;
   mainLeft: IStyle;
   textRow: IStyle;
   colorBlock: IStyle;
@@ -63,6 +65,19 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       lineHeight: "24px",
       margin: "auto",
       padding: "12px"
+    },
+    header: {
+      alignItems: "center",
+      backgroundColor: theme.semanticColors.bodyBackground,
+      display: "inline-flex",
+      flexDirection: "row",
+      height: "90px",
+      justifyContent: "space-between"
+    },
+    headerTitle: {
+      color: theme.semanticColors.bodyText,
+      fontSize: "24px",
+      fontWeight: FontWeights.semibold
     },
     infoButton: {
       border: "1px solid",
