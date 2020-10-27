@@ -29,7 +29,7 @@
     "memoize-one": "^5.0.2",
     "mlchartlib": "0.1.38-beta2",
     "moment": "^2.24.0",
-    "office-ui-fabric-react": "^7.74.1",
+    "office-ui-fabric-react": "^7.117.0",
     "package.json": "^2.0.1",
     "plotly.js-dist": "^1.45.3",
     "react-transition-group": "^4.2.4",

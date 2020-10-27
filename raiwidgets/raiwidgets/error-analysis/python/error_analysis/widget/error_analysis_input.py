@@ -13,6 +13,12 @@ from sklearn import tree
 from sklearn.tree import _tree
 from enum import Enum
 
+BIN_THRESHOLD = 8
+CATEGORY1 = "category1"
+CATEGORY2 = "category2"
+FALSE_COUNT = "falseCount"
+COUNT = "count"
+
 
 class TreeSide(str, Enum):
     """Provide model task constants.
@@ -66,6 +72,7 @@ class ErrorAnalysisDashboardInput:
             features=None,
             predict_url=None,
             tree_url=None,
+            matrix_url=None,
             local_url=None,
             locale=None):
         """Initialize the Explanation Dashboard Input.
@@ -103,6 +110,7 @@ class ErrorAnalysisDashboardInput:
         self.dashboard_input = {}
         self._predict_url = predict_url
         self._tree_url = tree_url
+        self._matrix_url = matrix_url
         self._local_url = local_url
         # List of explanations, key of explanation type is "explanation_type"
         self._mli_explanations = explanation.data(-1)["mli"]
@@ -267,6 +275,7 @@ class ErrorAnalysisDashboardInput:
             interface = ErrorAnalysisDashboardInterface
             self.dashboard_input[interface.PREDICTION_URL] = self._predict_url
             self.dashboard_input[interface.TREE_URL] = self._tree_url
+            self.dashboard_input[interface.MATRIX_URL] = self._matrix_url
             self.dashboard_input[interface.LOCAL_URL] = self._local_url
 
     def debug_ml(self, features):
@@ -279,21 +288,11 @@ class ErrorAnalysisDashboardInput:
             indexes = []
             for feature in features:
                 indexes.append(feature_names.index(feature))
-            print("feature_names: ")
-            print(feature_names)
-            print("selected features: ")
-            print(features)
-            print("indexes: ")
-            print(indexes)
             dataset_sub_features = self._dataset[:, indexes]
-            print("dataset_sub_features: ")
-            print(dataset_sub_features)
             dataset_sub_names = np.array(feature_names)[np.array(indexes)]
             surrogate.fit(dataset_sub_features, diff)
             json_tree = self.traverse(surrogate.tree_, 0, [],
                                       dataset_sub_names)
-            print("json_tree: ")
-            print(json_tree)
             return {
                 WidgetRequestResponseConstants.DATA: json_tree
             }
@@ -304,6 +303,155 @@ class ErrorAnalysisDashboardInput:
                     "Failed to generate json tree representation",
                 WidgetRequestResponseConstants.DATA: []
             }
+
+    def matrix(self, features):
+        try:
+            if features[0] is None:
+                return {WidgetRequestResponseConstants.DATA: []}
+            interface = ErrorAnalysisDashboardInterface
+            diff = self._model.predict(self._dataset) != self._true_y
+            feature_names = self.dashboard_input[interface.FEATURE_NAMES]
+            indexes = []
+            for feature in features:
+                if feature is None:
+                    continue
+                indexes.append(feature_names.index(feature))
+            dataset_sub_features = self._dataset[:, indexes]
+            dataset_sub_names = np.array(feature_names)[np.array(indexes)]
+            df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
+            df_err = df.copy()
+            diff_col = 'diff'
+            df_err[diff_col] = diff
+            df_err = df_err[df_err[diff_col]]
+            # construct json matrix
+            json_matrix = []
+            if len(dataset_sub_names) == 2:
+                feat1 = dataset_sub_names[0]
+                feat2 = dataset_sub_names[1]
+                unique_count1 = len(df[feat1].unique())
+                unique_count2 = len(df[feat2].unique())
+                if unique_count1 > BIN_THRESHOLD:
+                    tabdf1, bins = pd.cut(df[feat1], BIN_THRESHOLD,
+                                          retbins=True)
+                    tabdf1_err = pd.cut(df_err[feat1], bins)
+                    categories1 = tabdf1.cat.categories
+                else:
+                    tabdf1 = df[feat1]
+                    tabdf1_err = df_err[feat1]
+                    categories1 = np.unique(tabdf1.to_numpy(),
+                                            return_counts=True)[0]
+                if unique_count2 > BIN_THRESHOLD:
+                    tabdf2, bins = pd.cut(df[feat2], BIN_THRESHOLD,
+                                          retbins=True)
+                    tabdf2_err = pd.cut(df_err[feat2], bins)
+                    categories2 = tabdf2.cat.categories
+                else:
+                    tabdf2 = df[feat2]
+                    tabdf2_err = df_err[feat2]
+                    categories2 = np.unique(tabdf2.to_numpy(),
+                                            return_counts=True)[0]
+                matrix_total = pd.crosstab(tabdf1, tabdf2, rownames=[feat1],
+                                           colnames=[feat2])
+                matrix_error = pd.crosstab(tabdf1_err, tabdf2_err,
+                                           rownames=[feat1], colnames=[feat2])
+                json_matrix = self.json_matrix_2d(categories1, categories2,
+                                                  matrix_total, matrix_error)
+            else:
+                feat1 = dataset_sub_names[0]
+                unique_count1 = len(df[feat1].unique())
+                if unique_count1 > BIN_THRESHOLD:
+                    cutdf, bins = pd.cut(df[feat1], BIN_THRESHOLD,
+                                         retbins=True)
+                    bin_range = range(BIN_THRESHOLD)
+                    catr = cutdf.cat.rename_categories(bin_range)
+                    counts = np.unique(catr.to_numpy(), return_counts=True)[1]
+                    cutdf_err = pd.cut(df_err[feat1], bins)
+                    catr_err = cutdf_err.cat.rename_categories(bin_range)
+                    val_err, counts_err = np.unique(catr_err.to_numpy(),
+                                                    return_counts=True)
+                    val_err = cutdf_err.cat.categories[val_err]
+                    json_matrix = self.json_matrix_1d(cutdf.cat.categories,
+                                                      val_err, counts,
+                                                      counts_err)
+                else:
+                    values, counts = np.unique(df[feat1].to_numpy(),
+                                               return_counts=True)
+                    val_err, counts_err = np.unique(df_err[feat1].to_numpy(),
+                                                    return_counts=True)
+                    json_matrix = self.json_matrix_1d(values, val_err, counts,
+                                                      counts_err)
+            return {
+                WidgetRequestResponseConstants.DATA: json_matrix
+            }
+        except Exception as e:
+            print(e)
+            import traceback
+            traceback.print_stack()
+            return {
+                WidgetRequestResponseConstants.ERROR:
+                    "Failed to generate json matrix representation",
+                WidgetRequestResponseConstants.DATA: []
+            }
+
+    def json_matrix_2d(self, categories1, categories2, matrix_counts,
+                       matrix_err_counts):
+        json_matrix = []
+        for row_index in range(matrix_counts.shape[0]):
+            json_matrix_category = []
+            cat1 = categories1[row_index]
+            json_matrix_category.append({
+                CATEGORY1: str(cat1)
+            })
+            for col_index in range(matrix_counts.shape[1]):
+                cat2 = categories2[col_index]
+                index_exists = cat1 in matrix_err_counts.index
+                col_exists = cat2 in matrix_err_counts.columns
+                false_count = 0
+                if index_exists and col_exists:
+                    false_count = int(matrix_err_counts.loc[cat1, cat2])
+                json_matrix_category.append({
+                    FALSE_COUNT: false_count,
+                    COUNT: int(matrix_counts.iloc[row_index, col_index])
+                })
+            json_matrix.append(json_matrix_category)
+
+        json_matrix_category_end = []
+        json_matrix_category_end.append({
+            CATEGORY1: matrix_counts.shape[0]
+        })
+        for category in categories2:
+            json_matrix_category_end.append({
+                CATEGORY2: str(category)
+            })
+        json_matrix.append(json_matrix_category_end)
+        return json_matrix
+
+    def json_matrix_1d(self, categories, values_err, counts, counts_err):
+        json_matrix = []
+        json_matrix_category0 = []
+        json_matrix_category0.append({
+            CATEGORY1: 0
+        })
+        for index, count in enumerate(counts):
+            false_count = 0
+            if categories[index] in values_err:
+                index_err = list(values_err).index(categories[index])
+                false_count = int(counts_err[index_err])
+            json_matrix_category0.append({
+                FALSE_COUNT: false_count,
+                COUNT: int(counts[index])
+            })
+        json_matrix.append(json_matrix_category0)
+        json_matrix_category1 = []
+        json_matrix_category1.append({
+            CATEGORY1: 1
+        })
+        for category in categories:
+            json_matrix_category1.append({
+                CATEGORY2: str(category)
+            })
+        json_matrix.append(json_matrix_category1)
+        return json_matrix
 
     def traverse(self, tree, nodeid, json, feature_names, parent=None,
                  side=TreeSide.Unknown):
@@ -335,8 +483,6 @@ class ErrorAnalysisDashboardInput:
         if parent is not None:
             parent = int(parent)
             parent_node_name = feature_names[tree.feature[parent]]
-            print("parent node name in node_to_json: ")
-            print(parent_node_name)
             parent_threshold = float(tree.threshold[parent])
             if side == TreeSide.RightChild:
                 condition = "{} <= {:.2f}".format(parent_node_name,

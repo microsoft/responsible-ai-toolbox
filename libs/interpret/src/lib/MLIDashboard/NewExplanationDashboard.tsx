@@ -107,7 +107,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             })
         }}
       >
-        <div className={classNames.page} style={{ maxHeight: "1000px" }}>
+        <div className={classNames.page}>
           {this.state.showingDataSizeWarning && (
             <MessageBar
               onDismiss={this.clearSizeWarning}

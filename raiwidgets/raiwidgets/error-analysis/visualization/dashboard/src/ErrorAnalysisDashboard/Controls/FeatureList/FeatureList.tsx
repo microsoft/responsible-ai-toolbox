@@ -80,7 +80,10 @@ export class FeatureList extends React.PureComponent<
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
             <Stack.Item key="decisionTreeKey" align="start">
-              <Text key="decisionTreeTextKey" className="decisionTree">
+              <Text
+                key="decisionTreeTextKey"
+                className={classNames.decisionTree}
+              >
                 Decision Tree
               </Text>
             </Stack.Item>

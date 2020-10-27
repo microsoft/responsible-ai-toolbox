@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { limitStringLength } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  CommandBarButton,
+  DefaultButton,
   PrimaryButton,
   Stack,
   Text
@@ -21,8 +22,8 @@ export interface ICohortListProps {
   cohorts: Cohort[];
   metadata: IExplanationModelMetadata;
   jointDataset: JointDataset;
-  editCohort: (index: number) => void;
-  cloneAndEdit: (index: number) => void;
+  addCohort: () => void;
+  showEditList: () => void;
 }
 
 export class CohortList extends React.PureComponent<ICohortListProps> {
@@ -37,18 +38,20 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
     }
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <Stack.Item>
-          <PrimaryButton
-            disabled={!this.props.jointDataset.dataDict?.length}
-            onClick={this.props.editCohort.bind(
-              this,
-              this.props.cohorts.length
-            )}
-            text={localization.Interpret.CohortBanner.addCohort}
-            iconProps={{ iconName: "Add" }}
-            styles={{ label: { whiteSpace: "nowrap" } }}
-          />
-        </Stack.Item>
+        <PrimaryButton
+          disabled={!this.props.jointDataset.dataDict?.length}
+          onClick={this.props.addCohort}
+          text={localization.Interpret.CohortBanner.addCohort}
+          iconProps={{ iconName: "Add" }}
+          styles={{ label: { whiteSpace: "nowrap" } }}
+        />
+        <DefaultButton
+          disabled={!this.props.jointDataset.dataDict?.length}
+          onClick={this.props.showEditList}
+          text={localization.Interpret.CohortBanner.editCohort}
+          iconProps={{ iconName: "Edit" }}
+          styles={{ label: { whiteSpace: "nowrap" } }}
+        />
         <Stack>
           <Stack.Item>
             <Text variant={"small"}>
@@ -81,56 +84,25 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
               {localization.Interpret.CohortBanner.datasetCohorts.toUpperCase()}
             </Text>
           </Stack.Item>
-          {this.props.cohorts.map((cohort, index) => {
+          {this.props.cohorts.map((cohort) => {
             return (
               <Stack.Item tokens={{ padding: "l1" }}>
                 <Stack>
-                  <Stack.Item>
-                    <CommandBarButton
-                      ariaLabel="More items"
-                      role="menuitem"
-                      disabled={!this.props.jointDataset.dataDict?.length}
-                      menuIconProps={{
-                        iconName: "More",
-                        style: { fontSize: "x-large" }
-                      }}
-                      menuProps={{
-                        items: [
-                          {
-                            key: "item4",
-                            name:
-                              localization.Interpret.CohortBanner.editCohort,
-                            onClick: (): void => this.props.editCohort(index)
-                          },
-                          {
-                            key: "item5",
-                            name:
-                              localization.Interpret.CohortBanner
-                                .duplicateCohort,
-                            onClick: (): void => this.props.cloneAndEdit(index)
-                          }
-                        ]
-                      }}
-                    >
-                      <Text variant={"mediumPlus"}>{cohort.name}</Text>
-                    </CommandBarButton>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <Text variant={"xSmall"}>
-                      {localization.formatString(
-                        localization.Interpret.CohortBanner.datapoints,
-                        cohort.filteredData.length
-                      )}
-                    </Text>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <Text variant={"xSmall"}>
-                      {localization.formatString(
-                        localization.Interpret.CohortBanner.filters,
-                        cohort.filters.length
-                      )}
-                    </Text>
-                  </Stack.Item>
+                  <Text variant={"mediumPlus"} title={cohort.name}>
+                    {limitStringLength(cohort.name, 15)}
+                  </Text>
+                  <Text variant={"xSmall"}>
+                    {localization.formatString(
+                      localization.Interpret.CohortBanner.datapoints,
+                      cohort.filteredData.length
+                    )}
+                  </Text>
+                  <Text variant={"xSmall"}>
+                    {localization.formatString(
+                      localization.Interpret.CohortBanner.filters,
+                      cohort.filters.length
+                    )}
+                  </Text>
                 </Stack>
               </Stack.Item>
             );
