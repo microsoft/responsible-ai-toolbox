@@ -78,6 +78,7 @@ export interface IWhatIfTabStyles {
   calloutLink: IStyle;
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
+  notAvailable: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<
@@ -334,6 +335,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     },
     saveButton: {
       margin: "0 0 10px 24px"
+    },
+    notAvailable: {
+      backgroundColor: theme.semanticColors.severeWarningBackground
     },
     sliderLabel: {
       fontWeight: "600",

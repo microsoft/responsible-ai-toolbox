@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import {
   ComboBox,
   Dropdown,
+  FocusZone,
   IComboBox,
   IComboBoxOption,
   IconButton,
@@ -92,9 +93,17 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                     ? localization.Interpret.WhatIfTab.whatIfDatapoint
                     : localization.Interpret.WhatIfTab.dataPointInfo}
                 </Label>
-                <Text variant={"small"}>
-                  {localization.Interpret.WhatIfTab.whatIfHelpText}
-                </Text>
+                {this.props.invokeModel ? (
+                  <Text variant={"small"}>
+                    {localization.Interpret.WhatIfTab.whatIfHelpText}
+                  </Text>
+                ) : (
+                  <FocusZone className={classNames.notAvailable}>
+                    <Text variant={"small"}>
+                      {localization.Interpret.WhatIfTab.notAvailable}
+                    </Text>
+                  </FocusZone>
+                )}
               </Stack.Item>
               <Stack.Item>
                 {this.props.rowOptions && (

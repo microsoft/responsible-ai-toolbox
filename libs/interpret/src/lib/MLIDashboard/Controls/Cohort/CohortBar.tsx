@@ -5,7 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
   IColumn,
-  IconButton,
+  Link,
   Panel,
   SelectionMode,
   Stack,
@@ -65,10 +65,10 @@ export class CohortBar extends React.Component<
     }
     const columns: IColumn[] = [
       {
-        fieldName: "name",
         key: "name",
         minWidth: 100,
-        name: localization.Interpret.CohortBanner.name
+        name: localization.Interpret.CohortBanner.name,
+        onRender: this.renderCohortName
       },
       {
         key: "details",
@@ -178,6 +178,30 @@ export class CohortBar extends React.Component<
     this.setState({ editingCohortIndex: index });
   };
 
+  private renderCohortName = (
+    cohort?: Cohort,
+    index?: number
+  ): React.ReactNode => {
+    if (!cohort || index === undefined) {
+      return <span />;
+    }
+    return (
+      <Stack>
+        <Text>{cohort.name}</Text>
+        <Stack horizontal={true} tokens={{ childrenGap: "s1" }}>
+          {index && (
+            <Link onClick={this.editCohort.bind(this, index)}>
+              {localization.Interpret.CohortBanner.editCohort}
+            </Link>
+          )}
+          <Link onClick={this.cloneAndEditCohort.bind(this, index)}>
+            {localization.Interpret.CohortBanner.duplicateCohort}
+          </Link>
+        </Stack>
+      </Stack>
+    );
+  };
+
   private renderDetails = (
     cohort?: Cohort,
     index?: number
@@ -199,24 +223,6 @@ export class CohortBar extends React.Component<
             cohort.filters.length
           )}
         </Text>
-        <Stack horizontal={true}>
-          {index && (
-            <IconButton
-              iconProps={{
-                iconName: "Edit"
-              }}
-              title={localization.Interpret.CohortBanner.editCohort}
-              onClick={this.editCohort.bind(this, index)}
-            />
-          )}
-          <IconButton
-            iconProps={{
-              iconName: "Copy"
-            }}
-            title={localization.Interpret.CohortBanner.duplicateCohort}
-            onClick={this.cloneAndEditCohort.bind(this, index)}
-          />
-        </Stack>
       </Stack>
     );
   };
