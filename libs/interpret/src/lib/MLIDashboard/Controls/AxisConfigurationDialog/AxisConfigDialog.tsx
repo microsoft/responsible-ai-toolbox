@@ -150,6 +150,7 @@ export class AxisConfigDialog extends React.PureComponent<
         isOpen={true}
         onRenderFooter={this.renderFooter}
         isFooterAtBottom
+        isLightDismiss
       >
         <Stack tokens={{ childrenGap: "l1" }}>
           <Stack.Item>

@@ -391,6 +391,51 @@
         }
       }
     },
+    "error-analysis": {
+      "root": "libs/error-analysis",
+      "sourceRoot": "libs/error-analysis/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/error-analysis/tsconfig.lib.json",
+              "libs/error-analysis/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/error-analysis/**/*"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/error-analysis",
+            "tsConfig": "libs/error-analysis/tsconfig.lib.json",
+            "project": "libs/error-analysis/package.json",
+            "entryFile": "libs/error-analysis/src/index.ts",
+            "external": ["react", "react-dom"],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/error-analysis/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "widget": {
       "root": "apps/widget",
       "sourceRoot": "apps/widget/src",

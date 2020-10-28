@@ -38,20 +38,24 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
     }
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <PrimaryButton
-          disabled={!this.props.jointDataset.dataDict?.length}
-          onClick={this.props.addCohort}
-          text={localization.Interpret.CohortBanner.addCohort}
-          iconProps={{ iconName: "Add" }}
-          styles={{ label: { whiteSpace: "nowrap" } }}
-        />
-        <DefaultButton
-          disabled={!this.props.jointDataset.dataDict?.length}
-          onClick={this.props.showEditList}
-          text={localization.Interpret.CohortBanner.editCohort}
-          iconProps={{ iconName: "Edit" }}
-          styles={{ label: { whiteSpace: "nowrap" } }}
-        />
+        <Stack.Item>
+          <Stack tokens={{ childrenGap: "s1" }}>
+            <PrimaryButton
+              disabled={!this.props.jointDataset.dataDict?.length}
+              onClick={this.props.addCohort}
+              text={localization.Interpret.CohortBanner.addCohort}
+              iconProps={{ iconName: "Add" }}
+              styles={{ label: { whiteSpace: "nowrap" } }}
+            />
+            <DefaultButton
+              disabled={!this.props.jointDataset.dataDict?.length}
+              onClick={this.props.showEditList}
+              text={localization.Interpret.CohortBanner.editCohort}
+              iconProps={{ iconName: "Edit" }}
+              styles={{ label: { whiteSpace: "nowrap" } }}
+            />
+          </Stack>
+        </Stack.Item>
         <Stack>
           <Stack.Item>
             <Text variant={"small"}>
