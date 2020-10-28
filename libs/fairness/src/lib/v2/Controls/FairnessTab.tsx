@@ -29,7 +29,7 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
         <StackItem grow={2}>
           <Stack className={styles.main}>
             <Text className={styles.header} block>
-              {localization.Fairness.Performance.header}
+              {localization.Fairness.Fairness.pickerHeader}
             </Text>
             <Text className={styles.textBody} block>
               {localization.Fairness.Fairness.body}

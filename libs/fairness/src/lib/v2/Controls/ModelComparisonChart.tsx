@@ -26,7 +26,7 @@ import React from "react";
 
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
-import { fairnessOptions } from "../../util/FairnessMetrics";
+import { FairnessModes, fairnessOptions } from "../../util/FairnessMetrics";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV2,
@@ -215,9 +215,10 @@ export class ModelComparisonChart extends React.PureComponent<
       );
 
       const performanceMetricTitle = selectedMetric.title;
-      const fairnessMetricTitle =
-        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
-          .title;
+      const fairnessMetric =
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey];
+      const fairnessMetricTitle = fairnessMetric.title;
+
       if (props.layout?.xaxis) {
         props.layout.xaxis.title = performanceMetricTitle;
       }
@@ -226,6 +227,28 @@ export class ModelComparisonChart extends React.PureComponent<
       }
 
       const cancelIcon: IIconProps = { iconName: "Cancel" };
+
+      // The help text for performance metrics needs to indicate
+      // that a lower/higher value is better in the corresponding cases.
+      const helpModalText1 = localization.formatString(
+        localization.Fairness.ModelComparison.helpModalText1,
+        selectedMetric.isMinimization
+          ? localization.Fairness.ModelComparison.lower
+          : localization.Fairness.ModelComparison.higher
+      );
+
+      /* The following modal text needs to indicate whether lower or higher
+      is preferable given the selected fairness metric. For difference and
+      maximum based metrics lower is preferable, for ratio and minimum based
+      metrics higher is better. */
+      const helpModalText2 = localization.formatString(
+        localization.Fairness.ModelComparison.helpModalText2,
+        new Set([FairnessModes.Difference, FairnessModes.Max]).has(
+          fairnessMetric.fairnessMode
+        )
+          ? localization.Fairness.ModelComparison.lower
+          : localization.Fairness.ModelComparison.higher
+      );
 
       mainChart = (
         <div className={styles.main}>
@@ -254,10 +277,10 @@ export class ModelComparisonChart extends React.PureComponent<
                   {localization.Fairness.ModelComparison.introModalText}
                   <br />
                   <br />
-                  {localization.Fairness.ModelComparison.helpModalText1}
+                  {helpModalText1}
                   <br />
                   <br />
-                  {localization.Fairness.ModelComparison.helpModalText2}
+                  {helpModalText2}
                 </p>
                 <div style={{ display: "flex", paddingBottom: "20px" }}>
                   <PrimaryButton

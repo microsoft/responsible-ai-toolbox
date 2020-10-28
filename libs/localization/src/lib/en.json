@@ -612,6 +612,7 @@
       "continuous": "continuous"
     },
     "Fairness": {
+      "pickerHeader": "How do you want to measure fairness?",
       "header": "Fairness measured in terms of disparity",
       "bodyLegacy": "Fairness metrics quantify variation of your model's behavior across selected features. There are two of fairness metrics: more to come....",
       "body": "Fairness metrics quantify variation of your model's behavior across selected features. There are several kinds of fairness metrics that are based on a variety of performance metrics. They either capture the difference or ratio between the extreme values across the groups, or simply the worst value of any group."
@@ -652,8 +653,8 @@
       "to": " to ",
       "period": ". ",
       "introModalText": "Each model is a selectable point. Click or tap on a model for its full fairness assessment.",
-      "helpModalText1": "The x-axis represents performance, with higher being better.",
-      "helpModalText2": "The y-axis represents disparity, with lower being better.",
+      "helpModalText1": "The x-axis represents performance, with {0} being better.",
+      "helpModalText2": "The y-axis represents fairness metric values, with {0} being better.",
       "insightsText2": "{0} ranges from {1} to {2}. {3} ranges from {4} to {5}.",
       "insightsText3": "The model with the best performance achieves {0} of {1} and {2} of {3}.",
       "insightsText4": "The model with the best fairness metric value achieves {0} of {1} and {2} of {3}.",

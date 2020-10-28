@@ -103,11 +103,11 @@ export class Insights extends React.Component<IInsightsProps> {
     const insights4 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText4,
       this.props.selectedMetric.title.toLowerCase(),
-      this.props.selectedFairnessMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
         this.props.performanceArray[minFairnessValueIndex],
         this.props.selectedPerformanceKey
       ),
+      this.props.selectedFairnessMetric.title.toLowerCase(),
       formattedMinFairnessValue
     );
 
