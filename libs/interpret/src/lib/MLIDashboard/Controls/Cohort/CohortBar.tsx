@@ -103,7 +103,7 @@ export class CohortBar extends React.Component<
               deleteIsDisabled={this.props.cohorts.length === 1}
             />
           ) : (
-            <Panel isOpen={true} onDismiss={this.hideEditList}>
+            <Panel isOpen={true} onDismiss={this.hideEditList} isLightDismiss>
               <DetailsList
                 items={this.props.cohorts}
                 selectionMode={SelectionMode.none}

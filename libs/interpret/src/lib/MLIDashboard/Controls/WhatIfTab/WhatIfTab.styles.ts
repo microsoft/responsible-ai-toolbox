@@ -280,6 +280,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     negativeNumber: {
       color: theme.palette.red
     },
+    notAvailable: {
+      backgroundColor: theme.semanticColors.warningBackground
+    },
     paddingDiv: {
       width: "50px"
     },
@@ -335,9 +338,6 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     },
     saveButton: {
       margin: "0 0 10px 24px"
-    },
-    notAvailable: {
-      backgroundColor: theme.semanticColors.severeWarningBackground
     },
     sliderLabel: {
       fontWeight: "600",
