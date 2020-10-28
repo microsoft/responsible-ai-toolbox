@@ -401,7 +401,6 @@
       "higher": "più alto",
       "howToReadText": "Questo grafico rappresenta ciascuno dei {0} modelli come punto selezionabile. L'asse x rappresenta {1}, con un valore {2} come valore migliore. L'asse y rappresenta la disparità, con un valore più basso come valore migliore.",
       "insights": "Informazioni dettagliate",
-      "insightsText1": "Il grafico mostra {0} e la disparità di {1} modelli.",
       "insightsText2": "{0} varia da {1} a {2}. La disparità varia da {3} a {4}.",
       "insightsText3": "Il modello più accurato raggiunge {0} di {1} e una disparità di {2}.",
       "insightsText4": "Il modello con disparità più bassa raggiunge {0} di {1} e una disparità di {2}.",

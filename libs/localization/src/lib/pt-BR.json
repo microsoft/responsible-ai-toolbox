@@ -401,7 +401,6 @@
       "higher": "maior",
       "howToReadText": "Este gráfico representa cada um dos modelos de {0} como um ponto selecionável. O eixo x representa {1}, no qual {2} é melhor. O eixo y representa a disparidade, na qual um valor menor é melhor.",
       "insights": "Insights",
-      "insightsText1": "O gráfico mostra {0} e a disparidade de modelos de {1}.",
       "insightsText2": "{0} tem um intervalo de {1} a {2}. A disparidade tem um intervalo de {3} a {4}.",
       "insightsText3": "O modelo mais preciso atinge {0} de {1} e uma disparidade de {2}.",
       "insightsText4": "O modelo com menor disparidade atinge {0} de {1} e uma disparidade de {2}.",

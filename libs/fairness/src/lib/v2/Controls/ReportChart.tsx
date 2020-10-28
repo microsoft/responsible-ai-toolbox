@@ -14,7 +14,7 @@ import { PredictionTypes } from "../../IFairnessProps";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,
-  IParityPickerPropsV2,
+  IFairnessPickerPropsV2,
   IFeatureBinPickerPropsV2
 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
@@ -26,7 +26,7 @@ import { PerformancePlot } from "./PerformancePlot";
 export interface IReportChartProps {
   dashboardContext: IFairnessContext;
   performancePickerProps: IPerformancePickerPropsV2;
-  parityPickerProps: IParityPickerPropsV2;
+  fairnessPickerProps: IFairnessPickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   areaHeights: number;
   metrics: IMetrics;
@@ -40,10 +40,12 @@ export interface IState {
 }
 
 export class ReportChart extends React.Component<IReportChartProps, IState> {
+  public constructor(props: IReportChartProps) {
+    super(props);
+    this.state = { displayPlotKey: performanceKey };
+  }
+
   public render(): React.ReactNode {
-    if (!this.state) {
-      this.setState({ displayPlotKey: performanceKey });
-    }
     const styles = DropdownBarStyles();
     const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 180 },
@@ -129,8 +131,8 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     if (!option) {
       return;
     }
-    if (option?.key !== this.state.displayPlotKey) {
-      this.setState({ displayPlotKey: option?.key.toString() });
+    if (option.key !== this.state.displayPlotKey) {
+      this.setState({ displayPlotKey: option.key.toString() });
     }
   }
 }

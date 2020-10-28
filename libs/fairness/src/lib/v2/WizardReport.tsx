@@ -11,7 +11,7 @@ import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { ParityModes, parityOptions } from "../util/ParityMetrics";
+import { FairnessModes, fairnessOptions } from "../util/FairnessMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { DropdownBar } from "./Controls/DropdownBar";
@@ -25,7 +25,7 @@ import { WizardReportStyles } from "./WizardReport.styles";
 export interface IState {
   metrics?: IMetrics;
   featureKey?: string;
-  parityKey?: string;
+  fairnessKey?: string;
   performanceKey?: string;
   showModalHelp?: boolean;
   expandAttributes: boolean;
@@ -50,7 +50,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
-    const fairnessKey = this.props.parityPickerProps.selectedParityKey;
+    const fairnessKey = this.props.fairnessPickerProps.selectedFairnessKey;
     const outcomeKey: string =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -120,7 +120,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
       const fairnessMetricString = FormatMetrics.formatNumbers(
         this.state.metrics.disparities[
-          this.props.parityPickerProps.selectedParityKey
+          this.props.fairnessPickerProps.selectedFairnessKey
         ],
         performanceKey
       );
@@ -171,9 +171,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         ).title,
         performanceOptions[outcomeKey].title,
         (
-          this.props.parityPickerProps.parityOptions.find(
+          this.props.fairnessPickerProps.fairnessOptions.find(
             (a) => a.key === fairnessKey
-          ) || parityOptions[fairnessKey]
+          ) || fairnessOptions[fairnessKey]
         ).title
       ];
       additionalMetrics.forEach((_, metricName) => {
@@ -240,7 +240,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 dashboardContext={this.props.dashboardContext}
                 featureBinPickerProps={this.props.featureBinPickerProps}
                 metrics={this.state.metrics}
-                parityPickerProps={this.props.parityPickerProps}
+                fairnessPickerProps={this.props.fairnessPickerProps}
                 performancePickerProps={this.props.performancePickerProps}
               />
             </Stack>
@@ -251,6 +251,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             fairnessArray={this.state.fairnessArray}
             performanceArray={this.state.performanceArray}
             selectedMetric={selectedMetric}
+            selectedFairnessMetric={selectedFairnessMetric}
             selectedPerformanceKey={
               this.props.performancePickerProps.selectedPerformanceKey
             }
@@ -290,10 +291,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         <DropdownBar
           dashboardContext={this.props.dashboardContext}
           performancePickerProps={this.props.performancePickerProps}
-          parityPickerProps={this.props.parityPickerProps}
+          fairnessPickerProps={this.props.fairnessPickerProps}
           featureBinPickerProps={this.props.featureBinPickerProps}
           parentFeatureChanged={this.featureChanged}
-          parentParityChanged={this.parityChanged}
+          parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
         />
         {mainChart}
@@ -350,17 +351,17 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
   };
 
-  private readonly parityChanged = (
+  private readonly fairnessChanged = (
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
     if (!option) {
       return;
     }
-    const parityKey = option.key.toString();
-    if (this.state.parityKey !== parityKey) {
-      this.props.parityPickerProps.onParityChange(parityKey);
-      this.setState({ metrics: undefined, parityKey });
+    const fairnessKey = option.key.toString();
+    if (this.state.fairnessKey !== fairnessKey) {
+      this.props.fairnessPickerProps.onFairnessChange(fairnessKey);
+      this.setState({ metrics: undefined, fairnessKey });
     }
   };
 
@@ -380,10 +381,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       // TODO: extend disparities to query for all possible kinds of disparities
       // https://github.com/microsoft/responsible-ai-widgets/issues/65
       disparities[
-        this.props.parityPickerProps.selectedParityKey
+        this.props.fairnessPickerProps.selectedFairnessKey
       ] = await this.getFairnessMetric(
-        this.props.parityPickerProps.selectedParityKey,
-        parityOptions[this.props.parityPickerProps.selectedParityKey].parityMode
+        this.props.fairnessPickerProps.selectedFairnessKey,
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey].fairnessMode
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
@@ -442,14 +443,14 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
   private async getFairnessMetric(
     metricName: string,
-    parityMode: ParityModes
+    fairnessMode: FairnessModes
   ): Promise<number> {
     return await this.props.metricsCache.getFairnessMetric(
       this.props.dashboardContext.binVector,
       this.props.featureBinPickerProps.selectedBinIndex,
       this.props.selectedModelIndex,
       metricName,
-      parityMode
+      fairnessMode
     );
   }
 }

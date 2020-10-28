@@ -25,12 +25,12 @@ import { PredictionTypes } from "../../IFairnessProps";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
-import { ParityModes } from "../../util/ParityMetrics";
+import { FairnessModes } from "../../util/FairnessMetrics";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV1,
   IFeatureBinPickerPropsV1,
-  IParityPickerPropsV1
+  IFairnessPickerPropsV1
 } from "../FairnessWizard";
 
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
@@ -41,7 +41,7 @@ export interface IModelComparisonProps {
   metricsCache: MetricsCache;
   modelCount: number;
   performancePickerProps: IPerformancePickerPropsV1;
-  parityPickerProps: IParityPickerPropsV1;
+  fairnessPickerProps: IFairnessPickerPropsV1;
   featureBinPickerProps: IFeatureBinPickerPropsV1;
   onEditConfigs: () => void;
   onChartClick?: (data: any) => void;
@@ -49,7 +49,7 @@ export interface IModelComparisonProps {
 
 export interface IState {
   performanceArray?: Array<number | undefined>;
-  disparityArray?: number[];
+  fairnessArray?: number[];
   disparityInOutcomes: boolean;
 }
 
@@ -90,7 +90,7 @@ export class ModelComparisonChart extends React.PureComponent<
         mode: PlotlyMode.Markers,
         type: "scatter",
         xAccessor: "Performance",
-        yAccessor: "Parity"
+        yAccessor: "Fairness"
       }
     ],
     layout: {
@@ -117,7 +117,7 @@ export class ModelComparisonChart extends React.PureComponent<
         automargin: true,
         fixedrange: true,
         title: {
-          text: "Disparity"
+          text: "Fairness"
         }
       }
     } as any
@@ -135,7 +135,7 @@ export class ModelComparisonChart extends React.PureComponent<
     if (
       !this.state ||
       this.state.performanceArray === undefined ||
-      this.state.disparityArray === undefined
+      this.state.fairnessArray === undefined
     ) {
       this.loadData();
       return (
@@ -146,22 +146,22 @@ export class ModelComparisonChart extends React.PureComponent<
         />
       );
     }
-    const { disparityArray } = this.state;
+    const { fairnessArray } = this.state;
     const data = this.state.performanceArray.map((performance, index) => {
       return {
         index,
-        Parity: disparityArray[index],
+        Fairness: fairnessArray[index],
         Performance: performance
       };
     });
 
     let minPerformance: number = Number.MAX_SAFE_INTEGER;
     let maxPerformance: number = Number.MIN_SAFE_INTEGER;
-    let maxDisparity: number = Number.MIN_SAFE_INTEGER;
-    let minDisparity: number = Number.MAX_SAFE_INTEGER;
+    let maxFairness: number = Number.MIN_SAFE_INTEGER;
+    let minFairness: number = Number.MAX_SAFE_INTEGER;
     let minPerformanceIndex = 0;
     let maxPerformanceIndex = this.state.performanceArray[0];
-    let minDisparityIndex = 0;
+    let minFairnessIndex = 0;
     this.state.performanceArray.forEach((value, index) => {
       if (value === undefined) {
         return;
@@ -175,13 +175,13 @@ export class ModelComparisonChart extends React.PureComponent<
         minPerformance = value;
       }
     });
-    this.state.disparityArray.forEach((value, index) => {
-      if (value >= maxDisparity) {
-        maxDisparity = value;
+    this.state.fairnessArray.forEach((value, index) => {
+      if (value >= maxFairness) {
+        maxFairness = value;
       }
-      if (value <= minDisparity) {
-        minDisparityIndex = index;
-        minDisparity = value;
+      if (value <= minFairness) {
+        minFairnessIndex = index;
+        minFairness = value;
       }
     });
     const formattedMinPerformance = FormatMetrics.formatNumbers(
@@ -192,12 +192,12 @@ export class ModelComparisonChart extends React.PureComponent<
       maxPerformance,
       this.props.performancePickerProps.selectedPerformanceKey
     );
-    const formattedMinDisparity = FormatMetrics.formatNumbers(
-      minDisparity,
+    const formattedMinFairness = FormatMetrics.formatNumbers(
+      minFairness,
       this.props.performancePickerProps.selectedPerformanceKey
     );
-    const formattedMaxDisparity = FormatMetrics.formatNumbers(
-      maxDisparity,
+    const formattedMaxFairness = FormatMetrics.formatNumbers(
+      maxFairness,
       this.props.performancePickerProps.selectedPerformanceKey
     );
     const selectedMetric =
@@ -215,8 +215,8 @@ export class ModelComparisonChart extends React.PureComponent<
       selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
-      formattedMinDisparity,
-      formattedMaxDisparity
+      formattedMinFairness,
+      formattedMaxFairness
     );
     const metricTitleAppropriateCase = selectedMetric.alwaysUpperCase
       ? selectedMetric.title
@@ -227,10 +227,11 @@ export class ModelComparisonChart extends React.PureComponent<
       selectedMetric.isMinimization
         ? formattedMinPerformance
         : formattedMaxPerformance,
+      localization.Fairness.ModelComparison.insightsText3v1FairnessMetric,
       FormatMetrics.formatNumbers(
         minPerformanceIndex === undefined || maxPerformanceIndex === undefined
           ? undefined
-          : this.state.disparityArray[
+          : this.state.fairnessArray[
               selectedMetric.isMinimization
                 ? minPerformanceIndex
                 : maxPerformanceIndex
@@ -243,10 +244,10 @@ export class ModelComparisonChart extends React.PureComponent<
       localization.Fairness.ModelComparison.insightsText4,
       metricTitleAppropriateCase,
       FormatMetrics.formatNumbers(
-        this.state.performanceArray[minDisparityIndex],
+        this.state.performanceArray[minFairnessIndex],
         this.props.performancePickerProps.selectedPerformanceKey
       ),
-      formattedMinDisparity
+      formattedMinFairness
     );
 
     const howToReadText = localization.formatString(
@@ -345,7 +346,7 @@ export class ModelComparisonChart extends React.PureComponent<
                 text: localization.Fairness.ModelComparison.disparityInOutcomes
               }
             ]}
-            onChange={this.disparityChanged}
+            onChange={this.fairnessChanged}
             label={localization.Fairness.ModelComparison.howToMeasureDisparity}
             required={false}
           ></ChoiceGroup>
@@ -366,30 +367,30 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.performancePickerProps.selectedPerformanceKey
           );
         });
-      const disparityMetric = this.getDisparityMetric();
-      const disparityPromises = new Array(this.props.modelCount)
+      const fairnessMetric = this.getFairnessMetric();
+      const fairnessPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
-          return this.props.metricsCache.getDisparityMetric(
+          return this.props.metricsCache.getFairnessMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
-            disparityMetric,
-            ParityModes.Difference
+            fairnessMetric,
+            FairnessModes.Difference
           );
         });
 
       const performanceArray = (await Promise.all(performancePromises)).map(
         (metric) => metric.global
       );
-      const disparityArray = await Promise.all(disparityPromises);
-      this.setState({ disparityArray, performanceArray });
+      const fairnessArray = await Promise.all(fairnessPromises);
+      this.setState({ fairnessArray, performanceArray });
     } catch {
       // todo;
     }
   }
 
-  private getDisparityMetric(): string {
+  private getFairnessMetric(): string {
     if (this.state.disparityInOutcomes) {
       if (
         this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -402,13 +403,13 @@ export class ModelComparisonChart extends React.PureComponent<
     return this.props.performancePickerProps.selectedPerformanceKey;
   }
 
-  private readonly disparityChanged = (
+  private readonly fairnessChanged = (
     _ev?: React.FormEvent<HTMLInputElement | HTMLElement> | undefined,
     option?: IChoiceGroupOption | undefined
   ): void => {
     const disparityInOutcomes = option?.key !== "performance";
     if (this.state.disparityInOutcomes !== disparityInOutcomes) {
-      this.setState({ disparityArray: undefined, disparityInOutcomes });
+      this.setState({ fairnessArray: undefined, disparityInOutcomes });
     }
   };
   // TODO: Reuse if multiselect re-enters design

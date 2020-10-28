@@ -401,7 +401,6 @@
       "higher": "większa",
       "howToReadText": "Ten wykres reprezentuje każdy z {0} modeli jako punkt, który można wybrać. Oś X reprezentuje {1}, przy czym wartość {2} jest lepsza. Oś Y reprezentuje rozbieżność, przy czym wartość mniejsza jest lepsza.",
       "insights": "Analizy",
-      "insightsText1": "Wykres pokazuje {0} i rozbieżność {1} modeli.",
       "insightsText2": "Zakresy w liczbie {0} od {1} do {2}. Zakresy rozbieżności od {3} do {4}.",
       "insightsText3": "Najbardziej dokładny model osiąga {0} z {1} i rozbieżność {2}.",
       "insightsText4": "Model najniższej rozbieżności osiąga {0} z {1} i rozbieżność {2}.",

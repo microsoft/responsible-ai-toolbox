@@ -5,7 +5,7 @@ import _, { max, min } from "lodash";
 
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 
-import { ParityModes, parityOptions } from "./ParityMetrics";
+import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey
@@ -49,13 +49,13 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    fairnessMethod: ParityModes
+    fairnessMethod: FairnessModes
   ): Promise<number> {
     const falsePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
-      fairnessMethod === ParityModes.Difference
+      fairnessMethod === FairnessModes.Difference
         ? "false_positive_rate_difference"
         : "false_positive_rate_ratio",
       fairnessMethod
@@ -64,7 +64,7 @@ export class MetricsCache {
       binIndexVector,
       featureIndex,
       modelIndex,
-      fairnessMethod === ParityModes.Difference
+      fairnessMethod === FairnessModes.Difference
         ? "true_positive_rate_difference"
         : "true_positive_rate_ratio",
       fairnessMethod
@@ -77,7 +77,7 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    if (fairnessMethod === ParityModes.Difference) {
+    if (fairnessMethod === FairnessModes.Difference) {
       const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
       return maxMetric === undefined ? Number.NaN : maxMetric;
     }
@@ -91,7 +91,7 @@ export class MetricsCache {
     featureIndex: number,
     modelIndex: number,
     key: string,
-    fairnessMethod: ParityModes
+    fairnessMethod: FairnessModes
   ): Promise<number> {
     // Equalized Odds is calculated based on two other fairness metrics.
     if (key.startsWith("equalized_odds")) {
@@ -103,7 +103,7 @@ export class MetricsCache {
       );
     }
 
-    const metricKey = parityOptions[key].parityMetric;
+    const metricKey = fairnessOptions[key].fairnessMetric;
     let value = this.cache[featureIndex][modelIndex][metricKey];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
@@ -128,34 +128,34 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    if (fairnessMethod === ParityModes.Min) {
+    if (fairnessMethod === FairnessModes.Min) {
       return min;
     }
 
-    if (fairnessMethod === ParityModes.Max) {
+    if (fairnessMethod === FairnessModes.Max) {
       return max;
     }
 
-    if (fairnessMethod === ParityModes.Ratio) {
+    if (fairnessMethod === FairnessModes.Ratio) {
       if (max === 0) {
         return Number.NaN;
       }
       return min / max;
     }
 
-    if (fairnessMethod === ParityModes.Difference) {
+    if (fairnessMethod === FairnessModes.Difference) {
       return max - min;
     }
 
     return Number.NaN;
   }
 
-  public async getDisparityMetricV1(
+  public async getFairnessMetricV1(
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
     key: string,
-    fairnessMethod: ParityModes
+    fairnessMethod: FairnessModes
   ): Promise<number> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
@@ -179,11 +179,11 @@ export class MetricsCache {
     if (
       min === undefined ||
       max === undefined ||
-      (max === 0 && fairnessMethod === ParityModes.Ratio)
+      (max === 0 && fairnessMethod === FairnessModes.Ratio)
     ) {
       return Number.NaN;
     }
-    return fairnessMethod === ParityModes.Difference ? max - min : min / max;
+    return fairnessMethod === FairnessModes.Difference ? max - min : min / max;
   }
 
   public clearCache(binIndex?: number): void {

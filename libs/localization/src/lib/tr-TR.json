@@ -401,7 +401,6 @@
       "higher": "daha yüksek",
       "howToReadText": "Bu grafik, {0} modelin her birini seçilebilir bir nokta olarak temsil eder. X ekseni {1} temsil eder, {2} değerler daha iyidir. Y ekseni farkı temsil eder, düşük değerler daha iyidir.",
       "insights": "İçgörüler",
-      "insightsText1": "Grafik, {1} modelin {0} ve farkını gösterir.",
       "insightsText2": "{0}, {1} ile {2} aralığındayken, fark {3} ile {4} aralığındadır.",
       "insightsText3": "En doğru model, {0}/{1} ve {2} farkını alır.",
       "insightsText4": "En düşük farka sahip model {0}/{1} ve {2} farkını alır.",

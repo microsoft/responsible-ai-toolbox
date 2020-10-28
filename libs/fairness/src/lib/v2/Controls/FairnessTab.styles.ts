@@ -9,7 +9,7 @@ import {
   FontWeights
 } from "office-ui-fabric-react";
 
-export interface IParityTabStyles {
+export interface IFairnessTabStyles {
   iconClass: IStyle;
   itemsList: IStyle;
   frame: IStyle;
@@ -18,11 +18,11 @@ export interface IParityTabStyles {
   textBody: IStyle;
 }
 
-export const ParityTabStyles: () => IProcessedStyleSet<
-  IParityTabStyles
+export const FairnessTabStyles: () => IProcessedStyleSet<
+  IFairnessTabStyles
 > = () => {
   const theme = getTheme();
-  return mergeStyleSets<IParityTabStyles>({
+  return mergeStyleSets<IFairnessTabStyles>({
     frame: {
       height: "100%",
       width: "750px"

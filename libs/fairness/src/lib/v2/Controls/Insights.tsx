@@ -4,6 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import { Icon, Text } from "office-ui-fabric-react";
 import React from "react";
+import { IFairnessOption } from '../../util/FairnessMetrics';
 
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IPerformanceOption } from "../../util/PerformanceMetrics";
@@ -13,6 +14,7 @@ import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 interface IInsightsProps {
   selectedMetric: IPerformanceOption;
+  selectedFairnessMetric: IFairnessOption;
   selectedPerformanceKey: string;
   performanceArray: number[];
   fairnessArray: number[];
@@ -67,21 +69,26 @@ export class Insights extends React.Component<IInsightsProps> {
       this.props.selectedPerformanceKey
     );
 
+    // performance metric ranges from <min> to <max>
+    // disparity ranges from <min> to <max>
     const insights2 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText2,
       this.props.selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
+      this.props.selectedFairnessMetric.title,
       formattedMinFairnessValue,
       formattedMaxFairnessValue
     );
 
+    // description of model with best performance
     const insights3 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText3,
       this.props.selectedMetric.title.toLowerCase(),
       this.props.selectedMetric.isMinimization
         ? formattedMinPerformance
         : formattedMaxPerformance,
+      this.props.selectedFairnessMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
         this.props.fairnessArray[
           this.props.selectedMetric.isMinimization
@@ -92,9 +99,11 @@ export class Insights extends React.Component<IInsightsProps> {
       )
     );
 
+    // description of model with best fairness metric value
     const insights4 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText4,
       this.props.selectedMetric.title.toLowerCase(),
+      this.props.selectedFairnessMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
         this.props.performanceArray[minFairnessValueIndex],
         this.props.selectedPerformanceKey

@@ -401,7 +401,6 @@
       "higher": "magasabb",
       "howToReadText": "Ez a diagram a(z) {0} modellek mindegyikét kijelölhető pontként ábrázolja. Az x tengelyen {1} látható, ahol {2} jobb. Az Y tengely az egyenlőtlenséget mutatja, ahol az alacsonyabb érték jobb.",
       "insights": "Elemzések",
-      "insightsText1": "A diagramon látható a(z) {0} és a(z) {1} modellek egyenlőtlensége.",
       "insightsText2": "A(z) {0} terjedelme: {1}–{2}. Az egyenlőtlenség terjedelme: {3}–{4}.",
       "insightsText3": "A legpontosabb modell {1}/{0} értéket és {2} egyenlőtlenséget ér el.",
       "insightsText4": "A legkisebb egyenlőtlenséges modell {1}/{0} értéket és {2} egyenlőtlenséget ér el.",
