@@ -39,7 +39,8 @@
       "@responsible-ai/fairness": ["libs/fairness/src/index.ts"],
       "@responsible-ai/core-ui": ["libs/core-ui/src/index.ts"],
       "@responsible-ai/mlchartlib": ["libs/mlchartlib/src/index.ts"],
-      "@responsible-ai/localization": ["libs/localization/src/index.ts"]
+      "@responsible-ai/localization": ["libs/localization/src/index.ts"],
+      "@responsible-ai/error-analysis": ["libs/error-analysis/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

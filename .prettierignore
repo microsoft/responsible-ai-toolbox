@@ -6,3 +6,4 @@ _NOTICE.md
 raiwidgets/raiwidgets/templates/inlineDashboard.html
 raiwidgets/raiwidgets/static
 raiwidgets/raiwidgets/error-analysis/python/error_analysis/widget/static/
+raiwidgets/raiwidgets/widget/vendor.js
