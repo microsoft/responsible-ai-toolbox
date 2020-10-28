@@ -4,7 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme } from "@uifabric/styling";
-import { ITheme, Stack, Label } from "office-ui-fabric-react";
+import { ITheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
@@ -41,7 +41,6 @@ export class PerformancePlot extends React.PureComponent<
     const theme = getTheme();
     const sharedStyles = SharedStyles();
     let performanceChartModalHelpStrings: string[] = [];
-    let performanceChartHeaderString = "";
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -113,8 +112,6 @@ export class PerformancePlot extends React.PureComponent<
       performanceChartModalHelpStrings = [
         localization.Fairness.Report.classificationPerformanceHowToReadV2
       ];
-      performanceChartHeaderString =
-        localization.Fairness.Report.performanceChartHeaderBinaryClassification;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -184,8 +181,6 @@ export class PerformancePlot extends React.PureComponent<
         localization.Fairness.Report.probabilityPerformanceHowToRead2,
         localization.Fairness.Report.probabilityPerformanceHowToRead3
       ];
-      performanceChartHeaderString =
-        localization.Fairness.Report.performanceChartHeaderProbability;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -227,8 +222,6 @@ export class PerformancePlot extends React.PureComponent<
       performanceChartModalHelpStrings = [
         localization.Fairness.Report.regressionPerformanceHowToRead
       ];
-      performanceChartHeaderString =
-        localization.Fairness.Report.performanceChartHeaderRegression;
     }
 
     const performanceKey = this.props.performancePickerProps
@@ -247,8 +240,9 @@ export class PerformancePlot extends React.PureComponent<
       );
 
     return (
-      <Stack tokens={{ padding: "0 0 0 100px" }}>
-        <Label>{performanceChartHeaderString}</Label>
+      <Stack>
+        {/* chart header not needed due to dropdown
+        <Label>{performanceChartHeaderString}</Label> */}
         <div
           className={sharedStyles.presentationArea}
           style={{ height: `${this.props.areaHeights}px` }}
@@ -308,7 +302,10 @@ export class PerformancePlotLegend extends React.PureComponent<
     const sharedStyles = SharedStyles();
 
     return (
-      <Stack horizontal={true} tokens={{ childrenGap: "l1" }}>
+      <Stack
+        horizontal={true}
+        tokens={{ childrenGap: "l1", padding: "0 0 0 0" }}
+      >
         <div className={sharedStyles.textRow}>
           <div
             className={sharedStyles.colorBlock}

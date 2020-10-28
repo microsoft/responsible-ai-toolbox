@@ -710,7 +710,8 @@
       "tooltipPrediction": "Prediction: {0}",
       "_tooltipPrediction.comment": "Displays tooltip with the formatted numerical value of the prediction",
       "tooltipError": "Error: {0}",
-      "_tooltipError.comment": "Displays tooltip with the formatted numerical value of the error"
+      "_tooltipError.comment": "Displays tooltip with the formatted numerical value of the error",
+      "chartChoiceDropdownHeader": "Charts"
     },
     "Feature": {
       "header": "Along which features would you like to evaluate your model's fairness?",
