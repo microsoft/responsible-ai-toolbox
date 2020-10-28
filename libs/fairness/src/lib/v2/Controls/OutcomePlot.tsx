@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import { getTheme, ITheme, Label, Stack } from "office-ui-fabric-react";
+import { getTheme, ITheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
@@ -39,7 +39,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-    let outcomeChartHeaderString = "";
     let outcomeChartModalHelpStrings: string[] = [];
 
     if (
@@ -67,7 +66,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       outcomeChartModalHelpStrings = [
         localization.Fairness.Report.classificationOutcomesHowToRead
       ];
-      outcomeChartHeaderString = localization.Fairness.Metrics.selectionRate;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -98,8 +96,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       outcomeChartModalHelpStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
-      outcomeChartHeaderString =
-        localization.Fairness.Report.distributionOfPredictions;
     }
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -130,8 +126,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       outcomeChartModalHelpStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
-      outcomeChartHeaderString =
-        localization.Fairness.Report.distributionOfPredictions;
     }
 
     const formattedBinOutcomeValues = this.props.metrics.outcomes.bins.map(
@@ -139,8 +133,9 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     );
 
     return (
-      <Stack tokens={{ padding: "0 0 0 100px" }}>
-        <Label>{outcomeChartHeaderString}</Label>
+      <Stack>
+        {/* chart header not needed due to dropdown
+        <Label>{outcomeChartHeaderString}</Label> */}
         <div
           className={sharedStyles.presentationArea}
           style={{ height: `${this.props.areaHeights}px` }}

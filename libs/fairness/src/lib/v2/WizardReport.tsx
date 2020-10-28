@@ -16,9 +16,8 @@ import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { DropdownBar } from "./Controls/DropdownBar";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
-import { OutcomePlot } from "./Controls/OutcomePlot";
 import { OverallTable } from "./Controls/OverallTable";
-import { PerformancePlot } from "./Controls/PerformancePlot";
+import { ReportChart } from "./Controls/ReportChart";
 import { IMetrics } from "./IMetrics";
 import { SharedStyles } from "./Shared.styles";
 import { WizardReportStyles } from "./WizardReport.styles";
@@ -48,8 +47,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         60 +
       106;
     const areaHeights = Math.max(300, alternateHeight);
-
-    const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
 
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
@@ -238,22 +235,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                   </div>
                 </Stack>
               </Stack>
-              <PerformancePlot
+              <ReportChart
+                areaHeights={areaHeights}
                 dashboardContext={this.props.dashboardContext}
-                metrics={this.state.metrics}
-                nameIndex={nameIndex}
-                theme={undefined}
                 featureBinPickerProps={this.props.featureBinPickerProps}
+                metrics={this.state.metrics}
+                parityPickerProps={this.props.parityPickerProps}
                 performancePickerProps={this.props.performancePickerProps}
-                areaHeights={areaHeights}
-              />
-              <OutcomePlot
-                dashboardContext={this.props.dashboardContext}
-                metrics={this.state.metrics}
-                nameIndex={nameIndex}
-                theme={undefined}
-                featureBinPickerProps={this.props.featureBinPickerProps}
-                areaHeights={areaHeights}
               />
             </Stack>
           </Stack.Item>
