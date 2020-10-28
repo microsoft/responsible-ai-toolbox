@@ -96,6 +96,7 @@ export class CohortEditor extends React.PureComponent<
         onDismiss={this.props.closeCohortEditorPanel}
         onRenderFooter={this.renderFooter}
         isFooterAtBottom
+        isLightDismiss
       >
         <Stack tokens={{ childrenGap: "l1" }}>
           <Stack.Item>

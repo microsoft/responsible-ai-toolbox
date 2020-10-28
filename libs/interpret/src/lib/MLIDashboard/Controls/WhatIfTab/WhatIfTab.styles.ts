@@ -78,6 +78,7 @@ export interface IWhatIfTabStyles {
   calloutLink: IStyle;
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
+  notAvailable: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<
@@ -278,6 +279,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     },
     negativeNumber: {
       color: theme.palette.red
+    },
+    notAvailable: {
+      backgroundColor: theme.semanticColors.warningBackground
     },
     paddingDiv: {
       width: "50px"
