@@ -71,11 +71,11 @@ export interface IWizardStateV2 {
 const introTabKey = "introTab";
 const featureBinTabKey = "featureBinTab";
 const performanceTabKey = "performanceTab";
-const disparityTabKey = "disparityTab";
+const fairnessTabKey = "fairnessTab";
 const reportTabKey = "reportTab";
 
 const flights = {
-  skipDisparity: false
+  skipFairness: false
 };
 
 export class FairnessWizardV2 extends React.PureComponent<
@@ -224,7 +224,7 @@ export class FairnessWizardV2 extends React.PureComponent<
         )}
         {(this.state.activeTabKey === featureBinTabKey ||
           this.state.activeTabKey === performanceTabKey ||
-          this.state.activeTabKey === disparityTabKey) && (
+          this.state.activeTabKey === fairnessTabKey) && (
           <Stack.Item grow={2} className={styles.body}>
             <Pivot
               className={styles.pivot}
@@ -260,15 +260,15 @@ export class FairnessWizardV2 extends React.PureComponent<
                   performancePickerProps={performancePickerProps}
                   onNext={this.setTab.bind(
                     this,
-                    flights.skipDisparity ? reportTabKey : disparityTabKey
+                    flights.skipFairness ? reportTabKey : fairnessTabKey
                   )}
                   onPrevious={this.setTab.bind(this, featureBinTabKey)}
                 />
               </PivotItem>
-              {flights.skipDisparity === false && (
+              {flights.skipFairness === false && (
                 <PivotItem
-                  headerText={localization.Fairness.disparityMetric}
-                  itemKey={disparityTabKey}
+                  headerText={localization.Fairness.fairnessMetric}
+                  itemKey={fairnessTabKey}
                   style={{ height: "100%", paddingLeft: "8px" }}
                 >
                   <ParityTab
@@ -371,7 +371,7 @@ export class FairnessWizardV2 extends React.PureComponent<
 
   private readonly setPerformanceKey = (key: string): void => {
     const value: Partial<IWizardStateV2> = { selectedPerformanceKey: key };
-    if (flights.skipDisparity) {
+    if (flights.skipFairness) {
       value.selectedParityKey = key;
     }
     this.setState(value as IWizardStateV2);

@@ -49,25 +49,25 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    disparityMethod: ParityModes
+    fairnessMethod: ParityModes
   ): Promise<number> {
-    const falsePositiveRateMetric = await this.getDisparityMetric(
+    const falsePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
-      disparityMethod === ParityModes.Difference
+      fairnessMethod === ParityModes.Difference
         ? "false_positive_rate_difference"
         : "false_positive_rate_ratio",
-      disparityMethod
+      fairnessMethod
     );
-    const truePositiveRateMetric = await this.getDisparityMetric(
+    const truePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
-      disparityMethod === ParityModes.Difference
+      fairnessMethod === ParityModes.Difference
         ? "true_positive_rate_difference"
         : "true_positive_rate_ratio",
-      disparityMethod
+      fairnessMethod
     );
 
     if (
@@ -77,7 +77,7 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    if (disparityMethod === ParityModes.Difference) {
+    if (fairnessMethod === ParityModes.Difference) {
       const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
       return maxMetric === undefined ? Number.NaN : maxMetric;
     }
@@ -86,12 +86,12 @@ export class MetricsCache {
     return minMetric === undefined ? Number.NaN : minMetric;
   }
 
-  public async getDisparityMetric(
+  public async getFairnessMetric(
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
     key: string,
-    disparityMethod: ParityModes
+    fairnessMethod: ParityModes
   ): Promise<number> {
     // Equalized Odds is calculated based on two other fairness metrics.
     if (key.startsWith("equalized_odds")) {
@@ -99,7 +99,7 @@ export class MetricsCache {
         binIndexVector,
         featureIndex,
         modelIndex,
-        disparityMethod
+        fairnessMethod
       );
     }
 
@@ -128,22 +128,22 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    if (disparityMethod === ParityModes.Min) {
+    if (fairnessMethod === ParityModes.Min) {
       return min;
     }
 
-    if (disparityMethod === ParityModes.Max) {
+    if (fairnessMethod === ParityModes.Max) {
       return max;
     }
 
-    if (disparityMethod === ParityModes.Ratio) {
+    if (fairnessMethod === ParityModes.Ratio) {
       if (max === 0) {
         return Number.NaN;
       }
       return min / max;
     }
 
-    if (disparityMethod === ParityModes.Difference) {
+    if (fairnessMethod === ParityModes.Difference) {
       return max - min;
     }
 
@@ -155,7 +155,7 @@ export class MetricsCache {
     featureIndex: number,
     modelIndex: number,
     key: string,
-    disparityMethod: ParityModes
+    fairnessMethod: ParityModes
   ): Promise<number> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
@@ -179,11 +179,11 @@ export class MetricsCache {
     if (
       min === undefined ||
       max === undefined ||
-      (max === 0 && disparityMethod === ParityModes.Ratio)
+      (max === 0 && fairnessMethod === ParityModes.Ratio)
     ) {
       return Number.NaN;
     }
-    return disparityMethod === ParityModes.Difference ? max - min : min / max;
+    return fairnessMethod === ParityModes.Difference ? max - min : min / max;
   }
 
   public clearCache(binIndex?: number): void {

@@ -15,7 +15,7 @@ interface IInsightsProps {
   selectedMetric: IPerformanceOption;
   selectedPerformanceKey: string;
   performanceArray: number[];
-  disparityArray: number[];
+  fairnessArray: number[];
 }
 
 export class Insights extends React.Component<IInsightsProps> {
@@ -25,11 +25,11 @@ export class Insights extends React.Component<IInsightsProps> {
 
     let minPerformance: number = Number.MAX_SAFE_INTEGER;
     let maxPerformance: number = Number.MIN_SAFE_INTEGER;
-    let maxDisparity: number = Number.MIN_SAFE_INTEGER;
-    let minDisparity: number = Number.MAX_SAFE_INTEGER;
+    let maxFairnessValue: number = Number.MIN_SAFE_INTEGER;
+    let minFairnessValue: number = Number.MAX_SAFE_INTEGER;
     let minPerformanceIndex = 0;
     let maxPerformanceIndex = 0;
-    let minDisparityIndex = 0;
+    let minFairnessValueIndex = 0;
     this.props.performanceArray.forEach((value, index) => {
       if (value >= maxPerformance) {
         maxPerformanceIndex = index;
@@ -40,13 +40,13 @@ export class Insights extends React.Component<IInsightsProps> {
         minPerformance = value;
       }
     });
-    this.props.disparityArray.forEach((value, index) => {
-      if (value >= maxDisparity) {
-        maxDisparity = value;
+    this.props.fairnessArray.forEach((value, index) => {
+      if (value >= maxFairnessValue) {
+        maxFairnessValue = value;
       }
-      if (value <= minDisparity) {
-        minDisparityIndex = index;
-        minDisparity = value;
+      if (value <= minFairnessValue) {
+        minFairnessValueIndex = index;
+        minFairnessValue = value;
       }
     });
 
@@ -58,12 +58,12 @@ export class Insights extends React.Component<IInsightsProps> {
       maxPerformance,
       this.props.selectedPerformanceKey
     );
-    const formattedMinDisparity = FormatMetrics.formatNumbers(
-      minDisparity,
+    const formattedMinFairnessValue = FormatMetrics.formatNumbers(
+      minFairnessValue,
       this.props.selectedPerformanceKey
     );
-    const formattedMaxDisparity = FormatMetrics.formatNumbers(
-      maxDisparity,
+    const formattedMaxFairnessValue = FormatMetrics.formatNumbers(
+      maxFairnessValue,
       this.props.selectedPerformanceKey
     );
 
@@ -72,8 +72,8 @@ export class Insights extends React.Component<IInsightsProps> {
       this.props.selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
-      formattedMinDisparity,
-      formattedMaxDisparity
+      formattedMinFairnessValue,
+      formattedMaxFairnessValue
     );
 
     const insights3 = localization.formatString(
@@ -83,7 +83,7 @@ export class Insights extends React.Component<IInsightsProps> {
         ? formattedMinPerformance
         : formattedMaxPerformance,
       FormatMetrics.formatNumbers(
-        this.props.disparityArray[
+        this.props.fairnessArray[
           this.props.selectedMetric.isMinimization
             ? minPerformanceIndex
             : maxPerformanceIndex
@@ -96,10 +96,10 @@ export class Insights extends React.Component<IInsightsProps> {
       localization.Fairness.ModelComparison.insightsText4,
       this.props.selectedMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
-        this.props.performanceArray[minDisparityIndex],
+        this.props.performanceArray[minFairnessValueIndex],
         this.props.selectedPerformanceKey
       ),
-      formattedMinDisparity
+      formattedMinFairnessValue
     );
 
     return (

@@ -60,7 +60,7 @@ export interface IState {
   performanceKey?: string;
   parityKey?: string;
   performanceArray?: number[];
-  disparityArray?: number[];
+  fairnessArray?: number[];
 }
 
 export class ModelComparisonChart extends React.PureComponent<
@@ -131,7 +131,7 @@ export class ModelComparisonChart extends React.PureComponent<
         fixedrange: true,
         showgrid: false,
         title: {
-          text: "Disparity"
+          text: "Fairness"
         }
       }
     } as any
@@ -166,7 +166,7 @@ export class ModelComparisonChart extends React.PureComponent<
     if (
       !this.state ||
       this.state.performanceArray === undefined ||
-      this.state.disparityArray === undefined
+      this.state.fairnessArray === undefined
     ) {
       this.loadData();
       mainChart = (
@@ -177,11 +177,11 @@ export class ModelComparisonChart extends React.PureComponent<
         />
       );
     } else {
-      const { disparityArray } = this.state;
+      const { fairnessArray } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
           index,
-          Parity: disparityArray[index],
+          Parity: fairnessArray[index],
           Performance: performance
         };
       });
@@ -270,7 +270,7 @@ export class ModelComparisonChart extends React.PureComponent<
             </div>
           </div>
           <Insights
-            disparityArray={this.state.disparityArray}
+            fairnessArray={this.state.fairnessArray}
             performanceArray={this.state.performanceArray}
             selectedMetric={selectedMetric}
             selectedPerformanceKey={
@@ -316,10 +316,10 @@ export class ModelComparisonChart extends React.PureComponent<
         });
       const parityOption =
         parityOptions[this.props.parityPickerProps.selectedParityKey];
-      const disparityPromises = new Array(this.props.modelCount)
+      const fairnessPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
-          return this.props.metricsCache.getDisparityMetric(
+          return this.props.metricsCache.getFairnessMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
@@ -331,8 +331,8 @@ export class ModelComparisonChart extends React.PureComponent<
       const performanceArray = (await Promise.all(performancePromises)).map(
         (metric) => metric.global
       );
-      const disparityArray = await Promise.all(disparityPromises);
-      this.setState({ disparityArray, performanceArray });
+      const fairnessArray = await Promise.all(fairnessPromises);
+      this.setState({ fairnessArray, performanceArray });
     } catch {
       // todo;
     }
@@ -353,7 +353,7 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.featureBinPickerProps.selectedBinIndex = index;
       this.props.featureBinPickerProps.onBinChange(index);
       this.setState({
-        disparityArray: undefined,
+        fairnessArray: undefined,
         featureKey,
         performanceArray: undefined
       });
@@ -384,7 +384,7 @@ export class ModelComparisonChart extends React.PureComponent<
     const parityKey = option.key.toString();
     if (this.state.parityKey !== parityKey) {
       this.props.parityPickerProps.onParityChange(parityKey);
-      this.setState({ disparityArray: undefined, parityKey });
+      this.setState({ fairnessArray: undefined, parityKey });
     }
   };
 

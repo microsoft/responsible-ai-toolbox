@@ -88,7 +88,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
             styles={dropdownStyles}
           />
           <Dropdown
-            label={localization.Fairness.DropdownHeaders.disparityMetric}
+            label={localization.Fairness.DropdownHeaders.fairnessMetric}
             className={styles.dropDown}
             defaultSelectedKey={this.props.parityPickerProps.selectedParityKey}
             options={parityDropdown}
