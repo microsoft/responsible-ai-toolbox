@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { generateRoute } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
@@ -11,7 +12,6 @@ import { App as Interpret } from "../interpret/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
-import { generateRoute } from "./generateRoute";
 import { IAppSetting, routeKey } from "./IAppSetting";
 import { languages } from "./languages";
 import { themes } from "./themes";

@@ -55,11 +55,11 @@ class FairnessMetricModule:
                     "model_type": [],
                     "function": module.false_positive_rate_group_summary
                 },
-                "false_positive_over_total": {
+                "false_positive_rate": {
                     "model_type": [],
                     "function": module.false_positive_rate_group_summary
                 },
-                "false_negative_over_total": {
+                "false_negative_rate": {
                     "model_type": [],
                     "function": module.false_negative_rate_group_summary
                 },

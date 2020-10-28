@@ -35,9 +35,7 @@ setuptools.setup(
     include_package_data=True,
     package_data={
         '': [
-            'templates/inlineDashboard.html',
-            'static/index.js',
-            'static/index.js.map'
+            'widget/**'
         ]
     },
     zip_safe=False,
