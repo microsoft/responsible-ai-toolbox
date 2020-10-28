@@ -344,25 +344,11 @@ export class FairnessWizardV2 extends React.PureComponent<
   private getParityMetrics(
     fairnessContext: IRunTimeFairnessContext
   ): IParityOption[] {
-    if (
-      fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.BinaryClassification
-    ) {
-      return this.props.supportedBinaryClassificationParityKeys.map(
-        (key) => parityOptions[key]
+    return Object.values(parityOptions).filter((parityOption) => {
+      return parityOption.supportedTasks.has(
+        fairnessContext.modelMetadata.PredictionType
       );
-    }
-    if (
-      fairnessContext.modelMetadata.PredictionType ===
-      PredictionTypes.Regression
-    ) {
-      return this.props.supportedRegressionParityKeys.map(
-        (key) => parityOptions[key]
-      );
-    }
-    return this.props.supportedProbabilityParityKeys.map(
-      (key) => parityOptions[key]
-    );
+    });
   }
 
   private readonly hideIntro = (): void => {

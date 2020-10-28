@@ -41,6 +41,13 @@
     },
     "localization": {
       "tags": []
+    },
+    "widget": {
+      "tags": []
+    },
+    "widget-e2e": {
+      "tags": [],
+      "implicitDependencies": ["widget"]
     }
   }
 }

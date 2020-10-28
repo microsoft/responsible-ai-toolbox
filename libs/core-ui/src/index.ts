@@ -4,6 +4,7 @@
 export * from "./lib/util/Never";
 export * from "./lib/util/PartialRequired";
 export * from "./lib/util/array";
+export * from "./lib/util/generateRoute";
 export * from "./lib/util/initializeOfficeFabric";
 export * from "./lib/util/string";
 export * from "./lib/components/ExpandableText";
