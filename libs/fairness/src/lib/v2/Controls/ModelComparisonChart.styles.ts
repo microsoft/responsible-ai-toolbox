@@ -13,8 +13,6 @@ import {
 export interface IModelComparisonChartStyles {
   frame: IStyle;
   spinner: IStyle;
-  header: IStyle;
-  headerTitle: IStyle;
   doneButton: IStyle;
   infoButton: IStyle;
   modalContentHelp: IStyle;
@@ -56,20 +54,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       display: "flex",
       flex: 1,
       flexDirection: "column"
-    },
-    header: {
-      alignItems: "center",
-      backgroundColor: theme.semanticColors.bodyBackground,
-      display: "inline-flex",
-      flexDirection: "row",
-      height: "90px",
-      justifyContent: "space-between",
-      padding: "0 90px"
-    },
-    headerTitle: {
-      color: theme.semanticColors.bodyText,
-      fontSize: "24px",
-      fontWeight: FontWeights.semibold
     },
     howTo: {
       paddingLeft: "100px",

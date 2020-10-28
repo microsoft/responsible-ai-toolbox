@@ -283,8 +283,8 @@ export class ModelComparisonChart extends React.PureComponent<
 
     return (
       <Stack className={styles.frame}>
-        <div className={styles.header}>
-          <Text variant={"large"} className={styles.headerTitle} block>
+        <div className={sharedStyles.header} style={{ padding: "0 90px" }}>
+          <Text variant={"large"} className={sharedStyles.headerTitle} block>
             {localization.Fairness.ModelComparison.title} <b>assessment</b>
           </Text>
         </div>
