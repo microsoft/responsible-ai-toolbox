@@ -371,7 +371,7 @@ export class ModelComparisonChart extends React.PureComponent<
       const fairnessPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
-          return this.props.metricsCache.getFairnessMetric(
+          return this.props.metricsCache.getFairnessMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
