@@ -401,7 +401,6 @@
       "higher": "mayor",
       "howToReadText": "Este gráfico representa cada uno de los {0} modelos como un punto seleccionable. El eje X representa {1}, donde un valor {2} es mejor; el eje Y representa la disparidad, donde un valor menor es mejor.",
       "insights": "Conclusiones",
-      "insightsText1": "El gráfico muestra {0} y disparidad de los modelos de {1}.",
       "insightsText2": "{0} puede tener un valor de {1} a {2}. La disparidad puede tener un valor de {3} a {4}.",
       "insightsText3": "El modelo más preciso logra {0} de {1} y una disparidad de {2}.",
       "insightsText4": "El modelo de menor disparidad logra {0} de {1} y una disparidad de {2}.",

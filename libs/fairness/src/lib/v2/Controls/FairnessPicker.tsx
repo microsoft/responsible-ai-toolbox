@@ -13,23 +13,23 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IParityPickerPropsV2 } from "../FairnessWizard";
+import { IFairnessPickerPropsV2 } from "../FairnessWizard";
 
 interface IState {
   showCallout: boolean;
 }
 
-export class ParityPicker extends React.PureComponent<
-  IParityPickerPropsV2,
+export class FairnessPicker extends React.PureComponent<
+  IFairnessPickerPropsV2,
   IState
 > {
-  private _parityDropdownHelpId = "_parityDropdownHelpId";
-  public constructor(props: IParityPickerPropsV2) {
+  private _fairnessDropdownHelpId = "_fairnessDropdownHelpId";
+  public constructor(props: IFairnessPickerPropsV2) {
     super(props);
     this.state = { showCallout: false };
   }
   public ender(): React.ReactNode {
-    const options: IDropdownOption[] = this.props.parityOptions.map(
+    const options: IDropdownOption[] = this.props.fairnessOptions.map(
       (option) => {
         return {
           key: option.key,
@@ -44,7 +44,7 @@ export class ParityPicker extends React.PureComponent<
           <div>
             <span>{"TODO"}</span>
             <IconButton
-              id={this._parityDropdownHelpId}
+              id={this._fairnessDropdownHelpId}
               iconProps={{ iconName: "Info" }}
               title={"TODO"}
               ariaLabel="Info"
@@ -53,16 +53,16 @@ export class ParityPicker extends React.PureComponent<
             />
           </div>
           <ComboBox
-            selectedKey={this.props.selectedParityKey}
-            onChange={this.onParityChange}
+            selectedKey={this.props.selectedFairnessKey}
+            onChange={this.onFairnessChange}
             options={options}
-            ariaLabel={"Parity selector"}
+            ariaLabel={"Fairness selector"}
             useComboBoxAsMenuWidth={true}
           />
         </div>
         {this.state.showCallout && (
           <Callout
-            target={"#" + this._parityDropdownHelpId}
+            target={"#" + this._fairnessDropdownHelpId}
             setInitialFocus={true}
             onDismiss={this.onDismiss}
             role="alertdialog"
@@ -86,12 +86,12 @@ export class ParityPicker extends React.PureComponent<
     this.setState({ showCallout: true });
   };
 
-  private readonly onParityChange = (
+  private readonly onFairnessChange = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
-      this.props.onParityChange(item.key);
+      this.props.onFairnessChange(item.key);
     }
   };
 }

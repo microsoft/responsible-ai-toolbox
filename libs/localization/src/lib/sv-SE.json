@@ -401,7 +401,6 @@
       "higher": "högre",
       "howToReadText": "Det här diagrammet representerar var och en av {0}-modellerna som en valbar punkt. X-axeln representerar {1}, där {2} är bättre. Y-axeln representerar diskrepans, där lägre är bättre.",
       "insights": "Insikter",
-      "insightsText1": "Diagrammet visar {0} och diskrepanser för {1} modeller.",
       "insightsText2": "{0} intervall från {1} till {2}. Diskrepansen är från {3} till {4}.",
       "insightsText3": "Den mest exakta modellen uppnår {0} av {1} och en diskrepans på {2}.",
       "insightsText4": "Modellen med lägsta diskrepans uppnår {0} av {1} och en diskrepans på {2}.",

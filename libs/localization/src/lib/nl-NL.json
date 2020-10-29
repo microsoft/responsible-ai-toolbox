@@ -401,7 +401,6 @@
       "higher": "hoger",
       "howToReadText": "Deze grafiek toont elk van de {0} modellen als een selecteerbaar punt. De x-as toont {1}, waarbij {2} beter is. De y-as toont het verschil, waarbij lager beter is.",
       "insights": "Inzichten",
-      "insightsText1": "De grafiek toont {0} en het verschil tussen {1} modellen.",
       "insightsText2": "{0} loopt van {1} tot {2}. Het verschil loopt van {3} tot {4}.",
       "insightsText3": "Het meest nauwkeurige model bereikt {0} van {1} en een verschil van {2}.",
       "insightsText4": "Het model met het kleinste verschil bereikt {0} van {1} en een verschil van {2}.",

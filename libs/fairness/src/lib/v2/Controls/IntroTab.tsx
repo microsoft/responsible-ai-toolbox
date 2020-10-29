@@ -74,11 +74,11 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
                   03
                 </Text>
                 <Text variant={"large"}>
-                  {localization.Fairness.Intro.parity}
+                  {localization.Fairness.Intro.fairness}
                 </Text>
               </div>
               <Text className={styles.explanatoryText} block>
-                {localization.Fairness.Intro.parityInfo}
+                {localization.Fairness.Intro.fairnessInfo}
               </Text>
             </div>
           </div>

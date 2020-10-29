@@ -18,8 +18,8 @@ import {
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
+import { FairnessModes } from "../util/FairnessMetrics";
 import { FormatMetrics } from "../util/FormatMetrics";
-import { ParityModes } from "../util/ParityMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
@@ -30,9 +30,9 @@ const theme = getTheme();
 interface IMetrics {
   globalPerformance: number;
   binnedPerformance: number[];
-  performanceDisparity: number;
+  performanceFairness: number;
   globalOutcome: number;
-  outcomeDisparity: number;
+  outcomeFairness: number;
   binnedOutcome: number[];
   // Optional, based on model type
   binnedOverprediction?: number[];
@@ -477,8 +477,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       this.state.metrics.globalPerformance,
       performanceKey
     );
-    const disparityPerformanceString = FormatMetrics.formatNumbers(
-      this.state.metrics.performanceDisparity,
+    const fairnessPerformanceString = FormatMetrics.formatNumbers(
+      this.state.metrics.performanceFairness,
       performanceKey
     );
     const selectedMetric =
@@ -495,8 +495,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       this.state.metrics.globalOutcome,
       outcomeKey
     );
-    const disparityOutcomeString = FormatMetrics.formatNumbers(
-      this.state.metrics.outcomeDisparity,
+    const fairnessOutcomeString = FormatMetrics.formatNumbers(
+      this.state.metrics.outcomeFairness,
       outcomeKey
     );
     const formattedBinPerformanceValues = this.state.metrics.binnedPerformance.map(
@@ -543,7 +543,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 )}
               </Text>
               <Text className={styles.metricText} block>
-                {disparityPerformanceString}
+                {fairnessPerformanceString}
               </Text>
               <Text className={styles.metricLabel} block>
                 {localization.formatString(
@@ -612,7 +612,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 )}
               </Text>
               <Text variant={"xxLargePlus"} className={styles.metricText} block>
-                {disparityOutcomeString}
+                {fairnessOutcomeString}
               </Text>
               <Text className={styles.metricLabel} block>
                 {localization.formatString(
@@ -684,19 +684,19 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
-      let outcomeDisparity: number;
+      let outcomeFairness: number;
       const performance = await this.props.metricsCache.getMetric(
         this.props.dashboardContext.binVector,
         this.props.featureBinPickerProps.selectedBinIndex,
         this.props.selectedModelIndex,
         this.props.performancePickerProps.selectedPerformanceKey
       );
-      const performanceDisparity = await this.props.metricsCache.getDisparityMetricV1(
+      const performanceFairness = await this.props.metricsCache.getFairnessMetricV1(
         this.props.dashboardContext.binVector,
         this.props.featureBinPickerProps.selectedBinIndex,
         this.props.selectedModelIndex,
         this.props.performancePickerProps.selectedPerformanceKey,
-        ParityModes.Difference
+        FairnessModes.Difference
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
@@ -722,12 +722,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.selectedModelIndex,
             "selection_rate"
           );
-          outcomeDisparity = await this.props.metricsCache.getDisparityMetricV1(
+          outcomeFairness = await this.props.metricsCache.getFairnessMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "selection_rate",
-            ParityModes.Difference
+            FairnessModes.Difference
           );
           break;
         }
@@ -757,12 +757,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.selectedModelIndex,
             "average"
           );
-          outcomeDisparity = await this.props.metricsCache.getDisparityMetricV1(
+          outcomeFairness = await this.props.metricsCache.getFairnessMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "average",
-            ParityModes.Difference
+            FairnessModes.Difference
           );
           break;
         }
@@ -780,12 +780,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.selectedModelIndex,
             "average"
           );
-          outcomeDisparity = await this.props.metricsCache.getDisparityMetricV1(
+          outcomeFairness = await this.props.metricsCache.getFairnessMetricV1(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             this.props.selectedModelIndex,
             "average",
-            ParityModes.Difference
+            FairnessModes.Difference
           );
           break;
         }
@@ -799,8 +799,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           errors,
           globalOutcome: outcomes.global,
           globalPerformance: performance.global,
-          outcomeDisparity,
-          performanceDisparity,
+          outcomeFairness,
+          performanceFairness,
           predictions
         }
       });

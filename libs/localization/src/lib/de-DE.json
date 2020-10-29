@@ -401,7 +401,6 @@
       "higher": "ein höherer Wert",
       "howToReadText": "Dieses Diagramm stellt jedes der {0} Modelle als auswählbaren Punkt dar. Die x-Achse stellt \"{1}\" dar, wobei {2} besser ist. Die y-Achse stellt die Abweichung dar, wobei ein geringerer Wert besser ist.",
       "insights": "Erkenntnisse",
-      "insightsText1": "Das Diagramm zeigt \"{0}\" und die Abweichung bei {1} Modellen.",
       "insightsText2": "\"{0}\" liegt im Bereich zwischen {1} und {2}. Die Abweichung reicht von {3} bis {4}.",
       "insightsText3": "Das genaueste Modell erzielt für \"{0}\" einen Wert von {1} und eine Abweichung von {2}.",
       "insightsText4": "Das Modell mit der niedrigsten Abweichung erzielt für \"{0}\" einen Wert von {1} und eine Abweichung von {2}.",

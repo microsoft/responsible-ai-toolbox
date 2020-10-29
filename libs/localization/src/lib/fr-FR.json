@@ -401,7 +401,6 @@
       "higher": "supérieure",
       "howToReadText": "Ce graphique représente chacun des modèles {0} sous la forme d'un point sélectionnable. L'axe X représente {1} (une valeur {2} étant meilleure). L'axe Y représente la disparité (une valeur inférieure étant meilleure).",
       "insights": "Insights",
-      "insightsText1": "Le graphique montre {0} et la disparité de {1} modèles.",
       "insightsText2": "{0} est compris entre {1} et {2}. Les plages de disparité vont de {3} à {4}.",
       "insightsText3": "Le modèle le plus juste obtient {0} sur {1} et une disparité de {2}.",
       "insightsText4": "Le modèle de disparité le plus faible obtient {0} sur {1} et une disparité de {2}.",

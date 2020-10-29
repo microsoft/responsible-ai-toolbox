@@ -28,9 +28,9 @@ import {
 } from "../util/PerformanceMetrics";
 import { WizardBuilder } from "../util/WizardBuilder";
 
+import { FairnessTab } from "./Controls/FairnessTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
-import { ParityTab } from "./Controls/ParityTab";
 import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { defaultTheme } from "./Themes";
@@ -42,10 +42,10 @@ export interface IPerformancePickerPropsV1 {
   onPerformanceChange: (newKey: string) => void;
 }
 
-export interface IParityPickerPropsV1 {
-  parityOptions: IPerformanceOption[];
-  selectedParityKey: string;
-  onParityChange: (newKey: string) => void;
+export interface IFairnessPickerPropsV1 {
+  fairnessOptions: IPerformanceOption[];
+  selectedFairnessKey: string;
+  onFairnessChange: (newKey: string) => void;
 }
 
 export interface IFeatureBinPickerPropsV1 {
@@ -59,9 +59,9 @@ export interface IWizardStateV1 {
   selectedModelId?: number;
   dashboardContext: IFairnessContext;
   performanceMetrics: IPerformanceOption[];
-  parityMetrics: IPerformanceOption[];
+  fairnessMetrics: IPerformanceOption[];
   selectedPerformanceKey: string;
-  selectedParityKey: string;
+  selectedFairnessKey: string;
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
   metricCache: MetricsCache;
@@ -70,11 +70,11 @@ export interface IWizardStateV1 {
 const introTabKey = "introTab";
 const featureBinTabKey = "featureBinTab";
 const performanceTabKey = "performanceTab";
-const disparityTabKey = "disparityTab";
+const fairnessTabKey = "fairnessTab";
 const reportTabKey = "reportTab";
 
 const flights = {
-  skipDisparity: true
+  skipFairness: true
 };
 
 export class FairnessWizardV1 extends React.PureComponent<
@@ -111,6 +111,7 @@ export class FairnessWizardV1 extends React.PureComponent<
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
         ),
+        fairnessMetrics: performanceMetrics,
         featureBins: readonlyFeatureBins,
         metricCache: new MetricsCache(
           0,
@@ -118,11 +119,10 @@ export class FairnessWizardV1 extends React.PureComponent<
           undefined,
           props.precomputedMetrics
         ),
-        parityMetrics: performanceMetrics,
         performanceMetrics,
         selectedBinIndex: 0,
+        selectedFairnessKey: performanceMetrics[0].key,
         selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-        selectedParityKey: performanceMetrics[0].key,
         selectedPerformanceKey: performanceMetrics[0].key
       };
       return;
@@ -146,17 +146,17 @@ export class FairnessWizardV1 extends React.PureComponent<
     this.state = {
       activeTabKey: introTabKey,
       dashboardContext: fairnessContext,
+      fairnessMetrics: performanceMetrics,
       featureBins,
       metricCache: new MetricsCache(
         featureBins.length,
         this.props.predictedY.length,
         this.props.requestMetrics
       ),
-      parityMetrics: performanceMetrics,
       performanceMetrics,
       selectedBinIndex: 0,
+      selectedFairnessKey: performanceMetrics[0].key,
       selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-      selectedParityKey: performanceMetrics[0].key,
       selectedPerformanceKey: performanceMetrics[0].key
     };
   }
@@ -177,10 +177,10 @@ export class FairnessWizardV1 extends React.PureComponent<
       performanceOptions: this.state.performanceMetrics,
       selectedPerformanceKey: this.state.selectedPerformanceKey
     };
-    const parityPickerProps = {
-      onParityChange: this.setParityKey,
-      parityOptions: this.state.parityMetrics,
-      selectedParityKey: this.state.selectedParityKey
+    const fairnessPickerProps = {
+      fairnessOptions: this.state.fairnessMetrics,
+      onFairnessChange: this.setFairnessKey,
+      selectedFairnessKey: this.state.selectedFairnessKey
     };
     const featureBinPickerProps = {
       featureBins: this.state.featureBins,
@@ -227,7 +227,7 @@ export class FairnessWizardV1 extends React.PureComponent<
         )}
         {(this.state.activeTabKey === featureBinTabKey ||
           this.state.activeTabKey === performanceTabKey ||
-          this.state.activeTabKey === disparityTabKey) && (
+          this.state.activeTabKey === fairnessTabKey) && (
           <Stack.Item grow={2} className={styles.body}>
             <Pivot
               className={styles.pivot}
@@ -263,16 +263,16 @@ export class FairnessWizardV1 extends React.PureComponent<
                   performancePickerProps={performancePickerProps}
                   onNext={this.setTab.bind(
                     this,
-                    flights.skipDisparity ? reportTabKey : disparityTabKey
+                    flights.skipFairness ? reportTabKey : fairnessTabKey
                   )}
                   onPrevious={this.setTab.bind(this, featureBinTabKey)}
                 />
               </PivotItem>
-              {flights.skipDisparity === false && (
-                <PivotItem headerText={"Parity"} itemKey={disparityTabKey}>
-                  <ParityTab
+              {flights.skipFairness === false && (
+                <PivotItem headerText={"Fairness"} itemKey={fairnessTabKey}>
+                  <FairnessTab
                     dashboardContext={this.state.dashboardContext}
-                    parityPickerProps={parityPickerProps}
+                    fairnessPickerProps={fairnessPickerProps}
                     onNext={this.setTab.bind(this, reportTabKey)}
                     onPrevious={this.setTab.bind(this, performanceTabKey)}
                   />
@@ -289,7 +289,7 @@ export class FairnessWizardV1 extends React.PureComponent<
               modelCount={this.props.predictedY.length}
               performancePickerProps={performancePickerProps}
               onChartClick={this.onSelectModel}
-              parityPickerProps={parityPickerProps}
+              fairnessPickerProps={fairnessPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               selectedModelIndex={this.state.selectedModelId}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
@@ -303,7 +303,7 @@ export class FairnessWizardV1 extends React.PureComponent<
               onChartClick={this.onSelectModel}
               modelCount={this.props.predictedY.length}
               performancePickerProps={performancePickerProps}
-              parityPickerProps={parityPickerProps}
+              fairnessPickerProps={fairnessPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
@@ -352,14 +352,14 @@ export class FairnessWizardV1 extends React.PureComponent<
 
   private readonly setPerformanceKey = (key: string): void => {
     const value: Partial<IWizardStateV1> = { selectedPerformanceKey: key };
-    if (flights.skipDisparity) {
-      value.selectedParityKey = key;
+    if (flights.skipFairness) {
+      value.selectedFairnessKey = key;
     }
     this.setState(value as IWizardStateV1);
   };
 
-  private readonly setParityKey = (key: string): void => {
-    this.setState({ selectedParityKey: key });
+  private readonly setFairnessKey = (key: string): void => {
+    this.setState({ selectedFairnessKey: key });
   };
 
   private readonly setBinIndex = (index: number): void => {

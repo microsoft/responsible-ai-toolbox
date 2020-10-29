@@ -21,13 +21,13 @@ import {
 } from "../IFairnessProps";
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
+import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";
 import { IBinnedResponse } from "./IBinnedResponse";
 import {
   IRunTimeFairnessContext,
   IFairnessContext,
   IFairnessModelMetadata
 } from "./IFairnessContext";
-import { IParityOption, parityOptions } from "./ParityMetrics";
 import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 
 export class WizardBuilder {
@@ -236,27 +236,27 @@ export class WizardBuilder {
     return customMetrics.concat(providedMetrics);
   }
 
-  public static buildParityListForPrecomputedMetrics(
+  public static buildFairnessListForPrecomputedMetrics(
     props: IPreComputedData
-  ): IParityOption[] {
-    const customMetrics: IParityOption[] = [];
-    const providedMetrics: IParityOption[] = [];
-    // Every available precomputed metric can potentially be used for multiple parity metrics.
+  ): IFairnessOption[] {
+    const customMetrics: IFairnessOption[] = [];
+    const providedMetrics: IFairnessOption[] = [];
+    // Every available precomputed metric can potentially be used for multiple fairness metrics.
     // To get all possible ones listed create a mapping from the underlying precomputed metric
-    // to all the parity metrics that can be calculated from it.
-    const allParityMetrics: {
-      [parityMetric: string]: IParityOption[];
+    // to all the fairness metrics that can be calculated from it.
+    const allFairnessMetrics: {
+      [fairnessMetric: string]: IFairnessOption[];
     } = {};
-    Object.values(parityOptions).forEach((parityOption) => {
-      if (parityOption.parityMetric in allParityMetrics) {
-        allParityMetrics[parityOption.parityMetric].push(parityOption);
+    Object.values(fairnessOptions).forEach((fairnessOption) => {
+      if (fairnessOption.fairnessMetric in allFairnessMetrics) {
+        allFairnessMetrics[fairnessOption.fairnessMetric].push(fairnessOption);
       } else {
-        allParityMetrics[parityOption.parityMetric] = [parityOption];
+        allFairnessMetrics[fairnessOption.fairnessMetric] = [fairnessOption];
       }
     });
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      if (key in allParityMetrics) {
-        allParityMetrics[key].forEach((metric) => {
+      if (key in allFairnessMetrics) {
+        allFairnessMetrics[key].forEach((metric) => {
           if (metric !== undefined) {
             providedMetrics.push(metric);
           }

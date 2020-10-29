@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { Icon, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { IFairnessOption } from "../../util/FairnessMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IPerformanceOption } from "../../util/PerformanceMetrics";
 
@@ -13,9 +14,10 @@ import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 interface IInsightsProps {
   selectedMetric: IPerformanceOption;
+  selectedFairnessMetric: IFairnessOption;
   selectedPerformanceKey: string;
   performanceArray: number[];
-  disparityArray: number[];
+  fairnessArray: number[];
 }
 
 export class Insights extends React.Component<IInsightsProps> {
@@ -25,11 +27,11 @@ export class Insights extends React.Component<IInsightsProps> {
 
     let minPerformance: number = Number.MAX_SAFE_INTEGER;
     let maxPerformance: number = Number.MIN_SAFE_INTEGER;
-    let maxDisparity: number = Number.MIN_SAFE_INTEGER;
-    let minDisparity: number = Number.MAX_SAFE_INTEGER;
+    let maxFairnessValue: number = Number.MIN_SAFE_INTEGER;
+    let minFairnessValue: number = Number.MAX_SAFE_INTEGER;
     let minPerformanceIndex = 0;
     let maxPerformanceIndex = 0;
-    let minDisparityIndex = 0;
+    let minFairnessValueIndex = 0;
     this.props.performanceArray.forEach((value, index) => {
       if (value >= maxPerformance) {
         maxPerformanceIndex = index;
@@ -40,13 +42,13 @@ export class Insights extends React.Component<IInsightsProps> {
         minPerformance = value;
       }
     });
-    this.props.disparityArray.forEach((value, index) => {
-      if (value >= maxDisparity) {
-        maxDisparity = value;
+    this.props.fairnessArray.forEach((value, index) => {
+      if (value >= maxFairnessValue) {
+        maxFairnessValue = value;
       }
-      if (value <= minDisparity) {
-        minDisparityIndex = index;
-        minDisparity = value;
+      if (value <= minFairnessValue) {
+        minFairnessValueIndex = index;
+        minFairnessValue = value;
       }
     });
 
@@ -58,32 +60,37 @@ export class Insights extends React.Component<IInsightsProps> {
       maxPerformance,
       this.props.selectedPerformanceKey
     );
-    const formattedMinDisparity = FormatMetrics.formatNumbers(
-      minDisparity,
+    const formattedMinFairnessValue = FormatMetrics.formatNumbers(
+      minFairnessValue,
       this.props.selectedPerformanceKey
     );
-    const formattedMaxDisparity = FormatMetrics.formatNumbers(
-      maxDisparity,
+    const formattedMaxFairnessValue = FormatMetrics.formatNumbers(
+      maxFairnessValue,
       this.props.selectedPerformanceKey
     );
 
+    // performance metric ranges from <min> to <max>
+    // disparity ranges from <min> to <max>
     const insights2 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText2,
       this.props.selectedMetric.title,
       formattedMinPerformance,
       formattedMaxPerformance,
-      formattedMinDisparity,
-      formattedMaxDisparity
+      this.props.selectedFairnessMetric.title,
+      formattedMinFairnessValue,
+      formattedMaxFairnessValue
     );
 
+    // description of model with best performance
     const insights3 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText3,
       this.props.selectedMetric.title.toLowerCase(),
       this.props.selectedMetric.isMinimization
         ? formattedMinPerformance
         : formattedMaxPerformance,
+      this.props.selectedFairnessMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
-        this.props.disparityArray[
+        this.props.fairnessArray[
           this.props.selectedMetric.isMinimization
             ? minPerformanceIndex
             : maxPerformanceIndex
@@ -92,14 +99,16 @@ export class Insights extends React.Component<IInsightsProps> {
       )
     );
 
+    // description of model with best fairness metric value
     const insights4 = localization.formatString(
       localization.Fairness.ModelComparison.insightsText4,
       this.props.selectedMetric.title.toLowerCase(),
       FormatMetrics.formatNumbers(
-        this.props.performanceArray[minDisparityIndex],
+        this.props.performanceArray[minFairnessValueIndex],
         this.props.selectedPerformanceKey
       ),
-      formattedMinDisparity
+      this.props.selectedFairnessMetric.title.toLowerCase(),
+      formattedMinFairnessValue
     );
 
     return (

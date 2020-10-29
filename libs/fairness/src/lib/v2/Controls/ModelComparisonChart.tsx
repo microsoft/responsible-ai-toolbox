@@ -24,14 +24,14 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { FairnessModes, fairnessOptions } from "../../util/FairnessMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
-import { parityOptions } from "../../util/ParityMetrics";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV2,
   IFeatureBinPickerPropsV2,
-  IParityPickerPropsV2
+  IFairnessPickerPropsV2
 } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
 
@@ -46,7 +46,7 @@ export interface IModelComparisonProps {
   metricsCache: MetricsCache;
   modelCount: number;
   performancePickerProps: IPerformancePickerPropsV2;
-  parityPickerProps: IParityPickerPropsV2;
+  fairnessPickerProps: IFairnessPickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
   onEditConfigs: () => void;
@@ -58,9 +58,9 @@ export interface IState {
   showModalHelp?: boolean;
   featureKey?: string;
   performanceKey?: string;
-  parityKey?: string;
+  fairnessKey?: string;
   performanceArray?: number[];
-  disparityArray?: number[];
+  fairnessArray?: number[];
 }
 
 export class ModelComparisonChart extends React.PureComponent<
@@ -101,7 +101,7 @@ export class ModelComparisonChart extends React.PureComponent<
         textposition: "top",
         type: "scatter",
         xAccessor: "Performance",
-        yAccessor: "Parity"
+        yAccessor: "Fairness"
       } as any
     ],
     layout: {
@@ -131,7 +131,7 @@ export class ModelComparisonChart extends React.PureComponent<
         fixedrange: true,
         showgrid: false,
         title: {
-          text: "Disparity"
+          text: "Fairness"
         }
       }
     } as any
@@ -140,7 +140,7 @@ export class ModelComparisonChart extends React.PureComponent<
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
-      parityKey: this.props.parityPickerProps.selectedParityKey,
+      fairnessKey: this.props.fairnessPickerProps.selectedFairnessKey,
       performanceKey: this.props.performancePickerProps.selectedPerformanceKey,
       showModalIntro: this.props.showIntro
     };
@@ -166,7 +166,7 @@ export class ModelComparisonChart extends React.PureComponent<
     if (
       !this.state ||
       this.state.performanceArray === undefined ||
-      this.state.disparityArray === undefined
+      this.state.fairnessArray === undefined
     ) {
       this.loadData();
       mainChart = (
@@ -177,11 +177,11 @@ export class ModelComparisonChart extends React.PureComponent<
         />
       );
     } else {
-      const { disparityArray } = this.state;
+      const { fairnessArray } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
+          Fairness: fairnessArray[index],
           index,
-          Parity: disparityArray[index],
           Performance: performance
         };
       });
@@ -196,6 +196,13 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.performancePickerProps.selectedPerformanceKey
         );
 
+      const selectedFairnessMetric =
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey] ||
+        this.props.fairnessPickerProps.fairnessOptions.find(
+          (metric) =>
+            metric.key === this.props.fairnessPickerProps.selectedFairnessKey
+        );
+
       const props = _.cloneDeep(this.plotlyProps);
       props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
         (series) => {
@@ -208,16 +215,40 @@ export class ModelComparisonChart extends React.PureComponent<
       );
 
       const performanceMetricTitle = selectedMetric.title;
-      const parityMetricTitle =
-        parityOptions[this.props.parityPickerProps.selectedParityKey].title;
+      const fairnessMetric =
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey];
+      const fairnessMetricTitle = fairnessMetric.title;
+
       if (props.layout?.xaxis) {
         props.layout.xaxis.title = performanceMetricTitle;
       }
       if (props.layout?.yaxis) {
-        props.layout.yaxis.title = parityMetricTitle;
+        props.layout.yaxis.title = fairnessMetricTitle;
       }
 
       const cancelIcon: IIconProps = { iconName: "Cancel" };
+
+      // The help text for performance metrics needs to indicate
+      // that a lower/higher value is better in the corresponding cases.
+      const helpModalText1 = localization.formatString(
+        localization.Fairness.ModelComparison.helpModalText1,
+        selectedMetric.isMinimization
+          ? localization.Fairness.ModelComparison.lower
+          : localization.Fairness.ModelComparison.higher
+      );
+
+      /* The following modal text needs to indicate whether lower or higher
+      is preferable given the selected fairness metric. For difference and
+      maximum based metrics lower is preferable, for ratio and minimum based
+      metrics higher is better. */
+      const helpModalText2 = localization.formatString(
+        localization.Fairness.ModelComparison.helpModalText2,
+        new Set([FairnessModes.Difference, FairnessModes.Max]).has(
+          fairnessMetric.fairnessMode
+        )
+          ? localization.Fairness.ModelComparison.lower
+          : localization.Fairness.ModelComparison.higher
+      );
 
       mainChart = (
         <div className={styles.main}>
@@ -246,10 +277,10 @@ export class ModelComparisonChart extends React.PureComponent<
                   {localization.Fairness.ModelComparison.introModalText}
                   <br />
                   <br />
-                  {localization.Fairness.ModelComparison.helpModalText1}
+                  {helpModalText1}
                   <br />
                   <br />
-                  {localization.Fairness.ModelComparison.helpModalText2}
+                  {helpModalText2}
                 </p>
                 <div style={{ display: "flex", paddingBottom: "20px" }}>
                   <PrimaryButton
@@ -270,9 +301,10 @@ export class ModelComparisonChart extends React.PureComponent<
             </div>
           </div>
           <Insights
-            disparityArray={this.state.disparityArray}
+            fairnessArray={this.state.fairnessArray}
             performanceArray={this.state.performanceArray}
             selectedMetric={selectedMetric}
+            selectedFairnessMetric={selectedFairnessMetric}
             selectedPerformanceKey={
               this.props.performancePickerProps.selectedPerformanceKey
             }
@@ -291,10 +323,10 @@ export class ModelComparisonChart extends React.PureComponent<
         <DropdownBar
           dashboardContext={this.props.dashboardContext}
           performancePickerProps={this.props.performancePickerProps}
-          parityPickerProps={this.props.parityPickerProps}
+          fairnessPickerProps={this.props.fairnessPickerProps}
           featureBinPickerProps={this.props.featureBinPickerProps}
           parentFeatureChanged={this.featureChanged}
-          parentParityChanged={this.parityChanged}
+          parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
         />
         {mainChart}
@@ -314,25 +346,25 @@ export class ModelComparisonChart extends React.PureComponent<
             this.props.performancePickerProps.selectedPerformanceKey
           );
         });
-      const parityOption =
-        parityOptions[this.props.parityPickerProps.selectedParityKey];
-      const disparityPromises = new Array(this.props.modelCount)
+      const fairnessOption =
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey];
+      const fairnessPromises = new Array(this.props.modelCount)
         .fill(0)
         .map((_, modelIndex) => {
-          return this.props.metricsCache.getDisparityMetric(
+          return this.props.metricsCache.getFairnessMetric(
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
-            this.props.parityPickerProps.selectedParityKey,
-            parityOption.parityMode
+            this.props.fairnessPickerProps.selectedFairnessKey,
+            fairnessOption.fairnessMode
           );
         });
 
       const performanceArray = (await Promise.all(performancePromises)).map(
         (metric) => metric.global
       );
-      const disparityArray = await Promise.all(disparityPromises);
-      this.setState({ disparityArray, performanceArray });
+      const fairnessArray = await Promise.all(fairnessPromises);
+      this.setState({ fairnessArray, performanceArray });
     } catch {
       // todo;
     }
@@ -353,7 +385,7 @@ export class ModelComparisonChart extends React.PureComponent<
       this.props.featureBinPickerProps.selectedBinIndex = index;
       this.props.featureBinPickerProps.onBinChange(index);
       this.setState({
-        disparityArray: undefined,
+        fairnessArray: undefined,
         featureKey,
         performanceArray: undefined
       });
@@ -374,17 +406,17 @@ export class ModelComparisonChart extends React.PureComponent<
     }
   };
 
-  private readonly parityChanged = (
+  private readonly fairnessChanged = (
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
     if (!option) {
       return;
     }
-    const parityKey = option.key.toString();
-    if (this.state.parityKey !== parityKey) {
-      this.props.parityPickerProps.onParityChange(parityKey);
-      this.setState({ disparityArray: undefined, parityKey });
+    const fairnessKey = option.key.toString();
+    if (this.state.fairnessKey !== fairnessKey) {
+      this.props.fairnessPickerProps.onFairnessChange(fairnessKey);
+      this.setState({ fairnessArray: undefined, fairnessKey });
     }
   };
 

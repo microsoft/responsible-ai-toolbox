@@ -13,7 +13,7 @@ import React from "react";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,
-  IParityPickerPropsV2,
+  IFairnessPickerPropsV2,
   IFeatureBinPickerPropsV2
 } from "../FairnessWizard";
 
@@ -22,12 +22,12 @@ import { DropdownBarStyles } from "./DropdownBarStyles";
 export interface IDropdownBarProps {
   dashboardContext: IFairnessContext;
   performancePickerProps: IPerformancePickerPropsV2;
-  parityPickerProps: IParityPickerPropsV2;
+  fairnessPickerProps: IFairnessPickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   parentPerformanceChanged: {
     (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void;
   };
-  parentParityChanged: {
+  parentFairnessChanged: {
     (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void;
   };
   parentFeatureChanged: {
@@ -49,7 +49,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
         return { key: x.key, text: x.title };
       }
     );
-    const parityDropdown: IDropdownOption[] = this.props.parityPickerProps.parityOptions.map(
+    const fairnessDropdown: IDropdownOption[] = this.props.fairnessPickerProps.fairnessOptions.map(
       (x) => {
         return { key: x.key, text: x.title };
       }
@@ -88,12 +88,14 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
             styles={dropdownStyles}
           />
           <Dropdown
-            label={localization.Fairness.DropdownHeaders.disparityMetric}
+            label={localization.Fairness.DropdownHeaders.fairnessMetric}
             className={styles.dropDown}
-            defaultSelectedKey={this.props.parityPickerProps.selectedParityKey}
-            options={parityDropdown}
+            defaultSelectedKey={
+              this.props.fairnessPickerProps.selectedFairnessKey
+            }
+            options={fairnessDropdown}
             disabled={false}
-            onChange={this.props.parentParityChanged}
+            onChange={this.props.parentFairnessChanged}
             styles={dropdownStyles}
           />
         </Stack>

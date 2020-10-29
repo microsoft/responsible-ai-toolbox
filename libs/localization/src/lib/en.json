@@ -649,7 +649,7 @@
     "performanceMetricLegacy": "Performance metric",
     "sensitiveFeatures": "01 Sensitive features",
     "performanceMetric": "02 Performance metrics",
-    "disparityMetric": "03 Disparity metrics",
+    "fairnessMetric": "03 Fairness metrics",
     "errorOnInputs": "Error with input. Sensitive features must be categorical values at this time. Please map values to binned categories and retry.",
     "Performance": {
       "header": "How do you want to measure performance?",
@@ -663,10 +663,11 @@
       "binary": "binary",
       "continuous": "continuous"
     },
-    "Parity": {
+    "Fairness": {
+      "pickerHeader": "How do you want to measure fairness?",
       "header": "Fairness measured in terms of disparity",
-      "bodyLegacy": "Disparity metrics quantify variation of your model's behavior across selected features. There are two kinds of disparity metrics: more to come....",
-      "body": "Disparity metrics quantify variation of your model's behavior across selected features. There are four kinds of disparity metrics: more to come...."
+      "bodyLegacy": "Fairness metrics quantify variation of your model's behavior across selected features. There are two of fairness metrics: more to come....",
+      "body": "Fairness metrics quantify variation of your model's behavior across selected features. There are several kinds of fairness metrics that are based on a variety of performance metrics. They either capture the difference or ratio between the extreme values across the groups, or simply the worst value of any group."
     },
     "Header": {
       "title": "Fairness",
@@ -683,11 +684,11 @@
       "explanatoryStep": "To set up the assessment, you need to specify a sensitive feature and a performance metric.",
       "getStarted": "Get started",
       "features": "Sensitive features",
-      "featuresInfo": "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by disparity metrics. Disparity metrics quantify how much your model's behavior varies across these groups.",
+      "featuresInfo": "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by fairness metrics. Fairness metrics quantify how much your model's behavior varies across these groups.",
       "performance": "Performance metric",
       "performanceInfo": "Performance metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of the performance metric across the groups is reported as the disparity in performance.",
-      "parity": "Disparity metrics",
-      "parityInfo": "Parity metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. The difference between the extreme values of accuracy is reported as the disparity in accuracy."
+      "fairness": "Fairness metrics",
+      "fairnessInfo": "Fairness metrics are used to evaluate the overall quality of your model as well as the quality of your model in each group. Fairness metrics may represent the difference or ratio between the extreme values of a performance metric, or simply the worst value of any group."
     },
     "ModelComparison": {
       "title": "Model comparison",
@@ -704,19 +705,14 @@
       "to": " to ",
       "period": ". ",
       "introModalText": "Each model is a selectable point. Click or tap on a model for its full fairness assessment.",
-      "helpModalText1": "The x-axis represents performance, with higher being better.",
-      "helpModalText2": "The y-axis represents disparity, with lower being better.",
-      "insightsText1": "The chart shows {0} and disparity of {1} models.",
-      "_insightsText1.comment": "??? NOT FOUND IN SRC",
-      "insightsText2": "{0} ranges from {1} to {2}. The disparity ranges from {3} to {4}.",
-      "_insightsText2.comment": "The range (low to high) of the metric, and range (low to high) of the associated disparity for that metric",
-      "insightsText3": "The most accurate model achieves {0} of {1} and a disparity of {2}.",
-      "_insightsText3.comment": "For the most accurate model: The name of the performance measure (0), the formatted numerical value of the performance (1), and the formatted numerical value of the disparity (2)",
-      "insightsText4": "The lowest-disparity model achieves {0} of {1} and a disparity of {2}.",
-      "_insightsText4.comment": "For the lowest-disparity model: The name of the performance measure (0), the formatted numerical value of the performance (1), and the formatted numerical value of the disparity (2)",
+      "helpModalText1": "The x-axis represents performance, with {0} being better.",
+      "helpModalText2": "The y-axis represents fairness metric values, with {0} being better.",
+      "insightsText2": "{0} ranges from {1} to {2}. {3} ranges from {4} to {5}.",
+      "insightsText3": "The model with the best performance achieves {0} of {1} and {2} of {3}.",
+      "insightsText4": "The model with the best fairness metric value achieves {0} of {1} and {2} of {3}.",
+      "insightsText3v1FairnessMetric": "a disparity",
       "disparityInOutcomes": "Disparity in predictions",
       "disparityInPerformance": "Disparity in {0}",
-      "_disparityInPerformance.comment": "The name of the metric for which disparity is assessed",
       "howToMeasureDisparity": "How should disparity be measured?"
     },
     "Report": {
@@ -828,7 +824,7 @@
       "accuracyScoreRatio": "Accuracy score ratio",
       "accuracyScoreRatioDescription": "The minimum ratio in accuracy score between any two groups.",
       "balancedAccuracyScoreMin": "Balanced accuracy score minimum",
-      "balancedAccuracyScoreMinDescription": "The average recall on each class (0 and 1).",
+      "balancedAccuracyScoreMinDescription": "The minimum of all groups' average recall on each class (0 and 1).",
       "demographicParityDifference": "Demographic parity difference",
       "demographicParityDifferenceDescription": "The maximum difference in selection rate, that is the fraction with predicted label 1, between any two groups.",
       "demographicParityRatio": "Demographic parity ratio",
@@ -885,7 +881,7 @@
     "DropdownHeaders": {
       "sensitiveFeature": "Sensitive feature",
       "performanceMetric": "Performance metric",
-      "disparityMetric": "Disparity metric"
+      "fairnessMetric": "Disparity metric"
     }
   }
 }

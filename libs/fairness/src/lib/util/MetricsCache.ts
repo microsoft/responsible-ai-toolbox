@@ -5,7 +5,7 @@ import _, { max, min } from "lodash";
 
 import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 
-import { ParityModes, parityOptions } from "./ParityMetrics";
+import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 
 export class MetricsCache {
   // Top index is featureBin index, second index is model index. Third string key is metricKey
@@ -49,25 +49,25 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    disparityMethod: ParityModes
+    fairnessMethod: FairnessModes
   ): Promise<number> {
-    const falsePositiveRateMetric = await this.getDisparityMetric(
+    const falsePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
-      disparityMethod === ParityModes.Difference
+      fairnessMethod === FairnessModes.Difference
         ? "false_positive_rate_difference"
         : "false_positive_rate_ratio",
-      disparityMethod
+      fairnessMethod
     );
-    const truePositiveRateMetric = await this.getDisparityMetric(
+    const truePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
       featureIndex,
       modelIndex,
-      disparityMethod === ParityModes.Difference
+      fairnessMethod === FairnessModes.Difference
         ? "true_positive_rate_difference"
         : "true_positive_rate_ratio",
-      disparityMethod
+      fairnessMethod
     );
 
     if (
@@ -77,7 +77,7 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    if (disparityMethod === ParityModes.Difference) {
+    if (fairnessMethod === FairnessModes.Difference) {
       const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
       return maxMetric === undefined ? Number.NaN : maxMetric;
     }
@@ -86,12 +86,12 @@ export class MetricsCache {
     return minMetric === undefined ? Number.NaN : minMetric;
   }
 
-  public async getDisparityMetric(
+  public async getFairnessMetric(
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
     key: string,
-    disparityMethod: ParityModes
+    fairnessMethod: FairnessModes
   ): Promise<number> {
     // Equalized Odds is calculated based on two other fairness metrics.
     if (key.startsWith("equalized_odds")) {
@@ -99,11 +99,11 @@ export class MetricsCache {
         binIndexVector,
         featureIndex,
         modelIndex,
-        disparityMethod
+        fairnessMethod
       );
     }
 
-    const metricKey = parityOptions[key].parityMetric;
+    const metricKey = fairnessOptions[key].fairnessMetric;
     let value = this.cache[featureIndex][modelIndex][metricKey];
     if (value === undefined && this.fetchMethod) {
       value = await this.fetchMethod({
@@ -128,34 +128,34 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    if (disparityMethod === ParityModes.Min) {
+    if (fairnessMethod === FairnessModes.Min) {
       return min;
     }
 
-    if (disparityMethod === ParityModes.Max) {
+    if (fairnessMethod === FairnessModes.Max) {
       return max;
     }
 
-    if (disparityMethod === ParityModes.Ratio) {
+    if (fairnessMethod === FairnessModes.Ratio) {
       if (max === 0) {
         return Number.NaN;
       }
       return min / max;
     }
 
-    if (disparityMethod === ParityModes.Difference) {
+    if (fairnessMethod === FairnessModes.Difference) {
       return max - min;
     }
 
     return Number.NaN;
   }
 
-  public async getDisparityMetricV1(
+  public async getFairnessMetricV1(
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
     key: string,
-    disparityMethod: ParityModes
+    fairnessMethod: FairnessModes
   ): Promise<number> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (value === undefined && this.fetchMethod) {
@@ -179,11 +179,11 @@ export class MetricsCache {
     if (
       min === undefined ||
       max === undefined ||
-      (max === 0 && disparityMethod === ParityModes.Ratio)
+      (max === 0 && fairnessMethod === FairnessModes.Ratio)
     ) {
       return Number.NaN;
     }
-    return disparityMethod === ParityModes.Difference ? max - min : min / max;
+    return fairnessMethod === FairnessModes.Difference ? max - min : min / max;
   }
 
   public clearCache(binIndex?: number): void {
