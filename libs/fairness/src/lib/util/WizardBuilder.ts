@@ -21,13 +21,13 @@ import {
 } from "../IFairnessProps";
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
+import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";
 import { IBinnedResponse } from "./IBinnedResponse";
 import {
   IRunTimeFairnessContext,
   IFairnessContext,
   IFairnessModelMetadata
 } from "./IFairnessContext";
-import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";
 import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 
 export class WizardBuilder {

@@ -4,8 +4,8 @@
 import { localization } from "@responsible-ai/localization";
 import { Icon, Text } from "office-ui-fabric-react";
 import React from "react";
-import { IFairnessOption } from '../../util/FairnessMetrics';
 
+import { IFairnessOption } from "../../util/FairnessMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IPerformanceOption } from "../../util/PerformanceMetrics";
 

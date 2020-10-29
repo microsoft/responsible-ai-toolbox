@@ -24,9 +24,9 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { FairnessModes, fairnessOptions } from "../../util/FairnessMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
-import { FairnessModes, fairnessOptions } from "../../util/FairnessMetrics";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV2,
@@ -180,8 +180,8 @@ export class ModelComparisonChart extends React.PureComponent<
       const { fairnessArray } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
-          index,
           Fairness: fairnessArray[index],
+          index,
           Performance: performance
         };
       });
@@ -200,7 +200,7 @@ export class ModelComparisonChart extends React.PureComponent<
         fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey] ||
         this.props.fairnessPickerProps.fairnessOptions.find(
           (metric) =>
-            metric.key == this.props.fairnessPickerProps.selectedFairnessKey
+            metric.key === this.props.fairnessPickerProps.selectedFairnessKey
         );
 
       const props = _.cloneDeep(this.plotlyProps);

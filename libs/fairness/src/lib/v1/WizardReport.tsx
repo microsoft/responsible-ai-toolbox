@@ -18,8 +18,8 @@ import {
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { FormatMetrics } from "../util/FormatMetrics";
 import { FairnessModes } from "../util/FairnessMetrics";
+import { FormatMetrics } from "../util/FormatMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";

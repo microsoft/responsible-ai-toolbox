@@ -22,10 +22,10 @@ import {
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
+import { FairnessModes } from "../../util/FairnessMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { MetricsCache } from "../../util/MetricsCache";
-import { FairnessModes } from "../../util/FairnessMetrics";
 import { performanceOptions } from "../../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV1,
@@ -149,8 +149,8 @@ export class ModelComparisonChart extends React.PureComponent<
     const { fairnessArray } = this.state;
     const data = this.state.performanceArray.map((performance, index) => {
       return {
-        index,
         Fairness: fairnessArray[index],
+        index,
         Performance: performance
       };
     });
@@ -409,7 +409,7 @@ export class ModelComparisonChart extends React.PureComponent<
   ): void => {
     const disparityInOutcomes = option?.key !== "performance";
     if (this.state.disparityInOutcomes !== disparityInOutcomes) {
-      this.setState({ fairnessArray: undefined, disparityInOutcomes });
+      this.setState({ disparityInOutcomes, fairnessArray: undefined });
     }
   };
   // TODO: Reuse if multiselect re-enters design

@@ -10,8 +10,8 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
-import { FormatMetrics } from "../util/FormatMetrics";
 import { FairnessModes, fairnessOptions } from "../util/FairnessMetrics";
+import { FormatMetrics } from "../util/FormatMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";
 
 import { DropdownBar } from "./Controls/DropdownBar";
@@ -361,7 +361,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const fairnessKey = option.key.toString();
     if (this.state.fairnessKey !== fairnessKey) {
       this.props.fairnessPickerProps.onFairnessChange(fairnessKey);
-      this.setState({ metrics: undefined, fairnessKey });
+      this.setState({ fairnessKey, metrics: undefined });
     }
   };
 
