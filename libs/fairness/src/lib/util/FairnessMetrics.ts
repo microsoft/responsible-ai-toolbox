@@ -79,7 +79,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
       localization.Fairness.Metrics.equalizedOddsDifferenceDescription,
     fairnessMetric: "",
     // combination of two metrics
-fairnessMode: FairnessModes.Difference, 
+    fairnessMode: FairnessModes.Difference,
     key: "equalized_odds_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
     title: localization.Fairness.Metrics.equalizedOddsDifference
@@ -88,7 +88,7 @@ fairnessMode: FairnessModes.Difference,
     description: localization.Fairness.Metrics.equalizedOddsRatioDescription,
     fairnessMetric: "",
     // combination of two metrics
-fairnessMode: FairnessModes.Ratio, 
+    fairnessMode: FairnessModes.Ratio,
     key: "equalized_odds_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
     title: localization.Fairness.Metrics.equalizedOddsRatio

@@ -384,7 +384,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.fairnessPickerProps.selectedFairnessKey
       ] = await this.getFairnessMetric(
         this.props.fairnessPickerProps.selectedFairnessKey,
-        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey].fairnessMode
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
+          .fairnessMode
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {

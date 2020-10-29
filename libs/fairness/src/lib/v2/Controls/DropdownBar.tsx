@@ -90,7 +90,9 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           <Dropdown
             label={localization.Fairness.DropdownHeaders.fairnessMetric}
             className={styles.dropDown}
-            defaultSelectedKey={this.props.fairnessPickerProps.selectedFairnessKey}
+            defaultSelectedKey={
+              this.props.fairnessPickerProps.selectedFairnessKey
+            }
             options={fairnessDropdown}
             disabled={false}
             onChange={this.props.parentFairnessChanged}
