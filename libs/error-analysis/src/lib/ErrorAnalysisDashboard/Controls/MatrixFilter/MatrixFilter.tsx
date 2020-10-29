@@ -5,7 +5,8 @@ import {
   ComboBox,
   IComboBox,
   IComboBoxOption,
-  IStackTokens
+  IStackTokens,
+  ITheme
 } from "office-ui-fabric-react";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
@@ -15,7 +16,7 @@ import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { matrixFilterStyles } from "./MatrixFilter.styles";
 
 export interface IMatrixFilterProps {
-  theme?: string;
+  theme?: ITheme;
   features: string[];
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
 }

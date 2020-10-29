@@ -1,20 +1,22 @@
-/* tslint:disable:object-literal-sort-keys */
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export const dummyMatrixData = [
   [
     {
       category1: 0
     },
     {
-      falseCount: 593,
-      count: 2618
+      count: 2618,
+      falseCount: 593
     },
     {
-      falseCount: 1715,
-      count: 2704
+      count: 2704,
+      falseCount: 1715
     },
     {
-      falseCount: 2295,
-      count: 2671
+      count: 2671,
+      falseCount: 2295
     }
   ],
   [
@@ -22,16 +24,16 @@ export const dummyMatrixData = [
       category1: 1
     },
     {
-      falseCount: 381,
-      count: 662
+      count: 662,
+      falseCount: 381
     },
     {
-      falseCount: 384,
-      count: 677
+      count: 677,
+      falseCount: 384
     },
     {
-      falseCount: 22,
-      count: 668
+      count: 668,
+      falseCount: 22
     }
   ],
   [

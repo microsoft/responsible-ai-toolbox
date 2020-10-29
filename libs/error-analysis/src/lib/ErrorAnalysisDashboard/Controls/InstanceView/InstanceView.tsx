@@ -6,7 +6,8 @@ import {
   IPivotItemProps,
   PivotItem,
   Pivot,
-  PivotLinkSize
+  PivotLinkSize,
+  ITheme
 } from "office-ui-fabric-react";
 import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
 import React from "react";
@@ -20,7 +21,7 @@ import { InstanceViewStyles } from "./InstanceView.styles";
 // require('./InstanceView.css');
 
 export interface IInstanceViewProps {
-  theme?: string;
+  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;

@@ -3,14 +3,16 @@
 
 import { IExplanationDashboardData } from "@responsible-ai/core-ui";
 import {
-  NewExplanationDashboard,
-  ExplanationDashboard,
-  ITelemetryMessage,
-  IExplanationDashboardProps,
+  ErrorAnalysisDashboard,
+  IErrorAnalysisDashboardProps,
   HelpMessageDict
-} from "@responsible-ai/interpret";
+} from "@responsible-ai/error-analysis";
+import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
+
+import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
+import { dummyTreeData } from "./__mock_data__/dummyTree";
 
 interface IAppProps {
   dataset: IExplanationDashboardData;
@@ -31,27 +33,60 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
-    const dashboardProp: IExplanationDashboardProps = {
+    const dashboardProp: IErrorAnalysisDashboardProps = {
       ...this.props.dataset,
       explanationMethod: "mimic",
+      features: this.generateFeatures(),
       locale: this.props.language,
+      localUrl: "https://www.bing.com/",
+      requestDebugML: this.generateJsonTree,
+      requestMatrix: this.generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
         : this.requestPredictions,
       stringParams: { contextualHelp: this.messages },
-      telemetryHook: (er: ITelemetryMessage): void => {
-        console.error(er.message);
-      },
       theme: this.props.theme
     };
     switch (this.props.version) {
       case 1:
-        return <ExplanationDashboard {...dashboardProp} />;
-      case 2:
       default:
-        return <NewExplanationDashboard {...dashboardProp} />;
+        return <ErrorAnalysisDashboard {...dashboardProp} />;
     }
   }
+
+  private generateJsonTree = (
+    _data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    const promise = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        resolve(_.cloneDeep(dummyTreeData));
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
+    });
+
+    return promise;
+  };
+
+  private generateJsonMatrix = (
+    _data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    const promise = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        resolve(_.cloneDeep(dummyMatrixData));
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
+    });
+
+    return promise;
+  };
 
   private requestPredictions = (
     data: any[],
@@ -99,5 +134,25 @@ export class App extends React.Component<IAppProps> {
     });
 
     return promise;
+  }
+
+  private generateFeatures(): string[] {
+    return [
+      "Feature1",
+      "Feature2",
+      "Feature3",
+      "Feature4",
+      "Feature5",
+      "Feature6",
+      "Feature7",
+      "Feature8",
+      "Feature9",
+      "Feature10",
+      "Feature11",
+      "Feature12",
+      "Feature13",
+      "Feature14",
+      "Feature15"
+    ];
   }
 }

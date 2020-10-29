@@ -10,18 +10,22 @@ import {
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
+import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 
+import {
+  ITreeViewRendererStyles,
+  treeViewRendererStyles
+} from "./TreeViewRenderer.styles";
+
 // Importing this solely to set the selectedPanelId. This component is NOT a statefulContainer
 // import StatefulContainer from '../../ap/mixins/statefulContainer.js'
 
-require("./TreeViewRenderer.css");
-
 export interface ITreeViewRendererProps {
-  theme?: string;
+  theme?: ITheme;
   messages?: HelpMessageDict;
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
@@ -145,7 +149,7 @@ export class TreeViewRenderer extends React.PureComponent<
     if (!this.state.root) {
       return <div></div>;
     }
-
+    const classNames = treeViewRendererStyles();
     const labelPaddingX = 20;
     const labelPaddingY = 8;
     const labelYOffset = 3;
@@ -188,7 +192,7 @@ export class TreeViewRenderer extends React.PureComponent<
         const labelY = 4 + d!.y! + (d!.parent!.y! - d!.y!) * 0.5;
         let bb: DOMRect;
         try {
-          bb = this.getTextBB(d!.data!.condition!);
+          bb = this.getTextBB(d!.data!.condition!, classNames);
         } catch {
           bb = new DOMRect(1, 1, 1, 1);
         }
@@ -265,11 +269,11 @@ export class TreeViewRenderer extends React.PureComponent<
     const nodeDetail = this.state.nodeDetail;
 
     return (
-      <div className="mainFrame" id="mainFrame">
-        <div className="innerFrame">
+      <div className={classNames.mainFrame} id="mainFrame">
+        <div className={classNames.innerFrame}>
           <svg
             ref={svgOuterFrame}
-            className="svgOuterFrame"
+            className={classNames.svgOuterFrame}
             id="svgOuterFrame"
             viewBox="0 0 1000 500"
             onClick={this.bkgClick.bind(this)}
@@ -286,62 +290,74 @@ export class TreeViewRenderer extends React.PureComponent<
             </mask>
 
             {/* Legend */}
-            <g className="details" onClick={(e): void => e.stopPropagation()}>
+            <g
+              className={classNames.details}
+              onClick={(e): void => e.stopPropagation()}
+            >
               <mask id="detailMask">
                 <rect x="-26" y="-26" width="52" height="52" fill="white" />
               </mask>
 
               <g className="opacityToggle" style={nodeDetail.showSelected}>
-                <g className="innerOpacityToggle">
+                <g className={classNames.innerOpacityToggle}>
                   <rect
-                    className="opacityToggleRect"
+                    className={classNames.opacityToggleRect}
                     width="280"
                     height="140"
                     fill="transparent"
                   />
-                  <text className="detailLines">
+                  <text className={classNames.detailLines}>
                     {nodeDetail.instanceInfo} [ {nodeDetail.errorInfo} |{" "}
                     {nodeDetail.successInfo} ]
                   </text>
-                  <g className="opacityToggleCircle">
+                  <g className={classNames.opacityToggleCircle}>
                     <circle
                       r="26"
-                      className="node"
+                      className={classNames.node}
                       style={nodeDetail.errorColor}
                     />
                     <g
                       style={nodeDetail.maskDown}
                       mask="url(#detailMask)"
-                      className="nopointer"
+                      className={classNames.nopointer}
                     >
                       <circle
                         r="26"
-                        className="node"
+                        className={classNames.node}
                         fill="#d2d2d2"
                         style={nodeDetail.maskUp}
                       />
                     </g>
-                    <text className="detailPerc">
+                    <text className={classNames.detailPerc}>
                       {nodeDetail.globalError}%
                     </text>
-                    <text className="detailPercLabel">error coverage</text>
+                    <text className={classNames.detailPercLabel}>
+                      error coverage
+                    </text>
                   </g>
-                  <g className="nonOpacityToggleCircle">
+                  <g className={classNames.nonOpacityToggleCircle}>
                     <circle
                       r="26"
-                      className="node"
+                      className={classNames.node}
                       style={nodeDetail.errorColor}
                     />
-                    <circle r="21" className="node" fill="#d2d2d2" />
-                    <text className="detailPerc">{nodeDetail.localError}%</text>
-                    <text className="detailPercLabel">error rate</text>
+                    <circle r="21" className={classNames.node} fill="#d2d2d2" />
+                    <text className={classNames.detailPerc}>
+                      {nodeDetail.localError}%
+                    </text>
+                    <text className={classNames.detailPercLabel}>
+                      error rate
+                    </text>
                   </g>
                 </g>
               </g>
             </g>
 
             {/* Tree */}
-            <TransitionGroup component="g" className="linksTransitionGroup">
+            <TransitionGroup
+              component="g"
+              className={classNames.linksTransitionGroup}
+            >
               {links.map((link) => (
                 <CSSTransition
                   key={link.id}
@@ -358,7 +374,10 @@ export class TreeViewRenderer extends React.PureComponent<
                 </CSSTransition>
               ))}
             </TransitionGroup>
-            <TransitionGroup component="g" className="nodesTransitionGroup">
+            <TransitionGroup
+              component="g"
+              className={classNames.nodesTransitionGroup}
+            >
               {nodeData.map((node, index) => (
                 <CSSTransition
                   key={node.id}
@@ -375,19 +394,19 @@ export class TreeViewRenderer extends React.PureComponent<
                   >
                     <circle
                       r={node.r}
-                      className="node"
+                      className={classNames.node}
                       style={node.errorStyle}
                     />
 
                     <g
                       style={node.fillstyleDown}
                       mask="url(#Mask)"
-                      className="nopointer"
+                      className={classNames.nopointer}
                     >
                       <circle r="26" style={node.fillstyleUp} />
                     </g>
                     {/*TODO: not sure why text-anchor is not liked by browser*/}
-                    <text textAnchor="middle" className="node_text">
+                    <text textAnchor="middle" className={classNames.nodeText}>
                       {node.data.error} / {node.data.size}
                     </text>
                     <title>{node.hoverText}</title>
@@ -397,7 +416,7 @@ export class TreeViewRenderer extends React.PureComponent<
             </TransitionGroup>
             <TransitionGroup
               component="g"
-              className="linkLabelsTransitionGroup"
+              className={classNames.linkLabelsTransitionGroup}
             >
               {linkLabels.map((linkLabel) => (
                 <CSSTransition
@@ -418,7 +437,9 @@ export class TreeViewRenderer extends React.PureComponent<
                       rx="10"
                       ry="10"
                     />
-                    <text className="linkLabel">{linkLabel.text}</text>
+                    <text className={classNames.linkLabel}>
+                      {linkLabel.text}
+                    </text>
                   </g>
                 </CSSTransition>
               ))}
@@ -436,7 +457,7 @@ export class TreeViewRenderer extends React.PureComponent<
     ): ITreeViewRendererState => {
       let height = 300;
       let width = 800;
-      if (document.querySelector("#mainFrame") !== undefined) {
+      if (document.querySelector("#mainFrame")) {
         height = document.querySelector("#mainFrame")!.clientHeight * 0.3;
         width = document.querySelector("#mainFrame")!.clientWidth * 0.6;
       }
@@ -486,10 +507,16 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(reloadDataFunc);
   }
 
-  public getTextBB(labelText: string): DOMRect {
+  public getTextBB(
+    labelText: string,
+    classNames: IProcessedStyleSet<ITreeViewRendererStyles>
+  ): DOMRect {
     const temp = select(svgOuterFrame.current).append("g");
     temp.selectAll("*").remove();
-    temp.append("text").attr("className", "linkLabel").text(`${labelText}`);
+    temp
+      .append("text")
+      .attr("className", classNames.linkLabel)
+      .text(`${labelText}`);
 
     const bb = temp!.node()!.getBBox();
     temp.selectAll("*").remove();
@@ -552,7 +579,7 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   public getRoot(d: HierarchyPointNode<any>): HierarchyPointNode<any> {
-    if (d.parent === undefined) {
+    if (!d.parent) {
       return d;
     }
     return this.getRoot(d.parent!);
@@ -612,10 +639,10 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private fetchTreeNodes(): void {
-    if (this.state.request !== undefined) {
+    if (this.state.request) {
       this.state.request.abort();
     }
-    if (this.props.getTreeNodes === undefined) {
+    if (!this.props.getTreeNodes) {
       return;
     }
     //const abortController = new AbortController();
