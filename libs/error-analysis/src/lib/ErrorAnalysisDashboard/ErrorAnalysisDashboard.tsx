@@ -1,28 +1,37 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { initializeOfficeFabric } from "@responsible-ai/core-ui";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
-import { initializeIcons } from "@uifabric/icons";
-import { getId } from "@uifabric/utilities";
+import {
+  Cohort,
+  DatasetExplorerTab,
+  GlobalExplanationTab,
+  IExplanationModelMetadata,
+  JointDataset,
+  ModelTypes,
+  WeightVectorOption,
+  WeightVectors
+} from "@responsible-ai/interpret";
 import _ from "lodash";
+import { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
-import { IPivotItemProps, IPartialTheme } from "office-ui-fabric-react";
+import { initializeIcons, IPivotItemProps } from "office-ui-fabric-react";
 import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
 import {
   PivotItem,
   Pivot,
   PivotLinkSize
 } from "office-ui-fabric-react/lib/Pivot";
-import { mergeStyleSets, loadTheme } from "office-ui-fabric-react/lib/Styling";
-import { Customizer } from "office-ui-fabric-react/lib/Utilities";
+import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
+import { Customizer, getId } from "office-ui-fabric-react/lib/Utilities";
 import React from "react";
 
-import { Cohort } from "./Cohort";
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
 import { CohortSettings } from "./Controls/CohortSettings/CohortSettings";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
@@ -31,9 +40,7 @@ import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { Navigation } from "./Controls/Navigation/Navigation";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
-import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export interface IErrorAnalysisDashboardState {
@@ -46,8 +53,8 @@ export interface IErrorAnalysisDashboardState {
   dataChartConfig?: IGenericChartProps;
   whatIfChartConfig?: IGenericChartProps;
   dependenceProps?: IGenericChartProps;
-  globalImportanceIntercept: number;
-  globalImportance: number[];
+  globalImportanceIntercept: number[];
+  globalImportance: number[][];
   isGlobalImportanceDerivedFromLocal: boolean;
   sortVector?: number[];
   editingCohortIndex?: number;
@@ -56,11 +63,14 @@ export interface IErrorAnalysisDashboardState {
   openFeatureList: boolean;
   selectedFeatures: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
+  selectedWeightVector: WeightVectorOption;
+  weightVectorOptions: WeightVectorOption[];
+  weightVectorLabels: Dictionary<string>;
 }
 
 interface IGlobalExplanationProps {
-  globalImportanceIntercept: number;
-  globalImportance: number[];
+  globalImportanceIntercept: number[];
+  globalImportance: number[][];
   isGlobalImportanceDerivedFromLocal: boolean;
 }
 
@@ -108,12 +118,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   IErrorAnalysisDashboardProps,
   IErrorAnalysisDashboardState
 > {
+  private static iconsInitialized = false;
   private static readonly classNames = mergeStyleSets({
     pivotWrapper: {
       display: "contents"
     }
   });
-  private static iconsInitialized = false;
 
   private static getClassLength: (
     props: IErrorAnalysisDashboardProps
@@ -169,7 +179,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
     ErrorAnalysisDashboard.initializeIcons(props);
-    loadTheme(props.theme as IPartialTheme);
+    initializeOfficeFabric(props);
     this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
     this.onConfigChanged = this.onConfigChanged.bind(this);
     this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
@@ -196,6 +206,16 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       itemKey: GlobalTabKeys.LocalExplanationTab
     });
     this.layerHostId = getId("cohortsLayerHost");
+  }
+
+  private static initializeIcons(props: IErrorAnalysisDashboardProps): void {
+    if (
+      ErrorAnalysisDashboard.iconsInitialized === false &&
+      props.shouldInitializeIcons !== false
+    ) {
+      initializeIcons(props.iconUrl, { disableWarnings: true });
+      ErrorAnalysisDashboard.iconsInitialized = true;
+    }
   }
 
   private static buildModelMetadata(
@@ -307,16 +327,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     }
   }
 
-  private static initializeIcons(props: IErrorAnalysisDashboardProps): void {
-    if (
-      ErrorAnalysisDashboard.iconsInitialized === false &&
-      props.shouldInitializeIcons !== false
-    ) {
-      initializeIcons(props.iconUrl);
-      ErrorAnalysisDashboard.iconsInitialized = true;
-    }
-  }
-
   private static buildGlobalProperties(
     props: IErrorAnalysisDashboardProps
   ): IGlobalExplanationProps {
@@ -331,21 +341,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         (props.precomputedExplanations.globalFeatureImportance
           .scores as number[][]).every((dim1) => Array.isArray(dim1))
       ) {
-        result.globalImportance = (props.precomputedExplanations
-          .globalFeatureImportance.scores as number[][]).map(
-          (classArray) => classArray.reduce((a, b) => a + b),
-          0
-        );
-        result.globalImportanceIntercept = (props.precomputedExplanations
-          .globalFeatureImportance.intercept as number[]).reduce(
-          (a, b) => a + b,
-          0
-        );
-      } else {
         result.globalImportance = props.precomputedExplanations
-          .globalFeatureImportance.scores as number[];
+          .globalFeatureImportance.scores as number[][];
         result.globalImportanceIntercept = props.precomputedExplanations
-          .globalFeatureImportance.intercept as number;
+          .globalFeatureImportance.intercept as number[];
+      } else {
+        result.globalImportance = (props.precomputedExplanations
+          .globalFeatureImportance.scores as number[]).map((value) => [value]);
+        result.globalImportanceIntercept = [
+          props.precomputedExplanations.globalFeatureImportance
+            .intercept as number
+        ];
       }
     }
     return result;
@@ -385,6 +391,20 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         []
       )
     ];
+    const weightVectorLabels = {
+      [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
+    };
+    const weightVectorOptions = [];
+    if (modelMetadata.modelType === ModelTypes.Multiclass) {
+      weightVectorOptions.push(WeightVectors.AbsAvg);
+    }
+    modelMetadata.classNames.forEach((name, index) => {
+      weightVectorLabels[index] = localization.formatString(
+        localization.Interpret.WhatIfTab.classLabel,
+        name
+      );
+      weightVectorOptions.push(index);
+    });
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
       cohorts,
@@ -402,13 +422,22 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       openInfoPanel: false,
       openSettingsPanel: false,
       selectedFeatures: props.features,
+      selectedWeightVector:
+        modelMetadata.modelType === ModelTypes.Multiclass
+          ? WeightVectors.AbsAvg
+          : 0,
       sortVector: undefined,
       viewType: ViewTypeKeys.ErrorAnalysisView,
+      weightVectorLabels,
+      weightVectorOptions,
       whatIfChartConfig: undefined
     };
   }
 
   public render(): React.ReactNode {
+    const cohortIDs = this.state.cohorts.map((cohort) =>
+      cohort.getCohortID().toString()
+    );
     const classNames = ErrorAnalysisDashboardStyles();
     return (
       <div className={classNames.page} style={{ maxHeight: "1000px" }}>
@@ -465,6 +494,32 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       <PivotItem key={props.itemKey} {...props} />
                     ))}
                   </Pivot>
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.DataExplorerTab && (
+                    <DatasetExplorerTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      cohorts={this.state.cohorts}
+                    />
+                  )}
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.GlobalExplanationTab && (
+                    <GlobalExplanationTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      globalImportance={this.state.globalImportance}
+                      isGlobalDerivedFromLocal={
+                        this.state.isGlobalImportanceDerivedFromLocal
+                      }
+                      cohorts={this.state.cohorts}
+                      cohortIDs={cohortIDs}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                      explanationMethod={this.props.explanationMethod}
+                    />
+                  )}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.LocalExplanationTab && (
                     <InstanceView
@@ -554,4 +609,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private updateViewState(viewType: ViewTypeKeys): void {
     this.setState({ viewType });
   }
+
+  private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
+    this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
+    this.state.cohorts.forEach((cohort) => cohort.clearCachedImportances());
+    this.setState({ selectedWeightVector: weightOption });
+  };
 }

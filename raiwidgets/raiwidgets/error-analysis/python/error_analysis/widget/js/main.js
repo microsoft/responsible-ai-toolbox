@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { ErrorAnalysisDashboard } from "error-analysis-dashboard";
+import { ErrorAnalysisDashboard } from "@responsible-ai/error-analysis";
 
 const RenderDashboard = (divId, data) => {
   let generatePrediction = (postData) => {
@@ -95,6 +95,7 @@ const RenderDashboard = (divId, data) => {
       locale={data.locale}
       key={new Date()}
       features={data.featureNames}
+      shouldInitializeIcons={false}
     />,
     document.getElementById(divId)
   );

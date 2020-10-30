@@ -11,7 +11,7 @@ import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import React from "react";
 
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
-import { JointDataset } from "../JointDataset";
+import { JointDataset } from "@responsible-ai/interpret";
 
 export interface ITabularDataViewProps {
   theme?: ITheme;

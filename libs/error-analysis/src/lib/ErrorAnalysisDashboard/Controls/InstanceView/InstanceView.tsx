@@ -13,7 +13,7 @@ import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { JointDataset } from "../../JointDataset";
+import { JointDataset } from "@responsible-ai/interpret";
 import { TabularDataView } from "../TabularDataView";
 
 import { InstanceViewStyles } from "./InstanceView.styles";

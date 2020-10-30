@@ -42,8 +42,17 @@ const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 const fullscreenIcon: IIconProps = { iconName: "ScaleVolume" };
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 100 },
-  root: { alignSelf: "center" }
+  title: {
+    borderTop: "0px solid black",
+    borderRight: "0px solid black",
+    borderLeft: "0px solid black"
+  },
+  dropdown: {
+    width: 100
+  },
+  root: {
+    alignSelf: "center"
+  }
 };
 const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
@@ -183,7 +192,7 @@ export class MainMenu extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item !== undefined) {
+    if (item) {
       if (item.key === ErrorAnalysisOptions.HeatMap) {
         // Note comparison above is actually string comparison (key is string), we have to set the enum
         const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;

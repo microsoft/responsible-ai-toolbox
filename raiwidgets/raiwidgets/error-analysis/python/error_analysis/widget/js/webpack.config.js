@@ -33,6 +33,9 @@ var config = {
 
   optimization: {
     usedExports: true
+  },
+  node: {
+    fs: "empty"
   }
 };
 
