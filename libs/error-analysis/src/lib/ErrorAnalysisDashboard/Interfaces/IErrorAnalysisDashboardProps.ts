@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IOfficeFabricProps,
+  IExplanationDashboardData
+} from "@responsible-ai/core-ui";
+
 import { IStringsParam } from "./IStringsParam";
 
 // This is the interface of the data to be provided by any glue code, be it the ModelExplanationController, the Jupyter widget,
@@ -18,19 +23,11 @@ import { IStringsParam } from "./IStringsParam";
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
 
-export interface IErrorAnalysisDashboardProps {
-  modelInformation: IModelInformation;
-  dataSummary: IDatasetSummary;
-  testData?: any[][];
-  predictedY?: number[];
-  probabilityY?: number[][];
-  trueY?: number[];
-  precomputedExplanations?: IPrecomputedExplanations;
-  theme?: any;
+export interface IErrorAnalysisDashboardProps
+  extends IExplanationDashboardData,
+    IOfficeFabricProps {
   locale?: string;
   stringParams?: IStringsParam;
-  shouldInitializeIcons?: boolean;
-  iconUrl?: string;
   features: string[];
   requestPredictions?: (
     request: any[],
@@ -44,59 +41,4 @@ export interface IErrorAnalysisDashboardProps {
   requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   localUrl: string;
-}
-
-export interface IModelInformation {
-  modelClass: "Tree" | "EBM" | "blackbox";
-  method: "classifier" | "regressor";
-}
-
-export interface IDatasetSummary {
-  featureNames?: string[];
-  classNames?: string[];
-  categoricalMap?: { [key: number]: string[] };
-}
-
-export interface IPrecomputedExplanations {
-  localFeatureImportance?:
-    | IMultiClassLocalFeatureImportance
-    | ISingleClassLocalFeatureImportance;
-  globalFeatureImportance?:
-    | IMultiClassGlobalFeatureImportance
-    | ISingleClassGlobalFeatureImportance;
-  ebmGlobalExplanation?: IEBMGlobalExplanation;
-  customVis?: string;
-}
-
-export interface IBoundedCoordinates {
-  type: string;
-  names: number[];
-  scores: number[] | number[][];
-  scores_range?: number[];
-  upper_bounds?: number[] | number[][];
-  lower_bounds?: number[] | number[][];
-}
-
-export interface IEBMGlobalExplanation {
-  feature_list: IBoundedCoordinates[];
-}
-
-export interface IMultiClassLocalFeatureImportance {
-  scores: number[][][];
-  intercept?: number[];
-}
-
-export interface ISingleClassLocalFeatureImportance {
-  scores: number[][];
-  intercept?: number;
-}
-
-export interface IMultiClassGlobalFeatureImportance {
-  scores: number[][];
-  intercept?: number[];
-}
-
-export interface ISingleClassGlobalFeatureImportance {
-  scores: number[];
-  intercept?: number;
 }

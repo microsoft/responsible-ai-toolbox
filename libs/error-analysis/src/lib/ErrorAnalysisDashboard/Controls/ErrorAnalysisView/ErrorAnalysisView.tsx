@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisDashboard";
@@ -9,7 +10,7 @@ import { MatrixFilter } from "../MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
 export interface IErrorAnalysisViewProps {
-  theme?: string;
+  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   selectedFeatures: string[];

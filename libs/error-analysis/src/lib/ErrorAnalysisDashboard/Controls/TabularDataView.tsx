@@ -4,7 +4,8 @@
 import {
   DetailsList,
   DetailsListLayoutMode,
-  IColumn
+  IColumn,
+  ITheme
 } from "office-ui-fabric-react";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import React from "react";
@@ -13,7 +14,7 @@ import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { JointDataset } from "../JointDataset";
 
 export interface ITabularDataViewProps {
-  theme?: string;
+  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;

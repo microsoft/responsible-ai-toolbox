@@ -4,13 +4,13 @@
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
-import { mergeStyles, IStyle } from "office-ui-fabric-react";
+import { mergeStyles, IStyle, ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
 
 export interface IMatrixAreaProps {
-  theme?: string;
+  theme?: ITheme;
   features: string[];
   selectedFeature1?: string;
   selectedFeature2?: string;

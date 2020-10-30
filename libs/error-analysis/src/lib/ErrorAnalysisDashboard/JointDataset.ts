@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IMultiClassLocalFeatureImportance,
+  ISingleClassLocalFeatureImportance
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   INumericRange,
@@ -11,10 +15,6 @@ import _ from "lodash";
 
 import { cohortKey } from "./cohortKey";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
-import {
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "./Interfaces/IErrorAnalysisDashboardProps";
 import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
 
 export interface IJointDatasetArgs {

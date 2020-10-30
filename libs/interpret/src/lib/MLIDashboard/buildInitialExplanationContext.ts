@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IMultiClassLocalFeatureImportance,
+  ISingleClassLocalFeatureImportance
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
@@ -9,9 +13,7 @@ import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import {
   GlobalTabKeys,
   IExplanationDashboardProps,
-  IMultiClassLocalFeatureImportance,
-  INewExplanationDashboardState,
-  ISingleClassLocalFeatureImportance
+  INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { WeightVectors } from "./IWeightedDropdownContext";

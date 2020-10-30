@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IMultiClassLocalFeatureImportance,
+  ISingleClassLocalFeatureImportance
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import { initializeIcons } from "@uifabric/icons";
-import { getId } from "@uifabric/utilities/lib/getId";
+import { getId } from "@uifabric/utilities";
 import _ from "lodash";
 import * as memoize from "memoize-one";
-import { IPivotItemProps } from "office-ui-fabric-react";
+import { IPivotItemProps, IPartialTheme } from "office-ui-fabric-react";
 import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
 import {
   PivotItem,
@@ -28,11 +32,7 @@ import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { Navigation } from "./Controls/Navigation/Navigation";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
 import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
-import {
-  IErrorAnalysisDashboardProps,
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "./Interfaces/IErrorAnalysisDashboardProps";
+import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
@@ -169,7 +169,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
     ErrorAnalysisDashboard.initializeIcons(props);
-    loadTheme(props.theme);
+    loadTheme(props.theme as IPartialTheme);
     this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
     this.onConfigChanged = this.onConfigChanged.bind(this);
     this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
@@ -436,7 +436,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             <Layer>
               {this.state.viewType === ViewTypeKeys.ErrorAnalysisView && (
                 <ErrorAnalysisView
-                  theme={this.props.theme}
+                  theme={this.props.theme!}
                   messages={
                     this.props.stringParams
                       ? this.props.stringParams.contextualHelp
