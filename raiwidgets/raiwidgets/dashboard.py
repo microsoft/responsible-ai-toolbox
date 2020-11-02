@@ -98,6 +98,8 @@ class Dashboard(object):
             "dashboardType": dashboard_type,
             "id": self.id,
             "baseUrl": Dashboard._service.env.base_url,
+            'withCredentials': False,
+            'hasCallback': True
         }
         Dashboard.model_data[self.id] = model_data
 

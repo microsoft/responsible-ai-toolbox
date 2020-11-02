@@ -134,10 +134,6 @@ class FairnessDashboard(Dashboard):
                               "ignoring")
             fairness_input["features"] = sensitive_feature_names
 
-        # TODO
-        fairness_input['withCredentials'] = False
-        fairness_input['hasMetricCallback'] = True
-
         Dashboard.__init__(self, dashboard_type="Fairness",
                            model_data=fairness_input,
                            port=port)

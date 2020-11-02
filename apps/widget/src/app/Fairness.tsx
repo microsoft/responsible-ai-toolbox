@@ -37,9 +37,7 @@ export class Fairness extends React.Component {
         supportedRegressionPerformanceKeys={modelData.regression_methods}
         supportedProbabilityPerformanceKeys={modelData.probability_methods}
         locale={modelData.locale}
-        requestMetrics={
-          modelData.hasMetricCallback ? this.requestMetrics : undefined
-        }
+        requestMetrics={config.hasCallback ? this.requestMetrics : undefined}
       />
     );
   }
