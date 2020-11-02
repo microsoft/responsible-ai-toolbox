@@ -5,18 +5,12 @@
 
 # TODO: use environment_detector
 # https://github.com/microsoft/responsible-ai-widgets/issues/92
-from pandas.core import base
 from rai_core_flask import FlaskHelper  # , environment_detector
-
-from flask import jsonify, request, Response
+from flask import Response
 from IPython.display import display, HTML
-from jinja2 import Environment, PackageLoader
 import json
-import numpy as np
 import os
-import pandas as pd
 from html.parser import HTMLParser
-from scipy.sparse import issparse
 
 
 class InLineScript(HTMLParser):
