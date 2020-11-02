@@ -13,8 +13,11 @@ module.exports = (config) => {
     tls: "empty",
     child_process: "empty"
   };
-  config.externals = config.externals || {};
-  config.externals["plotly.js"] = "Plotly";
 
+  if (process.env.debug) {
+    require("fs-extra").writeJSONSync("./webpack.json", config, {
+      spaces: 2
+    });
+  }
   return config;
 };
