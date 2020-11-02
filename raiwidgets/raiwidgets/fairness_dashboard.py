@@ -5,20 +5,17 @@
 
 # TODO: use environment_detector
 # https://github.com/microsoft/responsible-ai-widgets/issues/92
+from .dashboard import Dashboard
 from rai_core_flask import FlaskHelper  # , environment_detector
 from .fairness_metric_calculation import FairnessMetricModule
 
-from flask import jsonify, request, Response
-from IPython.display import display, HTML
-from jinja2 import Environment, PackageLoader
-import json
+from flask import jsonify, request
 import numpy as np
-import os
 import pandas as pd
 from scipy.sparse import issparse
 
 
-class FairnessDashboard(object):
+class FairnessDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
     :param sensitive_features: A matrix of feature vector examples
@@ -35,59 +32,21 @@ class FairnessDashboard(object):
     :param sensitive_feature_names: Feature names
     :type sensitive_feature_names: numpy.array or list[]
     """
-    env = Environment(loader=PackageLoader(__name__, 'widget'))
-    _dashboard_js = None
-    fairness_inputs = {}
-    model_count = 0
     _service = None
-
-    @FlaskHelper.app.route('/widget/<path:path>')
-    def widget_static(path):
-        mimetypes = {
-            ".css": "text/css",
-            ".html": "text/html",
-            ".js": "application/javascript",
-        }
-        ext = os.path.splitext(path)[1]
-        mimetype = mimetypes.get(ext, "application/octet-stream")
-        return Response(load_widget_file(path), mimetype=mimetype)
-
-    @FlaskHelper.app.route('/getconfig')
-    def get_config():
-        burl = FairnessDashboard._service.env.base_url
-        ct = FairnessDashboard.model_count
-        return {
-            "local_url": f"{burl}/fairness/model/{ct}"
-        }
-
-    @FlaskHelper.app.route('/fairness')
-    def list():
-        return "No global list view supported at this time."
-
-    @FlaskHelper.app.route('/fairness/model/<id>')
-    def fairness_visual(id):
-        return load_widget_file("index.html")
-
-    @FlaskHelper.app.route('/fairness/getmodel/<id>')
-    def fairness_get_model(id):
-        if id in FairnessDashboard.fairness_inputs:
-            model_data = json.dumps(FairnessDashboard.fairness_inputs[id])
-            return model_data
-        else:
-            return Response("Unknown model id.", status=404)
+    fairness_metrics_module = {}
 
     @FlaskHelper.app.route('/fairness/model/<id>/metrics', methods=['POST'])
     def fairness_metrics_calculation(id):
         try:
             data = request.get_json(force=True)
-            if id in FairnessDashboard.fairness_inputs:
-                data.update(FairnessDashboard.fairness_inputs[id])
+            if id in FairnessDashboard.model_data:
+                data.update(FairnessDashboard.model_data[id])
 
                 if type(data["binVector"][0]) == np.int32:
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                method = FairnessDashboard.fairness_metrics_module. \
+                method = FairnessDashboard.fairness_metrics_module[id]. \
                     _metric_methods.get(data["metricKey"]).get("function")
                 prediction = method(
                     data['true_y'],
@@ -121,7 +80,7 @@ class FairnessDashboard(object):
             fairness_metric_mapping=None):
         """Initialize the fairness Dashboard."""
 
-        FairnessDashboard.fairness_metrics_module = FairnessMetricModule(
+        metrics_module = FairnessMetricModule(
             module_name=fairness_metric_module,
             mapping=fairness_metric_mapping)
 
@@ -154,14 +113,11 @@ class FairnessDashboard(object):
             "predicted_ys": self._y_pred,
             "dataset": dataset,
             "classification_methods":
-                FairnessDashboard.fairness_metrics_module.
-                classification_methods,
+                metrics_module.classification_methods,
             "regression_methods":
-                FairnessDashboard.fairness_metrics_module.
-                regression_methods,
+                metrics_module.regression_methods,
             "probability_methods":
-                FairnessDashboard.fairness_metrics_module.
-                probability_methods,
+                metrics_module.probability_methods,
         }
 
         if model_names is not None:
@@ -178,32 +134,11 @@ class FairnessDashboard(object):
                               "ignoring")
             fairness_input["features"] = sensitive_feature_names
 
-        if FairnessDashboard._service is None:
-            try:
-                FairnessDashboard._service = FlaskHelper(port=port)
-            except Exception as e:
-                FairnessDashboard._service = None
-                raise e
+        Dashboard.__init__(self, dashboard_type="Fairness",
+                           model_data=fairness_input,
+                           port=port)
 
-        FairnessDashboard.model_count += 1
-        model_count = FairnessDashboard.model_count
-
-        burl = FairnessDashboard._service.env.base_url
-
-        local_url = f"{burl}/fairness/model/{model_count}"
-        metrics_url = f"{local_url}/metrics"
-
-        fairness_input['metricsUrl'] = metrics_url
-
-        # TODO
-        fairness_input['withCredentials'] = False
-
-        FairnessDashboard.fairness_inputs[str(model_count)] = fairness_input
-
-        html = load_widget_file("index.html")
-        # TODO https://github.com/microsoft/responsible-ai-widgets/issues/92
-        # FairnessDashboard._service.env.display(html)
-        display(HTML(html))
+        FairnessDashboard.fairness_metrics_module[self.id] = metrics_module
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)
@@ -224,14 +159,3 @@ class FairnessDashboard(object):
         if (isinstance(array, np.ndarray)):
             return array.tolist()
         return array
-
-
-def get_widget_path(path):
-    script_path = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(script_path, "widget", path)
-
-
-def load_widget_file(path):
-    js_path = get_widget_path(path)
-    with open(js_path, "r", encoding="utf-8") as f:
-        return f.read()

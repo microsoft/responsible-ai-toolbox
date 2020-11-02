@@ -1,6 +1,4 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface IAppConfig {
-  localUrl: string;
-}
+export const modelData = JSON.parse(`__rai_model_data__${""}`);

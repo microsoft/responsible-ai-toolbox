@@ -23,6 +23,7 @@
     "format:check": "nx format:check",
     "format:write": "nx format:write",
     "help": "nx help",
+    "postinstall": "node ./scripts/postInstall.js",
     "kill": "taskkill /IM:node.exe /F",
     "lint": "cross-env NODE_OPTIONS=--max_old_space_size=4096 nx lint",
     "lintall": "nx workspace-lint && cross-env NODE_OPTIONS=--max_old_space_size=4096 nx run-many --target=lint --all && yarn prettier . --check",
