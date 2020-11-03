@@ -41,7 +41,7 @@ export interface IFeatureListState {
   features: string[];
 }
 
-export class FeatureList extends React.PureComponent<
+export class FeatureList extends React.Component<
   IFeatureListProps,
   IFeatureListState
 > {
@@ -79,10 +79,10 @@ export class FeatureList extends React.PureComponent<
               <SearchBox
                 placeholder="Search"
                 styles={searchBoxStyles}
-                onSearch={this._onSearch.bind(this)}
-                onClear={this._onSearch.bind(this)}
+                onSearch={this.onSearch.bind(this)}
+                onClear={this.onSearch.bind(this)}
                 onChange={(_, newValue?: string): void =>
-                  this._onSearch.bind(this)(newValue!)
+                  this.onSearch.bind(this)(newValue!)
                 }
               />
             </Stack.Item>
@@ -91,14 +91,14 @@ export class FeatureList extends React.PureComponent<
                 <Checkbox
                   label={feature}
                   checked={this.state.features.includes(feature)}
-                  onChange={this._onChange.bind(this, feature)}
+                  onChange={this.onChange.bind(this, feature)}
                 />
               </Stack.Item>
             ))}
             <Stack.Item key="applyButtonKey" align="start">
               <PrimaryButton
                 text="Apply"
-                onClick={this._apply.bind(this)}
+                onClick={this.apply.bind(this)}
                 allowDisabledFocus
                 disabled={false}
                 checked={false}
@@ -110,7 +110,7 @@ export class FeatureList extends React.PureComponent<
     );
   }
 
-  public _onChange(
+  private onChange(
     feature?: string,
     _?: React.FormEvent<HTMLElement>,
     isChecked?: boolean
@@ -132,7 +132,7 @@ export class FeatureList extends React.PureComponent<
     }
   }
 
-  public _onSearch(searchValue: string): void {
+  private onSearch(searchValue: string): void {
     this.setState({
       features: this.props.features.filter((feature) =>
         feature.includes(searchValue)
@@ -140,7 +140,7 @@ export class FeatureList extends React.PureComponent<
     });
   }
 
-  public _apply(): void {
+  private apply(): void {
     this.props.saveFeatures(this.state.features);
   }
 }
