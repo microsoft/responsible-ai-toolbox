@@ -1,9 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeOfficeFabric ,
+import {
+  initializeOfficeFabric,
   IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
+  ISingleClassLocalFeatureImportance,
+  isTwoDimArray,
+  isThreeDimArray
 } from "@responsible-ai/core-ui";
 import {
   Cohort,
@@ -19,7 +22,7 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
-import { initializeIcons, IPivotItemProps } from "office-ui-fabric-react";
+import { IPivotItemProps } from "office-ui-fabric-react";
 import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
 import {
   PivotItem,
@@ -116,7 +119,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   IErrorAnalysisDashboardProps,
   IErrorAnalysisDashboardState
 > {
-  private static iconsInitialized = false;
   private static readonly classNames = mergeStyleSets({
     pivotWrapper: {
       display: "contents"
@@ -134,11 +136,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       ) {
         const localImportances =
           props.precomputedExplanations.localFeatureImportance.scores;
-        if (
-          (localImportances as number[][][]).every((dim1) => {
-            return dim1.every((dim2) => Array.isArray(dim2));
-          })
-        ) {
+        if (isThreeDimArray(localImportances)) {
           return localImportances.length;
         }
         // 2d is regression (could be a non-scikit convention binary, but that is not supported)
@@ -151,8 +149,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       ) {
         // determine if passed in vaules is 1D or 2D
         if (
-          (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][]).every((dim1) => Array.isArray(dim1))
+          isTwoDimArray(
+            props.precomputedExplanations.globalFeatureImportance.scores
+          )
         ) {
           return (props.precomputedExplanations.globalFeatureImportance
             .scores as number[][]).length;
@@ -176,7 +175,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
-    ErrorAnalysisDashboard.initializeIcons(props);
     initializeOfficeFabric(props);
     this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
     this.onConfigChanged = this.onConfigChanged.bind(this);
@@ -204,16 +202,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       itemKey: GlobalTabKeys.LocalExplanationTab
     });
     this.layerHostId = getId("cohortsLayerHost");
-  }
-
-  private static initializeIcons(props: IErrorAnalysisDashboardProps): void {
-    if (
-      ErrorAnalysisDashboard.iconsInitialized === false &&
-      props.shouldInitializeIcons !== false
-    ) {
-      initializeIcons(props.iconUrl, { disableWarnings: true });
-      ErrorAnalysisDashboard.iconsInitialized = true;
-    }
   }
 
   private static buildModelMetadata(
@@ -248,11 +236,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       ) {
         const localImportances =
           props.precomputedExplanations.localFeatureImportance.scores;
-        if (
-          (localImportances as number[][][]).every((dim1) => {
-            return dim1.every((dim2) => Array.isArray(dim2));
-          })
-        ) {
+        if (isThreeDimArray(localImportances)) {
           featureLength = (props.precomputedExplanations.localFeatureImportance
             .scores[0][0] as number[]).length;
         } else {
@@ -336,8 +320,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     ) {
       result.isGlobalImportanceDerivedFromLocal = false;
       if (
-        (props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][]).every((dim1) => Array.isArray(dim1))
+        isTwoDimArray(
+          props.precomputedExplanations.globalFeatureImportance.scores
+        )
       ) {
         result.globalImportance = props.precomputedExplanations
           .globalFeatureImportance.scores as number[][];
