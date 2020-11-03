@@ -42,7 +42,7 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       fontSize: "10px",
       margin: "2px",
       minWidth: "60px",
-      overflow: "hidden"
+      overflow: "visible"
     },
     matrixCellPivot1Categories: {
       alignItems: "center",

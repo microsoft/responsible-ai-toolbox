@@ -42,8 +42,17 @@ const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 const fullscreenIcon: IIconProps = { iconName: "ScaleVolume" };
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 100 },
-  root: { alignSelf: "center" }
+  dropdown: {
+    width: 100
+  },
+  root: {
+    alignSelf: "center"
+  },
+  title: {
+    borderLeft: "0px solid black",
+    borderRight: "0px solid black",
+    borderTop: "0px solid black"
+  }
 };
 const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
@@ -107,7 +116,15 @@ export class MainMenu extends React.PureComponent<
       ];
     }
 
-    const farItems: ICommandBarItemProps[] = [];
+    const farItems: ICommandBarItemProps[] = [
+      {
+        buttonStyles: buttonStyle,
+        iconProps: fullscreenIcon,
+        key: "fullscreen",
+        onClick: (): any => window.open(this.props.localUrl),
+        text: "Fullscreen"
+      }
+    ];
     if (
       this.props.viewType === ViewTypeKeys.ErrorAnalysisView &&
       this.state.selectedOption === ErrorAnalysisOptions.TreeMap
@@ -134,13 +151,6 @@ export class MainMenu extends React.PureComponent<
         key: "cohortInfo",
         onClick: (): any => this.props.onInfoPanelClick(),
         text: "Cohort Info"
-      },
-      {
-        buttonStyles: buttonStyle,
-        iconProps: fullscreenIcon,
-        key: "fullscreen",
-        onClick: (): any => window.open(this.props.localUrl),
-        text: "Fullscreen"
       }
     ];
     farItems.push(...helpItems);
@@ -183,7 +193,7 @@ export class MainMenu extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item !== undefined) {
+    if (item) {
       if (item.key === ErrorAnalysisOptions.HeatMap) {
         // Note comparison above is actually string comparison (key is string), we have to set the enum
         const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;

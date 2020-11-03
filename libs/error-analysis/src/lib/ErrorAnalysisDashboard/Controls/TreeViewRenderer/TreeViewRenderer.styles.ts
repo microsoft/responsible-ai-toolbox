@@ -9,6 +9,7 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ITreeViewRendererStyles {
+  clickedNodeDashed: IStyle;
   mainFrame: IStyle;
   svgOuterFrame: IStyle;
   innerFrame: IStyle;
@@ -41,6 +42,12 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     textAnchor: "middle"
   };
   return mergeStyleSets<ITreeViewRendererStyles>({
+    clickedNodeDashed: {
+      fill: "none",
+      stroke: "#0078D4",
+      strokeDasharray: "3, 3",
+      strokeWidth: 2
+    },
     detailLines: mergeStyles([
       detailStyle,
       {
@@ -74,7 +81,11 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       transform: "translate(10px, 10px)"
     },
     linkLabel: {
-      fontFamily: "Arial, Helvetica, sans-serif"
+      fill: "#777",
+      font: "normal 12px Arial",
+      fontFamily: "Arial, Helvetica, sans-serif",
+      pointerEvents: "none",
+      textAnchor: "middle"
     },
     linkLabelsTransitionGroup: {
       transform: "translate(0px, 90px)"

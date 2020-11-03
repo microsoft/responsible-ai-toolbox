@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { JointDataset } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   IPivotItemProps,
@@ -13,7 +14,6 @@ import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { JointDataset } from "../../JointDataset";
 import { TabularDataView } from "../TabularDataView";
 
 import { InstanceViewStyles } from "./InstanceView.styles";

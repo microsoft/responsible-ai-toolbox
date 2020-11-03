@@ -38,13 +38,15 @@ export class Navigation extends React.PureComponent<INavigationProps> {
     return (
       <div className={classNames.navigation}>
         <div className={classNames.breadcrumb}>
-          <Breadcrumb
-            items={items}
-            maxDisplayedItems={10}
-            ariaLabel="Navigation"
-            overflowAriaLabel="More links"
-            onRenderItem={this._onRenderItem}
-          />
+          {this.props.viewType === ViewTypeKeys.ExplanationView && (
+            <Breadcrumb
+              items={items}
+              maxDisplayedItems={10}
+              ariaLabel="Navigation"
+              overflowAriaLabel="More links"
+              onRenderItem={this._onRenderItem}
+            />
+          )}
         </div>
       </div>
     );
@@ -53,7 +55,7 @@ export class Navigation extends React.PureComponent<INavigationProps> {
   private _onRenderItem: IRenderFunction<IBreadcrumbItem> = (
     item?: IBreadcrumbItem
   ): JSX.Element | null => {
-    if (item === undefined) {
+    if (!item) {
       return <div></div>;
     }
     if (item.onClick || item.href) {
