@@ -43,10 +43,10 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
   };
   return mergeStyleSets<ITreeViewRendererStyles>({
     clickedNodeDashed: {
+      fill: "none",
       stroke: "#0078D4",
-      strokeWidth: 2,
       strokeDasharray: "3, 3",
-      fill: "none"
+      strokeWidth: 2
     },
     detailLines: mergeStyles([
       detailStyle,
@@ -81,9 +81,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       transform: "translate(10px, 10px)"
     },
     linkLabel: {
-      fontFamily: "Arial, Helvetica, sans-serif",
       fill: "#777",
       font: "normal 12px Arial",
+      fontFamily: "Arial, Helvetica, sans-serif",
       pointerEvents: "none",
       textAnchor: "middle"
     },

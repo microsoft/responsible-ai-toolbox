@@ -10,8 +10,8 @@ import {
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
-import { D3ZoomEvent, zoom as d3zoom } from "d3-zoom";
 import { linkVertical as d3linkVertical } from "d3-shape";
+import { D3ZoomEvent, zoom as d3zoom } from "d3-zoom";
 import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -150,22 +150,6 @@ export class TreeViewRenderer extends React.PureComponent<
     this.fetchTreeNodes();
   }
 
-  private zoomed(
-    zoomEvent: D3ZoomEvent<any, SVGDatum>,
-    _object: SVGDatum
-  ): void {
-    const newTransform: any = zoomEvent.transform;
-    select(treeZoomPane.current).attr("transform", newTransform);
-    if (
-      this.state.transform === undefined ||
-      newTransform.x !== this.state.transform.x ||
-      newTransform.y !== this.state.transform.y ||
-      newTransform.r !== this.state.transform.r
-    ) {
-      this.setState({ transform: newTransform });
-    }
-  }
-
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
     if (this.props.selectedFeatures !== prevProps.selectedFeatures) {
       this.fetchTreeNodes();
@@ -182,7 +166,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const labelYOffset = 3;
 
     const min: number = this.state.rootErrorSize / this.state.rootSize;
-    var rootDescendents = this.state.root.descendants();
+    const rootDescendents = this.state.root.descendants();
     const max: number = d3max(
       rootDescendents,
       (d) => d.data.error / d.data.size
@@ -196,9 +180,9 @@ export class TreeViewRenderer extends React.PureComponent<
       const svg = select<SVGSVGElement, undefined>(
         svgOuterFrame.current!
       ).datum<SVGDatum>({
-        width: this.state.viewerWidth,
+        filterBrushEvent: true,
         height: this.state.viewerHeight,
-        filterBrushEvent: true
+        width: this.state.viewerWidth
       });
 
       svg.style("pointer-events", "all").call(zoom as any);
@@ -219,7 +203,7 @@ export class TreeViewRenderer extends React.PureComponent<
       .interpolate(d3interpolateHcl)
       .range(["#F4D1D2", "#8d2323"]);
 
-    var linkVertical = d3linkVertical<any, HierarchyPointNode<any>>()
+    const linkVertical = d3linkVertical<any, HierarchyPointNode<any>>()
       .x((d: any) => d!.x!)
       .y((d: any) => d!.y!);
     // GENERATES LINK DATA BETWEEN NODES
@@ -232,7 +216,7 @@ export class TreeViewRenderer extends React.PureComponent<
       return {
         d: linkVerticalD!,
         id: id + Math.random(),
-        style: { stroke: lineColor, strokeWidth: thick, fill: "white" }
+        style: { fill: "white", stroke: lineColor, strokeWidth: thick }
       };
     });
 
@@ -512,34 +496,43 @@ export class TreeViewRenderer extends React.PureComponent<
     );
   }
 
-  public onResize(): void {
-    const resizeFunc = (
-      state: Readonly<ITreeViewRendererState>
-    ): ITreeViewRendererState => {
-      let height = 500;
-      let width = 800;
-      //   if (document.querySelector("#mainFrame")) {
-      //     height = document.querySelector("#mainFrame")!.clientHeight;
-      //     width = document.querySelector("#mainFrame")!.clientWidth;
-      //   }
-      return {
-        nodeDetail: state.nodeDetail,
-        request: state.request,
-        root: state.root,
-        rootErrorSize: state.rootErrorSize,
-        rootLocalError: state.rootLocalError,
-        rootSize: state.rootSize,
-        selectedNode: state.selectedNode,
-        transform: state.transform,
-        treeNodes: state.treeNodes,
-        viewerHeight: height,
-        viewerWidth: width
-      };
-    };
-    this.setState(resizeFunc);
+  public componentDidMount(): void {
+    window.addEventListener("resize", this.onResize.bind(this));
   }
 
-  public reloadData(treeNodes: any[]): void {
+  public componentWillUnmount(): void {
+    window.removeEventListener("resize", this.onResize.bind(this));
+  }
+
+  private resizeFunc = (
+    state: Readonly<ITreeViewRendererState>
+  ): ITreeViewRendererState => {
+    const height = 500;
+    const width = 800;
+    //   if (document.querySelector("#mainFrame")) {
+    //     height = document.querySelector("#mainFrame")!.clientHeight;
+    //     width = document.querySelector("#mainFrame")!.clientWidth;
+    //   }
+    return {
+      nodeDetail: state.nodeDetail,
+      request: state.request,
+      root: state.root,
+      rootErrorSize: state.rootErrorSize,
+      rootLocalError: state.rootLocalError,
+      rootSize: state.rootSize,
+      selectedNode: state.selectedNode,
+      transform: state.transform,
+      treeNodes: state.treeNodes,
+      viewerHeight: height,
+      viewerWidth: width
+    };
+  };
+
+  private onResize(): void {
+    this.setState(this.resizeFunc);
+  }
+
+  private reloadData(treeNodes: any[]): void {
     const reloadDataFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -570,7 +563,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(reloadDataFunc);
   }
 
-  public getTextBB(
+  private getTextBB(
     labelText: string,
     classNames: IProcessedStyleSet<ITreeViewRendererStyles>
   ): DOMRect {
@@ -586,13 +579,13 @@ export class TreeViewRenderer extends React.PureComponent<
     return bb;
   }
 
-  public skippedInstances(node: HierarchyPointNode<any>): string {
+  private skippedInstances(node: HierarchyPointNode<any>): string {
     return node.data.badFeaturesRowCount !== 0
       ? `Skipped Instances: ${node.data.badFeaturesRowCount}`
       : "";
   }
 
-  public clearSelection(): void {
+  private clearSelection(): void {
     const clearSelectionFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -621,12 +614,12 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(clearSelectionFunc);
   }
 
-  public bkgClick(): void {
+  private bkgClick(): void {
     this.clearSelection();
     this.forceUpdate();
   }
 
-  public selectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
+  private selectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
     if (!d) {
       return;
     }
@@ -634,7 +627,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.selectParentNodes(d.parent!);
   }
 
-  public unselectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
+  private unselectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
     if (!d) {
       return;
     }
@@ -642,14 +635,14 @@ export class TreeViewRenderer extends React.PureComponent<
     this.unselectParentNodes(d.parent!);
   }
 
-  public getRoot(d: HierarchyPointNode<any>): HierarchyPointNode<any> {
+  private getRoot(d: HierarchyPointNode<any>): HierarchyPointNode<any> {
     if (!d.parent) {
       return d;
     }
     return this.getRoot(d.parent!);
   }
 
-  public select(
+  private select(
     _: number,
     node: TreeNode,
     event: React.MouseEvent<SVGElement, MouseEvent>
@@ -695,14 +688,6 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(updateSelectedFunc);
   }
 
-  public componentDidMount(): void {
-    window.addEventListener("resize", this.onResize.bind(this));
-  }
-
-  public componentWillUnmount(): void {
-    window.removeEventListener("resize", this.onResize.bind(this));
-  }
-
   private fetchTreeNodes(): void {
     if (this.state.request) {
       this.state.request.abort();
@@ -735,5 +720,18 @@ export class TreeViewRenderer extends React.PureComponent<
     //         }
     //     }
     // });
+  }
+
+  private zoomed(zoomEvent: D3ZoomEvent<any, SVGDatum>): void {
+    const newTransform: any = zoomEvent.transform;
+    select(treeZoomPane.current).attr("transform", newTransform);
+    if (
+      this.state.transform === undefined ||
+      newTransform.x !== this.state.transform.x ||
+      newTransform.y !== this.state.transform.y ||
+      newTransform.r !== this.state.transform.r
+    ) {
+      this.setState({ transform: newTransform });
+    }
   }
 }

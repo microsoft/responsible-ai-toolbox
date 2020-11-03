@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { JointDataset } from "@responsible-ai/interpret";
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -11,7 +12,6 @@ import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import React from "react";
 
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
-import { JointDataset } from "@responsible-ai/interpret";
 
 export interface ITabularDataViewProps {
   theme?: ITheme;

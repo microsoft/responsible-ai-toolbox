@@ -42,16 +42,16 @@ const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 const fullscreenIcon: IIconProps = { iconName: "ScaleVolume" };
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-  title: {
-    borderTop: "0px solid black",
-    borderRight: "0px solid black",
-    borderLeft: "0px solid black"
-  },
   dropdown: {
     width: 100
   },
   root: {
     alignSelf: "center"
+  },
+  title: {
+    borderLeft: "0px solid black",
+    borderRight: "0px solid black",
+    borderTop: "0px solid black"
   }
 };
 const buttonStyle: IButtonStyles = {
@@ -116,7 +116,15 @@ export class MainMenu extends React.PureComponent<
       ];
     }
 
-    const farItems: ICommandBarItemProps[] = [];
+    const farItems: ICommandBarItemProps[] = [
+      {
+        buttonStyles: buttonStyle,
+        iconProps: fullscreenIcon,
+        key: "fullscreen",
+        onClick: (): any => window.open(this.props.localUrl),
+        text: "Fullscreen"
+      }
+    ];
     if (
       this.props.viewType === ViewTypeKeys.ErrorAnalysisView &&
       this.state.selectedOption === ErrorAnalysisOptions.TreeMap
@@ -143,13 +151,6 @@ export class MainMenu extends React.PureComponent<
         key: "cohortInfo",
         onClick: (): any => this.props.onInfoPanelClick(),
         text: "Cohort Info"
-      },
-      {
-        buttonStyles: buttonStyle,
-        iconProps: fullscreenIcon,
-        key: "fullscreen",
-        onClick: (): any => window.open(this.props.localUrl),
-        text: "Fullscreen"
       }
     ];
     farItems.push(...helpItems);

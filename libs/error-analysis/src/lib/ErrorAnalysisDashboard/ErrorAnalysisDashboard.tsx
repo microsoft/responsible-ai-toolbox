@@ -1,13 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeOfficeFabric } from "@responsible-ai/core-ui";
-import {
+import { initializeOfficeFabric ,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import {
   Cohort,
   DatasetExplorerTab,
@@ -18,8 +15,9 @@ import {
   WeightVectorOption,
   WeightVectors
 } from "@responsible-ai/interpret";
-import _ from "lodash";
-import { Dictionary } from "lodash";
+import { localization } from "@responsible-ai/localization";
+import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import _, { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
 import { initializeIcons, IPivotItemProps } from "office-ui-fabric-react";
 import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
