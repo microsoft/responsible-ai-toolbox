@@ -44,15 +44,15 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
       }
     });
 
-    var items: { key: any }[] = [];
+    const items: Array<{ key: any }> = [];
     if (
       this.props.formattedBinValues.length > 0 &&
       this.props.formattedBinValues[0]
     ) {
       // add row for overall metrics
-      var item = {
-        key: "binLabel",
-        binLabel: localization.Fairness.Report.overallLabel
+      const item = {
+        binLabel: localization.Fairness.Report.overallLabel,
+        key: "binLabel"
       };
       this.props.overallMetrics.forEach((metric, colIndex) => {
         item["metric" + colIndex] = metric;
@@ -61,7 +61,10 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
 
       // add rows for each group
       this.props.formattedBinValues[0].forEach((_, rowIndex) => {
-        var item = { key: rowIndex, binLabel: this.props.binLabels[rowIndex] };
+        const item = {
+          binLabel: this.props.binLabels[rowIndex],
+          key: rowIndex
+        };
         this.props.formattedBinValues.forEach((metricArray, colIndex) => {
           if (metricArray) {
             item["metric" + colIndex] = metricArray[rowIndex];
@@ -73,24 +76,24 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
       });
     }
 
-    var columns = [
+    const columns = [
       {
-        key: "columnBin",
-        name: "",
         fieldName: "binLabel",
-        minWidth: 100,
+        isResizable: true,
+        key: "columnBin",
         maxWidth: 200,
-        isResizable: true
+        minWidth: 100,
+        name: ""
       }
     ];
     this.props.metricLabels.forEach((colName, colIndex) => {
       columns.push({
-        key: "column" + colIndex,
-        name: colName,
         fieldName: "metric" + colIndex,
-        minWidth: 100,
+        isResizable: true,
+        key: "column" + colIndex,
         maxWidth: 200,
-        isResizable: true
+        minWidth: 100,
+        name: colName
       });
     });
 

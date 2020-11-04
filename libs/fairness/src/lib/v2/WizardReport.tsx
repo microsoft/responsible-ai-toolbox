@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { IDropdownOption, Icon, Stack } from "office-ui-fabric-react";
+import { IDropdownOption, Stack } from "office-ui-fabric-react";
 import { ActionButton } from "office-ui-fabric-react/lib/Button";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import { Text } from "office-ui-fabric-react/lib/Text";
@@ -268,10 +268,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     if (this.props.onChartClick) {
       this.props.onChartClick();
     }
-  };
-
-  private readonly expandAttributes = (): void => {
-    this.setState({ expandAttributes: !this.state.expandAttributes });
   };
 
   // private readonly onEditConfigs = (): void => {
