@@ -2,9 +2,12 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode
+} from "office-ui-fabric-react";
 import React from "react";
-
-import { OverallTableStyles } from "./OverallTable.styles";
 
 export interface IOverallTableProps {
   binValues: number[];
@@ -16,16 +19,8 @@ export interface IOverallTableProps {
   binGroup: string;
 }
 
-// interface IBinItem {
-//     title: string;
-//     score: string;
-//     isMin: boolean;
-//     isMax: boolean;
-// }
-
 export class OverallTable extends React.PureComponent<IOverallTableProps> {
   public render(): React.ReactNode {
-    const styles = OverallTableStyles();
     let minIndexes = [];
     let maxIndexes = [];
     let minValue = Number.MAX_SAFE_INTEGER;
@@ -48,57 +43,65 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
         }
       }
     });
+
+    var items: { key: any }[] = [];
+    if (
+      this.props.formattedBinValues.length > 0 &&
+      this.props.formattedBinValues[0]
+    ) {
+      // add row for overall metrics
+      var item = {
+        key: "binLabel",
+        binLabel: localization.Fairness.Report.overallLabel
+      };
+      this.props.overallMetrics.forEach((metric, colIndex) => {
+        item["metric" + colIndex] = metric;
+      });
+      items.push(item);
+
+      // add rows for each group
+      this.props.formattedBinValues[0].forEach((_, rowIndex) => {
+        var item = { key: rowIndex, binLabel: this.props.binLabels[rowIndex] };
+        this.props.formattedBinValues.forEach((metricArray, colIndex) => {
+          if (metricArray) {
+            item["metric" + colIndex] = metricArray[rowIndex];
+          } else {
+            item["metric" + colIndex] = "empty";
+          }
+        });
+        items.push(item);
+      });
+    }
+
+    var columns = [
+      {
+        key: "columnBin",
+        name: "",
+        fieldName: "binLabel",
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true
+      }
+    ];
+    this.props.metricLabels.forEach((colName, colIndex) => {
+      columns.push({
+        key: "column" + colIndex,
+        name: colName,
+        fieldName: "metric" + colIndex,
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true
+      });
+    });
+
     return (
-      <div className={styles.frame}>
-        <div className={styles.groupCol}>
-          <div className={styles.groupLabel}>{/*this.props.binGroup*/}</div>
-          <div className={styles.flexCol}>
-            <div className={styles.binBox}>
-              <div className={styles.binTitle}>
-                {localization.Fairness.Report.overallLabel}
-              </div>
-            </div>
-            {this.props.binLabels.map((label, index) => {
-              if (this.props.expandAttributes) {
-                return (
-                  <div className={styles.binBox} key={index}>
-                    <div className={styles.binLabel}>{label}</div>
-                    {/* <Stack horizontal>
-                        {minIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Fairness.Report.minTag}</div>}
-                        {maxIndexes.includes(index) && <div className={styles.minMaxLabel}>{localization.Fairness.Report.maxTag}</div>}
-                    </Stack> */}
-                  </div>
-                );
-              }
-              return <div style={{ display: "none" }} key={index}></div>;
-            })}
-          </div>
-        </div>
-        {this.props.metricLabels.map((metric, index) => {
-          return (
-            <div className={styles.metricCol} key={index}>
-              <div className={styles.metricLabel}>{metric}</div>
-              <div className={styles.flexCol}>
-                <div className={styles.metricBox}>
-                  {this.props.overallMetrics[index]}
-                </div>
-                {this.props.formattedBinValues[index]?.map(
-                  (value, valIndex) => {
-                    if (this.props.expandAttributes) {
-                      return (
-                        <div className={styles.metricBox} key={valIndex}>
-                          {value !== undefined ? value : "empty"}
-                        </div>
-                      );
-                    }
-                    return <div style={{ display: "none" }}></div>;
-                  }
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <DetailsList
+        items={items}
+        columns={columns}
+        setKey="set"
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionMode={SelectionMode.none}
+      />
     );
   }
 }

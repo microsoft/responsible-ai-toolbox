@@ -183,58 +183,20 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       mainChart = (
         <Stack horizontal={true}>
           <Stack.Item className={sharedStyles.mainLeft}>
-            <Stack tokens={{ childrenGap: "l1" }}>
-              <Stack horizontal={true}>
-                <Stack>
-                  <div
-                    className={styles.overallArea}
-                    style={{
-                      height: this.state.expandAttributes
-                        ? `${150 + 50 * (areaHeights / 150)}px`
-                        : "97px"
-                    }}
-                  >
-                    <OverallTable
-                      binGroup={
-                        this.props.dashboardContext.modelMetadata.featureNames[
-                          this.props.featureBinPickerProps.selectedBinIndex
-                        ]
-                      }
-                      binLabels={this.props.dashboardContext.groupNames}
-                      formattedBinValues={formattedBinValues}
-                      metricLabels={metricLabels}
-                      overallMetrics={overallMetrics}
-                      expandAttributes={this.state.expandAttributes}
-                      binValues={this.state.metrics.performance.bins}
-                    />
-                  </div>
-                  <div
-                    className={styles.expandAttributes}
-                    onClick={this.expandAttributes}
-                  >
-                    {(this.state.expandAttributes && (
-                      <Icon
-                        iconName="ChevronUp"
-                        className={styles.chevronIcon}
-                      />
-                    )) ||
-                      (!this.state.expandAttributes && (
-                        <Icon
-                          iconName="ChevronDown"
-                          className={styles.chevronIcon}
-                        />
-                      ))}
-                    <Text>
-                      {(this.state.expandAttributes &&
-                        localization.Fairness.Report
-                          .collapseSensitiveAttributes) ||
-                        (!this.state.expandAttributes &&
-                          localization.Fairness.Report
-                            .expandSensitiveAttributes)}
-                    </Text>
-                  </div>
-                </Stack>
-              </Stack>
+            <Stack tokens={{ childrenGap: "l1", padding: "0 0 0 100px" }}>
+              <OverallTable
+                binGroup={
+                  this.props.dashboardContext.modelMetadata.featureNames[
+                    this.props.featureBinPickerProps.selectedBinIndex
+                  ]
+                }
+                binLabels={this.props.dashboardContext.groupNames}
+                formattedBinValues={formattedBinValues}
+                metricLabels={metricLabels}
+                overallMetrics={overallMetrics}
+                expandAttributes={this.state.expandAttributes}
+                binValues={this.state.metrics.performance.bins}
+              />
               <ReportChart
                 areaHeights={areaHeights}
                 dashboardContext={this.props.dashboardContext}

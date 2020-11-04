@@ -89,7 +89,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
       { key: outcomeKey, text: outcomeChartHeaderString }
     ];
     return (
-      <Stack tokens={{ padding: "0 0 0 100px" }}>
+      <Stack>
         <Dropdown
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
           className={styles.dropDown}
