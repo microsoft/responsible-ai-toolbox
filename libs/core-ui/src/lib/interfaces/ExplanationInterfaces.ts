@@ -15,7 +15,7 @@ export interface IExplanationDashboardData {
 
 export interface IModelInformation {
   modelClass: "Tree" | "EBM" | "blackbox";
-  method: "classifier" | "regressor";
+  method?: "classifier" | "regressor";
 }
 
 export interface IDatasetSummary {

@@ -23,13 +23,15 @@ class DatabricksEnvironment:
         self.successfully_detected = False
         self.base_url = None
         self.externally_available = False
+        self.with_credentials = False
 
         if "DATABRICKS_RUNTIME_VERSION" not in os.environ:
             self.successfully_detected = False
         else:
-            self.base_url = "http://{0}:{1}".format(
-                ip,
-                port)
+            # data bricks can never take call back
+            # self.base_url = "http://{0}:{1}".format(
+            #     ip,
+            #     port)
             self.externally_available = True
 
     def display(self, html):

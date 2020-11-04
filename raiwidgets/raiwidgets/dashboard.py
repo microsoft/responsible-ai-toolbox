@@ -11,13 +11,14 @@ from IPython.display import display, HTML
 import json
 import os
 from html.parser import HTMLParser
+import uuid
 
 
 class InLineScript(HTMLParser):
-    def __init__(self, id):
+    def __init__(self, load_widget_file):
         HTMLParser.__init__(self)
         self.content = ""
-        self.id = id
+        self.load_widget_file = load_widget_file
 
     def handle_starttag(self, tag, attrs):
         if tag == "script":
@@ -27,7 +28,7 @@ class InLineScript(HTMLParser):
                     src = att[1]
                     break
             if src is not None:
-                content = Dashboard.load_widget_file(src, self.id)
+                content = self.load_widget_file(src)
                 self.content += f'<script>\r\n{content}\r\n'
                 return
         self.content += self.get_starttag_text()
@@ -58,73 +59,63 @@ class Dashboard(object):
     :param sensitive_feature_names: Feature names
     :type sensitive_feature_names: numpy.array or list[]
     """
-    model_data = {}
-    config = {}
-    model_count = 0
-    _service = None
-
-    @FlaskHelper.app.route('/')
-    def list():
-        return ','.join(Dashboard.config.keys())
-
-    @FlaskHelper.app.route('/<int:id>')
-    def visual(id):
-        if str(id) in Dashboard.config:
-            return Dashboard.load_index(str(id))
-        else:
-            return Response("Unknown model id.", status=404)
 
     def __init__(
             self, *,
             dashboard_type,
             model_data,
+            public_ip=None,
             port=None):
         """Initialize the Dashboard."""
 
         if model_data is None or type is None:
             raise ValueError("Required parameters not provided")
 
-        if Dashboard._service is None:
-            try:
-                Dashboard._service = FlaskHelper(port=port)
-            except Exception as e:
-                Dashboard._service = None
-                raise e
+        try:
+            self._service = FlaskHelper(ip=public_ip, port=port)
+        except Exception as e:
+            self._service = None
+            raise e
 
-        Dashboard.model_count += 1
-        self.id = str(Dashboard.model_count)
+        self.id = uuid.uuid4().hex
 
-        Dashboard.config[self.id] = {
+        self.config = {
             "dashboardType": dashboard_type,
             "id": self.id,
-            "baseUrl": Dashboard._service.env.base_url,
-            'withCredentials': False,
-            'hasCallback': True
+            "baseUrl": self._service.env.base_url,
+            'withCredentials': False
         }
-        Dashboard.model_data[self.id] = model_data
+        self.model_data = model_data
+        self.add_route()
 
-        html = Dashboard.load_index(self.id)
-        # TODO https://github.com/microsoft/responsible-ai-widgets/issues/92
-        # FairnessDashboard._service.env.display(html)
+        html = self.load_index()
+        print(f'Started at {self._service.env.base_url}')
         display(HTML(html))
+
+    def add_route(self):
+        @self._service.app.route('/')
+        def visual():
+            return self.load_index()
+        return
 
     def get_widget_path(path):
         script_path = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(script_path, "widget", path)
 
-    def load_index(id):
-        index = Dashboard.load_widget_file("index.html", id)
-        parser = InLineScript(id)
+    def load_index(self):
+        index = self.load_widget_file("index.html")
+        parser = InLineScript(self.load_widget_file)
         parser.feed(index)
         return parser.content
 
-    def load_widget_file(path, id):
+    def load_widget_file(self, path):
         js_path = Dashboard.get_widget_path(path)
         with open(js_path, "r", encoding="utf-8") as f:
             content = f.read()
-            content = content.replace("__rai_app_id__", f'rai_widget_{id}')
             content = content.replace(
-                "__rai_config__", json.dumps(Dashboard.config[id]))
+                "__rai_app_id__", f'rai_widget_{self.id}')
             content = content.replace(
-                "__rai_model_data__", json.dumps(Dashboard.model_data[id]))
+                "__rai_config__", json.dumps(self.config))
+            content = content.replace(
+                "__rai_model_data__", json.dumps(self.model_data))
             return content

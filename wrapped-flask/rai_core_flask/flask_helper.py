@@ -52,9 +52,11 @@ class FlaskHelper(object):
         else:
             FlaskHelper._is_local_port_available(self.ip, self.port,
                                                  raise_error=True)
+        self.env = build_environment(self.ip, self.port)
+        if self.env.base_url is None:
+            return
         self._thread = threading.Thread(target=self.run, daemon=True)
         self._thread.start()
-        self.env = build_environment(self.ip, self.port)
 
     @staticmethod
     def _is_local_port_available(ip, port, raise_error=True):
