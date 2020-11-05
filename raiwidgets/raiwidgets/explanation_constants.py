@@ -1,12 +1,12 @@
-# ---------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 
 """Defines the Constant strings."""
 
 
 class ExplanationDashboardInterface(object):
-    """Dictionary properties shared between the python and javascript object."""
+    """Dictionary properties shared between \
+        the python and javascript object."""
     CLASS_NAMES = "classNames"
     CUSTOM_VISUALS = "customVis"
     EBM_EXPLANATION = "ebmGlobalExplanation"

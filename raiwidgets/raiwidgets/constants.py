@@ -1,6 +1,5 @@
-# ---------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# ---------------------------------------------------------
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 
 """Defines constants for interpret community."""
 
@@ -15,7 +14,8 @@ class ExplanationParams(object):
 
 
 class ExplainType(object):
-    """Provide constants for model and explainer type information, useful for visualization."""
+    """Provide constants for model and explainer
+        type information, useful for visualization."""
 
     CLASSIFICATION = 'classification'
     DATA = 'data_type'
@@ -44,7 +44,8 @@ class ExplainType(object):
 
 
 class ExplainParams(object):
-    """Provide constants for interpret community (init, explain_local and explain_global) parameters."""
+    """Provide constants for interpret community
+    (init, explain_local and explain_global) parameters."""
 
     BATCH_SIZE = 'batch_size'
     CLASSES = 'classes'
@@ -86,13 +87,18 @@ class ExplainParams(object):
 
     @classmethod
     def get_serializable(cls):
-        """Return only the ExplainParams properties that have meaningful data values for serialization.
+        """Return only the ExplainParams properties
+        that have meaningful data values for serialization.
 
-        :return: A set of property names, e.g., 'GLOBAL_IMPORTANCE_VALUES', 'MODEL_TYPE', etc.
+        :return: A set of property names,
+        e.g., 'GLOBAL_IMPORTANCE_VALUES', 'MODEL_TYPE', etc.
         :rtype: set{str}
         """
-        return (set(filter(lambda x: not x.startswith('__') and not callable(getattr(cls, x)),
-                vars(cls).keys())) - set(['DATA_MAPPER', 'DATA_MAPPER_INTERNAL']))
+        return (set(filter(lambda x:
+                           not x.startswith('__') and not callable(
+                               getattr(cls, x)),
+                           vars(cls).keys())) -
+                set(['DATA_MAPPER', 'DATA_MAPPER_INTERNAL']))
 
 
 class Defaults(object):
@@ -100,8 +106,10 @@ class Defaults(object):
 
     AUTO = 'auto'
     DEFAULT_BATCH_SIZE = 100
-    # hdbscan is an unsupervised learning library to find the optimal number of clusters in a dataset
-    # See this github repo for more details: https://github.com/scikit-learn-contrib/hdbscan
+    # hdbscan is an unsupervised learning library
+    # to find the optimal number of clusters in a dataset
+    # See this github repo for more details:
+    # https://github.com/scikit-learn-contrib/hdbscan
     HDBSCAN = 'hdbscan'
     MAX_DIM = 50
 
@@ -144,9 +152,11 @@ class Spacy(object):
 
 
 class ModelTask(str, Enum):
-    """Provide model task constants. Can be 'classification', 'regression', or 'unknown'.
+    """Provide model task constants.
+    Can be 'classification', 'regression', or 'unknown'.
 
-    By default the model domain is inferred if 'unknown', but this can be overridden if you specify
+    By default the model domain is inferred if 'unknown',
+    but this can be overridden if you specify
     'classification' or 'regression'.
     """
 
@@ -164,7 +174,8 @@ class LightGBMParams(object):
 class ShapValuesOutput(str, Enum):
     """Provide constants for the SHAP values output from the explainer.
 
-    Can be 'default', 'probability' or 'teacher_probability'. If 'teacher_probability' is specified,
+    Can be 'default', 'probability' or 'teacher_probability'.
+    If 'teacher_probability' is specified,
     we use the probabilities from the teacher model.
     """
 
@@ -181,7 +192,8 @@ class ExplainableModelType(str, Enum):
 
 
 class MimicSerializationConstants(object):
-    """Provide internal class that defines fields used for MimicExplainer serialization."""
+    """Provide internal class that defines fields
+    used for MimicExplainer serialization."""
 
     FUNCTION = 'function'
     IDENTITY = '_identity'
@@ -195,13 +207,15 @@ class MimicSerializationConstants(object):
     ALLOW_ALL_TRANSFORMATIONS = '_allow_all_transformations'
 
     enum_properties = ['_shap_values_output']
-    nonify_properties = ['_logger', 'model', 'function', 'initialization_examples',
+    nonify_properties = ['_logger', 'model', 'function',
+                         'initialization_examples',
                          '_original_eval_examples', '_timestamp_featurizer']
     save_properties = ['surrogate_model']
 
 
 class LightGBMSerializationConstants(object):
-    """Provide internal class that defines fields used for MimicExplainer serialization."""
+    """Provide internal class that defines fields
+    used for MimicExplainer serialization."""
 
     IDENTITY = '_identity'
     LOGGER = '_logger'
@@ -265,11 +279,15 @@ class SHAPDefaults(object):
 
 
 class ResetIndex(str, Enum):
-    """Provide index column handling constants. Can be 'ignore', 'reset' or 'reset_teacher'.
+    """Provide index column handling constants.
+    Can be 'ignore', 'reset' or 'reset_teacher'.
 
-    By default the index column is ignored, but you can override to reset it and make it a
-    feature column that is then featurized to numeric, or reset it and ignore it during
-    featurization but set it as the index when calling predict on the original model.
+    By default the index column is ignored,
+    but you can override to reset it and make it a
+    feature column that is then featurized to numeric,
+     or reset it and ignore it during
+    featurization but set it as the index
+    when calling predict on the original model.
     """
 
     Ignore = 'ignore'

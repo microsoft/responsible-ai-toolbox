@@ -4,7 +4,6 @@
 """Defines the dashboard class."""
 
 from rai_core_flask import FlaskHelper  # , environment_detector
-from flask import Response
 from IPython.display import display, HTML
 import json
 import os
