@@ -5,7 +5,7 @@ import { IExplanationDashboardData } from "@responsible-ai/core-ui";
 import { IFairnessData } from "@responsible-ai/fairness";
 
 import { adult } from "../fairness/__mock_data__/adult";
-import { adultPrecomputed } from '../fairness/__mock_data__/adultPrecomputed';
+import { adultPrecomputed } from "../fairness/__mock_data__/adultPrecomputed";
 import { binaryClassifier } from "../fairness/__mock_data__/binaryClassifier";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
