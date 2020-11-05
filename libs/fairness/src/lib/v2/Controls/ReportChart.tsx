@@ -84,7 +84,9 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
 
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
 
-    var displayOptions = [{ key: outcomeKey, text: outcomeChartHeaderString }];
+    const displayOptions = [
+      { key: outcomeKey, text: outcomeChartHeaderString }
+    ];
 
     // provide performance chart option only if we have the corresponding metrics
     if (
