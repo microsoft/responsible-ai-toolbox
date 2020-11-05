@@ -90,8 +90,17 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
 
     // provide performance chart option only if we have the corresponding metrics
     if (
-      this.props.metrics.falseNegativeRates &&
-      this.props.metrics.falsePositiveRates
+      (this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.BinaryClassification &&
+        this.props.metrics.falseNegativeRates &&
+        this.props.metrics.falsePositiveRates) ||
+      (this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.Probability &&
+        this.props.metrics.overpredictions &&
+        this.props.metrics.underpredictions) ||
+        (this.props.dashboardContext.modelMetadata.PredictionType ===
+          PredictionTypes.Probability &&
+          this.props.metrics.errors)
     ) {
       displayOptions.push({
         key: performanceKey,
