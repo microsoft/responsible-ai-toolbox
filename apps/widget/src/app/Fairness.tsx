@@ -11,10 +11,6 @@ import React from "react";
 import { config } from "./config";
 import { modelData } from "./modelData";
 
-export interface IFairnessState {
-  fairnessConfig: any | undefined;
-}
-
 export class Fairness extends React.Component {
   public render(): React.ReactNode {
     return (
@@ -37,7 +33,7 @@ export class Fairness extends React.Component {
         supportedRegressionPerformanceKeys={modelData.regression_methods}
         supportedProbabilityPerformanceKeys={modelData.probability_methods}
         locale={modelData.locale}
-        requestMetrics={config.hasCallback ? this.requestMetrics : undefined}
+        requestMetrics={config.baseUrl ? this.requestMetrics : undefined}
       />
     );
   }
@@ -45,7 +41,7 @@ export class Fairness extends React.Component {
   private readonly requestMetrics = (
     postData: IMetricRequest
   ): Promise<IMetricResponse> => {
-    return fetch(config.baseUrl + `/fairness/model/${config.id}/metrics`, {
+    return fetch(config.baseUrl + "/metrics", {
       body: JSON.stringify(postData),
       headers: {
         "Content-Type": "application/json"

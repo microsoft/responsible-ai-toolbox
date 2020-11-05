@@ -20,6 +20,7 @@ class AzureNBEnvironment:
         self.base_url = None
         self.externally_available = False
         self.successfully_detected = False
+        self.with_credentials = True
         if not (os.path.exists(self.nbvm_file_path) and
                 os.path.isfile(self.nbvm_file_path)):
             self.successfully_detected = False
