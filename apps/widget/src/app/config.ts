@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 export interface IAppConfig {
-  dashboardType: "Fairness";
+  dashboardType: "Fairness" | "Interpret";
   id: string;
   baseUrl: string;
-  hasCallback: boolean;
   withCredentials: boolean;
 }
 

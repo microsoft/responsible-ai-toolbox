@@ -3,10 +3,7 @@
 
 """Defines the fairness dashboard class."""
 
-# TODO: use environment_detector
-# https://github.com/microsoft/responsible-ai-widgets/issues/92
 from .dashboard import Dashboard
-from rai_core_flask import FlaskHelper  # , environment_detector
 from .fairness_metric_calculation import FairnessMetricModule
 
 from flask import jsonify, request
@@ -32,41 +29,6 @@ class FairnessDashboard(Dashboard):
     :param sensitive_feature_names: Feature names
     :type sensitive_feature_names: numpy.array or list[]
     """
-    _service = None
-    fairness_metrics_module = {}
-
-    @FlaskHelper.app.route('/fairness/model/<id>/metrics', methods=['POST'])
-    def fairness_metrics_calculation(id):
-        try:
-            data = request.get_json(force=True)
-            if id in FairnessDashboard.model_data:
-                data.update(FairnessDashboard.model_data[id])
-
-                if type(data["binVector"][0]) == np.int32:
-                    data['binVector'] = [
-                        str(bin_) for bin_ in data['binVector']]
-
-                method = FairnessDashboard.fairness_metrics_module[id]. \
-                    _metric_methods.get(data["metricKey"]).get("function")
-                prediction = method(
-                    data['true_y'],
-                    data['predicted_ys'][data["modelIndex"]],
-                    sensitive_features=data["binVector"])
-                return jsonify({"data": {
-                    "global": prediction.overall,
-                    "bins": list(prediction.by_group.values())
-                }})
-        except Exception as ex:
-            import sys
-            import traceback
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-
-            return jsonify({
-                "error": str(ex),
-                "stacktrace": str(repr(traceback.format_exception(
-                    exc_type, exc_value, exc_traceback))),
-                "locals": str(locals()),
-            })
 
     def __init__(
             self, *,
@@ -75,6 +37,7 @@ class FairnessDashboard(Dashboard):
             y_pred,
             sensitive_feature_names=None,
             locale=None,
+            public_ip=None,
             port=None,
             fairness_metric_module=None,
             fairness_metric_mapping=None):
@@ -136,9 +99,42 @@ class FairnessDashboard(Dashboard):
 
         Dashboard.__init__(self, dashboard_type="Fairness",
                            model_data=fairness_input,
+                           public_ip=public_ip,
                            port=port)
 
-        FairnessDashboard.fairness_metrics_module[self.id] = metrics_module
+        self.fairness_metrics_module = metrics_module
+
+        @self._service.app.route('/metrics', methods=['POST'])
+        def fairness_metrics_calculation():
+            try:
+                data = request.get_json(force=True)
+                data.update(self.model_data)
+
+                if type(data["binVector"][0]) == np.int32:
+                    data['binVector'] = [
+                        str(bin_) for bin_ in data['binVector']]
+
+                method = self.fairness_metrics_module.\
+                    _metric_methods.get(data["metricKey"]).get("function")
+                prediction = method(
+                    data['true_y'],
+                    data['predicted_ys'][data["modelIndex"]],
+                    sensitive_features=data["binVector"])
+                return jsonify({"data": {
+                    "global": prediction.overall,
+                    "bins": list(prediction.by_group.values())
+                }})
+            except Exception as ex:
+                import sys
+                import traceback
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+
+                return jsonify({
+                    "error": str(ex),
+                    "stacktrace": str(repr(traceback.format_exception(
+                        exc_type, exc_value, exc_traceback))),
+                    "locals": str(locals()),
+                })
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)

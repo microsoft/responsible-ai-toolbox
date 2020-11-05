@@ -15,6 +15,7 @@ class LocalIPythonEnvironment:
         self.base_url = None
         self.externally_available = None
         self.port = port
+        self.with_credentials = False
 
         try:
             from IPython.display import HTML, display  # noqa: F401
