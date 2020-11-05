@@ -7,6 +7,7 @@ import { IFairnessData } from "@responsible-ai/fairness";
 import { binaryClassifier } from "../fairness/__mock_data__/binaryClassifier";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
+import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { probit } from "../fairness/__mock_data__/probit";
 import { regression } from "../fairness/__mock_data__/regression";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
@@ -97,6 +98,9 @@ export const applications: IApplications = <const>{
     datasets: {
       binaryClassifier: { data: binaryClassifier },
       precomputedBinary: { data: precomputedBinary },
+      precomputedBinaryMissingMetrics: {
+        data: precomputedBinaryMissingMetrics
+      },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
       probit: { data: probit },
       regression: { data: regression }
