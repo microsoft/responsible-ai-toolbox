@@ -3,8 +3,6 @@
 
 """Defines the fairness dashboard class."""
 
-# TODO: use environment_detector
-# https://github.com/microsoft/responsible-ai-widgets/issues/92
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
 

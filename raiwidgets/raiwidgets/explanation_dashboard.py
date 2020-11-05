@@ -3,8 +3,6 @@
 
 """Defines the Explanation dashboard class."""
 
-# TODO: use environment_detector
-# https://github.com/microsoft/responsible-ai-widgets/issues/92
 from .explanation_dashboard_input import ExplanationDashboardInput
 from .dashboard import Dashboard
 

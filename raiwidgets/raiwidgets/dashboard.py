@@ -3,8 +3,6 @@
 
 """Defines the dashboard class."""
 
-# TODO: use environment_detector
-# https://github.com/microsoft/responsible-ai-widgets/issues/92
 from rai_core_flask import FlaskHelper  # , environment_detector
 from flask import Response
 from IPython.display import display, HTML
