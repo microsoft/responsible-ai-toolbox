@@ -13,7 +13,7 @@ export const binaryClassifier: IFairnessData = {
     ["a", "1", "test1", 1],
     ["b", "2", "test2", 2],
     ["b", "2", "test3", 3],
-    ["babaganoush test long", "3", "test4", 1],
+    ["very long group name indeed", "3", "test4", 1],
     ["b", "2", "test5", 2],
     ["b", "2", "test6", 3],
     ["b", "2", "test7", 0],

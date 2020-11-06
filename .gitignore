@@ -44,3 +44,6 @@ Thumbs.db
 **/__pycache__/*
 **-checkpoint.ipynb
 **.egg-info/
+
+# test files
+apps/*-e2e/debug.log
