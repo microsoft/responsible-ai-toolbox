@@ -42,7 +42,7 @@ export interface IState {
 export class ReportChart extends React.Component<IReportChartProps, IState> {
   public constructor(props: IReportChartProps) {
     super(props);
-    this.state = { displayPlotKey: performanceKey };
+    this.state = { displayPlotKey: outcomeKey };
   }
 
   public render(): React.ReactNode {
@@ -85,9 +85,29 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
 
     const displayOptions = [
-      { key: performanceKey, text: performanceChartHeaderString },
       { key: outcomeKey, text: outcomeChartHeaderString }
     ];
+
+    // provide performance chart option only if we have the corresponding metrics
+    if (
+      (this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.BinaryClassification &&
+        this.props.metrics.falseNegativeRates &&
+        this.props.metrics.falsePositiveRates) ||
+      (this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.Probability &&
+        this.props.metrics.overpredictions &&
+        this.props.metrics.underpredictions) ||
+      (this.props.dashboardContext.modelMetadata.PredictionType ===
+        PredictionTypes.Probability &&
+        this.props.metrics.errors)
+    ) {
+      displayOptions.push({
+        key: performanceKey,
+        text: performanceChartHeaderString
+      });
+    }
+
     return (
       <Stack>
         <Dropdown
