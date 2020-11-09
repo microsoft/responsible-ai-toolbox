@@ -46,7 +46,6 @@ export class PerformancePlot extends React.PureComponent<
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
     ) {
-      // TODO don't show chart if FPR, FNR not available
       barPlotlyProps.data = [
         {
           color: chartColors[0],
@@ -117,7 +116,6 @@ export class PerformancePlot extends React.PureComponent<
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Probability
     ) {
-      // TODO don't show chart if Overprediction/Underprediction not available
       barPlotlyProps.data = [
         {
           color: chartColors[0],
@@ -186,7 +184,6 @@ export class PerformancePlot extends React.PureComponent<
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.Regression
     ) {
-      // TODO don't show chart if errors not available
       const performanceText = this.props.metrics.predictions?.map(
         (val, index) => {
           return `${localization.formatString(

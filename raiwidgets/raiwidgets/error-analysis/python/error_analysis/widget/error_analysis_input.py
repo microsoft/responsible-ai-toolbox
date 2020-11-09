@@ -293,6 +293,8 @@ class ErrorAnalysisDashboardInput:
             surrogate.fit(dataset_sub_features, diff)
             json_tree = self.traverse(surrogate.tree_, 0, [],
                                       dataset_sub_names)
+            print(json_tree)
+            print(self.dashboard_input[interface.FEATURE_NAMES])
             return {
                 WidgetRequestResponseConstants.DATA: json_tree
             }
@@ -480,29 +482,37 @@ class ErrorAnalysisDashboardInput:
             error = values[1]
         parent_node_name = None
         condition = None
+        arg = None
+        method = None
         if parent is not None:
             parent = int(parent)
             parent_node_name = feature_names[tree.feature[parent]]
             parent_threshold = float(tree.threshold[parent])
             if side == TreeSide.RightChild:
+                method = "less and equal"
+                arg = parent_threshold
                 condition = "{} <= {:.2f}".format(parent_node_name,
                                                   parent_threshold)
             elif side == TreeSide.LeftChild:
+                method = "greater"
+                arg = parent_threshold
                 condition = "{} > {:.2f}".format(parent_node_name,
                                                  parent_threshold)
         json.append({
-            "id": int(nodeid),
-            "parentId": parent,
-            "size": float(success + error),
-            "success": float(success),
+            "arg": arg,
+            "badFeaturesRowCount": 0,
+            "condition": condition,
             "error": float(error),
+            "id": int(nodeid),
+            "method": method,
             "nodeIndex": int(nodeid),
             "nodeName": feature_names[tree.feature[int(nodeid)]],
+            "parentId": parent,
             "parentNodeName": parent_node_name,
             "pathFromRoot": "",
-            "condition": condition,
+            "size": float(success + error),
             "sourceRowKeyHash": "hashkey",
-            "badFeaturesRowCount": 0,
+            "success": float(success)
         })
         return json
 
