@@ -1,12 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Cohort,
-  JointDataset,
-  IFilter,
-  FilterMethods
-} from "@responsible-ai/interpret";
+import { Cohort, JointDataset } from "@responsible-ai/interpret";
 import { ITextFieldStyles, IStackTokens } from "office-ui-fabric-react";
 import {
   PrimaryButton,
@@ -81,23 +76,7 @@ export class SaveCohort extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = saveCohortStyles();
-    const filters = this.props.temporaryCohort.cohort.filters
-      .map((filter: IFilter): string => {
-        let method = "";
-        if (filter.method === FilterMethods.Equal) {
-          method = "==";
-        } else if (filter.method === FilterMethods.GreaterThan) {
-          method = ">";
-        } else if (filter.method === FilterMethods.GreaterThanEqualTo) {
-          method = ">=";
-        } else if (filter.method === FilterMethods.LessThan) {
-          method = "<";
-        } else if (filter.method === FilterMethods.LessThanEqualTo) {
-          method = "<=";
-        }
-        return `${filter.column} ${method} ${filter.arg[0]}`;
-      })
-      .join(", ");
+    const filters = this.props.temporaryCohort.filtersToString().join(", ");
     return (
       <Dialog
         hidden={!this.props.isOpen}
