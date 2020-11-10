@@ -28,7 +28,7 @@ additional questions or comments.
 
 ## Acceptance criteria
 
-All pull requests needs to abide by the following criteria to be accepted:
+All pull requests need to abide by the following criteria to be accepted:
 
 - passing pipelines on the GitHub pull request
 - signed [Contributor License Agreement (CLA)](#contributor-license-agreement)
@@ -62,7 +62,7 @@ Web Development Server is listening at http://localhost:4200/
 ```
 
 at which point you can follow the link to your browser and select the
-dashboard of your choice.
+dashboard and version of your choice.
 
 To check for linting issues and auto-apply fixes where possible run
 
@@ -79,6 +79,10 @@ yarn build <app-name>  // e.g. fairness, interpret
 or alternatively `yarn buildall` to build all of them. Since most apps have
 dependencies on `mlchartlib` it makes sense to run `yarn buildall` at least
 once.
+
+Tests are in the `apps` directory. To execute them run `yarn e2eall`.
+Sometimes it is preferable to watch the execution and select only individual
+test cases. This is possible using `yarn e2e-watch`.
 
 ### Debugging
 

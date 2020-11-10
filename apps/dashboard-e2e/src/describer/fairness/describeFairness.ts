@@ -132,12 +132,12 @@ export function describeSingleModelView(data: IFairnessData): void {
     );
 
     // chart dropdown
-    cy.contains(dropdownComponent, data.sensitiveFeatures[0]);
-    cy.contains(/presentationArea-.*/), Object.keys(data.sensitiveFeatures)[0]);
+    cy.contains(dropdownComponent, Object.keys(data.sensitiveFeatures)[0]);
+    cy.contains(/presentationArea-.*/).contains(Object.keys(data.sensitiveFeatures)[0]);
     data.sensitiveFeatures[data.performanceMetrics[0]].forEach(
       (sensitiveFeatureValue: string) => {
         cy.contains(/presentationArea-.*/).contains(sensitiveFeatureValue);
       }
     );
-  };
+  });
 }

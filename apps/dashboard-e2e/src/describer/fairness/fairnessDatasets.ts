@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from '@responsible-ai/fairness';
+import { PredictionTypes } from "@responsible-ai/fairness";
 import { IFairnessData } from "./IFairnessData";
 
 const fairnessDatasets = {
@@ -10,8 +10,17 @@ const fairnessDatasets = {
     sensitiveFeatures: {
       "Sensitive feature 0": ["a", "b", "very long group name indeed"],
       "Sensitive feature 1": ["1", "2", "3"],
-      "Sensitive feature 2": ["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
-      "Sensitive feature 3": ["0", "1", "2", "3"],
+      "Sensitive feature 2": [
+        "test1",
+        "test2",
+        "test3",
+        "test4",
+        "test5",
+        "test6",
+        "test7",
+        "test8"
+      ],
+      "Sensitive feature 3": ["0", "1", "2", "3"]
     },
     performanceMetrics: [
       "Accuracy",
@@ -44,10 +53,7 @@ const fairnessDatasets = {
       "True positive rate ratio"
     ],
     numberOfModels: 3,
-    charts: [
-      "Selection rate",
-      "False positive and false negative rates"
-    ]
+    charts: ["Selection rate", "False positive and false negative rates"]
   },
   probability: {
     predictionType: PredictionTypes.Probability,
@@ -69,18 +75,15 @@ const fairnessDatasets = {
       "Minimum ROC AUC score"
     ],
     numberOfModels: 3,
-    charts: [
-      "Distribution of predictions",
-      "Over- and underprediction"
-    ]
+    charts: ["Distribution of predictions", "Over- and underprediction"]
   },
   regression: {
     predictionType: PredictionTypes.Regression,
-    sensitiveFeatures: [
+    sensitiveFeatures: {
       "Sensitive feature 0": ["a", "b"],
       "Sensitive feature 1": ["1", "2", "3"],
       "Sensitive feature 2": ["1 - 3", "4 - 5", "6 - 7", "8 - 9", "10 - 12"]
-    ],
+    },
     performanceMetrics: [
       "Mean absolute error",
       "R-squared score",
@@ -93,9 +96,7 @@ const fairnessDatasets = {
       "Minimum R2-score"
     ],
     numberOfModels: 3,
-    charts: [
-      "Distribution of predictions"
-    ]
+    charts: ["Distribution of predictions"]
   }
 };
 const withType: {
