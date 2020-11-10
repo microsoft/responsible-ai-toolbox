@@ -111,6 +111,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     return (
       <Stack>
         <Dropdown
+          id="chartSelectionDropdown"
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
           className={styles.dropDown}
           defaultSelectedKey={this.state.displayPlotKey}

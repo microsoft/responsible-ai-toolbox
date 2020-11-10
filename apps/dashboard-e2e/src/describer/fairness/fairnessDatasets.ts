@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { PredictionTypes } from "@responsible-ai/fairness";
-import { IFairnessData } from "./IFairnessData";
+import { IFairnessMetadata } from "./IFairnessMetadata";
 
 const fairnessDatasets = {
   binaryClassification: {
@@ -100,7 +100,7 @@ const fairnessDatasets = {
   }
 };
 const withType: {
-  [key in keyof typeof fairnessDatasets]: IFairnessData;
+  [key in keyof typeof fairnessDatasets]: IFairnessMetadata;
 } = fairnessDatasets;
 
 export { withType as fairnessDatasets };

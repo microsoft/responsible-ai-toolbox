@@ -3,7 +3,7 @@
 
 import { PredictionType } from "@responsible-ai/fairness";
 
-export interface IFairnessData {
+export interface IFairnessMetadata {
   errorMessage?: string;
   predictionType: PredictionType;
   sensitiveFeatures: { [key: string]: string[] };
