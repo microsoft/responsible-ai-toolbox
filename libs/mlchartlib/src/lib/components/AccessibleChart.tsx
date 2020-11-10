@@ -3,8 +3,8 @@
 
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
-import Plotly from "plotly.js";
 import React from "react";
+import Plot from "react-plotly.js";
 import { v4 } from "uuid";
 
 import { accessibleChartStyles } from "./AccessibleChart.styles";
@@ -22,7 +22,6 @@ export interface IAccessibleChartProps {
   theme: string | ITheme | undefined;
   themeOverride?: Partial<IPlotlyTheme>;
   relayoutArg?: Partial<Plotly.Layout>;
-  animateArg?: IPlotlyAnimateProps;
   localizedStrings?: any;
   onClickHandler?: (data: any) => void;
 }
@@ -30,40 +29,6 @@ export interface IAccessibleChartProps {
 export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   public guid: string = v4();
   private timer: number | undefined;
-  private plotlyRef: Plotly.PlotlyHTMLElement | undefined;
-  private isClickHandled = false;
-
-  public componentDidMount(): void {
-    if (this.hasData()) {
-      this.resetRenderTimer();
-    }
-  }
-
-  public componentDidUpdate(prevProps: IAccessibleChartProps): void {
-    if (
-      (!_.isEqual(prevProps.plotlyProps, this.props.plotlyProps) ||
-        this.props.theme !== prevProps.theme) &&
-      this.hasData()
-    ) {
-      this.resetRenderTimer();
-    } else if (
-      this.props.relayoutArg &&
-      !_.isEqual(this.props.relayoutArg, prevProps.relayoutArg) &&
-      this.guid
-    ) {
-      Plotly.relayout(this.guid, this.props.relayoutArg);
-    } else if (
-      this.props.animateArg &&
-      !_.isEqual(this.props.animateArg, prevProps.animateArg) &&
-      this.guid
-    ) {
-      (Plotly as any).animate(
-        this.guid,
-        this.props.animateArg.props,
-        this.props.animateArg.animationAttributes
-      );
-    }
-  }
 
   public componentWillUnmount(): void {
     if (this.timer) {
@@ -73,12 +38,25 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
 
   public render(): React.ReactNode {
     if (this.hasData()) {
+      const themedProps = this.props.theme
+        ? PlotlyThemes.applyTheme(
+            this.props.plotlyProps,
+            this.props.theme,
+            this.props.themeOverride
+          )
+        : _.cloneDeep(this.props.plotlyProps);
       return (
         <>
-          <div
+          <Plot
             className={accessibleChartStyles.chart}
-            id={this.guid}
-            aria-hidden={true}
+            data={themedProps.data}
+            layout={
+              { ...themedProps.layout, ...this.props.relayoutArg } as Partial<
+                Plotly.Layout
+              >
+            }
+            config={themedProps.config as Partial<Plotly.Config>}
+            onClick={this.props.onClickHandler}
           />
           {this.createTableWithPlotlyData(this.props.plotlyProps.data)}
         </>
@@ -102,32 +80,6 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
         (datum) => !_.isEmpty(datum.y) || !_.isEmpty(datum.x)
       )
     );
-  }
-
-  private resetRenderTimer(): void {
-    if (this.timer) {
-      window.clearTimeout(this.timer);
-    }
-    const themedProps = this.props.theme
-      ? PlotlyThemes.applyTheme(
-          this.props.plotlyProps,
-          this.props.theme,
-          this.props.themeOverride
-        )
-      : _.cloneDeep(this.props.plotlyProps);
-    this.timer = window.setTimeout(async () => {
-      this.plotlyRef = await Plotly.react(
-        this.guid,
-        themedProps.data,
-        themedProps.layout,
-        themedProps.config
-      );
-      if (!this.isClickHandled && this.props.onClickHandler) {
-        this.isClickHandled = true;
-        this.plotlyRef.on("plotly_click", this.props.onClickHandler);
-      }
-      this.setState({ loading: false });
-    }, 0);
   }
 
   private createTableWithPlotlyData(data: Plotly.Data[]): React.ReactNode {
