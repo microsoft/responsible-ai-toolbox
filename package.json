@@ -19,6 +19,7 @@
     "dep-graph": "nx dep-graph",
     "e2e": "nx e2e",
     "e2eall": "nx run-many --target=e2e --all",
+    "e2e-watch": "yarn e2e dashboard-e2e --watch",
     "format": "nx format:write",
     "format:check": "nx format:check",
     "format:write": "nx format:write",

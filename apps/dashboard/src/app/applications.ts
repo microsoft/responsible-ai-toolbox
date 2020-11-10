@@ -4,11 +4,11 @@
 import { IExplanationDashboardData } from "@responsible-ai/core-ui";
 import { IFairnessData } from "@responsible-ai/fairness";
 
-import { binaryClassifier } from "../fairness/__mock_data__/binaryClassifier";
+import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
-import { probit } from "../fairness/__mock_data__/probit";
+import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
@@ -96,13 +96,13 @@ export const applications: IApplications = <const>{
   },
   fairness: {
     datasets: {
-      binaryClassifier: { data: binaryClassifier },
+      binaryClassification: { data: binaryClassification },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryMissingMetrics: {
         data: precomputedBinaryMissingMetrics
       },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
-      probit: { data: probit },
+      probability: { data: probability },
       regression: { data: regression }
     },
     versions: { "Version-1": 1, "Version-2": 2 }
