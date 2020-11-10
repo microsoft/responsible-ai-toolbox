@@ -4,7 +4,10 @@
 import { getSpan } from "../../util/getSpan";
 
 import { fairnessDatasets } from "./fairnessDatasets";
-import { IFairnessData } from './IFairnessData';
+import { IFairnessData } from "./IFairnessData";
+
+const dropdownComponent = "ms-Dropdown-container";
+const tableComponent = "ms-DetailsList";
 
 export function describeFairness(name: keyof typeof fairnessDatasets): void {
   describe(name, () => {
@@ -41,12 +44,12 @@ export function describeSimpleWalkthrough(data: IFairnessData): void {
 export function describeGetStartedPage(): void {
   it("should move to sensitive feature selection on button click", () => {
     getSpan("Get started").click();
-    cy.contains("button", "01 Sensitive features").should(
+    cy.get('button:contains("01 Sensitive features")').should(
       "have.class",
       "is-selected"
     );
-    cy.contains("button", "02 Performance metrics");
-    cy.contains("button", "03 Fairness metrics");
+    cy.get('button:contains("02 Performance metrics")').should("exist");
+    cy.get('button:contains("03 Fairness metrics")').should("exist");
     getSpan(
       "Along which features would you like to evaluate your model's fairness?"
     ).should("exist");
@@ -55,49 +58,53 @@ export function describeGetStartedPage(): void {
 
 export function describeDefaultSelections(): void {
   it("should move to performance metric selection on button click", () => {
-    cy.contains("button", "Next").click();
-    cy.contains("button", "01 Sensitive features");
-    cy.contains("button", "02 Performance metrics").should(
+    cy.get('button:contains("Next")').click();
+    cy.get('button:contains("01 Sensitive features")').should("exist");
+    cy.get('button:contains("02 Performance metrics")').should(
       "have.class",
       "is-selected"
     );
-    cy.contains("button", "03 Fairness metrics");
+    cy.get('button:contains("03 Fairness metrics")').should("exist");
     getSpan("How do you want to measure performance?").should("exist");
   });
+  cy.wait(10000);
   it("should move to fairness metric selection on button click", () => {
-    cy.contains("button", "Next").click();
-    cy.contains("button", "01 Sensitive features");
-    cy.contains("button", "02 Performance metrics");
-    cy.contains("button", "03 Fairness metrics").should(
+    cy.get('button:contains("Next")').click();
+    cy.get('button:contains("01 Sensitive features")').should("exist");
+    cy.get('button:contains("02 Performance metrics")').should("exist");
+    cy.get('button:contains("03 Fairness metrics")').should(
       "have.class",
       "is-selected"
     );
     getSpan("How do you want to measure fairness?").should("exist");
   });
+  cy.wait(10000);
   it("should move to model comparison view on button click", () => {
-    cy.contains("button", "Next").click();
-    cy.contains("button", "01 Sensitive features");
-    cy.contains("button", "02 Performance metrics");
-    cy.contains("button", "03 Fairness metrics").should(
+    cy.get('button:contains("Next")').click();
+    cy.get('button:contains("01 Sensitive features")').should("exist");
+    cy.get('button:contains("02 Performance metrics")').should("exist");
+    cy.get('button:contains("03 Fairness metrics")').should(
       "have.class",
       "is-selected"
     );
     getSpan("Model comparison").should("exist");
   });
+  cy.wait(10000);
 }
 
 export function describeModelComparisonView(data: IFairnessData): void {
   it("should have all model comparison view elements", () => {
-    cy.contains(
-      "ms-Dropdown-container",
-      Object.keys(data.sensitiveFeatures)[0]
-    );
-    cy.contains("ms-Dropdown-container", data.performanceMetrics[0]).should(
-      "exist"
-    );
-    cy.contains("ms-Dropdown-container", data.fairnessMetrics[0]).should(
-      "exist"
-    );
+    cy.get(
+      `${dropdownComponent}:contains("${
+        Object.keys(data.sensitiveFeatures)[0]
+      }")`
+    ).should("exist");
+    cy.get(
+      `${dropdownComponent}:contains("${data.performanceMetrics[0]}")`
+    ).should("exist");
+    cy.get(
+      `${dropdownComponent}:contains("${data.fairnessMetrics[0]}")`
+    ).should("exist");
     getSpan("How to read this chart").should("exist");
     // assert that the plot has the right number of points for models
     cy.get("points").find("path").should("have.length", data.numberOfModels);
@@ -107,36 +114,42 @@ export function describeModelComparisonView(data: IFairnessData): void {
 
 export function describeSingleModelView(data: IFairnessData): void {
   it("should have all single model view elements", () => {
-    const dropdownComponent = "ms-Dropdown-container";
     cy.get("points").find("path").first().click();
-    cy.contains(
-      dropdownComponent,
-      Object.keys(data.sensitiveFeatures)[0]
-    );
-    cy.contains(dropdownComponent, data.performanceMetrics[0]).should(
-      "exist"
-    );
-    cy.contains(dropdownComponent, data.fairnessMetrics[0]).should(
-      "exist"
-    );
+    cy.get(
+      `${dropdownComponent}:contains("${
+        Object.keys(data.sensitiveFeatures)[0]
+      }")`
+    ).should("exist");
+    cy.get(
+      `${dropdownComponent}:contains("${data.performanceMetrics[0]}")`
+    ).should("exist");
+    cy.get(
+      `${dropdownComponent}:contains("${data.fairnessMetrics[0]}")`
+    ).should("exist");
 
     // table should contain corresponding metrics
-    const tableComponent = "ms-DetailsList";
-    cy.contains(tableComponent, data.performanceMetrics[0]);
-    cy.contains(tableComponent, data.fairnessMetrics[0]);
-    cy.contains(tableComponent, "Overall");
+    cy.get(`${tableComponent}:contains("${data.performanceMetrics[0]}")`).should("exist");
+    cy.get(`${tableComponent}:contains("${data.fairnessMetrics[0]}")`).should("exist");
+    cy.get(tableComponent).should("contain.text", "Overall");
     data.sensitiveFeatures[data.performanceMetrics[0]].forEach(
       (sensitiveFeatureValue: string) => {
-        cy.contains(tableComponent, sensitiveFeatureValue);
+        cy.get(tableComponent).should("contain.text", sensitiveFeatureValue);
       }
     );
 
     // chart dropdown
-    cy.contains(dropdownComponent, Object.keys(data.sensitiveFeatures)[0]);
-    cy.contains(/presentationArea-.*/).contains(Object.keys(data.sensitiveFeatures)[0]);
+    cy.contains(
+      dropdownComponent,
+      Object.keys(data.sensitiveFeatures)[0]
+    ).should("exist");
+    cy.contains(/presentationArea-.*/)
+      .contains(Object.keys(data.sensitiveFeatures)[0])
+      .should("exist");
     data.sensitiveFeatures[data.performanceMetrics[0]].forEach(
       (sensitiveFeatureValue: string) => {
-        cy.contains(/presentationArea-.*/).contains(sensitiveFeatureValue);
+        cy.contains(/presentationArea-.*/)
+          .contains(sensitiveFeatureValue)
+          .should("exist");
       }
     );
   });
