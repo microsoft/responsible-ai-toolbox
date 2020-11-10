@@ -3,6 +3,7 @@
 
 import { IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import { DataTransform } from "plotly.js";
 
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
@@ -177,7 +178,7 @@ export function generatePlotlyProps(
           type: "groupby"
         });
       }
-      plotlyProps.data[0].transforms = transforms;
+      plotlyProps.data[0].transforms = transforms as DataTransform[];
       break;
     }
     default:
