@@ -18,7 +18,7 @@ and listens on it.
 To register a function to listen on an route:
 
 ```
-@FlaskHelper.app.route("/your-api-route/<int:param_name>", methods=["GET", "POST"])
+@flask_service.app.route("/your-api-route/<int:param_name>", methods=["GET", "POST"])
 def my_func(param_name):
     return something
 ```

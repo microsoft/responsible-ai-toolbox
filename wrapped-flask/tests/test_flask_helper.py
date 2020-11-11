@@ -34,7 +34,7 @@ class TestFlaskHelper(object):
 
         assert(flask_service.port >= 5000 and flask_service.port <= 5099)
 
-        @FlaskHelper.app.route("/hello", methods=["GET"])
+        @flask_service.app.route("/hello", methods=["GET"])
         def hello():
             return "Hello"
 
@@ -52,7 +52,7 @@ class TestFlaskHelper(object):
 
         assert(flask_service.port == self.test_port_local)
 
-        @FlaskHelper.app.route("/hello_two", methods=["GET"])
+        @flask_service.app.route("/hello_two", methods=["GET"])
         def hello_two():
             return "Hello"
 
