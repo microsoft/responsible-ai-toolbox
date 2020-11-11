@@ -292,7 +292,7 @@ export class ModelComparisonChart extends React.PureComponent<
                 </div>
               </Modal>
             </div>
-            <div className={styles.chart}>
+            <div className={styles.chart} id="FairnessPerformanceTradeoffChart">
               <AccessibleChart
                 plotlyProps={props}
                 onClickHandler={this.props.onChartClick}

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSpan } from 'apps/dashboard-e2e/src/util/getSpan';
+import { getSpan } from "apps/dashboard-e2e/src/util/getSpan";
 
 export function checkSensitiveFeatureSelectionPage(): void {
   cy.get('button:contains("01 Sensitive features")').should(
@@ -37,11 +37,10 @@ export function checkFairnessMetricSelectionPage(): void {
 
 export function describeConfigurationPages(): void {
   describe("configuration pages", () => {
-    before(() => {
+    it("should navigate through configuration pages", () => {
       // move to the first configuration page
       getSpan("Get started").click();
-    });
-    it("should navigate through configuration pages", () => {
+
       checkSensitiveFeatureSelectionPage();
       cy.get('button:contains("Next")').click();
       checkPerformanceMetricSelectionPage();

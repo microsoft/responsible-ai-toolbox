@@ -28,7 +28,7 @@ export function describeFairness(name: keyof typeof fairnessDatasets): void {
       });
     }
 
-    //describeGetStartedPage();
+    describeGetStartedPage();
     describeConfigurationPages();
     describeModelComparisonView(fairnessDatasets[name]);
     describeSingleModelView(fairnessDatasets[name]);
