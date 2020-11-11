@@ -1026,11 +1026,11 @@ export const precomputedBinaryTwo: IFairnessData = {
           bins: [0.6790540540540541, 0.75],
           global: 0.7086614173228347
         },
-        false_negative_rate: {
+        false_negative_over_total: {
           bins: [0.11814345991561181, 0.1482889733840304],
           global: 0.134
         },
-        false_positive_rate: {
+        false_positive_over_total: {
           bins: [0.4240506329113924, 0.30228136882129275],
           global: 0.36
         },

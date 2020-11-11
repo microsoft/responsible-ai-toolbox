@@ -37,11 +37,11 @@ export const precomputedBinary: IFairnessData = {
           bins: [0.75, 0.5, 0.25],
           global: 0.5
         },
-        false_negative_rate: {
+        false_negative_over_total: {
           bins: [0, 0.5, 0.5],
           global: 0.33333
         },
-        false_positive_rate: {
+        false_positive_over_total: {
           bins: [0.25, 0, 0.25],
           global: 0.16667
         },
@@ -68,11 +68,11 @@ export const precomputedBinary: IFairnessData = {
           bins: [0.75, 0.75, 0.5],
           global: 0.66667
         },
-        false_negative_rate: {
+        false_negative_over_total: {
           bins: [0, 0.33333, 0],
           global: 0.25
         },
-        false_positive_rate: {
+        false_positive_over_total: {
           bins: [0.5, 1, 0],
           global: 0.08333
         },

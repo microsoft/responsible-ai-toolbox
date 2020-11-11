@@ -114,15 +114,16 @@ class FairnessDashboard(Dashboard):
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                method = self.fairness_metrics_module.\
+                metric_method = self.fairness_metrics_module.\
                     _metric_methods.get(data["metricKey"]).get("function")
-                prediction = method(
+                metrics = self.fairness_metrics_module.MetricFrame(
+                    metric_method,
                     data['true_y'],
                     data['predicted_ys'][data["modelIndex"]],
                     sensitive_features=data["binVector"])
                 return jsonify({"data": {
-                    "global": prediction.overall,
-                    "bins": list(prediction.by_group.values())
+                    "global": metrics.overall,
+                    "bins": list(metrics.by_group.to_dict().values())
                 }})
             except Exception as ex:
                 import sys
