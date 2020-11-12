@@ -33,6 +33,7 @@
               "moment",
               "office-ui-fabric-react",
               "plotly.js",
+              "react-plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -85,9 +86,11 @@
               "jmespath",
               "localized-strings",
               "lodash",
+              "memoize-one",
               "moment",
               "office-ui-fabric-react",
               "plotly.js",
+              "react-plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -138,10 +141,13 @@
             "entryFile": "libs/core-ui/src/index.ts",
             "external": [
               "jmespath",
+              "localized-strings",
               "lodash",
+              "memoize-one",
               "moment",
               "office-ui-fabric-react",
               "plotly.js",
+              "react-plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -192,10 +198,13 @@
             "entryFile": "libs/mlchartlib/src/index.ts",
             "external": [
               "jmespath",
+              "localized-strings",
               "lodash",
+              "memoize-one",
               "moment",
               "office-ui-fabric-react",
               "plotly.js",
+              "react-plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -367,6 +376,7 @@
               "moment",
               "office-ui-fabric-react",
               "plotly.js",
+              "react-plotly.js",
               "react",
               "react-dom",
               "uuid"
@@ -415,7 +425,19 @@
             "tsConfig": "libs/error-analysis/tsconfig.lib.json",
             "project": "libs/error-analysis/package.json",
             "entryFile": "libs/error-analysis/src/index.ts",
-            "external": ["react", "react-dom"],
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
