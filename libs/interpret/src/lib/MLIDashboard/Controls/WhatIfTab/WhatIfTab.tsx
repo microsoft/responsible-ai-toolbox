@@ -11,34 +11,19 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
-  IProcessedStyleSet,
   getTheme,
-  ChoiceGroup,
-  IChoiceGroupOption,
-  Slider,
   Text,
-  ComboBox,
-  IComboBox,
-  DirectionalHint,
-  Callout,
   IComboBoxOption,
-  Link,
   DefaultButton,
-  IconButton,
-  CommandBarButton,
   Dropdown,
-  IDropdownOption,
-  Label
+  IDropdownOption
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
-import {
-  IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
+import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { WeightVectorOption } from "../../IWeightedDropdownContext";
 import { ColumnCategories, JointDataset } from "../../JointDataset";
@@ -46,14 +31,13 @@ import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
-import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 
+import { LocalImportancePlots } from "./LocalImportancePlots";
 import { WhatIfConstants } from "./WhatIfConstants";
 import { WhatIfPanel } from "./WhatIfPanel";
-import { IWhatIfTabStyles, whatIfTabStyles } from "./WhatIfTab.styles";
+import { whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
   jointDataset: JointDataset;
@@ -107,7 +91,6 @@ export class WhatIfTab extends React.PureComponent<
   private temporaryPoint: { [key: string]: any } | undefined;
   private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
   private testableDatapointNames: string[] = [];
-  private weightOptions: IDropdownOption[] | undefined;
   private rowOptions: IDropdownOption[] | undefined;
   private featuresOption: IDropdownOption[] = new Array(
     this.props.jointDataset.datasetFeatureCount
@@ -130,25 +113,12 @@ export class WhatIfTab extends React.PureComponent<
         text: meta.abbridgedLabel
       };
     });
-  private classOptions: IDropdownOption[] = this.props.metadata.classNames.map(
-    (name, index) => {
-      return { key: index, text: name };
-    }
-  );
 
   public constructor(props: IWhatIfTabProps) {
     super(props);
 
     if (!this.props.jointDataset.hasDataset) {
       return;
-    }
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
-      this.weightOptions = this.props.weightOptions.map((option) => {
-        return {
-          key: option,
-          text: this.props.weightLabels[option]
-        };
-      });
     }
     this.state = {
       chartProps: this.generateDefaultChartAxes(),
@@ -587,334 +557,27 @@ export class WhatIfTab extends React.PureComponent<
                 )}
               </div>
             </div>
-            {this.buildSecondaryArea(classNames)}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private buildSecondaryArea(
-    classNames: IProcessedStyleSet<IWhatIfTabStyles>
-  ): React.ReactNode {
-    let secondaryPlot: React.ReactNode;
-    const featureImportanceSortOptions: IDropdownOption[] = this.includedFeatureImportance.map(
-      (item, index) => {
-        return {
-          key: index,
-          text: item.name
-        };
-      }
-    );
-    if (
-      this.state.secondaryChartChoice === WhatIfConstants.featureImportanceKey
-    ) {
-      if (!this.props.jointDataset.hasLocalExplanations) {
-        secondaryPlot = (
-          <div
-            className={classNames.missingParametersPlaceholder}
-            id="noFeatureImportanceInfo"
-          >
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {
-                  localization.Interpret.WhatIfTab
-                    .featureImportanceLackingParameters
-                }
-              </Text>
-            </div>
-          </div>
-        );
-      } else if (this.includedFeatureImportance.length === 0) {
-        secondaryPlot = (
-          <div
-            className={classNames.missingParametersPlaceholder}
-            id="noPointSelectedInfo"
-          >
-            <Text>
-              {localization.Interpret.WhatIfTab.featureImportanceGetStartedText}
-            </Text>
-          </div>
-        );
-      } else {
-        const yAxisLabels: string[] = [
-          localization.Interpret.featureImportance
-        ];
-        if (this.props.metadata.modelType !== ModelTypes.Regression) {
-          yAxisLabels.push(
-            this.props.weightLabels[this.props.selectedWeightVector]
-          );
-        }
-        secondaryPlot = (
-          <div className={classNames.featureImportanceArea}>
-            <div className={classNames.featureImportanceControls}>
-              <Text variant="medium" className={classNames.sliderLabel}>
-                {localization.formatString(
-                  localization.Interpret.GlobalTab.topAtoB,
-                  1,
-                  this.state.topK
-                )}
-              </Text>
-              <Slider
-                className={classNames.startingK}
-                ariaLabel={
-                  localization.Interpret.AggregateImportance.topKFeatures
-                }
-                max={this.props.jointDataset.localExplanationFeatureCount}
-                min={1}
-                step={1}
-                value={this.state.topK}
-                onChange={this.setTopK}
-                showValue={false}
-              />
-            </div>
-            <div className={classNames.featureImportanceChartAndLegend}>
-              <FeatureImportanceBar
-                jointDataset={this.props.jointDataset}
-                yAxisLabels={yAxisLabels}
-                chartType={ChartTypes.Bar}
-                sortArray={this.state.sortArray}
-                unsortedX={this.props.metadata.featureNamesAbridged}
-                unsortedSeries={this.includedFeatureImportance}
-                topK={this.state.topK}
-              />
-              <div className={classNames.featureImportanceLegend}>
-                <Text
-                  variant={"medium"}
-                  className={classNames.cohortPickerLabel}
-                >
-                  {localization.Interpret.GlobalTab.sortBy}
-                </Text>
-                <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
-                  options={featureImportanceSortOptions}
-                  selectedKey={this.state.sortingSeriesIndex}
-                  onChange={this.setSortIndex}
-                />
-                {this.props.metadata.modelType === ModelTypes.Multiclass && (
-                  <div>
-                    <div className={classNames.multiclassWeightLabel}>
-                      <Text
-                        variant={"medium"}
-                        className={classNames.multiclassWeightLabelText}
-                      >
-                        {localization.Interpret.GlobalTab.weightOptions}
-                      </Text>
-                      <IconButton
-                        id={"cross-class-weight-info"}
-                        iconProps={{ iconName: "Info" }}
-                        title={localization.Interpret.CrossClass.info}
-                        onClick={this.toggleCrossClassInfo}
-                      />
-                    </div>
-                    {this.weightOptions && (
-                      <Dropdown
-                        options={this.weightOptions}
-                        selectedKey={this.props.selectedWeightVector}
-                        onChange={this.setWeightOption}
-                      />
-                    )}
-                    {this.state.crossClassInfoVisible && (
-                      <Callout
-                        doNotLayer={true}
-                        target={"#cross-class-weight-info"}
-                        setInitialFocus={true}
-                        onDismiss={this.toggleCrossClassInfo}
-                        directionalHint={DirectionalHint.leftCenter}
-                        role="alertdialog"
-                        styles={{ container: FabricStyles.calloutContainer }}
-                      >
-                        <div className={classNames.calloutWrapper}>
-                          <div className={classNames.calloutHeader}>
-                            <Text className={classNames.calloutTitle}>
-                              {
-                                localization.Interpret.CrossClass
-                                  .crossClassWeights
-                              }
-                            </Text>
-                          </div>
-                          <div className={classNames.calloutInner}>
-                            <Text>
-                              {localization.Interpret.CrossClass.overviewInfo}
-                            </Text>
-                            <ul>
-                              <li>
-                                <Text>
-                                  {
-                                    localization.Interpret.CrossClass
-                                      .absoluteValInfo
-                                  }
-                                </Text>
-                              </li>
-                              <li>
-                                <Text>
-                                  {
-                                    localization.Interpret.CrossClass
-                                      .enumeratedClassInfo
-                                  }
-                                </Text>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </Callout>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      }
-    } else if (!this.props.invokeModel) {
-      secondaryPlot = (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.WhatIfTab.iceLackingParameters}
-            </Text>
-          </div>
-        </div>
-      );
-    } else if (this.testableDatapoints.length === 0) {
-      secondaryPlot = (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.WhatIfTab.IceGetStartedText}
-            </Text>
-          </div>
-        </div>
-      );
-    } else {
-      secondaryPlot = (
-        <div className={classNames.featureImportanceArea}>
-          <div className={classNames.rightJustifiedContainer}>
-            <CommandBarButton
-              iconProps={{ iconName: "Info" }}
-              id="explanation-info"
-              className={classNames.infoButton}
-              text={localization.Interpret.Charts.howToRead}
-              onClick={this.toggleICETooltip}
-            />
-            {this.state.iceTooltipVisible && (
-              <Callout
-                doNotLayer={true}
-                target={"#explanation-info"}
-                setInitialFocus={true}
-                onDismiss={this.toggleICETooltip}
-                role="alertdialog"
-                styles={{ container: FabricStyles.calloutContainer }}
-              >
-                <div className={classNames.calloutWrapper}>
-                  <div className={classNames.calloutHeader}>
-                    <Text className={classNames.calloutTitle}>
-                      {localization.Interpret.WhatIfTab.icePlot}
-                    </Text>
-                  </div>
-                  <div className={classNames.calloutInner}>
-                    <Text>
-                      {localization.Interpret.WhatIfTab.icePlotHelperText}
-                    </Text>
-                    <div className={classNames.calloutActions}>
-                      <Link
-                        className={classNames.calloutLink}
-                        href={
-                          "https://christophm.github.io/interpretable-ml-book/ice.html#ice"
-                        }
-                        target="_blank"
-                      >
-                        {localization.Interpret.ExplanationSummary.clickHere}
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </Callout>
-            )}
-          </div>
-          <div className={classNames.featureImportanceChartAndLegend}>
-            <MultiICEPlot
-              invokeModel={this.props.invokeModel}
-              datapoints={this.testableDatapoints}
-              colors={this.testableDatapointColors}
-              rowNames={this.testableDatapointNames}
+            <LocalImportancePlots
+              includedFeatureImportance={this.includedFeatureImportance}
               jointDataset={this.props.jointDataset}
               metadata={this.props.metadata}
-              feature={this.state.selectedFeatureKey}
-              selectedClass={this.state.selectedICEClass}
+              selectedWeightVector={this.props.selectedWeightVector}
+              weightOptions={this.props.weightOptions}
+              weightLabels={this.props.weightLabels}
+              invokeModel={this.props.invokeModel}
+              onWeightChange={this.props.onWeightChange}
+              testableDatapoints={this.testableDatapoints}
+              testableDatapointNames={this.testableDatapointNames}
+              testableDatapointColors={this.testableDatapointColors}
+              featuresOption={this.featuresOption}
+              sortArray={this.state.sortArray}
+              sortingSeriesIndex={this.state.sortingSeriesIndex}
             />
-            <div className={classNames.featureImportanceLegend}>
-              <ComboBox
-                autoComplete={"on"}
-                className={classNames.iceFeatureSelection}
-                options={this.featuresOption}
-                onChange={this.onFeatureSelected}
-                label={localization.Interpret.IcePlot.featurePickerLabel}
-                ariaLabel="feature picker"
-                selectedKey={this.state.selectedFeatureKey}
-                useComboBoxAsMenuWidth={true}
-                calloutProps={FabricStyles.calloutProps}
-                styles={FabricStyles.limitedSizeMenuDropdown}
-              />
-              {this.props.metadata.modelType === ModelTypes.Multiclass && (
-                <ComboBox
-                  autoComplete={"on"}
-                  className={classNames.iceClassSelection}
-                  options={this.classOptions}
-                  onChange={this.onICEClassSelected}
-                  label={localization.Interpret.WhatIfTab.classPickerLabel}
-                  ariaLabel="class picker"
-                  selectedKey={this.state.selectedICEClass}
-                  useComboBoxAsMenuWidth={true}
-                  calloutProps={FabricStyles.calloutProps}
-                  styles={FabricStyles.limitedSizeMenuDropdown}
-                />
-              )}
-            </div>
           </div>
         </div>
-      );
-    }
-
-    const secondaryPlotChoices = [
-      {
-        key: WhatIfConstants.featureImportanceKey,
-        text: localization.Interpret.WhatIfTab.featureImportancePlot
-      },
-      {
-        key: WhatIfConstants.IceKey,
-        text: localization.Interpret.WhatIfTab.icePlot
-      }
-    ];
-    return (
-      <div id="subPlotContainer">
-        {this.props.invokeModel ? (
-          <div className={classNames.choiceBoxArea} id="subPlotChoice">
-            <Text variant="medium" className={classNames.boldText}>
-              {localization.Interpret.WhatIfTab.showLabel}
-            </Text>
-            <ChoiceGroup
-              className={classNames.choiceGroup}
-              styles={{
-                flexContainer: classNames.choiceGroupFlexContainer
-              }}
-              options={secondaryPlotChoices}
-              selectedKey={this.state.secondaryChartChoice}
-              onChange={this.setSecondaryChart}
-            />
-          </div>
-        ) : (
-          <Label>
-            {localization.Interpret.WhatIfTab.localFeatureImportanceForPoint}
-          </Label>
-        )}
-        {secondaryPlot}
       </div>
     );
   }
-  private setTopK = (newValue: number): void => {
-    this.setState({ topK: newValue });
-  };
 
   private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -955,61 +618,6 @@ export class WhatIfTab extends React.PureComponent<
       .reverse();
   }
 
-  private onFeatureSelected = (
-    _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    this.setState({ selectedFeatureKey: item.key as string });
-  };
-
-  private onICEClassSelected = (
-    _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    this.setState({ selectedICEClass: item.key as number });
-  };
-
-  private setSortIndex = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    const newIndex = item.key as number;
-    const sortArray = ModelExplanationUtils.getSortIndices(
-      this.includedFeatureImportance[newIndex].unsortedAggregateY
-    ).reverse();
-    this.setState({ sortArray, sortingSeriesIndex: newIndex });
-  };
-
-  private setWeightOption = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    const newIndex = item.key as WeightVectorOption;
-    this.props.onWeightChange(newIndex);
-  };
-
-  private setSecondaryChart = (
-    _event?: React.FormEvent,
-    item?: IChoiceGroupOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    this.setState({ secondaryChartChoice: item.key });
-  };
-
   private setSelectedIndex = (
     _event: React.FormEvent,
     item?: IDropdownOption
@@ -1017,14 +625,6 @@ export class WhatIfTab extends React.PureComponent<
     if (item?.key !== undefined) {
       this.setTemporaryPointToCopyOfDatasetPoint(item.key as number);
     }
-  };
-
-  private toggleCrossClassInfo = (): void => {
-    this.setState({ crossClassInfoVisible: !this.state.crossClassInfoVisible });
-  };
-
-  private toggleICETooltip = (): void => {
-    this.setState({ iceTooltipVisible: !this.state.iceTooltipVisible });
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {

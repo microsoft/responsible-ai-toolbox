@@ -28,8 +28,8 @@ export interface ICohortListState {
 export interface ICohortListItem {
   key: number;
   name: string;
-  coverage: number;
-  errorRate: number;
+  coverage: string;
+  errorRate: string;
 }
 
 const focusTrapZoneProps: IFocusTrapZoneProps = {
@@ -119,8 +119,8 @@ export class CohortList extends React.Component<
     const allItems = this.props.cohorts.map(
       (errorCohort: ErrorCohort, index: number) => {
         return {
-          coverage: errorCohort.errorCoverage,
-          errorRate: errorCohort.errorRate,
+          coverage: errorCohort.errorCoverage.toFixed(2),
+          errorRate: errorCohort.errorRate.toFixed(2),
           key: index,
           name: errorCohort.cohort.name
         };

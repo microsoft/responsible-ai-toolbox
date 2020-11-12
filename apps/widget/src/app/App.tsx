@@ -4,6 +4,7 @@
 import React from "react";
 
 import { config } from "./config";
+import { ErrorAnalysis } from "./ErrorAnalysis";
 import { Fairness } from "./Fairness";
 import { Interpret } from "./Interpret";
 
@@ -14,6 +15,8 @@ export class App extends React.Component {
         return <Fairness />;
       case "Interpret":
         return <Interpret />;
+      case "ErrorAnalysis":
+        return <ErrorAnalysis />;
       default:
         return "Not Found";
     }
