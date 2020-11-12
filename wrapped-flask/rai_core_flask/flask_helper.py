@@ -22,10 +22,9 @@ except ModuleNotFoundError:
 class FlaskHelper(object):
     """FlaskHelper is a class for common Flask utilities used in dashboards."""
 
-    app = Flask(__name__)
-    CORS(app)
-
     def __init__(self, ip=None, port=None):
+        self.app = Flask(__name__)
+        CORS(self.app)
         self.port = port
         self.ip = ip
         # dictionary to store arbitrary state for use by consuming classes
