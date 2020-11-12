@@ -17,6 +17,8 @@ CATEGORY1 = "category1"
 CATEGORY2 = "category2"
 FALSE_COUNT = "falseCount"
 COUNT = "count"
+INTERVAL_MIN = "intervalMin"
+INTERVAL_MAX = "intervalMax"
 
 
 class TreeSide(str, Enum):
@@ -285,8 +287,6 @@ class ErrorAnalysisDashboardInput:
             surrogate.fit(dataset_sub_features, diff)
             json_tree = self.traverse(surrogate.tree_, 0, [],
                                       dataset_sub_names)
-            print(json_tree)
-            print(self.dashboard_input[interface.FEATURE_NAMES])
             return {
                 WidgetRequestResponseConstants.DATA: json_tree
             }
@@ -374,6 +374,8 @@ class ErrorAnalysisDashboardInput:
                                                     return_counts=True)
                     json_matrix = self.json_matrix_1d(values, val_err, counts,
                                                       counts_err)
+                print("json matrix: ")
+                print(json_matrix)
             return {
                 WidgetRequestResponseConstants.DATA: json_matrix
             }
@@ -390,33 +392,42 @@ class ErrorAnalysisDashboardInput:
     def json_matrix_2d(self, categories1, categories2, matrix_counts,
                        matrix_err_counts):
         json_matrix = []
-        for row_index in range(matrix_counts.shape[0]):
+        for row_index in range(len(categories1)):
             json_matrix_category = []
             cat1 = categories1[row_index]
-            json_matrix_category.append({
-                CATEGORY1: str(cat1)
-            })
-            for col_index in range(matrix_counts.shape[1]):
+            categoryData = {CATEGORY1: str(cat1)}
+            if isinstance(categories1, pd.IntervalIndex):
+                categoryData[INTERVAL_MIN] = cat1.left
+                categoryData[INTERVAL_MAX] = cat1.right
+            json_matrix_category.append(categoryData)
+            for col_index in range(len(categories2)):
                 cat2 = categories2[col_index]
-                index_exists = cat1 in matrix_err_counts.index
-                col_exists = cat2 in matrix_err_counts.columns
+                index_exists_err = cat1 in matrix_err_counts.index
+                col_exists_err = cat2 in matrix_err_counts.columns
                 false_count = 0
-                if index_exists and col_exists:
+                if index_exists_err and col_exists_err:
                     false_count = int(matrix_err_counts.loc[cat1, cat2])
+                index_exists = cat1 in matrix_counts.index
+                col_exists = cat2 in matrix_counts.columns
+                total_count = 0
+                if index_exists and col_exists:
+                    total_count = int(matrix_counts.loc[cat1, cat2])
                 json_matrix_category.append({
                     FALSE_COUNT: false_count,
-                    COUNT: int(matrix_counts.iloc[row_index, col_index])
+                    COUNT: total_count
                 })
             json_matrix.append(json_matrix_category)
 
         json_matrix_category_end = []
         json_matrix_category_end.append({
-            CATEGORY1: matrix_counts.shape[0]
+            CATEGORY1: len(categories1)
         })
-        for category in categories2:
-            json_matrix_category_end.append({
-                CATEGORY2: str(category)
-            })
+        for cat2 in categories2:
+            categoryData = {CATEGORY2: str(cat2)}
+            if isinstance(categories2, pd.IntervalIndex):
+                categoryData[INTERVAL_MIN] = cat2.left
+                categoryData[INTERVAL_MAX] = cat2.right
+            json_matrix_category_end.append(categoryData)
         json_matrix.append(json_matrix_category_end)
         return json_matrix
 
@@ -440,10 +451,12 @@ class ErrorAnalysisDashboardInput:
         json_matrix_category1.append({
             CATEGORY1: 1
         })
-        for category in categories:
-            json_matrix_category1.append({
-                CATEGORY2: str(category)
-            })
+        for cat2 in categories:
+            categoryData = {CATEGORY2: str(cat2)}
+            if isinstance(categories, pd.IntervalIndex):
+                categoryData[INTERVAL_MIN] = cat2.left
+                categoryData[INTERVAL_MAX] = cat2.right
+            json_matrix_category1.append(categoryData)
         json_matrix.append(json_matrix_category1)
         return json_matrix
 
@@ -481,15 +494,15 @@ class ErrorAnalysisDashboardInput:
             parent_node_name = feature_names[tree.feature[parent]]
             parent_threshold = float(tree.threshold[parent])
             if side == TreeSide.RightChild:
-                method = "less and equal"
-                arg = parent_threshold
-                condition = "{} <= {:.2f}".format(parent_node_name,
-                                                  parent_threshold)
-            elif side == TreeSide.LeftChild:
                 method = "greater"
                 arg = parent_threshold
                 condition = "{} > {:.2f}".format(parent_node_name,
                                                  parent_threshold)
+            elif side == TreeSide.LeftChild:
+                method = "less and equal"
+                arg = parent_threshold
+                condition = "{} <= {:.2f}".format(parent_node_name,
+                                                  parent_threshold)
         json.append({
             "arg": arg,
             "badFeaturesRowCount": 0,

@@ -23,3 +23,17 @@ export interface IFilterContext {
   onDelete: (index: number) => void;
   onUpdate: (filter: IFilter, index: number) => void;
 }
+
+export enum Operations {
+  And = "and",
+  Or = "or"
+}
+
+export type ICompositeFilter =
+  | IFilter
+  | {
+      compositeFilters: ICompositeFilter[];
+      operation: Operations;
+
+      method?: never;
+    };

@@ -17,8 +17,11 @@ import React from "react";
 
 import {
   ViewTypeKeys,
-  ErrorAnalysisOptions
+  ErrorAnalysisOptions,
+  GlobalTabKeys,
+  PredictionTabKeys
 } from "../../ErrorAnalysisDashboard";
+import { ErrorCohort } from "../../ErrorCohort";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 
@@ -30,8 +33,12 @@ export interface IMainMenuProps {
   onFeatureListClick: () => void;
   onSaveCohortClick: () => void;
   onShiftCohortClick: () => void;
+  onWhatIfClick: () => void;
   localUrl: string;
   setErrorDetector: (key: ErrorAnalysisOptions) => void;
+  temporaryCohort: ErrorCohort;
+  activeGlobalTab: GlobalTabKeys;
+  activePredictionTab: PredictionTabKeys;
 }
 
 export interface IMainMenuState {
@@ -42,6 +49,7 @@ const settingsIcon: IIconProps = { iconName: "Settings" };
 const infoIcon: IIconProps = { iconName: "Info" };
 const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 const fullscreenIcon: IIconProps = { iconName: "ScaleVolume" };
+const whatIfIcon: IIconProps = { iconName: "ExploreData" };
 
 const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: {
@@ -110,10 +118,12 @@ export class MainMenu extends React.PureComponent<
       items = [
         {
           commandBarButtonAs: (): any => (
-            <Label styles={labelStyle}>Explanation</Label>
+            <Label styles={labelStyle}>
+              Explanation: {this.props.temporaryCohort.cohort.name}
+            </Label>
           ),
           key: "explanationLabel",
-          text: "Explanation"
+          text: `Explanation: ${this.props.temporaryCohort.cohort.name}`
         }
       ];
     }
@@ -127,6 +137,19 @@ export class MainMenu extends React.PureComponent<
         text: "Fullscreen"
       }
     ];
+    if (
+      this.props.viewType === ViewTypeKeys.ExplanationView &&
+      this.props.activeGlobalTab === GlobalTabKeys.LocalExplanationTab &&
+      this.props.activePredictionTab !== PredictionTabKeys.InspectionTab
+    ) {
+      farItems.push({
+        buttonStyles: buttonStyle,
+        iconProps: whatIfIcon,
+        key: "whatIf",
+        onClick: () => this.props.onWhatIfClick(),
+        text: "What-If"
+      });
+    }
     if (
       this.props.viewType === ViewTypeKeys.ErrorAnalysisView &&
       this.state.selectedOption === ErrorAnalysisOptions.TreeMap

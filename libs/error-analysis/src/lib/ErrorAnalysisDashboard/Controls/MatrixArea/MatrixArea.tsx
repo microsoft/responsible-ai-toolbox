@@ -1,11 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IFilter,
+  ICompositeFilter,
+  Operations,
+  FilterMethods,
+  JointDataset
+} from "@responsible-ai/interpret";
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { mergeStyles, IStyle, ITheme } from "office-ui-fabric-react";
 import React from "react";
+
+import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
 
@@ -15,6 +24,13 @@ export interface IMatrixAreaProps {
   selectedFeature1?: string;
   selectedFeature2?: string;
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  updateSelectedCohort: (
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource,
+    cells: number
+  ) => void;
+  selectedCohort: ErrorCohort;
 }
 
 export interface IMatrixAreaState {
@@ -117,16 +133,26 @@ export class MatrixArea extends React.PureComponent<
                   );
                 }
                 /* Value Cells */
-                const errorRatio = (value.falseCount / value.count) * 100;
-                const bkgcolor = this.colorLookup(errorRatio);
-                const color = this.textColorForBackground(bkgcolor);
-                let styledGradientMatrixCell: IStyle = mergeStyles([
-                  classNames.styledMatrixCell,
-                  {
-                    background: bkgcolor,
-                    color
-                  }
-                ]);
+                let errorRatio = 0;
+                let styledGradientMatrixCell: IStyle =
+                  classNames.styledMatrixCell;
+                if (value.count > 0) {
+                  errorRatio = (value.falseCount / value.count) * 100;
+                  const bkgcolor = this.colorLookup(errorRatio);
+                  const color = this.textColorForBackground(bkgcolor);
+                  styledGradientMatrixCell = mergeStyles([
+                    styledGradientMatrixCell,
+                    {
+                      background: bkgcolor,
+                      color
+                    }
+                  ]);
+                } else {
+                  styledGradientMatrixCell = mergeStyles([
+                    styledGradientMatrixCell,
+                    classNames.nanMatrixCell
+                  ]);
+                }
                 if (
                   this.state.selectedCells !== undefined &&
                   this.state.selectedCells[j + i * row.length]
@@ -206,6 +232,115 @@ export class MatrixArea extends React.PureComponent<
     const index = j + i * rowLength;
     selectedCells[index] = !selectedCells[index];
     this.setState({ selectedCells });
+    // Create a composite filter from the selected cells
+    const compositeFilter = this.createCompositeFilterFromCells(
+      selectedCells,
+      this.state.matrix!
+    );
+    const cells = selectedCells.filter(Boolean).length;
+    this.props.updateSelectedCohort(
+      [],
+      compositeFilter,
+      ErrorDetectorCohortSource.HeatMap,
+      cells
+    );
+  }
+
+  private getKey(feature: string): string {
+    const index = this.props.features.indexOf(feature);
+    return JointDataset.DataLabelRoot + index.toString();
+  }
+
+  private createCompositeFilterFromCells(
+    selectedCells: boolean[],
+    matrix: any[]
+  ): ICompositeFilter[] {
+    const category1Values = [];
+    let cat1HasIntervals = false;
+    let cat2HasIntervals = false;
+    for (let i = 0; i < matrix.length - 1; i++) {
+      const cellCat1 = matrix[i][0];
+      const category1 = cellCat1.category1;
+      if ("intervalMin" in cellCat1 && "intervalMax" in cellCat1) {
+        const minIntervalCat1 = cellCat1.intervalMin;
+        const maxIntervalCat1 = cellCat1.intervalMax;
+        category1Values.push({ category1, maxIntervalCat1, minIntervalCat1 });
+        cat1HasIntervals = true;
+      }
+    }
+    const category2Values = [];
+    const rowLength = matrix[0].length;
+    for (let i = 1; i < rowLength; i++) {
+      const cellCat2 = matrix[matrix.length - 1][i];
+      const category2 = cellCat2.category2;
+      if ("intervalMin" in cellCat2 && "intervalMax" in cellCat2) {
+        const minIntervalCat2 = cellCat2.intervalMin;
+        const maxIntervalCat2 = cellCat2.intervalMax;
+        category2Values.push({ category2, maxIntervalCat2, minIntervalCat2 });
+        cat2HasIntervals = true;
+      }
+    }
+    const multiCellCompositeFilters: ICompositeFilter[] = [];
+    const keyFeature1 = this.getKey(this.props.selectedFeature1!);
+    let keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    for (let i = 0; i < matrix.length - 1; i++) {
+      for (let j = 1; j < rowLength; j++) {
+        const index = j + i * rowLength;
+        const cellCompositeFilters: ICompositeFilter[] = [];
+        if (selectedCells[index]) {
+          if (category1Values.length > 0) {
+            if (cat1HasIntervals) {
+              cellCompositeFilters.push({
+                arg: [
+                  category1Values[i].minIntervalCat1,
+                  category1Values[i].maxIntervalCat1
+                ],
+                column: keyFeature1,
+                method: FilterMethods.InTheRangeOf
+              });
+            } else {
+              cellCompositeFilters.push({
+                arg: [category1Values[i].category1],
+                column: keyFeature1,
+                method: FilterMethods.Equal
+              });
+            }
+          } else {
+            keyFeature2 = keyFeature1;
+          }
+          if (cat2HasIntervals) {
+            cellCompositeFilters.push({
+              arg: [
+                category2Values[j - 1].minIntervalCat2,
+                category2Values[j - 1].maxIntervalCat2
+              ],
+              column: keyFeature2,
+              method: FilterMethods.InTheRangeOf
+            });
+          } else {
+            cellCompositeFilters.push({
+              arg: [category2Values[j - 1].category2],
+              column: keyFeature2,
+              method: FilterMethods.Equal
+            });
+          }
+          const singleCellCompositeFilter: ICompositeFilter = {
+            compositeFilters: cellCompositeFilters,
+            operation: Operations.And
+          };
+          multiCellCompositeFilters.push(singleCellCompositeFilter);
+        }
+      }
+    }
+    const compositeFilters: ICompositeFilter[] = [];
+    if (multiCellCompositeFilters.length > 0) {
+      const multiCompositeFilter: ICompositeFilter = {
+        compositeFilters: multiCellCompositeFilters,
+        operation: Operations.Or
+      };
+      compositeFilters.push(multiCompositeFilter);
+    }
+    return compositeFilters;
   }
 
   private mapRange(

@@ -28,8 +28,8 @@ export const dummyMatrixData = [
       falseCount: 381
     },
     {
-      count: 677,
-      falseCount: 384
+      count: 0,
+      falseCount: 0
     },
     {
       count: 668,

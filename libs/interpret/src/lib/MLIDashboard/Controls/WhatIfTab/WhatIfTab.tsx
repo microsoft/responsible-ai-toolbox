@@ -325,6 +325,7 @@ export class WhatIfTab extends React.PureComponent<
             filterFeatures={this.filterFeatures}
             filteredFeatureList={this.state.filteredFeatureList}
             isPanelOpen={this.state.isPanelOpen}
+            isInPanel={false}
             jointDataset={this.props.jointDataset}
             metadata={this.props.metadata}
             openPanel={this.openPanel}

@@ -12,6 +12,7 @@ import {
   Cohort,
   DatasetExplorerTab,
   GlobalExplanationTab,
+  ICompositeFilter,
   IExplanationModelMetadata,
   IFilter,
   JointDataset,
@@ -43,14 +44,16 @@ import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { Navigation } from "./Controls/Navigation/Navigation";
 import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
 import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
+import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
-import { ErrorCohort } from "./ErrorCohort";
+import { ErrorCohort, ErrorDetectorCohortSource } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export interface IErrorAnalysisDashboardState {
-  cohorts: ErrorCohort[];
   activeGlobalTab: GlobalTabKeys;
+  cohorts: ErrorCohort[];
+  customPoints: Array<{ [key: string]: any }>;
   viewType: ViewTypeKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
@@ -68,7 +71,10 @@ export interface IErrorAnalysisDashboardState {
   openFeatureList: boolean;
   openSaveCohort: boolean;
   openShiftCohort: boolean;
+  openWhatIf: boolean;
+  predictionTab: PredictionTabKeys;
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
   selectedFeatures: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   selectedWeightVector: WeightVectorOption;
@@ -120,6 +126,14 @@ export enum ViewTypeKeys {
 export enum ErrorAnalysisOptions {
   TreeMap = "TreeMap",
   HeatMap = "HeatMap"
+}
+
+export enum PredictionTabKeys {
+  CorrectPredictionTab = "CorrectPredictionTab",
+  IncorrectPredictionTab = "IncorrectPredictionTab",
+  WhatIfDatapointsTab = "WhatIfDatapointsTab",
+  AllSelectedTab = "AllSelectedTab",
+  InspectionTab = "InspectionTab"
 }
 
 export class ErrorAnalysisDashboard extends React.PureComponent<
@@ -400,7 +414,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
+      baseCohort: cohorts[0],
       cohorts,
+      customPoints: [],
       dataChartConfig: undefined,
       dependenceProps: undefined,
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
@@ -416,6 +432,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       openInfoPanel: false,
       openSaveCohort: false,
       openShiftCohort: false,
+      openWhatIf: false,
+      predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
       selectedFeatures: props.features,
       selectedWeightVector:
@@ -456,11 +474,18 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           onShiftCohortClick={(): void =>
             this.setState({ openShiftCohort: true })
           }
+          onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
           localUrl={this.props.localUrl}
           viewType={this.state.viewType}
           setErrorDetector={(key: ErrorAnalysisOptions): void =>
-            this.setState({ errorAnalysisOption: key })
+            this.setState({
+              errorAnalysisOption: key,
+              selectedCohort: this.state.baseCohort
+            })
           }
+          temporaryCohort={this.state.selectedCohort}
+          activeGlobalTab={this.state.activeGlobalTab}
+          activePredictionTab={this.state.predictionTab}
         />
         {this.state.openSaveCohort && (
           <SaveCohort
@@ -468,10 +493,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             onDismiss={(): void => this.setState({ openSaveCohort: false })}
             onSave={(temporaryCohort: ErrorCohort): void =>
               this.setState({
-                cohorts: [...this.state.cohorts, temporaryCohort]
+                baseCohort: temporaryCohort,
+                cohorts: [...this.state.cohorts, temporaryCohort],
+                selectedCohort: temporaryCohort
               })
             }
             temporaryCohort={this.state.selectedCohort}
+            baseCohort={this.state.baseCohort}
             jointDataset={this.state.jointDataset}
           />
         )}
@@ -504,6 +532,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   features={this.props.features}
                   selectedFeatures={this.state.selectedFeatures}
                   errorAnalysisOption={this.state.errorAnalysisOption}
+                  selectedCohort={this.state.selectedCohort}
                 />
               )}
               {this.state.viewType === ViewTypeKeys.ExplanationView && (
@@ -569,6 +598,15 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       weightOptions={this.state.weightVectorOptions}
                       weightLabels={this.state.weightVectorLabels}
                       onWeightChange={this.onWeightVectorChange}
+                      activePredictionTab={this.state.predictionTab}
+                      setActivePredictionTab={(
+                        key: PredictionTabKeys
+                      ): void => {
+                        this.setState({
+                          predictionTab: key
+                        });
+                      }}
+                      customPoints={this.state.customPoints}
                     />
                   )}
                 </div>
@@ -599,6 +637,20 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   this.setState({ openCohortListPanel: false })
                 }
               />
+              <WhatIf
+                isOpen={this.state.openWhatIf}
+                onDismiss={(): void => this.setState({ openWhatIf: false })}
+                currentCohort={this.state.selectedCohort}
+                jointDataset={this.state.jointDataset}
+                metadata={this.state.modelMetadata}
+                invokeModel={this.props.requestPredictions}
+                customPoints={this.state.customPoints}
+                addCustomPoint={(temporaryPoint: {
+                  [key: string]: any;
+                }): void => {
+                  this.state.customPoints.push(temporaryPoint);
+                }}
+              />
             </Layer>
           </Customizer>
           <LayerHost
@@ -614,7 +666,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     );
   }
 
-  private updateSelectedCohort(filters: IFilter[]): void {
+  private updateSelectedCohort(
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    cells = 0
+  ): void {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = filters.map(
       (filter: IFilter): IFilter => {
@@ -627,13 +684,24 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         };
       }
     );
+    let selectedCohortName = "";
+    if (source === ErrorDetectorCohortSource.TreeMap) {
+      selectedCohortName = `${this.state.baseCohort.cohort.name} (${filtersRelabeled.length} filters)`;
+    } else if (source === ErrorDetectorCohortSource.HeatMap) {
+      selectedCohortName = `${this.state.baseCohort.cohort.name} (${cells} cells)`;
+    } else {
+      selectedCohortName = this.state.baseCohort.cohort.name;
+    }
     const cohort: ErrorCohort = new ErrorCohort(
       new Cohort(
-        "Unsaved cohort (base cohort + filters)",
+        selectedCohortName,
         this.state.jointDataset,
-        filtersRelabeled
+        filtersRelabeled,
+        compositeFilters
       ),
-      this.state.jointDataset
+      this.state.jointDataset,
+      cells,
+      source
     );
     this.setState({ selectedCohort: cohort });
   }

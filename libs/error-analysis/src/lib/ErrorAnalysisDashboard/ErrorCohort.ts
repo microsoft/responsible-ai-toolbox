@@ -5,8 +5,15 @@ import {
   Cohort,
   JointDataset,
   IFilter,
-  FilterMethods
+  FilterMethods,
+  ICompositeFilter
 } from "@responsible-ai/interpret";
+
+export enum ErrorDetectorCohortSource {
+  None = "None",
+  TreeMap = "Tree Map",
+  HeatMap = "Heat Map"
+}
 
 export class ErrorCohort {
   public totalAll = 0;
@@ -17,7 +24,12 @@ export class ErrorCohort {
   public totalCohortIncorrect = 0;
   public errorRate = 0;
   public errorCoverage = 0;
-  public constructor(public cohort: Cohort, public jointDataset: JointDataset) {
+  public constructor(
+    public cohort: Cohort,
+    public jointDataset: JointDataset,
+    public cells: number = 0,
+    public source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None
+  ) {
     this.cohort = cohort;
     this.jointDataset = jointDataset;
 
@@ -51,15 +63,29 @@ export class ErrorCohort {
       this.totalCohortIncorrect = this.totalCohort - this.totalCohortCorrect;
     }
     // Calculate error rate
-    this.errorRate = this.totalCohortIncorrect / this.totalCohort;
+    if (this.totalCohort === 0) {
+      this.errorRate = 0;
+    } else {
+      this.errorRate = this.totalCohortIncorrect / this.totalCohort;
+    }
     // Calculate error coverage
-    this.errorCoverage =
-      (this.totalCohortIncorrect / this.totalIncorrect) * 100;
+    if (this.totalIncorrect === 0) {
+      this.errorCoverage = 0;
+    } else {
+      this.errorCoverage =
+        (this.totalCohortIncorrect / this.totalIncorrect) * 100;
+    }
   }
 
-  public filtersToString(): string[] {
-    return this.cohort.filters.map((filter: IFilter): string => {
+  public cohortFiltersToString(filters: IFilter[]): string[] {
+    return filters.map((filter: IFilter): string => {
       let method = "";
+      const label = this.jointDataset.metaDict[filter.column].label;
+      if (filter.method === FilterMethods.InTheRangeOf) {
+        const arg0 = filter.arg[0].toFixed(2);
+        const arg1 = filter.arg[1].toFixed(2);
+        return `${label} in (${arg0}, ${arg1}]`;
+      }
       if (filter.method === FilterMethods.Equal) {
         method = "==";
       } else if (filter.method === FilterMethods.GreaterThan) {
@@ -71,8 +97,36 @@ export class ErrorCohort {
       } else if (filter.method === FilterMethods.LessThanEqualTo) {
         method = "<=";
       }
-      const label = this.jointDataset.metaDict[filter.column].label;
       return `${label} ${method} ${filter.arg[0].toFixed(2)}`;
     });
+  }
+
+  public cohortCompositeFiltersToString(
+    compositeFilters: ICompositeFilter[]
+  ): string[] {
+    return compositeFilters.map((compositeFilter: ICompositeFilter): string => {
+      if (compositeFilter.method) {
+        return this.cohortFiltersToString([compositeFilter as IFilter])[0];
+      }
+      const cohortCompositeFiltersStrings = this.cohortCompositeFiltersToString(
+        compositeFilter.compositeFilters
+      );
+      if (cohortCompositeFiltersStrings.length === 1) {
+        return cohortCompositeFiltersStrings[0];
+      }
+      return cohortCompositeFiltersStrings
+        .map(
+          (cohortCompositeFiltersString) => `(${cohortCompositeFiltersString})`
+        )
+        .join(` ${compositeFilter.operation} `);
+    });
+  }
+
+  public filtersToString(): string[] {
+    const cohortFilters = this.cohortFiltersToString(this.cohort.filters);
+    const cohortCompositeFilters = this.cohortCompositeFiltersToString(
+      this.cohort.compositeFilters
+    );
+    return cohortFilters.concat(cohortCompositeFilters);
   }
 }
