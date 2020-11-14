@@ -23,9 +23,9 @@ class FairnessMetricModule:
         try:
             module = importlib.import_module(module_name)
         except ModuleNotFoundError:
-            raise Exception(MODULE_NOT_INSTALLED_ERROR_MESSAGE \
+            raise Exception(MODULE_NOT_INSTALLED_ERROR_MESSAGE
                             .format(module_name))
-        
+
         try:
             self.MetricFrame = module.MetricFrame
         except AttributeError:
