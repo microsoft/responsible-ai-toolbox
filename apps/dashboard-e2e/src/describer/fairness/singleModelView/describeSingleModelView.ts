@@ -55,10 +55,7 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
       );
 
       // chart dropdown
-      cy.get("#chartSelectionDropdown").should(
-        "contain.text",
-        data.charts[0]
-      );
+      cy.get("#chartSelectionDropdown").should("contain.text", data.charts[0]);
 
       cy.get("#outcomePlot").should("exist");
 
@@ -75,14 +72,16 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
       );
 
       // dropdown switch to other chart
-      cy.get("#chartSelectionDropdown").click();
-      cy.get("#chartSelectionDropdown-list1").click();
+      if (data.charts.length > 1) {
+        cy.get("#chartSelectionDropdown").click();
+        cy.get("#chartSelectionDropdown-list1").click();
 
-      cy.get("#performancePlot").should("exist");
-      cy.get("#chartSelectionDropdown").should(
-        "contain.text",
-        data.charts[1]
-      );
+        cy.get("#performancePlot").should("exist");
+        cy.get("#chartSelectionDropdown").should(
+          "contain.text",
+          data.charts[1]
+        );
+      }
     });
   });
 }
