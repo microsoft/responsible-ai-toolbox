@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSpan } from "apps/dashboard-e2e/src/util/getSpan";
-
+import { getSpan } from "../../../util/getSpan";
 import { IFairnessMetadata } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
