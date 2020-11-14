@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFairnessMetadata } from "../IFairnessMetadata";
 import { getSpan } from "apps/dashboard-e2e/src/util/getSpan";
+
+import { IFairnessMetadata } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
 export function describeModelComparisonView(data: IFairnessMetadata): void {

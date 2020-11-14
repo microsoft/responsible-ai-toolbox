@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import { getSpan } from "apps/dashboard-e2e/src/util/getSpan";
+
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IFairnessMetadata } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
 export function describeSingleModelView(data: IFairnessMetadata): void {
-  describe.only("single model view", () => {
+  describe("single model view", () => {
     const props = {
       chart: (undefined as unknown) as ScatterChart
     };
