@@ -563,6 +563,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       }
                       jointDataset={this.state.jointDataset}
                       features={this.props.features}
+                      metadata={this.state.modelMetadata}
+                      invokeModel={this.props.requestPredictions}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
                     />
                   )}
                 </div>

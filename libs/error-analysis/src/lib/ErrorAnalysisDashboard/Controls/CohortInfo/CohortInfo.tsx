@@ -12,6 +12,7 @@ import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
+import { PredictionPath } from "../PredictionPath/PredictionPath";
 
 import { cohortInfoStyles } from "./CohortInfo.styles";
 
@@ -124,7 +125,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div className={classNames.header}>Prediction path (filters)</div>
-            <div>TBD</div>
+            <PredictionPath temporaryCohort={this.props.currentCohort} />
           </div>
         </div>
       </Panel>
