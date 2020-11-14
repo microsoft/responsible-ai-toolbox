@@ -9,7 +9,8 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IInstanceViewStyles {
-  pivotLabelWrapper: IStyle;
+  choiceGroupContainerStyle: IStyle;
+  choiceItemRootStyle: IStyle;
   page: IStyle;
 }
 
@@ -18,16 +19,18 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IInstanceViewStyles>({
+    choiceGroupContainerStyle: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-start"
+    },
+    choiceItemRootStyle: {
+      padding: "0px 20px 0px 20px"
+    },
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       maxHeight: "1000px"
-    },
-    pivotLabelWrapper: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      padding: "5px 60px 5px 60px"
     }
   });
 };

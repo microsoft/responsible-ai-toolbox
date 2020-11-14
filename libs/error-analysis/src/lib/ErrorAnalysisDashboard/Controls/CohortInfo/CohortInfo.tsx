@@ -1,16 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFocusTrapZoneProps } from "office-ui-fabric-react";
+import { JointDataset } from "@responsible-ai/interpret";
+import {
+  DefaultButton,
+  IFocusTrapZoneProps,
+  IStackTokens
+} from "office-ui-fabric-react";
 import { Panel } from "office-ui-fabric-react/lib/Panel";
+import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
+
+import { ErrorCohort } from "../../ErrorCohort";
+import { PredictionPath } from "../PredictionPath/PredictionPath";
 
 import { cohortInfoStyles } from "./CohortInfo.styles";
 
 export interface ICohortInfoProps {
   isOpen: boolean;
+  currentCohort: ErrorCohort;
+  jointDataset: JointDataset;
   // hostId: string
   onDismiss: () => void;
+  onSaveCohortClick: () => void;
 }
 
 const focusTrapZoneProps: IFocusTrapZoneProps = {
@@ -18,9 +30,15 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
   isClickableOutsideFocusTrap: true
 };
 
+const alignmentStackTokens: IStackTokens = {
+  childrenGap: 5,
+  padding: 2
+};
+
 export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
   public render(): React.ReactNode {
     const classNames = cohortInfoStyles();
+
     return (
       <Panel
         headerText="Cohort Information"
@@ -35,50 +53,79 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         <div className={classNames.divider}></div>
         <div className={classNames.section}>
           <div className={classNames.subsection}>
-            <div className={classNames.header}>Current cohort</div>
-            <div>All Data (Treemap)</div>
+            <DefaultButton
+              text="Save Cohort"
+              onClick={(): any => this.props.onSaveCohortClick()}
+            />
           </div>
-        </div>
-        <div className={classNames.divider}></div>
-        <div className={classNames.section}>
+          <div className={classNames.section}></div>
           <div className={classNames.subsection}>
-            <div className={classNames.header}>Overview</div>
-            <div className="padding-top-xsm">
-              <div className="coverage">
-                <div className="flex-container">
-                  <div className="metric padding-top-xsm">
-                    <div className="font-size-20 semibold">{5.5}</div>
-                    <div className="font-size-12 text-grey">Coverage(%)</div>
-                  </div>
-                  {/* <img src={CoverageImg} className="legned" alt=""/> */}
-                </div>
-              </div>
-              <div className="errorRate marginTop-sm">
-                <div className="flex-container">
-                  <div className="metric padding-top-xsm">
-                    <div className="font-size-20 semibold">{5.5}</div>
-                    <div className="font-size-12 text-grey">Error Rate(%)</div>
-                  </div>
-                  {/* <img src={ErrorRateImg} className="legned" alt=""/> */}
-                </div>
-              </div>
+            <div className={classNames.header}>Basic Information</div>
+            {this.props.currentCohort.cohort.name !== "All data" && (
+              <div>{this.props.currentCohort.cohort.name}</div>
+            )}
+            <div>
+              All data ({this.props.currentCohort.cohort.filters.length}{" "}
+              filters)
             </div>
           </div>
         </div>
         <div className={classNames.divider}></div>
         <div className={classNames.section}>
           <div className={classNames.subsection}>
-            <div className={classNames.header}>Prediction path</div>
-            <div>TBD</div>
+            <div>Instances in base cohort</div>
+            <Stack>
+              <Stack horizontal tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>Total</div>
+                <div className={classNames.tableData}>
+                  {this.props.currentCohort.totalAll}
+                </div>
+              </Stack>
+              <Stack horizontal tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>Correct</div>
+                <div className={classNames.tableData}>
+                  {this.props.currentCohort.totalCorrect}
+                </div>
+              </Stack>
+              <Stack horizontal tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>Incorrect</div>
+                <div className={classNames.tableData}>
+                  {this.props.currentCohort.totalIncorrect}
+                </div>
+              </Stack>
+            </Stack>
+          </div>
+        </div>
+        <div className={classNames.section}>
+          <div className={classNames.subsection}>
+            <div>Instances in the selected cohort</div>
+            <Stack>
+              <Stack horizontal tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>Total</div>
+                <div className={classNames.tableData}>
+                  {this.props.currentCohort.totalCohort}
+                </div>
+              </Stack>
+              <Stack horizontal tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>Correct</div>
+                <div className={classNames.tableData}>
+                  {this.props.currentCohort.totalCohortCorrect}
+                </div>
+              </Stack>
+              <Stack horizontal tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>Incorrect</div>
+                <div className={classNames.tableData}>
+                  {this.props.currentCohort.totalCohortIncorrect}
+                </div>
+              </Stack>
+            </Stack>
           </div>
         </div>
         <div className={classNames.divider}></div>
         <div className={classNames.section}>
           <div className={classNames.subsection}>
-            <div className={classNames.header}>
-              Feature importance (Error rates)
-            </div>
-            <div>TBD</div>
+            <div className={classNames.header}>Prediction path (filters)</div>
+            <PredictionPath temporaryCohort={this.props.currentCohort} />
           </div>
         </div>
       </Panel>

@@ -13,6 +13,7 @@ import {
   DatasetExplorerTab,
   GlobalExplanationTab,
   IExplanationModelMetadata,
+  IFilter,
   JointDataset,
   ModelTypes,
   WeightVectorOption,
@@ -34,18 +35,21 @@ import { Customizer, getId } from "office-ui-fabric-react/lib/Utilities";
 import React from "react";
 
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
-import { CohortSettings } from "./Controls/CohortSettings/CohortSettings";
+import { CohortList } from "./Controls/CohortList/CohortList";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { Navigation } from "./Controls/Navigation/Navigation";
+import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
+import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
+import { ErrorCohort } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export interface IErrorAnalysisDashboardState {
-  cohorts: Cohort[];
+  cohorts: ErrorCohort[];
   activeGlobalTab: GlobalTabKeys;
   viewType: ViewTypeKeys;
   jointDataset: JointDataset;
@@ -60,8 +64,11 @@ export interface IErrorAnalysisDashboardState {
   sortVector?: number[];
   editingCohortIndex?: number;
   openInfoPanel: boolean;
-  openSettingsPanel: boolean;
+  openCohortListPanel: boolean;
   openFeatureList: boolean;
+  openSaveCohort: boolean;
+  openShiftCohort: boolean;
+  selectedCohort: ErrorCohort;
   selectedFeatures: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   selectedWeightVector: WeightVectorOption;
@@ -368,10 +375,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     const globalProps = ErrorAnalysisDashboard.buildGlobalProperties(props);
     // consider taking filters in as param arg for programatic users
     const cohorts = [
-      new Cohort(
-        localization.ErrorAnalysis.Cohort.defaultLabel,
-        jointDataset,
-        []
+      new ErrorCohort(
+        new Cohort(
+          localization.ErrorAnalysis.Cohort.defaultLabel,
+          jointDataset,
+          []
+        ),
+        jointDataset
       )
     ];
     const weightVectorLabels = {
@@ -401,9 +411,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       jointDataset,
       modelChartConfig: undefined,
       modelMetadata,
+      openCohortListPanel: false,
       openFeatureList: false,
       openInfoPanel: false,
-      openSettingsPanel: false,
+      openSaveCohort: false,
+      openShiftCohort: false,
+      selectedCohort: cohorts[0],
       selectedFeatures: props.features,
       selectedWeightVector:
         modelMetadata.modelType === ModelTypes.Multiclass
@@ -418,8 +431,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const cohortIDs = this.state.cohorts.map((cohort) =>
-      cohort.getCohortID().toString()
+    const cohortIDs = this.state.cohorts.map((errorCohort) =>
+      errorCohort.cohort.getCohortID().toString()
     );
     const classNames = ErrorAnalysisDashboardStyles();
     return (
@@ -431,11 +444,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         <MainMenu
           viewExplanation={this.viewExplanation.bind(this)}
           onInfoPanelClick={(): void => this.setState({ openInfoPanel: true })}
-          onSettingsPanelClick={(): void =>
-            this.setState({ openSettingsPanel: true })
+          onCohortListPanelClick={(): void =>
+            this.setState({ openCohortListPanel: true })
           }
           onFeatureListClick={(): void =>
             this.setState({ openFeatureList: true })
+          }
+          onSaveCohortClick={(): void =>
+            this.setState({ openSaveCohort: true })
+          }
+          onShiftCohortClick={(): void =>
+            this.setState({ openShiftCohort: true })
           }
           localUrl={this.props.localUrl}
           viewType={this.state.viewType}
@@ -443,6 +462,31 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             this.setState({ errorAnalysisOption: key })
           }
         />
+        {this.state.openSaveCohort && (
+          <SaveCohort
+            isOpen={this.state.openSaveCohort}
+            onDismiss={(): void => this.setState({ openSaveCohort: false })}
+            onSave={(temporaryCohort: ErrorCohort): void =>
+              this.setState({
+                cohorts: [...this.state.cohorts, temporaryCohort]
+              })
+            }
+            temporaryCohort={this.state.selectedCohort}
+            jointDataset={this.state.jointDataset}
+          />
+        )}
+        {this.state.openShiftCohort && (
+          <ShiftCohort
+            isOpen={this.state.openShiftCohort}
+            onDismiss={(): void => this.setState({ openShiftCohort: false })}
+            onApply={(selectedCohort: ErrorCohort): void =>
+              this.setState({
+                selectedCohort
+              })
+            }
+            cohorts={this.state.cohorts}
+          />
+        )}
         <div>
           <Customizer settings={{ hostId: this.layerHostId }}>
             <Layer>
@@ -456,6 +500,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   }
                   getTreeNodes={this.props.requestDebugML}
                   getMatrix={this.props.requestMatrix}
+                  updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                   features={this.props.features}
                   selectedFeatures={this.state.selectedFeatures}
                   errorAnalysisOption={this.state.errorAnalysisOption}
@@ -482,7 +527,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     <DatasetExplorerTab
                       jointDataset={this.state.jointDataset}
                       metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
+                      cohorts={this.state.cohorts.map(
+                        (errorCohort) => errorCohort.cohort
+                      )}
                     />
                   )}
                   {this.state.activeGlobalTab ===
@@ -494,7 +541,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       isGlobalDerivedFromLocal={
                         this.state.isGlobalImportanceDerivedFromLocal
                       }
-                      cohorts={this.state.cohorts}
+                      cohorts={this.state.cohorts.map(
+                        (errorCohort) => errorCohort.cohort
+                      )}
                       cohortIDs={cohortIDs}
                       selectedWeightVector={this.state.selectedWeightVector}
                       weightOptions={this.state.weightVectorOptions}
@@ -514,13 +563,24 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       }
                       jointDataset={this.state.jointDataset}
                       features={this.props.features}
+                      metadata={this.state.modelMetadata}
+                      invokeModel={this.props.requestPredictions}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
                     />
                   )}
                 </div>
               )}
               <CohortInfo
                 isOpen={this.state.openInfoPanel}
+                currentCohort={this.state.selectedCohort}
+                jointDataset={this.state.jointDataset}
                 onDismiss={(): void => this.setState({ openInfoPanel: false })}
+                onSaveCohortClick={(): void =>
+                  this.setState({ openSaveCohort: true })
+                }
               />
               <FeatureList
                 isOpen={this.state.openFeatureList}
@@ -532,10 +592,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 }
                 features={this.props.features}
               />
-              <CohortSettings
-                isOpen={this.state.openSettingsPanel}
+              <CohortList
+                isOpen={this.state.openCohortListPanel}
+                cohorts={this.state.cohorts}
                 onDismiss={(): void =>
-                  this.setState({ openSettingsPanel: false })
+                  this.setState({ openCohortListPanel: false })
                 }
               />
             </Layer>
@@ -551,6 +612,30 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         </div>
       </div>
     );
+  }
+
+  private updateSelectedCohort(filters: IFilter[]): void {
+    // Need to relabel the filter names based on index in joint dataset
+    const filtersRelabeled = filters.map(
+      (filter: IFilter): IFilter => {
+        const index = this.props.features.indexOf(filter.column);
+        const key = JointDataset.DataLabelRoot + index.toString();
+        return {
+          arg: filter.arg,
+          column: key,
+          method: filter.method
+        };
+      }
+    );
+    const cohort: ErrorCohort = new ErrorCohort(
+      new Cohort(
+        "Unsaved cohort (base cohort + filters)",
+        this.state.jointDataset,
+        filtersRelabeled
+      ),
+      this.state.jointDataset
+    );
+    this.setState({ selectedCohort: cohort });
   }
 
   private onConfigChanged(newConfig: IGenericChartProps): void {
@@ -580,7 +665,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private setSortVector(): void {
     this.setState({
       sortVector: ModelExplanationUtils.getSortIndices(
-        this.state.cohorts[0].calculateAverageImportance()
+        this.state.cohorts[0].cohort.calculateAverageImportance()
       ).reverse()
     });
   }
@@ -595,7 +680,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
-    this.state.cohorts.forEach((cohort) => cohort.clearCachedImportances());
+    this.state.cohorts.forEach((errorCohort) =>
+      errorCohort.cohort.clearCachedImportances()
+    );
     this.setState({ selectedWeightVector: weightOption });
   };
 }

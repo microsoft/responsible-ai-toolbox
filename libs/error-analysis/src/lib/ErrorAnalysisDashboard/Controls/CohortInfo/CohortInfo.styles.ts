@@ -14,6 +14,7 @@ export interface ICohortInfoStyles {
   section: IStyle;
   subsection: IStyle;
   header: IStyle;
+  tableData: IStyle;
 }
 
 export const cohortInfoStyles: () => IProcessedStyleSet<
@@ -45,6 +46,9 @@ export const cohortInfoStyles: () => IProcessedStyleSet<
       paddingLeft: "20px",
       paddingTop: "10px !important"
     },
-    subsection: {}
+    subsection: {},
+    tableData: {
+      fontSize: "16px"
+    }
   });
 };

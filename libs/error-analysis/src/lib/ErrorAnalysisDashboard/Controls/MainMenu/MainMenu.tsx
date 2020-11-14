@@ -26,8 +26,10 @@ export interface IMainMenuProps {
   viewExplanation: () => void;
   viewType: ViewTypeKeys;
   onInfoPanelClick: () => void;
-  onSettingsPanelClick: () => void;
+  onCohortListPanelClick: () => void;
   onFeatureListClick: () => void;
+  onSaveCohortClick: () => void;
+  onShiftCohortClick: () => void;
   localUrl: string;
   setErrorDetector: (key: ErrorAnalysisOptions) => void;
 }
@@ -142,7 +144,28 @@ export class MainMenu extends React.PureComponent<
         buttonStyles: buttonStyle,
         iconProps: settingsIcon,
         key: "cohortSettings",
-        onClick: (): any => this.props.onSettingsPanelClick(),
+        subMenuProps: {
+          items: [
+            {
+              iconProps: { iconName: "Import" },
+              key: "shiftCohort",
+              onClick: (): any => this.props.onShiftCohortClick(),
+              text: "Shift Cohort"
+            },
+            {
+              iconProps: { iconName: "Save" },
+              key: "saveCohort",
+              onClick: (): any => this.props.onSaveCohortClick(),
+              text: "Save Cohort"
+            },
+            {
+              iconProps: { iconName: "PageList" },
+              key: "cohortList",
+              onClick: (): any => this.props.onCohortListPanelClick(),
+              text: "Cohort List"
+            }
+          ]
+        },
         text: "Cohort Settings"
       },
       {

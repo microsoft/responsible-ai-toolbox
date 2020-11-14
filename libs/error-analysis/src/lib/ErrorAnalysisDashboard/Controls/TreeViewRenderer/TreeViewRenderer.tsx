@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IFilter } from "@responsible-ai/interpret";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -31,6 +32,7 @@ export interface ITreeViewRendererProps {
   messages?: HelpMessageDict;
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  updateSelectedCohort: (filters: IFilter[]) => void;
 }
 
 export interface ITreeViewRendererState {
@@ -507,7 +509,7 @@ export class TreeViewRenderer extends React.PureComponent<
   private resizeFunc = (
     state: Readonly<ITreeViewRendererState>
   ): ITreeViewRendererState => {
-    const height = 500;
+    const height = 300;
     const width = 800;
     //   if (document.querySelector("#mainFrame")) {
     //     height = document.querySelector("#mainFrame")!.clientHeight;
@@ -590,17 +592,15 @@ export class TreeViewRenderer extends React.PureComponent<
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
       const selectedNode = state.selectedNode;
-      let root = state.root;
       const nodeDetail = state.nodeDetail;
       nodeDetail.showSelected = { opacity: 0 };
       if (selectedNode) {
         this.unselectParentNodes(selectedNode);
-        root = this.getRoot(selectedNode);
       }
       return {
         nodeDetail,
         request: state.request,
-        root,
+        root: state.root,
         rootErrorSize: state.rootErrorSize,
         rootLocalError: state.rootLocalError,
         rootSize: state.rootSize,
@@ -612,6 +612,9 @@ export class TreeViewRenderer extends React.PureComponent<
       };
     };
     this.setState(clearSelectionFunc);
+    // Clear filters
+    const filters: IFilter[] = [];
+    this.props.updateSelectedCohort(filters);
   }
 
   private bkgClick(): void {
@@ -635,11 +638,16 @@ export class TreeViewRenderer extends React.PureComponent<
     this.unselectParentNodes(d.parent!);
   }
 
-  private getRoot(d: HierarchyPointNode<any>): HierarchyPointNode<any> {
-    if (!d.parent) {
-      return d;
+  private getFilters(d: HierarchyPointNode<any> | TreeNode): IFilter[] {
+    if (!d || !d.parent) {
+      return [];
     }
-    return this.getRoot(d.parent!);
+    const filter = {
+      arg: [d.data!.arg],
+      column: d.parent!.data!.nodeName,
+      method: d.data!.method
+    };
+    return [filter, ...this.getFilters(d.parent!)];
   }
 
   private select(
@@ -655,6 +663,10 @@ export class TreeViewRenderer extends React.PureComponent<
         this.unselectParentNodes(state.selectedNode);
       }
       this.selectParentNodes(node);
+
+      // Get filters and update
+      const filters = this.getFilters(node);
+      this.props.updateSelectedCohort(filters);
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = {

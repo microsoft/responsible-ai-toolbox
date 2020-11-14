@@ -1,85 +1,163 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/interpret";
+import {
+  JointDataset,
+  IExplanationModelMetadata,
+  WeightVectorOption
+} from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
-  IPivotItemProps,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
-  ITheme
+  IChoiceGroupOption,
+  IStackItemStyles,
+  ITheme,
+  PrimaryButton
 } from "office-ui-fabric-react";
-import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
+import { ChoiceGroup } from "office-ui-fabric-react/lib/ChoiceGroup";
+import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { TabularDataView } from "../TabularDataView";
+import { InspectionView } from "../InspectionView/InspectionView";
+import { DataViewKeys, TabularDataView } from "../TabularDataView";
 
 import { InstanceViewStyles } from "./InstanceView.styles";
 
-// require('./InstanceView.css');
+export interface SelectionDetails {
+  selectedDatasetIndexes: number[];
+  selectedCorrectDatasetIndexes: number[];
+  selectedIncorrectDatasetIndexes: number[];
+  selectedAllSelectedIndexes: number[];
+}
 
 export interface IInstanceViewProps {
   theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;
+  metadata: IExplanationModelMetadata;
+  invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  selectedWeightVector: WeightVectorOption;
+  weightOptions: WeightVectorOption[];
+  weightLabels: any;
+  onWeightChange: (option: WeightVectorOption) => void;
 }
 
 export interface IInstanceViewState {
-  features: string[];
   activePredictionTab: PredictionTabKeys;
+  selectionDetails: SelectionDetails;
 }
 
 enum PredictionTabKeys {
   CorrectPredictionTab = "CorrectPredictionTab",
-  WrongPredictionTab = "WrongPredictionTab"
+  IncorrectPredictionTab = "IncorrectPredictionTab",
+  WhatIfDatapointsTab = "WhatIfDatapointsTab",
+  AllSelectedTab = "AllSelectedTab",
+  InspectionTab = "InspectionTab"
 }
+
+const inspectButtonStyles: IStackItemStyles = {
+  root: {
+    paddingRight: 20
+  }
+};
 
 export class InstanceView extends React.PureComponent<
   IInstanceViewProps,
   IInstanceViewState
 > {
-  private static readonly classNames = mergeStyleSets({
-    pivotWrapper: {
-      display: "contents"
-    }
-  });
-
-  private pivotItems: IPivotItemProps[] = [];
+  private choiceItems: IChoiceGroupOption[] = [];
   public constructor(props: IInstanceViewProps) {
     super(props);
     this.state = {
       activePredictionTab: PredictionTabKeys.CorrectPredictionTab,
-      features: this.props.features
+      selectionDetails: {
+        selectedAllSelectedIndexes: [],
+        selectedCorrectDatasetIndexes: [],
+        selectedDatasetIndexes: [],
+        selectedIncorrectDatasetIndexes: []
+      }
     };
 
-    this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.correctPrediction,
-      itemKey: PredictionTabKeys.CorrectPredictionTab
+    const classNames = InstanceViewStyles();
+    this.choiceItems.push({
+      key: PredictionTabKeys.CorrectPredictionTab,
+      styles: {
+        root: classNames.choiceItemRootStyle
+      },
+      text: localization.ErrorAnalysis.correctPrediction
     });
-    this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.wrongPrediction,
-      itemKey: PredictionTabKeys.WrongPredictionTab
+    this.choiceItems.push({
+      key: PredictionTabKeys.IncorrectPredictionTab,
+      styles: {
+        root: classNames.choiceItemRootStyle
+      },
+      text: localization.ErrorAnalysis.incorrectPrediction
+    });
+    this.choiceItems.push({
+      key: PredictionTabKeys.WhatIfDatapointsTab,
+      styles: {
+        root: classNames.choiceItemRootStyle
+      },
+      text: localization.ErrorAnalysis.whatIfDatapoints
+    });
+    this.choiceItems.push({
+      key: PredictionTabKeys.AllSelectedTab,
+      styles: {
+        root: classNames.choiceItemRootStyle
+      },
+      text: localization.ErrorAnalysis.allSelected
     });
   }
 
   public render(): React.ReactNode {
     const classNames = InstanceViewStyles();
+    if (this.state.activePredictionTab === PredictionTabKeys.InspectionTab) {
+      return (
+        <div>
+          <InspectionView
+            theme={this.props.theme}
+            messages={this.props.messages}
+            features={this.props.features}
+            jointDataset={this.props.jointDataset}
+            inspectedIndexes={
+              this.state.selectionDetails.selectedAllSelectedIndexes
+            }
+            metadata={this.props.metadata}
+            selectedWeightVector={this.props.selectedWeightVector}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            invokeModel={this.props.invokeModel}
+            onWeightChange={this.props.onWeightChange}
+          />
+        </div>
+      );
+    }
     return (
-      <div className={InstanceView.classNames.pivotWrapper}>
-        <Pivot
-          selectedKey={this.state.activePredictionTab}
-          onLinkClick={this._handlePredictionTabClick.bind(this)}
-          linkSize={PivotLinkSize.normal}
-          headersOnly={true}
-          styles={{ root: classNames.pivotLabelWrapper }}
-        >
-          {this.pivotItems.map((props) => (
-            <PivotItem key={props.itemKey} {...props} />
-          ))}
-        </Pivot>
+      <div>
+        <Stack>
+          <Stack horizontal horizontalAlign="space-between">
+            <Stack.Item align="start">
+              <ChoiceGroup
+                selectedKey={this.state.activePredictionTab}
+                onChange={this.handlePredictionTabClick.bind(this)}
+                styles={{
+                  flexContainer: classNames.choiceGroupContainerStyle
+                }}
+                options={this.choiceItems}
+              />
+            </Stack.Item>
+            <Stack.Item align="end" styles={inspectButtonStyles}>
+              <PrimaryButton
+                text="Inspect"
+                onClick={this.inspect.bind(this)}
+                allowDisabledFocus
+                disabled={false}
+                checked={false}
+              />
+            </Stack.Item>
+          </Stack>
+        </Stack>
         {this.state.activePredictionTab ===
           PredictionTabKeys.CorrectPredictionTab && (
           <div className="tabularDataView">
@@ -88,17 +166,46 @@ export class InstanceView extends React.PureComponent<
               messages={this.props.messages}
               features={this.props.features}
               jointDataset={this.props.jointDataset}
+              dataView={DataViewKeys.CorrectInstances}
+              selectedIndexes={
+                this.state.selectionDetails.selectedCorrectDatasetIndexes
+              }
+              setSelectedIndexes={this.setCorrectSelectedIndexes.bind(this)}
             />
           </div>
         )}
         {this.state.activePredictionTab ===
-          PredictionTabKeys.WrongPredictionTab && (
+          PredictionTabKeys.IncorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
               theme={this.props.theme}
               messages={this.props.messages}
               features={this.props.features}
               jointDataset={this.props.jointDataset}
+              dataView={DataViewKeys.IncorrectInstances}
+              selectedIndexes={
+                this.state.selectionDetails.selectedIncorrectDatasetIndexes
+              }
+              setSelectedIndexes={this.setIncorrectSelectedIndexes.bind(this)}
+            />
+          </div>
+        )}
+        {this.state.activePredictionTab ===
+          PredictionTabKeys.AllSelectedTab && (
+          <div className="tabularDataView">
+            <TabularDataView
+              theme={this.props.theme}
+              messages={this.props.messages}
+              features={this.props.features}
+              jointDataset={this.props.jointDataset}
+              dataView={DataViewKeys.SelectedInstances}
+              setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
+              selectedIndexes={
+                this.state.selectionDetails.selectedAllSelectedIndexes
+              }
+              allSelectedIndexes={
+                this.state.selectionDetails.selectedAllSelectedIndexes
+              }
             />
           </div>
         )}
@@ -106,11 +213,119 @@ export class InstanceView extends React.PureComponent<
     );
   }
 
-  private _handlePredictionTabClick(item?: PivotItem): void {
-    if (item !== undefined) {
-      const itemKey: string = item.props.itemKey!;
-      const index: PredictionTabKeys = PredictionTabKeys[itemKey];
-      this.setState({ activePredictionTab: index });
+  private handlePredictionTabClick(
+    _?: React.FormEvent<HTMLElement | HTMLInputElement>,
+    option?: IChoiceGroupOption
+  ): void {
+    if (option) {
+      const predictionTabClickFunc = (
+        state: Readonly<IInstanceViewState>
+      ): IInstanceViewState => {
+        const selectionDetails = state.selectionDetails;
+        let selectedCorrectIndexes =
+          selectionDetails.selectedCorrectDatasetIndexes;
+        let selectedIncorrectIndexes =
+          selectionDetails.selectedIncorrectDatasetIndexes;
+        const selectedAllSelectedIndexes =
+          selectionDetails.selectedAllSelectedIndexes;
+        // If going from AllSelectedTab, need to update the other arrays
+        if (state.activePredictionTab === PredictionTabKeys.AllSelectedTab) {
+          selectedCorrectIndexes = selectedCorrectIndexes.filter((index) =>
+            selectedAllSelectedIndexes.includes(index)
+          );
+          selectedIncorrectIndexes = selectedIncorrectIndexes.filter((index) =>
+            selectedAllSelectedIndexes.includes(index)
+          );
+        }
+        const selectedIndexes = [
+          ...selectedCorrectIndexes,
+          ...selectedIncorrectIndexes
+        ];
+        return {
+          activePredictionTab: PredictionTabKeys[option.key],
+          selectionDetails: {
+            selectedAllSelectedIndexes,
+            selectedCorrectDatasetIndexes: selectedCorrectIndexes,
+            selectedDatasetIndexes: selectedIndexes,
+            selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
+          }
+        };
+      };
+      this.setState(predictionTabClickFunc);
     }
+  }
+
+  private inspect(): void {
+    this.setState({ activePredictionTab: PredictionTabKeys.InspectionTab });
+  }
+
+  private setCorrectSelectedIndexes(indexes: number[]): void {
+    const reloadDataFunc = (
+      state: Readonly<IInstanceViewState>
+    ): IInstanceViewState => {
+      const selectionDetails = state.selectionDetails;
+      const selectedCorrectIndexes = indexes;
+      const selectedIncorrectIndexes =
+        selectionDetails.selectedIncorrectDatasetIndexes;
+      const selectedIndexes = [
+        ...selectedCorrectIndexes,
+        ...selectedIncorrectIndexes
+      ];
+      return {
+        activePredictionTab: state.activePredictionTab,
+        selectionDetails: {
+          selectedAllSelectedIndexes: selectedIndexes,
+          selectedCorrectDatasetIndexes: selectedCorrectIndexes,
+          selectedDatasetIndexes: selectedIndexes,
+          selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
+        }
+      };
+    };
+    this.setState(reloadDataFunc);
+  }
+
+  private setIncorrectSelectedIndexes(indexes: number[]): void {
+    const reloadDataFunc = (
+      state: Readonly<IInstanceViewState>
+    ): IInstanceViewState => {
+      const selectionDetails = state.selectionDetails;
+      const selectedCorrectIndexes =
+        selectionDetails.selectedCorrectDatasetIndexes;
+      const selectedIncorrectIndexes = indexes;
+      const selectedIndexes = [
+        ...selectedCorrectIndexes,
+        ...selectedIncorrectIndexes
+      ];
+      return {
+        activePredictionTab: state.activePredictionTab,
+        selectionDetails: {
+          selectedAllSelectedIndexes: selectedIndexes,
+          selectedCorrectDatasetIndexes: selectedCorrectIndexes,
+          selectedDatasetIndexes: selectedIndexes,
+          selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
+        }
+      };
+    };
+    this.setState(reloadDataFunc);
+  }
+
+  private updateAllSelectedIndexes(indexes: number[]): void {
+    const reloadDataFunc = (
+      state: Readonly<IInstanceViewState>
+    ): IInstanceViewState => {
+      const selectionDetails = state.selectionDetails;
+      return {
+        activePredictionTab: state.activePredictionTab,
+        selectionDetails: {
+          selectedAllSelectedIndexes: indexes,
+          selectedCorrectDatasetIndexes:
+            selectionDetails.selectedCorrectDatasetIndexes,
+          selectedDatasetIndexes: selectionDetails.selectedDatasetIndexes,
+          selectedIncorrectDatasetIndexes:
+            selectionDetails.selectedIncorrectDatasetIndexes
+        }
+      };
+    };
+    this.setState(reloadDataFunc);
   }
 }

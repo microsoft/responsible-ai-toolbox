@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IFilter } from "@responsible-ai/interpret";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
@@ -17,6 +18,7 @@ export interface IErrorAnalysisViewProps {
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   errorAnalysisOption: ErrorAnalysisOptions;
+  updateSelectedCohort: (filters: IFilter[]) => void;
 }
 
 export class ErrorAnalysisView extends React.PureComponent<
@@ -32,6 +34,7 @@ export class ErrorAnalysisView extends React.PureComponent<
               messages={this.props.messages}
               getTreeNodes={this.props.getTreeNodes}
               selectedFeatures={this.props.selectedFeatures}
+              updateSelectedCohort={this.props.updateSelectedCohort}
             />
           )}
           {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
