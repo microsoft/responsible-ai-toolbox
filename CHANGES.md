@@ -34,12 +34,13 @@ This is the first release of the raiwidgets package.
 We're skipping v0.1.0 to get all our packages onto the same version:
 
 - pypi:
+
   - raiwidgets: first real release
 
 - npm:
-  - @responsible-ai/fairness: previously 0.1.*
-  - @responsible-ai/interpret: previously 0.0.*
+  - @responsible-ai/fairness: previously 0.1.\*
+  - @responsible-ai/interpret: previously 0.0.\*
   - @responsible-ai/error-analysis: first real release
-  - @responsible-ai/mlchartlib: previously 0.0.*
-  - @responsible-ai/core-ui: previously 0.0.*
-  - @responsible-ai/localization: previously 0.0.*
+  - @responsible-ai/mlchartlib: previously 0.0.\*
+  - @responsible-ai/core-ui: previously 0.0.\*
+  - @responsible-ai/localization: previously 0.0.\*
