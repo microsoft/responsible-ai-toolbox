@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Cohort, JointDataset } from "@responsible-ai/interpret";
+import {
+  Cohort,
+  JointDataset,
+  IFilter,
+  FilterMethods
+} from "@responsible-ai/interpret";
 
 export class ErrorCohort {
   public totalAll = 0;
@@ -50,5 +55,24 @@ export class ErrorCohort {
     // Calculate error coverage
     this.errorCoverage =
       (this.totalCohortIncorrect / this.totalIncorrect) * 100;
+  }
+
+  public filtersToString(): string[] {
+    return this.cohort.filters.map((filter: IFilter): string => {
+      let method = "";
+      if (filter.method === FilterMethods.Equal) {
+        method = "==";
+      } else if (filter.method === FilterMethods.GreaterThan) {
+        method = ">";
+      } else if (filter.method === FilterMethods.GreaterThanEqualTo) {
+        method = ">=";
+      } else if (filter.method === FilterMethods.LessThan) {
+        method = "<";
+      } else if (filter.method === FilterMethods.LessThanEqualTo) {
+        method = "<=";
+      }
+      const label = this.jointDataset.metaDict[filter.column].label;
+      return `${label} ${method} ${filter.arg[0].toFixed(2)}`;
+    });
   }
 }

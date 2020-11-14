@@ -30,13 +30,13 @@ export class CohortStats extends React.Component<ISaveCohortProps> {
             <Stack tokens={alignmentStackTokens}>
               <div className={classNames.tableData}>Error Coverage</div>
               <div className={classNames.tableData}>
-                {`${this.props.temporaryCohort.errorCoverage}%`}
+                {`${this.props.temporaryCohort.errorCoverage.toFixed(2)}%`}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>
               <div className={classNames.tableData}>Error Rate</div>
               <div className={classNames.tableData}>
-                {`${this.props.temporaryCohort.errorRate}%`}
+                {`${this.props.temporaryCohort.errorRate.toFixed(2)}%`}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>

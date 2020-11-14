@@ -6,22 +6,36 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  ITheme
+  ITheme,
+  Selection,
+  SelectionMode
 } from "office-ui-fabric-react";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
+import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import React from "react";
 
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
+import { constructRows, constructCols } from "../utils/DatasetUtils";
 
 export interface ITabularDataViewProps {
   theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;
+  dataView: DataViewKeys;
+  setSelectedIndexes: (indexes: number[]) => void;
+  selectedIndexes: number[];
+  allSelectedIndexes?: number[];
 }
 
 export interface ITabularDataViewState {
   jointDataset: JointDataset;
+}
+
+export enum DataViewKeys {
+  SelectedInstances = "SelectedInstances",
+  CorrectInstances = "CorrectInstances",
+  IncorrectInstances = "IncorrectInstances"
 }
 
 export class TabularDataView extends React.PureComponent<
@@ -30,44 +44,38 @@ export class TabularDataView extends React.PureComponent<
 > {
   private _rows: any[];
   private _columns: IColumn[];
+  private _selection: Selection;
   public constructor(props: ITabularDataViewProps) {
     super(props);
     this.state = {
       jointDataset: props.jointDataset
     };
     const numRows: number = this.props.jointDataset.datasetRowCount;
-    const viewedRows: number = Math.min(numRows, 8);
-    this._rows = [];
-    for (let i = 0; i < viewedRows; i++) {
-      const row = this.props.jointDataset.getRow(i);
-      const data = JointDataset.datasetSlice(
-        row,
-        this.props.jointDataset.metaDict,
-        this.props.jointDataset.localExplanationFeatureCount
-      );
-      const datarow = [];
-      for (const [j, datum] of data.entries()) {
-        datarow.push({
-          key: j,
-          name: j,
-          value: datum
-        });
-      }
-      this._rows.push(data);
+    let viewedRows: number = Math.min(numRows, 8);
+    if (this.props.allSelectedIndexes) {
+      viewedRows = Math.min(numRows, this.props.allSelectedIndexes.length);
     }
+    this._rows = constructRows(
+      this.props.jointDataset,
+      viewedRows,
+      this.tabularDataFilter.bind(this),
+      this.props.allSelectedIndexes
+    );
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
     // TODO: remove, this is just for debugging for now
     const viewedCols: number = Math.min(numCols, featureNames.length);
-    this._columns = [];
-    for (let i = 0; i < viewedCols; i++) {
-      this._columns.push({
-        fieldName: i.toString(),
-        isResizable: true,
-        key: "column" + i,
-        maxWidth: 200,
-        minWidth: 100,
-        name: featureNames[i]
+    this._columns = constructCols(viewedCols, featureNames);
+    this._selection = new Selection({
+      onSelectionChanged: (): void =>
+        this.props.setSelectedIndexes(this.getSelectionDetails())
+    });
+    this._selection.setItems(this._rows);
+    if (this.props.selectedIndexes) {
+      const rowIndexes = this._rows.map((row) => row[0]);
+      this.props.selectedIndexes.forEach((selectedIndex): void => {
+        const rowIndex = rowIndexes.indexOf(selectedIndex);
+        this._selection.setIndexSelected(rowIndex, true, true);
       });
     }
   }
@@ -75,18 +83,53 @@ export class TabularDataView extends React.PureComponent<
   public render(): React.ReactNode {
     return (
       <Fabric>
-        <DetailsList
-          items={this._rows}
-          columns={this._columns}
-          setKey="set"
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionPreservedOnEmptyClick={true}
-          ariaLabelForSelectionColumn="Toggle selection"
-          ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-          checkButtonAriaLabel="Row checkbox"
-          //onItemInvoked={this._onItemInvoked}
-        />
+        <MarqueeSelection selection={this._selection}>
+          <DetailsList
+            items={this._rows}
+            columns={this._columns}
+            setKey="set"
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionPreservedOnEmptyClick={true}
+            ariaLabelForSelectionColumn="Toggle selection"
+            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+            checkButtonAriaLabel="Row checkbox"
+            selectionMode={SelectionMode.multiple}
+            selection={this._selection}
+            //onItemInvoked={this._onItemInvoked}
+          />
+        </MarqueeSelection>
       </Fabric>
     );
+  }
+
+  private getSelectionDetails(): number[] {
+    const selectedRows = this._selection.getSelection();
+    const keys = selectedRows.map((row) => row[0] as number);
+    return keys;
+  }
+
+  private tabularDataFilter(row: { [key: string]: number }): boolean {
+    switch (this.props.dataView) {
+      case DataViewKeys.CorrectInstances: {
+        if (
+          row[JointDataset.PredictedYLabel] !== row[JointDataset.TrueYLabel]
+        ) {
+          return true;
+        }
+        break;
+      }
+      case DataViewKeys.IncorrectInstances: {
+        if (
+          row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel]
+        ) {
+          return true;
+        }
+        break;
+      }
+      case DataViewKeys.SelectedInstances:
+      default:
+        break;
+    }
+    return false;
   }
 }
