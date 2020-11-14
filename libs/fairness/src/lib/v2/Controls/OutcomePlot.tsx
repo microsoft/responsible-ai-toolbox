@@ -133,7 +133,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     );
 
     return (
-      <Stack>
+      <Stack id="outcomePlot">
         {/* chart header not needed due to dropdown
         <Label>{outcomeChartHeaderString}</Label> */}
         <div

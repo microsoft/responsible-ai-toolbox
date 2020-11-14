@@ -13,11 +13,13 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
     };
     beforeEach(() => {
       // move to the single model view
-      getToModelComparisonPageWithDefaults();
-
-      // click on model point in model comparison view
-      props.chart = new ScatterChart("#FairnessPerformanceTradeoffChart");
-      props.chart.clickNthPoint(1);
+      getToModelComparisonPageWithDefaults()
+        .get("#FairnessPerformanceTradeoffChart .trace.scatter:eq(0) .points")
+        .then(() => {
+          // click on model point in model comparison view
+          props.chart = new ScatterChart("#FairnessPerformanceTradeoffChart");
+          props.chart.clickNthPoint(0);
+        });
     });
     it("should find single model view", () => {
       getSpan("Assessment results").should("exist");
@@ -54,18 +56,32 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
       // chart dropdown
       cy.get("#chartSelectionDropdown").should(
         "contain.text",
-        Object.keys(data.sensitiveFeatures)[0]
+        data.charts[0]
       );
-      // cy.contains(/presentationArea-.*/)
-      //   .contains(Object.keys(data.sensitiveFeatures)[0])
-      //   .should("exist");
-      // data.sensitiveFeatures[data.performanceMetrics[0]].forEach(
-      //   (sensitiveFeatureValue: string) => {
-      //     cy.contains(/presentationArea-.*/)
-      //       .contains(sensitiveFeatureValue)
-      //       .should("exist");
-      //   }
-      // );
+
+      cy.get("#outcomePlot").should("exist");
+
+      // check text in table on the left
+      cy.get("#outcomePlot")
+        .contains(Object.keys(data.sensitiveFeatures)[0])
+        .should("exist");
+      data.sensitiveFeatures[Object.keys(data.sensitiveFeatures)[0]].forEach(
+        (sensitiveFeatureValue: string) => {
+          cy.get("#outcomePlot")
+            .contains(sensitiveFeatureValue)
+            .should("exist");
+        }
+      );
+
+      // dropdown switch to other chart
+      cy.get("#chartSelectionDropdown").click();
+      cy.get("#chartSelectionDropdown-list1").click();
+
+      cy.get("#performancePlot").should("exist");
+      cy.get("#chartSelectionDropdown").should(
+        "contain.text",
+        data.charts[1]
+      );
     });
   });
 }

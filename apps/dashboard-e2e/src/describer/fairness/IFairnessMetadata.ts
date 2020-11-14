@@ -10,4 +10,5 @@ export interface IFairnessMetadata {
   performanceMetrics: string[];
   fairnessMetrics: string[];
   numberOfModels: number;
+  charts: string[];
 }

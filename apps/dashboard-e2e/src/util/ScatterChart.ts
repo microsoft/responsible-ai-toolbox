@@ -41,7 +41,9 @@ export class ScatterChart extends Chart<IScatter> {
   }
 
   private getNthPointOffset(idx: number): JQuery.Coordinates | undefined {
-    return cy.$$(`.trace.scatter:eq(0) .points path:eq(${idx})`).offset();
+    const point = cy.$$(`.trace.scatter:eq(0) .points path:eq(${idx})`);
+    debugger;
+    return point.offset();
   }
 
   private readonly getCoordinate = (

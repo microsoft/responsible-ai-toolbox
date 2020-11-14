@@ -1,11 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSpan } from '../../util/getSpan';
+import { getSpan } from "../../util/getSpan";
 
-export function getToModelComparisonPageWithDefaults(): void {
-  getSpan("Get started").click();
-  cy.get('button:contains("Next")').click();
-  cy.get('button:contains("Next")').click();
-  cy.get('button:contains("Next")').click();
+export function getToModelComparisonPageWithDefaults(): Cypress.Chainable<
+  JQuery<HTMLElement>
+> {
+  return getSpan("Get started")
+    .click()
+    .get('button:contains("Next")')
+    .click()
+    .get('button:contains("Next")')
+    .click()
+    .get('button:contains("Next")')
+    .click();
 }

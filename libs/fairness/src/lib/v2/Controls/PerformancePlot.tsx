@@ -237,7 +237,7 @@ export class PerformancePlot extends React.PureComponent<
       );
 
     return (
-      <Stack>
+      <Stack id="performancePlot">
         {/* chart header not needed due to dropdown
         <Label>{performanceChartHeaderString}</Label> */}
         <div
