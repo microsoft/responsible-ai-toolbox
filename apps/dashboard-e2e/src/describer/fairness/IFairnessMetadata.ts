@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionType } from "@responsible-ai/fairness";
-
 export interface IFairnessMetadata {
   errorMessage?: string;
   predictionType: PredictionType;
@@ -12,3 +10,14 @@ export interface IFairnessMetadata {
   numberOfModels: number;
   charts: string[];
 }
+
+export enum PredictionTypes {
+  BinaryClassification = "binaryClassification",
+  Regression = "regression",
+  Probability = "probability"
+}
+
+export type PredictionType =
+  | PredictionTypes.BinaryClassification
+  | PredictionTypes.Probability
+  | PredictionTypes.Regression;

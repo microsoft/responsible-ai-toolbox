@@ -1,9 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from "@responsible-ai/fairness";
-
-import { IFairnessMetadata } from "./IFairnessMetadata";
+import { IFairnessMetadata, PredictionTypes } from "./IFairnessMetadata";
 
 const fairnessDatasets = {
   binaryClassification: {
