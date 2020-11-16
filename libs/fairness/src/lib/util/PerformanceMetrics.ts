@@ -70,18 +70,18 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
     key: "fallout_rate",
     title: localization.Fairness.Metrics.falloutRate
   },
-  false_negative_rate: {
+  false_negative_over_total: {
     description: localization.Fairness.Metrics.falseNegativeRateDescription,
     isMinimization: true,
     isPercentage: true,
-    key: "false_negative_rate",
+    key: "false_negative_over_total",
     title: localization.Fairness.Metrics.falseNegativeRate
   },
-  false_positive_rate: {
+  false_positive_over_total: {
     description: localization.Fairness.Metrics.falsePositiveRateDescription,
     isMinimization: true,
     isPercentage: true,
-    key: "false_positive_rate",
+    key: "false_positive_over_total",
     title: localization.Fairness.Metrics.falsePositiveRate
   },
   log_loss: {
