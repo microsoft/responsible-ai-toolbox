@@ -12,6 +12,8 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
+import { dummyMatrix1dInterval } from "./__mock_data__/dummyMatrixOnedInterval";
+import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
 import { dummyTreeData } from "./__mock_data__/dummyTree";
 
 interface IAppProps {
@@ -72,12 +74,22 @@ export class App extends React.Component<IAppProps> {
   };
 
   private generateJsonMatrix = (
-    _data: any[],
+    data: any[],
     signal: AbortSignal
   ): Promise<any> => {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        resolve(_.cloneDeep(dummyMatrixData));
+        if (
+          data.length === 2 &&
+          data[0] === "mean radius" &&
+          data[1] === "mean texture"
+        ) {
+          resolve(_.cloneDeep(dummyMatrix2dInterval));
+        } else if (data[0] === "mean radius") {
+          resolve(_.cloneDeep(dummyMatrix1dInterval));
+        } else {
+          resolve(_.cloneDeep(dummyMatrixData));
+        }
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);

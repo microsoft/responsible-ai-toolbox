@@ -17,6 +17,7 @@ export interface IMatrixAreaStyles {
   matrixCellPivot2Categories: IStyle;
   matrixRow: IStyle;
   matrixArea: IStyle;
+  nanMatrixCell: IStyle;
   styledMatrixCell: IStyle;
   selectedMatrixCell: IStyle;
 }
@@ -93,6 +94,11 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       fontStyle: "normal",
       fontWeight: "normal",
       height: "50px"
+    },
+    nanMatrixCell: {
+      background:
+        "repeating-linear-gradient(-45deg, white, white 5px, pink 10px, pink 20px)",
+      color: "black"
     },
     selectedMatrixCell: {
       alignItems: "center",

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter } from "@responsible-ai/interpret";
+import { ICompositeFilter, IFilter } from "@responsible-ai/interpret";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -17,7 +17,9 @@ import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
+import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import {
   ITreeViewRendererStyles,
@@ -32,7 +34,13 @@ export interface ITreeViewRendererProps {
   messages?: HelpMessageDict;
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  updateSelectedCohort: (filters: IFilter[]) => void;
+  updateSelectedCohort: (
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource,
+    cells: number
+  ) => void;
+  selectedCohort: ErrorCohort;
 }
 
 export interface ITreeViewRendererState {
@@ -346,10 +354,7 @@ export class TreeViewRenderer extends React.PureComponent<
                     height="140"
                     fill="transparent"
                   />
-                  <text className={classNames.detailLines}>
-                    {nodeDetail.instanceInfo} [ {nodeDetail.errorInfo} |{" "}
-                    {nodeDetail.successInfo} ]
-                  </text>
+                  <TreeLegend selectedCohort={this.props.selectedCohort} />
                   <g className={classNames.opacityToggleCircle}>
                     <circle
                       r="26"
@@ -368,12 +373,6 @@ export class TreeViewRenderer extends React.PureComponent<
                         style={nodeDetail.maskUp}
                       />
                     </g>
-                    <text className={classNames.detailPerc}>
-                      {nodeDetail.globalError}%
-                    </text>
-                    <text className={classNames.detailPercLabel}>
-                      error coverage
-                    </text>
                   </g>
                   <g className={classNames.nonOpacityToggleCircle}>
                     <circle
@@ -382,12 +381,6 @@ export class TreeViewRenderer extends React.PureComponent<
                       style={nodeDetail.errorColor}
                     />
                     <circle r="21" className={classNames.node} fill="#d2d2d2" />
-                    <text className={classNames.detailPerc}>
-                      {nodeDetail.localError}%
-                    </text>
-                    <text className={classNames.detailPercLabel}>
-                      error rate
-                    </text>
                   </g>
                 </g>
               </g>
@@ -614,7 +607,12 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(clearSelectionFunc);
     // Clear filters
     const filters: IFilter[] = [];
-    this.props.updateSelectedCohort(filters);
+    this.props.updateSelectedCohort(
+      filters,
+      [],
+      ErrorDetectorCohortSource.None,
+      0
+    );
   }
 
   private bkgClick(): void {
@@ -666,7 +664,12 @@ export class TreeViewRenderer extends React.PureComponent<
 
       // Get filters and update
       const filters = this.getFilters(node);
-      this.props.updateSelectedCohort(filters);
+      this.props.updateSelectedCohort(
+        filters,
+        [],
+        ErrorDetectorCohortSource.TreeMap,
+        0
+      );
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = {

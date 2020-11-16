@@ -37,6 +37,7 @@ export interface IWhatIfPanelProps {
   selectedWhatIfRootIndex: number;
   rowOptions: IDropdownOption[] | undefined;
   isPanelOpen: boolean;
+  isInPanel: boolean;
   filteredFeatureList: IDropdownOption[];
   openPanel(): void;
   dismissPanel(): void;
@@ -64,26 +65,28 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
   public render(): React.ReactNode {
     const classNames = whatIfTabStyles();
     const inputDisabled = !this.props.invokeModel;
+    let panelStyle: string;
+    if (this.props.isInPanel) {
+      panelStyle = classNames.expandedInPanel;
+    } else if (this.props.isPanelOpen) {
+      panelStyle = classNames.expandedPanel;
+    } else {
+      panelStyle = classNames.collapsedPanel;
+    }
     return (
-      <Stack
-        className={
-          this.props.isPanelOpen
-            ? classNames.expandedPanel
-            : classNames.collapsedPanel
-        }
-        horizontal
-      >
-        {this.props.isPanelOpen ? (
-          <IconButton
-            iconProps={{ iconName: "ChevronRight" }}
-            onClick={this.props.dismissPanel}
-          />
-        ) : (
-          <IconButton
-            iconProps={{ iconName: "ChevronLeft" }}
-            onClick={this.props.openPanel}
-          />
-        )}
+      <Stack className={panelStyle} horizontal>
+        {!this.props.isInPanel &&
+          (this.props.isPanelOpen ? (
+            <IconButton
+              iconProps={{ iconName: "ChevronRight" }}
+              onClick={this.props.dismissPanel}
+            />
+          ) : (
+            <IconButton
+              iconProps={{ iconName: "ChevronLeft" }}
+              onClick={this.props.openPanel}
+            />
+          ))}
         <Stack tokens={{ childrenGap: "l1" }}>
           {this.props.isPanelOpen && (
             <>

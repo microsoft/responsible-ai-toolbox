@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IFilter, ICompositeFilter } from "@responsible-ai/interpret";
 import {
   ComboBox,
   IComboBox,
@@ -11,7 +12,9 @@ import {
 import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
+import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
+import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
 
 import { matrixFilterStyles } from "./MatrixFilter.styles";
 
@@ -19,6 +22,13 @@ export interface IMatrixFilterProps {
   theme?: ITheme;
   features: string[];
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  updateSelectedCohort: (
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource,
+    cells: number
+  ) => void;
+  selectedCohort: ErrorCohort;
 }
 
 export interface IMatrixFilterState {
@@ -26,7 +36,7 @@ export interface IMatrixFilterState {
   selectedFeature2?: string;
 }
 
-const stackTokens: IStackTokens = { childrenGap: 20 };
+const stackTokens: IStackTokens = { childrenGap: 5 };
 
 export class MatrixFilter extends React.PureComponent<
   IMatrixFilterProps,
@@ -49,6 +59,7 @@ export class MatrixFilter extends React.PureComponent<
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
+          <MatrixLegend selectedCohort={this.props.selectedCohort} />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
@@ -85,6 +96,8 @@ export class MatrixFilter extends React.PureComponent<
             getMatrix={this.props.getMatrix}
             selectedFeature1={this.state.selectedFeature1}
             selectedFeature2={this.state.selectedFeature2}
+            updateSelectedCohort={this.props.updateSelectedCohort}
+            selectedCohort={this.props.selectedCohort}
           />
         </Stack>
       </div>

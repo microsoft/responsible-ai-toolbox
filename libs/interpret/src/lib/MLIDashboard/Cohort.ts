@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, FilterMethods } from "./Interfaces/IFilter";
+import {
+  IFilter,
+  FilterMethods,
+  ICompositeFilter,
+  Operations
+} from "./Interfaces/IFilter";
 import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
@@ -17,7 +22,8 @@ export class Cohort {
   public constructor(
     public name: string,
     private jointDataset: JointDataset,
-    public filters: IFilter[] = []
+    public filters: IFilter[] = [],
+    public compositeFilters: ICompositeFilter[] = []
   ) {
     this.cohortIndex = Cohort._cohortIndex;
     this.name = name;
@@ -126,32 +132,78 @@ export class Cohort {
     this.cachedTransposedLocalFeatureImportances = undefined;
   }
 
+  private filterRow(
+    row: { [key: string]: number },
+    filters: IFilter[]
+  ): boolean {
+    return filters.every((filter) => {
+      const rowVal = row[filter.column];
+      switch (filter.method) {
+        case FilterMethods.Equal:
+          return rowVal === filter.arg[0];
+        case FilterMethods.GreaterThan:
+          return rowVal > filter.arg[0];
+        case FilterMethods.GreaterThanEqualTo:
+          return rowVal >= filter.arg[0];
+        case FilterMethods.LessThan:
+          return rowVal < filter.arg[0];
+        case FilterMethods.LessThanEqualTo:
+          return rowVal <= filter.arg[0];
+        case FilterMethods.Includes:
+          return (filter.arg as number[]).includes(rowVal);
+        case FilterMethods.InTheRangeOf:
+          return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+        default:
+          return false;
+      }
+    });
+  }
+
+  private filterRecursively(
+    row: { [key: string]: number },
+    compositeFilter: ICompositeFilter
+  ): boolean {
+    if (compositeFilter.method) {
+      return this.filterRow(row, [compositeFilter as IFilter]);
+    }
+    return this.filterComposite(
+      row,
+      compositeFilter.compositeFilters,
+      compositeFilter.operation
+    );
+  }
+
+  private filterComposite(
+    row: { [key: string]: number },
+    compositeFilters: ICompositeFilter[],
+    operation: Operations
+  ): boolean {
+    if (operation === Operations.And) {
+      return compositeFilters.every((compositeFilter) =>
+        this.filterRecursively(row, compositeFilter)
+      );
+    }
+    return compositeFilters.some((compositeFilter) =>
+      this.filterRecursively(row, compositeFilter)
+    );
+  }
+
   private applyFilters(): Array<{ [key: string]: number }> {
     this.clearCachedImportances();
-    return (
-      this.jointDataset.dataDict?.filter((row) =>
-        this.filters.every((filter) => {
-          const rowVal = row[filter.column];
-          switch (filter.method) {
-            case FilterMethods.Equal:
-              return rowVal === filter.arg[0];
-            case FilterMethods.GreaterThan:
-              return rowVal > filter.arg[0];
-            case FilterMethods.GreaterThanEqualTo:
-              return rowVal >= filter.arg[0];
-            case FilterMethods.LessThan:
-              return rowVal < filter.arg[0];
-            case FilterMethods.LessThanEqualTo:
-              return rowVal <= filter.arg[0];
-            case FilterMethods.Includes:
-              return (filter.arg as number[]).includes(rowVal);
-            case FilterMethods.InTheRangeOf:
-              return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
-            default:
-              return false;
-          }
-        })
-      ) || []
-    );
+    let filteredData = this.jointDataset.dataDict;
+    if (!filteredData) {
+      return [];
+    }
+    if (this.filters.length > 0) {
+      filteredData = filteredData.filter((row) =>
+        this.filterRow(row, this.filters)
+      );
+    }
+    if (this.compositeFilters.length > 0) {
+      filteredData = filteredData.filter((row) =>
+        this.filterComposite(row, this.compositeFilters, Operations.And)
+      );
+    }
+    return filteredData;
   }
 }

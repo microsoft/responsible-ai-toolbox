@@ -30,6 +30,24 @@ export function constructRows(
   return rows;
 }
 
+export function rowsFromCustomPoints(
+  jointDataset: JointDataset,
+  customPoints: Array<{ [key: string]: any }>,
+  viewedRows: number
+): any[] {
+  const rows = [];
+  for (let i = 0; i < viewedRows; i++) {
+    const row = customPoints[i];
+    const data = JointDataset.datasetSlice(
+      row,
+      jointDataset.metaDict,
+      jointDataset.localExplanationFeatureCount
+    );
+    rows.push([i, ...data]);
+  }
+  return rows;
+}
+
 export function constructCols(
   viewedCols: number,
   featureNames: string[]

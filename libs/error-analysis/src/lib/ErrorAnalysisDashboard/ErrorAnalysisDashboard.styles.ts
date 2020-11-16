@@ -20,6 +20,9 @@ export const ErrorAnalysisDashboardStyles: () => IProcessedStyleSet<
   return mergeStyleSets<IErrorAnalysisDashboardStyles>({
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,
+      borderBottom: "1px solid #C8C8C8",
+      borderLeft: "1px solid #C8C8C8",
+      borderRight: "1px solid #C8C8C8",
       color: theme.semanticColors.bodyText,
       maxHeight: "1000px"
     },

@@ -14,6 +14,7 @@ export interface IWhatIfTabStyles {
   page: IStyle;
   blackIcon: IStyle;
   expandedPanel: IStyle;
+  expandedInPanel: IStyle;
   parameterList: IStyle;
   featureList: IStyle;
   collapsedPanel: IStyle;
@@ -163,6 +164,10 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
     },
     errorText: {
       color: theme.semanticColors.errorText
+    },
+    expandedInPanel: {
+      marginTop: "10px",
+      paddingRight: "40px"
     },
     expandedPanel: {
       boxShadow:

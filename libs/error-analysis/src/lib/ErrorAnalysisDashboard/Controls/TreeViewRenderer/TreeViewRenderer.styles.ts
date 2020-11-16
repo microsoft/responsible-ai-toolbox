@@ -18,13 +18,11 @@ export interface ITreeViewRendererStyles {
   nopointer: IStyle;
   linkLabel: IStyle;
   detailLines: IStyle;
-  detailPercLabel: IStyle;
   details: IStyle;
   innerOpacityToggle: IStyle;
   opacityToggleRect: IStyle;
   opacityToggleCircle: IStyle;
   nonOpacityToggleCircle: IStyle;
-  detailPerc: IStyle;
   linksTransitionGroup: IStyle;
   nodesTransitionGroup: IStyle;
   linkLabelsTransitionGroup: IStyle;
@@ -53,19 +51,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       {
         textAnchor: "start",
         transform: "translate(0px, 10px)"
-      }
-    ]),
-    detailPerc: mergeStyles([
-      detailStyle,
-      {
-        transform: "translate(0px, 45px)"
-      }
-    ]),
-    detailPercLabel: mergeStyles([
-      detailStyle,
-      {
-        fontSize: "0.65em",
-        transform: "translate(0px, 55px)"
       }
     ]),
     details: {
@@ -118,13 +103,13 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       transform: "translate(0px, 0px)"
     },
     nonOpacityToggleCircle: {
-      transform: "translate(100px, 50px)"
+      transform: "translate(126px, 80px)"
     },
     nopointer: {
       pointerEvents: "none"
     },
     opacityToggleCircle: {
-      transform: "translate(30px, 50px)"
+      transform: "translate(36px, 80px)"
     },
     opacityToggleRect: {
       transform: "translate(-5px, -5px)"
