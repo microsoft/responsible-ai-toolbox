@@ -17,7 +17,7 @@ export function describeGlobalExplanationBarChart(
     beforeEach(() => {
       props.chart = new BarChart("#FeatureImportanceBar");
     });
-    it("should be sorted by heigh", () => {
+    it("should be sorted by height", () => {
       expect(props.chart.sortByH()).deep.equal(props.chart.Elements);
     });
     describeGlobalExplanationChart(props);

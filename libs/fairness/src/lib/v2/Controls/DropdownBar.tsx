@@ -64,6 +64,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
       <div className={styles.headerOptions}>
         <Stack horizontal={true}>
           <Dropdown
+            id="sensitiveFeatureDropdown"
             label={localization.Fairness.DropdownHeaders.sensitiveFeature}
             className={styles.dropDown}
             defaultSelectedKey={
@@ -77,6 +78,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
             styles={dropdownStyles}
           />
           <Dropdown
+            id="performanceMetricDropdown"
             label={localization.Fairness.DropdownHeaders.performanceMetric}
             className={styles.dropDown}
             defaultSelectedKey={
@@ -88,6 +90,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
             styles={dropdownStyles}
           />
           <Dropdown
+            id="fairnessMetricDropdown"
             label={localization.Fairness.DropdownHeaders.fairnessMetric}
             className={styles.dropDown}
             defaultSelectedKey={

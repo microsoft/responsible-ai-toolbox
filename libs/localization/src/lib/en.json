@@ -683,7 +683,7 @@
       "welcome": "Welcome to the",
       "fairnessDashboard": "Fairness dashboard",
       "introBody": "The fairness dashboard enables you to assess tradeoffs between performance and fairness of your models",
-      "explanatoryStep": "To set up the assessment, you need to specify a sensitive feature and a performance metric.",
+      "explanatoryStep": "To set up the assessment, you need to specify a sensitive feature, a performance metric, and a fairness metric.",
       "getStarted": "Get started",
       "features": "Sensitive features",
       "featuresInfo": "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by fairness metrics. Fairness metrics quantify how much your model's behavior varies across these groups.",
@@ -788,7 +788,7 @@
       "falloutRate": "Fallout rate",
       "maxError": "Max error",
       "meanAbsoluteError": "Mean absolute error",
-      "meanSquaredError": " MSE (mean squared error)",
+      "meanSquaredError": " Mean squared error",
       "meanSquaredLogError": "Mean squared log error",
       "medianAbsoluteError": "Median absolute error",
       "average": "Average prediction",
@@ -798,11 +798,11 @@
       "falsePositiveRate": "False positive rate",
       "falseNegativeRate": "False negative rate",
       "r2_score": "R-squared score",
-      "rms_error": "RMSE (root mean squared error)",
+      "rms_error": "Root mean squared error",
       "auc": "Area under ROC curve",
-      "balancedRootMeanSquaredError": "Balanced RMSE",
+      "balancedRootMeanSquaredError": "Balanced root mean squared error",
       "balancedAccuracy": "Balanced accuracy",
-      "f1Score": "F1-Score",
+      "f1Score": "F1-score",
       "_f1Score.comment": "Data science terminology: https://en.wikipedia.org/wiki/F1_score",
       "logLoss": "Log loss",
       "_logLoss.comment": "Data science terminology",
@@ -883,7 +883,7 @@
     "DropdownHeaders": {
       "sensitiveFeature": "Sensitive feature",
       "performanceMetric": "Performance metric",
-      "fairnessMetric": "Disparity metric"
+      "fairnessMetric": "Fairness metric"
     }
   }
 }

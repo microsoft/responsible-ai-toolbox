@@ -3,7 +3,7 @@
 
 import { IFairnessData } from "@responsible-ai/fairness";
 
-export const binaryClassifier: IFairnessData = {
+export const binaryClassification: IFairnessData = {
   predictedY: [
     [1, 0, 0, 1, 1, 1, 1, 0],
     [1, 1, 1, 1, 1, 1, 1, 0],
