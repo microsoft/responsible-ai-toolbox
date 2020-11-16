@@ -208,7 +208,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   },
   roc_auc_score_min: {
     description: localization.Fairness.Metrics.ROCAUCScoreMinDescription,
-    fairnessMetric: "roc_auc_score",
+    fairnessMetric: "auc",
     fairnessMode: FairnessModes.Min,
     key: "roc_auc_score_min",
     supportedTasks: new Set([PredictionTypes.Probability]),

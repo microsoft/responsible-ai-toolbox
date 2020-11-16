@@ -75,13 +75,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         case PredictionTypes.BinaryClassification: {
           if (this.state.metrics.falsePositiveRates) {
             additionalMetrics.set(
-              "false_positive_rate",
+              "false_positive_over_total",
               this.state.metrics.falsePositiveRates
             );
           }
           if (this.state.metrics.falseNegativeRates) {
             additionalMetrics.set(
-              "false_negative_rate",
+              "false_negative_over_total",
               this.state.metrics.falseNegativeRates
             );
           }
@@ -347,8 +347,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
-          falseNegativeRates = await this.getMetric("false_negative_rate");
-          falsePositiveRates = await this.getMetric("false_positive_rate");
+          falseNegativeRates = await this.getMetric(
+            "false_negative_over_total"
+          );
+          falsePositiveRates = await this.getMetric(
+            "false_positive_over_total"
+          );
           outcomes = await this.getMetric("selection_rate");
           break;
         }

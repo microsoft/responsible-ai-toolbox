@@ -16,3 +16,5 @@ flake8-rst-docstrings==0.0.13
 requirements-parser==0.2.0
 
 wheel
+
+fairlearn==0.5.0
