@@ -31,6 +31,7 @@ export interface IMatrixAreaProps {
     cells: number
   ) => void;
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export interface IMatrixAreaState {
@@ -58,7 +59,11 @@ export class MatrixArea extends React.PureComponent<
       this.props.selectedFeature1 !== prevProps.selectedFeature1;
     const selectedFeature2Changed =
       this.props.selectedFeature2 !== prevProps.selectedFeature2;
-    if (selectedFeature1Changed || selectedFeature2Changed) {
+    if (
+      selectedFeature1Changed ||
+      selectedFeature2Changed ||
+      this.props.baseCohort !== prevProps.baseCohort
+    ) {
       this.fetchMatrix();
     }
   }
@@ -195,9 +200,21 @@ export class MatrixArea extends React.PureComponent<
     if (this.props.getMatrix === undefined) {
       return;
     }
+    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+      this.props.baseCohort.cohort.filters,
+      this.props.baseCohort.jointDataset
+    );
+    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+      this.props.baseCohort.cohort.compositeFilters,
+      this.props.baseCohort.jointDataset
+    );
     this.props
       .getMatrix(
-        [this.props.selectedFeature1!, this.props.selectedFeature2!],
+        [
+          [this.props.selectedFeature1!, this.props.selectedFeature2!],
+          filtersRelabeled,
+          compositeFiltersRelabeled
+        ],
         new AbortController().signal
       )
       .then((result) => {

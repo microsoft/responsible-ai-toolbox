@@ -56,12 +56,12 @@ class ErrorAnalysisDashboard(Dashboard):
 
         def tree():
             data = request.get_json(force=True)
-            return jsonify(self.input.debug_ml(data))
+            return jsonify(self.input.debug_ml(data[0], data[1], data[2]))
 
         self.add_url_rule(tree, '/tree', methods=["POST"])
 
         def matrix():
             data = request.get_json(force=True)
-            return jsonify(self.input.matrix(data))
+            return jsonify(self.input.matrix(data[0], data[1], data[2]))
 
         self.add_url_rule(matrix, '/matrix', methods=["POST"])
