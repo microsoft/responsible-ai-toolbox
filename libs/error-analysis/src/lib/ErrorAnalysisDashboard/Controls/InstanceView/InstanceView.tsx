@@ -62,7 +62,7 @@ const inspectButtonStyles: IStackItemStyles = {
   }
 };
 
-export class InstanceView extends React.PureComponent<
+export class InstanceView extends React.Component<
   IInstanceViewProps,
   IInstanceViewState
 > {

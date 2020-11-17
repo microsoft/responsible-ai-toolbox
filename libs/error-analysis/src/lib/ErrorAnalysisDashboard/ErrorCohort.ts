@@ -67,7 +67,7 @@ export class ErrorCohort {
     if (this.totalCohort === 0) {
       this.errorRate = 0;
     } else {
-      this.errorRate = this.totalCohortIncorrect / this.totalCohort;
+      this.errorRate = (this.totalCohortIncorrect / this.totalCohort) * 100;
     }
     // Calculate error coverage
     if (this.totalIncorrect === 0) {

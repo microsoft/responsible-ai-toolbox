@@ -220,7 +220,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // -------------------------------------------------------------------
     const links = rootDescendents.slice(1).map((d) => {
       const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
-      const lineColor = d.data.isSelected ? "089acc" : "e8eaed";
+      const lineColor = d.data.isSelected ? "#089acc" : "#e8eaed";
       const id: string = d.id!;
       const linkVerticalD = linkVertical({ source: d.parent, target: d });
       return {
@@ -323,7 +323,7 @@ export class TreeViewRenderer extends React.PureComponent<
             ref={svgOuterFrame}
             className={classNames.svgOuterFrame}
             id="svgOuterFrame"
-            viewBox="0 0 1000 500"
+            viewBox="0 0 952 820"
             onClick={this.bkgClick.bind(this)}
           >
             <mask id="Mask">

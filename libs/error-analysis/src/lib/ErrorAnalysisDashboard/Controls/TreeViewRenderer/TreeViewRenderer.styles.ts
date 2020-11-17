@@ -57,7 +57,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       transform: "translate(0px, 5px)"
     },
     innerFrame: {
-      height: "55%",
+      height: "100%",
       margin: "0",
       padding: "0",
       width: "100%"
