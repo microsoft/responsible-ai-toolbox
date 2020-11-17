@@ -86,6 +86,7 @@ class Dashboard(object):
         self.add_route()
 
         html = self.load_index()
+        print(f'Started at {self._service.env.base_url}')
         display(HTML(html), metadata=dict(isolated=True))
 
     def add_route(self):
