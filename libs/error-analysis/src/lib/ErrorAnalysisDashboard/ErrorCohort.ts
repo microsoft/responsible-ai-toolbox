@@ -28,7 +28,8 @@ export class ErrorCohort {
     public cohort: Cohort,
     public jointDataset: JointDataset,
     public cells: number = 0,
-    public source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None
+    public source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    public isTemporary: boolean = false
   ) {
     this.cohort = cohort;
     this.jointDataset = jointDataset;

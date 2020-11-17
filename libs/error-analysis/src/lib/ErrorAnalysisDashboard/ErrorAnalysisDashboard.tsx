@@ -24,7 +24,7 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
-import { IPivotItemProps } from "office-ui-fabric-react";
+import { IPivotItemProps, ISettings } from "office-ui-fabric-react";
 import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
 import {
   PivotItem,
@@ -457,7 +457,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       <div className={classNames.page} style={{ maxHeight: "1000px" }}>
         <Navigation
           updateViewState={this.updateViewState.bind(this)}
+          updateGlobalTabState={this.updateGlobalTabState.bind(this)}
+          updatePredictionTabState={this.updatePredictionTabState.bind(this)}
           viewType={this.state.viewType}
+          activeGlobalTab={this.state.activeGlobalTab}
+          activePredictionTab={this.state.predictionTab}
         />
         <MainMenu
           viewExplanation={this.viewExplanation.bind(this)}
@@ -494,7 +498,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             onSave={(temporaryCohort: ErrorCohort): void =>
               this.setState({
                 baseCohort: temporaryCohort,
-                cohorts: [...this.state.cohorts, temporaryCohort],
+                cohorts: [temporaryCohort, ...this.state.cohorts],
                 selectedCohort: temporaryCohort
               })
             }
@@ -507,16 +511,26 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           <ShiftCohort
             isOpen={this.state.openShiftCohort}
             onDismiss={(): void => this.setState({ openShiftCohort: false })}
-            onApply={(selectedCohort: ErrorCohort): void =>
+            onApply={(selectedCohort: ErrorCohort): void => {
+              let cohorts = this.state.cohorts;
+              cohorts = cohorts.filter(
+                (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
+              );
               this.setState({
+                cohorts: [selectedCohort, ...cohorts],
                 selectedCohort
-              })
-            }
+              });
+            }}
             cohorts={this.state.cohorts}
           />
         )}
         <div>
-          <Customizer settings={{ hostId: this.layerHostId }}>
+          <Customizer
+            settings={(currentSettings): ISettings => ({
+              ...currentSettings,
+              hostId: this.layerHostId
+            })}
+          >
             <Layer>
               {this.state.viewType === ViewTypeKeys.ErrorAnalysisView && (
                 <ErrorAnalysisView
@@ -607,6 +621,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         });
                       }}
                       customPoints={this.state.customPoints}
+                      selectedCohort={this.state.selectedCohort}
                     />
                   )}
                 </div>
@@ -685,14 +700,16 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       }
     );
     let selectedCohortName = "";
+    let addTemporaryCohort = true;
     if (source === ErrorDetectorCohortSource.TreeMap) {
       selectedCohortName = `${this.state.baseCohort.cohort.name} (${filtersRelabeled.length} filters)`;
     } else if (source === ErrorDetectorCohortSource.HeatMap) {
       selectedCohortName = `${this.state.baseCohort.cohort.name} (${cells} cells)`;
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
+      addTemporaryCohort = false;
     }
-    const cohort: ErrorCohort = new ErrorCohort(
+    const selectedCohort: ErrorCohort = new ErrorCohort(
       new Cohort(
         selectedCohortName,
         this.state.jointDataset,
@@ -701,9 +718,16 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       ),
       this.state.jointDataset,
       cells,
-      source
+      source,
+      true
     );
-    this.setState({ selectedCohort: cohort });
+    let cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    if (addTemporaryCohort) {
+      cohorts = [selectedCohort, ...cohorts];
+    }
+    this.setState({ cohorts, selectedCohort });
   }
 
   private onConfigChanged(newConfig: IGenericChartProps): void {
@@ -744,6 +768,14 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   private updateViewState(viewType: ViewTypeKeys): void {
     this.setState({ viewType });
+  }
+
+  private updateGlobalTabState(globalTab: GlobalTabKeys): void {
+    this.setState({ activeGlobalTab: globalTab });
+  }
+
+  private updatePredictionTabState(predictionTab: PredictionTabKeys): void {
+    this.setState({ predictionTab });
   }
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {

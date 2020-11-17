@@ -24,6 +24,7 @@ import { TooltipHost } from "office-ui-fabric-react/lib/Tooltip";
 import { IRenderFunction } from "office-ui-fabric-react/lib/Utilities";
 import React from "react";
 
+import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
   constructRows,
@@ -43,6 +44,7 @@ export interface ITabularDataViewProps {
   selectedIndexes: number[];
   allSelectedIndexes?: number[];
   customPoints?: Array<{ [key: string]: any }>;
+  selectedCohort: ErrorCohort;
 }
 
 export enum DataViewKeys {
@@ -90,12 +92,14 @@ export class TabularDataView extends React.PureComponent<
         viewedRows
       );
     } else {
-      const numRows: number = this.props.jointDataset.datasetRowCount;
+      const cohortData = this.props.selectedCohort.cohort.filteredData;
+      const numRows: number = cohortData.length;
       let viewedRows: number = numRows;
       if (this.props.allSelectedIndexes) {
         viewedRows = Math.min(numRows, this.props.allSelectedIndexes.length);
       }
       this._rows = constructRows(
+        cohortData,
         this.props.jointDataset,
         viewedRows,
         this.tabularDataFilter.bind(this),
@@ -142,7 +146,6 @@ export class TabularDataView extends React.PureComponent<
                 checkButtonAriaLabel="Row checkbox"
                 selectionMode={SelectionMode.multiple}
                 selection={this._selection}
-                //onItemInvoked={this._onItemInvoked}
               />
             </MarqueeSelection>
           </ScrollablePane>

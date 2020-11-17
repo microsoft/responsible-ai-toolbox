@@ -5,6 +5,7 @@ import { JointDataset } from "@responsible-ai/interpret";
 import { IColumn } from "office-ui-fabric-react";
 
 export function constructRows(
+  cohortData: Array<{ [key: string]: number }>,
   jointDataset: JointDataset,
   viewedRows: number,
   filterFunction?: (row: { [key: string]: number }) => boolean,
@@ -16,7 +17,7 @@ export function constructRows(
     if (indexes) {
       index = indexes[i];
     }
-    const row = jointDataset.getRow(index);
+    const row = cohortData[index];
     if (filterFunction && filterFunction(row)) {
       continue;
     }

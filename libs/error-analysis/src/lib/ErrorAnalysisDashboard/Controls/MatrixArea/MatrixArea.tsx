@@ -258,6 +258,7 @@ export class MatrixArea extends React.PureComponent<
     const category1Values = [];
     let cat1HasIntervals = false;
     let cat2HasIntervals = false;
+    // Extract categories for first selected feature in matrix filter
     for (let i = 0; i < matrix.length - 1; i++) {
       const cellCat1 = matrix[i][0];
       const category1 = cellCat1.category1;
@@ -270,6 +271,7 @@ export class MatrixArea extends React.PureComponent<
     }
     const category2Values = [];
     const rowLength = matrix[0].length;
+    // Extract categories for second selected feature in matrix filter
     for (let i = 1; i < rowLength; i++) {
       const cellCat2 = matrix[matrix.length - 1][i];
       const category2 = cellCat2.category2;
@@ -283,6 +285,7 @@ export class MatrixArea extends React.PureComponent<
     const multiCellCompositeFilters: ICompositeFilter[] = [];
     const keyFeature1 = this.getKey(this.props.selectedFeature1!);
     let keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    // Create filters based on the selected cells in the matrix filter
     for (let i = 0; i < matrix.length - 1; i++) {
       for (let j = 1; j < rowLength; j++) {
         const index = j + i * rowLength;
