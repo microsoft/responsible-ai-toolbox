@@ -48,17 +48,28 @@ class ErrorAnalysisDashboard(Dashboard):
                            public_ip=public_ip,
                            port=port)
 
-        @self._service.app.route('/predict', methods=['POST'])
+        # To enable multiple dashboards to run in the same notebook we need to
+        # prevent them from using the same method names (in addition to using
+        # dedicated ports). Below we rename the function for that purpose and
+        # manually add the URL rule instead of using the route decorator.
         def predict():
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
 
-        @self._service.app.route('/tree', methods=['POST'])
         def tree():
             data = request.get_json(force=True)
             return jsonify(self.input.debug_ml(data))
 
-        @self._service.app.route('/matrix', methods=['POST'])
         def matrix():
             data = request.get_json(force=True)
             return jsonify(self.input.matrix(data))
+
+        predict.__name__ = f"predict{self._service.port}"
+        self._service.app.add_url_rule('/predict', endpoint=predict.__name__,
+                                       view_func=predict, methods=['POST'])
+        tree.__name__ = f"tree{self._service.port}"
+        self._service.app.add_url_rule('/tree', endpoint=tree.__name__,
+                                       view_func=tree, methods=['POST'])
+        matrix.__name__ = f"matrix{self._service.port}"
+        self._service.app.add_url_rule('/matrix', endpoint=matrix.__name__,
+                                       view_func=matrix, methods=['POST'])

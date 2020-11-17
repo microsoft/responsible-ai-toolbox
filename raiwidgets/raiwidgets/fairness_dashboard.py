@@ -104,8 +104,11 @@ class FairnessDashboard(Dashboard):
 
         self.fairness_metrics_module = metrics_module
 
-        @self._service.app.route('/metrics', methods=['POST'])
-        def fairness_metrics_calculation():
+        # To enable multiple dashboards to run in the same notebook we need to
+        # prevent them from using the same method names (in addition to using
+        # dedicated ports). Below we rename the function for that purpose and
+        # manually add the URL rule instead of using the route decorator.
+        def metrics():
             try:
                 data = request.get_json(force=True)
                 data.update(self.model_data)
@@ -136,6 +139,10 @@ class FairnessDashboard(Dashboard):
                         exc_type, exc_value, exc_traceback))),
                     "locals": str(locals()),
                 })
+
+        metrics.__name__ = f"metrics{self._service.port}"
+        self._service.app.add_url_rule('/metrics', endpoint=metrics.__name__,
+                                       iew_func=metrics, methods=['POST'])
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)

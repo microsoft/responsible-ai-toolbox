@@ -40,7 +40,14 @@ class ExplanationDashboard(Dashboard):
                            public_ip=public_ip,
                            port=port)
 
-        @self._service.app.route('/predict', methods=['POST'])
+        # To enable multiple dashboards to run in the same notebook we need to
+        # prevent them from using the same method names (in addition to using
+        # dedicated ports). Below we rename the function for that purpose and
+        # manually add the URL rule instead of using the route decorator.
         def predict():
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
+
+        predict.__name__ = f"predict{self._service.port}"
+        self._service.app.add_url_rule('/predict', endpoint=predict.__name__,
+                                       view_func=predict, methods=['POST'])

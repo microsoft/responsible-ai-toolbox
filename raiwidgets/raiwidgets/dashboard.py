@@ -86,13 +86,18 @@ class Dashboard(object):
         self.add_route()
 
         html = self.load_index()
-        print(f'Started at {self._service.env.base_url}')
-        display(HTML(html))
+        display(HTML(html), metadata=dict(isolated=True))
 
     def add_route(self):
-        @self._service.app.route('/')
+        # To enable multiple dashboards to run in the same notebook we need to
+        # prevent them from using the same method names (in addition to using
+        # dedicated ports). Below we rename the function for that purpose and
+        # manually add the URL rule instead of using the route decorator.
         def visual():
             return self.load_index()
+        visual.__name__ = f"visual{self._service.port}"
+        self._service.app.add_url_rule('/', endpoint=visual.__name__,
+                                       view_func=visual)
         return
 
     def get_widget_path(path):
