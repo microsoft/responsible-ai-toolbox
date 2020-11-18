@@ -48,17 +48,20 @@ class ErrorAnalysisDashboard(Dashboard):
                            public_ip=public_ip,
                            port=port)
 
-        @self._service.app.route('/predict', methods=['POST'])
         def predict():
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
 
-        @self._service.app.route('/tree', methods=['POST'])
+        self.add_url_rule(predict, '/predict', methods=["POST"])
+
         def tree():
             data = request.get_json(force=True)
             return jsonify(self.input.debug_ml(data))
 
-        @self._service.app.route('/matrix', methods=['POST'])
+        self.add_url_rule(tree, '/tree', methods=["POST"])
+
         def matrix():
             data = request.get_json(force=True)
             return jsonify(self.input.matrix(data))
+
+        self.add_url_rule(matrix, '/matrix', methods=["POST"])

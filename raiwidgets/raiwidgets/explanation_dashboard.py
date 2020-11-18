@@ -40,7 +40,7 @@ class ExplanationDashboard(Dashboard):
                            public_ip=public_ip,
                            port=port)
 
-        @self._service.app.route('/predict', methods=['POST'])
         def predict():
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
+        self.add_url_rule(predict, '/predict', methods=["POST"])

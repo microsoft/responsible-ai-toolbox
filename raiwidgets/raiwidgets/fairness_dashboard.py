@@ -104,8 +104,7 @@ class FairnessDashboard(Dashboard):
 
         self.fairness_metrics_module = metrics_module
 
-        @self._service.app.route('/metrics', methods=['POST'])
-        def fairness_metrics_calculation():
+        def metrics():
             try:
                 data = request.get_json(force=True)
                 data.update(self.model_data)
@@ -136,6 +135,8 @@ class FairnessDashboard(Dashboard):
                         exc_type, exc_value, exc_traceback))),
                     "locals": str(locals()),
                 })
+
+        self.add_url_rule(metrics, '/metrics', methods=["POST"])
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)
