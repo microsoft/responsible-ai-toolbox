@@ -18,6 +18,7 @@ import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { PredictionTabKeys } from "../../ErrorAnalysisDashboard";
+import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { InspectionView } from "../InspectionView/InspectionView";
 import {
@@ -48,6 +49,7 @@ export interface IInstanceViewProps {
   activePredictionTab: PredictionTabKeys;
   setActivePredictionTab: (key: PredictionTabKeys) => void;
   customPoints: Array<{ [key: string]: any }>;
+  selectedCohort: ErrorCohort;
 }
 
 export interface IInstanceViewState {
@@ -126,6 +128,7 @@ export class InstanceView extends React.PureComponent<
             weightLabels={this.props.weightLabels}
             invokeModel={this.props.invokeModel}
             onWeightChange={this.props.onWeightChange}
+            selectedCohort={this.props.selectedCohort}
           />
         </div>
       );
@@ -168,6 +171,7 @@ export class InstanceView extends React.PureComponent<
                 this.state.selectionDetails.selectedCorrectDatasetIndexes
               }
               setSelectedIndexes={this.setCorrectSelectedIndexes.bind(this)}
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
@@ -184,6 +188,7 @@ export class InstanceView extends React.PureComponent<
                 this.state.selectionDetails.selectedIncorrectDatasetIndexes
               }
               setSelectedIndexes={this.setIncorrectSelectedIndexes.bind(this)}
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
@@ -203,6 +208,7 @@ export class InstanceView extends React.PureComponent<
               allSelectedIndexes={
                 this.state.selectionDetails.selectedAllSelectedIndexes
               }
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
@@ -223,6 +229,7 @@ export class InstanceView extends React.PureComponent<
               allSelectedIndexes={
                 this.state.selectionDetails.selectedAllSelectedIndexes
               }
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
