@@ -140,9 +140,7 @@ class FairnessDashboard(Dashboard):
                     "locals": str(locals()),
                 })
 
-        metrics.__name__ = f"metrics{self._service.port}"
-        self._service.app.add_url_rule('/metrics', endpoint=metrics.__name__,
-                                       iew_func=metrics, methods=['POST'])
+        self.add_url_rule(metrics, '/metrics', methods=["POST"])
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)

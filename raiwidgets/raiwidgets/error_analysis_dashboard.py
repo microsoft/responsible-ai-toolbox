@@ -56,20 +56,16 @@ class ErrorAnalysisDashboard(Dashboard):
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
 
+        self.add_url_rule(predict, '/predict', methods=["POST"])
+
         def tree():
             data = request.get_json(force=True)
             return jsonify(self.input.debug_ml(data))
+
+        self.add_url_rule(tree, '/tree', methods=["POST"])
 
         def matrix():
             data = request.get_json(force=True)
             return jsonify(self.input.matrix(data))
 
-        predict.__name__ = f"predict{self._service.port}"
-        self._service.app.add_url_rule('/predict', endpoint=predict.__name__,
-                                       view_func=predict, methods=['POST'])
-        tree.__name__ = f"tree{self._service.port}"
-        self._service.app.add_url_rule('/tree', endpoint=tree.__name__,
-                                       view_func=tree, methods=['POST'])
-        matrix.__name__ = f"matrix{self._service.port}"
-        self._service.app.add_url_rule('/matrix', endpoint=matrix.__name__,
-                                       view_func=matrix, methods=['POST'])
+        self.add_url_rule(matrix, '/matrix', methods=["POST"])

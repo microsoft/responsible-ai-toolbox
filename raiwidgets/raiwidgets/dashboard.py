@@ -96,9 +96,7 @@ class Dashboard(object):
         # manually add the URL rule instead of using the route decorator.
         def visual():
             return self.load_index()
-        visual.__name__ = f"visual{self._service.port}"
-        self._service.app.add_url_rule('/', endpoint=visual.__name__,
-                                       view_func=visual)
+        self.add_url_rule(visual, '/', methods=["GET"])
         return
 
     def get_widget_path(path):
@@ -122,3 +120,16 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_model_data__", json.dumps(self.model_data))
             return content
+
+    def add_url_rule(self, func, route, methods):
+        """To enable multiple dashboards to run in the same notebook we need to
+        prevent them from using the same method names (in addition to using
+        dedicated ports). We rename the function for that purpose and
+        manually add the URL rule instead of using the route decorator.
+        """
+        func.__name__ = func.__name__ + str(id(self))
+        self._service.app.add_url_rule(
+            route,
+            endpoint=func.__name__,
+            view_func=func,
+            methods=methods)

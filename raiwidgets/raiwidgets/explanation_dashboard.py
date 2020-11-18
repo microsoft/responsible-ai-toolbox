@@ -47,7 +47,4 @@ class ExplanationDashboard(Dashboard):
         def predict():
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
-
-        predict.__name__ = f"predict{self._service.port}"
-        self._service.app.add_url_rule('/predict', endpoint=predict.__name__,
-                                       view_func=predict, methods=['POST'])
+        self.add_url_rule(predict, '/predict', methods=["POST"])
