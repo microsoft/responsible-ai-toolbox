@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeOfficeFabric } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -49,7 +48,6 @@ export class NewExplanationDashboard extends React.PureComponent<
   private pivotItems: IPivotItemProps[] = [];
   public constructor(props: IExplanationDashboardProps) {
     super(props);
-    initializeOfficeFabric(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -77,9 +75,6 @@ export class NewExplanationDashboard extends React.PureComponent<
   }
 
   public componentDidUpdate(prev: IExplanationDashboardProps): void {
-    if (prev.theme !== this.props.theme) {
-      initializeOfficeFabric(this.props);
-    }
     if (this.props.locale && prev.locale !== this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
