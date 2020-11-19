@@ -4,8 +4,11 @@
 import {
   PrimaryButton,
   IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
   ISearchBoxStyles,
   IStackTokens,
+  IStyleFunctionOrObject,
   Checkbox,
   Panel,
   SearchBox,
@@ -41,6 +44,10 @@ export interface IFeatureListState {
   features: string[];
 }
 
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
+};
+
 export class FeatureList extends React.Component<
   IFeatureListProps,
   IFeatureListState
@@ -64,6 +71,7 @@ export class FeatureList extends React.Component<
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">

@@ -532,6 +532,7 @@
       "lessThanEquals": " <= {0}",
       "greaterThanEquals": " >= {0}",
       "includes": " includes {0} ",
+      "excludes": " excludes {0} ",
       "_includes.comment": "tooltip label for a filter with included values",
       "inTheRangeOf": "[ {0} ]",
       "overflowFilterArgs": "{0} and {1} others",

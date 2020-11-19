@@ -645,8 +645,14 @@ export class TreeViewRenderer extends React.PureComponent<
     if (!d || !d.parent) {
       return [];
     }
+    let filterArg: number[];
+    if (Array.isArray(d.data!.arg)) {
+      filterArg = d.data!.arg;
+    } else {
+      filterArg = [d.data!.arg];
+    }
     const filter = {
-      arg: [d.data!.arg],
+      arg: filterArg,
       column: d.parent!.data!.nodeName,
       method: d.data!.method
     };
