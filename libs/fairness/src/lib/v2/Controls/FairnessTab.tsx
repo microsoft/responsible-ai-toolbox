@@ -21,48 +21,46 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
   public render(): React.ReactNode {
     const styles = FairnessTabStyles();
     return (
-      <Stack
-        horizontal
-        horizontalAlign="space-between"
-        className={styles.frame}
-      >
-        <StackItem grow={2}>
-          <Stack className={styles.main}>
+      <Stack horizontal={false} className={styles.frame}>
+        <Stack horizontal={true} horizontalAlign="space-between">
+          <Stack horizontal={false} styles={{ root: { display: "flex" } }}>
             <Text className={styles.header} block>
               {localization.Fairness.Fairness.pickerHeader}
             </Text>
             <Text className={styles.textBody} block>
               {localization.Fairness.Fairness.body}
             </Text>
-            <StackItem grow={2} className={styles.itemsList}>
-              <TileList
-                items={this.props.fairnessPickerProps.fairnessOptions.map(
-                  (fairness): ITileProp => {
-                    const selected =
-                      this.props.fairnessPickerProps.selectedFairnessKey ===
-                      fairness.key;
-                    return {
-                      description: fairness.description,
-                      onSelect: this.props.fairnessPickerProps.onFairnessChange.bind(
-                        this,
-                        fairness.key
-                      ),
-                      selected,
-                      title: fairness.title
-                    };
-                  }
-                )}
-              />
-            </StackItem>
-            <WizardFooter
-              onNext={this.props.onNext}
-              onPrevious={this.props.onPrevious}
-            />
           </Stack>
+          <DataSpecificationBlade
+            numberRows={this.props.dashboardContext.trueY.length}
+            featureNames={
+              this.props.dashboardContext.modelMetadata.featureNames
+            }
+          />
+        </Stack>
+        <StackItem className={styles.itemsList}>
+          <TileList
+            items={this.props.fairnessPickerProps.fairnessOptions.map(
+              (fairness): ITileProp => {
+                const selected =
+                  this.props.fairnessPickerProps.selectedFairnessKey ===
+                  fairness.key;
+                return {
+                  description: fairness.description,
+                  onSelect: this.props.fairnessPickerProps.onFairnessChange.bind(
+                    this,
+                    fairness.key
+                  ),
+                  selected,
+                  title: fairness.title
+                };
+              }
+            )}
+          />
         </StackItem>
-        <DataSpecificationBlade
-          numberRows={this.props.dashboardContext.trueY.length}
-          featureNames={this.props.dashboardContext.modelMetadata.featureNames}
+        <WizardFooter
+          onNext={this.props.onNext}
+          onPrevious={this.props.onPrevious}
         />
       </Stack>
     );
