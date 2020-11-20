@@ -622,6 +622,9 @@
       "_colorValue.comment": "label for selecting color value",
       "count": "Count",
       "_count.comment": "the default axis is the count of items"
+    },
+    "WhatIfPanel": {
+      "whatIfHeader": "What-If"
     }
   },
   "Fairness": {

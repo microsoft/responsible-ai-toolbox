@@ -658,11 +658,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 metadata={this.state.modelMetadata}
                 invokeModel={this.props.requestPredictions}
                 customPoints={this.state.customPoints}
-                addCustomPoint={(temporaryPoint: {
-                  [key: string]: any;
-                }): void => {
-                  this.state.customPoints.push(temporaryPoint);
-                }}
+                addCustomPoint={this.addCustomPoint.bind(this)}
               />
             </Layer>
           </Customizer>
@@ -677,6 +673,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         </div>
       </div>
     );
+  }
+
+  private addCustomPoint(temporaryPoint: { [key: string]: any }): void {
+    this.setState({
+      customPoints: [...this.state.customPoints, temporaryPoint]
+    });
   }
 
   private updateSelectedCohort(
