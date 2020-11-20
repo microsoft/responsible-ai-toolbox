@@ -47,6 +47,15 @@ export interface ITabularDataViewProps {
   selectedCohort: ErrorCohort;
 }
 
+export interface ITableState {
+  rows: any[];
+  columns: IColumn[];
+}
+
+export interface ITabularDataViewState {
+  tableState: ITableState;
+}
+
 export enum DataViewKeys {
   SelectedInstances = "SelectedInstances",
   CorrectInstances = "CorrectInstances",
@@ -73,56 +82,32 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   );
 };
 
-export class TabularDataView extends React.PureComponent<
-  ITabularDataViewProps
+export class TabularDataView extends React.Component<
+  ITabularDataViewProps,
+  ITabularDataViewState
 > {
-  private _rows: any[];
-  private _columns: IColumn[];
   private _selection: Selection;
   public constructor(props: ITabularDataViewProps) {
     super(props);
+    const tableState = this.updateItems();
     this.state = {
-      jointDataset: props.jointDataset
+      tableState
     };
-    if (this.props.customPoints) {
-      const viewedRows = this.props.customPoints.length;
-      this._rows = rowsFromCustomPoints(
-        this.props.jointDataset,
-        this.props.customPoints,
-        viewedRows
-      );
-    } else {
-      const cohortData = this.props.selectedCohort.cohort.filteredData;
-      const numRows: number = cohortData.length;
-      let viewedRows: number = numRows;
-      if (this.props.allSelectedIndexes) {
-        viewedRows = Math.min(numRows, this.props.allSelectedIndexes.length);
-      }
-      this._rows = constructRows(
-        cohortData,
-        this.props.jointDataset,
-        viewedRows,
-        this.tabularDataFilter.bind(this),
-        this.props.allSelectedIndexes
-      );
-    }
-
-    const numCols: number = this.props.jointDataset.datasetFeatureCount;
-    const featureNames: string[] = this.props.features;
-    // TODO: remove, this is just for debugging for now
-    const viewedCols: number = Math.min(numCols, featureNames.length);
-    this._columns = constructCols(viewedCols, featureNames);
     this._selection = new Selection({
       onSelectionChanged: (): void =>
         this.props.setSelectedIndexes(this.getSelectionDetails())
     });
-    this._selection.setItems(this._rows);
-    if (this.props.selectedIndexes) {
-      const rowIndexes = this._rows.map((row) => row[0]);
-      this.props.selectedIndexes.forEach((selectedIndex): void => {
-        const rowIndex = rowIndexes.indexOf(selectedIndex);
-        this._selection.setIndexSelected(rowIndex, true, true);
-      });
+    this.updateSelection();
+  }
+
+  public componentDidUpdate(prevProps: ITabularDataViewProps): void {
+    if (
+      this.props.customPoints !== prevProps.customPoints ||
+      this.props.selectedCohort !== prevProps.selectedCohort
+    ) {
+      const newTableState = this.updateItems();
+      this.setState({ tableState: newTableState });
+      this.updateSelection();
     }
   }
 
@@ -134,8 +119,8 @@ export class TabularDataView extends React.PureComponent<
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <MarqueeSelection selection={this._selection}>
               <DetailsList
-                items={this._rows}
-                columns={this._columns}
+                items={this.state.tableState.rows}
+                columns={this.state.tableState.columns}
                 setKey="set"
                 layoutMode={DetailsListLayoutMode.fixedColumns}
                 constrainMode={ConstrainMode.unconstrained}
@@ -152,6 +137,53 @@ export class TabularDataView extends React.PureComponent<
         </Fabric>
       </div>
     );
+  }
+
+  private updateItems(): ITableState {
+    let rows = [];
+    if (this.props.customPoints) {
+      const viewedRows = this.props.customPoints.length;
+      rows = rowsFromCustomPoints(
+        this.props.jointDataset,
+        this.props.customPoints,
+        viewedRows
+      );
+    } else {
+      const cohortData = this.props.selectedCohort.cohort.filteredData;
+      const numRows: number = cohortData.length;
+      let viewedRows: number = numRows;
+      if (this.props.allSelectedIndexes) {
+        viewedRows = Math.min(numRows, this.props.allSelectedIndexes.length);
+      }
+      rows = constructRows(
+        cohortData,
+        this.props.jointDataset,
+        viewedRows,
+        this.tabularDataFilter.bind(this),
+        this.props.allSelectedIndexes
+      );
+    }
+
+    const numCols: number = this.props.jointDataset.datasetFeatureCount;
+    const featureNames: string[] = this.props.features;
+    // TODO: remove, this is just for debugging for now
+    const viewedCols: number = Math.min(numCols, featureNames.length);
+    const columns = constructCols(viewedCols, featureNames);
+    return {
+      columns,
+      rows
+    };
+  }
+
+  private updateSelection(): void {
+    this._selection.setItems(this.state.tableState.rows);
+    if (this.props.selectedIndexes) {
+      const rowIndexes = this.state.tableState.rows.map((row) => row[0]);
+      this.props.selectedIndexes.forEach((selectedIndex): void => {
+        const rowIndex = rowIndexes.indexOf(selectedIndex);
+        this._selection.setIndexSelected(rowIndex, true, true);
+      });
+    }
   }
 
   private getSelectionDetails(): number[] {
