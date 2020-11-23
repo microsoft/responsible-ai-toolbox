@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  initializeOfficeFabric,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
@@ -196,7 +195,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
-    initializeOfficeFabric(props);
     this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
     this.onConfigChanged = this.onConfigChanged.bind(this);
     this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
