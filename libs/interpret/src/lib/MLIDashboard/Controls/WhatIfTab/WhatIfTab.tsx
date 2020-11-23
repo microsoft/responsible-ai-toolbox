@@ -155,6 +155,9 @@ export class WhatIfTab extends React.PureComponent<
     prevProps: IWhatIfTabProps,
     prevState: IWhatIfTabState
   ): void {
+    if (!this.state) {
+      return;
+    }
     let sortingSeriesIndex = this.state.sortingSeriesIndex;
     let sortArray = this.state.sortArray;
     const selectionsAreEqual = _.isEqual(
