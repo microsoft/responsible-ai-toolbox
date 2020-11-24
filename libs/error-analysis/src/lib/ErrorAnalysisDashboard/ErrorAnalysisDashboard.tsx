@@ -292,11 +292,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       props.testData,
       props.dataSummary.categoricalMap
     );
-    const featureRanges = ModelMetadata.buildFeatureRanges(
-      props.testData,
-      featureIsCategorical,
-      props.dataSummary.categoricalMap
-    );
+    const featureRanges =
+      ModelMetadata.buildFeatureRanges(
+        props.testData,
+        featureIsCategorical,
+        props.dataSummary.categoricalMap
+      ) || [];
     return {
       classNames,
       featureIsCategorical,

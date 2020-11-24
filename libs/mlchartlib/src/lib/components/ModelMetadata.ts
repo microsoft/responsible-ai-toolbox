@@ -17,6 +17,11 @@ export class ModelMetadata {
     testData: any[][] | undefined,
     isCategoricalArray: boolean[] | undefined,
     categoricalMap?: { [key: number]: string[] }
+  ): Array<INumericRange | ICategoricalRange> | undefined;
+  public static buildFeatureRanges(
+    testData: any[][] | undefined,
+    isCategoricalArray: boolean[] | undefined,
+    categoricalMap?: { [key: number]: string[] }
   ): Array<INumericRange | ICategoricalRange> | undefined {
     if (testData === undefined || isCategoricalArray === undefined) {
       return undefined;
