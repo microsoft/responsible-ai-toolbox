@@ -371,10 +371,6 @@
       "binary": "二元",
       "continuous": "連續"
     },
-    "Parity": {
-      "header": "依據差距進行測量的公平性",
-      "body": "差距指標會在所選功能間量化模型行為的變化。有兩種差距指標: 即將推出更多...."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "文件"

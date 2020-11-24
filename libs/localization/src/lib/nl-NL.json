@@ -371,10 +371,6 @@
       "binary": "binair",
       "continuous": "doorlopend"
     },
-    "Parity": {
-      "header": "Verdeling gemeten in termen van verschil",
-      "body": "Met de verschilwaarden wordt de variatie van het gedrag van uw model op geselecteerde functies gekwantificeerd. Er zijn twee soorten verschilwaarden: wordt vervolgd...."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Documentatie"

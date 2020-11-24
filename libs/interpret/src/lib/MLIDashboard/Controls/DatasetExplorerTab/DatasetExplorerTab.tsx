@@ -337,7 +337,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       return;
     }
     const chartProps: IGenericChartProps = {
-      chartType: ChartTypes.Histogram,
+      chartType: ChartTypes.Scatter,
       colorAxis: {
         options: {},
         property: this.props.jointDataset.hasPredictedY
