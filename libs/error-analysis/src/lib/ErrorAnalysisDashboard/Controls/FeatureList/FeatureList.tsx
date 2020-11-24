@@ -5,13 +5,13 @@ import {
   PrimaryButton,
   IFocusTrapZoneProps,
   ISearchBoxStyles,
-  IStackTokens
+  IStackTokens,
+  Checkbox,
+  Panel,
+  SearchBox,
+  Stack,
+  Text
 } from "office-ui-fabric-react";
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
-import { SearchBox } from "office-ui-fabric-react/lib/SearchBox";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
 
 import { featureListStyles } from "./FeatureList.styles";

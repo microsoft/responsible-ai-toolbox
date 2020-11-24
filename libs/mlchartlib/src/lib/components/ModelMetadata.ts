@@ -9,10 +9,15 @@ import { RangeTypes } from "./RangeTypes";
 
 export class ModelMetadata {
   public static buildFeatureRanges(
-    testData: any[][] | undefined,
+    testData: any[][],
     isCategoricalArray: boolean[],
     categoricalMap?: { [key: number]: string[] }
   ): Array<INumericRange | ICategoricalRange>;
+  public static buildFeatureRanges(
+    testData: any[][] | undefined,
+    isCategoricalArray: boolean[] | undefined,
+    categoricalMap?: { [key: number]: string[] }
+  ): Array<INumericRange | ICategoricalRange> | undefined;
   public static buildFeatureRanges(
     testData: any[][] | undefined,
     isCategoricalArray: boolean[] | undefined,

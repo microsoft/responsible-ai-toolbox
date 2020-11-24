@@ -76,7 +76,14 @@ export class InteractiveLegend extends React.PureComponent<
       item.activated === false ? this.classes.inactiveItem : this.classes.item;
     return (
       <div className={rootClass} key={index}>
-        <div className={this.classes.clickTarget} onClick={item.onClick}>
+        <div
+          className={this.classes.clickTarget}
+          onClick={item.onClick}
+          onKeyUp={undefined}
+          role="checkbox"
+          aria-checked={item.activated}
+          tabIndex={index}
+        >
           <div
             className={
               item.activated === false

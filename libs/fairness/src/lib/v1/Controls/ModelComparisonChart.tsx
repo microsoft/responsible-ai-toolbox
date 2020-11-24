@@ -289,7 +289,6 @@ export class ModelComparisonChart extends React.PureComponent<
             iconProps={{ iconName: "Edit" }}
             onClick={this.props.onEditConfigs}
             className={styles.editButton}
-            autoFocus={true}
           >
             {localization.Fairness.Report.editConfiguration}
           </ActionButton>
