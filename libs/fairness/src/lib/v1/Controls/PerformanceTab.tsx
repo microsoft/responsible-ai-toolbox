@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text, FocusZone } from "office-ui-fabric-react";
-import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
+import { Text, FocusZone, Stack, StackItem } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";

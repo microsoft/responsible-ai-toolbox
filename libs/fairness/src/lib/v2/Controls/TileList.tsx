@@ -39,11 +39,13 @@ export class TileList extends React.PureComponent<ITileListProps> {
     return (
       <div
         className={styles.itemCell}
-        onClick={item.onSelect.bind(this)}
+        onClick={item.onSelect}
         key={index}
         data-is-focusable={true}
         role="radio"
         aria-checked={item.selected}
+        tabIndex={index}
+        onKeyUp={undefined}
       >
         <Icon
           iconName={item.selected ? "RadioBtnOn" : "RadioBtnOff"}

@@ -13,9 +13,9 @@ import _ from "lodash";
 import {
   IComboBoxOption,
   IDropdownOption,
-  IFocusTrapZoneProps
+  IFocusTrapZoneProps,
+  Panel
 } from "office-ui-fabric-react";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

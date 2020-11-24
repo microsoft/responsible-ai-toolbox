@@ -1,18 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IDropdownStyles, IDropdownOption } from "office-ui-fabric-react";
 import {
+  IDropdownStyles,
+  IDropdownOption,
   PrimaryButton,
-  DefaultButton
-} from "office-ui-fabric-react/lib/Button";
-import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
-import {
+  DefaultButton,
+  ContextualMenu,
   Dialog,
   DialogType,
-  DialogFooter
-} from "office-ui-fabric-react/lib/Dialog";
-import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
+  DialogFooter,
+  Dropdown
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

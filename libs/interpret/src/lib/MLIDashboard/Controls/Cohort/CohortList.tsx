@@ -88,9 +88,9 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
               {localization.Interpret.CohortBanner.datasetCohorts.toUpperCase()}
             </Text>
           </Stack.Item>
-          {this.props.cohorts.map((cohort) => {
+          {this.props.cohorts.map((cohort, idx) => {
             return (
-              <Stack.Item tokens={{ padding: "l1" }}>
+              <Stack.Item tokens={{ padding: "l1" }} key={idx}>
                 <Stack>
                   <Text variant={"mediumPlus"} title={cohort.name}>
                     {limitStringLength(cohort.name, 15)}

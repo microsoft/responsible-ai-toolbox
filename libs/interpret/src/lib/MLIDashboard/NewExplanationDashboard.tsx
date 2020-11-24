@@ -122,8 +122,12 @@ export class NewExplanationDashboard extends React.PureComponent<
               messageBarType={MessageBarType.warning}
             >
               <Text>{localization.Interpret.ValidationErrors.errorHeader}</Text>
-              {this.state.validationWarnings.map((message) => {
-                return <Text block>{message}</Text>;
+              {this.state.validationWarnings.map((message, idx) => {
+                return (
+                  <Text block key={idx}>
+                    {message}
+                  </Text>
+                );
               })}
             </MessageBar>
           )}

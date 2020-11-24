@@ -7,9 +7,9 @@ import {
   IComboBox,
   IComboBoxOption,
   IStackTokens,
-  ITheme
+  ITheme,
+  Stack
 } from "office-ui-fabric-react";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
