@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IColumn, IFocusTrapZoneProps } from "office-ui-fabric-react";
 import {
+  IColumn,
+  IFocusTrapZoneProps,
   CheckboxVisibility,
   DetailsList,
-  DetailsListLayoutMode
-} from "office-ui-fabric-react/lib/DetailsList";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
+  DetailsListLayoutMode,
+  Panel
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  initializeOfficeFabric,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
@@ -24,15 +23,18 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
-import { IPivotItemProps, ISettings } from "office-ui-fabric-react";
-import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
 import {
+  IPivotItemProps,
+  ISettings,
+  Layer,
+  LayerHost,
   PivotItem,
   Pivot,
-  PivotLinkSize
-} from "office-ui-fabric-react/lib/Pivot";
-import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
-import { Customizer, getId } from "office-ui-fabric-react/lib/Utilities";
+  PivotLinkSize,
+  mergeStyleSets,
+  Customizer,
+  getId
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
@@ -196,7 +198,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
-    initializeOfficeFabric(props);
     this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
     this.onConfigChanged = this.onConfigChanged.bind(this);
     this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
@@ -291,11 +292,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       props.testData,
       props.dataSummary.categoricalMap
     );
-    const featureRanges = ModelMetadata.buildFeatureRanges(
-      props.testData,
-      featureIsCategorical,
-      props.dataSummary.categoricalMap
-    );
+    const featureRanges =
+      ModelMetadata.buildFeatureRanges(
+        props.testData,
+        featureIsCategorical,
+        props.dataSummary.categoricalMap
+      ) || [];
     return {
       classNames,
       featureIsCategorical,

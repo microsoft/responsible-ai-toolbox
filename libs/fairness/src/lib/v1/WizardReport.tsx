@@ -557,7 +557,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             <ActionButton
               iconProps={{ iconName: "Edit" }}
               onClick={this.onEditConfigs}
-              autoFocus={true}
             >
               {localization.Fairness.Report.editConfiguration}
             </ActionButton>

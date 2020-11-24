@@ -11,17 +11,16 @@ import {
   IDetailsColumnRenderTooltipProps,
   ITheme,
   Selection,
-  SelectionMode
-} from "office-ui-fabric-react";
-import { Fabric } from "office-ui-fabric-react/lib/Fabric";
-import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
-import {
+  SelectionMode,
+  Fabric,
+  MarqueeSelection,
   ScrollablePane,
-  ScrollbarVisibility
-} from "office-ui-fabric-react/lib/ScrollablePane";
-import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
-import { TooltipHost } from "office-ui-fabric-react/lib/Tooltip";
-import { IRenderFunction } from "office-ui-fabric-react/lib/Utilities";
+  ScrollbarVisibility,
+  Sticky,
+  StickyPositionType,
+  TooltipHost,
+  IRenderFunction
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

@@ -1,0 +1,32 @@
+{
+  "plugins": ["import"],
+  "extends": ["plugin:import/errors", "plugin:import/warnings"],
+  "rules": {
+    "import/no-internal-modules": [
+      "error",
+      {
+        "allow": [
+          "core-js/stable",
+          "regenerator-runtime/runtime.js",
+          "office-ui-fabric-react/lib/utilities/positioning",
+          "@nrwl/cypress/plugins/preprocessor"
+        ]
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
+    "import/no-default-export": "error",
+    "import/first": "error",
+    "import/no-amd": "error",
+    "import/no-webpack-loader-syntax": "error"
+  }
+}

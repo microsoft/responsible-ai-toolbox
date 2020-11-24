@@ -3,10 +3,14 @@
 
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { IDropdownOption, Stack } from "office-ui-fabric-react";
-import { ActionButton } from "office-ui-fabric-react/lib/Button";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
-import { Text } from "office-ui-fabric-react/lib/Text";
+import {
+  IDropdownOption,
+  Stack,
+  ActionButton,
+  Spinner,
+  SpinnerSize,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
