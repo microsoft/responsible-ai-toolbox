@@ -371,10 +371,6 @@
       "binary": "二进制",
       "continuous": "连续"
     },
-    "Parity": {
-      "header": "根据差异衡量公平性",
-      "body": "差异指标量化了模型在所选特征之间的行为变化。有两种类型的差异指标: 即将推出更多..."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "文档"

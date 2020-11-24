@@ -371,10 +371,6 @@
       "binary": "이진",
       "continuous": "연속"
     },
-    "Parity": {
-      "header": "차이 측면에서 측정된 공정성",
-      "body": "차이 메트릭은 선택한 기능에서 모델 동작의 변형을 정량화합니다. 차이 메트릭에는 두 가지 종류가 있으며 더 많은 종류가 제공될 예정입니다."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "설명서"

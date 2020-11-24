@@ -371,10 +371,6 @@
       "binary": "binarny",
       "continuous": "ciągły"
     },
-    "Parity": {
-      "header": "Atrakcyjność mierzona za pomocą rozbieżności",
-      "body": "Metryki rozbieżności określają wartość odchylenia dla zachowania modelu w ramach wybranych cech. Istnieją dwa rodzaje metryk rozbieżności: informacje zostaną uzupełnione...."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Dokumentacja"

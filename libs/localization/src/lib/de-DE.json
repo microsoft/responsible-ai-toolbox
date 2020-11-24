@@ -371,10 +371,6 @@
       "binary": "binäre",
       "continuous": "fortlaufende"
     },
-    "Parity": {
-      "header": "Fairness gemessen in Bezug auf die Abweichung",
-      "body": "Abweichungsmetriken quantifizieren die Variation des Modellverhaltens für die ausgewählten Features. Es gibt zwei Arten von Abweichungsmetriken: Weitere Informationen folgen..."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Dokumentation"
