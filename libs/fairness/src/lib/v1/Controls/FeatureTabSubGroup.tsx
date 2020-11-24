@@ -5,7 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { ActionButton, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { IBinnedResponse } from "../util/IBinnedResponse";
+import { IBinnedResponse } from "../../util/IBinnedResponse";
 
 import { FeatureTabStyles } from "./FeatureTab.styles";
 

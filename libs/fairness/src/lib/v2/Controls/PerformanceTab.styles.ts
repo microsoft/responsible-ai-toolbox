@@ -13,7 +13,6 @@ export interface IPerformanceTabStyles {
   iconClass: IStyle;
   itemsList: IStyle;
   frame: IStyle;
-  main: IStyle;
   header: IStyle;
   textBody: IStyle;
 }
@@ -39,11 +38,6 @@ export const PerformanceTabStyles: () => IProcessedStyleSet<
     },
     itemsList: {
       overflowY: "auto"
-    },
-    main: {
-      flex: 1,
-      height: "100%",
-      maxWidth: "750px"
     },
     textBody: {
       color: theme.semanticColors.bodyText,

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text } from "office-ui-fabric-react";
+import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBladeStyles } from "./DataSpecificationBlade.styles";
@@ -18,11 +18,11 @@ export class DataSpecificationBlade extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = DataSpecificationBladeStyles();
     return (
-      <div className={styles.frame}>
-        <Text variant={"small"} className={styles.title} block>
+      <Stack horizontal={false} className={styles.frame}>
+        <Text variant={"small"} nowrap className={styles.title} block>
           {localization.Fairness.dataSpecifications}
         </Text>
-        <Text variant={"small"} className={styles.text} block>
+        <Text variant={"small"} nowrap className={styles.text} block>
           {this.props.featureNames.length === 1
             ? localization.Fairness.singleAttributeCount
             : localization.formatString(
@@ -30,13 +30,13 @@ export class DataSpecificationBlade extends React.PureComponent<
                 this.props.featureNames.length
               )}
         </Text>
-        <Text variant={"small"} className={styles.text} block>
+        <Text variant={"small"} nowrap className={styles.text} block>
           {localization.formatString(
             localization.Fairness.instanceCount,
             this.props.numberRows
           )}
         </Text>
-      </div>
+      </Stack>
     );
   }
 }

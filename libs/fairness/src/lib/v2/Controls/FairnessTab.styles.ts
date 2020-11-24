@@ -23,9 +23,9 @@ export const FairnessTabStyles: () => IProcessedStyleSet<
   const theme = getTheme();
   return mergeStyleSets<IFairnessTabStyles>({
     frame: {
+      flex: 1,
       height: "100%",
-      minWidth: "550px",
-      flex: 1
+      minWidth: "550px"
     },
     header: {
       color: theme.semanticColors.bodyText,
@@ -44,7 +44,7 @@ export const FairnessTabStyles: () => IProcessedStyleSet<
     textBody: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semilight,
-      paddingBottom: "50px",
+      paddingBottom: "20px",
       paddingTop: "12px"
     }
   });

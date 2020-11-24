@@ -217,7 +217,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   true_negative_rate_difference: {
     description:
       localization.Fairness.Metrics.trueNegativeRateDifferenceDescription,
-    fairnessMetric: "recall_score",
+    fairnessMetric: "specificity_score",
     fairnessMode: FairnessModes.Difference,
     key: "true_negative_rate_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -226,7 +226,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   true_negative_rate_ratio: {
     description:
       localization.Fairness.Metrics.trueNegativeRateDifferenceDescription,
-    fairnessMetric: "recall_score",
+    fairnessMetric: "specificity_score",
     fairnessMode: FairnessModes.Ratio,
     key: "true_negative_rate_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -251,3 +251,16 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
     title: localization.Fairness.Metrics.truePositiveRateRatio
   }
 };
+
+// List of fairness metrics to prefer as default if available.
+// The purpose of this list is to avoid having less popular metrics
+// selected by default.
+export const defaultFairnessMetricPrioritization = [
+  // binary classification
+  fairnessOptions["demographic_parity_difference"].key,
+  fairnessOptions["accuracy_score_difference"].key,
+  fairnessOptions["equalized_odds_difference"].key,
+  // regression / probability
+  fairnessOptions["mean_absolute_error_max"].key,
+  fairnessOptions["mean_squared_error_max"].key
+];

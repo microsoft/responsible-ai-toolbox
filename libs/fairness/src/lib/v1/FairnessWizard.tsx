@@ -14,7 +14,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FeatureTab } from "../components/FeatureTab";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
@@ -29,6 +28,7 @@ import {
 import { WizardBuilder } from "../util/WizardBuilder";
 
 import { FairnessTab } from "./Controls/FairnessTab";
+import { FeatureTab } from "./Controls/FeatureTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { PerformanceTab } from "./Controls/PerformanceTab";

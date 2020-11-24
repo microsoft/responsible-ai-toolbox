@@ -11,7 +11,7 @@ import { WizardFooter } from "../../components/WizardFooter";
 import { IFairnessPickerPropsV2 } from "../FairnessWizard";
 
 import { FairnessTabStyles } from "./FairnessTab.styles";
-import { TileList, ITileProp } from "./TileList";
+import { SelectionList, ISelectionItemProps } from "./SelectionList";
 
 export interface IFairnessTabProps extends IWizardTabProps {
   fairnessPickerProps: IFairnessPickerPropsV2;
@@ -39,20 +39,22 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
           />
         </Stack>
         <StackItem className={styles.itemsList}>
-          <TileList
+          <SelectionList
+            grouped={true}
+            defaultSelectedKey={
+              this.props.fairnessPickerProps.selectedFairnessKey
+            }
             items={this.props.fairnessPickerProps.fairnessOptions.map(
-              (fairness): ITileProp => {
-                const selected =
-                  this.props.fairnessPickerProps.selectedFairnessKey ===
-                  fairness.key;
+              (fairness): ISelectionItemProps => {
                 return {
                   description: fairness.description,
+                  key: fairness.key,
+                  metric: fairness.fairnessMetric,
+                  name: fairness.title,
                   onSelect: this.props.fairnessPickerProps.onFairnessChange.bind(
                     this,
                     fairness.key
-                  ),
-                  selected,
-                  title: fairness.title
+                  )
                 };
               }
             )}

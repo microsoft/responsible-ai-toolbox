@@ -221,6 +221,7 @@ export class WizardBuilder {
 
         customMetrics.push({
           description: customMetric?.description,
+          group: localization.Fairness.Metrics.Groups.custom,
           isMinimization: true,
           isPercentage: true,
           key,
