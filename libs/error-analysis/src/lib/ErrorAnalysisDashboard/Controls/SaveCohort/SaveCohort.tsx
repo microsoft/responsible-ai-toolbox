@@ -5,20 +5,16 @@ import { Cohort, JointDataset } from "@responsible-ai/interpret";
 import {
   ITextFieldStyles,
   IStackStyles,
-  IStackTokens
-} from "office-ui-fabric-react";
-import {
+  IStackTokens,
   PrimaryButton,
-  DefaultButton
-} from "office-ui-fabric-react/lib/Button";
-import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
-import {
+  DefaultButton,
+  ContextualMenu,
   Dialog,
   DialogType,
-  DialogFooter
-} from "office-ui-fabric-react/lib/Dialog";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+  DialogFooter,
+  Stack,
+  TextField
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

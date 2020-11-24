@@ -89,7 +89,6 @@ export class FairnessWizardV2 extends React.PureComponent<
 > {
   public constructor(props: IFairnessProps) {
     super(props);
-    WizardBuilder.initializeIcons(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }

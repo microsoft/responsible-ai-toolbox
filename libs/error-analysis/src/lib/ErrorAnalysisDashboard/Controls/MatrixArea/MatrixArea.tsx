@@ -173,6 +173,9 @@ export class MatrixArea extends React.PureComponent<
                       matrixLength,
                       row.length
                     )}
+                    role="button"
+                    tabIndex={i}
+                    onKeyUp={undefined}
                   >
                     <div className={styledGradientMatrixCell}>
                       {`${errorRatio.toFixed(0)}%`}

@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStackTokens } from "office-ui-fabric-react";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
+import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
@@ -26,7 +25,7 @@ export class PredictionPath extends React.Component<IPredictionPathProps> {
     return (
       <Stack>
         {filters.map((filter: string, index: number) => (
-          <div>
+          <div key={index}>
             <Stack horizontal tokens={alignmentStackTokens}>
               <Stack verticalAlign="center">
                 <i className={classNames.filterCircle}></i>

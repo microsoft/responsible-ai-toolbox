@@ -1,9 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react";
-import { Link } from "office-ui-fabric-react/lib/Link";
-import { IRenderFunction } from "office-ui-fabric-react/lib/Utilities";
+import {
+  Breadcrumb,
+  IBreadcrumbItem,
+  Link,
+  IRenderFunction
+} from "office-ui-fabric-react";
 import React from "react";
 
 import {

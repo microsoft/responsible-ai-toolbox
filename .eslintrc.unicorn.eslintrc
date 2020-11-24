@@ -1,4 +1,5 @@
 {
+  "plugins": ["eslint-plugin-unicorn"],
   "rules": {
     "unicorn/better-regex": "error",
     "unicorn/catch-error-name": "error",

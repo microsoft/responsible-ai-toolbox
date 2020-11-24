@@ -5,10 +5,10 @@ import { JointDataset } from "@responsible-ai/interpret";
 import {
   DefaultButton,
   IFocusTrapZoneProps,
-  IStackTokens
+  IStackTokens,
+  Panel,
+  Stack
 } from "office-ui-fabric-react";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

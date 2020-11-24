@@ -11,10 +11,10 @@ import {
   IChoiceGroupOption,
   IStackItemStyles,
   ITheme,
-  PrimaryButton
+  PrimaryButton,
+  ChoiceGroup,
+  Stack
 } from "office-ui-fabric-react";
-import { ChoiceGroup } from "office-ui-fabric-react/lib/ChoiceGroup";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { PredictionTabKeys } from "../../ErrorAnalysisDashboard";
@@ -62,7 +62,7 @@ const inspectButtonStyles: IStackItemStyles = {
   }
 };
 
-export class InstanceView extends React.PureComponent<
+export class InstanceView extends React.Component<
   IInstanceViewProps,
   IInstanceViewState
 > {

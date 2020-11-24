@@ -17,10 +17,10 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   Selection,
-  SelectionMode
+  SelectionMode,
+  Fabric,
+  Stack
 } from "office-ui-fabric-react";
-import { Fabric } from "office-ui-fabric-react/lib/Fabric";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

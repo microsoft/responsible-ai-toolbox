@@ -1,4 +1,0 @@
-include error_analysis/widget/static/extension.js
-include error_analysis/widget/static/index.js
-include error_analysis/widget/templates/inlineDashboard.html
-recursive-include error_analysis/widget/static *.js.map

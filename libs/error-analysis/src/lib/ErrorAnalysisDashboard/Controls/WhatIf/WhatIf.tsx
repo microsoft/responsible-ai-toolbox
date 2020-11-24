@@ -9,8 +9,13 @@ import {
   WhatIfPanel
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import { IFocusTrapZoneProps, IDropdownOption } from "office-ui-fabric-react";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
+import _ from "lodash";
+import {
+  IComboBoxOption,
+  IDropdownOption,
+  IFocusTrapZoneProps,
+  Panel
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
@@ -33,6 +38,7 @@ export interface IWhatIfState {
   filteredFeatureList: IDropdownOption[];
   selectedWhatIfRootIndex: number;
   editingDataCustomIndex?: number;
+  request?: AbortController;
 }
 
 const focusTrapZoneProps: IFocusTrapZoneProps = {
@@ -69,7 +75,9 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   public constructor(props: IWhatIfProps) {
     super(props);
     this.state = {
+      editingDataCustomIndex: undefined,
       filteredFeatureList: this.featuresOption,
+      request: undefined,
       selectedWhatIfRootIndex: 0
     };
 
@@ -81,7 +89,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     const classNames = whatIfStyles();
     return (
       <Panel
-        headerText="What If"
+        headerText={localization.ErrorAnalysis.WhatIfPanel.whatIfHeader}
         isOpen={this.props.isOpen}
         focusTrapZoneProps={focusTrapZoneProps}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
@@ -155,7 +163,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
 
   private saveAsPoint = (): void => {
     if (this.temporaryPoint) {
-      this.props.addCustomPoint(this.temporaryPoint);
+      this.props.addCustomPoint(_.cloneDeep(this.temporaryPoint));
     }
   };
 
@@ -163,12 +171,61 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     // do nothing
   };
 
-  private setCustomRowProperty = (): void => {
-    // do nothing
+  private setCustomRowProperty = (
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ): void => {
+    if (!this.temporaryPoint || !newValue) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    this.stringifedValues[key] = newValue;
+    if (isString) {
+      editingData[key] = newValue;
+      this.forceUpdate();
+    } else {
+      const asNumber = +newValue;
+      // because " " evaluates to 0 in js
+      const isWhitespaceOnly = /^\s*$/.test(newValue);
+      if (Number.isNaN(asNumber) || isWhitespaceOnly) {
+        this.validationErrors[key] =
+          localization.Interpret.WhatIfTab.nonNumericValue;
+        this.forceUpdate();
+      } else {
+        editingData[key] = asNumber;
+        this.validationErrors[key] = undefined;
+        this.forceUpdate();
+        this.fetchData(editingData);
+      }
+    }
   };
 
-  private setCustomRowPropertyDropdown = (): void => {
-    // do nothing
+  private setCustomRowPropertyDropdown = (
+    key: string | number,
+    option?: IComboBoxOption,
+    value?: string
+  ): void => {
+    if (!this.temporaryPoint || !value) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    if (option) {
+      // User selected/de-selected an existing option
+      editingData[key] = option.key;
+    } else if (value !== undefined) {
+      // User typed a freeform option
+      const featureOption = this.featuresOption.find(
+        (feature) => feature.key === key
+      );
+      if (featureOption) {
+        featureOption.data.categoricalOptions.push({ key: value, text: value });
+      }
+      editingData[key] = value;
+    }
+
+    this.forceUpdate();
+    this.fetchData(editingData);
   };
 
   private setSelectedIndex = (
@@ -228,5 +285,67 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       return [indexes[0]];
     }
     return [];
+  }
+
+  // fetch prediction for temporary point
+  private fetchData(fetchingReference: { [key: string]: any }): void {
+    if (!this.props.invokeModel) {
+      return;
+    }
+    if (this.state.request !== undefined) {
+      this.state.request.abort();
+    }
+    const abortController = new AbortController();
+    const rawData = JointDataset.datasetSlice(
+      fetchingReference,
+      this.props.jointDataset.metaDict,
+      this.props.jointDataset.datasetFeatureCount
+    );
+    fetchingReference[JointDataset.PredictedYLabel] = undefined;
+    const promise = this.props.invokeModel([rawData], abortController.signal);
+
+    this.setState({ request: abortController }, async () => {
+      try {
+        const fetchedData = await promise;
+        // returns predicted probabilities
+        if (Array.isArray(fetchedData[0])) {
+          const predictionVector = fetchedData[0];
+          let predictedClass = 0;
+          let maxProb = Number.MIN_SAFE_INTEGER;
+          for (const [i, element] of predictionVector.entries()) {
+            fetchingReference[
+              JointDataset.ProbabilityYRoot + i.toString()
+            ] = element;
+            if (element > maxProb) {
+              predictedClass = i;
+              maxProb = element;
+            }
+          }
+          fetchingReference[JointDataset.PredictedYLabel] = predictedClass;
+        } else {
+          // prediction is a scalar, no probabilities
+          fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
+        }
+        if (this.props.jointDataset.hasTrueY) {
+          JointDataset.setErrorMetrics(
+            fetchingReference,
+            this.props.metadata.modelType
+          );
+        }
+        this.setState({ request: undefined });
+      } catch (error) {
+        if (error.name === "AbortError") {
+          return;
+        }
+        if (error.name === "PythonError") {
+          alert(
+            localization.formatString(
+              localization.Interpret.IcePlot.errorPrefix,
+              error.message
+            )
+          );
+        }
+      }
+    });
   }
 }

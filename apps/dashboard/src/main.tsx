@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { initializeIcons } from "office-ui-fabric-react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, RouteComponentProps } from "react-router-dom";
@@ -11,6 +12,7 @@ import { IAppSetting } from "./app/IAppSetting";
 function renderApp(props: RouteComponentProps<IAppSetting>): React.ReactNode {
   return <App {...props.match.params} />;
 }
+initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>

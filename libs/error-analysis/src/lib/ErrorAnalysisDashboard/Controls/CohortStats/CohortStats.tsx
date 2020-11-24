@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStackTokens } from "office-ui-fabric-react";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
+import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";

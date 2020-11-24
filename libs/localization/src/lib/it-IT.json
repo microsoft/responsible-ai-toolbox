@@ -371,10 +371,6 @@
       "binary": "binario",
       "continuous": "continuo"
     },
-    "Parity": {
-      "header": "Equità misurata in termini di disparità",
-      "body": "Le metriche di disparità quantificano la variazione del comportamento del modello in tutte le funzionalità selezionate. Esistono due tipi di metriche di disparità: altro da aggiungere...."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Documentazione"

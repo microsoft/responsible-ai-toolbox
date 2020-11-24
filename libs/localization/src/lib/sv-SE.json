@@ -371,10 +371,6 @@
       "binary": "binär",
       "continuous": "kontinuerlig"
     },
-    "Parity": {
-      "header": "Rättvisa mätt avseende diskrepans",
-      "body": "Diskrepansmått kvantifierar variationer i dina modellers beteende för valda funktioner. Det finns två olika typer av diskrepansmått: mer kommer..."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Dokumentation"

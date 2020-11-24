@@ -1,0 +1,60 @@
+{
+  "plugins": ["filenames"],
+  "extends": [],
+  "rules": {
+    "filenames/match-regex": "error",
+    "filenames/match-exported": "error",
+    "filenames/no-index": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.tsx"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+$"]]
+      }
+    },
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-z]+$"]],
+        "no-dupe-class-members": "off"
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-z]+\\.spec$"]]
+      }
+    },
+    {
+      "files": ["*.test.tsx", "*.test.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.test$"]]
+      }
+    },
+    {
+      "files": ["*.styles.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.styles$"]]
+      }
+    },
+    {
+      "files": ["jest.config.js"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
+    },
+    {
+      "files": ["**/Localization/*.*"],
+      "rules": {
+        "filenames/match-regex": "off"
+      }
+    },
+    {
+      "files": ["src/index.ts"],
+      "rules": {
+        "filenames/no-index": "off"
+      }
+    }
+  ]
+}
