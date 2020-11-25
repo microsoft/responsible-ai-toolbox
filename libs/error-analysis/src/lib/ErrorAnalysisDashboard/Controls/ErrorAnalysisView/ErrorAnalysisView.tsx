@@ -26,6 +26,7 @@ export interface IErrorAnalysisViewProps {
     cells: number
   ) => void;
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export class ErrorAnalysisView extends React.PureComponent<
@@ -40,9 +41,11 @@ export class ErrorAnalysisView extends React.PureComponent<
               theme={this.props.theme}
               messages={this.props.messages}
               getTreeNodes={this.props.getTreeNodes}
+              features={this.props.features}
               selectedFeatures={this.props.selectedFeatures}
               updateSelectedCohort={this.props.updateSelectedCohort}
               selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
             />
           )}
           {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
@@ -52,6 +55,7 @@ export class ErrorAnalysisView extends React.PureComponent<
               getMatrix={this.props.getMatrix}
               updateSelectedCohort={this.props.updateSelectedCohort}
               selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
             />
           )}
         </div>

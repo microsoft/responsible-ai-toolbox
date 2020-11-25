@@ -32,6 +32,7 @@ import {
 export interface ITreeViewRendererProps {
   theme?: ITheme;
   messages?: HelpMessageDict;
+  features: string[];
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   updateSelectedCohort: (
@@ -41,6 +42,7 @@ export interface ITreeViewRendererProps {
     cells: number
   ) => void;
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export interface ITreeViewRendererState {
@@ -161,7 +163,10 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
-    if (this.props.selectedFeatures !== prevProps.selectedFeatures) {
+    if (
+      this.props.selectedFeatures !== prevProps.selectedFeatures ||
+      this.props.baseCohort !== prevProps.baseCohort
+    ) {
       this.fetchTreeNodes();
     }
   }
@@ -710,10 +715,25 @@ export class TreeViewRenderer extends React.PureComponent<
     if (!this.props.getTreeNodes) {
       return;
     }
+    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+      this.props.baseCohort.cohort.filters,
+      this.props.baseCohort.jointDataset
+    );
+    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+      this.props.baseCohort.cohort.compositeFilters,
+      this.props.baseCohort.jointDataset
+    );
     //const abortController = new AbortController();
     //const promise = this.props.getTreeNodes(["a", "b", "c"], abortController.signal);
     this.props
-      .getTreeNodes(this.props.selectedFeatures, new AbortController().signal)
+      .getTreeNodes(
+        [
+          this.props.selectedFeatures,
+          filtersRelabeled,
+          compositeFiltersRelabeled
+        ],
+        new AbortController().signal
+      )
       .then((result) => {
         this.onResize();
         this.clearSelection();

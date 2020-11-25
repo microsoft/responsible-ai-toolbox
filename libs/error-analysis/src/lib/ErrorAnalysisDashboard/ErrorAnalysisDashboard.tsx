@@ -519,6 +519,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
               );
               this.setState({
+                baseCohort: selectedCohort,
                 cohorts: [selectedCohort, ...cohorts],
                 selectedCohort
               });
@@ -549,6 +550,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   selectedFeatures={this.state.selectedFeatures}
                   errorAnalysisOption={this.state.errorAnalysisOption}
                   selectedCohort={this.state.selectedCohort}
+                  baseCohort={this.state.baseCohort}
                 />
               )}
               {this.state.viewType === ViewTypeKeys.ExplanationView && (
@@ -692,17 +694,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     cells = 0
   ): void {
     // Need to relabel the filter names based on index in joint dataset
-    const filtersRelabeled = filters.map(
-      (filter: IFilter): IFilter => {
-        const index = this.props.features.indexOf(filter.column);
-        const key = JointDataset.DataLabelRoot + index.toString();
-        return {
-          arg: filter.arg,
-          column: key,
-          method: filter.method
-        };
-      }
+    const filtersRelabeled = ErrorCohort.getDataFilters(
+      filters,
+      this.props.features
     );
+
     let selectedCohortName = "";
     let addTemporaryCohort = true;
     if (source === ErrorDetectorCohortSource.TreeMap) {
@@ -713,12 +709,15 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;
     }
+    const baseCohortFilters = this.state.baseCohort.cohort.filters;
+    const baseCohortCompositeFilters = this.state.baseCohort.cohort
+      .compositeFilters;
     const selectedCohort: ErrorCohort = new ErrorCohort(
       new Cohort(
         selectedCohortName,
         this.state.jointDataset,
-        filtersRelabeled,
-        compositeFilters
+        baseCohortFilters.concat(filtersRelabeled),
+        baseCohortCompositeFilters.concat(compositeFilters)
       ),
       this.state.jointDataset,
       cells,

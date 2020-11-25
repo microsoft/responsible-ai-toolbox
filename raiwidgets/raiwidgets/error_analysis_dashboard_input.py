@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn import tree
 from sklearn.tree import _tree
 from enum import Enum
+import traceback
 from .constants import SKLearn
 from .error_handling import _format_exception
 
@@ -19,6 +20,11 @@ FALSE_COUNT = "falseCount"
 COUNT = "count"
 INTERVAL_MIN = "intervalMin"
 INTERVAL_MAX = "intervalMax"
+METHOD = "method"
+METHOD_GREATER = "greater"
+METHOD_LESS_AND_EQUAL = "less and equal"
+METHOD_RANGE = "in the range of"
+TRUE_Y = "true_y"
 
 
 class TreeSide(str, Enum):
@@ -272,17 +278,60 @@ class ErrorAnalysisDashboardInput:
         if locale is not None:
             self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
 
-    def debug_ml(self, features):
+    def build_query(self, filters):
+        queries = []
+        for filter in filters:
+            if METHOD in filter:
+                method = filter[METHOD]
+                arg0 = str(filter['arg'][0])
+                colname = filter['column']
+                if method == METHOD_GREATER:
+                    queries.append("`" + colname + "` > " + arg0)
+                elif method == METHOD_LESS_AND_EQUAL:
+                    queries.append("`" + colname + "` <= " + arg0)
+                elif method == METHOD_RANGE:
+                    arg1 = str(filter['arg'][1])
+                    queries.append("`" + colname + "` >= " + arg0 +
+                                   ' & `' + colname + "` <= " + arg1)
+            else:
+                cqueries = []
+                for composite_filter in filter['compositeFilters']:
+                    cqueries.append(self.build_query([composite_filter]))
+                if filter['operation'] == 'and':
+                    queries.append(' & '.join(cqueries))
+                else:
+                    queries.append(' | '.join(cqueries))
+        return ' & '.join(queries)
+
+    def apply_recursive_filter(self, df, filters):
+        if filters:
+            return df.query(self.build_query(filters))
+        else:
+            return df
+
+    def filter_from_cohort(self, filters, composite_filters, feature_names):
+        df = pd.DataFrame(self._dataset, columns=feature_names)
+        df[TRUE_Y] = self._true_y
+        df = self.apply_recursive_filter(df, filters)
+        df = self.apply_recursive_filter(df, composite_filters)
+        true_y = df[TRUE_Y]
+        df = df.drop(columns=TRUE_Y)
+        return df.to_numpy(), true_y.to_numpy()
+
+    def debug_ml(self, features, filters, composite_filters):
         try:
             interface = ExplanationDashboardInterface
             # Fit a surrogate model on errors
             surrogate = tree.DecisionTreeClassifier(max_depth=3)
-            diff = self._model.predict(self._dataset) != self._true_y
             feature_names = self.dashboard_input[interface.FEATURE_NAMES]
+            filtered_df, true_y = self.filter_from_cohort(filters,
+                                                          composite_filters,
+                                                          feature_names)
+            diff = self._model.predict(filtered_df) != true_y
             indexes = []
             for feature in features:
                 indexes.append(feature_names.index(feature))
-            dataset_sub_features = self._dataset[:, indexes]
+            dataset_sub_features = filtered_df[:, indexes]
             dataset_sub_names = np.array(feature_names)[np.array(indexes)]
             surrogate.fit(dataset_sub_features, diff)
             json_tree = self.traverse(surrogate.tree_, 0, [],
@@ -292,25 +341,29 @@ class ErrorAnalysisDashboardInput:
             }
         except Exception as e:
             print(e)
+            traceback.print_exc()
             return {
                 WidgetRequestResponseConstants.ERROR:
                     "Failed to generate json tree representation",
                 WidgetRequestResponseConstants.DATA: []
             }
 
-    def matrix(self, features):
+    def matrix(self, features, filters, composite_filters):
         try:
             if features[0] is None:
                 return {WidgetRequestResponseConstants.DATA: []}
             interface = ExplanationDashboardInterface
-            diff = self._model.predict(self._dataset) != self._true_y
             feature_names = self.dashboard_input[interface.FEATURE_NAMES]
+            filtered_df, true_y = self.filter_from_cohort(filters,
+                                                          composite_filters,
+                                                          feature_names)
+            diff = self._model.predict(filtered_df) != self._true_y
             indexes = []
             for feature in features:
                 if feature is None:
                     continue
                 indexes.append(feature_names.index(feature))
-            dataset_sub_features = self._dataset[:, indexes]
+            dataset_sub_features = filtered_df[:, indexes]
             dataset_sub_names = np.array(feature_names)[np.array(indexes)]
             df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
             df_err = df.copy()
@@ -374,15 +427,13 @@ class ErrorAnalysisDashboardInput:
                                                     return_counts=True)
                     json_matrix = self.json_matrix_1d(values, val_err, counts,
                                                       counts_err)
-                print("json matrix: ")
-                print(json_matrix)
             return {
                 WidgetRequestResponseConstants.DATA: json_matrix
             }
         except Exception as e:
             print(e)
             import traceback
-            traceback.print_stack()
+            traceback.print_exc()
             return {
                 WidgetRequestResponseConstants.ERROR:
                     "Failed to generate json matrix representation",
@@ -494,12 +545,12 @@ class ErrorAnalysisDashboardInput:
             parent_node_name = feature_names[tree.feature[parent]]
             parent_threshold = float(tree.threshold[parent])
             if side == TreeSide.RightChild:
-                method = "greater"
+                method = METHOD_GREATER
                 arg = parent_threshold
                 condition = "{} > {:.2f}".format(parent_node_name,
                                                  parent_threshold)
             elif side == TreeSide.LeftChild:
-                method = "less and equal"
+                method = METHOD_LESS_AND_EQUAL
                 arg = parent_threshold
                 condition = "{} <= {:.2f}".format(parent_node_name,
                                                   parent_threshold)
@@ -509,7 +560,7 @@ class ErrorAnalysisDashboardInput:
             "condition": condition,
             "error": float(error),
             "id": int(nodeid),
-            "method": method,
+            METHOD: method,
             "nodeIndex": int(nodeid),
             "nodeName": feature_names[tree.feature[int(nodeid)]],
             "parentId": parent,
