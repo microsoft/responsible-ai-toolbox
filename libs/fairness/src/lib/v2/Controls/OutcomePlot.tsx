@@ -152,7 +152,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
             binValues={this.props.metrics.outcomes.bins}
           />
           <div className={sharedStyles.chartWrapper}>
-            <Stack horizontal={true} horizontalAlign={"space-between"}>
+            <Stack horizontal horizontalAlign={"space-between"}>
               <div className={sharedStyles.chartSubHeader}></div>
               <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             </Stack>

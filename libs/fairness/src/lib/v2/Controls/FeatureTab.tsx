@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import {
   ActionButton,
+  FontWeights,
   Modal,
   Stack,
   Text,
@@ -24,7 +25,6 @@ import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { IBinnedResponse } from "../../util/IBinnedResponse";
 
-import { FeatureTabStyles } from "./FeatureTab.styles";
 import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
 
 export interface IFeatureTabProps extends IWizardTabProps {
@@ -87,9 +87,8 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   }
 
   public render(): React.ReactNode {
-    const styles = FeatureTabStyles();
     return (
-      <Stack horizontal={false} className={styles.frame}>
+      <Stack>
         <Modal
           isOpen={this.state.editingFeatureIndex !== undefined}
           isBlocking={false}
@@ -110,14 +109,15 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             />
           )}
         </Modal>
-        <Stack horizontal={true} horizontalAlign="space-between">
-          <Stack horizontal={false} styles={{ root: { display: "flex" } }}>
-            <Text variant={"mediumPlus"} className={styles.header} block>
+        <Stack horizontal horizontalAlign="space-between">
+          <Stack
+            tokens={{ childrenGap: "l1", padding: "26px 0" }}
+            styles={{ root: { display: "flex" } }}
+          >
+            <Text variant={"xLarge"} block>
               {localization.Fairness.Feature.header}
             </Text>
-            <Text className={styles.textBody} block>
-              {localization.Fairness.Feature.body}
-            </Text>
+            <Text block>{localization.Fairness.Feature.body}</Text>
           </Stack>
           <DataSpecificationBlade
             numberRows={this.props.dashboardContext.trueY.length}
@@ -126,7 +126,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             }
           />
         </Stack>
-        <StackItem className={styles.itemsList}>
+        <StackItem>
           <DetailsList
             items={this.props.featureBins}
             columns={this.columns}
@@ -167,14 +167,13 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
     if (index === undefined || !item) {
       return undefined;
     }
-    const styles = FeatureTabStyles();
     return (
       <>
-        <Text className={styles.itemTitle} block>
+        <Text block styles={{ root: { fontWeight: FontWeights.semibold } }}>
           {this.props.dashboardContext.modelMetadata.featureNames[index]}
         </Text>
         {item.rangeType === RangeTypes.Categorical && (
-          <Text variant={"medium"} className={styles.valueCount} block>
+          <Text variant={"medium"} block>
             {localization.formatString(
               localization.Fairness.Feature.summaryCategoricalCount,
               item.array.length
@@ -182,7 +181,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           </Text>
         )}
         {item.rangeType !== RangeTypes.Categorical && (
-          <Text variant={"medium"} className={styles.valueCount} block>
+          <Text variant={"medium"} block>
             {localization.formatString(
               localization.Fairness.Feature.summaryNumericCount,
               (this.props.dashboardContext.modelMetadata.featureRanges[
@@ -199,7 +198,6 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           index
         ] && (
           <ActionButton
-            className={styles.expandButton}
             iconProps={{ iconName: "Edit" }}
             onClick={this.editBins.bind(this, index)}
           >

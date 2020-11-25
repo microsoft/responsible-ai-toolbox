@@ -4,6 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
+  FontWeights,
   IGroup,
   Selection,
   SelectionMode,
@@ -54,7 +55,11 @@ export class SelectionList extends React.Component<ISelectionListProps> {
       minWidth: 100,
       name: "Name",
       onRender: (item: any): React.ReactNode => {
-        return <Text variant={"medium"}>{item.name}</Text>;
+        return (
+          <Text block styles={{ root: { fontWeight: FontWeights.semibold } }}>
+            {item.name}
+          </Text>
+        );
       }
     },
     {
@@ -72,7 +77,7 @@ export class SelectionList extends React.Component<ISelectionListProps> {
             content={item.description}
             overflowMode={TooltipOverflowMode.Parent}
           >
-            <span aria-describedby={item.key}>{item.description}</span>
+            <Text>{item.description}</Text>
           </TooltipHost>
         );
       }

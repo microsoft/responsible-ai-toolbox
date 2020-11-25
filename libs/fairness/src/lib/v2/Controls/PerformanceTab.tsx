@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text, Stack, StackItem } from "office-ui-fabric-react";
+import { Text, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
@@ -11,7 +11,6 @@ import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";
 
-import { PerformanceTabStyles } from "./PerformanceTab.styles";
 import { SelectionList } from "./SelectionList";
 
 export interface IPerformancePickingTabProps extends IWizardTabProps {
@@ -22,15 +21,17 @@ export class PerformanceTab extends React.PureComponent<
   IPerformancePickingTabProps
 > {
   public render(): React.ReactNode {
-    const styles = PerformanceTabStyles();
     return (
-      <Stack horizontal={false} className={styles.frame}>
-        <Stack horizontal={true} horizontalAlign="space-between">
-          <Stack horizontal={false} styles={{ root: { display: "flex" } }}>
-            <Text className={styles.header} block>
+      <Stack>
+        <Stack horizontal horizontalAlign="space-between">
+          <Stack
+            tokens={{ childrenGap: "l1", padding: "26px 0" }}
+            styles={{ root: { display: "flex" } }}
+          >
+            <Text variant={"xLarge"} block>
               {localization.Fairness.Performance.header}
             </Text>
-            <Text className={styles.textBody} block>
+            <Text block>
               {localization.formatString(
                 localization.Fairness.Performance.body,
                 this.props.dashboardContext.modelMetadata.PredictionType !==
@@ -54,28 +55,26 @@ export class PerformanceTab extends React.PureComponent<
             }
           />
         </Stack>
-        <StackItem className={styles.itemsList}>
-          <SelectionList
-            grouped={false}
-            defaultSelectedKey={
-              this.props.performancePickerProps.selectedPerformanceKey
+        <SelectionList
+          grouped={false}
+          defaultSelectedKey={
+            this.props.performancePickerProps.selectedPerformanceKey
+          }
+          items={this.props.performancePickerProps.performanceOptions.map(
+            (performance) => {
+              return {
+                description: performance.description,
+                key: performance.key,
+                metric: performance.key,
+                name: performance.title,
+                onSelect: this.props.performancePickerProps.onPerformanceChange.bind(
+                  this,
+                  performance.key
+                )
+              };
             }
-            items={this.props.performancePickerProps.performanceOptions.map(
-              (performance) => {
-                return {
-                  description: performance.description,
-                  key: performance.key,
-                  metric: performance.key,
-                  name: performance.title,
-                  onSelect: this.props.performancePickerProps.onPerformanceChange.bind(
-                    this,
-                    performance.key
-                  )
-                };
-              }
-            )}
-          />
-        </StackItem>
+          )}
+        />
         <WizardFooter
           onNext={this.props.onNext}
           onPrevious={this.props.onPrevious}

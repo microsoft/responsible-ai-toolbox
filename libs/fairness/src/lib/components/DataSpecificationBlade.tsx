@@ -18,7 +18,7 @@ export class DataSpecificationBlade extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = DataSpecificationBladeStyles();
     return (
-      <Stack horizontal={false} className={styles.frame}>
+      <Stack className={styles.frame}>
         <Text variant={"small"} nowrap className={styles.title} block>
           {localization.Fairness.dataSpecifications}
         </Text>

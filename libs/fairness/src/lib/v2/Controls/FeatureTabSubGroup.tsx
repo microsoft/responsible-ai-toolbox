@@ -7,8 +7,6 @@ import React from "react";
 
 import { IBinnedResponse } from "../../util/IBinnedResponse";
 
-import { FeatureTabStyles } from "./FeatureTab.styles";
-
 interface IFeatureTabSubGroupProps {
   item: IBinnedResponse;
 }
@@ -25,7 +23,6 @@ export class FeatureTabSubGroup extends React.Component<
     this.state = { expanded: false };
   }
   public render(): React.ReactNode {
-    const styles = FeatureTabStyles();
     const { item } = this.props;
     const labelArray = this.state.expanded
       ? item.labelArray
@@ -34,13 +31,12 @@ export class FeatureTabSubGroup extends React.Component<
       !!item.labelArray && (
         <div>
           {labelArray.map((category, index) => (
-            <Text key={index} className={styles.category} block>
+            <Text key={index} block>
               {category}
             </Text>
           ))}
           {item.labelArray.length > 7 && (
             <ActionButton
-              className={styles.expandButton}
               iconProps={{
                 iconName: this.state.expanded
                   ? "ChevronUpMed"
