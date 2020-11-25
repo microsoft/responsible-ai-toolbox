@@ -123,10 +123,3 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
     }
   });
 };
-
-export const sharedTokens: { [key: string]: IStackTokens } = {
-  configurationTab: {
-    childrenGap: "l1",
-    padding: "26px 0"
-  }
-};

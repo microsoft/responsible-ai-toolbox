@@ -9,7 +9,6 @@ import { DataSpecificationBlade } from "../../components/DataSpecificationBlade"
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { IFairnessPickerPropsV2 } from "../FairnessWizard";
-import { sharedTokens } from "../Shared.styles";
 
 import { SelectionList, ISelectionItemProps } from "./SelectionList";
 
@@ -22,7 +21,7 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
     return (
       <Stack>
         <Stack horizontal horizontalAlign="space-between">
-          <Stack tokens={sharedTokens.configurationTab}>
+          <Stack tokens={{ childrenGap: "l1", padding: "l1 0" }}>
             <Text variant={"xLarge"} block>
               {localization.Fairness.Fairness.pickerHeader}
             </Text>
