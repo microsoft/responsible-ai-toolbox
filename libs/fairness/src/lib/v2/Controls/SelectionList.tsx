@@ -169,6 +169,10 @@ export class SelectionList extends React.Component<ISelectionListProps> {
       // complex metric based on more than one performance metric: equalized odds
       return localization.Fairness.Metrics.Groups.equalizedOdds;
     }
+    if (!Object.keys(performanceOptions).includes(metric)) {
+      // custom defined metric
+      return localization.Fairness.Metrics.Groups.custom;
+    }
     return performanceOptions[metric].group;
   }
 }
