@@ -17,11 +17,11 @@ export function describeModelComparisonView(data: IFairnessMetadata): void {
       );
       cy.get("#performanceMetricDropdown").should(
         "contain.text",
-        data.performanceMetrics[0]
+        data.defaultPerformanceMetric
       );
       cy.get("#fairnessMetricDropdown").should(
         "contain.text",
-        data.fairnessMetrics[0]
+        data.defaultFairnessMetric
       );
       cy.get('button:contains("How to read this chart")').should("exist");
       // assert that the plot has the right number of points for models

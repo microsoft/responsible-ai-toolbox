@@ -6,6 +6,8 @@ import { IFairnessMetadata, PredictionTypes } from "./IFairnessMetadata";
 const fairnessDatasets = {
   binaryClassification: {
     charts: ["Selection rate", "False positive and false negative rates"],
+    defaultFairnessMetric: "Demographic parity difference",
+    defaultPerformanceMetric: "Accuracy",
     fairnessMetrics: [
       "Accuracy score difference",
       "Minimum accuracy score",
@@ -29,7 +31,6 @@ const fairnessDatasets = {
       "True negative rate difference",
       "True positive rate ratio"
     ],
-    defaultFairnessMetric: "Demographic parity difference",
     numberOfModels: 3,
     performanceMetrics: [
       "Accuracy",
@@ -38,7 +39,6 @@ const fairnessDatasets = {
       "Recall",
       "F1-score"
     ],
-    defaultPerformanceMetric: "Accuracy",
     predictionType: PredictionTypes.BinaryClassification,
     sensitiveFeatures: {
       "Sensitive feature 0": ["a", "b", "very long group name indeed"],
@@ -58,12 +58,13 @@ const fairnessDatasets = {
   },
   probability: {
     charts: ["Distribution of predictions", "Over- and underprediction"],
+    defaultFairnessMetric: "Maximum mean squared error",
+    defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [
       "Maximum log loss",
       "Maximum mean squared error",
       "Minimum ROC AUC score"
     ],
-    defaultFairnessMetric: "Maximum mean squared error",
     numberOfModels: 3,
     performanceMetrics: [
       "Area under ROC curve",
@@ -73,7 +74,6 @@ const fairnessDatasets = {
       "Mean squared error",
       "Mean absolute error"
     ],
-    defaultPerformanceMetric: "Mean squared error",
     predictionType: PredictionTypes.Probability,
     sensitiveFeatures: {
       "Sensitive feature 0": ["a", "b"],
@@ -82,12 +82,13 @@ const fairnessDatasets = {
   },
   regression: {
     charts: ["Distribution of predictions"],
+    defaultFairnessMetric: "Maximum mean absolute error",
+    defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [
       "Maximum mean absolute error",
       "Maximum mean squared error",
       "Minimum R2-score"
     ],
-    defaultFairnessMetric: "Maximum mean squared error",
     numberOfModels: 3,
     performanceMetrics: [
       "Mean absolute error",
@@ -95,7 +96,6 @@ const fairnessDatasets = {
       "Mean squared error",
       "Root mean squared error"
     ],
-    defaultPerformanceMetric: "Mean squared error",
     predictionType: PredictionTypes.Regression,
     sensitiveFeatures: {
       "Sensitive feature 0": ["a", "b"],
