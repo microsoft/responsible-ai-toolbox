@@ -6,6 +6,7 @@ import {
   FontWeights,
   getTheme,
   IProcessedStyleSet,
+  IStackTokens,
   IStyle,
   mergeStyleSets
 } from "office-ui-fabric-react";
@@ -121,4 +122,11 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       paddingBottom: "7px"
     }
   });
+};
+
+export const SharedTokens: { [key: string]: IStackTokens } = {
+  configurationTab: {
+    padding: "26px 0",
+    childrenGap: "l1"
+  }
 };
