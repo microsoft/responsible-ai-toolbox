@@ -80,9 +80,9 @@ export class App extends React.Component<IAppProps> {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         if (
-          data.length === 2 &&
-          data[0] === "mean radius" &&
-          data[1] === "mean texture"
+          data.length === 3 &&
+          data[0][0] === "mean radius" &&
+          data[0][1] === "mean texture"
         ) {
           resolve(_.cloneDeep(dummyMatrix2dInterval));
         } else if (data[0] === "mean radius") {

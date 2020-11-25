@@ -29,6 +29,7 @@ export interface IMatrixFilterProps {
     cells: number
   ) => void;
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export interface IMatrixFilterState {
@@ -98,6 +99,7 @@ export class MatrixFilter extends React.PureComponent<
             selectedFeature2={this.state.selectedFeature2}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
           />
         </Stack>
       </div>
