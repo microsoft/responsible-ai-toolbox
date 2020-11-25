@@ -10,7 +10,7 @@ import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";
-import { SharedTokens } from "../Shared.styles";
+import { sharedTokens } from "../Shared.styles";
 
 import { SelectionList } from "./SelectionList";
 
@@ -25,7 +25,7 @@ export class PerformanceTab extends React.PureComponent<
     return (
       <Stack>
         <Stack horizontal horizontalAlign="space-between">
-          <Stack tokens={SharedTokens.configurationTab}>
+          <Stack tokens={sharedTokens.configurationTab}>
             <Text variant={"xLarge"} block>
               {localization.Fairness.Performance.header}
             </Text>

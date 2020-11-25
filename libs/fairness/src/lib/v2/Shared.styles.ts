@@ -124,9 +124,9 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
   });
 };
 
-export const SharedTokens: { [key: string]: IStackTokens } = {
+export const sharedTokens: { [key: string]: IStackTokens } = {
   configurationTab: {
-    padding: "26px 0",
-    childrenGap: "l1"
+    childrenGap: "l1",
+    padding: "26px 0"
   }
 };

@@ -24,7 +24,7 @@ import { DataSpecificationBlade } from "../../components/DataSpecificationBlade"
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { IBinnedResponse } from "../../util/IBinnedResponse";
-import { SharedTokens } from '../Shared.styles';
+import { sharedTokens } from '../Shared.styles';
 
 import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
 
@@ -111,7 +111,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           )}
         </Modal>
         <Stack horizontal horizontalAlign="space-between">
-          <Stack tokens={SharedTokens.configurationTab}>
+          <Stack tokens={sharedTokens.configurationTab}>
             <Text variant={"xLarge"} block>
               {localization.Fairness.Feature.header}
             </Text>
