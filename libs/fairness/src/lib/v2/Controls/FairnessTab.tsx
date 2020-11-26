@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
@@ -18,14 +18,22 @@ export interface IFairnessTabProps extends IWizardTabProps {
 
 export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
   public render(): React.ReactNode {
+    const theme = getTheme();
+
     return (
       <Stack>
         <Stack horizontal horizontalAlign="space-between">
           <Stack tokens={{ childrenGap: "l1", padding: "l1 0" }}>
-            <Text variant={"xLarge"} block>
+            <Text
+              variant={"xLarge"}
+              block
+              style={{ color: theme.semanticColors.bodyText }}
+            >
               {localization.Fairness.Fairness.pickerHeader}
             </Text>
-            <Text block>{localization.Fairness.Fairness.body}</Text>
+            <Text block style={{ color: theme.semanticColors.bodyText }}>
+              {localization.Fairness.Fairness.body}
+            </Text>
           </Stack>
           <DataSpecificationBlade
             numberRows={this.props.dashboardContext.trueY.length}

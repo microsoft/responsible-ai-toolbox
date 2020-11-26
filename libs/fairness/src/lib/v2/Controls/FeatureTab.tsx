@@ -15,7 +15,8 @@ import {
   Selection,
   ISelection,
   DetailsListLayoutMode,
-  StackItem
+  StackItem,
+  getTheme
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -87,6 +88,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   }
 
   public render(): React.ReactNode {
+    const theme = getTheme();
     return (
       <Stack>
         <Modal
@@ -111,10 +113,16 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         </Modal>
         <Stack horizontal horizontalAlign="space-between">
           <Stack tokens={{ childrenGap: "l1", padding: "l1 0" }}>
-            <Text variant={"xLarge"} block>
+            <Text
+              variant={"xLarge"}
+              block
+              style={{ color: theme.semanticColors.bodyText }}
+            >
               {localization.Fairness.Feature.header}
             </Text>
-            <Text block>{localization.Fairness.Feature.body}</Text>
+            <Text block style={{ color: theme.semanticColors.bodyText }}>
+              {localization.Fairness.Feature.body}
+            </Text>
           </Stack>
           <DataSpecificationBlade
             numberRows={this.props.dashboardContext.trueY.length}
@@ -164,9 +172,17 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
     if (index === undefined || !item) {
       return undefined;
     }
+
     return (
       <>
-        <Text block styles={{ root: { fontWeight: FontWeights.semibold } }}>
+        <Text
+          block
+          styles={{
+            root: {
+              fontWeight: FontWeights.semibold
+            }
+          }}
+        >
           {this.props.dashboardContext.modelMetadata.featureNames[index]}
         </Text>
         {item.rangeType === RangeTypes.Categorical && (
