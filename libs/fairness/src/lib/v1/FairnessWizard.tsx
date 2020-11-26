@@ -13,8 +13,8 @@ import {
   loadTheme
 } from "office-ui-fabric-react";
 import React from "react";
-import { EmptyHeader } from "../components/EmptyHeader";
 
+import { EmptyHeader } from "../components/EmptyHeader";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {

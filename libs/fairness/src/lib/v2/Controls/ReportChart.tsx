@@ -97,7 +97,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     }
 
     return (
-      <Stack tokens={{childrenGap: "l1"}}>
+      <Stack tokens={{ childrenGap: "l1" }}>
         <Dropdown
           id="chartSelectionDropdown"
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
