@@ -111,7 +111,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
             nameIndex={nameIndex}
-            theme={undefined}
             featureBinPickerProps={this.props.featureBinPickerProps}
             performancePickerProps={this.props.performancePickerProps}
             areaHeights={this.props.areaHeights}
@@ -122,7 +121,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
             nameIndex={nameIndex}
-            theme={undefined}
             featureBinPickerProps={this.props.featureBinPickerProps}
             areaHeights={this.props.areaHeights}
           />

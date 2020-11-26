@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import { getTheme, ITheme, Stack } from "office-ui-fabric-react";
+import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
@@ -26,7 +26,6 @@ interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
   nameIndex: number[];
-  theme: ITheme | undefined;
   areaHeights: number;
   performancePickerProps: IPerformancePickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
@@ -263,7 +262,7 @@ export class PerformancePlot extends React.PureComponent<
               />
             </Stack>
             <div className={sharedStyles.chartBody}>
-              <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
+              <AccessibleChart plotlyProps={barPlotlyProps} theme={theme} />
             </div>
           </div>
         </div>
