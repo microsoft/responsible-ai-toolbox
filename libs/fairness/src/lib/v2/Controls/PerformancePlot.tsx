@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import { getTheme } from "@uifabric/styling";
+import { getTheme } from "office-ui-fabric-react";
 import { ITheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
