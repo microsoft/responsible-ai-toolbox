@@ -2,12 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import {
-  Dropdown,
-  IDropdownOption,
-  IDropdownStyles,
-  Stack
-} from "office-ui-fabric-react";
+import { Dropdown, IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
@@ -19,7 +14,6 @@ import {
 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
 
-import { DropdownBarStyles } from "./DropdownBarStyles";
 import { OutcomePlot } from "./OutcomePlot";
 import { PerformancePlot } from "./PerformancePlot";
 
@@ -46,12 +40,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
   }
 
   public render(): React.ReactNode {
-    const styles = DropdownBarStyles();
-    const dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { width: 180 },
-      title: { borderRadius: "5px" }
-    };
-
     let performanceChartHeaderString = "";
     let outcomeChartHeaderString = "";
 
@@ -109,16 +97,14 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     }
 
     return (
-      <Stack>
+      <Stack tokens={{childrenGap: "l1"}}>
         <Dropdown
           id="chartSelectionDropdown"
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
-          className={styles.dropDown}
           defaultSelectedKey={this.state.displayPlotKey}
           options={displayOptions}
           disabled={false}
           onChange={this.onChange.bind(this)}
-          styles={dropdownStyles}
         />
         {this.state.displayPlotKey === performanceKey && (
           <PerformancePlot
