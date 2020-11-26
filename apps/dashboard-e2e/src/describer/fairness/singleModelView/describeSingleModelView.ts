@@ -30,19 +30,22 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
       );
       cy.get("#performanceMetricDropdown").should(
         "contain.text",
-        data.performanceMetrics[0]
+        data.defaultPerformanceMetric
       );
       cy.get("#fairnessMetricDropdown").should(
         "contain.text",
-        data.fairnessMetrics[0]
+        data.defaultFairnessMetric
       );
 
       // table should contain corresponding metrics
       cy.get(".ms-DetailsList").should(
         "contain.text",
-        data.performanceMetrics[0]
+        data.defaultPerformanceMetric
       );
-      cy.get(".ms-DetailsList").should("contain.text", data.fairnessMetrics[0]);
+      cy.get(".ms-DetailsList").should(
+        "contain.text",
+        data.defaultFairnessMetric
+      );
       cy.get(".ms-DetailsList").should("contain.text", "Overall");
       data.sensitiveFeatures[Object.keys(data.sensitiveFeatures)[0]].forEach(
         (sensitiveFeatureValue: string) => {

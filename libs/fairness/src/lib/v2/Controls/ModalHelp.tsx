@@ -43,7 +43,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
     const cancelIcon: IIconProps = { iconName: "Cancel" };
 
     return (
-      <Stack horizontal={true}>
+      <Stack horizontal>
         <ActionButton onClick={this.handleOpenModalHelp}>
           <div className={sharedStyles.infoButton}>i</div>
           {localization.Fairness.ModelComparison.howToRead}

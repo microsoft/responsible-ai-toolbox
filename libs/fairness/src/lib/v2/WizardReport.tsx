@@ -185,7 +185,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       });
 
       mainChart = (
-        <Stack horizontal={true}>
+        <Stack horizontal>
           <Stack.Item className={sharedStyles.mainLeft}>
             <Stack tokens={{ childrenGap: "l1", padding: "0 0 0 100px" }}>
               <OverallTable

@@ -873,7 +873,25 @@
       "truePositiveRateDifference": "True positive rate difference",
       "truePositiveRateDifferenceDescription": "The maximum difference between true positive rates of any two groups. Also sometimes referred to as equal opportunity difference or recall score difference.",
       "truePositiveRateRatio": "True positive rate ratio",
-      "truePositiveRateRatioDescription": "The minimum ratio between true positive rates of any two groups. Also sometimes referred to as equal opportunity ratio or recall score ratio."
+      "truePositiveRateRatioDescription": "The minimum ratio between true positive rates of any two groups. Also sometimes referred to as equal opportunity ratio or recall score ratio.",
+      "Groups": {
+        "equalizedOdds": "Equalized odds",
+        "classificationAccuracyAndErrorRate": "Accuracy / error rate",
+        "regressionError": "Error",
+        "selectionRate": "Demographic Parity / Selection rate",
+        "trueNegativeRate": "True negative rate / specificity",
+        "truePositiveRate": "True positive rate / recall / sensitivity",
+        "falseNegativeRate": "False negative rate / miss rate",
+        "falsePositiveRate": "False positive rate / fall-out",
+        "precision": "Precision",
+        "overUnderPrediction": "Over- and underprediction",
+        "auc": "Area under ROC curve",
+        "average": "Average prediction",
+        "f1_score": "F1-score",
+        "loss": "Loss",
+        "r2_score": "R-squared score",
+        "custom": "Custom metrics"
+      }
     },
     "BinDialog": {
       "header": "Configure bins",

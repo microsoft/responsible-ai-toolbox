@@ -6,7 +6,9 @@ export interface IFairnessMetadata {
   predictionType: PredictionType;
   sensitiveFeatures: { [key: string]: string[] };
   performanceMetrics: string[];
+  defaultPerformanceMetric: string;
   fairnessMetrics: string[];
+  defaultFairnessMetric: string;
   numberOfModels: number;
   charts: string[];
 }

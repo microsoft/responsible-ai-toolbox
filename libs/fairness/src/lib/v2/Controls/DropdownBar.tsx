@@ -62,7 +62,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
 
     return (
       <div className={styles.headerOptions}>
-        <Stack horizontal={true}>
+        <Stack horizontal>
           <Dropdown
             id="sensitiveFeatureDropdown"
             label={localization.Fairness.DropdownHeaders.sensitiveFeature}

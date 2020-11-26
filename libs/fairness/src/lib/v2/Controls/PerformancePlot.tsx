@@ -256,7 +256,7 @@ export class PerformancePlot extends React.PureComponent<
             binValues={this.props.metrics.performance.bins}
           />
           <div className={sharedStyles.chartWrapper}>
-            <Stack horizontal={true} horizontalAlign={"space-between"}>
+            <Stack horizontal horizontalAlign={"space-between"}>
               <div className={sharedStyles.chartSubHeader}></div>
               <ModalHelp
                 theme={theme}
@@ -299,10 +299,7 @@ export class PerformancePlotLegend extends React.PureComponent<
     const sharedStyles = SharedStyles();
 
     return (
-      <Stack
-        horizontal={true}
-        tokens={{ childrenGap: "l1", padding: "0 0 0 0" }}
-      >
+      <Stack horizontal tokens={{ childrenGap: "l1", padding: "0 0 0 0" }}>
         <div className={sharedStyles.textRow}>
           <div
             className={sharedStyles.colorBlock}

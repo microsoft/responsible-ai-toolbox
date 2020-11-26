@@ -13,7 +13,6 @@ export interface IFairnessTabStyles {
   iconClass: IStyle;
   itemsList: IStyle;
   frame: IStyle;
-  main: IStyle;
   header: IStyle;
   textBody: IStyle;
 }
@@ -24,8 +23,9 @@ export const FairnessTabStyles: () => IProcessedStyleSet<
   const theme = getTheme();
   return mergeStyleSets<IFairnessTabStyles>({
     frame: {
+      flex: 1,
       height: "100%",
-      width: "750px"
+      minWidth: "550px"
     },
     header: {
       color: theme.semanticColors.bodyText,
@@ -41,15 +41,10 @@ export const FairnessTabStyles: () => IProcessedStyleSet<
     itemsList: {
       overflowY: "auto"
     },
-    main: {
-      flex: 1,
-      height: "100%",
-      minWidth: "550px"
-    },
     textBody: {
       color: theme.semanticColors.bodyText,
       fontWeight: FontWeights.semilight,
-      paddingBottom: "50px",
+      paddingBottom: "20px",
       paddingTop: "12px"
     }
   });
