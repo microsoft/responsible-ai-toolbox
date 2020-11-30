@@ -14,6 +14,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { EmptyHeader } from "../components/EmptyHeader";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
@@ -189,16 +190,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     if (this.state.featureBins.length === 0) {
       return (
         <Stack className={styles.frame}>
-          <Stack
-            horizontal
-            horizontalAlign="space-between"
-            verticalAlign="center"
-            className={styles.thinHeader}
-          >
-            {/* <Text variant={"mediumPlus"} className={styles.headerLeft}>
-              {localization.Fairness.Header.title}
-            </Text> */}
-          </Stack>
+          <EmptyHeader />
           <Stack.Item grow={2} className={styles.body}>
             <Text variant={"mediumPlus"}>
               {localization.Fairness.errorOnInputs}
@@ -209,16 +201,7 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
     return (
       <Stack className={styles.frame}>
-        <Stack
-          horizontal
-          horizontalAlign="space-between"
-          verticalAlign="center"
-          className={styles.thinHeader}
-        >
-          {/* <Text variant={"mediumPlus"} className={styles.headerLeft}>
-            {localization.Fairness.Header.title}
-          </Text> */}
-        </Stack>
+        <EmptyHeader />
         {this.state.activeTabKey === introTabKey && (
           <StackItem grow={2} className={styles.body}>
             <IntroTab onNext={this.setTab.bind(this, featureBinTabKey)} />

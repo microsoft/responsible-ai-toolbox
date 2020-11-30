@@ -13,6 +13,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { EmptyHeader } from "../components/EmptyHeader";
 import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
 import {
   IFairnessOption,
@@ -223,32 +224,22 @@ export class FairnessWizardV2 extends React.PureComponent<
     if (this.state.featureBins.length === 0) {
       return (
         <Stack className={styles.frame}>
-          <Stack
-            horizontal
-            horizontalAlign="space-between"
-            verticalAlign="center"
-            className={styles.thinHeader}
-          ></Stack>
+          <EmptyHeader />
         </Stack>
       );
     }
     return (
       <Stack className={styles.frame}>
-        <Stack
-          horizontal
-          horizontalAlign="space-between"
-          verticalAlign="center"
-          className={styles.thinHeader}
-        ></Stack>
+        <EmptyHeader />
         {this.state.activeTabKey === introTabKey && (
-          <StackItem grow={2} className={styles.body}>
+          <StackItem grow={2}>
             <IntroTab onNext={this.setTab.bind(this, featureBinTabKey)} />
           </StackItem>
         )}
         {(this.state.activeTabKey === featureBinTabKey ||
           this.state.activeTabKey === performanceTabKey ||
           this.state.activeTabKey === fairnessTabKey) && (
-          <Stack.Item grow={2} className={styles.body}>
+          <Stack.Item grow={2}>
             <Pivot
               className={styles.pivot}
               styles={{

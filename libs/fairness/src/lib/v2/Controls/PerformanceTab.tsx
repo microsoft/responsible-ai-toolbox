@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text, Stack } from "office-ui-fabric-react";
+import { Text, Stack, getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
@@ -21,14 +21,19 @@ export class PerformanceTab extends React.PureComponent<
   IPerformancePickingTabProps
 > {
   public render(): React.ReactNode {
+    const theme = getTheme();
     return (
       <Stack>
         <Stack horizontal horizontalAlign="space-between">
           <Stack tokens={{ childrenGap: "l1", padding: "l1 0" }}>
-            <Text variant={"xLarge"} block>
+            <Text
+              variant={"xLarge"}
+              block
+              style={{ color: theme.semanticColors.bodyText }}
+            >
               {localization.Fairness.Performance.header}
             </Text>
-            <Text block>
+            <Text block style={{ color: theme.semanticColors.bodyText }}>
               {localization.formatString(
                 localization.Fairness.Performance.body,
                 this.props.dashboardContext.modelMetadata.PredictionType !==

@@ -3,8 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import { getTheme } from "@uifabric/styling";
-import { ITheme, Stack } from "office-ui-fabric-react";
+import { getTheme, ITheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
