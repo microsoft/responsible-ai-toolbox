@@ -4,6 +4,10 @@
 import setuptools
 
 # Fetch ReadMe
+with open("version.txt", "r") as fv:
+    version = fv.read()
+
+# Fetch ReadMe
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -13,7 +17,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="raiwidgets",
-    version="0.1.0-dev",
+    version=version,
     author="Roman Lutz, Ilya Matiach, Ke Xu, Brandon Horn",
     author_email="fairlearn@microsoft.com",
     description="Interactive visualizations to assess fairness, explain "

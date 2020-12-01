@@ -57,12 +57,12 @@ async function bump(workspace, pkgFolderName) {
   const packagePath = path.join(setting.root, "package.json");
   if (!fs.existsSync(packagePath)) {
     console.log(`Skipping: No package.json found, ${packagePath}`);
-    return;
+    return undefined;
   }
   const pkgSetting = fs.readJsonSync(packagePath);
   if (!pkgSetting.name) {
     console.log(`Skipping: No package name`);
-    return;
+    return undefined;
   }
   if (
     !setting.architect ||
@@ -79,10 +79,6 @@ async function bump(workspace, pkgFolderName) {
 
 async function main() {
   const pkg = process.argv[2];
-  const workspace = fs.readJSONSync("workspace.json");
-  if (pkg) {
-    await bump(workspace, pkg);
-  }
   if (!pkg) {
     for (const eachPkg of Object.keys(workspace.projects)) {
       await bump(workspace, eachPkg);
