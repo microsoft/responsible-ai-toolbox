@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Icon, Text } from "office-ui-fabric-react";
+import { Icon, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { IFairnessOption } from "../../util/FairnessMetrics";
@@ -112,8 +112,8 @@ export class Insights extends React.Component<IInsightsProps> {
     );
 
     return (
-      <div className={modelCompChartStyles.mainRight}>
-        <div className={styles.insights}>
+      <Stack className={modelCompChartStyles.mainRight}>
+        <Stack horizontal className={styles.insights}>
           <Icon
             iconName="CRMCustomerInsightsApp"
             className={styles.insightsIcon}
@@ -121,25 +121,25 @@ export class Insights extends React.Component<IInsightsProps> {
           <Text className={styles.insights} block>
             {localization.Fairness.ModelComparison.insights}
           </Text>
-        </div>
-        <div className={styles.insightsText}>
-          <Text className={modelCompChartStyles.textSection} block>
+        </Stack>
+        <Stack>
+          <Text className={styles.textSection} block>
             {insights2}
           </Text>
-          <Text className={modelCompChartStyles.textSection} block>
+          <Text className={styles.textSection} block>
             {insights3}
           </Text>
-          <Text className={modelCompChartStyles.textSection} block>
+          <Text className={styles.textSection} block>
             {insights4}
           </Text>
-        </div>
-        <div className={styles.downloadReport}>
+        </Stack>
+        <Stack horizontal className={styles.downloadReport}>
           <Icon iconName="Download" className={styles.downloadIcon} />
           <Text style={{ verticalAlign: "middle" }}>
             {localization.Fairness.ModelComparison.downloadReport}
           </Text>
-        </div>
-      </div>
+        </Stack>
+      </Stack>
     );
   }
 }

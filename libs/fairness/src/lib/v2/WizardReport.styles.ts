@@ -24,8 +24,6 @@ export interface IWizardReportStyles {
   overallArea: IStyle;
   dropDown: IStyle;
   mainRight: IStyle;
-  rightTitle: IStyle;
-  rightText: IStyle;
   insights: IStyle;
   insightsIcon: IStyle;
   insightsText: IStyle;
@@ -34,7 +32,6 @@ export interface IWizardReportStyles {
   chevronIcon: IStyle;
   tableWrapper: IStyle;
   closeButton: IStyle;
-  howTo: IStyle;
   multimodelSection: IStyle;
   modelLabel: IStyle;
   groupLabel: IStyle;
@@ -53,7 +50,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       paddingTop: "18px",
       width: "100%"
     },
-
     chevronIcon: {
       height: "6",
       marginRight: "10px",
@@ -88,7 +84,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       display: "inline-block",
       margin: "10px 0px"
     },
-
     expandAttributes: {
       color: theme.semanticColors.bodyText,
       fontSize: "12px",
@@ -123,10 +118,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
     headerTitle: {
       color: theme.semanticColors.bodyText,
       paddingTop: "10px"
-    },
-    howTo: {
-      paddingLeft: "100px",
-      paddingTop: "20px"
     },
     insights: {
       color: theme.semanticColors.bodyText,
@@ -187,18 +178,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "row",
       padding: "20px 0 0 100px"
-    },
-    rightText: {
-      borderBottom: "0.5px dashed",
-      borderBottomColor: theme.semanticColors.bodyDivider,
-      color: theme.semanticColors.bodyText,
-      padding: "16px 15px 30px 0"
-    },
-    rightTitle: {
-      borderBottom: "1px solid",
-      borderBottomColor: theme.semanticColors.bodyDivider,
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "11px"
     },
     spinner: {
       margin: "auto",

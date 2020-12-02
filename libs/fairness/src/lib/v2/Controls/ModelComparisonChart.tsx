@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ChartBuilder,
+  // chartColors,
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
@@ -39,7 +40,6 @@ import { DropdownBar } from "./DropdownBar";
 import { Insights } from "./Insights";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
-const theme = getTheme();
 export interface IModelComparisonProps {
   showIntro: boolean;
   dashboardContext: IFairnessContext;
@@ -63,7 +63,7 @@ export interface IState {
   fairnessArray?: number[];
 }
 
-export class ModelComparisonChart extends React.PureComponent<
+export class ModelComparisonChart extends React.Component<
   IModelComparisonProps,
   IState
 > {
@@ -94,6 +94,7 @@ export class ModelComparisonChart extends React.PureComponent<
           }
         },
         hoverinfo: "text",
+        // color: chartColors[0],
         marker: {
           size: 14
         },
@@ -114,14 +115,12 @@ export class ModelComparisonChart extends React.PureComponent<
         r: 0,
         t: 4
       },
-      plot_bgcolor: theme.semanticColors.bodyFrameBackground,
       xaxis: {
         automargin: true,
         fixedrange: true,
-        linecolor: theme.semanticColors.disabledBorder,
         linewidth: 1,
         mirror: true,
-        showgrid: false,
+        showgrid: true,
         title: {
           text: "Error"
         }
@@ -129,7 +128,9 @@ export class ModelComparisonChart extends React.PureComponent<
       yaxis: {
         automargin: true,
         fixedrange: true,
-        showgrid: false,
+        linewidth: 1,
+        mirror: true,
+        showgrid: true,
         title: {
           text: "Fairness"
         }
@@ -147,18 +148,6 @@ export class ModelComparisonChart extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const iconButtonStyles = {
-      root: {
-        color: theme.semanticColors.bodyText,
-        marginLeft: "auto",
-        marginRight: "2px",
-        marginTop: "4px"
-      },
-      rootHovered: {
-        color: theme.semanticColors.bodyBackgroundHovered
-      }
-    };
-
     const styles = ModelComparisonChartStyles();
     const sharedStyles = SharedStyles();
 
@@ -251,9 +240,9 @@ export class ModelComparisonChart extends React.PureComponent<
       );
 
       mainChart = (
-        <div className={styles.main}>
-          <div className={sharedStyles.mainLeft}>
-            <div className={styles.howTo}>
+        <Stack horizontal>
+          <Stack className={sharedStyles.mainLeft}>
+            <Stack className={styles.howTo}>
               <ActionButton onClick={this.handleOpenModalHelp}>
                 <div className={styles.infoButton}>i</div>
                 {localization.Fairness.ModelComparison.howToRead}
@@ -265,14 +254,11 @@ export class ModelComparisonChart extends React.PureComponent<
                 isModeless={true}
                 containerClassName={styles.modalContentHelp}
               >
-                <div style={{ display: "flex" }}>
-                  <IconButton
-                    styles={iconButtonStyles}
-                    iconProps={cancelIcon}
-                    ariaLabel="Close popup modal"
-                    onClick={this.handleCloseModalHelp}
-                  />
-                </div>
+                <IconButton
+                  iconProps={cancelIcon}
+                  ariaLabel="Close popup modal"
+                  onClick={this.handleCloseModalHelp}
+                />
                 <p className={styles.modalContentHelpText}>
                   {localization.Fairness.ModelComparison.introModalText}
                   <br />
@@ -291,15 +277,16 @@ export class ModelComparisonChart extends React.PureComponent<
                   </PrimaryButton>
                 </div>
               </Modal>
-            </div>
-            <div className={styles.chart} id="FairnessPerformanceTradeoffChart">
+            </Stack>
+            <div id="FairnessPerformanceTradeoffChart">
               <AccessibleChart
                 plotlyProps={props}
                 onClickHandler={this.props.onChartClick}
-                theme={undefined}
+                theme={getTheme()}
+                themeOverride={{axisGridColor: getTheme().semanticColors.disabledBorder}}
               />
             </div>
-          </div>
+          </Stack>
           <Insights
             fairnessArray={this.state.fairnessArray}
             performanceArray={this.state.performanceArray}
@@ -309,7 +296,7 @@ export class ModelComparisonChart extends React.PureComponent<
               this.props.performancePickerProps.selectedPerformanceKey
             }
           />
-        </div>
+        </Stack>
       );
     }
 

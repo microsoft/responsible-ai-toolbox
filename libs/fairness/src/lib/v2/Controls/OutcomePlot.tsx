@@ -127,10 +127,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       ];
     }
 
-    const formattedBinOutcomeValues = this.props.metrics.outcomes.bins.map(
-      (value) => FormatMetrics.formatNumbers(value, outcomeKey)
-    );
-
     return (
       <Stack id="outcomePlot">
         {/* chart header not needed due to dropdown
@@ -146,9 +142,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
               ]
             }
             binLabels={this.props.dashboardContext.groupNames}
-            formattedBinValues={formattedBinOutcomeValues}
-            metricLabel={outcomeMetric.title}
-            binValues={this.props.metrics.outcomes.bins}
           />
           <div className={sharedStyles.chartWrapper}>
             <Stack horizontal horizontalAlign={"space-between"}>
@@ -156,7 +149,13 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
               <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             </Stack>
             <div className={sharedStyles.chartBody}>
-              <AccessibleChart plotlyProps={barPlotlyProps} theme={theme} />
+              <AccessibleChart
+                plotlyProps={barPlotlyProps}
+                theme={theme}
+                themeOverride={{
+                  axisGridColor: theme.semanticColors.disabledBorder
+                }}
+              />
             </div>
           </div>
         </div>

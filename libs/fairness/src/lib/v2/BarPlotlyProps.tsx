@@ -3,13 +3,10 @@
 
 import {
   IData,
-  IPlotlyProperty,
-  chartColors
+  IPlotlyProperty
 } from "@responsible-ai/mlchartlib";
-import { getTheme } from "office-ui-fabric-react";
 import { Config, Layout } from "plotly.js";
 
-const theme = getTheme();
 export class BarPlotlyProps implements IPlotlyProperty {
   public config?: Partial<Config> | undefined = {
     displaylogo: false,
@@ -37,7 +34,6 @@ export class BarPlotlyProps implements IPlotlyProperty {
   public layout: Partial<Layout> | undefined = {
     autosize: true,
     barmode: "relative",
-    colorway: chartColors,
     font: {
       size: 10
     },
@@ -48,12 +44,10 @@ export class BarPlotlyProps implements IPlotlyProperty {
       r: 0,
       t: 4
     },
-    plot_bgcolor: theme.semanticColors.bodyFrameBackground,
     showlegend: false,
     xaxis: {
       autorange: true,
       fixedrange: true,
-      linecolor: theme.semanticColors.inputBorder,
       linewidth: 1,
       mirror: true
     },
@@ -61,8 +55,8 @@ export class BarPlotlyProps implements IPlotlyProperty {
       autorange: "reversed",
       dtick: 1,
       fixedrange: true,
-      gridcolor: theme.semanticColors.disabledBorder,
-      gridwidth: 1,
+      linewidth: 1,
+      mirror: true,
       showgrid: true,
       showticklabels: true,
       tick0: 0.5

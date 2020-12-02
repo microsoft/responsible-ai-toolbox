@@ -96,7 +96,8 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
     },
     mainLeft: {
       backgroundColor: theme.semanticColors.bodyBackground,
-      width: "75%"
+      width: "75%",
+      height: "100%"
     },
     modalContentHelp: {
       float: "left",

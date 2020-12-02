@@ -100,6 +100,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
       <Stack tokens={{ childrenGap: "l1" }}>
         <Dropdown
           id="chartSelectionDropdown"
+          styles={{ dropdown: { maxWidth: "75%" } }}
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
           defaultSelectedKey={this.state.displayPlotKey}
           options={displayOptions}
