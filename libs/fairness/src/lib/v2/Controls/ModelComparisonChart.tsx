@@ -5,7 +5,6 @@ import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
   ChartBuilder,
-  // chartColors,
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
@@ -94,7 +93,6 @@ export class ModelComparisonChart extends React.Component<
           }
         },
         hoverinfo: "text",
-        // color: chartColors[0],
         marker: {
           size: 14
         },
