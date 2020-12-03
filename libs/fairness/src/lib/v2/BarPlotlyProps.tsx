@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IData,
-  IPlotlyProperty
-} from "@responsible-ai/mlchartlib";
+import { IData, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { Config, Layout } from "plotly.js";
 
 export class BarPlotlyProps implements IPlotlyProperty {
@@ -52,13 +49,13 @@ export class BarPlotlyProps implements IPlotlyProperty {
       mirror: true
     },
     yaxis: {
+      automargin: true,
+      autorange: "reversed",
       fixedrange: true,
       linewidth: 1,
       mirror: true,
       showgrid: true,
-      showticklabels: true,
-      autorange: "reversed",
-      automargin: true
+      showticklabels: true
     }
   };
 }

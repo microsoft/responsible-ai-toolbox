@@ -283,7 +283,9 @@ export class ModelComparisonChart extends React.Component<
                 plotlyProps={props}
                 onClickHandler={this.props.onChartClick}
                 theme={getTheme()}
-                themeOverride={{axisGridColor: getTheme().semanticColors.disabledBorder}}
+                themeOverride={{
+                  axisGridColor: getTheme().semanticColors.disabledBorder
+                }}
               />
             </div>
           </Stack>
