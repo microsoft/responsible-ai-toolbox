@@ -221,18 +221,6 @@ export class PerformancePlot extends React.PureComponent<
       ];
     }
 
-    if (barPlotlyProps.layout?.yaxis) {
-      barPlotlyProps.layout.yaxis = {
-        fixedrange: true,
-        linewidth: 1,
-        mirror: true,
-        showgrid: true,
-        showticklabels: true,
-        autorange: "reversed",
-        automargin: true
-      };
-    }
-
     return (
       <Stack id="performancePlot">
         <div

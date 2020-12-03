@@ -52,14 +52,13 @@ export class BarPlotlyProps implements IPlotlyProperty {
       mirror: true
     },
     yaxis: {
-      autorange: "reversed",
-      dtick: 1,
       fixedrange: true,
       linewidth: 1,
       mirror: true,
       showgrid: true,
       showticklabels: true,
-      tick0: 0.5
+      autorange: "reversed",
+      automargin: true
     }
   };
 }

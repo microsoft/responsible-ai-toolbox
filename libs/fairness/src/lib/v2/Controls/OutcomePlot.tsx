@@ -129,18 +129,6 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       ];
     }
 
-    if (barPlotlyProps.layout?.yaxis) {
-      barPlotlyProps.layout.yaxis = {
-        fixedrange: true,
-        linewidth: 1,
-        mirror: true,
-        showgrid: true,
-        showticklabels: true,
-        autorange: "reversed",
-        automargin: true
-      };
-    }
-
     return (
       <Stack id="outcomePlot">
         <div
