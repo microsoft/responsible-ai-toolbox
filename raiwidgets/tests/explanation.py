@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiwidgets import ExplanationDashboard
+from raiwidgets import ExplanationDashboard, ModelPerformanceDashboard
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
 from sklearn import svm
@@ -39,6 +39,9 @@ sorted_local_importance_names = local_explanation.get_ranked_local_names()[
     prediction_value]
 
 
-ExplanationDashboard(global_explanation, model, dataset=x_test, true_y=y_test)
+# ExplanationDashboard(global_explanation, model, dataset=x_test, true_y=y_test)
+
+
+ModelPerformanceDashboard(model, dataset=x_test, true_y=y_test)
 
 input("Press Enter to continue...")

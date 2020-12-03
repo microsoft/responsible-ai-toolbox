@@ -54,7 +54,10 @@ class ExplanationDashboardInput:
         self._dataframeColumns = None
         self.dashboard_input = {}
         # List of explanations, key of explanation type is "explanation_type"
-        self._mli_explanations = explanation.data(-1)["mli"]
+        if explanation is not None:
+            self._mli_explanations = explanation.data(-1)["mli"]
+        else:
+            self._mli_explanations = None
         local_explanation = self._find_first_explanation(
             ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY)
         global_explanation = self._find_first_explanation(
@@ -64,7 +67,7 @@ class ExplanationDashboardInput:
         dataset_explanation = self._find_first_explanation(
             ExplanationDashboardInterface.MLI_EXPLANATION_DATASET_KEY)
 
-        if hasattr(explanation, 'method'):
+        if explanation is not None and hasattr(explanation, 'method'):
             self.dashboard_input[
                 ExplanationDashboardInterface.EXPLANATION_METHOD
             ] = explanation.method
@@ -199,7 +202,9 @@ class ExplanationDashboardInput:
                 raise ValueError(
                     "Unsupported ebm explanation type: {}".format(ex_str))
 
-        if features is None and hasattr(explanation, 'features')\
+        if features is None\
+                and explanation is not None\
+                and hasattr(explanation, 'features')\
                 and explanation.features is not None:
             features = explanation.features
         if features is not None:
@@ -211,7 +216,9 @@ class ExplanationDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.FEATURE_NAMES
             ] = features
-        if classes is None and hasattr(explanation, 'classes')\
+        if classes is None\
+                and explanation is not None\
+                and hasattr(explanation, 'classes')\
                 and explanation.classes is not None:
             classes = explanation.classes
         if classes is not None:
@@ -282,6 +289,8 @@ class ExplanationDashboardInput:
         return array
 
     def _find_first_explanation(self, key):
+        if self._mli_explanations is None:
+            return None
         new_array = [explanation for explanation
                      in self._mli_explanations
                      if explanation[
