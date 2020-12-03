@@ -23,7 +23,6 @@ import { PerformancePlotStyles } from "./PerformancePlot.styles";
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
-  nameIndex: number[];
   areaHeights: number;
   performancePickerProps: IPerformancePickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
@@ -37,6 +36,11 @@ export class PerformancePlot extends React.PureComponent<
     const theme = getTheme();
     const sharedStyles = SharedStyles();
     let performanceChartModalHelpStrings: string[] = [];
+    const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
+      (name) => {
+        return name + " ";
+      }
+    );
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -55,7 +59,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.falsePositiveRates?.bins,
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         } as any,
         {
           color: chartColors[1],
@@ -69,7 +73,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.falseNegativeRates?.bins.map((x) => -1 * x),
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         }
       ];
       // Annotations for both sides of the chart
@@ -125,7 +129,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.overpredictions?.bins,
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         } as any,
         {
           color: chartColors[1],
@@ -139,7 +143,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.underpredictions?.bins.map((x) => -1 * x),
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         }
       ];
       if (barPlotlyProps.layout) {
@@ -209,7 +213,7 @@ export class PerformancePlot extends React.PureComponent<
           text: performanceText,
           type: "box",
           x: this.props.metrics.errors,
-          y: this.props.dashboardContext.binVector
+          y: groupNamesWithBuffer
         } as any
       ];
       performanceChartModalHelpStrings = [
@@ -224,14 +228,8 @@ export class PerformancePlot extends React.PureComponent<
         mirror: true,
         showgrid: true,
         showticklabels: true,
-        tickmode: "array",
-        ticklen: 5,
-        tickvals: this.props.nameIndex,
-        ticktext: this.props.dashboardContext.groupNames,
-        automargin: true,
-        // title: this.props.dashboardContext.modelMetadata.featureNames[
-        //   this.props.featureBinPickerProps.selectedBinIndex
-        // ]
+        autorange: "reversed",
+        automargin: true
       };
     }
 

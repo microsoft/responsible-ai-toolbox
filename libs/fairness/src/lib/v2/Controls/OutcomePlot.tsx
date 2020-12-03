@@ -10,7 +10,6 @@ import { PredictionTypes } from "../../IFairnessProps";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { performanceOptions } from "../../util/PerformanceMetrics";
-import { SummaryTable } from "../../v2/Controls/SummaryTable";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import { IFeatureBinPickerPropsV2 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
@@ -21,7 +20,6 @@ import { ModalHelp } from "./ModalHelp";
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
-  nameIndex: number[];
   areaHeights: number;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
 }
@@ -37,8 +35,12 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         ? "selection_rate"
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
-    const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
     let outcomeChartModalHelpStrings: string[] = [];
+    const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
+      (name) => {
+        return name + " ";
+      }
+    );
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -56,7 +58,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           textposition: "inside",
           type: "bar",
           x: this.props.metrics.outcomes.bins,
-          y: nameIndex
+          y: groupNamesWithBuffer
         }
       ];
       if (barPlotlyProps.layout?.xaxis) {
@@ -89,7 +91,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           text: outcomeText,
           type: "box",
           x: this.props.metrics.predictions,
-          y: this.props.dashboardContext.binVector
+          y: groupNamesWithBuffer
         } as any
       ];
       outcomeChartModalHelpStrings = [
@@ -119,7 +121,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           text: outcomeText,
           type: "box",
           x: this.props.metrics.predictions,
-          y: this.props.dashboardContext.binVector
+          y: groupNamesWithBuffer
         } as any
       ];
       outcomeChartModalHelpStrings = [
@@ -127,22 +129,24 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       ];
     }
 
+    if (barPlotlyProps.layout?.yaxis) {
+      barPlotlyProps.layout.yaxis = {
+        fixedrange: true,
+        linewidth: 1,
+        mirror: true,
+        showgrid: true,
+        showticklabels: true,
+        autorange: "reversed",
+        automargin: true
+      };
+    }
+
     return (
       <Stack id="outcomePlot">
-        {/* chart header not needed due to dropdown
-        <Label>{outcomeChartHeaderString}</Label> */}
         <div
           className={sharedStyles.presentationArea}
           style={{ height: `${this.props.areaHeights}px` }}
         >
-          <SummaryTable
-            binGroup={
-              this.props.dashboardContext.modelMetadata.featureNames[
-                this.props.featureBinPickerProps.selectedBinIndex
-              ]
-            }
-            binLabels={this.props.dashboardContext.groupNames}
-          />
           <div className={sharedStyles.chartWrapper}>
             <Stack horizontal horizontalAlign={"space-between"}>
               <div className={sharedStyles.chartSubHeader}></div>

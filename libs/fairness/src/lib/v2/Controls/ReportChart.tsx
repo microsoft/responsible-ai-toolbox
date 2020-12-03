@@ -70,8 +70,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
         localization.Fairness.Report.distributionOfPredictions;
     }
 
-    const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-
     const displayOptions = [
       { key: outcomeKey, text: outcomeChartHeaderString }
     ];
@@ -111,7 +109,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           <PerformancePlot
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
-            nameIndex={nameIndex}
             featureBinPickerProps={this.props.featureBinPickerProps}
             performancePickerProps={this.props.performancePickerProps}
             areaHeights={this.props.areaHeights}
@@ -121,7 +118,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           <OutcomePlot
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
-            nameIndex={nameIndex}
             featureBinPickerProps={this.props.featureBinPickerProps}
             areaHeights={this.props.areaHeights}
           />
