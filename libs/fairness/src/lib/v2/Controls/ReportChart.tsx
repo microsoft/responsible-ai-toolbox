@@ -70,8 +70,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
         localization.Fairness.Report.distributionOfPredictions;
     }
 
-    const nameIndex = this.props.dashboardContext.groupNames.map((_, i) => i);
-
     const displayOptions = [
       { key: outcomeKey, text: outcomeChartHeaderString }
     ];
@@ -100,6 +98,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
       <Stack tokens={{ childrenGap: "l1" }}>
         <Dropdown
           id="chartSelectionDropdown"
+          styles={{ dropdown: { maxWidth: "75%" } }}
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
           defaultSelectedKey={this.state.displayPlotKey}
           options={displayOptions}
@@ -110,8 +109,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           <PerformancePlot
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
-            nameIndex={nameIndex}
-            theme={undefined}
             featureBinPickerProps={this.props.featureBinPickerProps}
             performancePickerProps={this.props.performancePickerProps}
             areaHeights={this.props.areaHeights}
@@ -121,8 +118,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           <OutcomePlot
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
-            nameIndex={nameIndex}
-            theme={undefined}
             featureBinPickerProps={this.props.featureBinPickerProps}
             areaHeights={this.props.areaHeights}
           />

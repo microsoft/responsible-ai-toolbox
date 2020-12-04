@@ -3,13 +3,12 @@
 
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import { getTheme, ITheme, Stack } from "office-ui-fabric-react";
+import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { PredictionTypes } from "../../IFairnessProps";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
-import { performanceOptions } from "../../util/PerformanceMetrics";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import {
   IFeatureBinPickerPropsV2,
@@ -20,13 +19,10 @@ import { SharedStyles } from "../Shared.styles";
 
 import { ModalHelp } from "./ModalHelp";
 import { PerformancePlotStyles } from "./PerformancePlot.styles";
-import { SummaryTable } from "./SummaryTable";
 
 interface IPerformancePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
-  nameIndex: number[];
-  theme: ITheme | undefined;
   areaHeights: number;
   performancePickerProps: IPerformancePickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
@@ -40,6 +36,11 @@ export class PerformancePlot extends React.PureComponent<
     const theme = getTheme();
     const sharedStyles = SharedStyles();
     let performanceChartModalHelpStrings: string[] = [];
+    const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
+      (name) => {
+        return name + " ";
+      }
+    );
 
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -58,7 +59,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.falsePositiveRates?.bins,
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         } as any,
         {
           color: chartColors[1],
@@ -72,7 +73,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.falseNegativeRates?.bins.map((x) => -1 * x),
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         }
       ];
       // Annotations for both sides of the chart
@@ -128,7 +129,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.overpredictions?.bins,
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         } as any,
         {
           color: chartColors[1],
@@ -142,7 +143,7 @@ export class PerformancePlot extends React.PureComponent<
           type: "bar",
           width: 0.5,
           x: this.props.metrics.underpredictions?.bins.map((x) => -1 * x),
-          y: this.props.nameIndex
+          y: groupNamesWithBuffer
         }
       ];
       if (barPlotlyProps.layout) {
@@ -212,7 +213,7 @@ export class PerformancePlot extends React.PureComponent<
           text: performanceText,
           type: "box",
           x: this.props.metrics.errors,
-          y: this.props.dashboardContext.binVector
+          y: groupNamesWithBuffer
         } as any
       ];
       performanceChartModalHelpStrings = [
@@ -220,40 +221,12 @@ export class PerformancePlot extends React.PureComponent<
       ];
     }
 
-    const performanceKey = this.props.performancePickerProps
-      .selectedPerformanceKey;
-    const formattedBinPerformanceValues = this.props.metrics.performance.bins.map(
-      (value) => FormatMetrics.formatNumbers(value, performanceKey)
-    );
-    const selectedMetric =
-      performanceOptions[
-        this.props.performancePickerProps.selectedPerformanceKey
-      ] ||
-      this.props.performancePickerProps.performanceOptions.find(
-        (metric) =>
-          metric.key ===
-          this.props.performancePickerProps.selectedPerformanceKey
-      );
-
     return (
       <Stack id="performancePlot">
-        {/* chart header not needed due to dropdown
-        <Label>{performanceChartHeaderString}</Label> */}
         <div
           className={sharedStyles.presentationArea}
           style={{ height: `${this.props.areaHeights}px` }}
         >
-          <SummaryTable
-            binGroup={
-              this.props.dashboardContext.modelMetadata.featureNames[
-                this.props.featureBinPickerProps.selectedBinIndex
-              ]
-            }
-            binLabels={this.props.dashboardContext.groupNames}
-            formattedBinValues={formattedBinPerformanceValues}
-            metricLabel={selectedMetric.title}
-            binValues={this.props.metrics.performance.bins}
-          />
           <div className={sharedStyles.chartWrapper}>
             <Stack horizontal horizontalAlign={"space-between"}>
               <div className={sharedStyles.chartSubHeader}></div>
@@ -263,7 +236,13 @@ export class PerformancePlot extends React.PureComponent<
               />
             </Stack>
             <div className={sharedStyles.chartBody}>
-              <AccessibleChart plotlyProps={barPlotlyProps} theme={undefined} />
+              <AccessibleChart
+                plotlyProps={barPlotlyProps}
+                theme={theme}
+                themeOverride={{
+                  axisGridColor: theme.semanticColors.disabledBorder
+                }}
+              />
             </div>
           </div>
         </div>

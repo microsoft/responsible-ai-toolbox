@@ -17,16 +17,8 @@ export interface IModelComparisonChartStyles {
   infoButton: IStyle;
   modalContentHelp: IStyle;
   modalContentHelpText: IStyle;
-  editButton: IStyle;
   howTo: IStyle;
-  main: IStyle;
   mainRight: IStyle;
-  rightTitle: IStyle;
-  rightText: IStyle;
-  chart: IStyle;
-  textSection: IStyle;
-  radio: IStyle;
-  radioOptions: IStyle;
 }
 
 export const ModelComparisonChartStyles: () => IProcessedStyleSet<
@@ -34,10 +26,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<IModelComparisonChartStyles>({
-    chart: {
-      flex: 1,
-      padding: "0px 0 0 0"
-    },
     doneButton: {
       color: theme.semanticColors.bodyText,
       fontSize: FontSizes.large,
@@ -46,9 +34,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       lineHeight: "24px",
       margin: "auto",
       padding: "12px"
-    },
-    editButton: {
-      color: theme.semanticColors.buttonText
     },
     frame: {
       display: "flex",
@@ -73,13 +58,6 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       textAlign: "center",
       width: "15px"
     },
-    main: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      display: "inline-flex",
-      flex: 1,
-      flexDirection: "row",
-      height: "100%"
-    },
     mainRight: {
       padding: "30px 0 0 35px",
       width: "300px"
@@ -93,33 +71,9 @@ export const ModelComparisonChartStyles: () => IProcessedStyleSet<
       textAlign: "center",
       wordWrap: "break-word"
     },
-    radio: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      paddingBottom: "30px",
-      paddingLeft: "75px"
-    },
-    radioOptions: {
-      color: theme.semanticColors.bodyText
-    },
-    rightText: {
-      borderBottom: "0.5px dashed",
-      borderColor: theme.semanticColors.bodyDivider,
-      color: theme.semanticColors.bodyText,
-      padding: "16px 15px 30px 0"
-    },
-    rightTitle: {
-      borderBottom: "1px solid",
-      borderColor: theme.semanticColors.bodyDivider,
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "18px"
-    },
     spinner: {
       margin: "auto",
       padding: "40px"
-    },
-    textSection: {
-      color: theme.semanticColors.bodyText,
-      paddingBottom: "5px"
     }
   });
 };

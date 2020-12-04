@@ -14,6 +14,7 @@ export interface IInsightsStyles {
   insightsText: IStyle;
   downloadIcon: IStyle;
   downloadReport: IStyle;
+  textSection: IStyle;
 }
 
 export const InsightsStyles: () => IProcessedStyleSet<IInsightsStyles> = () => {
@@ -52,6 +53,10 @@ export const InsightsStyles: () => IProcessedStyleSet<IInsightsStyles> = () => {
       marginTop: "20px",
       paddingBottom: "18px",
       paddingRight: "15px"
+    },
+    textSection: {
+      color: theme.semanticColors.bodyText,
+      paddingBottom: "5px"
     }
   });
 };

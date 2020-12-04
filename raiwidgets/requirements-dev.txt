@@ -6,7 +6,7 @@ pytest-mock==3.1.1
 requests==2.24.0
 
 autopep8==1.5.3
-flake8==3.7.9
+flake8==3.8.4
 flake8-blind-except==0.1.1
 flake8-builtins==1.5.3
 flake8-copyright==0.2.2
