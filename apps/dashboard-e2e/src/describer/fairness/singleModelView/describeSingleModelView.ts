@@ -60,11 +60,6 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
       cy.get("#chartSelectionDropdown").should("contain.text", data.charts[0]);
 
       cy.get("#outcomePlot").should("exist");
-
-      // check text in table on the left
-      cy.get("#outcomePlot")
-        .contains(Object.keys(data.sensitiveFeatures)[0])
-        .should("exist");
       data.sensitiveFeatures[Object.keys(data.sensitiveFeatures)[0]].forEach(
         (sensitiveFeatureValue: string) => {
           cy.get("#outcomePlot")
