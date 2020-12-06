@@ -85,7 +85,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
         this.props.metrics.overpredictions &&
         this.props.metrics.underpredictions) ||
       (this.props.dashboardContext.modelMetadata.PredictionType ===
-        PredictionTypes.Probability &&
+        PredictionTypes.Regression &&
         this.props.metrics.errors)
     ) {
       displayOptions.push({

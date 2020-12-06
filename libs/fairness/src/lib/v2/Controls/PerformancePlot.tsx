@@ -213,7 +213,9 @@ export class PerformancePlot extends React.PureComponent<
           text: performanceText,
           type: "box",
           x: this.props.metrics.errors,
-          y: groupNamesWithBuffer
+          y: this.props.dashboardContext.binVector.map(
+            (binIndex) => groupNamesWithBuffer[binIndex]
+          )
         } as any
       ];
       performanceChartModalHelpStrings = [

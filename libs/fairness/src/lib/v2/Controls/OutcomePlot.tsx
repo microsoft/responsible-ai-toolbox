@@ -91,7 +91,9 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           text: outcomeText,
           type: "box",
           x: this.props.metrics.predictions,
-          y: groupNamesWithBuffer
+          y: this.props.dashboardContext.binVector.map(
+            (binIndex) => groupNamesWithBuffer[binIndex]
+          )
         } as any
       ];
       outcomeChartModalHelpStrings = [
@@ -121,7 +123,9 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           text: outcomeText,
           type: "box",
           x: this.props.metrics.predictions,
-          y: groupNamesWithBuffer
+          y: this.props.dashboardContext.binVector.map(
+            (binIndex) => groupNamesWithBuffer[binIndex]
+          )
         } as any
       ];
       outcomeChartModalHelpStrings = [
