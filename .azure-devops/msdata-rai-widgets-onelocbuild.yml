@@ -1,0 +1,13 @@
+# Run localisation
+
+trigger:
+  - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - bash: |
+      ls -R
+      echo "Everything there"
+    displayName: "Smoke"
