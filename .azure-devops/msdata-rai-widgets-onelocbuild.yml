@@ -4,7 +4,7 @@ trigger:
   - main
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: "windows-latest"
 
 steps:
 - task: OneLocBuild@2
