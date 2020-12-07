@@ -149,6 +149,14 @@ export class ErrorCohort {
         const arg1 = filter.arg[1].toFixed(2);
         return `${label} in (${arg0}, ${arg1}]`;
       }
+      if (filter.method === FilterMethods.Includes) {
+        const args = filter.arg.map((arg) => arg.toFixed(2)).join(", ");
+        return `${label} in (${args}]`;
+      }
+      if (filter.method === FilterMethods.Excludes) {
+        const args = filter.arg.map((arg) => arg.toFixed(2)).join(", ");
+        return `${label} not in (${args}]`;
+      }
       if (filter.method === FilterMethods.Equal) {
         method = "==";
       } else if (filter.method === FilterMethods.GreaterThan) {

@@ -36,6 +36,9 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       paddingTop: "10px"
     },
     matrixCell: {
+      ":focus": {
+        outline: "none"
+      },
       alignItems: "center",
       border: "1px solid #bfbfbf",
       cursor: "pointer",
@@ -106,6 +109,9 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       display: "flex"
     },
     styledMatrixCell: {
+      ":focus": {
+        outline: "none"
+      },
       alignItems: "center",
       cursor: "pointer",
       display: "flex",

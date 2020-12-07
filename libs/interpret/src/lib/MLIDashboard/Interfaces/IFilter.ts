@@ -8,6 +8,7 @@ export enum FilterMethods {
   LessThanEqualTo = "less and equal",
   Equal = "equal",
   Includes = "includes",
+  Excludes = "excludes",
   InTheRangeOf = "in the range of"
 }
 

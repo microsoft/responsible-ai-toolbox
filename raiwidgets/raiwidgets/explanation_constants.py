@@ -7,6 +7,7 @@
 class ExplanationDashboardInterface(object):
     """Dictionary properties shared between \
         the python and javascript object."""
+    CATEGORICAL_MAP = "categoricalMap"
     CLASS_NAMES = "classNames"
     CUSTOM_VISUALS = "customVis"
     EBM_EXPLANATION = "ebmGlobalExplanation"

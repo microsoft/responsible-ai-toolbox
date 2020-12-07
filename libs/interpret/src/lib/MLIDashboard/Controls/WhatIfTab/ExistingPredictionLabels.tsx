@@ -48,8 +48,29 @@ export class ExistingPredictionLabels extends React.Component<
               .sortedCategoricalValues?.[predictedClass]
           : undefined;
       if (this.props.jointDataset.hasPredictedProbabilities) {
-        const predictedProb =
-          row[JointDataset.ProbabilityYRoot + predictedClass?.toString()];
+        let predictedProb: number;
+        let tempPredictedProb: number | undefined = undefined;
+        if (
+          this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
+            .treatAsCategorical
+        ) {
+          const categoricalValues = this.props.jointDataset.metaDict[
+            JointDataset.PredictedYLabel
+          ].sortedCategoricalValues;
+          const categoricalClassIndex = categoricalValues?.indexOf(
+            (predictedClass as unknown) as string
+          );
+          tempPredictedProb =
+            row[
+              JointDataset.ProbabilityYRoot + categoricalClassIndex?.toString()
+            ];
+        }
+        if (!tempPredictedProb) {
+          predictedProb =
+            row[JointDataset.ProbabilityYRoot + predictedClass?.toString()];
+        } else {
+          predictedProb = tempPredictedProb;
+        }
         const predictedProbs = JointDataset.predictProbabilitySlice(
           row,
           this.props.metadata.classNames.length

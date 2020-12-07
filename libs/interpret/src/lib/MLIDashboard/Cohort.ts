@@ -151,6 +151,8 @@ export class Cohort {
           return rowVal <= filter.arg[0];
         case FilterMethods.Includes:
           return (filter.arg as number[]).includes(rowVal);
+        case FilterMethods.Excludes:
+          return !(filter.arg as number[]).includes(rowVal);
         case FilterMethods.InTheRangeOf:
           return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
         default:

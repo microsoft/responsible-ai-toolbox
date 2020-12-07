@@ -4,6 +4,9 @@
 import {
   IColumn,
   IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
+  IStyleFunctionOrObject,
   CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
@@ -36,6 +39,10 @@ export interface ICohortListItem {
 const focusTrapZoneProps: IFocusTrapZoneProps = {
   forceFocusInsideTrap: false,
   isClickableOutsideFocusTrap: true
+};
+
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
 };
 
 export class CohortList extends React.Component<
@@ -97,6 +104,7 @@ export class CohortList extends React.Component<
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className={classNames.divider}></div>
         <div className={classNames.section}>

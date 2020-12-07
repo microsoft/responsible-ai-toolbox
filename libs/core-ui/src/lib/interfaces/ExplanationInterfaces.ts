@@ -13,6 +13,21 @@ export interface IExplanationDashboardData {
   precomputedExplanations?: IPrecomputedExplanations;
 }
 
+export interface ISerializedExplanationData {
+  explanationMethod?: string;
+  predictedY?: any[];
+  trainingData: any[][];
+  isClassifier: boolean;
+  trueY?: any[];
+  localExplanations:
+    | IMultiClassLocalFeatureImportance
+    | ISingleClassLocalFeatureImportance;
+  featureNames: string[];
+  classNames: string[];
+  probabilityY?: number[][];
+  categoricalMap?: { [key: number]: string[] };
+}
+
 export interface IModelInformation {
   modelClass: "Tree" | "EBM" | "blackbox";
   method?: "classifier" | "regressor";
