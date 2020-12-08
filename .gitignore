@@ -47,3 +47,7 @@ Thumbs.db
 
 # test files
 apps/*-e2e/debug.log
+
+# notebook artifacts
+/notebooks/*.csv
+/notebooks/*.zip
