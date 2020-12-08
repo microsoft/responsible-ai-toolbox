@@ -1,7 +1,8 @@
 # Run localisation
 
-trigger:
-  - main
+trigger: none
+
+pr: none
 
 pool:
   vmImage: "windows-latest"
