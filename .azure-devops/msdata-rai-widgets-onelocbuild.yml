@@ -15,10 +15,13 @@ steps:
     outDir: '$(Build.ArtifactStagingDirectory)'
     isCreatePrSelected: true
     prSourceBranchPrefix: 'locfiles'
+    isAutoCompletePrSelected: false
     repoType: gitHub
     gitHubPatVariable: $(GitHubPat)
     packageSourceAuth: patAuth
     patVariable: $(OneLocBuildPat)
+    lsBuildWarningLevel: 4
+    xLocConsoleLoggingLevel: Verbose
 
 - task: PublishBuildArtifacts@1
   inputs:
