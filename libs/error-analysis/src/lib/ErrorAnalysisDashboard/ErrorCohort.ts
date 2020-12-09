@@ -6,7 +6,8 @@ import {
   JointDataset,
   IFilter,
   FilterMethods,
-  ICompositeFilter
+  ICompositeFilter,
+  IJointMeta
 } from "@responsible-ai/interpret";
 
 export enum ErrorDetectorCohortSource {
@@ -143,22 +144,29 @@ export class ErrorCohort {
   public cohortFiltersToString(filters: IFilter[]): string[] {
     return filters.map((filter: IFilter): string => {
       let method = "";
-      const label = this.jointDataset.metaDict[filter.column].label;
+      const metaDict = this.jointDataset.metaDict[filter.column];
+      const label = metaDict.label;
       if (filter.method === FilterMethods.InTheRangeOf) {
         const arg0 = filter.arg[0].toFixed(2);
         const arg1 = filter.arg[1].toFixed(2);
         return `${label} in (${arg0}, ${arg1}]`;
       }
       if (filter.method === FilterMethods.Includes) {
-        const args = filter.arg.map((arg) => arg.toFixed(2)).join(", ");
-        return `${label} in (${args}]`;
+        const args = this.getFilterBoundsArgs(metaDict, filter);
+        return `${label} in ${args}`;
       }
       if (filter.method === FilterMethods.Excludes) {
-        const args = filter.arg.map((arg) => arg.toFixed(2)).join(", ");
-        return `${label} not in (${args}]`;
+        const args = this.getFilterBoundsArgs(metaDict, filter);
+        return `${label} not in ${args}`;
       }
       if (filter.method === FilterMethods.Equal) {
         method = "==";
+        if (metaDict.treatAsCategorical && metaDict.sortedCategoricalValues) {
+          const catArg = (metaDict.sortedCategoricalValues as string[])[
+            filter.arg[0]
+          ];
+          return `${label} ${method} ${catArg}`;
+        }
       } else if (filter.method === FilterMethods.GreaterThan) {
         method = ">";
       } else if (filter.method === FilterMethods.GreaterThanEqualTo) {
@@ -199,5 +207,14 @@ export class ErrorCohort {
       this.cohort.compositeFilters
     );
     return cohortFilters.concat(cohortCompositeFilters);
+  }
+
+  private getFilterBoundsArgs(metaDict: IJointMeta, filter: IFilter): string {
+    if (metaDict.treatAsCategorical && metaDict.sortedCategoricalValues) {
+      return filter.arg
+        .map((arg) => (metaDict.sortedCategoricalValues as string[])[arg])
+        .join(", ");
+    }
+    return filter.arg.map((arg) => arg.toFixed(2)).join(", ");
   }
 }

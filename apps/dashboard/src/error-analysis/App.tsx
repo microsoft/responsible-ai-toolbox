@@ -131,7 +131,7 @@ export class App extends React.Component<IAppProps> {
           data[0][1] === "mean texture"
         ) {
           resolve(_.cloneDeep(dummyMatrix2dInterval));
-        } else if (data[0] === "mean radius") {
+        } else if (data[0][0] === "mean radius") {
           resolve(_.cloneDeep(dummyMatrix1dInterval));
         } else {
           resolve(_.cloneDeep(dummyMatrixData));

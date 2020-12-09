@@ -48,7 +48,8 @@ class ErrorAnalysisDashboard(Dashboard):
         Dashboard.__init__(self, dashboard_type="ErrorAnalysis",
                            model_data=self.input.dashboard_input,
                            public_ip=public_ip,
-                           port=port)
+                           port=port,
+                           add_local_url=True)
 
         def predict():
             data = request.get_json(force=True)
