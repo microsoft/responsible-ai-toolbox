@@ -79,7 +79,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       transform: "translate(0px, 90px)"
     },
     mainFrame: {
-      height: "820px",
+      height: "1100px",
       margin: "0",
       padding: "0",
       width: "100%"

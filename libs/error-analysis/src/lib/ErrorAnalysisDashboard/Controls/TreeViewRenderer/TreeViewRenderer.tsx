@@ -333,7 +333,7 @@ export class TreeViewRenderer extends React.PureComponent<
             ref={svgOuterFrame}
             className={classNames.svgOuterFrame}
             id="svgOuterFrame"
-            viewBox="0 0 952 820"
+            viewBox="0 0 952 1100"
             onClick={this.bkgClick.bind(this)}
           >
             <mask id="Mask">
