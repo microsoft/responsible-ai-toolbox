@@ -45,10 +45,11 @@ class ErrorAnalysisDashboard(Dashboard):
             explanation, model, dataset, true_y, classes,
             features, locale, categorical_features)
 
-        Dashboard.__init__(self, dashboard_type="ErrorAnalysis",
-                           model_data=self.input.dashboard_input,
-                           public_ip=public_ip,
-                           port=port)
+        super(ErrorAnalysisDashboard, self).__init__(
+            dashboard_type="ErrorAnalysis",
+            model_data=self.input.dashboard_input,
+            public_ip=public_ip,
+            port=port)
 
         def predict():
             data = request.get_json(force=True)

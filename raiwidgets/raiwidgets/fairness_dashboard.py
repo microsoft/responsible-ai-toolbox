@@ -41,7 +41,7 @@ class FairnessDashboard(Dashboard):
             port=None,
             fairness_metric_module=None,
             fairness_metric_mapping=None):
-        """Initialize the fairness Dashboard."""
+        """Initialize the fairness dashboard."""
 
         metrics_module = FairnessMetricModule(
             module_name=fairness_metric_module,
@@ -97,17 +97,17 @@ class FairnessDashboard(Dashboard):
                               "ignoring")
             fairness_input["features"] = sensitive_feature_names
 
-        Dashboard.__init__(self, dashboard_type="Fairness",
-                           model_data=fairness_input,
-                           public_ip=public_ip,
-                           port=port)
+        super(FairnessDashboard, self).__init__(
+            dashboard_type="Fairness",
+            model_data=fairness_input,
+            public_ip=public_ip,
+            port=port)
 
         self.fairness_metrics_module = metrics_module
 
         def metrics():
             try:
                 data = request.get_json(force=True)
-                data.update(self.model_data)
 
                 if type(data["binVector"][0]) == np.int32:
                     data['binVector'] = [
@@ -115,14 +115,14 @@ class FairnessDashboard(Dashboard):
 
                 metric_method = self.fairness_metrics_module.\
                     _metric_methods.get(data["metricKey"]).get("function")
-                metrics = self.fairness_metrics_module.MetricFrame(
+                metric_frame = self.fairness_metrics_module.MetricFrame(
                     metric_method,
-                    data['true_y'],
-                    data['predicted_ys'][data["modelIndex"]],
+                    self.model_data['true_y'],
+                    self.model_data['predicted_ys'][data["modelIndex"]],
                     sensitive_features=data["binVector"])
                 return jsonify({"data": {
-                    "global": metrics.overall,
-                    "bins": list(metrics.by_group.to_dict().values())
+                    "global": metric_frame.overall,
+                    "bins": list(metric_frame.by_group.to_dict().values())
                 }})
             except Exception as ex:
                 import sys
