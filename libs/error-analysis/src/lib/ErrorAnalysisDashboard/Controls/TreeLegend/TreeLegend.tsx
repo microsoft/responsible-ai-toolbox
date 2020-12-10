@@ -15,7 +15,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
   public render(): React.ReactNode {
     const classNames = treeLegendStyles();
     return (
-      <g className={classNames.matrixLegend}>
+      <g className={classNames.treeLegend}>
         <g>
           <text className={classNames.cohortName}>
             Cohort: {this.props.selectedCohort.cohort.name}
