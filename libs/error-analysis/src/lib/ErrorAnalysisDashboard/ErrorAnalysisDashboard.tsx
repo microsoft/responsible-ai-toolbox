@@ -456,10 +456,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     );
     const classNames = ErrorAnalysisDashboardStyles();
     return (
-      <div className={classNames.page} style={{ maxHeight: "1000px" }}>
+      <div className={classNames.page}>
         <Navigation
           updateViewState={this.updateViewState.bind(this)}
-          updateGlobalTabState={this.updateGlobalTabState.bind(this)}
           updatePredictionTabState={this.updatePredictionTabState.bind(this)}
           viewType={this.state.viewType}
           activeGlobalTab={this.state.activeGlobalTab}
@@ -554,10 +553,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 />
               )}
               {this.state.viewType === ViewTypeKeys.ExplanationView && (
-                <div
-                  className={ErrorAnalysisDashboard.classNames.pivotWrapper}
-                  style={{ height: "820px" }}
-                >
+                <div className={ErrorAnalysisDashboard.classNames.pivotWrapper}>
                   <Pivot
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick.bind(this)}
@@ -671,7 +667,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           <LayerHost
             id={this.layerHostId}
             style={{
-              height: "820px",
+              height: "1100px",
               overflow: "hidden",
               position: "relative"
             }}
@@ -753,7 +749,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     if (item !== undefined) {
       const itemKey: string = item.props.itemKey!;
       const index: GlobalTabKeys = GlobalTabKeys[itemKey];
-      this.setState({ activeGlobalTab: index });
+      const predictionTab = PredictionTabKeys.CorrectPredictionTab;
+      this.setState({ activeGlobalTab: index, predictionTab });
     }
   }
 
@@ -770,11 +767,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   }
 
   private updateViewState(viewType: ViewTypeKeys): void {
-    this.setState({ viewType });
-  }
-
-  private updateGlobalTabState(globalTab: GlobalTabKeys): void {
-    this.setState({ activeGlobalTab: globalTab });
+    if (viewType !== ViewTypeKeys.ExplanationView) {
+      const predictionTab = PredictionTabKeys.CorrectPredictionTab;
+      this.setState({ predictionTab, viewType });
+    } else {
+      this.setState({ viewType });
+    }
   }
 
   private updatePredictionTabState(predictionTab: PredictionTabKeys): void {

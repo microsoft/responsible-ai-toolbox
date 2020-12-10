@@ -322,6 +322,7 @@ export class MatrixArea extends React.PureComponent<
     const category1Values = [];
     let cat1HasIntervals = false;
     let cat2HasIntervals = false;
+    const feature2IsSelected = this.props.selectedFeature2 !== undefined;
     // Extract categories for first selected feature in matrix filter
     for (let i = 0; i < matrix.length - 1; i++) {
       const cellCat1 = matrix[i][0];
@@ -354,14 +355,17 @@ export class MatrixArea extends React.PureComponent<
     }
     const multiCellCompositeFilters: ICompositeFilter[] = [];
     const keyFeature1 = this.getKey(this.props.selectedFeature1!);
-    let keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    let keyFeature2 = undefined;
+    if (feature2IsSelected) {
+      keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    }
     // Create filters based on the selected cells in the matrix filter
     for (let i = 0; i < matrix.length - 1; i++) {
       for (let j = 1; j < rowLength; j++) {
         const index = j + i * rowLength;
         const cellCompositeFilters: ICompositeFilter[] = [];
         if (selectedCells[index]) {
-          if (category1Values.length > 0) {
+          if (category1Values.length > 0 && feature2IsSelected) {
             if (cat1HasIntervals) {
               cellCompositeFilters.push({
                 arg: [
@@ -391,7 +395,7 @@ export class MatrixArea extends React.PureComponent<
                 category2Values[j - 1].minIntervalCat2,
                 category2Values[j - 1].maxIntervalCat2
               ],
-              column: keyFeature2,
+              column: keyFeature2!,
               method: FilterMethods.InTheRangeOf
             });
           } else {
@@ -401,7 +405,7 @@ export class MatrixArea extends React.PureComponent<
             }
             cellCompositeFilters.push({
               arg: [cat2arg],
-              column: keyFeature2,
+              column: keyFeature2!,
               method: FilterMethods.Equal
             });
           }
