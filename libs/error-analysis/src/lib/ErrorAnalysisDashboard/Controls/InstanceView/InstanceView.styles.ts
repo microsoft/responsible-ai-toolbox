@@ -29,8 +29,7 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
     },
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,
-      color: theme.semanticColors.bodyText,
-      maxHeight: "1000px"
+      color: theme.semanticColors.bodyText
     }
   });
 };
