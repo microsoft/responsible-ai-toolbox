@@ -485,6 +485,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           setErrorDetector={(key: ErrorAnalysisOptions): void =>
             this.setState({
               errorAnalysisOption: key,
+              openFeatureList: false,
               selectedCohort: this.state.baseCohort
             })
           }
@@ -750,7 +751,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       const itemKey: string = item.props.itemKey!;
       const index: GlobalTabKeys = GlobalTabKeys[itemKey];
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
-      this.setState({ activeGlobalTab: index, predictionTab });
+      this.setState({
+        activeGlobalTab: index,
+        openWhatIf: false,
+        predictionTab
+      });
     }
   }
 
@@ -763,13 +768,16 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   }
 
   private viewExplanation(): void {
-    this.setState({ viewType: ViewTypeKeys.ExplanationView });
+    this.setState({
+      openFeatureList: false,
+      viewType: ViewTypeKeys.ExplanationView
+    });
   }
 
   private updateViewState(viewType: ViewTypeKeys): void {
     if (viewType !== ViewTypeKeys.ExplanationView) {
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
-      this.setState({ predictionTab, viewType });
+      this.setState({ openWhatIf: false, predictionTab, viewType });
     } else {
       this.setState({ viewType });
     }
