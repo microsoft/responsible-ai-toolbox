@@ -11,10 +11,21 @@ import {
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
-import { mergeStyles, IStyle, ITheme } from "office-ui-fabric-react";
+import {
+  DirectionalHint,
+  mergeStyles,
+  IStyle,
+  ITheme,
+  ITooltipHostStyles,
+  ITooltipProps,
+  TooltipDelay,
+  TooltipHost
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
+import { FilterProps } from "../../FilterProps";
+import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
 
@@ -167,6 +178,31 @@ export class MatrixArea extends React.PureComponent<
                     classNames.selectedMatrixCell
                   ]);
                 }
+                const filterProps = new FilterProps(
+                  value.falseCount,
+                  value.count,
+                  this.props.baseCohort.totalIncorrect,
+                  errorRatio
+                );
+                const tooltipProps: ITooltipProps = {
+                  onRenderContent: () => (
+                    <svg width="110" height="140" viewBox="0 0 70 70">
+                      <FilterTooltip
+                        filterProps={filterProps}
+                        isMouseOver={true}
+                        nodeTransform={"translate(-10px, -10px)"}
+                      />
+                    </svg>
+                  )
+                };
+                const hostStyles: Partial<ITooltipHostStyles> = {
+                  root: {
+                    alignItems: "center",
+                    display: "flex",
+                    height: "100%",
+                    width: "100%"
+                  }
+                };
                 return (
                   <div
                     key={`${i}_${j}cell`}
@@ -182,9 +218,17 @@ export class MatrixArea extends React.PureComponent<
                     tabIndex={i}
                     onKeyUp={undefined}
                   >
-                    <div className={styledGradientMatrixCell}>
-                      {`${errorRatio.toFixed(0)}%`}
-                    </div>
+                    <TooltipHost
+                      tooltipProps={tooltipProps}
+                      delay={TooltipDelay.zero}
+                      id={`${i}_${j}celltooltip`}
+                      directionalHint={DirectionalHint.bottomCenter}
+                      styles={hostStyles}
+                    >
+                      <div className={styledGradientMatrixCell}>
+                        {`${errorRatio.toFixed(0)}%`}
+                      </div>
+                    </TooltipHost>
                   </div>
                 );
               })}
@@ -289,7 +333,7 @@ export class MatrixArea extends React.PureComponent<
         cat1HasIntervals = true;
       } else {
         category1Values.push({ category1 });
-        cat2HasIntervals = false;
+        cat1HasIntervals = false;
       }
     }
     const category2Values = [];

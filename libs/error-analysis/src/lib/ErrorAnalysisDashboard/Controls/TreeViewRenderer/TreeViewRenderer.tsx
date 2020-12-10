@@ -18,7 +18,9 @@ import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
+import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import {
@@ -96,8 +98,9 @@ export interface TreeNode {
   fillstyleUp: FillStyleUp;
   fillstyleDown: Transform;
   highlight: boolean;
-  hoverText: string;
+  filterProps: FilterProps;
   id: string;
+  isMouseOver: boolean;
   maskShift: number;
   parent: HierarchyPointNode<any>;
   r: number;
@@ -106,6 +109,7 @@ export interface TreeNode {
 
 export interface TreeNodeData {
   error: number;
+  isMouseOver: boolean;
   isSelected: boolean;
   nodeName: string;
   pathFromRoot: string;
@@ -269,14 +273,13 @@ export class TreeViewRenderer extends React.PureComponent<
         const globalErrorPerc = d!.data!.error! / this.state.rootErrorSize;
         const localErrorPerc = d!.data!.error! / d!.data!.size!;
         const calcMaskShift = globalErrorPerc * 52;
-        const calcHoverText = `Error Rate: ${(
-          (d!.data!.error! / d!.data!.size!) *
-          100
-        ).toFixed(2)}%\r\nError Coverage: ${(
-          (d.data.error / this.state.rootErrorSize) *
-          100
-        ).toFixed(2)}%\r\nInstances: ${d!.data!.size!}\r\n${d!.data!
-          .pathFromRoot!}${this.skippedInstances(d!)}`;
+        const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
+        const filterProps = new FilterProps(
+          d!.data!.error!,
+          d!.data!.size!,
+          this.state.rootErrorSize,
+          errorRate
+        );
 
         let heatmapStyle: { fill: string } = { fill: errorAvgColor };
 
@@ -305,10 +308,12 @@ export class TreeViewRenderer extends React.PureComponent<
             fill: "#d2d2d2",
             transform: `translate(0px, ${calcMaskShift}px)`
           },
+
+          filterProps,
           // size: d.size,
           highlight: d!.data!.isSelected,
-          hoverText: calcHoverText,
           id: d!.id! + Math.random(),
+          isMouseOver: d!.data!.isMouseOver,
           maskShift: calcMaskShift,
           parent: d!.parent!,
           r: 28,
@@ -430,6 +435,11 @@ export class TreeViewRenderer extends React.PureComponent<
                       onClick={(
                         e: React.MouseEvent<SVGElement, MouseEvent>
                       ): void => this.select(index, node, e)}
+                      // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
+                      onMouseEnter={(
+                        e: React.MouseEvent<SVGElement, MouseEvent>
+                      ): void => this.hover(node, true, e)}
+                      pointerEvents="all"
                     >
                       <circle
                         r={node.r}
@@ -450,11 +460,9 @@ export class TreeViewRenderer extends React.PureComponent<
                       >
                         <circle r="26" style={node.fillstyleUp} />
                       </g>
-                      {/*TODO: not sure why text-anchor is not liked by browser*/}
                       <text textAnchor="middle" className={classNames.nodeText}>
                         {node.data.error} / {node.data.size}
                       </text>
-                      <title>{node.hoverText}</title>
                     </g>
                   </CSSTransition>
                 ))}
@@ -470,7 +478,11 @@ export class TreeViewRenderer extends React.PureComponent<
                     timeout={200}
                     className="linkLabels"
                   >
-                    <g key={linkLabel.id} style={linkLabel.style}>
+                    <g
+                      key={linkLabel.id}
+                      style={linkLabel.style}
+                      pointerEvents="none"
+                    >
                       <rect
                         x={-linkLabel.bbX}
                         y={-linkLabel.bbY}
@@ -481,14 +493,31 @@ export class TreeViewRenderer extends React.PureComponent<
                         strokeWidth="1px"
                         rx="10"
                         ry="10"
+                        pointerEvents="none"
                       />
-                      <text className={classNames.linkLabel}>
+                      <text
+                        className={classNames.linkLabel}
+                        pointerEvents="none"
+                      >
                         {linkLabel.text}
                       </text>
                     </g>
                   </CSSTransition>
                 ))}
               </TransitionGroup>
+              <g
+                className={classNames.nodesTransitionGroup}
+                pointerEvents="none"
+              >
+                {nodeData.map((node) => (
+                  <FilterTooltip
+                    key={node.id + "tooltip"}
+                    filterProps={node.filterProps}
+                    isMouseOver={node.isMouseOver}
+                    nodeTransform={node.style.transform}
+                  />
+                ))}
+              </g>
             </g>
           </svg>
         </div>
@@ -577,12 +606,6 @@ export class TreeViewRenderer extends React.PureComponent<
     const bb = temp!.node()!.getBBox();
     temp.selectAll("*").remove();
     return bb;
-  }
-
-  private skippedInstances(node: HierarchyPointNode<any>): string {
-    return node.data.badFeaturesRowCount !== 0
-      ? `Skipped Instances: ${node.data.badFeaturesRowCount}`
-      : "";
   }
 
   private clearSelection(): void {
@@ -712,6 +735,27 @@ export class TreeViewRenderer extends React.PureComponent<
     };
 
     this.setState(updateSelectedFunc);
+  }
+
+  private hover(
+    node: TreeNode,
+    mouseEnter: boolean,
+    event: React.MouseEvent<SVGElement, MouseEvent>
+  ): void {
+    node.data.isMouseOver = mouseEnter;
+    const currentTarget = event.currentTarget;
+    const checkMouseLeave = (e: MouseEvent): void => {
+      if (currentTarget && !currentTarget.contains(e.target as HTMLElement)) {
+        node.data.isMouseOver = false;
+        svgOuterFrame.current!.removeEventListener(
+          "mousemove",
+          checkMouseLeave
+        );
+        this.forceUpdate();
+      }
+    };
+    svgOuterFrame.current!.addEventListener("mousemove", checkMouseLeave);
+    this.forceUpdate();
   }
 
   private fetchTreeNodes(): void {
