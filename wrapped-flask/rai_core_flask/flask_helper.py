@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 from flask import Flask
-from flask_cors import CORS
 from .environment_detector import build_environment
 
 import socket
@@ -15,9 +14,8 @@ from gevent.pywsgi import WSGIServer
 class FlaskHelper(object):
     """FlaskHelper is a class for common Flask utilities used in dashboards."""
 
-    def __init__(self, ip=None, port=None):
+    def __init__(self, ip=None, port=None, with_credentials=False):
         self.app = Flask(__name__)
-        CORS(self.app)
         self.port = port
         self.ip = ip
         # dictionary to store arbitrary state for use by consuming classes
@@ -44,7 +42,7 @@ class FlaskHelper(object):
         else:
             FlaskHelper._is_local_port_available(self.ip, self.port,
                                                  raise_error=True)
-        self.env = build_environment(self.ip, self.port)
+        self.env = build_environment(self)
         if self.env.base_url is None:
             return
         self._thread = threading.Thread(target=self.run, daemon=True)

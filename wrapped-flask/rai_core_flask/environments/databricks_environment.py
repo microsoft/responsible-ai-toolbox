@@ -2,6 +2,8 @@
 # Licensed under the MIT License.
 
 import os
+from rai_core_flask.environment_detector import DATABRICKS
+from rai_core_flask.environments.base_environment import BaseEnvironment
 
 
 _DISPLAY_HTML = "displayHTML"
@@ -9,7 +11,7 @@ _DISPLAY = "display"
 _SPARK = "spark"
 
 
-class DatabricksEnvironment:
+class DatabricksEnvironment(BaseEnvironment):
     """Environment class for Databricks environments.
 
     DatabricksEnvironment represents functionality to detect whether it is
@@ -19,20 +21,13 @@ class DatabricksEnvironment:
 
     lazy_display_function = None
 
-    def __init__(self, ip, port):
+    def __init__(self, service):
         self.successfully_detected = False
         self.base_url = None
-        self.externally_available = False
         self.with_credentials = False
 
-        if "DATABRICKS_RUNTIME_VERSION" not in os.environ:
-            self.successfully_detected = False
-        else:
-            # data bricks can never take call back
-            # self.base_url = "http://{0}:{1}".format(
-            #     ip,
-            #     port)
-            self.externally_available = True
+        if "DATABRICKS_RUNTIME_VERSION" in os.environ:
+            self.successfully_detected = True
 
     def display(self, html):
         """Display the passed HTML using Databricks's displayHTML.
@@ -61,3 +56,6 @@ class DatabricksEnvironment:
                 raise RuntimeError(msg)
 
         self.lazy_display_function(html)
+
+    def select(self, service):
+        service.env_name = DATABRICKS

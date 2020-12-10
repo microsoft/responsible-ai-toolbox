@@ -6,11 +6,11 @@ from rai_core_flask.environment_detector import LOCALHOST
 from rai_core_flask.environments.base_environment import BaseEnvironment
 
 
-class LocalIPythonEnvironment(BaseEnvironment):
-    """Environment class for local IPython environments.
+class PublicVMEnvironment(BaseEnvironment):
+    """Environment class for public VM environments.
 
-    LocalIPythonEnvironment represents functionality to detect whether it is
-    executed in a local python environment based on IPython's availability.
+    PublicVMEnvironment represents functionality to detect whether it is
+    executed in a public VM environment based on the IP address.
     Additionally, it can display corresponding visualizations.
     """
 
