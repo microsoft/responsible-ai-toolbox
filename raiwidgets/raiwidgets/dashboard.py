@@ -43,10 +43,10 @@ class Dashboard(object):
     """The dashboard class, wraps the dashboard component."""
 
     def __init__(self, *,
-            dashboard_type,
-            model_data,
-            public_ip=None,
-            port=None):
+                 dashboard_type,
+                 model_data,
+                 public_ip=None,
+                 port=None):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
