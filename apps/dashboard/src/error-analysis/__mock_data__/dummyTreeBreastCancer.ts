@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const dummyTreeData = [
+export const dummyTreeBreastCancerData = [
   {
     arg: "",
     badFeaturesRowCount: 0,

@@ -10,7 +10,7 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ITreeLegendStyles {
-  matrixLegend: IStyle;
+  treeLegend: IStyle;
   metricBarBlack: IStyle;
   metricBarRed: IStyle;
   smallHeader: IStyle;
@@ -48,9 +48,6 @@ export const treeLegendStyles: () => IProcessedStyleSet<
     errorRateCell: {
       transform: "translate(110px, 30px)"
     },
-    matrixLegend: {
-      padding: "10px"
-    },
     metricBarBlack: mergeStyles(metricBar, {
       fill: theme.palette.black
     }),
@@ -60,6 +57,9 @@ export const treeLegendStyles: () => IProcessedStyleSet<
     smallHeader: {
       fontSize: "10px",
       fontWeight: "500"
+    },
+    treeLegend: {
+      padding: "10px"
     },
     valueBlack: mergeStyles(value, {
       color: theme.palette.black

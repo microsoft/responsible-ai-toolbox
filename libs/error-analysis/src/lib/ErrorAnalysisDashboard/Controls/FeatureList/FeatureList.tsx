@@ -1,11 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   PrimaryButton,
   IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
   ISearchBoxStyles,
   IStackTokens,
+  IStyleFunctionOrObject,
   Checkbox,
   Panel,
   SearchBox,
@@ -13,8 +17,6 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { featureListStyles } from "./FeatureList.styles";
 
 export interface IFeatureListProps {
   isOpen: boolean;
@@ -41,6 +43,10 @@ export interface IFeatureListState {
   features: string[];
 }
 
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
+};
+
 export class FeatureList extends React.Component<
   IFeatureListProps,
   IFeatureListState
@@ -53,7 +59,6 @@ export class FeatureList extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const classNames = featureListStyles();
     return (
       <Panel
         headerText="Feature List"
@@ -64,15 +69,13 @@ export class FeatureList extends React.Component<
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
             <Stack.Item key="decisionTreeKey" align="start">
-              <Text
-                key="decisionTreeTextKey"
-                className={classNames.decisionTree}
-              >
-                Decision Tree
+              <Text key="decisionTreeTextKey" variant="medium">
+                {localization.ErrorAnalysis.treeMapDescription}
               </Text>
             </Stack.Item>
             <Stack.Item key="searchKey" align="start">

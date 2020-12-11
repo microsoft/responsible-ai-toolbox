@@ -11,10 +11,21 @@ import {
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
-import { mergeStyles, IStyle, ITheme } from "office-ui-fabric-react";
+import {
+  DirectionalHint,
+  mergeStyles,
+  IStyle,
+  ITheme,
+  ITooltipHostStyles,
+  ITooltipProps,
+  TooltipDelay,
+  TooltipHost
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
+import { FilterProps } from "../../FilterProps";
+import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
 
@@ -167,6 +178,31 @@ export class MatrixArea extends React.PureComponent<
                     classNames.selectedMatrixCell
                   ]);
                 }
+                const filterProps = new FilterProps(
+                  value.falseCount,
+                  value.count,
+                  this.props.baseCohort.totalIncorrect,
+                  errorRatio
+                );
+                const tooltipProps: ITooltipProps = {
+                  onRenderContent: () => (
+                    <svg width="110" height="140" viewBox="0 0 70 70">
+                      <FilterTooltip
+                        filterProps={filterProps}
+                        isMouseOver={true}
+                        nodeTransform={"translate(-10px, -10px)"}
+                      />
+                    </svg>
+                  )
+                };
+                const hostStyles: Partial<ITooltipHostStyles> = {
+                  root: {
+                    alignItems: "center",
+                    display: "flex",
+                    height: "100%",
+                    width: "100%"
+                  }
+                };
                 return (
                   <div
                     key={`${i}_${j}cell`}
@@ -182,9 +218,17 @@ export class MatrixArea extends React.PureComponent<
                     tabIndex={i}
                     onKeyUp={undefined}
                   >
-                    <div className={styledGradientMatrixCell}>
-                      {`${errorRatio.toFixed(0)}%`}
-                    </div>
+                    <TooltipHost
+                      tooltipProps={tooltipProps}
+                      delay={TooltipDelay.zero}
+                      id={`${i}_${j}celltooltip`}
+                      directionalHint={DirectionalHint.bottomCenter}
+                      styles={hostStyles}
+                    >
+                      <div className={styledGradientMatrixCell}>
+                        {`${errorRatio.toFixed(0)}%`}
+                      </div>
+                    </TooltipHost>
                   </div>
                 );
               })}
@@ -278,6 +322,7 @@ export class MatrixArea extends React.PureComponent<
     const category1Values = [];
     let cat1HasIntervals = false;
     let cat2HasIntervals = false;
+    const feature2IsSelected = this.props.selectedFeature2 !== undefined;
     // Extract categories for first selected feature in matrix filter
     for (let i = 0; i < matrix.length - 1; i++) {
       const cellCat1 = matrix[i][0];
@@ -287,6 +332,9 @@ export class MatrixArea extends React.PureComponent<
         const maxIntervalCat1 = cellCat1.intervalMax;
         category1Values.push({ category1, maxIntervalCat1, minIntervalCat1 });
         cat1HasIntervals = true;
+      } else {
+        category1Values.push({ category1 });
+        cat1HasIntervals = false;
       }
     }
     const category2Values = [];
@@ -300,18 +348,24 @@ export class MatrixArea extends React.PureComponent<
         const maxIntervalCat2 = cellCat2.intervalMax;
         category2Values.push({ category2, maxIntervalCat2, minIntervalCat2 });
         cat2HasIntervals = true;
+      } else {
+        category2Values.push({ category2 });
+        cat2HasIntervals = false;
       }
     }
     const multiCellCompositeFilters: ICompositeFilter[] = [];
     const keyFeature1 = this.getKey(this.props.selectedFeature1!);
-    let keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    let keyFeature2 = undefined;
+    if (feature2IsSelected) {
+      keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    }
     // Create filters based on the selected cells in the matrix filter
     for (let i = 0; i < matrix.length - 1; i++) {
       for (let j = 1; j < rowLength; j++) {
         const index = j + i * rowLength;
         const cellCompositeFilters: ICompositeFilter[] = [];
         if (selectedCells[index]) {
-          if (category1Values.length > 0) {
+          if (category1Values.length > 0 && feature2IsSelected) {
             if (cat1HasIntervals) {
               cellCompositeFilters.push({
                 arg: [
@@ -322,8 +376,12 @@ export class MatrixArea extends React.PureComponent<
                 method: FilterMethods.InTheRangeOf
               });
             } else {
+              let cat1arg = category1Values[i].category1;
+              if (typeof cat1arg == "string") {
+                cat1arg = i;
+              }
               cellCompositeFilters.push({
-                arg: [category1Values[i].category1],
+                arg: [cat1arg],
                 column: keyFeature1,
                 method: FilterMethods.Equal
               });
@@ -337,13 +395,17 @@ export class MatrixArea extends React.PureComponent<
                 category2Values[j - 1].minIntervalCat2,
                 category2Values[j - 1].maxIntervalCat2
               ],
-              column: keyFeature2,
+              column: keyFeature2!,
               method: FilterMethods.InTheRangeOf
             });
           } else {
+            let cat2arg = category2Values[j - 1].category2;
+            if (typeof cat2arg == "string") {
+              cat2arg = j - 1;
+            }
             cellCompositeFilters.push({
-              arg: [category2Values[j - 1].category2],
-              column: keyFeature2,
+              arg: [cat2arg],
+              column: keyFeature2!,
               method: FilterMethods.Equal
             });
           }
