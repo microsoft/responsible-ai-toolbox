@@ -12,28 +12,34 @@ from flask import jsonify, request
 class ExplanationDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
-
     :param explanation: An object that represents an explanation.
     :type explanation: ExplanationMixin
-    :param model: An object that represents a model. It is assumed that for the classification case
-        it has a method of predict_proba() returning the prediction probabilities for each
-        class and for the regression case a method of predict() returning the prediction value.
+    :param model: An object that represents a model.
+        It is assumed that for the classification case
+        flit has a method of predict_proba()
+        returning the prediction probabilities for each
+        class and for the regression case a method of predict()
+        returning the prediction value.
     :type model: object
-    :param dataset:  A matrix of feature vector examples (# examples x # features), the same samples
-        used to build the explanation. Overwrites any existing dataset on the explanation object. Must have fewer than
-        10000 rows and fewer than 1000 columns.
+    :param dataset: A matrix of feature vector examples
+        (# examples x # features),
+        the same samples used to build the explanation.
+        Overwrites any existing dataset on the explanation object.
+        Must have fewer than 10000 rows and fewer than 1000 columns.
     :type dataset: numpy.array or list[][]
-    :param true_y: The true labels for the provided dataset. Overwrites any existing dataset on the
-        explanation object.
+    :param true_y: The true labels for the provided dataset.
+        Overwrites any existing dataset on the explanation object.
     :type true_y: numpy.array or list[]
     :param classes: The class names.
     :type classes: numpy.array or list[]
     :param features: Feature names.
     :type features: numpy.array or list[]
-    :param public_ip: Optional. If running on a remote vm, the external public ip address of the VM.
+    :param public_ip: Optional. If running on a remote vm,
+        the external public ip address of the VM.
     :type public_ip: str
     :param port: The port to use on locally hosted service.
     :type port: int
+
     """
 
     def __init__(self, explanation, model=None, dataset=None,
