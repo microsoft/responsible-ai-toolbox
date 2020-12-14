@@ -49,7 +49,7 @@ export interface ITreeViewRendererProps {
 
 export interface ITreeViewRendererState {
   request?: AbortController;
-  nodeDetail: NodeDetail;
+  nodeDetail: INodeDetail;
   viewerWidth: number;
   viewerHeight: number;
   selectedNode: any;
@@ -61,42 +61,42 @@ export interface ITreeViewRendererState {
   rootLocalError: any;
 }
 
-export interface ErrorColorStyle {
+export interface IErrorColorStyle {
   fill: string;
 }
 
-export interface Transform {
+export interface ITransform {
   transform: string;
 }
 
-export interface FillStyleUp {
+export interface IFillStyleUp {
   transform: string;
   fill: string;
 }
 
-export interface ShowSelectedStyle {
+export interface IShowSelectedStyle {
   opacity: number;
 }
 
-export interface NodeDetail {
-  showSelected: ShowSelectedStyle;
+export interface INodeDetail {
+  showSelected: IShowSelectedStyle;
   globalError: string;
   localError: string;
   instanceInfo: string;
   errorInfo: string;
   successInfo: string;
-  errorColor: ErrorColorStyle;
-  maskDown: Transform;
-  maskUp: Transform;
+  errorColor: IErrorColorStyle;
+  maskDown: ITransform;
+  maskUp: ITransform;
 }
 
-export interface TreeNode {
-  data: TreeNodeData;
+export interface ITreeNode {
+  data: ITreeNodeData;
   error: number;
-  errorColor: ErrorColorStyle;
+  errorColor: IErrorColorStyle;
   errorStyle: Record<string, number | string>;
-  fillstyleUp: FillStyleUp;
-  fillstyleDown: Transform;
+  fillstyleUp: IFillStyleUp;
+  fillstyleDown: ITransform;
   highlight: boolean;
   filterProps: FilterProps;
   id: string;
@@ -104,10 +104,10 @@ export interface TreeNode {
   maskShift: number;
   parent: HierarchyPointNode<any>;
   r: number;
-  style: Transform;
+  style: ITransform;
 }
 
-export interface TreeNodeData {
+export interface ITreeNodeData {
   error: number;
   isMouseOver: boolean;
   isSelected: boolean;
@@ -117,7 +117,7 @@ export interface TreeNodeData {
   success: number;
 }
 
-export interface SVGDatum {
+export interface ISVGDatum {
   width: number;
   height: number;
   filterBrushEvent: boolean;
@@ -191,14 +191,14 @@ export class TreeViewRenderer extends React.PureComponent<
       (d) => d.data.error / d.data.size
     )!;
 
-    const zoom = d3zoom<SVGSVGElement, SVGDatum>()
+    const zoom = d3zoom<SVGSVGElement, ISVGDatum>()
       .scaleExtent([1 / 3, 4])
       .on("zoom", this.zoomed.bind(this));
 
     if (svgOuterFrame.current) {
       const svg = select<SVGSVGElement, undefined>(
         svgOuterFrame.current!
-      ).datum<SVGDatum>({
+      ).datum<ISVGDatum>({
         filterBrushEvent: true,
         height: this.state.viewerHeight,
         width: this.state.viewerWidth
@@ -268,8 +268,8 @@ export class TreeViewRenderer extends React.PureComponent<
 
     // GENERTES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
     // -------------------------------------------------------------------
-    const nodeData: TreeNode[] = rootDescendents.map(
-      (d): TreeNode => {
+    const nodeData: ITreeNode[] = rootDescendents.map(
+      (d): ITreeNode => {
         const globalErrorPerc = d!.data!.error! / this.state.rootErrorSize;
         const localErrorPerc = d!.data!.error! / d!.data!.size!;
         const calcMaskShift = globalErrorPerc * 52;
@@ -609,7 +609,7 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private clearSelection(): void {
-    const clearSelectionFunc = (
+    this.setState((
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
       const selectedNode = state.selectedNode;
@@ -631,8 +631,7 @@ export class TreeViewRenderer extends React.PureComponent<
         viewerHeight: state.viewerHeight,
         viewerWidth: state.viewerWidth
       };
-    };
-    this.setState(clearSelectionFunc);
+    });
     // Clear filters
     const filters: IFilter[] = [];
     this.props.updateSelectedCohort(
@@ -648,7 +647,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.forceUpdate();
   }
 
-  private selectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
+  private selectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
     if (!d) {
       return;
     }
@@ -656,7 +655,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.selectParentNodes(d.parent!);
   }
 
-  private unselectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
+  private unselectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
     if (!d) {
       return;
     }
@@ -664,7 +663,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.unselectParentNodes(d.parent!);
   }
 
-  private getFilters(d: HierarchyPointNode<any> | TreeNode): IFilter[] {
+  private getFilters(d: HierarchyPointNode<any> | ITreeNode): IFilter[] {
     if (!d || !d.parent) {
       return [];
     }
@@ -684,7 +683,7 @@ export class TreeViewRenderer extends React.PureComponent<
 
   private select(
     _: number,
-    node: TreeNode,
+    node: ITreeNode,
     event: React.MouseEvent<SVGElement, MouseEvent>
   ): void {
     event.stopPropagation();
@@ -738,7 +737,7 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private hover(
-    node: TreeNode,
+    node: ITreeNode,
     mouseEnter: boolean,
     event: React.MouseEvent<SVGElement, MouseEvent>
   ): void {
@@ -807,7 +806,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // });
   }
 
-  private zoomed(zoomEvent: D3ZoomEvent<any, SVGDatum>): void {
+  private zoomed(zoomEvent: D3ZoomEvent<any, ISVGDatum>): void {
     const newTransform: any = zoomEvent.transform;
     select(treeZoomPane.current).attr("transform", newTransform);
     if (

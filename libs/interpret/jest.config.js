@@ -3,14 +3,14 @@
 
 module.exports = {
   coverageDirectory: "../../coverage/libs/interpret",
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
+  displayName: "interpret",
 
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
   preset: "../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",
       { configFile: "./babel-jest.config.json", cwd: __dirname }
     ]
-  },
-  displayName: "interpret"
+  }
 };
