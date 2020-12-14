@@ -4,13 +4,14 @@
 module.exports = {
   coverageDirectory: "../../coverage/apps/widget",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  name: "widget",
-  preset: "../../jest.config.js",
+
+  preset: "../../jest.preset.js",
   transform: {
     "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nrwl/react/plugins/jest",
     "^.+\\.[tj]sx?$": [
       "babel-jest",
       { configFile: "./babel-jest.config.json", cwd: __dirname }
     ]
-  }
+  },
+  displayName: "widget"
 };
