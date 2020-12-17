@@ -3,12 +3,18 @@
 
 from flask import Flask
 from .environment_detector import build_environment
+from .environments.credentialed_vm_environment import CREDENTIALED_VM
+from .environments.public_vm_environment import PUBLIC_VM
 
 import socket
 import threading
 import atexit
 
 from gevent.pywsgi import WSGIServer
+
+
+LOCALHOST = 'localhost'
+VM_ENVS = {CREDENTIALED_VM, PUBLIC_VM}
 
 
 class FlaskHelper(object):
@@ -18,6 +24,7 @@ class FlaskHelper(object):
         self.app = Flask(__name__)
         self.port = port
         self.ip = ip
+        self.with_credentials = with_credentials
         # dictionary to store arbitrary state for use by consuming classes
         self.shared_state = {}
         if self.ip is None:
@@ -77,9 +84,14 @@ class FlaskHelper(object):
         class devnull:
             write = lambda _: None  # noqa: E731
 
-        server = WSGIServer((self.ip, self.port), self.app, log=devnull)
+        ip = LOCALHOST
+        # Note: for credentialed VM or public VM we need to use the private IP address
+        if self.env in VM_ENVS:
+            host_name = socket.gethostname()
+            ip = socket.gethostbyname(host_name)
+        server = WSGIServer((ip, self.port), self.app, log=devnull)
         self.app.config["server"] = server
-        self.app.config["CACHE_TYPE"] = "null"
+        # self.app.config["CACHE_TYPE"] = "null"
         server.serve_forever()
 
         # Closes server on program exit, including freeing all sockets

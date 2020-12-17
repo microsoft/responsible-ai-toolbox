@@ -16,13 +16,6 @@ Plotly derived code comes from below:
 https://github.com/plotly/plotly.py/blob/944af4a0b28bef2b139307a7808c02c51d804c4d/packages/python/plotly/plotly/io/_renderers.py#L455
 """
 
-AZURE_NB = "azure_nb"
-DATABRICKS = "databricks"
-CREDENTIALED_VM = 'credentialed_vm'
-PUBLIC_VM = 'public_vm'
-LOCALHOST = 'localhost'
-VM_ENVS = {CREDENTIALED_VM, PUBLIC_VM}
-
 
 def _detect_ipython():
     """Detect if called in an IPython environment.

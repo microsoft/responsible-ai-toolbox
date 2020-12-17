@@ -2,13 +2,16 @@
 # Licensed under the MIT License.
 
 import os
-from rai_core_flask.environment_detector import DATABRICKS
 from rai_core_flask.environments.base_environment import BaseEnvironment
 
 
 _DISPLAY_HTML = "displayHTML"
 _DISPLAY = "display"
 _SPARK = "spark"
+
+DATABRICKS_ENV_VAR = "DATABRICKS_RUNTIME_VERSION"
+
+DATABRICKS = "databricks"
 
 
 class DatabricksEnvironment(BaseEnvironment):
@@ -26,7 +29,7 @@ class DatabricksEnvironment(BaseEnvironment):
         self.base_url = None
         self.with_credentials = False
 
-        if "DATABRICKS_RUNTIME_VERSION" in os.environ:
+        if DATABRICKS_ENV_VAR in os.environ:
             self.successfully_detected = True
 
     def display(self, html):

@@ -2,8 +2,10 @@
 # Licensed under the MIT License.
 
 from flask_cors import CORS
-from rai_core_flask.environment_detector import CREDENTIALED_VM
 from rai_core_flask.environments.base_environment import BaseEnvironment
+
+
+CREDENTIALED_VM = 'credentialed_vm'
 
 
 class CredentialedVMEnvironment(BaseEnvironment):
@@ -29,5 +31,5 @@ class CredentialedVMEnvironment(BaseEnvironment):
     def select(self, service):
         origin = f"https://{service.ip}:{service.port}"
         headers = ['Content-Type']
-        service.cors = CORS(service, origins=[origin], expose_headers=headers, supports_credentials=True)
+        service.cors = CORS(service.app, origins=[origin], expose_headers=headers, supports_credentials=True)
         service.env_name = CREDENTIALED_VM
