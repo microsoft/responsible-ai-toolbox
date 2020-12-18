@@ -14,6 +14,9 @@ import {
   IComboBoxOption,
   IDropdownOption,
   IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
+  IStyleFunctionOrObject,
   Panel
 } from "office-ui-fabric-react";
 import React from "react";
@@ -44,6 +47,10 @@ export interface IWhatIfState {
 const focusTrapZoneProps: IFocusTrapZoneProps = {
   forceFocusInsideTrap: false,
   isClickableOutsideFocusTrap: true
+};
+
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
 };
 
 export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
@@ -97,6 +104,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className={classNames.divider}></div>
         <div className={classNames.section}>

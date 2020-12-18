@@ -5,7 +5,10 @@ import { JointDataset } from "@responsible-ai/interpret";
 import {
   DefaultButton,
   IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
   IStackTokens,
+  IStyleFunctionOrObject,
   Panel,
   Stack
 } from "office-ui-fabric-react";
@@ -35,6 +38,10 @@ const alignmentStackTokens: IStackTokens = {
   padding: 2
 };
 
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
+};
+
 export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
   public render(): React.ReactNode {
     const classNames = cohortInfoStyles();
@@ -49,6 +56,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className={classNames.divider}></div>
         <div className={classNames.section}>

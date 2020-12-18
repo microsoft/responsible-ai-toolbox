@@ -35,6 +35,7 @@ export class CohortEditorFilterList extends React.Component<
     [FilterMethods.LessThanEqualTo]:
       localization.Interpret.FilterOperations.lessThanEquals,
     [FilterMethods.Includes]: localization.Interpret.FilterOperations.includes,
+    [FilterMethods.Excludes]: localization.Interpret.FilterOperations.excludes,
     [FilterMethods.InTheRangeOf]:
       localization.Interpret.FilterOperations.inTheRangeOf
   };

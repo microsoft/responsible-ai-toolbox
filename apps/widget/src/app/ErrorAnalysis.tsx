@@ -13,6 +13,7 @@ export class ErrorAnalysis extends React.Component {
       <ErrorAnalysisDashboard
         modelInformation={{ modelClass: "blackbox" }}
         dataSummary={{
+          categoricalMap: modelData.categoricalMap,
           classNames: modelData.classNames,
           featureNames: modelData.featureNames
         }}

@@ -287,6 +287,9 @@ export class MatrixArea extends React.PureComponent<
         const maxIntervalCat1 = cellCat1.intervalMax;
         category1Values.push({ category1, maxIntervalCat1, minIntervalCat1 });
         cat1HasIntervals = true;
+      } else {
+        category1Values.push({ category1 });
+        cat2HasIntervals = false;
       }
     }
     const category2Values = [];
@@ -300,6 +303,9 @@ export class MatrixArea extends React.PureComponent<
         const maxIntervalCat2 = cellCat2.intervalMax;
         category2Values.push({ category2, maxIntervalCat2, minIntervalCat2 });
         cat2HasIntervals = true;
+      } else {
+        category2Values.push({ category2 });
+        cat2HasIntervals = false;
       }
     }
     const multiCellCompositeFilters: ICompositeFilter[] = [];
@@ -322,8 +328,12 @@ export class MatrixArea extends React.PureComponent<
                 method: FilterMethods.InTheRangeOf
               });
             } else {
+              let cat1arg = category1Values[i].category1;
+              if (typeof cat1arg == "string") {
+                cat1arg = i;
+              }
               cellCompositeFilters.push({
-                arg: [category1Values[i].category1],
+                arg: [cat1arg],
                 column: keyFeature1,
                 method: FilterMethods.Equal
               });
@@ -341,8 +351,12 @@ export class MatrixArea extends React.PureComponent<
               method: FilterMethods.InTheRangeOf
             });
           } else {
+            let cat2arg = category2Values[j - 1].category2;
+            if (typeof cat2arg == "string") {
+              cat2arg = j - 1;
+            }
             cellCompositeFilters.push({
-              arg: [category2Values[j - 1].category2],
+              arg: [cat2arg],
               column: keyFeature2,
               method: FilterMethods.Equal
             });
