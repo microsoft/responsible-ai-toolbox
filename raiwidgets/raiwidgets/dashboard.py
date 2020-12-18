@@ -9,6 +9,7 @@ import json
 import os
 from html.parser import HTMLParser
 import uuid
+from .explanation_constants import ExplanationDashboardInterface
 
 
 class InLineScript(HTMLParser):
@@ -62,7 +63,8 @@ class Dashboard(object):
             dashboard_type,
             model_data,
             public_ip=None,
-            port=None):
+            port=None,
+            add_local_url=False):
         """Initialize the Dashboard."""
 
         if model_data is None or type is None:
@@ -82,11 +84,14 @@ class Dashboard(object):
             "baseUrl": self._service.env.base_url,
             'withCredentials': False
         }
+        if add_local_url:
+            local_url = ExplanationDashboardInterface.LOCAL_URL
+            model_data[local_url] = self._service.env.base_url
         self.model_data = model_data
         self.add_route()
 
         html = self.load_index()
-        print(f'Started at {self._service.env.base_url}')
+        print(f'{dashboard_type} started at {self._service.env.base_url}')
         display(HTML(html), metadata=dict(isolated=True))
 
     def add_route(self):

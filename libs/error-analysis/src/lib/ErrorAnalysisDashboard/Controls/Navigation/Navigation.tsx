@@ -19,7 +19,6 @@ import { navigationStyles } from "./Navigation.styles";
 
 export interface INavigationProps {
   updateViewState: (viewTypeKeys: ViewTypeKeys) => void;
-  updateGlobalTabState: (globalTab: GlobalTabKeys) => void;
   updatePredictionTabState: (predictionTab: PredictionTabKeys) => void;
   viewType: ViewTypeKeys;
   activeGlobalTab: GlobalTabKeys;

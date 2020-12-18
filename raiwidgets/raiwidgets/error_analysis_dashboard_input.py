@@ -23,12 +23,15 @@ METHOD = "method"
 METHOD_GREATER = "greater"
 METHOD_LESS_AND_EQUAL = "less and equal"
 METHOD_RANGE = "in the range of"
+METHOD_EXCLUDES = "excludes"
+METHOD_INCLUDES = "includes"
 TRUE_Y = "true_y"
 DIFF = "diff"
 SPLIT_INDEX = "split_index"
 SPLIT_FEATURE = "split_feature"
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ROW_INDEX = "row_index"
+LEAF_INDEX = "leaf_index"
 
 
 class TreeSide(str, Enum):
@@ -309,6 +312,21 @@ class ErrorAnalysisDashboardInput:
                 ExplanationDashboardInterface.CATEGORICAL_MAP
             ] = category_dictionary
 
+    def build_cat_bounds_query(self, filter, colname, method):
+        bounds = []
+        if method == METHOD_EXCLUDES:
+            operator = " != "
+        else:
+            operator = " == "
+        for arg in filter['arg']:
+            cat_idx = self._categorical_features.index(colname)
+            arg_cat = "'{}'".format(str(self._categories[cat_idx][arg]))
+            bounds.append("`{}`{}{}".format(colname, operator, arg_cat))
+        if method == METHOD_EXCLUDES:
+            return ' & '.join(bounds)
+        else:
+            return ' | '.join(bounds)
+
     def build_query(self, filters):
         queries = []
         for filter in filters:
@@ -324,6 +342,14 @@ class ErrorAnalysisDashboardInput:
                     arg1 = str(filter['arg'][1])
                     queries.append("`" + colname + "` >= " + arg0 +
                                    ' & `' + colname + "` <= " + arg1)
+                elif method == METHOD_INCLUDES or method == METHOD_EXCLUDES:
+                    query = self.build_cat_bounds_query(filter,
+                                                        colname,
+                                                        method)
+                    queries.append(query)
+                else:
+                    raise ValueError(
+                        "Unsupported method type: {}".format(method))
             else:
                 cqueries = []
                 for composite_filter in filter['compositeFilters']:
@@ -375,6 +401,8 @@ class ErrorAnalysisDashboardInput:
             else:
                 input_data = input_data.to_numpy()
             diff = self._model.predict(input_data) != true_y
+            if not isinstance(diff, np.ndarray):
+                diff = np.array(diff)
             indexes = []
             for feature in features:
                 indexes.append(feature_names.index(feature))
@@ -467,8 +495,11 @@ class ErrorAnalysisDashboardInput:
                 feat2 = dataset_sub_names[1]
                 unique_count1 = len(df[feat1].unique())
                 unique_count2 = len(df[feat2].unique())
-                f1_is_cat = feat1 in self._categorical_features
-                f2_is_cat = feat2 in self._categorical_features
+                f1_is_cat = False
+                f2_is_cat = False
+                if self._categorical_features is not None:
+                    f1_is_cat = feat1 in self._categorical_features
+                    f2_is_cat = feat2 in self._categorical_features
                 if unique_count1 > BIN_THRESHOLD and not f1_is_cat:
                     tabdf1, bins = pd.cut(df[feat1], BIN_THRESHOLD,
                                           retbins=True)
@@ -498,7 +529,9 @@ class ErrorAnalysisDashboardInput:
             else:
                 feat1 = dataset_sub_names[0]
                 unique_count1 = len(df[feat1].unique())
-                f1_is_cat = feat1 in self._categorical_features
+                f1_is_cat = False
+                if self._categorical_features is not None:
+                    f1_is_cat = feat1 in self._categorical_features
                 if unique_count1 > BIN_THRESHOLD and not f1_is_cat:
                     cutdf, bins = pd.cut(df[feat1], BIN_THRESHOLD,
                                          retbins=True)
@@ -617,8 +650,10 @@ class ErrorAnalysisDashboardInput:
                  side=TreeSide.UNKNOWN):
         if SPLIT_INDEX in tree:
             nodeid = tree[SPLIT_INDEX]
+        elif LEAF_INDEX in tree:
+            nodeid = max_split_index + tree[LEAF_INDEX]
         else:
-            nodeid = max_split_index + tree['leaf_index']
+            nodeid = 0
 
         # write current node to json
         json, df = self.node_to_json(df, tree, nodeid, categories,
@@ -659,7 +694,7 @@ class ErrorAnalysisDashboardInput:
                     query = "`" + p_node_name + "` <= " + str(parent_threshold)
                     df = df.query(query)
                 elif parent_decision_type == '==':
-                    method = "includes"
+                    method = METHOD_INCLUDES
                     arg = [float(i) for i in parent_threshold.split('||')]
                     categorical_values = categories[0]
                     categorical_indexes = categories[1]
@@ -685,7 +720,7 @@ class ErrorAnalysisDashboardInput:
                     query = "`" + p_node_name + "` > " + str(parent_threshold)
                     df = df.query(query)
                 elif parent_decision_type == '==':
-                    method = "excludes"
+                    method = METHOD_EXCLUDES
                     arg = [float(i) for i in parent_threshold.split('||')]
                     categorical_values = categories[0]
                     categorical_indexes = categories[1]

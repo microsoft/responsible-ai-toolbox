@@ -7,11 +7,14 @@ import React from "react";
 
 import { config } from "./config";
 import { modelData } from "./modelData";
-
-export class Interpret extends React.Component {
+interface IInterpretProps {
+  dashboardType?: "ModelPerformance";
+}
+export class Interpret extends React.Component<IInterpretProps> {
   public render(): React.ReactNode {
     return (
       <NewExplanationDashboard
+        dashboardType={this.props.dashboardType}
         modelInformation={{ modelClass: "blackbox" }}
         dataSummary={{
           classNames: modelData.classNames,
