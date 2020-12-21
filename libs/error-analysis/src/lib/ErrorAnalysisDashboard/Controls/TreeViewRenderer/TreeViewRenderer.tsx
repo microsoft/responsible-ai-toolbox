@@ -609,29 +609,29 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private clearSelection(): void {
-    this.setState((
-      state: Readonly<ITreeViewRendererState>
-    ): ITreeViewRendererState => {
-      const selectedNode = state.selectedNode;
-      const nodeDetail = state.nodeDetail;
-      nodeDetail.showSelected = { opacity: 0 };
-      if (selectedNode) {
-        this.unselectParentNodes(selectedNode);
+    this.setState(
+      (state: Readonly<ITreeViewRendererState>): ITreeViewRendererState => {
+        const selectedNode = state.selectedNode;
+        const nodeDetail = state.nodeDetail;
+        nodeDetail.showSelected = { opacity: 0 };
+        if (selectedNode) {
+          this.unselectParentNodes(selectedNode);
+        }
+        return {
+          nodeDetail,
+          request: state.request,
+          root: state.root,
+          rootErrorSize: state.rootErrorSize,
+          rootLocalError: state.rootLocalError,
+          rootSize: state.rootSize,
+          selectedNode: undefined,
+          transform: state.transform,
+          treeNodes: state.treeNodes,
+          viewerHeight: state.viewerHeight,
+          viewerWidth: state.viewerWidth
+        };
       }
-      return {
-        nodeDetail,
-        request: state.request,
-        root: state.root,
-        rootErrorSize: state.rootErrorSize,
-        rootLocalError: state.rootLocalError,
-        rootSize: state.rootSize,
-        selectedNode: undefined,
-        transform: state.transform,
-        treeNodes: state.treeNodes,
-        viewerHeight: state.viewerHeight,
-        viewerWidth: state.viewerWidth
-      };
-    });
+    );
     // Clear filters
     const filters: IFilter[] = [];
     this.props.updateSelectedCohort(
