@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-"""Defines the Explanation dashboard class."""
+"""Defines the model performance dashboard class."""
 
 from .explanation_dashboard_input import ExplanationDashboardInput
 from .dashboard import Dashboard
@@ -9,11 +9,9 @@ from .dashboard import Dashboard
 from flask import jsonify, request
 
 
-class ExplanationDashboard(Dashboard):
+class ModelPerformanceDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
-    :param explanation: An object that represents an explanation.
-    :type explanation: ExplanationMixin
     :param model: An object that represents a model.
         It is assumed that for the classification case
         flit has a method of predict_proba()
@@ -42,19 +40,18 @@ class ExplanationDashboard(Dashboard):
 
     """
 
-    def __init__(self, explanation, model=None, dataset=None,
+    def __init__(self, model=None, dataset=None,
                  true_y=None, classes=None, features=None,
                  public_ip=None, port=None, locale=None):
-        """Initialize the fairness Dashboard."""
+        """Initialize the model performance dashboard."""
 
         self.input = ExplanationDashboardInput(
-            explanation, model, dataset, true_y, classes, features, locale)
+            None, model, dataset, true_y, classes, features, locale)
 
-        super(ExplanationDashboard, self).__init__(
-            dashboard_type="Interpret",
-            model_data=self.input.dashboard_input,
-            public_ip=public_ip,
-            port=port)
+        Dashboard.__init__(self, dashboard_type="ModelPerformance",
+                           model_data=self.input.dashboard_input,
+                           public_ip=public_ip,
+                           port=port)
 
         def predict():
             data = request.get_json(force=True)

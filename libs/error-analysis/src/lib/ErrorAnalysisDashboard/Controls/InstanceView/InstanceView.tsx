@@ -28,7 +28,7 @@ import {
 
 import { InstanceViewStyles } from "./InstanceView.styles";
 
-export interface SelectionDetails {
+export interface ISelectionDetails {
   selectedDatasetIndexes: number[];
   selectedCorrectDatasetIndexes: number[];
   selectedIncorrectDatasetIndexes: number[];
@@ -53,7 +53,7 @@ export interface IInstanceViewProps {
 }
 
 export interface IInstanceViewState {
-  selectionDetails: SelectionDetails;
+  selectionDetails: ISelectionDetails;
 }
 
 const inspectButtonStyles: IStackItemStyles = {

@@ -3,9 +3,10 @@
 
 module.exports = {
   coverageDirectory: "../../coverage/apps/dashboard",
+  displayName: "dashboard",
+
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  name: "dashboard",
-  preset: "../../jest.config.js",
+  preset: "../../jest.preset.js",
   transform: {
     "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nrwl/react/plugins/jest",
     "^.+\\.[tj]sx?$": [

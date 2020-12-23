@@ -33,6 +33,7 @@ import { ITelemetryMessage } from "./ITelemetryMessage";
 export interface IExplanationDashboardProps
   extends IExplanationDashboardData,
     IOfficeFabricProps {
+  dashboardType?: "ModelPerformance";
   locale?: string;
   stringParams?: IStringsParam;
   telemetryHook?: (message: ITelemetryMessage) => void;
