@@ -82,14 +82,6 @@ class FairnessMetricModule:
                     "model_type": [],
                     "function": false_positive_rate
                 },
-                "false_positive_over_total": {
-                    "model_type": [],
-                    "function": false_positive_rate
-                },
-                "false_negative_over_total": {
-                    "model_type": [],
-                    "function": false_negative_rate
-                },
                 "selection_rate": {
                     "model_type": [],
                     "function": selection_rate
