@@ -17,6 +17,15 @@ If you have previously committed changes that were not signed follow
 to sign them retroactively after setting up your GPG key as described in the
 [GitHub documentation](https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification).
 
+Setting up a GPG key has three stages:
+
+1. [Generate the key](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key)
+1. [Tell GitHub about the key](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-gpg-key-to-your-github-account)
+1. [Instruct Git to sign using your key](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/telling-git-about-your-signing-key)
+
+Note that the `GitBash` shell installed by Git on Windows already has GPG
+installed, so there is no need to install GPG separately.
+
 ## Code of conduct
 
 This project has adopted the
