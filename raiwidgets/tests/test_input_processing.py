@@ -56,3 +56,17 @@ class TestConvertToStringListDict:
         assert isinstance(arr, list)
         assert np.array_equal(arr, [0, 1, 4])
 
+    def test_dict(self):
+        input = {"a": np.array([0, 1, 2]), "b": pd.Series(data=[3, 4, 5])}
+        sample_array = [2, 3, 4]
+        result = _convert_to_string_list_dict("Base {0}", input, sample_array)
+        assert isinstance(result, dict)
+        assert len(result) == 2
+        assert "a" in result
+        arr = result["a"]
+        assert isinstance(arr, list)
+        assert np.array_equal(arr, [0, 1, 2])
+        assert "b" in result
+        arr = result["b"]
+        assert isinstance(arr, list)
+        assert np.array_equal(arr, [3, 4, 5])

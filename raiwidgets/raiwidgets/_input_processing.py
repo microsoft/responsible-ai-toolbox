@@ -10,6 +10,7 @@ from typing import Dict, List
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings. Name '{0}' is of type {1}"
 _LIST_NONSCALAR = "Lists must be of scalar types"
 
+
 def _convert_to_list(array):
     if issparse(array):
         if array.shape[1] > 1000:
@@ -53,5 +54,8 @@ def _convert_to_string_list_dict(
             result[base_name_format.format(0)] = _convert_to_list(f_arr)
         else:
             raise ValueError(_LIST_NONSCALAR)
+    elif isinstance(ys, dict):
+        for k, v in ys.items():
+            result[k] = _convert_to_list(v)
 
     return result
