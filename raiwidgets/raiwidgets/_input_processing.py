@@ -7,7 +7,8 @@ from scipy.sparse import issparse
 from sklearn.utils import check_consistent_length
 from typing import Dict, List
 
-_DF_COLUMN_BAD_NAME = "DataFrame column names must be strings. Name '{0}' is of type {1}"
+_DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
+    " Name '{0}' is of type {1}"
 _LIST_NONSCALAR = "Lists must be of scalar types"
 _TOO_MANY_DIMS = "Array must have at most two dimensions"
 
