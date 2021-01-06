@@ -8,7 +8,7 @@ from sklearn.utils import check_consistent_length
 from typing import Dict, List
 
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings. Name '{0}' is of type {1}"
-
+_LIST_NONSCALAR = "Lists must be of scalar types"
 
 def _convert_to_list(array):
     if issparse(array):
@@ -45,5 +45,13 @@ def _convert_to_string_list_dict(
             column = ys.iloc[:, i]
             check_consistent_length(column, sample_array)
             result[col_name] = _convert_to_list(column)
+    elif isinstance(ys, list):
+        if np.isscalar(ys[0]):
+            f_arr = np.atleast_1d(np.squeeze(np.asarray(ys)))
+            assert len(f_arr.shape) == 1  # Sanity check
+            check_consistent_length(f_arr, sample_array)
+            result[base_name_format.format(0)] = _convert_to_list(f_arr)
+        else:
+            raise ValueError(_LIST_NONSCALAR)
 
     return result

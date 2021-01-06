@@ -44,3 +44,15 @@ class TestConvertToStringListDict:
         arr = result["b"]
         assert isinstance(arr, list)
         assert np.array_equal(arr, [4, 5, 6])
+
+    def test_simplelist(self):
+        input = [0, 1, 4]
+        sample_array = [2, 3, 4]
+        result = _convert_to_string_list_dict("Base {0}", input, sample_array)
+        assert isinstance(result, dict)
+        assert len(result) == 1
+        assert "Base 0" in result
+        arr = result["Base 0"]
+        assert isinstance(arr, list)
+        assert np.array_equal(arr, [0, 1, 4])
+
