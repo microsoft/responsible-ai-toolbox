@@ -55,12 +55,24 @@ class FairnessDashboard(Dashboard):
                                                sensitive_features,
                                                y_true)
 
+        # Make sure that things are as the TS layer expects
+        self._y_true = _convert_to_list(y_true)
+        self._y_pred = list(model_dict.values())
+        dataset = (np.array(list(sf_dict.values())).T).tolist()
+
+        if np.shape(self._y_true)[0] != np.shape(self._y_pred)[1]:
+            raise ValueError("Predicted y does not match true y shape")
+
+        if np.shape(self._y_true)[0] != np.shape(dataset)[0]:
+            raise ValueError("Sensitive features shape does not match true y "
+                             "shape")
+
         fairness_input = {
-            "true_y": _convert_to_list(y_true),
+            "true_y": self._y_true,
             "model_names": list(model_dict.keys()),
-            "predicted_ys": list(model_dict.values()),
+            "predicted_ys": self._y_pred,
             "features": list(sf_dict.keys()),
-            "dataset": list(sf_dict.values()),
+            "dataset": dataset,
             "classification_methods":
                 metrics_module.classification_methods,
             "regression_methods":
