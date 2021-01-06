@@ -9,6 +9,7 @@ from typing import Dict, List
 
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings. Name '{0}' is of type {1}"
 _LIST_NONSCALAR = "Lists must be of scalar types"
+_TOO_MANY_DIMS = "Array must have at most two dimensions"
 
 
 def _convert_to_list(array):
@@ -57,5 +58,19 @@ def _convert_to_string_list_dict(
     elif isinstance(ys, dict):
         for k, v in ys.items():
             result[k] = _convert_to_list(v)
+    else:
+        # Assume it's something which can go into np.as_array
+        f_arr = np.squeeze(np.asarray(ys, dtype=np.object))
+        if len(f_arr.shape) == 1:
+            check_consistent_length(f_arr, sample_array)
+            result[base_name_format.format(0)] = _convert_to_list(f_arr)
+        elif len(f_arr.shape) == 2:
+            # Work similarly to pd.DataFrame(data=ndarray)
+            for i in range(f_arr.shape[1]):
+                col = f_arr[:, i]
+                check_consistent_length(col, sample_array)
+                result[base_name_format.format(i)] = _convert_to_list(col)
+        else:
+            raise ValueError(_TOO_MANY_DIMS)
 
     return result
