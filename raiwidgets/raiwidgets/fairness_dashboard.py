@@ -5,11 +5,10 @@
 
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
+from ._input_processing import _convert_to_string_list_dict, _convert_to_list
 
 from flask import jsonify, request
 import numpy as np
-import pandas as pd
-from scipy.sparse import issparse
 
 
 class FairnessDashboard(Dashboard):
@@ -35,7 +34,6 @@ class FairnessDashboard(Dashboard):
             sensitive_features,
             y_true,
             y_pred,
-            sensitive_feature_names=None,
             locale=None,
             public_ip=None,
             port=None,
@@ -50,31 +48,19 @@ class FairnessDashboard(Dashboard):
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
 
-        dataset = self._sanitize_data_shape(sensitive_features)
-        model_names = None
-        if isinstance(y_pred, dict):
-            model_names = []
-            self._y_pred = []
-            for k, v in y_pred.items():
-                model_names.append(k)
-                self._y_pred.append(self._convert_to_list(v))
-        else:
-            self._y_pred = self._convert_to_list(y_pred)
-        if len(np.shape(self._y_pred)) == 1:
-            self._y_pred = [self._y_pred]
-        self._y_true = self._convert_to_list(y_true)
-
-        if np.shape(self._y_true)[0] != np.shape(self._y_pred)[1]:
-            raise ValueError("Predicted y does not match true y shape")
-
-        if np.shape(self._y_true)[0] != np.shape(dataset)[0]:
-            raise ValueError("Sensitive features shape does not match true y "
-                             "shape")
+        model_dict = _convert_to_string_list_dict("Model {0}",
+                                                  y_pred,
+                                                  y_true)
+        sf_dict = _convert_to_string_list_dict("Sensitive Feature {0}",
+                                               sensitive_features,
+                                               y_true)
 
         fairness_input = {
-            "true_y": self._y_true,
-            "predicted_ys": self._y_pred,
-            "dataset": dataset,
+            "true_y": _convert_to_list(y_true),
+            "model_names": list(model_dict.keys()),
+            "predicted_ys": list(model_dict.values()),
+            "features": list(sf_dict.keys()),
+            "dataset": list(sf_dict.values()),
             "classification_methods":
                 metrics_module.classification_methods,
             "regression_methods":
@@ -83,19 +69,8 @@ class FairnessDashboard(Dashboard):
                 metrics_module.probability_methods,
         }
 
-        if model_names is not None:
-            fairness_input['model_names'] = model_names
-
         if locale is not None:
             fairness_input['locale'] = locale
-
-        if sensitive_feature_names is not None:
-            sensitive_feature_names = self._convert_to_list(
-                sensitive_feature_names)
-            if np.shape(dataset)[1] != np.shape(sensitive_feature_names)[0]:
-                raise Warning("Feature names shape does not match dataset, "
-                              "ignoring")
-            fairness_input["features"] = sensitive_feature_names
 
         Dashboard.__init__(self, dashboard_type="Fairness",
                            model_data=fairness_input,
@@ -137,23 +112,3 @@ class FairnessDashboard(Dashboard):
                 })
 
         self.add_url_rule(metrics, '/metrics', methods=["POST"])
-
-    def _sanitize_data_shape(self, dataset):
-        result = self._convert_to_list(dataset)
-        # Dataset should be 2d, if not we need to map
-        if (len(np.shape(result)) == 2):
-            return result
-        return list(map(lambda x: [x], result))
-
-    def _convert_to_list(self, array):
-        if issparse(array):
-            if array.shape[1] > 1000:
-                raise ValueError("Exceeds maximum number of features for "
-                                 "visualization (1000)")
-            return array.toarray().tolist()
-
-        if (isinstance(array, pd.DataFrame) or isinstance(array, pd.Series)):
-            return array.values.tolist()
-        if (isinstance(array, np.ndarray)):
-            return array.tolist()
-        return array
