@@ -8,6 +8,7 @@ export enum FilterMethods {
   LessThanEqualTo = "less and equal",
   Equal = "equal",
   Includes = "includes",
+  Excludes = "excludes",
   InTheRangeOf = "in the range of"
 }
 
@@ -23,3 +24,17 @@ export interface IFilterContext {
   onDelete: (index: number) => void;
   onUpdate: (filter: IFilter, index: number) => void;
 }
+
+export enum Operations {
+  And = "and",
+  Or = "or"
+}
+
+export type ICompositeFilter =
+  | IFilter
+  | {
+      compositeFilters: ICompositeFilter[];
+      operation: Operations;
+
+      method?: never;
+    };

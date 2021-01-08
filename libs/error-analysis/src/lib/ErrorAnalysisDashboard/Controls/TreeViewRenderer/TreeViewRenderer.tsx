@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter } from "@responsible-ai/interpret";
+import { ICompositeFilter, IFilter } from "@responsible-ai/interpret";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -17,7 +17,11 @@ import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
+import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
+import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
+import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import {
   ITreeViewRendererStyles,
@@ -30,14 +34,22 @@ import {
 export interface ITreeViewRendererProps {
   theme?: ITheme;
   messages?: HelpMessageDict;
+  features: string[];
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  updateSelectedCohort: (filters: IFilter[]) => void;
+  updateSelectedCohort: (
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource,
+    cells: number
+  ) => void;
+  selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export interface ITreeViewRendererState {
   request?: AbortController;
-  nodeDetail: NodeDetail;
+  nodeDetail: INodeDetail;
   viewerWidth: number;
   viewerHeight: number;
   selectedNode: any;
@@ -49,53 +61,55 @@ export interface ITreeViewRendererState {
   rootLocalError: any;
 }
 
-export interface ErrorColorStyle {
+export interface IErrorColorStyle {
   fill: string;
 }
 
-export interface Transform {
+export interface ITransform {
   transform: string;
 }
 
-export interface FillStyleUp {
+export interface IFillStyleUp {
   transform: string;
   fill: string;
 }
 
-export interface ShowSelectedStyle {
+export interface IShowSelectedStyle {
   opacity: number;
 }
 
-export interface NodeDetail {
-  showSelected: ShowSelectedStyle;
+export interface INodeDetail {
+  showSelected: IShowSelectedStyle;
   globalError: string;
   localError: string;
   instanceInfo: string;
   errorInfo: string;
   successInfo: string;
-  errorColor: ErrorColorStyle;
-  maskDown: Transform;
-  maskUp: Transform;
+  errorColor: IErrorColorStyle;
+  maskDown: ITransform;
+  maskUp: ITransform;
 }
 
-export interface TreeNode {
-  data: TreeNodeData;
+export interface ITreeNode {
+  data: ITreeNodeData;
   error: number;
-  errorColor: ErrorColorStyle;
+  errorColor: IErrorColorStyle;
   errorStyle: Record<string, number | string>;
-  fillstyleUp: FillStyleUp;
-  fillstyleDown: Transform;
+  fillstyleUp: IFillStyleUp;
+  fillstyleDown: ITransform;
   highlight: boolean;
-  hoverText: string;
+  filterProps: FilterProps;
   id: string;
+  isMouseOver: boolean;
   maskShift: number;
   parent: HierarchyPointNode<any>;
   r: number;
-  style: Transform;
+  style: ITransform;
 }
 
-export interface TreeNodeData {
+export interface ITreeNodeData {
   error: number;
+  isMouseOver: boolean;
   isSelected: boolean;
   nodeName: string;
   pathFromRoot: string;
@@ -103,7 +117,7 @@ export interface TreeNodeData {
   success: number;
 }
 
-export interface SVGDatum {
+export interface ISVGDatum {
   width: number;
   height: number;
   filterBrushEvent: boolean;
@@ -153,7 +167,10 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
-    if (this.props.selectedFeatures !== prevProps.selectedFeatures) {
+    if (
+      this.props.selectedFeatures !== prevProps.selectedFeatures ||
+      this.props.baseCohort !== prevProps.baseCohort
+    ) {
       this.fetchTreeNodes();
     }
   }
@@ -174,14 +191,14 @@ export class TreeViewRenderer extends React.PureComponent<
       (d) => d.data.error / d.data.size
     )!;
 
-    const zoom = d3zoom<SVGSVGElement, SVGDatum>()
+    const zoom = d3zoom<SVGSVGElement, ISVGDatum>()
       .scaleExtent([1 / 3, 4])
       .on("zoom", this.zoomed.bind(this));
 
     if (svgOuterFrame.current) {
       const svg = select<SVGSVGElement, undefined>(
         svgOuterFrame.current!
-      ).datum<SVGDatum>({
+      ).datum<ISVGDatum>({
         filterBrushEvent: true,
         height: this.state.viewerHeight,
         width: this.state.viewerWidth
@@ -212,7 +229,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // -------------------------------------------------------------------
     const links = rootDescendents.slice(1).map((d) => {
       const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
-      const lineColor = d.data.isSelected ? "089acc" : "e8eaed";
+      const lineColor = d.data.isSelected ? "#089acc" : "#e8eaed";
       const id: string = d.id!;
       const linkVerticalD = linkVertical({ source: d.parent, target: d });
       return {
@@ -251,19 +268,18 @@ export class TreeViewRenderer extends React.PureComponent<
 
     // GENERTES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
     // -------------------------------------------------------------------
-    const nodeData: TreeNode[] = rootDescendents.map(
-      (d): TreeNode => {
+    const nodeData: ITreeNode[] = rootDescendents.map(
+      (d): ITreeNode => {
         const globalErrorPerc = d!.data!.error! / this.state.rootErrorSize;
         const localErrorPerc = d!.data!.error! / d!.data!.size!;
         const calcMaskShift = globalErrorPerc * 52;
-        const calcHoverText = `Error Rate: ${(
-          (d!.data!.error! / d!.data!.size!) *
-          100
-        ).toFixed(2)}%\r\nError Coverage: ${(
-          (d.data.error / this.state.rootErrorSize) *
-          100
-        ).toFixed(2)}%\r\nInstances: ${d!.data!.size!}\r\n${d!.data!
-          .pathFromRoot!}${this.skippedInstances(d!)}`;
+        const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
+        const filterProps = new FilterProps(
+          d!.data!.error!,
+          d!.data!.size!,
+          this.state.rootErrorSize,
+          errorRate
+        );
 
         let heatmapStyle: { fill: string } = { fill: errorAvgColor };
 
@@ -292,10 +308,12 @@ export class TreeViewRenderer extends React.PureComponent<
             fill: "#d2d2d2",
             transform: `translate(0px, ${calcMaskShift}px)`
           },
+
+          filterProps,
           // size: d.size,
           highlight: d!.data!.isSelected,
-          hoverText: calcHoverText,
           id: d!.id! + Math.random(),
+          isMouseOver: d!.data!.isMouseOver,
           maskShift: calcMaskShift,
           parent: d!.parent!,
           r: 28,
@@ -315,7 +333,7 @@ export class TreeViewRenderer extends React.PureComponent<
             ref={svgOuterFrame}
             className={classNames.svgOuterFrame}
             id="svgOuterFrame"
-            viewBox="0 0 1000 500"
+            viewBox="0 0 952 1100"
             onClick={this.bkgClick.bind(this)}
           >
             <mask id="Mask">
@@ -346,10 +364,7 @@ export class TreeViewRenderer extends React.PureComponent<
                     height="140"
                     fill="transparent"
                   />
-                  <text className={classNames.detailLines}>
-                    {nodeDetail.instanceInfo} [ {nodeDetail.errorInfo} |{" "}
-                    {nodeDetail.successInfo} ]
-                  </text>
+                  <TreeLegend selectedCohort={this.props.selectedCohort} />
                   <g className={classNames.opacityToggleCircle}>
                     <circle
                       r="26"
@@ -368,12 +383,6 @@ export class TreeViewRenderer extends React.PureComponent<
                         style={nodeDetail.maskUp}
                       />
                     </g>
-                    <text className={classNames.detailPerc}>
-                      {nodeDetail.globalError}%
-                    </text>
-                    <text className={classNames.detailPercLabel}>
-                      error coverage
-                    </text>
                   </g>
                   <g className={classNames.nonOpacityToggleCircle}>
                     <circle
@@ -382,12 +391,6 @@ export class TreeViewRenderer extends React.PureComponent<
                       style={nodeDetail.errorColor}
                     />
                     <circle r="21" className={classNames.node} fill="#d2d2d2" />
-                    <text className={classNames.detailPerc}>
-                      {nodeDetail.localError}%
-                    </text>
-                    <text className={classNames.detailPercLabel}>
-                      error rate
-                    </text>
                   </g>
                 </g>
               </g>
@@ -432,6 +435,11 @@ export class TreeViewRenderer extends React.PureComponent<
                       onClick={(
                         e: React.MouseEvent<SVGElement, MouseEvent>
                       ): void => this.select(index, node, e)}
+                      // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
+                      onMouseEnter={(
+                        e: React.MouseEvent<SVGElement, MouseEvent>
+                      ): void => this.hover(node, true, e)}
+                      pointerEvents="all"
                     >
                       <circle
                         r={node.r}
@@ -452,11 +460,9 @@ export class TreeViewRenderer extends React.PureComponent<
                       >
                         <circle r="26" style={node.fillstyleUp} />
                       </g>
-                      {/*TODO: not sure why text-anchor is not liked by browser*/}
                       <text textAnchor="middle" className={classNames.nodeText}>
                         {node.data.error} / {node.data.size}
                       </text>
-                      <title>{node.hoverText}</title>
                     </g>
                   </CSSTransition>
                 ))}
@@ -472,7 +478,11 @@ export class TreeViewRenderer extends React.PureComponent<
                     timeout={200}
                     className="linkLabels"
                   >
-                    <g key={linkLabel.id} style={linkLabel.style}>
+                    <g
+                      key={linkLabel.id}
+                      style={linkLabel.style}
+                      pointerEvents="none"
+                    >
                       <rect
                         x={-linkLabel.bbX}
                         y={-linkLabel.bbY}
@@ -483,14 +493,31 @@ export class TreeViewRenderer extends React.PureComponent<
                         strokeWidth="1px"
                         rx="10"
                         ry="10"
+                        pointerEvents="none"
                       />
-                      <text className={classNames.linkLabel}>
+                      <text
+                        className={classNames.linkLabel}
+                        pointerEvents="none"
+                      >
                         {linkLabel.text}
                       </text>
                     </g>
                   </CSSTransition>
                 ))}
               </TransitionGroup>
+              <g
+                className={classNames.nodesTransitionGroup}
+                pointerEvents="none"
+              >
+                {nodeData.map((node) => (
+                  <FilterTooltip
+                    key={node.id + "tooltip"}
+                    filterProps={node.filterProps}
+                    isMouseOver={node.isMouseOver}
+                    nodeTransform={node.style.transform}
+                  />
+                ))}
+              </g>
             </g>
           </svg>
         </div>
@@ -581,40 +608,38 @@ export class TreeViewRenderer extends React.PureComponent<
     return bb;
   }
 
-  private skippedInstances(node: HierarchyPointNode<any>): string {
-    return node.data.badFeaturesRowCount !== 0
-      ? `Skipped Instances: ${node.data.badFeaturesRowCount}`
-      : "";
-  }
-
   private clearSelection(): void {
-    const clearSelectionFunc = (
-      state: Readonly<ITreeViewRendererState>
-    ): ITreeViewRendererState => {
-      const selectedNode = state.selectedNode;
-      const nodeDetail = state.nodeDetail;
-      nodeDetail.showSelected = { opacity: 0 };
-      if (selectedNode) {
-        this.unselectParentNodes(selectedNode);
+    this.setState(
+      (state: Readonly<ITreeViewRendererState>): ITreeViewRendererState => {
+        const selectedNode = state.selectedNode;
+        const nodeDetail = state.nodeDetail;
+        nodeDetail.showSelected = { opacity: 0 };
+        if (selectedNode) {
+          this.unselectParentNodes(selectedNode);
+        }
+        return {
+          nodeDetail,
+          request: state.request,
+          root: state.root,
+          rootErrorSize: state.rootErrorSize,
+          rootLocalError: state.rootLocalError,
+          rootSize: state.rootSize,
+          selectedNode: undefined,
+          transform: state.transform,
+          treeNodes: state.treeNodes,
+          viewerHeight: state.viewerHeight,
+          viewerWidth: state.viewerWidth
+        };
       }
-      return {
-        nodeDetail,
-        request: state.request,
-        root: state.root,
-        rootErrorSize: state.rootErrorSize,
-        rootLocalError: state.rootLocalError,
-        rootSize: state.rootSize,
-        selectedNode: undefined,
-        transform: state.transform,
-        treeNodes: state.treeNodes,
-        viewerHeight: state.viewerHeight,
-        viewerWidth: state.viewerWidth
-      };
-    };
-    this.setState(clearSelectionFunc);
+    );
     // Clear filters
     const filters: IFilter[] = [];
-    this.props.updateSelectedCohort(filters);
+    this.props.updateSelectedCohort(
+      filters,
+      [],
+      ErrorDetectorCohortSource.None,
+      0
+    );
   }
 
   private bkgClick(): void {
@@ -622,7 +647,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.forceUpdate();
   }
 
-  private selectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
+  private selectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
     if (!d) {
       return;
     }
@@ -630,7 +655,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.selectParentNodes(d.parent!);
   }
 
-  private unselectParentNodes(d: HierarchyPointNode<any> | TreeNode): void {
+  private unselectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
     if (!d) {
       return;
     }
@@ -638,12 +663,18 @@ export class TreeViewRenderer extends React.PureComponent<
     this.unselectParentNodes(d.parent!);
   }
 
-  private getFilters(d: HierarchyPointNode<any> | TreeNode): IFilter[] {
+  private getFilters(d: HierarchyPointNode<any> | ITreeNode): IFilter[] {
     if (!d || !d.parent) {
       return [];
     }
+    let filterArg: number[];
+    if (Array.isArray(d.data!.arg)) {
+      filterArg = d.data!.arg;
+    } else {
+      filterArg = [d.data!.arg];
+    }
     const filter = {
-      arg: [d.data!.arg],
+      arg: filterArg,
       column: d.parent!.data!.nodeName,
       method: d.data!.method
     };
@@ -652,7 +683,7 @@ export class TreeViewRenderer extends React.PureComponent<
 
   private select(
     _: number,
-    node: TreeNode,
+    node: ITreeNode,
     event: React.MouseEvent<SVGElement, MouseEvent>
   ): void {
     event.stopPropagation();
@@ -666,7 +697,12 @@ export class TreeViewRenderer extends React.PureComponent<
 
       // Get filters and update
       const filters = this.getFilters(node);
-      this.props.updateSelectedCohort(filters);
+      this.props.updateSelectedCohort(
+        filters,
+        [],
+        ErrorDetectorCohortSource.TreeMap,
+        0
+      );
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = {
@@ -700,6 +736,27 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(updateSelectedFunc);
   }
 
+  private hover(
+    node: ITreeNode,
+    mouseEnter: boolean,
+    event: React.MouseEvent<SVGElement, MouseEvent>
+  ): void {
+    node.data.isMouseOver = mouseEnter;
+    const currentTarget = event.currentTarget;
+    const checkMouseLeave = (e: MouseEvent): void => {
+      if (currentTarget && !currentTarget.contains(e.target as HTMLElement)) {
+        node.data.isMouseOver = false;
+        svgOuterFrame.current!.removeEventListener(
+          "mousemove",
+          checkMouseLeave
+        );
+        this.forceUpdate();
+      }
+    };
+    svgOuterFrame.current!.addEventListener("mousemove", checkMouseLeave);
+    this.forceUpdate();
+  }
+
   private fetchTreeNodes(): void {
     if (this.state.request) {
       this.state.request.abort();
@@ -707,10 +764,25 @@ export class TreeViewRenderer extends React.PureComponent<
     if (!this.props.getTreeNodes) {
       return;
     }
+    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+      this.props.baseCohort.cohort.filters,
+      this.props.baseCohort.jointDataset
+    );
+    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+      this.props.baseCohort.cohort.compositeFilters,
+      this.props.baseCohort.jointDataset
+    );
     //const abortController = new AbortController();
     //const promise = this.props.getTreeNodes(["a", "b", "c"], abortController.signal);
     this.props
-      .getTreeNodes(this.props.selectedFeatures, new AbortController().signal)
+      .getTreeNodes(
+        [
+          this.props.selectedFeatures,
+          filtersRelabeled,
+          compositeFiltersRelabeled
+        ],
+        new AbortController().signal
+      )
       .then((result) => {
         this.onResize();
         this.clearSelection();
@@ -734,7 +806,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // });
   }
 
-  private zoomed(zoomEvent: D3ZoomEvent<any, SVGDatum>): void {
+  private zoomed(zoomEvent: D3ZoomEvent<any, ISVGDatum>): void {
     const newTransform: any = zoomEvent.transform;
     select(treeZoomPane.current).attr("transform", newTransform);
     if (

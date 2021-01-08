@@ -371,10 +371,6 @@
       "binary": "ikili",
       "continuous": "sürekli"
     },
-    "Parity": {
-      "header": "Eşitlik, farklar temel alınarak ölçülür",
-      "body": "Fark ölçümleri, modelinizin seçilen özelliklerde gösterdiği davranışın varyasyon miktarını ölçer. İki tür fark ölçümü vardır. Daha fazla ölçüm kullanıma sunulacak..."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Belgeler"

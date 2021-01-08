@@ -8,10 +8,8 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { initializeIcons } from "office-ui-fabric-react";
 
 import {
-  IFairnessProps,
   IFairnessBaseData,
   IRunTimeFairnessData,
   IPreComputedFairnessData,
@@ -31,17 +29,6 @@ import {
 import { IPerformanceOption, performanceOptions } from "./PerformanceMetrics";
 
 export class WizardBuilder {
-  private static iconsInitialized = false;
-  public static initializeIcons(props: IFairnessProps): void {
-    if (
-      WizardBuilder.iconsInitialized === false &&
-      props.shouldInitializeIcons !== false
-    ) {
-      initializeIcons(props.iconUrl);
-      WizardBuilder.iconsInitialized = true;
-    }
-  }
-
   public static buildModelNames(props: IFairnessBaseData): string[] {
     return !!props.modelNames &&
       props.modelNames.length === props.predictedY.length
@@ -221,6 +208,7 @@ export class WizardBuilder {
 
         customMetrics.push({
           description: customMetric?.description,
+          group: localization.Fairness.Metrics.Groups.custom,
           isMinimization: true,
           isPercentage: true,
           key,

@@ -371,10 +371,6 @@
       "binary": "bináris",
       "continuous": "folyamatos"
     },
-    "Parity": {
-      "header": "Egyenlőtlenség alapján mért méltányosság",
-      "body": "Az egyenlőtlenségi metrikák számszerűsítik a modell viselkedésének variációját a kiválasztott jellemzők tekintetében. Kétféle egyenlőtlenségi metrika létezik: hamarosan...."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Dokumentáció"

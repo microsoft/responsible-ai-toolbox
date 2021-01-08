@@ -532,6 +532,7 @@
       "lessThanEquals": " <= {0}",
       "greaterThanEquals": " >= {0}",
       "includes": " includes {0} ",
+      "excludes": " excludes {0} ",
       "_includes.comment": "tooltip label for a filter with included values",
       "inTheRangeOf": "[ {0} ]",
       "overflowFilterArgs": "{0} and {1} others",
@@ -592,6 +593,7 @@
     "_localExplanationView.comment": "Local explanation view",
     "globalImportance": "Global Importance",
     "_globalImportance.comment": "Label for tab showing bar chart of importance of features at a global level",
+    "treeMapDescription": "To retrain the tree map, select and save the features below.",
     "Cohort": {
       "cohort": "Cohort",
       "_cohort.comment": "a subset of the data is called a cohort",
@@ -622,6 +624,9 @@
       "_colorValue.comment": "label for selecting color value",
       "count": "Count",
       "_count.comment": "the default axis is the count of items"
+    },
+    "WhatIfPanel": {
+      "whatIfHeader": "What-If"
     }
   },
   "Fairness": {
@@ -683,7 +688,7 @@
       "welcome": "Welcome to the",
       "fairnessDashboard": "Fairness dashboard",
       "introBody": "The fairness dashboard enables you to assess tradeoffs between performance and fairness of your models",
-      "explanatoryStep": "To set up the assessment, you need to specify a sensitive feature and a performance metric.",
+      "explanatoryStep": "To set up the assessment, you need to specify a sensitive feature, a performance metric, and a fairness metric.",
       "getStarted": "Get started",
       "features": "Sensitive features",
       "featuresInfo": "Sensitive features are used to split your data into groups. Fairness of your model across these groups is measured by fairness metrics. Fairness metrics quantify how much your model's behavior varies across these groups.",
@@ -788,7 +793,7 @@
       "falloutRate": "Fallout rate",
       "maxError": "Max error",
       "meanAbsoluteError": "Mean absolute error",
-      "meanSquaredError": " MSE (mean squared error)",
+      "meanSquaredError": " Mean squared error",
       "meanSquaredLogError": "Mean squared log error",
       "medianAbsoluteError": "Median absolute error",
       "average": "Average prediction",
@@ -798,11 +803,11 @@
       "falsePositiveRate": "False positive rate",
       "falseNegativeRate": "False negative rate",
       "r2_score": "R-squared score",
-      "rms_error": "RMSE (root mean squared error)",
+      "rms_error": "Root mean squared error",
       "auc": "Area under ROC curve",
-      "balancedRootMeanSquaredError": "Balanced RMSE",
+      "balancedRootMeanSquaredError": "Balanced root mean squared error",
       "balancedAccuracy": "Balanced accuracy",
-      "f1Score": "F1-Score",
+      "f1Score": "F1-score",
       "_f1Score.comment": "Data science terminology: https://en.wikipedia.org/wiki/F1_score",
       "logLoss": "Log loss",
       "_logLoss.comment": "Data science terminology",
@@ -870,7 +875,25 @@
       "truePositiveRateDifference": "True positive rate difference",
       "truePositiveRateDifferenceDescription": "The maximum difference between true positive rates of any two groups. Also sometimes referred to as equal opportunity difference or recall score difference.",
       "truePositiveRateRatio": "True positive rate ratio",
-      "truePositiveRateRatioDescription": "The minimum ratio between true positive rates of any two groups. Also sometimes referred to as equal opportunity ratio or recall score ratio."
+      "truePositiveRateRatioDescription": "The minimum ratio between true positive rates of any two groups. Also sometimes referred to as equal opportunity ratio or recall score ratio.",
+      "Groups": {
+        "equalizedOdds": "Equalized odds",
+        "classificationAccuracyAndErrorRate": "Accuracy / error rate",
+        "regressionError": "Error",
+        "selectionRate": "Demographic Parity / Selection rate",
+        "trueNegativeRate": "True negative rate / specificity",
+        "truePositiveRate": "True positive rate / recall / sensitivity",
+        "falseNegativeRate": "False negative rate / miss rate",
+        "falsePositiveRate": "False positive rate / fall-out",
+        "precision": "Precision",
+        "overUnderPrediction": "Over- and underprediction",
+        "auc": "Area under ROC curve",
+        "average": "Average prediction",
+        "f1_score": "F1-score",
+        "loss": "Loss",
+        "r2_score": "R-squared score",
+        "custom": "Custom metrics"
+      }
     },
     "BinDialog": {
       "header": "Configure bins",
@@ -883,7 +906,7 @@
     "DropdownHeaders": {
       "sensitiveFeature": "Sensitive feature",
       "performanceMetric": "Performance metric",
-      "fairnessMetric": "Disparity metric"
+      "fairnessMetric": "Fairness metric"
     }
   }
 }

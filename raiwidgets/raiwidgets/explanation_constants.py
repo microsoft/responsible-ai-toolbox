@@ -7,6 +7,7 @@
 class ExplanationDashboardInterface(object):
     """Dictionary properties shared between \
         the python and javascript object."""
+    CATEGORICAL_MAP = "categoricalMap"
     CLASS_NAMES = "classNames"
     CUSTOM_VISUALS = "customVis"
     EBM_EXPLANATION = "ebmGlobalExplanation"
@@ -28,6 +29,7 @@ class ExplanationDashboardInterface(object):
     PROBABILITY_Y = "probabilityY"
     TRAINING_DATA = "trainingData"
     TRUE_Y = "trueY"
+    LOCAL_URL = "localUrl"
 
 
 class DatabricksInterfaceConstants(object):

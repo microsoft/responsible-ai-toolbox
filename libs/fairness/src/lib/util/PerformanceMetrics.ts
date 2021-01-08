@@ -12,11 +12,14 @@ export interface IPerformanceOption {
   tags?: string[];
   userVisible?: boolean;
   alwaysUpperCase?: boolean;
+  group: string;
 }
 
 export const performanceOptions: { [key: string]: IPerformanceOption } = {
   accuracy_score: {
     description: localization.Fairness.Metrics.accuracyDescription,
+    group:
+      localization.Fairness.Metrics.Groups.classificationAccuracyAndErrorRate,
     isMinimization: false,
     isPercentage: true,
     key: "accuracy_score",
@@ -25,6 +28,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   auc: {
     description: localization.Fairness.Metrics.aucDescription,
+    group: localization.Fairness.Metrics.Groups.auc,
     isMinimization: false,
     isPercentage: false,
     key: "auc",
@@ -33,6 +37,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   average: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.average,
     isMinimization: false,
     isPercentage: false,
     key: "average",
@@ -40,6 +45,8 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   balanced_accuracy_score: {
     description: localization.Fairness.Metrics.balancedAccuracyDescription,
+    group:
+      localization.Fairness.Metrics.Groups.classificationAccuracyAndErrorRate,
     isMinimization: false,
     isPercentage: true,
     key: "balanced_accuracy_score",
@@ -48,6 +55,8 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   balanced_root_mean_squared_error: {
     description: localization.Fairness.Metrics.balancedRMSEDescription,
+    group:
+      localization.Fairness.Metrics.Groups.classificationAccuracyAndErrorRate,
     isMinimization: true,
     isPercentage: false,
     key: "balanced_root_mean_squared_error",
@@ -57,6 +66,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   f1_score: {
     alwaysUpperCase: true,
     description: localization.Fairness.Metrics.f1ScoreDescription,
+    group: localization.Fairness.Metrics.Groups.f1_score,
     isMinimization: false,
     isPercentage: false,
     key: "f1_score",
@@ -64,28 +74,16 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
     userVisible: true
   },
   fallout_rate: {
-    description: localization.Fairness.loremIpsum,
+    description: localization.Fairness.Metrics.falsePositiveRateDescription,
+    group: localization.Fairness.Metrics.Groups.falsePositiveRate,
     isMinimization: true,
     isPercentage: true,
     key: "fallout_rate",
-    title: localization.Fairness.Metrics.falloutRate
-  },
-  false_negative_rate: {
-    description: localization.Fairness.Metrics.falseNegativeRateDescription,
-    isMinimization: true,
-    isPercentage: true,
-    key: "false_negative_rate",
-    title: localization.Fairness.Metrics.falseNegativeRate
-  },
-  false_positive_rate: {
-    description: localization.Fairness.Metrics.falsePositiveRateDescription,
-    isMinimization: true,
-    isPercentage: true,
-    key: "false_positive_rate",
     title: localization.Fairness.Metrics.falsePositiveRate
   },
   log_loss: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.loss,
     isMinimization: true,
     isPercentage: false,
     key: "log_loss",
@@ -93,6 +91,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   max_error: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.regressionError,
     isMinimization: true,
     isPercentage: false,
     key: "max_error",
@@ -100,6 +99,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   mean_absolute_error: {
     description: localization.Fairness.Metrics.meanAbsoluteErrorDescription,
+    group: localization.Fairness.Metrics.Groups.regressionError,
     isMinimization: true,
     isPercentage: false,
     key: "mean_absolute_error",
@@ -108,6 +108,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   mean_squared_error: {
     description: localization.Fairness.Metrics.mseDescription,
+    group: localization.Fairness.Metrics.Groups.regressionError,
     isMinimization: true,
     isPercentage: false,
     key: "mean_squared_error",
@@ -116,6 +117,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   mean_squared_log_error: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.regressionError,
     isMinimization: true,
     isPercentage: false,
     key: "mean_squared_log_error",
@@ -123,20 +125,23 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   median_absolute_error: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.regressionError,
     isMinimization: true,
     isPercentage: false,
     key: "median_absolute_error",
     title: localization.Fairness.Metrics.medianAbsoluteError
   },
   miss_rate: {
-    description: localization.Fairness.loremIpsum,
+    description: localization.Fairness.Metrics.falseNegativeRateDescription,
+    group: localization.Fairness.Metrics.Groups.falseNegativeRate,
     isMinimization: true,
     isPercentage: true,
     key: "miss_rate",
-    title: localization.Fairness.Metrics.missRate
+    title: localization.Fairness.Metrics.falseNegativeRate
   },
   overprediction: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.overUnderPrediction,
     isMinimization: true,
     isPercentage: false,
     key: "overprediction",
@@ -144,6 +149,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   precision_score: {
     description: localization.Fairness.Metrics.precisionDescription,
+    group: localization.Fairness.Metrics.Groups.precision,
     isMinimization: false,
     isPercentage: true,
     key: "precision_score",
@@ -153,6 +159,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   r2_score: {
     alwaysUpperCase: true,
     description: localization.Fairness.Metrics.r2Description,
+    group: localization.Fairness.Metrics.Groups.r2_score,
     isMinimization: false,
     isPercentage: false,
     key: "r2_score",
@@ -161,6 +168,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   recall_score: {
     description: localization.Fairness.Metrics.recallDescription,
+    group: localization.Fairness.Metrics.Groups.truePositiveRate,
     isMinimization: false,
     isPercentage: true,
     key: "recall_score",
@@ -170,6 +178,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   root_mean_squared_error: {
     alwaysUpperCase: true,
     description: localization.Fairness.Metrics.rmseDescription,
+    group: localization.Fairness.Metrics.Groups.regressionError,
     isMinimization: true,
     isPercentage: false,
     key: "root_mean_squared_error",
@@ -178,6 +187,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   selection_rate: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.selectionRate,
     isMinimization: false,
     isPercentage: true,
     key: "selection_rate",
@@ -185,6 +195,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   specificity_score: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.trueNegativeRate,
     isMinimization: false,
     isPercentage: true,
     key: "specificity_score",
@@ -192,6 +203,7 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   underprediction: {
     description: localization.Fairness.loremIpsum,
+    group: localization.Fairness.Metrics.Groups.overUnderPrediction,
     isMinimization: true,
     isPercentage: false,
     key: "underprediction",
@@ -199,9 +211,23 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
   },
   zero_one_loss: {
     description: localization.Fairness.loremIpsum,
+    group:
+      localization.Fairness.Metrics.Groups.classificationAccuracyAndErrorRate,
     isMinimization: true,
     isPercentage: true,
     key: "zero_one_loss",
     title: localization.Fairness.Metrics.zeroOneLoss
   }
 };
+
+// List of fairness metrics to prefer as default if available.
+// The purpose of this list is to avoid having less popular metrics
+// selected by default.
+export const defaultPerformanceMetricPrioritization = [
+  // binary classification
+  performanceOptions["accuracy_score"].key,
+  // regression / probability
+  performanceOptions["mean_squared_error"].key,
+  performanceOptions["mean_absolute_error"].key,
+  performanceOptions["root_mean_squared_error"].key
+];

@@ -3,10 +3,14 @@
 
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { IDropdownOption, Stack } from "office-ui-fabric-react";
-import { ActionButton } from "office-ui-fabric-react/lib/Button";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
-import { Text } from "office-ui-fabric-react/lib/Text";
+import {
+  IDropdownOption,
+  Stack,
+  ActionButton,
+  Spinner,
+  SpinnerSize,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
@@ -75,13 +79,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         case PredictionTypes.BinaryClassification: {
           if (this.state.metrics.falsePositiveRates) {
             additionalMetrics.set(
-              "false_positive_rate",
+              "fallout_rate",
               this.state.metrics.falsePositiveRates
             );
           }
           if (this.state.metrics.falseNegativeRates) {
             additionalMetrics.set(
-              "false_negative_rate",
+              "miss_rate",
               this.state.metrics.falseNegativeRates
             );
           }
@@ -181,7 +185,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       });
 
       mainChart = (
-        <Stack horizontal={true}>
+        <Stack horizontal>
           <Stack.Item className={sharedStyles.mainLeft}>
             <Stack tokens={{ childrenGap: "l1", padding: "0 0 0 100px" }}>
               <OverallTable
@@ -347,8 +351,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
-          falseNegativeRates = await this.getMetric("false_negative_rate");
-          falsePositiveRates = await this.getMetric("false_positive_rate");
+          falseNegativeRates = await this.getMetric("miss_rate");
+          falsePositiveRates = await this.getMetric("fallout_rate");
           outcomes = await this.getMetric("selection_rate");
           break;
         }

@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IExplanationDashboardData } from "@responsible-ai/core-ui";
+import {
+  IExplanationDashboardData,
+  ISerializedExplanationData
+} from "@responsible-ai/core-ui";
 import {
   ErrorAnalysisDashboard,
   IErrorAnalysisDashboardProps,
@@ -12,13 +15,16 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
-import { dummyTreeData } from "./__mock_data__/dummyTree";
+import { dummyMatrix1dInterval } from "./__mock_data__/dummyMatrixOnedInterval";
+import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
+import { dummyTreeAdultCensusIncomeData } from "./__mock_data__/dummyTreeAdultCensusIncome";
+import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer";
 
 interface IAppProps {
-  dataset: IExplanationDashboardData;
+  dataset: IExplanationDashboardData | ISerializedExplanationData;
   theme: ITheme;
   language: string;
-  version: 1 | 2;
+  version: 1;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -33,13 +39,40 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
+    if ("categoricalMap" in this.props.dataset) {
+      return (
+        <ErrorAnalysisDashboard
+          modelInformation={{ modelClass: "blackbox" }}
+          dataSummary={{
+            categoricalMap: this.props.dataset.categoricalMap,
+            classNames: this.props.dataset.classNames,
+            featureNames: this.props.dataset.featureNames
+          }}
+          testData={this.props.dataset.trainingData}
+          predictedY={this.props.dataset.predictedY as any}
+          probabilityY={this.props.dataset.probabilityY}
+          trueY={this.props.dataset.trueY as any}
+          precomputedExplanations={{
+            localFeatureImportance: this.props.dataset.localExplanations
+          }}
+          requestPredictions={
+            !this.props.classDimension ? undefined : this.requestPredictions
+          }
+          requestDebugML={this.generateJsonTreeAdultCensusIncome}
+          requestMatrix={this.generateJsonMatrix}
+          localUrl={""}
+          locale={undefined}
+          features={this.props.dataset.featureNames}
+        />
+      );
+    }
     const dashboardProp: IErrorAnalysisDashboardProps = {
-      ...this.props.dataset,
+      ...(this.props.dataset as IExplanationDashboardData),
       explanationMethod: "mimic",
       features: this.generateFeatures(),
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
-      requestDebugML: this.generateJsonTree,
+      requestDebugML: this.generateJsonTreeBreastCancer,
       requestMatrix: this.generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
@@ -47,20 +80,21 @@ export class App extends React.Component<IAppProps> {
       stringParams: { contextualHelp: this.messages },
       theme: this.props.theme
     };
-    switch (this.props.version) {
-      case 1:
-      default:
-        return <ErrorAnalysisDashboard {...dashboardProp} />;
-    }
+    return <ErrorAnalysisDashboard {...dashboardProp} />;
   }
 
-  private generateJsonTree = (
+  private generateJsonTree(
     _data: any[],
-    signal: AbortSignal
-  ): Promise<any> => {
+    signal: AbortSignal,
+    isBreastCancer: boolean
+  ): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        resolve(_.cloneDeep(dummyTreeData));
+        if (isBreastCancer) {
+          resolve(_.cloneDeep(dummyTreeBreastCancerData));
+        } else {
+          resolve(_.cloneDeep(dummyTreeAdultCensusIncomeData));
+        }
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);
@@ -69,15 +103,39 @@ export class App extends React.Component<IAppProps> {
     });
 
     return promise;
+  }
+
+  private generateJsonTreeBreastCancer = (
+    _data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    return this.generateJsonTree(_data, signal, true);
+  };
+
+  private generateJsonTreeAdultCensusIncome = (
+    _data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    return this.generateJsonTree(_data, signal, false);
   };
 
   private generateJsonMatrix = (
-    _data: any[],
+    data: any[],
     signal: AbortSignal
   ): Promise<any> => {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        resolve(_.cloneDeep(dummyMatrixData));
+        if (
+          data.length === 3 &&
+          data[0][0] === "mean radius" &&
+          data[0][1] === "mean texture"
+        ) {
+          resolve(_.cloneDeep(dummyMatrix2dInterval));
+        } else if (data[0][0] === "mean radius") {
+          resolve(_.cloneDeep(dummyMatrix1dInterval));
+        } else {
+          resolve(_.cloneDeep(dummyMatrixData));
+        }
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);

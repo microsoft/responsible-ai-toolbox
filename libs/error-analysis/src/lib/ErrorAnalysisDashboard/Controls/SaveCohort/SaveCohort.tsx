@@ -2,19 +2,19 @@
 // Licensed under the MIT License.
 
 import { Cohort, JointDataset } from "@responsible-ai/interpret";
-import { ITextFieldStyles, IStackTokens } from "office-ui-fabric-react";
 import {
+  ITextFieldStyles,
+  IStackStyles,
+  IStackTokens,
   PrimaryButton,
-  DefaultButton
-} from "office-ui-fabric-react/lib/Button";
-import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
-import {
+  DefaultButton,
+  ContextualMenu,
   Dialog,
   DialogType,
-  DialogFooter
-} from "office-ui-fabric-react/lib/Dialog";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+  DialogFooter,
+  Stack,
+  TextField
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
@@ -25,6 +25,7 @@ import { saveCohortStyles } from "./SaveCohort.styles";
 export interface ISaveCohortProps {
   isOpen: boolean;
   temporaryCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
   jointDataset: JointDataset;
   onDismiss: () => void;
   onSave: (temporaryCohort: ErrorCohort) => void;
@@ -55,6 +56,12 @@ const modalProps = {
 const alignmentStackTokens: IStackTokens = {
   childrenGap: 10,
   padding: 5
+};
+
+const maxWidthStackStyle: IStackStyles = {
+  root: {
+    width: "500px"
+  }
 };
 
 const allDataCopy = "All data copy";
@@ -110,12 +117,20 @@ export class SaveCohort extends React.Component<
             </Stack>
             <Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>All data</div>
+                <div className={classNames.tableData}>
+                  {this.props.baseCohort.cohort.name}
+                </div>
               </Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Tree map</div>
+                <div className={classNames.tableData}>
+                  {this.props.temporaryCohort.source}
+                </div>
               </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
+              <Stack
+                horizontal
+                tokens={alignmentStackTokens}
+                styles={maxWidthStackStyle}
+              >
                 <div className={classNames.tableData}>{filters}</div>
               </Stack>
             </Stack>
@@ -151,7 +166,8 @@ export class SaveCohort extends React.Component<
       new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
-        tempCohort.cohort.filters
+        tempCohort.cohort.filters,
+        tempCohort.cohort.compositeFilters
       ),
       this.props.jointDataset
     );

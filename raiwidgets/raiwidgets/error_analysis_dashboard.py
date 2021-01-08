@@ -37,28 +37,35 @@ class ErrorAnalysisDashboard(Dashboard):
 
     def __init__(self, explanation, model=None, *, dataset=None,
                  true_y=None, classes=None, features=None, port=None,
-                 datasetX=None, trueY=None, locale=None, public_ip=None):
+                 datasetX=None, trueY=None, locale=None, public_ip=None,
+                 categorical_features=None):
         """Initialize the Error Analysis Dashboard."""
 
         self.input = ErrorAnalysisDashboardInput(
-            explanation, model, dataset, true_y, classes, features, locale)
+            explanation, model, dataset, true_y, classes,
+            features, locale, categorical_features)
 
-        Dashboard.__init__(self, dashboard_type="ErrorAnalysis",
-                           model_data=self.input.dashboard_input,
-                           public_ip=public_ip,
-                           port=port)
+        super(ErrorAnalysisDashboard, self).__init__(
+            dashboard_type="ErrorAnalysis",
+            model_data=self.input.dashboard_input,
+            public_ip=public_ip,
+            port=port,
+            add_local_url=True)
 
-        @self._service.app.route('/predict', methods=['POST'])
         def predict():
             data = request.get_json(force=True)
             return jsonify(self.input.on_predict(data))
 
-        @self._service.app.route('/tree', methods=['POST'])
+        self.add_url_rule(predict, '/predict', methods=["POST"])
+
         def tree():
             data = request.get_json(force=True)
-            return jsonify(self.input.debug_ml(data))
+            return jsonify(self.input.debug_ml(data[0], data[1], data[2]))
 
-        @self._service.app.route('/matrix', methods=['POST'])
+        self.add_url_rule(tree, '/tree', methods=["POST"])
+
         def matrix():
             data = request.get_json(force=True)
-            return jsonify(self.input.matrix(data))
+            return jsonify(self.input.matrix(data[0], data[1], data[2]))
+
+        self.add_url_rule(matrix, '/matrix', methods=["POST"])

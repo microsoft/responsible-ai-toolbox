@@ -1,20 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   PrimaryButton,
   IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
   ISearchBoxStyles,
-  IStackTokens
+  IStackTokens,
+  IStyleFunctionOrObject,
+  Checkbox,
+  Panel,
+  SearchBox,
+  Stack,
+  Text
 } from "office-ui-fabric-react";
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
-import { SearchBox } from "office-ui-fabric-react/lib/SearchBox";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react/lib/Text";
 import React from "react";
-
-import { featureListStyles } from "./FeatureList.styles";
 
 export interface IFeatureListProps {
   isOpen: boolean;
@@ -38,8 +40,13 @@ const checkboxStackTokens: IStackTokens = {
 };
 
 export interface IFeatureListState {
-  features: string[];
+  searchedFeatures: string[];
+  selectedFeatures: string[];
 }
+
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
+};
 
 export class FeatureList extends React.Component<
   IFeatureListProps,
@@ -48,12 +55,12 @@ export class FeatureList extends React.Component<
   public constructor(props: IFeatureListProps) {
     super(props);
     this.state = {
-      features: this.props.features
+      searchedFeatures: this.props.features,
+      selectedFeatures: this.props.features
     };
   }
 
   public render(): React.ReactNode {
-    const classNames = featureListStyles();
     return (
       <Panel
         headerText="Feature List"
@@ -64,15 +71,13 @@ export class FeatureList extends React.Component<
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
             <Stack.Item key="decisionTreeKey" align="start">
-              <Text
-                key="decisionTreeTextKey"
-                className={classNames.decisionTree}
-              >
-                Decision Tree
+              <Text key="decisionTreeTextKey" variant="medium">
+                {localization.ErrorAnalysis.treeMapDescription}
               </Text>
             </Stack.Item>
             <Stack.Item key="searchKey" align="start">
@@ -86,11 +91,11 @@ export class FeatureList extends React.Component<
                 }
               />
             </Stack.Item>
-            {this.props.features.map((feature) => (
+            {this.state.searchedFeatures.map((feature) => (
               <Stack.Item key={"checkboxKey" + feature} align="start">
                 <Checkbox
                   label={feature}
-                  checked={this.state.features.includes(feature)}
+                  checked={this.state.selectedFeatures.includes(feature)}
                   onChange={this.onChange.bind(this, feature)}
                 />
               </Stack.Item>
@@ -116,15 +121,15 @@ export class FeatureList extends React.Component<
     isChecked?: boolean
   ): void {
     if (isChecked) {
-      if (!this.state.features.includes(feature!)) {
+      if (!this.state.selectedFeatures.includes(feature!)) {
         this.setState({
-          features: [...this.state.features.concat([feature!])]
+          selectedFeatures: [...this.state.selectedFeatures.concat([feature!])]
         });
       }
     } else {
       this.setState({
-        features: [
-          ...this.state.features.filter(
+        selectedFeatures: [
+          ...this.state.selectedFeatures.filter(
             (stateFeature) => stateFeature !== feature!
           )
         ]
@@ -134,13 +139,13 @@ export class FeatureList extends React.Component<
 
   private onSearch(searchValue: string): void {
     this.setState({
-      features: this.props.features.filter((feature) =>
+      searchedFeatures: this.props.features.filter((feature) =>
         feature.includes(searchValue)
       )
     });
   }
 
   private apply(): void {
-    this.props.saveFeatures(this.state.features);
+    this.props.saveFeatures(this.state.selectedFeatures);
   }
 }

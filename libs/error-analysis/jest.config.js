@@ -3,9 +3,10 @@
 
 module.exports = {
   coverageDirectory: "../../coverage/libs/error-analysis",
+  displayName: "error-analysis",
+
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  name: "error-analysis",
-  preset: "../../jest.config.js",
+  preset: "../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",

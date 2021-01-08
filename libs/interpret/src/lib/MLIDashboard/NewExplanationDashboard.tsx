@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeOfficeFabric } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -49,7 +48,6 @@ export class NewExplanationDashboard extends React.PureComponent<
   private pivotItems: IPivotItemProps[] = [];
   public constructor(props: IExplanationDashboardProps) {
     super(props);
-    initializeOfficeFabric(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -77,9 +75,6 @@ export class NewExplanationDashboard extends React.PureComponent<
   }
 
   public componentDidUpdate(prev: IExplanationDashboardProps): void {
-    if (prev.theme !== this.props.theme) {
-      initializeOfficeFabric(this.props);
-    }
     if (this.props.locale && prev.locale !== this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -127,82 +122,94 @@ export class NewExplanationDashboard extends React.PureComponent<
               messageBarType={MessageBarType.warning}
             >
               <Text>{localization.Interpret.ValidationErrors.errorHeader}</Text>
-              {this.state.validationWarnings.map((message) => {
-                return <Text block>{message}</Text>;
+              {this.state.validationWarnings.map((message, idx) => {
+                return (
+                  <Text block key={idx}>
+                    {message}
+                  </Text>
+                );
               })}
             </MessageBar>
           )}
-          <Stack horizontal={true}>
-            <Stack.Item>
-              <CohortBar
-                cohorts={this.state.cohorts}
-                onCohortsChange={this.onCohortsChange}
-                jointDataset={this.state.jointDataset}
-                modelMetadata={this.state.modelMetadata}
-              />
-            </Stack.Item>
-            <Stack.Item grow>
-              <>
-                <Pivot
-                  selectedKey={this.state.activeGlobalTab}
-                  onLinkClick={this.handleGlobalTabClick}
-                  linkSize={PivotLinkSize.normal}
-                  headersOnly={true}
-                  id="DashboardPivot"
-                >
-                  {this.pivotItems.map((props) => (
-                    <PivotItem key={props.itemKey} {...props} />
-                  ))}
-                </Pivot>
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.ModelPerformance && (
-                  <ModelPerformanceTab
-                    jointDataset={this.state.jointDataset}
-                    metadata={this.state.modelMetadata}
-                    cohorts={this.state.cohorts}
-                  />
-                )}
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.DataExploration && (
-                  <DatasetExplorerTab
-                    jointDataset={this.state.jointDataset}
-                    metadata={this.state.modelMetadata}
-                    cohorts={this.state.cohorts}
-                  />
-                )}
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.ExplanationTab && (
-                  <GlobalExplanationTab
-                    jointDataset={this.state.jointDataset}
-                    metadata={this.state.modelMetadata}
-                    globalImportance={this.state.globalImportance}
-                    isGlobalDerivedFromLocal={
-                      this.state.isGlobalImportanceDerivedFromLocal
-                    }
-                    cohorts={this.state.cohorts}
-                    cohortIDs={cohortIDs}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightOptions={this.state.weightVectorOptions}
-                    weightLabels={this.state.weightVectorLabels}
-                    onWeightChange={this.onWeightVectorChange}
-                    explanationMethod={this.props.explanationMethod}
-                  />
-                )}
-                {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
-                  <WhatIfTab
-                    jointDataset={this.state.jointDataset}
-                    metadata={this.state.modelMetadata}
-                    cohorts={this.state.cohorts}
-                    invokeModel={this.state.requestPredictions}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightOptions={this.state.weightVectorOptions}
-                    weightLabels={this.state.weightVectorLabels}
-                    onWeightChange={this.onWeightVectorChange}
-                  />
-                )}
-              </>
-            </Stack.Item>
-          </Stack>{" "}
+          {this.props.dashboardType === "ModelPerformance" ? (
+            <ModelPerformanceTab
+              jointDataset={this.state.jointDataset}
+              metadata={this.state.modelMetadata}
+              cohorts={this.state.cohorts}
+            />
+          ) : (
+            <Stack horizontal={true}>
+              <Stack.Item>
+                <CohortBar
+                  cohorts={this.state.cohorts}
+                  onCohortsChange={this.onCohortsChange}
+                  jointDataset={this.state.jointDataset}
+                  modelMetadata={this.state.modelMetadata}
+                />
+              </Stack.Item>
+              <Stack.Item grow>
+                <>
+                  <Pivot
+                    selectedKey={this.state.activeGlobalTab}
+                    onLinkClick={this.handleGlobalTabClick}
+                    linkSize={PivotLinkSize.normal}
+                    headersOnly={true}
+                    id="DashboardPivot"
+                  >
+                    {this.pivotItems.map((props) => (
+                      <PivotItem key={props.itemKey} {...props} />
+                    ))}
+                  </Pivot>
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.ModelPerformance && (
+                    <ModelPerformanceTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      cohorts={this.state.cohorts}
+                    />
+                  )}
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.DataExploration && (
+                    <DatasetExplorerTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      cohorts={this.state.cohorts}
+                    />
+                  )}
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.ExplanationTab && (
+                    <GlobalExplanationTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      globalImportance={this.state.globalImportance}
+                      isGlobalDerivedFromLocal={
+                        this.state.isGlobalImportanceDerivedFromLocal
+                      }
+                      cohorts={this.state.cohorts}
+                      cohortIDs={cohortIDs}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                      explanationMethod={this.props.explanationMethod}
+                    />
+                  )}
+                  {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
+                    <WhatIfTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      cohorts={this.state.cohorts}
+                      invokeModel={this.state.requestPredictions}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                    />
+                  )}
+                </>
+              </Stack.Item>
+            </Stack>
+          )}
         </div>
       </InterpretContext.Provider>
     );

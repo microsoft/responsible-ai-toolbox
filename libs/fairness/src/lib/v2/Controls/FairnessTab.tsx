@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Stack, StackItem, Text } from "office-ui-fabric-react";
+import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
@@ -10,8 +10,7 @@ import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
 import { IFairnessPickerPropsV2 } from "../FairnessWizard";
 
-import { FairnessTabStyles } from "./FairnessTab.styles";
-import { TileList, ITileProp } from "./TileList";
+import { SelectionList, ISelectionItemProps } from "./SelectionList";
 
 export interface IFairnessTabProps extends IWizardTabProps {
   fairnessPickerProps: IFairnessPickerPropsV2;
@@ -19,50 +18,53 @@ export interface IFairnessTabProps extends IWizardTabProps {
 
 export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
   public render(): React.ReactNode {
-    const styles = FairnessTabStyles();
+    const theme = getTheme();
+
     return (
-      <Stack
-        horizontal
-        horizontalAlign="space-between"
-        className={styles.frame}
-      >
-        <StackItem grow={2}>
-          <Stack className={styles.main}>
-            <Text className={styles.header} block>
+      <Stack>
+        <Stack horizontal horizontalAlign="space-between">
+          <Stack tokens={{ childrenGap: "l1", padding: "l1 0" }}>
+            <Text
+              variant={"xLarge"}
+              block
+              style={{ color: theme.semanticColors.bodyText }}
+            >
               {localization.Fairness.Fairness.pickerHeader}
             </Text>
-            <Text className={styles.textBody} block>
+            <Text block style={{ color: theme.semanticColors.bodyText }}>
               {localization.Fairness.Fairness.body}
             </Text>
-            <StackItem grow={2} className={styles.itemsList}>
-              <TileList
-                items={this.props.fairnessPickerProps.fairnessOptions.map(
-                  (fairness): ITileProp => {
-                    const selected =
-                      this.props.fairnessPickerProps.selectedFairnessKey ===
-                      fairness.key;
-                    return {
-                      description: fairness.description,
-                      onSelect: this.props.fairnessPickerProps.onFairnessChange.bind(
-                        this,
-                        fairness.key
-                      ),
-                      selected,
-                      title: fairness.title
-                    };
-                  }
-                )}
-              />
-            </StackItem>
-            <WizardFooter
-              onNext={this.props.onNext}
-              onPrevious={this.props.onPrevious}
-            />
           </Stack>
-        </StackItem>
-        <DataSpecificationBlade
-          numberRows={this.props.dashboardContext.trueY.length}
-          featureNames={this.props.dashboardContext.modelMetadata.featureNames}
+          <DataSpecificationBlade
+            numberRows={this.props.dashboardContext.trueY.length}
+            featureNames={
+              this.props.dashboardContext.modelMetadata.featureNames
+            }
+          />
+        </Stack>
+        <SelectionList
+          grouped={true}
+          defaultSelectedKey={
+            this.props.fairnessPickerProps.selectedFairnessKey
+          }
+          items={this.props.fairnessPickerProps.fairnessOptions.map(
+            (fairness): ISelectionItemProps => {
+              return {
+                description: fairness.description,
+                key: fairness.key,
+                metric: fairness.fairnessMetric,
+                name: fairness.title,
+                onSelect: this.props.fairnessPickerProps.onFairnessChange.bind(
+                  this,
+                  fairness.key
+                )
+              };
+            }
+          )}
+        />
+        <WizardFooter
+          onNext={this.props.onNext}
+          onPrevious={this.props.onPrevious}
         />
       </Stack>
     );

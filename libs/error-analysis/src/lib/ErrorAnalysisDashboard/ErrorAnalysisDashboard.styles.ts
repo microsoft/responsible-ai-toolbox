@@ -20,14 +20,17 @@ export const ErrorAnalysisDashboardStyles: () => IProcessedStyleSet<
   return mergeStyleSets<IErrorAnalysisDashboardStyles>({
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,
+      borderBottom: "1px solid #C8C8C8",
+      borderLeft: "1px solid #C8C8C8",
+      borderRight: "1px solid #C8C8C8",
       color: theme.semanticColors.bodyText,
-      maxHeight: "1000px"
+      maxHeight: "1200px"
     },
     pivotLabelWrapper: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
-      padding: "10px 30px"
+      padding: "0px 30px"
     }
   });
 };

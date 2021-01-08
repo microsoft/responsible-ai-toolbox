@@ -12,7 +12,10 @@ export * from "./lib/MLIDashboard/Controls/GlobalExplanationTab/GlobalExplanatio
 export * from "./lib/MLIDashboard/Controls/GlobalExplanationTab/IGlobalSeries";
 export * from "./lib/MLIDashboard/JointDataset";
 export * from "./lib/MLIDashboard/Cohort";
+export * from "./lib/MLIDashboard/FabricStyles";
 export * from "./lib/MLIDashboard/IExplanationContext";
 export * from "./lib/MLIDashboard/IWeightedDropdownContext";
 export * from "./lib/MLIDashboard/Controls/WhatIfTab/LocalImportancePlots";
+export * from "./lib/MLIDashboard/Controls/WhatIfTab/WhatIfPanel";
+export * from "./lib/MLIDashboard/Controls/WhatIfTab/WhatIfConstants";
 export * from "./lib/MLIDashboard/ModelExplanationUtils";

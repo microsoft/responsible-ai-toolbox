@@ -371,10 +371,6 @@
       "binary": "binario",
       "continuous": "continuo"
     },
-    "Parity": {
-      "header": "Equidad medida en términos de disparidad",
-      "body": "Las métricas de disparidad cuantifican la variación del comportamiento del modelo en las características seleccionadas. Hay dos tipos de métricas de disparidad, pero está previsto que haya más disponibles."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Documentación"

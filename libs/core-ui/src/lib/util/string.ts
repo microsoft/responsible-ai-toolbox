@@ -7,7 +7,7 @@ export function limitStringLength(
 ): string | undefined {
   console.log(str?.length, length);
   if ((str?.length || 0) > length) {
-    return str?.substr(0, length) + "...";
+    return str?.slice(0, Math.max(0, length)) + "...";
   }
   return str;
 }

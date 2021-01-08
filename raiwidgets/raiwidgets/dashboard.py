@@ -9,6 +9,7 @@ import json
 import os
 from html.parser import HTMLParser
 import uuid
+from .explanation_constants import ExplanationDashboardInterface
 
 
 class InLineScript(HTMLParser):
@@ -40,30 +41,15 @@ class InLineScript(HTMLParser):
 
 
 class Dashboard(object):
-    """The dashboard class, wraps the dashboard component.
+    """The dashboard class, wraps the dashboard component."""
 
-    :param sensitive_features: A matrix of feature vector examples
-        (# examples x # features), these can be from the initial dataset,
-        or reserved from training.
-    :type sensitive_features: numpy.array or list[][] or pandas.DataFrame
-        or pandas.Series
-    :param y_true: The true labels or values for the provided dataset.
-    :type y_true: numpy.array or list[]
-    :param y_pred: Array of output predictions from models to be evaluated.
-        Can be a single array of predictions, or a 2D list over multiple
-        models. Can be a dictionary of named model predictions.
-    :type y_pred: numpy.array or list[][] or list[] or dict {string: list[]}
-    :param sensitive_feature_names: Feature names
-    :type sensitive_feature_names: numpy.array or list[]
-    """
-
-    def __init__(
-            self, *,
-            dashboard_type,
-            model_data,
-            public_ip=None,
-            port=None):
-        """Initialize the Dashboard."""
+    def __init__(self, *,
+                 dashboard_type,
+                 model_data,
+                 public_ip=None,
+                 port=None,
+                 add_local_url=False):
+        """Initialize the dashboard."""
 
         if model_data is None or type is None:
             raise ValueError("Required parameters not provided")
@@ -82,17 +68,24 @@ class Dashboard(object):
             "baseUrl": self._service.env.base_url,
             'withCredentials': False
         }
+        if add_local_url:
+            local_url = ExplanationDashboardInterface.LOCAL_URL
+            model_data[local_url] = self._service.env.base_url
         self.model_data = model_data
         self.add_route()
 
         html = self.load_index()
-        print(f'Started at {self._service.env.base_url}')
-        display(HTML(html))
+        print(f'{dashboard_type} started at {self._service.env.base_url}')
+        display(HTML(html), metadata=dict(isolated=True))
 
     def add_route(self):
-        @self._service.app.route('/')
+        # To enable multiple dashboards to run in the same notebook we need to
+        # prevent them from using the same method names (in addition to using
+        # dedicated ports). Below we rename the function for that purpose and
+        # manually add the URL rule instead of using the route decorator.
         def visual():
             return self.load_index()
+        self.add_url_rule(visual, '/', methods=["GET"])
         return
 
     def get_widget_path(path):
@@ -116,3 +109,16 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_model_data__", json.dumps(self.model_data))
             return content
+
+    def add_url_rule(self, func, route, methods):
+        """To enable multiple dashboards to run in the same notebook we need to
+        prevent them from using the same method names (in addition to using
+        dedicated ports). We rename the function for that purpose and
+        manually add the URL rule instead of using the route decorator.
+        """
+        func.__name__ = func.__name__ + str(id(self))
+        self._service.app.add_url_rule(
+            route,
+            endpoint=func.__name__,
+            view_func=func,
+            methods=methods)

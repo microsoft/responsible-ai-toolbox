@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  initializeOfficeFabric,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
@@ -12,6 +11,7 @@ import {
   Cohort,
   DatasetExplorerTab,
   GlobalExplanationTab,
+  ICompositeFilter,
   IExplanationModelMetadata,
   IFilter,
   JointDataset,
@@ -23,15 +23,18 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
-import { IPivotItemProps } from "office-ui-fabric-react";
-import { Layer, LayerHost } from "office-ui-fabric-react/lib/Layer";
 import {
+  IPivotItemProps,
+  ISettings,
+  Layer,
+  LayerHost,
   PivotItem,
   Pivot,
-  PivotLinkSize
-} from "office-ui-fabric-react/lib/Pivot";
-import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
-import { Customizer, getId } from "office-ui-fabric-react/lib/Utilities";
+  PivotLinkSize,
+  mergeStyleSets,
+  Customizer,
+  getId
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
@@ -43,14 +46,16 @@ import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { Navigation } from "./Controls/Navigation/Navigation";
 import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
 import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
+import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
-import { ErrorCohort } from "./ErrorCohort";
+import { ErrorCohort, ErrorDetectorCohortSource } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export interface IErrorAnalysisDashboardState {
-  cohorts: ErrorCohort[];
   activeGlobalTab: GlobalTabKeys;
+  cohorts: ErrorCohort[];
+  customPoints: Array<{ [key: string]: any }>;
   viewType: ViewTypeKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
@@ -68,7 +73,10 @@ export interface IErrorAnalysisDashboardState {
   openFeatureList: boolean;
   openSaveCohort: boolean;
   openShiftCohort: boolean;
+  openWhatIf: boolean;
+  predictionTab: PredictionTabKeys;
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
   selectedFeatures: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   selectedWeightVector: WeightVectorOption;
@@ -120,6 +128,14 @@ export enum ViewTypeKeys {
 export enum ErrorAnalysisOptions {
   TreeMap = "TreeMap",
   HeatMap = "HeatMap"
+}
+
+export enum PredictionTabKeys {
+  CorrectPredictionTab = "CorrectPredictionTab",
+  IncorrectPredictionTab = "IncorrectPredictionTab",
+  WhatIfDatapointsTab = "WhatIfDatapointsTab",
+  AllSelectedTab = "AllSelectedTab",
+  InspectionTab = "InspectionTab"
 }
 
 export class ErrorAnalysisDashboard extends React.PureComponent<
@@ -182,7 +198,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
-    initializeOfficeFabric(props);
     this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
     this.onConfigChanged = this.onConfigChanged.bind(this);
     this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
@@ -277,11 +292,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       props.testData,
       props.dataSummary.categoricalMap
     );
-    const featureRanges = ModelMetadata.buildFeatureRanges(
-      props.testData,
-      featureIsCategorical,
-      props.dataSummary.categoricalMap
-    );
+    const featureRanges =
+      ModelMetadata.buildFeatureRanges(
+        props.testData,
+        featureIsCategorical,
+        props.dataSummary.categoricalMap
+      ) || [];
     return {
       classNames,
       featureIsCategorical,
@@ -400,7 +416,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
+      baseCohort: cohorts[0],
       cohorts,
+      customPoints: [],
       dataChartConfig: undefined,
       dependenceProps: undefined,
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
@@ -416,6 +434,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       openInfoPanel: false,
       openSaveCohort: false,
       openShiftCohort: false,
+      openWhatIf: false,
+      predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
       selectedFeatures: props.features,
       selectedWeightVector:
@@ -436,10 +456,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     );
     const classNames = ErrorAnalysisDashboardStyles();
     return (
-      <div className={classNames.page} style={{ maxHeight: "1000px" }}>
+      <div className={classNames.page}>
         <Navigation
           updateViewState={this.updateViewState.bind(this)}
+          updatePredictionTabState={this.updatePredictionTabState.bind(this)}
           viewType={this.state.viewType}
+          activeGlobalTab={this.state.activeGlobalTab}
+          activePredictionTab={this.state.predictionTab}
         />
         <MainMenu
           viewExplanation={this.viewExplanation.bind(this)}
@@ -456,11 +479,19 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           onShiftCohortClick={(): void =>
             this.setState({ openShiftCohort: true })
           }
+          onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
           localUrl={this.props.localUrl}
           viewType={this.state.viewType}
           setErrorDetector={(key: ErrorAnalysisOptions): void =>
-            this.setState({ errorAnalysisOption: key })
+            this.setState({
+              errorAnalysisOption: key,
+              openFeatureList: false,
+              selectedCohort: this.state.baseCohort
+            })
           }
+          temporaryCohort={this.state.selectedCohort}
+          activeGlobalTab={this.state.activeGlobalTab}
+          activePredictionTab={this.state.predictionTab}
         />
         {this.state.openSaveCohort && (
           <SaveCohort
@@ -468,10 +499,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             onDismiss={(): void => this.setState({ openSaveCohort: false })}
             onSave={(temporaryCohort: ErrorCohort): void =>
               this.setState({
-                cohorts: [...this.state.cohorts, temporaryCohort]
+                baseCohort: temporaryCohort,
+                cohorts: [temporaryCohort, ...this.state.cohorts],
+                selectedCohort: temporaryCohort
               })
             }
             temporaryCohort={this.state.selectedCohort}
+            baseCohort={this.state.baseCohort}
             jointDataset={this.state.jointDataset}
           />
         )}
@@ -479,16 +513,27 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           <ShiftCohort
             isOpen={this.state.openShiftCohort}
             onDismiss={(): void => this.setState({ openShiftCohort: false })}
-            onApply={(selectedCohort: ErrorCohort): void =>
+            onApply={(selectedCohort: ErrorCohort): void => {
+              let cohorts = this.state.cohorts;
+              cohorts = cohorts.filter(
+                (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
+              );
               this.setState({
+                baseCohort: selectedCohort,
+                cohorts: [selectedCohort, ...cohorts],
                 selectedCohort
-              })
-            }
+              });
+            }}
             cohorts={this.state.cohorts}
           />
         )}
         <div>
-          <Customizer settings={{ hostId: this.layerHostId }}>
+          <Customizer
+            settings={(currentSettings): ISettings => ({
+              ...currentSettings,
+              hostId: this.layerHostId
+            })}
+          >
             <Layer>
               {this.state.viewType === ViewTypeKeys.ErrorAnalysisView && (
                 <ErrorAnalysisView
@@ -504,13 +549,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   features={this.props.features}
                   selectedFeatures={this.state.selectedFeatures}
                   errorAnalysisOption={this.state.errorAnalysisOption}
+                  selectedCohort={this.state.selectedCohort}
+                  baseCohort={this.state.baseCohort}
                 />
               )}
               {this.state.viewType === ViewTypeKeys.ExplanationView && (
-                <div
-                  className={ErrorAnalysisDashboard.classNames.pivotWrapper}
-                  style={{ height: "820px" }}
-                >
+                <div className={ErrorAnalysisDashboard.classNames.pivotWrapper}>
                   <Pivot
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick.bind(this)}
@@ -569,6 +613,16 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       weightOptions={this.state.weightVectorOptions}
                       weightLabels={this.state.weightVectorLabels}
                       onWeightChange={this.onWeightVectorChange}
+                      activePredictionTab={this.state.predictionTab}
+                      setActivePredictionTab={(
+                        key: PredictionTabKeys
+                      ): void => {
+                        this.setState({
+                          predictionTab: key
+                        });
+                      }}
+                      customPoints={this.state.customPoints}
+                      selectedCohort={this.state.selectedCohort}
                     />
                   )}
                 </div>
@@ -599,12 +653,22 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   this.setState({ openCohortListPanel: false })
                 }
               />
+              <WhatIf
+                isOpen={this.state.openWhatIf}
+                onDismiss={(): void => this.setState({ openWhatIf: false })}
+                currentCohort={this.state.selectedCohort}
+                jointDataset={this.state.jointDataset}
+                metadata={this.state.modelMetadata}
+                invokeModel={this.props.requestPredictions}
+                customPoints={this.state.customPoints}
+                addCustomPoint={this.addCustomPoint.bind(this)}
+              />
             </Layer>
           </Customizer>
           <LayerHost
             id={this.layerHostId}
             style={{
-              height: "820px",
+              height: "1100px",
               overflow: "hidden",
               position: "relative"
             }}
@@ -614,28 +678,56 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     );
   }
 
-  private updateSelectedCohort(filters: IFilter[]): void {
+  private addCustomPoint(temporaryPoint: { [key: string]: any }): void {
+    this.setState({
+      customPoints: [...this.state.customPoints, temporaryPoint]
+    });
+  }
+
+  private updateSelectedCohort(
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    cells = 0
+  ): void {
     // Need to relabel the filter names based on index in joint dataset
-    const filtersRelabeled = filters.map(
-      (filter: IFilter): IFilter => {
-        const index = this.props.features.indexOf(filter.column);
-        const key = JointDataset.DataLabelRoot + index.toString();
-        return {
-          arg: filter.arg,
-          column: key,
-          method: filter.method
-        };
-      }
+    const filtersRelabeled = ErrorCohort.getDataFilters(
+      filters,
+      this.props.features
     );
-    const cohort: ErrorCohort = new ErrorCohort(
+
+    let selectedCohortName = "";
+    let addTemporaryCohort = true;
+    if (source === ErrorDetectorCohortSource.TreeMap) {
+      selectedCohortName = `${this.state.baseCohort.cohort.name} (${filtersRelabeled.length} filters)`;
+    } else if (source === ErrorDetectorCohortSource.HeatMap) {
+      selectedCohortName = `${this.state.baseCohort.cohort.name} (${cells} cells)`;
+    } else {
+      selectedCohortName = this.state.baseCohort.cohort.name;
+      addTemporaryCohort = false;
+    }
+    const baseCohortFilters = this.state.baseCohort.cohort.filters;
+    const baseCohortCompositeFilters = this.state.baseCohort.cohort
+      .compositeFilters;
+    const selectedCohort: ErrorCohort = new ErrorCohort(
       new Cohort(
-        "Unsaved cohort (base cohort + filters)",
+        selectedCohortName,
         this.state.jointDataset,
-        filtersRelabeled
+        baseCohortFilters.concat(filtersRelabeled),
+        baseCohortCompositeFilters.concat(compositeFilters)
       ),
-      this.state.jointDataset
+      this.state.jointDataset,
+      cells,
+      source,
+      true
     );
-    this.setState({ selectedCohort: cohort });
+    let cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    if (addTemporaryCohort) {
+      cohorts = [selectedCohort, ...cohorts];
+    }
+    this.setState({ cohorts, selectedCohort });
   }
 
   private onConfigChanged(newConfig: IGenericChartProps): void {
@@ -658,7 +750,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     if (item !== undefined) {
       const itemKey: string = item.props.itemKey!;
       const index: GlobalTabKeys = GlobalTabKeys[itemKey];
-      this.setState({ activeGlobalTab: index });
+      const predictionTab = PredictionTabKeys.CorrectPredictionTab;
+      this.setState({
+        activeGlobalTab: index,
+        openWhatIf: false,
+        predictionTab
+      });
     }
   }
 
@@ -671,11 +768,23 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   }
 
   private viewExplanation(): void {
-    this.setState({ viewType: ViewTypeKeys.ExplanationView });
+    this.setState({
+      openFeatureList: false,
+      viewType: ViewTypeKeys.ExplanationView
+    });
   }
 
   private updateViewState(viewType: ViewTypeKeys): void {
-    this.setState({ viewType });
+    if (viewType !== ViewTypeKeys.ExplanationView) {
+      const predictionTab = PredictionTabKeys.CorrectPredictionTab;
+      this.setState({ openWhatIf: false, predictionTab, viewType });
+    } else {
+      this.setState({ viewType });
+    }
+  }
+
+  private updatePredictionTabState(predictionTab: PredictionTabKeys): void {
+    this.setState({ predictionTab });
   }
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {

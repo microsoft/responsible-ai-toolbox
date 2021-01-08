@@ -371,10 +371,6 @@
       "binary": "binární",
       "continuous": "průběžné"
     },
-    "Parity": {
-      "header": "Nestrannost měřená ve smyslu nekonzistence",
-      "body": "Metriky nekonzistence vyjadřují proměnlivost chování modelu mezi vybranými příznaky. Existují dva druhy metrik nekonzistence: další připravujeme..."
-    },
     "Header": {
       "title": "Fairness",
       "documentation": "Dokumentace"

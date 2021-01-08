@@ -17,6 +17,7 @@ export interface IMatrixAreaStyles {
   matrixCellPivot2Categories: IStyle;
   matrixRow: IStyle;
   matrixArea: IStyle;
+  nanMatrixCell: IStyle;
   styledMatrixCell: IStyle;
   selectedMatrixCell: IStyle;
 }
@@ -35,6 +36,9 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       paddingTop: "10px"
     },
     matrixCell: {
+      ":focus": {
+        outline: "none"
+      },
       alignItems: "center",
       border: "1px solid #bfbfbf",
       cursor: "pointer",
@@ -94,12 +98,20 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       fontWeight: "normal",
       height: "50px"
     },
+    nanMatrixCell: {
+      background:
+        "repeating-linear-gradient(-45deg, white, white 5px, pink 10px, pink 20px)",
+      color: "black"
+    },
     selectedMatrixCell: {
       alignItems: "center",
       border: "3px solid #089acc",
       display: "flex"
     },
     styledMatrixCell: {
+      ":focus": {
+        outline: "none"
+      },
       alignItems: "center",
       cursor: "pointer",
       display: "flex",

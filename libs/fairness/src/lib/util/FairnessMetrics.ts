@@ -122,7 +122,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_negative_rate_difference: {
     description:
       localization.Fairness.Metrics.falseNegativeRateDifferenceDescription,
-    fairnessMetric: "false_negative_over_total",
+    fairnessMetric: "miss_rate",
     fairnessMode: FairnessModes.Difference,
     key: "false_negative_rate_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -131,7 +131,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_negative_rate_ratio: {
     description:
       localization.Fairness.Metrics.falseNegativeRateDifferenceDescription,
-    fairnessMetric: "false_negative_over_total",
+    fairnessMetric: "miss_rate",
     fairnessMode: FairnessModes.Ratio,
     key: "false_negative_rate_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -140,7 +140,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_positive_rate_difference: {
     description:
       localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
-    fairnessMetric: "false_positive_over_total",
+    fairnessMetric: "fallout_rate",
     fairnessMode: FairnessModes.Difference,
     key: "false_positive_rate_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -149,7 +149,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_positive_rate_ratio: {
     description:
       localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
-    fairnessMetric: "false_positive_over_total",
+    fairnessMetric: "fallout_rate",
     fairnessMode: FairnessModes.Ratio,
     key: "false_positive_rate_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -208,7 +208,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   },
   roc_auc_score_min: {
     description: localization.Fairness.Metrics.ROCAUCScoreMinDescription,
-    fairnessMetric: "roc_auc_score",
+    fairnessMetric: "auc",
     fairnessMode: FairnessModes.Min,
     key: "roc_auc_score_min",
     supportedTasks: new Set([PredictionTypes.Probability]),
@@ -217,7 +217,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   true_negative_rate_difference: {
     description:
       localization.Fairness.Metrics.trueNegativeRateDifferenceDescription,
-    fairnessMetric: "recall_score",
+    fairnessMetric: "specificity_score",
     fairnessMode: FairnessModes.Difference,
     key: "true_negative_rate_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -226,7 +226,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   true_negative_rate_ratio: {
     description:
       localization.Fairness.Metrics.trueNegativeRateDifferenceDescription,
-    fairnessMetric: "recall_score",
+    fairnessMetric: "specificity_score",
     fairnessMode: FairnessModes.Ratio,
     key: "true_negative_rate_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -251,3 +251,16 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
     title: localization.Fairness.Metrics.truePositiveRateRatio
   }
 };
+
+// List of fairness metrics to prefer as default if available.
+// The purpose of this list is to avoid having less popular metrics
+// selected by default.
+export const defaultFairnessMetricPrioritization = [
+  // binary classification
+  fairnessOptions["demographic_parity_difference"].key,
+  fairnessOptions["accuracy_score_difference"].key,
+  fairnessOptions["equalized_odds_difference"].key,
+  // regression / probability
+  fairnessOptions["mean_absolute_error_max"].key,
+  fairnessOptions["mean_squared_error_max"].key
+];

@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text, FocusZone } from "office-ui-fabric-react";
-import { Stack, StackItem } from "office-ui-fabric-react/lib/Stack";
+import { Text, Stack, getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
@@ -12,8 +11,7 @@ import { WizardFooter } from "../../components/WizardFooter";
 import { PredictionTypes } from "../../IFairnessProps";
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";
 
-import { PerformanceTabStyles } from "./PerformanceTab.styles";
-import { TileList } from "./TileList";
+import { SelectionList } from "./SelectionList";
 
 export interface IPerformancePickingTabProps extends IWizardTabProps {
   performancePickerProps: IPerformancePickerPropsV2;
@@ -23,62 +21,65 @@ export class PerformanceTab extends React.PureComponent<
   IPerformancePickingTabProps
 > {
   public render(): React.ReactNode {
-    const styles = PerformanceTabStyles();
+    const theme = getTheme();
     return (
-      <Stack
-        horizontal
-        horizontalAlign="space-between"
-        className={styles.frame}
-      >
-        <Stack className={styles.main}>
-          <Text className={styles.header} block>
-            {localization.Fairness.Performance.header}
-          </Text>
-          <Text className={styles.textBody} block>
-            {localization.formatString(
-              localization.Fairness.Performance.body,
-              this.props.dashboardContext.modelMetadata.PredictionType !==
-                PredictionTypes.Regression
-                ? localization.Fairness.Performance.binary
-                : localization.Fairness.Performance.continuous,
-              this.props.dashboardContext.modelMetadata.PredictionType ===
-                PredictionTypes.BinaryClassification
-                ? localization.Fairness.Performance.binary
-                : localization.Fairness.Performance.continuous,
-              this.props.dashboardContext.predictions.length === 1
-                ? localization.Fairness.Performance.modelMakes
-                : localization.Fairness.Performance.modelsMake
-            )}
-          </Text>
-          <StackItem grow={2} className={styles.itemsList}>
-            <FocusZone shouldFocusOnMount={true}>
-              <TileList
-                items={this.props.performancePickerProps.performanceOptions.map(
-                  (performance) => {
-                    return {
-                      description: performance.description,
-                      onSelect: this.props.performancePickerProps.onPerformanceChange.bind(
-                        this,
-                        performance.key
-                      ),
-                      selected:
-                        this.props.performancePickerProps
-                          .selectedPerformanceKey === performance.key,
-                      title: performance.title
-                    };
-                  }
-                )}
-              />
-            </FocusZone>
-          </StackItem>
-          <WizardFooter
-            onNext={this.props.onNext}
-            onPrevious={this.props.onPrevious}
+      <Stack>
+        <Stack horizontal horizontalAlign="space-between">
+          <Stack tokens={{ childrenGap: "l1", padding: "l1 0" }}>
+            <Text
+              variant={"xLarge"}
+              block
+              style={{ color: theme.semanticColors.bodyText }}
+            >
+              {localization.Fairness.Performance.header}
+            </Text>
+            <Text block style={{ color: theme.semanticColors.bodyText }}>
+              {localization.formatString(
+                localization.Fairness.Performance.body,
+                this.props.dashboardContext.modelMetadata.PredictionType !==
+                  PredictionTypes.Regression
+                  ? localization.Fairness.Performance.binary
+                  : localization.Fairness.Performance.continuous,
+                this.props.dashboardContext.modelMetadata.PredictionType ===
+                  PredictionTypes.BinaryClassification
+                  ? localization.Fairness.Performance.binary
+                  : localization.Fairness.Performance.continuous,
+                this.props.dashboardContext.predictions.length === 1
+                  ? localization.Fairness.Performance.modelMakes
+                  : localization.Fairness.Performance.modelsMake
+              )}
+            </Text>
+          </Stack>
+          <DataSpecificationBlade
+            numberRows={this.props.dashboardContext.trueY.length}
+            featureNames={
+              this.props.dashboardContext.modelMetadata.featureNames
+            }
           />
         </Stack>
-        <DataSpecificationBlade
-          numberRows={this.props.dashboardContext.trueY.length}
-          featureNames={this.props.dashboardContext.modelMetadata.featureNames}
+        <SelectionList
+          grouped={false}
+          defaultSelectedKey={
+            this.props.performancePickerProps.selectedPerformanceKey
+          }
+          items={this.props.performancePickerProps.performanceOptions.map(
+            (performance) => {
+              return {
+                description: performance.description,
+                key: performance.key,
+                metric: performance.key,
+                name: performance.title,
+                onSelect: this.props.performancePickerProps.onPerformanceChange.bind(
+                  this,
+                  performance.key
+                )
+              };
+            }
+          )}
+        />
+        <WizardFooter
+          onNext={this.props.onNext}
+          onPrevious={this.props.onPrevious}
         />
       </Stack>
     );

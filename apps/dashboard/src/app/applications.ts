@@ -1,14 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IExplanationDashboardData } from "@responsible-ai/core-ui";
+import {
+  IExplanationDashboardData,
+  ISerializedExplanationData
+} from "@responsible-ai/core-ui";
 import { IFairnessData } from "@responsible-ai/fairness";
 
-import { binaryClassifier } from "../fairness/__mock_data__/binaryClassifier";
+import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
+import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
-import { probit } from "../fairness/__mock_data__/probit";
+import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
@@ -37,7 +41,7 @@ export interface IFairLearnDataSet {
 }
 
 export interface IErrorAnalysisDataSet {
-  data: IExplanationDashboardData;
+  data: IExplanationDashboardData | ISerializedExplanationData;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -74,35 +78,20 @@ export type IApplications = {
 export const applications: IApplications = <const>{
   errorAnalysis: {
     datasets: {
-      automlMimicAdult: { data: automlMimicAdult },
-      bostonData: { classDimension: 1, data: bostonData },
-      bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },
-      bostonDataNoDataset: { classDimension: 1, data: bostonDataNoDataset },
-      bostonDataNoPredict: { classDimension: undefined, data: bostonData },
-      bostonDataNoY: { classDimension: 1, data: bostonDataNoY },
-      breastCancerData: { classDimension: 2, data: breastCancerData },
-      ebmData: { classDimension: 2, data: ebmData },
-      ibmData: { classDimension: 2, data: ibmData },
-      ibmDataInconsistent: { classDimension: 2, data: ibmDataInconsistent },
-      ibmNoClass: { classDimension: 2, data: ibmNoClass },
-      irisData: { classDimension: 3, data: irisData },
-      irisDataNoLocal: { classDimension: 3, data: irisDataNoLocal },
-      irisGlobal: { classDimension: 3, data: irisGlobal },
-      irisNoData: { classDimension: 3, data: irisNoData },
-      irisNoFeatures: { classDimension: 3, data: irisNoFeatures },
-      largeFeatureCount: { classDimension: 2, data: largeFeatureCount }
+      adultCensusIncomeData: { classDimension: 2, data: adultCensus },
+      breastCancerData: { classDimension: 2, data: breastCancerData }
     },
     versions: { "Version-1": 1 }
   },
   fairness: {
     datasets: {
-      binaryClassifier: { data: binaryClassifier },
+      binaryClassification: { data: binaryClassification },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryMissingMetrics: {
         data: precomputedBinaryMissingMetrics
       },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
-      probit: { data: probit },
+      probability: { data: probability },
       regression: { data: regression }
     },
     versions: { "Version-1": 1, "Version-2": 2 }

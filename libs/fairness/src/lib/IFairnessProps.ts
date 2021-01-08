@@ -73,7 +73,6 @@ export type IFairnessProps = IFairnessData & {
   supportedBinaryClassificationPerformanceKeys: string[];
   supportedRegressionPerformanceKeys: string[];
   supportedProbabilityPerformanceKeys: string[];
-  shouldInitializeIcons?: boolean;
   iconUrl?: string;
   // The request hook
   requestMetrics?: (

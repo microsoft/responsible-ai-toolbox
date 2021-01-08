@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter } from "@responsible-ai/interpret";
+import { ICompositeFilter, IFilter } from "@responsible-ai/interpret";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisDashboard";
+import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { MatrixFilter } from "../MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
@@ -18,7 +19,14 @@ export interface IErrorAnalysisViewProps {
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   errorAnalysisOption: ErrorAnalysisOptions;
-  updateSelectedCohort: (filters: IFilter[]) => void;
+  updateSelectedCohort: (
+    filters: IFilter[],
+    compositeFilters: ICompositeFilter[],
+    source: ErrorDetectorCohortSource,
+    cells: number
+  ) => void;
+  selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export class ErrorAnalysisView extends React.PureComponent<
@@ -33,8 +41,11 @@ export class ErrorAnalysisView extends React.PureComponent<
               theme={this.props.theme}
               messages={this.props.messages}
               getTreeNodes={this.props.getTreeNodes}
+              features={this.props.features}
               selectedFeatures={this.props.selectedFeatures}
               updateSelectedCohort={this.props.updateSelectedCohort}
+              selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
             />
           )}
           {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
@@ -42,6 +53,9 @@ export class ErrorAnalysisView extends React.PureComponent<
               theme={this.props.theme}
               features={this.props.features}
               getMatrix={this.props.getMatrix}
+              updateSelectedCohort={this.props.updateSelectedCohort}
+              selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
             />
           )}
         </div>

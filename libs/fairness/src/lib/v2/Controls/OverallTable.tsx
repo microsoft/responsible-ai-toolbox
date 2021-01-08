@@ -5,7 +5,10 @@ import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
   DetailsListLayoutMode,
-  SelectionMode
+  FontWeights,
+  IColumn,
+  SelectionMode,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -76,14 +79,15 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
       });
     }
 
-    const columns = [
+    const columns: IColumn[] = [
       {
         fieldName: "binLabel",
         isResizable: true,
         key: "columnBin",
         maxWidth: 200,
         minWidth: 100,
-        name: ""
+        name: "",
+        onRender: this.renderBinColumn
       }
     ];
     this.props.metricLabels.forEach((colName, colIndex) => {
@@ -107,4 +111,22 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
       />
     );
   }
+
+  private readonly renderBinColumn = (item?: any): React.ReactNode => {
+    if (!item) {
+      return undefined;
+    }
+    return (
+      <Text
+        styles={{
+          root: {
+            fontWeight: FontWeights.semibold
+          }
+        }}
+        block
+      >
+        {item.binLabel}
+      </Text>
+    );
+  };
 }

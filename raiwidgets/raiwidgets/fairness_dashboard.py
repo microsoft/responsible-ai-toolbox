@@ -41,7 +41,7 @@ class FairnessDashboard(Dashboard):
             port=None,
             fairness_metric_module=None,
             fairness_metric_mapping=None):
-        """Initialize the fairness Dashboard."""
+        """Initialize the fairness dashboard."""
 
         metrics_module = FairnessMetricModule(
             module_name=fairness_metric_module,
@@ -97,32 +97,32 @@ class FairnessDashboard(Dashboard):
                               "ignoring")
             fairness_input["features"] = sensitive_feature_names
 
-        Dashboard.__init__(self, dashboard_type="Fairness",
-                           model_data=fairness_input,
-                           public_ip=public_ip,
-                           port=port)
+        super(FairnessDashboard, self).__init__(
+            dashboard_type="Fairness",
+            model_data=fairness_input,
+            public_ip=public_ip,
+            port=port)
 
         self.fairness_metrics_module = metrics_module
 
-        @self._service.app.route('/metrics', methods=['POST'])
-        def fairness_metrics_calculation():
+        def metrics():
             try:
                 data = request.get_json(force=True)
-                data.update(self.model_data)
 
                 if type(data["binVector"][0]) == np.int32:
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                method = self.fairness_metrics_module.\
+                metric_method = self.fairness_metrics_module.\
                     _metric_methods.get(data["metricKey"]).get("function")
-                prediction = method(
-                    data['true_y'],
-                    data['predicted_ys'][data["modelIndex"]],
+                metric_frame = self.fairness_metrics_module.MetricFrame(
+                    metric_method,
+                    self.model_data['true_y'],
+                    self.model_data['predicted_ys'][data["modelIndex"]],
                     sensitive_features=data["binVector"])
                 return jsonify({"data": {
-                    "global": prediction.overall,
-                    "bins": list(prediction.by_group.values())
+                    "global": metric_frame.overall,
+                    "bins": list(metric_frame.by_group.to_dict().values())
                 }})
             except Exception as ex:
                 import sys
@@ -135,6 +135,8 @@ class FairnessDashboard(Dashboard):
                         exc_type, exc_value, exc_traceback))),
                     "locals": str(locals()),
                 })
+
+        self.add_url_rule(metrics, '/metrics', methods=["POST"])
 
     def _sanitize_data_shape(self, dataset):
         result = self._convert_to_list(dataset)

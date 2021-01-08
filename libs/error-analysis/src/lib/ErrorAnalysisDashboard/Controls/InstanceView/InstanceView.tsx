@@ -11,19 +11,24 @@ import {
   IChoiceGroupOption,
   IStackItemStyles,
   ITheme,
-  PrimaryButton
+  PrimaryButton,
+  ChoiceGroup,
+  Stack
 } from "office-ui-fabric-react";
-import { ChoiceGroup } from "office-ui-fabric-react/lib/ChoiceGroup";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
+import { PredictionTabKeys } from "../../ErrorAnalysisDashboard";
+import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { InspectionView } from "../InspectionView/InspectionView";
-import { DataViewKeys, TabularDataView } from "../TabularDataView";
+import {
+  DataViewKeys,
+  TabularDataView
+} from "../TabularDataView/TabularDataView";
 
 import { InstanceViewStyles } from "./InstanceView.styles";
 
-export interface SelectionDetails {
+export interface ISelectionDetails {
   selectedDatasetIndexes: number[];
   selectedCorrectDatasetIndexes: number[];
   selectedIncorrectDatasetIndexes: number[];
@@ -41,19 +46,14 @@ export interface IInstanceViewProps {
   weightOptions: WeightVectorOption[];
   weightLabels: any;
   onWeightChange: (option: WeightVectorOption) => void;
+  activePredictionTab: PredictionTabKeys;
+  setActivePredictionTab: (key: PredictionTabKeys) => void;
+  customPoints: Array<{ [key: string]: any }>;
+  selectedCohort: ErrorCohort;
 }
 
 export interface IInstanceViewState {
-  activePredictionTab: PredictionTabKeys;
-  selectionDetails: SelectionDetails;
-}
-
-enum PredictionTabKeys {
-  CorrectPredictionTab = "CorrectPredictionTab",
-  IncorrectPredictionTab = "IncorrectPredictionTab",
-  WhatIfDatapointsTab = "WhatIfDatapointsTab",
-  AllSelectedTab = "AllSelectedTab",
-  InspectionTab = "InspectionTab"
+  selectionDetails: ISelectionDetails;
 }
 
 const inspectButtonStyles: IStackItemStyles = {
@@ -62,7 +62,7 @@ const inspectButtonStyles: IStackItemStyles = {
   }
 };
 
-export class InstanceView extends React.PureComponent<
+export class InstanceView extends React.Component<
   IInstanceViewProps,
   IInstanceViewState
 > {
@@ -70,7 +70,6 @@ export class InstanceView extends React.PureComponent<
   public constructor(props: IInstanceViewProps) {
     super(props);
     this.state = {
-      activePredictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectionDetails: {
         selectedAllSelectedIndexes: [],
         selectedCorrectDatasetIndexes: [],
@@ -112,7 +111,7 @@ export class InstanceView extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = InstanceViewStyles();
-    if (this.state.activePredictionTab === PredictionTabKeys.InspectionTab) {
+    if (this.props.activePredictionTab === PredictionTabKeys.InspectionTab) {
       return (
         <div>
           <InspectionView
@@ -129,6 +128,7 @@ export class InstanceView extends React.PureComponent<
             weightLabels={this.props.weightLabels}
             invokeModel={this.props.invokeModel}
             onWeightChange={this.props.onWeightChange}
+            selectedCohort={this.props.selectedCohort}
           />
         </div>
       );
@@ -139,7 +139,7 @@ export class InstanceView extends React.PureComponent<
           <Stack horizontal horizontalAlign="space-between">
             <Stack.Item align="start">
               <ChoiceGroup
-                selectedKey={this.state.activePredictionTab}
+                selectedKey={this.props.activePredictionTab}
                 onChange={this.handlePredictionTabClick.bind(this)}
                 styles={{
                   flexContainer: classNames.choiceGroupContainerStyle
@@ -158,7 +158,7 @@ export class InstanceView extends React.PureComponent<
             </Stack.Item>
           </Stack>
         </Stack>
-        {this.state.activePredictionTab ===
+        {this.props.activePredictionTab ===
           PredictionTabKeys.CorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
@@ -171,10 +171,11 @@ export class InstanceView extends React.PureComponent<
                 this.state.selectionDetails.selectedCorrectDatasetIndexes
               }
               setSelectedIndexes={this.setCorrectSelectedIndexes.bind(this)}
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
-        {this.state.activePredictionTab ===
+        {this.props.activePredictionTab ===
           PredictionTabKeys.IncorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
@@ -187,10 +188,11 @@ export class InstanceView extends React.PureComponent<
                 this.state.selectionDetails.selectedIncorrectDatasetIndexes
               }
               setSelectedIndexes={this.setIncorrectSelectedIndexes.bind(this)}
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
-        {this.state.activePredictionTab ===
+        {this.props.activePredictionTab ===
           PredictionTabKeys.AllSelectedTab && (
           <div className="tabularDataView">
             <TabularDataView
@@ -206,6 +208,28 @@ export class InstanceView extends React.PureComponent<
               allSelectedIndexes={
                 this.state.selectionDetails.selectedAllSelectedIndexes
               }
+              selectedCohort={this.props.selectedCohort}
+            />
+          </div>
+        )}
+        {this.props.activePredictionTab ===
+          PredictionTabKeys.WhatIfDatapointsTab && (
+          <div className="tabularDataView">
+            <TabularDataView
+              theme={this.props.theme}
+              messages={this.props.messages}
+              features={this.props.features}
+              jointDataset={this.props.jointDataset}
+              customPoints={this.props.customPoints}
+              dataView={DataViewKeys.SelectedInstances}
+              setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
+              selectedIndexes={
+                this.state.selectionDetails.selectedAllSelectedIndexes
+              }
+              allSelectedIndexes={
+                this.state.selectionDetails.selectedAllSelectedIndexes
+              }
+              selectedCohort={this.props.selectedCohort}
             />
           </div>
         )}
@@ -219,7 +243,8 @@ export class InstanceView extends React.PureComponent<
   ): void {
     if (option) {
       const predictionTabClickFunc = (
-        state: Readonly<IInstanceViewState>
+        state: Readonly<IInstanceViewState>,
+        props: Readonly<IInstanceViewProps>
       ): IInstanceViewState => {
         const selectionDetails = state.selectionDetails;
         let selectedCorrectIndexes =
@@ -229,7 +254,7 @@ export class InstanceView extends React.PureComponent<
         const selectedAllSelectedIndexes =
           selectionDetails.selectedAllSelectedIndexes;
         // If going from AllSelectedTab, need to update the other arrays
-        if (state.activePredictionTab === PredictionTabKeys.AllSelectedTab) {
+        if (props.activePredictionTab === PredictionTabKeys.AllSelectedTab) {
           selectedCorrectIndexes = selectedCorrectIndexes.filter((index) =>
             selectedAllSelectedIndexes.includes(index)
           );
@@ -241,8 +266,8 @@ export class InstanceView extends React.PureComponent<
           ...selectedCorrectIndexes,
           ...selectedIncorrectIndexes
         ];
+        this.props.setActivePredictionTab(PredictionTabKeys[option.key]);
         return {
-          activePredictionTab: PredictionTabKeys[option.key],
           selectionDetails: {
             selectedAllSelectedIndexes,
             selectedCorrectDatasetIndexes: selectedCorrectIndexes,
@@ -256,7 +281,7 @@ export class InstanceView extends React.PureComponent<
   }
 
   private inspect(): void {
-    this.setState({ activePredictionTab: PredictionTabKeys.InspectionTab });
+    this.props.setActivePredictionTab(PredictionTabKeys.InspectionTab);
   }
 
   private setCorrectSelectedIndexes(indexes: number[]): void {
@@ -272,7 +297,6 @@ export class InstanceView extends React.PureComponent<
         ...selectedIncorrectIndexes
       ];
       return {
-        activePredictionTab: state.activePredictionTab,
         selectionDetails: {
           selectedAllSelectedIndexes: selectedIndexes,
           selectedCorrectDatasetIndexes: selectedCorrectIndexes,
@@ -297,7 +321,6 @@ export class InstanceView extends React.PureComponent<
         ...selectedIncorrectIndexes
       ];
       return {
-        activePredictionTab: state.activePredictionTab,
         selectionDetails: {
           selectedAllSelectedIndexes: selectedIndexes,
           selectedCorrectDatasetIndexes: selectedCorrectIndexes,
@@ -315,7 +338,6 @@ export class InstanceView extends React.PureComponent<
     ): IInstanceViewState => {
       const selectionDetails = state.selectionDetails;
       return {
-        activePredictionTab: state.activePredictionTab,
         selectionDetails: {
           selectedAllSelectedIndexes: indexes,
           selectedCorrectDatasetIndexes:

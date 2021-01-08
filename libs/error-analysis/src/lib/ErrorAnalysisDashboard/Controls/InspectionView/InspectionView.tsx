@@ -17,12 +17,13 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   Selection,
-  SelectionMode
+  SelectionMode,
+  Fabric,
+  Stack
 } from "office-ui-fabric-react";
-import { Fabric } from "office-ui-fabric-react/lib/Fabric";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import React from "react";
 
+import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { constructRows, constructCols } from "../../utils/DatasetUtils";
 
@@ -40,6 +41,7 @@ export interface IInspectionViewProps {
   weightOptions: WeightVectorOption[];
   weightLabels: any;
   onWeightChange: (option: WeightVectorOption) => void;
+  selectedCohort: ErrorCohort;
 }
 
 export interface IInspectionViewState {
@@ -68,12 +70,14 @@ export class InspectionView extends React.PureComponent<
       sortArray: [],
       sortingSeriesIndex: undefined
     };
-    const numRows: number = this.props.jointDataset.datasetRowCount;
+    const cohortData = this.props.selectedCohort.cohort.filteredData;
+    const numRows: number = cohortData.length;
     const viewedRows: number = Math.min(
       Math.min(numRows, 8),
       this.props.inspectedIndexes.length
     );
     this._rows = constructRows(
+      cohortData,
       this.props.jointDataset,
       viewedRows,
       undefined,

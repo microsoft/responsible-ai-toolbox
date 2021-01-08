@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IColumn, IFocusTrapZoneProps } from "office-ui-fabric-react";
 import {
+  IColumn,
+  IFocusTrapZoneProps,
+  IPanelProps,
+  IPanelStyles,
+  IStyleFunctionOrObject,
   CheckboxVisibility,
   DetailsList,
-  DetailsListLayoutMode
-} from "office-ui-fabric-react/lib/DetailsList";
-import { Panel } from "office-ui-fabric-react/lib/Panel";
+  DetailsListLayoutMode,
+  Panel
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
@@ -35,6 +39,10 @@ export interface ICohortListItem {
 const focusTrapZoneProps: IFocusTrapZoneProps = {
   forceFocusInsideTrap: false,
   isClickableOutsideFocusTrap: true
+};
+
+const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
+  main: { zIndex: 1 }
 };
 
 export class CohortList extends React.Component<
@@ -96,6 +104,7 @@ export class CohortList extends React.Component<
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        styles={panelStyles}
       >
         <div className={classNames.divider}></div>
         <div className={classNames.section}>
