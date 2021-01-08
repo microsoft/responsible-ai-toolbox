@@ -1,6 +1,0 @@
-*.pyc
-rai_core_flask.egg-info/
-__pycache__
-build/
-dist/
-
