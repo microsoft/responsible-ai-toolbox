@@ -31,6 +31,31 @@ def _convert_to_string_list_dict(
         base_name_format: str,
         ys,
         sample_array) -> Dict[str, List]:
+    """Convert the given input to a string-list dictionary.
+
+    This function is used to convert arrays in a variety of types
+    into a dictionary mapping column names to regular Python lists
+    (in preparation for JSON serialisation). It is a modification
+    of the feature processing code in :class:`fairlearn.metrics.MetricFrame`.
+
+    The array to be converted is passed in :code:`ys`, and a variety
+    of types are supported. The :code:`sample_array` argument is
+    used in a call to :func:`sklearn.utils.check_consistent_length`
+    to ensure that the resultant lists are of the right length.
+    Finally `base_name_format` is used to generate sequential
+    keys for the dictionary if none are in the supplied :code:`ys`.
+    It must be of the form :code:`'Base String {0}'`, with the
+    :code:`{0}` being replaced by a sequential integer.
+
+    It is not possible to list out all the possible underlying types
+    for :code:`ys`. A brief summary:
+        - :class:`pd.Series`
+        - :class:`pd.DataFrame`
+        - A simple Python list
+        - A Python dictionary with string keys and values which are
+          convertible to lists
+        - Anything convertible to a :class:`np.ndarray`
+    """
     result = {}
 
     if isinstance(ys, pd.Series):
