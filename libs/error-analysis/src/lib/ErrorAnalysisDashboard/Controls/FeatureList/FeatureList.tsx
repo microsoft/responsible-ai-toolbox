@@ -40,7 +40,8 @@ const checkboxStackTokens: IStackTokens = {
 };
 
 export interface IFeatureListState {
-  features: string[];
+  searchedFeatures: string[];
+  selectedFeatures: string[];
 }
 
 const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
@@ -54,7 +55,8 @@ export class FeatureList extends React.Component<
   public constructor(props: IFeatureListProps) {
     super(props);
     this.state = {
-      features: this.props.features
+      searchedFeatures: this.props.features,
+      selectedFeatures: this.props.features
     };
   }
 
@@ -89,11 +91,11 @@ export class FeatureList extends React.Component<
                 }
               />
             </Stack.Item>
-            {this.props.features.map((feature) => (
+            {this.state.searchedFeatures.map((feature) => (
               <Stack.Item key={"checkboxKey" + feature} align="start">
                 <Checkbox
                   label={feature}
-                  checked={this.state.features.includes(feature)}
+                  checked={this.state.selectedFeatures.includes(feature)}
                   onChange={this.onChange.bind(this, feature)}
                 />
               </Stack.Item>
@@ -119,15 +121,15 @@ export class FeatureList extends React.Component<
     isChecked?: boolean
   ): void {
     if (isChecked) {
-      if (!this.state.features.includes(feature!)) {
+      if (!this.state.selectedFeatures.includes(feature!)) {
         this.setState({
-          features: [...this.state.features.concat([feature!])]
+          selectedFeatures: [...this.state.selectedFeatures.concat([feature!])]
         });
       }
     } else {
       this.setState({
-        features: [
-          ...this.state.features.filter(
+        selectedFeatures: [
+          ...this.state.selectedFeatures.filter(
             (stateFeature) => stateFeature !== feature!
           )
         ]
@@ -137,13 +139,13 @@ export class FeatureList extends React.Component<
 
   private onSearch(searchValue: string): void {
     this.setState({
-      features: this.props.features.filter((feature) =>
+      searchedFeatures: this.props.features.filter((feature) =>
         feature.includes(searchValue)
       )
     });
   }
 
   private apply(): void {
-    this.props.saveFeatures(this.state.features);
+    this.props.saveFeatures(this.state.selectedFeatures);
   }
 }
