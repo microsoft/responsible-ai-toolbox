@@ -32,9 +32,14 @@ export interface IMatrixFilterProps {
   baseCohort: ErrorCohort;
 }
 
+export interface IMatrixLegendState {
+  maxError: number;
+}
+
 export interface IMatrixFilterState {
   selectedFeature1?: string;
   selectedFeature2?: string;
+  matrixLegendState: IMatrixLegendState;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -47,6 +52,7 @@ export class MatrixFilter extends React.PureComponent<
   public constructor(props: IMatrixFilterProps) {
     super(props);
     this.state = {
+      matrixLegendState: { maxError: 0 },
       selectedFeature1: undefined,
       selectedFeature2: undefined
     };
@@ -60,7 +66,10 @@ export class MatrixFilter extends React.PureComponent<
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
-          <MatrixLegend selectedCohort={this.props.selectedCohort} />
+          <MatrixLegend
+            selectedCohort={this.props.selectedCohort}
+            max={this.state.matrixLegendState.maxError}
+          />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
@@ -100,6 +109,7 @@ export class MatrixFilter extends React.PureComponent<
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
+            updateMatrixLegendState={this.updateMatrixLegendState}
           />
         </Stack>
       </div>
@@ -122,5 +132,9 @@ export class MatrixFilter extends React.PureComponent<
     if (item !== undefined) {
       this.setState({ selectedFeature2: item.text });
     }
+  };
+
+  private updateMatrixLegendState = (maxError: number): void => {
+    this.setState({ matrixLegendState: { maxError } });
   };
 }
