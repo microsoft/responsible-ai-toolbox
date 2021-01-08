@@ -14,19 +14,19 @@ import numpy as np
 class FairnessDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
-    :param sensitive_features: A matrix of feature vector examples
-        (# examples x # features), these can be from the initial dataset,
-        or reserved from training.
-    :type sensitive_features: numpy.array or list[][] or pandas.DataFrame
-        or pandas.Series
+    :param sensitive_features: The sensitive features
+        These can be from the initial dataset, or reserved from training.
+        If the input type provides names, they will be used. Otherwise,
+        names of "Sensitive Feature <n>" are generated
+    :type sensitive_features: pandas.Series, pandas.DataFrame, list,
+        Dict[str,1d array] or something convertible to numpy.ndarray
     :param y_true: The true labels or values for the provided dataset.
     :type y_true: numpy.array or list[]
     :param y_pred: Array of output predictions from models to be evaluated.
-        Can be a single array of predictions, or a 2D list over multiple
-        models. Can be a dictionary of named model predictions.
-    :type y_pred: numpy.array or list[][] or list[] or dict {string: list[]}
-    :param sensitive_feature_names: Feature names
-    :type sensitive_feature_names: numpy.array or list[]
+        If the input type provides names, they will be used. Otherwise,
+        names of "Model <n>" are generated
+    :type y_pred: pandas.Series, pandas.DataFrame, list, Dict[str,1d array]
+        or something convertible to numpy.ndarray
     """
 
     def __init__(
@@ -58,6 +58,7 @@ class FairnessDashboard(Dashboard):
         # Make sure that things are as the TS layer expects
         self._y_true = _convert_to_list(y_true)
         self._y_pred = list(model_dict.values())
+        # Note transpose in the following
         dataset = (np.array(list(sf_dict.values())).T).tolist()
 
         if np.shape(self._y_true)[0] != np.shape(self._y_pred)[1]:
