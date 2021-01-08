@@ -3,9 +3,10 @@
 
 module.exports = {
   coverageDirectory: "../../coverage/libs/core-ui",
+  displayName: "core-ui",
+
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  name: "core-ui",
-  preset: "../../jest.config.js",
+  preset: "../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",
