@@ -69,7 +69,6 @@ jobs:
       - name: run tests
         run: pytest ./tests/
         working-directory: ${{ PACKAGE_DIRECTORY }}
-        id: wheel_tests
 
       # publish to PyPI
       - name: publish raiwidgets package to Test PyPI
