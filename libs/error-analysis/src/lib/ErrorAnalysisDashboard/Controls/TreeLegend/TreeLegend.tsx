@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
@@ -24,7 +25,9 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
             <g className={classNames.errorCoverageCell}>
               <rect className={classNames.metricBarBlack}></rect>
               <g>
-                <text className={classNames.smallHeader}>Error Coverage</text>
+                <text className={classNames.smallHeader}>
+                  {localization.ErrorAnalysis.errorCoverage}
+                </text>
                 <text className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorCoverage.toFixed(2)}%
                 </text>
@@ -33,7 +36,9 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
             <g className={classNames.errorRateCell}>
               <rect className={classNames.metricBarRed}></rect>
               <g>
-                <text className={classNames.smallHeader}>Error Rate</text>
+                <text className={classNames.smallHeader}>
+                  {localization.ErrorAnalysis.errorRate}
+                </text>
                 <text className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorRate.toFixed(2)}%
                 </text>
