@@ -60,8 +60,19 @@ jobs:
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ PACKAGE_DIRECTORY }}
 
+      # run tests before publishing to PyPI
+      - name: install wheel locally
+        run: |
+          cp ./dist/*.whl ./dist/package.whl
+          pip install ./dist/package.whl
+        working-directory: ${{ PACKAGE_DIRECTORY }}
+      - name: run tests
+        run: pytest ./tests/
+        working-directory: ${{ PACKAGE_DIRECTORY }}
+        id: wheel_tests
+
       # publish to PyPI
-      - name: Publish raiwidgets package to Test PyPI
+      - name: publish raiwidgets package to Test PyPI
         if: ${{ github.event.inputs.packageName == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
