@@ -20,17 +20,17 @@ jobs:
       - name: Set up Python 3.6
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ pythonVersion }}
+          python-version: ${{ matrix.pythonVersion }}
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r ${{ packageDirectory }}/requirements-dev.txt
-          pip install ${{ packageDirectory }}/
+          pip install -r ${{ matrix.packageDirectory }}/requirements-dev.txt
+          pip install ${{ matrix.packageDirectory }}/
 
       - name: flake8
         run: flake8
 
       - name: Run tests
         run: |
-          pytest ${{ packageDirectory }}/tests/
+          pytest ${{ matrix.packageDirectory }}/tests/
