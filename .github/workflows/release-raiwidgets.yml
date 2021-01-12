@@ -64,14 +64,14 @@ jobs:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{ github.event.inputs.packageDirectory }}
+          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
       - name: Publish package to PyPI
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
-          packages_dir: ${{ github.event.inputs.packageDirectory }}
+          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
       - name: Publish package to Test PyPI
         if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
@@ -79,11 +79,11 @@ jobs:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{ github.event.inputs.packageDirectory }}
+          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
       - name: Publish package to PyPI
         if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAI_CORE_FLASK }}
-          packages_dir: ${{ github.event.inputs.packageDirectory }}
+          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
