@@ -8,8 +8,8 @@ on:
         description: "Test or Prod PyPI?"
         required: true
         default: "Test"
-      packageName:
-        description: "raiwidgets or rai_core_flask?"
+      packageDirectory:
+        description: "raiwidgets or wrapped-flask?"
         required: true
 
 jobs:
@@ -20,21 +20,10 @@ jobs:
         node-version: [12.x]
 
     steps:
-      # define package directory based on package name
-      - name: set package directory
-        uses: allenevans/set-env@v2.0.0
-        if: ${{ github.event.inputs.packageName == 'raiwidgets' }}
-        with:
-          PACKAGE_DIRECTORY: "raiwidgets"
-      - name: set package directory
-        uses: allenevans/set-env@v2.0.0
-        if: ${{ github.event.inputs.packageName == 'rai_core_flask' }}
-        with:
-          PACKAGE_DIRECTORY: "wrapped-flask"
-      - name: fail if neither raiwidgets nor rai_core_flask
-        if: ${{ github.event.inputs.packageName != 'raiwidgets' && github.event.inputs.packageName != 'rai_core_flask' }}
+      - name: fail if neither raiwidgets nor wrapped-flask
+        if: ${{ github.event.inputs.packageDirectory != 'raiwidgets' && github.event.inputs.packageDirectory != 'wrapped-flask' }}
         run: |
-          echo "Only raiwidgets or rai_core_flask can be used."
+          echo "Only raiwidgets or wrapped-flask can be used."
           exit 1
 
       # build wheel
@@ -58,46 +47,46 @@ jobs:
           yarn buildall
       - name: build wheel
         run: python setup.py sdist bdist_wheel
-        working-directory: ${{ PACKAGE_DIRECTORY }}
+        working-directory: github.event.inputs.packageDirectory
 
       # run tests before publishing to PyPI
       - name: install wheel locally
         run: |
           cp ./dist/*.whl ./dist/package.whl
           pip install ./dist/package.whl
-        working-directory: ${{ PACKAGE_DIRECTORY }}
+        working-directory: github.event.inputs.packageDirectory
       - name: run tests
         run: pytest ./tests/
-        working-directory: ${{ PACKAGE_DIRECTORY }}
+        working-directory: github.event.inputs.packageDirectory
 
       # publish to PyPI
       - name: publish raiwidgets package to Test PyPI
-        if: ${{ github.event.inputs.packageName == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{ PACKAGE_DIRECTORY }}
+          packages_dir: github.event.inputs.packageDirectory
       - name: Publish package to PyPI
-        if: ${{ github.event.inputs.packageName == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
-          packages_dir: ${{ PACKAGE_DIRECTORY }}
+          packages_dir: github.event.inputs.packageDirectory
       - name: Publish package to Test PyPI
-        if: ${{ github.event.inputs.packageName == 'rai_core_flask' && github.event.inputs.pypiType == 'Test' }}
+        if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{ PACKAGE_DIRECTORY }}
+          packages_dir: github.event.inputs.packageDirectory
       - name: Publish package to PyPI
-        if: ${{ github.event.inputs.packageName == 'rai_core_flask' && github.event.inputs.pypiType == 'Prod' }}
+        if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAI_CORE_FLASK }}
-          packages_dir: ${{ PACKAGE_DIRECTORY }}
+          packages_dir: github.event.inputs.packageDirectory
