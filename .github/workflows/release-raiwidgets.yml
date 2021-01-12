@@ -15,9 +15,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
 
     steps:
       - name: fail if neither raiwidgets nor wrapped-flask
