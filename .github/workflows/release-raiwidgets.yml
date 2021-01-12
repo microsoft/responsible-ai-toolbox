@@ -1,0 +1,103 @@
+name: Release to PyPI
+
+# trigger manually only ("collaborator" or more permissions required)
+on:
+  workflow_dispatch:
+    inputs:
+      pypiType:
+        description: "Test or Prod PyPI?"
+        required: true
+        default: "Test"
+      packageName:
+        description: "raiwidgets or rai_core_flask?"
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      # define package directory based on package name
+      - name: set package directory
+        uses: allenevans/set-env@v2.0.0
+        if: ${{ github.event.inputs.packageName == 'raiwidgets' }}
+        with:
+          PACKAGE_DIRECTORY: "raiwidgets"
+      - name: set package directory
+        uses: allenevans/set-env@v2.0.0
+        if: ${{ github.event.inputs.packageName == 'rai_core_flask' }}
+        with:
+          PACKAGE_DIRECTORY: "wrapped-flask"
+      - name: fail if neither raiwidgets nor rai_core_flask
+        if: ${{ github.event.inputs.packageName != 'raiwidgets' && github.event.inputs.packageName != 'rai_core_flask' }}
+        run: |
+          echo "Only raiwidgets or rai_core_flask can be used."
+          exit 1
+
+      # build wheel
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+      - name: install requirements.txt
+        run: pip install -r requirements.txt
+        working-directory: raiwidgets
+      - name: pip freeze
+        run: pip freeze
+      - name: build typescript
+        run: |
+          yarn install
+          yarn buildall
+      - name: build wheel
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ PACKAGE_DIRECTORY }}
+
+      # run tests before publishing to PyPI
+      - name: install wheel locally
+        run: |
+          cp ./dist/*.whl ./dist/package.whl
+          pip install ./dist/package.whl
+        working-directory: ${{ PACKAGE_DIRECTORY }}
+      - name: run tests
+        run: pytest ./tests/
+        working-directory: ${{ PACKAGE_DIRECTORY }}
+
+      # publish to PyPI
+      - name: publish raiwidgets package to Test PyPI
+        if: ${{ github.event.inputs.packageName == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: ${{ PACKAGE_DIRECTORY }}
+      - name: Publish package to PyPI
+        if: ${{ github.event.inputs.packageName == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
+          packages_dir: ${{ PACKAGE_DIRECTORY }}
+      - name: Publish package to Test PyPI
+        if: ${{ github.event.inputs.packageName == 'rai_core_flask' && github.event.inputs.pypiType == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: ${{ PACKAGE_DIRECTORY }}
+      - name: Publish package to PyPI
+        if: ${{ github.event.inputs.packageName == 'rai_core_flask' && github.event.inputs.pypiType == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RAI_CORE_FLASK }}
+          packages_dir: ${{ PACKAGE_DIRECTORY }}
