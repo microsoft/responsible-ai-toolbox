@@ -38,7 +38,7 @@ jobs:
           pip install --upgrade setuptools wheel twine
       - name: install requirements.txt
         run: pip install -r requirements.txt
-        working-directory: raiwidgets
+        working-directory: ${{ github.event.inputs.packageDirectory }}
       - name: pip freeze
         run: pip freeze
       - name: build typescript
@@ -47,34 +47,34 @@ jobs:
           yarn buildall
       - name: build wheel
         run: python setup.py sdist bdist_wheel
-        working-directory: github.event.inputs.packageDirectory
+        working-directory: ${{ github.event.inputs.packageDirectory }}
 
       # run tests before publishing to PyPI
       - name: install wheel locally
         run: |
           cp ./dist/*.whl ./dist/package.whl
           pip install ./dist/package.whl
-        working-directory: github.event.inputs.packageDirectory
+        working-directory: ${{ github.event.inputs.packageDirectory }}
       - name: run tests
         run: pytest ./tests/
-        working-directory: github.event.inputs.packageDirectory
+        working-directory: ${{ github.event.inputs.packageDirectory }}
 
       # publish to PyPI
-      - name: publish raiwidgets package to Test PyPI
+      - name: publish package to Test PyPI
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: github.event.inputs.packageDirectory
+          packages_dir: ${{ github.event.inputs.packageDirectory }}
       - name: Publish package to PyPI
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
-          packages_dir: github.event.inputs.packageDirectory
+          packages_dir: ${{ github.event.inputs.packageDirectory }}
       - name: Publish package to Test PyPI
         if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
@@ -82,11 +82,11 @@ jobs:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: github.event.inputs.packageDirectory
+          packages_dir: ${{ github.event.inputs.packageDirectory }}
       - name: Publish package to PyPI
         if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAI_CORE_FLASK }}
-          packages_dir: github.event.inputs.packageDirectory
+          packages_dir: ${{ github.event.inputs.packageDirectory }}
