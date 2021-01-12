@@ -53,6 +53,7 @@ jobs:
       - name: install wheel locally
         run: |
           cp ./dist/*.whl ./dist/package.whl
+          ls ./dist/
           pip install ./dist/package.whl
         working-directory: ${{ github.event.inputs.packageDirectory }}
       - name: run tests
