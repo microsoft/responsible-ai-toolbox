@@ -48,7 +48,7 @@ jobs:
 
       # run tests before publishing to PyPI
       - name: install wheel locally
-        run: ls ./dist/*.whl | pip install
+        run: find ./dist/ -name '*.whl' | pip install
         working-directory: ${{ github.event.inputs.packageDirectory }}
       - name: run tests
         run: pytest ./tests/
