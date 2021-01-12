@@ -34,7 +34,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
       - name: install requirements.txt
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
         working-directory: ${{ github.event.inputs.packageDirectory }}
       - name: pip freeze
         run: pip freeze
