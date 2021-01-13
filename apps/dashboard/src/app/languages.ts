@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-
 export const languages = <const>{
   Cs: "Cs",
   De: "De",
