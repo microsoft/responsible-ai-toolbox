@@ -10,6 +10,7 @@ import {
   IErrorAnalysisDashboardProps,
   HelpMessageDict
 } from "@responsible-ai/error-analysis";
+import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
@@ -23,7 +24,7 @@ import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer
 interface IAppProps {
   dataset: IExplanationDashboardData | ISerializedExplanationData;
   theme: ITheme;
-  language: string;
+  language: Language;
   version: 1;
   classDimension?: 1 | 2 | 3;
 }
