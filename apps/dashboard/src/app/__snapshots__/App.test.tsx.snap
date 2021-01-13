@@ -6,7 +6,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     application="interpret"
     dataset="automlMimicAdult"
     iteration={1}
-    language="english"
+    language="Cs"
     onSettingChanged={[Function]}
     theme="1 - light"
     version="Version-1"
@@ -230,7 +230,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
           },
         }
       }
-      language="en-EN"
+      language="Cs"
       theme={
         Object {
           "disableGlobalClassNames": false,
@@ -509,7 +509,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
   </div>
   <Redirect
     push={true}
-    to="/interpret/automlMimicAdult/1%20-%20light/english/Version-1"
+    to="/interpret/automlMimicAdult/1%20-%20light/Cs/Version-1"
   />
 </Fragment>
 `;

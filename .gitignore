@@ -6,6 +6,7 @@
 /out-tsc
 /raiwidgets/raiwidgets/widget
 
+
 # dependencies
 **/node_modules/
 
@@ -44,6 +45,10 @@ Thumbs.db
 **/__pycache__/*
 **-checkpoint.ipynb
 **.egg-info/
+raiwidgets/build/
+wrapped-flask/build/
+**-py3-none-any.whl
+**.tar.gz
 
 # test files
 apps/*-e2e/debug.log

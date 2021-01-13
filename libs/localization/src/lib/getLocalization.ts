@@ -7,26 +7,7 @@ import {
 } from "localized-strings";
 import { mapValues, merge } from "lodash";
 
-export enum Language {
-  En = "en",
-  Es = "es",
-  Cs = "cs",
-  De = "de",
-  Fr = "fr",
-  It = "it",
-  Ja = "ja",
-  Ko = "ko",
-  PtBR = "pt-BR",
-  Ru = "ru",
-  ZhHans = "zh-CN",
-  ZhHant = "zh-TW",
-  Nl = "nl",
-  Hu = "hu",
-  PtPT = "pt-PT",
-  Pl = "pl",
-  Sv = "sv",
-  Tr = "tr"
-}
+import { Language } from "./Language";
 
 export type ILocalizationConfig<T> = { en: T } & {
   readonly [key in Language]: any;
