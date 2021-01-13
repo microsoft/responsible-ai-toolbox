@@ -1,43 +1,44 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import cs from "./cs-CZ.json";
-import de from "./de-DE.json";
-import en from "./en.json";
-import es from "./es-ES.json";
-import fr from "./fr-FR.json";
+import Cs from "./en.cs.json";
+import De from "./en.de.json";
+import Es from "./en.es.json";
+import Fr from "./en.fr.json";
+import Hu from "./en.hu.json";
+import It from "./en.it.json";
+import Ja from "./en.ja.json";
+import En from "./en.json";
+import Ko from "./en.ko.json";
+import Nl from "./en.nl.json";
+import Pl from "./en.pl.json";
+import PtBR from "./en.pt-BR.json";
+import PtPT from "./en.pt-PT.json";
+import Ru from "./en.ru.json";
+import Sv from "./en.sv.json";
+import Tr from "./en.tr.json";
+import ZhHans from "./en.zh-Hans.json";
+import ZhHant from "./en.zh-Hant.json";
 import { getLocalization } from "./getLocalization";
-import hu from "./hu-HU.json";
-import it from "./it-IT.json";
-import ja from "./ja-JP.json";
-import ko from "./ko-KR.json";
-import nl from "./nl-NL.json";
-import pl from "./pl-PL.json";
-import ptbr from "./pt-BR.json";
-import pt from "./pt-PT.json";
-import ru from "./ru-RU.json";
-import sv from "./sv-SE.json";
-import tr from "./tr-TR.json";
-import zhcn from "./zh-CN.json";
-import zhtw from "./zh-TW.json";
+import { Language } from "./Language";
 
 export const localization = getLocalization({
-  cs,
-  de,
-  en,
-  es,
-  fr,
-  hu,
-  it,
-  ja,
-  ko,
-  nl,
-  pl,
-  "pt-BR": ptbr,
-  "pt-PT": pt,
-  ru,
-  sv,
-  tr,
-  "zh-CN": zhcn,
-  "zh-TW": zhtw
+  [Language.En]: En,
+  [Language.Es]: Es,
+  [Language.Cs]: Cs,
+  [Language.De]: De,
+  [Language.Fr]: Fr,
+  [Language.It]: It,
+  [Language.Ja]: Ja,
+  [Language.Ko]: Ko,
+  [Language.PtBR]: PtBR,
+  [Language.Ru]: Ru,
+  [Language.ZhHans]: ZhHans,
+  [Language.ZhHant]: ZhHant,
+  [Language.Nl]: Nl,
+  [Language.Hu]: Hu,
+  [Language.PtPT]: PtPT,
+  [Language.Pl]: Pl,
+  [Language.Sv]: Sv,
+  [Language.Tr]: Tr
 });
