@@ -1,0 +1,42 @@
+name: CI Python
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        packageDirectory: ["raiwidgets", "wrapped-flask"]
+        pythonVersion: [3.6, 3.7, 3.8]
+        exclude:
+          # excludes python 3.7 and 3.8 with wrapped-flask since it consistently causes segfaults
+          - pythonVersion: 3.7
+            packageDirectory: "wrapped-flask"
+          - pythonVersion: 3.8
+            packageDirectory: "wrapped-flask"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.pythonVersion }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ${{ matrix.packageDirectory }}/requirements-dev.txt
+          pip install ${{ matrix.packageDirectory }}/
+
+      - name: flake8
+        run: flake8
+
+      - name: Run tests
+        run: |
+          pytest ${{ matrix.packageDirectory }}/tests/
