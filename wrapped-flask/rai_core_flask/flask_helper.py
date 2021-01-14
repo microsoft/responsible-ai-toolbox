@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from flask import Flask
+from flask_cors import CORS
 from .environment_detector import build_environment
 from .environments.credentialed_vm_environment import CREDENTIALED_VM
 from .environments.public_vm_environment import PUBLIC_VM
@@ -24,7 +25,6 @@ class FlaskHelper(object):
     def __init__(self, ip=None, port=None, with_credentials=False):
         # The name passed to Flask needs to be unique per instance.
         self.app = Flask(uuid.uuid4().hex)
-        CORS(self.app)
         self.port = port
         self.ip = ip
         self.with_credentials = with_credentials

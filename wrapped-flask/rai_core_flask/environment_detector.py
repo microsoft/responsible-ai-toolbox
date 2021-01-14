@@ -155,6 +155,6 @@ def build_environment(service):
         env = credentialed_vm_environment
     else:
         raise Exception("Failed to detect Ipython environment")
-    
+
     env.select(service)  # TODO: simplify
     return env

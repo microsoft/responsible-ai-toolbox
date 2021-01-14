@@ -44,16 +44,15 @@ export class Interpret extends React.Component<IInterpretProps> {
     const predictUrl = config.baseUrl + "/predict";
     if (config.withCredentials) {
       const headers = {
-        Accept:
-          "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "Content-Type": "application/json"
+        'Accept': 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Content-Type': 'application/json',
       };
       axios.defaults.withCredentials = true;
       const axiosOptions = { headers, withCredentials: true };
       return axios
         .post(predictUrl, JSON.stringify(postData), axiosOptions)
         .then((response) => {
-          return response.data.data;
+          return response.data;
         })
         .catch(function (error) {
           throw new Error(error);

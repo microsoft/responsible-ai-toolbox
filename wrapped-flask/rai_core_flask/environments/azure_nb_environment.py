@@ -29,13 +29,13 @@ class AzureNBEnvironment(BaseEnvironment):
                 os.path.isfile(AzureNBEnvironment.nbvm_file_path)):
             self.successfully_detected = False
         else:
-            nbvm_config = self.get_nbvm_config()
+            self.nbvm = self.get_nbvm_config()
 
-            if "instance" not in nbvm_config or "domainsuffix" not in nbvm_config:
+            if "instance" not in self.nbvm or "domainsuffix" not in self.nbvm:
                 self.successfully_detected = False
             else:
-                instance_name = nbvm_config["instance"]
-                domain_suffix = nbvm_config["domainsuffix"]
+                instance_name = self.nbvm["instance"]
+                domain_suffix = self.nbvm["domainsuffix"]
                 self.base_url = f"https://{instance_name}-{service.port}.{domain_suffix}"
                 self.successfully_detected = True
                 self.nbvm_origins = [
