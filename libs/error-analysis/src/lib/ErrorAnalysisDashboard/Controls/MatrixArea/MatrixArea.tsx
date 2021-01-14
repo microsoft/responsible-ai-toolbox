@@ -23,6 +23,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { ColorPalette } from "../../ColorPalette";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
@@ -43,6 +44,7 @@ export interface IMatrixAreaProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
+  updateMatrixLegendState: (maxError: number) => void;
 }
 
 export interface IMatrixAreaState {
@@ -267,12 +269,16 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private reloadData(matrix: any[]): void {
-    const maxErrorRate = 0;
+    let maxErrorRate = 0;
     matrix.forEach((row: any): void => {
       row.forEach((value: any): void => {
-        Math.max(maxErrorRate, (value.falseCount / value.count) * 100);
+        const errorRate = value.falseCount / value.count;
+        if (!Number.isNaN(errorRate)) {
+          maxErrorRate = Math.max(maxErrorRate, errorRate);
+        }
       });
     });
+    this.props.updateMatrixLegendState(maxErrorRate);
     this.setState({
       matrix,
       maxErrorRate,
@@ -440,7 +446,7 @@ export class MatrixArea extends React.PureComponent<
     return d3scaleLinear<string>()
       .domain([0, 1])
       .interpolate(d3interpolateHcl)
-      .range(["#F4D1D2", "#8d2323"])(value)!;
+      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value)!;
   }
 
   private colorLookup(ratio: number): string {

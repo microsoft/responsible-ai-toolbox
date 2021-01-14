@@ -10,6 +10,7 @@ import {
 
 export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
+  clickedNodeFull: IStyle;
   mainFrame: IStyle;
   svgOuterFrame: IStyle;
   innerFrame: IStyle;
@@ -22,7 +23,7 @@ export interface ITreeViewRendererStyles {
   innerOpacityToggle: IStyle;
   opacityToggleRect: IStyle;
   opacityToggleCircle: IStyle;
-  nonOpacityToggleCircle: IStyle;
+  errorRateGradientStyle: IStyle;
   linksTransitionGroup: IStyle;
   nodesTransitionGroup: IStyle;
   linkLabelsTransitionGroup: IStyle;
@@ -46,6 +47,11 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       strokeDasharray: "3, 3",
       strokeWidth: 2
     },
+    clickedNodeFull: {
+      fill: "none",
+      stroke: "#0078D4",
+      strokeWidth: 2
+    },
     detailLines: mergeStyles([
       detailStyle,
       {
@@ -55,6 +61,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     ]),
     details: {
       transform: "translate(0px, 5px)"
+    },
+    errorRateGradientStyle: {
+      transform: "translate(100px, 60px)"
     },
     innerFrame: {
       height: "100%",
@@ -101,9 +110,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       fontSize: "9px",
       pointerEvents: "none",
       transform: "translate(0px, 0px)"
-    },
-    nonOpacityToggleCircle: {
-      transform: "translate(126px, 80px)"
     },
     nopointer: {
       pointerEvents: "none"

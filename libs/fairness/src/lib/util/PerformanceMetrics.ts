@@ -74,27 +74,11 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
     userVisible: true
   },
   fallout_rate: {
-    description: localization.Fairness.loremIpsum,
-    group: localization.Fairness.Metrics.Groups.falsePositiveRate,
-    isMinimization: true,
-    isPercentage: true,
-    key: "fallout_rate",
-    title: localization.Fairness.Metrics.falloutRate
-  },
-  false_negative_over_total: {
-    description: localization.Fairness.Metrics.falseNegativeRateDescription,
-    group: localization.Fairness.Metrics.Groups.falseNegativeRate,
-    isMinimization: true,
-    isPercentage: true,
-    key: "false_negative_over_total",
-    title: localization.Fairness.Metrics.falseNegativeRate
-  },
-  false_positive_over_total: {
     description: localization.Fairness.Metrics.falsePositiveRateDescription,
     group: localization.Fairness.Metrics.Groups.falsePositiveRate,
     isMinimization: true,
     isPercentage: true,
-    key: "false_positive_over_total",
+    key: "fallout_rate",
     title: localization.Fairness.Metrics.falsePositiveRate
   },
   log_loss: {
@@ -148,12 +132,12 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
     title: localization.Fairness.Metrics.medianAbsoluteError
   },
   miss_rate: {
-    description: localization.Fairness.loremIpsum,
+    description: localization.Fairness.Metrics.falseNegativeRateDescription,
     group: localization.Fairness.Metrics.Groups.falseNegativeRate,
     isMinimization: true,
     isPercentage: true,
     key: "miss_rate",
-    title: localization.Fairness.Metrics.missRate
+    title: localization.Fairness.Metrics.falseNegativeRate
   },
   overprediction: {
     description: localization.Fairness.loremIpsum,

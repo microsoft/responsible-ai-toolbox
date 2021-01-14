@@ -11,7 +11,8 @@
     },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
-    "nx.json": "*"
+    "nx.json": "*",
+    ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {

@@ -6,7 +6,7 @@ import setuptools
 
 # The version must be incremented every time we push an update to pypi (but
 # not before)
-VERSION = "0.0.2"
+VERSION = "0.0.3-dev"
 
 # supply contents of our README file as our package's long description
 with open("README.md", "r") as fh:
@@ -25,30 +25,24 @@ setuptools.setup(
     name="rai_core_flask",
 
     version=VERSION,
-    author="Roman Lutz, Ke Xu, Brandon Horn, Xavier Fernandes",
+    author="Roman Lutz, Ke Xu, Xavier Fernandes",
     author_email="rolutz@microsoft.com",
     description="Responsible AI Core Flask Wrapper",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="",
-
     # this will find our package "xtlib" by its having an "__init__.py" file
     packages=setuptools.find_packages(),
-
-    entry_points={
-    },
-
+    entry_points={},
     # normally, only *.py files are included - this forces our YAML file and
     # controller scripts to be included
     package_data={'': []},
     include_package_data=True,
-
     # the packages that our package is dependent on
     install_requires=requirements,
     extras_require=dict(
         dev=[
         ], ),
-
     # used to identify the package to various searches
     classifiers=[
         "Programming Language :: Python :: 3.6",

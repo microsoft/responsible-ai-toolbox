@@ -122,7 +122,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_negative_rate_difference: {
     description:
       localization.Fairness.Metrics.falseNegativeRateDifferenceDescription,
-    fairnessMetric: "false_negative_over_total",
+    fairnessMetric: "miss_rate",
     fairnessMode: FairnessModes.Difference,
     key: "false_negative_rate_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -131,7 +131,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_negative_rate_ratio: {
     description:
       localization.Fairness.Metrics.falseNegativeRateDifferenceDescription,
-    fairnessMetric: "false_negative_over_total",
+    fairnessMetric: "miss_rate",
     fairnessMode: FairnessModes.Ratio,
     key: "false_negative_rate_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -140,7 +140,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_positive_rate_difference: {
     description:
       localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
-    fairnessMetric: "false_positive_over_total",
+    fairnessMetric: "fallout_rate",
     fairnessMode: FairnessModes.Difference,
     key: "false_positive_rate_difference",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),
@@ -149,7 +149,7 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
   false_positive_rate_ratio: {
     description:
       localization.Fairness.Metrics.falsePositiveRateDifferenceDescription,
-    fairnessMetric: "false_positive_over_total",
+    fairnessMetric: "fallout_rate",
     fairnessMode: FairnessModes.Ratio,
     key: "false_positive_rate_ratio",
     supportedTasks: new Set([PredictionTypes.BinaryClassification]),

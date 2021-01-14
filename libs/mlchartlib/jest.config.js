@@ -3,9 +3,10 @@
 
 module.exports = {
   coverageDirectory: "../../coverage/libs/mlchartlib",
+  displayName: "mlchartlib",
+
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
-  name: "mlchartlib",
-  preset: "../../jest.config.js",
+  preset: "../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": [
       "babel-jest",

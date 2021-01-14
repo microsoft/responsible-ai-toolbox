@@ -32,6 +32,7 @@ SPLIT_FEATURE = "split_feature"
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ROW_INDEX = "row_index"
 LEAF_INDEX = "leaf_index"
+METHOD_EQUAL = "equal"
 
 
 class TreeSide(str, Enum):
@@ -347,6 +348,17 @@ class ErrorAnalysisDashboardInput:
                                                         colname,
                                                         method)
                     queries.append(query)
+                elif method == METHOD_EQUAL:
+                    is_categorical = False
+                    if self._categorical_features:
+                        is_categorical = colname in self._categorical_features
+                    if is_categorical:
+                        cat_idx = self._categorical_features.index(colname)
+                        arg0i = filter['arg'][0]
+                        arg_cat = str(self._categories[cat_idx][arg0i])
+                        queries.append("`{}` == '{}'".format(colname, arg_cat))
+                    else:
+                        queries.append("`" + colname + "` == " + arg0)
                 else:
                     raise ValueError(
                         "Unsupported method type: {}".format(method))
@@ -474,7 +486,9 @@ class ErrorAnalysisDashboardInput:
                 true_y = true_y.to_numpy()
             else:
                 input_data = input_data.to_numpy()
-            diff = self._model.predict(input_data) != self._true_y
+            diff = self._model.predict(input_data) != true_y
+            if not isinstance(diff, np.ndarray):
+                diff = np.array(diff)
             indexes = []
             for feature in features:
                 if feature is None:

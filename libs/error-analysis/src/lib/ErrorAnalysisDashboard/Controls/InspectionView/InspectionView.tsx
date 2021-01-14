@@ -7,11 +7,13 @@ import {
   IExplanationModelMetadata,
   IGlobalSeries,
   ModelExplanationUtils,
-  WeightVectorOption
+  WeightVectorOption,
+  FabricStyles
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,
+  IDropdownOption,
   ITheme,
   IStackTokens,
   DetailsList,
@@ -63,6 +65,28 @@ export class InspectionView extends React.PureComponent<
   private _columns: IColumn[];
   private _selection: Selection;
   private _selectionInitialized = false;
+  private featuresOption: IDropdownOption[] = new Array(
+    this.props.jointDataset.datasetFeatureCount
+  )
+    .fill(0)
+    .map((_, index) => {
+      const key = JointDataset.DataLabelRoot + index.toString();
+      const meta = this.props.jointDataset.metaDict[key];
+      const options = meta.isCategorical
+        ? meta.sortedCategoricalValues?.map((optionText, index) => {
+            return { key: index, text: optionText };
+          })
+        : undefined;
+      return {
+        data: {
+          categoricalOptions: options,
+          fullLabel: meta.label.toLowerCase()
+        },
+        key,
+        text: meta.abbridgedLabel
+      };
+    });
+
   public constructor(props: IInspectionViewProps) {
     super(props);
     this.state = {
@@ -126,6 +150,15 @@ export class InspectionView extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = InspectionViewStyles();
+    const testableDatapoints = this.state.includedFeatureImportance.map(
+      (item) => item.unsortedFeatureValues as any[]
+    );
+    const testableDatapointColors = this.state.includedFeatureImportance.map(
+      (item) => FabricStyles.fabricColorPalette[item.colorIndex]
+    );
+    const testableDatapointNames = this.state.includedFeatureImportance.map(
+      (item) => item.name
+    );
     return (
       <div>
         <Stack tokens={alignmentStackTokens}>
@@ -156,10 +189,10 @@ export class InspectionView extends React.PureComponent<
               selectedWeightVector={this.props.selectedWeightVector}
               weightOptions={this.props.weightOptions}
               weightLabels={this.props.weightLabels}
-              testableDatapoints={[]}
-              testableDatapointColors={[]}
-              testableDatapointNames={[]}
-              featuresOption={[]}
+              testableDatapoints={testableDatapoints}
+              testableDatapointColors={testableDatapointColors}
+              testableDatapointNames={testableDatapointNames}
+              featuresOption={this.featuresOption}
               sortArray={this.state.sortArray}
               sortingSeriesIndex={this.state.sortingSeriesIndex}
               invokeModel={this.props.invokeModel}

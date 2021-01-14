@@ -9,6 +9,7 @@ from .environments.public_vm_environment import PUBLIC_VM
 import socket
 import threading
 import atexit
+import uuid
 
 from gevent.pywsgi import WSGIServer
 
@@ -21,7 +22,9 @@ class FlaskHelper(object):
     """FlaskHelper is a class for common Flask utilities used in dashboards."""
 
     def __init__(self, ip=None, port=None, with_credentials=False):
-        self.app = Flask(__name__)
+        # The name passed to Flask needs to be unique per instance.
+        self.app = Flask(uuid.uuid4().hex)
+        CORS(self.app)
         self.port = port
         self.ip = ip
         self.with_credentials = with_credentials

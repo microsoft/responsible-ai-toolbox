@@ -15,6 +15,8 @@ export class App extends React.Component {
         return <Fairness />;
       case "Interpret":
         return <Interpret />;
+      case "ModelPerformance":
+        return <Interpret dashboardType={config.dashboardType} />;
       case "ErrorAnalysis":
         return <ErrorAnalysis />;
       default:

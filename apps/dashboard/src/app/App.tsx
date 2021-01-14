@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { generateRoute } from "@responsible-ai/core-ui";
+import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
@@ -14,7 +15,6 @@ import { App as Interpret } from "../interpret/App";
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
 import { IAppSetting, routeKey } from "./IAppSetting";
-import { languages } from "./languages";
 import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
@@ -65,7 +65,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].classDimension
               }
               theme={theme}
-              language={languages[this.state.language]}
+              language={Language[this.state.language]}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -81,7 +81,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].data
               }
               theme={themes[this.state.theme]}
-              language={languages[this.state.language]}
+              language={Language[this.state.language]}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -102,7 +102,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ].classDimension
               }
               theme={theme}
-              language={languages[this.state.language]}
+              language={Language[this.state.language]}
               version={
                 applications[this.state.application].versions[
                   this.state.version
@@ -139,8 +139,8 @@ export class App extends React.Component<IAppSetting, IAppState> {
           : props.dataset,
       iteration: props.iteration + 1,
       language:
-        !props.language || !languages[props.language]
-          ? Object.keys(languages)[0]
+        !props.language || !Language[props.language]
+          ? Language.En
           : props.language,
       theme:
         !props.theme || !themes[props.theme]

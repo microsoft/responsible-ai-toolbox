@@ -41,31 +41,15 @@ class InLineScript(HTMLParser):
 
 
 class Dashboard(object):
-    """The dashboard class, wraps the dashboard component.
+    """The dashboard class, wraps the dashboard component."""
 
-    :param sensitive_features: A matrix of feature vector examples
-        (# examples x # features), these can be from the initial dataset,
-        or reserved from training.
-    :type sensitive_features: numpy.array or list[][] or pandas.DataFrame
-        or pandas.Series
-    :param y_true: The true labels or values for the provided dataset.
-    :type y_true: numpy.array or list[]
-    :param y_pred: Array of output predictions from models to be evaluated.
-        Can be a single array of predictions, or a 2D list over multiple
-        models. Can be a dictionary of named model predictions.
-    :type y_pred: numpy.array or list[][] or list[] or dict {string: list[]}
-    :param sensitive_feature_names: Feature names
-    :type sensitive_feature_names: numpy.array or list[]
-    """
-
-    def __init__(
-            self, *,
-            dashboard_type,
-            model_data,
-            public_ip=None,
-            port=None,
-            add_local_url=False):
-        """Initialize the Dashboard."""
+    def __init__(self, *,
+                 dashboard_type,
+                 model_data,
+                 public_ip=None,
+                 port=None,
+                 add_local_url=False):
+        """Initialize the dashboard."""
 
         if model_data is None or type is None:
             raise ValueError("Required parameters not provided")
@@ -91,7 +75,7 @@ class Dashboard(object):
         self.add_route()
 
         html = self.load_index()
-        print(f'Started at {self._service.env.base_url}')
+        print(f'{dashboard_type} started at {self._service.env.base_url}')
         display(HTML(html), metadata=dict(isolated=True))
 
     def add_route(self):
