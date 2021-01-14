@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Language } from "@responsible-ai/localization";
 import {
   CommandBar,
   ICommandBarItemProps,
@@ -10,7 +11,6 @@ import React from "react";
 
 import { applications, IApplications } from "./applications";
 import { IAppSetting } from "./IAppSetting";
-import { languages } from "./languages";
 import { themes } from "./themes";
 
 export interface IAppHeaderProps extends Required<IAppSetting> {
@@ -88,7 +88,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
         },
         key: "language",
         subMenuProps: {
-          items: this.getOptions(Object.keys(languages), this.onLanguageSelect)
+          items: this.getOptions(Object.keys(Language), this.onLanguageSelect)
         },
         text: `Language - ${this.props.language}`
       }
