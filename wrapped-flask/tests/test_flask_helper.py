@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import os
+import platform
 import pytest
 import requests
 from requests.adapters import HTTPAdapter
@@ -10,8 +10,8 @@ from rai_core_flask import FlaskHelper
 
 
 @pytest.mark.skipif(
-    os.name != "nt",
-    reason="Randomly fails in automated tests on Linux on GitHub.")
+    platform.system() != "Darwin",
+    reason="Randomly fails in automated tests on GitHub.")
 class TestFlaskHelper(object):
 
     def setup_class(cls):
