@@ -12,8 +12,8 @@ import {
 
 export enum ErrorDetectorCohortSource {
   None = "None",
-  TreeMap = "Tree Map",
-  HeatMap = "Heat Map"
+  TreeMap = "Tree map",
+  HeatMap = "Heat map"
 }
 
 export class ErrorCohort {

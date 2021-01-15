@@ -15,6 +15,7 @@ export interface IMatrixAreaStyles {
   matrixCell: IStyle;
   matrixCellPivot1Categories: IStyle;
   matrixCellPivot2Categories: IStyle;
+  matrixCol: IStyle;
   matrixRow: IStyle;
   matrixArea: IStyle;
   nanMatrixCell: IStyle;
@@ -72,6 +73,13 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
       maxWidth: "60px",
       minWidth: "60px",
       overflow: "hidden"
+    },
+    matrixCol: {
+      display: "flex",
+      flexDirection: "column",
+      fontFamily: "Segoe UI",
+      fontStyle: "normal",
+      fontWeight: "normal"
     },
     matrixLabel: {
       paddingLeft: "20px"

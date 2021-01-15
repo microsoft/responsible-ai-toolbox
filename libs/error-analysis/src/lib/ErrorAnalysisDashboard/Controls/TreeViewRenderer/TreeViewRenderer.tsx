@@ -372,7 +372,10 @@ export class TreeViewRenderer extends React.PureComponent<
                     height="140"
                     fill="transparent"
                   />
-                  <TreeLegend selectedCohort={this.props.selectedCohort} />
+                  <TreeLegend
+                    selectedCohort={this.props.selectedCohort}
+                    baseCohort={this.props.baseCohort}
+                  />
                   <g className={classNames.opacityToggleCircle}>
                     <circle
                       r="26"
