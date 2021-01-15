@@ -2,16 +2,23 @@
 // Licensed under the MIT License.
 
 import { NewExplanationDashboard } from "@responsible-ai/interpret";
-import axios from "axios";
 import React from "react";
 
 import { config } from "./config";
+import { FlaskCommunication } from "./FlaskCommunication";
 import { modelData } from "./modelData";
 interface IInterpretProps {
   dashboardType?: "ModelPerformance";
 }
 export class Interpret extends React.Component<IInterpretProps> {
   public render(): React.ReactNode {
+    let requestMethod = undefined;
+    if (config.baseUrl !== undefined) {
+      requestMethod = (request: any[]): Promise<any[]> => {
+        return FlaskCommunication.callFlaskService(request, "/predict");
+      };
+    }
+
     return (
       <NewExplanationDashboard
         dashboardType={this.props.dashboardType}
@@ -29,53 +36,10 @@ export class Interpret extends React.Component<IInterpretProps> {
           globalFeatureImportance: modelData.globalExplanation,
           localFeatureImportance: modelData.localExplanations
         }}
-        requestPredictions={
-          config.baseUrl !== undefined ? this.generatePrediction : undefined
-        }
+        requestPredictions={requestMethod}
         locale={modelData.locale}
         explanationMethod={modelData.explanation_method}
       />
     );
   }
-
-  private readonly generatePrediction = async (
-    postData: any[]
-  ): Promise<any[]> => {
-    const predictUrl = config.baseUrl + "/predict";
-    if (config.withCredentials) {
-      const headers = {
-        'Accept': 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'Content-Type': 'application/json',
-      };
-      axios.defaults.withCredentials = true;
-      const axiosOptions = { headers, withCredentials: true };
-      return axios
-        .post(predictUrl, JSON.stringify(postData), axiosOptions)
-        .then((response) => {
-          return response.data;
-        })
-        .catch(function (error) {
-          throw new Error(error);
-        });
-    }
-    return fetch(predictUrl, {
-      body: JSON.stringify(postData),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "post"
-    })
-      .then((resp) => {
-        if (resp.status >= 200 && resp.status < 300) {
-          return resp.json();
-        }
-        return Promise.reject(new Error(resp.statusText));
-      })
-      .then((json) => {
-        if (json.error !== undefined) {
-          throw new Error(json.error);
-        }
-        return Promise.resolve(json.data);
-      });
-  };
 }

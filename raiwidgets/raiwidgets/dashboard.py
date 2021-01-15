@@ -66,7 +66,7 @@ class Dashboard(object):
             "dashboardType": dashboard_type,
             "id": self.id,
             "baseUrl": self._service.env.base_url,
-            'withCredentials': False
+            'withCredentials': self._service.with_credentials
         }
         if add_local_url:
             local_url = ExplanationDashboardInterface.LOCAL_URL
