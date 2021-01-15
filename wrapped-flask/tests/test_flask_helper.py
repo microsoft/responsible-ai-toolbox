@@ -9,6 +9,9 @@ from requests.packages.urllib3.util.retry import Retry
 from rai_core_flask import FlaskHelper
 
 
+@pytest.mark.skipif(
+    os.name != "nt",
+    reason="Randomly fails in automated tests on Linux on GitHub.")
 class TestFlaskHelper(object):
 
     def setup_class(cls):
@@ -45,9 +48,6 @@ class TestFlaskHelper(object):
         assert(response.status_code == 200)
         assert(response.text == "Hello")
 
-    @pytest.mark.skipif(
-        "GITHUB_ACTION" in os.environ,
-        reason="Randomly fails in automated tests on GitHub.")
     def test_with_explicit_port(self):
         """Test the flask helper when setting an explicit port."""
         http = self.get_http_client()
