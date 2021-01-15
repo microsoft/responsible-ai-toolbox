@@ -343,7 +343,6 @@ export class TreeViewRenderer extends React.PureComponent<
             className={classNames.svgOuterFrame}
             id="svgOuterFrame"
             viewBox="0 0 952 1100"
-            onClick={this.bkgClick.bind(this)}
           >
             <mask id="Mask">
               <rect
@@ -587,14 +586,28 @@ export class TreeViewRenderer extends React.PureComponent<
       const tempRoot = d3stratify()(treeNodes);
       const treemap = d3tree().size([state.viewerWidth, state.viewerHeight]);
       const root = treemap(tempRoot);
+
+      const selectedNode = state.selectedNode;
+      if (selectedNode) {
+        this.unselectParentNodes(selectedNode);
+      }
+      this.selectParentNodes(root);
+      let nodeDetail: INodeDetail;
+      if (root === undefined) {
+        nodeDetail = this.state.nodeDetail;
+      } else {
+        (root as any).data.isSelectedLeaf = true;
+        nodeDetail = this.getNodeDetail((root as unknown) as ITreeNode, state);
+      }
+
       return {
-        nodeDetail: state.nodeDetail,
+        nodeDetail,
         request: state.request,
         root,
         rootErrorSize,
         rootLocalError,
         rootSize,
-        selectedNode: state.selectedNode,
+        selectedNode: root,
         transform: state.transform,
         treeNodes,
         viewerHeight: state.viewerHeight,
@@ -602,6 +615,14 @@ export class TreeViewRenderer extends React.PureComponent<
       };
     };
     this.setState(reloadDataFunc);
+    // Clear filters
+    const filters: IFilter[] = [];
+    this.props.updateSelectedCohort(
+      filters,
+      [],
+      ErrorDetectorCohortSource.None,
+      0
+    );
   }
 
   private getTextBB(
@@ -618,45 +639,6 @@ export class TreeViewRenderer extends React.PureComponent<
     const bb = temp!.node()!.getBBox();
     temp.selectAll("*").remove();
     return bb;
-  }
-
-  private clearSelection(): void {
-    this.setState(
-      (state: Readonly<ITreeViewRendererState>): ITreeViewRendererState => {
-        const selectedNode = state.selectedNode;
-        const nodeDetail = state.nodeDetail;
-        nodeDetail.showSelected = { opacity: 0 };
-        if (selectedNode) {
-          this.unselectParentNodes(selectedNode);
-        }
-        return {
-          nodeDetail,
-          request: state.request,
-          root: state.root,
-          rootErrorSize: state.rootErrorSize,
-          rootLocalError: state.rootLocalError,
-          rootSize: state.rootSize,
-          selectedNode: undefined,
-          transform: state.transform,
-          treeNodes: state.treeNodes,
-          viewerHeight: state.viewerHeight,
-          viewerWidth: state.viewerWidth
-        };
-      }
-    );
-    // Clear filters
-    const filters: IFilter[] = [];
-    this.props.updateSelectedCohort(
-      filters,
-      [],
-      ErrorDetectorCohortSource.None,
-      0
-    );
-  }
-
-  private bkgClick(): void {
-    this.clearSelection();
-    this.forceUpdate();
   }
 
   private selectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
@@ -719,19 +701,7 @@ export class TreeViewRenderer extends React.PureComponent<
       );
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
-      const nodeDetail = {
-        errorColor: node!.errorColor!,
-        errorInfo: `${node!.data!.error!} Error`,
-        globalError: ((node!.data!.error! / state.rootErrorSize) * 100).toFixed(
-          2
-        ),
-        instanceInfo: `${node!.data!.size!} Instances`,
-        localError: ((node!.data!.error! / node.data.size) * 100).toFixed(2),
-        maskDown: { transform: `translate(0px, -${node!.maskShift!}px)` },
-        maskUp: { transform: `translate(0px, ${node!.maskShift!}px)` },
-        showSelected: { opacity: 1 },
-        successInfo: `${node!.data!.success!} Success`
-      };
+      const nodeDetail = this.getNodeDetail(node, state);
       return {
         nodeDetail,
         request: state.request,
@@ -748,6 +718,26 @@ export class TreeViewRenderer extends React.PureComponent<
     };
 
     this.setState(updateSelectedFunc);
+  }
+
+  private getNodeDetail(
+    node: ITreeNode,
+    state: ITreeViewRendererState
+  ): INodeDetail {
+    const nodeDetail = {
+      errorColor: node!.errorColor!,
+      errorInfo: `${node!.data!.error!} Error`,
+      globalError: ((node!.data!.error! / state.rootErrorSize) * 100).toFixed(
+        2
+      ),
+      instanceInfo: `${node!.data!.size!} Instances`,
+      localError: ((node!.data!.error! / node.data.size) * 100).toFixed(2),
+      maskDown: { transform: `translate(0px, -${node!.maskShift!}px)` },
+      maskUp: { transform: `translate(0px, ${node!.maskShift!}px)` },
+      showSelected: { opacity: 1 },
+      successInfo: `${node!.data!.success!} Success`
+    };
+    return nodeDetail;
   }
 
   private hover(
@@ -799,7 +789,6 @@ export class TreeViewRenderer extends React.PureComponent<
       )
       .then((result) => {
         this.onResize();
-        this.clearSelection();
         this.forceUpdate();
         this.reloadData(result);
       });

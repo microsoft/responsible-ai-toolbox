@@ -577,22 +577,27 @@
     "_defaultClassNames.comment": " models that output classes have this as the default class names",
     "defaultFeatureNames": "Feature {0}",
     "_defaultFeatureNames.comment": "the default column names",
+    "cohortInfo": "Cohort info",
     "correctPrediction": "Correct Predictions",
     "incorrectPrediction": "Incorrect Predictions",
     "whatIfDatapoints": "What-If Datapoints",
     "allSelected": "All Selected",
+    "correctTotal": "Correct/Total",
     "dataExploration": "Dataset Exploration",
     "_dataExploration.comment": "Label for tab showing scatterplot of dataset and predictions",
     "instanceView": "Instance View",
     "_instanceView.comment": "Label for tab showing instances",
     "dataExplorerView": "Data Explorer",
     "_dataExplorerView.comment": "Data explorer view",
+    "errorCoverage": "Error coverage",
+    "errorRate": "Error rate",
     "globalExplanationView": "Global Explanation",
     "_globalExplanationView.comment": "Global explanation view",
     "localExplanationView": "Local Explanation",
     "_localExplanationView.comment": "Local explanation view",
     "globalImportance": "Global Importance",
     "_globalImportance.comment": "Label for tab showing bar chart of importance of features at a global level",
+    "incorrectTotal": "Incorrect/Total",
     "treeMapDescription": "To retrain the tree map, select and save the features below.",
     "Cohort": {
       "cohort": "Cohort",
@@ -627,6 +632,10 @@
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"
+    },
+    "EditCohort": {
+      "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort.",
+      "cohortName": "Cohort name"
     }
   },
   "Fairness": {
