@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
@@ -24,28 +25,38 @@ export class CohortStats extends React.Component<ISaveCohortProps> {
       <div>
         <div className={classNames.section}></div>
         <div className={classNames.subsection}>
-          <div className={classNames.header}>Cohort info</div>
+          <div className={classNames.header}>
+            {localization.ErrorAnalysis.cohortInfo}
+          </div>
           <Stack horizontal>
             <Stack tokens={alignmentStackTokens}>
-              <div className={classNames.tableData}>Error Coverage</div>
+              <div className={classNames.tableData}>
+                {localization.ErrorAnalysis.errorCoverage}
+              </div>
               <div className={classNames.tableData}>
                 {`${this.props.temporaryCohort.errorCoverage.toFixed(2)}%`}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>
-              <div className={classNames.tableData}>Error Rate</div>
+              <div className={classNames.tableData}>
+                {localization.ErrorAnalysis.errorRate}
+              </div>
               <div className={classNames.tableData}>
                 {`${this.props.temporaryCohort.errorRate.toFixed(2)}%`}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>
-              <div className={classNames.tableData}>Correct/Total</div>
+              <div className={classNames.tableData}>
+                {localization.ErrorAnalysis.correctTotal}
+              </div>
               <div className={classNames.tableData}>
                 {`${this.props.temporaryCohort.totalCohortCorrect} / ${this.props.temporaryCohort.totalCohort}`}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>
-              <div className={classNames.tableData}>Incorrect/Total</div>
+              <div className={classNames.tableData}>
+                {localization.ErrorAnalysis.incorrectTotal}
+              </div>
               <div className={classNames.tableData}>
                 {`${this.props.temporaryCohort.totalCohortIncorrect} / ${this.props.temporaryCohort.totalCohort}`}
               </div>

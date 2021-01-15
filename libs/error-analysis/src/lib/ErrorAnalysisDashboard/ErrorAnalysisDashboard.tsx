@@ -39,6 +39,7 @@ import React from "react";
 
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
 import { CohortList } from "./Controls/CohortList/CohortList";
+import { EditCohort } from "./Controls/EditCohort/EditCohort";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
@@ -70,12 +71,14 @@ export interface IErrorAnalysisDashboardState {
   editingCohortIndex?: number;
   openInfoPanel: boolean;
   openCohortListPanel: boolean;
+  openEditCohort: boolean;
   openFeatureList: boolean;
   openSaveCohort: boolean;
   openShiftCohort: boolean;
   openWhatIf: boolean;
   predictionTab: PredictionTabKeys;
   selectedCohort: ErrorCohort;
+  editedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   selectedFeatures: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
@@ -421,6 +424,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       customPoints: [],
       dataChartConfig: undefined,
       dependenceProps: undefined,
+      editedCohort: cohorts[0],
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       globalImportance: globalProps.globalImportance,
       globalImportanceIntercept: globalProps.globalImportanceIntercept,
@@ -430,6 +434,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       modelChartConfig: undefined,
       modelMetadata,
       openCohortListPanel: false,
+      openEditCohort: false,
       openFeatureList: false,
       openInfoPanel: false,
       openSaveCohort: false,
@@ -506,6 +511,41 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             }
             temporaryCohort={this.state.selectedCohort}
             baseCohort={this.state.baseCohort}
+            jointDataset={this.state.jointDataset}
+          />
+        )}
+        {this.state.openEditCohort && (
+          <EditCohort
+            isOpen={this.state.openEditCohort}
+            onDismiss={(): void => this.setState({ openEditCohort: false })}
+            onSave={(
+              originalCohort: ErrorCohort,
+              editedCohort: ErrorCohort
+            ): void => {
+              const cohorts = this.state.cohorts.filter(
+                (errorCohort) =>
+                  errorCohort.cohort.name !== originalCohort.cohort.name
+              );
+              let selectedCohort = this.state.selectedCohort;
+              if (originalCohort.cohort.name === selectedCohort.cohort.name) {
+                selectedCohort = editedCohort;
+              }
+              this.setState({
+                cohorts: [editedCohort, ...cohorts],
+                selectedCohort
+              });
+            }}
+            onDelete={(deletedCohort: ErrorCohort): void => {
+              const cohorts = this.state.cohorts.filter(
+                (errorCohort) =>
+                  errorCohort.cohort.name !== deletedCohort.cohort.name
+              );
+              this.setState({
+                cohorts
+              });
+            }}
+            cohort={this.state.editedCohort}
+            selectedCohort={this.state.selectedCohort}
             jointDataset={this.state.jointDataset}
           />
         )}
@@ -651,6 +691,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 cohorts={this.state.cohorts}
                 onDismiss={(): void =>
                   this.setState({ openCohortListPanel: false })
+                }
+                onEditCohortClick={(editedCohort: ErrorCohort): void =>
+                  this.setState({
+                    editedCohort,
+                    openEditCohort: true
+                  })
                 }
               />
               <WhatIf

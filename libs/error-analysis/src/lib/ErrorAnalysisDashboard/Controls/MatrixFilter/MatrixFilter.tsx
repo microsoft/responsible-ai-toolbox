@@ -12,6 +12,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
@@ -37,8 +38,8 @@ export interface IMatrixLegendState {
 }
 
 export interface IMatrixFilterState {
-  selectedFeature1?: string;
-  selectedFeature2?: string;
+  selectedFeature1: string;
+  selectedFeature2: string;
   matrixLegendState: IMatrixLegendState;
 }
 
@@ -53,12 +54,14 @@ export class MatrixFilter extends React.PureComponent<
     super(props);
     this.state = {
       matrixLegendState: { maxError: 0 },
-      selectedFeature1: undefined,
-      selectedFeature2: undefined
+      selectedFeature1: noFeature,
+      selectedFeature2: noFeature
     };
-    this.options = props.features.map((feature, index) => {
-      return { key: index, text: feature };
-    });
+    this.options = [{ key: 0, text: noFeature }].concat(
+      props.features.map((feature, index) => {
+        return { key: index + 1, text: feature };
+      })
+    );
   }
 
   public render(): React.ReactNode {
@@ -73,7 +76,7 @@ export class MatrixFilter extends React.PureComponent<
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
-                placeholder="No Feature"
+                selectedKey={0}
                 label="X-Axis: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -87,7 +90,7 @@ export class MatrixFilter extends React.PureComponent<
             </Stack.Item>
             <Stack.Item key="feature2key">
               <ComboBox
-                placeholder="No Feature"
+                selectedKey={0}
                 label="Y-Axis: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
