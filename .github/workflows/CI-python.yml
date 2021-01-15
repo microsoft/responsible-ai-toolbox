@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: [ubuntu-latest, windows-latest]
     strategy:
       matrix:
         packageDirectory: ["raiwidgets", "wrapped-flask"]
+        operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
           # excludes python 3.7 and 3.8 with wrapped-flask since it consistently causes segfaults
@@ -19,6 +19,8 @@ jobs:
             packageDirectory: "wrapped-flask"
           - pythonVersion: 3.8
             packageDirectory: "wrapped-flask"
+
+    runs-on: ${{ matrix.operatingSystem }}
 
     steps:
       - uses: actions/checkout@v2
