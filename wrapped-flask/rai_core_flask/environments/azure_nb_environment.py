@@ -36,7 +36,8 @@ class AzureNBEnvironment(BaseEnvironment):
             else:
                 instance_name = self.nbvm["instance"]
                 domain_suffix = self.nbvm["domainsuffix"]
-                self.base_url = f"https://{instance_name}-{service.port}.{domain_suffix}"
+                self.base_url = \
+                    f"https://{instance_name}-{service.port}.{domain_suffix}"
                 self.successfully_detected = True
                 self.nbvm_origins = [
                     f"https://{instance_name}.{domain_suffix}",
@@ -66,9 +67,6 @@ class AzureNBEnvironment(BaseEnvironment):
         service.with_credentials = True
         service.env_name = AZURE_NB
 
-
-    # This will probably be the default, if an env support IPython display,
-    # Call it for inlined html.
     def display(self, html):
         """Display the passed HTML using IPython."""
         display(HTML(html))

@@ -31,5 +31,6 @@ class CredentialedVMEnvironment(BaseEnvironment):
     def select(self, service):
         origin = f"https://{service.ip}:{service.port}"
         headers = ['Content-Type']
-        service.cors = CORS(service.app, origins=[origin], expose_headers=headers, supports_credentials=True)
+        service.cors = CORS(service.app, origins=[origin],
+                            expose_headers=headers, supports_credentials=True)
         service.env_name = CREDENTIALED_VM

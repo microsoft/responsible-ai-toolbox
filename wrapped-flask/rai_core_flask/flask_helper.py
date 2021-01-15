@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 from flask import Flask
-from flask_cors import CORS
 from .environment_detector import build_environment
 from .environments.credentialed_vm_environment import CREDENTIALED_VM
 from .environments.public_vm_environment import PUBLIC_VM
@@ -88,7 +87,7 @@ class FlaskHelper(object):
             write = lambda _: None  # noqa: E731
 
         ip = LOCALHOST
-        # Note: for credentialed VM or public VM we need to use the private IP address
+        # Note: for credentialed or public VM use the private IP address
         if self.env in VM_ENVS:
             host_name = socket.gethostname()
             ip = socket.gethostbyname(host_name)
