@@ -8,16 +8,21 @@ import {
   FilterMethods,
   JointDataset
 } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import {
   DirectionalHint,
   mergeStyles,
+  IStackStyles,
+  IStackTokens,
   IStyle,
   ITheme,
   ITooltipHostStyles,
   ITooltipProps,
+  Stack,
+  Text,
   TooltipDelay,
   TooltipHost
 } from "office-ui-fabric-react";
@@ -52,7 +57,17 @@ export interface IMatrixAreaState {
   jsonMatrix?: any;
   maxErrorRate: number;
   selectedCells?: boolean[];
+  matrixFeature1: string;
+  matrixFeature2: string;
 }
+
+const emptyTextStyle: IStackStyles = {
+  root: {
+    width: 300
+  }
+};
+
+const emptyTextPadding: IStackTokens = { padding: "10px 0px 0px 0px" };
 
 export class MatrixArea extends React.PureComponent<
   IMatrixAreaProps,
@@ -62,6 +77,8 @@ export class MatrixArea extends React.PureComponent<
     super(props);
     this.state = {
       jsonMatrix: undefined,
+      matrixFeature1: this.props.selectedFeature1,
+      matrixFeature2: this.props.selectedFeature2,
       maxErrorRate: 0,
       selectedCells: undefined
     };
@@ -84,15 +101,35 @@ export class MatrixArea extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = matrixAreaStyles();
+    // Note: we render as empty if:
+    // 1.) there is no matrix
+    // 2.) all features set to empty
+    // 3.) when user first changes feature a render is triggered but componentDidUpdate
+    // is only called after initial render is done, which would be an inconsistent state
+    // Note in third case we just show empty and not the help text
     if (
       !this.state.jsonMatrix ||
       (this.props.selectedFeature1 === noFeature &&
         this.props.selectedFeature2 === noFeature)
     ) {
+      return (
+        <Stack styles={emptyTextStyle} tokens={emptyTextPadding}>
+          <Text variant="medium">
+            {localization.ErrorAnalysis.MatrixArea.emptyText}
+          </Text>
+        </Stack>
+      );
+    }
+    if (
+      this.state.matrixFeature1 !== this.props.selectedFeature1 ||
+      this.state.matrixFeature2 !== this.props.selectedFeature2
+    ) {
       return <div></div>;
     }
+    const sameFeatureSelected =
+      this.props.selectedFeature1 === this.props.selectedFeature2;
     let rows = 0;
-    if (this.props.selectedFeature2 !== noFeature) {
+    if (this.props.selectedFeature2 !== noFeature && !sameFeatureSelected) {
       rows = Math.floor((this.state.jsonMatrix.matrix.length - 1) / 2);
     } else {
       rows = this.state.jsonMatrix.matrix.length / 2;
@@ -112,21 +149,26 @@ export class MatrixArea extends React.PureComponent<
     const [category2Values] = this.extractCategories(
       this.state.jsonMatrix.category2
     );
+    const topMatrixClass =
+      this.props.selectedFeature1 !== noFeature
+        ? classNames.matrixRow
+        : classNames.matrixCol;
     return (
       <div className={classNames.matrixArea}>
         <div>
-          {this.props.selectedFeature2 !== noFeature && (
+          {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
             <div className={classNames.matrixLabelBottom}>
               <div className={classNames.matrixLabelTab}></div>
               <div>{this.props.selectedFeature2}</div>
             </div>
           )}
-          {this.props.selectedFeature2 === noFeature && (
+          {(this.props.selectedFeature2 === noFeature ||
+            sameFeatureSelected) && (
             <div className={classNames.emptyLabelPadding}></div>
           )}
 
           {this.state.jsonMatrix.matrix.map((row: any, i: number) => (
-            <div key={`${i}row`} className={classNames.matrixRow}>
+            <div key={`${i}row`} className={topMatrixClass}>
               {row.map((value: any, j: number) => {
                 let errorRatio = 0;
                 let styledGradientMatrixCell: IStyle =
@@ -219,19 +261,17 @@ export class MatrixArea extends React.PureComponent<
                       {category1Values[j].value}
                     </div>
                   );
-                  if (j !== 0) {
-                    return [
-                      <div
-                        key={`${j}row`}
-                        className={classNames.matrixRow}
-                      ></div>,
-                      categoryData,
-                      cellData
-                    ];
-                  }
-                  return [categoryData, cellData];
+                  return (
+                    <div key={`${j}row`} className={classNames.matrixRow}>
+                      {categoryData}
+                      {cellData}
+                    </div>
+                  );
                 } else if (j === 0) {
-                  if (this.props.selectedFeature2 === noFeature) {
+                  if (
+                    this.props.selectedFeature2 === noFeature ||
+                    sameFeatureSelected
+                  ) {
                     return [
                       <div
                         key={`${i}_${j}category1`}
@@ -254,7 +294,7 @@ export class MatrixArea extends React.PureComponent<
               })}
             </div>
           ))}
-          {this.props.selectedFeature2 === noFeature &&
+          {(this.props.selectedFeature2 === noFeature || sameFeatureSelected) &&
             category1Values.length > 0 && (
               <div key={`${matrixLength}row`} className={classNames.matrixRow}>
                 <div
@@ -275,6 +315,7 @@ export class MatrixArea extends React.PureComponent<
             )}
           {this.props.selectedFeature1 !== noFeature &&
             this.props.selectedFeature2 !== noFeature &&
+            !sameFeatureSelected &&
             category2Values.length > 0 && (
               <div key={`${matrixLength}row`} className={classNames.matrixRow}>
                 <div
@@ -294,13 +335,19 @@ export class MatrixArea extends React.PureComponent<
               </div>
             )}
         </div>
-        <div className={styledMatrixLabel}>{this.props.selectedFeature1}</div>
+        {this.props.selectedFeature1 !== noFeature && (
+          <div className={styledMatrixLabel}>{this.props.selectedFeature1}</div>
+        )}
       </div>
     );
   }
 
   private fetchMatrix(): void {
-    if (this.props.getMatrix === undefined) {
+    if (
+      this.props.getMatrix === undefined ||
+      (this.props.selectedFeature1 === noFeature &&
+        this.props.selectedFeature2 === noFeature)
+    ) {
       return;
     }
     const filtersRelabeled = ErrorCohort.getLabeledFilters(
@@ -351,6 +398,8 @@ export class MatrixArea extends React.PureComponent<
     this.props.updateMatrixLegendState(maxErrorRate);
     this.setState({
       jsonMatrix,
+      matrixFeature1: this.props.selectedFeature1,
+      matrixFeature2: this.props.selectedFeature2,
       maxErrorRate,
       selectedCells: undefined
     });
@@ -421,7 +470,9 @@ export class MatrixArea extends React.PureComponent<
     selectedCells: boolean[],
     jsonMatrix: any
   ): ICompositeFilter[] {
-    const feature2IsSelected = this.props.selectedFeature2 !== noFeature;
+    const feature2IsSelected =
+      this.props.selectedFeature2 !== noFeature &&
+      this.props.selectedFeature2 !== this.props.selectedFeature1;
     // Extract categories
     const [category1Values, cat1HasIntervals] = this.extractCategories(
       jsonMatrix.category1

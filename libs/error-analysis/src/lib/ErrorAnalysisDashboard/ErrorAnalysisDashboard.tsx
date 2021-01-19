@@ -726,7 +726,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   private addCustomPoint(temporaryPoint: { [key: string]: any }): void {
     this.setState({
-      customPoints: [...this.state.customPoints, temporaryPoint]
+      customPoints: [...this.state.customPoints, temporaryPoint],
+      openWhatIf: false,
+      predictionTab: PredictionTabKeys.WhatIfDatapointsTab
     });
   }
 
@@ -744,10 +746,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
     let selectedCohortName = "";
     let addTemporaryCohort = true;
-    if (source === ErrorDetectorCohortSource.TreeMap) {
-      selectedCohortName = `${this.state.baseCohort.cohort.name} (${filtersRelabeled.length} filters)`;
-    } else if (source === ErrorDetectorCohortSource.HeatMap) {
-      selectedCohortName = `${this.state.baseCohort.cohort.name} (${cells} cells)`;
+    if (
+      source === ErrorDetectorCohortSource.TreeMap ||
+      source === ErrorDetectorCohortSource.HeatMap
+    ) {
+      selectedCohortName = "Unsaved";
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;

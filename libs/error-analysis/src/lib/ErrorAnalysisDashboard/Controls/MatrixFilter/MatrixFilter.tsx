@@ -71,6 +71,7 @@ export class MatrixFilter extends React.PureComponent<
         <Stack tokens={stackTokens}>
           <MatrixLegend
             selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
             max={this.state.matrixLegendState.maxError}
           />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">

@@ -94,18 +94,18 @@ export class InstanceView extends React.Component<
       text: localization.ErrorAnalysis.incorrectPrediction
     });
     this.choiceItems.push({
-      key: PredictionTabKeys.WhatIfDatapointsTab,
-      styles: {
-        root: classNames.choiceItemRootStyle
-      },
-      text: localization.ErrorAnalysis.whatIfDatapoints
-    });
-    this.choiceItems.push({
       key: PredictionTabKeys.AllSelectedTab,
       styles: {
         root: classNames.choiceItemRootStyle
       },
       text: localization.ErrorAnalysis.allSelected
+    });
+    this.choiceItems.push({
+      key: PredictionTabKeys.WhatIfDatapointsTab,
+      styles: {
+        root: classNames.choiceItemRootStyle
+      },
+      text: localization.ErrorAnalysis.whatIfDatapoints
     });
   }
 

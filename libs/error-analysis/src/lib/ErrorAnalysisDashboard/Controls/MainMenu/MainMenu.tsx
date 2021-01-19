@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
   Dropdown,
@@ -87,8 +88,14 @@ export class MainMenu extends React.PureComponent<
 
   public render(): React.ReactNode {
     const errorAnalysisOptionsDropdown: IDropdownOption[] = [
-      { key: ErrorAnalysisOptions.TreeMap, text: "Tree Map" },
-      { key: ErrorAnalysisOptions.HeatMap, text: "Heat Map" }
+      {
+        key: ErrorAnalysisOptions.TreeMap,
+        text: localization.ErrorAnalysis.MainMenu.treeMap
+      },
+      {
+        key: ErrorAnalysisOptions.HeatMap,
+        text: localization.ErrorAnalysis.MainMenu.heatMap
+      }
     ];
 
     let items: ICommandBarItemProps[] = [];
@@ -96,7 +103,9 @@ export class MainMenu extends React.PureComponent<
       items = [
         {
           commandBarButtonAs: (): any => (
-            <Label styles={labelStyle}>Error Detector:</Label>
+            <Label styles={labelStyle}>
+              {localization.ErrorAnalysis.MainMenu.errorDetectorLabel}
+            </Label>
           ),
           key: "errorDetectorLabel",
           text: "Error Detector Label"
@@ -111,7 +120,7 @@ export class MainMenu extends React.PureComponent<
             />
           ),
           key: "errorDetector",
-          text: "Error Detector"
+          text: localization.ErrorAnalysis.MainMenu.errorDetector
         }
       ];
     } else {
@@ -134,7 +143,7 @@ export class MainMenu extends React.PureComponent<
         iconProps: fullscreenIcon,
         key: "fullscreen",
         onClick: (): any => window.open(this.props.localUrl),
-        text: "Fullscreen"
+        text: localization.ErrorAnalysis.MainMenu.fullscreen
       }
     ];
     if (
@@ -147,7 +156,7 @@ export class MainMenu extends React.PureComponent<
         iconProps: whatIfIcon,
         key: "whatIf",
         onClick: () => this.props.onWhatIfClick(),
-        text: "What-If"
+        text: localization.ErrorAnalysis.MainMenu.whatIf
       });
     }
     if (
@@ -159,7 +168,7 @@ export class MainMenu extends React.PureComponent<
         iconProps: featureListIcon,
         key: "featureList",
         onClick: () => this.props.onFeatureListClick(),
-        text: "Feature List"
+        text: localization.ErrorAnalysis.MainMenu.featureList
       });
     }
     const helpItems: ICommandBarItemProps[] = [
@@ -173,30 +182,30 @@ export class MainMenu extends React.PureComponent<
               iconProps: { iconName: "Import" },
               key: "shiftCohort",
               onClick: (): any => this.props.onShiftCohortClick(),
-              text: "Shift Cohort"
+              text: localization.ErrorAnalysis.MainMenu.shiftCohort
             },
             {
               iconProps: { iconName: "Save" },
               key: "saveCohort",
               onClick: (): any => this.props.onSaveCohortClick(),
-              text: "Save Cohort"
+              text: localization.ErrorAnalysis.MainMenu.saveCohort
             },
             {
               iconProps: { iconName: "PageList" },
               key: "cohortList",
               onClick: (): any => this.props.onCohortListPanelClick(),
-              text: "Cohort List"
+              text: localization.ErrorAnalysis.MainMenu.cohortList
             }
           ]
         },
-        text: "Cohort Settings"
+        text: localization.ErrorAnalysis.MainMenu.cohortSettings
       },
       {
         buttonStyles: buttonStyle,
         iconProps: infoIcon,
         key: "cohortInfo",
         onClick: (): any => this.props.onInfoPanelClick(),
-        text: "Cohort Info"
+        text: localization.ErrorAnalysis.MainMenu.cohortInfo
       }
     ];
     farItems.push(...helpItems);
@@ -214,7 +223,7 @@ export class MainMenu extends React.PureComponent<
           />
         ),
         key: "explanation",
-        text: "Explanation"
+        text: localization.ErrorAnalysis.MainMenu.explanation
       });
     }
     const classNames = mainMenuStyles();
