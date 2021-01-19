@@ -469,7 +469,7 @@ class ErrorAnalysisDashboardInput:
 
     def matrix(self, features, filters, composite_filters):
         try:
-            if features[0] is None:
+            if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.DATA: []}
             interface = ExplanationDashboardInterface
             feature_names = self.dashboard_input[interface.FEATURE_NAMES]
