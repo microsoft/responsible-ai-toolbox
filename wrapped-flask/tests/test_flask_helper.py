@@ -10,10 +10,6 @@ import sys
 from rai_core_flask import FlaskHelper
 
 
-@pytest.mark.skipif(
-    platform.system() != "Darwin" or not sys.version.startswith('3.6'),
-    reason="Randomly fails in automated tests on GitHub except for MacOS "
-           "with python 3.6.")
 class TestFlaskHelper(object):
 
     def setup_class(cls):

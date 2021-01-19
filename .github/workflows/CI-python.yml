@@ -13,6 +13,15 @@ jobs:
         packageDirectory: ["raiwidgets", "wrapped-flask"]
         operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
+        exclude:
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: ubuntu-latest
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: macos-latest
+            pythonVersion: 3.7
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: macos-latest
+            pythonVersion: 3.8
 
     runs-on: ${{ matrix.operatingSystem }}
 
