@@ -1,12 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import platform
-import pytest
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-import sys
 from rai_core_flask import FlaskHelper
 
 
