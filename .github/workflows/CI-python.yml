@@ -14,6 +14,7 @@ jobs:
         operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
+          # segfaults in wrapped-flask tests in most OS-Python version combinations
           - packageDirectory: "wrapped-flask"
             operatingSystem: ubuntu-latest
           - packageDirectory: "wrapped-flask"
@@ -22,6 +23,9 @@ jobs:
           - packageDirectory: "wrapped-flask"
             operatingSystem: macos-latest
             pythonVersion: 3.8
+          # lightgbm doesn't install properly on MacOS
+          - packageDirectory: "raiwidgets"
+            operatingSystem: macos-latest
 
     runs-on: ${{ matrix.operatingSystem }}
 
