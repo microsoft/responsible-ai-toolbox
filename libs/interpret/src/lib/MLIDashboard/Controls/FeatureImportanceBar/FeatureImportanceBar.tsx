@@ -26,6 +26,7 @@ export interface IFeatureBarProps {
   topK: number;
   unsortedX: string[];
   unsortedSeries: IGlobalSeries[];
+  originX?: string[];
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
 }
 
@@ -160,11 +161,16 @@ export class FeatureImportanceBar extends React.PureComponent<
     };
 
     const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
+    const xOriginText = sortedIndexVector.map((i) => {
+      if (this.props.originX) return this.props.originX[i];
+      return this.props.unsortedX[i];
+    });
     if (this.props.chartType === ChartTypes.Bar) {
       baseSeries.layout.barmode = "group";
       let hovertemplate = this.props.unsortedSeries[0].unsortedFeatureValues
-        ? "%{text}: %{customdata.Yvalue}<br>"
-        : localization.Interpret.Charts.featurePrefix + ": %{text}<br>";
+        ? "%{customdata.HoverText}: %{customdata.Yvalue}<br>"
+        : localization.Interpret.Charts.featurePrefix +
+          ": %{customdata.HoverText}<br>";
       hovertemplate +=
         localization.Interpret.Charts.importancePrefix +
         ": %{customdata.Yformatted}<br>";
@@ -175,17 +181,18 @@ export class FeatureImportanceBar extends React.PureComponent<
 
       this.props.unsortedSeries.forEach((series, seriesIndex) => {
         baseSeries.data.push({
-          customdata: sortedIndexVector.map((index) => {
+          customdata: sortedIndexVector.map((value, index) => {
             return {
+              HoverText: xOriginText[index],
               Name: series.name,
-              Yformatted: series.unsortedAggregateY[index].toLocaleString(
+              Yformatted: series.unsortedAggregateY[value].toLocaleString(
                 undefined,
                 {
                   maximumFractionDigits: 3
                 }
               ),
               Yvalue: series.unsortedFeatureValues
-                ? series.unsortedFeatureValues[index]
+                ? series.unsortedFeatureValues[value]
                 : undefined
             };
           }),
