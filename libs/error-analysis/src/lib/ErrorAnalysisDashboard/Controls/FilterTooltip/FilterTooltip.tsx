@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { getTheme, mergeStyles } from "office-ui-fabric-react";
 import React from "react";
 
@@ -66,7 +67,9 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
           <g className={classNames.errorCoverageCell}>
             <rect className={classNames.metricBarBlack}></rect>
             <g>
-              <text className={classNames.smallHeader}>Error coverage</text>
+              <text className={classNames.smallHeader}>
+                {localization.ErrorAnalysis.errorCoverage}
+              </text>
               <text className={classNames.valueBlack}>
                 {this.props.filterProps.errorCoverage.toFixed(2)}%
               </text>
@@ -75,7 +78,9 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
           <g className={classNames.errorRateCell}>
             <rect className={classNames.metricBarRed}></rect>
             <g>
-              <text className={classNames.smallHeader}>Error rate</text>
+              <text className={classNames.smallHeader}>
+                {localization.ErrorAnalysis.errorRate}
+              </text>
               <text className={classNames.valueBlack}>
                 {this.props.filterProps.errorRate.toFixed(2)}%
               </text>

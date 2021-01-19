@@ -15,8 +15,7 @@ def test_no_fairlearn(importlib_mock):
 
     with pytest.raises(Exception) as exc:
         FairnessDashboard(
-            sensitive_features=["a", "b"],
-            sensitive_feature_names=["a", "b"],
+            sensitive_features={"a": [0, 1], "b": [0, 1]},
             y_true=[0, 1],
             y_pred=[0, 1])
 

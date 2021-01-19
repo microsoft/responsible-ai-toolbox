@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
@@ -39,7 +40,9 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
             <Stack horizontal>
               <div className={classNames.metricBarBlack}></div>
               <Stack tokens={cellTokens}>
-                <div className={classNames.smallHeader}>Error Coverage</div>
+                <div className={classNames.smallHeader}>
+                  {localization.ErrorAnalysis.errorCoverage}
+                </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorCoverage.toFixed(2)}%
                 </div>
@@ -49,7 +52,9 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
               <Stack horizontal>
                 <div className={classNames.metricBarRed}></div>
                 <Stack tokens={cellTokens}>
-                  <div className={classNames.smallHeader}>Error Rate</div>
+                  <div className={classNames.smallHeader}>
+                    {localization.ErrorAnalysis.errorRate}
+                  </div>
                   <div className={classNames.valueBlack}>
                     {this.props.selectedCohort.errorRate.toFixed(2)}%
                   </div>

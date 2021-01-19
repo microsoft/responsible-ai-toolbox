@@ -10,6 +10,7 @@ import {
   CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
+  Link,
   Panel
 } from "office-ui-fabric-react";
 import React from "react";
@@ -23,6 +24,7 @@ export interface ICohortListProps {
   cohorts: ErrorCohort[];
   // hostId: string
   onDismiss: () => void;
+  onEditCohortClick: (editedCohort: ErrorCohort) => void;
 }
 
 export interface ICohortListState {
@@ -117,6 +119,7 @@ export class CohortList extends React.Component<
               layoutMode={DetailsListLayoutMode.justified}
               selectionPreservedOnEmptyClick={true}
               checkboxVisibility={CheckboxVisibility.hidden}
+              onRenderItemColumn={this.renderItemColumn.bind(this)}
             />
           </div>
         </div>
@@ -124,17 +127,57 @@ export class CohortList extends React.Component<
     );
   }
 
+  private renderItemColumn(
+    item: ICohortListItem,
+    index: number | undefined,
+    column: IColumn | undefined
+  ): React.ReactNode {
+    if (column !== undefined && index !== undefined) {
+      const fieldContent = item[
+        column.fieldName as keyof ICohortListItem
+      ] as string;
+
+      switch (column.key) {
+        case "column1":
+          if (item.name !== "All data") {
+            return (
+              <Link
+                onClick={() =>
+                  this.props.onEditCohortClick(
+                    this.getErrorCohort.bind(this)(item.name)
+                  )
+                }
+              >
+                {fieldContent}
+              </Link>
+            );
+          }
+          return <span>{fieldContent}</span>;
+
+        default:
+          return <span>{fieldContent}</span>;
+      }
+    }
+    return <div></div>;
+  }
+
+  private getErrorCohort(name: string): ErrorCohort {
+    return this.props.cohorts.find(
+      (errorCohort) => errorCohort.cohort.name === name
+    )!;
+  }
+
   private getCohortListItems(): ICohortListItem[] {
-    const allItems = this.props.cohorts.map(
-      (errorCohort: ErrorCohort, index: number) => {
+    const allItems = this.props.cohorts
+      .filter((errorCohort) => !errorCohort.isTemporary)
+      .map((errorCohort: ErrorCohort, index: number) => {
         return {
           coverage: errorCohort.errorCoverage.toFixed(2),
           errorRate: errorCohort.errorRate.toFixed(2),
           key: index,
           name: errorCohort.cohort.name
         };
-      }
-    );
+      });
     return allItems;
   }
 }
