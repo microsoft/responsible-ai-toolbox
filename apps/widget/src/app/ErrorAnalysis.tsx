@@ -13,15 +13,19 @@ export class ErrorAnalysis extends React.Component {
     let requestPredictionsMethod = undefined;
     let requestMatrixMethod = undefined;
     let requestDebugMLMethod = undefined;
+    let requestImportancesMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/metrics");
+        return FlaskCommunication.callFlaskService(data, "/predict");
       };
       requestMatrixMethod = async (data: any[]): Promise<any[]> => {
         return FlaskCommunication.callFlaskService(data, "/matrix");
       };
       requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
         return FlaskCommunication.callFlaskService(data, "/tree");
+      };
+      requestImportancesMethod = async (data: any[]): Promise<any[]> => {
+        return FlaskCommunication.callFlaskService(data, "/importances");
       };
     }
 
@@ -45,6 +49,7 @@ export class ErrorAnalysis extends React.Component {
         requestPredictions={requestPredictionsMethod}
         requestDebugML={requestDebugMLMethod}
         requestMatrix={requestMatrixMethod}
+        requestImportances={requestImportancesMethod}
         localUrl={modelData.localUrl}
         locale={modelData.locale}
         features={modelData.featureNames}

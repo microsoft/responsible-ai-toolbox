@@ -32,6 +32,7 @@ import { ColorPalette } from "../../ColorPalette";
 import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
+import { IMatrixAreaState } from "../../MatrixFilterState";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
@@ -51,14 +52,8 @@ export interface IMatrixAreaProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   updateMatrixLegendState: (maxError: number) => void;
-}
-
-export interface IMatrixAreaState {
-  jsonMatrix?: any;
-  maxErrorRate: number;
-  selectedCells?: boolean[];
-  matrixFeature1: string;
-  matrixFeature2: string;
+  state: IMatrixAreaState;
+  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
 }
 
 const emptyTextStyle: IStackStyles = {
@@ -76,13 +71,15 @@ export class MatrixArea extends React.PureComponent<
   public constructor(props: IMatrixAreaProps) {
     super(props);
     this.state = {
-      jsonMatrix: undefined,
+      jsonMatrix: this.props.state.jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
-      maxErrorRate: 0,
-      selectedCells: undefined
+      maxErrorRate: this.props.state.maxErrorRate,
+      selectedCells: this.props.state.selectedCells
     };
-    this.fetchMatrix();
+    if (this.props.state.selectedCells === undefined) {
+      this.fetchMatrix();
+    }
   }
 
   public componentDidUpdate(prevProps: IMatrixAreaProps): void {
@@ -97,6 +94,10 @@ export class MatrixArea extends React.PureComponent<
     ) {
       this.fetchMatrix();
     }
+  }
+
+  public componentWillUnmount(): void {
+    this.props.setMatrixAreaState(this.state);
   }
 
   public render(): React.ReactNode {
@@ -474,10 +475,10 @@ export class MatrixArea extends React.PureComponent<
       this.props.selectedFeature2 !== noFeature &&
       this.props.selectedFeature2 !== this.props.selectedFeature1;
     // Extract categories
-    const [category1Values, cat1HasIntervals] = this.extractCategories(
+    let [category1Values, cat1HasIntervals] = this.extractCategories(
       jsonMatrix.category1
     );
-    const [category2Values, cat2HasIntervals] = this.extractCategories(
+    let [category2Values, cat2HasIntervals] = this.extractCategories(
       jsonMatrix.category2
     );
     const numCols = feature2IsSelected
@@ -487,10 +488,20 @@ export class MatrixArea extends React.PureComponent<
       ? jsonMatrix.matrix.length
       : jsonMatrix.matrix[0].length;
     const multiCellCompositeFilters: ICompositeFilter[] = [];
-    const keyFeature1 = this.getKey(this.props.selectedFeature1);
+    let keyFeature1 = undefined;
     let keyFeature2 = undefined;
-    if (feature2IsSelected) {
+    if (feature2IsSelected && this.props.selectedFeature1 === noFeature) {
+      // Vertical case, where feature 2 is selected and feature 1 is not
       keyFeature2 = this.getKey(this.props.selectedFeature2);
+      category2Values = category1Values;
+      cat2HasIntervals = cat1HasIntervals;
+      category1Values = [];
+      cat1HasIntervals = false;
+    } else {
+      keyFeature1 = this.getKey(this.props.selectedFeature1);
+      if (feature2IsSelected) {
+        keyFeature2 = this.getKey(this.props.selectedFeature2);
+      }
     }
     // Create filters based on the selected cells in the matrix filter
     for (let i = 0; i < numRows; i++) {
@@ -505,19 +516,19 @@ export class MatrixArea extends React.PureComponent<
                   category1Values[i].minIntervalCat,
                   category1Values[i].maxIntervalCat
                 ],
-                column: keyFeature1,
+                column: keyFeature1!,
                 method: FilterMethods.InTheRangeOf
               });
             } else {
               let cat1arg = category1Values[i].value;
               if (typeof cat1arg == "string") {
                 cat1arg = this.props.baseCohort.jointDataset.metaDict[
-                  keyFeature1
+                  keyFeature1!
                 ].sortedCategoricalValues?.indexOf(cat1arg);
               }
               cellCompositeFilters.push({
                 arg: [cat1arg],
-                column: keyFeature1,
+                column: keyFeature1!,
                 method: FilterMethods.Equal
               });
             }

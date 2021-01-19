@@ -61,6 +61,7 @@ export class App extends React.Component<IAppProps> {
           }
           requestDebugML={this.generateJsonTreeAdultCensusIncome}
           requestMatrix={this.generateJsonMatrix}
+          requestImportances={this.generateJsonImportancesAdultCensusIncome}
           localUrl={""}
           locale={undefined}
           features={this.props.dataset.featureNames}
@@ -74,6 +75,7 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
       requestDebugML: this.generateJsonTreeBreastCancer,
+      requestImportances: this.generateJsonImportancesBreastCancer,
       requestMatrix: this.generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
@@ -139,6 +141,44 @@ export class App extends React.Component<IAppProps> {
           resolve(_.cloneDeep(dummyMatrix1dInterval));
         } else {
           resolve(_.cloneDeep(dummyMatrixData));
+        }
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
+    });
+
+    return promise;
+  };
+
+  private generateJsonImportancesBreastCancer = (
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    return this.generateJsonImportances(data, signal, true);
+  };
+
+  private generateJsonImportancesAdultCensusIncome = (
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    return this.generateJsonImportances(data, signal, false);
+  };
+
+  private generateJsonImportances = (
+    _data: any[],
+    signal: AbortSignal,
+    isBreastCancer: boolean
+  ): Promise<any> => {
+    const promise = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        if (isBreastCancer) {
+          resolve(this.generateFeatures().map(() => Math.random()));
+        } else {
+          const featureNames = (this.props
+            .dataset as ISerializedExplanationData).featureNames;
+          resolve(featureNames.map(() => Math.random()));
         }
       }, 300);
       signal.addEventListener("abort", () => {

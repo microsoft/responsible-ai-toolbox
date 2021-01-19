@@ -69,3 +69,8 @@ class ErrorAnalysisDashboard(Dashboard):
             return jsonify(self.input.matrix(data[0], data[1], data[2]))
 
         self.add_url_rule(matrix, '/matrix', methods=["POST"])
+
+        def importances():
+            return jsonify(self.input.importances())
+
+        self.add_url_rule(importances, '/importances', methods=["POST"])
