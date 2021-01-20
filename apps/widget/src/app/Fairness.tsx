@@ -9,10 +9,22 @@ import {
 import React from "react";
 
 import { config } from "./config";
+import { FlaskCommunication } from "./FlaskCommunication";
 import { modelData } from "./modelData";
 
 export class Fairness extends React.Component {
   public render(): React.ReactNode {
+    let requestMethod = undefined;
+    if (config.baseUrl !== undefined) {
+      requestMethod = async (
+        data: IMetricRequest
+      ): Promise<IMetricResponse> => {
+        return FlaskCommunication.callFlaskService(data, "/metrics") as Promise<
+          IMetricResponse
+        >;
+      };
+    }
+
     return (
       <FairnessWizardV2
         dataSummary={{
@@ -33,32 +45,8 @@ export class Fairness extends React.Component {
         supportedRegressionPerformanceKeys={modelData.regression_methods}
         supportedProbabilityPerformanceKeys={modelData.probability_methods}
         locale={modelData.locale}
-        requestMetrics={config.baseUrl ? this.requestMetrics : undefined}
+        requestMetrics={requestMethod}
       />
     );
   }
-
-  private readonly requestMetrics = (
-    postData: IMetricRequest
-  ): Promise<IMetricResponse> => {
-    return fetch(config.baseUrl + "/metrics", {
-      body: JSON.stringify(postData),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "post"
-    })
-      .then((resp) => {
-        if (resp.status >= 200 && resp.status < 300) {
-          return resp.json();
-        }
-        return Promise.reject(new Error(resp.statusText));
-      })
-      .then((json) => {
-        if (json.error !== undefined) {
-          throw new Error(json.error);
-        }
-        return Promise.resolve(json.data);
-      });
-  };
 }
