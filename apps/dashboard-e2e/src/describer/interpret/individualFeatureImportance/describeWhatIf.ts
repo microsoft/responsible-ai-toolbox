@@ -14,8 +14,12 @@ export function describeWhatIf(): void {
         "None created yet"
       );
     });
-    it("should save data point", () => {
+    it("should save data point from dropdown option", () => {
       cy.get("#what-if-expand-btn").click();
+      cy.get("#indexSelector").click();
+      cy.get('button:contains("Row 1")').last().click();
+      cy.get("#whatIfNameLabel").should("have.value", "Copy of row 1");
+
       cy.get('button:contains("Save as new point")').click();
       cy.get("#IndividualFeatureContainer").should(
         "not.contain",
@@ -29,7 +33,7 @@ export function describeWhatIf(): void {
         "not.contain",
         "None created yet"
       );
-      cy.get("#iterative-container button.ms-Button").click({ multiple: true });
+      cy.get("#iterative-container button.ms-Button").last().click();
       cy.get("#IndividualFeatureContainer").should(
         "contain.text",
         "None created yet"
