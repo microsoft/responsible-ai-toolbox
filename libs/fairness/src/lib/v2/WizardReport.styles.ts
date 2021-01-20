@@ -27,8 +27,6 @@ export interface IWizardReportStyles {
   insights: IStyle;
   insightsIcon: IStyle;
   insightsText: IStyle;
-  downloadIcon: IStyle;
-  downloadReport: IStyle;
   chevronIcon: IStyle;
   tableWrapper: IStyle;
   closeButton: IStyle;
@@ -64,21 +62,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<
       fontWeight: "400",
       lineHeight: "20px",
       paddingLeft: "20px"
-    },
-    downloadIcon: {
-      height: "18",
-      marginRight: "10px",
-      verticalAlign: "middle",
-      width: "17"
-    },
-    downloadReport: {
-      color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      fontWeight: "normal",
-      lineHeight: "16px",
-      paddingBottom: "20px",
-      paddingLeft: "0px",
-      paddingTop: "20px"
     },
     dropDown: {
       display: "inline-block",
