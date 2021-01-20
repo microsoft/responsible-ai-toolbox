@@ -5,6 +5,7 @@ import { getMenu } from "../../../util/getMenu";
 import { IInterpretData } from "../IInterpretData";
 
 import { describeDataPointChart } from "./describeDataPointChart";
+import { describeWhatIf } from "./describeWhatIf";
 
 const testName = "Individual feature importance";
 
@@ -18,5 +19,6 @@ export function describeIndividualFeatureImportance(
       );
     });
     describeDataPointChart(datasetShape);
+    describeWhatIf();
   });
 }

@@ -78,11 +78,13 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
         {!this.props.isInPanel &&
           (this.props.isPanelOpen ? (
             <IconButton
+              id={"what-if-collapse-btn"}
               iconProps={{ iconName: "ChevronRight" }}
               onClick={this.props.dismissPanel}
             />
           ) : (
             <IconButton
+              id={"what-if-expand-btn"}
               iconProps={{ iconName: "ChevronLeft" }}
               onClick={this.props.openPanel}
             />
