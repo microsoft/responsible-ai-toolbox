@@ -487,7 +487,12 @@
       "cohortNameError": "Missing cohort name",
       "_cohortNameError.comment": "error message if required name is missing",
       "placeholderName": "Cohort {0}",
-      "_placeholderName.comment": "starting name for a new cohort"
+      "_placeholderName.comment": "starting name for a new cohort",
+      "cancelTitle": "Cancel cohort",
+      "cancelNewCohort": "Are you sure you want to cancel creating a new cohort and go back?",
+      "cancelExistingCohort": "Are you sure you want to cancel editing cohort and go back?",
+      "cancelYes": "Yes",
+      "cancelNo": "No"
     },
     "AxisConfigDialog": {
       "select": "Select",

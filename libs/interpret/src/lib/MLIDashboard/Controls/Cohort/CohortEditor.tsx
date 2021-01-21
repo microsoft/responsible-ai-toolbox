@@ -95,6 +95,9 @@ export class CohortEditor extends React.PureComponent<
     return (
       <>
         <Panel
+          onOuterClick={() => {
+            return 0;
+          }} // https://github.com/microsoft/fluentui/issues/6476
           id="cohortEditPanel"
           isOpen={true}
           onDismiss={this.props.closeCohortEditorPanel}
@@ -154,7 +157,6 @@ export class CohortEditor extends React.PureComponent<
             </Stack.Item>
           </Stack>
         </Panel>
-
         {this.renderCancelDialog()}
       </>
     );
@@ -188,8 +190,14 @@ export class CohortEditor extends React.PureComponent<
     }
     return (
       <ConfirmationDialog
-        title={"AAAAAAAA"}
-        subText={"BBBBBBBB"}
+        title={localization.Interpret.CohortEditor.cancelTitle}
+        subText={
+          this.props.isNewCohort
+            ? localization.Interpret.CohortEditor.cancelNewCohort
+            : localization.Interpret.CohortEditor.cancelExistingCohort
+        }
+        confirmButtonText={localization.Interpret.CohortEditor.cancelYes}
+        cancelButtonText={localization.Interpret.CohortEditor.cancelNo}
         onConfirm={this.onCancelConfirm}
         onClose={this.onCancelClose}
       />
