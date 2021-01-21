@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../util/getMenu";
+import { IInterpretData } from "../IInterpretData";
 
-export function describeWhatIf(): void {
+export function describeWhatIf(datasetShape: IInterpretData): void {
   describe("What if tab", () => {
     beforeEach(() => {
       getMenu("Individual feature importance", "#DashboardPivot").click();
@@ -14,30 +15,32 @@ export function describeWhatIf(): void {
         "None created yet"
       );
     });
-    it("should save data point from dropdown option", () => {
-      cy.get("#what-if-expand-btn").click();
-      cy.get("#indexSelector").click();
-      cy.get('button:contains("Row 1")').last().click();
-      cy.get("#whatIfNameLabel").should("have.value", "Copy of row 1");
+    if (!datasetShape.noY) {
+      it("should save data point from dropdown option", () => {
+        cy.get("#what-if-expand-btn").click();
+        cy.get("#indexSelector").click();
+        cy.get('button:contains("Row 1")').last().click();
+        cy.get("#whatIfNameLabel").should("have.value", "Copy of row 1");
 
-      cy.get('button:contains("Save as new point")').click();
-      cy.get("#IndividualFeatureContainer").should(
-        "not.contain",
-        "None created yet"
-      );
-    });
-    it("should delete selected data point", () => {
-      cy.get("#what-if-expand-btn").click();
-      cy.get('button:contains("Save as new point")').click();
-      cy.get("#IndividualFeatureContainer").should(
-        "not.contain",
-        "None created yet"
-      );
-      cy.get("#iterative-container button.ms-Button").last().click();
-      cy.get("#IndividualFeatureContainer").should(
-        "contain.text",
-        "None created yet"
-      );
-    });
+        cy.get('button:contains("Save as new point")').click();
+        cy.get("#IndividualFeatureContainer").should(
+          "not.contain",
+          "None created yet"
+        );
+      });
+      it("should delete selected data point", () => {
+        cy.get("#what-if-expand-btn").click();
+        cy.get('button:contains("Save as new point")').click();
+        cy.get("#IndividualFeatureContainer").should(
+          "not.contain",
+          "None created yet"
+        );
+        cy.get("#iterative-container button.ms-Button").last().click();
+        cy.get("#IndividualFeatureContainer").should(
+          "contain.text",
+          "None created yet"
+        );
+      });
+    }
   });
 }

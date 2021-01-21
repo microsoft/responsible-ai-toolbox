@@ -19,6 +19,8 @@ export function describeIndividualFeatureImportance(
       );
     });
     describeDataPointChart(datasetShape);
-    describeWhatIf();
+    if (!datasetShape.noPredict) {
+      describeWhatIf(datasetShape);
+    }
   });
 }
