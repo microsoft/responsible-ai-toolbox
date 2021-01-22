@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Cohort, JointDataset } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import {
   ITextFieldStyles,
   PrimaryButton,
@@ -32,16 +33,15 @@ export interface ISaveCohortState {
 }
 
 const dialogContentProps = {
-  subText:
-    "Save the current cohort to the cohort list. You can revisit the save cohort via the cohort list.",
-  title: "Save Cohort",
+  subText: localization.ErrorAnalysis.SaveCohort.subText,
+  title: localization.ErrorAnalysis.SaveCohort.saveTitle,
   type: DialogType.close
 };
 
 const dragOptions = {
-  closeMenuItemText: "Close",
+  closeMenuItemText: localization.ErrorAnalysis.SaveCohort.close,
   menu: ContextualMenu,
-  moveMenuItemText: "Move"
+  moveMenuItemText: localization.ErrorAnalysis.SaveCohort.move
 };
 
 const modalProps = {
@@ -77,7 +77,7 @@ export class SaveCohort extends React.Component<
         maxWidth={1000}
       >
         <TextField
-          label="Cohort name"
+          label={localization.ErrorAnalysis.SaveCohort.cohortName}
           onChange={this.updateCohortName.bind(this)}
           defaultValue={allDataCopy}
           styles={textFieldStyles}
@@ -93,9 +93,12 @@ export class SaveCohort extends React.Component<
               this.props.onDismiss();
               this.saveCohort.bind(this)();
             }}
-            text="Save"
+            text={localization.ErrorAnalysis.SaveCohort.save}
           />
-          <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+          <DefaultButton
+            onClick={this.props.onDismiss}
+            text={localization.ErrorAnalysis.SaveCohort.cancel}
+          />
         </DialogFooter>
       </Dialog>
     );

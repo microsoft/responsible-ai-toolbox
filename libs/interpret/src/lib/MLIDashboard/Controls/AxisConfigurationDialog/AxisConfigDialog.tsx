@@ -149,7 +149,7 @@ export class AxisConfigDialog extends React.PureComponent<
         onDismiss={this.props.onCancel}
         isOpen={true}
         onRenderFooter={this.renderFooter}
-        isFooterAtBottom
+        isFooterAtBottom={false}
         isLightDismiss
       >
         <Stack tokens={{ childrenGap: "l1" }}>
