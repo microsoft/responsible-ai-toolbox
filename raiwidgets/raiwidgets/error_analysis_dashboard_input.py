@@ -4,6 +4,7 @@
 from .explanation_constants import \
     ExplanationDashboardInterface, WidgetRequestResponseConstants
 from scipy.sparse import issparse
+from sklearn.feature_selection import mutual_info_classif
 import numpy as np
 import pandas as pd
 from lightgbm import LGBMClassifier
@@ -553,7 +554,18 @@ class ErrorAnalysisDashboardInput:
                                          retbins=True)
                     bin_range = range(BIN_THRESHOLD)
                     catr = cutdf.cat.rename_categories(bin_range)
-                    counts = np.unique(catr.to_numpy(), return_counts=True)[1]
+                    catn, counts = np.unique(catr.to_numpy(),
+                                             return_counts=True)
+                    # fix counts to include skipped categories
+                    fix_counts = []
+                    counts_idx = 0
+                    for idx, catdf in enumerate(cutdf.cat.categories):
+                        if idx not in catn:
+                            fix_counts.append(0)
+                        else:
+                            fix_counts.append(counts[counts_idx])
+                            counts_idx += 1
+                    counts = fix_counts
                     cutdf_err = pd.cut(df_err[feat1], bins)
                     catr_err = cutdf_err.cat.rename_categories(bin_range)
                     val_err, counts_err = np.unique(catr_err.to_numpy(),
@@ -578,6 +590,39 @@ class ErrorAnalysisDashboardInput:
             return {
                 WidgetRequestResponseConstants.ERROR:
                     "Failed to generate json matrix representation",
+                WidgetRequestResponseConstants.DATA: []
+            }
+
+    def importances(self):
+        try:
+            interface = ExplanationDashboardInterface
+            feature_names = self.dashboard_input[interface.FEATURE_NAMES]
+            is_pandas = False
+            if isinstance(self._dataset, str):
+                is_pandas = True
+            if is_pandas:
+                input_data = pd.read_json(self._dataset)
+            else:
+                input_data = pd.DataFrame(self._dataset,
+                                          columns=feature_names)
+            diff = self._model.predict(input_data) != self._true_y
+            if is_pandas:
+                input_data = input_data.to_numpy()
+            if self._categorical_features:
+                # Inplace replacement of columns
+                for idx, c_i in enumerate(self._categorical_indexes):
+                    input_data[:, c_i] = self.string_ind_data[:, idx]
+            # compute the feature importances using mutual information
+            scores = mutual_info_classif(input_data, diff).tolist()
+            return {
+                WidgetRequestResponseConstants.DATA: scores
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            return {
+                WidgetRequestResponseConstants.ERROR:
+                    "Failed to generate feature importances",
                 WidgetRequestResponseConstants.DATA: []
             }
 
@@ -632,14 +677,15 @@ class ErrorAnalysisDashboardInput:
     def json_matrix_1d(self, categories, values_err, counts, counts_err):
         json_matrix = []
         json_matrix_row = []
-        for index, count in enumerate(counts):
+        for col_idx in range(len(categories)):
+            cat = categories[col_idx]
             false_count = 0
-            if categories[index] in values_err:
-                index_err = list(values_err).index(categories[index])
+            if cat in values_err:
+                index_err = list(values_err).index(cat)
                 false_count = int(counts_err[index_err])
             json_matrix_row.append({
                 FALSE_COUNT: false_count,
-                COUNT: int(counts[index])
+                COUNT: int(counts[col_idx])
             })
         json_matrix.append(json_matrix_row)
         json_category = []

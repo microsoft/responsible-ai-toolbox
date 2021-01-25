@@ -35,6 +35,7 @@ export interface IWhatIfProps {
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   customPoints: Array<{ [key: string]: any }>;
   addCustomPoint: (temporaryPoint: { [key: string]: any }) => void;
+  selectedIndex: number | undefined;
 }
 
 export interface IWhatIfState {
@@ -90,6 +91,15 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
 
     this.createCopyOfFirstRow();
     this.buildRowOptions();
+  }
+
+  public componentDidUpdate(prevProps: IWhatIfProps): void {
+    if (
+      this.props.selectedIndex !== prevProps.selectedIndex &&
+      this.props.selectedIndex
+    ) {
+      this.setTemporaryPointToCopyOfDatasetPoint(this.props.selectedIndex);
+    }
   }
 
   public render(): React.ReactNode {

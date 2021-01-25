@@ -44,6 +44,7 @@ export interface ITabularDataViewProps {
   allSelectedIndexes?: number[];
   customPoints?: Array<{ [key: string]: any }>;
   selectedCohort: ErrorCohort;
+  setWhatIfDatapoint: (index: number) => void;
 }
 
 export interface ITableState {
@@ -93,8 +94,11 @@ export class TabularDataView extends React.Component<
       tableState
     };
     this._selection = new Selection({
-      onSelectionChanged: (): void =>
-        this.props.setSelectedIndexes(this.getSelectionDetails())
+      onSelectionChanged: (): void => {
+        const selectionDetails = this.getSelectionDetails();
+        this.props.setSelectedIndexes(selectionDetails);
+        this.props.setWhatIfDatapoint(selectionDetails[0]);
+      }
     });
     this.updateSelection();
   }
@@ -130,6 +134,7 @@ export class TabularDataView extends React.Component<
                 checkButtonAriaLabel="Row checkbox"
                 selectionMode={SelectionMode.multiple}
                 selection={this._selection}
+                onItemInvoked={this.onItemInvoked.bind(this)}
               />
             </MarqueeSelection>
           </ScrollablePane>
@@ -189,6 +194,10 @@ export class TabularDataView extends React.Component<
     const selectedRows = this._selection.getSelection();
     const keys = selectedRows.map((row) => row[0] as number);
     return keys;
+  }
+
+  private onItemInvoked(item: any): void {
+    this.props.setWhatIfDatapoint(item[0] as number);
   }
 
   private tabularDataFilter(row: { [key: string]: number }): boolean {

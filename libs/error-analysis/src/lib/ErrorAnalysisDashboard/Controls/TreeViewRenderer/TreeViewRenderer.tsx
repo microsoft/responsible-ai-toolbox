@@ -21,6 +21,12 @@ import { ColorPalette } from "../../ColorPalette";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import {
+  IErrorColorStyle,
+  ITransform,
+  INodeDetail,
+  ITreeViewRendererState
+} from "../../TreeViewState";
 import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
@@ -47,49 +53,13 @@ export interface ITreeViewRendererProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-}
-
-export interface ITreeViewRendererState {
-  request?: AbortController;
-  nodeDetail: INodeDetail;
-  viewerWidth: number;
-  viewerHeight: number;
-  selectedNode: any;
-  transform: any;
-  treeNodes: any[];
-  root?: HierarchyPointNode<any>;
-  rootSize: any;
-  rootErrorSize: any;
-  rootLocalError: any;
-}
-
-export interface IErrorColorStyle {
-  fill: string;
-}
-
-export interface ITransform {
-  transform: string;
+  state: ITreeViewRendererState;
+  setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
 }
 
 export interface IFillStyleUp {
   transform: string;
   fill: string;
-}
-
-export interface IShowSelectedStyle {
-  opacity: number;
-}
-
-export interface INodeDetail {
-  showSelected: IShowSelectedStyle;
-  globalError: string;
-  localError: string;
-  instanceInfo: string;
-  errorInfo: string;
-  successInfo: string;
-  errorColor: IErrorColorStyle;
-  maskDown: ITransform;
-  maskUp: ITransform;
 }
 
 export interface ITreeNode {
@@ -138,36 +108,15 @@ export class TreeViewRenderer extends React.PureComponent<
 > {
   public constructor(props: ITreeViewRendererProps) {
     super(props);
-    this.state = {
-      nodeDetail: {
-        errorColor: {
-          fill: "#eaeaea"
-        },
-        errorInfo: "0 Errors",
-        globalError: "0",
-        instanceInfo: "0 Instances",
-        localError: "0",
-        maskDown: {
-          transform: "translate(0px, -13px)"
-        },
-        maskUp: {
-          transform: "translate(0px, 13px)"
-        },
-        showSelected: { opacity: 0 },
-        successInfo: "0 Success"
-      },
-      request: undefined,
-      root: undefined,
-      rootErrorSize: 0,
-      rootLocalError: 0,
-      rootSize: 0,
-      selectedNode: undefined,
-      transform: undefined,
-      treeNodes: [],
-      viewerHeight: 0,
-      viewerWidth: 0
-    };
-    this.fetchTreeNodes();
+    // Note: we take state from props in case
+    this.state = this.props.state;
+    if (
+      !this.state.treeNodes ||
+      this.state.treeNodes.length === 0 ||
+      !this.state.treeNodes[0]
+    ) {
+      this.fetchTreeNodes();
+    }
   }
 
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
@@ -545,6 +494,7 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public componentWillUnmount(): void {
     window.removeEventListener("resize", this.onResize.bind(this));
+    this.props.setTreeViewState(this.state);
   }
 
   private resizeFunc = (

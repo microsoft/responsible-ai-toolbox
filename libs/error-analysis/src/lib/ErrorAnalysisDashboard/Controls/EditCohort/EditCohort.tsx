@@ -24,7 +24,8 @@ import { CohortStats } from "../CohortStats/CohortStats";
 export interface IEditCohortProps {
   isOpen: boolean;
   cohort: ErrorCohort;
-  selectedCohort: ErrorCohort;
+  selectedHeatMapCohort: ErrorCohort;
+  selectedTreeMapCohort: ErrorCohort;
   jointDataset: JointDataset;
   onDismiss: () => void;
   onSave: (originalCohort: ErrorCohort, editedCohort: ErrorCohort) => void;
@@ -65,7 +66,10 @@ export class EditCohort extends React.Component<
 
   public render(): React.ReactNode {
     const disableDelete =
-      this.props.cohort.cohort.name === this.props.selectedCohort.cohort.name;
+      this.props.cohort.cohort.name ===
+        this.props.selectedHeatMapCohort.cohort.name ||
+      this.props.cohort.cohort.name ===
+        this.props.selectedTreeMapCohort.cohort.name;
     const dialogContentProps = {
       subText: localization.ErrorAnalysis.EditCohort.subText,
       title: this.props.cohort.cohort.name,

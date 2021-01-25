@@ -8,6 +8,8 @@ import React from "react";
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisDashboard";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
+import { ITreeViewRendererState } from "../../TreeViewState";
 import { MatrixFilter } from "../MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
@@ -27,6 +29,12 @@ export interface IErrorAnalysisViewProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
+  treeViewState: ITreeViewRendererState;
+  setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
+  matrixFilterState: IMatrixFilterState;
+  matrixAreaState: IMatrixAreaState;
+  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
+  setMatrixFilterState: (matrixFilterState: IMatrixFilterState) => void;
 }
 
 export class ErrorAnalysisView extends React.PureComponent<
@@ -46,6 +54,8 @@ export class ErrorAnalysisView extends React.PureComponent<
               updateSelectedCohort={this.props.updateSelectedCohort}
               selectedCohort={this.props.selectedCohort}
               baseCohort={this.props.baseCohort}
+              state={this.props.treeViewState}
+              setTreeViewState={this.props.setTreeViewState}
             />
           )}
           {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
@@ -56,6 +66,10 @@ export class ErrorAnalysisView extends React.PureComponent<
               updateSelectedCohort={this.props.updateSelectedCohort}
               selectedCohort={this.props.selectedCohort}
               baseCohort={this.props.baseCohort}
+              state={this.props.matrixFilterState}
+              matrixAreaState={this.props.matrixAreaState}
+              setMatrixAreaState={this.props.setMatrixAreaState}
+              setMatrixFilterState={this.props.setMatrixFilterState}
             />
           )}
         </div>
