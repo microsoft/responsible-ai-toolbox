@@ -67,7 +67,7 @@ export class PerformancePlot extends React.PureComponent<
           name: localization.Fairness.Metrics.falseNegativeRate,
           orientation: "h",
           text: this.props.metrics.falseNegativeRates?.bins.map((num) =>
-            FormatMetrics.formatNumbers(num, "false_negative_rate", false, 2)
+            FormatMetrics.formatNumbers(num, "miss_rate", false, 2)
           ),
           textposition: "auto",
           type: "bar",
