@@ -40,10 +40,7 @@ export interface IMainMenuProps {
   temporaryCohort: ErrorCohort;
   activeGlobalTab: GlobalTabKeys;
   activePredictionTab: PredictionTabKeys;
-}
-
-export interface IMainMenuState {
-  selectedOption: ErrorAnalysisOptions;
+  errorAnalysisOption: ErrorAnalysisOptions;
 }
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
@@ -75,17 +72,7 @@ const explanationButtonStyle: IButtonStyles = {
   root: { alignSelf: "center", padding: "0px 4px" }
 };
 
-export class MainMenu extends React.PureComponent<
-  IMainMenuProps,
-  IMainMenuState
-> {
-  public constructor(props: IMainMenuProps) {
-    super(props);
-    this.state = {
-      selectedOption: ErrorAnalysisOptions.TreeMap
-    };
-  }
-
+export class MainMenu extends React.PureComponent<IMainMenuProps> {
   public render(): React.ReactNode {
     const errorAnalysisOptionsDropdown: IDropdownOption[] = [
       {
@@ -113,7 +100,7 @@ export class MainMenu extends React.PureComponent<
         {
           commandBarButtonAs: (): any => (
             <Dropdown
-              defaultSelectedKey={this.state.selectedOption}
+              selectedKey={this.props.errorAnalysisOption}
               options={errorAnalysisOptionsDropdown}
               styles={dropdownStyles}
               onChange={this.handleErrorDetectorChanged}
@@ -161,7 +148,7 @@ export class MainMenu extends React.PureComponent<
     }
     if (
       this.props.viewType === ViewTypeKeys.ErrorAnalysisView &&
-      this.state.selectedOption === ErrorAnalysisOptions.TreeMap
+      this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap
     ) {
       farItems.push({
         buttonStyles: buttonStyle,
@@ -253,12 +240,10 @@ export class MainMenu extends React.PureComponent<
         // Note comparison above is actually string comparison (key is string), we have to set the enum
         const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;
         this.props.setErrorDetector(selectedOptionHeatMap);
-        this.setState({ selectedOption: selectedOptionHeatMap });
       } else {
         // Note comparison above is actually string comparison (key is string), we have to set the enum
         const selectedOptionTreeMap = ErrorAnalysisOptions.TreeMap;
         this.props.setErrorDetector(selectedOptionTreeMap);
-        this.setState({ selectedOption: selectedOptionTreeMap });
       }
     }
   };

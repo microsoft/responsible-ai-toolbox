@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ICompositeFilter, IFilter } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -13,7 +14,7 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import { D3ZoomEvent, zoom as d3zoom } from "d3-zoom";
-import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
+import { IProcessedStyleSet, ITheme, Text } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -122,7 +123,8 @@ export class TreeViewRenderer extends React.PureComponent<
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
     if (
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
-      this.props.baseCohort !== prevProps.baseCohort
+      this.props.baseCohort !== prevProps.baseCohort ||
+      this.props.state !== prevProps.state
     ) {
       this.fetchTreeNodes();
     }
@@ -286,6 +288,11 @@ export class TreeViewRenderer extends React.PureComponent<
 
     return (
       <div className={classNames.mainFrame} id="mainFrame">
+        <div className={classNames.treeDescription}>
+          <Text variant={"smallPlus"}>
+            {localization.ErrorAnalysis.TreeView.treeDescription}
+          </Text>
+        </div>
         <div className={classNames.innerFrame}>
           <svg
             ref={svgOuterFrame}
@@ -490,6 +497,8 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public componentDidMount(): void {
     window.addEventListener("resize", this.onResize.bind(this));
+    this.onResize();
+    this.forceUpdate();
   }
 
   public componentWillUnmount(): void {

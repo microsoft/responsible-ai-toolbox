@@ -24,8 +24,10 @@ class ErrorAnalysisDashboard(Dashboard):
         explanation. Overwrites any existing dataset on the
         explanation object.
     :type dataset: numpy.array or list[][]
-    :param true_y: The true labels for the provided dataset. Overwrites
+    :param true_y: The true labels for the provided explanation. Overwrites
         any existing dataset on the explanation object.
+        Note if explanation is sample of dataset, you will need to specify
+        true_y_dataset as well.
     :type true_y: numpy.array or list[]
     :param classes: The class names.
     :type classes: numpy.array or list[]
@@ -33,17 +35,24 @@ class ErrorAnalysisDashboard(Dashboard):
     :type features: numpy.array or list[]
     :param port: The port to use on locally hosted service.
     :type port: int
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
+    :param true_y_dataset: The true labels for the provided dataset.
+    Only needed if the explanation has a sample of instances from the
+    original dataset.  Otherwise specify true_y parameter only.
+    :type true_y_dataset: numpy.array or list[]
     """
 
     def __init__(self, explanation, model=None, *, dataset=None,
                  true_y=None, classes=None, features=None, port=None,
-                 datasetX=None, trueY=None, locale=None, public_ip=None,
-                 categorical_features=None):
+                 locale=None, public_ip=None,
+                 categorical_features=None, true_y_dataset=None):
         """Initialize the Error Analysis Dashboard."""
 
         self.input = ErrorAnalysisDashboardInput(
             explanation, model, dataset, true_y, classes,
-            features, locale, categorical_features)
+            features, locale, categorical_features,
+            true_y_dataset)
 
         super(ErrorAnalysisDashboard, self).__init__(
             dashboard_type="ErrorAnalysis",
