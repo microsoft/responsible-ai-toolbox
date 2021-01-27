@@ -7,6 +7,7 @@ import { config } from "./config";
 import { ErrorAnalysis } from "./ErrorAnalysis";
 import { Fairness } from "./Fairness";
 import { Interpret } from "./Interpret";
+import { ModelAssessment } from "./ModelAssessment"
 
 export class App extends React.Component {
   public render(): React.ReactNode {
@@ -19,6 +20,8 @@ export class App extends React.Component {
         return <Interpret dashboardType={config.dashboardType} />;
       case "ErrorAnalysis":
         return <ErrorAnalysis />;
+      case "ModelAssessment":
+        return <ModelAssessment />;
       default:
         return "Not Found";
     }
