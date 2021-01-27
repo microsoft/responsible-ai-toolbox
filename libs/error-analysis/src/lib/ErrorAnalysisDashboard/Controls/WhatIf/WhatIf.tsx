@@ -256,7 +256,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
-    this.temporaryPoint = this.props.jointDataset.getRow(index);
+    this.temporaryPoint = this.props.currentCohort.cohort.filteredData[index];
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
@@ -282,7 +282,9 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     if (indexes.length === 0) {
       return undefined;
     }
-    this.temporaryPoint = this.props.jointDataset.getRow(indexes[0]);
+    this.temporaryPoint = this.props.currentCohort.cohort.filteredData[
+      indexes[0]
+    ];
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]

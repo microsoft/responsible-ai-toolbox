@@ -44,6 +44,7 @@ import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisVie
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
+import { MapShift } from "./Controls/MapShift/MapShift";
 import { Navigation } from "./Controls/Navigation/Navigation";
 import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
 import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
@@ -80,16 +81,17 @@ export interface IErrorAnalysisDashboardState {
   isGlobalImportanceDerivedFromLocal: boolean;
   sortVector?: number[];
   editingCohortIndex?: number;
+  mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
   openInfoPanel: boolean;
   openCohortListPanel: boolean;
   openEditCohort: boolean;
   openFeatureList: boolean;
+  openMapShift: boolean;
   openSaveCohort: boolean;
   openShiftCohort: boolean;
   openWhatIf: boolean;
   predictionTab: PredictionTabKeys;
-  selectedTreeMapCohort: ErrorCohort;
-  selectedHeatMapCohort: ErrorCohort;
+  selectedCohort: ErrorCohort;
   selectedWhatIfIndex: number | undefined;
   editedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
@@ -455,6 +457,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       isGlobalImportanceDerivedFromLocal:
         globalProps.isGlobalImportanceDerivedFromLocal,
       jointDataset,
+      mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       matrixAreaState: createInitialMatrixAreaState(),
       matrixFilterState: createInitialMatrixFilterState(),
       modelChartConfig: undefined,
@@ -463,13 +466,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       openEditCohort: false,
       openFeatureList: false,
       openInfoPanel: false,
+      openMapShift: false,
       openSaveCohort: false,
       openShiftCohort: false,
       openWhatIf: false,
       predictionTab: PredictionTabKeys.CorrectPredictionTab,
+      selectedCohort: cohorts[0],
       selectedFeatures: props.features,
-      selectedHeatMapCohort: cohorts[0],
-      selectedTreeMapCohort: cohorts[0],
       selectedWeightVector:
         modelMetadata.modelType === ModelTypes.Multiclass
           ? WeightVectors.AbsAvg
@@ -516,13 +519,22 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
           localUrl={this.props.localUrl}
           viewType={this.state.viewType}
-          setErrorDetector={(key: ErrorAnalysisOptions): void =>
-            this.setState({
-              errorAnalysisOption: key,
-              openFeatureList: false
-            })
-          }
-          temporaryCohort={this.getSelectedCohort()}
+          setErrorDetector={(key: ErrorAnalysisOptions): void => {
+            if (this.state.selectedCohort.isTemporary) {
+              this.setState({
+                mapShiftErrorAnalysisOption: key,
+                openFeatureList: false,
+                openMapShift: true
+              });
+            } else {
+              this.setState({
+                errorAnalysisOption: key,
+                openFeatureList: false
+              });
+            }
+          }}
+          errorAnalysisOption={this.state.errorAnalysisOption}
+          temporaryCohort={this.state.selectedCohort}
           activeGlobalTab={this.state.activeGlobalTab}
           activePredictionTab={this.state.predictionTab}
         />
@@ -531,23 +543,38 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             isOpen={this.state.openSaveCohort}
             onDismiss={(): void => this.setState({ openSaveCohort: false })}
             onSave={(savedCohort: ErrorCohort): void => {
-              if (
-                this.state.errorAnalysisOption === ErrorAnalysisOptions.HeatMap
-              ) {
-                this.setState({
-                  cohorts: [savedCohort, ...this.state.cohorts],
-                  selectedHeatMapCohort: savedCohort
-                });
-              } else {
-                this.setState({
-                  cohorts: [savedCohort, ...this.state.cohorts],
-                  selectedTreeMapCohort: savedCohort
-                });
-              }
+              let newCohorts = [savedCohort, ...this.state.cohorts];
+              newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+              this.setState({
+                cohorts: newCohorts,
+                selectedCohort: savedCohort
+              });
             }}
-            temporaryCohort={this.getSelectedCohort()}
+            temporaryCohort={this.state.selectedCohort}
             baseCohort={this.state.baseCohort}
             jointDataset={this.state.jointDataset}
+          />
+        )}
+        {this.state.openMapShift && (
+          <MapShift
+            isOpen={this.state.openMapShift}
+            onDismiss={(): void => this.setState({ openMapShift: false })}
+            onSave={(): void => {
+              this.setState({
+                openMapShift: false,
+                openSaveCohort: true
+              });
+            }}
+            onShift={(): void => {
+              this.setState({
+                errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
+                matrixAreaState: createInitialMatrixAreaState(),
+                matrixFilterState: createInitialMatrixFilterState(),
+                openMapShift: false,
+                selectedCohort: this.state.baseCohort,
+                treeViewState: createInitialTreeViewState()
+              });
+            }}
           />
         )}
         {this.state.openEditCohort && (
@@ -562,22 +589,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 (errorCohort) =>
                   errorCohort.cohort.name !== originalCohort.cohort.name
               );
-              let selectedHeatMapCohort = this.state.selectedHeatMapCohort;
-              if (
-                originalCohort.cohort.name === selectedHeatMapCohort.cohort.name
-              ) {
-                selectedHeatMapCohort = editedCohort;
-              }
-              let selectedTreeMapCohort = this.state.selectedTreeMapCohort;
-              if (
-                originalCohort.cohort.name === selectedTreeMapCohort.cohort.name
-              ) {
-                selectedTreeMapCohort = editedCohort;
+              let selectedCohort = this.state.selectedCohort;
+              if (originalCohort.cohort.name === selectedCohort.cohort.name) {
+                selectedCohort = editedCohort;
               }
               this.setState({
                 cohorts: [editedCohort, ...cohorts],
-                selectedHeatMapCohort,
-                selectedTreeMapCohort
+                selectedCohort
               });
             }}
             onDelete={(deletedCohort: ErrorCohort): void => {
@@ -590,8 +608,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
               });
             }}
             cohort={this.state.editedCohort}
-            selectedHeatMapCohort={this.state.selectedHeatMapCohort}
-            selectedTreeMapCohort={this.state.selectedTreeMapCohort}
+            selectedCohort={this.state.selectedCohort}
             jointDataset={this.state.jointDataset}
           />
         )}
@@ -607,8 +624,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
               this.setState({
                 baseCohort: selectedCohort,
                 cohorts: [selectedCohort, ...cohorts],
-                selectedHeatMapCohort: selectedCohort,
-                selectedTreeMapCohort: selectedCohort
+                selectedCohort
               });
             }}
             cohorts={this.state.cohorts}
@@ -636,21 +652,27 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   features={this.props.features}
                   selectedFeatures={this.state.selectedFeatures}
                   errorAnalysisOption={this.state.errorAnalysisOption}
-                  selectedCohort={this.getSelectedCohort()}
+                  selectedCohort={this.state.selectedCohort}
                   baseCohort={this.state.baseCohort}
                   treeViewState={this.state.treeViewState}
                   setTreeViewState={(treeViewState: ITreeViewRendererState) => {
-                    this.setState({ treeViewState });
+                    if (this.state.selectedCohort !== this.state.baseCohort) {
+                      this.setState({ treeViewState });
+                    }
                   }}
                   matrixAreaState={this.state.matrixAreaState}
                   matrixFilterState={this.state.matrixFilterState}
                   setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
-                    this.setState({ matrixAreaState });
+                    if (this.state.selectedCohort !== this.state.baseCohort) {
+                      this.setState({ matrixAreaState });
+                    }
                   }}
                   setMatrixFilterState={(
                     matrixFilterState: IMatrixFilterState
                   ) => {
-                    this.setState({ matrixFilterState });
+                    if (this.state.selectedCohort !== this.state.baseCohort) {
+                      this.setState({ matrixFilterState });
+                    }
                   }}
                 />
               )}
@@ -723,7 +745,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         });
                       }}
                       customPoints={this.state.customPoints}
-                      selectedCohort={this.getSelectedCohort()}
+                      selectedCohort={this.state.selectedCohort}
                       setWhatIfDatapoint={(index: number) =>
                         this.setState({ selectedWhatIfIndex: index })
                       }
@@ -733,7 +755,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
               )}
               <CohortInfo
                 isOpen={this.state.openInfoPanel}
-                currentCohort={this.getSelectedCohort()}
+                currentCohort={this.state.selectedCohort}
                 jointDataset={this.state.jointDataset}
                 onDismiss={(): void => this.setState({ openInfoPanel: false })}
                 onSaveCohortClick={(): void =>
@@ -767,7 +789,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
               <WhatIf
                 isOpen={this.state.openWhatIf}
                 onDismiss={(): void => this.setState({ openWhatIf: false })}
-                currentCohort={this.getSelectedCohort()}
+                currentCohort={this.state.selectedCohort}
                 jointDataset={this.state.jointDataset}
                 metadata={this.state.modelMetadata}
                 invokeModel={this.props.requestPredictions}
@@ -788,13 +810,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         </div>
       </div>
     );
-  }
-
-  private getSelectedCohort(): ErrorCohort {
-    if (this.state.errorAnalysisOption === ErrorAnalysisOptions.HeatMap) {
-      return this.state.selectedHeatMapCohort;
-    }
-    return this.state.selectedTreeMapCohort;
   }
 
   private addCustomPoint(temporaryPoint: { [key: string]: any }): void {
@@ -841,7 +856,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       this.state.jointDataset,
       cells,
       source,
-      true
+      addTemporaryCohort
     );
     let cohorts = this.state.cohorts.filter(
       (errorCohort) => !errorCohort.isTemporary
@@ -849,11 +864,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     if (addTemporaryCohort) {
       cohorts = [selectedCohort, ...cohorts];
     }
-    if (this.state.errorAnalysisOption === ErrorAnalysisOptions.HeatMap) {
-      this.setState({ cohorts, selectedHeatMapCohort: selectedCohort });
-    } else {
-      this.setState({ cohorts, selectedTreeMapCohort: selectedCohort });
-    }
+    this.setState({ cohorts, selectedCohort });
   }
 
   private onConfigChanged(newConfig: IGenericChartProps): void {

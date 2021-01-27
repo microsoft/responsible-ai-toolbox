@@ -78,7 +78,12 @@ export class ErrorAnalysisView extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: IErrorAnalysisViewProps): void {
-    if (this.props.selectedFeatures !== prevProps.selectedFeatures) {
+    if (
+      this.props.selectedFeatures !== prevProps.selectedFeatures ||
+      this.props.treeViewState !== prevProps.treeViewState ||
+      this.props.matrixFilterState !== prevProps.matrixFilterState ||
+      this.props.matrixAreaState !== prevProps.matrixAreaState
+    ) {
       this.forceUpdate();
     }
   }
