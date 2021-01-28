@@ -26,10 +26,33 @@ this file to understand what changed.
 
 ## v0.2.0
 
-This is the first release of the raiwidgets package.
+This is the first release of the `raiwidgets` package.
 
-- educational materials
+- educational materials:
+  - notebook `analyze-categoricals-binary-classification-local.ipynb` added
+  - notebook `erroranalysis-pretability-dashboard-breast-cancer.ipynb` added
+  - notebook `erroranalysis-interpretability-dashboard-census.ipynb` added
+  - notebook `fairness-credit.ipynb` added
+  - notebook `fairness-dashboard-loan-allocation.ipynb` added
+  - notebook `fairness-interpretability-dashboard-loan-allocation.ipynb` added
+  - notebook `interpretability-dashboard-employee-attrition.ipynb` added
 - features
+  - `FairnessDashboard` changes compared to `fairlearn`'s `FairlearnDashboard`
+    which was migrated to `raiwidgets`:
+    - Restructured performance metric selection as list rather than set of
+      tiles for easier navigation.
+    - Added fairness metric selection using a grouped list.
+    - Added dropdowns to model comparison view and single model view to allow
+      users to quickly switch between sensitive features, performance metrics,
+      and fairness metrics.
+    - Added metric table to single model view.
+    - Added dropdown to switch between charts in single model view.
+    - Simplified API to extract sensitive feature names directly from
+      `sensitive_features`.
+  - `ErrorAnalysisDashboard`: first release
+  - `ExplanationDashboard` changes compared to `interpret-community`'s
+    `ExplanationDashboard` which was migrated to `raiwidgets`:
+    - TODO
 
 We're skipping v0.1.0 to get all our packages onto the same version:
 
