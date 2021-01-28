@@ -50,6 +50,8 @@ All pull requests need to abide by the following criteria to be accepted:
 
 ## Development process
 
+### Typescript
+
 For all further steps `yarn install` is a prerequisite.
 
 To run the dashboards locally run the following from the root of the
@@ -93,7 +95,7 @@ Tests are in the `apps` directory. To execute them run `yarn e2eall`.
 Sometimes it is preferable to watch the execution and select only individual
 test cases. This is possible using `yarn e2e-watch`.
 
-### Debugging
+#### Debugging
 
 There are several different ways to debug the dashboards:
 
@@ -108,3 +110,35 @@ There are several different ways to debug the dashboards:
 3. Alternatively, you can set objects as part of `window` to inspect them
    through the console at runtime (as opposed to having to specify what to
    print with `console.log` at compile time).
+
+#### Releases
+
+Releases to npm happen automatically through a GitHub workflow after every
+merged PR to the `main` branch.
+
+### Python
+
+To work with the `rai_core_flask` package you only need to install the package
+in editable mode using `pip install -e .` from the `wrapped-flask` directory.
+
+To work with the `raiwidgets` package you first need to compile the
+visualizations using `yarn buildall` from the repo root directory. This will
+create several files under `raiwidgets/raiwidgets/widget`. Apart from that,
+you also need to run `pip install -e .` to see your changes reflected. With
+any new Typescript change you need to rerun `yarn buildall`. The `pip`
+installation in editable mode does not need to be repeated even after changes.
+
+If you want to make changes to both `rai_core_flask` and `raiwidgets` in
+tandem you need to first install `raiwidgets` and afterwards install
+`rai_core_flask` in editable mode, since otherwise the requirements of
+`raiwidgets` override the editable installation of `rai_core_flask`.
+
+#### Releases
+
+Releases to PyPI do not happen automatically, but rather with a GitHub
+workflow that is manually triggerable by repository administrators.
+If there are issues using the GitHub workflow, an issue should be filed and
+releases can be carried out manually using the same steps as outlined in the
+GitHub workflow. The OS and overall runtime environment in GitHub is different
+from a local setup and sometimes results in segmentation faults or other
+problems, so in urgent situations it may be preferable to manually release.
