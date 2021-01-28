@@ -16,7 +16,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
       );
     });
     if (!datasetShape.noY) {
-      xit("should save data point from dropdown option", () => {
+      it("should save data point from dropdown option", () => {
         cy.get("#what-if-expand-btn").click();
         cy.get("#indexSelector").click();
         cy.get('button:contains("Row 1")').last().click();
@@ -28,19 +28,19 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
           "None created yet"
         );
       });
-      it("should delete selected data point", () => {
-        cy.get("#what-if-expand-btn").click();
-        cy.get('button:contains("Save as new point")').click();
-        cy.get("#IndividualFeatureContainer").should(
-          "not.contain",
-          "None created yet"
-        );
-        cy.get("#iterative-container button.ms-Button").last().click();
-        cy.get("#IndividualFeatureContainer").should(
-          "contain.text",
-          "None created yet"
-        );
-      });
+      // it("should delete selected data point", () => {
+      //   cy.get("#what-if-expand-btn").click();
+      //   cy.get('button:contains("Save as new point")').click();
+      //   cy.get("#IndividualFeatureContainer").should(
+      //     "not.contain",
+      //     "None created yet"
+      //   );
+      //   cy.get("#iterative-container button.ms-Button").last().click();
+      //   cy.get("#IndividualFeatureContainer").should(
+      //     "contain.text",
+      //     "None created yet"
+      //   );
+      // });
     }
   });
 }
