@@ -133,12 +133,14 @@ export class Insights extends React.Component<IInsightsProps> {
             {insights4}
           </Text>
         </Stack>
-        <Stack horizontal className={styles.downloadReport}>
+        {/* download button functionality to be added:
+           https://github.com/microsoft/responsible-ai-widgets/issues/66*/}
+        {/* <Stack horizontal className={styles.downloadReport}>
           <Icon iconName="Download" className={styles.downloadIcon} />
           <Text style={{ verticalAlign: "middle" }}>
             {localization.Fairness.ModelComparison.downloadReport}
           </Text>
-        </Stack>
+        </Stack> */}
       </Stack>
     );
   }

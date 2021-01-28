@@ -10,6 +10,7 @@ import {
   IErrorAnalysisDashboardProps,
   HelpMessageDict
 } from "@responsible-ai/error-analysis";
+import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
@@ -23,7 +24,7 @@ import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer
 interface IAppProps {
   dataset: IExplanationDashboardData | ISerializedExplanationData;
   theme: ITheme;
-  language: string;
+  language: Language;
   version: 1;
   classDimension?: 1 | 2 | 3;
 }
@@ -60,6 +61,7 @@ export class App extends React.Component<IAppProps> {
           }
           requestDebugML={this.generateJsonTreeAdultCensusIncome}
           requestMatrix={this.generateJsonMatrix}
+          requestImportances={this.generateJsonImportancesAdultCensusIncome}
           localUrl={""}
           locale={undefined}
           features={this.props.dataset.featureNames}
@@ -73,6 +75,7 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
       requestDebugML: this.generateJsonTreeBreastCancer,
+      requestImportances: this.generateJsonImportancesBreastCancer,
       requestMatrix: this.generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
@@ -131,10 +134,51 @@ export class App extends React.Component<IAppProps> {
           data[0][1] === "mean texture"
         ) {
           resolve(_.cloneDeep(dummyMatrix2dInterval));
-        } else if (data[0][0] === "mean radius") {
+        } else if (
+          data[0][0] === "mean radius" ||
+          data[0][1] === "mean radius"
+        ) {
           resolve(_.cloneDeep(dummyMatrix1dInterval));
         } else {
           resolve(_.cloneDeep(dummyMatrixData));
+        }
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
+    });
+
+    return promise;
+  };
+
+  private generateJsonImportancesBreastCancer = (
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    return this.generateJsonImportances(data, signal, true);
+  };
+
+  private generateJsonImportancesAdultCensusIncome = (
+    data: any[],
+    signal: AbortSignal
+  ): Promise<any> => {
+    return this.generateJsonImportances(data, signal, false);
+  };
+
+  private generateJsonImportances = (
+    _data: any[],
+    signal: AbortSignal,
+    isBreastCancer: boolean
+  ): Promise<any> => {
+    const promise = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        if (isBreastCancer) {
+          resolve(this.generateFeatures().map(() => Math.random()));
+        } else {
+          const featureNames = (this.props
+            .dataset as ISerializedExplanationData).featureNames;
+          resolve(featureNames.map(() => Math.random()));
         }
       }, 300);
       signal.addEventListener("abort", () => {

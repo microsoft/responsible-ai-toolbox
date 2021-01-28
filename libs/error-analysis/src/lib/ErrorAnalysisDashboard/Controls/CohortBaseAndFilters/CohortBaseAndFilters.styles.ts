@@ -7,7 +7,7 @@ import {
   IProcessedStyleSet
 } from "office-ui-fabric-react";
 
-export interface ISaveCohortStyles {
+export interface ICohortBaseAndFiltersStyles {
   divider: IStyle;
   header: IStyle;
   section: IStyle;
@@ -15,10 +15,10 @@ export interface ISaveCohortStyles {
   tableData: IStyle;
 }
 
-export const saveCohortStyles: () => IProcessedStyleSet<
-  ISaveCohortStyles
+export const cohortBaseAndFiltersStyles: () => IProcessedStyleSet<
+  ICohortBaseAndFiltersStyles
 > = () => {
-  return mergeStyleSets<ISaveCohortStyles>({
+  return mergeStyleSets<ICohortBaseAndFiltersStyles>({
     divider: {
       borderTop: "1px solid #DADADA",
       left: "50%",

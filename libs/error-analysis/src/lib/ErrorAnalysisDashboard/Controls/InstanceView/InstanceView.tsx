@@ -50,6 +50,7 @@ export interface IInstanceViewProps {
   setActivePredictionTab: (key: PredictionTabKeys) => void;
   customPoints: Array<{ [key: string]: any }>;
   selectedCohort: ErrorCohort;
+  setWhatIfDatapoint: (index: number) => void;
 }
 
 export interface IInstanceViewState {
@@ -94,18 +95,18 @@ export class InstanceView extends React.Component<
       text: localization.ErrorAnalysis.incorrectPrediction
     });
     this.choiceItems.push({
-      key: PredictionTabKeys.WhatIfDatapointsTab,
-      styles: {
-        root: classNames.choiceItemRootStyle
-      },
-      text: localization.ErrorAnalysis.whatIfDatapoints
-    });
-    this.choiceItems.push({
       key: PredictionTabKeys.AllSelectedTab,
       styles: {
         root: classNames.choiceItemRootStyle
       },
       text: localization.ErrorAnalysis.allSelected
+    });
+    this.choiceItems.push({
+      key: PredictionTabKeys.WhatIfDatapointsTab,
+      styles: {
+        root: classNames.choiceItemRootStyle
+      },
+      text: localization.ErrorAnalysis.whatIfDatapoints
     });
   }
 
@@ -172,6 +173,7 @@ export class InstanceView extends React.Component<
               }
               setSelectedIndexes={this.setCorrectSelectedIndexes.bind(this)}
               selectedCohort={this.props.selectedCohort}
+              setWhatIfDatapoint={this.props.setWhatIfDatapoint}
             />
           </div>
         )}
@@ -189,6 +191,7 @@ export class InstanceView extends React.Component<
               }
               setSelectedIndexes={this.setIncorrectSelectedIndexes.bind(this)}
               selectedCohort={this.props.selectedCohort}
+              setWhatIfDatapoint={this.props.setWhatIfDatapoint}
             />
           </div>
         )}
@@ -209,6 +212,7 @@ export class InstanceView extends React.Component<
                 this.state.selectionDetails.selectedAllSelectedIndexes
               }
               selectedCohort={this.props.selectedCohort}
+              setWhatIfDatapoint={this.props.setWhatIfDatapoint}
             />
           </div>
         )}
@@ -230,6 +234,9 @@ export class InstanceView extends React.Component<
                 this.state.selectionDetails.selectedAllSelectedIndexes
               }
               selectedCohort={this.props.selectedCohort}
+              setWhatIfDatapoint={(_: number) => {
+                // do nothing.
+              }}
             />
           </div>
         )}

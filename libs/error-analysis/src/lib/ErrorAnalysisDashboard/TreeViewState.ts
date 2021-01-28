@@ -1,0 +1,74 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { HierarchyPointNode } from "d3-hierarchy";
+
+export interface IErrorColorStyle {
+  fill: string;
+}
+
+export interface IShowSelectedStyle {
+  opacity: number;
+}
+
+export interface ITransform {
+  transform: string;
+}
+
+export interface INodeDetail {
+  showSelected: IShowSelectedStyle;
+  globalError: string;
+  localError: string;
+  instanceInfo: string;
+  errorInfo: string;
+  successInfo: string;
+  errorColor: IErrorColorStyle;
+  maskDown: ITransform;
+  maskUp: ITransform;
+}
+
+export interface ITreeViewRendererState {
+  request?: AbortController;
+  nodeDetail: INodeDetail;
+  viewerWidth: number;
+  viewerHeight: number;
+  selectedNode: any;
+  transform: any;
+  treeNodes: any[];
+  root?: HierarchyPointNode<any>;
+  rootSize: any;
+  rootErrorSize: any;
+  rootLocalError: any;
+}
+
+export function createInitialTreeViewState(): ITreeViewRendererState {
+  return {
+    nodeDetail: {
+      errorColor: {
+        fill: "#eaeaea"
+      },
+      errorInfo: "0 Errors",
+      globalError: "0",
+      instanceInfo: "0 Instances",
+      localError: "0",
+      maskDown: {
+        transform: "translate(0px, -13px)"
+      },
+      maskUp: {
+        transform: "translate(0px, 13px)"
+      },
+      showSelected: { opacity: 0 },
+      successInfo: "0 Success"
+    },
+    request: undefined,
+    root: undefined,
+    rootErrorSize: 0,
+    rootLocalError: 0,
+    rootSize: 0,
+    selectedNode: undefined,
+    transform: undefined,
+    treeNodes: [],
+    viewerHeight: 0,
+    viewerWidth: 0
+  };
+}

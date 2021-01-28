@@ -9,13 +9,14 @@ import {
   IFairnessData,
   IFairnessProps
 } from "@responsible-ai/fairness";
+import { Language } from "@responsible-ai/localization";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 interface IAppProps {
   dataset: IFairnessData;
   theme: ITheme;
-  language: string;
+  language: Language;
   version: 1 | 2;
 }
 

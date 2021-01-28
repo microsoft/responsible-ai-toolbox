@@ -3,8 +3,10 @@
 
 import os
 from .environments import AzureNBEnvironment
+from .environments import CredentialedVMEnvironment
 from .environments import DatabricksEnvironment
 from .environments import LocalIPythonEnvironment
+from .environments import PublicVMEnvironment
 
 """Environment detection related utilities.
 A good portion of this code has largely been sourced from open-source licensed
@@ -115,7 +117,7 @@ def is_cloud_env(detected):
         return False
 
 
-def build_environment(ip, port):
+def build_environment(service):
     """Create a runtime environment object."""
     # legacy
     checks = {  # noqa: F841
@@ -132,16 +134,27 @@ def build_environment(ip, port):
         "ipython": _detect_ipython,
     }
 
-    azure_nb_environment = AzureNBEnvironment(ip, port)
-    databricks_environment = DatabricksEnvironment(ip, port)
-    local_ipython_environment = LocalIPythonEnvironment(ip, port)
+    azure_nb_environment = AzureNBEnvironment(service)
+    credentialed_vm_environment = CredentialedVMEnvironment(service)
+    databricks_environment = DatabricksEnvironment(service)
+    local_ipython_environment = LocalIPythonEnvironment(service)
+    public_vm_environment = PublicVMEnvironment(service)
 
     # Todo: Add case for detecting and using a Jupyterlab environment
+    # note: the order matters since Databricks requirements
+    # are a superset of local requirements, for example
     if databricks_environment.successfully_detected:
-        return databricks_environment
-    if azure_nb_environment.successfully_detected:
-        return azure_nb_environment
-    if local_ipython_environment.successfully_detected:
-        return local_ipython_environment
+        env = databricks_environment
+    elif azure_nb_environment.successfully_detected:
+        env = azure_nb_environment
+    elif local_ipython_environment.successfully_detected:
+        env = local_ipython_environment
+    elif public_vm_environment.successfully_detected:
+        env = public_vm_environment
+    elif credentialed_vm_environment.successfully_detected:
+        env = credentialed_vm_environment
     else:
         raise Exception("Failed to detect Ipython environment")
+
+    env.select(service)  # TODO: simplify
+    return env

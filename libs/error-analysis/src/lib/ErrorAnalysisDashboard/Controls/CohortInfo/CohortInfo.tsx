@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { JointDataset } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
   IFocusTrapZoneProps,
@@ -48,7 +49,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
 
     return (
       <Panel
-        headerText="Cohort Information"
+        headerText={localization.ErrorAnalysis.CohortInfo.cohortInformation}
         isOpen={this.props.isOpen}
         focusTrapZoneProps={focusTrapZoneProps}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
@@ -62,7 +63,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <DefaultButton
-              text="Save Cohort"
+              text={localization.ErrorAnalysis.CohortInfo.saveCohort}
               onClick={(): any => this.props.onSaveCohortClick()}
             />
           </div>

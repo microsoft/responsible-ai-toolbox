@@ -8,23 +8,31 @@ import {
   FilterMethods,
   JointDataset
 } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import {
   DirectionalHint,
   mergeStyles,
+  IStackStyles,
+  IStackTokens,
   IStyle,
   ITheme,
   ITooltipHostStyles,
   ITooltipProps,
+  Stack,
+  Text,
   TooltipDelay,
   TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { ColorPalette } from "../../ColorPalette";
+import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
+import { IMatrixAreaState } from "../../MatrixFilterState";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
@@ -32,9 +40,9 @@ import { matrixAreaStyles } from "./MatrixArea.styles";
 export interface IMatrixAreaProps {
   theme?: ITheme;
   features: string[];
-  selectedFeature1?: string;
-  selectedFeature2?: string;
-  getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  selectedFeature1: string;
+  selectedFeature2: string;
+  getMatrix?: (request: any, abortSignal: AbortSignal) => Promise<any>;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -43,13 +51,18 @@ export interface IMatrixAreaProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
+  updateMatrixLegendState: (maxError: number) => void;
+  state: IMatrixAreaState;
+  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
 }
 
-export interface IMatrixAreaState {
-  matrix?: any[];
-  maxErrorRate: number;
-  selectedCells?: boolean[];
-}
+const emptyTextStyle: IStackStyles = {
+  root: {
+    width: 300
+  }
+};
+
+const emptyTextPadding: IStackTokens = { padding: "10px 0px 0px 0px" };
 
 export class MatrixArea extends React.PureComponent<
   IMatrixAreaProps,
@@ -58,11 +71,15 @@ export class MatrixArea extends React.PureComponent<
   public constructor(props: IMatrixAreaProps) {
     super(props);
     this.state = {
-      matrix: undefined,
-      maxErrorRate: 0,
-      selectedCells: undefined
+      jsonMatrix: this.props.state.jsonMatrix,
+      matrixFeature1: this.props.selectedFeature1,
+      matrixFeature2: this.props.selectedFeature2,
+      maxErrorRate: this.props.state.maxErrorRate,
+      selectedCells: this.props.state.selectedCells
     };
-    this.fetchMatrix();
+    if (this.props.state.selectedCells === undefined) {
+      this.fetchMatrix();
+    }
   }
 
   public componentDidUpdate(prevProps: IMatrixAreaProps): void {
@@ -79,20 +96,44 @@ export class MatrixArea extends React.PureComponent<
     }
   }
 
+  public componentWillUnmount(): void {
+    this.props.setMatrixAreaState(this.state);
+  }
+
   public render(): React.ReactNode {
     const classNames = matrixAreaStyles();
+    // Note: we render as empty if:
+    // 1.) there is no matrix
+    // 2.) all features set to empty
+    // 3.) when user first changes feature a render is triggered but componentDidUpdate
+    // is only called after initial render is done, which would be an inconsistent state
+    // Note in third case we just show empty and not the help text
     if (
-      !this.state.matrix ||
-      (this.props.selectedFeature1 === undefined &&
-        this.props.selectedFeature2 === undefined)
+      !this.state.jsonMatrix ||
+      (this.props.selectedFeature1 === noFeature &&
+        this.props.selectedFeature2 === noFeature)
+    ) {
+      return (
+        <Stack styles={emptyTextStyle} tokens={emptyTextPadding}>
+          <Text variant="medium">
+            {localization.ErrorAnalysis.MatrixArea.emptyText}
+          </Text>
+        </Stack>
+      );
+    }
+    if (
+      this.state.matrixFeature1 !== this.props.selectedFeature1 ||
+      this.state.matrixFeature2 !== this.props.selectedFeature2
     ) {
       return <div></div>;
     }
+    const sameFeatureSelected =
+      this.props.selectedFeature1 === this.props.selectedFeature2;
     let rows = 0;
-    if (this.props.selectedFeature2 !== undefined) {
-      rows = Math.floor((this.state.matrix.length - 1) / 2);
+    if (this.props.selectedFeature2 !== noFeature && !sameFeatureSelected) {
+      rows = Math.floor((this.state.jsonMatrix.matrix.length - 1) / 2);
     } else {
-      rows = this.state.matrix.length / 2;
+      rows = this.state.jsonMatrix.matrix.length / 2;
     }
     const topPadding = rows * 50 - 14 + 60;
     const styledMatrixLabel: IStyle = mergeStyles([
@@ -101,54 +142,35 @@ export class MatrixArea extends React.PureComponent<
         paddingTop: `${topPadding}px`
       }
     ]);
-    const matrixLength = this.state.matrix.length;
+    const matrixLength = this.state.jsonMatrix.matrix.length;
+    // Extract categories
+    const [category1Values] = this.extractCategories(
+      this.state.jsonMatrix.category1
+    );
+    const [category2Values] = this.extractCategories(
+      this.state.jsonMatrix.category2
+    );
+    const topMatrixClass =
+      this.props.selectedFeature1 !== noFeature
+        ? classNames.matrixRow
+        : classNames.matrixCol;
     return (
       <div className={classNames.matrixArea}>
         <div>
-          {this.props.selectedFeature2 !== undefined && (
+          {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
             <div className={classNames.matrixLabelBottom}>
               <div className={classNames.matrixLabelTab}></div>
               <div>{this.props.selectedFeature2}</div>
             </div>
           )}
-          {this.props.selectedFeature2 === undefined && (
+          {(this.props.selectedFeature2 === noFeature ||
+            sameFeatureSelected) && (
             <div className={classNames.emptyLabelPadding}></div>
           )}
 
-          {this.state.matrix.map((row: any, i: number) => (
-            <div key={`${i}row`} className={classNames.matrixRow}>
+          {this.state.jsonMatrix.matrix.map((row: any, i: number) => (
+            <div key={`${i}row`} className={topMatrixClass}>
               {row.map((value: any, j: number) => {
-                if (j === 0) {
-                  if (
-                    i === matrixLength - 1 ||
-                    this.props.selectedFeature2 === undefined
-                  ) {
-                    return (
-                      <div
-                        key={`${i}_${j}category1`}
-                        className={classNames.matrixCellPivot1Categories}
-                      ></div>
-                    );
-                  }
-                  return (
-                    <div
-                      key={`${i}_${j}category1`}
-                      className={classNames.matrixCellPivot1Categories}
-                    >
-                      {value.category1}
-                    </div>
-                  );
-                } else if (i === matrixLength - 1) {
-                  return (
-                    <div
-                      key={`${i}_${j}category2`}
-                      className={classNames.matrixCellPivot2Categories}
-                    >
-                      {value.category2}
-                    </div>
-                  );
-                }
-                /* Value Cells */
                 let errorRatio = 0;
                 let styledGradientMatrixCell: IStyle =
                   classNames.styledMatrixCell;
@@ -203,7 +225,7 @@ export class MatrixArea extends React.PureComponent<
                     width: "100%"
                   }
                 };
-                return (
+                const cellData = (
                   <div
                     key={`${i}_${j}cell`}
                     className={classNames.matrixCell}
@@ -231,17 +253,102 @@ export class MatrixArea extends React.PureComponent<
                     </TooltipHost>
                   </div>
                 );
+                if (this.props.selectedFeature1 === noFeature) {
+                  const categoryData = (
+                    <div
+                      key={`${i}_${j}category1`}
+                      className={classNames.matrixCellPivot1Categories}
+                    >
+                      {category1Values[j].value}
+                    </div>
+                  );
+                  return (
+                    <div key={`${j}row`} className={classNames.matrixRow}>
+                      {categoryData}
+                      {cellData}
+                    </div>
+                  );
+                } else if (j === 0) {
+                  if (
+                    this.props.selectedFeature2 === noFeature ||
+                    sameFeatureSelected
+                  ) {
+                    return [
+                      <div
+                        key={`${i}_${j}category1`}
+                        className={classNames.matrixCellPivot1Categories}
+                      ></div>,
+                      cellData
+                    ];
+                  }
+                  return [
+                    <div
+                      key={`${i}_${j}category1`}
+                      className={classNames.matrixCellPivot1Categories}
+                    >
+                      {category1Values[i].value}
+                    </div>,
+                    cellData
+                  ];
+                }
+                return cellData;
               })}
             </div>
           ))}
+          {(this.props.selectedFeature2 === noFeature || sameFeatureSelected) &&
+            category1Values.length > 0 && (
+              <div key={`${matrixLength}row`} className={classNames.matrixRow}>
+                <div
+                  key={`${matrixLength}_${0}category1`}
+                  className={classNames.matrixCellPivot1Categories}
+                ></div>
+                {category1Values.map((category: any, i: number) => {
+                  return (
+                    <div
+                      key={`${matrixLength}_${i + 1}category1`}
+                      className={classNames.matrixCellPivot2Categories}
+                    >
+                      {category.value}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          {this.props.selectedFeature1 !== noFeature &&
+            this.props.selectedFeature2 !== noFeature &&
+            !sameFeatureSelected &&
+            category2Values.length > 0 && (
+              <div key={`${matrixLength}row`} className={classNames.matrixRow}>
+                <div
+                  key={`${matrixLength}_${0}category1`}
+                  className={classNames.matrixCellPivot1Categories}
+                ></div>
+                {category2Values.map((category: any, i: number) => {
+                  return (
+                    <div
+                      key={`${matrixLength}_${i + 1}category2`}
+                      className={classNames.matrixCellPivot2Categories}
+                    >
+                      {category.value}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
         </div>
-        <div className={styledMatrixLabel}>{this.props.selectedFeature1}</div>
+        {this.props.selectedFeature1 !== noFeature && (
+          <div className={styledMatrixLabel}>{this.props.selectedFeature1}</div>
+        )}
       </div>
     );
   }
 
   private fetchMatrix(): void {
-    if (this.props.getMatrix === undefined) {
+    if (
+      this.props.getMatrix === undefined ||
+      (this.props.selectedFeature1 === noFeature &&
+        this.props.selectedFeature2 === noFeature)
+    ) {
       return;
     }
     const filtersRelabeled = ErrorCohort.getLabeledFilters(
@@ -252,10 +359,23 @@ export class MatrixArea extends React.PureComponent<
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
+    let selectedFeature1: string | undefined = this.props.selectedFeature1;
+    if (this.props.selectedFeature1 === noFeature) {
+      selectedFeature1 = undefined;
+    }
+    let selectedFeature2: string | undefined = this.props.selectedFeature2;
+    // Note: edge case, if both features selected are the same one, show just a row
+    if (
+      this.props.selectedFeature2 === noFeature ||
+      (this.props.selectedFeature2 === this.props.selectedFeature1 &&
+        selectedFeature1 !== undefined)
+    ) {
+      selectedFeature2 = undefined;
+    }
     this.props
       .getMatrix(
         [
-          [this.props.selectedFeature1!, this.props.selectedFeature2!],
+          [selectedFeature1, selectedFeature2],
           filtersRelabeled,
           compositeFiltersRelabeled
         ],
@@ -266,15 +386,21 @@ export class MatrixArea extends React.PureComponent<
       });
   }
 
-  private reloadData(matrix: any[]): void {
-    const maxErrorRate = 0;
-    matrix.forEach((row: any): void => {
+  private reloadData(jsonMatrix: any): void {
+    let maxErrorRate = 0;
+    jsonMatrix.matrix.forEach((row: any): void => {
       row.forEach((value: any): void => {
-        Math.max(maxErrorRate, (value.falseCount / value.count) * 100);
+        const errorRate = value.falseCount / value.count;
+        if (!Number.isNaN(errorRate)) {
+          maxErrorRate = Math.max(maxErrorRate, errorRate);
+        }
       });
     });
+    this.props.updateMatrixLegendState(maxErrorRate);
     this.setState({
-      matrix,
+      jsonMatrix,
+      matrixFeature1: this.props.selectedFeature1,
+      matrixFeature2: this.props.selectedFeature2,
       maxErrorRate,
       selectedCells: undefined
     });
@@ -299,7 +425,7 @@ export class MatrixArea extends React.PureComponent<
     // Create a composite filter from the selected cells
     const compositeFilter = this.createCompositeFilterFromCells(
       selectedCells,
-      this.state.matrix!
+      this.state.jsonMatrix!
     );
     const cells = selectedCells.filter(Boolean).length;
     this.props.updateSelectedCohort(
@@ -315,99 +441,121 @@ export class MatrixArea extends React.PureComponent<
     return JointDataset.DataLabelRoot + index.toString();
   }
 
+  private extractCategories(category: any): [any[], boolean] {
+    if (category === undefined) {
+      return [[], false];
+    }
+    const categoryValues = [];
+    let catHasIntervals = false;
+    for (let i = 0; i < category.values.length; i++) {
+      const value = category.values[i];
+      if (
+        "intervalMin" in category &&
+        "intervalMax" in category &&
+        category.intervalMin.length > 0 &&
+        category.intervalMax.length > 0
+      ) {
+        const minIntervalCat = category.intervalMin[i];
+        const maxIntervalCat = category.intervalMax[i];
+        categoryValues.push({ maxIntervalCat, minIntervalCat, value });
+        catHasIntervals = true;
+      } else {
+        categoryValues.push({ value });
+        catHasIntervals = false;
+      }
+    }
+    return [categoryValues, catHasIntervals];
+  }
+
   private createCompositeFilterFromCells(
     selectedCells: boolean[],
-    matrix: any[]
+    jsonMatrix: any
   ): ICompositeFilter[] {
-    const category1Values = [];
-    let cat1HasIntervals = false;
-    let cat2HasIntervals = false;
-    const feature2IsSelected = this.props.selectedFeature2 !== undefined;
-    // Extract categories for first selected feature in matrix filter
-    for (let i = 0; i < matrix.length - 1; i++) {
-      const cellCat1 = matrix[i][0];
-      const category1 = cellCat1.category1;
-      if ("intervalMin" in cellCat1 && "intervalMax" in cellCat1) {
-        const minIntervalCat1 = cellCat1.intervalMin;
-        const maxIntervalCat1 = cellCat1.intervalMax;
-        category1Values.push({ category1, maxIntervalCat1, minIntervalCat1 });
-        cat1HasIntervals = true;
-      } else {
-        category1Values.push({ category1 });
-        cat1HasIntervals = false;
-      }
-    }
-    const category2Values = [];
-    const rowLength = matrix[0].length;
-    // Extract categories for second selected feature in matrix filter
-    for (let i = 1; i < rowLength; i++) {
-      const cellCat2 = matrix[matrix.length - 1][i];
-      const category2 = cellCat2.category2;
-      if ("intervalMin" in cellCat2 && "intervalMax" in cellCat2) {
-        const minIntervalCat2 = cellCat2.intervalMin;
-        const maxIntervalCat2 = cellCat2.intervalMax;
-        category2Values.push({ category2, maxIntervalCat2, minIntervalCat2 });
-        cat2HasIntervals = true;
-      } else {
-        category2Values.push({ category2 });
-        cat2HasIntervals = false;
-      }
-    }
+    const feature2IsSelected =
+      this.props.selectedFeature2 !== noFeature &&
+      this.props.selectedFeature2 !== this.props.selectedFeature1;
+    // Extract categories
+    let [category1Values, cat1HasIntervals] = this.extractCategories(
+      jsonMatrix.category1
+    );
+    let [category2Values, cat2HasIntervals] = this.extractCategories(
+      jsonMatrix.category2
+    );
+    const numCols = feature2IsSelected
+      ? jsonMatrix.matrix[0].length
+      : jsonMatrix.matrix.length;
+    const numRows = feature2IsSelected
+      ? jsonMatrix.matrix.length
+      : jsonMatrix.matrix[0].length;
     const multiCellCompositeFilters: ICompositeFilter[] = [];
-    const keyFeature1 = this.getKey(this.props.selectedFeature1!);
+    let keyFeature1 = undefined;
     let keyFeature2 = undefined;
-    if (feature2IsSelected) {
-      keyFeature2 = this.getKey(this.props.selectedFeature2!);
+    if (feature2IsSelected && this.props.selectedFeature1 === noFeature) {
+      // Vertical case, where feature 2 is selected and feature 1 is not
+      keyFeature2 = this.getKey(this.props.selectedFeature2);
+      category2Values = category1Values;
+      cat2HasIntervals = cat1HasIntervals;
+      category1Values = [];
+      cat1HasIntervals = false;
+    } else {
+      keyFeature1 = this.getKey(this.props.selectedFeature1);
+      if (feature2IsSelected) {
+        keyFeature2 = this.getKey(this.props.selectedFeature2);
+      }
     }
     // Create filters based on the selected cells in the matrix filter
-    for (let i = 0; i < matrix.length - 1; i++) {
-      for (let j = 1; j < rowLength; j++) {
-        const index = j + i * rowLength;
+    for (let i = 0; i < numRows; i++) {
+      for (let j = 0; j < numCols; j++) {
+        const index = j + i * numCols;
         const cellCompositeFilters: ICompositeFilter[] = [];
         if (selectedCells[index]) {
-          if (category1Values.length > 0 && feature2IsSelected) {
+          if (category1Values.length > 0) {
             if (cat1HasIntervals) {
               cellCompositeFilters.push({
                 arg: [
-                  category1Values[i].minIntervalCat1,
-                  category1Values[i].maxIntervalCat1
+                  category1Values[i].minIntervalCat,
+                  category1Values[i].maxIntervalCat
                 ],
-                column: keyFeature1,
+                column: keyFeature1!,
                 method: FilterMethods.InTheRangeOf
               });
             } else {
-              let cat1arg = category1Values[i].category1;
+              let cat1arg = category1Values[i].value;
               if (typeof cat1arg == "string") {
-                cat1arg = i;
+                cat1arg = this.props.baseCohort.jointDataset.metaDict[
+                  keyFeature1!
+                ].sortedCategoricalValues?.indexOf(cat1arg);
               }
               cellCompositeFilters.push({
                 arg: [cat1arg],
-                column: keyFeature1,
+                column: keyFeature1!,
                 method: FilterMethods.Equal
               });
             }
-          } else {
-            keyFeature2 = keyFeature1;
           }
-          if (cat2HasIntervals) {
-            cellCompositeFilters.push({
-              arg: [
-                category2Values[j - 1].minIntervalCat2,
-                category2Values[j - 1].maxIntervalCat2
-              ],
-              column: keyFeature2!,
-              method: FilterMethods.InTheRangeOf
-            });
-          } else {
-            let cat2arg = category2Values[j - 1].category2;
-            if (typeof cat2arg == "string") {
-              cat2arg = j - 1;
+          if (category2Values.length > 0) {
+            if (cat2HasIntervals) {
+              cellCompositeFilters.push({
+                arg: [
+                  category2Values[j].minIntervalCat,
+                  category2Values[j].maxIntervalCat
+                ],
+                column: keyFeature2!,
+                method: FilterMethods.InTheRangeOf
+              });
+            } else {
+              let cat2arg = category2Values[j].value;
+              if (typeof cat2arg == "string") {
+                cat2arg = this.props.baseCohort.jointDataset.metaDict[
+                  keyFeature2!
+                ].sortedCategoricalValues?.indexOf(cat2arg);
+              }
+              cellCompositeFilters.push({
+                arg: [cat2arg],
+                column: keyFeature2!,
+                method: FilterMethods.Equal
+              });
             }
-            cellCompositeFilters.push({
-              arg: [cat2arg],
-              column: keyFeature2!,
-              method: FilterMethods.Equal
-            });
           }
           const singleCellCompositeFilter: ICompositeFilter = {
             compositeFilters: cellCompositeFilters,
@@ -440,7 +588,7 @@ export class MatrixArea extends React.PureComponent<
     return d3scaleLinear<string>()
       .domain([0, 1])
       .interpolate(d3interpolateHcl)
-      .range(["#F4D1D2", "#8d2323"])(value)!;
+      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value)!;
   }
 
   private colorLookup(ratio: number): string {

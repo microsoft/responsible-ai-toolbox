@@ -217,6 +217,7 @@ export class GlobalExplanationTab extends React.PureComponent<
             sortArray={this.state.sortArray}
             chartType={this.state.chartType}
             unsortedX={this.props.metadata.featureNamesAbridged}
+            originX={this.props.metadata.featureNames}
             unsortedSeries={this.activeSeries}
             topK={this.state.topK}
             onFeatureSelection={this.handleFeatureSelection}

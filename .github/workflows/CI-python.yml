@@ -1,0 +1,51 @@
+name: CI Python
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        packageDirectory: ["raiwidgets", "wrapped-flask"]
+        operatingSystem: [ubuntu-latest, macos-latest]
+        pythonVersion: [3.6, 3.7, 3.8]
+        exclude:
+          # segfaults in wrapped-flask tests in most OS-Python version combinations
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: ubuntu-latest
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: macos-latest
+            pythonVersion: 3.7
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: macos-latest
+            pythonVersion: 3.8
+          # lightgbm doesn't install properly on MacOS
+          - packageDirectory: "raiwidgets"
+            operatingSystem: macos-latest
+
+    runs-on: ${{ matrix.operatingSystem }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.pythonVersion }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ${{ matrix.packageDirectory }}/requirements-dev.txt
+          pip install ${{ matrix.packageDirectory }}/
+
+      - name: flake8
+        run: flake8
+
+      - name: Run tests
+        run: |
+          pytest ${{ matrix.packageDirectory }}/tests/

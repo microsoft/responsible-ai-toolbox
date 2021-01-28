@@ -2,25 +2,22 @@
 // Licensed under the MIT License.
 
 import { Cohort, JointDataset } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import {
   ITextFieldStyles,
-  IStackStyles,
-  IStackTokens,
   PrimaryButton,
   DefaultButton,
   ContextualMenu,
   Dialog,
   DialogType,
   DialogFooter,
-  Stack,
   TextField
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
+import { CohortBaseAndFilters } from "../CohortBaseAndFilters/CohortBaseAndFilters";
 import { CohortStats } from "../CohortStats/CohortStats";
-
-import { saveCohortStyles } from "./SaveCohort.styles";
 
 export interface ISaveCohortProps {
   isOpen: boolean;
@@ -36,32 +33,20 @@ export interface ISaveCohortState {
 }
 
 const dialogContentProps = {
-  subText:
-    "Save the current cohort to the cohort list. You can revisit the save cohort via the cohort list.",
-  title: "Save Cohort",
+  subText: localization.ErrorAnalysis.SaveCohort.subText,
+  title: localization.ErrorAnalysis.SaveCohort.saveTitle,
   type: DialogType.close
 };
 
 const dragOptions = {
-  closeMenuItemText: "Close",
+  closeMenuItemText: localization.ErrorAnalysis.SaveCohort.close,
   menu: ContextualMenu,
-  moveMenuItemText: "Move"
+  moveMenuItemText: localization.ErrorAnalysis.SaveCohort.move
 };
 
 const modalProps = {
   dragOptions,
   isBlocking: true
-};
-
-const alignmentStackTokens: IStackTokens = {
-  childrenGap: 10,
-  padding: 5
-};
-
-const maxWidthStackStyle: IStackStyles = {
-  root: {
-    width: "500px"
-  }
 };
 
 const allDataCopy = "All data copy";
@@ -82,8 +67,6 @@ export class SaveCohort extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const classNames = saveCohortStyles();
-    const filters = this.props.temporaryCohort.filtersToString().join(", ");
     return (
       <Dialog
         hidden={!this.props.isOpen}
@@ -94,57 +77,28 @@ export class SaveCohort extends React.Component<
         maxWidth={1000}
       >
         <TextField
-          label="Cohort name"
+          label={localization.ErrorAnalysis.SaveCohort.cohortName}
           onChange={this.updateCohortName.bind(this)}
           defaultValue={allDataCopy}
           styles={textFieldStyles}
         />
         <CohortStats temporaryCohort={this.props.temporaryCohort}></CohortStats>
-        <div className={classNames.section}></div>
-        <div className={classNames.subsection}>
-          <div className={classNames.header}>Base cohort and filters</div>
-          <Stack horizontal>
-            <Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Base cohort</div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Error explorer</div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Filters</div>
-              </Stack>
-            </Stack>
-            <Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>
-                  {this.props.baseCohort.cohort.name}
-                </div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>
-                  {this.props.temporaryCohort.source}
-                </div>
-              </Stack>
-              <Stack
-                horizontal
-                tokens={alignmentStackTokens}
-                styles={maxWidthStackStyle}
-              >
-                <div className={classNames.tableData}>{filters}</div>
-              </Stack>
-            </Stack>
-          </Stack>
-        </div>
+        <CohortBaseAndFilters
+          cohort={this.props.temporaryCohort}
+          baseCohort={this.props.baseCohort}
+        ></CohortBaseAndFilters>
         <DialogFooter>
           <PrimaryButton
             onClick={(): void => {
               this.props.onDismiss();
               this.saveCohort.bind(this)();
             }}
-            text="Save"
+            text={localization.ErrorAnalysis.SaveCohort.save}
           />
-          <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+          <DefaultButton
+            onClick={this.props.onDismiss}
+            text={localization.ErrorAnalysis.SaveCohort.cancel}
+          />
         </DialogFooter>
       </Dialog>
     );

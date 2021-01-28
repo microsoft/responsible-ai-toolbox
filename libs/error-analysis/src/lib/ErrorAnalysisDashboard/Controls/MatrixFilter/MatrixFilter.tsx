@@ -12,7 +12,9 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
+import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
 
@@ -30,11 +32,10 @@ export interface IMatrixFilterProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-}
-
-export interface IMatrixFilterState {
-  selectedFeature1?: string;
-  selectedFeature2?: string;
+  state: IMatrixFilterState;
+  matrixAreaState: IMatrixAreaState;
+  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
+  setMatrixFilterState: (matrixFilterState: IMatrixFilterState) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -44,15 +45,32 @@ export class MatrixFilter extends React.PureComponent<
   IMatrixFilterState
 > {
   private options: IComboBoxOption[];
+  private selectedKey1: number;
+  private selectedKey2: number;
   public constructor(props: IMatrixFilterProps) {
     super(props);
-    this.state = {
-      selectedFeature1: undefined,
-      selectedFeature2: undefined
-    };
-    this.options = props.features.map((feature, index) => {
-      return { key: index, text: feature };
-    });
+    this.state = this.props.state;
+    this.options = [{ key: 0, text: noFeature }].concat(
+      props.features.map((feature, index) => {
+        return { key: index + 1, text: feature };
+      })
+    );
+    this.selectedKey1 = 0;
+    this.selectedKey2 = 0;
+    if (this.props.state.selectedFeature1 !== noFeature) {
+      this.selectedKey1 = this.options.findIndex(
+        (option) => option.text === this.props.state.selectedFeature1
+      );
+    }
+    if (this.props.state.selectedFeature2 !== noFeature) {
+      this.selectedKey2 = this.options.findIndex(
+        (option) => option.text === this.props.state.selectedFeature2
+      );
+    }
+  }
+
+  public componentWillUnmount(): void {
+    this.props.setMatrixFilterState(this.state);
   }
 
   public render(): React.ReactNode {
@@ -60,11 +78,15 @@ export class MatrixFilter extends React.PureComponent<
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
-          <MatrixLegend selectedCohort={this.props.selectedCohort} />
+          <MatrixLegend
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            max={this.state.matrixLegendState.maxError}
+          />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
-                placeholder="No Feature"
+                selectedKey={this.selectedKey1}
                 label="X-Axis: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -78,7 +100,7 @@ export class MatrixFilter extends React.PureComponent<
             </Stack.Item>
             <Stack.Item key="feature2key">
               <ComboBox
-                placeholder="No Feature"
+                selectedKey={this.selectedKey2}
                 label="Y-Axis: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -100,6 +122,9 @@ export class MatrixFilter extends React.PureComponent<
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
+            updateMatrixLegendState={this.updateMatrixLegendState}
+            state={this.props.matrixAreaState}
+            setMatrixAreaState={this.props.setMatrixAreaState}
           />
         </Stack>
       </div>
@@ -111,6 +136,13 @@ export class MatrixFilter extends React.PureComponent<
     item?: IComboBoxOption
   ): void => {
     if (item !== undefined) {
+      if (item.text !== noFeature) {
+        this.selectedKey1 = this.options.findIndex(
+          (option) => option.text === item.text
+        );
+      } else {
+        this.selectedKey1 = 0;
+      }
       this.setState({ selectedFeature1: item.text });
     }
   };
@@ -120,7 +152,18 @@ export class MatrixFilter extends React.PureComponent<
     item?: IComboBoxOption
   ): void => {
     if (item !== undefined) {
+      if (item.text !== noFeature) {
+        this.selectedKey2 = this.options.findIndex(
+          (option) => option.text === item.text
+        );
+      } else {
+        this.selectedKey2 = 0;
+      }
       this.setState({ selectedFeature2: item.text });
     }
+  };
+
+  private updateMatrixLegendState = (maxError: number): void => {
+    this.setState({ matrixLegendState: { maxError } });
   };
 }
