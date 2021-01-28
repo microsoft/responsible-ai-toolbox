@@ -13,11 +13,11 @@ export function constructRows(
 ): any[] {
   const rows = [];
   for (let i = 0; i < viewedRows; i++) {
-    let index = i;
+    let index = cohortData[i][JointDataset.IndexLabel];
     if (indexes) {
       index = indexes[i];
     }
-    const row = cohortData[index];
+    const row = jointDataset.getRow(index);
     if (filterFunction && filterFunction(row)) {
       continue;
     }
@@ -26,7 +26,7 @@ export function constructRows(
       jointDataset.metaDict,
       jointDataset.localExplanationFeatureCount
     );
-    rows.push([index, ...data]);
+    rows.push([row[JointDataset.IndexLabel], ...data]);
   }
   return rows;
 }

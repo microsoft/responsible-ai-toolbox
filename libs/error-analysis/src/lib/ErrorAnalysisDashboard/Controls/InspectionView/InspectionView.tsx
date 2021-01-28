@@ -220,7 +220,7 @@ export class InspectionView extends React.PureComponent<
   ): IInspectionViewState {
     const inspectedFeatureImportance = this.props.inspectedIndexes.map(
       (rowIndex, colorIndex) => {
-        const row = this.props.selectedCohort.cohort.filteredData[rowIndex];
+        const row = this.props.jointDataset.getRow(rowIndex);
         return {
           colorIndex,
           id: rowIndex,
