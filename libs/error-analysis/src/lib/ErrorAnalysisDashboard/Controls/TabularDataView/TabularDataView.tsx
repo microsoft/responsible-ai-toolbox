@@ -16,10 +16,9 @@ import {
   MarqueeSelection,
   ScrollablePane,
   ScrollbarVisibility,
-  Sticky,
-  StickyPositionType,
   TooltipHost,
-  IRenderFunction
+  IRenderFunction,
+  SelectAllVisibility
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -73,12 +72,13 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
     tooltipHostProps
   ) => <TooltipHost {...tooltipHostProps} />;
   return (
-    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
+    <div>
       {defaultRender!({
         ...props,
-        onRenderColumnHeaderTooltip
+        onRenderColumnHeaderTooltip,
+        selectAllVisibility: SelectAllVisibility.hidden
       })}
-    </Sticky>
+    </div>
   );
 };
 
