@@ -76,9 +76,8 @@ export const IntroTabStyles: () => IProcessedStyleSet<IIntroTabStyles> = () => {
       lineHeight: "50px"
     },
     getStarted: {
-      fontSize: FontSizes.large,
-      fontWeight: FontWeights.regular,
-      height: "44px",
+      fontSize: "14px",
+      fontWeight: "400",
       lineHeight: "24px",
       padding: "12px"
     },

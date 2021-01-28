@@ -18,9 +18,8 @@ export const WizardFooterStyles: () => IProcessedStyleSet<
 > = () => {
   return mergeStyleSets<IWizardFooterStyles>({
     back: {
-      fontSize: "18px",
+      fontSize: "14px",
       fontWeight: "400",
-      height: "44px",
       lineHeight: "24px",
       padding: "12px"
     },
@@ -31,11 +30,10 @@ export const WizardFooterStyles: () => IProcessedStyleSet<
       paddingTop: "10px"
     },
     next: {
-      fontSize: "18px",
+      fontSize: "14px",
       fontWeight: "400",
-      height: "44px",
       lineHeight: "24px",
-      marginLeft: "10px",
+      marginLeft: "16px",
       padding: "12px"
     }
   });
