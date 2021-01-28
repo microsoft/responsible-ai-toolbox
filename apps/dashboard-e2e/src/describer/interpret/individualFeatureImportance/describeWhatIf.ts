@@ -16,7 +16,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
       );
     });
     if (!datasetShape.noY) {
-      it("should save data point from dropdown option", () => {
+      xit("should save data point from dropdown option", () => {
         cy.get("#what-if-expand-btn").click();
         cy.get("#indexSelector").click();
         cy.get('button:contains("Row 1")').last().click();
