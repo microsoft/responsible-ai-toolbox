@@ -1,4 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const noFeature = "No Feature";
+import { localization } from "@responsible-ai/localization";
+
+export const noFeature = localization.ErrorAnalysis.noFeature;

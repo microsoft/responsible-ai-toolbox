@@ -10,15 +10,15 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ITreeLegendStyles {
-  treeLegend: IStyle;
+  cohortName: IStyle;
+  errorRateCell: IStyle;
+  errorCoverageCell: IStyle;
   metricBarBlack: IStyle;
   metricBarRed: IStyle;
   smallHeader: IStyle;
+  treeLegend: IStyle;
   valueRed: IStyle;
   valueBlack: IStyle;
-  errorRateCell: IStyle;
-  errorCoverageCell: IStyle;
-  cohortName: IStyle;
 }
 
 export const treeLegendStyles: () => IProcessedStyleSet<

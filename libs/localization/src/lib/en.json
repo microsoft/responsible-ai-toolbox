@@ -578,23 +578,24 @@
     "defaultFeatureNames": "Feature {0}",
     "_defaultFeatureNames.comment": "the default column names",
     "cohortInfo": "Cohort info",
-    "correctPrediction": "Correct Predictions",
-    "incorrectPrediction": "Incorrect Predictions",
-    "whatIfDatapoints": "What-If Datapoints",
-    "allSelected": "All Selected",
+    "correctPrediction": "Correct predictions",
+    "incorrectPrediction": "Incorrect predictions",
+    "whatIfDatapoints": "What-If datapoints",
+    "allSelected": "All selected",
     "correctTotal": "Correct/Total",
     "dataExploration": "Dataset Exploration",
     "_dataExploration.comment": "Label for tab showing scatterplot of dataset and predictions",
     "instanceView": "Instance View",
     "_instanceView.comment": "Label for tab showing instances",
-    "dataExplorerView": "Data Explorer",
+    "dataExplorerView": "Data explorer",
     "_dataExplorerView.comment": "Data explorer view",
     "errorCoverage": "Error coverage",
     "errorRate": "Error rate",
-    "globalExplanationView": "Global Explanation",
+    "globalExplanationView": "Global explanation",
     "_globalExplanationView.comment": "Global explanation view",
-    "localExplanationView": "Local Explanation",
+    "localExplanationView": "Local explanation",
     "_localExplanationView.comment": "Local explanation view",
+    "noFeature": "No feature",
     "globalImportance": "Global Importance",
     "_globalImportance.comment": "Label for tab showing bar chart of importance of features at a global level",
     "incorrectTotal": "Incorrect/Total",
@@ -603,6 +604,14 @@
       "cohort": "Cohort",
       "_cohort.comment": "a subset of the data is called a cohort",
       "defaultLabel": "All data"
+    },
+    "CohortInfo": {
+      "cohortInformation": "Cohort information",
+      "saveCohort": "Save as a new cohort"
+    },
+    "EditCohort": {
+      "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort.",
+      "cohortName": "Cohort name"
     },
     "ExplanationScatter": {
       "dataLabel": "Data : {0}",
@@ -630,12 +639,61 @@
       "count": "Count",
       "_count.comment": "the default axis is the count of items"
     },
+    "InspectionView": {
+      "emptyError": "Please select datapoints in the incorrect and correct categories by clicking the checkboxes.",
+      "selectedDatapoints": "Selected datapoints"
+    },
+    "MainMenu": {
+      "treeMap": "Tree map",
+      "heatMap": "Heat map",
+      "errorDetectorLabel": "Error detector:",
+      "errorDetector": "Error detector",
+      "fullscreen": "Fullscreen",
+      "whatIf": "What-If",
+      "featureList": "Feature list",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "explanation": "Explanation",
+      "cohortSettings": "Cohort settings"
+    },
+    "MapShift": {
+      "subText": "Do you want to restart your exploration with a different map?  Save it as a new cohort.  Otherwise, your chosen filters will be lost.",
+      "title": "Map shift",
+      "close": "Close",
+      "move": "Move",
+      "saveAs": "Save as a new cohort",
+      "shift": "Shift",
+      "cancel": "Cancel"
+    },
+    "MatrixArea": {
+      "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions."
+    },
+    "MatrixLegend": {
+      "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
+    },
+    "Navigation": {
+      "errorDetector": "Error detector",
+      "dataExplorer": "Data explorer",
+      "globalExplanation": "Global explanation",
+      "localExplanation": "Local explanation",
+      "localExplanationInspection": "Local explanation (Inspection)"
+    },
+    "SaveCohort": {
+      "subText": "Save the current cohort to the cohort list. You can revisit the saved cohort via the cohort list.",
+      "save": "Save",
+      "saveTitle": "Save as a new cohort",
+      "cancel": "Cancel",
+      "close": "Close",
+      "move": "Move",
+      "cohortName": "Cohort name"
+    },
+    "TreeView": {
+      "treeDescription": "To find nodes in the tree map with the most errors, look for higher values and fuller circles."
+    },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"
-    },
-    "EditCohort": {
-      "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort.",
-      "cohortName": "Cohort name"
     }
   },
   "Fairness": {

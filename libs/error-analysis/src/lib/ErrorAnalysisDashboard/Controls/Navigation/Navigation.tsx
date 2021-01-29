@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   Breadcrumb,
   IBreadcrumbItem,
@@ -39,19 +40,19 @@ export class Navigation extends React.Component<INavigationProps> {
             this.errorDetectorBreadcrumbClicked(e, item);
           }
         },
-        text: "Error Detector"
+        text: localization.ErrorAnalysis.Navigation.errorDetector
       });
       if (this.props.activeGlobalTab === GlobalTabKeys.DataExplorerTab) {
         items.push({
           key: GlobalTabKeys.DataExplorerTab,
-          text: "Data Explorer"
+          text: localization.ErrorAnalysis.Navigation.dataExplorer
         });
       } else if (
         this.props.activeGlobalTab === GlobalTabKeys.GlobalExplanationTab
       ) {
         items.push({
           key: GlobalTabKeys.GlobalExplanationTab,
-          text: "Global Explanation"
+          text: localization.ErrorAnalysis.Navigation.globalExplanation
         });
       } else if (
         this.props.activeGlobalTab === GlobalTabKeys.LocalExplanationTab
@@ -61,7 +62,7 @@ export class Navigation extends React.Component<INavigationProps> {
         ) {
           items.push({
             key: GlobalTabKeys.LocalExplanationTab,
-            text: "Local Explanation"
+            text: localization.ErrorAnalysis.Navigation.localExplanation
           });
         } else {
           items.push({
@@ -74,11 +75,12 @@ export class Navigation extends React.Component<INavigationProps> {
                 this.localExplanationBreadcrumbClicked(e, item);
               }
             },
-            text: "Local Explanation"
+            text: localization.ErrorAnalysis.Navigation.localExplanation
           });
           items.push({
             key: PredictionTabKeys.InspectionTab,
-            text: "Local Explanation (Inspection)"
+            text:
+              localization.ErrorAnalysis.Navigation.localExplanationInspection
           });
         }
       }

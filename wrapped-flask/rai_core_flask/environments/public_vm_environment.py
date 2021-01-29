@@ -5,11 +5,14 @@ from flask_cors import CORS
 from rai_core_flask.environments.base_environment import BaseEnvironment
 
 
-class LocalIPythonEnvironment(BaseEnvironment):
-    """Environment class for local IPython environments.
+PUBLIC_VM = 'public_vm'
 
-    LocalIPythonEnvironment represents functionality to detect whether it is
-    executed in a local python environment based on IPython's availability.
+
+class PublicVMEnvironment(BaseEnvironment):
+    """Environment class for public VM environments.
+
+    PublicVMEnvironment represents functionality to detect whether it is
+    executed in a public VM environment based on the IP address.
     Additionally, it can display corresponding visualizations.
     """
 
@@ -22,7 +25,7 @@ class LocalIPythonEnvironment(BaseEnvironment):
         except NameError:
             self.successfully_detected = False
         else:
-            if service.ip == "localhost" and not service.with_credentials:
+            if service.ip != "localhost" and not service.with_credentials:
                 self.successfully_detected = True
                 self.base_url = f"http://localhost:{service.port}"
 

@@ -8,17 +8,26 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         packageDirectory: ["raiwidgets", "wrapped-flask"]
+        operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
-          # excludes python 3.7 and 3.8 with wrapped-flask since it consistently causes segfaults
-          - pythonVersion: 3.7
-            packageDirectory: "wrapped-flask"
-          - pythonVersion: 3.8
-            packageDirectory: "wrapped-flask"
+          # segfaults in wrapped-flask tests in most OS-Python version combinations
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: ubuntu-latest
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: macos-latest
+            pythonVersion: 3.7
+          - packageDirectory: "wrapped-flask"
+            operatingSystem: macos-latest
+            pythonVersion: 3.8
+          # lightgbm doesn't install properly on MacOS
+          - packageDirectory: "raiwidgets"
+            operatingSystem: macos-latest
+
+    runs-on: ${{ matrix.operatingSystem }}
 
     steps:
       - uses: actions/checkout@v2

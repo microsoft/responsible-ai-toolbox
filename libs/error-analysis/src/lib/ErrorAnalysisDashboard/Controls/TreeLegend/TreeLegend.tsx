@@ -10,6 +10,7 @@ import { treeLegendStyles } from "./TreeLegend.styles";
 
 export interface ITreeLegendProps {
   selectedCohort: ErrorCohort;
+  baseCohort: ErrorCohort;
 }
 
 export class TreeLegend extends React.Component<ITreeLegendProps> {
@@ -19,7 +20,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
       <g className={classNames.treeLegend}>
         <g>
           <text className={classNames.cohortName}>
-            Cohort: {this.props.selectedCohort.cohort.name}
+            Cohort: {this.props.baseCohort.cohort.name}
           </text>
           <g>
             <g className={classNames.errorCoverageCell}>
