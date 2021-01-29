@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  FontSizes,
   IProcessedStyleSet,
   IStyle,
   mergeStyleSets
@@ -18,7 +19,7 @@ export const WizardFooterStyles: () => IProcessedStyleSet<
 > = () => {
   return mergeStyleSets<IWizardFooterStyles>({
     back: {
-      fontSize: "14px",
+      fontSize: FontSizes.size14,
       fontWeight: "400",
       lineHeight: "24px",
       padding: "12px"
@@ -30,7 +31,7 @@ export const WizardFooterStyles: () => IProcessedStyleSet<
       paddingTop: "10px"
     },
     next: {
-      fontSize: "14px",
+      fontSize: FontSizes.size14,
       fontWeight: "400",
       lineHeight: "24px",
       marginLeft: "16px",
