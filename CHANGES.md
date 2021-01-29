@@ -50,9 +50,7 @@ This is the first release of the `raiwidgets` package.
     - Simplified API to extract sensitive feature names directly from
       `sensitive_features`.
   - `ErrorAnalysisDashboard`: first release
-  - `ExplanationDashboard` changes compared to `interpret-community`'s
-    `ExplanationDashboard` which was migrated to `raiwidgets`:
-    - TODO
+  - migrated `ExplanationDashboard` from `interpret-community` to `raiwidgets`
 
 We're skipping v0.1.0 to get all our packages onto the same version:
 
