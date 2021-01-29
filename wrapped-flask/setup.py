@@ -26,7 +26,7 @@ setuptools.setup(
 
     version=VERSION,
     author="Roman Lutz, Ke Xu, Xavier Fernandes",
-    author_email="rolutz@microsoft.com",
+    author_email="raiwidgets-maintain@microsoft.com",
     description="Responsible AI Core Flask Wrapper",
     long_description=long_description,
     long_description_content_type="text/markdown",
