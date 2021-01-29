@@ -2,33 +2,31 @@
 # Licensed under the MIT License.
 
 from flask import Flask
-from flask_cors import CORS
 from .environment_detector import build_environment
+from .environments.credentialed_vm_environment import CREDENTIALED_VM
+from .environments.public_vm_environment import PUBLIC_VM
 
 import socket
 import threading
 import atexit
 import uuid
 
+from gevent.pywsgi import WSGIServer
 
-try:
-    from gevent.pywsgi import WSGIServer
-except ModuleNotFoundError:
-    raise RuntimeError(
-        "Error: gevent package is missing, please run 'conda install gevent' "
-        "or 'pip install gevent' or "
-        "'pip install interpret-community[visualization]'")
+
+LOCALHOST = 'localhost'
+VM_ENVS = {CREDENTIALED_VM, PUBLIC_VM}
 
 
 class FlaskHelper(object):
     """FlaskHelper is a class for common Flask utilities used in dashboards."""
 
-    def __init__(self, ip=None, port=None):
+    def __init__(self, ip=None, port=None, with_credentials=False):
         # The name passed to Flask needs to be unique per instance.
         self.app = Flask(uuid.uuid4().hex)
-        CORS(self.app)
         self.port = port
         self.ip = ip
+        self.with_credentials = with_credentials
         # dictionary to store arbitrary state for use by consuming classes
         self.shared_state = {}
         if self.ip is None:
@@ -53,7 +51,7 @@ class FlaskHelper(object):
         else:
             FlaskHelper._is_local_port_available(self.ip, self.port,
                                                  raise_error=True)
-        self.env = build_environment(self.ip, self.port)
+        self.env = build_environment(self)
         if self.env.base_url is None:
             return
         self._thread = threading.Thread(target=self.run, daemon=True)
@@ -88,9 +86,14 @@ class FlaskHelper(object):
         class devnull:
             write = lambda _: None  # noqa: E731
 
-        server = WSGIServer((self.ip, self.port), self.app, log=devnull)
+        ip = LOCALHOST
+        # Note: for credentialed or public VM use the private IP address
+        if self.env in VM_ENVS:
+            host_name = socket.gethostname()
+            ip = socket.gethostbyname(host_name)
+        server = WSGIServer((ip, self.port), self.app, log=devnull)
         self.app.config["server"] = server
-        self.app.config["CACHE_TYPE"] = "null"
+        # self.app.config["CACHE_TYPE"] = "null"
         server.serve_forever()
 
         # Closes server on program exit, including freeing all sockets

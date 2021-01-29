@@ -12,29 +12,31 @@ export interface IInsightsStyles {
   insights: IStyle;
   insightsIcon: IStyle;
   insightsText: IStyle;
-  downloadIcon: IStyle;
-  downloadReport: IStyle;
+  // downloadIcon: IStyle;
+  // downloadReport: IStyle;
   textSection: IStyle;
 }
 
 export const InsightsStyles: () => IProcessedStyleSet<IInsightsStyles> = () => {
   const theme = getTheme();
   return mergeStyleSets<IInsightsStyles>({
-    downloadIcon: {
-      height: "18",
-      marginRight: "10px",
-      verticalAlign: "middle",
-      width: "17"
-    },
-    downloadReport: {
-      color: theme.semanticColors.bodyText,
-      fontSize: "12px",
-      fontWeight: "normal",
-      lineHeight: "16px",
-      paddingBottom: "20px",
-      paddingLeft: "0px",
-      paddingTop: "20px"
-    },
+    // download button functionality to be added:
+    // https://github.com/microsoft/responsible-ai-widgets/issues/66
+    // downloadIcon: {
+    //   height: "18",
+    //   marginRight: "10px",
+    //   verticalAlign: "middle",
+    //   width: "17"
+    // },
+    // downloadReport: {
+    //   color: theme.semanticColors.bodyText,
+    //   fontSize: "12px",
+    //   fontWeight: "normal",
+    //   lineHeight: "16px",
+    //   paddingBottom: "20px",
+    //   paddingLeft: "0px",
+    //   paddingTop: "20px"
+    // },
     insights: {
       color: theme.semanticColors.bodyText,
       display: "inline",
