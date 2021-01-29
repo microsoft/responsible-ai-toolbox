@@ -644,6 +644,10 @@
       "count": "Count",
       "_count.comment": "the default axis is the count of items"
     },
+    "InspectionView": {
+      "emptyError": "Please select datapoints in the incorrect and correct categories by clicking the checkboxes.",
+      "selectedDatapoints": "Selected datapoints"
+    },
     "MainMenu": {
       "treeMap": "Tree map",
       "heatMap": "Heat map",
@@ -659,6 +663,15 @@
       "explanation": "Explanation",
       "cohortSettings": "Cohort settings"
     },
+    "MapShift": {
+      "subText": "Do you want to restart your exploration with a different map?  Save it as a new cohort.  Otherwise, your chosen filters will be lost.",
+      "title": "Map shift",
+      "close": "Close",
+      "move": "Move",
+      "saveAs": "Save as a new cohort",
+      "shift": "Shift",
+      "cancel": "Cancel"
+    },
     "MatrixArea": {
       "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions."
     },
@@ -671,6 +684,18 @@
       "globalExplanation": "Global explanation",
       "localExplanation": "Local explanation",
       "localExplanationInspection": "Local explanation (Inspection)"
+    },
+    "SaveCohort": {
+      "subText": "Save the current cohort to the cohort list. You can revisit the saved cohort via the cohort list.",
+      "save": "Save",
+      "saveTitle": "Save as a new cohort",
+      "cancel": "Cancel",
+      "close": "Close",
+      "move": "Move",
+      "cohortName": "Cohort name"
+    },
+    "TreeView": {
+      "treeDescription": "To find nodes in the tree map with the most errors, look for higher values and fuller circles."
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"

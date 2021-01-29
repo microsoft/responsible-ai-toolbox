@@ -64,7 +64,7 @@ export const matrixAreaStyles: () => IProcessedStyleSet<
     },
     matrixCellPivot2Categories: {
       alignItems: "center",
-      border: "none",
+      border: "1px transparent solid",
       display: "flex",
       fontSize: "12px",
       justifyContent: "center",

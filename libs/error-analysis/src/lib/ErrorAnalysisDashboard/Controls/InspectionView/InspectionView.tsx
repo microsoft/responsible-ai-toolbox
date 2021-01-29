@@ -21,15 +21,14 @@ import {
   Selection,
   SelectionMode,
   Fabric,
-  Stack
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { constructRows, constructCols } from "../../utils/DatasetUtils";
-
-import { InspectionViewStyles } from "./InspectionView.styles";
 
 export interface IInspectionViewProps {
   theme?: ITheme;
@@ -149,7 +148,6 @@ export class InspectionView extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const classNames = InspectionViewStyles();
     const testableDatapoints = this.state.includedFeatureImportance.map(
       (item) => item.unsortedFeatureValues as any[]
     );
@@ -163,42 +161,55 @@ export class InspectionView extends React.PureComponent<
       <div>
         <Stack tokens={alignmentStackTokens}>
           <Stack.Item align="start">
-            <div className={classNames.headerStyle}>Selected datapoints</div>
+            <Text variant={"xLarge"}>
+              {localization.ErrorAnalysis.InspectionView.selectedDatapoints}
+            </Text>
           </Stack.Item>
-          <Stack.Item>
-            <Fabric>
-              <DetailsList
-                items={this._rows}
-                columns={this._columns}
-                setKey="set"
-                layoutMode={DetailsListLayoutMode.justified}
-                selectionPreservedOnEmptyClick={true}
-                ariaLabelForSelectionColumn="Toggle selection"
-                ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                checkButtonAriaLabel="Row checkbox"
-                selectionMode={SelectionMode.multiple}
-                selection={this._selection}
-              />
-            </Fabric>
-          </Stack.Item>
-          <Stack.Item>
-            <LocalImportancePlots
-              includedFeatureImportance={this.state.includedFeatureImportance}
-              jointDataset={this.props.jointDataset}
-              metadata={this.props.metadata}
-              selectedWeightVector={this.props.selectedWeightVector}
-              weightOptions={this.props.weightOptions}
-              weightLabels={this.props.weightLabels}
-              testableDatapoints={testableDatapoints}
-              testableDatapointColors={testableDatapointColors}
-              testableDatapointNames={testableDatapointNames}
-              featuresOption={this.featuresOption}
-              sortArray={this.state.sortArray}
-              sortingSeriesIndex={this.state.sortingSeriesIndex}
-              invokeModel={this.props.invokeModel}
-              onWeightChange={this.props.onWeightChange}
-            />
-          </Stack.Item>
+          {this._rows.length > 0 && (
+            <Stack tokens={alignmentStackTokens}>
+              <Stack.Item>
+                <Fabric>
+                  <DetailsList
+                    items={this._rows}
+                    columns={this._columns}
+                    setKey="set"
+                    layoutMode={DetailsListLayoutMode.justified}
+                    selectionPreservedOnEmptyClick={true}
+                    ariaLabelForSelectionColumn="Toggle selection"
+                    ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+                    checkButtonAriaLabel="Row checkbox"
+                    selectionMode={SelectionMode.multiple}
+                    selection={this._selection}
+                  />
+                </Fabric>
+              </Stack.Item>
+              <Stack.Item>
+                <LocalImportancePlots
+                  includedFeatureImportance={
+                    this.state.includedFeatureImportance
+                  }
+                  jointDataset={this.props.jointDataset}
+                  metadata={this.props.metadata}
+                  selectedWeightVector={this.props.selectedWeightVector}
+                  weightOptions={this.props.weightOptions}
+                  weightLabels={this.props.weightLabels}
+                  testableDatapoints={testableDatapoints}
+                  testableDatapointColors={testableDatapointColors}
+                  testableDatapointNames={testableDatapointNames}
+                  featuresOption={this.featuresOption}
+                  sortArray={this.state.sortArray}
+                  sortingSeriesIndex={this.state.sortingSeriesIndex}
+                  invokeModel={this.props.invokeModel}
+                  onWeightChange={this.props.onWeightChange}
+                />
+              </Stack.Item>
+            </Stack>
+          )}
+          {this._rows.length === 0 && (
+            <Text variant={"medium"}>
+              {localization.ErrorAnalysis.InspectionView.emptyError}
+            </Text>
+          )}
         </Stack>
       </div>
     );
