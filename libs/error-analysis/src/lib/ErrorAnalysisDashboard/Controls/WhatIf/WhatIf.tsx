@@ -14,9 +14,6 @@ import {
   IComboBoxOption,
   IDropdownOption,
   IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
-  IStyleFunctionOrObject,
   Panel
 } from "office-ui-fabric-react";
 import React from "react";
@@ -48,10 +45,6 @@ export interface IWhatIfState {
 const focusTrapZoneProps: IFocusTrapZoneProps = {
   forceFocusInsideTrap: false,
   isClickableOutsideFocusTrap: true
-};
-
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
 };
 
 export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
@@ -114,7 +107,6 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
-        styles={panelStyles}
       >
         <div className={classNames.divider}></div>
         <div className={classNames.section}>
@@ -224,7 +216,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     option?: IComboBoxOption,
     value?: string
   ): void => {
-    if (!this.temporaryPoint || !value) {
+    if (!this.temporaryPoint) {
       return;
     }
     const editingData = this.temporaryPoint;
@@ -282,7 +274,9 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     if (indexes.length === 0) {
       return undefined;
     }
-    this.temporaryPoint = this.props.jointDataset.getRow(indexes[0]);
+    this.temporaryPoint = this.props.currentCohort.cohort.filteredData[
+      indexes[0]
+    ];
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]
@@ -319,7 +313,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       this.props.jointDataset.metaDict,
       this.props.jointDataset.datasetFeatureCount
     );
-    fetchingReference[JointDataset.PredictedYLabel] = undefined;
+    // This seems to break the dashboard for long requests
+    // fetchingReference[JointDataset.PredictedYLabel] = undefined;
     const promise = this.props.invokeModel([rawData], abortController.signal);
 
     this.setState({ request: abortController }, async () => {

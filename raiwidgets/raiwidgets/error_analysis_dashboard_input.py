@@ -62,7 +62,8 @@ class ErrorAnalysisDashboardInput:
             classes,
             features,
             locale,
-            categorical_features):
+            categorical_features,
+            true_y_dataset):
         """Initialize the Error Analysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -81,14 +82,19 @@ class ErrorAnalysisDashboardInput:
             Must have fewer than
             10000 rows and fewer than 1000 columns.
         :type dataset: numpy.array or list[][] or pandas.DataFrame
-        :param true_y: The true labels for the provided dataset.
-            Will overwrite any set on
-            explanation object already.
+        :param true_y: The true labels for the provided explanation.
+            Will overwrite any set on explanation object already.
         :type true_y: numpy.array or list[]
         :param classes: The class names.
         :type classes: numpy.array or list[]
         :param features: Feature names.
         :type features: numpy.array or list[]
+            :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
+        :param true_y_dataset: The true labels for the provided dataset.
+        Only needed if the explanation has a sample of instances from the
+        original dataset.  Otherwise specify true_y parameter only.
+        :type true_y_dataset: numpy.array or list[]
         """
         self._model = model
         original_dataset = dataset
@@ -96,7 +102,10 @@ class ErrorAnalysisDashboardInput:
             self._dataset = dataset.to_json()
         else:
             self._dataset = dataset
-        self._true_y = true_y
+        if true_y_dataset is None:
+            self._true_y = true_y
+        else:
+            self._true_y = true_y_dataset
         self._categorical_features = categorical_features
         self._categories = []
         self._categorical_indexes = []
@@ -124,7 +133,7 @@ class ErrorAnalysisDashboardInput:
         predicted_y = None
         feature_length = None
         if dataset_explanation is not None:
-            if dataset is None:
+            if dataset is None or len(dataset) != len(true_y):
                 dataset = dataset_explanation[
                     ExplanationDashboardInterface.MLI_DATASET_X_KEY
                 ]
@@ -132,6 +141,8 @@ class ErrorAnalysisDashboardInput:
                 true_y = dataset_explanation[
                     ExplanationDashboardInterface.MLI_DATASET_Y_KEY
                 ]
+        elif len(dataset) != len(true_y):
+            dataset = explanation._eval_data
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns

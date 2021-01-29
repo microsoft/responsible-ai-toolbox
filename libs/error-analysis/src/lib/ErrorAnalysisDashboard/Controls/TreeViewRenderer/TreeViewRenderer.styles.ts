@@ -12,6 +12,7 @@ export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
   mainFrame: IStyle;
+  treeDescription: IStyle;
   svgOuterFrame: IStyle;
   innerFrame: IStyle;
   node: IStyle;
@@ -124,6 +125,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       margin: "0",
       padding: "0",
       width: "100%"
+    },
+    treeDescription: {
+      padding: "30px 0px 0px 35px"
     }
   });
 };

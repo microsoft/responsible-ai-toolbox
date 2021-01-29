@@ -23,8 +23,6 @@ export const navigationStyles: () => IProcessedStyleSet<
     },
     navigation: {
       backgroundColor: theme.palette.white,
-      borderLeft: "1px solid #C8C8C8",
-      borderRight: "1px solid #C8C8C8",
       borderTop: "1px solid #C8C8C8",
       boxSizing: "border-box",
       color: theme.palette.black,
