@@ -48,8 +48,7 @@ jobs:
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
         run: |
           cp ./README.md ./raiwidgets/
-          mkdir ./raiwidgets/img
-          cp ./img/* ./raiwidgets/img/
+          sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
       - name: build wheel
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ github.event.inputs.packageDirectory }}
