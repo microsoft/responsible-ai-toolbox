@@ -13,7 +13,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="raiwidgets",
-    version="0.2.0rc3",
+    version="0.2.0rc4",
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
     description="Interactive visualizations to assess fairness, explain "
