@@ -46,7 +46,10 @@ jobs:
           yarn buildall
       - name: replace README for raiwidgets
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
-        run: cp ./README.md ./raiwidgets/
+        run: |
+          cp ./README.md ./raiwidgets/
+          mkdir ./raiwidgets/img
+          cp ./img/* ./raiwidgets/img/
       - name: build wheel
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ github.event.inputs.packageDirectory }}
