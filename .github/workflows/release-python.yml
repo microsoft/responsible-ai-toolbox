@@ -47,8 +47,8 @@ jobs:
       - name: replace README for raiwidgets
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
         run: |
-          cp ./README.md ./raiwidgets/
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
+          cp ./README.md ./raiwidgets/
       - name: build wheel
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ github.event.inputs.packageDirectory }}

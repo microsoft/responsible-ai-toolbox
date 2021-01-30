@@ -9,7 +9,7 @@ from .error_analysis_dashboard import ErrorAnalysisDashboard
 from .model_performance_dashboard import ModelPerformanceDashboard
 
 
-__version__ = "0.2.0rc6"
+__version__ = "0.2.0rc7"
 
 __all__ = ['FairnessDashboard', 'ExplanationDashboard',
            'ErrorAnalysisDashboard', 'ExplanationDashboard',
