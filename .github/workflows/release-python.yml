@@ -22,11 +22,6 @@ jobs:
         run: |
           echo "Only raiwidgets or wrapped-flask can be used."
           exit 1
-      
-      # replace README
-      - name: replace README
-        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
-        run: cp ./README.md ./raiwidgets/
 
       # build wheel
       - uses: actions/checkout@v2
@@ -49,6 +44,9 @@ jobs:
         run: |
           yarn install
           yarn buildall
+      - name: replace README for raiwidgets
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
+        run: cp ./README.md ./raiwidgets/
       - name: build wheel
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ github.event.inputs.packageDirectory }}
