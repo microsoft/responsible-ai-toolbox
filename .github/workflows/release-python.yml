@@ -56,6 +56,11 @@ jobs:
         run: pytest ./tests/
         working-directory: ${{ github.event.inputs.packageDirectory }}
 
+      # replace README
+      - name: replace README
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
+        run: cp ./README.md ./raiwidgets/
+
       # publish to PyPI
       - name: publish package to Test PyPI
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
