@@ -123,7 +123,11 @@ export class SaveCohort extends React.Component<
         tempCohort.cohort.filters,
         tempCohort.cohort.compositeFilters
       ),
-      this.props.jointDataset
+      this.props.jointDataset,
+      tempCohort.cells,
+      tempCohort.source,
+      false,
+      tempCohort.cohortStats
     );
     this.props.onSave(savedCohort);
   }

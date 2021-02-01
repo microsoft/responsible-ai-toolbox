@@ -10,6 +10,8 @@ import {
   IJointMeta
 } from "@responsible-ai/interpret";
 
+import { CohortStats } from "./CohortStats";
+
 export enum ErrorDetectorCohortSource {
   None = "None",
   TreeMap = "Tree map",
@@ -30,52 +32,23 @@ export class ErrorCohort {
     public jointDataset: JointDataset,
     public cells: number = 0,
     public source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
-    public isTemporary: boolean = false
+    public isTemporary: boolean = false,
+    public cohortStats: CohortStats | undefined = undefined
   ) {
     this.cohort = cohort;
     this.jointDataset = jointDataset;
-
-    const filteredData = cohort.filteredData;
-    // Calculate various cohort and global statistics
-    const trueYsCohort = JointDataset.unwrap(
-      filteredData,
-      JointDataset.TrueYLabel
-    );
-    const predYsCohort = JointDataset.unwrap(
-      filteredData,
-      JointDataset.PredictedYLabel
-    );
-
-    const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
-    const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
-
-    if (trueYsCohort && trueYs && predYsCohort && predYs) {
-      this.totalCohort = trueYsCohort.length;
-      this.totalAll = trueYs.length;
-
-      for (let i = 0; i < this.totalAll; i++) {
-        this.totalCorrect += trueYs[i] === predYs[i] ? 1 : 0;
-      }
-      this.totalIncorrect = this.totalAll - this.totalCorrect;
-
-      this.totalCohortCorrect = 0;
-      for (let i = 0; i < this.totalCohort; i++) {
-        this.totalCohortCorrect += trueYsCohort[i] === predYsCohort[i] ? 1 : 0;
-      }
-      this.totalCohortIncorrect = this.totalCohort - this.totalCohortCorrect;
-    }
-    // Calculate error rate
-    if (this.totalCohort === 0) {
-      this.errorRate = 0;
+    if (cohortStats) {
+      this.errorCoverage = cohortStats.errorCoverage;
+      this.errorRate = cohortStats.errorRate;
+      this.totalAll = cohortStats.totalAll;
+      this.totalCorrect = cohortStats.totalCorrect;
+      this.totalIncorrect = cohortStats.totalIncorrect;
+      this.totalCohort = cohortStats.totalCohort;
+      this.totalCohortCorrect = cohortStats.totalCohortCorrect;
+      this.totalCohortIncorrect = cohortStats.totalCohortIncorrect;
     } else {
-      this.errorRate = (this.totalCohortIncorrect / this.totalCohort) * 100;
-    }
-    // Calculate error coverage
-    if (this.totalIncorrect === 0) {
-      this.errorCoverage = 0;
-    } else {
-      this.errorCoverage =
-        (this.totalCohortIncorrect / this.totalIncorrect) * 100;
+      const filteredData = cohort.filteredData;
+      this.updateStatsFromData(filteredData, jointDataset);
     }
   }
 
@@ -216,5 +189,52 @@ export class ErrorCohort {
         .join(", ");
     }
     return filter.arg.map((arg) => arg.toFixed(2)).join(", ");
+  }
+
+  private updateStatsFromData(
+    filteredData: Array<{ [key: string]: number }>,
+    jointDataset: JointDataset
+  ): void {
+    // Calculate various cohort and global stats
+    const trueYsCohort = JointDataset.unwrap(
+      filteredData,
+      JointDataset.TrueYLabel
+    );
+    const predYsCohort = JointDataset.unwrap(
+      filteredData,
+      JointDataset.PredictedYLabel
+    );
+
+    const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
+    const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
+
+    if (trueYsCohort && trueYs && predYsCohort && predYs) {
+      this.totalCohort = trueYsCohort.length;
+      this.totalAll = trueYs.length;
+
+      for (let i = 0; i < this.totalAll; i++) {
+        this.totalCorrect += trueYs[i] === predYs[i] ? 1 : 0;
+      }
+      this.totalIncorrect = this.totalAll - this.totalCorrect;
+
+      this.totalCohortCorrect = 0;
+      for (let i = 0; i < this.totalCohort; i++) {
+        this.totalCohortCorrect += trueYsCohort[i] === predYsCohort[i] ? 1 : 0;
+      }
+      this.totalCohortIncorrect = this.totalCohort - this.totalCohortCorrect;
+    }
+    // Calculate error rate
+    if (this.totalCohort === 0) {
+      this.errorRate = 0;
+    } else {
+      this.errorRate = (this.totalCohortIncorrect / this.totalCohort) * 100;
+    }
+    // Calculate error coverage
+    if (this.totalIncorrect === 0) {
+      this.errorCoverage = 0;
+    } else {
+      this.errorCoverage =
+        (this.totalCohortIncorrect / this.totalIncorrect) * 100;
+    }
   }
 }
