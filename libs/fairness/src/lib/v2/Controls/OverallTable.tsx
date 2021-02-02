@@ -17,7 +17,6 @@ export interface IOverallTableProps {
   formattedBinValues: Array<string[] | undefined>;
   binLabels: string[];
   metricLabels: string[];
-  expandAttributes: boolean;
   overallMetrics: string[];
   binGroup: string;
 }
