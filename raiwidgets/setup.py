@@ -20,7 +20,7 @@ setuptools.setup(
                 "models, and analyze errors in Machine Learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/microsoft/responsible-ai-core",
+    url="https://github.com/microsoft/responsible-ai-widgets",
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
     install_requires=install_requires,

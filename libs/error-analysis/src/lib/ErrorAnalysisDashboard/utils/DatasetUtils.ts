@@ -26,7 +26,16 @@ export function constructRows(
       jointDataset.metaDict,
       jointDataset.localExplanationFeatureCount
     );
-    rows.push([row[JointDataset.IndexLabel], ...data]);
+    const tableRow = [];
+    tableRow.push(row[JointDataset.IndexLabel]);
+    if (jointDataset.hasTrueY) {
+      tableRow.push(row[JointDataset.TrueYLabel]);
+    }
+    if (jointDataset.hasPredictedY) {
+      tableRow.push(row[JointDataset.PredictedYLabel]);
+    }
+    tableRow.push(...data);
+    rows.push(tableRow);
   }
   return rows;
 }
@@ -51,7 +60,9 @@ export function rowsFromCustomPoints(
 
 export function constructCols(
   viewedCols: number,
-  featureNames: string[]
+  featureNames: string[],
+  jointDataset: JointDataset,
+  isCustomPointsView: boolean
 ): IColumn[] {
   const columns: IColumn[] = [];
   columns.push({
@@ -62,15 +73,39 @@ export function constructCols(
     minWidth: 50,
     name: "Index"
   });
+  let index = 1;
+  if (!isCustomPointsView && jointDataset.hasTrueY) {
+    columns.push({
+      fieldName: `${index}`,
+      isResizable: true,
+      key: `column${index}`,
+      maxWidth: 100,
+      minWidth: 50,
+      name: "TrueY"
+    });
+    index++;
+  }
+  if (!isCustomPointsView && jointDataset.hasPredictedY) {
+    columns.push({
+      fieldName: `${index}`,
+      isResizable: true,
+      key: `column${index}`,
+      maxWidth: 100,
+      minWidth: 50,
+      name: "PredictedY"
+    });
+    index++;
+  }
   for (let i = 0; i < viewedCols; i++) {
     columns.push({
-      fieldName: (i + 1).toString(),
+      fieldName: `${index}`,
       isResizable: true,
-      key: "column" + (i + 1),
+      key: `column${index}`,
       maxWidth: 200,
       minWidth: 100,
       name: featureNames[i]
     });
+    index += 1;
   }
   return columns;
 }

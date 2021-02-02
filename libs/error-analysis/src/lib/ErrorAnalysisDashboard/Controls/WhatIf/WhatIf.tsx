@@ -89,7 +89,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   public componentDidUpdate(prevProps: IWhatIfProps): void {
     if (
       this.props.selectedIndex !== prevProps.selectedIndex &&
-      this.props.selectedIndex
+      this.props.selectedIndex !== undefined
     ) {
       this.setTemporaryPointToCopyOfDatasetPoint(this.props.selectedIndex);
     }
