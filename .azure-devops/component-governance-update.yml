@@ -1,0 +1,13 @@
+# Run Component Governance to register all dependencies.
+
+trigger:
+  - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - task: notice@0
+    displayName: 'NOTICE File Generator'
+    inputs:
+      outputformat: 'text'
