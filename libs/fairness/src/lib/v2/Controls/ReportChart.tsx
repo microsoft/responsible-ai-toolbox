@@ -141,7 +141,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
       return;
     }
     if (option.key !== this.state.chartKey) {
-      let newChartKey = option.key.toString();
+      const newChartKey = option.key.toString();
       this.props.onUpdateChartKey(newChartKey);
       this.setState({ chartKey: newChartKey });
     }
