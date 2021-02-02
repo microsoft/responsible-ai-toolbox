@@ -12,6 +12,8 @@ from enum import Enum
 import traceback
 from .constants import SKLearn
 from .error_handling import _format_exception
+from ._input_processing import _serialize_json_safe
+
 
 BIN_THRESHOLD = 8
 CATEGORY1 = "category1"
@@ -187,7 +189,7 @@ class ErrorAnalysisDashboardInput:
                                  " dataset.")
             self.dashboard_input[
                 ExplanationDashboardInterface.TRAINING_DATA
-            ] = list_dataset
+            ] = _serialize_json_safe(list_dataset)
             self.dashboard_input[
                 ExplanationDashboardInterface.IS_CLASSIFIER
             ] = self._is_classifier

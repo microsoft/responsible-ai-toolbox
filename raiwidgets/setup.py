@@ -13,9 +13,9 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="raiwidgets",
-    version="0.1.0-dev",
+    version="0.2.0",
     author="Roman Lutz, Ilya Matiach, Ke Xu",
-    author_email="fairlearn@microsoft.com",
+    author_email="raiwidgets-maintain@microsoft.com",
     description="Interactive visualizations to assess fairness, explain "
                 "models, and analyze errors in Machine Learning",
     long_description=long_description,
