@@ -7,6 +7,7 @@ pool:
   vmImage: "ubuntu-latest"
 
 steps:
+  - task: ComponentGovernanceComponentDetection@0
   - task: notice@0
     displayName: 'NOTICE File Generator'
     inputs:
