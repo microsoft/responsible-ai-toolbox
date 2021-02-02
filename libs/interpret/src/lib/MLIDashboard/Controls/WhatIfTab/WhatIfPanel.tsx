@@ -78,11 +78,13 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
         {!this.props.isInPanel &&
           (this.props.isPanelOpen ? (
             <IconButton
+              id={"what-if-collapse-btn"}
               iconProps={{ iconName: "ChevronRight" }}
               onClick={this.props.dismissPanel}
             />
           ) : (
             <IconButton
+              id={"what-if-expand-btn"}
               iconProps={{ iconName: "ChevronLeft" }}
               onClick={this.props.openPanel}
             />
@@ -111,6 +113,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
               <Stack.Item>
                 {this.props.rowOptions && (
                   <Dropdown
+                    id="indexSelector"
                     label={localization.Interpret.WhatIfTab.indexLabel}
                     options={this.props.rowOptions}
                     selectedKey={this.props.selectedWhatIfRootIndex}
@@ -126,6 +129,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                 {this.props.invokeModel && (
                   <>
                     <TextField
+                      id="whatIfNameLabel"
                       label={localization.Interpret.WhatIfTab.whatIfNameLabel}
                       value={
                         this.props.temporaryPoint?.[WhatIfConstants.namePath]
