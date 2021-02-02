@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from .constants import SKLearn
 from .error_handling import _format_exception
+from ._input_processing import _serialize_json_safe
 
 
 class ExplanationDashboardInput:
@@ -127,7 +128,7 @@ class ExplanationDashboardInput:
                                  " dataset.")
             self.dashboard_input[
                 ExplanationDashboardInterface.TRAINING_DATA
-            ] = list_dataset
+            ] = _serialize_json_safe(list_dataset)
             self.dashboard_input[
                 ExplanationDashboardInterface.IS_CLASSIFIER
             ] = self._is_classifier

@@ -35,7 +35,7 @@ export class InteractiveLegend extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <div className={this.classes.root}>
+      <div id="iterative-container" className={this.classes.root}>
         {this.props.items.map((item, index) => {
           return this.buildRowElement(item, index);
         })}
