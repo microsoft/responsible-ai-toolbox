@@ -146,9 +146,9 @@ Error Analysis identifies cohorts of data with higher error rate than the overal
 
 #### Different Methods for Error Identification
 
-1. Decision Tree: Discover cohorts with high error rates across multiple features using the binary tree visualization. Investigate indicators such as error rate, error coverage, and data representation for each discovered cohort.
+1. Decision Tree: Discover cohorts with high error rates across multiple features using the binary tree visualization. Investigate indicators such as error rate, error coverage, and data representation for each discovered cohort. ![Error Analysis tree map](./img/EA-TreeMap.png)
 
-2. Error Heatmap: Once you form hypotheses of the most impactful features for failure, use the Error Heatmap to further investigate how one or two input features impact the error rate across cohorts.
+2. Error Heatmap: Once you form hypotheses of the most impactful features for failure, use the Error Heatmap to further investigate how one or two input features impact the error rate across cohorts. ![Error Analysis heat map](./img/EA-Heatmap.png)
 
 ### Diagnosis of Errors
 
