@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ConfirmationDialog } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -44,6 +45,7 @@ export interface ICohortEditorState {
   filters: IFilter[];
   cohortName?: string;
   selectedFilterCategory?: string;
+  showConfirmation: boolean;
 }
 
 export class CohortEditor extends React.PureComponent<
@@ -81,7 +83,8 @@ export class CohortEditor extends React.PureComponent<
       filterIndex: this.props.filterList.length,
       filters: this.props.filterList,
       openedFilter: undefined,
-      selectedFilterCategory: undefined
+      selectedFilterCategory: undefined,
+      showConfirmation: false
     };
     this._isInitialized = true;
   }
@@ -90,66 +93,72 @@ export class CohortEditor extends React.PureComponent<
     const openedFilter = this.state.openedFilter;
 
     return (
-      <Panel
-        id="cohortEditPanel"
-        isOpen={true}
-        onDismiss={this.props.closeCohortEditorPanel}
-        onRenderFooter={this.renderFooter}
-        isFooterAtBottom
-        isLightDismiss
-      >
-        <Stack tokens={{ childrenGap: "l1" }}>
-          <Stack.Item>
-            <TextField
-              value={this.state.cohortName}
-              label={localization.Interpret.CohortEditor.cohortNameLabel}
-              placeholder={
-                localization.Interpret.CohortEditor.cohortNamePlaceholder
-              }
-              onGetErrorMessage={this._getErrorMessage}
-              validateOnLoad={false}
-              onChange={this.setCohortName}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <ChoiceGroup
-              options={this.leftItems}
-              label={localization.Interpret.CohortEditor.selectFilter}
-              onChange={this.onFilterCategoryChange}
-              selectedKey={this.state.selectedFilterCategory}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            {!openedFilter ? (
-              <Text variant={"medium"}>
-                {localization.Interpret.CohortEditor.defaultFilterState}
-              </Text>
-            ) : (
-              <CohortEditorFilter
-                cancelFilter={this.cancelFilter}
+      <>
+        <Panel
+          onOuterClick={() => {
+            return 0;
+          }} // https://github.com/microsoft/fluentui/issues/6476
+          id="cohortEditPanel"
+          isOpen={true}
+          onDismiss={this.props.closeCohortEditorPanel}
+          onRenderFooter={this.renderFooter}
+          isFooterAtBottom
+          isLightDismiss
+        >
+          <Stack tokens={{ childrenGap: "l1" }}>
+            <Stack.Item>
+              <TextField
+                value={this.state.cohortName}
+                label={localization.Interpret.CohortEditor.cohortNameLabel}
+                placeholder={
+                  localization.Interpret.CohortEditor.cohortNamePlaceholder
+                }
+                onGetErrorMessage={this._getErrorMessage}
+                validateOnLoad={false}
+                onChange={this.setCohortName}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <ChoiceGroup
+                options={this.leftItems}
+                label={localization.Interpret.CohortEditor.selectFilter}
+                onChange={this.onFilterCategoryChange}
+                selectedKey={this.state.selectedFilterCategory}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              {!openedFilter ? (
+                <Text variant={"medium"}>
+                  {localization.Interpret.CohortEditor.defaultFilterState}
+                </Text>
+              ) : (
+                <CohortEditorFilter
+                  cancelFilter={this.cancelFilter}
+                  filters={this.state.filters}
+                  jointDataset={this.props.jointDataset}
+                  openedFilter={openedFilter}
+                  saveState={this.saveState}
+                  setAsCategorical={this.setAsCategorical}
+                  setCategoricalValues={this.setCategoricalValues}
+                  setComparison={this.setComparison}
+                  setNumericValue={this.setNumericValue}
+                  setSelectedProperty={this.setSelectedProperty}
+                  filterIndex={this.state.filterIndex}
+                />
+              )}
+            </Stack.Item>
+            <Stack.Item>
+              <CohortEditorFilterList
+                editFilter={this.editFilter}
+                removeFilter={this.removeFilter}
                 filters={this.state.filters}
                 jointDataset={this.props.jointDataset}
-                openedFilter={openedFilter}
-                saveState={this.saveState}
-                setAsCategorical={this.setAsCategorical}
-                setCategoricalValues={this.setCategoricalValues}
-                setComparison={this.setComparison}
-                setNumericValue={this.setNumericValue}
-                setSelectedProperty={this.setSelectedProperty}
-                filterIndex={this.state.filterIndex}
               />
-            )}
-          </Stack.Item>
-          <Stack.Item>
-            <CohortEditorFilterList
-              editFilter={this.editFilter}
-              removeFilter={this.removeFilter}
-              filters={this.state.filters}
-              jointDataset={this.props.jointDataset}
-            />
-          </Stack.Item>
-        </Stack>
-      </Panel>
+            </Stack.Item>
+          </Stack>
+        </Panel>
+        {this.renderCancelDialog()}
+      </>
     );
   }
   private renderFooter = (): JSX.Element => {
@@ -168,21 +177,51 @@ export class CohortEditor extends React.PureComponent<
         <PrimaryButton onClick={this.saveCohort}>
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
-        <DefaultButton
-          onClick={
-            this.props.isNewCohort
-              ? this.props.closeCohortEditorPanel
-              : this.props.closeCohortEditor
-          }
-        >
+        <DefaultButton onClick={this.onCancelClick}>
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
       </Stack>
     );
   };
 
+  private readonly renderCancelDialog = (): React.ReactNode => {
+    if (!this.state.showConfirmation) {
+      return undefined;
+    }
+    return (
+      <ConfirmationDialog
+        title={localization.Interpret.CohortEditor.cancelTitle}
+        subText={
+          this.props.isNewCohort
+            ? localization.Interpret.CohortEditor.cancelNewCohort
+            : localization.Interpret.CohortEditor.cancelExistingCohort
+        }
+        confirmButtonText={localization.Interpret.CohortEditor.cancelYes}
+        cancelButtonText={localization.Interpret.CohortEditor.cancelNo}
+        onConfirm={this.onCancelConfirm}
+        onClose={this.onCancelClose}
+      />
+    );
+  };
+
   private deleteCohort = (): void => {
     this.props.onDelete();
+  };
+
+  private readonly onCancelClick = () => {
+    this.setState({ showConfirmation: true });
+  };
+
+  private readonly onCancelConfirm = async () => {
+    const callback = this.props.isNewCohort
+      ? this.props.closeCohortEditorPanel
+      : this.props.closeCohortEditor;
+    callback();
+    this.setState({ showConfirmation: false });
+  };
+
+  private readonly onCancelClose = () => {
+    this.setState({ showConfirmation: false });
   };
 
   private readonly setAsCategorical = (
