@@ -20,7 +20,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
       !datasetShape.noPredict &&
       !datasetShape.errorMessage
     ) {
-      it("should save data point from dropdown option", () => {
+      xit("should save data point from dropdown option", () => {
         cy.get("#what-if-expand-btn").click();
         cy.get("#indexSelector").click();
         cy.get('button:contains("Row 1")').last().click();
