@@ -18,6 +18,7 @@ import { IProcessedStyleSet, ITheme, Text } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
+import { CohortStats } from "../../CohortStats";
 import { ColorPalette } from "../../ColorPalette";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
@@ -50,7 +51,8 @@ export interface ITreeViewRendererProps {
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: ErrorDetectorCohortSource,
-    cells: number
+    cells: number,
+    cohortStats: CohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
@@ -231,13 +233,7 @@ export class TreeViewRenderer extends React.PureComponent<
         const globalErrorPerc = d!.data!.error! / this.state.rootErrorSize;
         const localErrorPerc = d!.data!.error! / d!.data!.size!;
         const calcMaskShift = globalErrorPerc * 52;
-        const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
-        const filterProps = new FilterProps(
-          d!.data!.error!,
-          d!.data!.size!,
-          this.state.rootErrorSize,
-          errorRate
-        );
+        const filterProps = this.calculateFilterProps(d);
 
         let heatmapStyle: { fill: string } = { fill: errorAvgColor };
 
@@ -506,6 +502,33 @@ export class TreeViewRenderer extends React.PureComponent<
     this.props.setTreeViewState(this.state);
   }
 
+  private calculateFilterProps(
+    d: HierarchyPointNode<any> | ITreeNode
+  ): FilterProps {
+    const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
+    const filterProps = new FilterProps(
+      d!.data!.error!,
+      d!.data!.size!,
+      this.state.rootErrorSize,
+      errorRate
+    );
+    return filterProps;
+  }
+
+  private calculateCohortStats(
+    d: HierarchyPointNode<any> | ITreeNode
+  ): CohortStats {
+    const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
+    const cohortStats = new CohortStats(
+      d!.data!.error!,
+      d!.data!.size!,
+      this.state.rootErrorSize,
+      this.state.rootSize,
+      errorRate
+    );
+    return cohortStats;
+  }
+
   private resizeFunc = (
     state: Readonly<ITreeViewRendererState>
   ): ITreeViewRendererState => {
@@ -579,11 +602,16 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(reloadDataFunc);
     // Clear filters
     const filters: IFilter[] = [];
+    let cohortStats: CohortStats | undefined = undefined;
+    if (this.state.root) {
+      cohortStats = this.calculateCohortStats(this.state.root);
+    }
     this.props.updateSelectedCohort(
       filters,
       [],
       ErrorDetectorCohortSource.None,
-      0
+      0,
+      cohortStats
     );
   }
 
@@ -655,11 +683,13 @@ export class TreeViewRenderer extends React.PureComponent<
 
       // Get filters and update
       const filters = this.getFilters(node);
+      const cohortStats = this.calculateCohortStats(node);
       this.props.updateSelectedCohort(
         filters,
         [],
         ErrorDetectorCohortSource.TreeMap,
-        0
+        0,
+        cohortStats
       );
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
