@@ -32,7 +32,7 @@ export interface IState {
   fairnessKey?: string;
   performanceKey?: string;
   showModalHelp?: boolean;
-  expandAttributes: boolean;
+  chartKey?: string;
 }
 
 export interface IReportProps extends IModelComparisonProps {
@@ -198,7 +198,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 formattedBinValues={formattedBinValues}
                 metricLabels={metricLabels}
                 overallMetrics={overallMetrics}
-                expandAttributes={this.state.expandAttributes}
                 binValues={this.state.metrics.performance.bins}
               />
               <ReportChart
@@ -208,6 +207,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 metrics={this.state.metrics}
                 fairnessPickerProps={this.props.fairnessPickerProps}
                 performancePickerProps={this.props.performancePickerProps}
+                chartKey={this.state.chartKey}
+                onUpdateChartKey={this.updateChartKey}
               />
             </Stack>
           </Stack.Item>
@@ -280,6 +281,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   //   }
   //   this.props.onEditConfigs();
   // };
+
+  private readonly updateChartKey = (chartKey: string): void => {
+    this.setState({ chartKey });
+  };
 
   private readonly featureChanged = (
     _: React.FormEvent<HTMLDivElement>,
