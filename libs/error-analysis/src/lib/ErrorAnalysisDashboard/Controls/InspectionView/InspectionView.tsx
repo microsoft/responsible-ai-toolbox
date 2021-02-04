@@ -110,7 +110,12 @@ export class InspectionView extends React.PureComponent<
     const featureNames: string[] = this.props.features;
     // TODO: remove, this is just for debugging for now
     const viewedCols: number = Math.min(numCols, featureNames.length);
-    this._columns = constructCols(viewedCols, featureNames);
+    this._columns = constructCols(
+      viewedCols,
+      featureNames,
+      this.props.jointDataset,
+      false
+    );
     this._selection = new Selection({
       onSelectionChanged: (): void => {
         if (this._selectionInitialized) {
