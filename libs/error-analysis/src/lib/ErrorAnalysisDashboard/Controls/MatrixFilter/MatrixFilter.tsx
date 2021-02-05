@@ -12,6 +12,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { CohortStats } from "../../CohortStats";
 import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
@@ -28,7 +29,8 @@ export interface IMatrixFilterProps {
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: ErrorDetectorCohortSource,
-    cells: number
+    cells: number,
+    cohortStats: CohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;

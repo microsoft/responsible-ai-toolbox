@@ -24,19 +24,26 @@ export interface IReportChartProps {
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   areaHeights: number;
   metrics: IMetrics;
+  chartKey?: string;
+  onUpdateChartKey: (chartKey: string) => void;
 }
 
 const performanceKey = "performance";
 const outcomeKey = "outcome";
 
 export interface IState {
-  displayPlotKey: string;
+  chartKey: string;
 }
 
 export class ReportChart extends React.Component<IReportChartProps, IState> {
   public constructor(props: IReportChartProps) {
     super(props);
-    this.state = { displayPlotKey: outcomeKey };
+    if (this.props.chartKey) {
+      this.state = { chartKey: this.props.chartKey };
+    } else {
+      this.state = { chartKey: outcomeKey };
+    }
+    this.props.onUpdateChartKey(this.state.chartKey);
   }
 
   public render(): React.ReactNode {
@@ -100,12 +107,12 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           id="chartSelectionDropdown"
           styles={{ dropdown: { maxWidth: "75%" } }}
           label={localization.Fairness.Report.chartChoiceDropdownHeader}
-          defaultSelectedKey={this.state.displayPlotKey}
+          defaultSelectedKey={this.state.chartKey}
           options={displayOptions}
           disabled={false}
           onChange={this.onChange.bind(this)}
         />
-        {this.state.displayPlotKey === performanceKey && (
+        {this.state.chartKey === performanceKey && (
           <PerformancePlot
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
@@ -114,7 +121,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             areaHeights={this.props.areaHeights}
           />
         )}
-        {this.state.displayPlotKey === outcomeKey && (
+        {this.state.chartKey === outcomeKey && (
           <OutcomePlot
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
@@ -133,8 +140,10 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     if (!option) {
       return;
     }
-    if (option.key !== this.state.displayPlotKey) {
-      this.setState({ displayPlotKey: option.key.toString() });
+    if (option.key !== this.state.chartKey) {
+      const newChartKey = option.key.toString();
+      this.props.onUpdateChartKey(newChartKey);
+      this.setState({ chartKey: newChartKey });
     }
   }
 }
