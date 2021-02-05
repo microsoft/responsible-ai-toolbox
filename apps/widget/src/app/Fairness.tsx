@@ -9,7 +9,7 @@ import {
 import React from "react";
 
 import { config } from "./config";
-import { FlaskCommunication } from "./FlaskCommunication";
+import { callFlaskService } from "./FlaskCommunication";
 import { modelData } from "./modelData";
 
 export class Fairness extends React.Component {
@@ -19,9 +19,7 @@ export class Fairness extends React.Component {
       requestMethod = async (
         data: IMetricRequest
       ): Promise<IMetricResponse> => {
-        return FlaskCommunication.callFlaskService(data, "/metrics") as Promise<
-          IMetricResponse
-        >;
+        return callFlaskService(data, "/metrics") as Promise<IMetricResponse>;
       };
     }
 

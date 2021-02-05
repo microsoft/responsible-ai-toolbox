@@ -5,7 +5,7 @@ import { NewExplanationDashboard } from "@responsible-ai/interpret";
 import React from "react";
 
 import { config } from "./config";
-import { FlaskCommunication } from "./FlaskCommunication";
+import { callFlaskService } from "./FlaskCommunication";
 import { modelData } from "./modelData";
 interface IInterpretProps {
   dashboardType?: "ModelPerformance";
@@ -15,7 +15,7 @@ export class Interpret extends React.Component<IInterpretProps> {
     let requestMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestMethod = (request: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(request, "/predict");
+        return callFlaskService(request, "/predict");
       };
     }
 

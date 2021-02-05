@@ -5,7 +5,7 @@ import { ErrorAnalysisDashboard } from "@responsible-ai/error-analysis";
 import React from "react";
 
 import { config } from "./config";
-import { FlaskCommunication } from "./FlaskCommunication";
+import { callFlaskService } from "./FlaskCommunication";
 import { modelData } from "./modelData";
 
 export class ErrorAnalysis extends React.Component {
@@ -16,16 +16,16 @@ export class ErrorAnalysis extends React.Component {
     let requestImportancesMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/predict");
+        return callFlaskService(data, "/predict");
       };
       requestMatrixMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/matrix");
+        return callFlaskService(data, "/matrix");
       };
       requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/tree");
+        return callFlaskService(data, "/tree");
       };
       requestImportancesMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/importances");
+        return callFlaskService(data, "/importances");
       };
     }
 
