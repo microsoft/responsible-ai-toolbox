@@ -487,7 +487,12 @@
       "cohortNameError": "Missing cohort name",
       "_cohortNameError.comment": "error message if required name is missing",
       "placeholderName": "Cohort {0}",
-      "_placeholderName.comment": "starting name for a new cohort"
+      "_placeholderName.comment": "starting name for a new cohort",
+      "cancelTitle": "Cancel cohort",
+      "cancelNewCohort": "Are you sure you want to cancel creating a new cohort and go back?",
+      "cancelExistingCohort": "Are you sure you want to cancel editing cohort and go back?",
+      "cancelYes": "Yes",
+      "cancelNo": "No"
     },
     "AxisConfigDialog": {
       "select": "Select",
@@ -658,6 +663,15 @@
       "explanation": "Explanation",
       "cohortSettings": "Cohort settings"
     },
+    "MapShift": {
+      "subText": "Do you want to restart your exploration with a different map?  Save it as a new cohort.  Otherwise, your chosen filters will be lost.",
+      "title": "Map shift",
+      "close": "Close",
+      "move": "Move",
+      "saveAs": "Save as a new cohort",
+      "shift": "Shift",
+      "cancel": "Cancel"
+    },
     "MatrixArea": {
       "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions."
     },
@@ -670,6 +684,18 @@
       "globalExplanation": "Global explanation",
       "localExplanation": "Local explanation",
       "localExplanationInspection": "Local explanation (Inspection)"
+    },
+    "SaveCohort": {
+      "subText": "Save the current cohort to the cohort list. You can revisit the saved cohort via the cohort list.",
+      "save": "Save",
+      "saveTitle": "Save as a new cohort",
+      "cancel": "Cancel",
+      "close": "Close",
+      "move": "Move",
+      "cohortName": "Cohort name"
+    },
+    "TreeView": {
+      "treeDescription": "To find nodes in the tree map with the most errors, look for higher values and fuller circles."
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"

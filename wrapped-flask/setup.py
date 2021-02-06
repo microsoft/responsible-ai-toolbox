@@ -6,7 +6,7 @@ import setuptools
 
 # The version must be incremented every time we push an update to pypi (but
 # not before)
-VERSION = "0.0.3-dev"
+VERSION = "0.2.0"
 
 # supply contents of our README file as our package's long description
 with open("README.md", "r") as fh:
@@ -26,7 +26,7 @@ setuptools.setup(
 
     version=VERSION,
     author="Roman Lutz, Ke Xu, Xavier Fernandes",
-    author_email="rolutz@microsoft.com",
+    author_email="raiwidgets-maintain@microsoft.com",
     description="Responsible AI Core Flask Wrapper",
     long_description=long_description,
     long_description_content_type="text/markdown",

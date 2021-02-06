@@ -5,6 +5,7 @@ import { ICompositeFilter, IFilter } from "@responsible-ai/interpret";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
+import { CohortStats } from "../../CohortStats";
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisDashboard";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
@@ -25,7 +26,8 @@ export interface IErrorAnalysisViewProps {
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: ErrorDetectorCohortSource,
-    cells: number
+    cells: number,
+    cohortStats: CohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
@@ -78,7 +80,12 @@ export class ErrorAnalysisView extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: IErrorAnalysisViewProps): void {
-    if (this.props.selectedFeatures !== prevProps.selectedFeatures) {
+    if (
+      this.props.selectedFeatures !== prevProps.selectedFeatures ||
+      this.props.treeViewState !== prevProps.treeViewState ||
+      this.props.matrixFilterState !== prevProps.matrixFilterState ||
+      this.props.matrixAreaState !== prevProps.matrixAreaState
+    ) {
       this.forceUpdate();
     }
   }

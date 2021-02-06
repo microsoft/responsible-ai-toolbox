@@ -28,6 +28,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { CohortStats } from "../../CohortStats";
 import { ColorPalette } from "../../ColorPalette";
 import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
@@ -47,7 +48,8 @@ export interface IMatrixAreaProps {
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: ErrorDetectorCohortSource,
-    cells: number
+    cells: number,
+    cohortStats: CohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
@@ -154,6 +156,12 @@ export class MatrixArea extends React.PureComponent<
       this.props.selectedFeature1 !== noFeature
         ? classNames.matrixRow
         : classNames.matrixCol;
+    let falseCount = 0;
+    this.state.jsonMatrix.matrix.forEach((row: any) => {
+      row.forEach((value: any) => {
+        falseCount += value.falseCount;
+      });
+    });
     return (
       <div className={classNames.matrixArea}>
         <div>
@@ -203,7 +211,7 @@ export class MatrixArea extends React.PureComponent<
                 const filterProps = new FilterProps(
                   value.falseCount,
                   value.count,
-                  this.props.baseCohort.totalIncorrect,
+                  falseCount,
                   errorRatio
                 );
                 const tooltipProps: ITooltipProps = {
@@ -428,11 +436,13 @@ export class MatrixArea extends React.PureComponent<
       this.state.jsonMatrix!
     );
     const cells = selectedCells.filter(Boolean).length;
+    const cohortStats = this.createCohortStatsFromSelectedCells(selectedCells);
     this.props.updateSelectedCohort(
       [],
       compositeFilter,
       ErrorDetectorCohortSource.HeatMap,
-      cells
+      cells,
+      cohortStats
     );
   }
 
@@ -465,6 +475,45 @@ export class MatrixArea extends React.PureComponent<
       }
     }
     return [categoryValues, catHasIntervals];
+  }
+
+  private createCohortStatsFromSelectedCells(
+    selectedCells: boolean[]
+  ): CohortStats {
+    let falseCohortCount = 0;
+    let totalCohortCount = 0;
+    let falseCount = 0;
+    let totalCount = 0;
+    let existsSelectedCell = false;
+    this.state.jsonMatrix.matrix.forEach((row: any, i: number) => {
+      row.forEach((value: any, j: number) => {
+        if (selectedCells !== undefined && selectedCells[j + i * row.length]) {
+          falseCohortCount += value.falseCount;
+          totalCohortCount += value.count;
+          existsSelectedCell = true;
+        }
+        falseCount += value.falseCount;
+        totalCount += value.count;
+      });
+    });
+    if (existsSelectedCell) {
+      const errorRate = (falseCohortCount / totalCohortCount) * 100;
+      return new CohortStats(
+        falseCohortCount,
+        totalCohortCount,
+        falseCount,
+        totalCount,
+        errorRate
+      );
+    }
+    const errorRate = (falseCount / totalCount) * 100;
+    return new CohortStats(
+      falseCount,
+      totalCount,
+      falseCount,
+      totalCount,
+      errorRate
+    );
   }
 
   private createCompositeFilterFromCells(

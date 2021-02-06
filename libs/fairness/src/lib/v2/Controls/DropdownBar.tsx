@@ -71,6 +71,7 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           onChange={this.props.parentPerformanceChanged}
         />
         <Dropdown
+          style={{ minWidth: "240px" }}
           id="fairnessMetricDropdown"
           label={localization.Fairness.DropdownHeaders.fairnessMetric}
           defaultSelectedKey={

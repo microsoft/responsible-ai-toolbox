@@ -17,7 +17,6 @@ export interface IOverallTableProps {
   formattedBinValues: Array<string[] | undefined>;
   binLabels: string[];
   metricLabels: string[];
-  expandAttributes: boolean;
   overallMetrics: string[];
   binGroup: string;
 }
@@ -84,8 +83,8 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
         fieldName: "binLabel",
         isResizable: true,
         key: "columnBin",
-        maxWidth: 200,
-        minWidth: 100,
+        maxWidth: 100,
+        minWidth: 50,
         name: "",
         onRender: this.renderBinColumn
       }
@@ -95,8 +94,8 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
         fieldName: "metric" + colIndex,
         isResizable: true,
         key: "column" + colIndex,
-        maxWidth: 200,
-        minWidth: 100,
+        maxWidth: 150,
+        minWidth: 75,
         name: colName
       });
     });

@@ -16,10 +16,9 @@ import {
   MarqueeSelection,
   ScrollablePane,
   ScrollbarVisibility,
-  Sticky,
-  StickyPositionType,
   TooltipHost,
-  IRenderFunction
+  IRenderFunction,
+  SelectAllVisibility
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -73,12 +72,13 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
     tooltipHostProps
   ) => <TooltipHost {...tooltipHostProps} />;
   return (
-    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
+    <div>
       {defaultRender!({
         ...props,
-        onRenderColumnHeaderTooltip
+        onRenderColumnHeaderTooltip,
+        selectAllVisibility: SelectAllVisibility.hidden
       })}
-    </Sticky>
+    </div>
   );
 };
 
@@ -145,6 +145,7 @@ export class TabularDataView extends React.Component<
 
   private updateItems(): ITableState {
     let rows = [];
+    let isCustomPointsView = false;
     if (this.props.customPoints) {
       const viewedRows = this.props.customPoints.length;
       rows = rowsFromCustomPoints(
@@ -152,6 +153,7 @@ export class TabularDataView extends React.Component<
         this.props.customPoints,
         viewedRows
       );
+      isCustomPointsView = true;
     } else {
       const cohortData = this.props.selectedCohort.cohort.filteredData;
       const numRows: number = cohortData.length;
@@ -172,7 +174,12 @@ export class TabularDataView extends React.Component<
     const featureNames: string[] = this.props.features;
     // TODO: remove, this is just for debugging for now
     const viewedCols: number = Math.min(numCols, featureNames.length);
-    const columns = constructCols(viewedCols, featureNames);
+    const columns = constructCols(
+      viewedCols,
+      featureNames,
+      this.props.jointDataset,
+      isCustomPointsView
+    );
     return {
       columns,
       rows

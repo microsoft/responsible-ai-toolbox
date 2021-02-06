@@ -53,7 +53,9 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>Cells</div>
                 <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.cells}
+                  {this.props.selectedCohort.cells === 0
+                    ? "-"
+                    : this.props.selectedCohort.cells}
                 </div>
               </Stack>
             </Stack>
