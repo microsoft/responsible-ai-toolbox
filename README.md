@@ -230,7 +230,7 @@ To setup on your local machine:
 <details><summary><strong><em>Install Python module, packages and necessary distributions</em></strong></summary>
 
 ```
-pip install responsible-ai-widgets
+pip install raiwidgets
 ```
 
 If you intend to run repository tests:
