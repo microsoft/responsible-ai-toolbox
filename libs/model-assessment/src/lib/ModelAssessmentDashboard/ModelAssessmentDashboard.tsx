@@ -30,10 +30,8 @@ import {
   ErrorAnalysisDashboardStyles,
   FeatureList,
   InstanceView,
-  MainMenu,
   MapShift,
   ModelExplanationUtils,
-  Navigation,
   SaveCohort,
   ShiftCohort,
   WhatIf,
@@ -62,12 +60,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 import { IModelAssessmentDashboardProps } from "./Interfaces/IModelAssessmentDashboardProps";
+import { MainMenu } from "./Controls/MainMenu/MainMenu";
 
 export interface IModelAssessmentDashboardState {
   activeGlobalTab: GlobalTabKeys;
   cohorts: ErrorCohort[];
   customPoints: Array<{ [key: string]: any }>;
-  viewType: ViewTypeKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
@@ -137,12 +135,8 @@ export interface ISelectorConfig {
 export enum GlobalTabKeys {
   DataExplorerTab = "DataExplorerTab",
   GlobalExplanationTab = "GlobalExplanationTab",
-  LocalExplanationTab = "LocalExplanationTab"
-}
-
-export enum ViewTypeKeys {
-  ErrorAnalysisView = "ErrorAnalysisView",
-  ExplanationView = "ExplanationView"
+  LocalExplanationTab = "LocalExplanationTab",
+  ErrorAnalysisTab = "ErrorAnalysisTab"
 }
 
 export enum ErrorAnalysisOptions {
@@ -231,6 +225,10 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       _.cloneDeep(props)
     );
 
+    this.pivotItems.push({
+      headerText: localization.ErrorAnalysis.Navigation.errorDetector,
+      itemKey: GlobalTabKeys.ErrorAnalysisTab
+    });
     this.pivotItems.push({
       headerText: localization.ErrorAnalysis.dataExplorerView,
       itemKey: GlobalTabKeys.DataExplorerTab
@@ -344,7 +342,9 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     );
   }
 
-  private static getModelType(props: IModelAssessmentDashboardProps): ModelTypes {
+  private static getModelType(
+    props: IModelAssessmentDashboardProps
+  ): ModelTypes {
     // If python gave us a hint, use it
     if (props.modelInformation.method === "regressor") {
       return ModelTypes.Regression;
@@ -479,7 +479,6 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       selectedWhatIfIndex: undefined,
       sortVector: undefined,
       treeViewState: createInitialTreeViewState(),
-      viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
       weightVectorOptions,
       whatIfChartConfig: undefined
@@ -493,15 +492,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     const classNames = ErrorAnalysisDashboardStyles();
     return (
       <div className={classNames.page}>
-        <Navigation
-          updateViewState={this.updateViewState.bind(this)}
-          updatePredictionTabState={this.updatePredictionTabState.bind(this)}
-          viewType={this.state.viewType}
-          activeGlobalTab={this.state.activeGlobalTab}
-          activePredictionTab={this.state.predictionTab}
-        />
         <MainMenu
-          viewExplanation={this.viewExplanation.bind(this)}
           onInfoPanelClick={(): void => this.setState({ openInfoPanel: true })}
           onCohortListPanelClick={(): void =>
             this.setState({ openCohortListPanel: true })
@@ -517,7 +508,6 @@ export class ModelAssessmentDashboard extends React.PureComponent<
           }
           onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
           localUrl={this.props.localUrl}
-          viewType={this.state.viewType}
           setErrorDetector={(key: ErrorAnalysisOptions): void => {
             if (this.state.selectedCohort.isTemporary) {
               this.setState({
@@ -637,121 +627,120 @@ export class ModelAssessmentDashboard extends React.PureComponent<
             })}
           >
             <Layer>
-              {this.state.viewType === ViewTypeKeys.ErrorAnalysisView && (
-                <ErrorAnalysisView
-                  theme={this.props.theme!}
-                  messages={
-                    this.props.stringParams
-                      ? this.props.stringParams.contextualHelp
-                      : undefined
-                  }
-                  getTreeNodes={this.props.requestDebugML}
-                  getMatrix={this.props.requestMatrix}
-                  updateSelectedCohort={this.updateSelectedCohort.bind(this)}
-                  features={this.props.features}
-                  selectedFeatures={this.state.selectedFeatures}
-                  errorAnalysisOption={this.state.errorAnalysisOption}
-                  selectedCohort={this.state.selectedCohort}
-                  baseCohort={this.state.baseCohort}
-                  treeViewState={this.state.treeViewState}
-                  setTreeViewState={(treeViewState: ITreeViewRendererState) => {
-                    if (this.state.selectedCohort !== this.state.baseCohort) {
-                      this.setState({ treeViewState });
+              <div className={ModelAssessmentDashboard.classNames.pivotWrapper}>
+                <Pivot
+                  selectedKey={this.state.activeGlobalTab}
+                  onLinkClick={this.handleGlobalTabClick.bind(this)}
+                  linkSize={PivotLinkSize.normal}
+                  headersOnly={true}
+                  styles={{ root: classNames.pivotLabelWrapper }}
+                >
+                  {this.pivotItems.map((props) => (
+                    <PivotItem key={props.itemKey} {...props} />
+                  ))}
+                </Pivot>
+                {this.state.activeGlobalTab ===
+                  GlobalTabKeys.ErrorAnalysisTab && (
+                  <ErrorAnalysisView
+                    theme={this.props.theme!}
+                    messages={
+                      this.props.stringParams
+                        ? this.props.stringParams.contextualHelp
+                        : undefined
                     }
-                  }}
-                  matrixAreaState={this.state.matrixAreaState}
-                  matrixFilterState={this.state.matrixFilterState}
-                  setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
-                    if (this.state.selectedCohort !== this.state.baseCohort) {
-                      this.setState({ matrixAreaState });
+                    getTreeNodes={this.props.requestDebugML}
+                    getMatrix={this.props.requestMatrix}
+                    updateSelectedCohort={this.updateSelectedCohort.bind(this)}
+                    features={this.props.features}
+                    selectedFeatures={this.state.selectedFeatures}
+                    errorAnalysisOption={this.state.errorAnalysisOption}
+                    selectedCohort={this.state.selectedCohort}
+                    baseCohort={this.state.baseCohort}
+                    treeViewState={this.state.treeViewState}
+                    setTreeViewState={(
+                      treeViewState: ITreeViewRendererState
+                    ) => {
+                      if (this.state.selectedCohort !== this.state.baseCohort) {
+                        this.setState({ treeViewState });
+                      }
+                    }}
+                    matrixAreaState={this.state.matrixAreaState}
+                    matrixFilterState={this.state.matrixFilterState}
+                    setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
+                      if (this.state.selectedCohort !== this.state.baseCohort) {
+                        this.setState({ matrixAreaState });
+                      }
+                    }}
+                    setMatrixFilterState={(
+                      matrixFilterState: IMatrixFilterState
+                    ) => {
+                      if (this.state.selectedCohort !== this.state.baseCohort) {
+                        this.setState({ matrixFilterState });
+                      }
+                    }}
+                  />
+                )}
+                {this.state.activeGlobalTab ===
+                  GlobalTabKeys.DataExplorerTab && (
+                  <DatasetExplorerTab
+                    jointDataset={this.state.jointDataset}
+                    metadata={this.state.modelMetadata}
+                    cohorts={this.state.cohorts.map(
+                      (errorCohort) => errorCohort.cohort
+                    )}
+                  />
+                )}
+                {this.state.activeGlobalTab ===
+                  GlobalTabKeys.GlobalExplanationTab && (
+                  <GlobalExplanationTab
+                    jointDataset={this.state.jointDataset}
+                    metadata={this.state.modelMetadata}
+                    globalImportance={this.state.globalImportance}
+                    isGlobalDerivedFromLocal={
+                      this.state.isGlobalImportanceDerivedFromLocal
                     }
-                  }}
-                  setMatrixFilterState={(
-                    matrixFilterState: IMatrixFilterState
-                  ) => {
-                    if (this.state.selectedCohort !== this.state.baseCohort) {
-                      this.setState({ matrixFilterState });
+                    cohorts={this.state.cohorts.map(
+                      (errorCohort) => errorCohort.cohort
+                    )}
+                    cohortIDs={cohortIDs}
+                    selectedWeightVector={this.state.selectedWeightVector}
+                    weightOptions={this.state.weightVectorOptions}
+                    weightLabels={this.state.weightVectorLabels}
+                    onWeightChange={this.onWeightVectorChange}
+                    explanationMethod={this.props.explanationMethod}
+                  />
+                )}
+                {this.state.activeGlobalTab ===
+                  GlobalTabKeys.LocalExplanationTab && (
+                  <InstanceView
+                    theme={this.props.theme}
+                    messages={
+                      this.props.stringParams
+                        ? this.props.stringParams.contextualHelp
+                        : undefined
                     }
-                  }}
-                />
-              )}
-              {this.state.viewType === ViewTypeKeys.ExplanationView && (
-                <div className={ModelAssessmentDashboard.classNames.pivotWrapper}>
-                  <Pivot
-                    selectedKey={this.state.activeGlobalTab}
-                    onLinkClick={this.handleGlobalTabClick.bind(this)}
-                    linkSize={PivotLinkSize.normal}
-                    headersOnly={true}
-                    styles={{ root: classNames.pivotLabelWrapper }}
-                  >
-                    {this.pivotItems.map((props) => (
-                      <PivotItem key={props.itemKey} {...props} />
-                    ))}
-                  </Pivot>
-                  {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExplorerTab && (
-                    <DatasetExplorerTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts.map(
-                        (errorCohort) => errorCohort.cohort
-                      )}
-                    />
-                  )}
-                  {this.state.activeGlobalTab ===
-                    GlobalTabKeys.GlobalExplanationTab && (
-                    <GlobalExplanationTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      globalImportance={this.state.globalImportance}
-                      isGlobalDerivedFromLocal={
-                        this.state.isGlobalImportanceDerivedFromLocal
-                      }
-                      cohorts={this.state.cohorts.map(
-                        (errorCohort) => errorCohort.cohort
-                      )}
-                      cohortIDs={cohortIDs}
-                      selectedWeightVector={this.state.selectedWeightVector}
-                      weightOptions={this.state.weightVectorOptions}
-                      weightLabels={this.state.weightVectorLabels}
-                      onWeightChange={this.onWeightVectorChange}
-                      explanationMethod={this.props.explanationMethod}
-                    />
-                  )}
-                  {this.state.activeGlobalTab ===
-                    GlobalTabKeys.LocalExplanationTab && (
-                    <InstanceView
-                      theme={this.props.theme}
-                      messages={
-                        this.props.stringParams
-                          ? this.props.stringParams.contextualHelp
-                          : undefined
-                      }
-                      jointDataset={this.state.jointDataset}
-                      features={this.props.features}
-                      metadata={this.state.modelMetadata}
-                      invokeModel={this.props.requestPredictions}
-                      selectedWeightVector={this.state.selectedWeightVector}
-                      weightOptions={this.state.weightVectorOptions}
-                      weightLabels={this.state.weightVectorLabels}
-                      onWeightChange={this.onWeightVectorChange}
-                      activePredictionTab={this.state.predictionTab}
-                      setActivePredictionTab={(
-                        key: PredictionTabKeys
-                      ): void => {
-                        this.setState({
-                          predictionTab: key
-                        });
-                      }}
-                      customPoints={this.state.customPoints}
-                      selectedCohort={this.state.selectedCohort}
-                      setWhatIfDatapoint={(index: number) =>
-                        this.setState({ selectedWhatIfIndex: index })
-                      }
-                    />
-                  )}
-                </div>
-              )}
+                    jointDataset={this.state.jointDataset}
+                    features={this.props.features}
+                    metadata={this.state.modelMetadata}
+                    invokeModel={this.props.requestPredictions}
+                    selectedWeightVector={this.state.selectedWeightVector}
+                    weightOptions={this.state.weightVectorOptions}
+                    weightLabels={this.state.weightVectorLabels}
+                    onWeightChange={this.onWeightVectorChange}
+                    activePredictionTab={this.state.predictionTab}
+                    setActivePredictionTab={(key: PredictionTabKeys): void => {
+                      this.setState({
+                        predictionTab: key
+                      });
+                    }}
+                    customPoints={this.state.customPoints}
+                    selectedCohort={this.state.selectedCohort}
+                    setWhatIfDatapoint={(index: number) =>
+                      this.setState({ selectedWhatIfIndex: index })
+                    }
+                  />
+                )}
+              </div>
               <CohortInfo
                 isOpen={this.state.openInfoPanel}
                 currentCohort={this.state.selectedCohort}
@@ -905,25 +894,11 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     });
   }
 
-  private viewExplanation(): void {
-    this.setState({
-      openFeatureList: false,
-      viewType: ViewTypeKeys.ExplanationView
-    });
-  }
-
-  private updateViewState(viewType: ViewTypeKeys): void {
-    if (viewType !== ViewTypeKeys.ExplanationView) {
-      const predictionTab = PredictionTabKeys.CorrectPredictionTab;
-      this.setState({ openWhatIf: false, predictionTab, viewType });
-    } else {
-      this.setState({ viewType });
-    }
-  }
-
-  private updatePredictionTabState(predictionTab: PredictionTabKeys): void {
-    this.setState({ predictionTab });
-  }
+  // private viewExplanation(): void {
+  //   this.setState({
+  //     openFeatureList: false
+  //   });
+  // }
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
