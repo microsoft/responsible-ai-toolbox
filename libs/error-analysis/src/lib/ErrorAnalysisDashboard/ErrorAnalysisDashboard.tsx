@@ -41,6 +41,12 @@ import { CohortStats } from "./CohortStats";
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
 import { CohortList } from "./Controls/CohortList/CohortList";
 import { EditCohort } from "./Controls/EditCohort/EditCohort";
+import {
+  ErrorAnalysisOptions,
+  GlobalTabKeys,
+  PredictionTabKeys,
+  ViewTypeKeys
+} from "./ErrorAnalysisEnums";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
@@ -134,30 +140,6 @@ export interface ISelectorConfig {
     // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
     bin?: boolean;
   };
-}
-
-export enum GlobalTabKeys {
-  DataExplorerTab = "DataExplorerTab",
-  GlobalExplanationTab = "GlobalExplanationTab",
-  LocalExplanationTab = "LocalExplanationTab"
-}
-
-export enum ViewTypeKeys {
-  ErrorAnalysisView = "ErrorAnalysisView",
-  ExplanationView = "ExplanationView"
-}
-
-export enum ErrorAnalysisOptions {
-  TreeMap = "TreeMap",
-  HeatMap = "HeatMap"
-}
-
-export enum PredictionTabKeys {
-  CorrectPredictionTab = "CorrectPredictionTab",
-  IncorrectPredictionTab = "IncorrectPredictionTab",
-  WhatIfDatapointsTab = "WhatIfDatapointsTab",
-  AllSelectedTab = "AllSelectedTab",
-  InspectionTab = "InspectionTab"
 }
 
 export class ErrorAnalysisDashboard extends React.PureComponent<

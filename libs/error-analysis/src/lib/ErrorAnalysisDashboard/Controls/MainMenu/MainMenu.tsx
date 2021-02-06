@@ -21,7 +21,7 @@ import {
   ErrorAnalysisOptions,
   GlobalTabKeys,
   PredictionTabKeys
-} from "../../ErrorAnalysisDashboard";
+} from "../../ErrorAnalysisEnums";
 import { ErrorCohort } from "../../ErrorCohort";
 
 import { mainMenuStyles } from "./MainMenu.styles";
