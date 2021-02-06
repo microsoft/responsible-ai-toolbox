@@ -9,7 +9,7 @@ import {
 import React from "react";
 
 import { config } from "./config";
-import { callFlaskService } from "./FlaskCommunication";
+import { callFlaskService } from "./callFlaskService";
 import { modelData } from "./modelData";
 
 export class Fairness extends React.Component {
