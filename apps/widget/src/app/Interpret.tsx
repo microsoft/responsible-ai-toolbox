@@ -4,8 +4,8 @@
 import { NewExplanationDashboard } from "@responsible-ai/interpret";
 import React from "react";
 
-import { config } from "./config";
 import { callFlaskService } from "./callFlaskService";
+import { config } from "./config";
 import { modelData } from "./modelData";
 interface IInterpretProps {
   dashboardType?: "ModelPerformance";

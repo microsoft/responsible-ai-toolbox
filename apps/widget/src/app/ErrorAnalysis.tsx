@@ -4,8 +4,8 @@
 import { ErrorAnalysisDashboard } from "@responsible-ai/error-analysis";
 import React from "react";
 
-import { config } from "./config";
 import { callFlaskService } from "./callFlaskService";
+import { config } from "./config";
 import { modelData } from "./modelData";
 
 export class ErrorAnalysis extends React.Component {
