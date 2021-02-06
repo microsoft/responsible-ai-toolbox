@@ -41,12 +41,6 @@ import { CohortStats } from "./CohortStats";
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
 import { CohortList } from "./Controls/CohortList/CohortList";
 import { EditCohort } from "./Controls/EditCohort/EditCohort";
-import {
-  ErrorAnalysisOptions,
-  GlobalTabKeys,
-  PredictionTabKeys,
-  ViewTypeKeys
-} from "./ErrorAnalysisEnums";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
@@ -57,6 +51,12 @@ import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
 import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
 import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
+import {
+  ErrorAnalysisOptions,
+  GlobalTabKeys,
+  PredictionTabKeys,
+  ViewTypeKeys
+} from "./ErrorAnalysisEnums";
 import { ErrorCohort, ErrorDetectorCohortSource } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import {
