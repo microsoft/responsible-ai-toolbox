@@ -37,6 +37,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { CohortStats } from "./CohortStats";
 import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
 import { CohortList } from "./Controls/CohortList/CohortList";
 import { EditCohort } from "./Controls/EditCohort/EditCohort";
@@ -417,7 +418,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       trueY: props.trueY
     });
     const globalProps = ErrorAnalysisDashboard.buildGlobalProperties(props);
-    // consider taking filters in as param arg for programatic users
+    // consider taking filters in as param arg for programmatic users
     const cohorts = [
       new ErrorCohort(
         new Cohort(
@@ -627,7 +628,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 selectedCohort
               });
             }}
-            cohorts={this.state.cohorts}
+            cohorts={this.state.cohorts.filter((cohort) => !cohort.isTemporary)}
           />
         )}
         <div>
@@ -824,7 +825,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
-    cells = 0
+    cells: number,
+    cohortStats: CohortStats | undefined
   ): void {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
@@ -856,7 +858,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       this.state.jointDataset,
       cells,
       source,
-      addTemporaryCohort
+      addTemporaryCohort,
+      cohortStats
     );
     let cohorts = this.state.cohorts.filter(
       (errorCohort) => !errorCohort.isTemporary

@@ -142,7 +142,11 @@ export class EditCohort extends React.Component<
         cohort.cohort.filters,
         cohort.cohort.compositeFilters
       ),
-      this.props.jointDataset
+      this.props.jointDataset,
+      cohort.cells,
+      cohort.source,
+      cohort.isTemporary,
+      cohort.cohortStats
     );
     this.props.onSave(cohort, savedCohort);
   }
