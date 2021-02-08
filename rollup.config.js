@@ -9,7 +9,6 @@ module.exports = (config) => {
   config.plugins.push(json());
   config.plugins.push(svgr.default());
   config.onwarn = (warning, warn) => {
-    // ignore
     if (
       warning.code === "THIS_IS_UNDEFINED" ||
       warning.code === "CIRCULAR_DEPENDENCY" ||
