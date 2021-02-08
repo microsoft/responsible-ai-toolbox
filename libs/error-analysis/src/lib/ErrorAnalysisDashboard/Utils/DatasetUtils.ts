@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IColumn } from "office-ui-fabric-react";
-
 import { JointDataset } from "@responsible-ai/core-ui";
+import { IColumn } from "office-ui-fabric-react";
 
 export function constructRows(
   cohortData: Array<{ [key: string]: number }>,
