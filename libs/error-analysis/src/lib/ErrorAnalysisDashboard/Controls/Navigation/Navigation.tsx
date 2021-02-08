@@ -14,7 +14,7 @@ import {
   ViewTypeKeys,
   GlobalTabKeys,
   PredictionTabKeys
-} from "../../ErrorAnalysisDashboard";
+} from "../../ErrorAnalysisEnums";
 
 import { navigationStyles } from "./Navigation.styles";
 
