@@ -13,7 +13,7 @@ on:
         required: true
 
 jobs:
-  release:
+  release-python:
     runs-on: ubuntu-latest
 
     steps:
