@@ -3,7 +3,7 @@
 
 import { IColumn } from "office-ui-fabric-react";
 
-import { JointDataset } from "./JointDataset";
+import { JointDataset } from "@responsible-ai/core-ui";
 
 export function constructRows(
   cohortData: Array<{ [key: string]: number }>,

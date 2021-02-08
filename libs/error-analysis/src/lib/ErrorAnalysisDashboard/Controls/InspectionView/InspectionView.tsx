@@ -4,9 +4,7 @@
 import {
   JointDataset,
   WeightVectorOption,
-  IExplanationModelMetadata,
-  constructRows,
-  constructCols
+  IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import {
   LocalImportancePlots,
@@ -32,6 +30,7 @@ import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import { constructRows, constructCols } from "../../Utils/DatasetUtils";
 
 export interface IInspectionViewProps {
   theme?: ITheme;

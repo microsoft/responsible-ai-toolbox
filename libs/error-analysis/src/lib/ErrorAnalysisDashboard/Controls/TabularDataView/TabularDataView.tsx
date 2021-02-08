@@ -1,12 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  JointDataset,
-  constructRows,
-  constructCols,
-  rowsFromCustomPoints
-} from "@responsible-ai/core-ui";
+import { JointDataset } from "@responsible-ai/core-ui";
 import {
   ConstrainMode,
   DetailsList,
@@ -29,6 +24,11 @@ import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+import {
+  constructRows,
+  constructCols,
+  rowsFromCustomPoints
+} from "../../Utils/DatasetUtils";
 
 import { tabularDataViewStyles } from "./TabularDataView.styles";
 

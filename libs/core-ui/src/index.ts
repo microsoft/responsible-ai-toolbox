@@ -14,4 +14,3 @@ export * from "./lib/cohortKey";
 export * from "./lib/interfaces/IExplanationContext";
 export * from "./lib/interfaces/IWeightedDropdownContext";
 export * from "./lib/util/JointDataset";
-export * from "./lib/util/DatasetUtils";
