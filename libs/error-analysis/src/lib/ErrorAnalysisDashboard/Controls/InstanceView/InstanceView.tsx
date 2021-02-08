@@ -17,7 +17,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTabKeys } from "../../ErrorAnalysisDashboard";
+import { PredictionTabKeys } from "../../ErrorAnalysisEnums";
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { InspectionView } from "../InspectionView/InspectionView";
