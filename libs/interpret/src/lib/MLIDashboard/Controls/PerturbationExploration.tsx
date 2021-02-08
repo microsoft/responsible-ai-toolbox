@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IExplanationContext } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React from "react";
 
-import { IExplanationContext } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { FeatureEditingTile } from "../SharedComponents/FeatureEditingTile";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";

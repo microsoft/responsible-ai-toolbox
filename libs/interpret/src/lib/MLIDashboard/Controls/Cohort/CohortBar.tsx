@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IExplanationModelMetadata,
+  JointDataset
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
@@ -14,7 +18,6 @@ import {
 import React from "react";
 
 import { Cohort } from "../../Cohort";
-import { IExplanationModelMetadata, JointDataset } from "@responsible-ai/core-ui";
 
 import { CohortEditor } from "./CohortEditor";
 import { CohortList } from "./CohortList";

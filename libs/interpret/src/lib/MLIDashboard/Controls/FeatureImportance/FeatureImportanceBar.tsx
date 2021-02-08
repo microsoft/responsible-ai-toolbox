@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ModelTypes, IGlobalExplanation } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -16,7 +17,6 @@ import {
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelTypes, IGlobalExplanation } from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { BarChart } from "../../SharedComponents/BarChart";
 import {

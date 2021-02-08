@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IExplanationContext,
+  IMultiClassBoundedCoordinates,
+  IFeatureValueExplanation
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -14,11 +19,6 @@ import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { FabricStyles } from "../FabricStyles";
-import {
-  IExplanationContext,
-  IMultiClassBoundedCoordinates,
-  IFeatureValueExplanation
-} from "@responsible-ai/core-ui";
 
 export interface IEbmProps {
   explanationContext: IExplanationContext;

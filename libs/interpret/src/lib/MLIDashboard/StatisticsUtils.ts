@@ -1,9 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  ClassificationEnum,
+  JointDataset,
+  ModelTypes
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-
-import { ClassificationEnum, JointDataset, ModelTypes } from "@responsible-ai/core-ui";
 
 export interface ILabeledStatistic {
   label: string;

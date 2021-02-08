@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";

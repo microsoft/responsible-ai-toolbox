@@ -2,18 +2,18 @@
 // Licensed under the MIT License.
 
 import {
-  LocalImportancePlots,
-  IGlobalSeries,
-  ModelExplanationUtils,
-  FabricStyles
-} from "@responsible-ai/interpret";
-import {
   JointDataset,
   WeightVectorOption,
   IExplanationModelMetadata,
   constructRows,
   constructCols
 } from "@responsible-ai/core-ui";
+import {
+  LocalImportancePlots,
+  IGlobalSeries,
+  ModelExplanationUtils,
+  FabricStyles
+} from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,

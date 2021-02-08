@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { JointDataset } from "@responsible-ai/core-ui";
 import {
   IFilter,
   ICompositeFilter,
   Operations,
-  FilterMethods,
+  FilterMethods
 } from "@responsible-ai/interpret";
-import { JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";

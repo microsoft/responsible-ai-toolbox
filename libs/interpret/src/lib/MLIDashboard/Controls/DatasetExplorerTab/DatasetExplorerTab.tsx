@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ExpandableText, JointDataset, ColumnCategories, cohortKey, IExplanationModelMetadata } from "@responsible-ai/core-ui";
+import {
+  ExpandableText,
+  JointDataset,
+  ColumnCategories,
+  cohortKey,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";

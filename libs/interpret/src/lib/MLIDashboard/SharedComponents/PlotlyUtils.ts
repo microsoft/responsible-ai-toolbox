@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { IDropdownOption } from "office-ui-fabric-react";
-
-import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 
 export class PlotlyUtils {
   public static setColorProperty(

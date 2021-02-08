@@ -1,6 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IExplanationModelMetadata,
+  ModelTypes,
+  WeightVectorOption,
+  JointDataset
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   ChoiceGroup,
@@ -22,12 +28,6 @@ import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
-import {
-  IExplanationModelMetadata,
-  ModelTypes,
-  WeightVectorOption,
-  JointDataset
-} from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

@@ -29,6 +29,7 @@ import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
+
 import { tabularDataViewStyles } from "./TabularDataView.styles";
 
 export interface ITabularDataViewProps {

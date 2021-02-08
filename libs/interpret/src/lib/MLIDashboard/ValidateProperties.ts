@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isThreeDimArray, isTwoDimArray, IExplanationModelMetadata } from "@responsible-ai/core-ui";
+import {
+  isThreeDimArray,
+  isTwoDimArray,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";

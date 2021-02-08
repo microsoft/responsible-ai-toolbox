@@ -1,9 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PartialRequired2, IExplanationContext,
+import {
+  PartialRequired2,
+  IExplanationContext,
   IExplanationModelMetadata,
-  ModelTypes } from "@responsible-ai/core-ui";
+  ModelTypes
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessorMappingFunctionNames,

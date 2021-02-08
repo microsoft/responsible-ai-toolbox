@@ -1,6 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  JointDataset,
+  IExplanationModelMetadata,
+  ModelTypes,
+  WeightVectorOption
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -14,12 +20,6 @@ import React from "react";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import {
-  JointDataset,
-  IExplanationModelMetadata,
-  ModelTypes,
-  WeightVectorOption
-} from "@responsible-ai/core-ui";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";
 

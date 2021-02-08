@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { JointDataset, IJointMeta } from "@responsible-ai/core-ui";
 import {
   Cohort,
   IFilter,
   FilterMethods,
   ICompositeFilter
 } from "@responsible-ai/interpret";
-import { JointDataset, IJointMeta } from "@responsible-ai/core-ui";
 
 import { CohortStats } from "./CohortStats";
 
