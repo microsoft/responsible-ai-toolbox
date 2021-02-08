@@ -18,7 +18,7 @@ import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
   IFeatureValueExplanation
-} from "../IExplanationContext";
+} from "@responsible-ai/core-ui";
 
 export interface IEbmProps {
   explanationContext: IExplanationContext;

@@ -21,8 +21,7 @@ import {
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
-import { cohortKey } from "../../cohortKey";
-import { ColumnCategories, IJointMeta, JointDataset } from "../../JointDataset";
+import { ColumnCategories, IJointMeta, JointDataset, cohortKey } from "@responsible-ai/core-ui";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 
 export interface IAxisConfigProps {

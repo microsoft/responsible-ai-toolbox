@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PartialRequired2 } from "@responsible-ai/core-ui";
+import { PartialRequired2, IExplanationContext,
+  IExplanationModelMetadata,
+  ModelTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessorMappingFunctionNames,
@@ -19,11 +21,6 @@ import {
 } from "office-ui-fabric-react";
 
 import { IDashboardContext } from "../../ExplanationDashboard";
-import {
-  IExplanationContext,
-  IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
 

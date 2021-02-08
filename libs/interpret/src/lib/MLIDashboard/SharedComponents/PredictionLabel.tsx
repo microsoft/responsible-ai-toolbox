@@ -4,7 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { ModelTypes } from "../IExplanationContext";
+import { ModelTypes } from "@responsible-ai/core-ui";
 
 import { predictionLabelStyles } from "./PredictionLabel.styles";
 

@@ -5,7 +5,7 @@ import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { IDropdownOption } from "office-ui-fabric-react";
 
-import { IExplanationModelMetadata } from "../IExplanationContext";
+import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 
 export class PlotlyUtils {
   public static setColorProperty(

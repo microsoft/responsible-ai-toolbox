@@ -13,13 +13,13 @@ import React from "react";
 
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
-import {
-  IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { JointDataset } from "../../JointDataset";
+import {
+  JointDataset,
+  IExplanationModelMetadata,
+  ModelTypes,
+  WeightVectorOption
+} from "@responsible-ai/core-ui";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";
 

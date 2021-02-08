@@ -5,19 +5,19 @@ import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
-  isThreeDimArray
+  isThreeDimArray,
+  JointDataset,
+  IExplanationModelMetadata,
+  ModelTypes,
+  WeightVectorOption,
+  WeightVectors
 } from "@responsible-ai/core-ui";
 import {
   Cohort,
   DatasetExplorerTab,
   GlobalExplanationTab,
   ICompositeFilter,
-  IExplanationModelMetadata,
-  IFilter,
-  JointDataset,
-  ModelTypes,
-  WeightVectorOption,
-  WeightVectors
+  IFilter
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";

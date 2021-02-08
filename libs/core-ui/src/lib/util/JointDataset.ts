@@ -13,9 +13,9 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 
-import { cohortKey } from "./cohortKey";
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
-import { WeightVectors, WeightVectorOption } from "./IWeightedDropdownContext";
+import { cohortKey } from "../cohortKey";
+import { IExplanationModelMetadata, ModelTypes } from "../interfaces/IExplanationContext";
+import { WeightVectors, WeightVectorOption } from "../interfaces/IWeightedDropdownContext";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];

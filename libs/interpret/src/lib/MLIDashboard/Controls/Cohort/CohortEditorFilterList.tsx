@@ -13,7 +13,7 @@ import {
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
-import { JointDataset } from "../../JointDataset";
+import { JointDataset } from "@responsible-ai/core-ui";
 
 export interface ICohortEditorFilterList {
   filters: IFilter[];

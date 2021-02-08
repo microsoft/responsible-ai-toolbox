@@ -6,7 +6,7 @@ import { ICategoricalRange } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React from "react";
 
-import { IExplanationContext } from "../IExplanationContext";
+import { IExplanationContext } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { FeatureEditingTile } from "../SharedComponents/FeatureEditingTile";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";

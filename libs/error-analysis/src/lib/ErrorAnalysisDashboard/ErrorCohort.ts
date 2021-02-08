@@ -3,12 +3,11 @@
 
 import {
   Cohort,
-  JointDataset,
   IFilter,
   FilterMethods,
-  ICompositeFilter,
-  IJointMeta
+  ICompositeFilter
 } from "@responsible-ai/interpret";
+import { JointDataset, IJointMeta } from "@responsible-ai/core-ui";
 
 import { CohortStats } from "./CohortStats";
 

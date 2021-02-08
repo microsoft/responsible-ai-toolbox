@@ -7,7 +7,7 @@ import {
   ICompositeFilter,
   Operations
 } from "./Interfaces/IFilter";
-import { JointDataset } from "./JointDataset";
+import { JointDataset } from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 
 export class Cohort {

@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { limitStringLength } from "@responsible-ai/core-ui";
+import {
+  limitStringLength,
+  IExplanationModelMetadata,
+  ModelTypes
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
@@ -12,11 +16,7 @@ import {
 import React from "react";
 
 import { Cohort } from "../../Cohort";
-import {
-  IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
-import { JointDataset } from "../../JointDataset";
+import { JointDataset } from "@responsible-ai/core-ui";
 
 export interface ICohortListProps {
   cohorts: Cohort[];

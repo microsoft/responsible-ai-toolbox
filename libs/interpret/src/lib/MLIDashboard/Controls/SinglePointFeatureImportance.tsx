@@ -17,7 +17,7 @@ import {
   IExplanationContext,
   ModelTypes,
   ILocalExplanation
-} from "../IExplanationContext";
+} from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { BarChart } from "../SharedComponents/BarChart";

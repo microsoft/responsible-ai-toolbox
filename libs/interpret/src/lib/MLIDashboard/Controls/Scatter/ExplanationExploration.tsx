@@ -15,7 +15,7 @@ import {
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelTypes } from "../../IExplanationContext";
+import { ModelTypes } from "@responsible-ai/core-ui";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 

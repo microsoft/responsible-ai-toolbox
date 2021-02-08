@@ -19,9 +19,8 @@ import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
-import { WeightVectorOption } from "../../IWeightedDropdownContext";
+  ModelTypes, WeightVectorOption
+} from "@responsible-ai/core-ui";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 

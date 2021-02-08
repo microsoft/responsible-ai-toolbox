@@ -15,7 +15,7 @@ import React from "react";
 import { Cohort } from "../Cohort";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationModelMetadata } from "../IExplanationContext";
-import { JointDataset } from "../JointDataset";
+import { JointDataset } from "@responsible-ai/core-ui";
 import { LoadingSpinner } from "../SharedComponents";
 
 export interface IGlobalViolinPlotProps {

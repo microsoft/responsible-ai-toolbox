@@ -5,7 +5,7 @@ import { localization } from "@responsible-ai/localization";
 
 import { ChartTypes } from "../../ChartTypes";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ColumnCategories, JointDataset } from "../../JointDataset";
+import { ColumnCategories, JointDataset } from "@responsible-ai/core-ui";
 
 export function buildHoverTemplate(
   jointData: JointDataset,

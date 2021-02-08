@@ -3,8 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 
-import { ModelTypes } from "./IExplanationContext";
-import { ClassificationEnum, JointDataset } from "./JointDataset";
+import { ClassificationEnum, JointDataset, ModelTypes } from "@responsible-ai/core-ui";
 
 export interface ILabeledStatistic {
   label: string;

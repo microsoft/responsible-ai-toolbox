@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/interpret";
+import { JointDataset } from "./JointDataset";
 import { IColumn } from "office-ui-fabric-react";
 
 export function constructRows(

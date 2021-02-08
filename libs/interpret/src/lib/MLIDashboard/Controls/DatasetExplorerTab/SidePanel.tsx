@@ -17,7 +17,7 @@ import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ColumnCategories, JointDataset } from "../../JointDataset";
+import { ColumnCategories, JointDataset } from "@responsible-ai/core-ui";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";

@@ -5,7 +5,7 @@ import {
   JointDataset,
   IExplanationModelMetadata,
   WeightVectorOption
-} from "@responsible-ai/interpret";
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IChoiceGroupOption,

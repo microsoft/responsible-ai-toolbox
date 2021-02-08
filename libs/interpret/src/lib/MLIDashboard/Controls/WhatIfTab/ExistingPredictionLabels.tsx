@@ -14,9 +14,9 @@ import React from "react";
 
 import {
   IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
-import { JointDataset } from "../../JointDataset";
+  ModelTypes,
+  JointDataset
+} from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 
 import { WhatIfConstants } from "./WhatIfConstants";

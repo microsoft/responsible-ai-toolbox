@@ -14,8 +14,7 @@ import {
 import React from "react";
 
 import { Cohort } from "../../Cohort";
-import { IExplanationModelMetadata } from "../../IExplanationContext";
-import { JointDataset } from "../../JointDataset";
+import { IExplanationModelMetadata, JointDataset } from "@responsible-ai/core-ui";
 
 import { CohortEditor } from "./CohortEditor";
 import { CohortList } from "./CohortList";

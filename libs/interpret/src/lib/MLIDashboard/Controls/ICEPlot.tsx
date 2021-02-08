@@ -23,7 +23,7 @@ import { Data } from "plotly.js";
 import React from "react";
 
 import { FabricStyles } from "../FabricStyles";
-import { IExplanationContext, ModelTypes } from "../IExplanationContext";
+import { IExplanationContext, ModelTypes } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";

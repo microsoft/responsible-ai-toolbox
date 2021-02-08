@@ -4,7 +4,7 @@
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ColumnCategories, JointDataset } from "../../JointDataset";
+import { ColumnCategories, JointDataset } from "@responsible-ai/core-ui";
 
 export function buildCustomData(
   jointData: JointDataset,

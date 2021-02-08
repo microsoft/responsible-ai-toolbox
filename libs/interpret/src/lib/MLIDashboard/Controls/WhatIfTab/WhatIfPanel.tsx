@@ -19,8 +19,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IExplanationModelMetadata } from "../../IExplanationContext";
-import { JointDataset } from "../../JointDataset";
+import { IExplanationModelMetadata, JointDataset } from "@responsible-ai/core-ui";
 
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 import { ExistingPredictionLabels } from "./ExistingPredictionLabels";

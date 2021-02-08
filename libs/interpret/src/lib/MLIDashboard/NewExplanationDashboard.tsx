@@ -28,7 +28,7 @@ import {
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
-import { WeightVectorOption } from "./IWeightedDropdownContext";
+import { WeightVectorOption } from "@responsible-ai/core-ui";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 
 export interface ISelectorConfig {

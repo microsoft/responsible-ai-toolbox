@@ -3,11 +3,10 @@
 
 import {
   FabricStyles,
-  IExplanationModelMetadata,
-  JointDataset,
   WhatIfConstants,
   WhatIfPanel
 } from "@responsible-ai/interpret";
+import { JointDataset, IExplanationModelMetadata } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {

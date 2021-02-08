@@ -23,7 +23,7 @@ import {
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { IExplanationContext, ModelTypes } from "../../IExplanationContext";
+import { IExplanationContext, ModelTypes } from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";

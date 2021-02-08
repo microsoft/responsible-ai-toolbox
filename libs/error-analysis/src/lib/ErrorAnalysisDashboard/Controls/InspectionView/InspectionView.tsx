@@ -2,14 +2,18 @@
 // Licensed under the MIT License.
 
 import {
-  JointDataset,
   LocalImportancePlots,
-  IExplanationModelMetadata,
   IGlobalSeries,
   ModelExplanationUtils,
-  WeightVectorOption,
   FabricStyles
 } from "@responsible-ai/interpret";
+import {
+  JointDataset,
+  WeightVectorOption,
+  IExplanationModelMetadata,
+  constructRows,
+  constructCols
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,
@@ -28,7 +32,6 @@ import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { constructRows, constructCols } from "../../utils/DatasetUtils";
 
 export interface IInspectionViewProps {
   theme?: ITheme;

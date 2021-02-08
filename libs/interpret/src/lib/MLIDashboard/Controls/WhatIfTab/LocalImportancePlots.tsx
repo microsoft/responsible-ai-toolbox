@@ -24,10 +24,10 @@ import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import {
   IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
-import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { JointDataset } from "../../JointDataset";
+  ModelTypes,
+  WeightVectorOption,
+  JointDataset
+} from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

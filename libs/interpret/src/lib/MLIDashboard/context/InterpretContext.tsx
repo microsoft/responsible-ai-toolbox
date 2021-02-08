@@ -5,7 +5,7 @@ import React from "react";
 
 import { Cohort } from "../Cohort";
 import { ITelemetryMessage } from "../Interfaces/ITelemetryMessage";
-import { JointDataset } from "../JointDataset";
+import { JointDataset } from "@responsible-ai/core-ui";
 
 export interface IInterpretContext {
   cohorts: Cohort[];

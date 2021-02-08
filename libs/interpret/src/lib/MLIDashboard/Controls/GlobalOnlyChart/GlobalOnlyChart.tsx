@@ -6,7 +6,7 @@ import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { IExplanationModelMetadata } from "../../IExplanationContext";
+import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";

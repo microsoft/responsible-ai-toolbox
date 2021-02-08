@@ -19,7 +19,7 @@ import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
-import { IJointMeta, JointDataset } from "../../JointDataset";
+import { IJointMeta, JointDataset } from "@responsible-ai/core-ui";
 
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;

@@ -16,7 +16,7 @@ import {
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelTypes, IGlobalExplanation } from "../../IExplanationContext";
+import { ModelTypes, IGlobalExplanation } from "@responsible-ai/core-ui";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { BarChart } from "../../SharedComponents/BarChart";
 import {
