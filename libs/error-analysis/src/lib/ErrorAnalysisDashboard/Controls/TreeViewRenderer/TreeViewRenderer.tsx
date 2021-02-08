@@ -154,13 +154,19 @@ export class TreeViewRenderer extends React.PureComponent<
       .y((d: HierarchyPointNode<ITreeNode>) => d!.y!);
     // GENERATES LINK DATA BETWEEN NODES
     // -------------------------------------------------------------------
+    // The links between the nodes in the tree view are generated below.
+    // We go through each of the nodes other than the root and generate a link
+    // to the parent.  Depending on whether the node is on the selected path
+    // or not we highlight it.  We use the d3 linkVertical which is a curved
+    // spline to draw the link.  The thickness of the links depends on the
+    // ratio of data going through the path versus overall data in the tree.
     const links = rootDescendents
       .slice(1)
       .map((d: HierarchyPointNode<ITreeNode>) => {
         const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
         const lineColor = d.data.nodeState.onSelectedPath
-          ? "#089acc"
-          : "#e8eaed";
+          ? ColorPalette.SelectedLineColor
+          : ColorPalette.UnselectedLineColor;
         const id: string = d.id!;
         const linkVerticalD = linkVertical({ source: d.parent, target: d });
         return {
@@ -172,6 +178,9 @@ export class TreeViewRenderer extends React.PureComponent<
 
     // GENERATES THE LINK LABEL DATA FOR THE SELECTED PATH
     // -------------------------------------------------------------------
+    // Generates the labels on the links.  This initially writes the text,
+    // calculates the bounding box using getTextBB, and then returns the
+    // properties (x, y, height, width and the text) of the link label.
     const linkLabels = rootDescendents
       .slice(1)
       .filter(
@@ -199,8 +208,9 @@ export class TreeViewRenderer extends React.PureComponent<
         };
       });
 
-    // GENERTES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
+    // GENERATES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
     // -------------------------------------------------------------------
+    // The code below generates the circular nodes in the tree view.
     const nodeData: Array<HierarchyPointNode<ITreeNode>> = rootDescendents.map(
       (d: HierarchyPointNode<ITreeNode>): HierarchyPointNode<ITreeNode> => {
         let selectedStyle: Record<string, number | string> = {
@@ -287,7 +297,7 @@ export class TreeViewRenderer extends React.PureComponent<
                       <circle
                         r="26"
                         className={classNames.node}
-                        fill="#d2d2d2"
+                        fill={ColorPalette.FillStyle}
                         style={nodeDetail.maskUp}
                       />
                     </g>
@@ -329,54 +339,60 @@ export class TreeViewRenderer extends React.PureComponent<
                 component="g"
                 className={classNames.nodesTransitionGroup}
               >
-                {nodeData.map((node, index) => (
-                  <CSSTransition
-                    key={node.id! + Math.random()}
-                    in={true}
-                    timeout={200}
-                    className="nodes"
-                  >
-                    <g
-                      key={node.id! + Math.random()}
-                      style={node.data.nodeState.style}
-                      onClick={(
-                        e: React.MouseEvent<SVGElement, MouseEvent>
-                      ): void => this.select(index, node, e)}
-                      // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
-                      onMouseEnter={(
-                        e: React.MouseEvent<SVGElement, MouseEvent>
-                      ): void => this.hover(node, true, e)}
-                      pointerEvents="all"
+                {nodeData.map((node, index) => {
+                  const nodeId = node.id! + Math.random();
+                  return (
+                    <CSSTransition
+                      key={nodeId}
+                      in={true}
+                      timeout={200}
+                      className="nodes"
                     >
-                      <circle
-                        r={node.data.r}
-                        className={classNames.node}
-                        style={node.data.nodeState.errorStyle}
-                      />
-                      {node.data.nodeState.onSelectedPath && (
-                        <circle
-                          r={node.data.r * 1.4}
-                          className={
-                            node.data.nodeState.isSelectedLeaf
-                              ? classNames.clickedNodeFull
-                              : classNames.clickedNodeDashed
-                          }
-                        />
-                      )}
-
                       <g
-                        style={node.data.fillstyleDown}
-                        mask="url(#Mask)"
-                        className={classNames.nopointer}
+                        key={nodeId}
+                        style={node.data.nodeState.style}
+                        onClick={(
+                          e: React.MouseEvent<SVGElement, MouseEvent>
+                        ): void => this.select(index, node, e)}
+                        // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
+                        onMouseEnter={(
+                          e: React.MouseEvent<SVGElement, MouseEvent>
+                        ): void => this.hover(node, true, e)}
+                        pointerEvents="all"
                       >
-                        <circle r="26" style={node.data.fillstyleUp} />
+                        <circle
+                          r={node.data.r}
+                          className={classNames.node}
+                          style={node.data.nodeState.errorStyle}
+                        />
+                        {node.data.nodeState.onSelectedPath && (
+                          <circle
+                            r={node.data.r * 1.4}
+                            className={
+                              node.data.nodeState.isSelectedLeaf
+                                ? classNames.clickedNodeFull
+                                : classNames.clickedNodeDashed
+                            }
+                          />
+                        )}
+
+                        <g
+                          style={node.data.fillstyleDown}
+                          mask="url(#Mask)"
+                          className={classNames.nopointer}
+                        >
+                          <circle r="26" style={node.data.fillstyleUp} />
+                        </g>
+                        <text
+                          textAnchor="middle"
+                          className={classNames.nodeText}
+                        >
+                          {node.data.error} / {node.data.size}
+                        </text>
                       </g>
-                      <text textAnchor="middle" className={classNames.nodeText}>
-                        {node.data.error} / {node.data.size}
-                      </text>
-                    </g>
-                  </CSSTransition>
-                ))}
+                    </CSSTransition>
+                  );
+                })}
               </TransitionGroup>
               <TransitionGroup
                 component="g"
@@ -400,7 +416,7 @@ export class TreeViewRenderer extends React.PureComponent<
                         width={linkLabel.bbWidth}
                         height={linkLabel.bbHeight}
                         fill="white"
-                        stroke="#089acc"
+                        stroke={ColorPalette.LinkLabelOutline}
                         strokeWidth="1px"
                         rx="10"
                         ry="10"
@@ -559,7 +575,7 @@ export class TreeViewRenderer extends React.PureComponent<
               transform: `translate(0px, -${calcMaskShift}px)`
             },
             fillstyleUp: {
-              fill: "#d2d2d2",
+              fill: ColorPalette.FillStyle,
               transform: `translate(0px, ${calcMaskShift}px)`
             },
             filterProps,
