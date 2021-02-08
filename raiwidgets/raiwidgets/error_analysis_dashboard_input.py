@@ -170,7 +170,22 @@ class ErrorAnalysisDashboardInput:
                 raise ValueError(
                     "Model prediction output of unsupported type,"
                     "inner error: {}".format(ex_str))
+
+        if classes is None and hasattr(explanation, 'classes')\
+                and explanation.classes is not None:
+            classes = explanation.classes
+        if classes is not None:
+            classes = self._convert_to_list(classes)
+            self.dashboard_input[
+                ExplanationDashboardInterface.CLASS_NAMES
+            ] = classes
+            class_to_index = {k: v for v, k in enumerate(classes)}
+
         if predicted_y is not None:
+            # If classes specified, convert predicted_y to numeric representation
+            if classes is not None and predicted_y[0] in class_to_index:
+                for i in range(len(predicted_y)):
+                    predicted_y[i] = class_to_index[predicted_y[i]]
             self.dashboard_input[
                 ExplanationDashboardInterface.PREDICTED_Y
             ] = predicted_y
@@ -194,13 +209,15 @@ class ErrorAnalysisDashboardInput:
                 ExplanationDashboardInterface.IS_CLASSIFIER
             ] = self._is_classifier
 
-        local_dim = None
-
         if true_y is not None and len(true_y) == row_length:
+            list_true_y = self._convert_to_list(true_y)
+            # If classes specified, convert true_y to numeric representation
+            if classes is not None and list_true_y[0] in class_to_index:
+                for i in range(len(list_true_y)):
+                    list_true_y[i] = class_to_index[list_true_y[i]]
             self.dashboard_input[
                 ExplanationDashboardInterface.TRUE_Y
-            ] = self._convert_to_list(
-                true_y)
+            ] = list_true_y
 
         if local_explanation is not None:
             try:
@@ -240,6 +257,10 @@ class ErrorAnalysisDashboardInput:
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         " length differs from dataset")
+                if classes is not None and len(classes) != local_dim[0]:
+                    raise ValueError("Class vector length mismatch:"
+                                    "class names length differs from"
+                                    "local explanations dimension")
         if local_explanation is None and global_explanation is not None:
             try:
                 global_explanation["scores"] = self._convert_to_list(
@@ -274,18 +295,6 @@ class ErrorAnalysisDashboardInput:
                                  " feature names length differs"
                                  " from local explanations dimension")
             self.dashboard_input[FEATURE_NAMES] = features
-        if classes is None and hasattr(explanation, 'classes')\
-                and explanation.classes is not None:
-            classes = explanation.classes
-        if classes is not None:
-            classes = self._convert_to_list(classes)
-            if local_dim is not None and len(classes) != local_dim[0]:
-                raise ValueError("Class vector length mismatch:"
-                                 "class names length differs from"
-                                 "local explanations dimension")
-            self.dashboard_input[
-                ExplanationDashboardInterface.CLASS_NAMES
-            ] = classes
         if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
                 and model.predict_proba is not None and dataset is not None:
             try:
