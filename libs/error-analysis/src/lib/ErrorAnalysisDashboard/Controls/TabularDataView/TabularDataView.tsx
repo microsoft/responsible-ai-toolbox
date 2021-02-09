@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/interpret";
+import { JointDataset } from "@responsible-ai/core-ui";
 import {
   ConstrainMode,
   DetailsList,
@@ -28,7 +28,7 @@ import {
   constructRows,
   constructCols,
   rowsFromCustomPoints
-} from "../../utils/DatasetUtils";
+} from "../../Utils/DatasetUtils";
 
 import { tabularDataViewStyles } from "./TabularDataView.styles";
 

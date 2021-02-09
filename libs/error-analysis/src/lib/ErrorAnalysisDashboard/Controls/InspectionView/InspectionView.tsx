@@ -3,11 +3,13 @@
 
 import {
   JointDataset,
+  WeightVectorOption,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
+import {
   LocalImportancePlots,
-  IExplanationModelMetadata,
   IGlobalSeries,
   ModelExplanationUtils,
-  WeightVectorOption,
   FabricStyles
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -28,7 +30,7 @@ import React from "react";
 
 import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { constructRows, constructCols } from "../../utils/DatasetUtils";
+import { constructRows, constructCols } from "../../Utils/DatasetUtils";
 
 export interface IInspectionViewProps {
   theme?: ITheme;
