@@ -3,7 +3,7 @@
 
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
 
-import { JointDataset } from "./JointDataset";
+import { JointDataset } from "../util/JointDataset";
 
 export enum ModelTypes {
   Regression = "regression",

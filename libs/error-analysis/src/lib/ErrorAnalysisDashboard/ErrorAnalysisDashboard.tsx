@@ -5,19 +5,19 @@ import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
-  isThreeDimArray
+  isThreeDimArray,
+  JointDataset,
+  IExplanationModelMetadata,
+  ModelTypes,
+  WeightVectorOption,
+  WeightVectors
 } from "@responsible-ai/core-ui";
 import {
   Cohort,
   DatasetExplorerTab,
   GlobalExplanationTab,
   ICompositeFilter,
-  IExplanationModelMetadata,
-  IFilter,
-  JointDataset,
-  ModelTypes,
-  WeightVectorOption,
-  WeightVectors
+  IFilter
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -51,6 +51,12 @@ import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
 import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
 import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
+import {
+  ErrorAnalysisOptions,
+  GlobalTabKeys,
+  PredictionTabKeys,
+  ViewTypeKeys
+} from "./ErrorAnalysisEnums";
 import { ErrorCohort, ErrorDetectorCohortSource } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import {
@@ -134,30 +140,6 @@ export interface ISelectorConfig {
     // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
     bin?: boolean;
   };
-}
-
-export enum GlobalTabKeys {
-  DataExplorerTab = "DataExplorerTab",
-  GlobalExplanationTab = "GlobalExplanationTab",
-  LocalExplanationTab = "LocalExplanationTab"
-}
-
-export enum ViewTypeKeys {
-  ErrorAnalysisView = "ErrorAnalysisView",
-  ExplanationView = "ExplanationView"
-}
-
-export enum ErrorAnalysisOptions {
-  TreeMap = "TreeMap",
-  HeatMap = "HeatMap"
-}
-
-export enum PredictionTabKeys {
-  CorrectPredictionTab = "CorrectPredictionTab",
-  IncorrectPredictionTab = "IncorrectPredictionTab",
-  WhatIfDatapointsTab = "WhatIfDatapointsTab",
-  AllSelectedTab = "AllSelectedTab",
-  InspectionTab = "InspectionTab"
 }
 
 export class ErrorAnalysisDashboard extends React.PureComponent<

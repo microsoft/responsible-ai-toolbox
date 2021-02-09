@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ModelTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -15,7 +16,6 @@ import {
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelTypes } from "../../IExplanationContext";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 

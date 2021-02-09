@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICompositeFilter, IFilter } from "@responsible-ai/interpret";
+import {
+  ICompositeFilter,
+  IFilter,
+  FilterMethods
+} from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
 import {
@@ -24,9 +28,8 @@ import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
-  IErrorColorStyle,
-  ITransform,
   INodeDetail,
+  ITreeNode,
   ITreeViewRendererState
 } from "../../TreeViewState";
 import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
@@ -60,37 +63,20 @@ export interface ITreeViewRendererProps {
   setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
 }
 
-export interface IFillStyleUp {
-  transform: string;
-  fill: string;
-}
-
-export interface ITreeNode {
-  data: ITreeNodeData;
+// Represents the data retrieved from the backend
+export interface IRequestNode {
+  arg: number;
+  condition: string;
   error: number;
-  errorColor: IErrorColorStyle;
-  errorStyle: Record<string, number | string>;
-  fillstyleUp: IFillStyleUp;
-  fillstyleDown: ITransform;
-  highlight: boolean;
-  selected: boolean;
-  filterProps: FilterProps;
   id: string;
-  isMouseOver: boolean;
-  maskShift: number;
-  parent: HierarchyPointNode<any>;
-  r: number;
-  style: ITransform;
-}
-
-export interface ITreeNodeData {
-  error: number;
-  isMouseOver: boolean;
-  onSelectedPath: boolean;
-  isSelectedLeaf: boolean;
+  method: string;
+  nodeIndex: number;
   nodeName: string;
+  parentId: string;
+  parentNodeName: string;
   pathFromRoot: string;
   size: number;
+  sourceRowKeyHash: string;
   success: number;
 }
 
@@ -141,7 +127,6 @@ export class TreeViewRenderer extends React.PureComponent<
     const labelPaddingY = 8;
     const labelYOffset = 3;
 
-    const min: number = this.state.rootErrorSize / this.state.rootSize;
     const rootDescendents = this.state.root.descendants();
     const max: number = d3max(
       rootDescendents,
@@ -162,49 +147,46 @@ export class TreeViewRenderer extends React.PureComponent<
       });
 
       svg.style("pointer-events", "all").call(zoom as any);
-
-      //   if (this.state.transform) {
-      //     var x = this.state.transform.x;
-      //     var y = this.state.transform.y;
-      //     var k = this.state.transform.k;
-      //     select(svgOuterFrame.current).call(
-      //       zoom.transform as any,
-      //       d3zoomIdentity.translate(x, y).scale(k)
-      //     );
-      //   }
     }
 
-    const minColor = ColorPalette.MinColor;
-    const maxColor = ColorPalette.MaxColor;
-
-    const colorgrad = d3scaleLinear<string>()
-      .domain([min, max])
-      .interpolate(d3interpolateHcl)
-      .range([minColor, maxColor]);
-
-    const linkVertical = d3linkVertical<any, HierarchyPointNode<any>>()
-      .x((d: any) => d!.x!)
-      .y((d: any) => d!.y!);
+    const linkVertical = d3linkVertical<any, HierarchyPointNode<ITreeNode>>()
+      .x((d: HierarchyPointNode<ITreeNode>) => d!.x!)
+      .y((d: HierarchyPointNode<ITreeNode>) => d!.y!);
     // GENERATES LINK DATA BETWEEN NODES
     // -------------------------------------------------------------------
-    const links = rootDescendents.slice(1).map((d) => {
-      const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
-      const lineColor = d.data.onSelectedPath ? "#089acc" : "#e8eaed";
-      const id: string = d.id!;
-      const linkVerticalD = linkVertical({ source: d.parent, target: d });
-      return {
-        d: linkVerticalD!,
-        id: id + Math.random(),
-        style: { fill: "white", stroke: lineColor, strokeWidth: thick }
-      };
-    });
+    // The links between the nodes in the tree view are generated below.
+    // We go through each of the nodes other than the root and generate a link
+    // to the parent.  Depending on whether the node is on the selected path
+    // or not we highlight it.  We use the d3 linkVertical which is a curved
+    // spline to draw the link.  The thickness of the links depends on the
+    // ratio of data going through the path versus overall data in the tree.
+    const links = rootDescendents
+      .slice(1)
+      .map((d: HierarchyPointNode<ITreeNode>) => {
+        const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
+        const lineColor = d.data.nodeState.onSelectedPath
+          ? ColorPalette.SelectedLineColor
+          : ColorPalette.UnselectedLineColor;
+        const id: string = d.id!;
+        const linkVerticalD = linkVertical({ source: d.parent, target: d });
+        return {
+          d: linkVerticalD!,
+          id: id + Math.random(),
+          style: { fill: "white", stroke: lineColor, strokeWidth: thick }
+        };
+      });
 
     // GENERATES THE LINK LABEL DATA FOR THE SELECTED PATH
     // -------------------------------------------------------------------
+    // Generates the labels on the links.  This initially writes the text,
+    // calculates the bounding box using getTextBB, and then returns the
+    // properties (x, y, height, width and the text) of the link label.
     const linkLabels = rootDescendents
       .slice(1)
-      .filter((d) => d.data.onSelectedPath)
-      .map((d) => {
+      .filter(
+        (d: HierarchyPointNode<ITreeNode>) => d.data.nodeState.onSelectedPath
+      )
+      .map((d: HierarchyPointNode<ITreeNode>) => {
         const labelX = d!.x! + (d!.parent!.x! - d!.x!) * 0.5;
         const labelY = 4 + d!.y! + (d!.parent!.y! - d!.y!) * 0.5;
         let bb: DOMRect;
@@ -226,57 +208,30 @@ export class TreeViewRenderer extends React.PureComponent<
         };
       });
 
-    // GENERTES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
+    // GENERATES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
     // -------------------------------------------------------------------
-    const nodeData: ITreeNode[] = rootDescendents.map(
-      (d): ITreeNode => {
-        const globalErrorPerc = d!.data!.error! / this.state.rootErrorSize;
-        const localErrorPerc = d!.data!.error! / d!.data!.size!;
-        const calcMaskShift = globalErrorPerc * 52;
-        const filterProps = this.calculateFilterProps(d);
+    // The code below generates the circular nodes in the tree view.
+    const nodeData: Array<HierarchyPointNode<ITreeNode>> = rootDescendents.map(
+      (d: HierarchyPointNode<ITreeNode>): HierarchyPointNode<ITreeNode> => {
+        let selectedStyle: Record<string, number | string> = {
+          fill: d.data.errorColor.fill
+        };
 
-        let heatmapStyle: { fill: string } = { fill: errorAvgColor };
-
-        if (
-          d!.data!.error! / d!.data!.size! >
-          this.state.rootLocalError * errorRatioThreshold
-        ) {
-          heatmapStyle = { fill: colorgrad(localErrorPerc)! };
+        if (d.data.nodeState.onSelectedPath!) {
+          selectedStyle = { fill: d.data.errorColor.fill, strokeWidth: 3 };
         }
 
-        let selectedStyle: Record<string, number | string> = heatmapStyle;
-
-        if (d!.data!.onSelectedPath!) {
-          selectedStyle = { fill: heatmapStyle.fill, strokeWidth: 3 };
-        }
-
-        return {
-          data: d!.data!,
-          error: 10,
-          errorColor: heatmapStyle,
+        // Update node state based on new user actions
+        d.data.nodeState = {
           errorStyle: selectedStyle,
-          fillstyleDown: {
-            transform: `translate(0px, -${calcMaskShift}px)`
-          },
-          fillstyleUp: {
-            fill: "#d2d2d2",
-            transform: `translate(0px, ${calcMaskShift}px)`
-          },
-
-          filterProps,
-          // size: d.size,
-          highlight: d!.data!.onSelectedPath,
-          id: d!.id! + Math.random(),
-          isMouseOver: d!.data!.isMouseOver,
-          maskShift: calcMaskShift,
-          parent: d!.parent!,
-          r: 28,
-          selected: d!.data!.isSelectedLeaf,
-          // parentId: d.parentId,
+          isMouseOver: d.data.nodeState.isMouseOver,
+          isSelectedLeaf: d.data.nodeState.isSelectedLeaf,
+          onSelectedPath: d.data.nodeState.onSelectedPath,
           style: {
             transform: `translate(${d!.x!}px, ${d!.y!}px)`
           }
         };
+        return d;
       }
     );
     const nodeDetail = this.state.nodeDetail;
@@ -342,7 +297,7 @@ export class TreeViewRenderer extends React.PureComponent<
                       <circle
                         r="26"
                         className={classNames.node}
-                        fill="#d2d2d2"
+                        fill={ColorPalette.FillStyle}
                         style={nodeDetail.maskUp}
                       />
                     </g>
@@ -384,54 +339,60 @@ export class TreeViewRenderer extends React.PureComponent<
                 component="g"
                 className={classNames.nodesTransitionGroup}
               >
-                {nodeData.map((node, index) => (
-                  <CSSTransition
-                    key={node.id}
-                    in={true}
-                    timeout={200}
-                    className="nodes"
-                  >
-                    <g
-                      key={node.id}
-                      style={node.style}
-                      onClick={(
-                        e: React.MouseEvent<SVGElement, MouseEvent>
-                      ): void => this.select(index, node, e)}
-                      // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
-                      onMouseEnter={(
-                        e: React.MouseEvent<SVGElement, MouseEvent>
-                      ): void => this.hover(node, true, e)}
-                      pointerEvents="all"
+                {nodeData.map((node, index) => {
+                  const nodeId = node.id! + Math.random();
+                  return (
+                    <CSSTransition
+                      key={nodeId}
+                      in={true}
+                      timeout={200}
+                      className="nodes"
                     >
-                      <circle
-                        r={node.r}
-                        className={classNames.node}
-                        style={node.errorStyle}
-                      />
-                      {node.highlight && (
-                        <circle
-                          r={node.r * 1.4}
-                          className={
-                            node.selected
-                              ? classNames.clickedNodeFull
-                              : classNames.clickedNodeDashed
-                          }
-                        />
-                      )}
-
                       <g
-                        style={node.fillstyleDown}
-                        mask="url(#Mask)"
-                        className={classNames.nopointer}
+                        key={nodeId}
+                        style={node.data.nodeState.style}
+                        onClick={(
+                          e: React.MouseEvent<SVGElement, MouseEvent>
+                        ): void => this.select(index, node, e)}
+                        // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
+                        onMouseEnter={(
+                          e: React.MouseEvent<SVGElement, MouseEvent>
+                        ): void => this.hover(node, true, e)}
+                        pointerEvents="all"
                       >
-                        <circle r="26" style={node.fillstyleUp} />
+                        <circle
+                          r={node.data.r}
+                          className={classNames.node}
+                          style={node.data.nodeState.errorStyle}
+                        />
+                        {node.data.nodeState.onSelectedPath && (
+                          <circle
+                            r={node.data.r * 1.4}
+                            className={
+                              node.data.nodeState.isSelectedLeaf
+                                ? classNames.clickedNodeFull
+                                : classNames.clickedNodeDashed
+                            }
+                          />
+                        )}
+
+                        <g
+                          style={node.data.fillstyleDown}
+                          mask="url(#Mask)"
+                          className={classNames.nopointer}
+                        >
+                          <circle r="26" style={node.data.fillstyleUp} />
+                        </g>
+                        <text
+                          textAnchor="middle"
+                          className={classNames.nodeText}
+                        >
+                          {node.data.error} / {node.data.size}
+                        </text>
                       </g>
-                      <text textAnchor="middle" className={classNames.nodeText}>
-                        {node.data.error} / {node.data.size}
-                      </text>
-                    </g>
-                  </CSSTransition>
-                ))}
+                    </CSSTransition>
+                  );
+                })}
               </TransitionGroup>
               <TransitionGroup
                 component="g"
@@ -455,7 +416,7 @@ export class TreeViewRenderer extends React.PureComponent<
                         width={linkLabel.bbWidth}
                         height={linkLabel.bbHeight}
                         fill="white"
-                        stroke="#089acc"
+                        stroke={ColorPalette.LinkLabelOutline}
                         strokeWidth="1px"
                         rx="10"
                         ry="10"
@@ -478,9 +439,9 @@ export class TreeViewRenderer extends React.PureComponent<
                 {nodeData.map((node) => (
                   <FilterTooltip
                     key={node.id + "tooltip"}
-                    filterProps={node.filterProps}
-                    isMouseOver={node.isMouseOver}
-                    nodeTransform={node.style.transform}
+                    filterProps={node.data.filterProps}
+                    isMouseOver={node.data.nodeState.isMouseOver}
+                    nodeTransform={node.data.nodeState.style!.transform}
                   />
                 ))}
               </g>
@@ -503,25 +464,24 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private calculateFilterProps(
-    d: HierarchyPointNode<any> | ITreeNode
+    node: IRequestNode,
+    rootErrorSize: number
   ): FilterProps {
-    const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
+    const errorRate = (node.error / node.size) * 100;
     const filterProps = new FilterProps(
-      d!.data!.error!,
-      d!.data!.size!,
-      this.state.rootErrorSize,
+      node.error,
+      node.size,
+      rootErrorSize,
       errorRate
     );
     return filterProps;
   }
 
-  private calculateCohortStats(
-    d: HierarchyPointNode<any> | ITreeNode
-  ): CohortStats {
-    const errorRate = (d!.data!.error! / d!.data!.size!) * 100;
+  private calculateCohortStats(node: ITreeNode): CohortStats {
+    const errorRate = (node.error / node.size) * 100;
     const cohortStats = new CohortStats(
-      d!.data!.error!,
-      d!.data!.size!,
+      node.error,
+      node.size,
       this.state.rootErrorSize,
       this.state.rootSize,
       errorRate
@@ -557,20 +517,94 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(this.resizeFunc);
   }
 
-  private reloadData(treeNodes: any[]): void {
+  private reloadData(requestTreeNodes: IRequestNode[]): void {
     const reloadDataFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
-      if (!treeNodes || treeNodes.length === 0 || !treeNodes[0]) {
+      if (
+        !requestTreeNodes ||
+        requestTreeNodes.length === 0 ||
+        !requestTreeNodes[0]
+      ) {
         return state;
       }
-      const rootSize = treeNodes[0].size;
-      const rootErrorSize = treeNodes[0].error;
+
+      const rootSize = requestTreeNodes[0].size;
+      const rootErrorSize = requestTreeNodes[0].error;
       const rootLocalError = rootErrorSize / rootSize;
+
+      const min: number = rootErrorSize / rootSize;
+      const max: number = Math.max(
+        ...requestTreeNodes.map((node) => {
+          if (node.size === 0) {
+            return 0;
+          }
+          return node.error / node.size;
+        })
+      );
+
+      const minColor = ColorPalette.MinColor;
+      const maxColor = ColorPalette.MaxColor;
+
+      const colorgrad = d3scaleLinear<string>()
+        .domain([min, max])
+        .interpolate(d3interpolateHcl)
+        .range([minColor, maxColor]);
+
+      // From the retrieved request, calculate additional properties
+      // that won't change during UI updates
+      const treeNodes = requestTreeNodes.map(
+        (node): ITreeNode => {
+          const globalErrorPerc = node.error / rootErrorSize;
+          const localErrorPerc = node.error / node.size;
+          const calcMaskShift = globalErrorPerc * 52;
+          const filterProps = this.calculateFilterProps(node, rootErrorSize);
+
+          let heatmapStyle: { fill: string } = { fill: errorAvgColor };
+
+          if (node.error / node.size > rootLocalError * errorRatioThreshold) {
+            heatmapStyle = { fill: colorgrad(localErrorPerc)! };
+          }
+
+          return {
+            arg: node.arg,
+            condition: node.condition,
+            error: node.error,
+            errorColor: heatmapStyle,
+            fillstyleDown: {
+              transform: `translate(0px, -${calcMaskShift}px)`
+            },
+            fillstyleUp: {
+              fill: ColorPalette.FillStyle,
+              transform: `translate(0px, ${calcMaskShift}px)`
+            },
+            filterProps,
+            id: node.id,
+            maskShift: calcMaskShift,
+            method: node.method,
+            nodeIndex: node.nodeIndex,
+            nodeName: node.nodeName,
+            nodeState: {
+              errorStyle: undefined,
+              isMouseOver: false,
+              isSelectedLeaf: false,
+              onSelectedPath: false,
+              style: undefined
+            },
+            parentId: node.parentId,
+            parentNodeName: node.parentNodeName,
+            pathFromRoot: node.pathFromRoot,
+            r: 28,
+            size: node.size,
+            sourceRowKeyHash: node.sourceRowKeyHash,
+            success: node.success
+          };
+        }
+      );
 
       const tempRoot = d3stratify()(treeNodes);
       const treemap = d3tree().size([state.viewerWidth, state.viewerHeight]);
-      const root = treemap(tempRoot);
+      const root = treemap(tempRoot) as HierarchyPointNode<ITreeNode>;
 
       const selectedNode = state.selectedNode;
       if (selectedNode) {
@@ -582,7 +616,7 @@ export class TreeViewRenderer extends React.PureComponent<
         nodeDetail = this.state.nodeDetail;
       } else {
         (root as any).data.isSelectedLeaf = true;
-        nodeDetail = this.getNodeDetail((root as unknown) as ITreeNode, state);
+        nodeDetail = this.getNodeDetail(root, state);
       }
 
       return {
@@ -604,7 +638,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const filters: IFilter[] = [];
     let cohortStats: CohortStats | undefined = undefined;
     if (this.state.root) {
-      cohortStats = this.calculateCohortStats(this.state.root);
+      cohortStats = this.calculateCohortStats(this.state.root.data);
     }
     this.props.updateSelectedCohort(
       filters,
@@ -631,44 +665,44 @@ export class TreeViewRenderer extends React.PureComponent<
     return bb;
   }
 
-  private selectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
+  private selectParentNodes(d: HierarchyPointNode<ITreeNode> | null): void {
     if (!d) {
       return;
     }
-    d.data!.onSelectedPath = true;
-    this.selectParentNodes(d.parent!);
+    d.data.nodeState!.onSelectedPath = true;
+    this.selectParentNodes(d.parent);
   }
 
-  private unselectParentNodes(d: HierarchyPointNode<any> | ITreeNode): void {
+  private unselectParentNodes(d: HierarchyPointNode<ITreeNode> | null): void {
     if (!d) {
       return;
     }
-    d.data!.onSelectedPath = false;
-    d.data!.isSelectedLeaf = false;
+    d.data.nodeState!.onSelectedPath = false;
+    d.data.nodeState!.isSelectedLeaf = false;
     this.unselectParentNodes(d.parent!);
   }
 
-  private getFilters(d: HierarchyPointNode<any> | ITreeNode): IFilter[] {
+  private getFilters(d: HierarchyPointNode<ITreeNode>): IFilter[] {
     if (!d || !d.parent) {
       return [];
     }
     let filterArg: number[];
-    if (Array.isArray(d.data!.arg)) {
-      filterArg = d.data!.arg;
+    if (Array.isArray(d.data.arg)) {
+      filterArg = d.data.arg;
     } else {
-      filterArg = [d.data!.arg];
+      filterArg = [d.data.arg];
     }
     const filter = {
       arg: filterArg,
-      column: d.parent!.data!.nodeName,
-      method: d.data!.method
+      column: d.parent.data.nodeName,
+      method: d.data.method as FilterMethods
     };
     return [filter, ...this.getFilters(d.parent!)];
   }
 
   private select(
     _: number,
-    node: ITreeNode,
+    node: HierarchyPointNode<ITreeNode>,
     event: React.MouseEvent<SVGElement, MouseEvent>
   ): void {
     event.stopPropagation();
@@ -679,11 +713,11 @@ export class TreeViewRenderer extends React.PureComponent<
         this.unselectParentNodes(state.selectedNode);
       }
       this.selectParentNodes(node);
-      node.data.isSelectedLeaf = true;
+      node.data.nodeState.isSelectedLeaf = true;
 
       // Get filters and update
       const filters = this.getFilters(node);
-      const cohortStats = this.calculateCohortStats(node);
+      const cohortStats = this.calculateCohortStats(node.data);
       this.props.updateSelectedCohort(
         filters,
         [],
@@ -713,35 +747,33 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private getNodeDetail(
-    node: ITreeNode,
+    node: HierarchyPointNode<ITreeNode>,
     state: ITreeViewRendererState
   ): INodeDetail {
     const nodeDetail = {
-      errorColor: node!.errorColor!,
-      errorInfo: `${node!.data!.error!} Error`,
-      globalError: ((node!.data!.error! / state.rootErrorSize) * 100).toFixed(
-        2
-      ),
-      instanceInfo: `${node!.data!.size!} Instances`,
-      localError: ((node!.data!.error! / node.data.size) * 100).toFixed(2),
-      maskDown: { transform: `translate(0px, -${node!.maskShift!}px)` },
-      maskUp: { transform: `translate(0px, ${node!.maskShift!}px)` },
+      errorColor: node.data.errorColor,
+      errorInfo: `${node.data.error} Error`,
+      globalError: ((node.data.error / state.rootErrorSize) * 100).toFixed(2),
+      instanceInfo: `${node.data.size} Instances`,
+      localError: ((node.data.error / node.data.size) * 100).toFixed(2),
+      maskDown: { transform: `translate(0px, -${node.data.maskShift}px)` },
+      maskUp: { transform: `translate(0px, ${node.data.maskShift}px)` },
       showSelected: { opacity: 1 },
-      successInfo: `${node!.data!.success!} Success`
+      successInfo: `${node.data.success} Success`
     };
     return nodeDetail;
   }
 
   private hover(
-    node: ITreeNode,
+    node: HierarchyPointNode<ITreeNode>,
     mouseEnter: boolean,
     event: React.MouseEvent<SVGElement, MouseEvent>
   ): void {
-    node.data.isMouseOver = mouseEnter;
+    node.data.nodeState.isMouseOver = mouseEnter;
     const currentTarget = event.currentTarget;
     const checkMouseLeave = (e: MouseEvent): void => {
       if (currentTarget && !currentTarget.contains(e.target as HTMLElement)) {
-        node.data.isMouseOver = false;
+        node.data.nodeState.isMouseOver = false;
         svgOuterFrame.current!.removeEventListener(
           "mousemove",
           checkMouseLeave
@@ -768,8 +800,6 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
-    //const abortController = new AbortController();
-    //const promise = this.props.getTreeNodes(["a", "b", "c"], abortController.signal);
     this.props
       .getTreeNodes(
         [
@@ -782,23 +812,8 @@ export class TreeViewRenderer extends React.PureComponent<
       .then((result) => {
         this.onResize();
         this.forceUpdate();
-        this.reloadData(result);
+        this.reloadData(result as IRequestNode[]);
       });
-    // this.setState({ request: abortController }, async () => {
-    //     try {
-    //         const fetchedData = await promise;
-    //         this.treeNodes = fetchedData[0];
-    //         this.setState({request: undefined});
-    //         this.onResize()
-    //     } catch (err) {
-    //         if (err.name === 'AbortError') {
-    //             return;
-    //         }
-    //         if (err.name === 'PythonError') {
-    //             alert(err.message as string);
-    //         }
-    //     }
-    // });
   }
 
   private zoomed(zoomEvent: D3ZoomEvent<any, ISVGDatum>): void {

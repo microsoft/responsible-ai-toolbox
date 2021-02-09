@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { WeightVectorOption } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -28,7 +29,6 @@ import {
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
-import { WeightVectorOption } from "./IWeightedDropdownContext";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 
 export interface ISelectorConfig {
