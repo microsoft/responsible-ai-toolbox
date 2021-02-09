@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  ci-python:
+  build:
     strategy:
       matrix:
         packageDirectory: ["raiwidgets", "wrapped-flask"]
