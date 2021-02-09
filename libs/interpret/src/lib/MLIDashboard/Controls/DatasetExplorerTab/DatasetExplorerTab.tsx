@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ExpandableText } from "@responsible-ai/core-ui";
+import {
+  ExpandableText,
+  JointDataset,
+  ColumnCategories,
+  cohortKey,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -17,10 +23,7 @@ import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
-import { cohortKey } from "../../cohortKey";
-import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { JointDataset, ColumnCategories } from "../../JointDataset";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";

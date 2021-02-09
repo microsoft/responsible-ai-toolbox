@@ -21,7 +21,7 @@ import {
   ErrorAnalysisOptions,
   GlobalTabKeys,
   PredictionTabKeys
-} from "../../ErrorAnalysisDashboard";
+} from "../../ErrorAnalysisEnums";
 import { ErrorCohort } from "../../ErrorCohort";
 
 import { mainMenuStyles } from "./MainMenu.styles";
@@ -91,11 +91,11 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
         {
           commandBarButtonAs: (): any => (
             <Label styles={labelStyle}>
-              {localization.ErrorAnalysis.MainMenu.errorDetectorLabel}
+              {localization.ErrorAnalysis.MainMenu.errorExplorerLabel}
             </Label>
           ),
-          key: "errorDetectorLabel",
-          text: "Error Detector Label"
+          key: "errorExplorerLabel",
+          text: "Error explorer label"
         },
         {
           commandBarButtonAs: (): any => (
@@ -106,8 +106,8 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
               onChange={this.handleErrorDetectorChanged}
             />
           ),
-          key: "errorDetector",
-          text: localization.ErrorAnalysis.MainMenu.errorDetector
+          key: "errorExplorer",
+          text: localization.ErrorAnalysis.MainMenu.errorExplorer
         }
       ];
     } else {

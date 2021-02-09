@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Cohort, JointDataset } from "@responsible-ai/interpret";
+import { JointDataset } from "@responsible-ai/core-ui";
+import { Cohort } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   IStackTokens,

@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ModelTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
-
-import { ModelTypes } from "../IExplanationContext";
 
 import { predictionLabelStyles } from "./PredictionLabel.styles";
 

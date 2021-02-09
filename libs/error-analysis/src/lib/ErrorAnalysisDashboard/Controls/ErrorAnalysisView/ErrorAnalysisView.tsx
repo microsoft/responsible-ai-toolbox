@@ -6,7 +6,7 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStats } from "../../CohortStats";
-import { ErrorAnalysisOptions } from "../../ErrorAnalysisDashboard";
+import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";

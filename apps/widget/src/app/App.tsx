@@ -18,7 +18,7 @@ export class App extends React.Component {
         return <Interpret />;
       case "ModelPerformance":
         return <Interpret dashboardType={config.dashboardType} />;
-      case "ErrorAnalysis":
+      case "DebugML":
         return <ErrorAnalysis />;
       case "ModelAssessment":
         return <ModelAssessment />;

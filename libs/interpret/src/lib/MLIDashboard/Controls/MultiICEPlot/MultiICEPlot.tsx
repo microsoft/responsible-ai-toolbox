@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isTwoDimArray } from "@responsible-ai/core-ui";
+import {
+  isTwoDimArray,
+  ModelTypes,
+  JointDataset,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -22,11 +27,6 @@ import { Data } from "plotly.js";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import {
-  ModelTypes,
-  IExplanationModelMetadata
-} from "../../IExplanationContext";
-import { JointDataset } from "../../JointDataset";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { IRangeView } from "../ICEPlot";

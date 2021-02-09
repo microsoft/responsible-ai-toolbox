@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -15,7 +16,6 @@ import React from "react";
 import { Cohort } from "../Cohort";
 import { FabricStyles } from "../FabricStyles";
 import { IExplanationModelMetadata } from "../IExplanationContext";
-import { JointDataset } from "../JointDataset";
 import { LoadingSpinner } from "../SharedComponents";
 
 export interface IGlobalViolinPlotProps {

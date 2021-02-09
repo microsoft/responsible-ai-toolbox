@@ -3,6 +3,8 @@
 
 import { HierarchyPointNode } from "d3-hierarchy";
 
+import { FilterProps } from "./FilterProps";
+
 export interface IErrorColorStyle {
   fill: string;
 }
@@ -35,10 +37,48 @@ export interface ITreeViewRendererState {
   selectedNode: any;
   transform: any;
   treeNodes: any[];
-  root?: HierarchyPointNode<any>;
+  root?: HierarchyPointNode<ITreeNode>;
   rootSize: any;
   rootErrorSize: any;
   rootLocalError: any;
+}
+
+// Represents IRequestNode with augmented calculations
+export interface ITreeNode {
+  arg: number;
+  condition: string;
+  error: number;
+  id: string;
+  method: string;
+  nodeIndex: number;
+  nodeName: string;
+  parentId: string;
+  parentNodeName: string;
+  pathFromRoot: string;
+  size: number;
+  sourceRowKeyHash: string;
+  success: number;
+  errorColor: IErrorColorStyle;
+  fillstyleUp: IFillStyleUp;
+  fillstyleDown: ITransform;
+  filterProps: FilterProps;
+  maskShift: number;
+  r: number;
+  nodeState: INodeState;
+}
+
+export interface IFillStyleUp {
+  transform: string;
+  fill: string;
+}
+
+// Contains node state that changes with UI clicks
+export interface INodeState {
+  errorStyle: Record<string, number | string> | undefined;
+  onSelectedPath: boolean;
+  isSelectedLeaf: boolean;
+  isMouseOver: boolean;
+  style: ITransform | undefined;
 }
 
 export function createInitialTreeViewState(): ITreeViewRendererState {
