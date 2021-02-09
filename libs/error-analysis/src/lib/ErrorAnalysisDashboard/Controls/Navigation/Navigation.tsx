@@ -29,6 +29,12 @@ export interface INavigationProps {
 export class Navigation extends React.Component<INavigationProps> {
   public render(): React.ReactNode {
     const items: IBreadcrumbItem[] = [];
+    if (this.props.viewType === ViewTypeKeys.ErrorAnalysisView) {
+      items.push({
+        key: ViewTypeKeys.ErrorAnalysisView,
+        text: localization.ErrorAnalysis.Navigation.errorExplorer
+      });
+    }
     if (this.props.viewType === ViewTypeKeys.ExplanationView) {
       items.push({
         key: ViewTypeKeys.ErrorAnalysisView,
@@ -40,7 +46,7 @@ export class Navigation extends React.Component<INavigationProps> {
             this.errorDetectorBreadcrumbClicked(e, item);
           }
         },
-        text: localization.ErrorAnalysis.Navigation.errorDetector
+        text: localization.ErrorAnalysis.Navigation.errorExplorer
       });
       if (this.props.activeGlobalTab === GlobalTabKeys.DataExplorerTab) {
         items.push({
@@ -89,15 +95,13 @@ export class Navigation extends React.Component<INavigationProps> {
     return (
       <div className={classNames.navigation}>
         <div className={classNames.breadcrumb}>
-          {this.props.viewType === ViewTypeKeys.ExplanationView && (
-            <Breadcrumb
-              items={items}
-              maxDisplayedItems={10}
-              ariaLabel="Navigation"
-              overflowAriaLabel="More links"
-              onRenderItem={this._onRenderItem}
-            />
-          )}
+          <Breadcrumb
+            items={items}
+            maxDisplayedItems={10}
+            ariaLabel="Navigation"
+            overflowAriaLabel="More links"
+            onRenderItem={this._onRenderItem}
+          />
         </div>
       </div>
     );
