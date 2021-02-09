@@ -10,3 +10,7 @@ export * from "./lib/util/string";
 export * from "./lib/components/ConfirmationDialog";
 export * from "./lib/components/ExpandableText";
 export * from "./lib/interfaces/ExplanationInterfaces";
+export * from "./lib/cohortKey";
+export * from "./lib/interfaces/IExplanationContext";
+export * from "./lib/interfaces/IWeightedDropdownContext";
+export * from "./lib/util/JointDataset";

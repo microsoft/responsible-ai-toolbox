@@ -3,14 +3,14 @@
 
 import {
   IOfficeFabricProps,
-  IExplanationDashboardData
+  IExplanationDashboardData,
+  IExplanationModelMetadata,
+  WeightVectorOption,
+  JointDataset
 } from "@responsible-ai/core-ui";
 import { Dictionary } from "lodash";
 
 import { Cohort } from "../Cohort";
-import { IExplanationModelMetadata } from "../IExplanationContext";
-import { WeightVectorOption } from "../IWeightedDropdownContext";
-import { JointDataset } from "../JointDataset";
 
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";

@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ExpandableText } from "@responsible-ai/core-ui";
+import {
+  ExpandableText,
+  JointDataset,
+  WeightVectorOption,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
@@ -19,10 +24,7 @@ import React from "react";
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
-import { IExplanationModelMetadata } from "../../IExplanationContext";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { WeightVectorOption } from "../../IWeightedDropdownContext";
-import { JointDataset } from "../../JointDataset";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
