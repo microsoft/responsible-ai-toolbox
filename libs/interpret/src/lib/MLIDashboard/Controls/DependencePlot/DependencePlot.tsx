@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   JointDataset,
   IExplanationModelMetadata,
   ModelTypes,
@@ -17,7 +18,6 @@ import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
 

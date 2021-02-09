@@ -4,7 +4,8 @@
 import {
   IExplanationModelMetadata,
   ModelTypes,
-  JointDataset
+  JointDataset,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -16,8 +17,6 @@ import {
   TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 
 import { WhatIfConstants } from "./WhatIfConstants";
 import { whatIfTabStyles } from "./WhatIfTab.styles";

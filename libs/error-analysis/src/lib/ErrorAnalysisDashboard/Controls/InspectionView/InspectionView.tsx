@@ -4,12 +4,12 @@
 import {
   JointDataset,
   WeightVectorOption,
+  ModelExplanationUtils,
   IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import {
   LocalImportancePlots,
   IGlobalSeries,
-  ModelExplanationUtils,
   FabricStyles
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";

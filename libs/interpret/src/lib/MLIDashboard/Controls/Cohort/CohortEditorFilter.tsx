@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IJointMeta, JointDataset } from "@responsible-ai/core-ui";
+import {
+  IJointMeta,
+  JointDataset,
+  FilterMethods,
+  IFilter
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import {
@@ -19,7 +24,6 @@ import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;

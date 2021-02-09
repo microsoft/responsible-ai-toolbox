@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
-
 import {
   IFilter,
   FilterMethods,
   ICompositeFilter,
   Operations
-} from "./Interfaces/IFilter";
-import { ModelExplanationUtils } from "./ModelExplanationUtils";
+} from "../Interfaces/IFilter";
+import { JointDataset } from "../util/JointDataset";
+import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
 export class Cohort {
   private static _cohortIndex = 0;
