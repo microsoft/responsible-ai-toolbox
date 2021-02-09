@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  IExplanationModelMetadata,
+  ModelTypes,
+  JointDataset
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DirectionalHint,
@@ -12,11 +17,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import {
-  IExplanationModelMetadata,
-  ModelTypes
-} from "../../IExplanationContext";
-import { JointDataset } from "../../JointDataset";
 import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 
 import { WhatIfConstants } from "./WhatIfConstants";

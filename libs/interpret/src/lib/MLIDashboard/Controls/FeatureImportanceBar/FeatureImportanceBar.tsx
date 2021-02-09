@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PartialRequired } from "@responsible-ai/core-ui";
+import { PartialRequired, JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -10,7 +10,6 @@ import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
-import { JointDataset } from "../../JointDataset";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
