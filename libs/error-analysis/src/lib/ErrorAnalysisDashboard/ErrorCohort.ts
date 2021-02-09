@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { JointDataset, IJointMeta } from "@responsible-ai/core-ui";
 import {
   JointDataset,
   IJointMeta,
