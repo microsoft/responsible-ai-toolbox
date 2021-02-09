@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ColumnCategories, JointDataset } from "@responsible-ai/core-ui";
+
 import { ChartTypes } from "../../ChartTypes";
 import { Cohort } from "../../Cohort";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ColumnCategories, JointDataset } from "../../JointDataset";
 
 export function buildCustomData(
   jointData: JointDataset,

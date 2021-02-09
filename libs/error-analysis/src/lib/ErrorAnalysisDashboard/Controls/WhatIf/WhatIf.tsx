@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import {
-  FabricStyles,
-  IExplanationModelMetadata,
   JointDataset,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
+import {
+  FabricStyles,
   WhatIfConstants,
   WhatIfPanel
 } from "@responsible-ai/interpret";

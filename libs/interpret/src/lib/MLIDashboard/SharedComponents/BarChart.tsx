@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IExplanationModelMetadata, ModelTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -8,7 +9,6 @@ import Plotly from "plotly.js";
 import React from "react";
 import { v4 } from "uuid";
 
-import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { ModelExplanationUtils } from "../ModelExplanationUtils";
 
 import { barChartStyles } from "./BarChart.styles";

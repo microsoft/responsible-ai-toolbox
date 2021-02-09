@@ -3,21 +3,22 @@
 
 import {
   IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
+  ISingleClassLocalFeatureImportance,
+  WeightVectors,
+  JointDataset,
+  IExplanationModelMetadata,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { Cohort } from "./Cohort";
-import { IExplanationModelMetadata, ModelTypes } from "./IExplanationContext";
 import {
   GlobalTabKeys,
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
-import { WeightVectors } from "./IWeightedDropdownContext";
-import { JointDataset } from "./JointDataset";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 

@@ -1,7 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isTwoDimArray } from "@responsible-ai/core-ui";
+import {
+  isTwoDimArray,
+  IExplanationContext,
+  IExplanationGenerators,
+  IGlobalExplanation,
+  ILocalExplanation,
+  IExplanationModelMetadata,
+  ITestDataset,
+  ModelTypes,
+  IFeatureValueExplanation,
+  IWeightedDropdownContext,
+  WeightVectorOption,
+  WeightVectors,
+  JointDataset,
+  IMultiClassBoundedCoordinates
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -49,25 +64,8 @@ import {
 } from "./Controls/SinglePointFeatureImportance";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import { FabricStyles } from "./FabricStyles";
-import {
-  IExplanationContext,
-  IExplanationGenerators,
-  IGlobalExplanation,
-  ILocalExplanation,
-  IExplanationModelMetadata,
-  ITestDataset,
-  ModelTypes,
-  IFeatureValueExplanation,
-  IMultiClassBoundedCoordinates
-} from "./IExplanationContext";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
-import {
-  IWeightedDropdownContext,
-  WeightVectorOption,
-  WeightVectors
-} from "./IWeightedDropdownContext";
-import { JointDataset } from "./JointDataset";
 import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
 import { validateInputs } from "./validateInputs";
