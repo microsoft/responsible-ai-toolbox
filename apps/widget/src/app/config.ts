@@ -2,11 +2,7 @@
 // Licensed under the MIT License.
 
 export interface IAppConfig {
-  dashboardType:
-    | "Fairness"
-    | "Interpret"
-    | "ErrorAnalysis"
-    | "ModelPerformance";
+  dashboardType: "Fairness" | "Interpret" | "DebugML" | "ModelPerformance";
   id: string;
   baseUrl: string;
   withCredentials: boolean;
