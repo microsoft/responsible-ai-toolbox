@@ -9,7 +9,7 @@ import {
 import { IStringsParam } from "@responsible-ai/interpret";
 
 // This is the interface of the data to be provided by any glue code, be it the ModelExplanationController, the Jupyter widget,
-// or some future extension. The Explanation Dashboard opperates on this data object, and an optional chart config that specifies
+// or some future extension. The Explanation Dashboard operates on this data object, and an optional chart config that specifies
 // configurable view information that is orthogonal to this data.
 /**
  * @typedef {Object} IKernelExplanationData

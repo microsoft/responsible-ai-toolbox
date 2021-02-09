@@ -84,7 +84,7 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
         {
           commandBarButtonAs: (): any => (
             <Label styles={labelStyle}>
-              {localization.ErrorAnalysis.MainMenu.errorDetectorLabel}
+              {localization.ErrorAnalysis.MainMenu.errorExplorerLabel}
             </Label>
           ),
           key: "errorDetectorLabel",
@@ -100,7 +100,7 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
             />
           ),
           key: "errorDetector",
-          text: localization.ErrorAnalysis.MainMenu.errorDetector
+          text: localization.ErrorAnalysis.MainMenu.errorExplorer
         }
       ];
     } else {

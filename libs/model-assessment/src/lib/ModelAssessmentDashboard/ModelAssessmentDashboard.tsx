@@ -5,19 +5,19 @@ import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
-  isThreeDimArray
+  isThreeDimArray,
+  IExplanationModelMetadata,
+  JointDataset,
+  ModelTypes,
+  WeightVectorOption,
+  WeightVectors
 } from "@responsible-ai/core-ui";
 import {
   Cohort,
   DatasetExplorerTab,
   GlobalExplanationTab,
   ICompositeFilter,
-  IExplanationModelMetadata,
-  IFilter,
-  JointDataset,
-  ModelTypes,
-  WeightVectorOption,
-  WeightVectors
+  IFilter
 } from "@responsible-ai/interpret";
 import {
   CohortInfo,
@@ -184,7 +184,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
         props.precomputedExplanations.globalFeatureImportance &&
         props.precomputedExplanations.globalFeatureImportance.scores
       ) {
-        // determine if passed in vaules is 1D or 2D
+        // determine if passed in values is 1D or 2D
         if (
           isTwoDimArray(
             props.precomputedExplanations.globalFeatureImportance.scores
@@ -226,7 +226,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     );
 
     this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.Navigation.errorDetector,
+      headerText: localization.ErrorAnalysis.Navigation.errorExplorer,
       itemKey: GlobalTabKeys.ErrorAnalysisTab
     });
     this.pivotItems.push({
@@ -893,12 +893,6 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       ).reverse()
     });
   }
-
-  // private viewExplanation(): void {
-  //   this.setState({
-  //     openFeatureList: false
-  //   });
-  // }
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
