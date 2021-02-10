@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption
@@ -20,7 +21,6 @@ import {
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";

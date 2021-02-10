@@ -5,7 +5,7 @@ import {
   ICompositeFilter,
   IFilter,
   FilterMethods
-} from "@responsible-ai/interpret";
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
 import {

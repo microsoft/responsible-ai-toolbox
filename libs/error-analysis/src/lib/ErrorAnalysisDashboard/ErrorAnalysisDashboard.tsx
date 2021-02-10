@@ -2,6 +2,9 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
+  ICompositeFilter,
+  IFilter,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
@@ -13,11 +16,8 @@ import {
   WeightVectors
 } from "@responsible-ai/core-ui";
 import {
-  Cohort,
   DatasetExplorerTab,
-  GlobalExplanationTab,
-  ICompositeFilter,
-  IFilter
+  GlobalExplanationTab
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";

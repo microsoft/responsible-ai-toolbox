@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IExplanationContext, ModelTypes } from "@responsible-ai/core-ui";
+import {
+  IExplanationContext,
+  ModelTypes,
+  ModelExplanationUtils
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -25,7 +29,6 @@ import React from "react";
 
 import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 
 import { iCEPlotStyles } from "./ICEPlot.styles";

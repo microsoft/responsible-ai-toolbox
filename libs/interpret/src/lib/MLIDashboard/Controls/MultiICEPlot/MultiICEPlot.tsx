@@ -5,7 +5,8 @@ import {
   isTwoDimArray,
   ModelTypes,
   JointDataset,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -27,7 +28,6 @@ import { Data } from "plotly.js";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { IRangeView } from "../ICEPlot";
 
