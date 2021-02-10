@@ -651,8 +651,8 @@
     "MainMenu": {
       "treeMap": "Tree map",
       "heatMap": "Heat map",
-      "errorDetectorLabel": "Error detector:",
-      "errorDetector": "Error detector",
+      "errorExplorerLabel": "Error explorer:",
+      "errorExplorer": "Error explorer",
       "fullscreen": "Fullscreen",
       "whatIf": "What-If",
       "featureList": "Feature list",
@@ -679,7 +679,7 @@
       "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
     },
     "Navigation": {
-      "errorDetector": "Error detector",
+      "errorExplorer": "Error explorer",
       "dataExplorer": "Data explorer",
       "globalExplanation": "Global explanation",
       "localExplanation": "Local explanation",

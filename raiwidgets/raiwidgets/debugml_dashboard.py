@@ -1,16 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-"""Defines the Error Analysis dashboard class."""
+"""Defines the DebugML dashboard class."""
 
-from .error_analysis_dashboard_input import ErrorAnalysisDashboardInput
+from .debugml_dashboard_input import DebugMLDashboardInput
 from .dashboard import Dashboard
 
 from flask import jsonify, request
 
 
-class ErrorAnalysisDashboard(Dashboard):
-    """ErrorAnalysis Dashboard Class.
+class DebugMLDashboard(Dashboard):
+    """DebugML Dashboard Class.
 
     :param explanation: An object that represents an explanation.
     :type explanation: ExplanationMixin
@@ -47,15 +47,15 @@ class ErrorAnalysisDashboard(Dashboard):
                  true_y=None, classes=None, features=None, port=None,
                  locale=None, public_ip=None,
                  categorical_features=None, true_y_dataset=None):
-        """Initialize the Error Analysis Dashboard."""
+        """Initialize the DebugML Dashboard."""
 
-        self.input = ErrorAnalysisDashboardInput(
+        self.input = DebugMLDashboardInput(
             explanation, model, dataset, true_y, classes,
             features, locale, categorical_features,
             true_y_dataset)
 
-        super(ErrorAnalysisDashboard, self).__init__(
-            dashboard_type="ErrorAnalysis",
+        super(DebugMLDashboard, self).__init__(
+            dashboard_type="DebugML",
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
             port=port,
