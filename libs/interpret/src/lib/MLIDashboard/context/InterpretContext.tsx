@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
+import { Cohort, JointDataset } from "@responsible-ai/core-ui";
 import React from "react";
 
-import { Cohort } from "../Cohort";
 import { ITelemetryMessage } from "../Interfaces/ITelemetryMessage";
 
 export interface IInterpretContext {

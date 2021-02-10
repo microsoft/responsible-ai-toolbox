@@ -5,7 +5,8 @@ import {
   limitStringLength,
   IExplanationModelMetadata,
   ModelTypes,
-  JointDataset
+  JointDataset,
+  Cohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -15,8 +16,6 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { Cohort } from "../../Cohort";
 
 export interface ICohortListProps {
   cohorts: Cohort[];

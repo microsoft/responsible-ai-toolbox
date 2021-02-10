@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   IOfficeFabricProps,
   IExplanationDashboardData,
   IExplanationModelMetadata,
@@ -9,8 +10,6 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 import { Dictionary } from "lodash";
-
-import { Cohort } from "../Cohort";
 
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";

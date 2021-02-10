@@ -6,6 +6,7 @@ import {
   JointDataset,
   ColumnCategories,
   cohortKey,
+  Cohort,
   IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -22,7 +23,6 @@ import {
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";

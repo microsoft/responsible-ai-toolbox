@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IExplanationContext, ModelTypes } from "@responsible-ai/core-ui";
+import {
+  IExplanationContext,
+  ModelTypes,
+  ModelExplanationUtils
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   ChartBuilder,
@@ -23,7 +27,6 @@ import {
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import {
   FeatureKeys,
   FeatureSortingKey

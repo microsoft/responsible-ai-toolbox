@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "@responsible-ai/interpret";
+import { IFilter, ICompositeFilter } from "@responsible-ai/core-ui";
 import {
   ComboBox,
   IComboBox,
