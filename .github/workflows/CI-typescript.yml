@@ -48,3 +48,17 @@ jobs:
         with:
           name: yarn-error.log-${{ matrix.node-version }}
           path: yarn-error.log
+      - id: publish_url
+        run: |
+          echo "::set-output name=url::https://${{env.blob_account}}.blob.core.windows.net/${{env.blob_container}}/${{env.blob_path}}/index.html"
+      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        with:
+          inlineScript: |
+            az storage blob sync -c "${{env.blob_container}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" -d "${{env.blob_path}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+      - uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: ${{steps.publish_url.outputs.url}}
+          check_for_duplicate_msg: true
