@@ -9,6 +9,7 @@ import {
   ILocalExplanation,
   IExplanationModelMetadata,
   ITestDataset,
+  ModelExplanationUtils,
   ModelTypes,
   IFeatureValueExplanation,
   IWeightedDropdownContext,
@@ -66,7 +67,6 @@ import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import { FabricStyles } from "./FabricStyles";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
-import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
 import { validateInputs } from "./validateInputs";
 

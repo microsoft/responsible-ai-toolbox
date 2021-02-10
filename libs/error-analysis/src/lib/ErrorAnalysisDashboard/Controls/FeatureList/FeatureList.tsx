@@ -46,6 +46,8 @@ export interface IFeatureListState {
   selectedFeatures: string[];
   percents: number[];
   sortedFeatures: string[];
+  enableApplyButton: boolean;
+  lastAppliedFeatures: Set<string>;
 }
 
 const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
@@ -62,6 +64,8 @@ export class FeatureList extends React.Component<
     const percents = this.updatePercents();
     const [sortedPercents, sortedFeatures] = this.sortByPercent(percents);
     this.state = {
+      enableApplyButton: false,
+      lastAppliedFeatures: new Set<string>(this.props.features),
       percents: sortedPercents,
       searchedFeatures: sortedFeatures,
       selectedFeatures: this.props.features,
@@ -123,7 +127,10 @@ export class FeatureList extends React.Component<
               return (
                 <Stack.Item key={"checkboxKey" + feature}>
                   <Stack horizontal horizontalAlign="space-between">
-                    <Stack.Item key={"checkboxItemKey" + feature} align="start">
+                    <Stack.Item
+                      key={"checkboxItemKey" + feature}
+                      align="center"
+                    >
                       <Checkbox
                         label={feature}
                         checked={this.state.selectedFeatures.includes(feature)}
@@ -135,9 +142,9 @@ export class FeatureList extends React.Component<
                         undefined && (
                         <Stack.Item
                           key={"checkboxImpKey" + feature}
-                          align="end"
+                          align="center"
                         >
-                          <svg width="100px" height="4px">
+                          <svg width="100px" height="6px">
                             <g>
                               <rect
                                 fill={theme.palette.neutralQuaternary}
@@ -164,7 +171,7 @@ export class FeatureList extends React.Component<
                 text="Apply"
                 onClick={this.apply.bind(this)}
                 allowDisabledFocus
-                disabled={false}
+                disabled={!this.state.enableApplyButton}
                 checked={false}
               />
             </Stack.Item>
@@ -213,17 +220,35 @@ export class FeatureList extends React.Component<
   ): void {
     if (isChecked) {
       if (!this.state.selectedFeatures.includes(feature!)) {
+        const newSelectedFeatures = [
+          ...this.state.selectedFeatures.concat([feature!])
+        ];
+        const enableApplyButton =
+          this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
+          newSelectedFeatures.some(
+            (selectedFeature) =>
+              !this.state.lastAppliedFeatures.has(selectedFeature)
+          );
         this.setState({
-          selectedFeatures: [...this.state.selectedFeatures.concat([feature!])]
+          enableApplyButton,
+          selectedFeatures: newSelectedFeatures
         });
       }
     } else {
+      const newSelectedFeatures = [
+        ...this.state.selectedFeatures.filter(
+          (stateFeature) => stateFeature !== feature!
+        )
+      ];
+      const enableApplyButton =
+        this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
+        newSelectedFeatures.some(
+          (selectedFeature) =>
+            !this.state.lastAppliedFeatures.has(selectedFeature)
+        );
       this.setState({
-        selectedFeatures: [
-          ...this.state.selectedFeatures.filter(
-            (stateFeature) => stateFeature !== feature!
-          )
-        ]
+        enableApplyButton,
+        selectedFeatures: newSelectedFeatures
       });
     }
   }
@@ -238,5 +263,9 @@ export class FeatureList extends React.Component<
 
   private apply(): void {
     this.props.saveFeatures(this.state.selectedFeatures);
+    this.setState({
+      enableApplyButton: false,
+      lastAppliedFeatures: new Set<string>(this.state.selectedFeatures)
+    });
   }
 }

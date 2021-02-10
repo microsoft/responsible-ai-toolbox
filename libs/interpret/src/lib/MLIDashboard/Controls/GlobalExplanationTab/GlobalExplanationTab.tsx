@@ -2,10 +2,12 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   ExpandableText,
   JointDataset,
   WeightVectorOption,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -22,10 +24,8 @@ import {
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";

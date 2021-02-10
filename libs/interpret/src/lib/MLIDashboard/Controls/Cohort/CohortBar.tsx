@@ -3,7 +3,9 @@
 
 import {
   IExplanationModelMetadata,
-  JointDataset
+  JointDataset,
+  Cohort,
+  ICohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -17,11 +19,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { Cohort } from "../../Cohort";
-
 import { CohortEditor } from "./CohortEditor";
 import { CohortList } from "./CohortList";
-import { ICohort } from "./ICohort";
 
 export interface ICohortBarProps {
   cohorts: Cohort[];

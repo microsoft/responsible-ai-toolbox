@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WeightVectorOption } from "@responsible-ai/core-ui";
+import { WeightVectorOption, Cohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -17,7 +17,6 @@ import {
 import React from "react";
 
 import { buildInitialExplanationContext } from "./buildInitialExplanationContext";
-import { Cohort } from "./Cohort";
 import { InterpretContext } from "./context/InterpretContext";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
 import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";

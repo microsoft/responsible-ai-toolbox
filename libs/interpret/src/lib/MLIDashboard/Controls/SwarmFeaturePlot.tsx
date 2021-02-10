@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
+import {
+  JointDataset,
+  Cohort,
+  IExplanationModelMetadata,
+  ModelTypes
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -13,8 +18,6 @@ import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { Cohort } from "../Cohort";
-import { IExplanationModelMetadata, ModelTypes } from "../IExplanationContext";
 import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
 
 export interface ISwarmFeaturePlotProps {
