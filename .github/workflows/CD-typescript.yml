@@ -43,6 +43,7 @@ jobs:
       - name: Upload dashboard ${{steps.publish_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
+          azcliversion: 2.16.0
           inlineScript: |
             az storage blob sync -c "${{env.blob_container}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
