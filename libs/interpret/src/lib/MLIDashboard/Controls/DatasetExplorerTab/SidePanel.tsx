@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ColumnCategories, JointDataset } from "@responsible-ai/core-ui";
+import {
+  ColumnCategories,
+  JointDataset,
+  Cohort
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -15,7 +19,6 @@ import {
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";

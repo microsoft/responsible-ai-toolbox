@@ -5,7 +5,8 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption,
-  JointDataset
+  JointDataset,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -28,7 +29,6 @@ import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
