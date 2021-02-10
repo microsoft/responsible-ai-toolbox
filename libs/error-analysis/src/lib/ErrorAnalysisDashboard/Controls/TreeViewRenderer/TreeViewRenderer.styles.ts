@@ -27,6 +27,7 @@ export interface ITreeViewRendererStyles {
   errorRateGradientStyle: IStyle;
   linksTransitionGroup: IStyle;
   nodesTransitionGroup: IStyle;
+  tooltipTransitionGroup: IStyle;
   linkLabelsTransitionGroup: IStyle;
 }
 
@@ -108,7 +109,8 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     nodeText: {
       fill: "#555",
-      fontSize: "9px",
+      fontSize: "10px",
+      fontWeight: "bolder",
       pointerEvents: "none",
       transform: "translate(0px, 0px)"
     },
@@ -125,6 +127,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       margin: "0",
       padding: "0",
       width: "100%"
+    },
+    tooltipTransitionGroup: {
+      transform: "translate(40px, 90px)"
     },
     treeDescription: {
       padding: "30px 0px 0px 35px"
