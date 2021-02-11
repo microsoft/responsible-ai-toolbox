@@ -3,6 +3,7 @@
 
 export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisDashboard";
 export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisDashboard.styles";
+export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisEnums";
 export * from "./lib/ErrorAnalysisDashboard/ErrorCohort";
 export * from "./lib/ErrorAnalysisDashboard/ModelExplanationUtils";
 export * from "./lib/ErrorAnalysisDashboard/MatrixFilterState";

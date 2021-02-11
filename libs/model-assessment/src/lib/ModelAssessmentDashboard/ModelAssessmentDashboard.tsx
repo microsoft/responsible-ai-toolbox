@@ -10,19 +10,20 @@ import {
   JointDataset,
   ModelTypes,
   WeightVectorOption,
-  WeightVectors
-} from "@responsible-ai/core-ui";
-import {
+  WeightVectors,
   Cohort,
-  DatasetExplorerTab,
-  GlobalExplanationTab,
   ICompositeFilter,
   IFilter
+} from "@responsible-ai/core-ui";
+import {
+  DatasetExplorerTab,
+  GlobalExplanationTab
 } from "@responsible-ai/interpret";
 import {
   CohortInfo,
   CohortList,
   CohortStats,
+  ErrorAnalysisOptions,
   EditCohort,
   ErrorCohort,
   ErrorDetectorCohortSource,
@@ -61,6 +62,7 @@ import {
 import React from "react";
 import { IModelAssessmentDashboardProps } from "./Interfaces/IModelAssessmentDashboardProps";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
+import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
 
 export interface IModelAssessmentDashboardState {
   activeGlobalTab: GlobalTabKeys;
@@ -130,26 +132,6 @@ export interface ISelectorConfig {
     // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
     bin?: boolean;
   };
-}
-
-export enum GlobalTabKeys {
-  DataExplorerTab = "DataExplorerTab",
-  GlobalExplanationTab = "GlobalExplanationTab",
-  LocalExplanationTab = "LocalExplanationTab",
-  ErrorAnalysisTab = "ErrorAnalysisTab"
-}
-
-export enum ErrorAnalysisOptions {
-  TreeMap = "TreeMap",
-  HeatMap = "HeatMap"
-}
-
-export enum PredictionTabKeys {
-  CorrectPredictionTab = "CorrectPredictionTab",
-  IncorrectPredictionTab = "IncorrectPredictionTab",
-  WhatIfDatapointsTab = "WhatIfDatapointsTab",
-  AllSelectedTab = "AllSelectedTab",
-  InspectionTab = "InspectionTab"
 }
 
 export class ModelAssessmentDashboard extends React.PureComponent<

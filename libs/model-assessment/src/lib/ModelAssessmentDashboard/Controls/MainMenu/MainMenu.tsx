@@ -16,11 +16,13 @@ import {
 import React from "react";
 
 import {
-  ErrorAnalysisOptions,
   GlobalTabKeys,
   PredictionTabKeys
-} from "../../ModelAssessmentDashboard";
-import { ErrorCohort } from "@responsible-ai/error-analysis";
+} from "../../ModelAssessmentEnums";
+import {
+  ErrorCohort,
+  ErrorAnalysisOptions
+} from "@responsible-ai/error-analysis";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 
