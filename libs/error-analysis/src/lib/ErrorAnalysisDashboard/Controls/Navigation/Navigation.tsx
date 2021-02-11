@@ -5,6 +5,9 @@ import { localization } from "@responsible-ai/localization";
 import {
   Breadcrumb,
   IBreadcrumbItem,
+  IBreadcrumbStyleProps,
+  IBreadcrumbStyles,
+  IStyleFunctionOrObject,
   Link,
   IRenderFunction
 } from "office-ui-fabric-react";
@@ -25,6 +28,13 @@ export interface INavigationProps {
   activeGlobalTab: GlobalTabKeys;
   activePredictionTab: PredictionTabKeys;
 }
+
+const breadcrumbStyle: IStyleFunctionOrObject<
+  IBreadcrumbStyleProps,
+  IBreadcrumbStyles
+> = {
+  root: { margin: "3px 0px 1px" }
+};
 
 export class Navigation extends React.Component<INavigationProps> {
   public render(): React.ReactNode {
@@ -101,6 +111,7 @@ export class Navigation extends React.Component<INavigationProps> {
             ariaLabel="Navigation"
             overflowAriaLabel="More links"
             onRenderItem={this._onRenderItem}
+            styles={breadcrumbStyle}
           />
         </div>
       </div>

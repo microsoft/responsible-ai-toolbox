@@ -196,15 +196,20 @@ export class Cohort {
     if (!filteredData) {
       return [];
     }
-    if (this.filters.length > 0) {
+    const hasFilters = this.filters.length > 0;
+    const hasCompositeFilters = this.compositeFilters.length > 0;
+    if (hasFilters) {
       filteredData = filteredData.filter((row) =>
         this.filterRow(row, this.filters)
       );
     }
-    if (this.compositeFilters.length > 0) {
+    if (hasCompositeFilters) {
       filteredData = filteredData.filter((row) =>
         this.filterComposite(row, this.compositeFilters, Operations.And)
       );
+    }
+    if (!hasFilters && !hasCompositeFilters) {
+      filteredData = [...filteredData];
     }
     return filteredData;
   }

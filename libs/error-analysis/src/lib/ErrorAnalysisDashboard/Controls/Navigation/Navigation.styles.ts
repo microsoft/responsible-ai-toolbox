@@ -26,7 +26,7 @@ export const navigationStyles: () => IProcessedStyleSet<
       borderTop: "1px solid #C8C8C8",
       boxSizing: "border-box",
       color: theme.palette.black,
-      height: "35px",
+      height: "25px",
       width: "100%"
     }
   });
