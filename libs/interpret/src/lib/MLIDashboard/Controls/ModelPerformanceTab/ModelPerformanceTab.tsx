@@ -7,7 +7,8 @@ import {
   JointDataset,
   ModelTypes,
   IExplanationModelMetadata,
-  cohortKey
+  cohortKey,
+  Cohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -23,7 +24,6 @@ import { Transform } from "plotly.js";
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ISelectorConfig } from "../../NewExplanationDashboard";

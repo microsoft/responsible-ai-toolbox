@@ -6,6 +6,9 @@
 /out-tsc
 /raiwidgets/raiwidgets/widget
 
+#debug file
+webpack.json
+rollup.json
 
 # dependencies
 **/node_modules/

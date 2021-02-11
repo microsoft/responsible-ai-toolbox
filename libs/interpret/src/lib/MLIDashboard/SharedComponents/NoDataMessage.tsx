@@ -23,7 +23,7 @@ export class NoDataMessage extends React.PureComponent<{
   }
 
   private renderExplanationStrings(): React.ReactNode {
-    // Support links et c. when needed.
+    // Support links etc. when needed.
     if (
       this.props.explanationStrings === undefined ||
       this.props.explanationStrings.length === 0

@@ -6,14 +6,13 @@ env:
   folder_to_upload: dist/apps/dashboard
   blob_account: responsibleai
   blob_container: latest
-  blob_path:
 
 on:
   push:
     branches: [main]
 
 jobs:
-  cd-typescript:
+  cd-typescript-build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -40,15 +39,16 @@ jobs:
           path: dist
       - id: publish_url
         run: |
-          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/${blob_path}/index.html"
+          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/index.html"
       - name: Upload dashboard ${{steps.publish_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
+          azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container}}" -s "${{env.folder_to_upload}}" -d "${{env.blob_path}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            az storage blob sync -c "${{env.blob_container}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
-  publish:
-    needs: build
+  cd-typescript-publish:
+    needs: cd-typescript-build
     runs-on: ubuntu-latest
     strategy:
       matrix:

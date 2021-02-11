@@ -4,7 +4,8 @@
 import {
   IExplanationContext,
   ModelTypes,
-  ILocalExplanation
+  ILocalExplanation,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -19,7 +20,6 @@ import React from "react";
 
 import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
-import { ModelExplanationUtils } from "../ModelExplanationUtils";
 import { BarChart } from "../SharedComponents/BarChart";
 import {
   IBarChartConfig,
