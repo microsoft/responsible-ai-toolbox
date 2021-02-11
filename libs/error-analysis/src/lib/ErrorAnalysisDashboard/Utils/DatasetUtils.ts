@@ -9,7 +9,8 @@ export function constructRows(
   jointDataset: JointDataset,
   viewedRows: number,
   filterFunction?: (row: { [key: string]: number }) => boolean,
-  indexes?: number[]
+  indexes?: number[],
+  colors?: string[]
 ): any[] {
   const rows = [];
   for (let i = 0; i < viewedRows; i++) {
@@ -28,6 +29,9 @@ export function constructRows(
     );
     const tableRow = [];
     tableRow.push(row[JointDataset.IndexLabel]);
+    if (colors) {
+      tableRow.push(colors[i]);
+    }
     if (jointDataset.hasTrueY) {
       pushRowData(tableRow, JointDataset.TrueYLabel, jointDataset, row);
     }
@@ -62,7 +66,8 @@ export function constructCols(
   viewedCols: number,
   featureNames: string[],
   jointDataset: JointDataset,
-  isCustomPointsView: boolean
+  isCustomPointsView: boolean,
+  hasColors = false
 ): IColumn[] {
   const columns: IColumn[] = [];
   columns.push({
@@ -74,6 +79,17 @@ export function constructCols(
     name: "Index"
   });
   let index = 1;
+  if (hasColors) {
+    columns.push({
+      fieldName: `${index}`,
+      isResizable: true,
+      key: `color`,
+      maxWidth: 100,
+      minWidth: 50,
+      name: "Color"
+    });
+    index++;
+  }
   if (!isCustomPointsView && jointDataset.hasTrueY) {
     columns.push({
       fieldName: `${index}`,
