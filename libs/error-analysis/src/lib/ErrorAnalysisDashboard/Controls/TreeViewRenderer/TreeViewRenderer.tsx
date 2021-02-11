@@ -387,7 +387,7 @@ export class TreeViewRenderer extends React.PureComponent<
                           textAnchor="middle"
                           className={classNames.nodeText}
                         >
-                          {node.data.error} / {node.data.size}
+                          {node.data.error}/{node.data.size}
                         </text>
                       </g>
                     </CSSTransition>
@@ -433,7 +433,7 @@ export class TreeViewRenderer extends React.PureComponent<
                 ))}
               </TransitionGroup>
               <g
-                className={classNames.nodesTransitionGroup}
+                className={classNames.tooltipTransitionGroup}
                 pointerEvents="none"
               >
                 {nodeData.map((node) => (
