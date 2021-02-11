@@ -66,7 +66,7 @@ const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
 };
 const labelStyle: ILabelStyles = {
-  root: { alignSelf: "center", padding: "0px 10px 0px 0px" }
+  root: { alignSelf: "center", fontSize: "24px", padding: "0px 10px 0px 0px" }
 };
 const explanationButtonStyle: IButtonStyles = {
   root: { alignSelf: "center", padding: "0px 4px" }

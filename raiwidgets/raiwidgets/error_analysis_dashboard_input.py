@@ -54,7 +54,7 @@ class TreeSide(str, Enum):
     UNKNOWN = 'unknown'
 
 
-class DebugMLDashboardInput:
+class ErrorAnalysisDashboardInput:
     def __init__(
             self,
             explanation,
@@ -66,7 +66,7 @@ class DebugMLDashboardInput:
             locale,
             categorical_features,
             true_y_dataset):
-        """Initialize the DebugML Dashboard Input.
+        """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
         :type explanation: ExplanationMixin
