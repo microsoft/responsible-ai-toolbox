@@ -23,7 +23,7 @@ import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import { CohortStats } from "../../CohortStats";
-import { ColorPalette } from "../../ColorPalette";
+import { ColorPalette, isColorDark } from "../../ColorPalette";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
@@ -385,7 +385,11 @@ export class TreeViewRenderer extends React.PureComponent<
                         </g>
                         <text
                           textAnchor="middle"
-                          className={classNames.nodeText}
+                          className={this.getNodeClassName(
+                            classNames,
+                            node.data.filterProps.errorCoverage,
+                            node.data.errorColor.fill
+                          )}
                         >
                           {node.data.error}/{node.data.size}
                         </text>
@@ -461,6 +465,18 @@ export class TreeViewRenderer extends React.PureComponent<
   public componentWillUnmount(): void {
     window.removeEventListener("resize", this.onResize.bind(this));
     this.props.setTreeViewState(this.state);
+  }
+
+  private getNodeClassName(
+    classNames: IProcessedStyleSet<ITreeViewRendererStyles>,
+    ratio: number,
+    fill: string
+  ): string {
+    let nodeTextClassName = classNames.nodeText;
+    if (ratio > 50 && isColorDark(fill)) {
+      nodeTextClassName = classNames.filledNodeText;
+    }
+    return nodeTextClassName;
   }
 
   private calculateFilterProps(
