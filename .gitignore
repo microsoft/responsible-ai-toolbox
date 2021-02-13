@@ -52,6 +52,7 @@ raiwidgets/build/
 wrapped-flask/build/
 **-py3-none-any.whl
 **.tar.gz
+**.zip
 **.output.ipynb
 **.processed.ipynb
 
