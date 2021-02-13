@@ -18,3 +18,10 @@ requirements-parser==0.2.0
 wheel
 
 fairlearn==0.5.0
+
+# Required for notebook tests
+nbformat
+papermill
+nteract-scrapbook
+jupyter
+nbval
