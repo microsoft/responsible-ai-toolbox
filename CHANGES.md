@@ -29,29 +29,24 @@ this file to understand what changed.
 Update to `raiwidgets` package.
 
 - educational materials:
-  - add imports for `MimicExplainer` and `PFIExplainer`
+  - add imports for `MimicExplainer` and `PFIExplainer` in the
+    interpretability-dashboard-employee-attrition notebook
 - features
-
   - migrate cohort and dataset utilities to core-ui
   - remove circular dependencies
-  - convert flask comms class to function
   - add confirmation popup in `ExplanationDashboard` when cancelling editing
     a cohort.
   - fix clipped dropdown in `FairnessDashboard`
   - keep `FairnessDashboard` chart state in single model view
-  - in large data view, change `ErrorAnalysisDashboard` cohort state to use
-    full data instead of downsampled explanation data
   - updates to `ErrorAnalysisDashboard`:
+    - in large data view, change cohort state to use full data instead
+      of downsampled explanation data
     - add true y and predicted y values
     - fix categorical labels handling in what if panel
     - add breadcrumb to error explorer view and minor style adjustments to
       navigation panel
     - fix indexing issues for all data cohort
     - add color column to local explanation view
-
-- pypi:
-
-  - raiwidgets: release v0.2.1
 
 ## v0.2.0
 
