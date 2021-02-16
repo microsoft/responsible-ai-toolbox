@@ -9,10 +9,16 @@ import {
   IPanelProps,
   IPanelStyles,
   ISearchBoxStyles,
+  ISettings,
   IStackTokens,
   IStyleFunctionOrObject,
   Checkbox,
+  Customizer,
+  getId,
+  Layer,
+  LayerHost,
   Panel,
+  ScrollablePane,
   SearchBox,
   Stack,
   Text
@@ -58,6 +64,7 @@ export class FeatureList extends React.Component<
   IFeatureListProps,
   IFeatureListState
 > {
+  private layerHostId: string;
   public constructor(props: IFeatureListProps) {
     super(props);
 
@@ -71,6 +78,7 @@ export class FeatureList extends React.Component<
       selectedFeatures: this.props.features,
       sortedFeatures
     };
+    this.layerHostId = getId("featuresListHost");
   }
 
   public componentDidUpdate(prevProps: IFeatureListProps): void {
@@ -120,52 +128,78 @@ export class FeatureList extends React.Component<
                 }
               />
             </Stack.Item>
-            {this.state.searchedFeatures.map((feature) => {
-              const sortedFeatureIndex = this.state.sortedFeatures.indexOf(
-                feature
-              );
-              return (
-                <Stack.Item key={"checkboxKey" + feature}>
-                  <Stack horizontal horizontalAlign="space-between">
-                    <Stack.Item
-                      key={"checkboxItemKey" + feature}
-                      align="center"
-                    >
-                      <Checkbox
-                        label={feature}
-                        checked={this.state.selectedFeatures.includes(feature)}
-                        onChange={this.onChange.bind(this, feature)}
-                      />
-                    </Stack.Item>
-                    {this.props.importances.length > 0 &&
-                      this.props.importances[sortedFeatureIndex] !==
-                        undefined && (
-                        <Stack.Item
-                          key={"checkboxImpKey" + feature}
-                          align="center"
-                        >
-                          <svg width="100px" height="6px">
-                            <g>
-                              <rect
-                                fill={theme.palette.neutralQuaternary}
-                                width="100%"
-                                height="4"
-                                rx="5"
-                              ></rect>
-                              <rect
-                                fill={theme.palette.neutralSecondary}
-                                width={`${this.state.percents[sortedFeatureIndex]}%`}
-                                height="4"
-                                rx="5"
-                              ></rect>
-                            </g>
-                          </svg>
+            <Customizer
+              settings={(currentSettings): ISettings => ({
+                ...currentSettings,
+                hostId: this.layerHostId
+              })}
+            >
+              <Layer>
+                <ScrollablePane>
+                  <Stack
+                    tokens={checkboxStackTokens}
+                    verticalAlign="space-around"
+                  >
+                    {this.state.searchedFeatures.map((feature) => {
+                      const sortedFeatureIndex = this.state.sortedFeatures.indexOf(
+                        feature
+                      );
+                      return (
+                        <Stack.Item key={"checkboxKey" + feature}>
+                          <Stack horizontal horizontalAlign="space-between">
+                            <Stack.Item
+                              key={"checkboxItemKey" + feature}
+                              align="center"
+                            >
+                              <Checkbox
+                                label={feature}
+                                checked={this.state.selectedFeatures.includes(
+                                  feature
+                                )}
+                                onChange={this.onChange.bind(this, feature)}
+                              />
+                            </Stack.Item>
+                            {this.props.importances.length > 0 &&
+                              this.props.importances[sortedFeatureIndex] !==
+                                undefined && (
+                                <Stack.Item
+                                  key={"checkboxImpKey" + feature}
+                                  align="center"
+                                >
+                                  <svg width="100px" height="6px">
+                                    <g>
+                                      <rect
+                                        fill={theme.palette.neutralQuaternary}
+                                        width="100%"
+                                        height="4"
+                                        rx="5"
+                                      ></rect>
+                                      <rect
+                                        fill={theme.palette.neutralSecondary}
+                                        width={`${this.state.percents[sortedFeatureIndex]}%`}
+                                        height="4"
+                                        rx="5"
+                                      ></rect>
+                                    </g>
+                                  </svg>
+                                </Stack.Item>
+                              )}
+                          </Stack>
                         </Stack.Item>
-                      )}
+                      );
+                    })}
                   </Stack>
-                </Stack.Item>
-              );
-            })}
+                </ScrollablePane>
+              </Layer>
+            </Customizer>
+            <LayerHost
+              id={this.layerHostId}
+              style={{
+                height: "500px",
+                overflow: "hidden",
+                position: "relative"
+              }}
+            />
             <Stack.Item key="applyButtonKey" align="start">
               <PrimaryButton
                 text="Apply"
