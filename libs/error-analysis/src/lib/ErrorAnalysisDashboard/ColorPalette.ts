@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { lab as Lab } from "d3-color";
+
 export enum ColorPalette {
   MinColor = "#F4D1D2",
   MaxColor = "#8d2323",
@@ -9,4 +11,9 @@ export enum ColorPalette {
   SelectedLineColor = "#089acc",
   UnselectedLineColor = "#e8eaed",
   LinkLabelOutline = "#089acc"
+}
+
+export function isColorDark(colorStr: string): boolean {
+  const val = Lab(colorStr).l;
+  return val <= 65;
 }
