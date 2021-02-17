@@ -29,7 +29,7 @@ export const ErrorAnalysisDashboardStyles: () => IProcessedStyleSet<
     pivotLabelWrapper: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-between",
+      justifyContent: "start",
       padding: "0px 30px"
     }
   });
