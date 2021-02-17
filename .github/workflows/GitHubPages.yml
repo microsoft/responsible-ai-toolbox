@@ -1,5 +1,5 @@
 
-name: CI Python
+name: GitHub Pages
 
 on:
   push:
