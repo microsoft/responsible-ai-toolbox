@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -73,7 +76,8 @@ html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     # TODO: fork the pydata-sphinx-theme to integrate these with logo
     "external_links": [
-        #{"name": "StackOverflow", "url": "https://stackoverflow.com/questions/tagged/fairlearn"}
+        # {"name": "StackOverflow",
+        #  "url": "https://stackoverflow.com/questions/tagged/fairlearn"}
     ],
     "github_url": "https://github.com/microsoft/responsible-ai-widgets",
     # "twitter_url": "https://twitter.com/fairlearn" TODO: start using this
@@ -82,7 +86,7 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = "_static/images/<filename>.png"
+# html_logo = "_static/images/<filename>.png"
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -113,7 +117,11 @@ pygments_style = 'sphinx'
 # }
 
 # html_sidebars = {
-#     "**": ["version-sidebar.html", "sidebar-search-bs.html", "sidebar-nav-bs.html"],
+#     "**": [
+#         "version-sidebar.html",
+#         "sidebar-search-bs.html",
+#         "sidebar-nav-bs.html"
+#     ],
 # }
 
 # Auto-Doc Options
@@ -165,5 +173,7 @@ def linkcode_resolve(domain, info):
         linespec = ""
 
     tag_or_branch = os.getenv("SPHINX_MULTIVERSION_NAME", default="main")
-    fn = os.path.relpath(fn, start=os.path.dirname(raiwidgets.__file__)).replace(os.sep, '/')
-    return f"http://github.com/microsoft/responsible-ai-widgets/blob/{tag_or_branch}/raiwidgets/raiwidgets/{fn}{linespec}"
+    fn = os.path.relpath(fn, start=os.path.dirname(raiwidgets.__file__)) \
+        .replace(os.sep, '/')
+    return f"http://github.com/microsoft/responsible-ai-widgets/blob/" \
+        f"{tag_or_branch}/raiwidgets/raiwidgets/{fn}{linespec}"
