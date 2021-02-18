@@ -16,13 +16,37 @@ Note that it is not required to have an entry for every pull request.
 Instead, please try to add only changes that are meaningful to users who read
 this file to understand what changed.
 
-## v-next (post-v0.2.0)
+## v-next (post-v0.2.\*)
 
 - educational materials
 - new features
 - breaking changes
 - bug fixes
 - other
+
+## v0.2.1
+
+Update to `raiwidgets` package.
+
+- educational materials:
+  - add imports for `MimicExplainer` and `PFIExplainer` in the
+    interpretability-dashboard-employee-attrition notebook
+- features
+  - migrate cohort and dataset utilities to core-ui
+  - remove circular dependencies
+  - add confirmation popup in `ExplanationDashboard` when cancelling editing
+    a cohort.
+  - fix clipped dropdown in `FairnessDashboard`
+  - keep `FairnessDashboard` chart state in single model view
+  - updates to `ErrorAnalysisDashboard`:
+    - in large data view, change cohort state to use full data instead
+      of downsampled explanation data
+    - add true y and predicted y values
+    - fix categorical labels handling in what if panel
+    - add breadcrumb to error explorer view and minor style adjustments to
+      navigation panel
+    - fix indexing issues for all data cohort
+    - add color column to local explanation view
 
 ## v0.2.0
 
