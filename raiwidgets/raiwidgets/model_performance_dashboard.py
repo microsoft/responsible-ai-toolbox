@@ -24,14 +24,14 @@ class ModelPerformanceDashboard(Dashboard):
         the same samples used to build the explanation.
         Overwrites any existing dataset on the explanation object.
         Must have fewer than 10000 rows and fewer than 1000 columns.
-    :type dataset: numpy.array or list[][]
+    :type dataset: numpy.ndarray or list[][]
     :param true_y: The true labels for the provided dataset.
         Overwrites any existing dataset on the explanation object.
-    :type true_y: numpy.array or list[]
+    :type true_y: numpy.ndarray or list[]
     :param classes: The class names.
-    :type classes: numpy.array or list[]
+    :type classes: numpy.ndarray or list[]
     :param features: Feature names.
-    :type features: numpy.array or list[]
+    :type features: numpy.ndarray or list[]
     :param public_ip: Optional. If running on a remote vm,
         the external public ip address of the VM.
     :type public_ip: str

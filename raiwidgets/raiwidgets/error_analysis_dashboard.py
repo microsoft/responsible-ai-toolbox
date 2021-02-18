@@ -19,28 +19,29 @@ class ErrorAnalysisDashboard(Dashboard):
         the prediction probabilities for each class and for the regression
         case a method of predict() returning the prediction value.
     :type model: object
-    :param dataset:  A matrix of feature vector examples
+    :param dataset: A matrix of feature vector examples
         (# examples x # features), the same samples used to build the
         explanation. Overwrites any existing dataset on the
         explanation object.
-    :type dataset: numpy.array or list[][]
+    :type dataset: numpy.ndarray or list[][]
     :param true_y: The true labels for the provided explanation. Overwrites
         any existing dataset on the explanation object.
         Note if explanation is sample of dataset, you will need to specify
         true_y_dataset as well.
-    :type true_y: numpy.array or list[]
+    :type true_y: numpy.ndarray or list[]
     :param classes: The class names.
-    :type classes: numpy.array or list[]
+    :type classes: numpy.ndarray or list[]
     :param features: Feature names.
-    :type features: numpy.array or list[]
+    :type features: numpy.ndarray or list[]
     :param port: The port to use on locally hosted service.
     :type port: int
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
     :param true_y_dataset: The true labels for the provided dataset.
-    Only needed if the explanation has a sample of instances from the
-    original dataset.  Otherwise specify true_y parameter only.
-    :type true_y_dataset: numpy.array or list[]
+        Only needed if the explanation has a sample of instances from the
+        original dataset. Otherwise specify true_y parameter only.
+    :type true_y_dataset: numpy.ndarray or list[]
+
     """
 
     def __init__(self, explanation, model=None, *, dataset=None,

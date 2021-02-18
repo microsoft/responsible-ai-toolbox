@@ -8,6 +8,8 @@ import {
   mergeStyles
 } from "office-ui-fabric-react";
 
+import { ColorPalette } from "../../ColorPalette";
+
 export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
@@ -77,7 +79,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     filledNodeText: mergeStyles([
       nodeTextStyle,
       {
-        fill: "#FFF"
+        fill: ColorPalette.ErrorAnalysisLightText
       }
     ]),
     innerFrame: {
@@ -123,7 +125,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     nodeText: mergeStyles([
       nodeTextStyle,
       {
-        fill: "#555"
+        fill: ColorPalette.ErrorAnalysisDarkGreyText
       }
     ]),
     nopointer: {
