@@ -23,6 +23,11 @@ jobs:
         with:
           python-version: ${{ matrix.pythonVersion }}
 
+      - name: build typescript
+        run: |
+          yarn install
+          yarn buildall
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
