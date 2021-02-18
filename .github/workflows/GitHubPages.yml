@@ -28,7 +28,7 @@ jobs:
         working-directory: ./docs
       
       - name: Debug print
-        run: echo ${{ github.event.type }}
+        run: echo ${{ github.event.name }}
 
       - name: Deploy
         if: ${{ github.event.type == 'PushEvent' }}
