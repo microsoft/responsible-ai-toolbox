@@ -21,7 +21,7 @@ class FairnessDashboard(Dashboard):
     :type sensitive_features: pandas.Series, pandas.DataFrame, list,
         Dict[str,1d array] or something convertible to numpy.ndarray
     :param y_true: The true labels or values for the provided dataset.
-    :type y_true: numpy.array or list[]
+    :type y_true: numpy.ndarray or list[]
     :param y_pred: Array of output predictions from models to be evaluated.
         If the input type provides names, they will be used. Otherwise,
         names of "Model <n>" are generated
