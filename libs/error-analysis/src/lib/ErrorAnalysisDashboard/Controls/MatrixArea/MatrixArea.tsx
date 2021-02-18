@@ -12,6 +12,7 @@ import { localization } from "@responsible-ai/localization";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import {
+  DefaultButton,
   DirectionalHint,
   mergeStyles,
   IStackStyles,
@@ -65,6 +66,8 @@ const emptyTextStyle: IStackStyles = {
 
 const emptyTextPadding: IStackTokens = { padding: "10px 0px 0px 0px" };
 
+const stackTokens: IStackTokens = { childrenGap: 5 };
+
 export class MatrixArea extends React.PureComponent<
   IMatrixAreaProps,
   IMatrixAreaState
@@ -72,6 +75,8 @@ export class MatrixArea extends React.PureComponent<
   public constructor(props: IMatrixAreaProps) {
     super(props);
     this.state = {
+      disableClearAll: this.props.state.disableClearAll,
+      disableSelectAll: this.props.state.disableSelectAll,
       jsonMatrix: this.props.state.jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
@@ -144,6 +149,7 @@ export class MatrixArea extends React.PureComponent<
       }
     ]);
     const matrixLength = this.state.jsonMatrix.matrix.length;
+    const matrixRowLength = this.state.jsonMatrix.matrix[0].length;
     // Extract categories
     const [category1Values] = this.extractCategories(
       this.state.jsonMatrix.category1
@@ -162,191 +168,214 @@ export class MatrixArea extends React.PureComponent<
       });
     });
     return (
-      <div className={classNames.matrixArea}>
-        <div>
-          {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
-            <div className={classNames.matrixLabelBottom}>
-              <div className={classNames.matrixLabelTab}></div>
-              <div>{this.props.selectedFeature2}</div>
-            </div>
-          )}
-          {(this.props.selectedFeature2 === noFeature ||
-            sameFeatureSelected) && (
-            <div className={classNames.emptyLabelPadding}></div>
-          )}
+      <Stack>
+        <Stack horizontal tokens={stackTokens}>
+          <DefaultButton
+            text={localization.ErrorAnalysis.MatrixArea.clearAll}
+            onClick={this.clearAll.bind(this, matrixLength, matrixRowLength)}
+            disabled={this.state.disableClearAll}
+          />
+          <DefaultButton
+            text={localization.ErrorAnalysis.MatrixArea.selectAll}
+            onClick={this.selectAll.bind(this, matrixLength, matrixRowLength)}
+            disabled={this.state.disableSelectAll}
+          />
+        </Stack>
+        <div className={classNames.matrixArea}>
+          <div>
+            {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
+              <div className={classNames.matrixLabelBottom}>
+                <div className={classNames.matrixLabelTab}></div>
+                <div>{this.props.selectedFeature2}</div>
+              </div>
+            )}
+            {(this.props.selectedFeature2 === noFeature ||
+              sameFeatureSelected) && (
+              <div className={classNames.emptyLabelPadding}></div>
+            )}
 
-          {this.state.jsonMatrix.matrix.map((row: any, i: number) => (
-            <div key={`${i}row`} className={topMatrixClass}>
-              {row.map((value: any, j: number) => {
-                let errorRatio = 0;
-                let styledGradientMatrixCell: IStyle =
-                  classNames.styledMatrixCell;
-                if (value.count > 0) {
-                  errorRatio = (value.falseCount / value.count) * 100;
-                  const bkgcolor = this.colorLookup(errorRatio);
-                  const color = this.textColorForBackground(bkgcolor);
-                  styledGradientMatrixCell = mergeStyles([
-                    styledGradientMatrixCell,
-                    {
-                      background: bkgcolor,
-                      color
-                    }
-                  ]);
-                } else {
-                  styledGradientMatrixCell = mergeStyles([
-                    styledGradientMatrixCell,
-                    classNames.nanMatrixCell
-                  ]);
-                }
-                if (
-                  this.state.selectedCells !== undefined &&
-                  this.state.selectedCells[j + i * row.length]
-                ) {
-                  styledGradientMatrixCell = mergeStyles([
-                    styledGradientMatrixCell,
-                    classNames.selectedMatrixCell
-                  ]);
-                }
-                const filterProps = new FilterProps(
-                  value.falseCount,
-                  value.count,
-                  falseCount,
-                  errorRatio
-                );
-                const tooltipProps: ITooltipProps = {
-                  onRenderContent: () => (
-                    <svg width="110" height="140" viewBox="0 0 70 70">
-                      <FilterTooltip
-                        filterProps={filterProps}
-                        isMouseOver={true}
-                        nodeTransform={"translate(-10px, -10px)"}
-                      />
-                    </svg>
-                  )
-                };
-                const hostStyles: Partial<ITooltipHostStyles> = {
-                  root: {
-                    alignItems: "center",
-                    display: "flex",
-                    height: "100%",
-                    width: "100%"
+            {this.state.jsonMatrix.matrix.map((row: any, i: number) => (
+              <div key={`${i}row`} className={topMatrixClass}>
+                {row.map((value: any, j: number) => {
+                  let errorRatio = 0;
+                  let styledGradientMatrixCell: IStyle =
+                    classNames.styledMatrixCell;
+                  if (value.count > 0) {
+                    errorRatio = (value.falseCount / value.count) * 100;
+                    const bkgcolor = this.colorLookup(errorRatio);
+                    const color = this.textColorForBackground(bkgcolor);
+                    styledGradientMatrixCell = mergeStyles([
+                      styledGradientMatrixCell,
+                      {
+                        background: bkgcolor,
+                        color
+                      }
+                    ]);
+                  } else {
+                    styledGradientMatrixCell = mergeStyles([
+                      styledGradientMatrixCell,
+                      classNames.nanMatrixCell
+                    ]);
                   }
-                };
-                const cellData = (
-                  <div
-                    key={`${i}_${j}cell`}
-                    className={classNames.matrixCell}
-                    onClick={this.selectedCellHandler.bind(
-                      this,
-                      i,
-                      j,
-                      matrixLength,
-                      row.length
-                    )}
-                    role="button"
-                    tabIndex={i}
-                    onKeyUp={undefined}
-                  >
-                    <TooltipHost
-                      tooltipProps={tooltipProps}
-                      delay={TooltipDelay.zero}
-                      id={`${i}_${j}celltooltip`}
-                      directionalHint={DirectionalHint.bottomCenter}
-                      styles={hostStyles}
-                    >
-                      <div className={styledGradientMatrixCell}>
-                        {`${errorRatio.toFixed(0)}%`}
-                      </div>
-                    </TooltipHost>
-                  </div>
-                );
-                if (this.props.selectedFeature1 === noFeature) {
-                  const categoryData = (
-                    <div
-                      key={`${i}_${j}category1`}
-                      className={classNames.matrixCellPivot1Categories}
-                    >
-                      {category1Values[j].value}
-                    </div>
-                  );
-                  return (
-                    <div key={`${j}row`} className={classNames.matrixRow}>
-                      {categoryData}
-                      {cellData}
-                    </div>
-                  );
-                } else if (j === 0) {
                   if (
-                    this.props.selectedFeature2 === noFeature ||
-                    sameFeatureSelected
+                    this.state.selectedCells !== undefined &&
+                    this.state.selectedCells[j + i * row.length]
                   ) {
+                    styledGradientMatrixCell = mergeStyles([
+                      styledGradientMatrixCell,
+                      classNames.selectedMatrixCell
+                    ]);
+                  }
+                  const filterProps = new FilterProps(
+                    value.falseCount,
+                    value.count,
+                    falseCount,
+                    errorRatio
+                  );
+                  const tooltipProps: ITooltipProps = {
+                    onRenderContent: () => (
+                      <svg width="110" height="140" viewBox="0 0 70 70">
+                        <FilterTooltip
+                          filterProps={filterProps}
+                          isMouseOver={true}
+                          nodeTransform={"translate(-10px, -10px)"}
+                        />
+                      </svg>
+                    )
+                  };
+                  const hostStyles: Partial<ITooltipHostStyles> = {
+                    root: {
+                      alignItems: "center",
+                      display: "flex",
+                      height: "100%",
+                      width: "100%"
+                    }
+                  };
+                  const cellData = (
+                    <div
+                      key={`${i}_${j}cell`}
+                      className={classNames.matrixCell}
+                      onClick={this.selectedCellHandler.bind(
+                        this,
+                        i,
+                        j,
+                        matrixLength,
+                        row.length
+                      )}
+                      role="button"
+                      tabIndex={i}
+                      onKeyUp={undefined}
+                    >
+                      <TooltipHost
+                        tooltipProps={tooltipProps}
+                        delay={TooltipDelay.zero}
+                        id={`${i}_${j}celltooltip`}
+                        directionalHint={DirectionalHint.bottomCenter}
+                        styles={hostStyles}
+                      >
+                        <div className={styledGradientMatrixCell}>
+                          {`${errorRatio.toFixed(0)}%`}
+                        </div>
+                      </TooltipHost>
+                    </div>
+                  );
+                  if (this.props.selectedFeature1 === noFeature) {
+                    const categoryData = (
+                      <div
+                        key={`${i}_${j}category1`}
+                        className={classNames.matrixCellPivot1Categories}
+                      >
+                        {category1Values[j].value}
+                      </div>
+                    );
+                    return (
+                      <div key={`${j}row`} className={classNames.matrixRow}>
+                        {categoryData}
+                        {cellData}
+                      </div>
+                    );
+                  } else if (j === 0) {
+                    if (
+                      this.props.selectedFeature2 === noFeature ||
+                      sameFeatureSelected
+                    ) {
+                      return [
+                        <div
+                          key={`${i}_${j}category1`}
+                          className={classNames.matrixCellPivot1Categories}
+                        ></div>,
+                        cellData
+                      ];
+                    }
                     return [
                       <div
                         key={`${i}_${j}category1`}
                         className={classNames.matrixCellPivot1Categories}
-                      ></div>,
+                      >
+                        {category1Values[i].value}
+                      </div>,
                       cellData
                     ];
                   }
-                  return [
-                    <div
-                      key={`${i}_${j}category1`}
-                      className={classNames.matrixCellPivot1Categories}
-                    >
-                      {category1Values[i].value}
-                    </div>,
-                    cellData
-                  ];
-                }
-                return cellData;
-              })}
+                  return cellData;
+                })}
+              </div>
+            ))}
+            {(this.props.selectedFeature2 === noFeature ||
+              sameFeatureSelected) &&
+              category1Values.length > 0 && (
+                <div
+                  key={`${matrixLength}row`}
+                  className={classNames.matrixRow}
+                >
+                  <div
+                    key={`${matrixLength}_${0}category1`}
+                    className={classNames.matrixCellPivot1Categories}
+                  ></div>
+                  {category1Values.map((category: any, i: number) => {
+                    return (
+                      <div
+                        key={`${matrixLength}_${i + 1}category1`}
+                        className={classNames.matrixCellPivot2Categories}
+                      >
+                        {category.value}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            {this.props.selectedFeature1 !== noFeature &&
+              this.props.selectedFeature2 !== noFeature &&
+              !sameFeatureSelected &&
+              category2Values.length > 0 && (
+                <div
+                  key={`${matrixLength}row`}
+                  className={classNames.matrixRow}
+                >
+                  <div
+                    key={`${matrixLength}_${0}category1`}
+                    className={classNames.matrixCellPivot1Categories}
+                  ></div>
+                  {category2Values.map((category: any, i: number) => {
+                    return (
+                      <div
+                        key={`${matrixLength}_${i + 1}category2`}
+                        className={classNames.matrixCellPivot2Categories}
+                      >
+                        {category.value}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+          </div>
+          {this.props.selectedFeature1 !== noFeature && (
+            <div className={styledMatrixLabel}>
+              {this.props.selectedFeature1}
             </div>
-          ))}
-          {(this.props.selectedFeature2 === noFeature || sameFeatureSelected) &&
-            category1Values.length > 0 && (
-              <div key={`${matrixLength}row`} className={classNames.matrixRow}>
-                <div
-                  key={`${matrixLength}_${0}category1`}
-                  className={classNames.matrixCellPivot1Categories}
-                ></div>
-                {category1Values.map((category: any, i: number) => {
-                  return (
-                    <div
-                      key={`${matrixLength}_${i + 1}category1`}
-                      className={classNames.matrixCellPivot2Categories}
-                    >
-                      {category.value}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          {this.props.selectedFeature1 !== noFeature &&
-            this.props.selectedFeature2 !== noFeature &&
-            !sameFeatureSelected &&
-            category2Values.length > 0 && (
-              <div key={`${matrixLength}row`} className={classNames.matrixRow}>
-                <div
-                  key={`${matrixLength}_${0}category1`}
-                  className={classNames.matrixCellPivot1Categories}
-                ></div>
-                {category2Values.map((category: any, i: number) => {
-                  return (
-                    <div
-                      key={`${matrixLength}_${i + 1}category2`}
-                      className={classNames.matrixCellPivot2Categories}
-                    >
-                      {category.value}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+          )}
         </div>
-        {this.props.selectedFeature1 !== noFeature && (
-          <div className={styledMatrixLabel}>{this.props.selectedFeature1}</div>
-        )}
-      </div>
+      </Stack>
     );
   }
 
@@ -405,12 +434,39 @@ export class MatrixArea extends React.PureComponent<
     });
     this.props.updateMatrixLegendState(maxErrorRate);
     this.setState({
+      disableClearAll: true,
+      disableSelectAll: false,
       jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
       maxErrorRate,
       selectedCells: undefined
     });
+  }
+
+  private selectAll(matrixLength: number, rowLength: number): void {
+    const size = matrixLength * rowLength;
+    const selectedCells = new Array<boolean>(size);
+    for (let i = 0; i < size; i++) {
+      selectedCells[i] = true;
+    }
+    this.setState({
+      disableClearAll: false,
+      disableSelectAll: true,
+      selectedCells
+    });
+    this.updateStateFromSelectedCells(selectedCells);
+  }
+
+  private clearAll(matrixLength: number, rowLength: number): void {
+    const size = matrixLength * rowLength;
+    const selectedCells = new Array<boolean>(size);
+    this.setState({
+      disableClearAll: true,
+      disableSelectAll: false,
+      selectedCells
+    });
+    this.updateStateFromSelectedCells(selectedCells);
   }
 
   private selectedCellHandler(
@@ -428,7 +484,24 @@ export class MatrixArea extends React.PureComponent<
     }
     const index = j + i * rowLength;
     selectedCells[index] = !selectedCells[index];
-    this.setState({ selectedCells });
+    let disableClearAll = false;
+    let disableSelectAll = false;
+    if (selectedCells.every((value) => value)) {
+      disableClearAll = false;
+      disableSelectAll = true;
+    } else if (selectedCells.every((value) => !value)) {
+      disableClearAll = true;
+      disableSelectAll = false;
+    }
+    this.setState({
+      disableClearAll,
+      disableSelectAll,
+      selectedCells
+    });
+    this.updateStateFromSelectedCells(selectedCells);
+  }
+
+  private updateStateFromSelectedCells(selectedCells: boolean[]) {
     // Create a composite filter from the selected cells
     const compositeFilter = this.createCompositeFilterFromCells(
       selectedCells,
