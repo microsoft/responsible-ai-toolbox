@@ -549,7 +549,7 @@ export class MultiICEPlot extends React.PureComponent<
 
   private buildRangeView(featureKey: string): IRangeView | undefined {
     const summary = this.props.jointDataset.metaDict[featureKey];
-    if (!summary || summary.index === undefined || !summary.featureRange) {
+    if (!summary || summary.index === undefined) {
       return undefined;
     }
     if (summary.treatAsCategorical) {
@@ -576,6 +576,9 @@ export class MultiICEPlot extends React.PureComponent<
         selectedOptionKeys: summary.sortedCategoricalValues?.map((x) => +x),
         type: RangeTypes.Categorical
       };
+    }
+    if (!summary.featureRange) {
+      return undefined;
     }
     return {
       featureIndex: summary.index,
