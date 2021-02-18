@@ -27,7 +27,7 @@ copyright = 'Microsoft Corporation'
 author = 'Roman Lutz, Ilya Matiach, Ke Xu'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.2.0'
+release = f'v{raiwidgets.__version__}'
 
 
 # -- General configuration ---------------------------------------------------
