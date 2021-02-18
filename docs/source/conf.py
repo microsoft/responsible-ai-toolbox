@@ -74,13 +74,11 @@ html_theme = 'pydata_sphinx_theme'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    # TODO: fork the pydata-sphinx-theme to integrate these with logo
     "external_links": [
         # {"name": "StackOverflow",
-        #  "url": "https://stackoverflow.com/questions/tagged/fairlearn"}
+        #  "url": "https://stackoverflow.com/questions/tagged/raiwidgets"}
     ],
     "github_url": "https://github.com/microsoft/responsible-ai-widgets",
-    # "twitter_url": "https://twitter.com/fairlearn" TODO: start using this
     "show_prev_next": False
 }
 
