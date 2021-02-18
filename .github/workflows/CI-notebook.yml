@@ -32,5 +32,3 @@ jobs:
 
       - name: Run notebook tests
         run: python -m pytest notebooks
-
-
