@@ -26,6 +26,9 @@ jobs:
       - name: Build
         run: make html
         working-directory: ./docs
+      
+      - name: Debug print
+        run: echo ${{ github.event.type }}
 
       - name: Deploy
         if: ${{ github.event.type == 'PushEvent' }}
