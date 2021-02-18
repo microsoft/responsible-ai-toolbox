@@ -45,7 +45,7 @@ class ExplanationDashboard(Dashboard):
     def __init__(self, explanation, model=None, dataset=None,
                  true_y=None, classes=None, features=None,
                  public_ip=None, port=None, locale=None):
-
+        """Initialize the ExplanationDashboard."""
         self.input = ExplanationDashboardInput(
             explanation, model, dataset, true_y, classes, features, locale)
 
