@@ -657,6 +657,8 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private textColorForBackground(colorStr: string): string {
-    return isColorDark(colorStr) ? "white" : "rgba(0,0,0,0.8)";
+    return isColorDark(colorStr)
+      ? ColorPalette.ErrorAnalysisLightText
+      : ColorPalette.ErrorAnalysisDarkBlackText;
   }
 }
