@@ -9,7 +9,6 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { lab as Lab } from "d3-color";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import {
@@ -29,7 +28,7 @@ import {
 import React from "react";
 
 import { CohortStats } from "../../CohortStats";
-import { ColorPalette } from "../../ColorPalette";
+import { ColorPalette, isColorDark } from "../../ColorPalette";
 import { noFeature } from "../../Constants";
 import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
@@ -658,11 +657,6 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private textColorForBackground(colorStr: string): string {
-    return this.isColorDark(colorStr) ? "white" : "rgba(0,0,0,0.8)";
-  }
-
-  private isColorDark(colorStr: string): boolean {
-    const val = Lab(colorStr).l;
-    return val <= 65;
+    return isColorDark(colorStr) ? "white" : "rgba(0,0,0,0.8)";
   }
 }
