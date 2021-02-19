@@ -69,7 +69,7 @@ async function main() {
   for (const eachPkg of Object.keys(workspace.projects)) {
     await setVersion(workspace, eachPkg, version);
   }
-  if (!release) {
+  if (release) {
     execSync(`git add -A`);
     execSync(`git commit -m "Release v${version}"`);
     execSync(`git tag -a v${version} -m "Release v${version}"`);
