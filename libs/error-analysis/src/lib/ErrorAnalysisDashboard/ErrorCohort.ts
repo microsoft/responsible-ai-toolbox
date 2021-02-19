@@ -47,6 +47,7 @@ export class ErrorCohort {
       this.totalCohortCorrect = cohortStats.totalCohortCorrect;
       this.totalCohortIncorrect = cohortStats.totalCohortIncorrect;
     } else {
+      cohort.sort();
       const filteredData = cohort.filteredData;
       this.updateStatsFromData(filteredData, jointDataset);
     }
