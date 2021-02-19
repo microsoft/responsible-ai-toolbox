@@ -62,7 +62,6 @@ async function main() {
     .option("-r, --release", "Generate a release version")
     .parse(process.argv)
     .outputHelp();
-  const pkg = commander.opts().package;
   const release = commander.opts().release;
   const workspace = fs.readJSONSync("workspace.json");
   const version = getVersion(release);
@@ -70,10 +69,12 @@ async function main() {
   for (const eachPkg of Object.keys(workspace.projects)) {
     await setVersion(workspace, eachPkg, version);
   }
-  execSync(`git add -A`);
-  execSync(`git commit -m "Release v${version}"`);
-  execSync(`git tag -a v${version} -m "Release v${version}"`);
-  execSync(`git push origin v${version}`);
+  if (!release) {
+    execSync(`git add -A`);
+    execSync(`git commit -m "Release v${version}"`);
+    execSync(`git tag -a v${version} -m "Release v${version}"`);
+    execSync(`git push origin v${version}`);
+  }
 }
 
 main();

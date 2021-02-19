@@ -2,7 +2,13 @@
 # Licensed under the MIT License.
 
 import setuptools
+import os
 from .raiwidgets.__version__ import version
+
+# Fetch Version
+with open(os.path.join('..', 'interpret_community', 'version.py')) as f:
+    code = compile(f.read(), f.name, 'exec')
+    exec(code)
 
 # Fetch ReadMe
 with open("README.md", "r") as fh:
