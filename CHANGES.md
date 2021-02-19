@@ -29,7 +29,11 @@ this file to understand what changed.
 Update to `raiwidgets` package.
 
 - Bug fix:
-  - Fix cagegorical feature in ice plot
+  - Fix categorical feature in ice plot
+  - Left align tabs in explanation window of error analysis
+  - Move the selected features and feature importances inside a scrollable pane
+  - Show aggregate plots by default in dataset explorer
+  - Fix indexing issue in heatmap when selecting all cells
 
 ## v0.2.1
 
