@@ -5,9 +5,12 @@ const semver = require("semver");
 const { execSync } = require("child_process");
 const commander = require("commander");
 
+const versionCfgFile = "./version.cfg";
+const versionPyFiles = ["./raiwidgets/raiwidgets/__version__.py"];
+
 function getVersion(release) {
   const revision = execSync("git rev-list --count HEAD").toString().trim();
-  const versionStr = fs.readFileSync("./version.cfg").toString().trim();
+  const versionStr = fs.readFileSync(versionCfgFile).toString().trim();
   var version = semver.parse(versionStr);
   if (release) {
     return `${version.major}.${version.minor}.${version.patch}`;
@@ -47,6 +50,13 @@ async function setVersion(workspace, pkgFolderName, version) {
   fs.writeJSONSync(packagePath, pkgSetting, { spaces: 2 });
 }
 
+function writeVersion(version) {
+  fs.writeFileSync(versionCfgFile, version);
+  for (const py of versionPyFiles) {
+    fs.writeFileSync(py, `version = "${version}"`);
+  }
+}
+
 async function main() {
   commander
     .option("-r, --release", "Generate a release version")
@@ -56,11 +66,13 @@ async function main() {
   const release = commander.opts().release;
   const workspace = fs.readJSONSync("workspace.json");
   const version = getVersion(release);
-  fs.writeFileSync("./version.cfg", version);
+  writeVersion(version);
   for (const eachPkg of Object.keys(workspace.projects)) {
     await setVersion(workspace, eachPkg, version);
   }
-  execSync(`git tag -a v${version} -m "Releasing v${version}"`);
+  execSync(`git add -A`);
+  execSync(`git commit -m "Release v${version}"`);
+  execSync(`git tag -a v${version} -m "Release v${version}"`);
   execSync(`git push origin v${version}`);
 }
 

@@ -2,10 +2,7 @@
 # Licensed under the MIT License.
 
 import setuptools
-
-# Fetch version
-with open("../version.cfg", "r") as fh:
-    version = fh.read()
+from .raiwidgets.__version__ import version
 
 # Fetch ReadMe
 with open("README.md", "r") as fh:
