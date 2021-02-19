@@ -11,7 +11,7 @@ const versionPyFiles = ["./raiwidgets/raiwidgets/__version__.py"];
 function getVersion(release) {
   const revision = execSync("git rev-list --count HEAD").toString().trim();
   const versionStr = fs.readFileSync(versionCfgFile).toString().trim();
-  var version = semver.parse(versionStr);
+  var version = semver.coerce(versionStr, true);
   if (release) {
     return `${version.major}.${version.minor}.${version.patch}`;
   } else {
