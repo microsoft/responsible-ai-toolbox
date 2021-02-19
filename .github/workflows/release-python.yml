@@ -29,6 +29,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
+      - name: install typescript dependencies
+        run: |
+          yarn install
+      - name: auto version
+        run: |
+          yarn auto-version -r
+      - name: build typescript 
+        run: |
+          yarn buildall
       - name: update and upgrade pip, setuptools, wheel, and twine
         run: |
           python -m pip install --upgrade pip
@@ -40,10 +49,6 @@ jobs:
         working-directory: ${{ github.event.inputs.packageDirectory }}
       - name: pip freeze
         run: pip freeze
-      - name: build typescript
-        run: |
-          yarn install
-          yarn buildall
       - name: replace README for raiwidgets
         if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
         run: |

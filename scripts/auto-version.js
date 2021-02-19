@@ -2,50 +2,21 @@
 const path = require("path");
 const fs = require("fs-extra");
 const semver = require("semver");
-const fetch = require("./fetch");
+const { execSync } = require("child_process");
+const commander = require("commander");
 
-async function getTargetVersion(name, localVersion) {
-  const local = localVersion || "0.0.1";
-  const npmVersions = await fetch(name);
-  if (!semver.valid(local)) {
-    throw new Error(`Invalid version in package.json ${local}`);
+function getVersion(release) {
+  const revision = execSync("git rev-list --count HEAD").toString().trim();
+  const versionStr = fs.readFileSync("./version.cfg").toString().trim();
+  var version = semver.parse(versionStr);
+  if (release) {
+    return `${version.major}.${version.minor}.${version.patch}`;
+  } else {
+    return `${version.major}.${version.minor}.${version.patch}.post${revision}`;
   }
-  if (npmVersions === "Not Found") {
-    console.log(`Not found on npm, use package.json version ${local}`);
-    return local;
-  }
-  if (!npmVersions.latest) {
-    throw new Error(`Cannot find latest version from npm.\r\n${npmVersions}`);
-  }
-  const { latest } = npmVersions;
-  if (!semver.valid(latest)) {
-    throw new Error(`Invalid latest version on npm ${latest}`);
-  }
-  if (semver.major(latest) > semver.major(local)) {
-    throw new Error(
-      `Remote has greater major version. ${latest} > ${local}, update local major version first`
-    );
-  }
-  if (
-    semver.major(latest) === semver.major(local) &&
-    semver.minor(latest) > semver.minor(local)
-  ) {
-    throw new Error(
-      `Remote has greater minor version. ${latest} > ${local}, update local minor version first`
-    );
-  }
-  if (semver.gte(latest, local)) {
-    const target = semver.inc(latest, "patch");
-    console.log(
-      `Remote version is greater (${latest} >= ${local}) using ${target}`
-    );
-    return target;
-  }
-  console.log(`Local version is greater (${local} > ${latest}) using ${local}`);
-  return local;
 }
 
-async function bump(workspace, pkgFolderName) {
+async function setVersion(workspace, pkgFolderName, version) {
   console.log(`\r\nProcessing: ${pkgFolderName}`);
   const setting = workspace.projects[pkgFolderName];
   if (!setting) {
@@ -72,22 +43,30 @@ async function bump(workspace, pkgFolderName) {
   ) {
     throw new Error(`outputPath for "${pkgFolderName}" is not set.`);
   }
-  const target = await getTargetVersion(pkgSetting.name, pkgSetting.version);
-  pkgSetting.version = target;
+  pkgSetting.version = version;
   fs.writeJSONSync(packagePath, pkgSetting, { spaces: 2 });
 }
 
 async function main() {
-  const pkg = process.argv[2];
+  commander
+    .option("-p, --package [package]", "Specify a package name")
+    .option("-r, --release", "Generate a release version")
+    .parse(process.argv)
+    .outputHelp();
+  const pkg = commander.opts().package;
+  const release = commander.opts().release;
   const workspace = fs.readJSONSync("workspace.json");
+  const version = getVersion(release);
+  fs.writeFileSync("./version.cfg", version);
   if (pkg) {
-    await bump(workspace, pkg);
-  }
-  if (!pkg) {
+    await setVersion(workspace, pkg, version);
+  } else {
     for (const eachPkg of Object.keys(workspace.projects)) {
-      await bump(workspace, eachPkg);
+      await setVersion(workspace, eachPkg, version);
     }
   }
+  execSync(`git tag -a v${version} -m "Releasing v${version}"`);
+  execSync(`git push origin v${version}`);
 }
 
 main();
