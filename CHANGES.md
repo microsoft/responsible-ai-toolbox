@@ -24,6 +24,13 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.2.2
+
+Update to `raiwidgets` package.
+
+- Bug fix:
+  - Fix cagegorical feature in ice plot
+
 ## v0.2.1
 
 Update to `raiwidgets` package.
