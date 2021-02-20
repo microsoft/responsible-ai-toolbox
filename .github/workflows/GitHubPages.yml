@@ -30,10 +30,10 @@ jobs:
       - name: Disable jekyll builds
         # By default GitHub attempts jekyll builds.
         # Instead, we want the webpage to just point at index.html
-        run: touch docs/_build/html/.nojekyll
+        run: touch docs/build/html/.nojekyll
 
       - name: Create CNAME file
-        run: echo "erroranalysis.ai" > docs/_build/html/CNAME
+        run: echo "erroranalysis.ai" > docs/build/html/CNAME
 
       - name: Deploy
         # only deploy if this is a push event on main
