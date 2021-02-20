@@ -1,0 +1,331 @@
+/* ======= FONTS ==========*/
+/* @font-face {
+    font-family: "TT Commons Regular";
+    src: url("../fonts/TypeType-TTCommonsRegular.woff") format("woff"),
+    url("../fonts/TypeType-TTCommonsRegular.otf") format("opentype");
+  }
+  @font-face {
+    font-family: 'TT Commons Medium';
+    src: url("../fonts/TypeType-TTCommonsMedium.woff") format("woff"),
+         url("../fonts/TypeType-TTCommonsMedium.otf") format("opentype");
+  }
+  @font-face {
+    font-family: "TT Commons Bold";
+    src: url("../fonts/TypeType-TTCommonsBold.woff") format("woff"),
+         url("../fonts/TypeType-TTCommonsBold.otf") format("opentype");
+  } */
+
+
+/* ===== COMMAN CSS CLASSES START ===== */
+/* body{
+    font-family: 'TT Commons Regular', Arial, sans-serif;
+} */
+h1{
+    font-size: 100px;
+}
+h2{
+    font-size: 48px;
+}
+h3{
+    font-size: 42px;
+}
+h4{
+    font-size: 28px;
+}
+h5{
+    font-size: 28px;
+}
+p{
+    font-size: 20px;
+    line-height: 1.4;
+}
+a{
+    color:#394ccf;
+}
+.text-darkblue{
+    color: #061058;
+}
+.text-lightblue{
+    color: #061058;
+    opacity: 0.7;
+}
+
+.btn-blue{
+    background-color: #394ccf;
+    color: #fff;
+    font-size: 26px;
+    padding: 7px 30px 9px;
+    border-radius: 26px;
+    box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+    -webkit-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+    -moz-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+} 
+.btn-blue:hover,
+.btn-blue:focus{
+    color: #fff;
+}
+.btn-white{
+    background-color: #fff;
+    color: #061058;
+    font-size: 26px;
+    font-weight: 500;
+    padding: 7px 30px 9px;
+    border-radius: 26px;
+    box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+    -webkit-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+    -moz-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+}
+.btn-white.btn-sm{
+    font-size: 16px;
+    padding: 4px 18px 4px;
+}
+.btn-white:hover,
+.btn-white:focus{
+    color: #061058;
+}
+.container-fluid{
+    overflow: hidden;
+}
+/* .inner-container .row{
+    margin-left: 0;
+    margin-right: 0;
+} */
+/* ===== COMMAN CSS CLASSES ENDS===== */
+
+
+/* ===== HEADER CSS START ===== */
+.navbar-brand img{
+    height: 32px;
+}
+.menu-icon{
+    width: 25px;
+}
+/* ===== HEADER CSS START ===== */
+
+
+/* ===== HERO BANNER CSS START ===== */
+.heading,
+.subheading {
+    text-shadow: 4px 4px 35px rgb(57 76 207 / 35%);
+}
+.hero-banner{
+    padding-bottom: 100px;
+    padding-top: 30px;
+}
+.inner-container{
+    max-width: 1280px;
+    margin: 0 auto;
+}
+.hero-banner p{
+    font-size: 28px;
+}
+.hero-banner .content-wrapper{
+    z-index: 11;
+}
+.shape-divider,.row-bg-wrap{
+    height: 100%;
+    position: absolute;
+    top: 0;
+    margin-left: -50vw;
+    left: 50%;
+    width: 100vw;
+}
+.row-bg-wrap .row-bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    -webkit-background-size: cover;
+}
+.hero-banner .row-bg-wrap .row-bg{
+    background-image: url(../img/banner-error-analysis-new.png);
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+.shape-img {
+    width: 100%;
+    left: 0;
+    bottom: -1px;
+    height: 100%;
+    position: absolute;
+}
+.shape-divider[data-position="top"]{
+    top: -2px;
+    bottom: auto;
+    /* transform: rotate(180deg); */
+}
+.shape-divider[data-position="bottom"]{
+    top: auto;
+    bottom: -2px;
+    transform: rotate(180deg);
+}
+/* ===== HERO BANNER CSS ENDS ===== */
+
+
+/* ===== HERO BANNER TAB SECTION CSS START ===== */
+.tab-container{
+    padding: 18px 25px 20px;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    background-color: #fff;
+    max-width: 580px;
+}
+.tab-container .nav-pills .nav-link{
+    background-color: transparent;
+    font-size: 28px;
+    font-weight: 700;
+    color: #061058;
+    padding: 4px 8px;
+    opacity: 0.5;
+}
+.tab-container .nav-pills .nav-link.active, .tab-container .nav-pills .show>.nav-link{
+    background-color: transparent;
+    border-bottom: 1px solid #30bddc;
+    border-radius: 0;
+    opacity: 1;
+}
+
+.tab-container .tab-content>.tab-pane p{
+    font-size: 20px;
+    font-weight: 400;
+    color: #061058;
+}
+/* ===== HERO BANNER TAB SECTION CSS ENDS ===== */
+
+
+/* ===== GET STARTED CSS START ===== */
+.get-started-container .row-eq-height{
+    z-index: 11;
+}
+.get-started-container .btn-wrapper{
+    margin-bottom: 40px;
+}
+.why-error-wrapper{
+    max-width: 920px;
+}
+.shadow-box{
+    height: 100%;
+    background-color: #fff;
+    padding: 25px 40px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 12px 0px rgb(0 0 0 / 20%);
+    -webkit-box-shadow: 0px 0px 12px 0px rgb(0 0 0 / 20%);
+    -moz-box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.2);
+}
+.shadow-box img{
+    height: 70px;
+    margin-bottom: 12px;
+}
+/* ===== GET STARTED CSS END ===== */
+
+
+/* ===== ERROR WORKS CSS START ===== */
+.error-work-container{
+    margin-top: -25px;
+}
+.error-work-wrapper{
+    padding-top: 150px;
+    padding-bottom: 20px;
+    z-index: 11;
+    max-width: 960px;
+}
+.error-work-wrapper h4{
+    font-size: 32px;
+}
+.error-work-wrapper .img-box-wrapper{
+    max-width: 445px;
+}
+.error-work-wrapper .img-box-wrapper img{
+    border-radius: 20px;
+    max-width: 90%;
+    box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+    -webkit-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+    -moz-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+}
+.error-work-wrapper .custom-box-wrapper img{
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+.error-work-wrapper .custom-box-wrapper{
+    background: #fff;
+    padding: 20px 4px;
+    max-width: 440px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 30px 2px rgb(57 76 207 / 49%);
+    -webkit-box-shadow: 2px 2px 30px 2px rgb(57 76 207 / 49%);
+    -moz-box-shadow: 2px 2px 30px 2px rgba(57,76,207,0.49);
+}
+.error-work-container .row-bg-wrap .row-bg{
+    background-image: linear-gradient(to top, #0c1765, #30bddc);
+}
+/* ===== ERROR WORKS CSS START ===== */
+
+
+/* ===== EXPLORE TOOLKIT CSS START ===== */
+.explore-toolkit-container{
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+.explore-toolkit-container .btn-wrapper{
+    max-width: 600px;
+}
+.explore-toolkit-container a{
+    color:#394ccf;
+    text-decoration: underline;
+}
+/* ===== EXPLORE TOOLKIT CSS ENDS ===== */
+
+.intall-error-container{
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+.intall-error-container .content-wrapper{
+    z-index: 11;
+    max-width: 960px;
+}
+/* ===== CONTRIBUTE ERROR ANALYSIS CSS START ===== */
+.contribute-error-container{
+    padding-top: 90px;
+    padding-bottom: 90px;
+}
+.contribute-error-container .contribute-error-wrapper{
+    /* background-color: #394ccf;
+    color: #fff; */
+    position: relative;
+    z-index: 11;
+    max-width: 960px;
+}
+.contribute-error-container .row-bg-wrap .row-bg{
+    background-color: #394ccf;
+}
+/* ===== CONTRIBUTE ERROR ANALYSIS CSS END ===== */
+
+
+/* ===== FOOTER CSS CLASSES ===== */
+.footer-container{
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.footer-content{
+    z-index: 11;
+}
+.footer-content ul{
+    list-style: none;
+}
+.footer-content ul li{
+    margin-bottom: 8px;
+}
+.footer-content ul li a{
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+}
+.footer-logo{
+    height: 30px;
+}
+/* ===== FOOTER CSS CLASSES ===== */
+

@@ -1,0 +1,316 @@
+/* FOOTER MEDIA QUERY:START */
+@media only screen and (min-width: 1366px) and (max-width: 1500px){
+    
+}
+@media only screen and (min-width: 1199px) and (max-width: 1366px) {
+    
+    .inner-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .btn-white,
+    .btn-blue {
+        font-size: 26px;
+    }
+    .shadow-box{
+        padding: 25px 30px;
+    }
+    h1 {
+        font-size: 90px;
+    }
+    h2 {
+        font-size: 46px;
+    }
+    h3{
+        font-size: 40px;
+    }
+    .hero-banner p {
+        font-size: 26px;
+    }
+}
+@media only screen and (min-width: 991px) and (max-width: 1199px) {
+
+    .inner-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    h1 {
+        font-size: 75px;
+    }
+    h2 {
+        font-size: 40px;
+    }
+    h3{
+        font-size: 36px;
+    }
+    h4{
+        font-size: 24px;
+    }
+    h5{
+        font-size: 24px;
+    }
+    p{
+        font-size: 20px;
+    }
+    .hero-banner p {
+        font-size: 26px;
+    }
+    .tab-container .nav-pills .nav-link{
+        font-size: 24px;
+    }
+    .tab-container .tab-content>.tab-pane p{
+        font-size: 18px;
+    }
+    .tab-container{
+        max-width: 480px;
+    }
+    .error-work-wrapper{
+        padding-top: 120px;
+    }
+    .contribute-error-container {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+    .intall-error-container,
+    .explore-toolkit-container {
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+    .btn-white,
+    .btn-blue {
+        font-size: 24px;
+    }
+    .shadow-box {
+        padding: 25px 25px;
+    }
+}
+
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .inner-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .hero-banner {
+        padding-bottom: 90px;
+        padding-top: 20px;    
+    }
+    h1 {
+        font-size: 70px;
+    }
+    h2 {
+        font-size: 36px;
+    }
+    h3{
+        font-size: 34px;
+    }
+    h4{
+        font-size: 24px;
+    }
+    h5{
+        font-size: 20px;
+    }
+    p{
+        font-size: 18px;
+    }
+    .hero-banner p {
+        font-size: 24px;
+    }
+    .error-work-wrapper h4 {
+        font-size: 28px;
+    }
+    .tab-container .nav-pills .nav-link{
+        font-size: 22px;
+    }
+    .tab-container .tab-content>.tab-pane p{
+        font-size: 18px;
+    }
+    .get-started-container .btn-wrapper {
+        margin-bottom: 30px;
+    }
+    .tab-container{
+        max-width: 500px;
+    }
+    .error-work-wrapper{
+        padding-top: 110px;
+    }
+    .contribute-error-container {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .intall-error-container,
+    .explore-toolkit-container {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+    .btn-white,
+    .btn-blue{
+        font-size: 22px;
+    }
+    .shadow-box{
+        padding: 20px 20px;
+    }
+}
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .inner-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    h1 {
+        font-size: 60px;
+    }
+    h2 {
+        font-size: 32px;
+    }
+    h3{
+        font-size: 32px;
+    }
+    h4{
+        font-size: 26px;
+    }
+    h5{
+        font-size: 24px;
+    }
+    p{
+        font-size: 16px;
+    }
+    .hero-banner p {
+        font-size: 20px;
+    }
+    .error-work-wrapper h4 {
+        font-size: 26px;
+    }
+    .tab-container .nav-pills .nav-link{
+        font-size: 20px;
+    }
+    .tab-container .tab-content>.tab-pane p{
+        font-size: 16px;
+    }
+    .get-started-container .btn-wrapper {
+        margin-bottom: 30px;
+    }
+    .tab-container{
+        max-width: 460px;
+    }
+    .error-work-wrapper{
+        padding-top: 40px;
+        padding-bottom: 20px;
+        max-width: 500px;
+    }
+    .error-work-wrapper .img-box-wrapper{
+        text-align: center;
+    }
+     .contribute-error-container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .explore-toolkit-container,
+    .intall-error-container {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+    .footer-container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .shadow-box{
+        padding: 20px 20px;
+    }
+    .btn-white, .btn-blue {
+        font-size: 20px;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .hero-banner {
+        padding-bottom: 70px;
+        padding-top: 20px;
+    }
+    .footer-content ul li a {
+        font-size: 18px;
+    }
+    .hero-banner .row-bg-wrap .row-bg {
+        background-position: bottom right;
+    }
+    .hero-banner .row-bg-wrap .row-bg-overlay{
+        position: absolute;
+        left: 0;
+        right: 0;
+        background-color: rgb(0 0 0 / 30%);
+        width: 100%;
+        bottom: 30px;
+        top: 0px;
+    }
+    .error-work-container {
+        margin-top: 40px;
+    }
+    .error-work-wrapper .custom-box-wrapper{
+        margin: 0 auto;
+    }
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+    .inner-container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    h1 {
+        font-size: 48px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    h3{
+        font-size: 28px;
+    }
+    h4{
+        font-size: 24px;
+    }
+    h5{
+        font-size: 24px;
+    }
+    p{
+        font-size: 16px;
+    }
+    .error-work-wrapper h4 {
+        font-size: 24px;
+    }
+    .hero-banner p {
+        font-size: 18px;
+    }
+    .tab-container .nav-pills .nav-link{
+        font-size: 20px;
+    }
+    .tab-container .tab-content>.tab-pane p{
+        font-size: 16px;
+    }
+    .error-work-wrapper{
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+     .contribute-error-container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .explore-toolkit-container,
+    .intall-error-container {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+    .footer-container {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    .shadow-box{
+        padding: 20px 20px;
+    }
+    .btn-white, .btn-blue {
+        font-size: 20px;
+    }
+    .get-started-container .btn-wrapper {
+        margin-bottom: 30px;
+    }
+    .tab-container {
+        padding: 10px 15px 15px;
+    }
+}   
