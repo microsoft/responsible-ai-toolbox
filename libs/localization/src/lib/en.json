@@ -519,6 +519,7 @@
       "predictedProbability": "Predicted probability",
       "predictedY": "Predicted Y",
       "evalData": "Evaluation dataset",
+      "globalFeatureImportance": "Global feature importance",
       "localFeatureImportance": "Local feature importance",
       "inconsistentDimensions": "Inconsistent dimensions. {0} has dimensions {1}, expected {2}",
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
