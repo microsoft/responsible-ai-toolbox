@@ -309,7 +309,7 @@ export class CohortEditor extends React.PureComponent<
     _ev?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!this.state.openedFilter || !item?.key) {
+    if (!this.state.openedFilter || (!item?.key && item?.key !== 0)) {
       return;
     }
     const openedFilter = this.state.openedFilter;
