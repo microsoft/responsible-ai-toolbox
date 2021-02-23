@@ -652,7 +652,9 @@
       "cancel": "Cancel"
     },
     "MatrixArea": {
-      "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions."
+      "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions.",
+      "selectAll": "Select all",
+      "clearAll": "Clear all"
     },
     "MatrixLegend": {
       "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
