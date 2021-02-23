@@ -155,6 +155,7 @@ export class TabularDataView extends React.Component<
       );
       isCustomPointsView = true;
     } else {
+      this.props.selectedCohort.cohort.sort();
       const cohortData = this.props.selectedCohort.cohort.filteredData;
       const numRows: number = cohortData.length;
       let viewedRows: number = numRows;

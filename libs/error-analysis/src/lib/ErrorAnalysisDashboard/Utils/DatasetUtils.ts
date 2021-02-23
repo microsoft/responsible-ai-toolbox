@@ -9,7 +9,8 @@ export function constructRows(
   jointDataset: JointDataset,
   viewedRows: number,
   filterFunction?: (row: { [key: string]: number }) => boolean,
-  indexes?: number[]
+  indexes?: number[],
+  colors?: string[]
 ): any[] {
   const rows = [];
   for (let i = 0; i < viewedRows; i++) {
@@ -28,11 +29,14 @@ export function constructRows(
     );
     const tableRow = [];
     tableRow.push(row[JointDataset.IndexLabel]);
+    if (colors) {
+      tableRow.push(colors[i]);
+    }
     if (jointDataset.hasTrueY) {
-      tableRow.push(row[JointDataset.TrueYLabel]);
+      pushRowData(tableRow, JointDataset.TrueYLabel, jointDataset, row);
     }
     if (jointDataset.hasPredictedY) {
-      tableRow.push(row[JointDataset.PredictedYLabel]);
+      pushRowData(tableRow, JointDataset.PredictedYLabel, jointDataset, row);
     }
     tableRow.push(...data);
     rows.push(tableRow);
@@ -62,7 +66,8 @@ export function constructCols(
   viewedCols: number,
   featureNames: string[],
   jointDataset: JointDataset,
-  isCustomPointsView: boolean
+  isCustomPointsView: boolean,
+  hasColors = false
 ): IColumn[] {
   const columns: IColumn[] = [];
   columns.push({
@@ -74,6 +79,17 @@ export function constructCols(
     name: "Index"
   });
   let index = 1;
+  if (hasColors) {
+    columns.push({
+      fieldName: `${index}`,
+      isResizable: true,
+      key: `color`,
+      maxWidth: 100,
+      minWidth: 50,
+      name: "Color"
+    });
+    index++;
+  }
   if (!isCustomPointsView && jointDataset.hasTrueY) {
     columns.push({
       fieldName: `${index}`,
@@ -108,4 +124,18 @@ export function constructCols(
     index += 1;
   }
   return columns;
+}
+
+function pushRowData(
+  tableRow: any[],
+  property: string,
+  jointDataset: JointDataset,
+  row: { [key: string]: number }
+): void {
+  if (jointDataset.metaDict[property].isCategorical) {
+    const categories = jointDataset.metaDict[property].sortedCategoricalValues!;
+    tableRow.push(categories[row[property]]);
+  } else {
+    tableRow.push(row[property]);
+  }
 }

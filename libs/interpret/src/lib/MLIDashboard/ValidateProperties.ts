@@ -155,7 +155,7 @@ export class ValidateProperties {
         !this.validate2D(
           globalExp,
           [this.featureLength, this.classLength],
-          localization.Interpret.ValidationErrors.localFeatureImportance
+          localization.Interpret.ValidationErrors.globalFeatureImportance
         )
       ) {
         this.props.precomputedExplanations.globalFeatureImportance = undefined;
@@ -164,7 +164,7 @@ export class ValidateProperties {
       !this.validate1D(
         globalExp,
         this.featureLength,
-        localization.Interpret.ValidationErrors.localFeatureImportance
+        localization.Interpret.ValidationErrors.globalFeatureImportance
       )
     ) {
       this.props.precomputedExplanations.globalFeatureImportance = undefined;

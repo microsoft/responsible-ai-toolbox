@@ -13,7 +13,8 @@ import {
   ITheme,
   PrimaryButton,
   ChoiceGroup,
-  Stack
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -63,6 +64,12 @@ const inspectButtonStyles: IStackItemStyles = {
   }
 };
 
+enum SelectionType {
+  CorrectSelectionType = "CorrectSelectionType",
+  IncorrectSelectionType = "IncorrectSelectionType",
+  AllSelectionType = "AllSelectionType"
+}
+
 export class InstanceView extends React.Component<
   IInstanceViewProps,
   IInstanceViewState
@@ -82,6 +89,7 @@ export class InstanceView extends React.Component<
     const classNames = InstanceViewStyles();
     this.choiceItems.push({
       key: PredictionTabKeys.CorrectPredictionTab,
+      onRenderLabel: this.onRenderLabel(SelectionType.CorrectSelectionType),
       styles: {
         root: classNames.choiceItemRootStyle
       },
@@ -89,6 +97,7 @@ export class InstanceView extends React.Component<
     });
     this.choiceItems.push({
       key: PredictionTabKeys.IncorrectPredictionTab,
+      onRenderLabel: this.onRenderLabel(SelectionType.IncorrectSelectionType),
       styles: {
         root: classNames.choiceItemRootStyle
       },
@@ -96,6 +105,7 @@ export class InstanceView extends React.Component<
     });
     this.choiceItems.push({
       key: PredictionTabKeys.AllSelectedTab,
+      onRenderLabel: this.onRenderLabel(SelectionType.AllSelectionType),
       styles: {
         root: classNames.choiceItemRootStyle
       },
@@ -150,7 +160,7 @@ export class InstanceView extends React.Component<
             </Stack.Item>
             <Stack.Item align="end" styles={inspectButtonStyles}>
               <PrimaryButton
-                text="Inspect"
+                text={localization.ErrorAnalysis.InstanceView.inspect}
                 onClick={this.inspect.bind(this)}
                 allowDisabledFocus
                 disabled={false}
@@ -357,4 +367,53 @@ export class InstanceView extends React.Component<
     };
     this.setState(reloadDataFunc);
   }
+
+  private onRenderLabel = (type: SelectionType) => (
+    p: IChoiceGroupOption | undefined
+  ) => {
+    const classNames = InstanceViewStyles();
+    let selectionText = "";
+    switch (type) {
+      case SelectionType.AllSelectionType:
+        selectionText = localization.formatString(
+          localization.ErrorAnalysis.InstanceView.selection,
+          this.state.selectionDetails.selectedAllSelectedIndexes.length
+        );
+        break;
+      case SelectionType.CorrectSelectionType:
+        selectionText = localization.formatString(
+          localization.ErrorAnalysis.InstanceView.selection,
+          this.state.selectionDetails.selectedCorrectDatasetIndexes.length
+        );
+        break;
+      case SelectionType.IncorrectSelectionType:
+        selectionText = localization.formatString(
+          localization.ErrorAnalysis.InstanceView.selection,
+          this.state.selectionDetails.selectedIncorrectDatasetIndexes.length
+        );
+        break;
+      default:
+        break;
+    }
+    const stackItemStyles: IStackItemStyles = {
+      root: classNames.stackItemsStyle
+    };
+    const textStyle = {
+      root: classNames.selectedTextStyle
+    };
+    return (
+      <Stack>
+        <Stack.Item align="start">
+          <span id={p!.labelId} className="ms-ChoiceFieldLabel">
+            {p!.text}
+          </span>
+        </Stack.Item>
+        <Stack.Item align="start" styles={stackItemStyles}>
+          <Text variant="small" styles={textStyle}>
+            {selectionText}
+          </Text>
+        </Stack.Item>
+      </Stack>
+    );
+  };
 }

@@ -8,26 +8,30 @@ import {
   mergeStyles
 } from "office-ui-fabric-react";
 
+import { ColorPalette } from "../../ColorPalette";
+
 export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
-  mainFrame: IStyle;
-  treeDescription: IStyle;
-  svgOuterFrame: IStyle;
-  innerFrame: IStyle;
-  node: IStyle;
-  nodeText: IStyle;
-  nopointer: IStyle;
-  linkLabel: IStyle;
   detailLines: IStyle;
   details: IStyle;
+  errorRateGradientStyle: IStyle;
+  filledNodeText: IStyle;
+  innerFrame: IStyle;
   innerOpacityToggle: IStyle;
+  linkLabel: IStyle;
+  linkLabelsTransitionGroup: IStyle;
+  linksTransitionGroup: IStyle;
+  mainFrame: IStyle;
+  node: IStyle;
+  nodeText: IStyle;
+  nodesTransitionGroup: IStyle;
+  nopointer: IStyle;
   opacityToggleRect: IStyle;
   opacityToggleCircle: IStyle;
-  errorRateGradientStyle: IStyle;
-  linksTransitionGroup: IStyle;
-  nodesTransitionGroup: IStyle;
-  linkLabelsTransitionGroup: IStyle;
+  svgOuterFrame: IStyle;
+  treeDescription: IStyle;
+  tooltipTransitionGroup: IStyle;
 }
 
 export const treeViewRendererStyles: () => IProcessedStyleSet<
@@ -40,6 +44,12 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     fontWeight: "bold",
     pointerEvents: "none",
     textAnchor: "middle"
+  };
+  const nodeTextStyle = {
+    fontSize: "10px",
+    fontWeight: "bolder",
+    pointerEvents: "none",
+    transform: "translate(0px, 0px)"
   };
   return mergeStyleSets<ITreeViewRendererStyles>({
     clickedNodeDashed: {
@@ -66,6 +76,12 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     errorRateGradientStyle: {
       transform: "translate(100px, 60px)"
     },
+    filledNodeText: mergeStyles([
+      nodeTextStyle,
+      {
+        fill: ColorPalette.ErrorAnalysisLightText
+      }
+    ]),
     innerFrame: {
       height: "100%",
       margin: "0",
@@ -106,12 +122,12 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     nodesTransitionGroup: {
       transform: "translate(0px, 90px)"
     },
-    nodeText: {
-      fill: "#555",
-      fontSize: "9px",
-      pointerEvents: "none",
-      transform: "translate(0px, 0px)"
-    },
+    nodeText: mergeStyles([
+      nodeTextStyle,
+      {
+        fill: ColorPalette.ErrorAnalysisDarkGreyText
+      }
+    ]),
     nopointer: {
       pointerEvents: "none"
     },
@@ -125,6 +141,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       margin: "0",
       padding: "0",
       width: "100%"
+    },
+    tooltipTransitionGroup: {
+      transform: "translate(40px, 90px)"
     },
     treeDescription: {
       padding: "30px 0px 0px 35px"

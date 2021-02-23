@@ -5,7 +5,7 @@ export interface IAppConfig {
   dashboardType:
     | "Fairness"
     | "Interpret"
-    | "DebugML"
+    | "ErrorAnalysis"
     | "ModelPerformance"
     | "ModelAssessment";
   id: string;
