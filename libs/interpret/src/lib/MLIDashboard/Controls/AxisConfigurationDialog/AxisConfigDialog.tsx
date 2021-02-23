@@ -203,17 +203,18 @@ export class AxisConfigDialog extends React.PureComponent<
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
-                {selectedMeta.featureRange?.rangeType ===
-                  RangeTypes.Integer && (
-                  <Checkbox
-                    key={this.state.selectedColumn.property}
-                    label={
-                      localization.Interpret.AxisConfigDialog.TreatAsCategorical
-                    }
-                    checked={selectedMeta.treatAsCategorical}
-                    onChange={this.setAsCategorical}
-                  />
-                )}
+                {selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
+                  this.allowUserInteract() && (
+                    <Checkbox
+                      key={this.state.selectedColumn.property}
+                      label={
+                        localization.Interpret.AxisConfigDialog
+                          .TreatAsCategorical
+                      }
+                      checked={selectedMeta.treatAsCategorical}
+                      onChange={this.setAsCategorical}
+                    />
+                  )}
                 {selectedMeta.treatAsCategorical ? (
                   <>
                     <Text variant={"small"}>
@@ -287,7 +288,8 @@ export class AxisConfigDialog extends React.PureComponent<
                       this.props.mustBin ||
                       this.state.selectedColumn.options.bin
                     ) &&
-                      this.props.canDither && (
+                      this.props.canDither &&
+                      this.allowUserInteract() && (
                         <Checkbox
                           key={this.state.selectedColumn.property}
                           label={
@@ -524,4 +526,8 @@ export class AxisConfigDialog extends React.PureComponent<
     }
     return binCount;
   }
+
+  private readonly allowUserInteract = (): boolean => {
+    return this.state.selectedColumn.property !== JointDataset.IndexLabel;
+  };
 }
