@@ -19,6 +19,8 @@ export interface IMatrixAreaState {
   selectedCells?: boolean[];
   matrixFeature1: string;
   matrixFeature2: string;
+  disableClearAll: boolean;
+  disableSelectAll: boolean;
 }
 
 export function createInitialMatrixFilterState(): IMatrixFilterState {
@@ -31,6 +33,8 @@ export function createInitialMatrixFilterState(): IMatrixFilterState {
 
 export function createInitialMatrixAreaState(): IMatrixAreaState {
   return {
+    disableClearAll: true,
+    disableSelectAll: false,
     jsonMatrix: undefined,
     matrixFeature1: noFeature,
     matrixFeature2: noFeature,
