@@ -84,7 +84,7 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-# html_logo = "_static/images/<filename>.png"
+html_logo = "landing_page/img/error-analysis-logo.svg"
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
