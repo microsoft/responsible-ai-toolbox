@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Error Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="shortcut icon"
+      type="./images/x-icon"
+      href="./img/erroranalysis-favicon.ico"
+    />
+    <meta property="og:title" content="Error Analysis" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="A toolkit to help analyze and improve model accuracy."
+    />
+    <meta property="og:image" content="./img/erroranalysis-meta-image.jpg" />
+    <meta property="og:url" content="https://erroranalysis.io/" />
+    <!-- ====== Bootstrap CDN ====== -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="./css/custom.css?v1.1" />
+    <link rel="stylesheet" href="./css/responsive.css?v1.1" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <!-- ========= INNER CONTAINER START ========== -->
+      <div class="inner-container">
+        <!-- ========= NAVBAR START ========== -->
+        <header>
+          <nav
+            class="navbar d-flex align-items-center px-0 py-3 navbar-expand-lg"
+          >
+            <a class="navbar-brand" href="javascript: void(0);">
+              <img
+                src="./img/error-analysis-logo.svg"
+                alt="Error Analysis logo"
+              />
+            </a>
+            <!-- <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ml-auto text-center">
+                            <li class="nav-item pr-0 pr-lg-4">
+                              <a class="nav-link" href="./raiwidgets.html">API Reference</a>
+                            </li>
+                        </ul>
+                    </div> -->
+          </nav>
+        </header>
+        <!-- ========= NAVBAR ENDS ========== -->
+
+        <!-- ========= HERO BANNER START ========== -->
+        <div class="row hero-banner position-relative">
+          <div class="col-12 col-sm-10 col-md-9 col-lg-7 content-wrapper">
+            <h1 class="heading text-white mb-1 font-weight-bold">
+              Error Analysis
+            </h1>
+            <h2 class="text-white subheading mb-3">
+              Identify & Diagnose Errors <br />Build Responsibly
+            </h2>
+            <p class="text-white mb-3 mb-md-4">
+              A toolkit to help analyze and improve model accuracy.
+            </p>
+            <div class="tab-container">
+              <ul class="nav nav-pills" role="tablist">
+                <li class="nav-item mr-4">
+                  <a class="nav-link active" data-toggle="pill" href="#identify"
+                    >Identify</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="pill" href="#diagnose"
+                    >Diagnose</a
+                  >
+                </li>
+              </ul>
+              <!-- Tab panes -->
+              <div class="tab-content pt-3">
+                <div id="identify" class="container tab-pane active px-2">
+                  <p class="mb-0 text-darkblue">
+                    Identify cohorts with high error rate versus benchmark and
+                    visualize how the error rate distributes.
+                  </p>
+                </div>
+                <div id="diagnose" class="container tab-pane fade px-2">
+                  <p class="mb-0 text-darkblue">
+                    Diagnose root causes by visually diving deeper into the
+                    characteristics of data and models.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-bg-wrap">
+            <div class="inner-wrap">
+              <div class="row-bg using-bg-color"></div>
+            </div>
+            <div class="row-bg-overlay"></div>
+          </div>
+          <!-- <div class="shape-divider" data-position="bottom" style="height:120px;">
+                    
+                </div> -->
+        </div>
+        <!-- ========= HERO BANNER ENDS ========== -->
+
+        <!-- ========= WHY ERROR ANALYSIS SECTION START ========== -->
+        <section class="get-started-container">
+          <div class="row">
+            <div class="col-12 text-center btn-wrapper pt-3">
+              <a
+                class="btn btn-blue"
+                href="https://github.com/microsoft/responsible-ai-widgets/#error-analysis-dashboard"
+                >Get Started</a
+              >
+            </div>
+            <div class="col-12 text-center why-error-wrapper mx-auto mb-4">
+              <h3 class="text-darkblue mb-3 font-weight-bold">
+                Why Error Analysis?
+              </h3>
+              <p class="text-lightblue">
+                Error Analysis is a Responsible AI toolkit that enables you to
+                get a deeper understanding of machine learning model errors.
+                When evaluating a machine learning model, aggregate accuracy is
+                not sufficient and single-score evaluation may hide important
+                conditions of inaccuracies. Use Error Analysis to identify
+                cohorts with higher error rates and diagnose the root causes
+                behind these errors.
+              </p>
+            </div>
+          </div>
+          <div class="row-eq-height row position-relative">
+            <div class="col-md-4 col-12 mb-4 mb-md-0">
+              <div class="shadow-box text-center">
+                <img src="./img/icon-1.svg" alt="Evaluate cohorts icon" />
+                <h4 class="text-darkblue font-weight-bold">Evaluate Cohorts</h4>
+                <p class="text-lightblue mb-0">
+                  Learn how errors distribute across different cohorts at
+                  different levels of granularity
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4 col-12 mb-4 mb-md-0">
+              <div class="shadow-box text-center">
+                <img src="./img/icon-2.svg" alt="Explore predictions icon" />
+                <h4 class="text-darkblue font-weight-bold">
+                  Explore Predictions
+                </h4>
+                <p class="text-lightblue mb-0">
+                  Use built-in interpretability features or combine with
+                  InterpretML for boosted debugging capability
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4 col-12">
+              <div class="shadow-box text-center">
+                <img src="./img/icon-3.svg" alt="Interactive dashboard icon" />
+                <h4 class="text-darkblue font-weight-bold">
+                  Interactive Dashboard
+                </h4>
+                <p class="text-lightblue mb-0">
+                  View customizable pre-built visuals to quickly identify errors
+                  and diagnose root causes
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- ========= WHY ERROR ANALYSIS SECTION ENDS ========== -->
+
+        <!-- ========= HOW ERROR ANALYSIS WORKS SECTION START ========== -->
+        <section class="error-work-container position-relative">
+          <div class="error-work-wrapper position-relative mx-auto">
+            <div class="text-center pb-4">
+              <h3 class="text-white mb-4 mb-md-5 font-weight-bold">
+                How Error Analysis Works
+              </h3>
+              <h4 class="text-white font-weight-bold">Identification</h4>
+              <p class="text-white px-0 px-md-5">
+                Error Analysis identifies cohorts of data with higher error rate
+                than the overall benchmark. These discrepancies might occur when
+                the system or model underperforms for specific demographic
+                groups or infrequently observed input conditions in the training
+                data.
+              </p>
+            </div>
+            <div class="text-white text-center">
+              <h5 class="mb-4">Different Methods for Error Identification</h5>
+            </div>
+            <div class="row text-white mb-4">
+              <div class="col-12 col-md-6 order-md-2">
+                <p class="mb-2 font-weight-bold">Decision Tree</p>
+                <p>
+                  Discover cohorts with high error rates across multiple
+                  features using the binary tree visualization. Investigate
+                  indicators such as error rate, error coverage, and data
+                  representation for each discovered cohort.
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="img-box-wrapper">
+                  <img src="./img/identification1.jpg" />
+                </div>
+              </div>
+            </div>
+            <div class="row text-white mb-5">
+              <div class="col-12 col-md-6 order-md-2">
+                <p class="mb-2 font-weight-bold">Error Heatmap</p>
+                <p>
+                  Once you form hypotheses of the most impactful features for
+                  error, use the error heatmap to further investigate how one or
+                  two input features impact the error rate across cohorts.
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="img-box-wrapper">
+                  <img src="./img/identification2.jpg" />
+                </div>
+              </div>
+            </div>
+            <div class="text-center text-white">
+              <h4>Diagnosis</h4>
+              <p class="mb-4 pb-2 px-0 px-md-5">
+                After identifying cohorts with high error rates, Error Analysis
+                enables you to understand the reasons behind the error rates so
+                you can take corrective actions.
+              </p>
+            </div>
+
+            <div class="row text-white mb-4">
+              <div class="col-12 text-center">
+                <h5 class="mb-4">Different Methods for Error Diagnosis</h5>
+              </div>
+              <div class="col-12 col-md-6 order-md-2">
+                <p class="mb-2 font-weight-bold">Data Exploration</p>
+                <p>
+                  Explore dataset statistics and feature distributions. Compare
+                  cohort statistics with other cohorts or to benchmark.
+                  Investigate whether certain cohorts are underrepresented or
+                  their feature distribution is significantly different from the
+                  overall data.
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="img-box-wrapper">
+                  <img src="./img/diagnosis1.jpg" />
+                </div>
+              </div>
+            </div>
+            <div class="row text-white mb-4">
+              <div class="col-12 col-md-6 order-md-2">
+                <p class="mb-2 font-weight-bold">Global Explanation</p>
+                <p>
+                  Explore the most important features that impact the model
+                  global explanation of a selected cohort. Understand how values
+                  of features impact model predictions. Compare explanations of
+                  your selected cohorts with other cohorts or benchmark.
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="img-box-wrapper">
+                  <img src="./img/diagnosis2.jpg" />
+                </div>
+              </div>
+            </div>
+            <div class="row text-white mb-4">
+              <div class="col-12 col-md-6 order-md-2">
+                <p class="mb-2 font-weight-bold">Local Explanation</p>
+                <p>
+                  Analyze the selected cohort's datapoints in instance view,
+                  divided by correct or incorrect predictions. Visually examine
+                  for missing features or label noises as potential causes for
+                  incorrect predictions. Understand which features have the most
+                  impact to each data point's predictions. Observe individual
+                  conditional expectation plots.
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="img-box-wrapper">
+                  <img src="./img/diagnosis3.jpg" />
+                </div>
+              </div>
+            </div>
+            <div class="row text-white mb-4">
+              <div class="col-12 col-md-6 order-md-2">
+                <p class="mb-2 font-weight-bold">What-if Analysis</p>
+                <p>
+                  Apply changes to feature values of a selected data point and
+                  observe the resulting change to the prediction.
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="img-box-wrapper">
+                  <img src="./img/what-if.jpg" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row-bg-wrap">
+            <div class="inner-wrap">
+              <div
+                class="row-bg using-bg-color"
+                style="background-color: #30bddc"
+              ></div>
+            </div>
+            <div class="row-bg-overlay"></div>
+          </div>
+        </section>
+        <!-- ========= HOW ERROR ANALYSIS WORKS SECTION START ========== -->
+
+        <!-- ========= INSTALL ERROR ANALYSIS SECTION START ========== -->
+        <section class="position-relative intall-error-container">
+          <div
+            class="d-sm-flex content-wrapper position-relative mx-auto justify-content-between text-sm-left text-center"
+          >
+            <h3 class="text-darkblue font-weight-bold">Getting Started</h3>
+            <a
+              class="btn btn-blue"
+              href="https://github.com/microsoft/responsible-ai-widgets/#getting-started"
+              >Install Error Analysis</a
+            >
+          </div>
+          <div class="row-bg-wrap">
+            <div class="inner-wrap">
+              <div class="row-bg using-bg-color"></div>
+            </div>
+            <div class="row-bg-overlay"></div>
+          </div>
+        </section>
+        <!-- ========= INSTALL ERROR ANALYSIS SECTION ENDS ========== -->
+
+        <!-- ========= CONTRIBUTE ERROR ANALYSIS SECTION START ========== -->
+        <section class="contribute-error-container position-relative">
+          <div class="contribute-error-wrapper mx-auto">
+            <div class="row align-items-center text-white">
+              <div class="col-md-9 mb-3 mb-md-0">
+                <h3 class="font-weight-bold">Contribute To Error Analysis</h3>
+                <p class="mb-0">
+                  We encourage you to join the effort and contribute feedback,
+                  algorithms, ideas and more, so we can evolve the toolkit
+                  together! Example contributions may include novel
+                  visualizations, failure explanation algorithms, improved UX
+                  experience, or further integration with other toolkits in
+                  Responsible AI.
+                </p>
+              </div>
+              <div class="col-md-3 text-center text-md-right">
+                <a
+                  class="btn btn-white"
+                  href="https://github.com/microsoft/responsible-ai-widgets/blob/main/CONTRIBUTING.md"
+                  >Contribute</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row-bg-wrap">
+            <div class="inner-wrap">
+              <div class="row-bg using-bg-color"></div>
+            </div>
+            <div class="row-bg-overlay"></div>
+          </div>
+        </section>
+        <!-- ========= CONTRIBUTE ERROR ANALYSIS SECTION ENDS ========== -->
+
+        <!-- ========= EXPLORE SECTION START ========== -->
+        <section class="explore-toolkit-container">
+          <div class="text-center">
+            <h3 class="text-darkblue mb-3 font-weight-bold">
+              Explore other Responsible AI toolkits
+            </h3>
+            <p class="text-lightblue">
+              Assess fairness & mitigate unfairness using
+              <a href="https://fairlearn.github.io/">Fairlearn</a>
+            </p>
+            <p class="text-lightblue mb-0">
+              Understand model behaviors using
+              <a href="https://interpret.ml/">InterpretML</a>
+            </p>
+          </div>
+          <!-- <div class="d-flex btn-wrapper justify-content-around mx-auto">
+                    <button class="btn btn-blue">API Docs</button>
+                    <button class="btn btn-blue">Get Started</button>
+                </div> -->
+        </section>
+        <!-- ========= EXPLORE SECTION ENDS ========== -->
+
+        <!-- ========= FOOTER SECTION START ========== -->
+        <footer class="position-relative footer-container">
+          <div
+            class="footer-content position-relative text-center text-sm-left"
+          >
+            <div class="row mb-4 mb-md-5">
+              <div class="col-sm-3 col-md-2 col-12 mb-3 mb-md-0">
+                <h5 class="text-white">Resources</h5>
+              </div>
+              <div class="col-sm-4 col-md-3 col-12 mb-3 mb-md-0">
+                <ul class="m-0 p-0">
+                  <li>
+                    <a
+                      href="https://techcommunity.microsoft.com/t5/azure-ai/responsible-machine-learning-with-error-analysis/ba-p/2141774"
+                      >Developer blog</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="https://github.com/microsoft/responsible-ai-widgets/tree/main/notebooks"
+                      >Tutorial notebooks</a
+                    >
+                  </li>
+                  <li><a href="./raiwidgets.html">API Reference</a></li>
+                </ul>
+              </div>
+            </div>
+            <div
+              class="text-white d-sm-flex align-items-center justify-content-between"
+            >
+              <div class="d-sm-flex mr-sm-3 mr-0 mb-3 mb-sm-0">
+                <img
+                  class="footer-logo mr-4 mb-2 mb-sm-0"
+                  src="./img/error-analysis-logo-white.svg"
+                />
+                <p class="mb-0">
+                  Copyright &copy; 2021 Microsoft. All rights reserved.
+                </p>
+              </div>
+              <div>
+                <a
+                  href="https://github.com/microsoft/responsible-ai-widgets"
+                  class="btn btn-white btn-sm"
+                  >GitHub</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row-bg-wrap">
+            <div class="inner-wrap">
+              <div
+                class="row-bg using-bg-color"
+                style="background-color: #061058"
+              ></div>
+            </div>
+            <div class="row-bg-overlay"></div>
+          </div>
+        </footer>
+        <!-- ========= FOOTER SECTION ENDS ========== -->
+      </div>
+      <!-- ========= INNER CONTAINER ENDS ========== -->
+    </div>
+
+    <!-- ====== Bootstrap Script CDN ====== -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="./js/landing_page.js"></script>
+  </body>
+</html>

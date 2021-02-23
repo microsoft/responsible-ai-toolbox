@@ -96,6 +96,7 @@ export class InspectionView extends React.PureComponent<
       sortArray: [],
       sortingSeriesIndex: undefined
     };
+    this.props.selectedCohort.cohort.sort();
     const cohortData = this.props.selectedCohort.cohort.filteredData;
     const numRows: number = cohortData.length;
     const viewedRows: number = Math.min(

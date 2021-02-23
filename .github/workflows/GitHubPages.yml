@@ -27,8 +27,17 @@ jobs:
         run: make html
         working-directory: ./docs
 
+      - name: Disable jekyll builds
+        # By default GitHub attempts jekyll builds.
+        # Instead, we want the webpage to just point at index.html
+        run: touch docs/build/html/.nojekyll
+
+      - name: Create CNAME file
+        run: echo "erroranalysis.ai" > docs/build/html/CNAME
+
       - name: Deploy
-        if: ${{ github.event.type == 'PushEvent' }}
+        # only deploy if this is a push event on main
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

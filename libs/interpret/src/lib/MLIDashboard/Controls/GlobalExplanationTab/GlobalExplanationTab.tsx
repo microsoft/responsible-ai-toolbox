@@ -54,6 +54,7 @@ export interface IGlobalExplanationTabProps {
   weightLabels: Dictionary<string>;
   explanationMethod?: string;
   onWeightChange: (option: WeightVectorOption) => void;
+  initialCohortIndex?: number;
 }
 
 interface IGlobalExplanationTabState {
@@ -95,16 +96,20 @@ export class GlobalExplanationTab extends React.PureComponent<
       4,
       this.props.jointDataset.localExplanationFeatureCount
     );
+    let initialCohortIndex = 0;
+    if (this.props.initialCohortIndex !== undefined) {
+      initialCohortIndex = this.props.initialCohortIndex;
+    }
     this.state = {
       chartType: ChartTypes.Bar,
       crossClassInfoVisible: false,
       globalBarSettings: this.getDefaultSettings(),
       maxK: Math.min(30, this.props.jointDataset.localExplanationFeatureCount),
       minK,
-      selectedCohortIndex: 0,
+      selectedCohortIndex: initialCohortIndex,
       seriesIsActive: props.cohorts.map(() => true),
       sortArray: ModelExplanationUtils.getSortIndices(
-        this.props.cohorts[0].calculateAverageImportance()
+        this.props.cohorts[initialCohortIndex].calculateAverageImportance()
       ).reverse(),
       sortingSeriesIndex: 0,
       topK: minK

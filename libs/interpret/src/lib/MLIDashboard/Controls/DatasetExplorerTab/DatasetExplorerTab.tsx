@@ -37,6 +37,7 @@ export interface IDatasetExplorerTabProps {
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
   cohorts: Cohort[];
+  initialCohortIndex?: number;
 }
 
 export interface IDatasetExplorerTabState {
@@ -56,11 +57,15 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
+    let initialCohortIndex = 0;
+    if (this.props.initialCohortIndex !== undefined) {
+      initialCohortIndex = this.props.initialCohortIndex;
+    }
     this.state = {
       calloutVisible: false,
       chartProps: this.generateDefaultChartAxes(),
       colorDialogOpen: false,
-      selectedCohortIndex: 0,
+      selectedCohortIndex: initialCohortIndex,
       xDialogOpen: false,
       yDialogOpen: false
     };
