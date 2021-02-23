@@ -31,7 +31,7 @@ export class ModelExplanationUtils {
     return matrix[0].map((_, index) => matrix.map((row) => row[index]));
   }
 
-  // Take the L1 norm acroos the top index of a 3d array
+  // Take the L1 norm across the top index of a 3d array
   public static absoluteAverageTensor(input: number[][][]): number[][] {
     const rowLength = input.length;
     const featureLength = input[0].length;

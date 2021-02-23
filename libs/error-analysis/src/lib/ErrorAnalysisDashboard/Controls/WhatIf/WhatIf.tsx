@@ -276,6 +276,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     if (indexes.length === 0) {
       return undefined;
     }
+    this.props.currentCohort.cohort.sort();
     this.temporaryPoint = this.props.currentCohort.cohort.filteredData[
       indexes[0]
     ];

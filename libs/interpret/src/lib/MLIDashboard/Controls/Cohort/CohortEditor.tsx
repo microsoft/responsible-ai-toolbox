@@ -4,7 +4,10 @@
 import {
   ConfirmationDialog,
   IJointMeta,
-  JointDataset
+  JointDataset,
+  Cohort,
+  FilterMethods,
+  IFilter
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
@@ -22,9 +25,6 @@ import {
   IChoiceGroupOption
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
-
-import { Cohort } from "../../Cohort";
-import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorFilter } from "./CohortEditorFilter";
@@ -309,7 +309,7 @@ export class CohortEditor extends React.PureComponent<
     _ev?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!this.state.openedFilter || !item?.key) {
+    if (!this.state.openedFilter || (!item?.key && item?.key !== 0)) {
       return;
     }
     const openedFilter = this.state.openedFilter;

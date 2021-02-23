@@ -66,7 +66,7 @@ const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
 };
 const labelStyle: ILabelStyles = {
-  root: { alignSelf: "center", padding: "0px 10px 0px 0px" }
+  root: { alignSelf: "center", fontSize: "24px", padding: "0px 10px 0px 0px" }
 };
 const explanationButtonStyle: IButtonStyles = {
   root: { alignSelf: "center", padding: "0px 4px" }
@@ -91,11 +91,11 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
         {
           commandBarButtonAs: (): any => (
             <Label styles={labelStyle}>
-              {localization.ErrorAnalysis.MainMenu.errorDetectorLabel}
+              {localization.ErrorAnalysis.MainMenu.errorExplorerLabel}
             </Label>
           ),
-          key: "errorDetectorLabel",
-          text: "Error Detector Label"
+          key: "errorExplorerLabel",
+          text: "Error explorer label"
         },
         {
           commandBarButtonAs: (): any => (
@@ -106,8 +106,8 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
               onChange={this.handleErrorDetectorChanged}
             />
           ),
-          key: "errorDetector",
-          text: localization.ErrorAnalysis.MainMenu.errorDetector
+          key: "errorExplorer",
+          text: localization.ErrorAnalysis.MainMenu.errorExplorer
         }
       ];
     } else {

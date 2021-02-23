@@ -2,10 +2,12 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   ExpandableText,
   JointDataset,
   WeightVectorOption,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -22,10 +24,8 @@ import {
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { FabricStyles } from "../../FabricStyles";
 import { IGenericChartProps } from "../../IGenericChartProps";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
@@ -54,6 +54,7 @@ export interface IGlobalExplanationTabProps {
   weightLabels: Dictionary<string>;
   explanationMethod?: string;
   onWeightChange: (option: WeightVectorOption) => void;
+  initialCohortIndex?: number;
 }
 
 interface IGlobalExplanationTabState {
@@ -95,16 +96,20 @@ export class GlobalExplanationTab extends React.PureComponent<
       4,
       this.props.jointDataset.localExplanationFeatureCount
     );
+    let initialCohortIndex = 0;
+    if (this.props.initialCohortIndex !== undefined) {
+      initialCohortIndex = this.props.initialCohortIndex;
+    }
     this.state = {
       chartType: ChartTypes.Bar,
       crossClassInfoVisible: false,
       globalBarSettings: this.getDefaultSettings(),
       maxK: Math.min(30, this.props.jointDataset.localExplanationFeatureCount),
       minK,
-      selectedCohortIndex: 0,
+      selectedCohortIndex: initialCohortIndex,
       seriesIsActive: props.cohorts.map(() => true),
       sortArray: ModelExplanationUtils.getSortIndices(
-        this.props.cohorts[0].calculateAverageImportance()
+        this.props.cohorts[initialCohortIndex].calculateAverageImportance()
       ).reverse(),
       sortingSeriesIndex: 0,
       topK: minK

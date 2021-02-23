@@ -6,6 +6,9 @@
 /out-tsc
 /raiwidgets/raiwidgets/widget
 
+#debug file
+webpack.json
+rollup.json
 
 # dependencies
 **/node_modules/
@@ -56,3 +59,6 @@ apps/*-e2e/debug.log
 # notebook artifacts
 /notebooks/*.csv
 /notebooks/*.zip
+
+# docs
+docs/build

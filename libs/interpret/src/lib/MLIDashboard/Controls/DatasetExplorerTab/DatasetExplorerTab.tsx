@@ -6,6 +6,7 @@ import {
   JointDataset,
   ColumnCategories,
   cohortKey,
+  Cohort,
   IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -22,7 +23,6 @@ import {
 import React from "react";
 
 import { ChartTypes } from "../../ChartTypes";
-import { Cohort } from "../../Cohort";
 import { IGenericChartProps } from "../../IGenericChartProps";
 import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
@@ -37,6 +37,7 @@ export interface IDatasetExplorerTabProps {
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
   cohorts: Cohort[];
+  initialCohortIndex?: number;
 }
 
 export interface IDatasetExplorerTabState {
@@ -56,11 +57,15 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
+    let initialCohortIndex = 0;
+    if (this.props.initialCohortIndex !== undefined) {
+      initialCohortIndex = this.props.initialCohortIndex;
+    }
     this.state = {
       calloutVisible: false,
       chartProps: this.generateDefaultChartAxes(),
       colorDialogOpen: false,
-      selectedCohortIndex: 0,
+      selectedCohortIndex: initialCohortIndex,
       xDialogOpen: false,
       yDialogOpen: false
     };
@@ -340,7 +345,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       return;
     }
     const chartProps: IGenericChartProps = {
-      chartType: ChartTypes.Scatter,
+      chartType: ChartTypes.Histogram,
       colorAxis: {
         options: {},
         property: this.props.jointDataset.hasPredictedY

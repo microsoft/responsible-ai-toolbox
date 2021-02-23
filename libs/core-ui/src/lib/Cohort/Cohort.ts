@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
-
 import {
   IFilter,
   FilterMethods,
   ICompositeFilter,
   Operations
-} from "./Interfaces/IFilter";
-import { ModelExplanationUtils } from "./ModelExplanationUtils";
+} from "../Interfaces/IFilter";
+import { JointDataset } from "../util/JointDataset";
+import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
 export class Cohort {
   private static _cohortIndex = 0;
@@ -197,15 +196,20 @@ export class Cohort {
     if (!filteredData) {
       return [];
     }
-    if (this.filters.length > 0) {
+    const hasFilters = this.filters.length > 0;
+    const hasCompositeFilters = this.compositeFilters.length > 0;
+    if (hasFilters) {
       filteredData = filteredData.filter((row) =>
         this.filterRow(row, this.filters)
       );
     }
-    if (this.compositeFilters.length > 0) {
+    if (hasCompositeFilters) {
       filteredData = filteredData.filter((row) =>
         this.filterComposite(row, this.compositeFilters, Operations.And)
       );
+    }
+    if (!hasFilters && !hasCompositeFilters) {
+      filteredData = [...filteredData];
     }
     return filteredData;
   }

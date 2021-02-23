@@ -2,6 +2,9 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
+  ICompositeFilter,
+  IFilter,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isTwoDimArray,
@@ -13,11 +16,8 @@ import {
   WeightVectors
 } from "@responsible-ai/core-ui";
 import {
-  Cohort,
   DatasetExplorerTab,
-  GlobalExplanationTab,
-  ICompositeFilter,
-  IFilter
+  GlobalExplanationTab
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -526,7 +526,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             isOpen={this.state.openSaveCohort}
             onDismiss={(): void => this.setState({ openSaveCohort: false })}
             onSave={(savedCohort: ErrorCohort): void => {
-              let newCohorts = [savedCohort, ...this.state.cohorts];
+              let newCohorts = [...this.state.cohorts, savedCohort];
               newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
               this.setState({
                 cohorts: newCohorts,
@@ -577,7 +577,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 selectedCohort = editedCohort;
               }
               this.setState({
-                cohorts: [editedCohort, ...cohorts],
+                cohorts: [...cohorts, editedCohort],
                 selectedCohort
               });
             }}
@@ -606,7 +606,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
               );
               this.setState({
                 baseCohort: selectedCohort,
-                cohorts: [selectedCohort, ...cohorts],
+                cohorts: [...cohorts, selectedCohort],
                 selectedCohort
               });
             }}
@@ -680,6 +680,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       cohorts={this.state.cohorts.map(
                         (errorCohort) => errorCohort.cohort
                       )}
+                      initialCohortIndex={this.state.cohorts.findIndex(
+                        (errorCohort) =>
+                          errorCohort.cohort.name ===
+                          this.state.selectedCohort.cohort.name
+                      )}
                     />
                   )}
                   {this.state.activeGlobalTab ===
@@ -700,6 +705,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       weightLabels={this.state.weightVectorLabels}
                       onWeightChange={this.onWeightVectorChange}
                       explanationMethod={this.props.explanationMethod}
+                      initialCohortIndex={this.state.cohorts.findIndex(
+                        (errorCohort) =>
+                          errorCohort.cohort.name ===
+                          this.state.selectedCohort.cohort.name
+                      )}
                     />
                   )}
                   {this.state.activeGlobalTab ===
@@ -847,7 +857,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       (errorCohort) => !errorCohort.isTemporary
     );
     if (addTemporaryCohort) {
-      cohorts = [selectedCohort, ...cohorts];
+      cohorts = [...cohorts, selectedCohort];
     }
     this.setState({ cohorts, selectedCohort });
   }

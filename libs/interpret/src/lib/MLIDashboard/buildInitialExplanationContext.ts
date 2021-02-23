@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   WeightVectors,
@@ -12,7 +13,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
-import { Cohort } from "./Cohort";
 import {
   GlobalTabKeys,
   IExplanationDashboardProps,

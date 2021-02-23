@@ -12,6 +12,8 @@ export interface IInstanceViewStyles {
   choiceGroupContainerStyle: IStyle;
   choiceItemRootStyle: IStyle;
   page: IStyle;
+  selectedTextStyle: IStyle;
+  stackItemsStyle: IStyle;
 }
 
 export const InstanceViewStyles: () => IProcessedStyleSet<
@@ -30,6 +32,10 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText
+    },
+    selectedTextStyle: { color: getTheme().palette.neutralPrimaryAlt },
+    stackItemsStyle: {
+      padding: "0px 0px 0px 26px"
     }
   });
 };

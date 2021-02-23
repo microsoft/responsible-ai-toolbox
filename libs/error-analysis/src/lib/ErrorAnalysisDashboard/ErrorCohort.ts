@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, IJointMeta } from "@responsible-ai/core-ui";
 import {
+  JointDataset,
+  IJointMeta,
   Cohort,
   IFilter,
   FilterMethods,
   ICompositeFilter
-} from "@responsible-ai/interpret";
+} from "@responsible-ai/core-ui";
 
 import { CohortStats } from "./CohortStats";
 
@@ -46,6 +47,7 @@ export class ErrorCohort {
       this.totalCohortCorrect = cohortStats.totalCohortCorrect;
       this.totalCohortIncorrect = cohortStats.totalCohortIncorrect;
     } else {
+      cohort.sort();
       const filteredData = cohort.filteredData;
       this.updateStatsFromData(filteredData, jointDataset);
     }

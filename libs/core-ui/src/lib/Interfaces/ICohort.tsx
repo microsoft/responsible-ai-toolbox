@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter } from "../../Interfaces/IFilter";
+import { IFilter } from "./IFilter";
 
 export interface ICohort {
   filterList: IFilter[];

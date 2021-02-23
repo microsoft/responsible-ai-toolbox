@@ -4,12 +4,12 @@
 import {
   JointDataset,
   WeightVectorOption,
+  ModelExplanationUtils,
   IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import {
   LocalImportancePlots,
   IGlobalSeries,
-  ModelExplanationUtils,
   FabricStyles
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -20,6 +20,7 @@ import {
   IStackTokens,
   DetailsList,
   DetailsListLayoutMode,
+  mergeStyles,
   Selection,
   SelectionMode,
   Fabric,
@@ -95,18 +96,23 @@ export class InspectionView extends React.PureComponent<
       sortArray: [],
       sortingSeriesIndex: undefined
     };
+    this.props.selectedCohort.cohort.sort();
     const cohortData = this.props.selectedCohort.cohort.filteredData;
     const numRows: number = cohortData.length;
     const viewedRows: number = Math.min(
       Math.min(numRows, 8),
       this.props.inspectedIndexes.length
     );
+    const colors = this.props.inspectedIndexes.map(
+      (_rowIndex, colorIndex) => FabricStyles.fabricColorPalette[colorIndex]
+    );
     this._rows = constructRows(
       cohortData,
       this.props.jointDataset,
       viewedRows,
       undefined,
-      this.props.inspectedIndexes
+      this.props.inspectedIndexes,
+      colors
     );
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
@@ -116,7 +122,8 @@ export class InspectionView extends React.PureComponent<
       viewedCols,
       featureNames,
       this.props.jointDataset,
-      false
+      false,
+      true
     );
     this._selection = new Selection({
       onSelectionChanged: (): void => {
@@ -181,6 +188,7 @@ export class InspectionView extends React.PureComponent<
                     columns={this._columns}
                     setKey="set"
                     layoutMode={DetailsListLayoutMode.justified}
+                    onRenderItemColumn={this.renderItemColumn.bind(this)}
                     selectionPreservedOnEmptyClick={true}
                     ariaLabelForSelectionColumn="Toggle selection"
                     ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -220,6 +228,34 @@ export class InspectionView extends React.PureComponent<
         </Stack>
       </div>
     );
+  }
+
+  private renderItemColumn(
+    item: any,
+    index?: number,
+    column?: IColumn
+  ): React.ReactNode {
+    if (column && index !== undefined) {
+      const fieldContent = item[column.fieldName as keyof any] as string;
+
+      switch (column.key) {
+        case "color":
+          return (
+            <div
+              className={mergeStyles({
+                backgroundColor: fieldContent,
+                display: "block",
+                height: "100%",
+                width: "20px"
+              })}
+            ></div>
+          );
+
+        default:
+          return <span>{fieldContent}</span>;
+      }
+    }
+    return <span></span>;
   }
 
   private updateViewedFeatureImportances(

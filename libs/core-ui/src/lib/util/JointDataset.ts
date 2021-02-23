@@ -17,11 +17,11 @@ import { cohortKey } from "../cohortKey";
 import {
   IExplanationModelMetadata,
   ModelTypes
-} from "../interfaces/IExplanationContext";
+} from "../Interfaces/IExplanationContext";
 import {
   WeightVectors,
   WeightVectorOption
-} from "../interfaces/IWeightedDropdownContext";
+} from "../Interfaces/IWeightedDropdownContext";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];

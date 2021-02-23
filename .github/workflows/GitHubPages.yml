@@ -1,0 +1,44 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  website-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r raiwidgets/requirements-dev.txt
+          pip install raiwidgets/
+
+      - name: Build
+        run: make html
+        working-directory: ./docs
+
+      - name: Disable jekyll builds
+        # By default GitHub attempts jekyll builds.
+        # Instead, we want the webpage to just point at index.html
+        run: touch docs/build/html/.nojekyll
+
+      - name: Create CNAME file
+        run: echo "erroranalysis.ai" > docs/build/html/CNAME
+
+      - name: Deploy
+        # only deploy if this is a push event on main
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build/html

@@ -5,7 +5,8 @@ import {
   isTwoDimArray,
   ModelTypes,
   JointDataset,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -27,7 +28,6 @@ import { Data } from "plotly.js";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { ModelExplanationUtils } from "../../ModelExplanationUtils";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { IRangeView } from "../ICEPlot";
 
@@ -549,7 +549,7 @@ export class MultiICEPlot extends React.PureComponent<
 
   private buildRangeView(featureKey: string): IRangeView | undefined {
     const summary = this.props.jointDataset.metaDict[featureKey];
-    if (!summary || summary.index === undefined || !summary.featureRange) {
+    if (!summary || summary.index === undefined) {
       return undefined;
     }
     if (summary.treatAsCategorical) {
@@ -576,6 +576,9 @@ export class MultiICEPlot extends React.PureComponent<
         selectedOptionKeys: summary.sortedCategoricalValues?.map((x) => +x),
         type: RangeTypes.Categorical
       };
+    }
+    if (!summary.featureRange) {
+      return undefined;
     }
     return {
       featureIndex: summary.index,

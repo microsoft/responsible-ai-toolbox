@@ -66,7 +66,7 @@ class ErrorAnalysisDashboardInput:
             locale,
             categorical_features,
             true_y_dataset):
-        """Initialize the Error Analysis Dashboard Input.
+        """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
         :type explanation: ExplanationMixin

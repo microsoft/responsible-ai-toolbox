@@ -519,6 +519,7 @@
       "predictedProbability": "Predicted probability",
       "predictedY": "Predicted Y",
       "evalData": "Evaluation dataset",
+      "globalFeatureImportance": "Global feature importance",
       "localFeatureImportance": "Local feature importance",
       "inconsistentDimensions": "Inconsistent dimensions. {0} has dimensions {1}, expected {2}",
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
@@ -618,41 +619,19 @@
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort.",
       "cohortName": "Cohort name"
     },
-    "ExplanationScatter": {
-      "dataLabel": "Data : {0}",
-      "_dataLabel.comment": "prepend in front of column names",
-      "importanceLabel": "Importance : {0}",
-      "_importanceLabel.comment": "prepend in front of feature importance of column name",
-      "predictedY": "Predicted Y",
-      "_predictedY.comment": "predicted output",
-      "index": "Index",
-      "_index.comment": "the index value (an integer of the row number)",
-      "dataGroupLabel": "Data",
-      "output": "Output",
-      "probabilityLabel": "Probability : {0}",
-      "_probabilityLabel.comment": "Probability prefix for all classes in a multiclass problem",
-      "trueY": "True Y",
-      "_trueY.comment": "The true value to be predicted",
-      "class": "class: ",
-      "_class.comment": "label for predicted class",
-      "xValue": "X value:",
-      "_xValue.comment": "label for x value dropdown",
-      "yValue": "Y value:",
-      "_yValue.comment": "label for y value dropdown",
-      "colorValue": "Color:",
-      "_colorValue.comment": "label for selecting color value",
-      "count": "Count",
-      "_count.comment": "the default axis is the count of items"
-    },
     "InspectionView": {
       "emptyError": "Please select datapoints in the incorrect and correct categories by clicking the checkboxes.",
       "selectedDatapoints": "Selected datapoints"
     },
+    "InstanceView": {
+      "selection": "{0} selected",
+      "inspect": "Inspect"
+    },
     "MainMenu": {
       "treeMap": "Tree map",
       "heatMap": "Heat map",
-      "errorDetectorLabel": "Error detector:",
-      "errorDetector": "Error detector",
+      "errorExplorerLabel": "Error explorer:",
+      "errorExplorer": "Error explorer",
       "fullscreen": "Fullscreen",
       "whatIf": "What-If",
       "featureList": "Feature list",
@@ -679,7 +658,7 @@
       "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
     },
     "Navigation": {
-      "errorDetector": "Error detector",
+      "errorExplorer": "Error explorer",
       "dataExplorer": "Data explorer",
       "globalExplanation": "Global explanation",
       "localExplanation": "Local explanation",
