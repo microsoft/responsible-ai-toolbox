@@ -61,4 +61,4 @@ apps/*-e2e/debug.log
 /notebooks/*.zip
 
 # docs
-docs/build
+docs/build/*
