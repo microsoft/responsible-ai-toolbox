@@ -11,7 +11,7 @@ This repository contains the Jupyter notebooks with examples to showcase how to 
 
 - [Overview of Responsible-AI-Widgets](#intro)
 - [Interpretability Dashboard](#interpretability-dashboard)
-- [Error Analysis Dashboard](#error-dashboard)
+- [Error Analysis Dashboard](#error-analysis-dashboard)
 - [Fairness Dashboard](#fairness-dashboard)
 - [Supported Models](#supported-models)
 - [Getting Started](#getting-started)
@@ -31,7 +31,7 @@ Besides the above functionalities, this repository provides foundational blocks 
 
 - A shared Flask service layer which also maintains utilities to determine the environment that it is running in so that it can configure the local flask service accordingly. This layer is published in the ```rai_core_flask``` package on PyPI.
 
-- A base typescript library with common controls used across responsible AI dashboards. For information on how to contribute please refer to our [Contributor Guide](#Contributing).
+- A base typescript library with common controls used across responsible AI dashboards. For information on how to contribute please refer to our [Contributor Guide](CONTRIBUTING.md).
 
 ## Example Notebooks
 
@@ -110,7 +110,7 @@ You can click on any individual data point on the scatter plot to view its local
 
 ![Visualization Dashboard Global](./img/Interpretability-WhatIf.gif)
 
-<a name="error dashboard"></a>
+<a name="error analysis dashboard "></a>
 
 ## Error Analysis Dashboard
 
