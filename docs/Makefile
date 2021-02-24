@@ -19,5 +19,5 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	echo "copying static landing page"
-	cp -r "$(SOURCEDIR)/landing_page/*" "$(BUILDDIR)/html"
+	cp -r $(SOURCEDIR)/landing_page/* $(BUILDDIR)/html
 	echo "completed copying static landing page"
