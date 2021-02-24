@@ -35,7 +35,7 @@ jobs:
       - name: auto version
         run: |
           yarn auto-version -r
-      - name: build typescript 
+      - name: build typescript
         run: |
           yarn buildall
       - name: update and upgrade pip, setuptools, wheel, and twine
