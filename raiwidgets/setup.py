@@ -4,7 +4,8 @@
 import setuptools
 import os
 
-version = "0.0.0"
+# Version will be read from version.py
+version = ""
 # Fetch Version
 with open(os.path.join('raiwidgets', '__version__.py')) as f:
     code = compile(f.read(), f.name, 'exec')
