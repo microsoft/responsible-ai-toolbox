@@ -152,9 +152,11 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       paddingTop: "13px"
     },
     collapsedPanel: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       boxShadow:
         "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
-      width: "40px"
+      width: "40px",
+      zIndex: 99999
     },
     customPredictBlock: {
       paddingTop: "5px"
@@ -170,11 +172,13 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       paddingRight: "40px"
     },
     expandedPanel: {
+      backgroundColor: theme.semanticColors.bodyBackground,
       boxShadow:
         "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
       marginTop: "10px",
       paddingRight: "40px",
-      width: "250px"
+      width: "250px",
+      zIndex: 99999
     },
     faintText: [FabricStyles.faintText],
     featureImportanceArea: {

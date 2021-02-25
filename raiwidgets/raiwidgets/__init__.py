@@ -7,9 +7,9 @@ from .fairness_dashboard import FairnessDashboard
 from .explanation_dashboard import ExplanationDashboard
 from .error_analysis_dashboard import ErrorAnalysisDashboard
 from .model_performance_dashboard import ModelPerformanceDashboard
+from .__version__ import version
 
-
-__version__ = "0.2.2"
+__version__ = version
 
 __all__ = ['FairnessDashboard', 'ExplanationDashboard',
            'ErrorAnalysisDashboard', 'ModelPerformanceDashboard']
