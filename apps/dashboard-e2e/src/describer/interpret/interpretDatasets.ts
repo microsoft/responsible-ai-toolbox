@@ -164,7 +164,8 @@ const interpretDatasets = {
       "worst concavity",
       "concavity error",
       "radius error"
-    ]
+    ],
+    isClassification: true
   },
   ebmData: {
     datapoint: 2,
@@ -172,7 +173,8 @@ const interpretDatasets = {
     defaultXAxis: "Index",
     defaultYAxis: "Age",
     featureNames: ["Age", "Employment"],
-    noFeatureImportance: true
+    noFeatureImportance: true,
+    noY: true
   },
   ibmData: {
     datapoint: 20,
@@ -210,7 +212,8 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ]
+    ],
+    isClassification: true
   },
   ibmDataInconsistent: {
     datapoint: 20,
@@ -288,7 +291,8 @@ const interpretDatasets = {
       "Education",
       "HourlyRate",
       "PercentSalaryHike"
-    ]
+    ],
+    isClassification: true
   },
   irisData: {
     datapoint: 30,
@@ -300,7 +304,9 @@ const interpretDatasets = {
       "petal width (cm)",
       "sepal length (cm)",
       "sepal width (cm)"
-    ]
+    ],
+    isClassification: true,
+    isMulticlass: true
   },
   irisDataNoLocal: {
     datapoint: 30,
@@ -313,6 +319,8 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
+    isClassification: true,
+    isMulticlass: true,
     noLocalImportance: true
   },
   irisGlobal: {
@@ -322,6 +330,8 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
+    isClassification: true,
+    isMulticlass: true,
     noDataset: true,
     noLocalImportance: true,
     noY: true
@@ -333,6 +343,8 @@ const interpretDatasets = {
       "sepal length (cm)",
       "sepal width (cm)"
     ],
+    isClassification: true,
+    isMulticlass: true,
     noDataset: true
   },
   irisNoFeatures: {
@@ -340,7 +352,9 @@ const interpretDatasets = {
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     defaultXAxis: "Index",
     defaultYAxis: "Feature 0",
-    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
+    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"],
+    isClassification: true,
+    isMulticlass: true
   }
 };
 const withType: {

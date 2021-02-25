@@ -13,4 +13,6 @@ export interface IInterpretData {
   noLocalImportance?: boolean;
   noPredict?: boolean;
   noY?: boolean;
+  isClassification?: boolean;
+  isMulticlass?: boolean;
 }
