@@ -2,6 +2,14 @@
 # Licensed under the MIT License.
 
 import setuptools
+import os
+
+# Version will be read from version.py
+version = ""
+# Fetch Version
+with open(os.path.join('raiwidgets', '__version__.py')) as f:
+    code = compile(f.read(), f.name, 'exec')
+    exec(code)
 
 # Fetch ReadMe
 with open("README.md", "r") as fh:
@@ -13,7 +21,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="raiwidgets",
-    version="0.2.2",
+    version=version,
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
     description="Interactive visualizations to assess fairness, explain "
