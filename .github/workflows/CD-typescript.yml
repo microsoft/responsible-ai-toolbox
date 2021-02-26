@@ -6,7 +6,7 @@ env:
   folder_to_upload: dist/apps/dashboard
   blob_account: responsibleai
   blob_container: latest
-  blob_container_for_raiwidget: raiwidget
+  blob_container_for_raiwidget: raiwidgets
   node-version: 12.x
   packageDirectory: raiwidgets
 
@@ -82,7 +82,7 @@ jobs:
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.packageDirectory }}/dist/" -d "${{steps.version.outputs.version}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.packageDirectory }}/dist/" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
       - name: CI
         run: yarn ci
