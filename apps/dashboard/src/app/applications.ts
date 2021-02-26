@@ -87,13 +87,6 @@ export type IApplications = {
 };
 
 export const applications: IApplications = <const>{
-  modelAssessment: {
-    datasets: {
-      adultCensusIncomeData: { classDimension: 2, data: adultCensus },
-      breastCancerData: { classDimension: 2, data: breastCancerData }
-    },
-    versions: { "Version-1": 1 }
-  },
   errorAnalysis: {
     datasets: {
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
@@ -135,5 +128,12 @@ export const applications: IApplications = <const>{
       largeFeatureCount: { classDimension: 2, data: largeFeatureCount }
     },
     versions: { "Version-1": 1, "Version-2": 2 }
+  },
+  modelAssessment: {
+    datasets: {
+      adultCensusIncomeData: { classDimension: 2, data: adultCensus },
+      breastCancerData: { classDimension: 2, data: breastCancerData }
+    },
+    versions: { "Version-1": 1 }
   }
 };

@@ -5,7 +5,8 @@ import {
   ColumnCategories,
   IJointMeta,
   JointDataset,
-  cohortKey
+  cohortKey,
+  ISelectorConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
@@ -26,8 +27,6 @@ import {
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
-
-import { ISelectorConfig } from "@responsible-ai/core-ui";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;

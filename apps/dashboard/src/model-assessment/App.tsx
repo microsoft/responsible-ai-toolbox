@@ -6,11 +6,11 @@ import {
   ISerializedExplanationData
 } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
+import { Language } from "@responsible-ai/localization";
 import {
   ModelAssessmentDashboard,
   IModelAssessmentDashboardProps
 } from "@responsible-ai/model-assessment";
-import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";

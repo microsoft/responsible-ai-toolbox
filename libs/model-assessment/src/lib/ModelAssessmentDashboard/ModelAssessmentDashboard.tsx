@@ -13,12 +13,9 @@ import {
   WeightVectors,
   Cohort,
   ICompositeFilter,
-  IFilter
+  IFilter,
+  IOfficeFabricProps
 } from "@responsible-ai/core-ui";
-import {
-  DatasetExplorerTab,
-  GlobalExplanationTab
-} from "@responsible-ai/interpret";
 import {
   CohortInfo,
   CohortList,
@@ -41,8 +38,13 @@ import {
   IMatrixAreaState,
   IMatrixFilterState,
   ITreeViewRendererState,
-  createInitialTreeViewState
+  createInitialTreeViewState,
+  IErrorAnalysisDashboardProps
 } from "@responsible-ai/error-analysis";
+import {
+  DatasetExplorerTab,
+  GlobalExplanationTab
+} from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
@@ -60,10 +62,9 @@ import {
   getId
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
-import { IOfficeFabricProps } from "@responsible-ai/core-ui";
-import { IErrorAnalysisDashboardProps } from "@responsible-ai/error-analysis";
 
 export interface IModelAssessmentDashboardProps
   extends IErrorAnalysisDashboardProps,

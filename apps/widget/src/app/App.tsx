@@ -7,7 +7,7 @@ import { config } from "./config";
 import { ErrorAnalysis } from "./ErrorAnalysis";
 import { Fairness } from "./Fairness";
 import { Interpret } from "./Interpret";
-import { ModelAssessment } from "./ModelAssessment"
+import { ModelAssessment } from "./ModelAssessment";
 
 export class App extends React.Component {
   public render(): React.ReactNode {

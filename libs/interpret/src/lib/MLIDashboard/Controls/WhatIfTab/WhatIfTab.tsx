@@ -8,7 +8,10 @@ import {
   WeightVectorOption,
   JointDataset,
   Cohort,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  ChartTypes,
+  IGenericChartProps,
+  ISelectorConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -28,10 +31,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "@responsible-ai/core-ui";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "@responsible-ai/core-ui";
-import { ISelectorConfig } from "@responsible-ai/core-ui";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

@@ -8,7 +8,10 @@ import {
   ModelTypes,
   IExplanationModelMetadata,
   cohortKey,
-  Cohort
+  Cohort,
+  ChartTypes,
+  IGenericChartProps,
+  ISelectorConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -23,10 +26,7 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
-import { ChartTypes } from "@responsible-ai/core-ui";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "@responsible-ai/core-ui";
-import { ISelectorConfig } from "@responsible-ai/core-ui";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 

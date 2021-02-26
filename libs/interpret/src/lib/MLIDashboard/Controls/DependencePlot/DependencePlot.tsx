@@ -6,7 +6,8 @@ import {
   JointDataset,
   IExplanationModelMetadata,
   ModelTypes,
-  WeightVectorOption
+  WeightVectorOption,
+  IGenericChartProps
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -19,7 +20,6 @@ import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "@responsible-ai/core-ui";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";
 

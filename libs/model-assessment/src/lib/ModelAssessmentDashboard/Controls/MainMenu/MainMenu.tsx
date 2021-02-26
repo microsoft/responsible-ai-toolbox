@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  ErrorCohort,
+  ErrorAnalysisOptions
+} from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
@@ -15,14 +19,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import {
-  GlobalTabKeys,
-  PredictionTabKeys
-} from "../../ModelAssessmentEnums";
-import {
-  ErrorCohort,
-  ErrorAnalysisOptions
-} from "@responsible-ai/error-analysis";
+import { GlobalTabKeys, PredictionTabKeys } from "../../ModelAssessmentEnums";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 

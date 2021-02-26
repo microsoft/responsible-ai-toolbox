@@ -4,11 +4,10 @@
 import {
   ColumnCategories,
   JointDataset,
-  Cohort
+  Cohort,
+  ChartTypes,
+  IGenericChartProps
 } from "@responsible-ai/core-ui";
-
-import { ChartTypes } from "@responsible-ai/core-ui";
-import { IGenericChartProps } from "@responsible-ai/core-ui";
 
 export function buildCustomData(
   jointData: JointDataset,

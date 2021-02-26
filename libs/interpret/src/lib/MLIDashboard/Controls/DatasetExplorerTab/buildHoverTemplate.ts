@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ColumnCategories, JointDataset } from "@responsible-ai/core-ui";
+import {
+  ColumnCategories,
+  JointDataset,
+  ChartTypes,
+  IGenericChartProps
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-
-import { ChartTypes } from "@responsible-ai/core-ui";
-import { IGenericChartProps } from "@responsible-ai/core-ui";
 
 export function buildHoverTemplate(
   jointData: JointDataset,

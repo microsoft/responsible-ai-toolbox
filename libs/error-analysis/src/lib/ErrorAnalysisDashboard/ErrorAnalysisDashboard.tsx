@@ -18,11 +18,11 @@ import {
 } from "@responsible-ai/core-ui";
 import {
   DatasetExplorerTab,
-  GlobalExplanationTab
+  GlobalExplanationTab,
+  IGlobalExplanationProps
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
-import { IGlobalExplanationProps } from "@responsible-ai/interpret";
 import _ from "lodash";
 import * as memoize from "memoize-one";
 import {

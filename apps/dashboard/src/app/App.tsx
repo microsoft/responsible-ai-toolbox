@@ -8,10 +8,10 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 
-import { App as ModelAssessment } from "../model-assessment/App";
 import { App as ErrorAnalysis } from "../error-analysis/App";
 import { App as Fairness } from "../fairness/App";
 import { App as Interpret } from "../interpret/App";
+import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";

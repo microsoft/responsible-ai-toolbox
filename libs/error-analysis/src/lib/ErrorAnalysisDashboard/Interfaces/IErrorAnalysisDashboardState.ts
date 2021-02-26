@@ -1,10 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, IExplanationModelMetadata, WeightVectorOption, IGenericChartProps } from "@responsible-ai/core-ui";
-import { GlobalTabKeys } from "../ErrorAnalysisEnums";
+import {
+  JointDataset,
+  IExplanationModelMetadata,
+  WeightVectorOption,
+  IGenericChartProps
+} from "@responsible-ai/core-ui";
 import { Dictionary } from "lodash";
-import { ViewTypeKeys, ErrorAnalysisOptions, PredictionTabKeys } from "../ErrorAnalysisEnums";
+
+import {
+  GlobalTabKeys,
+  ViewTypeKeys,
+  ErrorAnalysisOptions,
+  PredictionTabKeys
+} from "../ErrorAnalysisEnums";
 import { ErrorCohort } from "../ErrorCohort";
 import { IMatrixAreaState, IMatrixFilterState } from "../MatrixFilterState";
 import { ITreeViewRendererState } from "../TreeViewState";
