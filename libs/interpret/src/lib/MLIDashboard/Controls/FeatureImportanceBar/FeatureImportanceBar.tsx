@@ -8,7 +8,7 @@ import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
+import { ChartTypes } from "@responsible-ai/core-ui";
 import { FabricStyles } from "../../FabricStyles";
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

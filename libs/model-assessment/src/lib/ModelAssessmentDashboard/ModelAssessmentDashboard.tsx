@@ -60,9 +60,14 @@ import {
   getId
 } from "office-ui-fabric-react";
 import React from "react";
-import { IModelAssessmentDashboardProps } from "./Interfaces/IModelAssessmentDashboardProps";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
+import { IOfficeFabricProps } from "@responsible-ai/core-ui";
+import { IErrorAnalysisDashboardProps } from "@responsible-ai/error-analysis";
+
+export interface IModelAssessmentDashboardProps
+  extends IErrorAnalysisDashboardProps,
+    IOfficeFabricProps {}
 
 export interface IModelAssessmentDashboardState {
   activeGlobalTab: GlobalTabKeys;

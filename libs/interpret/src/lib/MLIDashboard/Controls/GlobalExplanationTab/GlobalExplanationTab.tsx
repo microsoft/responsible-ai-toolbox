@@ -23,9 +23,9 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
+import { ChartTypes } from "@responsible-ai/core-ui";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "../../IGenericChartProps";
+import { IGenericChartProps } from "@responsible-ai/core-ui";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";

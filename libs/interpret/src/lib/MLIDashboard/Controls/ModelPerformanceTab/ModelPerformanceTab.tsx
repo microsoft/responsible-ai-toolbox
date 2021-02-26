@@ -23,10 +23,10 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
+import { ChartTypes } from "@responsible-ai/core-ui";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { IGenericChartProps } from "@responsible-ai/core-ui";
+import { ISelectorConfig } from "@responsible-ai/core-ui";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 

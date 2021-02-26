@@ -4,6 +4,7 @@
 export * from "./lib/MLIDashboard/ExplanationDashboard";
 export * from "./lib/MLIDashboard/NewExplanationDashboard";
 export * from "./lib/MLIDashboard/Interfaces/IExplanationDashboardProps";
+export * from "./lib/MLIDashboard/Interfaces/IGlobalExplanationProps";
 export * from "./lib/MLIDashboard/Interfaces/IStringsParam";
 export * from "./lib/MLIDashboard/Interfaces/ITelemetryMessage";
 export * from "./lib/MLIDashboard/Controls/DatasetExplorerTab/DatasetExplorerTab";

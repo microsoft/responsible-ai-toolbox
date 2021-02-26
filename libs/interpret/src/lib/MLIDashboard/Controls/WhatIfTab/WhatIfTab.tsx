@@ -28,10 +28,10 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
+import { ChartTypes } from "@responsible-ai/core-ui";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { IGenericChartProps } from "@responsible-ai/core-ui";
+import { ISelectorConfig } from "@responsible-ai/core-ui";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

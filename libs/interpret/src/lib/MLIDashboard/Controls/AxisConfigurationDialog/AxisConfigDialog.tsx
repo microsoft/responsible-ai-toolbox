@@ -27,7 +27,7 @@ import {
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
-import { ISelectorConfig } from "../../NewExplanationDashboard";
+import { ISelectorConfig } from "@responsible-ai/core-ui";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;

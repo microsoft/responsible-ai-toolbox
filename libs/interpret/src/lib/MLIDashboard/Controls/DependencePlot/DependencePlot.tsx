@@ -19,7 +19,7 @@ import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "../../IGenericChartProps";
+import { IGenericChartProps } from "@responsible-ai/core-ui";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";
 
