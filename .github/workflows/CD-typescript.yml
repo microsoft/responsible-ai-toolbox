@@ -6,30 +6,82 @@ env:
   folder_to_upload: dist/apps/dashboard
   blob_account: responsibleai
   blob_container: latest
+  blob_container_for_raiwidget: raiwidget
+  node-version: 12.x
+  packageDirectory: raiwidgets
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  cd-typescript-build:
+  cd-build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+
+      #setup environment
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.node-version }}
+
       - name: Install yarn
         run: npm install yarn -g
       - name: Install
         run: yarn install --frozen-lock-file
       - name: bump version
         run: yarn auto-version
+      - name: Get version
+        id: version
+        run: echo ::set-output name=version::$(cat VERSION)
+
+      # run tests before publishing to PyPI
+      - name: update and upgrade pip, setup tools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setup tools wheel twine
+      - name: install requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: ${{ env.packageDirectory }}
+      - name: pip freeze
+        run: pip freeze
+      - name: replace README for raiwidgets
+        if: ${{ env.packageDirectory == 'raiwidgets' }}
+        run: |
+          sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
+          cp ./README.md ./raiwidgets/
+      - name: build wheel
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.packageDirectory }}
+
+      # run tests before publishing to PyPI
+      - name: install wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.packageDirectory }}
+      - name: run tests
+        run: pytest ./tests/
+        working-directory: ${{ env.packageDirectory }}
+
+      - id: package_url
+        run: |
+          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_raiwidget}/"
+
+      - name: Upload package ${{steps.package_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        with:
+          azcliversion: 2.16.0
+          inlineScript: |
+            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.packageDirectory }}/dist/" -s "${{steps.version.outputs.version}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+
       - name: CI
         run: yarn ci
       - name: Upload a Build result
@@ -48,18 +100,17 @@ jobs:
             az storage blob sync -c "${{env.blob_container}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
   cd-typescript-publish:
-    needs: cd-typescript-build
+    needs: cd-build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
         package: [core-ui, mlchartlib, fairness, interpret, localization]
 
     steps:
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.node-version }}
       - id: download
         name: Download a Build Artifact
         uses: actions/download-artifact@v2
@@ -71,8 +122,8 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.KE_NPM_TOKEN }}
-          package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
-          dry-run: false
+          package: ${{steps.download.outputs.download-path}}/libs/${{ env.package }}/package.json
+          dry-run: true
       - if: steps.publish.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"

@@ -15,7 +15,7 @@ function getVersion(release) {
   if (release) {
     return `${version.major}.${version.minor}.${version.patch}`;
   } else {
-    return `${version.major}.${version.minor}.${version.patch}.post${revision}`;
+    return `${version.major}.${version.minor}.${version.patch}-${revision}`;
   }
 }
 
