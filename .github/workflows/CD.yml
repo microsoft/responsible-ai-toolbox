@@ -122,7 +122,7 @@ jobs:
         with:
           token: ${{ secrets.KE_NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
-          dry-run: true
+          dry-run: false
       - if: steps.publish.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
