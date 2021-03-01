@@ -31,7 +31,9 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
       - name: git list
-        run: git rev-list
+        run: git rev-list HEAD
+      - name: git log
+        run: git --no-pager log --decorate=short --pretty=oneline
 
   #     - name: Install yarn
   #       run: npm install yarn -g
