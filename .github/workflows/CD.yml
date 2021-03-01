@@ -12,7 +12,7 @@ env:
 
 on:
   push:
-    branches: [xuke/fixpythonpublish]
+    branches: [main]
 
 jobs:
   cd-build:
