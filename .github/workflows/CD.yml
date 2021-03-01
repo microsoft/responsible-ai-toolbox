@@ -13,6 +13,9 @@ env:
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   cd-build:
@@ -40,6 +43,9 @@ jobs:
       - name: Get version
         id: version
         run: echo ::set-output name=version::$(cat version.cfg)
+        
+      - name: Build Typescript
+        run: yarn buildall
 
       # run tests before publishing to PyPI
       - name: update and upgrade pip, setuptools, wheel, and twine
@@ -69,9 +75,6 @@ jobs:
       - name: run tests
         run: pytest ./tests/
         working-directory: ${{ env.packageDirectory }}
-
-      - name: Build Typescript
-        run: yarn buildall
       - name: Upload a Build result
         uses: actions/upload-artifact@v2
         with:
