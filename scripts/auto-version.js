@@ -9,7 +9,9 @@ const versionCfgFile = "./version.cfg";
 const versionPyFiles = ["./raiwidgets/raiwidgets/__version__.py"];
 
 function getVersion(release) {
-  const revision = execSync("git rev-list --count HEAD").toString().trim();
+  const revision = execSync("git rev-list --count origin main")
+    .toString()
+    .trim();
   const versionStr = fs.readFileSync(versionCfgFile).toString().trim();
   var version = semver.coerce(versionStr, true);
   if (release) {
