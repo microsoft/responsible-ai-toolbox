@@ -45,8 +45,6 @@ export interface IGlobalBarSettings {
 export interface IGlobalExplanationTabProps {
   jointDataset: JointDataset;
   metadata: IExplanationModelMetadata;
-  globalImportance?: number[][];
-  isGlobalDerivedFromLocal: boolean;
   cohorts: Cohort[];
   cohortIDs: string[];
   selectedWeightVector: WeightVectorOption;

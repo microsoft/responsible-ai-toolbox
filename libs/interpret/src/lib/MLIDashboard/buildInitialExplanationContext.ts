@@ -8,7 +8,8 @@ import {
   WeightVectors,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes
+  ModelTypes,
+  isTwoDimArray
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -24,8 +25,6 @@ import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 
 const rowWarningSize = 6000;
-// features x classes
-
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
   if (props.modelInformation.method === "regressor") {
@@ -41,9 +40,9 @@ function getModelType(props: IExplanationDashboardProps): ModelTypes {
   }
 }
 function buildIndexedNames(length: number, baseString: string): string[] {
-  return [...new Array(length).keys()].map((i) =>
-    localization.formatString(baseString, i.toString())
-  );
+  return new Array(length)
+    .fill(baseString)
+    .map((s, i) => localization.formatString(s, i.toString()));
 }
 function buildModelMetadata(
   props: IExplanationDashboardProps
@@ -130,32 +129,45 @@ function buildModelMetadata(
 
 function buildGlobalProperties(
   props: IExplanationDashboardProps
-): IGlobalExplanationProps {
-  const result: IGlobalExplanationProps = {} as IGlobalExplanationProps;
+): IGlobalExplanationProps | undefined {
   if (
     props.precomputedExplanations &&
     props.precomputedExplanations.globalFeatureImportance &&
     props.precomputedExplanations.globalFeatureImportance.scores
   ) {
-    result.isGlobalImportanceDerivedFromLocal = false;
+    let globalImportance: number[][];
+    let globalImportanceIntercept: number[] | undefined;
     if (
-      (props.precomputedExplanations.globalFeatureImportance
-        .scores as number[][]).every((dim1) => Array.isArray(dim1))
+      isTwoDimArray(
+        props.precomputedExplanations.globalFeatureImportance.scores
+      )
     ) {
-      result.globalImportance = props.precomputedExplanations
-        .globalFeatureImportance.scores as number[][];
-      result.globalImportanceIntercept = props.precomputedExplanations
+      globalImportance =
+        props.precomputedExplanations.globalFeatureImportance.scores;
+      globalImportanceIntercept = props.precomputedExplanations
         .globalFeatureImportance.intercept as number[];
     } else {
-      result.globalImportance = (props.precomputedExplanations
-        .globalFeatureImportance.scores as number[]).map((value) => [value]);
-      result.globalImportanceIntercept = [
-        props.precomputedExplanations.globalFeatureImportance
-          .intercept as number
-      ];
+      globalImportance = props.precomputedExplanations.globalFeatureImportance.scores.map(
+        (value) => [value]
+      );
+      globalImportanceIntercept = props.precomputedExplanations
+        .globalFeatureImportance
+        ? [
+            props.precomputedExplanations.globalFeatureImportance
+              .intercept as number
+          ]
+        : undefined;
     }
+    return {
+      globalImportance,
+      globalImportanceFeatureNames:
+        props.precomputedExplanations.globalFeatureImportance.featureNames ||
+        props.dataSummary.featureNames,
+      globalImportanceIntercept,
+      isGlobalImportanceDerivedFromLocal: false
+    };
   }
-  return result;
+  return undefined;
 }
 export function buildInitialExplanationContext(
   props: IExplanationDashboardProps
@@ -210,10 +222,11 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ModelPerformance,
     cohorts,
-    globalImportance: globalProps.globalImportance,
-    globalImportanceIntercept: globalProps.globalImportanceIntercept,
+    globalImportance: globalProps?.globalImportance,
+    globalImportanceFeatureNames: globalProps?.globalImportanceFeatureNames,
+    globalImportanceIntercept: globalProps?.globalImportanceIntercept,
     isGlobalImportanceDerivedFromLocal:
-      globalProps.isGlobalImportanceDerivedFromLocal,
+      globalProps?.isGlobalImportanceDerivedFromLocal || false,
     jointDataset,
     modelMetadata,
     selectedWeightVector:
