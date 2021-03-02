@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ModelAssessmentDashboard } from "@responsible-ai/@responsible-ai/model-assessment";
+import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
 import React from "react";
 
+import { callFlaskService } from "./callFlaskService";
 import { config } from "./config";
-import { FlaskCommunication } from "./FlaskCommunication";
 import { modelData } from "./modelData";
 
 export class ModelAssessment extends React.Component {
@@ -16,16 +16,16 @@ export class ModelAssessment extends React.Component {
     let requestImportancesMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/predict");
+        return callFlaskService(data, "/predict");
       };
       requestMatrixMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/matrix");
+        return callFlaskService(data, "/matrix");
       };
       requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/tree");
+        return callFlaskService(data, "/tree");
       };
       requestImportancesMethod = async (data: any[]): Promise<any[]> => {
-        return FlaskCommunication.callFlaskService(data, "/importances");
+        return callFlaskService(data, "/importances");
       };
     }
 

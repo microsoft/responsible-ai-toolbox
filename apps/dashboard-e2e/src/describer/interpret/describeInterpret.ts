@@ -6,6 +6,7 @@ import { describeCohort } from "./cohort/describeCohort";
 import { describeDatasetExplorer } from "./datasetExplorer/describeDatasetExplorer";
 import { describeIndividualFeatureImportance } from "./individualFeatureImportance/describeIndividualFeatureImportance";
 import { interpretDatasets } from "./interpretDatasets";
+import { describeModelPerformancePlot } from "./modelPerformance/describeModelPerformancePlot";
 
 export function describeInterpret(name: keyof typeof interpretDatasets): void {
   describe(name, () => {
@@ -31,6 +32,13 @@ export function describeInterpret(name: keyof typeof interpretDatasets): void {
     if (!interpretDatasets[name].noDataset) {
       describeDatasetExplorer(interpretDatasets[name]);
       describeIndividualFeatureImportance(interpretDatasets[name]);
+    }
+    if (
+      !interpretDatasets[name].noDataset &&
+      !interpretDatasets[name].noPredict &&
+      !interpretDatasets[name].noY
+    ) {
+      describeModelPerformancePlot(interpretDatasets[name]);
     }
   });
 }
