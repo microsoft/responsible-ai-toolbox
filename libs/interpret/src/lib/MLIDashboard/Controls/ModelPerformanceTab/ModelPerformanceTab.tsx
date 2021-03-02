@@ -50,7 +50,7 @@ export class ModelPerformanceTab extends React.PureComponent<
   IModelPerformanceTabProps,
   IModelPerformanceTabState
 > {
-  private readonly chartAndConfigsId = "chart-and-axis-config-id";
+  private readonly chartAndConfigsId = "ModelPerformanceChart";
 
   public constructor(props: IModelPerformanceTabProps) {
     super(props);
