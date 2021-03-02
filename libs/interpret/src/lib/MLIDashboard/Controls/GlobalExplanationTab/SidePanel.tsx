@@ -5,7 +5,8 @@ import {
   Cohort,
   IExplanationModelMetadata,
   ModelTypes,
-  WeightVectorOption
+  WeightVectorOption,
+  ChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -20,7 +21,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";

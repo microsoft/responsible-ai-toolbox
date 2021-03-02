@@ -7,7 +7,10 @@ import {
   ColumnCategories,
   cohortKey,
   Cohort,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ChartTypes,
+  IGenericChartProps,
+  ISelectorConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
@@ -22,9 +25,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
-import { IGenericChartProps } from "../../IGenericChartProps";
-import { ISelectorConfig } from "../../NewExplanationDashboard";
 import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 

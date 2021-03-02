@@ -4,7 +4,9 @@
 import {
   ColumnCategories,
   JointDataset,
-  Cohort
+  Cohort,
+  ChartTypes,
+  IGenericChartProps
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -18,9 +20,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "../../IGenericChartProps";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";

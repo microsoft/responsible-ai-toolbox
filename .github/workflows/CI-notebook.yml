@@ -25,6 +25,7 @@ jobs:
 
       - name: build typescript
         run: |
+          yarn config set network-timeout 300000
           yarn install
           yarn buildall
 

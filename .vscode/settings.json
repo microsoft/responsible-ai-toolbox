@@ -55,6 +55,7 @@
     "Plotly",
     "Unmount",
     "automl",
+    "bdist",
     "bgcolor",
     "camelcase",
     "cssmodule",
@@ -62,7 +63,11 @@
     "mlchartlib",
     "multiclass",
     "nrwl",
+    "pytest",
+    "raiwidget",
+    "raiwidgets",
     "relayout",
+    "sdist",
     "shap",
     "uifabric"
   ]

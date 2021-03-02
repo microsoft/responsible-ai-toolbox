@@ -52,6 +52,9 @@
     "widget-e2e": {
       "tags": [],
       "implicitDependencies": ["widget"]
+    },
+    "model-assessment": {
+      "tags": []
     }
   }
 }

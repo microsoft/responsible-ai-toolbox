@@ -6,7 +6,8 @@ import {
   ModelTypes,
   WeightVectorOption,
   JointDataset,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  ChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -27,7 +28,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
