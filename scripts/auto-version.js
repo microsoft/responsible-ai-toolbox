@@ -58,22 +58,26 @@ function writeVersion(version) {
 }
 
 async function main() {
-  commander
-    .option("-r, --release", "Generate a release version")
-    .parse(process.argv)
-    .outputHelp();
-  const release = commander.opts().release;
-  const workspace = fs.readJSONSync("workspace.json");
-  const version = getVersion(release);
-  writeVersion(version);
-  for (const eachPkg of Object.keys(workspace.projects)) {
-    await setVersion(workspace, eachPkg, version);
-  }
-  if (release) {
-    execSync(`git add -A`);
-    execSync(`git commit -m "Release v${version}"`);
-    execSync(`git tag -a v${version} -m "Release v${version}"`);
-    execSync(`git push origin v${version}`);
+  try {
+    commander
+      .option("-r, --release", "Generate a release version")
+      .parse(process.argv)
+      .outputHelp();
+    const release = commander.opts().release;
+    const workspace = fs.readJSONSync("workspace.json");
+    const version = getVersion(release);
+    writeVersion(version);
+    for (const eachPkg of Object.keys(workspace.projects)) {
+      await setVersion(workspace, eachPkg, version);
+    }
+    if (release) {
+      execSync(`git add -A`);
+      execSync(`git commit -m "Release v${version}"`);
+      execSync(`git tag -a v${version} -m "Release v${version}"`);
+      execSync(`git push origin v${version}`);
+    }
+  } catch (e) {
+    process.exit(1);
   }
 }
 
