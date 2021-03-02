@@ -6,7 +6,8 @@ export interface IAppConfig {
     | "Fairness"
     | "Interpret"
     | "ErrorAnalysis"
-    | "ModelPerformance";
+    | "ModelPerformance"
+    | "ModelAssessment";
   id: string;
   baseUrl: string;
   withCredentials: boolean;

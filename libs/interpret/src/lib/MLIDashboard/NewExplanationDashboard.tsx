@@ -30,16 +30,6 @@ import {
 } from "./Interfaces/IExplanationDashboardProps";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 
-export interface ISelectorConfig {
-  property: string;
-  index?: number;
-  options: {
-    dither?: boolean;
-    // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
-    bin?: boolean;
-  };
-}
-
 export class NewExplanationDashboard extends React.PureComponent<
   IExplanationDashboardProps,
   INewExplanationDashboardState

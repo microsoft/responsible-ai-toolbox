@@ -18,17 +18,14 @@ import {
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
+import { IGlobalExplanationProps } from "./Interfaces/IGlobalExplanationProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 
 const rowWarningSize = 6000;
 // features x classes
-export interface IGlobalExplanationProps {
-  globalImportanceIntercept: number[];
-  globalImportance: number[][];
-  isGlobalImportanceDerivedFromLocal: boolean;
-}
+
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
   if (props.modelInformation.method === "regressor") {

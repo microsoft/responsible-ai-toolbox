@@ -661,6 +661,75 @@
           }
         }
       }
+    },
+    "model-assessment": {
+      "root": "libs/model-assessment",
+      "sourceRoot": "libs/model-assessment/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/model-assessment/**/*.js",
+              "libs/model-assessment/**/*.jsx",
+              "libs/model-assessment/**/*.ts",
+              "libs/model-assessment/**/*.tsx",
+              "libs/model-assessment/**/*.test.ts",
+              "libs/model-assessment/**/*.test.tsx",
+              "libs/model-assessment/**/*.test.js",
+              "libs/model-assessment/**/*.test.jsx",
+              "libs/model-assessment/**/*.spec.ts",
+              "libs/model-assessment/**/*.spec.tsx",
+              "libs/model-assessment/**/*.spec.js",
+              "libs/model-assessment/**/*.spec.jsx",
+              "libs/model-assessment/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/model-assessment",
+            "tsConfig": "libs/model-assessment/tsconfig.lib.json",
+            "project": "libs/model-assessment/package.json",
+            "entryFile": "libs/model-assessment/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/model-assessment/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/model-assessment"]
+        }
+      }
     }
   },
   "cli": {
