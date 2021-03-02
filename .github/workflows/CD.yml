@@ -20,6 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       #setup environment
       - name: Set up Python
@@ -40,6 +42,9 @@ jobs:
       - name: Get version
         id: version
         run: echo ::set-output name=version::$(cat version.cfg)
+
+      - name: Build Typescript
+        run: yarn buildall
 
       # run tests before publishing to PyPI
       - name: update and upgrade pip, setuptools, wheel, and twine
@@ -69,9 +74,6 @@ jobs:
       - name: run tests
         run: pytest ./tests/
         working-directory: ${{ env.packageDirectory }}
-
-      - name: Build Typescript
-        run: yarn buildall
       - name: Upload a Build result
         uses: actions/upload-artifact@v2
         with:
@@ -123,6 +125,7 @@ jobs:
           token: ${{ secrets.KE_NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
           dry-run: false
+          tag: next
       - if: steps.publish.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
