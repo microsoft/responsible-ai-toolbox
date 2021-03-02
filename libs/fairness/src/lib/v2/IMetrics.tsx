@@ -5,7 +5,7 @@ import { Dictionary } from "lodash";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricResponse } from "../IFairnessProps";
+import { IMetricResponse } from "@responsible-ai/core-ui";
 
 export interface IMetrics {
   performance: IMetricResponse;

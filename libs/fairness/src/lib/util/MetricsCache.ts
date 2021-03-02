@@ -3,7 +3,7 @@
 
 import _, { max, min } from "lodash";
 
-import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
+import { IMetricResponse, IMetricRequest } from "@responsible-ai/core-ui";
 
 import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 

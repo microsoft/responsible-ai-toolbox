@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFairnessData, PredictionTypes } from "@responsible-ai/fairness";
+import { IFairnessData, PredictionTypes } from "@responsible-ai/core-ui";
 
 export const precomputedBinary: IFairnessData = {
   // feel free to come up with a better name

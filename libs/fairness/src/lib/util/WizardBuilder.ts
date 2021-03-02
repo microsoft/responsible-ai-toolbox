@@ -16,7 +16,7 @@ import {
   PredictionType,
   PredictionTypes,
   IPreComputedData
-} from "../IFairnessProps";
+} from "@responsible-ai/core-ui";
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";

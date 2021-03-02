@@ -5,7 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { Dropdown, IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTypes } from "../../IFairnessProps";
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,

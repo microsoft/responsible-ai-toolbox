@@ -3,7 +3,7 @@
 
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
 
-import { PredictionType } from "../IFairnessProps";
+import { PredictionType } from "@responsible-ai/core-ui";
 
 export interface IBaseFairnessContext {
   trueY: number[];

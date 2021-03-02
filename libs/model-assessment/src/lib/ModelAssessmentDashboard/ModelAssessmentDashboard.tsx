@@ -45,6 +45,7 @@ import {
   DatasetExplorerTab,
   GlobalExplanationTab
 } from "@responsible-ai/interpret";
+import { FairnessWizardV2, IFairnessProps } from "@responsible-ai/fairness";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
@@ -68,7 +69,9 @@ import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
 
 export interface IModelAssessmentDashboardProps
   extends IErrorAnalysisDashboardProps,
-    IOfficeFabricProps {}
+    IOfficeFabricProps {
+  fairness: IFairnessProps;
+}
 
 export interface IModelAssessmentDashboardState {
   activeGlobalTab: GlobalTabKeys;
@@ -228,6 +231,10 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     this.pivotItems.push({
       headerText: localization.ErrorAnalysis.localExplanationView,
       itemKey: GlobalTabKeys.LocalExplanationTab
+    });
+    this.pivotItems.push({
+      headerText: localization.Fairness.Header.title,
+      itemKey: GlobalTabKeys.FairnessTab
     });
     this.layerHostId = getId("cohortsLayerHost");
     if (this.props.requestImportances) {
@@ -726,6 +733,11 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                     setWhatIfDatapoint={(index: number) =>
                       this.setState({ selectedWhatIfIndex: index })
                     }
+                  />
+                )}
+                {this.state.activeGlobalTab === GlobalTabKeys.FairnessTab && (
+                  <FairnessWizardV2 
+                    {...this.props.fairness}
                   />
                 )}
               </div>

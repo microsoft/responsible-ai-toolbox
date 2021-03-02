@@ -21,7 +21,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTypes } from "../../IFairnessProps";
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import { FairnessModes } from "../../util/FairnessMetrics";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";

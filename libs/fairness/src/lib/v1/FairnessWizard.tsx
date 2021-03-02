@@ -3,6 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import {
   Pivot,
@@ -15,7 +16,7 @@ import {
 import React from "react";
 
 import { EmptyHeader } from "../components/EmptyHeader";
-import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
+import { IFairnessProps } from "../IFairnessProps";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
   IFairnessContext,

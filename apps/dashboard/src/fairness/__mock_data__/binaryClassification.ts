@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFairnessData } from "@responsible-ai/fairness";
+import { IFairnessData } from "@responsible-ai/core-ui";
 
 export const binaryClassification: IFairnessData = {
   predictedY: [

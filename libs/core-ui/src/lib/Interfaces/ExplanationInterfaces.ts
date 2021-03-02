@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDatasetSummary } from "./IDataset";
+
+// TODO replace all of these with classes IDataset and IModelExplanationData
+
 export interface IExplanationDashboardData {
   modelInformation: IModelInformation;
   dataSummary: IDatasetSummary;
@@ -33,11 +37,7 @@ export interface IModelInformation {
   method?: "classifier" | "regressor";
 }
 
-export interface IDatasetSummary {
-  featureNames?: string[];
-  classNames?: string[];
-  categoricalMap?: { [key: number]: string[] };
-}
+// TODO replace all of the above with classes IDataset and IModelExplanationData
 
 export interface IPrecomputedExplanations {
   localFeatureImportance?:

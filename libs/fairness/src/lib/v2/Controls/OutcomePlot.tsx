@@ -6,7 +6,7 @@ import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTypes } from "../../IFairnessProps";
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import { FormatMetrics } from "../../util/FormatMetrics";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import { performanceOptions } from "../../util/PerformanceMetrics";

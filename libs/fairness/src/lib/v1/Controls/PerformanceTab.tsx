@@ -8,7 +8,7 @@ import React from "react";
 import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
 import { IWizardTabProps } from "../../components/IWizardTabProps";
 import { WizardFooter } from "../../components/WizardFooter";
-import { PredictionTypes } from "../../IFairnessProps";
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import { IPerformancePickerPropsV1 } from "../FairnessWizard";
 
 import { PerformanceTabStyles } from "./PerformanceTab.styles";

@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 
-import { PredictionTypes } from "../IFairnessProps";
+import { PredictionTypes } from "@responsible-ai/core-ui";
 
 export interface IFairnessOption {
   key: string;
