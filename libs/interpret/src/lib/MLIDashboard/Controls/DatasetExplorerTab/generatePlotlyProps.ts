@@ -4,15 +4,15 @@
 import {
   ColumnCategories,
   JointDataset,
-  Cohort
+  Cohort,
+  ChartTypes,
+  IGenericChartProps
 } from "@responsible-ai/core-ui";
 import { IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { DataTransform } from "plotly.js";
 
-import { ChartTypes } from "../../ChartTypes";
 import { FabricStyles } from "../../FabricStyles";
-import { IGenericChartProps } from "../../IGenericChartProps";
 
 import { basePlotlyProperties } from "./basePlotlyProperties";
 import { buildCustomData } from "./buildCustomData";

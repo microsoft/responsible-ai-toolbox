@@ -45,6 +45,11 @@ export interface IErrorAnalysisDataSet {
   classDimension?: 1 | 2 | 3;
 }
 
+export interface IModelAssessmentDataSet {
+  data: IExplanationDashboardData | ISerializedExplanationData;
+  classDimension?: 1 | 2 | 3;
+}
+
 export interface IDataSet<TDataSet> {
   datasets: { [key: string]: TDataSet };
 }
@@ -61,10 +66,15 @@ export interface IErrorAnalysisSetting {
   versions: { [key: string]: 1 };
 }
 
+export interface IModelAssessmentSetting {
+  versions: { [key: string]: 1 };
+}
+
 export const applicationKeys = <const>[
   "interpret",
   "fairness",
-  "errorAnalysis"
+  "errorAnalysis",
+  "modelAssessment"
 ];
 
 export type IApplications = {
@@ -73,6 +83,7 @@ export type IApplications = {
   fairness: IFairLearnSetting & IDataSet<IFairLearnDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
+  modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
 };
 
 export const applications: IApplications = <const>{
@@ -117,5 +128,12 @@ export const applications: IApplications = <const>{
       largeFeatureCount: { classDimension: 2, data: largeFeatureCount }
     },
     versions: { "Version-1": 1, "Version-2": 2 }
+  },
+  modelAssessment: {
+    datasets: {
+      adultCensusIncomeData: { classDimension: 2, data: adultCensus },
+      breastCancerData: { classDimension: 2, data: breastCancerData }
+    },
+    versions: { "Version-1": 1 }
   }
 };

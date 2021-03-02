@@ -6,6 +6,7 @@ export * from "./lib/Cohort/Cohort";
 export * from "./lib/util/array";
 export * from "./lib/util/JointDataset";
 export * from "./lib/util/generateRoute";
+export * from "./lib/util/IGenericChartProps";
 export * from "./lib/util/initializeOfficeFabric";
 export * from "./lib/util/ModelExplanationUtils";
 export * from "./lib/util/Never";
