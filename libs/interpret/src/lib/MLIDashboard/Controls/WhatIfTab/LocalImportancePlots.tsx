@@ -7,7 +7,8 @@ import {
   WeightVectorOption,
   JointDataset,
   ModelExplanationUtils,
-  ChartTypes
+  ChartTypes,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -128,30 +129,18 @@ export class LocalImportancePlots extends React.Component<
     ) {
       if (!this.props.jointDataset.hasLocalExplanations) {
         secondaryPlot = (
-          <div
-            className={classNames.missingParametersPlaceholder}
-            id="noFeatureImportanceInfo"
-          >
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {
-                  localization.Interpret.WhatIfTab
-                    .featureImportanceLackingParameters
-                }
-              </Text>
-            </div>
-          </div>
+          <MissingParametersPlaceholder>
+            {
+              localization.Interpret.WhatIfTab
+                .featureImportanceLackingParameters
+            }
+          </MissingParametersPlaceholder>
         );
       } else if (this.props.includedFeatureImportance.length === 0) {
         secondaryPlot = (
-          <div
-            className={classNames.missingParametersPlaceholder}
-            id="noPointSelectedInfo"
-          >
-            <Text>
-              {localization.Interpret.WhatIfTab.featureImportanceGetStartedText}
-            </Text>
-          </div>
+          <MissingParametersPlaceholder>
+            {localization.Interpret.WhatIfTab.featureImportanceGetStartedText}
+          </MissingParametersPlaceholder>
         );
       } else {
         const yAxisLabels: string[] = [
@@ -285,23 +274,15 @@ export class LocalImportancePlots extends React.Component<
       }
     } else if (!this.props.invokeModel) {
       secondaryPlot = (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.WhatIfTab.iceLackingParameters}
-            </Text>
-          </div>
-        </div>
+        <MissingParametersPlaceholder>
+          {localization.Interpret.WhatIfTab.iceLackingParameters}
+        </MissingParametersPlaceholder>
       );
     } else if (this.props.testableDatapoints.length === 0) {
       secondaryPlot = (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.WhatIfTab.IceGetStartedText}
-            </Text>
-          </div>
-        </div>
+        <MissingParametersPlaceholder>
+          {localization.Interpret.WhatIfTab.IceGetStartedText}
+        </MissingParametersPlaceholder>
       );
     } else {
       secondaryPlot = (

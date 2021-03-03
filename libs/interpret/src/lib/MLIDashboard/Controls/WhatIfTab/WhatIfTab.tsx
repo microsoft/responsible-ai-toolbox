@@ -11,7 +11,8 @@ import {
   ModelExplanationUtils,
   ChartTypes,
   IGenericChartProps,
-  ISelectorConfig
+  ISelectorConfig,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -291,13 +292,9 @@ export class WhatIfTab extends React.PureComponent<
     const classNames = whatIfTabStyles();
     if (!this.props.jointDataset.hasDataset) {
       return (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.WhatIfTab.missingParameters}
-            </Text>
-          </div>
-        </div>
+        <MissingParametersPlaceholder>
+          {localization.Interpret.WhatIfTab.missingParameters}
+        </MissingParametersPlaceholder>
       );
     }
     if (this.state.chartProps === undefined) {
@@ -436,24 +433,9 @@ export class WhatIfTab extends React.PureComponent<
                     </div>
                   </div>
                   {!canRenderChart && (
-                    <div className={classNames.missingParametersPlaceholder}>
-                      <div
-                        className={
-                          classNames.missingParametersPlaceholderSpacer
-                        }
-                      >
-                        <Text
-                          block
-                          variant="large"
-                          className={classNames.faintText}
-                        >
-                          {
-                            localization.Interpret.ValidationErrors
-                              .datasizeError
-                          }
-                        </Text>
-                      </div>
-                    </div>
+                    <MissingParametersPlaceholder>
+                      {localization.Interpret.ValidationErrors.datasizeError}
+                    </MissingParametersPlaceholder>
                   )}
                   {canRenderChart && (
                     <AccessibleChart

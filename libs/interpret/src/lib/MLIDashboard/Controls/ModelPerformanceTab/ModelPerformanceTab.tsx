@@ -11,7 +11,8 @@ import {
   Cohort,
   ChartTypes,
   IGenericChartProps,
-  ISelectorConfig
+  ISelectorConfig,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -221,13 +222,9 @@ export class ModelPerformanceTab extends React.PureComponent<
     const classNames = modelPerformanceTabStyles();
     if (!this.props.jointDataset.hasPredictedY) {
       return (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.ModelPerformance.missingParameters}
-            </Text>
-          </div>
-        </div>
+        <MissingParametersPlaceholder>
+          {localization.Interpret.ModelPerformance.missingParameters}
+        </MissingParametersPlaceholder>
       );
     }
     if (this.state.chartProps === undefined) {
@@ -335,23 +332,9 @@ export class ModelPerformanceTab extends React.PureComponent<
                 {this.props.metadata.modelType !== ModelTypes.Multiclass && (
                   <div className={classNames.rightPanel}>
                     {!this.props.jointDataset.hasTrueY && (
-                      <div className={classNames.missingParametersPlaceholder}>
-                        <div
-                          className={
-                            classNames.missingParametersPlaceholderNeutralSpacer
-                          }
-                        >
-                          <Text
-                            variant="large"
-                            className={classNames.faintText}
-                          >
-                            {
-                              localization.Interpret.ModelPerformance
-                                .missingTrueY
-                            }
-                          </Text>
-                        </div>
-                      </div>
+                      <MissingParametersPlaceholder>
+                        {localization.Interpret.ModelPerformance.missingTrueY}
+                      </MissingParametersPlaceholder>
                     )}
                     {this.props.jointDataset.hasTrueY &&
                       metricsList.map((stats, index) => {
