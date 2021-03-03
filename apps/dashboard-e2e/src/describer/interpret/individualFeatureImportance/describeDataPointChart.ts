@@ -33,11 +33,7 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
           !dataShape.noLocalImportance && !dataShape.noFeatureImportance
             ? "Select a point to see its local importance"
             : "Provide local feature importances to see how each feature impacts individual predictions.";
-        const containerId =
-          !dataShape.noLocalImportance && !dataShape.noFeatureImportance
-            ? "#noPointSelectedInfo"
-            : "#noFeatureImportanceInfo";
-        cy.get(`${containerId}`).should("contain.text", message);
+        cy.get(`#subPlotContainer`).should("contain.text", message);
       });
       it("should select the first point", () => {
         props.chart.clickNthPoint(0);
