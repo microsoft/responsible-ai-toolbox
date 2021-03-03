@@ -49,9 +49,6 @@ export interface IWhatIfTabStyles {
   choiceGroup: IStyle;
   choiceGroupFlexContainer: IStyle;
   panelIconAndLabel: IStyle;
-  missingParametersPlaceholder: IStyle;
-  missingParametersPlaceholderSpacer: IStyle;
-  faintText: IStyle;
   predictedBlock: IStyle;
   upperWhatIfPanel: IStyle;
   saveButton: IStyle;
@@ -60,7 +57,6 @@ export interface IWhatIfTabStyles {
   iceFeatureSelection: IStyle;
   iceClassSelection: IStyle;
   disclaimerWrapper: IStyle;
-  panelPlaceholderWrapper: IStyle;
   errorText: IStyle;
   tooltipColumn: IStyle;
   tooltipTable: IStyle;
@@ -180,7 +176,6 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       width: "250px",
       zIndex: 99999
     },
-    faintText: [FabricStyles.faintText],
     featureImportanceArea: {
       width: "100%"
     },
@@ -274,10 +269,6 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       flexDirection: "row-reverse",
       minHeight: "800px"
     },
-    missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer
-    ],
     multiclassWeightLabel: {
       display: "inline-flex",
       paddingTop: "10px"
@@ -305,13 +296,6 @@ export const whatIfTabStyles: () => IProcessedStyleSet<
       display: "flex",
       paddingTop: "10px"
     },
-    panelPlaceholderWrapper: [
-      FabricStyles.missingParameterPlaceholder,
-      {
-        boxSizing: "border-box",
-        padding: "0 16px"
-      }
-    ],
     parameterList: {
       backgroundColor: theme.palette.neutralLighter,
       display: "flex",

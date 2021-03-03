@@ -8,8 +8,7 @@ import {
   WeightVectors,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes,
-  isTwoDimArray
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -19,7 +18,6 @@ import {
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
-import { IGlobalExplanationProps } from "./Interfaces/IGlobalExplanationProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
@@ -127,48 +125,6 @@ function buildModelMetadata(
   };
 }
 
-function buildGlobalProperties(
-  props: IExplanationDashboardProps
-): IGlobalExplanationProps | undefined {
-  if (
-    props.precomputedExplanations &&
-    props.precomputedExplanations.globalFeatureImportance &&
-    props.precomputedExplanations.globalFeatureImportance.scores
-  ) {
-    let globalImportance: number[][];
-    let globalImportanceIntercept: number[] | undefined;
-    if (
-      isTwoDimArray(
-        props.precomputedExplanations.globalFeatureImportance.scores
-      )
-    ) {
-      globalImportance =
-        props.precomputedExplanations.globalFeatureImportance.scores;
-      globalImportanceIntercept = props.precomputedExplanations
-        .globalFeatureImportance.intercept as number[];
-    } else {
-      globalImportance = props.precomputedExplanations.globalFeatureImportance.scores.map(
-        (value) => [value]
-      );
-      globalImportanceIntercept = props.precomputedExplanations
-        .globalFeatureImportance
-        ? [
-            props.precomputedExplanations.globalFeatureImportance
-              .intercept as number
-          ]
-        : undefined;
-    }
-    return {
-      globalImportance,
-      globalImportanceFeatureNames:
-        props.precomputedExplanations.globalFeatureImportance.featureNames ||
-        props.dataSummary.featureNames,
-      globalImportanceIntercept,
-      isGlobalImportanceDerivedFromLocal: false
-    };
-  }
-  return undefined;
-}
 export function buildInitialExplanationContext(
   props: IExplanationDashboardProps
 ): INewExplanationDashboardState {
@@ -190,7 +146,6 @@ export function buildInitialExplanationContext(
     predictedY: props.predictedY,
     trueY: props.trueY
   });
-  const globalProps = buildGlobalProperties(props);
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
     new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
@@ -222,11 +177,6 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ModelPerformance,
     cohorts,
-    globalImportance: globalProps?.globalImportance,
-    globalImportanceFeatureNames: globalProps?.globalImportanceFeatureNames,
-    globalImportanceIntercept: globalProps?.globalImportanceIntercept,
-    isGlobalImportanceDerivedFromLocal:
-      globalProps?.isGlobalImportanceDerivedFromLocal || false,
     jointDataset,
     modelMetadata,
     selectedWeightVector:

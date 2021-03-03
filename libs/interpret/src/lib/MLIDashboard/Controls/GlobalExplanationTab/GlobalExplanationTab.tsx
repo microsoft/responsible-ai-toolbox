@@ -9,7 +9,8 @@ import {
   IExplanationModelMetadata,
   ModelExplanationUtils,
   ChartTypes,
-  IGenericChartProps
+  IGenericChartProps,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -132,23 +133,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     const classNames = globalTabStyles();
 
     if (!this.props.jointDataset.hasLocalExplanations) {
-      if (this.props.globalImportance !== undefined) {
-        return (
-          <GlobalOnlyChart
-            metadata={this.props.metadata}
-            globalImportance={this.props.globalImportance}
-          />
-        );
-      }
-      return (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.GlobalTab.missingParameters}
-            </Text>
-          </div>
-        </div>
-      );
+      return <GlobalOnlyChart />;
     }
 
     if (this.state.globalBarSettings === undefined) {
@@ -245,13 +230,9 @@ export class GlobalExplanationTab extends React.PureComponent<
           />
         </div>
         {!this.hasDataset && (
-          <div className={classNames.missingParametersPlaceholder}>
-            <div className={classNames.missingParametersPlaceholderSpacer}>
-              <Text variant="large" className={classNames.faintText}>
-                {localization.Interpret.GlobalTab.datasetRequired}
-              </Text>
-            </div>
-          </div>
+          <MissingParametersPlaceholder>
+            {localization.Interpret.GlobalTab.datasetRequired}
+          </MissingParametersPlaceholder>
         )}
         {this.hasDataset && (
           <div>
@@ -381,7 +362,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       4
     );
     result.sortOption = "global";
-    result.includeOverallGlobal = !this.props.isGlobalDerivedFromLocal;
+    result.includeOverallGlobal = true;
     return result;
   }
 

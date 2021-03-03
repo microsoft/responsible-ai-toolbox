@@ -78,9 +78,9 @@ export class NewExplanationDashboard extends React.PureComponent<
       <InterpretContext.Provider
         value={{
           cohorts: this.state.cohorts,
-          globalImportance: this.props.precomputedExplanations
-            ?.globalFeatureImportance,
           jointDataset: this.state.jointDataset,
+          modelMetadata: this.state.modelMetadata,
+          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
