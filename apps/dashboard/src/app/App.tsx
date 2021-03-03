@@ -113,10 +113,15 @@ export class App extends React.Component<IAppSetting, IAppState> {
           )}
           {this.state.application === "modelAssessment" && (
             <ModelAssessment
-              modelAssessmentData={
+              dataset={
                 applications[this.state.application].datasets[
                   this.state.dataset
-                ].data
+                ].dataset
+              }
+              modelExplanationData={
+                applications[this.state.application].datasets[
+                  this.state.dataset
+                ].modelExplanationData
               }
               classDimension={
                 applications[this.state.application].datasets[

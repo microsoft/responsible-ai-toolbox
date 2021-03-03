@@ -3,13 +3,17 @@
 
 import {
   IExplanationDashboardData,
-  IModelAssessmentDashboardData,
   ISerializedExplanationData,
-  IFairnessData
+  IFairnessData,
+  IModelExplanationData,
+  IDataset
 } from "@responsible-ai/core-ui";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
-import { adultCensusWithFairness } from "../model-assessment/__mock_data__/adultCensus";
+import {
+  adultCensusWithFairnessDataset,
+  adultCensusWithFairnessModelExplanationData
+} from "../model-assessment/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
@@ -48,7 +52,8 @@ export interface IErrorAnalysisDataSet {
 }
 
 export interface IModelAssessmentDataSet {
-  data: IModelAssessmentDashboardData;
+  dataset: IDataset;
+  modelExplanationData: IModelExplanationData;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -133,7 +138,11 @@ export const applications: IApplications = <const>{
   },
   modelAssessment: {
     datasets: {
-      adultCensusIncomeData: { classDimension: 2, data: adultCensusWithFairness },
+      adultCensusIncomeData: {
+        classDimension: 2,
+        dataset: adultCensusWithFairnessDataset,
+        modelExplanationData: adultCensusWithFairnessModelExplanationData
+      }
     },
     versions: { "Version-1": 1 }
   }

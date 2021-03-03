@@ -19,7 +19,6 @@ export * from "./lib/Interfaces/IExplanationContext";
 export * from "./lib/Interfaces/IFairnessData";
 export * from "./lib/Interfaces/IDataset";
 export * from "./lib/Interfaces/IModelExplanationData";
-export * from "./lib/Interfaces/IModelAssessmentData";
 export * from "./lib/Interfaces/IWeightedDropdownContext";
 export * from "./lib/Interfaces/IFilter";
 export * from "./lib/Interfaces/ICohort";

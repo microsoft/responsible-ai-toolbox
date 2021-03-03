@@ -14,7 +14,12 @@ import {
   Cohort,
   ICompositeFilter,
   IFilter,
-  IOfficeFabricProps
+  IOfficeFabricProps,
+  IMetricRequest,
+  IMetricResponse,
+  IDataset,
+  IModelExplanationData,
+  getDatasetSummary
 } from "@responsible-ai/core-ui";
 import {
   CohortInfo,
@@ -39,13 +44,13 @@ import {
   IMatrixFilterState,
   ITreeViewRendererState,
   createInitialTreeViewState,
-  IErrorAnalysisDashboardProps
+  IStringsParam
 } from "@responsible-ai/error-analysis";
 import {
   DatasetExplorerTab,
   GlobalExplanationTab
 } from "@responsible-ai/interpret";
-import { FairnessWizardV2, IFairnessProps } from "@responsible-ai/fairness";
+import { FairnessWizardV2 } from "@responsible-ai/fairness";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
@@ -67,10 +72,40 @@ import React from "react";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
 
-export interface IModelAssessmentDashboardProps
-  extends IErrorAnalysisDashboardProps,
-    IOfficeFabricProps {
-  fairness: IFairnessProps;
+export interface IModelAssessmentDashboardProps extends IOfficeFabricProps {
+  locale?: string;
+  stringParams?: IStringsParam;
+
+  dataset: IDataset;
+  modelExplanationData: IModelExplanationData;
+
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestLocalFeatureExplanations?: (
+    request: any[],
+    abortSignal: AbortSignal,
+    explanationAlgorithm?: string
+  ) => Promise<any[]>;
+  requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestImportances?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  requestMetrics?: (
+    request: IMetricRequest,
+    abortSignal?: AbortSignal
+  ) => Promise<IMetricResponse>;
+  localUrl: string;
+
+  // TODO figure out how to persist starting tab for fairness
+  startingTabIndex?: number;
+
+  supportedBinaryClassificationPerformanceKeys: string[];
+  supportedRegressionPerformanceKeys: string[];
+  supportedProbabilityPerformanceKeys: string[];
 }
 
 export interface IModelAssessmentDashboardState {
@@ -158,12 +193,15 @@ export class ModelAssessmentDashboard extends React.PureComponent<
   ) => number = (memoize as any).default(
     (props: IModelAssessmentDashboardProps): number => {
       if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.localFeatureImportance &&
-        props.precomputedExplanations.localFeatureImportance.scores
+        props.modelExplanationData.precomputedExplanations &&
+        props.modelExplanationData.precomputedExplanations
+          .localFeatureImportance &&
+        props.modelExplanationData.precomputedExplanations
+          .localFeatureImportance.scores
       ) {
         const localImportances =
-          props.precomputedExplanations.localFeatureImportance.scores;
+          props.modelExplanationData.precomputedExplanations
+            .localFeatureImportance.scores;
         if (isThreeDimArray(localImportances)) {
           return localImportances.length;
         }
@@ -171,27 +209,30 @@ export class ModelAssessmentDashboard extends React.PureComponent<
         return 1;
       }
       if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.globalFeatureImportance &&
-        props.precomputedExplanations.globalFeatureImportance.scores
+        props.modelExplanationData.precomputedExplanations &&
+        props.modelExplanationData.precomputedExplanations
+          .globalFeatureImportance &&
+        props.modelExplanationData.precomputedExplanations
+          .globalFeatureImportance.scores
       ) {
         // determine if passed in values is 1D or 2D
         if (
           isTwoDimArray(
-            props.precomputedExplanations.globalFeatureImportance.scores
+            props.modelExplanationData.precomputedExplanations
+              .globalFeatureImportance.scores
           )
         ) {
-          return (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][]).length;
+          return (props.modelExplanationData.precomputedExplanations
+            .globalFeatureImportance.scores as number[][]).length;
         }
       }
       if (
-        props.probabilityY &&
-        Array.isArray(props.probabilityY) &&
-        Array.isArray(props.probabilityY[0]) &&
-        props.probabilityY[0].length > 0
+        props.modelExplanationData.probabilityY &&
+        Array.isArray(props.modelExplanationData.probabilityY) &&
+        Array.isArray(props.modelExplanationData.probabilityY[0]) &&
+        props.modelExplanationData.probabilityY[0].length > 0
       ) {
-        return props.probabilityY[0].length;
+        return props.modelExplanationData.probabilityY[0].length;
       }
       // default to regression case
       return 1;
@@ -250,7 +291,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     props: IModelAssessmentDashboardProps
   ): IExplanationModelMetadata {
     const modelType = ModelAssessmentDashboard.getModelType(props);
-    let featureNames = props.dataSummary.featureNames;
+    let featureNames = props.dataset.featureNames;
     let featureNamesAbridged: string[];
     const maxLength = 18;
     if (featureNames !== undefined) {
@@ -264,34 +305,38 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       });
     } else {
       let featureLength = 0;
-      if (props.testData && props.testData[0] !== undefined) {
-        featureLength = props.testData[0].length;
+      if (props.dataset.features && props.dataset.features[0] !== undefined) {
+        featureLength = props.dataset.features[0].length;
       } else if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.globalFeatureImportance
+        props.modelExplanationData.precomputedExplanations &&
+        props.modelExplanationData.precomputedExplanations
+          .globalFeatureImportance
       ) {
         featureLength =
-          props.precomputedExplanations.globalFeatureImportance.scores.length;
+          props.modelExplanationData.precomputedExplanations
+            .globalFeatureImportance.scores.length;
       } else if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.localFeatureImportance
+        props.modelExplanationData.precomputedExplanations &&
+        props.modelExplanationData.precomputedExplanations
+          .localFeatureImportance
       ) {
         const localImportances =
-          props.precomputedExplanations.localFeatureImportance.scores;
+          props.modelExplanationData.precomputedExplanations
+            .localFeatureImportance.scores;
         if (isThreeDimArray(localImportances)) {
-          featureLength = (props.precomputedExplanations.localFeatureImportance
-            .scores[0][0] as number[]).length;
+          featureLength = (props.modelExplanationData.precomputedExplanations
+            .localFeatureImportance.scores[0][0] as number[]).length;
         } else {
-          featureLength = (props.precomputedExplanations.localFeatureImportance
-            .scores[0] as number[]).length;
+          featureLength = (props.modelExplanationData.precomputedExplanations
+            .localFeatureImportance.scores[0] as number[]).length;
         }
       } else if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.ebmGlobalExplanation
+        props.modelExplanationData.precomputedExplanations &&
+        props.modelExplanationData.precomputedExplanations.ebmGlobalExplanation
       ) {
         featureLength =
-          props.precomputedExplanations.ebmGlobalExplanation.feature_list
-            .length;
+          props.modelExplanationData.precomputedExplanations
+            .ebmGlobalExplanation.feature_list.length;
       }
       featureNames = ModelAssessmentDashboard.buildIndexedNames(
         featureLength,
@@ -299,7 +344,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       );
       featureNamesAbridged = featureNames;
     }
-    let classNames = props.dataSummary.classNames;
+    let classNames = props.dataset.classNames;
     const classLength = ModelAssessmentDashboard.getClassLength(props);
     if (!classNames || classNames.length !== classLength) {
       classNames = ModelAssessmentDashboard.buildIndexedNames(
@@ -309,14 +354,14 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     }
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
       featureNames.length,
-      props.testData,
-      props.dataSummary.categoricalMap
+      props.dataset.features,
+      props.dataset.categoricalMap
     );
     const featureRanges =
       ModelMetadata.buildFeatureRanges(
-        props.testData,
+        props.dataset.features,
         featureIsCategorical,
-        props.dataSummary.categoricalMap
+        props.dataset.categoricalMap
       ) || [];
     return {
       classNames,
@@ -341,7 +386,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     props: IModelAssessmentDashboardProps
   ): ModelTypes {
     // If python gave us a hint, use it
-    if (props.modelInformation.method === "regressor") {
+    if (props.modelExplanationData.method === "regressor") {
       return ModelTypes.Regression;
     }
     switch (ModelAssessmentDashboard.getClassLength(props)) {
@@ -359,26 +404,31 @@ export class ModelAssessmentDashboard extends React.PureComponent<
   ): IGlobalExplanationProps {
     const result: IGlobalExplanationProps = {} as IGlobalExplanationProps;
     if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.globalFeatureImportance &&
-      props.precomputedExplanations.globalFeatureImportance.scores
+      props.modelExplanationData.precomputedExplanations &&
+      props.modelExplanationData.precomputedExplanations
+        .globalFeatureImportance &&
+      props.modelExplanationData.precomputedExplanations.globalFeatureImportance
+        .scores
     ) {
       result.isGlobalImportanceDerivedFromLocal = false;
       if (
         isTwoDimArray(
-          props.precomputedExplanations.globalFeatureImportance.scores
+          props.modelExplanationData.precomputedExplanations
+            .globalFeatureImportance.scores
         )
       ) {
-        result.globalImportance = props.precomputedExplanations
-          .globalFeatureImportance.scores as number[][];
-        result.globalImportanceIntercept = props.precomputedExplanations
-          .globalFeatureImportance.intercept as number[];
+        result.globalImportance = props.modelExplanationData
+          .precomputedExplanations.globalFeatureImportance.scores as number[][];
+        result.globalImportanceIntercept = props.modelExplanationData
+          .precomputedExplanations.globalFeatureImportance
+          .intercept as number[];
       } else {
-        result.globalImportance = (props.precomputedExplanations
-          .globalFeatureImportance.scores as number[]).map((value) => [value]);
+        result.globalImportance = (props.modelExplanationData
+          .precomputedExplanations.globalFeatureImportance
+          .scores as number[]).map((value) => [value]);
         result.globalImportanceIntercept = [
-          props.precomputedExplanations.globalFeatureImportance
-            .intercept as number
+          props.modelExplanationData.precomputedExplanations
+            .globalFeatureImportance.intercept as number
         ];
       }
     }
@@ -396,19 +446,23 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       | undefined = undefined;
     if (
       props &&
-      props.precomputedExplanations &&
-      props.precomputedExplanations.localFeatureImportance &&
-      props.precomputedExplanations.localFeatureImportance.scores
+      props.modelExplanationData.precomputedExplanations &&
+      props.modelExplanationData.precomputedExplanations
+        .localFeatureImportance &&
+      props.modelExplanationData.precomputedExplanations.localFeatureImportance
+        .scores
     ) {
-      localExplanations = props.precomputedExplanations.localFeatureImportance;
+      localExplanations =
+        props.modelExplanationData.precomputedExplanations
+          .localFeatureImportance;
     }
     const jointDataset = new JointDataset({
-      dataset: props.testData,
+      dataset: props.dataset.features,
       localExplanations,
       metadata: modelMetadata,
-      predictedProbabilities: props.probabilityY,
-      predictedY: props.predictedY,
-      trueY: props.trueY
+      predictedProbabilities: props.modelExplanationData.probabilityY,
+      predictedY: props.modelExplanationData.predictedY,
+      trueY: props.dataset.trueY
     });
     const globalProps = ModelAssessmentDashboard.buildGlobalProperties(props);
     // consider taking filters in as param arg for programmatic users
@@ -466,7 +520,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       openWhatIf: false,
       predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
-      selectedFeatures: props.features,
+      selectedFeatures: props.dataset.featureNames,
       selectedWeightVector:
         modelMetadata.modelType === ModelTypes.Multiclass
           ? WeightVectors.AbsAvg
@@ -646,7 +700,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
-                    features={this.props.features}
+                    features={this.props.dataset.featureNames}
                     selectedFeatures={this.state.selectedFeatures}
                     errorAnalysisOption={this.state.errorAnalysisOption}
                     selectedCohort={this.state.selectedCohort}
@@ -702,7 +756,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                     weightOptions={this.state.weightVectorOptions}
                     weightLabels={this.state.weightVectorLabels}
                     onWeightChange={this.onWeightVectorChange}
-                    explanationMethod={this.props.explanationMethod}
+                    explanationMethod={this.props.modelExplanationData.explanationMethod}
                   />
                 )}
                 {this.state.activeGlobalTab ===
@@ -715,7 +769,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                         : undefined
                     }
                     jointDataset={this.state.jointDataset}
-                    features={this.props.features}
+                    features={this.props.dataset.featureNames}
                     metadata={this.state.modelMetadata}
                     invokeModel={this.props.requestPredictions}
                     selectedWeightVector={this.state.selectedWeightVector}
@@ -736,8 +790,23 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                   />
                 )}
                 {this.state.activeGlobalTab === GlobalTabKeys.FairnessTab && (
-                  <FairnessWizardV2 
-                    {...this.props.fairness}
+                  <FairnessWizardV2
+                    predictedY={[this.props.modelExplanationData.predictedY!]}
+                    trueY={this.props.dataset.trueY}
+                    dataSummary={getDatasetSummary(this.props.dataset, true)}
+                    supportedBinaryClassificationPerformanceKeys={
+                      this.props.supportedBinaryClassificationPerformanceKeys
+                    }
+                    supportedProbabilityPerformanceKeys={
+                      this.props.supportedProbabilityPerformanceKeys
+                    }
+                    supportedRegressionPerformanceKeys={
+                      this.props.supportedRegressionPerformanceKeys
+                    }
+                    requestMetrics={this.props.requestMetrics}
+                    testData={this.props.dataset.sensitiveFeatures!}
+                    locale={this.props.locale}
+                    theme={this.props.theme}
                   />
                 )}
               </div>
@@ -758,7 +827,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                 saveFeatures={(features: string[]): void =>
                   this.setState({ selectedFeatures: features })
                 }
-                features={this.props.features}
+                features={this.props.dataset.featureNames}
                 importances={this.state.importances}
               />
               <CohortList
@@ -818,7 +887,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
       filters,
-      this.props.features
+      this.props.dataset.featureNames
     );
 
     let selectedCohortName = "";
