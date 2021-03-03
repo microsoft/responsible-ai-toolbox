@@ -50,19 +50,19 @@ const interpretDatasets = {
     defaultXAxis: "Index",
     defaultYAxis: "CRIM",
     featureNames: [
-      "LSTAT",
+      "ZN",
+      "INDUS",
       "RM",
-      "PTRATIO",
-      "NOX",
       "DIS",
+      "NOX",
+      "LSTAT",
+      "RAD",
       "AGE",
       "TAX",
-      "CRIM",
+      "CHAS",
+      "PTRATIO",
       "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
+      "CRIM"
     ],
     noLocalImportance: true
   },

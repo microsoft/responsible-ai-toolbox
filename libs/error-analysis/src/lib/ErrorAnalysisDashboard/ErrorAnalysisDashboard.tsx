@@ -624,10 +624,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     <GlobalExplanationTab
                       jointDataset={this.state.jointDataset}
                       metadata={this.state.modelMetadata}
-                      globalImportance={this.state.globalImportance}
-                      isGlobalDerivedFromLocal={
-                        this.state.isGlobalImportanceDerivedFromLocal
-                      }
                       cohorts={this.state.cohorts.map(
                         (errorCohort) => errorCohort.cohort
                       )}

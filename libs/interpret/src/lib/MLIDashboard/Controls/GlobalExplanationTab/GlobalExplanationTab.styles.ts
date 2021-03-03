@@ -24,9 +24,6 @@ export interface IGlobalTabStyles {
   cohortLegend: IStyle;
   legendHelpText: IStyle;
   secondaryChartAndLegend: IStyle;
-  missingParametersPlaceholder: IStyle;
-  missingParametersPlaceholderSpacer: IStyle;
-  faintText: IStyle;
   chartEditorButton: IStyle;
   boldText: IStyle;
   cohortLegendWithTop: IStyle;
@@ -60,7 +57,6 @@ export const globalTabStyles: () => IProcessedStyleSet<
       paddingBottom: "10px",
       paddingTop: "10px"
     },
-    faintText: [FabricStyles.faintText],
     globalChartControls: {
       display: "flex",
       flexDirection: "row",
@@ -96,10 +92,6 @@ export const globalTabStyles: () => IProcessedStyleSet<
     legendHelpText: {
       fontWeight: "300"
     },
-    missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer
-    ],
     page: {
       boxSizing: "border-box",
       display: "flex",
