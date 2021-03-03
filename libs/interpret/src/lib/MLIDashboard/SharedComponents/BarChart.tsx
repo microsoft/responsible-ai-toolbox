@@ -11,7 +11,7 @@ import { IPlotlyProperty, PlotlyThemes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import Plotly from "plotly.js";
 import React from "react";
-import { v4 } from "uuid";
+import Plot from "react-plotly.js";
 
 import { barChartStyles } from "./BarChart.styles";
 
@@ -28,8 +28,6 @@ export interface IBarChartProps {
 }
 
 export class BarChart extends React.PureComponent<IBarChartProps> {
-  private guid: string = v4();
-
   private static buildTextArray(
     sortedIndexVector: number[],
     importanceVector: number[],
@@ -37,7 +35,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
     className?: string,
     rowDataArray?: Array<string | number>
   ): string[] {
-    return sortedIndexVector.map((index) => {
+    return _.flatMap(sortedIndexVector, (index) => {
       const result = [];
       result.push(
         localization.formatString(
@@ -69,14 +67,14 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           )
         );
       }
-      return result.join("<br>");
+      return result;
     });
   }
 
   private static buildInterceptTooltip(
     value: number,
     className?: string
-  ): string {
+  ): string[] {
     const result = [];
     result.push(localization.Interpret.intercept);
     result.push(
@@ -93,7 +91,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         )
       );
     }
-    return result.join("<br>");
+    return result;
   }
 
   public render(): React.ReactNode {
@@ -102,15 +100,13 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
       const themedProps = this.props.theme
         ? PlotlyThemes.applyTheme(plotlyProps, this.props.theme)
         : plotlyProps;
-      window.setTimeout(async () => {
-        await Plotly.react(
-          this.guid,
-          themedProps.data,
-          themedProps.layout,
-          themedProps.config
-        );
-      }, 0);
-      return <div className={barChartStyles.barChart} id={this.guid} />;
+      return (
+        <Plot
+          data={themedProps.data}
+          layout={themedProps.layout as Plotly.Layout}
+          config={themedProps.config}
+        />
+      );
     }
     return (
       <div className={barChartStyles.centered}>
@@ -135,7 +131,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
         displaylogo: false,
         displayModeBar: false,
         responsive: true
-      } as Plotly.Config,
+      },
       data: [],
       layout: {
         autosize: true,
@@ -154,7 +150,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           automargin: true,
           title: localization.Interpret.featureImportance
         }
-      } as any
+      }
     };
 
     if (classByFeatureMatrix.length > 0) {
@@ -179,7 +175,7 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           x.unshift(-1);
           y.unshift(this.props.intercept[classIndex]);
           text.unshift(
-            BarChart.buildInterceptTooltip(
+            ...BarChart.buildInterceptTooltip(
               this.props.intercept[classIndex],
               this.props.modelMetadata.modelType === ModelTypes.Multiclass
                 ? this.props.modelMetadata.classNames[classIndex]
@@ -201,19 +197,19 @@ export class BarChart extends React.PureComponent<IBarChartProps> {
           visible,
           x,
           y
-        } as any);
+        });
       });
     }
-    const ticktext = sortedIndexVector.map(
+    const tickText = sortedIndexVector.map(
       (i) => this.props.modelMetadata.featureNamesAbridged[i]
     );
-    const tickvals = sortedIndexVector.map((_, index) => index);
+    const tickValues = sortedIndexVector.map((_, index) => index);
     if (this.props.intercept) {
-      ticktext.unshift(localization.Interpret.intercept);
-      tickvals.unshift(-1);
+      tickText.unshift(localization.Interpret.intercept);
+      tickValues.unshift(-1);
     }
-    _.set(baseSeries, "layout.xaxis.ticktext", ticktext);
-    _.set(baseSeries, "layout.xaxis.tickvals", tickvals);
+    _.set(baseSeries, "layout.xaxis.ticktext", tickText);
+    _.set(baseSeries, "layout.xaxis.tickvals", tickValues);
     return baseSeries;
   }
 }

@@ -29,6 +29,7 @@ export interface IFeatureBarProps {
   unsortedX: string[];
   unsortedSeries: IGlobalSeries[];
   originX?: string[];
+  xMapping?: string[];
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
 }
 

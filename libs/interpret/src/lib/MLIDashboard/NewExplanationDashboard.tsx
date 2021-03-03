@@ -78,9 +78,9 @@ export class NewExplanationDashboard extends React.PureComponent<
       <InterpretContext.Provider
         value={{
           cohorts: this.state.cohorts,
-          globalImportance: this.state.globalImportance,
-          globalImportanceIntercept: this.state.globalImportanceIntercept,
           jointDataset: this.state.jointDataset,
+          modelMetadata: this.state.modelMetadata,
+          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
@@ -170,10 +170,6 @@ export class NewExplanationDashboard extends React.PureComponent<
                     <GlobalExplanationTab
                       jointDataset={this.state.jointDataset}
                       metadata={this.state.modelMetadata}
-                      globalImportance={this.state.globalImportance}
-                      isGlobalDerivedFromLocal={
-                        this.state.isGlobalImportanceDerivedFromLocal
-                      }
                       cohorts={this.state.cohorts}
                       cohortIDs={cohortIDs}
                       selectedWeightVector={this.state.selectedWeightVector}

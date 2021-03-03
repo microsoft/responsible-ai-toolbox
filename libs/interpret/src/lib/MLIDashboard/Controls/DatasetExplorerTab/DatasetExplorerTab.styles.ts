@@ -34,9 +34,6 @@ export interface IDatasetExplorerTabStyles {
   legend: IStyle;
   callout: IStyle;
   chartEditorButton: IStyle;
-  missingParametersPlaceholder: IStyle;
-  missingParametersPlaceholderSpacer: IStyle;
-  faintText: IStyle;
   smallItalic: IStyle;
 }
 
@@ -102,7 +99,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<
       margin: "11px 4px 11px 8px",
       width: "12px"
     },
-    faintText: [FabricStyles.faintText],
     helperText: {
       paddingLeft: "15px",
       paddingRight: "160px"
@@ -149,10 +145,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<
       height: "600px",
       width: "100%"
     },
-    missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer
-    ],
     paddingDiv: {
       width: "50px"
     },

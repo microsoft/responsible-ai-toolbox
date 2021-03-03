@@ -24,6 +24,21 @@ export const bostonData: IExplanationDashboardData = {
   modelInformation: { method: "regressor", modelClass: "blackbox" },
   precomputedExplanations: {
     globalFeatureImportance: {
+      featureNames: [
+        "AGE",
+        "B",
+        "CHAS",
+        "CRIM",
+        "DIS",
+        "INDUS",
+        "LSTAT",
+        "NOX",
+        "PTRATIO",
+        "RAD",
+        "RM",
+        "TAX",
+        "ZN"
+      ],
       scores: [
         0.47353925321840673,
         0.009792442047157582,
