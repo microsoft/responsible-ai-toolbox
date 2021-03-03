@@ -8,8 +8,6 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 
-import { FabricStyles } from "../../FabricStyles";
-
 export interface IModelPerformanceTabStyles {
   page: IStyle;
   infoIcon: IStyle;

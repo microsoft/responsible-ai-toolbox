@@ -133,7 +133,7 @@ export class GlobalOnlyChart extends React.PureComponent<
             ]}
             sortArray={this.state.sortArray}
             chartType={ChartTypes.Bar}
-            unsortedX={this.context.modelMetadata.featureNamesAbridged}
+            unsortedX={this.state.featureNames}
             unsortedSeries={this.state.globalSeries}
             topK={this.state.topK}
           />
