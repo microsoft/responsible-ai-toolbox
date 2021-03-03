@@ -216,7 +216,9 @@ export class CustomPredictionLabels extends React.Component<
           <Text className={classNames.boldText} variant="small">
             {localization.Interpret.WhatIfTab.newPredictedValue}
           </Text>
-          <Text variant="small">{predictedValueString}</Text>
+          <Text variant="small" id="newPredictedValue">
+            {predictedValueString}
+          </Text>
         </div>
       </div>
     );
