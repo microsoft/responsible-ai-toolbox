@@ -6,7 +6,6 @@ import { Dictionary } from "lodash";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-
 export interface IMetrics {
   performance: IMetricResponse;
   outcomes: IMetricResponse;

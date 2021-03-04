@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
 import {
   IDataset,
   IMetricRequest,
   IMetricResponse,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
+import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
@@ -52,13 +52,13 @@ export class ModelAssessment extends React.Component {
 
     const modelExplanationData: IModelExplanationData = {
       modelClass: "modelClass" in modelData ? modelData.modelClass : "blackbox",
-      predictedY: modelData.predictedY,
-      probabilityY: modelData.probabilityY,
       precomputedExplanations: {
         ebmGlobalExplanation: modelData.ebmData,
         globalFeatureImportance: modelData.globalExplanation,
         localFeatureImportance: modelData.localExplanations
-      }
+      },
+      predictedY: modelData.predictedY,
+      probabilityY: modelData.probabilityY
     };
 
     return (

@@ -4,7 +4,6 @@
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
-
 export interface IFairnessOption {
   key: string;
   title: string;

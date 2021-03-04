@@ -4,7 +4,6 @@
 import { PredictionType } from "@responsible-ai/core-ui";
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
 
-
 export interface IBaseFairnessContext {
   trueY: number[];
   // modelPredictions, models x rows

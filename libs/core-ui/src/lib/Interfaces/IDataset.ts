@@ -19,10 +19,17 @@ export interface IDatasetSummary {
   categoricalMap?: { [key: number]: string[] };
 }
 
-export function getDatasetSummary(dataset: IDataset, isFairness: boolean): IDatasetSummary{
+export function getDatasetSummary(
+  dataset: IDataset,
+  isFairness: boolean
+): IDatasetSummary {
   return {
-    categoricalMap: isFairness ? dataset.sensitiveFeatureCategoricalMap : dataset.categoricalMap,
+    categoricalMap: isFairness
+      ? dataset.sensitiveFeatureCategoricalMap
+      : dataset.categoricalMap,
     classNames: dataset.classNames,
-    featureNames: isFairness ? dataset.sensitiveFeatureNames : dataset.featureNames
-  }
+    featureNames: isFairness
+      ? dataset.sensitiveFeatureNames
+      : dataset.featureNames
+  };
 }

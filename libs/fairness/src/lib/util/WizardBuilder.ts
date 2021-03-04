@@ -17,7 +17,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 
-
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";
 import { IBinnedResponse } from "./IBinnedResponse";

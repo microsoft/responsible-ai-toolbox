@@ -752,7 +752,9 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                     weightOptions={this.state.weightVectorOptions}
                     weightLabels={this.state.weightVectorLabels}
                     onWeightChange={this.onWeightVectorChange}
-                    explanationMethod={this.props.modelExplanationData.explanationMethod}
+                    explanationMethod={
+                      this.props.modelExplanationData.explanationMethod
+                    }
                   />
                 )}
                 {this.state.activeGlobalTab ===

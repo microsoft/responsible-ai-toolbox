@@ -955,6 +955,7 @@ export const adultCensusWithFairnessDataset: IDataset = {
 
 export const adultCensusWithFairnessModelExplanationData: IModelExplanationData = {
   explanationMethod: "mimic.lightgbm",
+  modelClass: "blackbox",
   precomputedExplanations: {
     localFeatureImportance: {
       intercept: [1.1482462674350296, -1.1482462674350296],
@@ -2502,7 +2503,6 @@ export const adultCensusWithFairnessModelExplanationData: IModelExplanationData 
       ]
     }
   },
-  modelClass: "blackbox",
   predictedY: [
     1,
     0,

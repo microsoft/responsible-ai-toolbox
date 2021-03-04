@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFairnessData, IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
-
+import {
+  IFairnessData,
+  IMetricRequest,
+  IMetricResponse
+} from "@responsible-ai/core-ui";
 
 export type IFairnessProps = IFairnessData & {
   startingTabIndex?: number;

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {IFairnessData} from "@responsible-ai/core-ui";
+import { IFairnessData } from "@responsible-ai/core-ui";
 import {
   FairnessWizardV1,
   FairnessWizardV2,

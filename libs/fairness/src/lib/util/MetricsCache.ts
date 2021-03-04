@@ -4,7 +4,6 @@
 import { IMetricResponse, IMetricRequest } from "@responsible-ai/core-ui";
 import _, { max, min } from "lodash";
 
-
 import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 
 export class MetricsCache {
