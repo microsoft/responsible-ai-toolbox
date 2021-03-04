@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getText } from "apps/dashboard-e2e/src/util/getText";
-import { setText } from "apps/dashboard-e2e/src/util/setText";
-
 import { getMenu } from "../../../util/getMenu";
+import { getText } from "../../../util/getText";
+import { setText } from "../../../util/setText";
 import { IInterpretData } from "../IInterpretData";
 
 export function describeWhatIf(datasetShape: IInterpretData): void {
