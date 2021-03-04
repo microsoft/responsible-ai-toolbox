@@ -2,87 +2,98 @@
 // Licensed under the MIT License.
 
 import {
-  IExplanationModelMetadata,
   ModelExplanationUtils,
-  ChartTypes
+  ChartTypes,
+  MissingParametersPlaceholder,
+  isTwoDimArray,
+  IGlobalFeatureImportance
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IDropdownOption, Icon, Slider, Text } from "office-ui-fabric-react";
+import { Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import {
+  defaultInterpretContext,
+  InterpretContext
+} from "../../context/InterpretContext";
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
-export interface IGlobalOnlyChartProps {
-  metadata: IExplanationModelMetadata;
-  globalImportance?: number[][];
-}
-
 export interface IGlobalOnlyChartState {
   topK: number;
   sortingSeriesKey: number | string;
   sortArray: number[];
+  globalSeries: IGlobalSeries[];
+  featureNames: string[];
 }
 
 export class GlobalOnlyChart extends React.PureComponent<
-  IGlobalOnlyChartProps,
+  unknown,
   IGlobalOnlyChartState
 > {
-  private readonly featureDimension = this.props.metadata.featureNames.length;
-  private readonly perClassExplanationDimension =
-    this.props.globalImportance && this.props.globalImportance[0]
-      ? this.props.globalImportance[0].length
-      : 0;
-  private readonly minK = Math.min(4, this.featureDimension);
-  private classOptions: IDropdownOption[];
-  // look into per_class importances when available.
-  // if explanation class dimension is singular,
-  private readonly globalSeries: IGlobalSeries[] =
-    this.perClassExplanationDimension === 1
-      ? [
-          {
-            colorIndex: 0,
-            name: localization.Interpret.BarChart.absoluteGlobal,
-            unsortedAggregateY:
-              this.props.globalImportance?.map((classArray) => classArray[0]) ||
-              []
-          }
-        ]
-      : this.props.metadata.classNames.map((name, index) => {
-          return {
-            colorIndex: index,
-            name,
-            unsortedAggregateY:
-              this.props.globalImportance?.map(
-                (classArray) => classArray[index]
-              ) || []
-          };
-        });
+  public static contextType = InterpretContext;
+  public context: React.ContextType<
+    typeof InterpretContext
+  > = defaultInterpretContext;
 
-  public constructor(props: IGlobalOnlyChartProps) {
-    super(props);
-
-    this.classOptions = this.props.metadata.classNames.map(
-      (className, index) => {
-        return { key: index, text: className };
-      }
+  public componentDidMount(): void {
+    if (
+      !this.context.precomputedExplanations?.globalFeatureImportance?.scores
+        ?.length
+    ) {
+      return;
+    }
+    const globalImportance = this.buildGlobalProperties(
+      this.context.precomputedExplanations?.globalFeatureImportance
     );
-    this.classOptions.unshift({
-      key: FeatureKeys.AbsoluteGlobal,
-      text: localization.Interpret.BarChart.absoluteGlobal
-    });
-    this.state = {
+    const perClassExplanationDimension = globalImportance[0].length || 0;
+    this.setState({
+      featureNames:
+        this.context.precomputedExplanations.globalFeatureImportance
+          .featureNames || this.context.modelMetadata.featureNamesAbridged,
+      globalSeries:
+        perClassExplanationDimension === 1
+          ? [
+              {
+                colorIndex: 0,
+                name: localization.Interpret.BarChart.absoluteGlobal,
+                unsortedAggregateY:
+                  globalImportance?.map((classArray) => classArray[0]) || []
+              }
+            ]
+          : this.context.modelMetadata.classNames.map((name, index) => {
+              return {
+                colorIndex: index,
+                name,
+                unsortedAggregateY:
+                  globalImportance.map((classArray) => classArray[index]) || []
+              };
+            }),
       sortArray: ModelExplanationUtils.buildSortedVector(
-        this.props.globalImportance || []
+        globalImportance
       ).reverse(),
       sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
-      topK: this.minK
-    };
+      topK: Math.min(
+        4,
+        this.context.precomputedExplanations?.globalFeatureImportance?.scores
+          .length || 0
+      )
+    });
   }
 
   public render(): React.ReactNode {
+    if (!this.context.precomputedExplanations?.globalFeatureImportance) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.Interpret.GlobalTab.missingParameters}
+        </MissingParametersPlaceholder>
+      );
+    }
+    if (!this.state) {
+      return React.Fragment;
+    }
     const classNames = globalTabStyles();
     return (
       <div className={classNames.page}>
@@ -103,7 +114,10 @@ export class GlobalOnlyChart extends React.PureComponent<
           <Slider
             className={classNames.startingK}
             ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
-            max={this.featureDimension}
+            max={
+              this.context.precomputedExplanations.globalFeatureImportance
+                .scores.length
+            }
             min={1}
             step={1}
             value={this.state.topK}
@@ -119,8 +133,8 @@ export class GlobalOnlyChart extends React.PureComponent<
             ]}
             sortArray={this.state.sortArray}
             chartType={ChartTypes.Bar}
-            unsortedX={this.props.metadata.featureNamesAbridged}
-            unsortedSeries={this.globalSeries}
+            unsortedX={this.state.featureNames}
+            unsortedSeries={this.state.globalSeries}
             topK={this.state.topK}
           />
         </div>
@@ -131,4 +145,16 @@ export class GlobalOnlyChart extends React.PureComponent<
   private setTopK = (newValue: number): void => {
     this.setState({ topK: newValue });
   };
+
+  private buildGlobalProperties(
+    globalFeatureImportance: IGlobalFeatureImportance
+  ): number[][] {
+    let globalImportance: number[][];
+    if (isTwoDimArray(globalFeatureImportance.scores)) {
+      globalImportance = globalFeatureImportance.scores;
+    } else {
+      globalImportance = globalFeatureImportance.scores.map((value) => [value]);
+    }
+    return globalImportance;
+  }
 }

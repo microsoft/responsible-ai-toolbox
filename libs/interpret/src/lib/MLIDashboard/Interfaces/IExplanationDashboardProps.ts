@@ -52,9 +52,6 @@ export interface INewExplanationDashboardState {
   activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
-  globalImportanceIntercept: number[];
-  globalImportance: number[][];
-  isGlobalImportanceDerivedFromLocal: boolean;
   validationWarnings: string[];
   showingDataSizeWarning: boolean;
   selectedWeightVector: WeightVectorOption;

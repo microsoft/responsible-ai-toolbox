@@ -18,14 +18,11 @@ import {
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
-import { IGlobalExplanationProps } from "./Interfaces/IGlobalExplanationProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 
 const rowWarningSize = 6000;
-// features x classes
-
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
   if (props.modelInformation.method === "regressor") {
@@ -41,9 +38,9 @@ function getModelType(props: IExplanationDashboardProps): ModelTypes {
   }
 }
 function buildIndexedNames(length: number, baseString: string): string[] {
-  return [...new Array(length).keys()].map((i) =>
-    localization.formatString(baseString, i.toString())
-  );
+  return new Array(length)
+    .fill(baseString)
+    .map((s, i) => localization.formatString(s, i.toString()));
 }
 function buildModelMetadata(
   props: IExplanationDashboardProps
@@ -128,35 +125,6 @@ function buildModelMetadata(
   };
 }
 
-function buildGlobalProperties(
-  props: IExplanationDashboardProps
-): IGlobalExplanationProps {
-  const result: IGlobalExplanationProps = {} as IGlobalExplanationProps;
-  if (
-    props.precomputedExplanations &&
-    props.precomputedExplanations.globalFeatureImportance &&
-    props.precomputedExplanations.globalFeatureImportance.scores
-  ) {
-    result.isGlobalImportanceDerivedFromLocal = false;
-    if (
-      (props.precomputedExplanations.globalFeatureImportance
-        .scores as number[][]).every((dim1) => Array.isArray(dim1))
-    ) {
-      result.globalImportance = props.precomputedExplanations
-        .globalFeatureImportance.scores as number[][];
-      result.globalImportanceIntercept = props.precomputedExplanations
-        .globalFeatureImportance.intercept as number[];
-    } else {
-      result.globalImportance = (props.precomputedExplanations
-        .globalFeatureImportance.scores as number[]).map((value) => [value]);
-      result.globalImportanceIntercept = [
-        props.precomputedExplanations.globalFeatureImportance
-          .intercept as number
-      ];
-    }
-  }
-  return result;
-}
 export function buildInitialExplanationContext(
   props: IExplanationDashboardProps
 ): INewExplanationDashboardState {
@@ -178,7 +146,6 @@ export function buildInitialExplanationContext(
     predictedY: props.predictedY,
     trueY: props.trueY
   });
-  const globalProps = buildGlobalProperties(props);
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
     new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
@@ -210,10 +177,6 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ModelPerformance,
     cohorts,
-    globalImportance: globalProps.globalImportance,
-    globalImportanceIntercept: globalProps.globalImportanceIntercept,
-    isGlobalImportanceDerivedFromLocal:
-      globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
     modelMetadata,
     selectedWeightVector:

@@ -39,13 +39,15 @@ export interface IModelInformation {
 
 // TODO replace all of the above with classes IDataset and IModelExplanationData
 
+export type IGlobalFeatureImportance =
+  | IMultiClassGlobalFeatureImportance
+  | ISingleClassGlobalFeatureImportance;
+
 export interface IPrecomputedExplanations {
   localFeatureImportance?:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
-  globalFeatureImportance?:
-    | IMultiClassGlobalFeatureImportance
-    | ISingleClassGlobalFeatureImportance;
+  globalFeatureImportance?: IGlobalFeatureImportance;
   ebmGlobalExplanation?: IEBMGlobalExplanation;
   customVis?: string;
 }
@@ -62,16 +64,19 @@ export interface IMultiClassLocalFeatureImportance {
 export interface ISingleClassLocalFeatureImportance {
   scores: number[][];
   intercept?: number;
+  featureNames?: string[];
 }
 
 export interface IMultiClassGlobalFeatureImportance {
   scores: number[][];
   intercept?: number[];
+  featureNames?: string[];
 }
 
 export interface ISingleClassGlobalFeatureImportance {
   scores: number[];
   intercept?: number;
+  featureNames?: string[];
 }
 
 export interface IBoundedCoordinates {

@@ -72,11 +72,6 @@ export class FabricStyles {
     FabricStyles.limitedSizeMenuDropdown
   );
 
-  public static missingParameterPlaceholder: IStyle = {
-    height: "300px",
-    width: "100%"
-  };
-
   public static calloutWrapper: IStyle = {
     width: "300px"
   };
@@ -128,18 +123,6 @@ export class FabricStyles {
     color: getTheme().semanticColors.disabledBodyText,
     fontStyle: "italic",
     padding: "0 0 5px 5px"
-  };
-
-  public static missingParameterPlaceholderSpacer: IStyle = {
-    boxShadow: getTheme().effects.elevation4,
-    margin: "25px auto 0 auto",
-    maxWidth: "400px",
-    padding: "23px",
-    width: "fit-content"
-  };
-
-  public static faintText: IStyle = {
-    fontWeight: "350" as any
   };
 
   public static plotlyColorPalette: IRGBColor[] = [
