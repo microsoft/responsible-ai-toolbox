@@ -14,6 +14,7 @@ import {
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
+
 import {
   generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
@@ -53,23 +54,23 @@ export class App extends React.Component<IAppProps> {
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       dataset: this.props.dataset,
+      locale: this.props.language,
       modelExplanationData: this.props.modelExplanationData,
-      requestPredictions: !this.props.classDimension
-        ? undefined
-        : createPredictionsRequestGenerator(this.props.classDimension),
+      localUrl: "",
       requestDebugML: generateJsonTreeAdultCensusIncome,
-      requestMatrix: generateJsonMatrix,
       requestImportances: createJsonImportancesGenerator(
         this.props.dataset.featureNames!,
         false
       ),
+      requestMatrix: generateJsonMatrix,
       requestMetrics: generateRandomMetrics.bind(this),
-      supportedBinaryClassificationPerformanceKeys: supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys: supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys: supportedRegressionPerformanceKeys,
-      localUrl: "",
-      locale: this.props.language,
+      requestPredictions: !this.props.classDimension
+        ? undefined
+        : createPredictionsRequestGenerator(this.props.classDimension),
       stringParams: { contextualHelp: this.messages },
+      supportedBinaryClassificationPerformanceKeys,
+      supportedProbabilityPerformanceKeys,
+      supportedRegressionPerformanceKeys,
       theme: this.props.theme
     };
 

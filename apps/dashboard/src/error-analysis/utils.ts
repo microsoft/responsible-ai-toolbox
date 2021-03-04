@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
+
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
 import { dummyMatrix1dInterval } from "./__mock_data__/dummyMatrixOnedInterval";
 import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";

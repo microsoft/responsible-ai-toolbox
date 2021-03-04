@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PredictionType } from "@responsible-ai/core-ui";
 import { IModelMetadata } from "@responsible-ai/mlchartlib";
 
-import { PredictionType } from "@responsible-ai/core-ui";
 
 export interface IBaseFairnessContext {
   trueY: number[];

@@ -10,6 +10,7 @@ import {
 import { Language } from "@responsible-ai/localization";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
+
 import {
   generateRandomMetrics,
   messages,
@@ -32,9 +33,9 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       requestMetrics: generateRandomMetrics.bind(this),
       stringParams: { contextualHelp: messages },
-      supportedBinaryClassificationPerformanceKeys: supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys: supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys: supportedRegressionPerformanceKeys,
+      supportedBinaryClassificationPerformanceKeys,
+      supportedProbabilityPerformanceKeys,
+      supportedRegressionPerformanceKeys,
       theme: this.props.theme
     };
     switch (this.props.version) {

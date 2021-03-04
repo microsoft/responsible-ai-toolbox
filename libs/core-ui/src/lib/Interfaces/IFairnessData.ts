@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Never } from "../util/Never";
+
 import { IDatasetSummary } from "./IDataset";
 
 export enum PredictionTypes {

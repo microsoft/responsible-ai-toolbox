@@ -21,8 +21,8 @@ export interface IDatasetSummary {
 
 export function getDatasetSummary(dataset: IDataset, isFairness: boolean): IDatasetSummary{
   return {
-    featureNames: isFairness ? dataset.sensitiveFeatureNames : dataset.featureNames,
+    categoricalMap: isFairness ? dataset.sensitiveFeatureCategoricalMap : dataset.categoricalMap,
     classNames: dataset.classNames,
-    categoricalMap: isFairness ? dataset.sensitiveFeatureCategoricalMap : dataset.categoricalMap
+    featureNames: isFairness ? dataset.sensitiveFeatureNames : dataset.featureNames
   }
 }

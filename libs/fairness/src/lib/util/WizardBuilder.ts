@@ -1,14 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import {
-  ModelMetadata,
-  ICategoricalRange,
-  RangeTypes
-} from "@responsible-ai/mlchartlib";
-import _ from "lodash";
-
 import {
   IFairnessBaseData,
   IRunTimeFairnessData,
@@ -17,6 +9,14 @@ import {
   PredictionTypes,
   IPreComputedData
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import {
+  ModelMetadata,
+  ICategoricalRange,
+  RangeTypes
+} from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
 import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";

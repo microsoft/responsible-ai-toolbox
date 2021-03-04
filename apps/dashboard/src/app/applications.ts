@@ -10,10 +10,6 @@ import {
 } from "@responsible-ai/core-ui";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
-import {
-  adultCensusWithFairnessDataset,
-  adultCensusWithFairnessModelExplanationData
-} from "../model-assessment/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
@@ -36,6 +32,10 @@ import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
+import {
+  adultCensusWithFairnessDataset,
+  adultCensusWithFairnessModelExplanationData
+} from "../model-assessment/__mock_data__/adultCensus";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;

@@ -46,11 +46,11 @@ import {
   createInitialTreeViewState,
   IStringsParam
 } from "@responsible-ai/error-analysis";
+import { FairnessWizardV2 } from "@responsible-ai/fairness";
 import {
   DatasetExplorerTab,
   GlobalExplanationTab
 } from "@responsible-ai/interpret";
-import { FairnessWizardV2 } from "@responsible-ai/fairness";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
