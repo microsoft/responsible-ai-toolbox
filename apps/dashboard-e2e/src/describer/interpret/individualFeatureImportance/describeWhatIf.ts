@@ -9,10 +9,7 @@ import { IInterpretData } from "../IInterpretData";
 export function describeWhatIf(datasetShape: IInterpretData): void {
   describe("What if tab", () => {
     beforeEach(() => {
-      getMenu("Individual feature importance", "#DashboardPivot")
-        .click()
-        .get("#what-if-expand-btn")
-        .click();
+      getMenu("Individual feature importance", "#DashboardPivot").click();
     });
     it("should have no datapoint selected by default", () => {
       cy.get("#IndividualFeatureContainer").should(
@@ -42,7 +39,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
         const predict = getText(`${selector}:first`);
         const fieldSelector = "#WhatIfFeatureComboBox";
         const comboBoxValue = getText(fieldSelector);
-        if (!comboBoxValue) {
+        if (comboBoxValue) {
           setText(fieldSelector, "1" + comboBoxValue);
           cy.get(selector).should("not.eq", predict);
         }
@@ -54,7 +51,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
         const predict = getText(`${selector}:first`);
         const fieldSelector = "#WhatIfFeatureComboBox";
         const comboBoxValue = getText(fieldSelector);
-        if (!comboBoxValue) {
+        if (comboBoxValue) {
           cy.get(selector)
             .siblings("button")
             .click()

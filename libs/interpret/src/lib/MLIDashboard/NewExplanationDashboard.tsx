@@ -212,11 +212,11 @@ export class NewExplanationDashboard extends React.PureComponent<
           [this.props.testData[0]],
           abortController.signal
         );
-        if (prediction !== undefined) {
-          this.setState({ requestPredictions: this.props.requestPredictions });
+        if (prediction === undefined) {
+          throw new Error(" ");
         }
       } catch {
-        return;
+        this.setState({ requestPredictions: undefined });
       }
     }
   }
