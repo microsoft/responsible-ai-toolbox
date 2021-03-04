@@ -55,8 +55,8 @@ export class App extends React.Component<IAppProps> {
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       dataset: this.props.dataset,
       locale: this.props.language,
-      modelExplanationData: this.props.modelExplanationData,
       localUrl: "",
+      modelExplanationData: this.props.modelExplanationData,
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
         this.props.dataset.featureNames!,
