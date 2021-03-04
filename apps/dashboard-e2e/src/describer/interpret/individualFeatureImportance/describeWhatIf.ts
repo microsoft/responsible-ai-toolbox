@@ -3,7 +3,8 @@
 
 import { getMenu } from "../../../util/getMenu";
 import { getText } from "../../../util/getText";
-import { setText } from "../../../util/setText";
+import { getValue } from "../../../util/getValue";
+import { setValue } from "../../../util/setValue";
 import { IInterpretData } from "../IInterpretData";
 
 export function describeWhatIf(datasetShape: IInterpretData): void {
@@ -28,9 +29,8 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
           : "#WhatIfNewPredictedValue";
         const predict = getText(selector);
         const fieldSelector = "#WhatIfFeatureTextField";
-        const textFieldValue = getText(fieldSelector);
-        setText(fieldSelector, "1" + textFieldValue);
-        cy.get(selector).should("not.eq", predict);
+        setValue(fieldSelector, "1");
+        cy.get(selector).should("not.have.text", predict);
       });
       it("should update when combo box change", () => {
         const selector = datasetShape.isClassification
@@ -40,8 +40,8 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
         const fieldSelector = "#WhatIfFeatureComboBox";
         const comboBoxValue = getText(fieldSelector);
         if (comboBoxValue) {
-          setText(fieldSelector, "1" + comboBoxValue);
-          cy.get(selector).should("not.eq", predict);
+          setValue(fieldSelector, "1");
+          cy.get(selector).should("not.have.text", predict);
         }
       });
       it("should update when combo box select new value", () => {
@@ -49,16 +49,17 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
           ? "#WhatIfNewProbability"
           : "#WhatIfNewPredictedValue";
         const predict = getText(`${selector}:first`);
-        const fieldSelector = "#WhatIfFeatureComboBox";
-        const comboBoxValue = getText(fieldSelector);
+        const fieldSelector = "#WhatIfFeatureComboBox-input";
+        const comboBoxValue = getValue(fieldSelector);
         if (comboBoxValue) {
-          cy.get(selector)
+          cy.get(fieldSelector)
             .siblings("button")
             .click()
             .get(
               `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}"))`
-            );
-          cy.get(selector).should("not.eq", predict);
+            )
+            .click();
+          cy.get(selector).should("not.have.text", predict);
         }
       });
       it("should save data point from dropdown option", () => {
