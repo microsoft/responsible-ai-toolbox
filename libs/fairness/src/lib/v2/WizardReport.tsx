@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IMetricResponse, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
@@ -13,7 +14,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IMetricResponse, PredictionTypes } from "../IFairnessProps";
 import { FairnessModes, fairnessOptions } from "../util/FairnessMetrics";
 import { FormatMetrics } from "../util/FormatMetrics";
 import { performanceOptions } from "../util/PerformanceMetrics";

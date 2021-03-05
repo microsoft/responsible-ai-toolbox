@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -15,7 +16,7 @@ import {
 import React from "react";
 
 import { EmptyHeader } from "../components/EmptyHeader";
-import { IFairnessProps, PredictionTypes } from "../IFairnessProps";
+import { IFairnessProps } from "../IFairnessProps";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 import {
   IFairnessContext,

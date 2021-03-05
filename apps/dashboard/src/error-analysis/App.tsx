@@ -15,11 +15,14 @@ import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
-import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
-import { dummyMatrix1dInterval } from "./__mock_data__/dummyMatrixOnedInterval";
-import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
-import { dummyTreeAdultCensusIncomeData } from "./__mock_data__/dummyTreeAdultCensusIncome";
-import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer";
+import {
+  createJsonImportancesGenerator,
+  createPredictionsRequestGenerator,
+  generateFeatures,
+  generateJsonMatrix,
+  generateJsonTreeAdultCensusIncome,
+  generateJsonTreeBreastCancer
+} from "./utils";
 
 interface IAppProps {
   dataset: IExplanationDashboardData | ISerializedExplanationData;
@@ -57,11 +60,16 @@ export class App extends React.Component<IAppProps> {
             localFeatureImportance: this.props.dataset.localExplanations
           }}
           requestPredictions={
-            !this.props.classDimension ? undefined : this.requestPredictions
+            !this.props.classDimension
+              ? undefined
+              : createPredictionsRequestGenerator(this.props.classDimension)
           }
-          requestDebugML={this.generateJsonTreeAdultCensusIncome}
-          requestMatrix={this.generateJsonMatrix}
-          requestImportances={this.generateJsonImportancesAdultCensusIncome}
+          requestDebugML={generateJsonTreeAdultCensusIncome}
+          requestMatrix={generateJsonMatrix}
+          requestImportances={createJsonImportancesGenerator(
+            this.props.dataset.featureNames,
+            false
+          )}
           localUrl={""}
           locale={undefined}
           features={this.props.dataset.featureNames}
@@ -71,205 +79,23 @@ export class App extends React.Component<IAppProps> {
     const dashboardProp: IErrorAnalysisDashboardProps = {
       ...(this.props.dataset as IExplanationDashboardData),
       explanationMethod: "mimic",
-      features: this.generateFeatures(),
+      features: generateFeatures(),
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
-      requestDebugML: this.generateJsonTreeBreastCancer,
-      requestImportances: this.generateJsonImportancesBreastCancer,
-      requestMatrix: this.generateJsonMatrix,
+      requestDebugML: generateJsonTreeBreastCancer,
+      requestImportances: createJsonImportancesGenerator(
+        "dataSummary" in this.props.dataset
+          ? this.props.dataset.dataSummary.featureNames!
+          : [],
+        true
+      ),
+      requestMatrix: generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
-        : this.requestPredictions,
+        : createPredictionsRequestGenerator(this.props.classDimension),
       stringParams: { contextualHelp: this.messages },
       theme: this.props.theme
     };
     return <ErrorAnalysisDashboard {...dashboardProp} />;
-  }
-
-  private generateJsonTree(
-    _data: any[],
-    signal: AbortSignal,
-    isBreastCancer: boolean
-  ): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        if (isBreastCancer) {
-          resolve(_.cloneDeep(dummyTreeBreastCancerData));
-        } else {
-          resolve(_.cloneDeep(dummyTreeAdultCensusIncomeData));
-        }
-      }, 300);
-      signal.addEventListener("abort", () => {
-        clearTimeout(timeout);
-        reject(new DOMException("Aborted", "AbortError"));
-      });
-    });
-
-    return promise;
-  }
-
-  private generateJsonTreeBreastCancer = (
-    _data: any[],
-    signal: AbortSignal
-  ): Promise<any> => {
-    return this.generateJsonTree(_data, signal, true);
-  };
-
-  private generateJsonTreeAdultCensusIncome = (
-    _data: any[],
-    signal: AbortSignal
-  ): Promise<any> => {
-    return this.generateJsonTree(_data, signal, false);
-  };
-
-  private generateJsonMatrix = (
-    data: any[],
-    signal: AbortSignal
-  ): Promise<any> => {
-    const promise = new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        if (
-          data.length === 3 &&
-          data[0][0] === "mean radius" &&
-          data[0][1] === "mean texture"
-        ) {
-          resolve(_.cloneDeep(dummyMatrix2dInterval));
-        } else if (
-          data[0][0] === "mean radius" ||
-          data[0][1] === "mean radius"
-        ) {
-          resolve(_.cloneDeep(dummyMatrix1dInterval));
-        } else {
-          resolve(_.cloneDeep(dummyMatrixData));
-        }
-      }, 300);
-      signal.addEventListener("abort", () => {
-        clearTimeout(timeout);
-        reject(new DOMException("Aborted", "AbortError"));
-      });
-    });
-
-    return promise;
-  };
-
-  private generateJsonImportancesBreastCancer = (
-    data: any[],
-    signal: AbortSignal
-  ): Promise<any> => {
-    return this.generateJsonImportances(data, signal, true);
-  };
-
-  private generateJsonImportancesAdultCensusIncome = (
-    data: any[],
-    signal: AbortSignal
-  ): Promise<any> => {
-    return this.generateJsonImportances(data, signal, false);
-  };
-
-  private generateJsonImportances = (
-    _data: any[],
-    signal: AbortSignal,
-    isBreastCancer: boolean
-  ): Promise<any> => {
-    const promise = new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        if (isBreastCancer) {
-          resolve(this.generateFeatures().map(() => Math.random()));
-        } else {
-          const featureNames = (this.props
-            .dataset as ISerializedExplanationData).featureNames;
-          resolve(featureNames.map(() => Math.random()));
-        }
-      }, 300);
-      signal.addEventListener("abort", () => {
-        clearTimeout(timeout);
-        reject(new DOMException("Aborted", "AbortError"));
-      });
-    });
-
-    return promise;
-  };
-
-  private requestPredictions = (
-    data: any[],
-    signal: AbortSignal
-  ): Promise<any[]> => {
-    return !this.props.classDimension || this.props.classDimension === 1
-      ? this.generateRandomScore(data, signal)
-      : this.generateRandomProbs(this.props.classDimension, data, signal);
-  };
-
-  private generateRandomScore = (
-    data: any[],
-    signal: AbortSignal
-  ): Promise<any[]> => {
-    const promise = new Promise<any>((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        resolve(data.map(() => Math.random()));
-      }, 300);
-      signal.addEventListener("abort", () => {
-        clearTimeout(timeout);
-        reject(new DOMException("Aborted", "AbortError"));
-      });
-    });
-
-    return promise;
-  };
-
-  private generateRandomProbs(
-    classDimensions: 2 | 3,
-    data: any[],
-    signal: AbortSignal
-  ): Promise<any[]> {
-    const promise = new Promise<any[]>((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        resolve(
-          data.map(() =>
-            Array.from({ length: classDimensions }, () => Math.random())
-          )
-        );
-      }, 300);
-      signal.addEventListener("abort", () => {
-        clearTimeout(timeout);
-        reject(new DOMException("Aborted", "AbortError"));
-      });
-    });
-
-    return promise;
-  }
-
-  private generateFeatures(): string[] {
-    return [
-      "mean radius",
-      "mean texture",
-      "mean perimeter",
-      "mean area",
-      "mean smoothness",
-      "mean compactness",
-      "mean concavity",
-      "mean concave points",
-      "mean symmetry",
-      "mean fractal dimension",
-      "radius error",
-      "texture error",
-      "perimeter error",
-      "area error",
-      "smoothness error",
-      "compactness error",
-      "concavity error",
-      "concave points error",
-      "symmetry error",
-      "fractal dimension error",
-      "worst radius",
-      "worst texture",
-      "worst perimeter",
-      "worst area",
-      "worst smoothness",
-      "worst compactness",
-      "worst concavity",
-      "worst concave points",
-      "worst symmetry",
-      "worst fractal dimension"
-    ];
   }
 }
