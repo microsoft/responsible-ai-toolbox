@@ -178,6 +178,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                           item.key
                         )}
                         disabled={inputDisabled}
+                        id="WhatIfFeatureComboBox"
                       />
                     );
                   }
@@ -193,6 +194,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                       )}
                       errorMessage={this.props.validationErrors[item.key]}
                       disabled={inputDisabled}
+                      id="WhatIfFeatureTextField"
                     />
                   );
                 })}
