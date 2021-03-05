@@ -167,7 +167,7 @@ export class CustomPredictionLabels extends React.Component<
                 <Text className={classNames.boldText} variant="small">
                   {localization.Interpret.WhatIfTab.newProbability}
                 </Text>
-                <Text variant="small">
+                <Text variant="small" id="WhatIfNewProbability">
                   {predictedProb.toLocaleString(undefined, {
                     maximumFractionDigits: 3
                   })}
@@ -216,7 +216,9 @@ export class CustomPredictionLabels extends React.Component<
           <Text className={classNames.boldText} variant="small">
             {localization.Interpret.WhatIfTab.newPredictedValue}
           </Text>
-          <Text variant="small">{predictedValueString}</Text>
+          <Text variant="small" id="WhatIfNewPredictedValue">
+            {predictedValueString}
+          </Text>
         </div>
       </div>
     );

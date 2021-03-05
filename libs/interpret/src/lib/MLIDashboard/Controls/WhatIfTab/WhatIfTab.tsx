@@ -694,7 +694,7 @@ export class WhatIfTab extends React.PureComponent<
     option?: IComboBoxOption,
     value?: string
   ): void => {
-    if (!this.temporaryPoint || !value) {
+    if (!this.temporaryPoint || (!value && !option)) {
       return;
     }
     const editingData = this.temporaryPoint;

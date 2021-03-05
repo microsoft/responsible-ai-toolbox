@@ -179,6 +179,7 @@ export function buildInitialExplanationContext(
     cohorts,
     jointDataset,
     modelMetadata,
+    requestPredictions: props.requestPredictions,
     selectedWeightVector:
       modelMetadata.modelType === ModelTypes.Multiclass
         ? WeightVectors.AbsAvg
