@@ -71,6 +71,8 @@ async function main() {
       await setVersion(workspace, eachPkg, version);
     }
     if (release) {
+      execSync(`git config user.email "raiwidgets-maintain@microsoft.com"`);
+      execSync(`git config user.name  "AML Rai Package Manager"`);
       execSync(`git add -A`);
       execSync(`git commit -m "Release v${version}"`);
       execSync(`git tag -a v${version} -m "Release v${version}"`);
