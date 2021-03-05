@@ -1,11 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  FairnessWizardV2,
-  IMetricRequest,
-  IMetricResponse
-} from "@responsible-ai/fairness";
+import { IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
+import { FairnessWizardV2 } from "@responsible-ai/fairness";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";

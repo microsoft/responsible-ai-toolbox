@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dropdown, IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTypes } from "../../IFairnessProps";
 import { IFairnessContext } from "../../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,
