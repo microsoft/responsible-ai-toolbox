@@ -30,7 +30,7 @@ Update to `raiwidgets` package.
 
 - Bug fix:
   - Fix all data cohort always appearing first in cohorts lists
-  - Add num selected text under local explanation radio buttons
+  - Add number selected text under local explanation radio buttons
   - Fix the issue that categorical feature is not able to change in cohort editor.
   - Fix categorical feature in what-if tab
 
