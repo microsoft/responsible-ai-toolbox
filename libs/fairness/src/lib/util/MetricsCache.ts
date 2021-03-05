@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IMetricResponse, IMetricRequest } from "@responsible-ai/core-ui";
 import _, { max, min } from "lodash";
-
-import { IMetricResponse, IMetricRequest } from "../IFairnessProps";
 
 import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 

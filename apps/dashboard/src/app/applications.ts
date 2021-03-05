@@ -3,9 +3,11 @@
 
 import {
   IExplanationDashboardData,
-  ISerializedExplanationData
+  ISerializedExplanationData,
+  IFairnessData,
+  IModelExplanationData,
+  IDataset
 } from "@responsible-ai/core-ui";
-import { IFairnessData } from "@responsible-ai/fairness";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
@@ -30,6 +32,10 @@ import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
+import {
+  adultCensusWithFairnessDataset,
+  adultCensusWithFairnessModelExplanationData
+} from "../model-assessment/__mock_data__/adultCensus";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;
@@ -46,7 +52,8 @@ export interface IErrorAnalysisDataSet {
 }
 
 export interface IModelAssessmentDataSet {
-  data: IExplanationDashboardData | ISerializedExplanationData;
+  dataset: IDataset;
+  modelExplanationData: IModelExplanationData;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -58,7 +65,7 @@ export interface IInterpretSetting {
   versions: { [key: string]: 1 | 2 };
 }
 
-export interface IFairLearnSetting {
+export interface IFairnessSetting {
   versions: { [key: string]: 1 | 2 };
 }
 
@@ -80,7 +87,7 @@ export const applicationKeys = <const>[
 export type IApplications = {
   [key in typeof applicationKeys[number]]: unknown;
 } & {
-  fairness: IFairLearnSetting & IDataSet<IFairLearnDataSet>;
+  fairness: IFairnessSetting & IDataSet<IFairLearnDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
@@ -131,8 +138,11 @@ export const applications: IApplications = <const>{
   },
   modelAssessment: {
     datasets: {
-      adultCensusIncomeData: { classDimension: 2, data: adultCensus },
-      breastCancerData: { classDimension: 2, data: breastCancerData }
+      adultCensusIncomeData: {
+        classDimension: 2,
+        dataset: adultCensusWithFairnessDataset,
+        modelExplanationData: adultCensusWithFairnessModelExplanationData
+      }
     },
     versions: { "Version-1": 1 }
   }
