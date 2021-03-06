@@ -37,6 +37,9 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator"
   },
+  "resolutions": {
+    "ecstatic": "4.1.4"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
