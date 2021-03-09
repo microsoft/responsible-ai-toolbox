@@ -14,6 +14,7 @@ export interface IInstanceViewStyles {
   page: IStyle;
   selectedTextStyle: IStyle;
   stackItemsStyle: IStyle;
+  frame: IStyle;
 }
 
 export const InstanceViewStyles: () => IProcessedStyleSet<
@@ -36,6 +37,9 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
     selectedTextStyle: { color: getTheme().palette.neutralPrimaryAlt },
     stackItemsStyle: {
       padding: "0px 0px 0px 26px"
+    },
+    frame: {
+      width: "inherit"
     }
   });
 };

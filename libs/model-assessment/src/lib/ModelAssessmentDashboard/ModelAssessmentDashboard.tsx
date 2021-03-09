@@ -56,18 +56,20 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import * as memoize from "memoize-one";
 import {
-  IPivotItemProps,
+  INavLinkGroup,
   ISettings,
   Layer,
   LayerHost,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
   mergeStyleSets,
   Customizer,
-  getId
+  getId,
+  Nav,
+  INavLink,
+  Stack,
+  Text,
+  getTheme
 } from "office-ui-fabric-react";
-import React from "react";
+import * as React from "react";
 
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
@@ -183,8 +185,9 @@ export class ModelAssessmentDashboard extends React.PureComponent<
   IModelAssessmentDashboardState
 > {
   private static readonly classNames = mergeStyleSets({
-    pivotWrapper: {
-      display: "contents"
+    navWrapper: {
+      display: "contents",
+      width: "calc(100% - 300px)"
     }
   });
 
@@ -239,7 +242,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     }
   );
 
-  private pivotItems: IPivotItemProps[] = [];
+  private navLinkGroups: INavLinkGroup[] = [];
   private layerHostId: string;
 
   public constructor(props: IModelAssessmentDashboardProps) {
@@ -257,26 +260,73 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       _.cloneDeep(props)
     );
 
-    this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.Navigation.errorExplorer,
-      itemKey: GlobalTabKeys.ErrorAnalysisTab
+    this.navLinkGroups.push({
+      name: "Identify", // TODO move to localization
+      links: [
+        // TODO add model statistics
+        // {
+        //   name: "Model statistics",
+        //   url: "",
+        //   key: "causal",
+        //   target: "_blank",
+        //   onClick: this.handleGlobalTabClick
+        // },
+        {
+          name: localization.ErrorAnalysis.dataExplorerView,
+          url: "",
+          key: GlobalTabKeys.DataExplorerTab,
+          target: "_blank",
+          onClick: this.handleGlobalTabClick
+        },
+        {
+          name: localization.ErrorAnalysis.Navigation.errorExplorer,
+          url: "",
+          key: GlobalTabKeys.ErrorAnalysisTab,
+          target: "_blank",
+          onClick: this.handleGlobalTabClick
+        },
+        {
+          name: localization.Fairness.Header.title,
+          url: "",
+          key: GlobalTabKeys.FairnessTab,
+          target: "_blank",
+          onClick: this.handleGlobalTabClick
+        }
+      ]
     });
-    this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.dataExplorerView,
-      itemKey: GlobalTabKeys.DataExplorerTab
+    this.navLinkGroups.push({
+      name: "Diagnose",
+      links: [
+        {
+          name: localization.ErrorAnalysis.globalExplanationView,
+          url: "",
+          key: GlobalTabKeys.GlobalExplanationTab,
+          target: "_blank",
+          onClick: this.handleGlobalTabClick
+        },
+        {
+          name: localization.ErrorAnalysis.localExplanationView,
+          url: "",
+          key: GlobalTabKeys.LocalExplanationTab,
+          target: "_blank",
+          onClick: this.handleGlobalTabClick
+        }
+      ]
     });
-    this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.globalExplanationView,
-      itemKey: GlobalTabKeys.GlobalExplanationTab
-    });
-    this.pivotItems.push({
-      headerText: localization.ErrorAnalysis.localExplanationView,
-      itemKey: GlobalTabKeys.LocalExplanationTab
-    });
-    this.pivotItems.push({
-      headerText: localization.Fairness.Header.title,
-      itemKey: GlobalTabKeys.FairnessTab
-    });
+    // TODO: add causal analysis
+    // this.navLinkGroups.push({
+    //   name: "Actionable Insights",
+    //   links: [
+    //     {
+    //       name: "Causal analysis",
+    //       url: "",
+    //       key: "causal",
+    //       target: "_blank",
+    //       onClick: this.handleGlobalTabClick
+    //     }
+    //   ]
+    // });
+
     this.layerHostId = getId("cohortsLayerHost");
     if (this.props.requestImportances) {
       this.props
@@ -676,138 +726,149 @@ export class ModelAssessmentDashboard extends React.PureComponent<
             })}
           >
             <Layer>
-              <div className={ModelAssessmentDashboard.classNames.pivotWrapper}>
-                <Pivot
+              <Stack horizontal={true}>
+                <Nav
                   selectedKey={this.state.activeGlobalTab}
                   onLinkClick={this.handleGlobalTabClick.bind(this)}
-                  linkSize={PivotLinkSize.normal}
-                  headersOnly={true}
-                  styles={{ root: classNames.pivotLabelWrapper }}
-                >
-                  {this.pivotItems.map((props) => (
-                    <PivotItem key={props.itemKey} {...props} />
-                  ))}
-                </Pivot>
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.ErrorAnalysisTab && (
-                  <ErrorAnalysisView
-                    theme={this.props.theme!}
-                    messages={
-                      this.props.stringParams
-                        ? this.props.stringParams.contextualHelp
-                        : undefined
-                    }
-                    getTreeNodes={this.props.requestDebugML}
-                    getMatrix={this.props.requestMatrix}
-                    updateSelectedCohort={this.updateSelectedCohort.bind(this)}
-                    features={this.props.dataset.featureNames}
-                    selectedFeatures={this.state.selectedFeatures}
-                    errorAnalysisOption={this.state.errorAnalysisOption}
-                    selectedCohort={this.state.selectedCohort}
-                    baseCohort={this.state.baseCohort}
-                    treeViewState={this.state.treeViewState}
-                    setTreeViewState={(
-                      treeViewState: ITreeViewRendererState
-                    ) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ treeViewState });
+                  styles={{ root: { width: 300 } }}
+                  groups={this.navLinkGroups}
+                  onRenderGroupHeader={_onRenderGroupHeader}
+                  onRenderLink={_onRenderLink}
+                />
+                <div className={ModelAssessmentDashboard.classNames.navWrapper}>
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.ErrorAnalysisTab && (
+                    <ErrorAnalysisView
+                      theme={this.props.theme!}
+                      messages={
+                        this.props.stringParams
+                          ? this.props.stringParams.contextualHelp
+                          : undefined
                       }
-                    }}
-                    matrixAreaState={this.state.matrixAreaState}
-                    matrixFilterState={this.state.matrixFilterState}
-                    setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ matrixAreaState });
+                      getTreeNodes={this.props.requestDebugML}
+                      getMatrix={this.props.requestMatrix}
+                      updateSelectedCohort={this.updateSelectedCohort.bind(
+                        this
+                      )}
+                      features={this.props.dataset.featureNames}
+                      selectedFeatures={this.state.selectedFeatures}
+                      errorAnalysisOption={this.state.errorAnalysisOption}
+                      selectedCohort={this.state.selectedCohort}
+                      baseCohort={this.state.baseCohort}
+                      treeViewState={this.state.treeViewState}
+                      setTreeViewState={(
+                        treeViewState: ITreeViewRendererState
+                      ) => {
+                        if (
+                          this.state.selectedCohort !== this.state.baseCohort
+                        ) {
+                          this.setState({ treeViewState });
+                        }
+                      }}
+                      matrixAreaState={this.state.matrixAreaState}
+                      matrixFilterState={this.state.matrixFilterState}
+                      setMatrixAreaState={(
+                        matrixAreaState: IMatrixAreaState
+                      ) => {
+                        if (
+                          this.state.selectedCohort !== this.state.baseCohort
+                        ) {
+                          this.setState({ matrixAreaState });
+                        }
+                      }}
+                      setMatrixFilterState={(
+                        matrixFilterState: IMatrixFilterState
+                      ) => {
+                        if (
+                          this.state.selectedCohort !== this.state.baseCohort
+                        ) {
+                          this.setState({ matrixFilterState });
+                        }
+                      }}
+                    />
+                  )}
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.DataExplorerTab && (
+                    <DatasetExplorerTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      cohorts={this.state.cohorts.map(
+                        (errorCohort) => errorCohort.cohort
+                      )}
+                    />
+                  )}
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.GlobalExplanationTab && (
+                    <GlobalExplanationTab
+                      jointDataset={this.state.jointDataset}
+                      metadata={this.state.modelMetadata}
+                      cohorts={this.state.cohorts.map(
+                        (errorCohort) => errorCohort.cohort
+                      )}
+                      cohortIDs={cohortIDs}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                      explanationMethod={
+                        this.props.modelExplanationData.explanationMethod
                       }
-                    }}
-                    setMatrixFilterState={(
-                      matrixFilterState: IMatrixFilterState
-                    ) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ matrixFilterState });
+                    />
+                  )}
+                  {this.state.activeGlobalTab ===
+                    GlobalTabKeys.LocalExplanationTab && (
+                    <InstanceView
+                      theme={this.props.theme}
+                      messages={
+                        this.props.stringParams
+                          ? this.props.stringParams.contextualHelp
+                          : undefined
                       }
-                    }}
-                  />
-                )}
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.DataExplorerTab && (
-                  <DatasetExplorerTab
-                    jointDataset={this.state.jointDataset}
-                    metadata={this.state.modelMetadata}
-                    cohorts={this.state.cohorts.map(
-                      (errorCohort) => errorCohort.cohort
-                    )}
-                  />
-                )}
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.GlobalExplanationTab && (
-                  <GlobalExplanationTab
-                    jointDataset={this.state.jointDataset}
-                    metadata={this.state.modelMetadata}
-                    cohorts={this.state.cohorts.map(
-                      (errorCohort) => errorCohort.cohort
-                    )}
-                    cohortIDs={cohortIDs}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightOptions={this.state.weightVectorOptions}
-                    weightLabels={this.state.weightVectorLabels}
-                    onWeightChange={this.onWeightVectorChange}
-                    explanationMethod={
-                      this.props.modelExplanationData.explanationMethod
-                    }
-                  />
-                )}
-                {this.state.activeGlobalTab ===
-                  GlobalTabKeys.LocalExplanationTab && (
-                  <InstanceView
-                    theme={this.props.theme}
-                    messages={
-                      this.props.stringParams
-                        ? this.props.stringParams.contextualHelp
-                        : undefined
-                    }
-                    jointDataset={this.state.jointDataset}
-                    features={this.props.dataset.featureNames}
-                    metadata={this.state.modelMetadata}
-                    invokeModel={this.props.requestPredictions}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightOptions={this.state.weightVectorOptions}
-                    weightLabels={this.state.weightVectorLabels}
-                    onWeightChange={this.onWeightVectorChange}
-                    activePredictionTab={this.state.predictionTab}
-                    setActivePredictionTab={(key: PredictionTabKeys): void => {
-                      this.setState({
-                        predictionTab: key
-                      });
-                    }}
-                    customPoints={this.state.customPoints}
-                    selectedCohort={this.state.selectedCohort}
-                    setWhatIfDatapoint={(index: number) =>
-                      this.setState({ selectedWhatIfIndex: index })
-                    }
-                  />
-                )}
-                {this.state.activeGlobalTab === GlobalTabKeys.FairnessTab && (
-                  <FairnessWizardV2
-                    predictedY={[this.props.modelExplanationData.predictedY!]}
-                    trueY={this.props.dataset.trueY}
-                    dataSummary={getDatasetSummary(this.props.dataset, true)}
-                    supportedBinaryClassificationPerformanceKeys={
-                      this.props.supportedBinaryClassificationPerformanceKeys
-                    }
-                    supportedProbabilityPerformanceKeys={
-                      this.props.supportedProbabilityPerformanceKeys
-                    }
-                    supportedRegressionPerformanceKeys={
-                      this.props.supportedRegressionPerformanceKeys
-                    }
-                    requestMetrics={this.props.requestMetrics}
-                    testData={this.props.dataset.sensitiveFeatures!}
-                    locale={this.props.locale}
-                    theme={this.props.theme}
-                  />
-                )}
-              </div>
+                      jointDataset={this.state.jointDataset}
+                      features={this.props.dataset.featureNames}
+                      metadata={this.state.modelMetadata}
+                      invokeModel={this.props.requestPredictions}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                      activePredictionTab={this.state.predictionTab}
+                      setActivePredictionTab={(
+                        key: PredictionTabKeys
+                      ): void => {
+                        this.setState({
+                          predictionTab: key
+                        });
+                      }}
+                      customPoints={this.state.customPoints}
+                      selectedCohort={this.state.selectedCohort}
+                      setWhatIfDatapoint={(index: number) =>
+                        this.setState({ selectedWhatIfIndex: index })
+                      }
+                    />
+                  )}
+                  {this.state.activeGlobalTab === GlobalTabKeys.FairnessTab && (
+                    <FairnessWizardV2
+                      predictedY={[this.props.modelExplanationData.predictedY!]}
+                      trueY={this.props.dataset.trueY}
+                      dataSummary={getDatasetSummary(this.props.dataset, true)}
+                      supportedBinaryClassificationPerformanceKeys={
+                        this.props.supportedBinaryClassificationPerformanceKeys
+                      }
+                      supportedProbabilityPerformanceKeys={
+                        this.props.supportedProbabilityPerformanceKeys
+                      }
+                      supportedRegressionPerformanceKeys={
+                        this.props.supportedRegressionPerformanceKeys
+                      }
+                      requestMetrics={this.props.requestMetrics}
+                      testData={this.props.dataset.sensitiveFeatures!}
+                      locale={this.props.locale}
+                      theme={this.props.theme}
+                    />
+                  )}
+                </div>
+              </Stack>
               <CohortInfo
                 isOpen={this.state.openInfoPanel}
                 currentCohort={this.state.selectedCohort}
@@ -858,6 +919,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
             id={this.layerHostId}
             style={{
               height: "1100px",
+              width: "100%",
               overflow: "hidden",
               position: "relative"
             }}
@@ -940,9 +1002,9 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     this.setState({ dependenceProps: newConfig });
   }
 
-  private handleGlobalTabClick(item: PivotItem | undefined): void {
+  private handleGlobalTabClick(_ev?: any, item?: INavLink | undefined): void {
     if (item !== undefined) {
-      const itemKey: string = item.props.itemKey!;
+      const itemKey: string = item.key!;
       const index: GlobalTabKeys = GlobalTabKeys[itemKey];
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
       this.setState({
@@ -968,4 +1030,24 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     );
     this.setState({ selectedWeightVector: weightOption });
   };
+}
+
+function _onRenderGroupHeader(group?: INavLinkGroup) {
+  return (
+    <h6 style={{ paddingLeft: "20px" }}>
+      {group ? group.name?.toUpperCase() : ""}
+    </h6>
+  );
+}
+
+function _onRenderLink(link?: INavLink) {
+  const theme = getTheme();
+  return (
+    <Text
+      variant={"mediumPlus"}
+      style={{ color: theme.semanticColors.bodyText }}
+    >
+      {link ? link.name : ""}
+    </Text>
+  );
 }

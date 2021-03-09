@@ -228,7 +228,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
 
     return (
-      <Stack style={{ height: "100%", overflowY: "auto" }}>
+      <Stack style={{ height: "100%", overflowY: "auto", width: "100%" }}>
         {this.props.modelCount > 1 && (
           <div
             className={styles.multimodelSection}
