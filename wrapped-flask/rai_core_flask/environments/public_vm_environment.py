@@ -27,7 +27,7 @@ class PublicVMEnvironment(BaseEnvironment):
         else:
             if service.ip != "localhost" and not service.with_credentials:
                 self.successfully_detected = True
-                self.base_url = f"http://localhost:{service.port}"
+                self.base_url = f"http://{service.ip}:{service.port}"
 
     def display(self, html):
         """Display the passed HTML using IPython."""
@@ -37,3 +37,4 @@ class PublicVMEnvironment(BaseEnvironment):
     def select(self, service):
         service.with_credentials = False
         service.cors = CORS(service.app)
+        service.env_name = PUBLIC_VM
