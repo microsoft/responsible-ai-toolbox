@@ -69,15 +69,13 @@ import {
   Text,
   getTheme,
   Dropdown,
-  ICommandBarItemProps,
   IDropdownOption,
   Label,
   ILabelStyles,
   IDropdownStyles,
   CommandBarButton,
   IIconProps,
-  IButtonStyles,
-  StackItem
+  IButtonStyles
 } from "office-ui-fabric-react";
 import * as React from "react";
 
@@ -271,7 +269,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
     );
 
     this.navLinkGroups.push({
-      name: "Identify", // TODO move to localization
+      // TODO move to localization
       links: [
         // TODO add model statistics
         // {
@@ -282,46 +280,47 @@ export class ModelAssessmentDashboard extends React.PureComponent<
         //   onClick: this.handleGlobalTabClick
         // },
         {
-          name: localization.ErrorAnalysis.dataExplorerView,
-          url: "",
           key: GlobalTabKeys.DataExplorerTab,
+          name: localization.ErrorAnalysis.dataExplorerView,
+          onClick: this.handleGlobalTabClick.bind(this),
           target: "_blank",
-          onClick: this.handleGlobalTabClick
+          url: ""
         },
         {
-          name: localization.ErrorAnalysis.Navigation.errorExplorer,
-          url: "",
           key: GlobalTabKeys.ErrorAnalysisTab,
+          name: localization.ErrorAnalysis.Navigation.errorExplorer,
+          onClick: this.handleGlobalTabClick.bind(this),
           target: "_blank",
-          onClick: this.handleGlobalTabClick
+          url: ""
         },
         {
-          name: localization.Fairness.Header.title,
-          url: "",
           key: GlobalTabKeys.FairnessTab,
+          name: localization.Fairness.Header.title,
+          onClick: this.handleGlobalTabClick.bind(this),
           target: "_blank",
-          onClick: this.handleGlobalTabClick
+          url: ""
         }
-      ]
+      ],
+      name: "Identify"
     });
     this.navLinkGroups.push({
-      name: "Diagnose",
       links: [
         {
-          name: localization.ErrorAnalysis.globalExplanationView,
-          url: "",
           key: GlobalTabKeys.GlobalExplanationTab,
+          name: localization.ErrorAnalysis.globalExplanationView,
+          onClick: this.handleGlobalTabClick.bind(this),
           target: "_blank",
-          onClick: this.handleGlobalTabClick
+          url: ""
         },
         {
-          name: localization.ErrorAnalysis.localExplanationView,
-          url: "",
           key: GlobalTabKeys.LocalExplanationTab,
+          name: localization.ErrorAnalysis.localExplanationView,
+          onClick: this.handleGlobalTabClick.bind(this),
           target: "_blank",
-          onClick: this.handleGlobalTabClick
+          url: ""
         }
-      ]
+      ],
+      name: "Diagnose"
     });
     // TODO: add causal analysis
     // this.navLinkGroups.push({
@@ -758,8 +757,8 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                   onLinkClick={this.handleGlobalTabClick.bind(this)}
                   styles={{ root: { width: 300 } }}
                   groups={this.navLinkGroups}
-                  onRenderGroupHeader={_onRenderGroupHeader}
-                  onRenderLink={_onRenderLink}
+                  onRenderGroupHeader={onRenderGroupHeader}
+                  onRenderLink={onRenderLink}
                 />
                 <div className={ModelAssessmentDashboard.classNames.navWrapper}>
                   {this.state.activeGlobalTab ===
@@ -767,7 +766,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                     <Stack grow={true}>
                       <Stack
                         horizontal={true}
-                        tokens={{ padding: "16px 24px", childrenGap: "10px" }}
+                        tokens={{ childrenGap: "10px", padding: "16px 24px" }}
                       >
                         <Stack horizontal={true}>
                           <Label styles={labelStyle}>
@@ -980,9 +979,9 @@ export class ModelAssessmentDashboard extends React.PureComponent<
             id={this.layerHostId}
             style={{
               height: "1100px",
-              width: "100%",
               overflow: "hidden",
-              position: "relative"
+              position: "relative",
+              width: "100%"
             }}
           />
         </div>
@@ -1125,7 +1124,7 @@ export class ModelAssessmentDashboard extends React.PureComponent<
   };
 }
 
-function _onRenderGroupHeader(group?: INavLinkGroup) {
+function onRenderGroupHeader(group?: INavLinkGroup) {
   return (
     <h6 style={{ paddingLeft: "20px" }}>
       {group ? group.name?.toUpperCase() : ""}
@@ -1133,7 +1132,7 @@ function _onRenderGroupHeader(group?: INavLinkGroup) {
   );
 }
 
-function _onRenderLink(link?: INavLink) {
+function onRenderLink(link?: INavLink) {
   const theme = getTheme();
   return (
     <Text

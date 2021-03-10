@@ -30,6 +30,9 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
     choiceItemRootStyle: {
       padding: "0px 20px 0px 20px"
     },
+    frame: {
+      width: "inherit"
+    },
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText
@@ -37,9 +40,6 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
     selectedTextStyle: { color: getTheme().palette.neutralPrimaryAlt },
     stackItemsStyle: {
       padding: "0px 0px 0px 26px"
-    },
-    frame: {
-      width: "inherit"
     }
   });
 };
