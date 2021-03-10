@@ -114,6 +114,4 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
       </div>
     );
   }
-
-  
 }
