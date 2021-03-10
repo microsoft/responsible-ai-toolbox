@@ -42,7 +42,8 @@ class ScrapSpec:
 
 
 def append_scrapbook_commands(input_nb_path, output_nb_path, scrap_specs):
-    notebook = nbf.read(input_nb_path, as_version=nbf.NO_CONVERT)
+    notebook = nbf.read(input_nb_path, as_version=4)
+    notebook = nbf.v4.upgrade(notebook, from_version=4, from_minor=2)
 
     scrapbook_cells = []
     # Always need to import nteract-scrapbook
