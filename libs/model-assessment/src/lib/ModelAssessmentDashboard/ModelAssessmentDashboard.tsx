@@ -67,7 +67,17 @@ import {
   INavLink,
   Stack,
   Text,
-  getTheme
+  getTheme,
+  Dropdown,
+  ICommandBarItemProps,
+  IDropdownOption,
+  Label,
+  ILabelStyles,
+  IDropdownStyles,
+  CommandBarButton,
+  IIconProps,
+  IButtonStyles,
+  StackItem
 } from "office-ui-fabric-react";
 import * as React from "react";
 
@@ -589,15 +599,45 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       errorCohort.cohort.getCohortID().toString()
     );
     const classNames = ErrorAnalysisDashboardStyles();
+
+    const labelStyle: ILabelStyles = {
+      root: { alignSelf: "center", padding: "0px 10px 0px 0px" }
+    };
+    const dropdownStyles: Partial<IDropdownStyles> = {
+      dropdown: {
+        width: 100
+      },
+      root: {
+        alignSelf: "center"
+      },
+      title: {
+        borderLeft: "0px solid black",
+        borderRight: "0px solid black",
+        borderTop: "0px solid black"
+      }
+    };
+    const buttonStyle: IButtonStyles = {
+      root: { padding: "0px 4px" }
+    };
+    const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
+
+    const errorAnalysisOptionsDropdown: IDropdownOption[] = [
+      {
+        key: ErrorAnalysisOptions.TreeMap,
+        text: localization.ErrorAnalysis.MainMenu.treeMap
+      },
+      {
+        key: ErrorAnalysisOptions.HeatMap,
+        text: localization.ErrorAnalysis.MainMenu.heatMap
+      }
+    ];
+
     return (
       <div className={classNames.page}>
         <MainMenu
           onInfoPanelClick={(): void => this.setState({ openInfoPanel: true })}
           onCohortListPanelClick={(): void =>
             this.setState({ openCohortListPanel: true })
-          }
-          onFeatureListClick={(): void =>
-            this.setState({ openFeatureList: true })
           }
           onSaveCohortClick={(): void =>
             this.setState({ openSaveCohort: true })
@@ -607,20 +647,6 @@ export class ModelAssessmentDashboard extends React.PureComponent<
           }
           onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
           localUrl={this.props.localUrl}
-          setErrorDetector={(key: ErrorAnalysisOptions): void => {
-            if (this.state.selectedCohort.isTemporary) {
-              this.setState({
-                mapShiftErrorAnalysisOption: key,
-                openFeatureList: false,
-                openMapShift: true
-              });
-            } else {
-              this.setState({
-                errorAnalysisOption: key,
-                openFeatureList: false
-              });
-            }
-          }}
           errorAnalysisOption={this.state.errorAnalysisOption}
           temporaryCohort={this.state.selectedCohort}
           activeGlobalTab={this.state.activeGlobalTab}
@@ -738,54 +764,89 @@ export class ModelAssessmentDashboard extends React.PureComponent<
                 <div className={ModelAssessmentDashboard.classNames.navWrapper}>
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ErrorAnalysisTab && (
-                    <ErrorAnalysisView
-                      theme={this.props.theme!}
-                      messages={
-                        this.props.stringParams
-                          ? this.props.stringParams.contextualHelp
-                          : undefined
-                      }
-                      getTreeNodes={this.props.requestDebugML}
-                      getMatrix={this.props.requestMatrix}
-                      updateSelectedCohort={this.updateSelectedCohort.bind(
-                        this
-                      )}
-                      features={this.props.dataset.featureNames}
-                      selectedFeatures={this.state.selectedFeatures}
-                      errorAnalysisOption={this.state.errorAnalysisOption}
-                      selectedCohort={this.state.selectedCohort}
-                      baseCohort={this.state.baseCohort}
-                      treeViewState={this.state.treeViewState}
-                      setTreeViewState={(
-                        treeViewState: ITreeViewRendererState
-                      ) => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
-                          this.setState({ treeViewState });
+                    <Stack grow={true}>
+                      <Stack
+                        horizontal={true}
+                        tokens={{ padding: "16px 24px", childrenGap: "10px" }}
+                      >
+                        <Stack horizontal={true}>
+                          <Label styles={labelStyle}>
+                            {
+                              localization.ErrorAnalysis.MainMenu
+                                .errorExplorerLabel
+                            }
+                          </Label>
+                          <Dropdown
+                            selectedKey={this.state.errorAnalysisOption}
+                            options={errorAnalysisOptionsDropdown}
+                            styles={dropdownStyles}
+                            onChange={this.handleErrorDetectorChanged}
+                          />
+                        </Stack>
+                        {this.state.errorAnalysisOption ===
+                          ErrorAnalysisOptions.TreeMap && (
+                          <CommandBarButton
+                            styles={buttonStyle}
+                            iconProps={featureListIcon}
+                            key={"featureList"}
+                            onClick={(): void =>
+                              this.setState({ openFeatureList: true })
+                            }
+                            text={
+                              localization.ErrorAnalysis.MainMenu.featureList
+                            }
+                          />
+                        )}
+                      </Stack>
+                      <ErrorAnalysisView
+                        theme={this.props.theme!}
+                        messages={
+                          this.props.stringParams
+                            ? this.props.stringParams.contextualHelp
+                            : undefined
                         }
-                      }}
-                      matrixAreaState={this.state.matrixAreaState}
-                      matrixFilterState={this.state.matrixFilterState}
-                      setMatrixAreaState={(
-                        matrixAreaState: IMatrixAreaState
-                      ) => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
-                          this.setState({ matrixAreaState });
-                        }
-                      }}
-                      setMatrixFilterState={(
-                        matrixFilterState: IMatrixFilterState
-                      ) => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
-                          this.setState({ matrixFilterState });
-                        }
-                      }}
-                    />
+                        getTreeNodes={this.props.requestDebugML}
+                        getMatrix={this.props.requestMatrix}
+                        updateSelectedCohort={this.updateSelectedCohort.bind(
+                          this
+                        )}
+                        features={this.props.dataset.featureNames}
+                        selectedFeatures={this.state.selectedFeatures}
+                        errorAnalysisOption={this.state.errorAnalysisOption}
+                        selectedCohort={this.state.selectedCohort}
+                        baseCohort={this.state.baseCohort}
+                        treeViewState={this.state.treeViewState}
+                        setTreeViewState={(
+                          treeViewState: ITreeViewRendererState
+                        ) => {
+                          if (
+                            this.state.selectedCohort !== this.state.baseCohort
+                          ) {
+                            this.setState({ treeViewState });
+                          }
+                        }}
+                        matrixAreaState={this.state.matrixAreaState}
+                        matrixFilterState={this.state.matrixFilterState}
+                        setMatrixAreaState={(
+                          matrixAreaState: IMatrixAreaState
+                        ) => {
+                          if (
+                            this.state.selectedCohort !== this.state.baseCohort
+                          ) {
+                            this.setState({ matrixAreaState });
+                          }
+                        }}
+                        setMatrixFilterState={(
+                          matrixFilterState: IMatrixFilterState
+                        ) => {
+                          if (
+                            this.state.selectedCohort !== this.state.baseCohort
+                          ) {
+                            this.setState({ matrixFilterState });
+                          }
+                        }}
+                      />
+                    </Stack>
                   )}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.DataExplorerTab && (
@@ -1029,6 +1090,38 @@ export class ModelAssessmentDashboard extends React.PureComponent<
       errorCohort.cohort.clearCachedImportances()
     );
     this.setState({ selectedWeightVector: weightOption });
+  };
+
+  private handleErrorDetectorChanged = (
+    _: React.FormEvent<HTMLDivElement>,
+    item?: IDropdownOption
+  ): void => {
+    if (item) {
+      if (item.key === ErrorAnalysisOptions.HeatMap) {
+        // Note comparison above is actually string comparison (key is string), we have to set the enum
+        const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;
+        this.setErrorDetector(selectedOptionHeatMap);
+      } else {
+        // Note comparison above is actually string comparison (key is string), we have to set the enum
+        const selectedOptionTreeMap = ErrorAnalysisOptions.TreeMap;
+        this.setErrorDetector(selectedOptionTreeMap);
+      }
+    }
+  };
+
+  private setErrorDetector = (key: ErrorAnalysisOptions): void => {
+    if (this.state.selectedCohort.isTemporary) {
+      this.setState({
+        mapShiftErrorAnalysisOption: key,
+        openFeatureList: false,
+        openMapShift: true
+      });
+    } else {
+      this.setState({
+        errorAnalysisOption: key,
+        openFeatureList: false
+      });
+    }
   };
 }
 
