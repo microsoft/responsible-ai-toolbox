@@ -126,12 +126,9 @@ def test_fairness_interpretability_dashboard_loan_allocation():
     )
 
     test_values["local_explanation_feature_names"] = ScrapSpec(
-        "sorted_local_importance_names[0]",
+        "sorted_local_importance_names[0][0:3]",
         [
-            'marital-status', 'occupation', 'hours-per-week', 'age',
-            'capital-gain', 'capital-loss', 'education', 'workclass',
-            'native-country', 'race', 'fnlwgt', 'relationship', 'sex',
-            'education-num'
+            'marital-status', 'occupation', 'hours-per-week'
         ]
     )
 
