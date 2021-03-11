@@ -21,6 +21,6 @@ export * from "./lib/ErrorAnalysisDashboard/Controls/CohortList/CohortList";
 export * from "./lib/ErrorAnalysisDashboard/CohortStats";
 export * from "./lib/ErrorAnalysisDashboard/Controls/ShiftCohort/ShiftCohort";
 export * from "./lib/ErrorAnalysisDashboard/Controls/WhatIf/WhatIf";
-export * from "./lib/ErrorAnalysisDashboard/Controls/ErrorAnalysisView/ErrorAnalysisView";
+export * from "./lib/ErrorAnalysisDashboard/Controls/ErrorAnalysisView/ErrorAnalysisViewTab";
 export * from "./lib/ErrorAnalysisDashboard/Controls/MainMenu/MainMenu";
 export * from "./lib/ErrorAnalysisDashboard/Controls/MapShift/MapShift";

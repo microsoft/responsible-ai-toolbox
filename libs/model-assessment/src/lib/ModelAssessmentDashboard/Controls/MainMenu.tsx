@@ -14,7 +14,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { GlobalTabKeys, PredictionTabKeys } from "../../ModelAssessmentEnums";
+import { GlobalTabKeys, PredictionTabKeys } from "../ModelAssessmentEnums";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 
