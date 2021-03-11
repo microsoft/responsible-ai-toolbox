@@ -22,7 +22,7 @@ fairlearn==0.6.0
 # Required for notebook tests
 nbformat
 papermill
-nteract-scrapbook
+scrapbook
 jupyter
 nbval
 
