@@ -14,7 +14,7 @@ import {
   WeightVectorOption,
   WeightVectors,
   IGenericChartProps,
-  ErrorDetectorCohortSource,
+  CohortSource,
   CohortInfo,
   CohortList,
   CohortStats,
@@ -653,7 +653,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private updateSelectedCohort(
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    source: CohortSource = CohortSource.None,
     cells: number,
     cohortStats: CohortStats | undefined
   ): void {
@@ -666,8 +666,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     let selectedCohortName = "";
     let addTemporaryCohort = true;
     if (
-      source === ErrorDetectorCohortSource.TreeMap ||
-      source === ErrorDetectorCohortSource.HeatMap
+      source === CohortSource.TreeMap ||
+      source === CohortSource.HeatMap
     ) {
       selectedCohortName = "Unsaved";
     } else {

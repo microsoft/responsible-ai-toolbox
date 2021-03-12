@@ -5,7 +5,7 @@ import {
   ICompositeFilter,
   IFilter,
   FilterMethods,
-  ErrorDetectorCohortSource,
+  CohortSource,
   CohortStats,
   ErrorCohort
 } from "@responsible-ai/core-ui";
@@ -54,7 +54,7 @@ export interface ITreeViewRendererProps {
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;
@@ -660,7 +660,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.props.updateSelectedCohort(
       filters,
       [],
-      ErrorDetectorCohortSource.None,
+      CohortSource.None,
       0,
       cohortStats
     );
@@ -738,7 +738,7 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.updateSelectedCohort(
         filters,
         [],
-        ErrorDetectorCohortSource.TreeMap,
+        CohortSource.TreeMap,
         0,
         cohortStats
       );

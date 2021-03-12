@@ -10,7 +10,7 @@ import {
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
-export enum ErrorDetectorCohortSource {
+export enum CohortSource {
   None = "None",
   TreeMap = "Tree map",
   HeatMap = "Heat map"

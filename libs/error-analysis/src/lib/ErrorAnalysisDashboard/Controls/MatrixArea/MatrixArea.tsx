@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorDetectorCohortSource } from "@responsible-ai/core-ui";
+import { CohortSource } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
@@ -278,7 +278,7 @@ export class MatrixArea extends React.PureComponent<
     this.props.updateSelectedCohort(
       [],
       compositeFilter,
-      ErrorDetectorCohortSource.HeatMap,
+      CohortSource.HeatMap,
       cells,
       cohortStats
     );
