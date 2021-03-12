@@ -11,6 +11,7 @@ import {
 } from "@responsible-ai/core-ui";
 
 import { noFeature } from "../../Constants";
+
 import { IMatrixAreaProps } from "./MatrixAreaProps";
 
 export function fetchMatrix(

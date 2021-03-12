@@ -4,7 +4,9 @@
 import {
   IFilter,
   ICompositeFilter,
-  ErrorDetectorCohortSource
+  ErrorDetectorCohortSource,
+  ErrorCohort,
+  CohortStats
 } from "@responsible-ai/core-ui";
 import {
   ComboBox,
@@ -16,7 +18,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort, CohortStats } from "@responsible-ai/core-ui";
 import { noFeature } from "../../Constants";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";

@@ -1,8 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter, FilterMethods } from "../Interfaces/IFilter";
+import {
+  IFilter,
+  ICompositeFilter,
+  FilterMethods
+} from "../Interfaces/IFilter";
 import { JointDataset, IJointMeta } from "../util/JointDataset";
+
 import { Cohort, ErrorDetectorCohortSource } from "./Cohort";
 import { CohortStats } from "./CohortStats";
 

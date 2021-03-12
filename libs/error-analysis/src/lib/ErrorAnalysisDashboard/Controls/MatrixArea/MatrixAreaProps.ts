@@ -9,6 +9,7 @@ import {
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
+
 import { IMatrixAreaState } from "../../MatrixFilterState";
 
 export interface IMatrixAreaProps {

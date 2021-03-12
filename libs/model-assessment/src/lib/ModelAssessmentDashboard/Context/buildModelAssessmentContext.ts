@@ -20,13 +20,13 @@ import {
   ErrorAnalysisOptions
 } from "@responsible-ai/error-analysis";
 import { IGlobalExplanationProps } from "@responsible-ai/interpret";
-
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import memoize from "memoize-one";
+
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "../ModelAssessmentDashboardState";
 import { PredictionTabKeys, GlobalTabKeys } from "../ModelAssessmentEnums";
-import memoize from "memoize-one";
 
 // TODO which of these can go into core-ui utils?
 

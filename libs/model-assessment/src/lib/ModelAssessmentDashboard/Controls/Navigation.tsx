@@ -1,20 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { GlobalTabKeys } from "../ModelAssessmentEnums";
 import { localization } from "@responsible-ai/localization";
-import { getTheme, INavLink, INavLinkGroup, Nav, Text } from "office-ui-fabric-react";
+import {
+  getTheme,
+  INavLink,
+  INavLinkGroup,
+  Nav,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 
+import { GlobalTabKeys } from "../ModelAssessmentEnums";
+
 export interface INavigationProps {
-  activeGlobalTab: GlobalTabKeys,
-  handleGlobalTabClick: ((_ev?: any, item?: INavLink | undefined) => void)
+  activeGlobalTab: GlobalTabKeys;
+  handleGlobalTabClick: (_ev?: any, item?: INavLink | undefined) => void;
 }
 
 export class Navigation extends React.PureComponent<INavigationProps> {
   private navLinkGroups: INavLinkGroup[] = [];
 
-  constructor(props: INavigationProps){
+  constructor(props: INavigationProps) {
     super(props);
 
     this.navLinkGroups.push({

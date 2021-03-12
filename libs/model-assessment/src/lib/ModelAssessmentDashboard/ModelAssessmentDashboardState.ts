@@ -15,8 +15,9 @@ import {
   IMatrixAreaState,
   IMatrixFilterState
 } from "@responsible-ai/error-analysis";
-import { GlobalTabKeys } from "./ModelAssessmentEnums";
 import { Dictionary } from "lodash";
+
+import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {

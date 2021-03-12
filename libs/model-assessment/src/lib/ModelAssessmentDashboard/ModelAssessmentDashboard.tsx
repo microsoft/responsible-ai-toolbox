@@ -48,13 +48,13 @@ import {
 } from "office-ui-fabric-react";
 import * as React from "react";
 
+import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
+import { ModelAssessmentContext } from "./Context/ModelAssessmentContext";
 import { MainMenu } from "./Controls/MainMenu";
 import { Navigation } from "./Controls/Navigation";
-import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
-import { ModelAssessmentContext } from "./Context/ModelAssessmentContext";
-import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
-import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
+import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
+import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,

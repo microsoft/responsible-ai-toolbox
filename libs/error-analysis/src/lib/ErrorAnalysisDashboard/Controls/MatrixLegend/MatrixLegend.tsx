@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IStackStyles,
@@ -10,7 +11,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
 import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
 
 import { matrixLegendStyles } from "./MatrixLegend.styles";

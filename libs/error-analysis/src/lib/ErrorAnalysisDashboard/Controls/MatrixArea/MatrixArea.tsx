@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorDetectorCohortSource } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
@@ -14,7 +15,6 @@ import {
 import React from "react";
 
 import { noFeature } from "../../Constants";
-import { ErrorDetectorCohortSource } from "@responsible-ai/core-ui";
 import { IMatrixAreaState } from "../../MatrixFilterState";
 import { MatrixCells } from "../MatrixCells/MatrixCells";
 import { MatrixFooter } from "../MatrixFooter/MatrixFooter";

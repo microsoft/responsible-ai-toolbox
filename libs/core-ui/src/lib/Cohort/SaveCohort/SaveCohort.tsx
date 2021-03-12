@@ -14,11 +14,11 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../ErrorCohort";
-import { CohortBaseAndFilters } from "../CohortBaseAndFilters/CohortBaseAndFilters";
-import { CohortStats } from "../CohortStats/CohortStats";
 import { JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
+import { CohortBaseAndFilters } from "../CohortBaseAndFilters/CohortBaseAndFilters";
+import { CohortStats } from "../CohortStats/CohortStats";
+import { ErrorCohort } from "../ErrorCohort";
 
 export interface ISaveCohortProps {
   isOpen: boolean;

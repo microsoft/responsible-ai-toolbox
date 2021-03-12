@@ -14,9 +14,11 @@ import {
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { IStringsParam } from "../../Interfaces/IStringsParam";
 import { FeatureList } from "../FeatureList/FeatureList";
+
 import {
   ErrorAnalysisView,
   IErrorAnalysisViewProps

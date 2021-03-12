@@ -14,8 +14,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../ErrorCohort";
 import { CohortStats } from "../CohortStats/CohortStats";
+import { ErrorCohort } from "../ErrorCohort";
 
 export interface IShiftCohortProps {
   isOpen: boolean;

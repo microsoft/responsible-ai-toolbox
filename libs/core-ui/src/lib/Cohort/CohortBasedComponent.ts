@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import React from "react";
+
 import { IDataset } from "../Interfaces/IDataset";
 import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
 import { JointDataset } from "../util/JointDataset";
+
 import { Cohort, ErrorDetectorCohortSource } from "./Cohort";
 import { CohortStats } from "./CohortStats";
 import { ErrorCohort } from "./ErrorCohort";
