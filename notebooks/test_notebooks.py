@@ -164,3 +164,11 @@ def test_erroranalysis_interpretability_dashboard_breast_cancer():
 
     test_values = {}
     assay_one_notebook(nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_erroranalysis_dashboard_multiclass():
+    nb_name = "erroranalysis-dashboard-multiclass"
+
+    test_values = {}
+    assay_one_notebook(nb_name, test_values)
