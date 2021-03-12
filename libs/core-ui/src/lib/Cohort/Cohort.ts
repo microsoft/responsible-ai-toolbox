@@ -25,7 +25,7 @@ export class Cohort {
   private cachedTransposedLocalFeatureImportances: number[][] | undefined;
   private currentSortKey: string | undefined;
   private currentSortReversed = false;
-  
+
   public constructor(
     public name: string,
     private jointDataset: JointDataset,

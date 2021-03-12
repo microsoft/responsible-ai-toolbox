@@ -3,7 +3,8 @@
 
 import {
   IOfficeFabricProps,
-  IExplanationDashboardData} from "@responsible-ai/core-ui";
+  IExplanationDashboardData
+} from "@responsible-ai/core-ui";
 
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";

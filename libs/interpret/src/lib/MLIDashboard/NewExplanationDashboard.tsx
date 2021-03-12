@@ -1,9 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  WeightVectorOption,
-  Cohort} from "@responsible-ai/core-ui";
+import { WeightVectorOption, Cohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
