@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WeightVectorOption, Cohort } from "@responsible-ai/core-ui";
+import {
+  WeightVectorOption,
+  Cohort} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -16,18 +18,18 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { buildInitialExplanationContext } from "./buildInitialExplanationContext";
+import {
+  buildInitialExplanationContext,
+  GlobalTabKeys,
+  INewExplanationDashboardState
+} from "./buildInitialExplanationContext";
 import { InterpretContext } from "./context/InterpretContext";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
 import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
-import {
-  GlobalTabKeys,
-  IExplanationDashboardProps,
-  INewExplanationDashboardState
-} from "./Interfaces/IExplanationDashboardProps";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 
 export class NewExplanationDashboard extends React.PureComponent<
