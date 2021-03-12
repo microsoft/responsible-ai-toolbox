@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "@responsible-ai/core-ui";
+import {
+  IFilter,
+  ICompositeFilter,
+  ErrorDetectorCohortSource,
+  CohortStats,
+  ErrorCohort
+} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
-
-import { CohortStats } from "../../CohortStats";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { IMatrixAreaState } from "../../MatrixFilterState";
 
 export interface IMatrixAreaProps {

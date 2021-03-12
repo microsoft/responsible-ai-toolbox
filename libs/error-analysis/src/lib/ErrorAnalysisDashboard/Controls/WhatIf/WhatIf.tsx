@@ -3,7 +3,8 @@
 
 import {
   JointDataset,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import {
   FabricStyles,
@@ -19,8 +20,6 @@ import {
   Panel
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { ErrorCohort } from "../../ErrorCohort";
 
 import { whatIfStyles } from "./WhatIf.styles";
 

@@ -4,7 +4,10 @@
 import {
   ICompositeFilter,
   IFilter,
-  FilterMethods
+  FilterMethods,
+  ErrorDetectorCohortSource,
+  CohortStats,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
@@ -22,9 +25,7 @@ import { IProcessedStyleSet, ITheme, Text } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-import { CohortStats } from "../../CohortStats";
 import { ColorPalette, isColorDark } from "../../ColorPalette";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {

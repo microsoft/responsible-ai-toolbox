@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "@responsible-ai/core-ui";
+import {
+  IFilter,
+  ICompositeFilter,
+  ErrorDetectorCohortSource
+} from "@responsible-ai/core-ui";
 import {
   ComboBox,
   IComboBox,
@@ -12,9 +16,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "../../CohortStats";
+import { ErrorCohort, CohortStats } from "@responsible-ai/core-ui";
 import { noFeature } from "../../Constants";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";

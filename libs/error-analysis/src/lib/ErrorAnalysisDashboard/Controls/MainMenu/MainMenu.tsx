@@ -22,7 +22,7 @@ import {
   GlobalTabKeys,
   PredictionTabKeys
 } from "../../ErrorAnalysisEnums";
-import { ErrorCohort } from "../../ErrorCohort";
+import { ErrorCohort } from "@responsible-ai/core-ui";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 

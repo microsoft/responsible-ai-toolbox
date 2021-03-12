@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ErrorCohort,
-  ErrorAnalysisOptions
-} from "@responsible-ai/error-analysis";
+import { ErrorCohort } from "@responsible-ai/core-ui";
+import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,

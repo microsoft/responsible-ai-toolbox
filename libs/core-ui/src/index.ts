@@ -3,6 +3,15 @@
 
 export * from "./lib/cohortKey";
 export * from "./lib/Cohort/Cohort";
+export * from "./lib/Cohort/ErrorCohort";
+export * from "./lib/Cohort/CohortStats";
+export * from "./lib/Cohort/CohortBasedComponent";
+export * from "./lib/Cohort/CohortInfo/CohortInfo";
+export * from "./lib/Cohort/CohortList/CohortList";
+export * from "./lib/Cohort/EditCohort/EditCohort";
+export * from "./lib/Cohort/PredictionPath/PredictionPath";
+export * from "./lib/Cohort/SaveCohort/SaveCohort";
+export * from "./lib/Cohort/ShiftCohort/ShiftCohort";
 export * from "./lib/util/array";
 export * from "./lib/util/JointDataset";
 export * from "./lib/util/generateRoute";

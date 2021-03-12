@@ -15,7 +15,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
+import { ErrorCohort } from "../ErrorCohort";
 
 import { cohortListStyles } from "./CohortList.styles";
 

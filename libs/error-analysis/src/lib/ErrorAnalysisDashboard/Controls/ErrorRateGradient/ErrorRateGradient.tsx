@@ -4,7 +4,7 @@
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
-import { ErrorCohort } from "../../ErrorCohort";
+import { ErrorCohort } from "@responsible-ai/core-ui";
 
 import { errorRateGradientStyles } from "./ErrorRateGradient.styles";
 

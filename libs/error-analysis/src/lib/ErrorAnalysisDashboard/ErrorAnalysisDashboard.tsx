@@ -14,7 +14,15 @@ import {
   ModelTypes,
   WeightVectorOption,
   WeightVectors,
-  IGenericChartProps
+  IGenericChartProps,
+  ErrorDetectorCohortSource,
+  CohortInfo,
+  CohortList,
+  CohortStats,
+  EditCohort,
+  ErrorCohort,
+  SaveCohort,
+  ShiftCohort
 } from "@responsible-ai/core-ui";
 import {
   DatasetExplorerTab,
@@ -39,18 +47,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "./CohortStats";
-import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
-import { CohortList } from "./Controls/CohortList/CohortList";
-import { EditCohort } from "./Controls/EditCohort/EditCohort";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { MapShift } from "./Controls/MapShift/MapShift";
 import { Navigation } from "./Controls/Navigation/Navigation";
-import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
-import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
 import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
 import {
@@ -59,7 +61,6 @@ import {
   PredictionTabKeys,
   ViewTypeKeys
 } from "./ErrorAnalysisEnums";
-import { ErrorCohort, ErrorDetectorCohortSource } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { IErrorAnalysisDashboardState } from "./Interfaces/IErrorAnalysisDashboardState";
 import {

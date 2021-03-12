@@ -1,22 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  JointDataset,
-  IJointMeta,
-  Cohort,
-  IFilter,
-  FilterMethods,
-  ICompositeFilter
-} from "@responsible-ai/core-ui";
-
+import { IFilter, ICompositeFilter, FilterMethods } from "../Interfaces/IFilter";
+import { JointDataset, IJointMeta } from "../util/JointDataset";
+import { Cohort, ErrorDetectorCohortSource } from "./Cohort";
 import { CohortStats } from "./CohortStats";
-
-export enum ErrorDetectorCohortSource {
-  None = "None",
-  TreeMap = "Tree map",
-  HeatMap = "Heat map"
-}
 
 export class ErrorCohort {
   public totalAll = 0;

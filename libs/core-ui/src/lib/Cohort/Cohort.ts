@@ -10,6 +10,12 @@ import {
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
+export enum ErrorDetectorCohortSource {
+  None = "None",
+  TreeMap = "Tree map",
+  HeatMap = "Heat map"
+}
+
 export class Cohort {
   private static _cohortIndex = 0;
 

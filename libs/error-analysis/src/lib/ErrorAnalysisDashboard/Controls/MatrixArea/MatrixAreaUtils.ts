@@ -5,13 +5,12 @@ import {
   ICompositeFilter,
   Operations,
   FilterMethods,
-  JointDataset
+  JointDataset,
+  CohortStats,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 
-import { CohortStats } from "../../CohortStats";
 import { noFeature } from "../../Constants";
-import { ErrorCohort } from "../../ErrorCohort";
-
 import { IMatrixAreaProps } from "./MatrixAreaProps";
 
 export function fetchMatrix(

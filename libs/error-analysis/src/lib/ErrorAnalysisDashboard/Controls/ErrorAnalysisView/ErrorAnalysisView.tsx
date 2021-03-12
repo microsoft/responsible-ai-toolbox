@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICompositeFilter, IFilter } from "@responsible-ai/core-ui";
+import {
+  ICompositeFilter,
+  IFilter,
+  ErrorDetectorCohortSource,
+  CohortStats,
+  ErrorCohort
+} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "../../CohortStats";
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { ITreeViewRendererState } from "../../TreeViewState";

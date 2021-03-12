@@ -4,7 +4,8 @@
 import {
   JointDataset,
   IExplanationModelMetadata,
-  WeightVectorOption
+  WeightVectorOption,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -19,7 +20,6 @@ import {
 import React from "react";
 
 import { PredictionTabKeys } from "../../ErrorAnalysisEnums";
-import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { InspectionView } from "../InspectionView/InspectionView";
 import {
