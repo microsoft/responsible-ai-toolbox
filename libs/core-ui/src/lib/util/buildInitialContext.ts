@@ -2,12 +2,14 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
-import { IGlobalExplanationProps } from "../Interfaces/IGlobalExplanationProps";
-import { isThreeDimArray, isTwoDimArray } from "./array";
 import memoize from "memoize-one";
-import { Method } from "../Interfaces/IModelExplanationData";
+
+import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import { IGlobalExplanationProps } from "../Interfaces/IGlobalExplanationProps";
+import { Method } from "../Interfaces/IModelExplanationData";
+
+import { isThreeDimArray, isTwoDimArray } from "./array";
 
 export function buildGlobalProperties(
   precomputedExplanations?: IPrecomputedExplanations
