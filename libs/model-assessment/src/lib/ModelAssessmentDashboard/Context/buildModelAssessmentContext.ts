@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  isTwoDimArray,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   JointDataset,
@@ -11,7 +10,11 @@ import {
   ModelTypes,
   IExplanationModelMetadata,
   isThreeDimArray,
-  ErrorCohort
+  ErrorCohort,
+  buildGlobalProperties,
+  buildIndexedNames,
+  getClassLength,
+  getModelType
 } from "@responsible-ai/core-ui";
 import {
   createInitialMatrixAreaState,
@@ -19,99 +22,12 @@ import {
   createInitialTreeViewState,
   ErrorAnalysisOptions
 } from "@responsible-ai/error-analysis";
-import { IGlobalExplanationProps } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
-import memoize from "memoize-one";
 
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "../ModelAssessmentDashboardState";
 import { PredictionTabKeys, GlobalTabKeys } from "../ModelAssessmentEnums";
-
-// TODO which of these can go into core-ui utils?
-
-function buildGlobalProperties(
-  props: IModelAssessmentDashboardProps
-): IGlobalExplanationProps {
-  const result: IGlobalExplanationProps = {} as IGlobalExplanationProps;
-  if (
-    props.modelExplanationData.precomputedExplanations &&
-    props.modelExplanationData.precomputedExplanations
-      .globalFeatureImportance &&
-    props.modelExplanationData.precomputedExplanations.globalFeatureImportance
-      .scores
-  ) {
-    result.isGlobalImportanceDerivedFromLocal = false;
-    if (
-      isTwoDimArray(
-        props.modelExplanationData.precomputedExplanations
-          .globalFeatureImportance.scores
-      )
-    ) {
-      result.globalImportance = props.modelExplanationData
-        .precomputedExplanations.globalFeatureImportance.scores as number[][];
-      result.globalImportanceIntercept = props.modelExplanationData
-        .precomputedExplanations.globalFeatureImportance.intercept as number[];
-    } else {
-      result.globalImportance = (props.modelExplanationData
-        .precomputedExplanations.globalFeatureImportance
-        .scores as number[]).map((value) => [value]);
-      result.globalImportanceIntercept = [
-        props.modelExplanationData.precomputedExplanations
-          .globalFeatureImportance.intercept as number
-      ];
-    }
-  }
-  return result;
-}
-
-const getClassLength: (
-  props: IModelAssessmentDashboardProps
-) => number = memoize((props: IModelAssessmentDashboardProps) => {
-  if (
-    props.modelExplanationData.precomputedExplanations &&
-    props.modelExplanationData.precomputedExplanations.localFeatureImportance &&
-    props.modelExplanationData.precomputedExplanations.localFeatureImportance
-      .scores
-  ) {
-    const localImportances =
-      props.modelExplanationData.precomputedExplanations.localFeatureImportance
-        .scores;
-    if (isThreeDimArray(localImportances)) {
-      return localImportances.length;
-    }
-    // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-    return 1;
-  }
-  if (
-    props.modelExplanationData.precomputedExplanations &&
-    props.modelExplanationData.precomputedExplanations
-      .globalFeatureImportance &&
-    props.modelExplanationData.precomputedExplanations.globalFeatureImportance
-      .scores
-  ) {
-    // determine if passed in values is 1D or 2D
-    if (
-      isTwoDimArray(
-        props.modelExplanationData.precomputedExplanations
-          .globalFeatureImportance.scores
-      )
-    ) {
-      return (props.modelExplanationData.precomputedExplanations
-        .globalFeatureImportance.scores as number[][]).length;
-    }
-  }
-  if (
-    props.modelExplanationData.probabilityY &&
-    Array.isArray(props.modelExplanationData.probabilityY) &&
-    Array.isArray(props.modelExplanationData.probabilityY[0]) &&
-    props.modelExplanationData.probabilityY[0].length > 0
-  ) {
-    return props.modelExplanationData.probabilityY[0].length;
-  }
-  // default to regression case
-  return 1;
-});
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
@@ -140,7 +56,9 @@ export function buildInitialModelAssessmentContext(
     predictedY: props.modelExplanationData.predictedY,
     trueY: props.dataset.trueY
   });
-  const globalProps = buildGlobalProperties(props);
+  const globalProps = buildGlobalProperties(
+    props.modelExplanationData.precomputedExplanations
+  );
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
     new ErrorCohort(
@@ -212,7 +130,11 @@ export function buildInitialModelAssessmentContext(
 function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
-  const modelType = getModelType(props);
+  const modelType = getModelType(
+    props.modelExplanationData.method,
+    props.modelExplanationData.precomputedExplanations,
+    props.modelExplanationData.probabilityY
+  );
   let featureNames = props.dataset.featureNames;
   let featureNamesAbridged: string[];
   const maxLength = 18;
@@ -263,7 +185,10 @@ function buildModelMetadata(
     featureNamesAbridged = featureNames;
   }
   let classNames = props.dataset.classNames;
-  const classLength = getClassLength(props);
+  const classLength = getClassLength(
+    props.modelExplanationData.precomputedExplanations,
+    props.modelExplanationData.probabilityY
+  );
   if (!classNames || classNames.length !== classLength) {
     classNames = buildIndexedNames(
       classLength,
@@ -289,25 +214,4 @@ function buildModelMetadata(
     featureRanges,
     modelType
   };
-}
-
-function buildIndexedNames(length: number, baseString: string): string[] {
-  return [...new Array(length).keys()].map(
-    (i) => localization.formatString(baseString, i.toString()) as string
-  );
-}
-
-function getModelType(props: IModelAssessmentDashboardProps): ModelTypes {
-  // If Python provides a hint, use it!
-  if (props.modelExplanationData.method === "regressor") {
-    return ModelTypes.Regression;
-  }
-  switch (getClassLength(props)) {
-    case 1:
-      return ModelTypes.Regression;
-    case 2:
-      return ModelTypes.Binary;
-    default:
-      return ModelTypes.Multiclass;
-  }
 }
