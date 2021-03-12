@@ -32,12 +32,7 @@ export const bostonData: IExplanationDashboardData = {
         "DIS",
         "INDUS",
         "LSTAT",
-        "NOX",
-        "PTRATIO",
-        "RAD",
-        "RM",
-        "TAX",
-        "ZN"
+        "NOX"
       ],
       scores: [
         0.47353925321840673,
@@ -47,12 +42,7 @@ export const bostonData: IExplanationDashboardData = {
         0.6301678974587717,
         1.5774414042677294,
         0.5701866766083523,
-        0.6111090772142793,
-        0.0903037496673469,
-        0.5119680964984695,
-        0.9115765292668955,
-        0.26031928443456054,
-        2.750619869786484
+        0.6111090772142793
       ]
     },
     localFeatureImportance: {

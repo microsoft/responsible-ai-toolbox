@@ -13,7 +13,7 @@ class TestFlaskHelper(object):
         """Set up once for all tests."""
         cls.port_range_start = 5000
         cls.port_range_end = 5099
-        cls.test_ip_local = "127.0.0.1"
+        cls.test_ip_local = "localhost"
         cls.test_port_local = 5100
 
     def get_http_client(self):
