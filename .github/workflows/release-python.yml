@@ -33,6 +33,7 @@ jobs:
         run: |
           yarn install
       - name: auto version
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
         run: |
           yarn auto-version -r
       - name: build typescript

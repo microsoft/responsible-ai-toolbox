@@ -150,11 +150,14 @@ export class ValidateProperties {
     }
     const globalExp = this.props.precomputedExplanations
       ?.globalFeatureImportance?.scores;
+    const globalFeatureLength =
+      this.props.precomputedExplanations?.globalFeatureImportance?.featureNames
+        ?.length ?? this.featureLength;
     if (isTwoDimArray(globalExp)) {
       if (
         !this.validate2D(
           globalExp,
-          [this.featureLength, this.classLength],
+          [globalFeatureLength, this.classLength],
           localization.Interpret.ValidationErrors.globalFeatureImportance
         )
       ) {
@@ -163,7 +166,7 @@ export class ValidateProperties {
     } else if (
       !this.validate1D(
         globalExp,
-        this.featureLength,
+        globalFeatureLength,
         localization.Interpret.ValidationErrors.globalFeatureImportance
       )
     ) {
