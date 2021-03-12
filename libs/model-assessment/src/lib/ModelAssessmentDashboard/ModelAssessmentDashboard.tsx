@@ -10,7 +10,8 @@ import {
   ErrorCohort,
   SaveCohort,
   ShiftCohort,
-  CohortBasedComponent
+  CohortBasedComponent,
+  IGenericChartProps
 } from "@responsible-ai/core-ui";
 import {
   ErrorAnalysisOptions,
@@ -54,30 +55,6 @@ import { ModelAssessmentContext } from "./Context/ModelAssessmentContext";
 import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
-
-export enum ChartTypes {
-  Scatter = "scatter",
-  Bar = "histogram",
-  Box = "box"
-}
-
-export interface IGenericChartProps {
-  chartType: ChartTypes;
-  xAxis: ISelectorConfig;
-  yAxis: ISelectorConfig;
-  colorAxis?: ISelectorConfig;
-  selectedCohortIndex?: number;
-}
-
-export interface ISelectorConfig {
-  property: string;
-  index?: number;
-  options: {
-    dither?: boolean;
-    // this is only used in the ambiguous case of numeric values on color axis for scatter chart, when binned or unbinned are valid
-    bin?: boolean;
-  };
-}
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
