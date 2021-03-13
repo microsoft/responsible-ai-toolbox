@@ -4,7 +4,7 @@
 import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
+import { ErrorCohort } from "../ErrorCohort";
 
 import { predictionPathStyles } from "./PredictionPath.styles";
 

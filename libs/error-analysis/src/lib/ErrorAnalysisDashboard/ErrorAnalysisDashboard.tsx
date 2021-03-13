@@ -7,24 +7,33 @@ import {
   IFilter,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
-  isTwoDimArray,
   isThreeDimArray,
   JointDataset,
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption,
   WeightVectors,
-  IGenericChartProps
+  IGenericChartProps,
+  CohortSource,
+  CohortInfo,
+  CohortList,
+  CohortStats,
+  EditCohort,
+  ErrorCohort,
+  SaveCohort,
+  ShiftCohort,
+  buildGlobalProperties,
+  buildIndexedNames,
+  getModelType,
+  getClassLength
 } from "@responsible-ai/core-ui";
 import {
   DatasetExplorerTab,
-  GlobalExplanationTab,
-  IGlobalExplanationProps
+  GlobalExplanationTab
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import * as memoize from "memoize-one";
 import {
   IPivotItemProps,
   ISettings,
@@ -39,18 +48,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "./CohortStats";
-import { CohortInfo } from "./Controls/CohortInfo/CohortInfo";
-import { CohortList } from "./Controls/CohortList/CohortList";
-import { EditCohort } from "./Controls/EditCohort/EditCohort";
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
 import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { MapShift } from "./Controls/MapShift/MapShift";
 import { Navigation } from "./Controls/Navigation/Navigation";
-import { SaveCohort } from "./Controls/SaveCohort/SaveCohort";
-import { ShiftCohort } from "./Controls/ShiftCohort/ShiftCohort";
 import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
 import {
@@ -59,7 +62,6 @@ import {
   PredictionTabKeys,
   ViewTypeKeys
 } from "./ErrorAnalysisEnums";
-import { ErrorCohort, ErrorDetectorCohortSource } from "./ErrorCohort";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { IErrorAnalysisDashboardState } from "./Interfaces/IErrorAnalysisDashboardState";
 import {
@@ -83,51 +85,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       display: "contents"
     }
   });
-
-  private static getClassLength: (
-    props: IErrorAnalysisDashboardProps
-  ) => number = (memoize as any).default(
-    (props: IErrorAnalysisDashboardProps): number => {
-      if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.localFeatureImportance &&
-        props.precomputedExplanations.localFeatureImportance.scores
-      ) {
-        const localImportances =
-          props.precomputedExplanations.localFeatureImportance.scores;
-        if (isThreeDimArray(localImportances)) {
-          return localImportances.length;
-        }
-        // 2d is regression (could be a non-scikit convention binary, but that is not supported)
-        return 1;
-      }
-      if (
-        props.precomputedExplanations &&
-        props.precomputedExplanations.globalFeatureImportance &&
-        props.precomputedExplanations.globalFeatureImportance.scores
-      ) {
-        // determine if passed in vaules is 1D or 2D
-        if (
-          isTwoDimArray(
-            props.precomputedExplanations.globalFeatureImportance.scores
-          )
-        ) {
-          return (props.precomputedExplanations.globalFeatureImportance
-            .scores as number[][]).length;
-        }
-      }
-      if (
-        props.probabilityY &&
-        Array.isArray(props.probabilityY) &&
-        Array.isArray(props.probabilityY[0]) &&
-        props.probabilityY[0].length > 0
-      ) {
-        return props.probabilityY[0].length;
-      }
-      // default to regression case
-      return 1;
-    }
-  );
 
   private pivotItems: IPivotItemProps[] = [];
   private layerHostId: string;
@@ -172,7 +129,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private static buildModelMetadata(
     props: IErrorAnalysisDashboardProps
   ): IExplanationModelMetadata {
-    const modelType = ErrorAnalysisDashboard.getModelType(props);
+    const modelType = getModelType(
+      props.modelInformation.method,
+      props.precomputedExplanations,
+      props.probabilityY
+    );
     let featureNames = props.dataSummary.featureNames;
     let featureNamesAbridged: string[];
     const maxLength = 18;
@@ -216,16 +177,19 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           props.precomputedExplanations.ebmGlobalExplanation.feature_list
             .length;
       }
-      featureNames = ErrorAnalysisDashboard.buildIndexedNames(
+      featureNames = buildIndexedNames(
         featureLength,
         localization.ErrorAnalysis.defaultFeatureNames
       );
       featureNamesAbridged = featureNames;
     }
     let classNames = props.dataSummary.classNames;
-    const classLength = ErrorAnalysisDashboard.getClassLength(props);
+    const classLength = getClassLength(
+      props.precomputedExplanations,
+      props.probabilityY
+    );
     if (!classNames || classNames.length !== classLength) {
-      classNames = ErrorAnalysisDashboard.buildIndexedNames(
+      classNames = buildIndexedNames(
         classLength,
         localization.ErrorAnalysis.defaultClassNames
       );
@@ -249,61 +213,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       featureRanges,
       modelType
     };
-  }
-
-  private static buildIndexedNames(
-    length: number,
-    baseString: string
-  ): string[] {
-    return [...new Array(length).keys()].map(
-      (i) => localization.formatString(baseString, i.toString()) as string
-    );
-  }
-
-  private static getModelType(props: IErrorAnalysisDashboardProps): ModelTypes {
-    // If python gave us a hint, use it
-    if (props.modelInformation.method === "regressor") {
-      return ModelTypes.Regression;
-    }
-    switch (ErrorAnalysisDashboard.getClassLength(props)) {
-      case 1:
-        return ModelTypes.Regression;
-      case 2:
-        return ModelTypes.Binary;
-      default:
-        return ModelTypes.Multiclass;
-    }
-  }
-
-  private static buildGlobalProperties(
-    props: IErrorAnalysisDashboardProps
-  ): IGlobalExplanationProps {
-    const result: IGlobalExplanationProps = {} as IGlobalExplanationProps;
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.globalFeatureImportance &&
-      props.precomputedExplanations.globalFeatureImportance.scores
-    ) {
-      result.isGlobalImportanceDerivedFromLocal = false;
-      if (
-        isTwoDimArray(
-          props.precomputedExplanations.globalFeatureImportance.scores
-        )
-      ) {
-        result.globalImportance = props.precomputedExplanations
-          .globalFeatureImportance.scores as number[][];
-        result.globalImportanceIntercept = props.precomputedExplanations
-          .globalFeatureImportance.intercept as number[];
-      } else {
-        result.globalImportance = (props.precomputedExplanations
-          .globalFeatureImportance.scores as number[]).map((value) => [value]);
-        result.globalImportanceIntercept = [
-          props.precomputedExplanations.globalFeatureImportance
-            .intercept as number
-        ];
-      }
-    }
-    return result;
   }
 
   private static buildInitialExplanationContext(
@@ -331,7 +240,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       predictedY: props.predictedY,
       trueY: props.trueY
     });
-    const globalProps = ErrorAnalysisDashboard.buildGlobalProperties(props);
+    const globalProps = buildGlobalProperties(props.precomputedExplanations);
     // consider taking filters in as param arg for programmatic users
     const cohorts = [
       new ErrorCohort(
@@ -744,7 +653,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private updateSelectedCohort(
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    source: CohortSource = CohortSource.None,
     cells: number,
     cohortStats: CohortStats | undefined
   ): void {
@@ -756,10 +665,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
     let selectedCohortName = "";
     let addTemporaryCohort = true;
-    if (
-      source === ErrorDetectorCohortSource.TreeMap ||
-      source === ErrorDetectorCohortSource.HeatMap
-    ) {
+    if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
       selectedCohortName = "Unsaved";
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;

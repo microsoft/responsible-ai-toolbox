@@ -3,27 +3,26 @@
 
 import {
   IExplanationModelMetadata,
-  WeightVectorOption,
   IGenericChartProps,
+  WeightVectorOption,
   ErrorCohort,
   ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
+import {
+  ErrorAnalysisOptions,
+  PredictionTabKeys,
+  ITreeViewRendererState,
+  IMatrixAreaState,
+  IMatrixFilterState
+} from "@responsible-ai/error-analysis";
 import { Dictionary } from "lodash";
 
-import {
-  GlobalTabKeys,
-  ViewTypeKeys,
-  ErrorAnalysisOptions,
-  PredictionTabKeys
-} from "../ErrorAnalysisEnums";
-import { IMatrixAreaState, IMatrixFilterState } from "../MatrixFilterState";
-import { ITreeViewRendererState } from "../TreeViewState";
+import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
-export interface IErrorAnalysisDashboardState
+export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
   activeGlobalTab: GlobalTabKeys;
   customPoints: Array<{ [key: string]: any }>;
-  viewType: ViewTypeKeys;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
@@ -39,7 +38,6 @@ export interface IErrorAnalysisDashboardState
   openInfoPanel: boolean;
   openCohortListPanel: boolean;
   openEditCohort: boolean;
-  openFeatureList: boolean;
   openMapShift: boolean;
   openSaveCohort: boolean;
   openShiftCohort: boolean;

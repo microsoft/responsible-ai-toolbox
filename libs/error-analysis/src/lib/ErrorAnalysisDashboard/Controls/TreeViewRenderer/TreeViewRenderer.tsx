@@ -4,7 +4,10 @@
 import {
   ICompositeFilter,
   IFilter,
-  FilterMethods
+  FilterMethods,
+  CohortSource,
+  CohortStats,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
@@ -22,9 +25,7 @@ import { IProcessedStyleSet, ITheme, Text } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-import { CohortStats } from "../../CohortStats";
 import { ColorPalette, isColorDark } from "../../ColorPalette";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
@@ -53,7 +54,7 @@ export interface ITreeViewRendererProps {
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;
@@ -659,7 +660,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.props.updateSelectedCohort(
       filters,
       [],
-      ErrorDetectorCohortSource.None,
+      CohortSource.None,
       0,
       cohortStats
     );
@@ -737,7 +738,7 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.updateSelectedCohort(
         filters,
         [],
-        ErrorDetectorCohortSource.TreeMap,
+        CohortSource.TreeMap,
         0,
         cohortStats
       );

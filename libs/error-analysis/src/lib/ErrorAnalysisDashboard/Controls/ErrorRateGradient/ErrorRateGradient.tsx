@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
-import { ErrorCohort } from "../../ErrorCohort";
 
 import { errorRateGradientStyles } from "./ErrorRateGradient.styles";
 

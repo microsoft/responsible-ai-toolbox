@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICompositeFilter, IFilter } from "@responsible-ai/core-ui";
+import {
+  ICompositeFilter,
+  IFilter,
+  CohortSource,
+  CohortStats,
+  ErrorCohort
+} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "../../CohortStats";
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { ITreeViewRendererState } from "../../TreeViewState";
@@ -25,7 +29,7 @@ export interface IErrorAnalysisViewProps {
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;
@@ -44,38 +48,36 @@ export class ErrorAnalysisView extends React.PureComponent<
 > {
   public render(): React.ReactNode {
     return (
-      <div className="mainPage">
-        <div className="errorAnalysisView">
-          {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
-            <TreeViewRenderer
-              theme={this.props.theme}
-              messages={this.props.messages}
-              getTreeNodes={this.props.getTreeNodes}
-              features={this.props.features}
-              selectedFeatures={this.props.selectedFeatures}
-              updateSelectedCohort={this.props.updateSelectedCohort}
-              selectedCohort={this.props.selectedCohort}
-              baseCohort={this.props.baseCohort}
-              state={this.props.treeViewState}
-              setTreeViewState={this.props.setTreeViewState}
-            />
-          )}
-          {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
-            <MatrixFilter
-              theme={this.props.theme}
-              features={this.props.features}
-              getMatrix={this.props.getMatrix}
-              updateSelectedCohort={this.props.updateSelectedCohort}
-              selectedCohort={this.props.selectedCohort}
-              baseCohort={this.props.baseCohort}
-              state={this.props.matrixFilterState}
-              matrixAreaState={this.props.matrixAreaState}
-              setMatrixAreaState={this.props.setMatrixAreaState}
-              setMatrixFilterState={this.props.setMatrixFilterState}
-            />
-          )}
-        </div>
-      </div>
+      <>
+        {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
+          <TreeViewRenderer
+            theme={this.props.theme}
+            messages={this.props.messages}
+            getTreeNodes={this.props.getTreeNodes}
+            features={this.props.features}
+            selectedFeatures={this.props.selectedFeatures}
+            updateSelectedCohort={this.props.updateSelectedCohort}
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            state={this.props.treeViewState}
+            setTreeViewState={this.props.setTreeViewState}
+          />
+        )}
+        {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
+          <MatrixFilter
+            theme={this.props.theme}
+            features={this.props.features}
+            getMatrix={this.props.getMatrix}
+            updateSelectedCohort={this.props.updateSelectedCohort}
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            state={this.props.matrixFilterState}
+            matrixAreaState={this.props.matrixAreaState}
+            setMatrixAreaState={this.props.setMatrixAreaState}
+            setMatrixFilterState={this.props.setMatrixFilterState}
+          />
+        )}
+      </>
     );
   }
 
