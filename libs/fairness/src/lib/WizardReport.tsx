@@ -14,9 +14,9 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FairnessModes, fairnessOptions } from "../util/FairnessMetrics";
-import { FormatMetrics } from "../util/FormatMetrics";
-import { performanceOptions } from "../util/PerformanceMetrics";
+import { FairnessModes, fairnessOptions } from "./util/FairnessMetrics";
+import { FormatMetrics } from "./util/FormatMetrics";
+import { performanceOptions } from "./util/PerformanceMetrics";
 
 import { DropdownBar } from "./Controls/DropdownBar";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";

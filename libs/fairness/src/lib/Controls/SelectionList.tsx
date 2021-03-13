@@ -16,7 +16,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { performanceOptions } from "../../util/PerformanceMetrics";
+import { performanceOptions } from "./../util/PerformanceMetrics";
 
 export interface ISelectionItemProps extends IObjectWithKey {
   name: string;

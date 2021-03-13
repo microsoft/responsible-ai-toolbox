@@ -7,9 +7,9 @@ import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { FormatMetrics } from "../../util/FormatMetrics";
-import { IFairnessContext } from "../../util/IFairnessContext";
-import { performanceOptions } from "../../util/PerformanceMetrics";
+import { FormatMetrics } from "./../util/FormatMetrics";
+import { IFairnessContext } from "./../util/IFairnessContext";
+import { performanceOptions } from "./../util/PerformanceMetrics";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import { IFeatureBinPickerPropsV2 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";

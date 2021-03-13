@@ -24,10 +24,10 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FairnessModes, fairnessOptions } from "../../util/FairnessMetrics";
-import { IFairnessContext } from "../../util/IFairnessContext";
-import { MetricsCache } from "../../util/MetricsCache";
-import { performanceOptions } from "../../util/PerformanceMetrics";
+import { FairnessModes, fairnessOptions } from "./../util/FairnessMetrics";
+import { IFairnessContext } from "./../util/IFairnessContext";
+import { MetricsCache } from "./../util/MetricsCache";
+import { performanceOptions } from "./../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV2,
   IFeatureBinPickerPropsV2,

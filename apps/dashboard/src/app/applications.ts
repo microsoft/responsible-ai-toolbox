@@ -42,7 +42,7 @@ export interface IInterpretDataSet {
   classDimension?: 1 | 2 | 3;
 }
 
-export interface IFairLearnDataSet {
+export interface IFairnessDataSet {
   data: IFairnessData;
 }
 
@@ -66,7 +66,7 @@ export interface IInterpretSetting {
 }
 
 export interface IFairnessSetting {
-  versions: { [key: string]: 1 | 2 };
+  versions: { [key: string]: 2 };
 }
 
 export interface IErrorAnalysisSetting {
@@ -87,7 +87,7 @@ export const applicationKeys = <const>[
 export type IApplications = {
   [key in typeof applicationKeys[number]]: unknown;
 } & {
-  fairness: IFairnessSetting & IDataSet<IFairLearnDataSet>;
+  fairness: IFairnessSetting & IDataSet<IFairnessDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
@@ -112,7 +112,7 @@ export const applications: IApplications = <const>{
       probability: { data: probability },
       regression: { data: regression }
     },
-    versions: { "Version-1": 1, "Version-2": 2 }
+    versions: { "Version-2": 2 }
   },
   interpret: {
     datasets: {

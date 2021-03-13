@@ -6,7 +6,7 @@ import { localization } from "@responsible-ai/localization";
 import { Dropdown, IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { IFairnessContext } from "../../util/IFairnessContext";
+import { IFairnessContext } from "./../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,
   IFairnessPickerPropsV2,
