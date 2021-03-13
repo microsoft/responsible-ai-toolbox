@@ -23,7 +23,7 @@ import {
   IDropdownOption
 } from "office-ui-fabric-react";
 
-import { IDashboardContext } from "../../ExplanationDashboard";
+import { IDashboardContext } from "../../DashboardContext";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { PlotlyUtils } from "../../SharedComponents/PlotlyUtils";
 

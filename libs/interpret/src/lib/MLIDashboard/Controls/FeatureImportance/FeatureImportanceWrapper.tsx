@@ -6,7 +6,7 @@ import { SelectionContext } from "@responsible-ai/mlchartlib";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { IDashboardContext } from "../../ExplanationDashboard";
+import { IDashboardContext } from "../../DashboardContext";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IBarChartConfig } from "../../SharedComponents/IBarChartConfig";
 

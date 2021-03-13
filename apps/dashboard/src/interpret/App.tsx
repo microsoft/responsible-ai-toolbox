@@ -4,7 +4,6 @@
 import { IExplanationDashboardData } from "@responsible-ai/core-ui";
 import {
   NewExplanationDashboard,
-  ExplanationDashboard,
   ITelemetryMessage,
   IExplanationDashboardProps,
   HelpMessageDict
@@ -46,8 +45,8 @@ export class App extends React.Component<IAppProps> {
       theme: this.props.theme
     };
     switch (this.props.version) {
-      case 1:
-        return <ExplanationDashboard {...dashboardProp} />;
+      // The first version of ExplanationDashboard is no longer available - refer to branch
+      // rolutz/branch_with_fairness_v1_and_interpret_v1 if needed
       case 2:
       default:
         return <NewExplanationDashboard {...dashboardProp} />;

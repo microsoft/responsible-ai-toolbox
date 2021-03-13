@@ -134,7 +134,7 @@ export const applications: IApplications = <const>{
       irisNoFeatures: { classDimension: 3, data: irisNoFeatures },
       largeFeatureCount: { classDimension: 2, data: largeFeatureCount }
     },
-    versions: { "Version-1": 1, "Version-2": 2 }
+    versions: { "Version-2": 2 }
   },
   modelAssessment: {
     datasets: {
