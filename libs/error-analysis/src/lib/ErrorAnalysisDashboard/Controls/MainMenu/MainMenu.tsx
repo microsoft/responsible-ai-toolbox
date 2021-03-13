@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
@@ -22,7 +23,6 @@ import {
   GlobalTabKeys,
   PredictionTabKeys
 } from "../../ErrorAnalysisEnums";
-import { ErrorCohort } from "../../ErrorCohort";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 

@@ -18,7 +18,8 @@ export const FairnessWizardStyles: () => IProcessedStyleSet<
   return mergeStyleSets<IFairnessWizardStyles>({
     frame: {
       minHeight: "800px",
-      minWidth: "800px"
+      minWidth: "800px",
+      width: "100%"
     },
     pivot: {
       display: "flex",

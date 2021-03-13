@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Cohort, JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IStackTokens,
@@ -17,9 +16,11 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
+import { JointDataset } from "../../util/JointDataset";
+import { Cohort } from "../Cohort";
 import { CohortFilters } from "../CohortFilters/CohortFilters";
 import { CohortStats } from "../CohortStats/CohortStats";
+import { ErrorCohort } from "../ErrorCohort";
 
 export interface IEditCohortProps {
   isOpen: boolean;

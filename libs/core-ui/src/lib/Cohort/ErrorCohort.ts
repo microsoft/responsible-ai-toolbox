@@ -2,21 +2,14 @@
 // Licensed under the MIT License.
 
 import {
-  JointDataset,
-  IJointMeta,
-  Cohort,
   IFilter,
-  FilterMethods,
-  ICompositeFilter
-} from "@responsible-ai/core-ui";
+  ICompositeFilter,
+  FilterMethods
+} from "../Interfaces/IFilter";
+import { JointDataset, IJointMeta } from "../util/JointDataset";
 
+import { Cohort, CohortSource } from "./Cohort";
 import { CohortStats } from "./CohortStats";
-
-export enum ErrorDetectorCohortSource {
-  None = "None",
-  TreeMap = "Tree map",
-  HeatMap = "Heat map"
-}
 
 export class ErrorCohort {
   public totalAll = 0;
@@ -31,7 +24,7 @@ export class ErrorCohort {
     public cohort: Cohort,
     public jointDataset: JointDataset,
     public cells: number = 0,
-    public source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    public source: CohortSource = CohortSource.None,
     public isTemporary: boolean = false,
     public cohortStats: CohortStats | undefined = undefined
   ) {

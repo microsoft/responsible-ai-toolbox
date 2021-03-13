@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
+import { JointDataset, ErrorCohort } from "@responsible-ai/core-ui";
 import {
   ConstrainMode,
   DetailsList,
@@ -22,7 +22,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
   constructRows,
