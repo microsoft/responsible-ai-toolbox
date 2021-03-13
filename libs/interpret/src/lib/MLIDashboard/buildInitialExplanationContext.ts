@@ -16,7 +16,7 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import {
   GlobalTabKeys,
   IExplanationDashboardProps,
-  INewExplanationDashboardState
+  IExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
@@ -127,7 +127,7 @@ function buildModelMetadata(
 
 export function buildInitialExplanationContext(
   props: IExplanationDashboardProps
-): INewExplanationDashboardState {
+): IExplanationDashboardState {
   const modelMetadata = buildModelMetadata(props);
   const validationCheck = new ValidateProperties(props, modelMetadata);
 

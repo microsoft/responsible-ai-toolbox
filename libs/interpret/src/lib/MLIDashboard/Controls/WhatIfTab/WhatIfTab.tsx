@@ -32,8 +32,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { explanationDashboardRowErrorSize } from "../../explanationDashboardRowErrorSize";
 import { FabricStyles } from "../../FabricStyles";
-import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
@@ -308,7 +308,7 @@ export class WhatIfTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .filteredData.length;
     const canRenderChart =
-      cohortLength < newExplanationDashboardRowErrorSize ||
+      cohortLength < explanationDashboardRowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {

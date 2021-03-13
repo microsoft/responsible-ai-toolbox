@@ -23,16 +23,16 @@ import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplore
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
+import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
 import {
   GlobalTabKeys,
   IExplanationDashboardProps,
-  INewExplanationDashboardState
+  IExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
-import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 
-export class NewExplanationDashboard extends React.PureComponent<
+export class ExplanationDashboard extends React.PureComponent<
   IExplanationDashboardProps,
-  INewExplanationDashboardState
+  IExplanationDashboardState
 > {
   private pivotItems: IPivotItemProps[] = [];
   public constructor(props: IExplanationDashboardProps) {

@@ -26,7 +26,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
+import { explanationDashboardRowErrorSize } from "../../explanationDashboardRowErrorSize";
 import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
@@ -101,7 +101,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
       .filteredData.length;
     const canRenderChart =
-      cohortLength < newExplanationDashboardRowErrorSize ||
+      cohortLength < explanationDashboardRowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
       ColumnCategories.Index,

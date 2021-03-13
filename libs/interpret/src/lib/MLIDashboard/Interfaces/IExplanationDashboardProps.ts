@@ -47,7 +47,7 @@ export interface IExplanationDashboardProps
   ) => Promise<any[]>;
 }
 
-export interface INewExplanationDashboardState {
+export interface IExplanationDashboardState {
   cohorts: Cohort[];
   activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;

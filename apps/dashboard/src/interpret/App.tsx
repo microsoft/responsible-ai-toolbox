@@ -3,7 +3,7 @@
 
 import { IExplanationDashboardData } from "@responsible-ai/core-ui";
 import {
-  NewExplanationDashboard,
+  ExplanationDashboard,
   ITelemetryMessage,
   IExplanationDashboardProps,
   HelpMessageDict
@@ -49,7 +49,7 @@ export class App extends React.Component<IAppProps> {
       // rolutz/branch_with_fairness_v1_and_interpret_v1 if needed
       case 2:
       default:
-        return <NewExplanationDashboard {...dashboardProp} />;
+        return <ExplanationDashboard {...dashboardProp} />;
     }
   }
 
