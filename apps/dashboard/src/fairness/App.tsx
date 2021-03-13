@@ -2,10 +2,7 @@
 // Licensed under the MIT License.
 
 import { IFairnessData } from "@responsible-ai/core-ui";
-import {
-  FairnessWizardV2,
-  IFairnessProps
-} from "@responsible-ai/fairness";
+import { FairnessWizardV2, IFairnessProps } from "@responsible-ai/fairness";
 import { Language } from "@responsible-ai/localization";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";

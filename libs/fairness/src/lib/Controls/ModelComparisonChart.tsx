@@ -24,10 +24,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FairnessModes, fairnessOptions } from "./../util/FairnessMetrics";
-import { IFairnessContext } from "./../util/IFairnessContext";
-import { MetricsCache } from "./../util/MetricsCache";
-import { performanceOptions } from "./../util/PerformanceMetrics";
 import {
   IPerformancePickerPropsV2,
   IFeatureBinPickerPropsV2,
@@ -35,6 +31,10 @@ import {
 } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
 
+import { FairnessModes, fairnessOptions } from "./../util/FairnessMetrics";
+import { IFairnessContext } from "./../util/IFairnessContext";
+import { MetricsCache } from "./../util/MetricsCache";
+import { performanceOptions } from "./../util/PerformanceMetrics";
 import { DropdownBar } from "./DropdownBar";
 import { Insights } from "./Insights";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";

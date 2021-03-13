@@ -7,8 +7,6 @@ import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { FormatMetrics } from "./../util/FormatMetrics";
-import { IFairnessContext } from "./../util/IFairnessContext";
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import {
   IFeatureBinPickerPropsV2,
@@ -17,6 +15,8 @@ import {
 import { IMetrics } from "../IMetrics";
 import { SharedStyles } from "../Shared.styles";
 
+import { FormatMetrics } from "./../util/FormatMetrics";
+import { IFairnessContext } from "./../util/IFairnessContext";
 import { ModalHelp } from "./ModalHelp";
 import { PerformancePlotStyles } from "./PerformancePlot.styles";
 

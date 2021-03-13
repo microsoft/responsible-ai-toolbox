@@ -8,7 +8,6 @@ import React from "react";
 import { IFairnessOption } from "./../util/FairnessMetrics";
 import { FormatMetrics } from "./../util/FormatMetrics";
 import { IPerformanceOption } from "./../util/PerformanceMetrics";
-
 import { InsightsStyles } from "./Insights.styles";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 

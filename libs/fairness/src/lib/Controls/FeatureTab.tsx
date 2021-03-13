@@ -20,13 +20,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { IBinnedResponse } from "./../util/IBinnedResponse";
 import { BinDialog } from "./BinDialog";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
+import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
 import { IWizardTabProps } from "./IWizardTabProps";
 import { WizardFooter } from "./WizardFooter";
-import { IBinnedResponse } from "./../util/IBinnedResponse";
-
-import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
 
 export interface IFeatureTabProps extends IWizardTabProps {
   featureBins: IBinnedResponse[];

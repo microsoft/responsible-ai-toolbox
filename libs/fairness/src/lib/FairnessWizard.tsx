@@ -15,7 +15,14 @@ import {
 import React from "react";
 
 import { EmptyHeader } from "./Controls/EmptyHeader";
+import { FairnessTab } from "./Controls/FairnessTab";
+import { FeatureTab } from "./Controls/FeatureTab";
+import { IntroTab } from "./Controls/IntroTab";
+import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
+import { PerformanceTab } from "./Controls/PerformanceTab";
+import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { IFairnessProps } from "./IFairnessProps";
+import { defaultTheme } from "./Themes";
 import {
   IFairnessOption,
   fairnessOptions,
@@ -33,14 +40,6 @@ import {
   defaultPerformanceMetricPrioritization
 } from "./util/PerformanceMetrics";
 import { WizardBuilder } from "./util/WizardBuilder";
-
-import { FairnessTab } from "./Controls/FairnessTab";
-import { FeatureTab } from "./Controls/FeatureTab";
-import { IntroTab } from "./Controls/IntroTab";
-import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
-import { PerformanceTab } from "./Controls/PerformanceTab";
-import { FairnessWizardStyles } from "./FairnessWizard.styles";
-import { defaultTheme } from "./Themes";
 import { WizardReport } from "./WizardReport";
 
 export interface IPerformancePickerPropsV2 {
