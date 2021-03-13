@@ -505,12 +505,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     item?: IDropdownOption
   ): void => {
     if (item) {
+      // Note comparison below is actually string comparison (key is string), we have to set the enum
       if (item.key === ErrorAnalysisOptions.HeatMap) {
-        // Note comparison above is actually string comparison (key is string), we have to set the enum
         const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;
         this.setErrorDetector(selectedOptionHeatMap);
       } else {
-        // Note comparison above is actually string comparison (key is string), we have to set the enum
         const selectedOptionTreeMap = ErrorAnalysisOptions.TreeMap;
         this.setErrorDetector(selectedOptionTreeMap);
       }

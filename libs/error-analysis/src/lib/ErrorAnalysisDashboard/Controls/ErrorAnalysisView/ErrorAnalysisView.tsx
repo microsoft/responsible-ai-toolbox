@@ -4,7 +4,7 @@
 import {
   ICompositeFilter,
   IFilter,
-  ErrorDetectorCohortSource,
+  CohortSource,
   CohortStats,
   ErrorCohort
 } from "@responsible-ai/core-ui";
@@ -29,7 +29,7 @@ export interface IErrorAnalysisViewProps {
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;

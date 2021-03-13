@@ -8,7 +8,7 @@ import {
 } from "../Interfaces/IFilter";
 import { JointDataset, IJointMeta } from "../util/JointDataset";
 
-import { Cohort, ErrorDetectorCohortSource } from "./Cohort";
+import { Cohort, CohortSource } from "./Cohort";
 import { CohortStats } from "./CohortStats";
 
 export class ErrorCohort {
@@ -25,7 +25,7 @@ export class ErrorCohort {
     public cohort: Cohort,
     public jointDataset: JointDataset,
     public cells: number = 0,
-    public source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    public source: CohortSource = CohortSource.None,
     public isTemporary: boolean = false,
     public cohortStats: CohortStats | undefined = undefined
   ) {

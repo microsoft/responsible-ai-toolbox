@@ -4,7 +4,7 @@
 import {
   IFilter,
   ICompositeFilter,
-  ErrorDetectorCohortSource,
+  CohortSource,
   ErrorCohort,
   CohortStats
 } from "@responsible-ai/core-ui";
@@ -32,7 +32,7 @@ export interface IMatrixFilterProps {
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;

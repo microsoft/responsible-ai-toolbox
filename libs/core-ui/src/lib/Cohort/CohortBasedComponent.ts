@@ -7,7 +7,7 @@ import { IDataset } from "../Interfaces/IDataset";
 import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
 import { JointDataset } from "../util/JointDataset";
 
-import { Cohort, ErrorDetectorCohortSource } from "./Cohort";
+import { Cohort, CohortSource } from "./Cohort";
 import { CohortStats } from "./CohortStats";
 import { ErrorCohort } from "./ErrorCohort";
 
@@ -29,7 +29,7 @@ export abstract class CohortBasedComponent<
   public updateSelectedCohort(
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource = ErrorDetectorCohortSource.None,
+    source: CohortSource = CohortSource.None,
     cells: number,
     cohortStats: CohortStats | undefined
   ): void {
@@ -41,10 +41,7 @@ export abstract class CohortBasedComponent<
 
     let selectedCohortName = "";
     let addTemporaryCohort = true;
-    if (
-      source === ErrorDetectorCohortSource.TreeMap ||
-      source === ErrorDetectorCohortSource.HeatMap
-    ) {
+    if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
       selectedCohortName = "Unsaved";
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
