@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { NewExplanationDashboard } from "@responsible-ai/interpret";
+import { ExplanationDashboard } from "@responsible-ai/interpret";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
@@ -20,7 +20,7 @@ export class Interpret extends React.Component<IInterpretProps> {
     }
 
     return (
-      <NewExplanationDashboard
+      <ExplanationDashboard
         dashboardType={this.props.dashboardType}
         modelInformation={{ modelClass: "blackbox" }}
         dataSummary={{
