@@ -9,7 +9,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     language="en"
     onSettingChanged={[Function]}
     theme="1 - light"
-    version="Version-1"
+    version="Version-2"
   />
   <div
     key="1"
@@ -503,12 +503,12 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
           },
         }
       }
-      version={1}
+      version={2}
     />
   </div>
   <Redirect
     push={true}
-    to="/interpret/automlMimicAdult/1%20-%20light/en/Version-1"
+    to="/interpret/automlMimicAdult/1%20-%20light/en/Version-2"
   />
 </Fragment>
 `;
