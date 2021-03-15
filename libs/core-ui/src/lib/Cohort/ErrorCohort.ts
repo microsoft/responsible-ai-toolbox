@@ -20,6 +20,7 @@ export class ErrorCohort {
   public totalCohortIncorrect = 0;
   public errorRate = 0;
   public errorCoverage = 0;
+
   public constructor(
     public cohort: Cohort,
     public jointDataset: JointDataset,

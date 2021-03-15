@@ -2,14 +2,9 @@
 // Licensed under the MIT License.
 
 import {
-  Cohort,
   IOfficeFabricProps,
-  IExplanationDashboardData,
-  IExplanationModelMetadata,
-  WeightVectorOption,
-  JointDataset
+  IExplanationDashboardData
 } from "@responsible-ai/core-ui";
-import { Dictionary } from "lodash";
 
 import { IStringsParam } from "./IStringsParam";
 import { ITelemetryMessage } from "./ITelemetryMessage";
@@ -45,27 +40,4 @@ export interface IExplanationDashboardProps
     abortSignal: AbortSignal,
     explanationAlgorithm?: string
   ) => Promise<any[]>;
-}
-
-export interface INewExplanationDashboardState {
-  cohorts: Cohort[];
-  activeGlobalTab: GlobalTabKeys;
-  jointDataset: JointDataset;
-  modelMetadata: IExplanationModelMetadata;
-  validationWarnings: string[];
-  showingDataSizeWarning: boolean;
-  selectedWeightVector: WeightVectorOption;
-  requestPredictions?: (
-    request: any[],
-    abortSignal: AbortSignal
-  ) => Promise<any[]>;
-  weightVectorOptions: WeightVectorOption[];
-  weightVectorLabels: Dictionary<string>;
-}
-
-export enum GlobalTabKeys {
-  ModelPerformance = "modelPerformance",
-  DataExploration = "dataExploration",
-  ExplanationTab = "explanationTab",
-  WhatIfTab = "whatIfTab"
 }
