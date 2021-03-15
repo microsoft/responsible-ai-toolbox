@@ -605,7 +605,7 @@
     "globalImportance": "Global Importance",
     "_globalImportance.comment": "Label for tab showing bar chart of importance of features at a global level",
     "incorrectTotal": "Incorrect/Total",
-    "treeMapDescription": "To retrain the tree map, select and save the features below.",
+    "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
     "Cohort": {
       "cohort": "Cohort",
       "_cohort.comment": "a subset of the data is called a cohort",
@@ -618,6 +618,10 @@
     "EditCohort": {
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort.",
       "cohortName": "Cohort name"
+    },
+    "FeatureList": {
+      "importances": "Importances",
+      "features": "Features"
     },
     "InspectionView": {
       "emptyError": "Please select datapoints in the incorrect and correct categories by clicking the checkboxes.",

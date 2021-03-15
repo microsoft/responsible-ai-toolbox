@@ -3,8 +3,13 @@
 
 import { localization } from "@responsible-ai/localization";
 import {
+  ConstrainMode,
+  DetailsList,
+  DetailsListLayoutMode,
   getTheme,
+  MarqueeSelection,
   PrimaryButton,
+  IColumn,
   IFocusTrapZoneProps,
   IPanelProps,
   IPanelStyles,
@@ -12,18 +17,24 @@ import {
   ISettings,
   IStackTokens,
   IStyleFunctionOrObject,
-  Checkbox,
+  ITheme,
   Customizer,
   getId,
   Layer,
   LayerHost,
   Panel,
   ScrollablePane,
+  Selection,
+  SelectionMode,
   SearchBox,
   Stack,
   Text
 } from "office-ui-fabric-react";
 import React from "react";
+
+import { ITableState } from "../../Utils/DatasetUtils";
+
+import { updateItems, updatePercents, sortByPercent } from "./FeatureListUtils";
 
 export interface IFeatureListProps {
   isOpen: boolean;
@@ -44,7 +55,7 @@ const searchBoxStyles: Partial<ISearchBoxStyles> = { root: { width: 120 } };
 // Used to add spacing between example checkboxes
 const checkboxStackTokens: IStackTokens = {
   childrenGap: "s1",
-  padding: "m"
+  padding: 1
 };
 
 export interface IFeatureListState {
@@ -54,6 +65,7 @@ export interface IFeatureListState {
   sortedFeatures: string[];
   enableApplyButton: boolean;
   lastAppliedFeatures: Set<string>;
+  tableState: ITableState;
 }
 
 const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
@@ -65,34 +77,70 @@ export class FeatureList extends React.Component<
   IFeatureListState
 > {
   private layerHostId: string;
+  private _selection: Selection;
   public constructor(props: IFeatureListProps) {
     super(props);
-
-    const percents = this.updatePercents();
-    const [sortedPercents, sortedFeatures] = this.sortByPercent(percents);
+    const percents = updatePercents(this.props.importances);
+    const [sortedPercents, sortedFeatures] = sortByPercent(
+      percents,
+      this.props.features
+    );
+    const searchedFeatures = sortedFeatures;
+    const tableState = updateItems(
+      sortedPercents,
+      sortedFeatures,
+      searchedFeatures
+    );
     this.state = {
       enableApplyButton: false,
       lastAppliedFeatures: new Set<string>(this.props.features),
       percents: sortedPercents,
-      searchedFeatures: sortedFeatures,
+      searchedFeatures,
       selectedFeatures: this.props.features,
-      sortedFeatures
+      sortedFeatures,
+      tableState
     };
     this.layerHostId = getId("featuresListHost");
+    this._selection = new Selection({
+      onSelectionChanged: (): void => {
+        const newSelectedFeatures = this.getSelectionDetails();
+        const enableApplyButton =
+          this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
+          newSelectedFeatures.some(
+            (selectedFeature) =>
+              !this.state.lastAppliedFeatures.has(selectedFeature)
+          );
+        this.setState({
+          enableApplyButton,
+          selectedFeatures: newSelectedFeatures
+        });
+      }
+    });
+    this.updateSelection();
   }
 
   public componentDidUpdate(prevProps: IFeatureListProps): void {
     if (this.props.importances !== prevProps.importances) {
-      const percents = this.updatePercents();
-      const [sortedPercents, sortedFeatures] = this.sortByPercent(percents);
+      const percents = updatePercents(this.props.importances);
+      const [sortedPercents, sortedFeatures] = sortByPercent(
+        percents,
+        this.props.features
+      );
       const searchedFeatures = sortedFeatures.filter((sortedFeature) =>
         this.state.searchedFeatures.includes(sortedFeature)
+      );
+      const tableState = updateItems(
+        sortedPercents,
+        sortedFeatures,
+        searchedFeatures
       );
       this.setState({
         percents: sortedPercents,
         searchedFeatures,
-        sortedFeatures
+        sortedFeatures,
+        tableState
       });
+      this.updateSelection();
     }
   }
 
@@ -136,59 +184,25 @@ export class FeatureList extends React.Component<
             >
               <Layer>
                 <ScrollablePane>
-                  <Stack
-                    tokens={checkboxStackTokens}
-                    verticalAlign="space-around"
-                  >
-                    {this.state.searchedFeatures.map((feature) => {
-                      const sortedFeatureIndex = this.state.sortedFeatures.indexOf(
-                        feature
-                      );
-                      return (
-                        <Stack.Item key={"checkboxKey" + feature}>
-                          <Stack horizontal horizontalAlign="space-between">
-                            <Stack.Item
-                              key={"checkboxItemKey" + feature}
-                              align="center"
-                            >
-                              <Checkbox
-                                label={feature}
-                                checked={this.state.selectedFeatures.includes(
-                                  feature
-                                )}
-                                onChange={this.onChange.bind(this, feature)}
-                              />
-                            </Stack.Item>
-                            {this.props.importances.length > 0 &&
-                              this.props.importances[sortedFeatureIndex] !==
-                                undefined && (
-                                <Stack.Item
-                                  key={"checkboxImpKey" + feature}
-                                  align="center"
-                                >
-                                  <svg width="100px" height="6px">
-                                    <g>
-                                      <rect
-                                        fill={theme.palette.neutralQuaternary}
-                                        width="100%"
-                                        height="4"
-                                        rx="5"
-                                      ></rect>
-                                      <rect
-                                        fill={theme.palette.neutralSecondary}
-                                        width={`${this.state.percents[sortedFeatureIndex]}%`}
-                                        height="4"
-                                        rx="5"
-                                      ></rect>
-                                    </g>
-                                  </svg>
-                                </Stack.Item>
-                              )}
-                          </Stack>
-                        </Stack.Item>
-                      );
-                    })}
-                  </Stack>
+                  <MarqueeSelection selection={this._selection}>
+                    <DetailsList
+                      items={this.state.tableState.rows}
+                      columns={this.state.tableState.columns}
+                      setKey="set"
+                      layoutMode={DetailsListLayoutMode.fixedColumns}
+                      constrainMode={ConstrainMode.unconstrained}
+                      onRenderItemColumn={this.renderItemColumn.bind(
+                        this,
+                        theme
+                      )}
+                      selectionPreservedOnEmptyClick={true}
+                      ariaLabelForSelectionColumn="Toggle selection"
+                      ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+                      checkButtonAriaLabel="Row checkbox"
+                      selectionMode={SelectionMode.multiple}
+                      selection={this._selection}
+                    />
+                  </MarqueeSelection>
                 </ScrollablePane>
               </Layer>
             </Customizer>
@@ -215,76 +229,57 @@ export class FeatureList extends React.Component<
     );
   }
 
-  private updatePercents(): number[] {
-    let percents: number[] = [];
-    if (this.props.importances && this.props.importances.length > 0) {
-      const maxImportance = this.props.importances.reduce(
-        (featImp1: number, featImp2: number) => Math.max(featImp1, featImp2)
-      );
-      percents = this.props.importances.map(
-        (imp: number) => (imp / maxImportance) * 100
-      );
-    }
-    return percents;
-  }
+  private renderItemColumn(
+    theme: ITheme,
+    item: any,
+    index?: number,
+    column?: IColumn
+  ): React.ReactNode {
+    if (column && index !== undefined) {
+      const fieldContent = item[column.fieldName as keyof any] as string;
 
-  private sortByPercent(percents: number[]): [number[], string[]] {
-    let sortedPercents: number[] = [];
-    let sortedFeatures: string[] = this.props.features;
-    // Sort the searched features by importance
-    if (percents.length > 0) {
-      let joinedFeatImp: Array<[number, string]> = [];
-      joinedFeatImp = percents.map((percent, i) => [
-        percent,
-        this.props.features[i]
-      ]);
-      joinedFeatImp.sort(function (left, right) {
-        return left[0] > right[0] ? -1 : 1;
-      });
-      sortedPercents = joinedFeatImp.map((joinedVal) => joinedVal[0]);
-      sortedFeatures = joinedFeatImp.map((joinedVal) => joinedVal[1]);
-    }
-    return [sortedPercents, sortedFeatures];
-  }
-
-  private onChange(
-    feature?: string,
-    _?: React.FormEvent<HTMLElement>,
-    isChecked?: boolean
-  ): void {
-    if (isChecked) {
-      if (!this.state.selectedFeatures.includes(feature!)) {
-        const newSelectedFeatures = [
-          ...this.state.selectedFeatures.concat([feature!])
-        ];
-        const enableApplyButton =
-          this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
-          newSelectedFeatures.some(
-            (selectedFeature) =>
-              !this.state.lastAppliedFeatures.has(selectedFeature)
+      switch (column.key) {
+        case "importances":
+          return (
+            <svg width="100px" height="6px">
+              <g>
+                <rect
+                  fill={theme.palette.neutralQuaternary}
+                  width="100%"
+                  height="4"
+                  rx="5"
+                ></rect>
+                <rect
+                  fill={theme.palette.neutralSecondary}
+                  width={`${fieldContent}%`}
+                  height="4"
+                  rx="5"
+                ></rect>
+              </g>
+            </svg>
           );
-        this.setState({
-          enableApplyButton,
-          selectedFeatures: newSelectedFeatures
-        });
+
+        default:
+          return <span>{fieldContent}</span>;
       }
-    } else {
-      const newSelectedFeatures = [
-        ...this.state.selectedFeatures.filter(
-          (stateFeature) => stateFeature !== feature!
-        )
-      ];
-      const enableApplyButton =
-        this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
-        newSelectedFeatures.some(
-          (selectedFeature) =>
-            !this.state.lastAppliedFeatures.has(selectedFeature)
-        );
-      this.setState({
-        enableApplyButton,
-        selectedFeatures: newSelectedFeatures
-      });
     }
+    return <span></span>;
+  }
+
+  private updateSelection(): void {
+    this._selection.setItems(this.state.tableState.rows);
+    const featureNames = this.state.tableState.rows.map((row) => row[0]);
+    featureNames.forEach((feature, index) => {
+      if (this.state.selectedFeatures.includes(feature)) {
+        this._selection.setIndexSelected(index, true, true);
+      }
+    });
+  }
+
+  private getSelectionDetails(): string[] {
+    const selectedRows = this._selection.getSelection();
+    const keys = selectedRows.map((row) => row[0] as string);
+    return keys;
   }
 
   private onSearch(searchValue: string): void {
