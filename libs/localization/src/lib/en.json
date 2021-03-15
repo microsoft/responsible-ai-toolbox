@@ -961,5 +961,10 @@
       "performanceMetric": "Performance metric",
       "fairnessMetric": "Fairness metric"
     }
+  },
+  "ModelAssessment": {
+    "Navigation": {
+      "modelStatistics": "Model statistics"
+    }
   }
 }
