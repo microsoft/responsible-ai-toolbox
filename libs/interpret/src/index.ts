@@ -9,6 +9,7 @@ export * from "./lib/MLIDashboard/Interfaces/ITelemetryMessage";
 export * from "./lib/MLIDashboard/Controls/DatasetExplorerTab/DatasetExplorerTab";
 export * from "./lib/MLIDashboard/Controls/GlobalExplanationTab/GlobalExplanationTab";
 export * from "./lib/MLIDashboard/Controls/GlobalExplanationTab/IGlobalSeries";
+export * from "./lib/MLIDashboard/Controls/ModelPerformanceTab/ModelPerformanceTab";
 export * from "./lib/MLIDashboard/FabricStyles";
 export * from "./lib/MLIDashboard/Controls/WhatIfTab/LocalImportancePlots";
 export * from "./lib/MLIDashboard/Controls/WhatIfTab/WhatIfPanel";
