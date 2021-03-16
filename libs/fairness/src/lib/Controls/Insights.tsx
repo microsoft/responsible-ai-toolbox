@@ -5,10 +5,9 @@ import { localization } from "@responsible-ai/localization";
 import { Icon, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { IFairnessOption } from "../../util/FairnessMetrics";
-import { FormatMetrics } from "../../util/FormatMetrics";
-import { IPerformanceOption } from "../../util/PerformanceMetrics";
-
+import { IFairnessOption } from "./../util/FairnessMetrics";
+import { FormatMetrics } from "./../util/FormatMetrics";
+import { IPerformanceOption } from "./../util/PerformanceMetrics";
 import { InsightsStyles } from "./Insights.styles";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 

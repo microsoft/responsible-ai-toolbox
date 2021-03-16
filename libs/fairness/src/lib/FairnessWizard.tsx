@@ -10,58 +10,63 @@ import {
   PivotItem,
   Stack,
   StackItem,
-  Text,
   loadTheme
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { EmptyHeader } from "../components/EmptyHeader";
-import { IFairnessProps } from "../IFairnessProps";
-import { IBinnedResponse } from "../util/IBinnedResponse";
-import {
-  IFairnessContext,
-  IRunTimeFairnessContext
-} from "../util/IFairnessContext";
-import { MetricsCache } from "../util/MetricsCache";
-import {
-  IPerformanceOption,
-  performanceOptions
-} from "../util/PerformanceMetrics";
-import { WizardBuilder } from "../util/WizardBuilder";
-
+import { EmptyHeader } from "./Controls/EmptyHeader";
 import { FairnessTab } from "./Controls/FairnessTab";
 import { FeatureTab } from "./Controls/FeatureTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
+import { IFairnessProps } from "./IFairnessProps";
 import { defaultTheme } from "./Themes";
+import {
+  IFairnessOption,
+  fairnessOptions,
+  defaultFairnessMetricPrioritization
+} from "./util/FairnessMetrics";
+import { IBinnedResponse } from "./util/IBinnedResponse";
+import {
+  IFairnessContext,
+  IRunTimeFairnessContext
+} from "./util/IFairnessContext";
+import { MetricsCache } from "./util/MetricsCache";
+import {
+  performanceOptions,
+  IPerformanceOption,
+  defaultPerformanceMetricPrioritization
+} from "./util/PerformanceMetrics";
+import { WizardBuilder } from "./util/WizardBuilder";
 import { WizardReport } from "./WizardReport";
 
-export interface IPerformancePickerPropsV1 {
+export interface IPerformancePickerPropsV2 {
   performanceOptions: IPerformanceOption[];
   selectedPerformanceKey: string;
   onPerformanceChange: (newKey: string) => void;
 }
 
-export interface IFairnessPickerPropsV1 {
-  fairnessOptions: IPerformanceOption[];
+export interface IFairnessPickerPropsV2 {
+  fairnessOptions: IFairnessOption[];
   selectedFairnessKey: string;
   onFairnessChange: (newKey: string) => void;
 }
 
-export interface IFeatureBinPickerPropsV1 {
+export interface IFeatureBinPickerPropsV2 {
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
   onBinChange: (index: number) => void;
 }
 
-export interface IWizardStateV1 {
+export interface IWizardStateV2 {
+  showIntro: boolean;
   activeTabKey: string;
   selectedModelId?: number;
   dashboardContext: IFairnessContext;
   performanceMetrics: IPerformanceOption[];
-  fairnessMetrics: IPerformanceOption[];
+  fairnessMetrics: IFairnessOption[];
   selectedPerformanceKey: string;
   selectedFairnessKey: string;
   featureBins: IBinnedResponse[];
@@ -76,12 +81,12 @@ const fairnessTabKey = "fairnessTab";
 const reportTabKey = "reportTab";
 
 const flights = {
-  skipFairness: true
+  skipFairness: false
 };
 
-export class FairnessWizardV1 extends React.PureComponent<
+export class FairnessWizardV2 extends React.PureComponent<
   IFairnessProps,
-  IWizardStateV1
+  IWizardStateV2
 > {
   public constructor(props: IFairnessProps) {
     super(props);
@@ -89,11 +94,17 @@ export class FairnessWizardV1 extends React.PureComponent<
       localization.setLanguage(this.props.locale);
     }
     let performanceMetrics: IPerformanceOption[];
+    let fairnessMetrics: IFairnessOption[];
+    let selectedPerformanceKey: string;
+    let selectedFairnessKey: string;
     loadTheme(props.theme || defaultTheme);
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
       // we must assume that the same performance metrics are provided across models and bins
       performanceMetrics = WizardBuilder.buildPerformanceListForPrecomputedMetrics(
+        this.props
+      );
+      fairnessMetrics = WizardBuilder.buildFairnessListForPrecomputedMetrics(
         this.props
       );
       const readonlyFeatureBins = this.props.precomputedFeatureBins.map(
@@ -107,12 +118,21 @@ export class FairnessWizardV1 extends React.PureComponent<
           };
         }
       );
+      selectedPerformanceKey = this.selectDefaultMetric(
+        performanceMetrics,
+        defaultPerformanceMetricPrioritization
+      );
+      selectedFairnessKey = this.selectDefaultMetric(
+        fairnessMetrics,
+        defaultFairnessMetricPrioritization
+      );
+
       this.state = {
         activeTabKey: featureBinTabKey,
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
         ),
-        fairnessMetrics: performanceMetrics,
+        fairnessMetrics,
         featureBins: readonlyFeatureBins,
         metricCache: new MetricsCache(
           0,
@@ -122,9 +142,10 @@ export class FairnessWizardV1 extends React.PureComponent<
         ),
         performanceMetrics,
         selectedBinIndex: 0,
-        selectedFairnessKey: performanceMetrics[0].key,
+        selectedFairnessKey,
         selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-        selectedPerformanceKey: performanceMetrics[0].key
+        selectedPerformanceKey,
+        showIntro: true
       };
       return;
     }
@@ -143,11 +164,22 @@ export class FairnessWizardV1 extends React.PureComponent<
 
     performanceMetrics = this.getPerformanceMetrics(fairnessContext);
     performanceMetrics = performanceMetrics.filter((metric) => !!metric);
+    selectedPerformanceKey = this.selectDefaultMetric(
+      performanceMetrics,
+      defaultPerformanceMetricPrioritization
+    );
+
+    fairnessMetrics = this.getFairnessMetrics(fairnessContext);
+    fairnessMetrics = fairnessMetrics.filter((metric) => !!metric);
+    selectedFairnessKey = this.selectDefaultMetric(
+      fairnessMetrics,
+      defaultFairnessMetricPrioritization
+    );
 
     this.state = {
       activeTabKey: introTabKey,
       dashboardContext: fairnessContext,
-      fairnessMetrics: performanceMetrics,
+      fairnessMetrics,
       featureBins,
       metricCache: new MetricsCache(
         featureBins.length,
@@ -156,9 +188,10 @@ export class FairnessWizardV1 extends React.PureComponent<
       ),
       performanceMetrics,
       selectedBinIndex: 0,
-      selectedFairnessKey: performanceMetrics[0].key,
+      selectedFairnessKey,
       selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
-      selectedPerformanceKey: performanceMetrics[0].key
+      selectedPerformanceKey,
+      showIntro: true
     };
   }
 
@@ -192,11 +225,6 @@ export class FairnessWizardV1 extends React.PureComponent<
       return (
         <Stack className={styles.frame}>
           <EmptyHeader />
-          <Stack.Item grow={2} className={styles.body}>
-            <Text variant={"mediumPlus"}>
-              {localization.Fairness.errorOnInputs}
-            </Text>
-          </Stack.Item>
         </Stack>
       );
     }
@@ -204,14 +232,14 @@ export class FairnessWizardV1 extends React.PureComponent<
       <Stack className={styles.frame}>
         <EmptyHeader />
         {this.state.activeTabKey === introTabKey && (
-          <StackItem grow={2} className={styles.body}>
+          <StackItem grow={2}>
             <IntroTab onNext={this.setTab.bind(this, featureBinTabKey)} />
           </StackItem>
         )}
         {(this.state.activeTabKey === featureBinTabKey ||
           this.state.activeTabKey === performanceTabKey ||
           this.state.activeTabKey === fairnessTabKey) && (
-          <Stack.Item grow={2} className={styles.body}>
+          <Stack.Item grow={2}>
             <Pivot
               className={styles.pivot}
               styles={{
@@ -223,7 +251,7 @@ export class FairnessWizardV1 extends React.PureComponent<
               onLinkClick={this.handleTabClick}
             >
               <PivotItem
-                headerText={localization.Fairness.Intro.features}
+                headerText={localization.Fairness.sensitiveFeatures}
                 itemKey={featureBinTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >
@@ -237,7 +265,7 @@ export class FairnessWizardV1 extends React.PureComponent<
                 />
               </PivotItem>
               <PivotItem
-                headerText={localization.Fairness.performanceMetricLegacy}
+                headerText={localization.Fairness.performanceMetric}
                 itemKey={performanceTabKey}
                 style={{ height: "100%", paddingLeft: "8px" }}
               >
@@ -252,7 +280,11 @@ export class FairnessWizardV1 extends React.PureComponent<
                 />
               </PivotItem>
               {flights.skipFairness === false && (
-                <PivotItem headerText={"Fairness"} itemKey={fairnessTabKey}>
+                <PivotItem
+                  headerText={localization.Fairness.fairnessMetric}
+                  itemKey={fairnessTabKey}
+                  style={{ height: "100%", paddingLeft: "8px" }}
+                >
                   <FairnessTab
                     dashboardContext={this.state.dashboardContext}
                     fairnessPickerProps={fairnessPickerProps}
@@ -267,6 +299,7 @@ export class FairnessWizardV1 extends React.PureComponent<
         {this.state.activeTabKey === reportTabKey &&
           this.state.selectedModelId !== undefined && (
             <WizardReport
+              showIntro={this.state.showIntro}
               dashboardContext={this.state.dashboardContext}
               metricsCache={this.state.metricCache}
               modelCount={this.props.predictedY.length}
@@ -275,12 +308,14 @@ export class FairnessWizardV1 extends React.PureComponent<
               fairnessPickerProps={fairnessPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               selectedModelIndex={this.state.selectedModelId}
+              onHideIntro={this.hideIntro.bind(this)}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
           )}
         {this.state.activeTabKey === reportTabKey &&
           this.state.selectedModelId === undefined && (
             <ModelComparisonChart
+              showIntro={this.state.showIntro}
               dashboardContext={this.state.dashboardContext}
               metricsCache={this.state.metricCache}
               onChartClick={this.onSelectModel}
@@ -288,6 +323,7 @@ export class FairnessWizardV1 extends React.PureComponent<
               performancePickerProps={performancePickerProps}
               fairnessPickerProps={fairnessPickerProps}
               featureBinPickerProps={featureBinPickerProps}
+              onHideIntro={this.hideIntro.bind(this)}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
           )}
@@ -319,6 +355,20 @@ export class FairnessWizardV1 extends React.PureComponent<
     );
   }
 
+  private getFairnessMetrics(
+    fairnessContext: IRunTimeFairnessContext
+  ): IFairnessOption[] {
+    return Object.values(fairnessOptions).filter((fairnessOption) => {
+      return fairnessOption.supportedTasks.has(
+        fairnessContext.modelMetadata.PredictionType
+      );
+    });
+  }
+
+  private readonly hideIntro = (): void => {
+    this.setState({ showIntro: false });
+  };
+
   private readonly setTab = (key: string): void => {
     this.setState({ activeTabKey: key });
   };
@@ -334,11 +384,11 @@ export class FairnessWizardV1 extends React.PureComponent<
   };
 
   private readonly setPerformanceKey = (key: string): void => {
-    const value: Partial<IWizardStateV1> = { selectedPerformanceKey: key };
+    const value: Partial<IWizardStateV2> = { selectedPerformanceKey: key };
     if (flights.skipFairness) {
       value.selectedFairnessKey = key;
     }
-    this.setState(value as IWizardStateV1);
+    this.setState(value as IWizardStateV2);
   };
 
   private readonly setFairnessKey = (key: string): void => {
@@ -360,8 +410,8 @@ export class FairnessWizardV1 extends React.PureComponent<
     }
   };
 
-  private readonly handleTabClick = (item: PivotItem | undefined): void => {
-    if (item && item.props.itemKey) {
+  private readonly handleTabClick = (item?: PivotItem): void => {
+    if (item?.props?.itemKey) {
       this.setState({ activeTabKey: item.props.itemKey });
     }
   };
@@ -391,4 +441,19 @@ export class FairnessWizardV1 extends React.PureComponent<
     this.state.metricCache.clearCache(bin.featureIndex);
     this.binningSet(bin);
   };
+
+  private selectDefaultMetric(
+    metrics: { [key: string]: any },
+    prioritization: string[]
+  ): string {
+    const keys = new Set(Object.values(metrics).map((metric) => metric.key));
+    for (const metricKey of prioritization) {
+      if (keys.has(metricKey)) {
+        return metricKey;
+      }
+    }
+
+    // if none of the prioritized default metrics are available return first item
+    return metrics[0].key;
+  }
 }
