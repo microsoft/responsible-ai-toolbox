@@ -4,7 +4,7 @@
 import { IStackStyles, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
+import { ErrorCohort } from "../ErrorCohort";
 
 import { cohortBaseAndFiltersStyles } from "./CohortBaseAndFilters.styles";
 

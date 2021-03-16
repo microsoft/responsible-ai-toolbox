@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import {
-  JointDataset,
   IExplanationModelMetadata,
   WeightVectorOption,
-  IGenericChartProps
+  IGenericChartProps,
+  ErrorCohort,
+  ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
 import { Dictionary } from "lodash";
 
@@ -15,16 +16,14 @@ import {
   ErrorAnalysisOptions,
   PredictionTabKeys
 } from "../ErrorAnalysisEnums";
-import { ErrorCohort } from "../ErrorCohort";
 import { IMatrixAreaState, IMatrixFilterState } from "../MatrixFilterState";
 import { ITreeViewRendererState } from "../TreeViewState";
 
-export interface IErrorAnalysisDashboardState {
+export interface IErrorAnalysisDashboardState
+  extends ICohortBasedComponentState {
   activeGlobalTab: GlobalTabKeys;
-  cohorts: ErrorCohort[];
   customPoints: Array<{ [key: string]: any }>;
   viewType: ViewTypeKeys;
-  jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
@@ -46,10 +45,8 @@ export interface IErrorAnalysisDashboardState {
   openShiftCohort: boolean;
   openWhatIf: boolean;
   predictionTab: PredictionTabKeys;
-  selectedCohort: ErrorCohort;
   selectedWhatIfIndex: number | undefined;
   editedCohort: ErrorCohort;
-  baseCohort: ErrorCohort;
   selectedFeatures: string[];
   treeViewState: ITreeViewRendererState;
   matrixAreaState: IMatrixAreaState;

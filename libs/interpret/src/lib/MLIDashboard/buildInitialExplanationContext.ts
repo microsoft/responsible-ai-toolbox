@@ -8,24 +8,42 @@ import {
   WeightVectors,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes
+  ModelTypes,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import { Dictionary } from "lodash";
 
-import {
-  GlobalTabKeys,
-  IExplanationDashboardProps,
-  INewExplanationDashboardState
-} from "./Interfaces/IExplanationDashboardProps";
-import { IGlobalExplanationProps } from "./Interfaces/IGlobalExplanationProps";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 
-const rowWarningSize = 6000;
-// features x classes
+export interface INewExplanationDashboardState {
+  cohorts: Cohort[];
+  activeGlobalTab: GlobalTabKeys;
+  jointDataset: JointDataset;
+  modelMetadata: IExplanationModelMetadata;
+  validationWarnings: string[];
+  showingDataSizeWarning: boolean;
+  selectedWeightVector: WeightVectorOption;
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  weightVectorOptions: WeightVectorOption[];
+  weightVectorLabels: Dictionary<string>;
+}
 
+export enum GlobalTabKeys {
+  ModelPerformance = "modelPerformance",
+  DataExploration = "dataExploration",
+  ExplanationTab = "explanationTab",
+  WhatIfTab = "whatIfTab"
+}
+
+const rowWarningSize = 6000;
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
   if (props.modelInformation.method === "regressor") {
@@ -41,9 +59,9 @@ function getModelType(props: IExplanationDashboardProps): ModelTypes {
   }
 }
 function buildIndexedNames(length: number, baseString: string): string[] {
-  return [...new Array(length).keys()].map((i) =>
-    localization.formatString(baseString, i.toString())
-  );
+  return new Array(length)
+    .fill(baseString)
+    .map((s, i) => localization.formatString(s, i.toString()));
 }
 function buildModelMetadata(
   props: IExplanationDashboardProps
@@ -128,35 +146,6 @@ function buildModelMetadata(
   };
 }
 
-function buildGlobalProperties(
-  props: IExplanationDashboardProps
-): IGlobalExplanationProps {
-  const result: IGlobalExplanationProps = {} as IGlobalExplanationProps;
-  if (
-    props.precomputedExplanations &&
-    props.precomputedExplanations.globalFeatureImportance &&
-    props.precomputedExplanations.globalFeatureImportance.scores
-  ) {
-    result.isGlobalImportanceDerivedFromLocal = false;
-    if (
-      (props.precomputedExplanations.globalFeatureImportance
-        .scores as number[][]).every((dim1) => Array.isArray(dim1))
-    ) {
-      result.globalImportance = props.precomputedExplanations
-        .globalFeatureImportance.scores as number[][];
-      result.globalImportanceIntercept = props.precomputedExplanations
-        .globalFeatureImportance.intercept as number[];
-    } else {
-      result.globalImportance = (props.precomputedExplanations
-        .globalFeatureImportance.scores as number[]).map((value) => [value]);
-      result.globalImportanceIntercept = [
-        props.precomputedExplanations.globalFeatureImportance
-          .intercept as number
-      ];
-    }
-  }
-  return result;
-}
 export function buildInitialExplanationContext(
   props: IExplanationDashboardProps
 ): INewExplanationDashboardState {
@@ -178,7 +167,6 @@ export function buildInitialExplanationContext(
     predictedY: props.predictedY,
     trueY: props.trueY
   });
-  const globalProps = buildGlobalProperties(props);
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
     new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
@@ -210,12 +198,9 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ModelPerformance,
     cohorts,
-    globalImportance: globalProps.globalImportance,
-    globalImportanceIntercept: globalProps.globalImportanceIntercept,
-    isGlobalImportanceDerivedFromLocal:
-      globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
     modelMetadata,
+    requestPredictions: props.requestPredictions,
     selectedWeightVector:
       modelMetadata.modelType === ModelTypes.Multiclass
         ? WeightVectors.AbsAvg

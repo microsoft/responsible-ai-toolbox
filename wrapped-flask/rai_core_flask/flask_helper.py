@@ -67,7 +67,7 @@ class FlaskHelper(object):
         try:
             backlog = 5
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.bind((ip, port))
+            sock.bind((LOCALHOST, port))
             sock.listen(backlog)
             sock.close()
         except socket.error:  # pragma: no cover
@@ -88,7 +88,7 @@ class FlaskHelper(object):
 
         ip = LOCALHOST
         # Note: for credentialed or public VM use the private IP address
-        if self.env in VM_ENVS:
+        if self.env_name in VM_ENVS:
             host_name = socket.gethostname()
             ip = socket.gethostbyname(host_name)
         server = WSGIServer((ip, self.port), self.app, log=devnull)

@@ -8,8 +8,6 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 
-import { FabricStyles } from "../../FabricStyles";
-
 export interface IModelPerformanceTabStyles {
   page: IStyle;
   infoIcon: IStyle;
@@ -30,10 +28,6 @@ export interface IModelPerformanceTabStyles {
   cohortPickerWrapper: IStyle;
   cohortPickerLabel: IStyle;
   boldText: IStyle;
-  missingParametersPlaceholder: IStyle;
-  missingParametersPlaceholderSpacer: IStyle;
-  missingParametersPlaceholderNeutralSpacer: IStyle;
-  faintText: IStyle;
 }
 
 export const modelPerformanceTabStyles: () => IProcessedStyleSet<
@@ -72,7 +66,6 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<
       paddingLeft: "63px",
       paddingTop: "13px"
     },
-    faintText: [FabricStyles.faintText],
     helperText: {
       paddingLeft: "15px",
       paddingRight: "160px"
@@ -98,16 +91,6 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<
       paddingLeft: "25px",
       width: "100%"
     },
-    missingParametersPlaceholder: [FabricStyles.missingParameterPlaceholder],
-    missingParametersPlaceholderNeutralSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer,
-      {
-        backgroundColor: theme.semanticColors.bodyBackground
-      }
-    ],
-    missingParametersPlaceholderSpacer: [
-      FabricStyles.missingParameterPlaceholderSpacer
-    ],
     paddingDiv: {
       width: "50px"
     },

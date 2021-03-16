@@ -10,7 +10,8 @@ import {
   IExplanationModelMetadata,
   ChartTypes,
   IGenericChartProps,
-  ISelectorConfig
+  ISelectorConfig,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
@@ -78,13 +79,9 @@ export class DatasetExplorerTab extends React.PureComponent<
 
     if (!this.props.jointDataset.hasDataset) {
       return (
-        <div className={classNames.missingParametersPlaceholder}>
-          <div className={classNames.missingParametersPlaceholderSpacer}>
-            <Text variant="large" className={classNames.faintText}>
-              {localization.Interpret.DatasetExplorer.missingParameters}
-            </Text>
-          </div>
-        </div>
+        <MissingParametersPlaceholder>
+          {localization.Interpret.DatasetExplorer.missingParameters}
+        </MissingParametersPlaceholder>
       );
     }
     if (this.state.chartProps === undefined) {
@@ -216,19 +213,9 @@ export class DatasetExplorerTab extends React.PureComponent<
               {canRenderChart ? (
                 <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
               ) : (
-                <div className={classNames.missingParametersPlaceholder}>
-                  <div
-                    className={classNames.missingParametersPlaceholderSpacer}
-                  >
-                    <Text
-                      block
-                      variant="large"
-                      className={classNames.faintText}
-                    >
-                      {localization.Interpret.ValidationErrors.datasizeError}
-                    </Text>
-                  </div>
-                </div>
+                <MissingParametersPlaceholder>
+                  {localization.Interpret.ValidationErrors.datasizeError}
+                </MissingParametersPlaceholder>
               )}
             </div>
             <div className={classNames.horizontalAxisWithPadding}>

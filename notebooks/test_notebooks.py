@@ -42,7 +42,8 @@ class ScrapSpec:
 
 
 def append_scrapbook_commands(input_nb_path, output_nb_path, scrap_specs):
-    notebook = nbf.read(input_nb_path, as_version=nbf.NO_CONVERT)
+    notebook = nbf.read(input_nb_path, as_version=4)
+    notebook = nbf.v4.upgrade(notebook, from_version=4, from_minor=2)
 
     scrapbook_cells = []
     # Always need to import nteract-scrapbook
@@ -125,12 +126,9 @@ def test_fairness_interpretability_dashboard_loan_allocation():
     )
 
     test_values["local_explanation_feature_names"] = ScrapSpec(
-        "sorted_local_importance_names[0]",
+        "sorted_local_importance_names[0][0:3]",
         [
-            'marital-status', 'occupation', 'hours-per-week', 'age',
-            'capital-gain', 'capital-loss', 'education', 'workclass',
-            'native-country', 'race', 'fnlwgt', 'relationship', 'sex',
-            'education-num'
+            'marital-status', 'occupation', 'hours-per-week'
         ]
     )
 
@@ -163,6 +161,14 @@ def test_erroranalysis_interpretability_dashboard_census():
 @pytest.mark.notebooks
 def test_erroranalysis_interpretability_dashboard_breast_cancer():
     nb_name = "erroranalysis-interpretability-dashboard-breast-cancer"
+
+    test_values = {}
+    assay_one_notebook(nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_erroranalysis_dashboard_multiclass():
+    nb_name = "erroranalysis-dashboard-multiclass"
 
     test_values = {}
     assay_one_notebook(nb_name, test_values)

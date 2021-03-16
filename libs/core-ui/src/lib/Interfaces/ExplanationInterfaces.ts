@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDatasetSummary } from "./IDataset";
+import { Method, ModelClass } from "./IModelExplanationData";
+
+// TODO replace all of these with classes IDataset and IModelExplanationData
+
 export interface IExplanationDashboardData {
   modelInformation: IModelInformation;
   dataSummary: IDatasetSummary;
@@ -29,23 +34,21 @@ export interface ISerializedExplanationData {
 }
 
 export interface IModelInformation {
-  modelClass: "Tree" | "EBM" | "blackbox";
-  method?: "classifier" | "regressor";
+  modelClass: ModelClass;
+  method?: Method;
 }
 
-export interface IDatasetSummary {
-  featureNames?: string[];
-  classNames?: string[];
-  categoricalMap?: { [key: number]: string[] };
-}
+// TODO replace all of the above with classes IDataset and IModelExplanationData
+
+export type IGlobalFeatureImportance =
+  | IMultiClassGlobalFeatureImportance
+  | ISingleClassGlobalFeatureImportance;
 
 export interface IPrecomputedExplanations {
   localFeatureImportance?:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
-  globalFeatureImportance?:
-    | IMultiClassGlobalFeatureImportance
-    | ISingleClassGlobalFeatureImportance;
+  globalFeatureImportance?: IGlobalFeatureImportance;
   ebmGlobalExplanation?: IEBMGlobalExplanation;
   customVis?: string;
 }
@@ -62,16 +65,19 @@ export interface IMultiClassLocalFeatureImportance {
 export interface ISingleClassLocalFeatureImportance {
   scores: number[][];
   intercept?: number;
+  featureNames?: string[];
 }
 
 export interface IMultiClassGlobalFeatureImportance {
   scores: number[][];
   intercept?: number[];
+  featureNames?: string[];
 }
 
 export interface ISingleClassGlobalFeatureImportance {
   scores: number[];
   intercept?: number;
+  featureNames?: string[];
 }
 
 export interface IBoundedCoordinates {

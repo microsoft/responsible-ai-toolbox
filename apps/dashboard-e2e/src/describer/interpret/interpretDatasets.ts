@@ -49,21 +49,7 @@ const interpretDatasets = {
     datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
     defaultXAxis: "Index",
     defaultYAxis: "CRIM",
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
+    featureNames: ["INDUS", "DIS", "NOX", "LSTAT", "AGE", "CHAS", "B", "CRIM"],
     noLocalImportance: true
   },
   bostonDataNoDataset: {

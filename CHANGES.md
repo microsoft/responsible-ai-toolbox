@@ -24,6 +24,24 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.3.1
+
+Update to `raiwidgets` package.
+
+- Bug fix:
+  - fix public VM failing requests in rai-core-flask package,
+    update raiwidgets to latest rai-core-flask package
+
+## v0.3.0
+
+Update to `raiwidgets` package.
+
+- Bug fix:
+  - Fix all data cohort always appearing first in cohorts lists
+  - Add number selected text under local explanation radio buttons
+  - Fix the issue that categorical feature is not able to change in cohort editor.
+  - Fix categorical feature in what-if tab
+
 ## v0.2.2
 
 Update to `raiwidgets` package.

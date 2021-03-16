@@ -16,18 +16,18 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { buildInitialExplanationContext } from "./buildInitialExplanationContext";
+import {
+  buildInitialExplanationContext,
+  GlobalTabKeys,
+  INewExplanationDashboardState
+} from "./buildInitialExplanationContext";
 import { InterpretContext } from "./context/InterpretContext";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
 import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
-import {
-  GlobalTabKeys,
-  IExplanationDashboardProps,
-  INewExplanationDashboardState
-} from "./Interfaces/IExplanationDashboardProps";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { explanationDashboardStyles } from "./NewExplanationDashboard.styles";
 
 export class NewExplanationDashboard extends React.PureComponent<
@@ -78,9 +78,9 @@ export class NewExplanationDashboard extends React.PureComponent<
       <InterpretContext.Provider
         value={{
           cohorts: this.state.cohorts,
-          globalImportance: this.state.globalImportance,
-          globalImportanceIntercept: this.state.globalImportanceIntercept,
           jointDataset: this.state.jointDataset,
+          modelMetadata: this.state.modelMetadata,
+          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
@@ -170,10 +170,6 @@ export class NewExplanationDashboard extends React.PureComponent<
                     <GlobalExplanationTab
                       jointDataset={this.state.jointDataset}
                       metadata={this.state.modelMetadata}
-                      globalImportance={this.state.globalImportance}
-                      isGlobalDerivedFromLocal={
-                        this.state.isGlobalImportanceDerivedFromLocal
-                      }
                       cohorts={this.state.cohorts}
                       cohortIDs={cohortIDs}
                       selectedWeightVector={this.state.selectedWeightVector}
@@ -216,11 +212,11 @@ export class NewExplanationDashboard extends React.PureComponent<
           [this.props.testData[0]],
           abortController.signal
         );
-        if (prediction !== undefined) {
-          this.setState({ requestPredictions: this.props.requestPredictions });
+        if (prediction === undefined) {
+          throw new Error(" ");
         }
       } catch {
-        return;
+        this.setState({ requestPredictions: undefined });
       }
     }
   }

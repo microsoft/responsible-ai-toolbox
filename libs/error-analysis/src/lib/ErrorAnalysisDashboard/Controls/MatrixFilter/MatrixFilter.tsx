@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "@responsible-ai/core-ui";
+import {
+  IFilter,
+  ICompositeFilter,
+  CohortSource,
+  ErrorCohort,
+  CohortStats
+} from "@responsible-ai/core-ui";
 import {
   ComboBox,
   IComboBox,
@@ -12,9 +18,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "../../CohortStats";
 import { noFeature } from "../../Constants";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
@@ -28,7 +32,7 @@ export interface IMatrixFilterProps {
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;

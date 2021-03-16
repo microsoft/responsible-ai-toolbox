@@ -5,7 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
+import { ErrorCohort } from "../ErrorCohort";
 
 import { cohortStatsStyles } from "./CohortStats.styles";
 
