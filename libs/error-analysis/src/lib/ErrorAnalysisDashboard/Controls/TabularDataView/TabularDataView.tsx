@@ -6,7 +6,6 @@ import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
-  IColumn,
   IDetailsHeaderProps,
   IDetailsColumnRenderTooltipProps,
   ITheme,
@@ -26,7 +25,8 @@ import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
   constructRows,
   constructCols,
-  rowsFromCustomPoints
+  rowsFromCustomPoints,
+  ITableState
 } from "../../Utils/DatasetUtils";
 
 import { tabularDataViewStyles } from "./TabularDataView.styles";
@@ -43,11 +43,6 @@ export interface ITabularDataViewProps {
   customPoints?: Array<{ [key: string]: any }>;
   selectedCohort: ErrorCohort;
   setWhatIfDatapoint: (index: number) => void;
-}
-
-export interface ITableState {
-  rows: any[];
-  columns: IColumn[];
 }
 
 export interface ITabularDataViewState {
