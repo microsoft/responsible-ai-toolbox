@@ -5,12 +5,12 @@ import { localization } from "@responsible-ai/localization";
 import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
-import { IWizardTabProps } from "../../components/IWizardTabProps";
-import { WizardFooter } from "../../components/WizardFooter";
 import { IFairnessPickerPropsV2 } from "../FairnessWizard";
 
+import { DataSpecificationBlade } from "./DataSpecificationBlade";
+import { IWizardTabProps } from "./IWizardTabProps";
 import { SelectionList, ISelectionItemProps } from "./SelectionList";
+import { WizardFooter } from "./WizardFooter";
 
 export interface IFairnessTabProps extends IWizardTabProps {
   fairnessPickerProps: IFairnessPickerPropsV2;

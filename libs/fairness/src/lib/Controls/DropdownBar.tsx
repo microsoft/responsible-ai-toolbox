@@ -5,12 +5,13 @@ import { localization } from "@responsible-ai/localization";
 import { Stack, Dropdown, IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { IFairnessContext } from "../../util/IFairnessContext";
 import {
   IPerformancePickerPropsV2,
   IFairnessPickerPropsV2,
   IFeatureBinPickerPropsV2
 } from "../FairnessWizard";
+
+import { IFairnessContext } from "./../util/IFairnessContext";
 
 export interface IDropdownBarProps {
   dashboardContext: IFairnessContext;

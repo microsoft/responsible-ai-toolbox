@@ -6,12 +6,12 @@ import { localization } from "@responsible-ai/localization";
 import { Text, Stack, getTheme } from "office-ui-fabric-react";
 import React from "react";
 
-import { DataSpecificationBlade } from "../../components/DataSpecificationBlade";
-import { IWizardTabProps } from "../../components/IWizardTabProps";
-import { WizardFooter } from "../../components/WizardFooter";
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";
 
+import { DataSpecificationBlade } from "./DataSpecificationBlade";
+import { IWizardTabProps } from "./IWizardTabProps";
 import { SelectionList } from "./SelectionList";
+import { WizardFooter } from "./WizardFooter";
 
 export interface IPerformancePickingTabProps extends IWizardTabProps {
   performancePickerProps: IPerformancePickerPropsV2;
