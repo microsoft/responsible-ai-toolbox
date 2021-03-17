@@ -9,7 +9,6 @@ import {
   CohortStats,
   ErrorCohort
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -21,7 +20,7 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import { D3ZoomEvent, zoom as d3zoom } from "d3-zoom";
-import { IProcessedStyleSet, ITheme, Text } from "office-ui-fabric-react";
+import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -33,7 +32,6 @@ import {
   ITreeNode,
   ITreeViewRendererState
 } from "../../TreeViewState";
-import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
@@ -240,12 +238,16 @@ export class TreeViewRenderer extends React.PureComponent<
 
     return (
       <div className={classNames.mainFrame} id="mainFrame">
-        <div className={classNames.treeDescription}>
-          <Text variant={"smallPlus"}>
-            {localization.ErrorAnalysis.TreeView.treeDescription}
-          </Text>
-        </div>
         <div className={classNames.innerFrame}>
+          <div className={classNames.legend}>
+            <TreeLegend
+              selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
+              nodeDetail={nodeDetail}
+              minPct={minPct}
+              max={max}
+            />
+          </div>
           <svg
             ref={svgOuterFrame}
             className={classNames.svgOuterFrame}
@@ -262,57 +264,6 @@ export class TreeViewRenderer extends React.PureComponent<
                 fill="white"
               />
             </mask>
-
-            {/* Legend */}
-            <g
-              className={classNames.details}
-              onClick={(e): void => e.stopPropagation()}
-            >
-              <mask id="detailMask">
-                <rect x="-26" y="-26" width="52" height="52" fill="white" />
-              </mask>
-
-              <g className="opacityToggle" style={nodeDetail.showSelected}>
-                <g className={classNames.innerOpacityToggle}>
-                  <rect
-                    className={classNames.opacityToggleRect}
-                    width="280"
-                    height="140"
-                    fill="transparent"
-                  />
-                  <TreeLegend
-                    selectedCohort={this.props.selectedCohort}
-                    baseCohort={this.props.baseCohort}
-                  />
-                  <g className={classNames.opacityToggleCircle}>
-                    <circle
-                      r="26"
-                      className={classNames.node}
-                      style={nodeDetail.errorColor}
-                    />
-                    <g
-                      style={nodeDetail.maskDown}
-                      mask="url(#detailMask)"
-                      className={classNames.nopointer}
-                    >
-                      <circle
-                        r="26"
-                        className={classNames.node}
-                        fill={ColorPalette.FillStyle}
-                        style={nodeDetail.maskUp}
-                      />
-                    </g>
-                  </g>
-                  <g className={classNames.errorRateGradientStyle}>
-                    <ErrorRateGradient
-                      max={max}
-                      minPct={minPct}
-                      selectedCohort={this.props.selectedCohort}
-                    />
-                  </g>
-                </g>
-              </g>
-            </g>
 
             <g ref={treeZoomPane} className="treeZoomPane">
               {/* Tree */}
@@ -376,7 +327,6 @@ export class TreeViewRenderer extends React.PureComponent<
                             }
                           />
                         )}
-
                         <g
                           style={node.data.fillstyleDown}
                           mask="url(#Mask)"

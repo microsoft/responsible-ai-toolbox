@@ -583,6 +583,9 @@
     "_defaultClassNames.comment": " models that output classes have this as the default class names",
     "defaultFeatureNames": "Feature {0}",
     "_defaultFeatureNames.comment": "the default column names",
+    "cells": "Cells",
+    "cellsInfo": "The number of cells selected in the matrix filter.  When no cells selected, displays - (dash) and shows the global cohort information as if all cells are selected.",
+    "cellsTitle": "Additional information on cells",
     "cohortInfo": "Cohort info",
     "correctPrediction": "Correct predictions",
     "incorrectPrediction": "Incorrect predictions",
@@ -596,7 +599,11 @@
     "dataExplorerView": "Data explorer",
     "_dataExplorerView.comment": "Data explorer view",
     "errorCoverage": "Error coverage",
+    "errorCoverageInfo": "The error coverage shows the percentage of errors that are concentrated in the selection out of all errors present in the dataset.",
+    "errorCoverageTitle": "Additional information on error coverage",
     "errorRate": "Error rate",
+    "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+    "errorRateTitle": "Additional information on error rate",
     "globalExplanationView": "Global explanation",
     "_globalExplanationView.comment": "Global explanation view",
     "localExplanationView": "Local explanation",
@@ -680,7 +687,8 @@
       "cohortName": "Cohort name"
     },
     "TreeView": {
-      "treeDescription": "To find nodes in the tree map with the most errors, look for higher values and fuller circles."
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data.",
+      "treeDescriptionExpanded": "This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree go to the \"Feature list\" panel."
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"
