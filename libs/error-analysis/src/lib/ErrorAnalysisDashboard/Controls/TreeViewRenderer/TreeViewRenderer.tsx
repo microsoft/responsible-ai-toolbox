@@ -49,6 +49,7 @@ export interface ITreeViewRendererProps {
   features: string[];
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  staticTreeNodes?: any;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -757,6 +758,14 @@ export class TreeViewRenderer extends React.PureComponent<
       this.state.request.abort();
     }
     if (!this.props.getTreeNodes) {
+      if (this.props.staticTreeNodes) {
+        // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
+        setTimeout(() => {
+          this.onResize();
+          this.forceUpdate();
+          this.reloadData(this.props.staticTreeNodes.data as IRequestNode[]);
+        }, 100);
+      }
       return;
     }
     const filtersRelabeled = ErrorCohort.getLabeledFilters(

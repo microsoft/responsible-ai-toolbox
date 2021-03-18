@@ -18,6 +18,12 @@ export function fetchMatrix(
   props: IMatrixAreaProps,
   reloadData: (matrix: any) => void
 ): void {
+  if (props.getMatrix === undefined && props.staticMatrixData !== undefined) {
+    // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
+    setTimeout(() => {
+      reloadData(props.staticMatrixData);
+    }, 100);
+  }
   if (
     props.getMatrix === undefined ||
     (props.selectedFeature1 === noFeature &&

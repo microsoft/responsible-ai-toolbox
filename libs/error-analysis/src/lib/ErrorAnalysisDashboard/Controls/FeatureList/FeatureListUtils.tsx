@@ -9,7 +9,8 @@ import { ITableState } from "../../Utils/DatasetUtils";
 export function updateItems(
   percents: number[],
   sortedFeatures: string[],
-  searchedFeatures: string[]
+  searchedFeatures: string[],
+  isEnabled: boolean
 ): ITableState {
   const rows: any = [];
   searchedFeatures.forEach((feature) => {
@@ -18,6 +19,16 @@ export function updateItems(
     rows.push(row);
   });
   const columns: IColumn[] = [];
+  if (!isEnabled) {
+    columns.push({
+      fieldName: "0",
+      isResizable: false,
+      key: "checkbox",
+      maxWidth: 15,
+      minWidth: 15,
+      name: ""
+    });
+  }
   columns.push({
     fieldName: "0",
     isResizable: true,
