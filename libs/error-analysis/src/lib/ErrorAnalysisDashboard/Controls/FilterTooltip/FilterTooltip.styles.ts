@@ -49,7 +49,8 @@ export const filterTooltipStyles: () => IProcessedStyleSet<
     },
     filterTooltip: {
       padding: "10px",
-      pointerEvents: "none"
+      pointerEvents: "none",
+      transform: "translate(50px, -30px)"
     },
     hideFilterTooltip: {
       visibility: "hidden"

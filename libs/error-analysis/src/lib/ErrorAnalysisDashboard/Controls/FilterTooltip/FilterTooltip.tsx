@@ -12,17 +12,13 @@ import { filterTooltipStyles } from "./FilterTooltip.styles";
 export interface IFilterTooltipProps {
   filterProps: FilterProps;
   isMouseOver: boolean;
-  nodeTransform: string;
 }
 
 export class FilterTooltip extends React.Component<IFilterTooltipProps> {
   public render(): React.ReactNode {
     const classNames = filterTooltipStyles();
     const theme = getTheme();
-    let filterTooltipStyle = mergeStyles(
-      { transform: this.props.nodeTransform },
-      classNames.filterTooltip
-    );
+    let filterTooltipStyle = classNames.filterTooltip;
     if (this.props.isMouseOver) {
       filterTooltipStyle = mergeStyles(
         filterTooltipStyle,

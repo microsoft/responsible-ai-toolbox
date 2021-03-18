@@ -24,7 +24,7 @@ import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-import { ColorPalette, isColorDark } from "../../ColorPalette";
+import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
@@ -32,9 +32,9 @@ import {
   ITreeNode,
   ITreeViewRendererState
 } from "../../TreeViewState";
-import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
+import { TreeViewNode } from "./TreeViewNode";
 import {
   ITreeViewRendererStyles,
   treeViewRendererStyles
@@ -223,7 +223,6 @@ export class TreeViewRenderer extends React.PureComponent<
         // Update node state based on new user actions
         d.data.nodeState = {
           errorStyle: selectedStyle,
-          isMouseOver: d.data.nodeState.isMouseOver,
           isSelectedLeaf: d.data.nodeState.isSelectedLeaf,
           onSelectedPath: d.data.nodeState.onSelectedPath,
           style: {
@@ -292,60 +291,12 @@ export class TreeViewRenderer extends React.PureComponent<
                 className={classNames.nodesTransitionGroup}
               >
                 {nodeData.map((node, index) => {
-                  const nodeId = node.id! + Math.random();
                   return (
-                    <CSSTransition
-                      key={nodeId}
-                      in={true}
-                      timeout={200}
-                      className="nodes"
-                    >
-                      <g
-                        key={nodeId}
-                        style={node.data.nodeState.style}
-                        onClick={(
-                          e: React.MouseEvent<SVGElement, MouseEvent>
-                        ): void => this.select(index, node, e)}
-                        // Note: I've tried to add onMouseOver as well but it causes weird perf issues since it fires so often
-                        onMouseEnter={(
-                          e: React.MouseEvent<SVGElement, MouseEvent>
-                        ): void => this.hover(node, true, e)}
-                        pointerEvents="all"
-                      >
-                        <circle
-                          r={node.data.r}
-                          className={classNames.node}
-                          style={node.data.nodeState.errorStyle}
-                        />
-                        {node.data.nodeState.onSelectedPath && (
-                          <circle
-                            r={node.data.r * 1.4}
-                            className={
-                              node.data.nodeState.isSelectedLeaf
-                                ? classNames.clickedNodeFull
-                                : classNames.clickedNodeDashed
-                            }
-                          />
-                        )}
-                        <g
-                          style={node.data.fillstyleDown}
-                          mask="url(#Mask)"
-                          className={classNames.nopointer}
-                        >
-                          <circle r="26" style={node.data.fillstyleUp} />
-                        </g>
-                        <text
-                          textAnchor="middle"
-                          className={this.getNodeClassName(
-                            classNames,
-                            node.data.filterProps.errorCoverage,
-                            node.data.errorColor.fill
-                          )}
-                        >
-                          {node.data.error}/{node.data.size}
-                        </text>
-                      </g>
-                    </CSSTransition>
+                    <TreeViewNode
+                      key={index}
+                      node={node}
+                      onSelect={this.onSelectNode}
+                    />
                   );
                 })}
               </TransitionGroup>
@@ -387,19 +338,6 @@ export class TreeViewRenderer extends React.PureComponent<
                   </CSSTransition>
                 ))}
               </TransitionGroup>
-              <g
-                className={classNames.tooltipTransitionGroup}
-                pointerEvents="none"
-              >
-                {nodeData.map((node) => (
-                  <FilterTooltip
-                    key={node.id + "tooltip"}
-                    filterProps={node.data.filterProps}
-                    isMouseOver={node.data.nodeState.isMouseOver}
-                    nodeTransform={node.data.nodeState.style!.transform}
-                  />
-                ))}
-              </g>
             </g>
           </svg>
         </div>
@@ -416,18 +354,6 @@ export class TreeViewRenderer extends React.PureComponent<
   public componentWillUnmount(): void {
     window.removeEventListener("resize", this.onResize.bind(this));
     this.props.setTreeViewState(this.state);
-  }
-
-  private getNodeClassName(
-    classNames: IProcessedStyleSet<ITreeViewRendererStyles>,
-    ratio: number,
-    fill: string
-  ): string {
-    let nodeTextClassName = classNames.nodeText;
-    if (ratio > 50 && isColorDark(fill)) {
-      nodeTextClassName = classNames.filledNodeText;
-    }
-    return nodeTextClassName;
   }
 
   private calculateFilterProps(
@@ -553,7 +479,6 @@ export class TreeViewRenderer extends React.PureComponent<
             nodeName: node.nodeName,
             nodeState: {
               errorStyle: undefined,
-              isMouseOver: false,
               isSelectedLeaf: false,
               onSelectedPath: false,
               style: undefined
@@ -667,12 +592,7 @@ export class TreeViewRenderer extends React.PureComponent<
     return [filter, ...this.getFilters(d.parent!)];
   }
 
-  private select(
-    _: number,
-    node: HierarchyPointNode<ITreeNode>,
-    event: React.MouseEvent<SVGElement, MouseEvent>
-  ): void {
-    event.stopPropagation();
+  private onSelectNode = (node: HierarchyPointNode<ITreeNode>): void => {
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -711,7 +631,7 @@ export class TreeViewRenderer extends React.PureComponent<
     };
 
     this.setState(updateSelectedFunc);
-  }
+  };
 
   private getNodeDetail(
     node: HierarchyPointNode<ITreeNode>,
@@ -729,27 +649,6 @@ export class TreeViewRenderer extends React.PureComponent<
       successInfo: `${node.data.success} Success`
     };
     return nodeDetail;
-  }
-
-  private hover(
-    node: HierarchyPointNode<ITreeNode>,
-    mouseEnter: boolean,
-    event: React.MouseEvent<SVGElement, MouseEvent>
-  ): void {
-    node.data.nodeState.isMouseOver = mouseEnter;
-    const currentTarget = event.currentTarget;
-    const checkMouseLeave = (e: MouseEvent): void => {
-      if (currentTarget && !currentTarget.contains(e.target as HTMLElement)) {
-        node.data.nodeState.isMouseOver = false;
-        svgOuterFrame.current!.removeEventListener(
-          "mousemove",
-          checkMouseLeave
-        );
-        this.forceUpdate();
-      }
-    };
-    svgOuterFrame.current!.addEventListener("mousemove", checkMouseLeave);
-    this.forceUpdate();
   }
 
   private fetchTreeNodes(): void {
