@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { getTheme, mergeStyles } from "office-ui-fabric-react";
+import { getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { FilterProps } from "../../FilterProps";
@@ -11,36 +11,14 @@ import { filterTooltipStyles } from "./FilterTooltip.styles";
 
 export interface IFilterTooltipProps {
   filterProps: FilterProps;
-  isMouseOver: boolean;
 }
 
 export class FilterTooltip extends React.Component<IFilterTooltipProps> {
   public render(): React.ReactNode {
     const classNames = filterTooltipStyles();
     const theme = getTheme();
-    let filterTooltipStyle = classNames.filterTooltip;
-    if (this.props.isMouseOver) {
-      filterTooltipStyle = mergeStyles(
-        filterTooltipStyle,
-        classNames.showFilterTooltip
-      );
-    } else {
-      filterTooltipStyle = mergeStyles(
-        filterTooltipStyle,
-        classNames.hideFilterTooltip
-      );
-    }
     return (
-      <g className={filterTooltipStyle}>
-        <rect
-          className={classNames.tooltipRect}
-          fill="white"
-          strokeWidth="2"
-          height="100"
-          width="80"
-          y="0"
-          x="0"
-        ></rect>
+      <>
         <g>
           <text className={classNames.numCorrect}>
             Correct (#): {this.props.filterProps.numCorrect}
@@ -83,7 +61,7 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
             </g>
           </g>
         </g>
-      </g>
+      </>
     );
   }
 }

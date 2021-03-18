@@ -10,7 +10,6 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IFilterTooltipStyles {
-  filterTooltip: IStyle;
   hideFilterTooltip: IStyle;
   tooltipRect: IStyle;
   metricBarBlack: IStyle;
@@ -46,11 +45,6 @@ export const filterTooltipStyles: () => IProcessedStyleSet<
     },
     errorRateCell: {
       transform: "translate(20px, 75px)"
-    },
-    filterTooltip: {
-      padding: "10px",
-      pointerEvents: "none",
-      transform: "translate(50px, -30px)"
     },
     hideFilterTooltip: {
       visibility: "hidden"
