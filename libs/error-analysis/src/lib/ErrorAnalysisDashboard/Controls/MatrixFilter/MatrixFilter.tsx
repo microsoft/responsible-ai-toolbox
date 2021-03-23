@@ -135,7 +135,7 @@ export class MatrixFilter extends React.PureComponent<
             theme={this.props.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
-            staticMatrixData={this.props.staticMatrix.data}
+            staticMatrixData={this.props.staticMatrix?.data}
             selectedFeature1={this.state.selectedFeature1}
             selectedFeature2={this.state.selectedFeature2}
             updateSelectedCohort={this.props.updateSelectedCohort}
