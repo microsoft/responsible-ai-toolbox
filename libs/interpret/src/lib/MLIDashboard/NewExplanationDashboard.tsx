@@ -56,7 +56,7 @@ export class NewExplanationDashboard extends React.PureComponent<
       itemKey: GlobalTabKeys.ExplanationTab
     });
     this.pivotItems.push({
-      headerText: this.props.requestPredictions
+      headerText: this.state.requestPredictions
         ? localization.Interpret.individualAndWhatIf
         : localization.Interpret.individualImportance,
       itemKey: GlobalTabKeys.WhatIfTab
@@ -66,6 +66,9 @@ export class NewExplanationDashboard extends React.PureComponent<
   public componentDidUpdate(prev: IExplanationDashboardProps): void {
     if (this.props.locale && prev.locale !== this.props.locale) {
       localization.setLanguage(this.props.locale);
+    }
+    if (this.props.requestPredictions !== prev.requestPredictions) {
+      this.validatePredictMethod();
     }
   }
 
