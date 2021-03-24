@@ -18,6 +18,7 @@ export interface IMatrixAreaProps {
   selectedFeature1: string;
   selectedFeature2: string;
   getMatrix?: (request: any, abortSignal: AbortSignal) => Promise<any>;
+  staticMatrixData?: any[];
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],

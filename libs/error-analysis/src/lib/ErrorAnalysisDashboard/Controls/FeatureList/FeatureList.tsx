@@ -3,13 +3,19 @@
 
 import { localization } from "@responsible-ai/localization";
 import {
+  Checkbox,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
+  DetailsRow,
+  DetailsRowFields,
   getTheme,
   MarqueeSelection,
   PrimaryButton,
   IColumn,
+  IRenderFunction,
+  IDetailsRowFieldsProps,
+  IDetailsRowProps,
   IFocusTrapZoneProps,
   IPanelProps,
   IPanelStyles,
@@ -43,6 +49,8 @@ export interface IFeatureListProps {
   features: string[];
   theme?: string;
   importances: number[];
+  isEnabled: boolean;
+  selectedFeatures: string[];
 }
 
 const focusTrapZoneProps: IFocusTrapZoneProps = {
@@ -89,14 +97,15 @@ export class FeatureList extends React.Component<
     const tableState = updateItems(
       sortedPercents,
       sortedFeatures,
-      searchedFeatures
+      searchedFeatures,
+      this.props.isEnabled
     );
     this.state = {
       enableApplyButton: false,
       lastAppliedFeatures: new Set<string>(this.props.features),
       percents: sortedPercents,
       searchedFeatures,
-      selectedFeatures: this.props.features,
+      selectedFeatures: this.props.selectedFeatures,
       sortedFeatures,
       tableState
     };
@@ -132,7 +141,8 @@ export class FeatureList extends React.Component<
       const tableState = updateItems(
         sortedPercents,
         sortedFeatures,
-        searchedFeatures
+        searchedFeatures,
+        this.props.isEnabled
       );
       this.setState({
         percents: sortedPercents,
@@ -184,7 +194,10 @@ export class FeatureList extends React.Component<
             >
               <Layer>
                 <ScrollablePane>
-                  <MarqueeSelection selection={this._selection}>
+                  <MarqueeSelection
+                    selection={this._selection}
+                    isEnabled={this.props.isEnabled}
+                  >
                     <DetailsList
                       items={this.state.tableState.rows}
                       columns={this.state.tableState.columns}
@@ -199,8 +212,13 @@ export class FeatureList extends React.Component<
                       ariaLabelForSelectionColumn="Toggle selection"
                       ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                       checkButtonAriaLabel="Row checkbox"
-                      selectionMode={SelectionMode.multiple}
+                      selectionMode={
+                        this.props.isEnabled
+                          ? SelectionMode.multiple
+                          : SelectionMode.none
+                      }
                       selection={this._selection}
+                      onRenderRow={this.renderRow.bind(this)}
                     />
                   </MarqueeSelection>
                 </ScrollablePane>
@@ -229,6 +247,25 @@ export class FeatureList extends React.Component<
     );
   }
 
+  private renderRow: IRenderFunction<IDetailsRowProps> = (
+    props?: IDetailsRowProps
+  ): JSX.Element | null => {
+    return (
+      <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props!} />
+    );
+  };
+
+  private renderRowFields(props: IDetailsRowFieldsProps) {
+    if (this.props.isEnabled) {
+      return <DetailsRowFields {...props} />;
+    }
+    return (
+      <span data-selection-disabled={true}>
+        <DetailsRowFields {...props} />
+      </span>
+    );
+  }
+
   private renderItemColumn(
     theme: ITheme,
     item: any,
@@ -239,6 +276,11 @@ export class FeatureList extends React.Component<
       const fieldContent = item[column.fieldName as keyof any] as string;
 
       switch (column.key) {
+        case "checkbox":
+          if (this.state.selectedFeatures.includes(fieldContent)) {
+            return <Checkbox checked={true} disabled />;
+          }
+          return <Checkbox checked={false} disabled />;
         case "importances":
           return (
             <svg width="100px" height="6px">

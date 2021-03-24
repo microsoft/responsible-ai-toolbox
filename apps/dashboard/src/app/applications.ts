@@ -70,7 +70,7 @@ export interface IFairnessSetting {
 }
 
 export interface IErrorAnalysisSetting {
-  versions: { [key: string]: 1 };
+  versions: { [key: string]: 1 | 2 };
 }
 
 export interface IModelAssessmentSetting {
@@ -99,7 +99,7 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
       breastCancerData: { classDimension: 2, data: breastCancerData }
     },
-    versions: { "Version-1": 1 }
+    versions: { "Static-View": 2, "Version-1": 1 }
   },
   fairness: {
     datasets: {
