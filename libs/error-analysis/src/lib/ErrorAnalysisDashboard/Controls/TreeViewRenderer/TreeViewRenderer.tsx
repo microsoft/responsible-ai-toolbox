@@ -280,10 +280,7 @@ export class TreeViewRenderer extends React.PureComponent<
                   </CSSTransition>
                 ))}
               </TransitionGroup>
-              <TransitionGroup
-                component="g"
-                className={classNames.nodesTransitionGroup}
-              >
+              <g className={classNames.nodesGroup}>
                 {nodeData.map((node, index) => {
                   return (
                     <TreeViewNode
@@ -293,7 +290,7 @@ export class TreeViewRenderer extends React.PureComponent<
                     />
                   );
                 })}
-              </TransitionGroup>
+              </g>
               <TransitionGroup
                 component="g"
                 className={classNames.linkLabelsTransitionGroup}
