@@ -25,6 +25,8 @@ export interface IErrorAnalysisViewProps {
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  staticTreeNodes?: any;
+  staticMatrix?: any;
   errorAnalysisOption: ErrorAnalysisOptions;
   updateSelectedCohort: (
     filters: IFilter[],
@@ -54,6 +56,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             theme={this.props.theme}
             messages={this.props.messages}
             getTreeNodes={this.props.getTreeNodes}
+            staticTreeNodes={this.props.staticTreeNodes}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
             updateSelectedCohort={this.props.updateSelectedCohort}
@@ -68,6 +71,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             theme={this.props.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
+            staticMatrix={this.props.staticMatrix}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
@@ -75,6 +79,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             matrixAreaState={this.props.matrixAreaState}
             setMatrixAreaState={this.props.setMatrixAreaState}
             setMatrixFilterState={this.props.setMatrixFilterState}
+            isEnabled={this.props.getMatrix !== undefined}
           />
         )}
       </>

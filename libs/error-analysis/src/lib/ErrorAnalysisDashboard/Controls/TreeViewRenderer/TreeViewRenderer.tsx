@@ -49,6 +49,7 @@ export interface ITreeViewRendererProps {
   features: string[];
   selectedFeatures: string[];
   getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  staticTreeNodes?: any;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -98,13 +99,6 @@ export class TreeViewRenderer extends React.PureComponent<
     super(props);
     // Note: we take state from props in case
     this.state = this.props.state;
-    if (
-      !this.state.treeNodes ||
-      this.state.treeNodes.length === 0 ||
-      !this.state.treeNodes[0]
-    ) {
-      this.fetchTreeNodes();
-    }
   }
 
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
@@ -347,8 +341,16 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public componentDidMount(): void {
     window.addEventListener("resize", this.onResize.bind(this));
-    this.onResize();
-    this.forceUpdate();
+    if (
+      !this.state.treeNodes ||
+      this.state.treeNodes.length === 0 ||
+      !this.state.treeNodes[0]
+    ) {
+      this.fetchTreeNodes();
+    } else {
+      this.onResize();
+      this.forceUpdate();
+    }
   }
 
   public componentWillUnmount(): void {
@@ -656,6 +658,12 @@ export class TreeViewRenderer extends React.PureComponent<
       this.state.request.abort();
     }
     if (!this.props.getTreeNodes) {
+      if (this.props.staticTreeNodes) {
+        // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
+        this.onResize();
+        this.forceUpdate();
+        this.reloadData(this.props.staticTreeNodes.data as IRequestNode[]);
+      }
       return;
     }
     const filtersRelabeled = ErrorCohort.getLabeledFilters(
