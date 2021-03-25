@@ -8,6 +8,7 @@ import { SVGToolTipStyles } from "./SVGToolTip.styles";
 
 export interface ISVGToolTipProps {
   target: React.RefObject<SVGElement>;
+  spacing?: number;
 }
 export interface ISVGToolTipState {
   isMouseOver: boolean;
@@ -66,9 +67,10 @@ export class SVGToolTip extends React.Component<
       const rect = element.getBoundingClientRect();
       const pos = this.svgPoint(
         element.ownerSVGElement,
-        rect.x + rect.width,
+        rect.x + rect.width + (this.props.spacing ?? 0),
         rect.y
       );
+      console.log(pos);
       this.setState({
         isMouseOver: true,
         svgElement: element.ownerSVGElement,

@@ -75,7 +75,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               {node.data.error}/{node.data.size}
             </text>
           </g>
-          <SVGToolTip target={this.ref}>
+          <SVGToolTip target={this.ref} spacing={15}>
             <FilterTooltip
               key={node.id + "tooltip"}
               filterProps={node.data.filterProps}
