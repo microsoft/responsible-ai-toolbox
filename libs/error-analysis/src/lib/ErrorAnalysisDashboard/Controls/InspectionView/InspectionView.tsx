@@ -5,7 +5,8 @@ import {
   JointDataset,
   WeightVectorOption,
   ModelExplanationUtils,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import {
   LocalImportancePlots,
@@ -29,7 +30,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { constructRows, constructCols } from "../../Utils/DatasetUtils";
 

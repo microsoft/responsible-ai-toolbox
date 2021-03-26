@@ -4,6 +4,8 @@
 from flask_cors import CORS
 from rai_core_flask.environments.base_environment import BaseEnvironment
 
+LOCAL = 'local'
+
 
 class LocalIPythonEnvironment(BaseEnvironment):
     """Environment class for local IPython environments.
@@ -34,3 +36,4 @@ class LocalIPythonEnvironment(BaseEnvironment):
     def select(self, service):
         service.with_credentials = False
         service.cors = CORS(service.app)
+        service.env_name = LOCAL

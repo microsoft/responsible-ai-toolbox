@@ -1,53 +1,144 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort, ExpandableText } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import {
+  IStackStyles,
+  IStackTokens,
+  Stack,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
+import { ColorPalette } from "../../ColorPalette";
+import { INodeDetail } from "../../TreeViewState";
+import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
+import { InfoCallout } from "../InfoCallout/InfoCallout";
 
 import { treeLegendStyles } from "./TreeLegend.styles";
 
 export interface ITreeLegendProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
+  nodeDetail: INodeDetail;
+  minPct: number;
+  max: number;
 }
 
+const stackTokens: IStackTokens = { childrenGap: 5 };
+const cellTokens: IStackTokens = { padding: 10 };
+const legendDescriptionPadding: IStackTokens = { padding: "20px 0px 20px 0px" };
+const legendDescriptionStyle: IStackStyles = {
+  root: {
+    pointerEvents: "auto",
+    width: 500
+  }
+};
+
 export class TreeLegend extends React.Component<ITreeLegendProps> {
+  private readonly _errorRateIconId = "errorRateIconId";
+  private readonly _errorCoverageIconId = "errorCoverageIconId";
   public render(): React.ReactNode {
     const classNames = treeLegendStyles();
     return (
-      <g className={classNames.treeLegend}>
-        <g>
-          <text className={classNames.cohortName}>
+      <div className={classNames.treeLegend}>
+        <Stack
+          styles={legendDescriptionStyle}
+          tokens={legendDescriptionPadding}
+        >
+          <ExpandableText
+            expandedText={
+              localization.ErrorAnalysis.TreeView.treeDescriptionExpanded
+            }
+            iconName="Info"
+            variant={"smallPlus"}
+          >
+            {localization.ErrorAnalysis.TreeView.treeDescription}
+          </ExpandableText>
+        </Stack>
+        <Stack tokens={stackTokens}>
+          <Text variant={"xLarge"} block>
             Cohort: {this.props.baseCohort.cohort.name}
-          </text>
-          <g>
-            <g className={classNames.errorCoverageCell}>
-              <rect className={classNames.metricBarBlack}></rect>
-              <g>
-                <text className={classNames.smallHeader}>
-                  {localization.ErrorAnalysis.errorCoverage}
-                </text>
-                <text className={classNames.valueBlack}>
-                  {this.props.selectedCohort.errorCoverage.toFixed(2)}%
-                </text>
-              </g>
-            </g>
-            <g className={classNames.errorRateCell}>
-              <rect className={classNames.metricBarRed}></rect>
-              <g>
-                <text className={classNames.smallHeader}>
-                  {localization.ErrorAnalysis.errorRate}
-                </text>
-                <text className={classNames.valueBlack}>
-                  {this.props.selectedCohort.errorRate.toFixed(2)}%
-                </text>
-              </g>
-            </g>
-          </g>
-        </g>
-      </g>
+          </Text>
+          <Stack horizontal>
+            <Stack>
+              <Stack horizontal>
+                <div className={classNames.metricBarBlack}></div>
+                <Stack tokens={cellTokens}>
+                  <div className={classNames.smallHeader}>
+                    {localization.ErrorAnalysis.errorCoverage}
+                    <InfoCallout
+                      iconId={this._errorCoverageIconId}
+                      infoText={localization.ErrorAnalysis.errorCoverageInfo}
+                      title={localization.ErrorAnalysis.errorCoverageTitle}
+                    ></InfoCallout>
+                  </div>
+                  <div className={classNames.valueBlack}>
+                    {this.props.selectedCohort.errorCoverage.toFixed(2)}%
+                  </div>
+                </Stack>
+              </Stack>
+              <svg
+                width="60"
+                height="60"
+                viewBox="-2 -2 56 56"
+                pointerEvents="auto"
+              >
+                <mask id="detailMask">
+                  <rect x="-26" y="-26" width="52" height="52" fill="white" />
+                </mask>
+                <g className={classNames.opacityToggleCircle}>
+                  <circle
+                    r="26"
+                    className={classNames.node}
+                    style={this.props.nodeDetail.errorColor}
+                  />
+                  <g
+                    style={this.props.nodeDetail.maskDown}
+                    mask="url(#detailMask)"
+                    className={classNames.nopointer}
+                  >
+                    <circle
+                      r="26"
+                      className={classNames.node}
+                      fill={ColorPalette.FillStyle}
+                      style={this.props.nodeDetail.maskUp}
+                    />
+                  </g>
+                </g>
+              </svg>
+            </Stack>
+            <Stack>
+              <Stack horizontal>
+                <div className={classNames.metricBarRed}></div>
+                <Stack tokens={cellTokens}>
+                  <div className={classNames.smallHeader}>
+                    {localization.ErrorAnalysis.errorRate}
+                    <InfoCallout
+                      iconId={this._errorRateIconId}
+                      infoText={localization.ErrorAnalysis.errorRateInfo}
+                      title={localization.ErrorAnalysis.errorRateTitle}
+                    ></InfoCallout>
+                  </div>
+                  <div className={classNames.valueBlack}>
+                    {this.props.selectedCohort.errorRate.toFixed(2)}%
+                  </div>
+                </Stack>
+              </Stack>
+              <svg width="60" height="60" viewBox="0 0 40 40">
+                <g>
+                  <ErrorRateGradient
+                    max={this.props.max}
+                    minPct={0}
+                    selectedCohort={this.props.selectedCohort}
+                  />
+                </g>
+              </svg>
+            </Stack>
+          </Stack>
+        </Stack>
+      </div>
     );
   }
 }

@@ -14,6 +14,7 @@ export interface IInstanceViewStyles {
   page: IStyle;
   selectedTextStyle: IStyle;
   stackItemsStyle: IStyle;
+  frame: IStyle;
 }
 
 export const InstanceViewStyles: () => IProcessedStyleSet<
@@ -28,6 +29,9 @@ export const InstanceViewStyles: () => IProcessedStyleSet<
     },
     choiceItemRootStyle: {
       padding: "0px 20px 0px 20px"
+    },
+    frame: {
+      width: "inherit"
     },
     page: {
       backgroundColor: theme.semanticColors.bodyBackground,

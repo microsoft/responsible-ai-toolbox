@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
   Dropdown,
   ICommandBarItemProps,
+  IContextualMenuItem,
   IDropdownStyles,
   IDropdownOption,
   IIconProps,
@@ -22,7 +24,6 @@ import {
   GlobalTabKeys,
   PredictionTabKeys
 } from "../../ErrorAnalysisEnums";
-import { ErrorCohort } from "../../ErrorCohort";
 
 import { mainMenuStyles } from "./MainMenu.styles";
 
@@ -41,6 +42,7 @@ export interface IMainMenuProps {
   activeGlobalTab: GlobalTabKeys;
   activePredictionTab: PredictionTabKeys;
   errorAnalysisOption: ErrorAnalysisOptions;
+  isEnabled: boolean;
 }
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
@@ -158,32 +160,35 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
         text: localization.ErrorAnalysis.MainMenu.featureList
       });
     }
+    const subMenuPropItems: IContextualMenuItem[] = [];
+    if (this.props.isEnabled) {
+      subMenuPropItems.push({
+        iconProps: { iconName: "Import" },
+        key: "shiftCohort",
+        onClick: (): any => this.props.onShiftCohortClick(),
+        text: localization.ErrorAnalysis.MainMenu.shiftCohort
+      });
+    }
+    subMenuPropItems.push({
+      iconProps: { iconName: "Save" },
+      key: "saveCohort",
+      onClick: (): any => this.props.onSaveCohortClick(),
+      text: localization.ErrorAnalysis.MainMenu.saveCohort
+    });
+    subMenuPropItems.push({
+      iconProps: { iconName: "PageList" },
+      key: "cohortList",
+      onClick: (): any => this.props.onCohortListPanelClick(),
+      text: localization.ErrorAnalysis.MainMenu.cohortList
+    });
+
     const helpItems: ICommandBarItemProps[] = [
       {
         buttonStyles: buttonStyle,
         iconProps: settingsIcon,
         key: "cohortSettings",
         subMenuProps: {
-          items: [
-            {
-              iconProps: { iconName: "Import" },
-              key: "shiftCohort",
-              onClick: (): any => this.props.onShiftCohortClick(),
-              text: localization.ErrorAnalysis.MainMenu.shiftCohort
-            },
-            {
-              iconProps: { iconName: "Save" },
-              key: "saveCohort",
-              onClick: (): any => this.props.onSaveCohortClick(),
-              text: localization.ErrorAnalysis.MainMenu.saveCohort
-            },
-            {
-              iconProps: { iconName: "PageList" },
-              key: "cohortList",
-              onClick: (): any => this.props.onCohortListPanelClick(),
-              text: localization.ErrorAnalysis.MainMenu.cohortList
-            }
-          ]
+          items: subMenuPropItems
         },
         text: localization.ErrorAnalysis.MainMenu.cohortSettings
       },

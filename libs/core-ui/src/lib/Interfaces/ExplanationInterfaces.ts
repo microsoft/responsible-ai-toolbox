@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IDatasetSummary } from "./IDataset";
+import { Method, ModelClass } from "./IModelExplanationData";
 
 // TODO replace all of these with classes IDataset and IModelExplanationData
 
@@ -33,8 +34,8 @@ export interface ISerializedExplanationData {
 }
 
 export interface IModelInformation {
-  modelClass: "Tree" | "EBM" | "blackbox";
-  method?: "classifier" | "regressor";
+  modelClass: ModelClass;
+  method?: Method;
 }
 
 // TODO replace all of the above with classes IDataset and IModelExplanationData

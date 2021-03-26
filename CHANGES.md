@@ -24,6 +24,14 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.3.1
+
+Update to `raiwidgets` package.
+
+- Bug fix:
+  - fix public VM failing requests in rai-core-flask package,
+    update raiwidgets to latest rai-core-flask package
+
 ## v0.3.0
 
 Update to `raiwidgets` package.

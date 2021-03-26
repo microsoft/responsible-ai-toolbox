@@ -32,9 +32,16 @@ jobs:
       - name: install typescript dependencies
         run: |
           yarn install
+
       - name: auto version
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
         run: |
           yarn auto-version -r
+      - name: auto version
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
+        run: |
+          yarn auto-version -r -t
+
       - name: build typescript
         run: |
           yarn buildall

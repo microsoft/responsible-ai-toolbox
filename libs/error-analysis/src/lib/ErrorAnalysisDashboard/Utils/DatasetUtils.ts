@@ -4,6 +4,11 @@
 import { JointDataset } from "@responsible-ai/core-ui";
 import { IColumn } from "office-ui-fabric-react";
 
+export interface ITableState {
+  rows: any[];
+  columns: IColumn[];
+}
+
 export function constructRows(
   cohortData: Array<{ [key: string]: number }>,
   jointDataset: JointDataset,

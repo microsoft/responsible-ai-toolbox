@@ -16,6 +16,7 @@
     "build": "nx build",
     "buildall": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --all",
     "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn buildall && yarn e2eall",
+    "copytest": "node ./scripts/copyTest.js",
     "dep-graph": "nx dep-graph",
     "e2e": "nx e2e",
     "e2e-watch": "yarn e2e dashboard-e2e --watch",

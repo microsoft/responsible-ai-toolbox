@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IStackStyles,
@@ -10,8 +11,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
 import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
+import { InfoCallout } from "../InfoCallout/InfoCallout";
 
 import { matrixLegendStyles } from "./MatrixLegend.styles";
 
@@ -31,6 +32,10 @@ const legendDescriptionStyle: IStackStyles = {
 };
 
 export class MatrixLegend extends React.Component<IMatrixLegendProps> {
+  private readonly _errorRateIconId = "errorRateIconId";
+  private readonly _errorCoverageIconId = "errorCoverageIconId";
+  private readonly _cellsIconId = "cellsIconId";
+
   public render(): React.ReactNode {
     const classNames = matrixLegendStyles();
     return (
@@ -51,7 +56,14 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
             <Stack horizontal>
               <div className={classNames.metricBarBlack}></div>
               <Stack tokens={cellTokens}>
-                <div className={classNames.smallHeader}>Cells</div>
+                <div className={classNames.smallHeader}>
+                  {localization.ErrorAnalysis.cells}
+                  <InfoCallout
+                    iconId={this._cellsIconId}
+                    infoText={localization.ErrorAnalysis.cellsInfo}
+                    title={localization.ErrorAnalysis.cellsTitle}
+                  ></InfoCallout>
+                </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.cells === 0
                     ? "-"
@@ -64,6 +76,11 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
                   {localization.ErrorAnalysis.errorCoverage}
+                  <InfoCallout
+                    iconId={this._errorCoverageIconId}
+                    infoText={localization.ErrorAnalysis.errorCoverageInfo}
+                    title={localization.ErrorAnalysis.errorCoverageTitle}
+                  ></InfoCallout>
                 </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorCoverage.toFixed(2)}%
@@ -76,6 +93,11 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                 <Stack tokens={cellTokens}>
                   <div className={classNames.smallHeader}>
                     {localization.ErrorAnalysis.errorRate}
+                    <InfoCallout
+                      iconId={this._errorRateIconId}
+                      infoText={localization.ErrorAnalysis.errorRateInfo}
+                      title={localization.ErrorAnalysis.errorRateTitle}
+                    ></InfoCallout>
                   </div>
                   <div className={classNames.valueBlack}>
                     {this.props.selectedCohort.errorRate.toFixed(2)}%

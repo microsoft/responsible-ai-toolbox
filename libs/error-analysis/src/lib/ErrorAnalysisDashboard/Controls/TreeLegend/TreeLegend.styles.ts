@@ -10,11 +10,11 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ITreeLegendStyles {
-  cohortName: IStyle;
-  errorRateCell: IStyle;
-  errorCoverageCell: IStyle;
   metricBarBlack: IStyle;
   metricBarRed: IStyle;
+  node: IStyle;
+  nopointer: IStyle;
+  opacityToggleCircle: IStyle;
   smallHeader: IStyle;
   treeLegend: IStyle;
   valueRed: IStyle;
@@ -26,46 +26,54 @@ export const treeLegendStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   const value: IStyle = {
-    fontSize: "14px",
-    fontWeight: "700",
-    transform: "translate(0px, 14px)"
+    fontSize: "28px",
+    fontWeight: "600"
   };
   const metricBar: IStyle = {
-    height: "25px",
+    height: "50px",
     marginTop: "14px",
-    transform: "translate(-10px, -10px)",
-    width: "4px"
+    width: "5px"
   };
   return mergeStyleSets<ITreeLegendStyles>({
-    cohortName: {
-      fontSize: "14px",
-      fontWeight: "500",
-      transform: "translate(10px, 10px)"
-    },
-    errorCoverageCell: {
-      transform: "translate(20px, 30px)"
-    },
-    errorRateCell: {
-      transform: "translate(110px, 30px)"
-    },
     metricBarBlack: mergeStyles(metricBar, {
-      fill: theme.palette.black
+      backgroundColor: theme.palette.black
     }),
     metricBarRed: mergeStyles(metricBar, {
-      fill: theme.palette.red
+      backgroundColor: theme.palette.red
     }),
+    node: {
+      ":hover": {
+        strokeWidth: "3px"
+      },
+      cursor: "pointer",
+      opacity: "1",
+      stroke: "#089acc",
+      strokeWidth: "0px"
+    },
+    nopointer: {
+      pointerEvents: "none"
+    },
+    opacityToggleCircle: {
+      transform: "translate(26px, 26px)"
+    },
     smallHeader: {
-      fontSize: "10px",
-      fontWeight: "500"
+      fontSize: "15px",
+      fontWeight: "500",
+      pointerEvents: "auto"
     },
     treeLegend: {
-      padding: "10px"
+      paddingLeft: "35px",
+      zIndex: "-1"
     },
     valueBlack: mergeStyles(value, {
-      color: theme.palette.black
+      color: theme.palette.black,
+      fontSize: "28px",
+      fontWeight: "600"
     }),
     valueRed: mergeStyles(value, {
-      color: theme.palette.red
+      color: theme.palette.red,
+      fontSize: "28px",
+      fontWeight: "600"
     })
   });
 };

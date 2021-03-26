@@ -91,11 +91,9 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           const tooltipProps: ITooltipProps = {
             onRenderContent: () => (
               <svg width="110" height="140" viewBox="0 0 70 70">
-                <FilterTooltip
-                  filterProps={filterProps}
-                  isMouseOver={true}
-                  nodeTransform={"translate(-10px, -10px)"}
-                />
+                <g style={{ transform: "translate(-10px,-10px)" }}>
+                  <FilterTooltip filterProps={filterProps} />
+                </g>
               </svg>
             )
           };

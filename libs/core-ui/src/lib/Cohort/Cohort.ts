@@ -10,6 +10,12 @@ import {
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
+export enum CohortSource {
+  None = "None",
+  TreeMap = "Tree map",
+  HeatMap = "Heat map"
+}
+
 export class Cohort {
   private static _cohortIndex = 0;
 
@@ -19,6 +25,7 @@ export class Cohort {
   private cachedTransposedLocalFeatureImportances: number[][] | undefined;
   private currentSortKey: string | undefined;
   private currentSortReversed = false;
+
   public constructor(
     public name: string,
     private jointDataset: JointDataset,
