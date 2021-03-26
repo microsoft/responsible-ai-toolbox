@@ -4,10 +4,13 @@
 import { IPrecomputedExplanations } from "./ExplanationInterfaces";
 
 export interface IModelExplanationData {
-  modelClass: "Tree" | "EBM" | "blackbox";
-  method?: "classifier" | "regressor";
+  modelClass: ModelClass;
+  method?: Method;
   predictedY?: number[];
   probabilityY?: number[][];
   explanationMethod?: string;
   precomputedExplanations?: IPrecomputedExplanations;
 }
+
+export type Method = "classifier" | "regressor";
+export type ModelClass = "Tree" | "EBM" | "blackbox";

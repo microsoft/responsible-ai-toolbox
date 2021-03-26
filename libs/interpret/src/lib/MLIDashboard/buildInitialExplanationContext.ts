@@ -8,19 +8,40 @@ import {
   WeightVectors,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes
+  ModelTypes,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+import { Dictionary } from "lodash";
 
-import {
-  GlobalTabKeys,
-  IExplanationDashboardProps,
-  INewExplanationDashboardState
-} from "./Interfaces/IExplanationDashboardProps";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
+
+export interface INewExplanationDashboardState {
+  cohorts: Cohort[];
+  activeGlobalTab: GlobalTabKeys;
+  jointDataset: JointDataset;
+  modelMetadata: IExplanationModelMetadata;
+  validationWarnings: string[];
+  showingDataSizeWarning: boolean;
+  selectedWeightVector: WeightVectorOption;
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  weightVectorOptions: WeightVectorOption[];
+  weightVectorLabels: Dictionary<string>;
+}
+
+export enum GlobalTabKeys {
+  ModelPerformance = "modelPerformance",
+  DataExploration = "dataExploration",
+  ExplanationTab = "explanationTab",
+  WhatIfTab = "whatIfTab"
+}
 
 const rowWarningSize = 6000;
 function getModelType(props: IExplanationDashboardProps): ModelTypes {

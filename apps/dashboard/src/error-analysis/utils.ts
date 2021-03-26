@@ -9,6 +9,40 @@ import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
 import { dummyTreeAdultCensusIncomeData } from "./__mock_data__/dummyTreeAdultCensusIncome";
 import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer";
 
+export function getJsonMatrix(): any {
+  return {
+    data: _.cloneDeep(dummyMatrix2dInterval),
+    features: ["mean radius", "mean texture"]
+  };
+}
+
+export function getJsonTreeBreastCancer(): any {
+  return {
+    data: getJsonTree(true),
+    features: generateFeatures().filter((feature) => feature.startsWith("mean"))
+  };
+}
+
+export function getJsonTreeAdultCensusIncome(featureNames: string[]): any {
+  return {
+    data: getJsonTree(false),
+    features: featureNames.filter(
+      (feature) =>
+        feature.startsWith("a") ||
+        feature.startsWith("c") ||
+        feature.startsWith("m") ||
+        feature.startsWith("e")
+    )
+  };
+}
+
+export function getJsonTree(isBreastCancer: boolean): any {
+  if (isBreastCancer) {
+    return _.cloneDeep(dummyTreeBreastCancerData);
+  }
+  return _.cloneDeep(dummyTreeAdultCensusIncomeData);
+}
+
 export function generateJsonTree(
   _data: any[],
   signal: AbortSignal,

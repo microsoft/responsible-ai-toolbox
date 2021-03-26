@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "@responsible-ai/core-ui";
+import {
+  IFilter,
+  ICompositeFilter,
+  CohortSource,
+  ErrorCohort,
+  CohortStats
+} from "@responsible-ai/core-ui";
 import {
   ComboBox,
   IComboBox,
@@ -12,9 +18,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { CohortStats } from "../../CohortStats";
 import { noFeature } from "../../Constants";
-import { ErrorCohort, ErrorDetectorCohortSource } from "../../ErrorCohort";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
@@ -25,10 +29,11 @@ export interface IMatrixFilterProps {
   theme?: ITheme;
   features: string[];
   getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  staticMatrix?: any;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
-    source: ErrorDetectorCohortSource,
+    source: CohortSource,
     cells: number,
     cohortStats: CohortStats | undefined
   ) => void;
@@ -38,6 +43,7 @@ export interface IMatrixFilterProps {
   matrixAreaState: IMatrixAreaState;
   setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
   setMatrixFilterState: (matrixFilterState: IMatrixFilterState) => void;
+  isEnabled: boolean;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -59,14 +65,22 @@ export class MatrixFilter extends React.PureComponent<
     );
     this.selectedKey1 = 0;
     this.selectedKey2 = 0;
-    if (this.props.state.selectedFeature1 !== noFeature) {
+    if (!this.props.isEnabled) {
+      const features = this.props.staticMatrix.features;
+      this.state = {
+        matrixLegendState: this.state.matrixLegendState,
+        selectedFeature1: features[0],
+        selectedFeature2: features[1]
+      };
+    }
+    if (this.state.selectedFeature1 !== noFeature) {
       this.selectedKey1 = this.options.findIndex(
-        (option) => option.text === this.props.state.selectedFeature1
+        (option) => option.text === this.state.selectedFeature1
       );
     }
-    if (this.props.state.selectedFeature2 !== noFeature) {
+    if (this.state.selectedFeature2 !== noFeature) {
       this.selectedKey2 = this.options.findIndex(
-        (option) => option.text === this.props.state.selectedFeature2
+        (option) => option.text === this.state.selectedFeature2
       );
     }
   }
@@ -98,6 +112,7 @@ export class MatrixFilter extends React.PureComponent<
                   calloutMaxHeight: 300,
                   directionalHintFixed: true
                 }}
+                disabled={!this.props.isEnabled}
               />
             </Stack.Item>
             <Stack.Item key="feature2key">
@@ -112,6 +127,7 @@ export class MatrixFilter extends React.PureComponent<
                   calloutMaxHeight: 300,
                   directionalHintFixed: true
                 }}
+                disabled={!this.props.isEnabled}
               />
             </Stack.Item>
           </Stack>
@@ -119,6 +135,7 @@ export class MatrixFilter extends React.PureComponent<
             theme={this.props.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
+            staticMatrixData={this.props.staticMatrix?.data}
             selectedFeature1={this.state.selectedFeature1}
             selectedFeature2={this.state.selectedFeature2}
             updateSelectedCohort={this.props.updateSelectedCohort}

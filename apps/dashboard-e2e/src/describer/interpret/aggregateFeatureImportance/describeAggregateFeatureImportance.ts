@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../util/getMenu";
-import { IInterpretData } from "../IInterpretData";
+import { interpretDatasets } from "../interpretDatasets";
 
 import { describeGlobalExplanationBarChart } from "./describeGlobalExplanationBarChart";
 import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBoxChart";
@@ -10,10 +10,15 @@ import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBo
 const testName = "Aggregate feature importance";
 
 export function describeAggregateFeatureImportance(
-  datasetShape: IInterpretData
+  name: keyof typeof interpretDatasets
 ): void {
+  const datasetShape = interpretDatasets[name];
+  if (datasetShape.noFeatureImportance) {
+    return;
+  }
   describe(testName, () => {
     beforeEach(() => {
+      cy.visit(`#/interpret/${name}/light/english/Version-2`);
       getMenu("Aggregate feature importance", "#DashboardPivot").click();
     });
     it("Tab Header should exist", () => {

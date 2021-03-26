@@ -4,7 +4,8 @@
 import {
   JointDataset,
   IExplanationModelMetadata,
-  WeightVectorOption
+  WeightVectorOption,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -19,7 +20,6 @@ import {
 import React from "react";
 
 import { PredictionTabKeys } from "../../ErrorAnalysisEnums";
-import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { InspectionView } from "../InspectionView/InspectionView";
 import {
@@ -124,7 +124,7 @@ export class InstanceView extends React.Component<
     const classNames = InstanceViewStyles();
     if (this.props.activePredictionTab === PredictionTabKeys.InspectionTab) {
       return (
-        <div>
+        <div className={classNames.frame}>
           <InspectionView
             theme={this.props.theme}
             messages={this.props.messages}
@@ -145,7 +145,7 @@ export class InstanceView extends React.Component<
       );
     }
     return (
-      <div>
+      <div className={classNames.frame}>
         <Stack>
           <Stack horizontal horizontalAlign="space-between">
             <Stack.Item align="start">

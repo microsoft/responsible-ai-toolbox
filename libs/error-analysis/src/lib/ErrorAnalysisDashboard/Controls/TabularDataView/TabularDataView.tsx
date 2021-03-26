@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
+import { JointDataset, ErrorCohort } from "@responsible-ai/core-ui";
 import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
-  IColumn,
   IDetailsHeaderProps,
   IDetailsColumnRenderTooltipProps,
   ITheme,
@@ -22,12 +21,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorCohort } from "../../ErrorCohort";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
   constructRows,
   constructCols,
-  rowsFromCustomPoints
+  rowsFromCustomPoints,
+  ITableState
 } from "../../Utils/DatasetUtils";
 
 import { tabularDataViewStyles } from "./TabularDataView.styles";
@@ -44,11 +43,6 @@ export interface ITabularDataViewProps {
   customPoints?: Array<{ [key: string]: any }>;
   selectedCohort: ErrorCohort;
   setWhatIfDatapoint: (index: number) => void;
-}
-
-export interface ITableState {
-  rows: any[];
-  columns: IColumn[];
 }
 
 export interface ITabularDataViewState {
