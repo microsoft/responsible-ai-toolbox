@@ -25,6 +25,7 @@ export * from "./lib/util/string";
 export * from "./lib/components/ConfirmationDialog";
 export * from "./lib/components/ExpandableText";
 export * from "./lib/components/MissingParametersPlaceholder";
+export * from "./lib/components/SVGToolTip";
 export * from "./lib/Interfaces/ExplanationInterfaces";
 export * from "./lib/Interfaces/IExplanationContext";
 export * from "./lib/Interfaces/IFairnessData";
