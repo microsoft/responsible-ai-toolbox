@@ -1,14 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IInterpretData } from "../IInterpretData";
+import { interpretDatasets } from "../interpretDatasets";
 
 import { describeCreateCohort } from "./describeCreateCohort";
 
 const testName = "Cohort";
 
-export function describeCohort(dataShape: IInterpretData): void {
+export function describeCohort(name: keyof typeof interpretDatasets): void {
+  const dataShape = interpretDatasets[name];
   describe(testName, () => {
+    beforeEach(() => {
+      cy.visit(`#/interpret/${name}/light/english/Version-2`);
+    });
     it("should hide cohort edit panel by default", () => {
       cy.get("#cohortEditPanel").should("not.exist");
     });

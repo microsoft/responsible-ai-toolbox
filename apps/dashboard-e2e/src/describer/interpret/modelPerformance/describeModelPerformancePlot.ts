@@ -2,13 +2,23 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../util/getMenu";
-import { IInterpretData } from "../IInterpretData";
+import { interpretDatasets } from "../interpretDatasets";
 
 import { describeAxisConfigDialog } from "./describeAxisConfigDialog";
 import { describeModelPerformanceStats } from "./describeModelPerformanceStats";
 
-export function describeModelPerformancePlot(dataShape: IInterpretData): void {
-  describe("Model performance plot", () => {
+const testName = "Model performance plot";
+export function describeModelPerformancePlot(
+  name: keyof typeof interpretDatasets
+): void {
+  const datasetShape = interpretDatasets[name];
+  if (datasetShape.noDataset) return;
+  if (datasetShape.noPredict) return;
+  if (datasetShape.noY) return;
+  describe(testName, () => {
+    beforeEach(() => {
+      cy.visit(`#/interpret/${name}/light/english/Version-2`);
+    });
     beforeEach(() => {
       getMenu("Model performance", "#DashboardPivot").click();
     });
@@ -16,7 +26,7 @@ export function describeModelPerformancePlot(dataShape: IInterpretData): void {
       describeAxisConfigDialog();
     });
     describe("Model performance stats", () => {
-      describeModelPerformanceStats(dataShape);
+      describeModelPerformanceStats(datasetShape);
     });
   });
 }
