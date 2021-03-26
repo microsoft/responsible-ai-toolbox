@@ -14,11 +14,9 @@ export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
   detailLines: IStyle;
-  details: IStyle;
-  errorRateGradientStyle: IStyle;
   filledNodeText: IStyle;
   innerFrame: IStyle;
-  innerOpacityToggle: IStyle;
+  legend: IStyle;
   linkLabel: IStyle;
   linkLabelsTransitionGroup: IStyle;
   linksTransitionGroup: IStyle;
@@ -27,8 +25,6 @@ export interface ITreeViewRendererStyles {
   nodeText: IStyle;
   nodesTransitionGroup: IStyle;
   nopointer: IStyle;
-  opacityToggleRect: IStyle;
-  opacityToggleCircle: IStyle;
   svgOuterFrame: IStyle;
   treeDescription: IStyle;
   tooltipTransitionGroup: IStyle;
@@ -70,12 +66,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
         transform: "translate(0px, 10px)"
       }
     ]),
-    details: {
-      transform: "translate(0px, 5px)"
-    },
-    errorRateGradientStyle: {
-      transform: "translate(100px, 60px)"
-    },
     filledNodeText: mergeStyles([
       nodeTextStyle,
       {
@@ -88,8 +78,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       padding: "0",
       width: "100%"
     },
-    innerOpacityToggle: {
-      transform: "translate(10px, 10px)"
+    legend: {
+      pointerEvents: "none",
+      position: "absolute"
     },
     linkLabel: {
       fill: "#777",
@@ -130,12 +121,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     ]),
     nopointer: {
       pointerEvents: "none"
-    },
-    opacityToggleCircle: {
-      transform: "translate(36px, 80px)"
-    },
-    opacityToggleRect: {
-      transform: "translate(-5px, -5px)"
     },
     svgOuterFrame: {
       margin: "0",

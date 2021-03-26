@@ -3,32 +3,32 @@
 
 import {
   Cohort,
-  ICompositeFilter,
-  IFilter,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isThreeDimArray,
   JointDataset,
   IExplanationModelMetadata,
   ModelTypes,
-  WeightVectorOption,
   WeightVectors,
-  IGenericChartProps,
-  CohortSource,
   CohortInfo,
   CohortList,
-  CohortStats,
-  EditCohort,
   ErrorCohort,
   SaveCohort,
-  ShiftCohort,
   buildGlobalProperties,
   buildIndexedNames,
   getModelType,
   getClassLength,
   ModelAssessmentContext,
   IDataset,
-  IModelExplanationData
+  IModelExplanationData,
+  CohortSource,
+  CohortStats,
+  ICompositeFilter,
+  IFilter,
+  IGenericChartProps,
+  WeightVectorOption,
+  EditCohort,
+  ShiftCohort
 } from "@responsible-ai/core-ui";
 import {
   DatasetExplorerTab,
@@ -42,12 +42,12 @@ import {
   ISettings,
   Layer,
   LayerHost,
+  Customizer,
+  getId,
   PivotItem,
   Pivot,
   PivotLinkSize,
-  mergeStyleSets,
-  Customizer,
-  getId
+  mergeStyleSets
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -269,6 +269,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       );
       weightVectorOptions.push(index);
     });
+    let selectedFeatures = props.features;
+    if (props.requestDebugML === undefined) {
+      selectedFeatures = props.staticDebugML.features;
+    }
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
       baseCohort: cohorts[0],
@@ -299,7 +303,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       openWhatIf: false,
       predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
-      selectedFeatures: props.features,
+      selectedFeatures,
       selectedWeightVector:
         modelMetadata.modelType === ModelTypes.Multiclass
           ? WeightVectors.AbsAvg
@@ -325,7 +329,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           dataset: {} as IDataset,
           modelExplanationData: {} as IModelExplanationData,
           theme: this.props.theme,
-          cohorts: this.state.cohorts.map((cohort: ErrorCohort) => cohort.cohort),
+          cohorts: this.state.cohorts.map(
+            (cohort: ErrorCohort) => cohort.cohort
+          ),
           jointDataset: this.state.jointDataset,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.precomputedExplanations,
@@ -385,6 +391,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             temporaryCohort={this.state.selectedCohort}
             activeGlobalTab={this.state.activeGlobalTab}
             activePredictionTab={this.state.predictionTab}
+            isEnabled={this.props.requestDebugML !== undefined}
           />
           {this.state.openSaveCohort && (
             <SaveCohort
@@ -497,6 +504,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
+                    staticTreeNodes={this.props.staticDebugML}
+                    staticMatrix={this.props.staticMatrix}
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                     features={this.props.features}
                     selectedFeatures={this.state.selectedFeatures}
@@ -632,6 +641,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   }
                   features={this.props.features}
                   importances={this.state.importances}
+                  isEnabled={this.props.requestDebugML !== undefined}
+                  selectedFeatures={this.state.selectedFeatures}
                 />
                 <CohortList
                   isOpen={this.state.openCohortListPanel}

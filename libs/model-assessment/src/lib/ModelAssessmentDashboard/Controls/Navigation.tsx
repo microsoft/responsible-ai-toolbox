@@ -25,16 +25,14 @@ export class Navigation extends React.PureComponent<INavigationProps> {
     super(props);
 
     this.navLinkGroups.push({
-      // TODO move to localization
       links: [
-        // TODO add model statistics
-        // {
-        //   name: "Model statistics",
-        //   url: "",
-        //   key: "causal",
-        //   target: "_blank",
-        //   onClick: this.handleGlobalTabClick
-        // },
+        {
+          key: GlobalTabKeys.ModelStatisticsTab,
+          name: localization.ModelAssessment.Navigation.modelStatistics,
+          onClick: this.props.handleGlobalTabClick,
+          target: "_blank",
+          url: ""
+        },
         {
           key: GlobalTabKeys.DataExplorerTab,
           name: localization.ErrorAnalysis.dataExplorerView,

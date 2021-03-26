@@ -46,5 +46,7 @@ export interface IErrorAnalysisDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
+  staticDebugML?: any;
+  staticMatrix?: any;
   telemetryHook?: (message: ITelemetryMessage) => void;
 }

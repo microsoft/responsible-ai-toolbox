@@ -77,7 +77,6 @@ export interface INodeState {
   errorStyle: Record<string, number | string> | undefined;
   onSelectedPath: boolean;
   isSelectedLeaf: boolean;
-  isMouseOver: boolean;
   style: ITransform | undefined;
 }
 

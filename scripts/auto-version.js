@@ -61,16 +61,18 @@ async function main() {
   try {
     commander
       .option("-r, --release", "Generate a release version")
+      .option("-t, --tag", "Generate a tag on git hub")
       .parse(process.argv)
       .outputHelp();
     const release = commander.opts().release;
+    const tag = commander.opts().tag;
     const workspace = fs.readJSONSync("workspace.json");
     const version = getVersion(release);
     writeVersion(version);
     for (const eachPkg of Object.keys(workspace.projects)) {
       await setVersion(workspace, eachPkg, version);
     }
-    if (release) {
+    if (tag) {
       execSync(`git config user.email "raiwidgets-maintain@microsoft.com"`);
       execSync(`git config user.name  "AML Rai Package Manager"`);
       execSync(`git add -A`);

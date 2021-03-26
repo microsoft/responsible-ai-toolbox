@@ -125,6 +125,8 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
           saveFeatures={this.saveFeatures.bind(this)}
           features={this.props.features}
           importances={this.props.importances}
+          isEnabled={true}
+          selectedFeatures={this.props.features}
         />
       </Stack>
     );

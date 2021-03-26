@@ -32,7 +32,8 @@ import {
 import { FairnessWizardV2 } from "@responsible-ai/fairness";
 import {
   DatasetExplorerTab,
-  GlobalExplanationTab
+  GlobalExplanationTab,
+  ModelPerformanceTab
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -305,6 +306,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           this.setState({ selectedFeatures: features })
                         }
                         importances={this.state.importances}
+                      />
+                    )}
+                    {this.state.activeGlobalTab ===
+                      GlobalTabKeys.ModelStatisticsTab && (
+                      <ModelPerformanceTab
+                        jointDataset={this.state.jointDataset}
+                        metadata={this.state.modelMetadata}
+                        cohorts={this.state.cohorts.map(
+                          (errorCohort: ErrorCohort) => errorCohort.cohort
+                        )}
                       />
                     )}
                     {this.state.activeGlobalTab ===
