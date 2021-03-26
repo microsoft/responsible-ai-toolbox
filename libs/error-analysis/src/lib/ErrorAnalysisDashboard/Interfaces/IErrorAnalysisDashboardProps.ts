@@ -3,7 +3,8 @@
 
 import {
   IOfficeFabricProps,
-  IExplanationDashboardData
+  IExplanationDashboardData,
+  ITelemetryMessage
 } from "@responsible-ai/core-ui";
 
 import { IStringsParam } from "./IStringsParam";
@@ -45,4 +46,5 @@ export interface IErrorAnalysisDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
+  telemetryHook?: (message: ITelemetryMessage) => void;
 }

@@ -6,16 +6,13 @@ import {
   ChartTypes,
   MissingParametersPlaceholder,
   isTwoDimArray,
-  IGlobalFeatureImportance
+  IGlobalFeatureImportance,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
-
-import {
-  defaultInterpretContext,
-  InterpretContext
-} from "../../context/InterpretContext";
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
@@ -33,10 +30,10 @@ export class GlobalOnlyChart extends React.PureComponent<
   unknown,
   IGlobalOnlyChartState
 > {
-  public static contextType = InterpretContext;
+  public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
-    typeof InterpretContext
-  > = defaultInterpretContext;
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public componentDidMount(): void {
     if (

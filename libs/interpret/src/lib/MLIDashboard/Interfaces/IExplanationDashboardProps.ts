@@ -7,12 +7,12 @@ import {
   IExplanationDashboardData,
   IExplanationModelMetadata,
   WeightVectorOption,
-  JointDataset
+  JointDataset,
+  ITelemetryMessage
 } from "@responsible-ai/core-ui";
 import { Dictionary } from "lodash";
 
 import { IStringsParam } from "./IStringsParam";
-import { ITelemetryMessage } from "./ITelemetryMessage";
 
 // This is the interface of the data to be provided by any glue code, be it the ModelExplanationController, the Jupyter widget,
 // or some future extension. The Explanation Dashboard opperates on this data object, and an optional chart config that specifies

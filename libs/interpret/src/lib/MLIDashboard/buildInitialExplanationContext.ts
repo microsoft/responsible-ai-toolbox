@@ -8,7 +8,8 @@ import {
   WeightVectors,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes
+  ModelTypes,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -18,7 +19,6 @@ import {
   IExplanationDashboardProps,
   INewExplanationDashboardState
 } from "./Interfaces/IExplanationDashboardProps";
-import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 

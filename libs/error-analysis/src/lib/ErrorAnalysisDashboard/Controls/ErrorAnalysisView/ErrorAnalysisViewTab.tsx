@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { defaultModelAssessmentContext, ModelAssessmentContext } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
@@ -79,6 +80,11 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
   IErrorAnalysisViewTabProps,
   IErrorAnalysisViewTabState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   constructor(props: IErrorAnalysisViewTabProps) {
     super(props);
     this.state = { openFeatureList: false };
