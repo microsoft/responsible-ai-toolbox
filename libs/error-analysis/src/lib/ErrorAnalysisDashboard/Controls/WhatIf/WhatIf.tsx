@@ -3,8 +3,9 @@
 
 import {
   JointDataset,
-  IExplanationModelMetadata,
-  ErrorCohort
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import {
   FabricStyles,
@@ -27,8 +28,6 @@ export interface IWhatIfProps {
   isOpen: boolean;
   // hostId: string
   onDismiss: () => void;
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
   currentCohort: ErrorCohort;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   customPoints: Array<{ [key: string]: any }>;
@@ -49,17 +48,22 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
 };
 
 export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private rowOptions: IDropdownOption[] | undefined;
   private stringifedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
   private validationErrors: { [key: string]: string | undefined } = {};
   private featuresOption: IDropdownOption[] = new Array(
-    this.props.jointDataset.datasetFeatureCount
+    this.context.jointDataset.datasetFeatureCount
   )
     .fill(0)
     .map((_, index) => {
       const key = JointDataset.DataLabelRoot + index.toString();
-      const meta = this.props.jointDataset.metaDict[key];
+      const meta = this.context.jointDataset.metaDict[key];
       const options = meta.isCategorical
         ? meta.sortedCategoricalValues?.map((optionText, index) => {
             return { key: index, text: optionText };
@@ -118,8 +122,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
               filteredFeatureList={this.state.filteredFeatureList}
               isPanelOpen={this.props.isOpen}
               isInPanel={true}
-              jointDataset={this.props.jointDataset}
-              metadata={this.props.metadata}
+              jointDataset={this.context.jointDataset}
+              metadata={this.context.modelMetadata}
               openPanel={(): void => {
                 // do nothing
               }}
@@ -249,7 +253,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
-    this.temporaryPoint = this.props.jointDataset.getRow(index);
+    this.temporaryPoint = this.context.jointDataset.getRow(index);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
@@ -312,8 +316,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     const abortController = new AbortController();
     const rawData = JointDataset.datasetSlice(
       fetchingReference,
-      this.props.jointDataset.metaDict,
-      this.props.jointDataset.datasetFeatureCount
+      this.context.jointDataset.metaDict,
+      this.context.jointDataset.datasetFeatureCount
     );
     // This seems to break the dashboard for long requests
     // fetchingReference[JointDataset.PredictedYLabel] = undefined;
@@ -341,10 +345,10 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           // prediction is a scalar, no probabilities
           fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
         }
-        if (this.props.jointDataset.hasTrueY) {
+        if (this.context.jointDataset.hasTrueY) {
           JointDataset.setErrorMetrics(
             fetchingReference,
-            this.props.metadata.modelType
+            this.context.modelMetadata.modelType
           );
         }
         this.setState({ request: undefined });

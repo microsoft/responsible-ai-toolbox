@@ -6,7 +6,8 @@ import {
   Cohort,
   ModelAssessmentContext,
   IDataset,
-  IModelExplanationData
+  IModelExplanationData,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -86,7 +87,9 @@ export class NewExplanationDashboard extends React.PureComponent<
           dataset: {} as IDataset,
           modelExplanationData: {} as IModelExplanationData,
           theme: getTheme(),
-          cohorts: this.state.cohorts,
+          cohorts: this.state.cohorts.map(
+            (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
+          ),
           jointDataset: this.state.jointDataset,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.precomputedExplanations,
@@ -130,11 +133,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             </MessageBar>
           )}
           {this.props.dashboardType === "ModelPerformance" ? (
-            <ModelPerformanceTab
-              jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              cohorts={this.state.cohorts}
-            />
+            <ModelPerformanceTab />
           ) : (
             <Stack horizontal={true}>
               <Stack.Item>
@@ -159,26 +158,12 @@ export class NewExplanationDashboard extends React.PureComponent<
                     ))}
                   </Pivot>
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.ModelPerformance && (
-                    <ModelPerformanceTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
-                    />
-                  )}
+                    GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExploration && (
-                    <DatasetExplorerTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
-                    />
-                  )}
+                    GlobalTabKeys.DataExploration && <DatasetExplorerTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (
                     <GlobalExplanationTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
                       cohorts={this.state.cohorts}
                       cohortIDs={cohortIDs}
                       selectedWeightVector={this.state.selectedWeightVector}

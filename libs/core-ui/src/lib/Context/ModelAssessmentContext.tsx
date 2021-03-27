@@ -4,12 +4,12 @@
 import { ITelemetryMessage } from "../util/ITelemetryMessage";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
-import { Cohort } from "../Cohort/Cohort";
 import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
 import { IDataset } from "../Interfaces/IDataset";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { JointDataset } from "../util/JointDataset";
+import { ErrorCohort } from "@responsible-ai/core-ui";
 
 export interface IModelAssessmentContext {
   dataset: IDataset;
@@ -17,7 +17,7 @@ export interface IModelAssessmentContext {
   theme?: ITheme;
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
-  cohorts: Cohort[];
+  cohorts: ErrorCohort[];
   precomputedExplanations?: IPrecomputedExplanations;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;

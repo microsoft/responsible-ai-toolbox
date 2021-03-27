@@ -105,10 +105,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           dataset: this.props.dataset,
           modelExplanationData: this.props.modelExplanationData,
           theme: this.props.theme,
-          cohorts: this.state.cohorts.map((cohort: ErrorCohort) => cohort.cohort),
+          cohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelMetadata: this.state.modelMetadata,
-          precomputedExplanations: this.props.modelExplanationData.precomputedExplanations,
+          precomputedExplanations: this.props.modelExplanationData
+            .precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
@@ -154,7 +155,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }}
               temporaryCohort={this.state.selectedCohort}
               baseCohort={this.state.baseCohort}
-              jointDataset={this.state.jointDataset}
             />
           )}
           {this.state.openMapShift && (
@@ -211,7 +211,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }}
               cohort={this.state.editedCohort}
               selectedCohort={this.state.selectedCohort}
-              jointDataset={this.state.jointDataset}
             />
           )}
           {this.state.openShiftCohort && (
@@ -229,9 +228,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   selectedCohort
                 });
               }}
-              cohorts={this.state.cohorts.filter(
-                (cohort) => !cohort.isTemporary
-              )}
             />
           )}
           <div>
@@ -310,32 +306,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     )}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.ModelStatisticsTab && (
-                      <ModelPerformanceTab
-                        jointDataset={this.state.jointDataset}
-                        metadata={this.state.modelMetadata}
-                        cohorts={this.state.cohorts.map(
-                          (errorCohort: ErrorCohort) => errorCohort.cohort
-                        )}
-                      />
+                      <ModelPerformanceTab />
                     )}
                     {this.state.activeGlobalTab ===
-                      GlobalTabKeys.DataExplorerTab && (
-                      <DatasetExplorerTab
-                        jointDataset={this.state.jointDataset}
-                        metadata={this.state.modelMetadata}
-                        cohorts={this.state.cohorts.map(
-                          (errorCohort) => errorCohort.cohort
-                        )}
-                      />
-                    )}
+                      GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab
-                        jointDataset={this.state.jointDataset}
-                        metadata={this.state.modelMetadata}
-                        cohorts={this.state.cohorts.map(
-                          (errorCohort) => errorCohort.cohort
-                        )}
+                        cohorts={this.state.cohorts.map((cohort) => cohort.cohort)}
                         cohortIDs={cohortIDs}
                         selectedWeightVector={this.state.selectedWeightVector}
                         weightOptions={this.state.weightVectorOptions}
@@ -354,9 +332,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             ? this.props.stringParams.contextualHelp
                             : undefined
                         }
-                        jointDataset={this.state.jointDataset}
                         features={this.props.dataset.featureNames}
-                        metadata={this.state.modelMetadata}
                         invokeModel={this.props.requestPredictions}
                         selectedWeightVector={this.state.selectedWeightVector}
                         weightOptions={this.state.weightVectorOptions}
@@ -409,7 +385,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 <CohortInfo
                   isOpen={this.state.openInfoPanel}
                   currentCohort={this.state.selectedCohort}
-                  jointDataset={this.state.jointDataset}
                   onDismiss={(): void =>
                     this.setState({ openInfoPanel: false })
                   }
@@ -418,8 +393,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   }
                 />
                 <CohortList
-                  isOpen={this.state.openCohortListPanel}
                   cohorts={this.state.cohorts}
+                  isOpen={this.state.openCohortListPanel}
                   onDismiss={(): void =>
                     this.setState({ openCohortListPanel: false })
                   }
@@ -434,8 +409,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   isOpen={this.state.openWhatIf}
                   onDismiss={(): void => this.setState({ openWhatIf: false })}
                   currentCohort={this.state.selectedCohort}
-                  jointDataset={this.state.jointDataset}
-                  metadata={this.state.modelMetadata}
                   invokeModel={this.props.requestPredictions}
                   customPoints={this.state.customPoints}
                   addCustomPoint={this.addCustomPoint.bind(this)}

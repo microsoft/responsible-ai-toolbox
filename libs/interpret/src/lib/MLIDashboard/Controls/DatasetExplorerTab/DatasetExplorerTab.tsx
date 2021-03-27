@@ -6,12 +6,12 @@ import {
   JointDataset,
   ColumnCategories,
   cohortKey,
-  Cohort,
-  IExplanationModelMetadata,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
-  MissingParametersPlaceholder
+  MissingParametersPlaceholder,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
@@ -34,10 +34,6 @@ import { generatePlotlyProps } from "./generatePlotlyProps";
 import { SidePanel } from "./SidePanel";
 
 export interface IDatasetExplorerTabProps {
-  theme?: string;
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
-  cohorts: Cohort[];
   initialCohortIndex?: number;
 }
 
@@ -54,6 +50,11 @@ export class DatasetExplorerTab extends React.PureComponent<
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private readonly chartAndConfigsId = "DatasetExplorerChart";
 
   public constructor(props: IDatasetExplorerTabProps) {
@@ -70,14 +71,14 @@ export class DatasetExplorerTab extends React.PureComponent<
       xDialogOpen: false,
       yDialogOpen: false
     };
-    if (!this.props.jointDataset.hasDataset) {
+    if (!this.context.jointDataset.hasDataset) {
       return;
     }
   }
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
-    if (!this.props.jointDataset.hasDataset) {
+    if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.DatasetExplorer.missingParameters}
@@ -88,17 +89,17 @@ export class DatasetExplorerTab extends React.PureComponent<
       return <div />;
     }
     const plotlyProps = generatePlotlyProps(
-      this.props.jointDataset,
+      this.context.jointDataset,
       this.state.chartProps,
-      this.props.cohorts[this.state.selectedCohortIndex]
+      this.context.cohorts.map((cohort) => cohort.cohort)[this.state.selectedCohortIndex]
     );
     const cohortOptions =
       this.state.chartProps.xAxis.property !== cohortKey
-        ? this.props.cohorts.map((cohort, index) => {
-            return { key: index, text: cohort.name };
+        ? this.context.cohorts.map((cohort, index) => {
+            return { key: index, text: cohort.cohort.name };
           })
         : undefined;
-    const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
+    const cohortLength = this.context.cohorts[this.state.selectedCohortIndex].cohort
       .filteredData.length;
     const canRenderChart =
       cohortLength < newExplanationDashboardRowErrorSize ||
@@ -138,7 +139,7 @@ export class DatasetExplorerTab extends React.PureComponent<
           <div className={classNames.chartWithAxes}>
             {this.state.yDialogOpen && (
               <AxisConfigDialog
-                jointDataset={this.props.jointDataset}
+                jointDataset={this.context.jointDataset}
                 orderedGroupTitles={yAxisCategories}
                 selectedColumn={this.state.chartProps.yAxis}
                 canBin={false}
@@ -152,7 +153,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             )}
             {this.state.xDialogOpen && (
               <AxisConfigDialog
-                jointDataset={this.props.jointDataset}
+                jointDataset={this.context.jointDataset}
                 orderedGroupTitles={[
                   ColumnCategories.Index,
                   ColumnCategories.Dataset,
@@ -176,7 +177,7 @@ export class DatasetExplorerTab extends React.PureComponent<
             )}
             {this.state.colorDialogOpen && this.state.chartProps.colorAxis && (
               <AxisConfigDialog
-                jointDataset={this.props.jointDataset}
+                jointDataset={this.context.jointDataset}
                 orderedGroupTitles={[
                   ColumnCategories.Index,
                   ColumnCategories.Dataset,
@@ -197,12 +198,12 @@ export class DatasetExplorerTab extends React.PureComponent<
                     <DefaultButton
                       onClick={this.setYOpen.bind(this, true)}
                       text={
-                        this.props.jointDataset.metaDict[
+                        this.context.jointDataset.metaDict[
                           this.state.chartProps.yAxis.property
                         ].abbridgedLabel
                       }
                       title={
-                        this.props.jointDataset.metaDict[
+                        this.context.jointDataset.metaDict[
                           this.state.chartProps.yAxis.property
                         ].label
                       }
@@ -225,12 +226,12 @@ export class DatasetExplorerTab extends React.PureComponent<
                   <DefaultButton
                     onClick={this.setXOpen.bind(this, true)}
                     text={
-                      this.props.jointDataset.metaDict[
+                      this.context.jointDataset.metaDict[
                         this.state.chartProps.xAxis.property
                       ].abbridgedLabel
                     }
                     title={
-                      this.props.jointDataset.metaDict[
+                      this.context.jointDataset.metaDict[
                         this.state.chartProps.xAxis.property
                       ].label
                     }
@@ -241,8 +242,8 @@ export class DatasetExplorerTab extends React.PureComponent<
           </div>
           <SidePanel
             chartProps={this.state.chartProps}
-            cohorts={this.props.cohorts}
-            jointDataset={this.props.jointDataset}
+            cohorts={this.context.cohorts.map((cohort) => cohort.cohort)}
+            jointDataset={this.context.jointDataset}
             selectedCohortIndex={this.state.selectedCohortIndex}
             setColorOpen={this.setColorOpen}
             onChartTypeChange={this.onChartTypeChange}
@@ -328,14 +329,14 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    if (!this.props.jointDataset.hasDataset) {
+    if (!this.context.jointDataset.hasDataset) {
       return;
     }
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Histogram,
       colorAxis: {
         options: {},
-        property: this.props.jointDataset.hasPredictedY
+        property: this.context.jointDataset.hasPredictedY
           ? JointDataset.PredictedYLabel
           : JointDataset.IndexLabel
       },
@@ -350,7 +351,7 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   private generateDefaultYAxis(): ISelectorConfig {
     const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.props.jointDataset.metaDict[yKey]
+    const yIsDithered = this.context.jointDataset.metaDict[yKey]
       .treatAsCategorical;
     return {
       options: {

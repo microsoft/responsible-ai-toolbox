@@ -6,11 +6,12 @@ import {
   ExpandableText,
   JointDataset,
   WeightVectorOption,
-  IExplanationModelMetadata,
   ModelExplanationUtils,
   ChartTypes,
   IGenericChartProps,
-  MissingParametersPlaceholder
+  MissingParametersPlaceholder,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -44,9 +45,7 @@ export interface IGlobalBarSettings {
 }
 
 export interface IGlobalExplanationTabProps {
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
-  cohorts: Cohort[];
+  cohorts: Cohort[],
   cohortIDs: string[];
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
@@ -75,9 +74,14 @@ export class GlobalExplanationTab extends React.PureComponent<
   IGlobalExplanationTabProps,
   IGlobalExplanationTabState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private cohortSeries: IGlobalSeries[];
   private activeSeries: IGlobalSeries[];
-  private readonly hasDataset = this.props.jointDataset.hasDataset;
+  private readonly hasDataset = this.context.jointDataset.hasDataset;
   private readonly explainerCalloutInfo = this.props.explanationMethod
     ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
@@ -85,7 +89,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
 
-    if (!this.props.jointDataset.hasLocalExplanations) {
+    if (!this.context.jointDataset.hasLocalExplanations) {
       this.activeSeries = [];
       this.cohortSeries = [];
       return;
@@ -93,7 +97,7 @@ export class GlobalExplanationTab extends React.PureComponent<
 
     const minK = Math.min(
       4,
-      this.props.jointDataset.localExplanationFeatureCount
+      this.context.jointDataset.localExplanationFeatureCount
     );
     let initialCohortIndex = 0;
     if (this.props.initialCohortIndex !== undefined) {
@@ -103,7 +107,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       chartType: ChartTypes.Bar,
       crossClassInfoVisible: false,
       globalBarSettings: this.getDefaultSettings(),
-      maxK: Math.min(30, this.props.jointDataset.localExplanationFeatureCount),
+      maxK: Math.min(30, this.context.jointDataset.localExplanationFeatureCount),
       minK,
       selectedCohortIndex: initialCohortIndex,
       seriesIsActive: props.cohorts.map(() => true),
@@ -132,7 +136,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   public render(): React.ReactNode {
     const classNames = globalTabStyles();
 
-    if (!this.props.jointDataset.hasLocalExplanations) {
+    if (!this.context.jointDataset.hasLocalExplanations) {
       return <GlobalOnlyChart />;
     }
 
@@ -145,11 +149,11 @@ export class GlobalExplanationTab extends React.PureComponent<
       }
     );
     const featureOptions: IDropdownOption[] = [];
-    for (let i = 0; i < this.props.jointDataset.datasetFeatureCount; i++) {
+    for (let i = 0; i < this.context.jointDataset.datasetFeatureCount; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
       featureOptions.push({
         key,
-        text: this.props.jointDataset.metaDict[key].label
+        text: this.context.jointDataset.metaDict[key].label
       });
     }
 
@@ -172,7 +176,7 @@ export class GlobalExplanationTab extends React.PureComponent<
             )}
             className={classNames.startingK}
             ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
-            max={this.props.jointDataset.localExplanationFeatureCount}
+            max={this.context.jointDataset.localExplanationFeatureCount}
             min={1}
             step={1}
             value={this.state.topK}
@@ -200,14 +204,14 @@ export class GlobalExplanationTab extends React.PureComponent<
         </div>
         <div className={classNames.globalChartWithLegend}>
           <FeatureImportanceBar
-            jointDataset={this.props.jointDataset}
+            jointDataset={this.context.jointDataset}
             yAxisLabels={[
               localization.Interpret.GlobalTab.aggregateFeatureImportance
             ]}
             sortArray={this.state.sortArray}
             chartType={this.state.chartType}
-            unsortedX={this.props.metadata.featureNamesAbridged}
-            originX={this.props.metadata.featureNames}
+            unsortedX={this.context.modelMetadata.featureNamesAbridged}
+            originX={this.context.modelMetadata.featureNames}
             unsortedSeries={this.activeSeries}
             topK={this.state.topK}
             onFeatureSelection={this.handleFeatureSelection}
@@ -216,7 +220,7 @@ export class GlobalExplanationTab extends React.PureComponent<
           <SidePanel
             cohortSeries={this.cohortSeries}
             cohorts={this.props.cohorts}
-            metadata={this.props.metadata}
+            metadata={this.context.modelMetadata}
             onWeightChange={this.props.onWeightChange}
             selectedWeightVector={this.props.selectedWeightVector}
             seriesIsActive={this.state.seriesIsActive}
@@ -257,8 +261,8 @@ export class GlobalExplanationTab extends React.PureComponent<
                 chartProps={this.state.dependenceProps}
                 cohortIndex={this.state.selectedCohortIndex}
                 cohort={this.props.cohorts[this.state.selectedCohortIndex]}
-                jointDataset={this.props.jointDataset}
-                metadata={this.props.metadata}
+                jointDataset={this.context.jointDataset}
+                metadata={this.context.modelMetadata}
                 onChange={this.onDependenceChange}
                 selectedWeight={this.props.selectedWeightVector}
                 selectedWeightLabel={
@@ -358,7 +362,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   private getDefaultSettings(): IGlobalBarSettings | undefined {
     const result: IGlobalBarSettings = {} as IGlobalBarSettings;
     result.topK = Math.min(
-      this.props.jointDataset.localExplanationFeatureCount,
+      this.context.jointDataset.localExplanationFeatureCount,
       4
     );
     result.sortOption = "global";
@@ -379,7 +383,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   ): void => {
     if (typeof item?.key === "string") {
       const key = item.key as string;
-      const index = this.props.jointDataset.metaDict[key].index;
+      const index = this.context.jointDataset.metaDict[key].index;
       if (index !== undefined) {
         this.handleFeatureSelection(this.state.selectedCohortIndex, index);
       }
@@ -392,7 +396,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   ): void => {
     // set to dependence plot initially, can be changed if other feature importances available
     const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
-    const xIsDithered = this.props.jointDataset.metaDict[xKey]
+    const xIsDithered = this.context.jointDataset.metaDict[xKey]
       .treatAsCategorical;
     const yKey =
       JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();

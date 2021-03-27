@@ -13,8 +13,11 @@ import {
   TextField
 } from "office-ui-fabric-react";
 import React from "react";
+import {
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
 
-import { JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
 import { CohortBaseAndFilters } from "../CohortBaseAndFilters/CohortBaseAndFilters";
 import { CohortStats } from "../CohortStats/CohortStats";
@@ -24,7 +27,6 @@ export interface ISaveCohortProps {
   isOpen: boolean;
   temporaryCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-  jointDataset: JointDataset;
   onDismiss: () => void;
   onSave: (temporaryCohort: ErrorCohort) => void;
 }
@@ -60,6 +62,11 @@ export class SaveCohort extends React.Component<
   ISaveCohortProps,
   ISaveCohortState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   public constructor(props: ISaveCohortProps) {
     super(props);
     this.state = {
@@ -120,11 +127,11 @@ export class SaveCohort extends React.Component<
     const savedCohort = new ErrorCohort(
       new Cohort(
         this.state.cohortName,
-        this.props.jointDataset,
+        this.context.jointDataset,
         tempCohort.cohort.filters,
         tempCohort.cohort.compositeFilters
       ),
-      this.props.jointDataset,
+      this.context.jointDataset,
       tempCohort.cells,
       tempCohort.source,
       false,

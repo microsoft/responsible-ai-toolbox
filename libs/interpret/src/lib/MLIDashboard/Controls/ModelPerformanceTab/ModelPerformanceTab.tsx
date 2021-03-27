@@ -6,13 +6,14 @@ import {
   ExpandableText,
   JointDataset,
   ModelTypes,
-  IExplanationModelMetadata,
   cohortKey,
   Cohort,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
-  MissingParametersPlaceholder
+  MissingParametersPlaceholder,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -34,10 +35,6 @@ import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
 export interface IModelPerformanceTabProps {
-  theme?: string;
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
-  cohorts: Cohort[];
 }
 
 export interface IModelPerformanceTabState {
@@ -51,6 +48,11 @@ export class ModelPerformanceTab extends React.PureComponent<
   IModelPerformanceTabProps,
   IModelPerformanceTabState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private readonly chartAndConfigsId = "ModelPerformanceChart";
 
   public constructor(props: IModelPerformanceTabProps) {
@@ -61,7 +63,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       xDialogOpen: false,
       yDialogOpen: false
     };
-    if (!this.props.jointDataset.hasPredictedY) {
+    if (!this.context.jointDataset.hasPredictedY) {
       return;
     }
   }
@@ -72,7 +74,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     cohorts: Cohort[],
     selectedCohortIndex: number
   ): IPlotlyProperty {
-    // In this view, y will always be categorical (including a binned numberic variable), and could be
+    // In this view, y will always be categorical (including a binned numeric variable), and could be
     // iterations over the cohorts. We can set y and the y labels before the rest of the char properties.
     const plotlyProps: IPlotlyProperty = {
       config: { displaylogo: false, displayModeBar: false, responsive: true },
@@ -220,7 +222,7 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = modelPerformanceTabStyles();
-    if (!this.props.jointDataset.hasPredictedY) {
+    if (!this.context.jointDataset.hasPredictedY) {
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.ModelPerformance.missingParameters}
@@ -231,17 +233,17 @@ export class ModelPerformanceTab extends React.PureComponent<
       return <div />;
     }
     const plotlyProps = ModelPerformanceTab.generatePlotlyProps(
-      this.props.jointDataset,
+      this.context.jointDataset,
       this.state.chartProps,
-      this.props.cohorts,
+      this.context.cohorts.map((cohort) => cohort.cohort),
       this.state.selectedCohortIndex
     );
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
     const cohortOptions =
       this.state.chartProps.yAxis.property !== cohortKey
-        ? this.props.cohorts.map((cohort, index) => {
-            return { key: index, text: cohort.name };
+        ? this.context.cohorts.map((cohort, index) => {
+            return { key: index, text: cohort.cohort.name };
           })
         : undefined;
     return (
@@ -270,7 +272,7 @@ export class ModelPerformanceTab extends React.PureComponent<
         <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
-              jointDataset={this.props.jointDataset}
+              jointDataset={this.context.jointDataset}
               orderedGroupTitles={[
                 ColumnCategories.Cohort,
                 ColumnCategories.Dataset
@@ -291,7 +293,7 @@ export class ModelPerformanceTab extends React.PureComponent<
           )}
           {this.state.xDialogOpen && (
             <AxisConfigDialog
-              jointDataset={this.props.jointDataset}
+              jointDataset={this.context.jointDataset}
               orderedGroupTitles={[ColumnCategories.Outcome]}
               selectedColumn={this.state.chartProps.xAxis}
               canBin={false}
@@ -308,12 +310,12 @@ export class ModelPerformanceTab extends React.PureComponent<
                   <DefaultButton
                     onClick={this.setYOpen.bind(this, true)}
                     text={
-                      this.props.jointDataset.metaDict[
+                      this.context.jointDataset.metaDict[
                         this.state.chartProps.yAxis.property
                       ].abbridgedLabel
                     }
                     title={
-                      this.props.jointDataset.metaDict[
+                      this.context.jointDataset.metaDict[
                         this.state.chartProps.yAxis.property
                       ].label
                     }
@@ -329,14 +331,14 @@ export class ModelPerformanceTab extends React.PureComponent<
                     theme={getTheme() as any}
                   />
                 </div>
-                {this.props.metadata.modelType !== ModelTypes.Multiclass && (
+                {this.context.modelMetadata.modelType !== ModelTypes.Multiclass && (
                   <div className={classNames.rightPanel}>
-                    {!this.props.jointDataset.hasTrueY && (
+                    {!this.context.jointDataset.hasTrueY && (
                       <MissingParametersPlaceholder>
                         {localization.Interpret.ModelPerformance.missingTrueY}
                       </MissingParametersPlaceholder>
                     )}
-                    {this.props.jointDataset.hasTrueY &&
+                    {this.context.jointDataset.hasTrueY &&
                       metricsList.map((stats, index) => {
                         return (
                           <div className={classNames.statsBox} key={index}>
@@ -367,12 +369,12 @@ export class ModelPerformanceTab extends React.PureComponent<
                 <DefaultButton
                   onClick={this.setXOpen.bind(this, true)}
                   text={
-                    this.props.jointDataset.metaDict[
+                    this.context.jointDataset.metaDict[
                       this.state.chartProps.xAxis.property
                     ].abbridgedLabel
                   }
                   title={
-                    this.props.jointDataset.metaDict[
+                    this.context.jointDataset.metaDict[
                       this.state.chartProps.xAxis.property
                     ].label
                   }
@@ -416,7 +418,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       return;
     }
     newProps.xAxis = value;
-    newProps.chartType = this.props.jointDataset.metaDict[value.property]
+    newProps.chartType = this.context.jointDataset.metaDict[value.property]
       .treatAsCategorical
       ? ChartTypes.Histogram
       : ChartTypes.Box;
@@ -435,19 +437,19 @@ export class ModelPerformanceTab extends React.PureComponent<
   };
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    if (!this.props.jointDataset.hasPredictedY) {
+    if (!this.context.jointDataset.hasPredictedY) {
       return undefined;
     }
     let bestModelMetricKey: string;
     if (
-      this.props.metadata.modelType === ModelTypes.Binary &&
-      this.props.jointDataset.hasPredictedProbabilities
+      this.context.modelMetadata.modelType === ModelTypes.Binary &&
+      this.context.jointDataset.hasPredictedProbabilities
     ) {
       bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
-    } else if (this.props.metadata.modelType === ModelTypes.Regression) {
+    } else if (this.context.modelMetadata.modelType === ModelTypes.Regression) {
       if (
-        this.props.jointDataset.hasPredictedY &&
-        this.props.jointDataset.hasTrueY
+        this.context.jointDataset.hasPredictedY &&
+        this.context.jointDataset.hasTrueY
       ) {
         bestModelMetricKey = JointDataset.RegressionError;
       } else {
@@ -458,7 +460,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     } // not handling multiclass at this time
 
     const chartProps: IGenericChartProps = {
-      chartType: this.props.jointDataset.metaDict[bestModelMetricKey]
+      chartType: this.context.jointDataset.metaDict[bestModelMetricKey]
         .isCategorical
         ? ChartTypes.Histogram
         : ChartTypes.Box,
@@ -481,19 +483,19 @@ export class ModelPerformanceTab extends React.PureComponent<
       return [];
     }
     if (this.state.chartProps.yAxis.property === cohortKey) {
-      const indexes = this.props.cohorts.map((cohort) =>
-        cohort.unwrap(JointDataset.IndexLabel)
+      const indexes = this.context.cohorts.map((cohort) =>
+        cohort.cohort.unwrap(JointDataset.IndexLabel)
       );
       return generateMetrics(
-        this.props.jointDataset,
+        this.context.jointDataset,
         indexes,
-        this.props.metadata.modelType
+        this.context.modelMetadata.modelType
       );
     }
-    const cohort = this.props.cohorts[this.state.selectedCohortIndex];
+    const cohort = this.context.cohorts[this.state.selectedCohortIndex].cohort;
     const yValues = cohort.unwrap(this.state.chartProps.yAxis.property, true);
     const indexArray = cohort.unwrap(JointDataset.IndexLabel);
-    const sortedCategoricalValues = this.props.jointDataset.metaDict[
+    const sortedCategoricalValues = this.context.jointDataset.metaDict[
       this.state.chartProps.yAxis.property
     ].sortedCategoricalValues;
     const indexes = sortedCategoricalValues?.map((_, labelIndex) => {
@@ -502,9 +504,9 @@ export class ModelPerformanceTab extends React.PureComponent<
       });
     });
     return generateMetrics(
-      this.props.jointDataset,
+      this.context.jointDataset,
       indexes || [],
-      this.props.metadata.modelType
+      this.context.modelMetadata.modelType
     );
   }
 }
