@@ -4,13 +4,11 @@
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
-  Dropdown,
   IButtonStyles,
-  IDropdownOption,
-  IDropdownStyles,
   IIconProps,
-  ILabelStyles,
-  Label,
+  Text,
+  Pivot,
+  PivotItem,
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
@@ -29,43 +27,16 @@ import {
  * error analysis specific components can be plugged into a larger dashboard.
  */
 
-const labelStyle: ILabelStyles = {
-  root: { alignSelf: "center", padding: "0px 10px 0px 0px" }
-};
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: {
-    width: 100
-  },
-  root: {
-    alignSelf: "center"
-  },
-  title: {
-    borderLeft: "0px solid black",
-    borderRight: "0px solid black",
-    borderTop: "0px solid black"
-  }
-};
 const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
 };
 const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
-const errorAnalysisOptionsDropdown: IDropdownOption[] = [
-  {
-    key: ErrorAnalysisOptions.TreeMap,
-    text: localization.ErrorAnalysis.MainMenu.treeMap
-  },
-  {
-    key: ErrorAnalysisOptions.HeatMap,
-    text: localization.ErrorAnalysis.MainMenu.heatMap
-  }
-];
-
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   stringParams?: IStringsParam;
   handleErrorDetectorChanged: (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
+    item?: PivotItem,
+    ev?: React.MouseEvent<HTMLElement>
   ) => void;
   selectFeatures: (features: string[]) => void;
   importances: number[];
@@ -86,22 +57,21 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack grow={true}>
-        <Stack
-          horizontal={true}
-          tokens={{ childrenGap: "10px", padding: "16px 24px" }}
-        >
-          <Stack horizontal={true}>
-            <Label styles={labelStyle}>
-              {localization.ErrorAnalysis.MainMenu.errorExplorerLabel}
-            </Label>
-            <Dropdown
-              selectedKey={this.props.errorAnalysisOption}
-              options={errorAnalysisOptionsDropdown}
-              styles={dropdownStyles}
-              onChange={this.props.handleErrorDetectorChanged}
+      <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+        <Text variant={"xLarge"}>
+          {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
+        </Text>
+        <Stack horizontal={true} tokens={{ childrenGap: "10px" }}>
+          <Pivot onLinkClick={this.props.handleErrorDetectorChanged}>
+            <PivotItem
+              itemKey={ErrorAnalysisOptions.TreeMap}
+              headerText={localization.ErrorAnalysis.MainMenu.treeMap}
             />
-          </Stack>
+            <PivotItem
+              itemKey={ErrorAnalysisOptions.HeatMap}
+              headerText={localization.ErrorAnalysis.MainMenu.heatMap}
+            />
+          </Pivot>
           {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
             <CommandBarButton
               styles={buttonStyle}
