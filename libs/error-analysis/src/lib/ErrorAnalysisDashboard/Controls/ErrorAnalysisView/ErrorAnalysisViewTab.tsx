@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultModelAssessmentContext, ModelAssessmentContext } from "@responsible-ai/core-ui";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,

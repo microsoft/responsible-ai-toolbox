@@ -83,11 +83,10 @@ export class NewExplanationDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          dataset: {} as IDataset,
-          modelExplanationData: {} as IModelExplanationData,
-          theme: getTheme(),
           cohorts: this.state.cohorts,
+          dataset: {} as IDataset,
           jointDataset: this.state.jointDataset,
+          modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
@@ -97,7 +96,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            })
+            }),
+          theme: getTheme()
         }}
       >
         <div className={classNames.page}>

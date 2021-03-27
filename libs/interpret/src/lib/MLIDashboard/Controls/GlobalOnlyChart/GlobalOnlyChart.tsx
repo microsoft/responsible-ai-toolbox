@@ -13,6 +13,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
+
 import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
