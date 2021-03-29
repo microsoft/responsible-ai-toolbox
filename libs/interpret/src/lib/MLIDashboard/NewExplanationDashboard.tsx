@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WeightVectorOption, Cohort } from "@responsible-ai/core-ui";
+import {
+  WeightVectorOption,
+  Cohort,
+  ModelAssessmentContext,
+  IDataset,
+  IModelExplanationData
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -12,7 +18,8 @@ import {
   MessageBar,
   MessageBarType,
   Text,
-  Stack
+  Stack,
+  getTheme
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -21,7 +28,6 @@ import {
   GlobalTabKeys,
   INewExplanationDashboardState
 } from "./buildInitialExplanationContext";
-import { InterpretContext } from "./context/InterpretContext";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
 import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
@@ -75,10 +81,12 @@ export class NewExplanationDashboard extends React.PureComponent<
     );
     const classNames = explanationDashboardStyles();
     return (
-      <InterpretContext.Provider
+      <ModelAssessmentContext.Provider
         value={{
           cohorts: this.state.cohorts,
+          dataset: {} as IDataset,
           jointDataset: this.state.jointDataset,
+          modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
@@ -88,7 +96,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            })
+            }),
+          theme: getTheme()
         }}
       >
         <div className={classNames.page}>
@@ -196,7 +205,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             </Stack>
           )}
         </div>
-      </InterpretContext.Provider>
+      </ModelAssessmentContext.Provider>
     );
   }
 
