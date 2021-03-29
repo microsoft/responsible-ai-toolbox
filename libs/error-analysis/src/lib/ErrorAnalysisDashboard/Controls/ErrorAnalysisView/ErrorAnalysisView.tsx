@@ -6,9 +6,10 @@ import {
   IFilter,
   CohortSource,
   CohortStats,
-  ErrorCohort
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
@@ -19,7 +20,6 @@ import { MatrixFilter } from "../MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
 export interface IErrorAnalysisViewProps {
-  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   selectedFeatures: string[];
@@ -48,12 +48,17 @@ export interface IErrorAnalysisViewProps {
 export class ErrorAnalysisView extends React.PureComponent<
   IErrorAnalysisViewProps
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   public render(): React.ReactNode {
     return (
       <>
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
           <TreeViewRenderer
-            theme={this.props.theme}
+            theme={this.context.theme}
             messages={this.props.messages}
             getTreeNodes={this.props.getTreeNodes}
             staticTreeNodes={this.props.staticTreeNodes}
@@ -68,7 +73,7 @@ export class ErrorAnalysisView extends React.PureComponent<
         )}
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
           <MatrixFilter
-            theme={this.props.theme}
+            theme={this.context.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
             staticMatrix={this.props.staticMatrix}

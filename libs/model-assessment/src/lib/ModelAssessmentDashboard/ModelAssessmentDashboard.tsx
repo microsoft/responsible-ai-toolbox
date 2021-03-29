@@ -11,7 +11,8 @@ import {
   SaveCohort,
   ShiftCohort,
   CohortBasedComponent,
-  IGenericChartProps
+  IGenericChartProps,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import {
   ErrorAnalysisOptions,
@@ -50,7 +51,6 @@ import {
 import * as React from "react";
 
 import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
-import { ModelAssessmentContext } from "./Context/ModelAssessmentContext";
 import { MainMenu } from "./Controls/MainMenu";
 import { Navigation } from "./Controls/Navigation";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
@@ -102,8 +102,24 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          cohorts: this.state.cohorts.map(
+            (cohort: ErrorCohort) => cohort.cohort
+          ),
           dataset: this.props.dataset,
-          modelExplanationData: this.props.modelExplanationData
+          jointDataset: this.state.jointDataset,
+          modelExplanationData: this.props.modelExplanationData,
+          modelMetadata: this.state.modelMetadata,
+          precomputedExplanations: this.props.modelExplanationData
+            .precomputedExplanations,
+          requestLocalFeatureExplanations: this.props
+            .requestLocalFeatureExplanations,
+          requestPredictions: this.props.requestPredictions,
+          telemetryHook:
+            this.props.telemetryHook ||
+            ((): void => {
+              return;
+            }),
+          theme: this.props.theme
         }}
       >
         <div className={classNames.page}>
@@ -240,7 +256,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.ErrorAnalysisTab && (
                       <ErrorAnalysisViewTab
-                        theme={this.props.theme!}
                         messages={
                           this.props.stringParams
                             ? this.props.stringParams.contextualHelp
@@ -337,7 +352,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.LocalExplanationTab && (
                       <InstanceView
-                        theme={this.props.theme}
                         messages={
                           this.props.stringParams
                             ? this.props.stringParams.contextualHelp

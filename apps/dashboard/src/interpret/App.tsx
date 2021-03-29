@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IExplanationDashboardData } from "@responsible-ai/core-ui";
+import {
+  IExplanationDashboardData,
+  ITelemetryMessage
+} from "@responsible-ai/core-ui";
 import {
   NewExplanationDashboard,
   ExplanationDashboard,
-  ITelemetryMessage,
   IExplanationDashboardProps,
   HelpMessageDict
 } from "@responsible-ai/interpret";
