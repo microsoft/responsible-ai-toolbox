@@ -23,11 +23,6 @@ class CredentialedVMEnvironment(BaseEnvironment):
         if service.with_credentials:
             self.successfully_detected = True
 
-    def display(self, html):
-        """Display the passed HTML using IPython."""
-        from IPython.display import HTML, display
-        display(HTML(html))
-
     def select(self, service):
         origin = f"https://{service.ip}:{service.port}"
         headers = ['Content-Type']
