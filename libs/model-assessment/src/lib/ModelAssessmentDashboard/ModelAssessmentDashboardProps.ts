@@ -6,7 +6,8 @@ import {
   IModelExplanationData,
   IMetricRequest,
   IMetricResponse,
-  ICohortBasedComponentProps
+  ICohortBasedComponentProps,
+  ITelemetryMessage
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -38,6 +39,8 @@ export interface IModelAssessmentDashboardProps
     abortSignal?: AbortSignal
   ) => Promise<IMetricResponse>;
   localUrl: string;
+
+  telemetryHook?: (message: ITelemetryMessage) => void;
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;

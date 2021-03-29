@@ -3,29 +3,32 @@
 
 import {
   Cohort,
-  ICompositeFilter,
-  IFilter,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isThreeDimArray,
   JointDataset,
   IExplanationModelMetadata,
   ModelTypes,
-  WeightVectorOption,
   WeightVectors,
-  IGenericChartProps,
-  CohortSource,
   CohortInfo,
   CohortList,
-  CohortStats,
-  EditCohort,
   ErrorCohort,
   SaveCohort,
-  ShiftCohort,
   buildGlobalProperties,
   buildIndexedNames,
   getModelType,
-  getClassLength
+  getClassLength,
+  ModelAssessmentContext,
+  IDataset,
+  IModelExplanationData,
+  CohortSource,
+  CohortStats,
+  ICompositeFilter,
+  IFilter,
+  IGenericChartProps,
+  WeightVectorOption,
+  EditCohort,
+  ShiftCohort
 } from "@responsible-ai/core-ui";
 import {
   DatasetExplorerTab,
@@ -39,12 +42,12 @@ import {
   ISettings,
   Layer,
   LayerHost,
+  Customizer,
+  getId,
   PivotItem,
   Pivot,
   PivotLinkSize,
-  mergeStyleSets,
-  Customizer,
-  getId
+  mergeStyleSets
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -321,333 +324,363 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     );
     const classNames = ErrorAnalysisDashboardStyles();
     return (
-      <div className={classNames.page}>
-        <Navigation
-          updateViewState={this.updateViewState.bind(this)}
-          updatePredictionTabState={this.updatePredictionTabState.bind(this)}
-          viewType={this.state.viewType}
-          activeGlobalTab={this.state.activeGlobalTab}
-          activePredictionTab={this.state.predictionTab}
-        />
-        <MainMenu
-          viewExplanation={this.viewExplanation.bind(this)}
-          onInfoPanelClick={(): void => this.setState({ openInfoPanel: true })}
-          onCohortListPanelClick={(): void =>
-            this.setState({ openCohortListPanel: true })
-          }
-          onFeatureListClick={(): void =>
-            this.setState({ openFeatureList: true })
-          }
-          onSaveCohortClick={(): void =>
-            this.setState({ openSaveCohort: true })
-          }
-          onShiftCohortClick={(): void =>
-            this.setState({ openShiftCohort: true })
-          }
-          onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
-          localUrl={this.props.localUrl}
-          viewType={this.state.viewType}
-          setErrorDetector={(key: ErrorAnalysisOptions): void => {
-            if (this.state.selectedCohort.isTemporary) {
-              this.setState({
-                mapShiftErrorAnalysisOption: key,
-                openFeatureList: false,
-                openMapShift: true
-              });
-            } else {
-              this.setState({
-                errorAnalysisOption: key,
-                openFeatureList: false
-              });
+      <ModelAssessmentContext.Provider
+        value={{
+          cohorts: this.state.cohorts.map(
+            (cohort: ErrorCohort) => cohort.cohort
+          ),
+          dataset: {} as IDataset,
+          jointDataset: this.state.jointDataset,
+          modelExplanationData: {} as IModelExplanationData,
+          modelMetadata: this.state.modelMetadata,
+          precomputedExplanations: this.props.precomputedExplanations,
+          requestLocalFeatureExplanations: this.props
+            .requestLocalFeatureExplanations,
+          requestPredictions: this.props.requestPredictions,
+          telemetryHook:
+            this.props.telemetryHook ||
+            ((): void => {
+              return;
+            }),
+          theme: this.props.theme
+        }}
+      >
+        <div className={classNames.page}>
+          <Navigation
+            updateViewState={this.updateViewState.bind(this)}
+            updatePredictionTabState={this.updatePredictionTabState.bind(this)}
+            viewType={this.state.viewType}
+            activeGlobalTab={this.state.activeGlobalTab}
+            activePredictionTab={this.state.predictionTab}
+          />
+          <MainMenu
+            viewExplanation={this.viewExplanation.bind(this)}
+            onInfoPanelClick={(): void =>
+              this.setState({ openInfoPanel: true })
             }
-          }}
-          errorAnalysisOption={this.state.errorAnalysisOption}
-          temporaryCohort={this.state.selectedCohort}
-          activeGlobalTab={this.state.activeGlobalTab}
-          activePredictionTab={this.state.predictionTab}
-          isEnabled={this.props.requestDebugML !== undefined}
-        />
-        {this.state.openSaveCohort && (
-          <SaveCohort
-            isOpen={this.state.openSaveCohort}
-            onDismiss={(): void => this.setState({ openSaveCohort: false })}
-            onSave={(savedCohort: ErrorCohort): void => {
-              let newCohorts = [...this.state.cohorts, savedCohort];
-              newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-              this.setState({
-                cohorts: newCohorts,
-                selectedCohort: savedCohort
-              });
-            }}
-            temporaryCohort={this.state.selectedCohort}
-            baseCohort={this.state.baseCohort}
-            jointDataset={this.state.jointDataset}
-          />
-        )}
-        {this.state.openMapShift && (
-          <MapShift
-            isOpen={this.state.openMapShift}
-            onDismiss={(): void => this.setState({ openMapShift: false })}
-            onSave={(): void => {
-              this.setState({
-                openMapShift: false,
-                openSaveCohort: true
-              });
-            }}
-            onShift={(): void => {
-              this.setState({
-                errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
-                matrixAreaState: createInitialMatrixAreaState(),
-                matrixFilterState: createInitialMatrixFilterState(),
-                openMapShift: false,
-                selectedCohort: this.state.baseCohort,
-                treeViewState: createInitialTreeViewState()
-              });
-            }}
-          />
-        )}
-        {this.state.openEditCohort && (
-          <EditCohort
-            isOpen={this.state.openEditCohort}
-            onDismiss={(): void => this.setState({ openEditCohort: false })}
-            onSave={(
-              originalCohort: ErrorCohort,
-              editedCohort: ErrorCohort
-            ): void => {
-              const cohorts = this.state.cohorts.filter(
-                (errorCohort) =>
-                  errorCohort.cohort.name !== originalCohort.cohort.name
-              );
-              let selectedCohort = this.state.selectedCohort;
-              if (originalCohort.cohort.name === selectedCohort.cohort.name) {
-                selectedCohort = editedCohort;
+            onCohortListPanelClick={(): void =>
+              this.setState({ openCohortListPanel: true })
+            }
+            onFeatureListClick={(): void =>
+              this.setState({ openFeatureList: true })
+            }
+            onSaveCohortClick={(): void =>
+              this.setState({ openSaveCohort: true })
+            }
+            onShiftCohortClick={(): void =>
+              this.setState({ openShiftCohort: true })
+            }
+            onWhatIfClick={(): void => this.setState({ openWhatIf: true })}
+            localUrl={this.props.localUrl}
+            viewType={this.state.viewType}
+            setErrorDetector={(key: ErrorAnalysisOptions): void => {
+              if (this.state.selectedCohort.isTemporary) {
+                this.setState({
+                  mapShiftErrorAnalysisOption: key,
+                  openFeatureList: false,
+                  openMapShift: true
+                });
+              } else {
+                this.setState({
+                  errorAnalysisOption: key,
+                  openFeatureList: false
+                });
               }
-              this.setState({
-                cohorts: [...cohorts, editedCohort],
-                selectedCohort
-              });
             }}
-            onDelete={(deletedCohort: ErrorCohort): void => {
-              const cohorts = this.state.cohorts.filter(
-                (errorCohort) =>
-                  errorCohort.cohort.name !== deletedCohort.cohort.name
-              );
-              this.setState({
-                cohorts
-              });
-            }}
-            cohort={this.state.editedCohort}
-            selectedCohort={this.state.selectedCohort}
-            jointDataset={this.state.jointDataset}
+            errorAnalysisOption={this.state.errorAnalysisOption}
+            temporaryCohort={this.state.selectedCohort}
+            activeGlobalTab={this.state.activeGlobalTab}
+            activePredictionTab={this.state.predictionTab}
+            isEnabled={this.props.requestDebugML !== undefined}
           />
-        )}
-        {this.state.openShiftCohort && (
-          <ShiftCohort
-            isOpen={this.state.openShiftCohort}
-            onDismiss={(): void => this.setState({ openShiftCohort: false })}
-            onApply={(selectedCohort: ErrorCohort): void => {
-              let cohorts = this.state.cohorts;
-              cohorts = cohorts.filter(
-                (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
-              );
-              this.setState({
-                baseCohort: selectedCohort,
-                cohorts: [...cohorts, selectedCohort],
-                selectedCohort
-              });
-            }}
-            cohorts={this.state.cohorts.filter((cohort) => !cohort.isTemporary)}
-          />
-        )}
-        <div>
-          <Customizer
-            settings={(currentSettings): ISettings => ({
-              ...currentSettings,
-              hostId: this.layerHostId
-            })}
-          >
-            <Layer>
-              {this.state.viewType === ViewTypeKeys.ErrorAnalysisView && (
-                <ErrorAnalysisView
-                  theme={this.props.theme!}
-                  messages={
-                    this.props.stringParams
-                      ? this.props.stringParams.contextualHelp
-                      : undefined
-                  }
-                  getTreeNodes={this.props.requestDebugML}
-                  getMatrix={this.props.requestMatrix}
-                  staticTreeNodes={this.props.staticDebugML}
-                  staticMatrix={this.props.staticMatrix}
-                  updateSelectedCohort={this.updateSelectedCohort.bind(this)}
-                  features={this.props.features}
-                  selectedFeatures={this.state.selectedFeatures}
-                  errorAnalysisOption={this.state.errorAnalysisOption}
-                  selectedCohort={this.state.selectedCohort}
-                  baseCohort={this.state.baseCohort}
-                  treeViewState={this.state.treeViewState}
-                  setTreeViewState={(treeViewState: ITreeViewRendererState) => {
-                    if (this.state.selectedCohort !== this.state.baseCohort) {
-                      this.setState({ treeViewState });
-                    }
-                  }}
-                  matrixAreaState={this.state.matrixAreaState}
-                  matrixFilterState={this.state.matrixFilterState}
-                  setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
-                    if (this.state.selectedCohort !== this.state.baseCohort) {
-                      this.setState({ matrixAreaState });
-                    }
-                  }}
-                  setMatrixFilterState={(
-                    matrixFilterState: IMatrixFilterState
-                  ) => {
-                    if (this.state.selectedCohort !== this.state.baseCohort) {
-                      this.setState({ matrixFilterState });
-                    }
-                  }}
-                />
+          {this.state.openSaveCohort && (
+            <SaveCohort
+              isOpen={this.state.openSaveCohort}
+              onDismiss={(): void => this.setState({ openSaveCohort: false })}
+              onSave={(savedCohort: ErrorCohort): void => {
+                let newCohorts = [...this.state.cohorts, savedCohort];
+                newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+                this.setState({
+                  cohorts: newCohorts,
+                  selectedCohort: savedCohort
+                });
+              }}
+              temporaryCohort={this.state.selectedCohort}
+              baseCohort={this.state.baseCohort}
+              jointDataset={this.state.jointDataset}
+            />
+          )}
+          {this.state.openMapShift && (
+            <MapShift
+              isOpen={this.state.openMapShift}
+              onDismiss={(): void => this.setState({ openMapShift: false })}
+              onSave={(): void => {
+                this.setState({
+                  openMapShift: false,
+                  openSaveCohort: true
+                });
+              }}
+              onShift={(): void => {
+                this.setState({
+                  errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
+                  matrixAreaState: createInitialMatrixAreaState(),
+                  matrixFilterState: createInitialMatrixFilterState(),
+                  openMapShift: false,
+                  selectedCohort: this.state.baseCohort,
+                  treeViewState: createInitialTreeViewState()
+                });
+              }}
+            />
+          )}
+          {this.state.openEditCohort && (
+            <EditCohort
+              isOpen={this.state.openEditCohort}
+              onDismiss={(): void => this.setState({ openEditCohort: false })}
+              onSave={(
+                originalCohort: ErrorCohort,
+                editedCohort: ErrorCohort
+              ): void => {
+                const cohorts = this.state.cohorts.filter(
+                  (errorCohort) =>
+                    errorCohort.cohort.name !== originalCohort.cohort.name
+                );
+                let selectedCohort = this.state.selectedCohort;
+                if (originalCohort.cohort.name === selectedCohort.cohort.name) {
+                  selectedCohort = editedCohort;
+                }
+                this.setState({
+                  cohorts: [...cohorts, editedCohort],
+                  selectedCohort
+                });
+              }}
+              onDelete={(deletedCohort: ErrorCohort): void => {
+                const cohorts = this.state.cohorts.filter(
+                  (errorCohort) =>
+                    errorCohort.cohort.name !== deletedCohort.cohort.name
+                );
+                this.setState({
+                  cohorts
+                });
+              }}
+              cohort={this.state.editedCohort}
+              selectedCohort={this.state.selectedCohort}
+              jointDataset={this.state.jointDataset}
+            />
+          )}
+          {this.state.openShiftCohort && (
+            <ShiftCohort
+              isOpen={this.state.openShiftCohort}
+              onDismiss={(): void => this.setState({ openShiftCohort: false })}
+              onApply={(selectedCohort: ErrorCohort): void => {
+                let cohorts = this.state.cohorts;
+                cohorts = cohorts.filter(
+                  (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
+                );
+                this.setState({
+                  baseCohort: selectedCohort,
+                  cohorts: [...cohorts, selectedCohort],
+                  selectedCohort
+                });
+              }}
+              cohorts={this.state.cohorts.filter(
+                (cohort) => !cohort.isTemporary
               )}
-              {this.state.viewType === ViewTypeKeys.ExplanationView && (
-                <div className={ErrorAnalysisDashboard.classNames.pivotWrapper}>
-                  <Pivot
-                    selectedKey={this.state.activeGlobalTab}
-                    onLinkClick={this.handleGlobalTabClick.bind(this)}
-                    linkSize={PivotLinkSize.normal}
-                    headersOnly={true}
-                    styles={{ root: classNames.pivotLabelWrapper }}
+            />
+          )}
+          <div>
+            <Customizer
+              settings={(currentSettings): ISettings => ({
+                ...currentSettings,
+                hostId: this.layerHostId
+              })}
+            >
+              <Layer>
+                {this.state.viewType === ViewTypeKeys.ErrorAnalysisView && (
+                  <ErrorAnalysisView
+                    messages={
+                      this.props.stringParams
+                        ? this.props.stringParams.contextualHelp
+                        : undefined
+                    }
+                    getTreeNodes={this.props.requestDebugML}
+                    getMatrix={this.props.requestMatrix}
+                    staticTreeNodes={this.props.staticDebugML}
+                    staticMatrix={this.props.staticMatrix}
+                    updateSelectedCohort={this.updateSelectedCohort.bind(this)}
+                    features={this.props.features}
+                    selectedFeatures={this.state.selectedFeatures}
+                    errorAnalysisOption={this.state.errorAnalysisOption}
+                    selectedCohort={this.state.selectedCohort}
+                    baseCohort={this.state.baseCohort}
+                    treeViewState={this.state.treeViewState}
+                    setTreeViewState={(
+                      treeViewState: ITreeViewRendererState
+                    ) => {
+                      if (this.state.selectedCohort !== this.state.baseCohort) {
+                        this.setState({ treeViewState });
+                      }
+                    }}
+                    matrixAreaState={this.state.matrixAreaState}
+                    matrixFilterState={this.state.matrixFilterState}
+                    setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
+                      if (this.state.selectedCohort !== this.state.baseCohort) {
+                        this.setState({ matrixAreaState });
+                      }
+                    }}
+                    setMatrixFilterState={(
+                      matrixFilterState: IMatrixFilterState
+                    ) => {
+                      if (this.state.selectedCohort !== this.state.baseCohort) {
+                        this.setState({ matrixFilterState });
+                      }
+                    }}
+                  />
+                )}
+                {this.state.viewType === ViewTypeKeys.ExplanationView && (
+                  <div
+                    className={ErrorAnalysisDashboard.classNames.pivotWrapper}
                   >
-                    {this.pivotItems.map((props) => (
-                      <PivotItem key={props.itemKey} {...props} />
-                    ))}
-                  </Pivot>
-                  {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExplorerTab && (
-                    <DatasetExplorerTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts.map(
-                        (errorCohort) => errorCohort.cohort
-                      )}
-                      initialCohortIndex={this.state.cohorts.findIndex(
-                        (errorCohort) =>
-                          errorCohort.cohort.name ===
-                          this.state.selectedCohort.cohort.name
-                      )}
-                    />
-                  )}
-                  {this.state.activeGlobalTab ===
-                    GlobalTabKeys.GlobalExplanationTab && (
-                    <GlobalExplanationTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts.map(
-                        (errorCohort) => errorCohort.cohort
-                      )}
-                      cohortIDs={cohortIDs}
-                      selectedWeightVector={this.state.selectedWeightVector}
-                      weightOptions={this.state.weightVectorOptions}
-                      weightLabels={this.state.weightVectorLabels}
-                      onWeightChange={this.onWeightVectorChange}
-                      explanationMethod={this.props.explanationMethod}
-                      initialCohortIndex={this.state.cohorts.findIndex(
-                        (errorCohort) =>
-                          errorCohort.cohort.name ===
-                          this.state.selectedCohort.cohort.name
-                      )}
-                    />
-                  )}
-                  {this.state.activeGlobalTab ===
-                    GlobalTabKeys.LocalExplanationTab && (
-                    <InstanceView
-                      theme={this.props.theme}
-                      messages={
-                        this.props.stringParams
-                          ? this.props.stringParams.contextualHelp
-                          : undefined
-                      }
-                      jointDataset={this.state.jointDataset}
-                      features={this.props.features}
-                      metadata={this.state.modelMetadata}
-                      invokeModel={this.props.requestPredictions}
-                      selectedWeightVector={this.state.selectedWeightVector}
-                      weightOptions={this.state.weightVectorOptions}
-                      weightLabels={this.state.weightVectorLabels}
-                      onWeightChange={this.onWeightVectorChange}
-                      activePredictionTab={this.state.predictionTab}
-                      setActivePredictionTab={(
-                        key: PredictionTabKeys
-                      ): void => {
-                        this.setState({
-                          predictionTab: key
-                        });
-                      }}
-                      customPoints={this.state.customPoints}
-                      selectedCohort={this.state.selectedCohort}
-                      setWhatIfDatapoint={(index: number) =>
-                        this.setState({ selectedWhatIfIndex: index })
-                      }
-                    />
-                  )}
-                </div>
-              )}
-              <CohortInfo
-                isOpen={this.state.openInfoPanel}
-                currentCohort={this.state.selectedCohort}
-                jointDataset={this.state.jointDataset}
-                onDismiss={(): void => this.setState({ openInfoPanel: false })}
-                onSaveCohortClick={(): void =>
-                  this.setState({ openSaveCohort: true })
-                }
-              />
-              <FeatureList
-                isOpen={this.state.openFeatureList}
-                onDismiss={(): void =>
-                  this.setState({ openFeatureList: false })
-                }
-                saveFeatures={(features: string[]): void =>
-                  this.setState({ selectedFeatures: features })
-                }
-                features={this.props.features}
-                importances={this.state.importances}
-                isEnabled={this.props.requestDebugML !== undefined}
-                selectedFeatures={this.state.selectedFeatures}
-              />
-              <CohortList
-                isOpen={this.state.openCohortListPanel}
-                cohorts={this.state.cohorts}
-                onDismiss={(): void =>
-                  this.setState({ openCohortListPanel: false })
-                }
-                onEditCohortClick={(editedCohort: ErrorCohort): void =>
-                  this.setState({
-                    editedCohort,
-                    openEditCohort: true
-                  })
-                }
-              />
-              <WhatIf
-                isOpen={this.state.openWhatIf}
-                onDismiss={(): void => this.setState({ openWhatIf: false })}
-                currentCohort={this.state.selectedCohort}
-                jointDataset={this.state.jointDataset}
-                metadata={this.state.modelMetadata}
-                invokeModel={this.props.requestPredictions}
-                customPoints={this.state.customPoints}
-                addCustomPoint={this.addCustomPoint.bind(this)}
-                selectedIndex={this.state.selectedWhatIfIndex}
-              />
-            </Layer>
-          </Customizer>
-          <LayerHost
-            id={this.layerHostId}
-            style={{
-              height: "1100px",
-              overflow: "hidden",
-              position: "relative"
-            }}
-          />
+                    <Pivot
+                      selectedKey={this.state.activeGlobalTab}
+                      onLinkClick={this.handleGlobalTabClick.bind(this)}
+                      linkSize={PivotLinkSize.normal}
+                      headersOnly={true}
+                      styles={{ root: classNames.pivotLabelWrapper }}
+                    >
+                      {this.pivotItems.map((props) => (
+                        <PivotItem key={props.itemKey} {...props} />
+                      ))}
+                    </Pivot>
+                    {this.state.activeGlobalTab ===
+                      GlobalTabKeys.DataExplorerTab && (
+                      <DatasetExplorerTab
+                        jointDataset={this.state.jointDataset}
+                        metadata={this.state.modelMetadata}
+                        cohorts={this.state.cohorts.map(
+                          (errorCohort) => errorCohort.cohort
+                        )}
+                        initialCohortIndex={this.state.cohorts.findIndex(
+                          (errorCohort) =>
+                            errorCohort.cohort.name ===
+                            this.state.selectedCohort.cohort.name
+                        )}
+                      />
+                    )}
+                    {this.state.activeGlobalTab ===
+                      GlobalTabKeys.GlobalExplanationTab && (
+                      <GlobalExplanationTab
+                        jointDataset={this.state.jointDataset}
+                        metadata={this.state.modelMetadata}
+                        cohorts={this.state.cohorts.map(
+                          (errorCohort) => errorCohort.cohort
+                        )}
+                        cohortIDs={cohortIDs}
+                        selectedWeightVector={this.state.selectedWeightVector}
+                        weightOptions={this.state.weightVectorOptions}
+                        weightLabels={this.state.weightVectorLabels}
+                        onWeightChange={this.onWeightVectorChange}
+                        explanationMethod={this.props.explanationMethod}
+                        initialCohortIndex={this.state.cohorts.findIndex(
+                          (errorCohort) =>
+                            errorCohort.cohort.name ===
+                            this.state.selectedCohort.cohort.name
+                        )}
+                      />
+                    )}
+                    {this.state.activeGlobalTab ===
+                      GlobalTabKeys.LocalExplanationTab && (
+                      <InstanceView
+                        messages={
+                          this.props.stringParams
+                            ? this.props.stringParams.contextualHelp
+                            : undefined
+                        }
+                        jointDataset={this.state.jointDataset}
+                        features={this.props.features}
+                        metadata={this.state.modelMetadata}
+                        invokeModel={this.props.requestPredictions}
+                        selectedWeightVector={this.state.selectedWeightVector}
+                        weightOptions={this.state.weightVectorOptions}
+                        weightLabels={this.state.weightVectorLabels}
+                        onWeightChange={this.onWeightVectorChange}
+                        activePredictionTab={this.state.predictionTab}
+                        setActivePredictionTab={(
+                          key: PredictionTabKeys
+                        ): void => {
+                          this.setState({
+                            predictionTab: key
+                          });
+                        }}
+                        customPoints={this.state.customPoints}
+                        selectedCohort={this.state.selectedCohort}
+                        setWhatIfDatapoint={(index: number) =>
+                          this.setState({ selectedWhatIfIndex: index })
+                        }
+                      />
+                    )}
+                  </div>
+                )}
+                <CohortInfo
+                  isOpen={this.state.openInfoPanel}
+                  currentCohort={this.state.selectedCohort}
+                  jointDataset={this.state.jointDataset}
+                  onDismiss={(): void =>
+                    this.setState({ openInfoPanel: false })
+                  }
+                  onSaveCohortClick={(): void =>
+                    this.setState({ openSaveCohort: true })
+                  }
+                />
+                <FeatureList
+                  isOpen={this.state.openFeatureList}
+                  onDismiss={(): void =>
+                    this.setState({ openFeatureList: false })
+                  }
+                  saveFeatures={(features: string[]): void =>
+                    this.setState({ selectedFeatures: features })
+                  }
+                  features={this.props.features}
+                  importances={this.state.importances}
+                  isEnabled={this.props.requestDebugML !== undefined}
+                  selectedFeatures={this.state.selectedFeatures}
+                />
+                <CohortList
+                  isOpen={this.state.openCohortListPanel}
+                  cohorts={this.state.cohorts}
+                  onDismiss={(): void =>
+                    this.setState({ openCohortListPanel: false })
+                  }
+                  onEditCohortClick={(editedCohort: ErrorCohort): void =>
+                    this.setState({
+                      editedCohort,
+                      openEditCohort: true
+                    })
+                  }
+                />
+                <WhatIf
+                  isOpen={this.state.openWhatIf}
+                  onDismiss={(): void => this.setState({ openWhatIf: false })}
+                  currentCohort={this.state.selectedCohort}
+                  jointDataset={this.state.jointDataset}
+                  metadata={this.state.modelMetadata}
+                  invokeModel={this.props.requestPredictions}
+                  customPoints={this.state.customPoints}
+                  addCustomPoint={this.addCustomPoint.bind(this)}
+                  selectedIndex={this.state.selectedWhatIfIndex}
+                />
+              </Layer>
+            </Customizer>
+            <LayerHost
+              id={this.layerHostId}
+              style={{
+                height: "1100px",
+                overflow: "hidden",
+                position: "relative"
+              }}
+            />
+          </div>
         </div>
-      </div>
+      </ModelAssessmentContext.Provider>
     );
   }
 

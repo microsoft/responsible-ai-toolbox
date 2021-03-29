@@ -5,13 +5,14 @@ import {
   JointDataset,
   IExplanationModelMetadata,
   WeightVectorOption,
-  ErrorCohort
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IChoiceGroupOption,
   IStackItemStyles,
-  ITheme,
   PrimaryButton,
   ChoiceGroup,
   Stack,
@@ -37,7 +38,6 @@ export interface ISelectionDetails {
 }
 
 export interface IInstanceViewProps {
-  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;
@@ -74,6 +74,11 @@ export class InstanceView extends React.Component<
   IInstanceViewProps,
   IInstanceViewState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private choiceItems: IChoiceGroupOption[] = [];
   public constructor(props: IInstanceViewProps) {
     super(props);
@@ -126,7 +131,7 @@ export class InstanceView extends React.Component<
       return (
         <div className={classNames.frame}>
           <InspectionView
-            theme={this.props.theme}
+            theme={this.context.theme}
             messages={this.props.messages}
             features={this.props.features}
             jointDataset={this.props.jointDataset}
@@ -173,7 +178,7 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.CorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.props.theme}
+              theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
               jointDataset={this.props.jointDataset}
@@ -191,7 +196,7 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.IncorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.props.theme}
+              theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
               jointDataset={this.props.jointDataset}
@@ -209,7 +214,7 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.AllSelectedTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.props.theme}
+              theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
               jointDataset={this.props.jointDataset}
@@ -230,7 +235,7 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.WhatIfDatapointsTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.props.theme}
+              theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
               jointDataset={this.props.jointDataset}
