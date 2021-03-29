@@ -4,7 +4,6 @@
 from flask_cors import CORS
 import os
 import re
-from IPython.display import display, HTML
 from rai_core_flask.environments.base_environment import BaseEnvironment
 
 
@@ -66,7 +65,3 @@ class AzureNBEnvironment(BaseEnvironment):
             supports_credentials=True)
         service.with_credentials = True
         service.env_name = AZURE_NB
-
-    def display(self, html):
-        """Display the passed HTML using IPython."""
-        display(HTML(html))
