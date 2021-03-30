@@ -30,10 +30,8 @@ import {
   EditCohort,
   ShiftCohort
 } from "@responsible-ai/core-ui";
-import {
-  DatasetExplorerTab,
-  GlobalExplanationTab
-} from "@responsible-ai/interpret";
+import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
+import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _ from "lodash";

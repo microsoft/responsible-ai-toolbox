@@ -16,17 +16,16 @@ Note that it is not required to have an entry for every pull request.
 Instead, please try to add only changes that are meaningful to users who read
 this file to understand what changed.
 
-## v-next (post-v0.2.\*)
+## v-next (post-v0.3.1)
 
 - educational materials
 - new features
 - breaking changes
 - bug fixes
 - other
+  - moved dataset explorer into a new project `dataset-explorer`
 
 ## v0.3.1
-
-Update to `raiwidgets` package.
 
 - Bug fix:
   - fix public VM failing requests in rai-core-flask package,
@@ -34,17 +33,13 @@ Update to `raiwidgets` package.
 
 ## v0.3.0
 
-Update to `raiwidgets` package.
-
-- Bug fix:
+- Bug fixes:
   - Fix all data cohort always appearing first in cohorts lists
   - Add number selected text under local explanation radio buttons
   - Fix the issue that categorical feature is not able to change in cohort editor.
   - Fix categorical feature in what-if tab
 
 ## v0.2.2
-
-Update to `raiwidgets` package.
 
 - Bug fix:
   - Fix categorical feature in ice plot
@@ -54,8 +49,6 @@ Update to `raiwidgets` package.
   - Fix indexing issue in heatmap when selecting all cells
 
 ## v0.2.1
-
-Update to `raiwidgets` package.
 
 - educational materials:
   - add imports for `MimicExplainer` and `PFIExplainer` in the

@@ -4,13 +4,10 @@
 import {
   JointDataset,
   IExplanationModelMetadata,
-  ErrorCohort
+  ErrorCohort,
+  FabricStyles
 } from "@responsible-ai/core-ui";
-import {
-  FabricStyles,
-  WhatIfConstants,
-  WhatIfPanel
-} from "@responsible-ai/interpret";
+import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {

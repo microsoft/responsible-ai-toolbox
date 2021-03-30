@@ -5,7 +5,8 @@ import {
   IExplanationContext,
   ModelTypes,
   ILocalExplanation,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -18,7 +19,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { BarChart } from "../SharedComponents/BarChart";
 import {

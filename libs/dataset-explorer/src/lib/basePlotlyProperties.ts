@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FabricStyles } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-
-import { FabricStyles } from "../../FabricStyles";
 
 export const basePlotlyProperties: IPlotlyProperty = {
   config: { displaylogo: false, displayModeBar: false, responsive: true },

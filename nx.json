@@ -30,6 +30,9 @@
     "core-ui": {
       "tags": []
     },
+    "dataset-explorer": {
+      "tags": []
+    },
     "mlchartlib": {
       "tags": []
     },

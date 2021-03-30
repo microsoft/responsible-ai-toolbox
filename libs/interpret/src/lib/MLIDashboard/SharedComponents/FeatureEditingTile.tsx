@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
@@ -11,8 +12,6 @@ import {
   IComboBoxOption
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { FabricStyles } from "../FabricStyles";
 
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
 

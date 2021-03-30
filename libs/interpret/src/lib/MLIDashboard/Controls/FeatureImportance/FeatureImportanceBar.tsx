@@ -4,7 +4,8 @@
 import {
   ModelTypes,
   IGlobalExplanation,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -20,7 +21,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { BarChart } from "../../SharedComponents/BarChart";
 import {
   FeatureSortingKey,

@@ -4,7 +4,8 @@
 import {
   IExplanationContext,
   ModelTypes,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -27,7 +28,6 @@ import {
 import { Data } from "plotly.js";
 import React from "react";
 
-import { FabricStyles } from "../FabricStyles";
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
 import { NoDataMessage } from "../SharedComponents/NoDataMessage";
 

@@ -6,7 +6,8 @@ import {
   ModelTypes,
   JointDataset,
   IExplanationModelMetadata,
-  ModelExplanationUtils
+  ModelExplanationUtils,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -27,7 +28,6 @@ import {
 import { Data } from "plotly.js";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { IRangeView } from "../ICEPlot";
 

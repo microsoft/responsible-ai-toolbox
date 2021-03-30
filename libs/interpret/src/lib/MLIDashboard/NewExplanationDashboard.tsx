@@ -8,6 +8,7 @@ import {
   IDataset,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
+import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -29,7 +30,6 @@ import {
   INewExplanationDashboardState
 } from "./buildInitialExplanationContext";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
-import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
