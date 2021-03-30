@@ -12,8 +12,7 @@ env:
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [xuke/fixcd]
 
 jobs:
   cd-build:
