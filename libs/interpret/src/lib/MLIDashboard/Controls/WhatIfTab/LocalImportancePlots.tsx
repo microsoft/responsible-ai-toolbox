@@ -8,7 +8,8 @@ import {
   JointDataset,
   ModelExplanationUtils,
   ChartTypes,
-  MissingParametersPlaceholder
+  MissingParametersPlaceholder,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -29,7 +30,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";

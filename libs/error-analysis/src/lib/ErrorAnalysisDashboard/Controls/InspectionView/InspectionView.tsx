@@ -6,13 +6,10 @@ import {
   WeightVectorOption,
   ModelExplanationUtils,
   IExplanationModelMetadata,
-  ErrorCohort
-} from "@responsible-ai/core-ui";
-import {
-  LocalImportancePlots,
-  IGlobalSeries,
+  ErrorCohort,
   FabricStyles
-} from "@responsible-ai/interpret";
+} from "@responsible-ai/core-ui";
+import { LocalImportancePlots, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,

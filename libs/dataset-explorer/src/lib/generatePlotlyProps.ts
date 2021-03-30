@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  FabricStyles,
   ColumnCategories,
   JointDataset,
   Cohort,
@@ -11,8 +12,6 @@ import {
 import { IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { DataTransform } from "plotly.js";
-
-import { FabricStyles } from "../../FabricStyles";
 
 import { basePlotlyProperties } from "./basePlotlyProperties";
 import { buildCustomData } from "./buildCustomData";

@@ -105,7 +105,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [core-ui, mlchartlib, dataset-explorer, fairness, interpret, localization, error-analysis, model-assessment]
+        package:
+          [
+            core-ui,
+            mlchartlib,
+            dataset-explorer,
+            fairness,
+            interpret,
+            localization,
+            error-analysis,
+            model-assessment,
+          ]
 
     steps:
       - name: Use Node.js ${{ env.node-version }}

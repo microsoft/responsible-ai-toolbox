@@ -6,7 +6,9 @@ import {
   JointDataset,
   Cohort,
   ChartTypes,
-  IGenericChartProps
+  IGenericChartProps,
+  FabricStyles,
+  InteractiveLegend
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -19,9 +21,6 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { FabricStyles } from "../../FabricStyles";
-import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 
