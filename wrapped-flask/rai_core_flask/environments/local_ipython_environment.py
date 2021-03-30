@@ -28,11 +28,6 @@ class LocalIPythonEnvironment(BaseEnvironment):
                 self.successfully_detected = True
                 self.base_url = f"http://localhost:{service.port}"
 
-    def display(self, html):
-        """Display the passed HTML using IPython."""
-        from IPython.display import HTML, display
-        display(HTML(html))
-
     def select(self, service):
         service.with_credentials = False
         service.cors = CORS(service.app)

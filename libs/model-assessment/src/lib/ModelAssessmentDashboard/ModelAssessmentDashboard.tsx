@@ -46,7 +46,7 @@ import {
   getId,
   INavLink,
   Stack,
-  IDropdownOption
+  PivotItem
 } from "office-ui-fabric-react";
 import * as React from "react";
 
@@ -102,6 +102,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          cohorts: this.state.cohorts.map(
+            (cohort: ErrorCohort) => cohort.cohort
+          ),
           dataset: this.props.dataset,
           modelExplanationData: this.props.modelExplanationData,
           theme: this.props.theme,
@@ -485,12 +488,12 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   };
 
   private handleErrorDetectorChanged = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
+    item?: PivotItem,
+    _ev?: React.MouseEvent<HTMLElement>
   ): void => {
-    if (item) {
+    if (item && item.props.itemKey) {
       // Note comparison below is actually string comparison (key is string), we have to set the enum
-      if (item.key === ErrorAnalysisOptions.HeatMap) {
+      if (item.props.itemKey === ErrorAnalysisOptions.HeatMap) {
         const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;
         this.setErrorDetector(selectedOptionHeatMap);
       } else {

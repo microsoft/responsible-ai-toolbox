@@ -16,9 +16,7 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import { Dictionary } from "lodash";
 
-import {
-  IExplanationDashboardProps
-} from "./Interfaces/IExplanationDashboardProps";
+import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { getClassLength } from "./utils/getClassLength";
 import { ValidateProperties } from "./ValidateProperties";
 
