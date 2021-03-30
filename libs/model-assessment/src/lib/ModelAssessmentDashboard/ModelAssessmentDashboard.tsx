@@ -102,9 +102,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts.map(
-            (cohort: ErrorCohort) => cohort.cohort
-          ),
           dataset: this.props.dataset,
           modelExplanationData: this.props.modelExplanationData,
           theme: this.props.theme,

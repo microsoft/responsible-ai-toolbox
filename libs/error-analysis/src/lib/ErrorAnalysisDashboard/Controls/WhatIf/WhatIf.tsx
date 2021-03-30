@@ -54,7 +54,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   > = defaultModelAssessmentContext;
 
   private rowOptions: IDropdownOption[] | undefined;
-  private stringifedValues: { [key: string]: string } = {};
+  private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
   private validationErrors: { [key: string]: string | undefined } = {};
   private featuresOption: IDropdownOption[] = new Array(
@@ -78,6 +78,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         text: meta.abbridgedLabel
       };
     });
+
   public constructor(props: IWhatIfProps) {
     super(props);
     this.state = {
@@ -134,7 +135,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
               setCustomRowProperty={this.setCustomRowProperty}
               setCustomRowPropertyDropdown={this.setCustomRowPropertyDropdown}
               setSelectedIndex={this.setSelectedIndex}
-              stringifedValues={this.stringifedValues}
+              stringifiedValues={this.stringifiedValues}
               temporaryPoint={this.temporaryPoint}
               validationErrors={this.validationErrors}
               editingDataCustomIndex={this.state.editingDataCustomIndex}
@@ -195,7 +196,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       return;
     }
     const editingData = this.temporaryPoint;
-    this.stringifedValues[key] = newValue;
+    this.stringifiedValues[key] = newValue;
     if (isString) {
       editingData[key] = newValue;
       this.forceUpdate();
@@ -263,7 +264,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -292,7 +293,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
   }

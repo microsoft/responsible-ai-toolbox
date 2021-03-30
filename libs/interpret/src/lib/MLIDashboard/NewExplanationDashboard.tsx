@@ -84,7 +84,9 @@ export class NewExplanationDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts,
+          cohorts: this.state.cohorts.map(
+            (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
+          ),
           dataset: {} as IDataset,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
@@ -173,9 +175,6 @@ export class NewExplanationDashboard extends React.PureComponent<
                   )}
                   {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
                     <WhatIfTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
                       invokeModel={this.state.requestPredictions}
                       selectedWeightVector={this.state.selectedWeightVector}
                       weightOptions={this.state.weightVectorOptions}
