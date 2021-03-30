@@ -45,7 +45,7 @@ export interface IGlobalBarSettings {
 }
 
 export interface IGlobalExplanationTabProps {
-  cohorts: Cohort[],
+  cohorts: Cohort[];
   cohortIDs: string[];
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
@@ -68,6 +68,8 @@ interface IGlobalExplanationTabState {
   chartType: ChartTypes;
   globalBarSettings?: IGlobalBarSettings;
   dependenceProps?: IGenericChartProps;
+  cohortSeries: IGlobalSeries[];
+  activeSeries: IGlobalSeries[];
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -79,19 +81,21 @@ export class GlobalExplanationTab extends React.PureComponent<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
 
-  private cohortSeries: IGlobalSeries[];
-  private activeSeries: IGlobalSeries[];
-  private readonly hasDataset = this.context.jointDataset.hasDataset;
   private readonly explainerCalloutInfo = this.props.explanationMethod
     ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
 
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
+  }
 
+  public componentDidMount() {
+    const basicState = {
+      activeSeries: [],
+      cohortSeries: []
+    };
     if (!this.context.jointDataset.hasLocalExplanations) {
-      this.activeSeries = [];
-      this.cohortSeries = [];
+      //this.state = basicState;
       return;
     }
 
@@ -104,24 +108,27 @@ export class GlobalExplanationTab extends React.PureComponent<
       initialCohortIndex = this.props.initialCohortIndex;
     }
     this.state = {
+      ...basicState,
       chartType: ChartTypes.Bar,
       crossClassInfoVisible: false,
       globalBarSettings: this.getDefaultSettings(),
-      maxK: Math.min(30, this.context.jointDataset.localExplanationFeatureCount),
+      maxK: Math.min(
+        30,
+        this.context.jointDataset.localExplanationFeatureCount
+      ),
       minK,
       selectedCohortIndex: initialCohortIndex,
-      seriesIsActive: props.cohorts.map(() => true),
+      seriesIsActive: this.context.cohorts.map(() => true),
       sortArray: ModelExplanationUtils.getSortIndices(
         this.props.cohorts[initialCohortIndex].calculateAverageImportance()
       ).reverse(),
       sortingSeriesIndex: 0,
-      topK: minK
+      topK: minK,
+      cohortSeries: this.getGlobalSeries(),
+      activeSeries: this.getActiveCohortSeries(
+        this.state.sortArray.map(() => true)
+      )
     };
-
-    this.cohortSeries = this.getGlobalSeries();
-    this.activeSeries = this.getActiveCohortSeries(
-      this.state.sortArray.map(() => true)
-    );
   }
 
   public componentDidUpdate(prevProps: IGlobalExplanationTabProps): void {
@@ -212,13 +219,13 @@ export class GlobalExplanationTab extends React.PureComponent<
             chartType={this.state.chartType}
             unsortedX={this.context.modelMetadata.featureNamesAbridged}
             originX={this.context.modelMetadata.featureNames}
-            unsortedSeries={this.activeSeries}
+            unsortedSeries={this.state.activeSeries}
             topK={this.state.topK}
             onFeatureSelection={this.handleFeatureSelection}
             selectedFeatureIndex={this.state.selectedFeatureIndex}
           />
           <SidePanel
-            cohortSeries={this.cohortSeries}
+            cohortSeries={this.state.cohortSeries}
             cohorts={this.props.cohorts}
             metadata={this.context.modelMetadata}
             onWeightChange={this.props.onWeightChange}
@@ -233,12 +240,12 @@ export class GlobalExplanationTab extends React.PureComponent<
             chartType={this.state.chartType}
           />
         </div>
-        {!this.hasDataset && (
+        {!this.context.jointDataset.hasDataset && (
           <MissingParametersPlaceholder>
             {localization.Interpret.GlobalTab.datasetRequired}
           </MissingParametersPlaceholder>
         )}
-        {this.hasDataset && (
+        {this.context.jointDataset.hasDataset && (
           <div>
             <div className={classNames.rightJustifiedContainer}>
               <LabelWithCallout
@@ -327,8 +334,10 @@ export class GlobalExplanationTab extends React.PureComponent<
   private toggleActivation = (index: number): void => {
     const seriesIsActive = [...this.state.seriesIsActive];
     seriesIsActive[index] = !seriesIsActive[index];
-    this.activeSeries = this.getActiveCohortSeries(seriesIsActive);
-    this.setState({ seriesIsActive });
+    this.setState({
+      seriesIsActive,
+      activeSeries: this.getActiveCohortSeries(seriesIsActive)
+    });
   };
 
   private getGlobalSeries(): IGlobalSeries[] {
@@ -345,7 +354,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   // This can probably be done cheaper by passing the active array to the charts, and zeroing
   // the series in the plotlyProps. Later optimization.
   private getActiveCohortSeries(activeArray: boolean[]): IGlobalSeries[] {
-    return this.cohortSeries.filter((_series, idx) => activeArray[idx]);
+    return this.state.cohortSeries.filter((_series, idx) => activeArray[idx]);
   }
 
   private updateIncludedCohortsOnCohortEdit(): void {
@@ -354,9 +363,12 @@ export class GlobalExplanationTab extends React.PureComponent<
       selectedCohortIndex = 0;
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
-    this.cohortSeries = this.getGlobalSeries();
-    this.activeSeries = this.getActiveCohortSeries(seriesIsActive);
-    this.setState({ selectedCohortIndex, seriesIsActive });
+    this.setState({
+      selectedCohortIndex,
+      seriesIsActive,
+      cohortSeries: this.getGlobalSeries(),
+      activeSeries: this.getActiveCohortSeries(seriesIsActive)
+    });
   }
 
   private getDefaultSettings(): IGlobalBarSettings | undefined {
@@ -372,7 +384,7 @@ export class GlobalExplanationTab extends React.PureComponent<
 
   private setSortIndex = (newIndex: number): void => {
     const sortArray = ModelExplanationUtils.getSortIndices(
-      this.cohortSeries[newIndex].unsortedAggregateY
+      this.state.cohortSeries[newIndex].unsortedAggregateY
     ).reverse();
     this.setState({ sortArray, sortingSeriesIndex: newIndex });
   };

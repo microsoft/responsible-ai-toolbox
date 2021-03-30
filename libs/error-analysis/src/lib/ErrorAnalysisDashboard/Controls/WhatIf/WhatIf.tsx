@@ -37,6 +37,7 @@ export interface IWhatIfProps {
 
 export interface IWhatIfState {
   filteredFeatureList: IDropdownOption[];
+  featuresOption: IDropdownOption[];
   selectedWhatIfRootIndex: number;
   editingDataCustomIndex?: number;
   request?: AbortController;
@@ -57,33 +58,37 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
   private validationErrors: { [key: string]: string | undefined } = {};
-  private featuresOption: IDropdownOption[] = new Array(
-    this.context.jointDataset.datasetFeatureCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.DataLabelRoot + index.toString();
-      const meta = this.context.jointDataset.metaDict[key];
-      const options = meta.isCategorical
-        ? meta.sortedCategoricalValues?.map((optionText, index) => {
-            return { key: index, text: optionText };
-          })
-        : undefined;
-      return {
-        data: {
-          categoricalOptions: options,
-          fullLabel: meta.label.toLowerCase()
-        },
-        key,
-        text: meta.abbridgedLabel
-      };
-    });
 
   public constructor(props: IWhatIfProps) {
     super(props);
+  }
+
+  public componentDidMount() {
+    const featuresOption: IDropdownOption[] = new Array(
+      this.context.jointDataset.datasetFeatureCount
+    )
+      .fill(0)
+      .map((_, index) => {
+        const key = JointDataset.DataLabelRoot + index.toString();
+        const meta = this.context.jointDataset.metaDict[key];
+        const options = meta.isCategorical
+          ? meta.sortedCategoricalValues?.map((optionText, index) => {
+              return { key: index, text: optionText };
+            })
+          : undefined;
+        return {
+          data: {
+            categoricalOptions: options,
+            fullLabel: meta.label.toLowerCase()
+          },
+          key,
+          text: meta.abbridgedLabel
+        };
+      });
     this.state = {
       editingDataCustomIndex: undefined,
-      filteredFeatureList: this.featuresOption,
+      filteredFeatureList: featuresOption,
+      featuresOption: featuresOption,
       request: undefined,
       selectedWhatIfRootIndex: 0
     };
@@ -152,10 +157,10 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     newValue?: string
   ): void => {
     if (newValue === undefined || newValue === null || !/\S/.test(newValue)) {
-      this.setState({ filteredFeatureList: this.featuresOption });
+      this.setState({ filteredFeatureList: this.state.featuresOption });
       return;
     }
-    const filteredFeatureList = this.featuresOption.filter((item) => {
+    const filteredFeatureList = this.state.featuresOption.filter((item) => {
       return item.data.fullLabel.includes(newValue.toLowerCase());
     });
     this.setState({ filteredFeatureList });
@@ -231,7 +236,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       editingData[key] = option.key;
     } else if (value !== undefined) {
       // User typed a freeform option
-      const featureOption = this.featuresOption.find(
+      const featureOption = this.state.featuresOption.find(
         (feature) => feature.key === key
       );
       if (featureOption) {

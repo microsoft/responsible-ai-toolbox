@@ -62,6 +62,7 @@ export interface IWhatIfTabState {
   showSelectionWarning: boolean;
   customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
+  featuresOption: IDropdownOption[];
   filteredFeatureList: IDropdownOption[];
   request?: AbortController;
   selectedPointsIndexes: number[];
@@ -99,30 +100,33 @@ export class WhatIfTab extends React.PureComponent<
   private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
   private testableDatapointNames: string[] = [];
   private rowOptions: IDropdownOption[] | undefined;
-  private featuresOption: IDropdownOption[] = new Array(
-    this.context.jointDataset.datasetFeatureCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.DataLabelRoot + index.toString();
-      const meta = this.context.jointDataset.metaDict[key];
-      const options = meta.isCategorical
-        ? meta.sortedCategoricalValues?.map((optionText, index) => {
-            return { key: index, text: optionText };
-          })
-        : undefined;
-      return {
-        data: {
-          categoricalOptions: options,
-          fullLabel: meta.label.toLowerCase()
-        },
-        key,
-        text: meta.abbridgedLabel
-      };
-    });
 
   public constructor(props: IWhatIfTabProps) {
     super(props);
+  }
+
+  public componentDidMount() {
+    const featuresOption = new Array(
+      this.context.jointDataset.datasetFeatureCount
+    )
+      .fill(0)
+      .map((_, index) => {
+        const key = JointDataset.DataLabelRoot + index.toString();
+        const meta = this.context.jointDataset.metaDict[key];
+        const options = meta.isCategorical
+          ? meta.sortedCategoricalValues?.map((optionText, index) => {
+              return { key: index, text: optionText };
+            })
+          : undefined;
+        return {
+          data: {
+            categoricalOptions: options,
+            fullLabel: meta.label.toLowerCase()
+          },
+          key,
+          text: meta.abbridgedLabel
+        };
+      });
 
     if (!this.context.jointDataset.hasDataset) {
       return;
@@ -133,7 +137,8 @@ export class WhatIfTab extends React.PureComponent<
       customPointIsActive: [],
       customPoints: [],
       editingDataCustomIndex: undefined,
-      filteredFeatureList: this.featuresOption,
+      featuresOption: featuresOption,
+      filteredFeatureList: featuresOption,
       iceTooltipVisible: false,
       isPanelOpen: this.props.invokeModel !== undefined,
       pointIsActive: [],
@@ -561,7 +566,7 @@ export class WhatIfTab extends React.PureComponent<
               testableDatapoints={this.testableDatapoints}
               testableDatapointNames={this.testableDatapointNames}
               testableDatapointColors={this.testableDatapointColors}
-              featuresOption={this.featuresOption}
+              featuresOption={this.state.featuresOption}
               sortArray={this.state.sortArray}
               sortingSeriesIndex={this.state.sortingSeriesIndex}
             />
@@ -706,7 +711,7 @@ export class WhatIfTab extends React.PureComponent<
       editingData[key] = option.key;
     } else if (value !== undefined) {
       // User typed a freeform option
-      const featureOption = this.featuresOption.find(
+      const featureOption = this.state.featuresOption.find(
         (feature) => feature.key === key
       );
       if (featureOption) {
@@ -814,10 +819,10 @@ export class WhatIfTab extends React.PureComponent<
     newValue?: string
   ): void => {
     if (newValue === undefined || newValue === null || !/\S/.test(newValue)) {
-      this.setState({ filteredFeatureList: this.featuresOption });
+      this.setState({ filteredFeatureList: this.state.featuresOption });
       return;
     }
-    const filteredFeatureList = this.featuresOption.filter((item) => {
+    const filteredFeatureList = this.state.featuresOption.filter((item) => {
       return item.data.fullLabel.includes(newValue.toLowerCase());
     });
     this.setState({ filteredFeatureList });
@@ -1055,7 +1060,9 @@ export class WhatIfTab extends React.PureComponent<
     });
     let hovertemplate = "";
     if (chartProps.xAxis) {
-      const metaX = this.context.jointDataset.metaDict[chartProps.xAxis.property];
+      const metaX = this.context.jointDataset.metaDict[
+        chartProps.xAxis.property
+      ];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
       hovertemplate += metaX.label + ": %{customdata.X}<br>";
 
@@ -1081,7 +1088,9 @@ export class WhatIfTab extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      const metaY = this.context.jointDataset.metaDict[chartProps.yAxis.property];
+      const metaY = this.context.jointDataset.metaDict[
+        chartProps.yAxis.property
+      ];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
       hovertemplate += metaY.label + ": %{customdata.Y}<br>";
       rawY.forEach((val, index) => {
