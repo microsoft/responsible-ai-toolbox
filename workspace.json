@@ -208,6 +208,75 @@
         }
       }
     },
+    "dataset-explorer": {
+      "root": "libs/dataset-explorer",
+      "sourceRoot": "libs/dataset-explorer/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/dataset-explorer/**/*.js",
+              "libs/dataset-explorer/**/*.jsx",
+              "libs/dataset-explorer/**/*.ts",
+              "libs/dataset-explorer/**/*.tsx",
+              "libs/dataset-explorer/**/*.test.ts",
+              "libs/dataset-explorer/**/*.test.tsx",
+              "libs/dataset-explorer/**/*.test.js",
+              "libs/dataset-explorer/**/*.test.jsx",
+              "libs/dataset-explorer/**/*.spec.ts",
+              "libs/dataset-explorer/**/*.spec.tsx",
+              "libs/dataset-explorer/**/*.spec.js",
+              "libs/dataset-explorer/**/*.spec.jsx",
+              "libs/dataset-explorer/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/dataset-explorer",
+            "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",
+            "project": "libs/dataset-explorer/package.json",
+            "entryFile": "libs/dataset-explorer/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/dataset-explorer/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/dataset-explorer"]
+        }
+      }
+    },
     "mlchartlib": {
       "root": "libs/mlchartlib",
       "sourceRoot": "libs/mlchartlib/src",
