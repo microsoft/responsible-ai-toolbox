@@ -20,6 +20,7 @@ import React from "react";
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { IStringsParam } from "../../Interfaces/IStringsParam";
 import { FeatureList } from "../FeatureList/FeatureList";
+import { CollapsedTreeViewRenderer } from "../TreeViewRenderer/CollapsedTreeView";
 
 import {
   ErrorAnalysisView,
@@ -67,6 +68,19 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
   public render(): React.ReactNode {
     return (
       <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+        <CollapsedTreeViewRenderer
+          theme={this.context.theme}
+          messages={this.props.messages}
+          getTreeNodes={this.props.getTreeNodes}
+          staticTreeNodes={this.props.staticTreeNodes}
+          features={this.props.features}
+          selectedFeatures={this.props.selectedFeatures}
+          updateSelectedCohort={this.props.updateSelectedCohort}
+          selectedCohort={this.props.selectedCohort}
+          baseCohort={this.props.baseCohort}
+          state={this.props.treeViewState}
+          setTreeViewState={this.props.setTreeViewState}
+        />
         <Text variant={"xLarge"}>
           {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
         </Text>
