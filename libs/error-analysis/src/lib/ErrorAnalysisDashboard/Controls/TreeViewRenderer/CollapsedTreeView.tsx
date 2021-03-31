@@ -144,12 +144,15 @@ export class CollapsedTreeViewRenderer extends React.PureComponent<
       svg.style("pointer-events", "all").call(zoom as any);
     }
 
+    // the level for all nodes to align
+    const rootHorizontalLevel = this.state.root.y;
+
     const linkHorizontal = d3linkHorizontal<
       any,
       HierarchyPointNode<ITreeNode>
     >()
-      .x((d: HierarchyPointNode<ITreeNode>) => d!.x!)
-      .y((d: HierarchyPointNode<ITreeNode>) => d!.y!);
+      .x((d: HierarchyPointNode<ITreeNode>) => d!.y!)
+      .y((_d: HierarchyPointNode<ITreeNode>) => rootHorizontalLevel);
     // GENERATES LINK DATA BETWEEN NODES
     // -------------------------------------------------------------------
     // The links between the nodes in the tree view are generated below.
@@ -185,7 +188,7 @@ export class CollapsedTreeViewRenderer extends React.PureComponent<
       //  (d: HierarchyPointNode<ITreeNode>) => d.data.nodeState.onSelectedPath
       //)
       .map((d: HierarchyPointNode<ITreeNode>) => {
-        const labelX = d!.x! + (d!.parent!.x! - d!.x!) * 0.5;
+        // const labelX = d!.x! + (d!.parent!.x! - d!.x!) * 0.5;
         const labelY = 4 + d!.y! + (d!.parent!.y! - d!.y!) * 0.5;
         let bb: DOMRect;
         try {
@@ -200,7 +203,7 @@ export class CollapsedTreeViewRenderer extends React.PureComponent<
           bbY: 0.5 * (bb.height + labelPaddingY) + labelYOffset,
           id: `linkLabel${d!.id!}`,
           style: {
-            transform: `translate(${labelX}px, ${labelY}px)`
+            transform: `translate(${labelY}px, ${rootHorizontalLevel+20}px)`
           },
           text: `${d!.data!.condition!}`
         };
@@ -225,7 +228,7 @@ export class CollapsedTreeViewRenderer extends React.PureComponent<
           isSelectedLeaf: d.data.nodeState.isSelectedLeaf,
           onSelectedPath: d.data.nodeState.onSelectedPath,
           style: {
-            transform: `translate(${d!.x!}px, ${d!.y!}px)`
+            transform: `translate(${d!.y!}px, ${rootHorizontalLevel}px)`
           }
         };
         return d;
