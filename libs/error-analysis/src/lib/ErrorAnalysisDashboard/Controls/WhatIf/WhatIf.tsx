@@ -6,7 +6,6 @@ import {
   ErrorCohort,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  IExplanationModelMetadata,
   FabricStyles
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";

@@ -34,15 +34,17 @@ import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
 
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
-export interface IModelPerformanceTabState {
+interface IModelPerformanceTabState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   selectedCohortIndex: number;
   chartProps: IGenericChartProps | undefined;
 }
 
+class ModelPerformanceTabProps {}
+
 export class ModelPerformanceTab extends React.PureComponent<
-  undefined,
+  ModelPerformanceTabProps,
   IModelPerformanceTabState
 > {
   public static contextType = ModelAssessmentContext;
@@ -52,8 +54,8 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   private readonly chartAndConfigsId = "ModelPerformanceChart";
 
-  public constructor() {
-    super(undefined);
+  public constructor(props: ModelPerformanceTabProps) {
+    super(props);
     this.state = {
       chartProps: undefined,
       selectedCohortIndex: 0,
