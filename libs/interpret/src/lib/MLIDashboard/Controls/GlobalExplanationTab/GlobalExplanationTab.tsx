@@ -85,50 +85,52 @@ export class GlobalExplanationTab extends React.PureComponent<
     ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
 
+  private defaultMinK = 4;
+  private defaultMaxK = 30;
+
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
-  }
 
-  public componentDidMount() {
-    const basicState = {
-      activeSeries: [],
-      cohortSeries: []
-    };
-    if (!this.context.jointDataset.hasLocalExplanations) {
-      //this.state = basicState;
-      return;
-    }
-
-    const minK = Math.min(
-      4,
-      this.context.jointDataset.localExplanationFeatureCount
-    );
     let initialCohortIndex = 0;
     if (this.props.initialCohortIndex !== undefined) {
       initialCohortIndex = this.props.initialCohortIndex;
     }
     this.state = {
-      ...basicState,
+      activeSeries: [], // set in componentDidMount()
+      cohortSeries: this.getGlobalSeries(),
       chartType: ChartTypes.Bar,
       crossClassInfoVisible: false,
-      globalBarSettings: this.getDefaultSettings(),
-      maxK: Math.min(
-        30,
-        this.context.jointDataset.localExplanationFeatureCount
-      ),
-      minK,
+      maxK: this.defaultMaxK,
+      minK: this.defaultMinK,
       selectedCohortIndex: initialCohortIndex,
-      seriesIsActive: this.context.cohorts.map(() => true),
+      seriesIsActive: this.props.cohorts.map(() => true),
       sortArray: ModelExplanationUtils.getSortIndices(
         this.props.cohorts[initialCohortIndex].calculateAverageImportance()
       ).reverse(),
       sortingSeriesIndex: 0,
-      topK: minK,
-      cohortSeries: this.getGlobalSeries(),
+      topK: this.defaultMinK
+    };
+  }
+
+  public componentDidMount() {
+    const minK = Math.min(
+      4,
+      this.context.jointDataset.localExplanationFeatureCount
+    );
+
+    const maxK = Math.min(
+      this.defaultMaxK,
+      this.context.jointDataset.localExplanationFeatureCount
+    );
+
+    this.setState({
+      minK,
+      maxK,
       activeSeries: this.getActiveCohortSeries(
         this.state.sortArray.map(() => true)
-      )
-    };
+      ),
+      globalBarSettings: this.getDefaultSettings()
+    });
   }
 
   public componentDidUpdate(prevProps: IGlobalExplanationTabProps): void {

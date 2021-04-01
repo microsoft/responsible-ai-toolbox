@@ -103,6 +103,41 @@ export class WhatIfTab extends React.PureComponent<
 
   public constructor(props: IWhatIfTabProps) {
     super(props);
+
+    if (!this.context.jointDataset.hasDataset) {
+      return;
+    }
+
+    this.state = {
+      chartProps: this.generateDefaultChartAxes(),
+      crossClassInfoVisible: false,
+      customPointIsActive: [],
+      customPoints: [],
+      editingDataCustomIndex: undefined,
+      featuresOption: [],
+      filteredFeatureList: [],
+      iceTooltipVisible: false,
+      isPanelOpen: this.props.invokeModel !== undefined,
+      pointIsActive: [],
+      request: undefined,
+      secondaryChartChoice: WhatIfConstants.featureImportanceKey,
+      selectedCohortIndex: 0,
+      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
+      selectedICEClass: 0,
+      selectedPointsIndexes: [],
+      selectedWhatIfRootIndex: 0,
+      showSelectionWarning: false,
+      sortArray: [],
+      sortingSeriesIndex: undefined,
+      topK: 4,
+      xDialogOpen: false,
+      yDialogOpen: false
+    };
+
+    this.createCopyOfFirstRow();
+    this.buildRowOptions(0);
+
+    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
   }
 
   public componentDidMount() {
@@ -128,39 +163,7 @@ export class WhatIfTab extends React.PureComponent<
         };
       });
 
-    if (!this.context.jointDataset.hasDataset) {
-      return;
-    }
-    this.state = {
-      chartProps: this.generateDefaultChartAxes(),
-      crossClassInfoVisible: false,
-      customPointIsActive: [],
-      customPoints: [],
-      editingDataCustomIndex: undefined,
-      featuresOption: featuresOption,
-      filteredFeatureList: featuresOption,
-      iceTooltipVisible: false,
-      isPanelOpen: this.props.invokeModel !== undefined,
-      pointIsActive: [],
-      request: undefined,
-      secondaryChartChoice: WhatIfConstants.featureImportanceKey,
-      selectedCohortIndex: 0,
-      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
-      selectedICEClass: 0,
-      selectedPointsIndexes: [],
-      selectedWhatIfRootIndex: 0,
-      showSelectionWarning: false,
-      sortArray: [],
-      sortingSeriesIndex: undefined,
-      topK: 4,
-      xDialogOpen: false,
-      yDialogOpen: false
-    };
-
-    this.createCopyOfFirstRow();
-    this.buildRowOptions(0);
-
-    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+    this.setState({ featuresOption, filteredFeatureList: featuresOption });
   }
 
   public componentDidUpdate(

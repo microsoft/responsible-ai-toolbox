@@ -61,6 +61,15 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
 
   public constructor(props: IWhatIfProps) {
     super(props);
+    this.state = {
+      editingDataCustomIndex: undefined,
+      filteredFeatureList: [],
+      featuresOption: [],
+      request: undefined,
+      selectedWhatIfRootIndex: 0
+    };
+    this.createCopyOfFirstRow();
+    this.buildRowOptions();
   }
 
   public componentDidMount() {
@@ -85,16 +94,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           text: meta.abbridgedLabel
         };
       });
-    this.state = {
-      editingDataCustomIndex: undefined,
-      filteredFeatureList: featuresOption,
-      featuresOption: featuresOption,
-      request: undefined,
-      selectedWhatIfRootIndex: 0
-    };
-
-    this.createCopyOfFirstRow();
-    this.buildRowOptions();
+    this.setState({featuresOption, filteredFeatureList: featuresOption})
   }
 
   public componentDidUpdate(prevProps: IWhatIfProps): void {

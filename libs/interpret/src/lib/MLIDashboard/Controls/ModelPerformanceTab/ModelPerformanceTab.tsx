@@ -34,8 +34,7 @@ import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
-export interface IModelPerformanceTabProps {
-}
+export interface IModelPerformanceTabProps {}
 
 export interface IModelPerformanceTabState {
   xDialogOpen: boolean;
@@ -58,14 +57,15 @@ export class ModelPerformanceTab extends React.PureComponent<
   public constructor(props: IModelPerformanceTabProps) {
     super(props);
     this.state = {
-      chartProps: this.generateDefaultChartAxes(),
       selectedCohortIndex: 0,
       xDialogOpen: false,
-      yDialogOpen: false
+      yDialogOpen: false,
+      chartProps: undefined
     };
-    if (!this.context.jointDataset.hasPredictedY) {
-      return;
-    }
+  }
+
+  public componentDidMount() {
+    this.setState({ chartProps: this.generateDefaultChartAxes() });
   }
 
   private static generatePlotlyProps(
@@ -331,7 +331,8 @@ export class ModelPerformanceTab extends React.PureComponent<
                     theme={getTheme() as any}
                   />
                 </div>
-                {this.context.modelMetadata.modelType !== ModelTypes.Multiclass && (
+                {this.context.modelMetadata.modelType !==
+                  ModelTypes.Multiclass && (
                   <div className={classNames.rightPanel}>
                     {!this.context.jointDataset.hasTrueY && (
                       <MissingParametersPlaceholder>

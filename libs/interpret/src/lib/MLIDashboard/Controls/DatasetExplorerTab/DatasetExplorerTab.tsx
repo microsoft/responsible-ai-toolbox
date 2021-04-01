@@ -65,16 +65,17 @@ export class DatasetExplorerTab extends React.PureComponent<
     }
     this.state = {
       calloutVisible: false,
-      chartProps: this.generateDefaultChartAxes(),
       colorDialogOpen: false,
       selectedCohortIndex: initialCohortIndex,
       xDialogOpen: false,
       yDialogOpen: false
     };
-    if (!this.context.jointDataset.hasDataset) {
-      return;
-    }
   }
+
+  public componentDidMount() {
+    this.setState({ chartProps: this.generateDefaultChartAxes() });
+  }
+
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
@@ -91,7 +92,9 @@ export class DatasetExplorerTab extends React.PureComponent<
     const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.cohorts.map((cohort) => cohort.cohort)[this.state.selectedCohortIndex]
+      this.context.cohorts.map((cohort) => cohort.cohort)[
+        this.state.selectedCohortIndex
+      ]
     );
     const cohortOptions =
       this.state.chartProps.xAxis.property !== cohortKey
@@ -99,8 +102,8 @@ export class DatasetExplorerTab extends React.PureComponent<
             return { key: index, text: cohort.cohort.name };
           })
         : undefined;
-    const cohortLength = this.context.cohorts[this.state.selectedCohortIndex].cohort
-      .filteredData.length;
+    const cohortLength = this.context.cohorts[this.state.selectedCohortIndex]
+      .cohort.filteredData.length;
     const canRenderChart =
       cohortLength < newExplanationDashboardRowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
