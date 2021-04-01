@@ -13,11 +13,11 @@ import {
   Dropdown
 } from "office-ui-fabric-react";
 import React from "react";
+
 import {
   ModelAssessmentContext,
   defaultModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
-
 import { CohortStats } from "../CohortStats/CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
 
@@ -76,8 +76,8 @@ export class ShiftCohort extends React.Component<
     );
     this.state = {
       options,
-      selectedCohort: 0,
-      savedCohorts: savedCohorts
+      savedCohorts,
+      selectedCohort: 0
     };
   }
 

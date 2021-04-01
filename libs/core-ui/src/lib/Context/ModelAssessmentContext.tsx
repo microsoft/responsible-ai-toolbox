@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITelemetryMessage } from "../util/ITelemetryMessage";
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
+
 import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
 import { IDataset } from "../Interfaces/IDataset";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
+import { ITelemetryMessage } from "../util/ITelemetryMessage";
 import { JointDataset } from "../util/JointDataset";
-import { ErrorCohort } from "@responsible-ai/core-ui";
 
 export interface IModelAssessmentContext {
   dataset: IDataset;
@@ -35,16 +36,16 @@ export interface IModelAssessmentContext {
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
-  dataset: {} as IDataset,
-  modelExplanationData: {} as IModelExplanationData,
-  theme: {} as ITheme,
   cohorts: [],
+  dataset: {} as IDataset,
   jointDataset: {} as JointDataset,
+  modelExplanationData: {} as IModelExplanationData,
   modelMetadata: {} as IExplanationModelMetadata,
   precomputedExplanations: undefined,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
-  telemetryHook: () => undefined
+  telemetryHook: () => undefined,
+  theme: {} as ITheme
 };
 const modelAssessmentContext = React.createContext<IModelAssessmentContext>(
   defaultModelAssessmentContext

@@ -63,8 +63,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     super(props);
     this.state = {
       editingDataCustomIndex: undefined,
-      filteredFeatureList: [],
       featuresOption: [],
+      filteredFeatureList: [],
       request: undefined,
       selectedWhatIfRootIndex: 0
     };
@@ -94,7 +94,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           text: meta.abbridgedLabel
         };
       });
-    this.setState({featuresOption, filteredFeatureList: featuresOption})
+    this.setState({ featuresOption, filteredFeatureList: featuresOption });
   }
 
   public componentDidUpdate(prevProps: IWhatIfProps): void {

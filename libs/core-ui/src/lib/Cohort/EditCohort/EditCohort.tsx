@@ -15,11 +15,11 @@ import {
   TextField
 } from "office-ui-fabric-react";
 import React from "react";
+
 import {
   ModelAssessmentContext,
   defaultModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
-
 import { Cohort } from "../Cohort";
 import { CohortFilters } from "../CohortFilters/CohortFilters";
 import { CohortStats } from "../CohortStats/CohortStats";

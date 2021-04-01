@@ -102,11 +102,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          dataset: this.props.dataset,
-          modelExplanationData: this.props.modelExplanationData,
-          theme: this.props.theme,
           cohorts: this.state.cohorts,
+          dataset: this.props.dataset,
           jointDataset: this.state.jointDataset,
+          modelExplanationData: this.props.modelExplanationData,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.modelExplanationData
             .precomputedExplanations,
@@ -117,7 +116,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            })
+            }),
+          theme: this.props.theme
         }}
       >
         <div className={classNames.page}>
@@ -313,7 +313,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab
-                        cohorts={this.state.cohorts.map((cohort) => cohort.cohort)}
+                        cohorts={this.state.cohorts.map(
+                          (cohort) => cohort.cohort
+                        )}
                         cohortIDs={cohortIDs}
                         selectedWeightVector={this.state.selectedWeightVector}
                         weightOptions={this.state.weightVectorOptions}

@@ -326,11 +326,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          dataset: {} as IDataset,
-          modelExplanationData: {} as IModelExplanationData,
-          theme: this.props.theme,
           cohorts: this.state.cohorts,
+          dataset: {} as IDataset,
           jointDataset: this.state.jointDataset,
+          modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
@@ -340,7 +339,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            })
+            }),
+          theme: this.props.theme
         }}
       >
         <div className={classNames.page}>

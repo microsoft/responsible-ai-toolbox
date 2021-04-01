@@ -96,9 +96,10 @@ export class GlobalExplanationTab extends React.PureComponent<
       initialCohortIndex = this.props.initialCohortIndex;
     }
     this.state = {
-      activeSeries: [], // set in componentDidMount()
-      cohortSeries: this.getGlobalSeries(),
+      activeSeries: [],
       chartType: ChartTypes.Bar,
+      // set in componentDidMount()
+      cohortSeries: this.getGlobalSeries(),
       crossClassInfoVisible: false,
       maxK: this.defaultMaxK,
       minK: this.defaultMinK,
@@ -124,12 +125,12 @@ export class GlobalExplanationTab extends React.PureComponent<
     );
 
     this.setState({
-      minK,
-      maxK,
       activeSeries: this.getActiveCohortSeries(
         this.state.sortArray.map(() => true)
       ),
-      globalBarSettings: this.getDefaultSettings()
+      globalBarSettings: this.getDefaultSettings(),
+      maxK,
+      minK
     });
   }
 
@@ -337,8 +338,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     const seriesIsActive = [...this.state.seriesIsActive];
     seriesIsActive[index] = !seriesIsActive[index];
     this.setState({
-      seriesIsActive,
-      activeSeries: this.getActiveCohortSeries(seriesIsActive)
+      activeSeries: this.getActiveCohortSeries(seriesIsActive),
+      seriesIsActive
     });
   };
 
@@ -366,10 +367,10 @@ export class GlobalExplanationTab extends React.PureComponent<
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
     this.setState({
-      selectedCohortIndex,
-      seriesIsActive,
+      activeSeries: this.getActiveCohortSeries(seriesIsActive),
       cohortSeries: this.getGlobalSeries(),
-      activeSeries: this.getActiveCohortSeries(seriesIsActive)
+      selectedCohortIndex,
+      seriesIsActive
     });
   }
 
