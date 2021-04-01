@@ -5,7 +5,8 @@ import {
   IJointMeta,
   JointDataset,
   FilterMethods,
-  IFilter
+  IFilter,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
@@ -22,8 +23,6 @@ import {
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
-
-import { FabricStyles } from "../../FabricStyles";
 
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;

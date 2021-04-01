@@ -31,7 +31,6 @@ export interface IMainMenuProps {
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
 const infoIcon: IIconProps = { iconName: "Info" };
-const fullscreenIcon: IIconProps = { iconName: "ScaleVolume" };
 const whatIfIcon: IIconProps = { iconName: "ExploreData" };
 
 const buttonStyle: IButtonStyles = {
@@ -40,15 +39,7 @@ const buttonStyle: IButtonStyles = {
 
 export class MainMenu extends React.PureComponent<IMainMenuProps> {
   public render(): React.ReactNode {
-    const farItems: ICommandBarItemProps[] = [
-      {
-        buttonStyles: buttonStyle,
-        iconProps: fullscreenIcon,
-        key: "fullscreen",
-        onClick: (): any => window.open(this.props.localUrl),
-        text: localization.ErrorAnalysis.MainMenu.fullscreen
-      }
-    ];
+    const farItems: ICommandBarItemProps[] = [];
     if (
       this.props.activeGlobalTab === GlobalTabKeys.LocalExplanationTab &&
       this.props.activePredictionTab !== PredictionTabKeys.InspectionTab

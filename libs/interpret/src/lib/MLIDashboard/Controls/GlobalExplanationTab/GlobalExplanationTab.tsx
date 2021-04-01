@@ -11,7 +11,8 @@ import {
   IGenericChartProps,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -27,7 +28,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";

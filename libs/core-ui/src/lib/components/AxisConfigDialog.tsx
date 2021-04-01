@@ -1,13 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ColumnCategories,
-  IJointMeta,
-  JointDataset,
-  cohortKey,
-  ISelectorConfig
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -27,6 +20,14 @@ import {
 } from "office-ui-fabric-react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
+
+import { cohortKey } from "../cohortKey";
+import { ISelectorConfig } from "../util/IGenericChartProps";
+import {
+  ColumnCategories,
+  IJointMeta,
+  JointDataset
+} from "../util/JointDataset";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;

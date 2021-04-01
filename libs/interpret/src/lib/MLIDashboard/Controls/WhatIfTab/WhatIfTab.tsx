@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  AxisConfigDialog,
   ExpandableText,
   ColumnCategories,
   WeightVectorOption,
@@ -13,7 +14,10 @@ import {
   ISelectorConfig,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  FabricStyles,
+  InteractiveLegend,
+  rowErrorSize
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -33,11 +37,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
-import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
-import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 
 import { LocalImportancePlots } from "./LocalImportancePlots";
 import { WhatIfConstants } from "./WhatIfConstants";
@@ -319,7 +319,7 @@ export class WhatIfTab extends React.PureComponent<
     const cohortLength = this.context.cohorts[this.state.selectedCohortIndex]
       .cohort.filteredData.length;
     const canRenderChart =
-      cohortLength < newExplanationDashboardRowErrorSize ||
+      cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     const cohortOptions: IDropdownOption[] = this.context.cohorts.map(
       (cohort, index) => {

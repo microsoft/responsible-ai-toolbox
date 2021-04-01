@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FabricStyles } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   getTheme,
   mergeStyleSets,
   IStyle
 } from "office-ui-fabric-react";
-
-import { FabricStyles } from "../../FabricStyles";
 
 export interface IWhatIfTabStyles {
   page: IStyle;

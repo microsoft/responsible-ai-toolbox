@@ -4,7 +4,8 @@
 import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
-  IFeatureValueExplanation
+  IFeatureValueExplanation,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -17,8 +18,6 @@ import _ from "lodash";
 import memoize from "memoize-one";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
-
-import { FabricStyles } from "../FabricStyles";
 
 export interface IEbmProps {
   explanationContext: IExplanationContext;

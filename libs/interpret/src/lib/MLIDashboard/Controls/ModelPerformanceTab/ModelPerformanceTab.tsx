@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  AxisConfigDialog,
   ColumnCategories,
   ExpandableText,
   JointDataset,
@@ -13,7 +14,8 @@ import {
   ISelectorConfig,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -28,9 +30,7 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { ILabeledStatistic, generateMetrics } from "../../StatisticsUtils";
-import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 

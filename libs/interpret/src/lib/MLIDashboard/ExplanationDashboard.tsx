@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  FabricStyles,
   isTwoDimArray,
   IExplanationContext,
   IExplanationGenerators,
@@ -65,7 +66,6 @@ import {
   SinglePointFeatureImportance
 } from "./Controls/SinglePointFeatureImportance";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
-import { FabricStyles } from "./FabricStyles";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
 import { validateInputs } from "./validateInputs";

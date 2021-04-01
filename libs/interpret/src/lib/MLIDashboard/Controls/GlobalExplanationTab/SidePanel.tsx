@@ -6,7 +6,9 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption,
-  ChartTypes
+  ChartTypes,
+  FabricStyles,
+  InteractiveLegend
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -21,9 +23,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { LabelWithCallout } from "../Callout/LabelWithCallout";
-import { InteractiveLegend } from "../InteractiveLegend/InteractiveLegend";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";
