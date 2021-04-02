@@ -70,7 +70,6 @@ export class SVGToolTip extends React.Component<
         rect.x + rect.width + (this.props.spacing ?? 0),
         rect.y
       );
-      console.log(pos);
       this.setState({
         isMouseOver: true,
         svgElement: element.ownerSVGElement,
