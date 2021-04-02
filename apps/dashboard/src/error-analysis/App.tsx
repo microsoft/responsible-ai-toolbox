@@ -31,7 +31,7 @@ interface IAppProps {
   dataset: IExplanationDashboardData | ISerializedExplanationData;
   theme: ITheme;
   language: Language;
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -46,6 +46,23 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
+    let requestPredictionsMethod = undefined;
+    let requestMatrixMethod = undefined;
+    let requestDebugMLMethod = undefined;
+    let requestImportancesMethod = undefined;
+
+    requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
+      return callFlaskService(data, "/predict");
+    };
+    requestMatrixMethod = async (data: any[]): Promise<any[]> => {
+      return callFlaskService(data, "/matrix");
+    };
+    requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
+      return callFlaskService(data, "/tree");
+    };
+    requestImportancesMethod = async (data: any[]): Promise<any[]> => {
+      return callFlaskService(data, "/importances");
+    };
     if ("categoricalMap" in this.props.dataset) {
       if (this.props.version === 1) {
         return (
@@ -74,6 +91,31 @@ export class App extends React.Component<IAppProps> {
               this.props.dataset.featureNames,
               false
             )}
+            localUrl={""}
+            locale={undefined}
+            features={this.props.dataset.featureNames}
+          />
+        );
+      } else if (this.props.version === 3) {
+        return (
+          <ErrorAnalysisDashboard
+            modelInformation={{ modelClass: "blackbox" }}
+            dataSummary={{
+              categoricalMap: this.props.dataset.categoricalMap,
+              classNames: this.props.dataset.classNames,
+              featureNames: this.props.dataset.featureNames
+            }}
+            testData={this.props.dataset.trainingData}
+            predictedY={this.props.dataset.predictedY as any}
+            probabilityY={this.props.dataset.probabilityY}
+            trueY={this.props.dataset.trueY as any}
+            precomputedExplanations={{
+              localFeatureImportance: this.props.dataset.localExplanations
+            }}
+            requestDebugML={requestDebugMLMethod}
+            requestImportances={requestImportancesMethod}
+            requestMatrix={requestMatrixMethod}
+            requestPredictions={requestPredictionsMethod}
             localUrl={""}
             locale={undefined}
             features={this.props.dataset.featureNames}
@@ -127,6 +169,20 @@ export class App extends React.Component<IAppProps> {
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };
+    } else if (this.props.version === 3) {
+      dashboardProp = {
+        ...(this.props.dataset as IExplanationDashboardData),
+        explanationMethod: "mimic",
+        features: generateFeatures(),
+        locale: this.props.language,
+        localUrl: "https://www.bing.com/",
+        requestDebugML: requestDebugMLMethod,
+        requestImportances: requestImportancesMethod,
+        requestMatrix: requestMatrixMethod,
+        requestPredictions: requestPredictionsMethod,
+        stringParams: { contextualHelp: this.messages },
+        theme: this.props.theme
+      };
     } else {
       dashboardProp = {
         ...(this.props.dataset as IExplanationDashboardData),
@@ -142,4 +198,30 @@ export class App extends React.Component<IAppProps> {
     }
     return <ErrorAnalysisDashboard {...dashboardProp} />;
   }
+}
+
+export async function callFlaskService<TRequest, TResponse>(
+  data: TRequest,
+  urlPath: string
+): Promise<TResponse> {
+  const url = "http://localhost:5000" + urlPath;
+  return fetch(url, {
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    method: "post"
+  })
+    .then((resp) => {
+      if (resp.status >= 200 && resp.status < 300) {
+        return resp.json();
+      }
+      return Promise.reject(new Error(resp.statusText));
+    })
+    .then((json) => {
+      if (json.error !== undefined) {
+        throw new Error(json.error);
+      }
+      return Promise.resolve(json.data);
+    });
 }

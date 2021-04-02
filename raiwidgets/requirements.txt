@@ -6,3 +6,4 @@ jinja2==2.11.1
 ipython==7.16.1
 scikit-learn>=0.22.1
 lightgbm>=3.1.1
+erroranalysis>=0.1.0

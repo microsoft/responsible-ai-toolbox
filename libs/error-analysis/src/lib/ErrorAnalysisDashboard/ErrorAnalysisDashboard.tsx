@@ -714,7 +714,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     if (addTemporaryCohort) {
       cohorts = [...cohorts, selectedCohort];
     }
-    this.setState({ cohorts, selectedCohort });
+    this.setState({
+      cohorts,
+      selectedCohort
+    });
   }
 
   private onConfigChanged(newConfig: IGenericChartProps): void {
