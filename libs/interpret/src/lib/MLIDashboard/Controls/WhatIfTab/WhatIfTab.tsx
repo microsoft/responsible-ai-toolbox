@@ -159,9 +159,9 @@ export class WhatIfTab extends React.PureComponent<
       });
 
     this.setState({
+      chartProps: this.generateDefaultChartAxes(),
       featuresOption,
-      filteredFeatureList: featuresOption,
-      chartProps: this.generateDefaultChartAxes()
+      filteredFeatureList: featuresOption
     });
   }
 
