@@ -104,12 +104,7 @@ export class WhatIfTab extends React.PureComponent<
   public constructor(props: IWhatIfTabProps) {
     super(props);
 
-    if (!this.context.jointDataset.hasDataset) {
-      return;
-    }
-
     this.state = {
-      chartProps: this.generateDefaultChartAxes(),
       crossClassInfoVisible: false,
       customPointIsActive: [],
       customPoints: [],
@@ -133,14 +128,14 @@ export class WhatIfTab extends React.PureComponent<
       xDialogOpen: false,
       yDialogOpen: false
     };
+  }
 
+  public componentDidMount() {
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
     this.fetchData = _.debounce(this.fetchData.bind(this), 400);
-  }
 
-  public componentDidMount() {
     const featuresOption = new Array(
       this.context.jointDataset.datasetFeatureCount
     )
@@ -163,7 +158,11 @@ export class WhatIfTab extends React.PureComponent<
         };
       });
 
-    this.setState({ featuresOption, filteredFeatureList: featuresOption });
+    this.setState({
+      featuresOption,
+      filteredFeatureList: featuresOption,
+      chartProps: this.generateDefaultChartAxes()
+    });
   }
 
   public componentDidUpdate(
