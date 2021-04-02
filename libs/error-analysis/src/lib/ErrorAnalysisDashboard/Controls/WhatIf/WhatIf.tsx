@@ -65,11 +65,12 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       request: undefined,
       selectedWhatIfRootIndex: 0
     };
-    this.createCopyOfFirstRow();
-    this.buildRowOptions();
   }
 
   public componentDidMount() {
+    this.createCopyOfFirstRow();
+    this.buildRowOptions();
+
     const featuresOption: IDropdownOption[] = new Array(
       this.context.jointDataset.datasetFeatureCount
     )
