@@ -324,8 +324,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts,
           dataset: {} as IDataset,
+          errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -457,7 +457,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   cohorts
                 });
               }}
-              cohort={this.state.editedCohort}
+              errorCohort={this.state.editedCohort}
               selectedCohort={this.state.selectedCohort}
             />
           )}

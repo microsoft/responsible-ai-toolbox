@@ -83,15 +83,15 @@ export class ModelPerformanceTab extends React.PureComponent<
     const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.cohorts.map((cohort) => cohort.cohort),
+      this.context.errorCohorts.map((errorCohort) => errorCohort.cohort),
       this.state.selectedCohortIndex
     );
     const metricsList = this.generateMetrics().reverse();
     const height = Math.max(400, 160 * metricsList.length) + "px";
     const cohortOptions =
       this.state.chartProps.yAxis.property !== cohortKey
-        ? this.context.cohorts.map((cohort, index) => {
-            return { key: index, text: cohort.cohort.name };
+        ? this.context.errorCohorts.map((errorCohort, index) => {
+            return { key: index, text: errorCohort.cohort.name };
           })
         : undefined;
     return (
@@ -332,8 +332,8 @@ export class ModelPerformanceTab extends React.PureComponent<
       return [];
     }
     if (this.state.chartProps.yAxis.property === cohortKey) {
-      const indexes = this.context.cohorts.map((cohort) =>
-        cohort.cohort.unwrap(JointDataset.IndexLabel)
+      const indexes = this.context.errorCohorts.map((errorCohort) =>
+        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
       );
       return generateMetrics(
         this.context.jointDataset,
@@ -341,7 +341,8 @@ export class ModelPerformanceTab extends React.PureComponent<
         this.context.modelMetadata.modelType
       );
     }
-    const cohort = this.context.cohorts[this.state.selectedCohortIndex].cohort;
+    const cohort = this.context.errorCohorts[this.state.selectedCohortIndex]
+      .cohort;
     const yValues = cohort.unwrap(this.state.chartProps.yAxis.property, true);
     const indexArray = cohort.unwrap(JointDataset.IndexLabel);
     const sortedCategoricalValues = this.context.jointDataset.metaDict[

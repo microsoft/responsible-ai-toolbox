@@ -102,8 +102,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts,
           dataset: this.props.dataset,
+          errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: this.props.modelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -209,7 +209,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   cohorts
                 });
               }}
-              cohort={this.state.editedCohort}
+              errorCohort={this.state.editedCohort}
               selectedCohort={this.state.selectedCohort}
             />
           )}

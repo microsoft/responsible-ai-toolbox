@@ -84,10 +84,10 @@ export class NewExplanationDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts.map(
+          dataset: {} as IDataset,
+          errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
-          dataset: {} as IDataset,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,

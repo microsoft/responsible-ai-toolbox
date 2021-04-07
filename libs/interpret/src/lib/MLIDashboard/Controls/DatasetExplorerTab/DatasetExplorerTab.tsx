@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  AxisConfigDialog,
   ExpandableText,
   JointDataset,
   ColumnCategories,
@@ -12,8 +11,7 @@ import {
   ISelectorConfig,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  rowErrorSize
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart } from "@responsible-ai/mlchartlib";
@@ -27,6 +25,9 @@ import {
   IChoiceGroupOption
 } from "office-ui-fabric-react";
 import React from "react";
+
+import { newExplanationDashboardRowErrorSize } from "../../newExplanationDashboardRowErrorSize";
+import { AxisConfigDialog } from "../AxisConfigurationDialog/AxisConfigDialog";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 import { generatePlotlyProps } from "./generatePlotlyProps";
@@ -105,7 +106,7 @@ export class DatasetExplorerTab extends React.PureComponent<
       this.state.selectedCohortIndex
     ].cohort.filteredData.length;
     const canRenderChart =
-      cohortLength < rowErrorSize ||
+      cohortLength < newExplanationDashboardRowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
       ColumnCategories.Index,

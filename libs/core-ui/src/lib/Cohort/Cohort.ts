@@ -72,8 +72,10 @@ export class Cohort {
       this.currentSortKey = columnName;
       this.currentSortReversed = false;
     }
+    reverse = reverse === undefined ? false : reverse;
     if (this.currentSortReversed !== reverse) {
       this.filteredData.reverse();
+      this.currentSortReversed = true;
     }
   }
 

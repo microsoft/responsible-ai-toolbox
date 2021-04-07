@@ -66,12 +66,12 @@ export class ShiftCohort extends React.Component<
 
   public constructor(props: IShiftCohortProps) {
     super(props);
-    const savedCohorts = this.context.cohorts.filter(
-      (cohort) => !cohort.isTemporary
+    const savedCohorts = this.context.errorCohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
     );
     const options: IDropdownOption[] = savedCohorts.map(
-      (errorCohort: ErrorCohort, index: number) => {
-        return { key: index, text: errorCohort.cohort.name };
+      (savedCohort: ErrorCohort, index: number) => {
+        return { key: index, text: savedCohort.cohort.name };
       }
     );
     this.state = {

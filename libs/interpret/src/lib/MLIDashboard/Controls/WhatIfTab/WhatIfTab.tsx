@@ -313,16 +313,17 @@ export class WhatIfTab extends React.PureComponent<
     const plotlyProps = this.generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.cohorts[this.state.selectedCohortIndex].cohort
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
     );
-    const cohortLength = this.context.cohorts[this.state.selectedCohortIndex]
-      .cohort.filteredData.length;
+    const cohortLength = this.context.errorCohorts[
+      this.state.selectedCohortIndex
+    ].cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
-    const cohortOptions: IDropdownOption[] = this.context.cohorts.map(
-      (cohort, index) => {
-        return { key: index, text: cohort.cohort.name };
+    const cohortOptions: IDropdownOption[] = this.context.errorCohorts.map(
+      (errorCohort, index) => {
+        return { key: index, text: errorCohort.cohort.name };
       }
     );
     return (
@@ -602,8 +603,8 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   private buildRowOptions(cohortIndex: number): void {
-    this.context.cohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
-    this.rowOptions = this.context.cohorts[cohortIndex].cohort
+    this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
+    this.rowOptions = this.context.errorCohorts[cohortIndex].cohort
       .unwrap(JointDataset.IndexLabel)
       .map((index) => {
         return {
@@ -756,7 +757,7 @@ export class WhatIfTab extends React.PureComponent<
 
   private createCopyOfFirstRow(): void {
     const indexes = this.getDefaultSelectedPointIndexes(
-      this.context.cohorts[this.state.selectedCohortIndex].cohort
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
     );
     if (indexes.length === 0) {
       return undefined;

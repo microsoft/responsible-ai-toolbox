@@ -18,7 +18,7 @@ export interface IModelAssessmentContext {
   theme?: ITheme;
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
-  cohorts: ErrorCohort[];
+  errorCohorts: ErrorCohort[];
   precomputedExplanations?: IPrecomputedExplanations;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
@@ -36,8 +36,8 @@ export interface IModelAssessmentContext {
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
-  cohorts: [],
   dataset: {} as IDataset,
+  errorCohorts: [],
   jointDataset: {} as JointDataset,
   modelExplanationData: {} as IModelExplanationData,
   modelMetadata: {} as IExplanationModelMetadata,
