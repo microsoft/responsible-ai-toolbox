@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
+from sklearn.feature_selection import mutual_info_classif
 from erroranalysis._internal.matrix_filter import compute_json_matrix
 from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
@@ -81,6 +82,20 @@ class ErrorAnalyzer(object):
     def compute_error_tree(self, features, filters, composite_filters):
         return compute_json_error_tree(self, features, filters,
                                        composite_filters)
+
+    def compute_importances(self):
+        input_data = self.dataset
+        diff = self.model.predict(self.dataset) != self.true_y
+        if isinstance(self.dataset, pd.DataFrame):
+            input_data = input_data.to_numpy()
+        if self.categorical_features:
+            # Inplace replacement of columns
+            indexes = self.categorical_indexes
+            string_ind_data = self.string_indexed_data
+            for idx, c_i in enumerate(indexes):
+                input_data[:, c_i] = string_ind_data[:, idx]
+        # compute the feature importances using mutual information
+        return mutual_info_classif(input_data, diff).tolist()
 
     def _make_pandas_copy(self, dataset):
         if isinstance(dataset, pd.DataFrame):

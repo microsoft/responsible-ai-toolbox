@@ -4,7 +4,6 @@
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
 from scipy.sparse import issparse
-from sklearn.feature_selection import mutual_info_classif
 import numpy as np
 import pandas as pd
 import traceback
@@ -62,14 +61,11 @@ class ErrorAnalysisDashboardInput:
         :type true_y_dataset: numpy.array or list[]
         """
         self._model = model
-        if isinstance(dataset, pd.DataFrame):
-            self._dataset = dataset.to_json()
-        else:
-            self._dataset = dataset
+        full_dataset = dataset
         if true_y_dataset is None:
-            self._true_y = true_y
+            full_true_y = true_y
         else:
-            self._true_y = true_y_dataset
+            full_true_y = true_y_dataset
         self._categorical_features = categorical_features
         self._string_ind_data = None
         self._categories = []
@@ -280,11 +276,8 @@ class ErrorAnalysisDashboardInput:
             ] = probability_y
         if locale is not None:
             self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
-        interface = ExplanationDashboardInterface
-        feature_names = self.dashboard_input[interface.FEATURE_NAMES]
-        self._error_analyzer = ErrorAnalyzer(model, dataset, true_y,
-                                             feature_names,
-                                             categorical_features)
+        self._error_analyzer = ErrorAnalyzer(model, full_dataset, full_true_y,
+                                             features, categorical_features)
         if self._categorical_features:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP
@@ -326,27 +319,7 @@ class ErrorAnalysisDashboardInput:
 
     def importances(self):
         try:
-            interface = ExplanationDashboardInterface
-            feature_names = self.dashboard_input[interface.FEATURE_NAMES]
-            is_pandas = False
-            if isinstance(self._dataset, str):
-                is_pandas = True
-            if is_pandas:
-                input_data = pd.read_json(self._dataset)
-            else:
-                input_data = pd.DataFrame(self._dataset,
-                                          columns=feature_names)
-            diff = self._model.predict(input_data) != self._true_y
-            if is_pandas:
-                input_data = input_data.to_numpy()
-            if self._categorical_features:
-                # Inplace replacement of columns
-                indexes = self._error_analyzer.categorical_indexes
-                string_ind_data = self._error_analyzer.string_indexed_data
-                for idx, c_i in enumerate(indexes):
-                    input_data[:, c_i] = string_ind_data[:, idx]
-            # compute the feature importances using mutual information
-            scores = mutual_info_classif(input_data, diff).tolist()
+            scores = self._error_analyzer.compute_importances()
             return {
                 WidgetRequestResponseConstants.DATA: scores
             }
