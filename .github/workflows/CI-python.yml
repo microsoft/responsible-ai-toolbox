@@ -34,15 +34,15 @@ jobs:
         with:
           python-version: ${{ matrix.pythonVersion }}
 
-      - bash: brew install libomp
-        displayName: Use Homebrew to install libomp on MacOS for lightgbm
-        condition: eq(variables['Agent.OS'], 'Darwin')
+      - if: ${{ matrix.operatingSystem == "macos-latest" }}
+        name: Use Homebrew to install libomp on MacOS for lightgbm
+        run: brew install libomp
 
-      - bash: |
+      - if: ${{ matrix.operatingSystem == "macos-latest" }}
+        name: Install lightgbm from conda on MacOS
+        run: |
           source activate  ${{parameters.condaEnv}}
           conda install --yes -c conda-forge lightgbm
-        displayName: Install lightgbm from conda on MacOS
-        condition: eq(variables['Agent.OS'], 'Darwin')
 
       - name: Install dependencies
         run: |
