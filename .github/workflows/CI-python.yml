@@ -38,12 +38,6 @@ jobs:
         name: Use Homebrew to install libomp on MacOS for lightgbm
         run: brew install libomp
 
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install lightgbm from conda on MacOS
-        run: |
-          source activate  ${{parameters.condaEnv}}
-          conda install --yes -c conda-forge lightgbm
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
