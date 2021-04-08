@@ -98,16 +98,13 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.state = {
       activeSeries: [],
       chartType: ChartTypes.Bar,
-      // set in componentDidMount()
-      cohortSeries: this.getGlobalSeries(),
+      cohortSeries: [],
       crossClassInfoVisible: false,
       maxK: this.defaultMaxK,
       minK: this.defaultMinK,
       selectedCohortIndex: initialCohortIndex,
       seriesIsActive: this.props.cohorts.map(() => true),
-      sortArray: ModelExplanationUtils.getSortIndices(
-        this.props.cohorts[initialCohortIndex].calculateAverageImportance()
-      ).reverse(),
+      sortArray: [],
       sortingSeriesIndex: 0,
       topK: this.defaultMinK
     };
@@ -124,13 +121,19 @@ export class GlobalExplanationTab extends React.PureComponent<
       this.context.jointDataset.localExplanationFeatureCount
     );
 
+    const sortArray = ModelExplanationUtils.getSortIndices(
+      this.props.cohorts[
+        this.state.selectedCohortIndex
+      ].calculateAverageImportance()
+    ).reverse();
+
     this.setState({
-      activeSeries: this.getActiveCohortSeries(
-        this.state.sortArray.map(() => true)
-      ),
+      activeSeries: this.getActiveCohortSeries(sortArray.map(() => true)),
       globalBarSettings: this.getDefaultSettings(),
       maxK,
-      minK
+      minK,
+      cohortSeries: this.getGlobalSeries(),
+      sortArray
     });
   }
 
