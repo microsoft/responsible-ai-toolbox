@@ -111,6 +111,10 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   public componentDidMount() {
+    if (!this.context.jointDataset.hasLocalExplanations) {
+      return;
+    }
+
     const minK = Math.min(
       4,
       this.context.jointDataset.localExplanationFeatureCount
