@@ -66,6 +66,14 @@ export class ShiftCohort extends React.Component<
 
   public constructor(props: IShiftCohortProps) {
     super(props);
+    this.state = {
+      options: [],
+      savedCohorts: [],
+      selectedCohort: 0
+    };
+  }
+
+  public componentDidMount() {
     const savedCohorts = this.context.errorCohorts.filter(
       (errorCohort) => !errorCohort.isTemporary
     );
@@ -74,11 +82,10 @@ export class ShiftCohort extends React.Component<
         return { key: index, text: savedCohort.cohort.name };
       }
     );
-    this.state = {
-      options,
+    this.setState({
       savedCohorts,
-      selectedCohort: 0
-    };
+      options
+    });
   }
 
   public render(): React.ReactNode {
