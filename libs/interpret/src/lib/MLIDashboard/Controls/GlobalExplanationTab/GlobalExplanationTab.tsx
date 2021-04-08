@@ -131,9 +131,13 @@ export class GlobalExplanationTab extends React.PureComponent<
       ].calculateAverageImportance()
     ).reverse();
 
+    const cohortSeries = this.getGlobalSeries();
     this.setState({
-      activeSeries: this.getActiveCohortSeries(sortArray.map(() => true)),
-      cohortSeries: this.getGlobalSeries(),
+      activeSeries: this.getActiveCohortSeries(
+        sortArray.map(() => true),
+        cohortSeries
+      ),
+      cohortSeries,
       globalBarSettings: this.getDefaultSettings(),
       maxK,
       minK,
@@ -363,7 +367,15 @@ export class GlobalExplanationTab extends React.PureComponent<
 
   // This can probably be done cheaper by passing the active array to the charts, and zeroing
   // the series in the plotlyProps. Later optimization.
-  private getActiveCohortSeries(activeArray: boolean[]): IGlobalSeries[] {
+  private getActiveCohortSeries(
+    activeArray: boolean[],
+    cohortSeries?: IGlobalSeries[]
+  ): IGlobalSeries[] {
+    // In the initial call this.state.cohortSeries isn't set yet.
+    // The cohortSeries optional arg solves that problem.
+    if (cohortSeries) {
+      return cohortSeries.filter((_series, idx) => activeArray[idx]);
+    }
     return this.state.cohortSeries.filter((_series, idx) => activeArray[idx]);
   }
 
