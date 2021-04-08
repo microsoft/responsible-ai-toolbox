@@ -133,10 +133,10 @@ export class GlobalExplanationTab extends React.PureComponent<
 
     this.setState({
       activeSeries: this.getActiveCohortSeries(sortArray.map(() => true)),
+      cohortSeries: this.getGlobalSeries(),
       globalBarSettings: this.getDefaultSettings(),
       maxK,
       minK,
-      cohortSeries: this.getGlobalSeries(),
       sortArray
     });
   }

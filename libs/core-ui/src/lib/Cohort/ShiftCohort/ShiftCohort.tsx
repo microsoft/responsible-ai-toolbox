@@ -83,8 +83,8 @@ export class ShiftCohort extends React.Component<
       }
     );
     this.setState({
-      savedCohorts,
-      options
+      options,
+      savedCohorts
     });
   }
 
