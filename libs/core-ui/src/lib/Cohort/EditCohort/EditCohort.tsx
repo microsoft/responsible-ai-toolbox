@@ -16,7 +16,10 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { JointDataset } from "../../util/JointDataset";
+import {
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
 import { Cohort } from "../Cohort";
 import { CohortFilters } from "../CohortFilters/CohortFilters";
 import { CohortStats } from "../CohortStats/CohortStats";
@@ -24,9 +27,8 @@ import { ErrorCohort } from "../ErrorCohort";
 
 export interface IEditCohortProps {
   isOpen: boolean;
-  cohort: ErrorCohort;
+  errorCohort: ErrorCohort;
   selectedCohort: ErrorCohort;
-  jointDataset: JointDataset;
   onDismiss: () => void;
   onSave: (originalCohort: ErrorCohort, editedCohort: ErrorCohort) => void;
   onDelete: (cohort: ErrorCohort) => void;
@@ -57,19 +59,25 @@ export class EditCohort extends React.Component<
   IEditCohortProps,
   IEditCohortState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   public constructor(props: IEditCohortProps) {
     super(props);
     this.state = {
-      cohortName: this.props.cohort.cohort.name
+      cohortName: this.props.errorCohort.cohort.name
     };
   }
 
   public render(): React.ReactNode {
     const disableDelete =
-      this.props.cohort.cohort.name === this.props.selectedCohort.cohort.name;
+      this.props.errorCohort.cohort.name ===
+      this.props.selectedCohort.cohort.name;
     const dialogContentProps = {
       subText: localization.ErrorAnalysis.EditCohort.subText,
-      title: this.props.cohort.cohort.name,
+      title: this.props.errorCohort.cohort.name,
       type: DialogType.close
     };
     return (
@@ -87,8 +95,8 @@ export class EditCohort extends React.Component<
           defaultValue={this.state.cohortName}
           styles={textFieldStyles}
         />
-        <CohortStats temporaryCohort={this.props.cohort}></CohortStats>
-        <CohortFilters cohort={this.props.cohort}></CohortFilters>
+        <CohortStats temporaryCohort={this.props.errorCohort}></CohortStats>
+        <CohortFilters cohort={this.props.errorCohort}></CohortFilters>
         <DialogFooter>
           <Stack
             horizontal
@@ -130,25 +138,25 @@ export class EditCohort extends React.Component<
 
   private deleteCohort(): void {
     this.props.onDismiss();
-    this.props.onDelete(this.props.cohort);
+    this.props.onDelete(this.props.errorCohort);
   }
 
   private editCohort(): void {
     this.props.onDismiss();
-    const cohort = this.props.cohort;
+    const errorCohort = this.props.errorCohort;
     const savedCohort = new ErrorCohort(
       new Cohort(
         this.state.cohortName,
-        this.props.jointDataset,
-        cohort.cohort.filters,
-        cohort.cohort.compositeFilters
+        this.context.jointDataset,
+        errorCohort.cohort.filters,
+        errorCohort.cohort.compositeFilters
       ),
-      this.props.jointDataset,
-      cohort.cells,
-      cohort.source,
-      cohort.isTemporary,
-      cohort.cohortStats
+      this.context.jointDataset,
+      errorCohort.cells,
+      errorCohort.source,
+      errorCohort.isTemporary,
+      errorCohort.cohortStats
     );
-    this.props.onSave(cohort, savedCohort);
+    this.props.onSave(errorCohort, savedCohort);
   }
 }

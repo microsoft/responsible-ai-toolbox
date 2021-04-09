@@ -14,12 +14,15 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import {
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "../../Context/ModelAssessmentContext";
 import { CohortStats } from "../CohortStats/CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
 
 export interface IShiftCohortProps {
   isOpen: boolean;
-  cohorts: ErrorCohort[];
   onDismiss: () => void;
   onApply: (selectedCohort: ErrorCohort) => void;
 }
@@ -27,6 +30,7 @@ export interface IShiftCohortProps {
 export interface IShiftCohortState {
   options: IDropdownOption[];
   selectedCohort: number;
+  savedCohorts: ErrorCohort[];
 }
 
 const dialogContentProps = {
@@ -55,17 +59,33 @@ export class ShiftCohort extends React.Component<
   IShiftCohortProps,
   IShiftCohortState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   public constructor(props: IShiftCohortProps) {
     super(props);
-    const options: IDropdownOption[] = props.cohorts.map(
-      (errorCohort: ErrorCohort, index: number) => {
-        return { key: index, text: errorCohort.cohort.name };
-      }
-    );
     this.state = {
-      options,
+      options: [],
+      savedCohorts: [],
       selectedCohort: 0
     };
+  }
+
+  public componentDidMount() {
+    const savedCohorts = this.context.errorCohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    const options: IDropdownOption[] = savedCohorts.map(
+      (savedCohort: ErrorCohort, index: number) => {
+        return { key: index, text: savedCohort.cohort.name };
+      }
+    );
+    this.setState({
+      options,
+      savedCohorts
+    });
   }
 
   public render(): React.ReactNode {
@@ -87,7 +107,7 @@ export class ShiftCohort extends React.Component<
           onChange={this.onChange}
         />
         <CohortStats
-          temporaryCohort={this.props.cohorts[this.state.selectedCohort]}
+          temporaryCohort={this.state.savedCohorts[this.state.selectedCohort]}
         ></CohortStats>
         <DialogFooter>
           <PrimaryButton onClick={this.onApplyClick.bind(this)} text="Apply" />
@@ -107,7 +127,7 @@ export class ShiftCohort extends React.Component<
   };
 
   private shiftCohort(): void {
-    this.props.onApply(this.props.cohorts[this.state.selectedCohort]);
+    this.props.onApply(this.state.savedCohorts[this.state.selectedCohort]);
   }
 
   private onApplyClick(): void {

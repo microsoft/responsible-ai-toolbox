@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
@@ -23,7 +22,6 @@ import { cohortInfoStyles } from "./CohortInfo.styles";
 export interface ICohortInfoProps {
   isOpen: boolean;
   currentCohort: ErrorCohort;
-  jointDataset: JointDataset;
   // hostId: string
   onDismiss: () => void;
   onSaveCohortClick: () => void;

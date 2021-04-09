@@ -31,7 +31,7 @@ import { whatIfTabStyles } from "./WhatIfTab.styles";
 export interface IWhatIfPanelProps {
   editingDataCustomIndex?: number;
   validationErrors: { [key: string]: string | undefined };
-  stringifedValues: { [key: string]: string };
+  stringifiedValues: { [key: string]: string };
   metadata: IExplanationModelMetadata;
   temporaryPoint: { [key: string]: any } | undefined;
   jointDataset: JointDataset;
@@ -186,7 +186,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                     <TextField
                       key={item.key}
                       label={metaInfo.abbridgedLabel}
-                      value={this.props.stringifedValues[item.key]}
+                      value={this.props.stringifiedValues[item.key]}
                       onChange={this.setCustomRowProperty.bind(
                         this,
                         item.key,

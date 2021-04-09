@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
-import { Cohort } from "../Cohort/Cohort";
 import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
 import { IDataset } from "../Interfaces/IDataset";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
@@ -18,7 +18,7 @@ export interface IModelAssessmentContext {
   theme?: ITheme;
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
-  cohorts: Cohort[];
+  errorCohorts: ErrorCohort[];
   precomputedExplanations?: IPrecomputedExplanations;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
@@ -36,8 +36,8 @@ export interface IModelAssessmentContext {
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
-  cohorts: [],
   dataset: {} as IDataset,
+  errorCohorts: [],
   jointDataset: {} as JointDataset,
   modelExplanationData: {} as IModelExplanationData,
   modelMetadata: {} as IExplanationModelMetadata,

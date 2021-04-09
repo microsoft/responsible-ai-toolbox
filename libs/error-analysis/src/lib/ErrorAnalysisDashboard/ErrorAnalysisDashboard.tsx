@@ -324,10 +324,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts.map(
-            (cohort: ErrorCohort) => cohort.cohort
-          ),
           dataset: {} as IDataset,
+          errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -405,7 +403,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
               }}
               temporaryCohort={this.state.selectedCohort}
               baseCohort={this.state.baseCohort}
-              jointDataset={this.state.jointDataset}
             />
           )}
           {this.state.openMapShift && (
@@ -460,9 +457,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   cohorts
                 });
               }}
-              cohort={this.state.editedCohort}
+              errorCohort={this.state.editedCohort}
               selectedCohort={this.state.selectedCohort}
-              jointDataset={this.state.jointDataset}
             />
           )}
           {this.state.openShiftCohort && (
@@ -480,9 +476,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   selectedCohort
                 });
               }}
-              cohorts={this.state.cohorts.filter(
-                (cohort) => !cohort.isTemporary
-              )}
             />
           )}
           <div>
@@ -552,11 +545,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.DataExplorerTab && (
                       <DatasetExplorerTab
-                        jointDataset={this.state.jointDataset}
-                        metadata={this.state.modelMetadata}
-                        cohorts={this.state.cohorts.map(
-                          (errorCohort) => errorCohort.cohort
-                        )}
                         initialCohortIndex={this.state.cohorts.findIndex(
                           (errorCohort) =>
                             errorCohort.cohort.name ===
@@ -567,8 +555,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab
-                        jointDataset={this.state.jointDataset}
-                        metadata={this.state.modelMetadata}
                         cohorts={this.state.cohorts.map(
                           (errorCohort) => errorCohort.cohort
                         )}
@@ -593,9 +579,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                             ? this.props.stringParams.contextualHelp
                             : undefined
                         }
-                        jointDataset={this.state.jointDataset}
                         features={this.props.features}
-                        metadata={this.state.modelMetadata}
                         invokeModel={this.props.requestPredictions}
                         selectedWeightVector={this.state.selectedWeightVector}
                         weightOptions={this.state.weightVectorOptions}
@@ -621,7 +605,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 <CohortInfo
                   isOpen={this.state.openInfoPanel}
                   currentCohort={this.state.selectedCohort}
-                  jointDataset={this.state.jointDataset}
                   onDismiss={(): void =>
                     this.setState({ openInfoPanel: false })
                   }
@@ -659,8 +642,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   isOpen={this.state.openWhatIf}
                   onDismiss={(): void => this.setState({ openWhatIf: false })}
                   currentCohort={this.state.selectedCohort}
-                  jointDataset={this.state.jointDataset}
-                  metadata={this.state.modelMetadata}
                   invokeModel={this.props.requestPredictions}
                   customPoints={this.state.customPoints}
                   addCustomPoint={this.addCustomPoint.bind(this)}

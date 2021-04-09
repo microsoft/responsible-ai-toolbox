@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  JointDataset,
-  IExplanationModelMetadata,
   WeightVectorOption,
   ErrorCohort,
   defaultModelAssessmentContext,
@@ -40,8 +38,6 @@ export interface ISelectionDetails {
 export interface IInstanceViewProps {
   messages?: HelpMessageDict;
   features: string[];
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
@@ -134,11 +130,11 @@ export class InstanceView extends React.Component<
             theme={this.context.theme}
             messages={this.props.messages}
             features={this.props.features}
-            jointDataset={this.props.jointDataset}
+            jointDataset={this.context.jointDataset}
             inspectedIndexes={
               this.state.selectionDetails.selectedAllSelectedIndexes
             }
-            metadata={this.props.metadata}
+            metadata={this.context.modelMetadata}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightOptions}
             weightLabels={this.props.weightLabels}
@@ -181,7 +177,7 @@ export class InstanceView extends React.Component<
               theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
-              jointDataset={this.props.jointDataset}
+              jointDataset={this.context.jointDataset}
               dataView={DataViewKeys.CorrectInstances}
               selectedIndexes={
                 this.state.selectionDetails.selectedCorrectDatasetIndexes
@@ -199,7 +195,7 @@ export class InstanceView extends React.Component<
               theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
-              jointDataset={this.props.jointDataset}
+              jointDataset={this.context.jointDataset}
               dataView={DataViewKeys.IncorrectInstances}
               selectedIndexes={
                 this.state.selectionDetails.selectedIncorrectDatasetIndexes
@@ -217,7 +213,7 @@ export class InstanceView extends React.Component<
               theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
-              jointDataset={this.props.jointDataset}
+              jointDataset={this.context.jointDataset}
               dataView={DataViewKeys.SelectedInstances}
               setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
               selectedIndexes={
@@ -238,7 +234,7 @@ export class InstanceView extends React.Component<
               theme={this.context.theme}
               messages={this.props.messages}
               features={this.props.features}
-              jointDataset={this.props.jointDataset}
+              jointDataset={this.context.jointDataset}
               customPoints={this.props.customPoints}
               dataView={DataViewKeys.SelectedInstances}
               setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}

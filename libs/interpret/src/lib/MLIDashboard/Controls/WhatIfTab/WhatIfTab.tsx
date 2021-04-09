@@ -4,7 +4,6 @@
 import {
   AxisConfigDialog,
   ExpandableText,
-  IExplanationModelMetadata,
   ColumnCategories,
   WeightVectorOption,
   JointDataset,
@@ -14,6 +13,8 @@ import {
   IGenericChartProps,
   ISelectorConfig,
   MissingParametersPlaceholder,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
   FabricStyles,
   InteractiveLegend,
   rowErrorSize
@@ -44,9 +45,6 @@ import { WhatIfPanel } from "./WhatIfPanel";
 import { whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfTabProps {
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
-  cohorts: Cohort[];
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
@@ -64,6 +62,7 @@ export interface IWhatIfTabState {
   showSelectionWarning: boolean;
   customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
+  featuresOption: IDropdownOption[];
   filteredFeatureList: IDropdownOption[];
   request?: AbortController;
   selectedPointsIndexes: number[];
@@ -83,12 +82,17 @@ export class WhatIfTab extends React.PureComponent<
   IWhatIfTabProps,
   IWhatIfTabState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
   private includedFeatureImportance: IGlobalSeries[] = [];
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
-  private stringifedValues: { [key: string]: string } = {};
+  private stringifiedValues: { [key: string]: string } = {};
   private selectedDatapoints: any[][] = [];
   private customDatapoints: any[][] = [];
   private testableDatapoints: any[][] = [];
@@ -96,41 +100,17 @@ export class WhatIfTab extends React.PureComponent<
   private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
   private testableDatapointNames: string[] = [];
   private rowOptions: IDropdownOption[] | undefined;
-  private featuresOption: IDropdownOption[] = new Array(
-    this.props.jointDataset.datasetFeatureCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.DataLabelRoot + index.toString();
-      const meta = this.props.jointDataset.metaDict[key];
-      const options = meta.isCategorical
-        ? meta.sortedCategoricalValues?.map((optionText, index) => {
-            return { key: index, text: optionText };
-          })
-        : undefined;
-      return {
-        data: {
-          categoricalOptions: options,
-          fullLabel: meta.label.toLowerCase()
-        },
-        key,
-        text: meta.abbridgedLabel
-      };
-    });
 
   public constructor(props: IWhatIfTabProps) {
     super(props);
 
-    if (!this.props.jointDataset.hasDataset) {
-      return;
-    }
     this.state = {
-      chartProps: this.generateDefaultChartAxes(),
       crossClassInfoVisible: false,
       customPointIsActive: [],
       customPoints: [],
       editingDataCustomIndex: undefined,
-      filteredFeatureList: this.featuresOption,
+      featuresOption: [],
+      filteredFeatureList: [],
       iceTooltipVisible: false,
       isPanelOpen: this.props.invokeModel !== undefined,
       pointIsActive: [],
@@ -148,11 +128,41 @@ export class WhatIfTab extends React.PureComponent<
       xDialogOpen: false,
       yDialogOpen: false
     };
+  }
 
+  public componentDidMount() {
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
     this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+
+    const featuresOption = new Array(
+      this.context.jointDataset.datasetFeatureCount
+    )
+      .fill(0)
+      .map((_, index) => {
+        const key = JointDataset.DataLabelRoot + index.toString();
+        const meta = this.context.jointDataset.metaDict[key];
+        const options = meta.isCategorical
+          ? meta.sortedCategoricalValues?.map((optionText, index) => {
+              return { key: index, text: optionText };
+            })
+          : undefined;
+        return {
+          data: {
+            categoricalOptions: options,
+            fullLabel: meta.label.toLowerCase()
+          },
+          key,
+          text: meta.abbridgedLabel
+        };
+      });
+
+    this.setState({
+      chartProps: this.generateDefaultChartAxes(),
+      featuresOption,
+      filteredFeatureList: featuresOption
+    });
   }
 
   public componentDidUpdate(
@@ -183,7 +193,7 @@ export class WhatIfTab extends React.PureComponent<
     if (!selectionsAreEqual || !weightVectorsAreEqual) {
       this.selectedFeatureImportance = this.state.selectedPointsIndexes.map(
         (rowIndex, colorIndex) => {
-          const row = this.props.jointDataset.getRow(rowIndex);
+          const row = this.context.jointDataset.getRow(rowIndex);
           return {
             colorIndex,
             id: rowIndex,
@@ -193,23 +203,23 @@ export class WhatIfTab extends React.PureComponent<
             ),
             unsortedAggregateY: JointDataset.localExplanationSlice(
               row,
-              this.props.jointDataset.localExplanationFeatureCount
+              this.context.jointDataset.localExplanationFeatureCount
             ) as number[],
             unsortedFeatureValues: JointDataset.datasetSlice(
               row,
-              this.props.jointDataset.metaDict,
-              this.props.jointDataset.localExplanationFeatureCount
+              this.context.jointDataset.metaDict,
+              this.context.jointDataset.localExplanationFeatureCount
             )
           };
         }
       );
       this.selectedDatapoints = this.state.selectedPointsIndexes.map(
         (rowIndex) => {
-          const row = this.props.jointDataset.getRow(rowIndex);
+          const row = this.context.jointDataset.getRow(rowIndex);
           return JointDataset.datasetSlice(
             row,
-            this.props.jointDataset.metaDict,
-            this.props.jointDataset.datasetFeatureCount
+            this.context.jointDataset.metaDict,
+            this.context.jointDataset.datasetFeatureCount
           );
         }
       );
@@ -237,8 +247,8 @@ export class WhatIfTab extends React.PureComponent<
       this.customDatapoints = this.state.customPoints.map((row) => {
         return JointDataset.datasetSlice(
           row,
-          this.props.jointDataset.metaDict,
-          this.props.jointDataset.datasetFeatureCount
+          this.context.jointDataset.metaDict,
+          this.context.jointDataset.datasetFeatureCount
         );
       });
     }
@@ -290,7 +300,7 @@ export class WhatIfTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = whatIfTabStyles();
-    if (!this.props.jointDataset.hasDataset) {
+    if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.WhatIfTab.missingParameters}
@@ -301,18 +311,19 @@ export class WhatIfTab extends React.PureComponent<
       return <div />;
     }
     const plotlyProps = this.generatePlotlyProps(
-      this.props.jointDataset,
+      this.context.jointDataset,
       this.state.chartProps,
-      this.props.cohorts[this.state.selectedCohortIndex]
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
     );
-    const cohortLength = this.props.cohorts[this.state.selectedCohortIndex]
-      .filteredData.length;
+    const cohortLength = this.context.errorCohorts[
+      this.state.selectedCohortIndex
+    ].cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
-    const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
-      (cohort, index) => {
-        return { key: index, text: cohort.name };
+    const cohortOptions: IDropdownOption[] = this.context.errorCohorts.map(
+      (errorCohort, index) => {
+        return { key: index, text: errorCohort.cohort.name };
       }
     );
     return (
@@ -329,8 +340,8 @@ export class WhatIfTab extends React.PureComponent<
             filteredFeatureList={this.state.filteredFeatureList}
             isPanelOpen={this.state.isPanelOpen}
             isInPanel={false}
-            jointDataset={this.props.jointDataset}
-            metadata={this.props.metadata}
+            jointDataset={this.context.jointDataset}
+            metadata={this.context.modelMetadata}
             openPanel={this.openPanel}
             rowOptions={this.rowOptions}
             saveAsPoint={this.saveAsPoint}
@@ -339,7 +350,7 @@ export class WhatIfTab extends React.PureComponent<
             setCustomRowProperty={this.setCustomRowProperty}
             setCustomRowPropertyDropdown={this.setCustomRowPropertyDropdown}
             setSelectedIndex={this.setSelectedIndex}
-            stringifedValues={this.stringifedValues}
+            stringifiedValues={this.stringifiedValues}
             temporaryPoint={this.temporaryPoint}
             validationErrors={this.validationErrors}
             editingDataCustomIndex={this.state.editingDataCustomIndex}
@@ -372,7 +383,7 @@ export class WhatIfTab extends React.PureComponent<
               >
                 {this.state.yDialogOpen && (
                   <AxisConfigDialog
-                    jointDataset={this.props.jointDataset}
+                    jointDataset={this.context.jointDataset}
                     orderedGroupTitles={[
                       ColumnCategories.Index,
                       ColumnCategories.Dataset,
@@ -390,7 +401,7 @@ export class WhatIfTab extends React.PureComponent<
                 )}
                 {this.state.xDialogOpen && (
                   <AxisConfigDialog
-                    jointDataset={this.props.jointDataset}
+                    jointDataset={this.context.jointDataset}
                     orderedGroupTitles={[
                       ColumnCategories.Index,
                       ColumnCategories.Dataset,
@@ -420,12 +431,12 @@ export class WhatIfTab extends React.PureComponent<
                       <DefaultButton
                         onClick={this.setYOpen.bind(this, true)}
                         text={
-                          this.props.jointDataset.metaDict[
+                          this.context.jointDataset.metaDict[
                             this.state.chartProps.yAxis.property
                           ].abbridgedLabel
                         }
                         title={
-                          this.props.jointDataset.metaDict[
+                          this.context.jointDataset.metaDict[
                             this.state.chartProps.yAxis.property
                           ].label
                         }
@@ -452,12 +463,12 @@ export class WhatIfTab extends React.PureComponent<
                       <DefaultButton
                         onClick={this.setXOpen.bind(this, true)}
                         text={
-                          this.props.jointDataset.metaDict[
+                          this.context.jointDataset.metaDict[
                             this.state.chartProps.xAxis.property
                           ].abbridgedLabel
                         }
                         title={
-                          this.props.jointDataset.metaDict[
+                          this.context.jointDataset.metaDict[
                             this.state.chartProps.xAxis.property
                           ].label
                         }
@@ -548,8 +559,8 @@ export class WhatIfTab extends React.PureComponent<
             </div>
             <LocalImportancePlots
               includedFeatureImportance={this.includedFeatureImportance}
-              jointDataset={this.props.jointDataset}
-              metadata={this.props.metadata}
+              jointDataset={this.context.jointDataset}
+              metadata={this.context.modelMetadata}
               selectedWeightVector={this.props.selectedWeightVector}
               weightOptions={this.props.weightOptions}
               weightLabels={this.props.weightLabels}
@@ -558,7 +569,7 @@ export class WhatIfTab extends React.PureComponent<
               testableDatapoints={this.testableDatapoints}
               testableDatapointNames={this.testableDatapointNames}
               testableDatapointColors={this.testableDatapointColors}
-              featuresOption={this.featuresOption}
+              featuresOption={this.state.featuresOption}
               sortArray={this.state.sortArray}
               sortingSeriesIndex={this.state.sortingSeriesIndex}
             />
@@ -592,8 +603,8 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   private buildRowOptions(cohortIndex: number): void {
-    this.props.cohorts[cohortIndex].sort(JointDataset.IndexLabel);
-    this.rowOptions = this.props.cohorts[cohortIndex]
+    this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
+    this.rowOptions = this.context.errorCohorts[cohortIndex].cohort
       .unwrap(JointDataset.IndexLabel)
       .map((index) => {
         return {
@@ -617,7 +628,7 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
-    this.temporaryPoint = this.props.jointDataset.getRow(index);
+    this.temporaryPoint = this.context.jointDataset.getRow(index);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
@@ -627,7 +638,7 @@ export class WhatIfTab extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -639,7 +650,7 @@ export class WhatIfTab extends React.PureComponent<
   private setTemporaryPointToCustomPoint(index: number): void {
     this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -668,7 +679,7 @@ export class WhatIfTab extends React.PureComponent<
       return;
     }
     const editingData = this.temporaryPoint;
-    this.stringifedValues[key] = newValue;
+    this.stringifiedValues[key] = newValue;
     if (isString) {
       editingData[key] = newValue;
       this.forceUpdate();
@@ -703,7 +714,7 @@ export class WhatIfTab extends React.PureComponent<
       editingData[key] = option.key;
     } else if (value !== undefined) {
       // User typed a freeform option
-      const featureOption = this.featuresOption.find(
+      const featureOption = this.state.featuresOption.find(
         (feature) => feature.key === key
       );
       if (featureOption) {
@@ -746,12 +757,12 @@ export class WhatIfTab extends React.PureComponent<
 
   private createCopyOfFirstRow(): void {
     const indexes = this.getDefaultSelectedPointIndexes(
-      this.props.cohorts[this.state.selectedCohortIndex]
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
     );
     if (indexes.length === 0) {
       return undefined;
     }
-    this.temporaryPoint = this.props.jointDataset.getRow(indexes[0]);
+    this.temporaryPoint = this.context.jointDataset.getRow(indexes[0]);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]
@@ -761,7 +772,7 @@ export class WhatIfTab extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -811,10 +822,10 @@ export class WhatIfTab extends React.PureComponent<
     newValue?: string
   ): void => {
     if (newValue === undefined || newValue === null || !/\S/.test(newValue)) {
-      this.setState({ filteredFeatureList: this.featuresOption });
+      this.setState({ filteredFeatureList: this.state.featuresOption });
       return;
     }
-    const filteredFeatureList = this.featuresOption.filter((item) => {
+    const filteredFeatureList = this.state.featuresOption.filter((item) => {
       return item.data.fullLabel.includes(newValue.toLowerCase());
     });
     this.setState({ filteredFeatureList });
@@ -886,8 +897,8 @@ export class WhatIfTab extends React.PureComponent<
     const abortController = new AbortController();
     const rawData = JointDataset.datasetSlice(
       fetchingReference,
-      this.props.jointDataset.metaDict,
-      this.props.jointDataset.datasetFeatureCount
+      this.context.jointDataset.metaDict,
+      this.context.jointDataset.datasetFeatureCount
     );
     fetchingReference[JointDataset.PredictedYLabel] = undefined;
     const promise = this.props.invokeModel([rawData], abortController.signal);
@@ -914,10 +925,10 @@ export class WhatIfTab extends React.PureComponent<
           // prediction is a scalar, no probabilities
           fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
         }
-        if (this.props.jointDataset.hasTrueY) {
+        if (this.context.jointDataset.hasTrueY) {
           JointDataset.setErrorMetrics(
             fetchingReference,
-            this.props.metadata.modelType
+            this.context.modelMetadata.modelType
           );
         }
         this.setState({ request: undefined });
@@ -1052,7 +1063,9 @@ export class WhatIfTab extends React.PureComponent<
     });
     let hovertemplate = "";
     if (chartProps.xAxis) {
-      const metaX = this.props.jointDataset.metaDict[chartProps.xAxis.property];
+      const metaX = this.context.jointDataset.metaDict[
+        chartProps.xAxis.property
+      ];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
       hovertemplate += metaX.label + ": %{customdata.X}<br>";
 
@@ -1078,7 +1091,9 @@ export class WhatIfTab extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      const metaY = this.props.jointDataset.metaDict[chartProps.yAxis.property];
+      const metaY = this.context.jointDataset.metaDict[
+        chartProps.yAxis.property
+      ];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
       hovertemplate += metaY.label + ": %{customdata.Y}<br>";
       rawY.forEach((val, index) => {
@@ -1111,13 +1126,13 @@ export class WhatIfTab extends React.PureComponent<
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
     const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.props.jointDataset.metaDict[yKey]
+    const yIsDithered = this.context.jointDataset.metaDict[yKey]
       .treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
         options: {},
-        property: this.props.jointDataset.hasPredictedProbabilities
+        property: this.context.jointDataset.hasPredictedProbabilities
           ? JointDataset.ProbabilityYRoot + "0"
           : JointDataset.IndexLabel
       },
