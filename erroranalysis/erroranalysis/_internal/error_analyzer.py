@@ -3,6 +3,7 @@
 
 import pandas as pd
 import numpy as np
+from abc import ABC, abstractmethod
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.feature_selection import mutual_info_classif
@@ -11,10 +12,9 @@ from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
 
 
-class ErrorAnalyzer(object):
-    def __init__(self, model, dataset, true_y, feature_names,
+class BaseAnalyzer(ABC):
+    def __init__(self, dataset, true_y, feature_names,
                  categorical_features):
-        self._model = model
         self._dataset = self._make_pandas_copy(dataset)
         self._true_y = true_y
         self._categorical_features = categorical_features
@@ -65,10 +65,6 @@ class ErrorAnalyzer(object):
         return self._feature_names
 
     @property
-    def model(self):
-        return self._model
-
-    @property
     def string_indexed_data(self):
         return self._string_ind_data
 
@@ -85,7 +81,7 @@ class ErrorAnalyzer(object):
 
     def compute_importances(self):
         input_data = self.dataset
-        diff = self.model.predict(self.dataset) != self.true_y
+        diff = self.get_diff()
         if isinstance(self.dataset, pd.DataFrame):
             input_data = input_data.to_numpy()
         if self.categorical_features:
@@ -101,3 +97,38 @@ class ErrorAnalyzer(object):
         if isinstance(dataset, pd.DataFrame):
             return dataset.copy()
         return dataset
+
+    @abstractmethod
+    def get_diff(self):
+        pass
+
+
+class ModelAnalyzer(BaseAnalyzer):
+    def __init__(self, model, dataset, true_y, feature_names,
+                 categorical_features):
+        self._model = model
+        super(ModelAnalyzer, self).__init__(dataset, true_y, feature_names,
+                                            categorical_features)
+
+    @property
+    def model(self):
+        return self._model
+
+    def get_diff(self):
+        return self.model.predict(self.dataset) != self.true_y
+
+
+class PredictionsAnalyzer(BaseAnalyzer):
+    def __init__(self, pred_y, dataset, true_y, feature_names,
+                 categorical_features):
+        self._pred_y = pred_y
+        super(PredictionsAnalyzer, self).__init__(dataset, true_y,
+                                                  feature_names,
+                                                  categorical_features)
+
+    @property
+    def pred_y(self):
+        return self._pred_y
+
+    def get_diff(self):
+        return self.pred_y != self.true_y
