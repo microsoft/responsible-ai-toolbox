@@ -6,7 +6,10 @@ const { execSync } = require("child_process");
 const commander = require("commander");
 
 const versionCfgFile = "./version.cfg";
-const versionPyFiles = ["./raiwidgets/raiwidgets/__version__.py"];
+const versionPyFiles = [
+  "./raiwidgets/raiwidgets/__version__.py",
+  "./raitools/raitools/__version__.py"
+];
 
 function getVersion(release) {
   const revision = execSync("git rev-list --count HEAD").toString().trim();
