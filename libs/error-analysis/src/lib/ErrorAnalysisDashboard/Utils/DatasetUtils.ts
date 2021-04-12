@@ -30,7 +30,7 @@ export function constructRows(
     const data = JointDataset.datasetSlice(
       row,
       jointDataset.metaDict,
-      jointDataset.localExplanationFeatureCount
+      jointDataset.datasetFeatureCount
     );
     const tableRow = [];
     tableRow.push(row[JointDataset.IndexLabel]);

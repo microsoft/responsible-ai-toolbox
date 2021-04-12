@@ -10,7 +10,8 @@ import traceback
 from .constants import SKLearn
 from .error_handling import _format_exception
 from ._input_processing import _serialize_json_safe
-from erroranalysis._internal.error_analyzer import ErrorAnalyzer
+from erroranalysis._internal.error_analyzer import (
+    ModelAnalyzer, PredictionsAnalyzer)
 
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
@@ -27,7 +28,8 @@ class ErrorAnalysisDashboardInput:
             features,
             locale,
             categorical_features,
-            true_y_dataset):
+            true_y_dataset,
+            pred_y):
         """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -59,6 +61,10 @@ class ErrorAnalysisDashboardInput:
         Only needed if the explanation has a sample of instances from the
         original dataset.  Otherwise specify true_y parameter only.
         :type true_y_dataset: numpy.array or list[]
+        :param pred_y: The predicted y values, can be passed in as an
+            alternative to the model and explanation for a more limited
+            view.
+        :type pred_y: numpy.ndarray or list[]
         """
         self._model = model
         full_dataset = dataset
@@ -75,35 +81,24 @@ class ErrorAnalysisDashboardInput:
             model.predict_proba is not None
         self._dataframeColumns = None
         self.dashboard_input = {}
-        # List of explanations, key of explanation type is "explanation_type"
-        self._mli_explanations = explanation.data(-1)["mli"]
-        local_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY)
-        global_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_GLOBAL_EXPLANATION_KEY)
-        ebm_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_EBM_GLOBAL_EXPLANATION_KEY)
-        dataset_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_EXPLANATION_DATASET_KEY)
-
-        if hasattr(explanation, 'method'):
-            self.dashboard_input[
-                ExplanationDashboardInterface.EXPLANATION_METHOD
-            ] = explanation.method
-
-        predicted_y = None
+        has_explanation = explanation is not None
         feature_length = None
-        if dataset_explanation is not None:
-            if dataset is None or len(dataset) != len(true_y):
-                dataset = dataset_explanation[
-                    ExplanationDashboardInterface.MLI_DATASET_X_KEY
-                ]
-            if true_y is None:
-                true_y = dataset_explanation[
-                    ExplanationDashboardInterface.MLI_DATASET_Y_KEY
-                ]
-        elif len(dataset) != len(true_y):
-            dataset = explanation._eval_data
+
+        if has_explanation:
+            if classes is None:
+                has_classes_attr = hasattr(explanation, 'classes')
+                if has_classes_attr and explanation.classes is not None:
+                    classes = explanation.classes
+            dataset, true_y = self.input_explanation(explanation,
+                                                     dataset,
+                                                     true_y)
+
+        if classes is not None:
+            classes = self._convert_to_list(classes)
+            self.dashboard_input[
+                ExplanationDashboardInterface.CLASS_NAMES
+            ] = classes
+            class_to_index = {k: v for v, k in enumerate(classes)}
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
@@ -113,32 +108,20 @@ class ErrorAnalysisDashboardInput:
             ex_str = _format_exception(ex)
             raise ValueError(
                 "Unsupported dataset type, inner error: {}".format(ex_str))
-        if dataset is not None and model is not None:
-            try:
-                predicted_y = model.predict(dataset)
-            except Exception as ex:
-                ex_str = _format_exception(ex)
-                msg = "Model does not support predict method for given"
-                "dataset type, inner error: {}".format(
-                    ex_str)
-                raise ValueError(msg)
-            try:
-                predicted_y = self._convert_to_list(predicted_y)
-            except Exception as ex:
-                ex_str = _format_exception(ex)
-                raise ValueError(
-                    "Model prediction output of unsupported type,"
-                    "inner error: {}".format(ex_str))
 
-        if classes is None and hasattr(explanation, 'classes')\
-                and explanation.classes is not None:
-            classes = explanation.classes
-        if classes is not None:
-            classes = self._convert_to_list(classes)
-            self.dashboard_input[
-                ExplanationDashboardInterface.CLASS_NAMES
-            ] = classes
-            class_to_index = {k: v for v, k in enumerate(classes)}
+        if has_explanation:
+            self.input_explanation_data(explanation, list_dataset, classes)
+            if features is None and hasattr(explanation, 'features'):
+                features = explanation.features
+
+        if model is not None and pred_y is not None:
+            raise ValueError(
+                'Only model or pred_y need to be specified, not both')
+
+        if model is not None:
+            predicted_y = self.compute_predicted_y(model, dataset)
+        else:
+            predicted_y = self.predicted_y_to_list(pred_y)
 
         if predicted_y is not None:
             # If classes specified, convert predicted_y to
@@ -179,6 +162,101 @@ class ErrorAnalysisDashboardInput:
                 ExplanationDashboardInterface.TRUE_Y
             ] = list_true_y
 
+        if features is not None:
+            features = self._convert_to_list(features)
+            if feature_length is not None and len(features) != feature_length:
+                raise ValueError("Feature vector length mismatch:"
+                                 " feature names length differs"
+                                 " from local explanations dimension")
+            self.dashboard_input[FEATURE_NAMES] = features
+        if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
+                and model.predict_proba is not None and dataset is not None:
+            try:
+                probability_y = model.predict_proba(dataset)
+            except Exception as ex:
+                ex_str = _format_exception(ex)
+                raise ValueError("Model does not support predict_proba method"
+                                 " for given dataset type,"
+                                 " inner error: {}".format(ex_str))
+            try:
+                probability_y = self._convert_to_list(probability_y)
+            except Exception as ex:
+                ex_str = _format_exception(ex)
+                raise ValueError(
+                    "Model predict_proba output of unsupported type,"
+                    "inner error: {}".format(ex_str))
+            self.dashboard_input[
+                ExplanationDashboardInterface.PROBABILITY_Y
+            ] = probability_y
+        if locale is not None:
+            self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
+        if model is not None:
+            self._error_analyzer = ModelAnalyzer(model, full_dataset,
+                                                 full_true_y, features,
+                                                 categorical_features)
+        else:
+            self._error_analyzer = PredictionsAnalyzer(pred_y, full_dataset,
+                                                       full_true_y, features,
+                                                       categorical_features)
+        if self._categorical_features:
+            self.dashboard_input[
+                ExplanationDashboardInterface.CATEGORICAL_MAP
+            ] = self._error_analyzer.category_dictionary
+
+    def compute_predicted_y(self, model, dataset):
+        predicted_y = None
+        if dataset is not None and model is not None:
+            try:
+                predicted_y = model.predict(dataset)
+            except Exception as ex:
+                ex_str = _format_exception(ex)
+                msg = "Model does not support predict method for given"
+                "dataset type, inner error: {}".format(
+                    ex_str)
+                raise ValueError(msg)
+            predicted_y = self.predicted_y_to_list(predicted_y)
+        return predicted_y
+
+    def predicted_y_to_list(self, predicted_y):
+        try:
+            predicted_y = self._convert_to_list(predicted_y)
+        except Exception as ex:
+            ex_str = _format_exception(ex)
+            raise ValueError(
+                "Model prediction output of unsupported type,"
+                "inner error: {}".format(ex_str))
+        return predicted_y
+
+    def input_explanation(self, explanation, dataset, true_y):
+        self._mli_explanations = explanation.data(-1)["mli"]
+        dataset_explanation = self._find_first_explanation(
+            ExplanationDashboardInterface.MLI_EXPLANATION_DATASET_KEY)
+        if hasattr(explanation, 'method'):
+            self.dashboard_input[
+                ExplanationDashboardInterface.EXPLANATION_METHOD
+            ] = explanation.method
+        if dataset_explanation is not None:
+            if dataset is None or len(dataset) != len(true_y):
+                dataset = dataset_explanation[
+                    ExplanationDashboardInterface.MLI_DATASET_X_KEY
+                ]
+            if true_y is None:
+                true_y = dataset_explanation[
+                    ExplanationDashboardInterface.MLI_DATASET_Y_KEY
+                ]
+        elif len(dataset) != len(true_y):
+            dataset = explanation._eval_data
+        return dataset, true_y
+
+    def input_explanation_data(self, explanation, list_dataset, classes):
+        # List of explanations, key of explanation type is "explanation_type"
+        local_explanation = self._find_first_explanation(
+            ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY)
+        global_explanation = self._find_first_explanation(
+            ExplanationDashboardInterface.MLI_GLOBAL_EXPLANATION_KEY)
+        ebm_explanation = self._find_first_explanation(
+            ExplanationDashboardInterface.MLI_EBM_GLOBAL_EXPLANATION_KEY)
+
         if local_explanation is not None:
             try:
                 local_explanation["scores"] = self._convert_to_list(
@@ -203,6 +281,7 @@ class ErrorAnalysisDashboardInput:
                     "Unsupported local explanation type,"
                     "inner error: {}".format(ex_str))
             if list_dataset is not None:
+                row_length, feature_length = np.shape(list_dataset)
                 local_dim = np.shape(local_explanation["scores"])
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(
@@ -244,44 +323,6 @@ class ErrorAnalysisDashboardInput:
                 ex_str = _format_exception(ex)
                 raise ValueError(
                     "Unsupported ebm explanation type: {}".format(ex_str))
-
-        if features is None and hasattr(explanation, 'features')\
-                and explanation.features is not None:
-            features = explanation.features
-        if features is not None:
-            features = self._convert_to_list(features)
-            if feature_length is not None and len(features) != feature_length:
-                raise ValueError("Feature vector length mismatch:"
-                                 " feature names length differs"
-                                 " from local explanations dimension")
-            self.dashboard_input[FEATURE_NAMES] = features
-        if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
-                and model.predict_proba is not None and dataset is not None:
-            try:
-                probability_y = model.predict_proba(dataset)
-            except Exception as ex:
-                ex_str = _format_exception(ex)
-                raise ValueError("Model does not support predict_proba method"
-                                 " for given dataset type,"
-                                 " inner error: {}".format(ex_str))
-            try:
-                probability_y = self._convert_to_list(probability_y)
-            except Exception as ex:
-                ex_str = _format_exception(ex)
-                raise ValueError(
-                    "Model predict_proba output of unsupported type,"
-                    "inner error: {}".format(ex_str))
-            self.dashboard_input[
-                ExplanationDashboardInterface.PROBABILITY_Y
-            ] = probability_y
-        if locale is not None:
-            self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
-        self._error_analyzer = ErrorAnalyzer(model, full_dataset, full_true_y,
-                                             features, categorical_features)
-        if self._categorical_features:
-            self.dashboard_input[
-                ExplanationDashboardInterface.CATEGORICAL_MAP
-            ] = self._error_analyzer.category_dictionary
 
     def debug_ml(self, features, filters, composite_filters):
         try:
