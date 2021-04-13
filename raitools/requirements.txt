@@ -2,6 +2,6 @@ numpy>=1.17.2
 pandas>=0.25.1
 scipy>=1.4.1
 scikit-learn>=0.22.1
-lightgbm>=2.2.3
+lightgbm>=2.0.11
 interpret-community>=0.17.0
 fairlearn>=0.4.6
