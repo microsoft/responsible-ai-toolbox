@@ -4,6 +4,8 @@ module.exports = {
     "<rootDir>/libs/fairness",
     "<rootDir>/libs/core-ui",
     "<rootDir>/libs/dataset-explorer",
+    "<rootDir>/libs/causality",
+    "<rootDir>/libs/counterfactuals",
     "<rootDir>/libs/mlchartlib",
     "<rootDir>/apps/dashboard",
     "<rootDir>/libs/localization",

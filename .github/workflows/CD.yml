@@ -110,6 +110,8 @@ jobs:
             core-ui,
             mlchartlib,
             dataset-explorer,
+            causality,
+            counterfactuals,
             fairness,
             interpret,
             localization,
