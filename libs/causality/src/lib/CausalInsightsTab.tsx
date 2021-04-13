@@ -18,6 +18,6 @@ export class CausalInsightsTab extends React.PureComponent {
   }
 
   public render(): React.ReactNode {
-    return (null);
+    return;
   }
 }

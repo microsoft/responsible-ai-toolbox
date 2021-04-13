@@ -18,6 +18,6 @@ export class CounterfactualsTab extends React.PureComponent {
   }
 
   public render(): React.ReactNode {
-    return (null);
+    return;
   }
 }
