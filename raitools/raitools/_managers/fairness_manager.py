@@ -3,6 +3,7 @@
 
 """Defines the Fairness Manager class."""
 
+from raitools.raianalyzer.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 
 
@@ -31,13 +32,11 @@ class FairnessManager(BaseManager):
         :return: The name of the fairness manager.
         :rtype: str
         """
-        return "fairness"
+        return ManagerNames.FAIRNESS
 
     def save(self, path):
-        raise NotImplementedError(
-            "Save not implemented for FairnessManager")
+        pass
 
     @staticmethod
-    def load(path):
-        raise NotImplementedError(
-            "Load not implemented for FairnessManager")
+    def load(path, raianalyzer):
+        pass

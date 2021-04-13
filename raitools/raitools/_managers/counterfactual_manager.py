@@ -3,6 +3,7 @@
 
 """Defines the Counterfactual Manager class."""
 
+from raitools.raianalyzer.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 
 
@@ -39,13 +40,11 @@ class CounterfactualManager(BaseManager):
         :return: The name of the counterfactual manager.
         :rtype: str
         """
-        return "counterfactual"
+        return ManagerNames.COUNTERFACTUAL
 
     def save(self, path):
-        raise NotImplementedError(
-            "Save not implemented for CounterfactualManager")
+        pass
 
     @staticmethod
-    def load(path):
-        raise NotImplementedError(
-            "Load not implemented for CounterfactualManager")
+    def load(path, raianalyzer):
+        pass

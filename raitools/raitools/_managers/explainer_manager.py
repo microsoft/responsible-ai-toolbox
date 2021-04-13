@@ -4,16 +4,31 @@
 """Defines the Explainer Manager class."""
 
 import warnings
+import json
 from scipy.sparse import issparse
+from pathlib import Path
 from interpret_community.mimic.mimic_explainer import MimicExplainer
 from interpret_community.mimic.models.lightgbm_model import (
     LGBMExplainableModel)
 from interpret_community.mimic.models.linear_model import (
     LinearExplainableModel)
 from interpret_community.common.constants import ModelTask
+from interpret_community.explanation.explanation import (
+    save_explanation, load_explanation, FeatureImportanceExplanation)
+from raitools.raianalyzer.constants import (
+    ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
 from raitools._managers.base_manager import BaseManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
+EXPLANATION = 'explanation'
+IS_RUN = 'is_run'
+IS_ADDED = 'is_added'
+CLASSES = 'classes'
+U_INITIALIZATION_EXAMPLES = '_initialization_examples'
+U_EVALUATION_EXAMPLES = '_evaluation_examples'
+FEATURES = 'features'
+META_JSON = Metadata.META_JSON
+MODEL = Metadata.MODEL
 
 
 class ExplainerManager(BaseManager):
@@ -117,7 +132,24 @@ class ExplainerManager(BaseManager):
             return []
 
     def list(self):
-        pass
+        """List information about the ExplainerManager.
+
+        :return: A dictionary of properties.
+        :rtype: dict
+        """
+        props = {ListProperties.MANAGER_TYPE: self.name}
+        if self._explanation:
+            props[Keys.ID] = self._explanation.id
+            props[Keys.METHOD] = self._explanation.method
+            props[Keys.MODEL_TASK] = self._explanation.model_task
+            props[Keys.MODEL_TYPE] = self._explanation.model_type
+            if FeatureImportanceExplanation._does_quack(self._explanation):
+                props[Keys.IS_RAW] = self._explanation.is_raw
+                props[Keys.IS_ENGINEERED] = self._explanation.is_engineered
+            props[Keys.IS_COMPUTED] = True
+        else:
+            props[Keys.IS_COMPUTED] = False
+        return props
 
     @property
     def name(self):
@@ -126,13 +158,55 @@ class ExplainerManager(BaseManager):
         :return: The name of the explainer manager.
         :rtype: str
         """
-        return "explain"
+        return ManagerNames.EXPLAINER
 
     def save(self, path):
-        raise NotImplementedError(
-            "Save not implemented for ExplainerManager")
+        """Save the ExplainerManager to the given path.
+
+        :param path: The directory path to save the ExplainerManager to.
+        :type path: str
+        """
+        top_dir = Path(path)
+        # save the explanation
+        if self._explanation:
+            save_explanation(self._explanation, top_dir / EXPLANATION)
+        meta = {IS_RUN: self._is_run,
+                IS_ADDED: self._is_added}
+        with open(Path(path) / META_JSON, 'w') as file:
+            json.dump(meta, file)
 
     @staticmethod
-    def load(path):
-        raise NotImplementedError(
-            "Load not implemented for ExplainerManager")
+    def load(path, raianalyzer):
+        """Load the ExplainerManager from the given path.
+
+        :param path: The directory path to load the ExplainerManager from.
+        :type path: str
+        :param raianalyzer: The loaded parent RAIAnalyzer.
+        :type raianalyzer: RAIAnalyzer
+        """
+        # create the ExplainerManager without any properties using the __new__
+        # function, similar to pickle
+        inst = ExplainerManager.__new__(ExplainerManager)
+        top_dir = Path(path)
+        explanation_path = top_dir / EXPLANATION
+        if explanation_path.exists():
+            explanation = load_explanation(explanation_path)
+            inst.__dict__['_' + EXPLANATION] = explanation
+        inst.__dict__['_' + MODEL] = raianalyzer.model
+
+        with open(top_dir / META_JSON, 'r') as meta_file:
+            meta = meta_file.read()
+        meta = json.loads(meta)
+        inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
+        inst.__dict__['_' + CLASSES] = raianalyzer._classes
+        target_column = raianalyzer.target_column
+        train = raianalyzer.train.drop(columns=[target_column])
+        test = raianalyzer.test.drop(columns=[target_column])
+        inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
+        inst.__dict__[U_EVALUATION_EXAMPLES] = test
+        inst.__dict__['_' + FEATURES] = list(train.columns)
+        inst.__dict__['_' + IS_ADDED] = False
+        # reset self._surrogate_model
+        if meta[IS_ADDED]:
+            inst.add()
+        return inst
