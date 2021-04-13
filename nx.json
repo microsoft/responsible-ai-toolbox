@@ -33,6 +33,12 @@
     "dataset-explorer": {
       "tags": []
     },
+    "causality": {
+      "tags": []
+    },
+    "counterfactuals": {
+      "tags": []
+    },
     "mlchartlib": {
       "tags": []
     },

@@ -277,6 +277,144 @@
         }
       }
     },
+    "causality": {
+      "root": "libs/causality",
+      "sourceRoot": "libs/causality/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/causality/**/*.js",
+              "libs/causality/**/*.jsx",
+              "libs/causality/**/*.ts",
+              "libs/causality/**/*.tsx",
+              "libs/causality/**/*.test.ts",
+              "libs/causality/**/*.test.tsx",
+              "libs/causality/**/*.test.js",
+              "libs/causality/**/*.test.jsx",
+              "libs/causality/**/*.spec.ts",
+              "libs/causality/**/*.spec.tsx",
+              "libs/causality/**/*.spec.js",
+              "libs/causality/**/*.spec.jsx",
+              "libs/causality/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/causality",
+            "tsConfig": "libs/causality/tsconfig.lib.json",
+            "project": "libs/causality/package.json",
+            "entryFile": "libs/causality/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/causality/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/causality"]
+        }
+      }
+    },
+    "counterfactuals": {
+      "root": "libs/counterfactuals",
+      "sourceRoot": "libs/counterfactuals/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/counterfactuals/**/*.js",
+              "libs/counterfactuals/**/*.jsx",
+              "libs/counterfactuals/**/*.ts",
+              "libs/counterfactuals/**/*.tsx",
+              "libs/counterfactuals/**/*.test.ts",
+              "libs/counterfactuals/**/*.test.tsx",
+              "libs/counterfactuals/**/*.test.js",
+              "libs/counterfactuals/**/*.test.jsx",
+              "libs/counterfactuals/**/*.spec.ts",
+              "libs/counterfactuals/**/*.spec.tsx",
+              "libs/counterfactuals/**/*.spec.js",
+              "libs/counterfactuals/**/*.spec.jsx",
+              "libs/counterfactuals/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/counterfactuals",
+            "tsConfig": "libs/counterfactuals/tsconfig.lib.json",
+            "project": "libs/counterfactuals/package.json",
+            "entryFile": "libs/counterfactuals/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/counterfactuals/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/counterfactuals"]
+        }
+      }
+    },
     "mlchartlib": {
       "root": "libs/mlchartlib",
       "sourceRoot": "libs/mlchartlib/src",

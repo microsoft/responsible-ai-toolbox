@@ -24,6 +24,7 @@ this file to understand what changed.
 - bug fixes
 - other
   - moved dataset explorer into a new project `dataset-explorer`
+  - created new projects `causality` and `counterfactuals`
 
 ## v0.3.1
 
