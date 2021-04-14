@@ -35,7 +35,8 @@ class TestRAIAnalyzer(object):
 
         for model in models:
             run_raianalyzer(model, x_train, x_test, LABELS, classes)
-            run_counterfactual_rai_analyzer(model, x_train, x_test, LABELS, classes)
+            run_counterfactual_rai_analyzer(model, x_train, x_test, LABELS,
+                                            classes)
 
     def test_raianalyzer_binary(self):
         x_train, y_train, x_test, y_test, classes = \
@@ -68,7 +69,8 @@ def run_raianalyzer(model, x_train, x_test, target_column, classes):
     assert len(explanation.local_importance_values[0][0]) == num_cols
 
 
-def run_counterfactual_rai_analyzer(model, x_train, x_test, target_column, classes):
+def run_counterfactual_rai_analyzer(model, x_train, x_test, target_column,
+                                    classes):
     cf_analyzer = RAIAnalyzer(model, x_train, x_test[0:1], target_column,
                               task_type=ModelTask.CLASSIFICATION)
     continuous_features = list(set(x_train.columns) - set([target_column]))
@@ -84,7 +86,9 @@ def run_counterfactual_rai_analyzer(model, x_train, x_test, target_column, class
     assert len(cf_analyzer.counterfactual.get()) == 1
 
     # Add a duplicate configuration
-    from raitools._managers.counterfactual_manager import DuplicateCounterfactualConfig
+    from raitools._managers.counterfactual_manager import (
+        DuplicateCounterfactualConfig
+    )
     with pytest.raises(DuplicateCounterfactualConfig):
         cf_analyzer.counterfactual.add(continuous_features=continuous_features,
                                        total_CFs=10,

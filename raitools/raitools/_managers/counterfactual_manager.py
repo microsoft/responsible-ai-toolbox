@@ -10,7 +10,8 @@ from raitools.raianalyzer.constants import ModelTask
 
 
 class DuplicateCounterfactualConfig(Exception):
-    """An exception indicating that a duplicate counterfactual configuration was detected.
+    """An exception indicating that a duplicate counterfactual configuration
+    was detected.
 
     :param exception_message: A message describing the error.
     :type exception_message: str
@@ -19,8 +20,9 @@ class DuplicateCounterfactualConfig(Exception):
 
 
 class _CounterfactualConfig:
-    def __init__(self, method, continuous_features, total_CFs, desired_class="opposite",
-                 desired_range=None, permitted_range=None, features_to_vary=None):
+    def __init__(self, method, continuous_features, total_CFs,
+                 desired_class="opposite", desired_range=None,
+                 permitted_range=None, features_to_vary=None):
         self.method = method
         self.continuous_features = continuous_features
         self.total_CFs = total_CFs
@@ -33,14 +35,16 @@ class _CounterfactualConfig:
         self.has_computation_failed = False
         self.failure_reason = None
 
-    def __eq__(self, other_counterfactual_config):
-        return self.method == other_counterfactual_config.method and \
-            self.continuous_features == other_counterfactual_config.continuous_features and \
-            self.total_CFs == other_counterfactual_config.total_CFs and \
-            self.desired_range == other_counterfactual_config.desired_range and \
-            self.desired_class == other_counterfactual_config.desired_class and \
-            self.permitted_range == other_counterfactual_config.permitted_range and \
-            self.features_to_vary == other_counterfactual_config.features_to_vary
+    def __eq__(self, other_cf_config):
+        return (
+            self.method == other_cf_config.method and
+            self.continuous_features == other_cf_config.continuous_features and
+            self.total_CFs == other_cf_config.total_CFs and
+            self.desired_range == other_cf_config.desired_range and
+            self.desired_class == other_cf_config.desired_class and
+            self.permitted_range == other_cf_config.permitted_range and
+            self.features_to_vary == other_cf_config.features_to_vary
+        )
 
 
 class CounterfactualManager(BaseManager):
@@ -58,7 +62,8 @@ class CounterfactualManager(BaseManager):
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
 
-        model_type = "classifier" if self._task_type == ModelTask.CLASSIFICATION else 'regressor'
+        model_type = "classifier" \
+            if self._task_type == ModelTask.CLASSIFICATION else 'regressor'
         dice_model = dice_ml.Model(model=self._model,
                                    backend='sklearn',
                                    model_type=model_type)
@@ -102,27 +107,29 @@ class CounterfactualManager(BaseManager):
         self._add_counterfactual_config(counterfactual_config)
 
     def compute(self):
-        for counterfactual_config in self._counterfactual_config_list:
-            if not counterfactual_config.is_computed:
-                counterfactual_config.is_computed = True
+        for cf_config in self._counterfactual_config_list:
+            if not cf_config.is_computed:
+                cf_config.is_computed = True
                 try:
                     dice_explainer = self._create_diceml_explainer(
-                        method=counterfactual_config.method,
-                        continuous_features=counterfactual_config.continuous_features)
+                        method=cf_config.method,
+                        continuous_features=cf_config.continuous_features)
 
                     X_test = self._test.drop([self._target_column], axis=1)
 
-                    counterfactual_obj = dice_explainer.generate_counterfactuals(
-                        X_test, total_CFs=counterfactual_config.total_CFs,
-                        desired_class=counterfactual_config.desired_class,
-                        desired_range=counterfactual_config.desired_range)
+                    counterfactual_obj = \
+                        dice_explainer.generate_counterfactuals(
+                            X_test, total_CFs=cf_config.total_CFs,
+                            desired_class=cf_config.desired_class,
+                            desired_range=cf_config.desired_range)
 
-                    counterfactual_config.counterfactual_obj = counterfactual_obj
+                    cf_config.counterfactual_obj = \
+                        counterfactual_obj
                 except Exception as e:
                     # import pdb
                     # pdb.set_trace()
-                    counterfactual_config.has_computation_failed = True
-                    counterfactual_config.failure_reason = str(e)
+                    cf_config.has_computation_failed = True
+                    cf_config.failure_reason = str(e)
 
     def get(self, failed_to_compute=False):
         if not failed_to_compute:
