@@ -35,6 +35,7 @@ class TestRAIAnalyzer(object):
 
         for model in models:
             run_raianalyzer(model, x_train, x_test, LABELS, classes)
+            run_counterfactual_rai_analyzer(model, x_train, x_test, LABELS, classes)
 
     def test_raianalyzer_binary(self):
         x_train, y_train, x_test, y_test, classes = \
@@ -65,3 +66,48 @@ def run_raianalyzer(model, x_train, x_test, target_column, classes):
     assert len(explanation.local_importance_values[0]) == len(x_test)
     num_cols = len(x_train.columns) - 1
     assert len(explanation.local_importance_values[0][0]) == num_cols
+
+
+def run_counterfactual_rai_analyzer(model, x_train, x_test, target_column, classes):
+    cf_analyzer = RAIAnalyzer(model, x_train, x_test[0:1], target_column,
+                              task_type=ModelTask.CLASSIFICATION)
+    continuous_features = list(set(x_train.columns) - set([target_column]))
+
+    # Add the first configuration
+    cf_analyzer.counterfactual.add(continuous_features=continuous_features,
+                                   total_CFs=10,
+                                   method='random',
+                                   desired_class='opposite')
+    cf_analyzer.counterfactual.compute()
+    assert cf_analyzer.counterfactual.get() is not None
+    assert isinstance(cf_analyzer.counterfactual.get(), list)
+    assert len(cf_analyzer.counterfactual.get()) == 1
+
+    # Add a duplicate configuration
+    from raitools._managers.counterfactual_manager import DuplicateCounterfactualConfig
+    with pytest.raises(DuplicateCounterfactualConfig):
+        cf_analyzer.counterfactual.add(continuous_features=continuous_features,
+                                       total_CFs=10,
+                                       method='random',
+                                       desired_class='opposite')
+
+    # Add the second configuration
+    cf_analyzer.counterfactual.add(continuous_features=continuous_features,
+                                   total_CFs=1,
+                                   method='random',
+                                   desired_class='opposite')
+    cf_analyzer.counterfactual.compute()
+    assert cf_analyzer.counterfactual.get() is not None
+    assert isinstance(cf_analyzer.counterfactual.get(), list)
+    assert len(cf_analyzer.counterfactual.get()) == 2
+
+    # Add a bad configuration
+    cf_analyzer.counterfactual.add(continuous_features=continuous_features,
+                                   total_CFs=-1,
+                                   method='random',
+                                   desired_class='opposite')
+    cf_analyzer.counterfactual.compute()
+    assert cf_analyzer.counterfactual.get() is not None
+    assert isinstance(cf_analyzer.counterfactual.get(), list)
+    assert len(cf_analyzer.counterfactual.get()) == 2
+    assert len(cf_analyzer.counterfactual.get(failed_to_compute=True)) == 1
