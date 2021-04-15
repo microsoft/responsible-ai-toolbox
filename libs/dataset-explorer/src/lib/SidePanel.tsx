@@ -3,12 +3,12 @@
 
 import {
   ColumnCategories,
-  JointDataset,
-  Cohort,
   ChartTypes,
   IGenericChartProps,
   FabricStyles,
-  InteractiveLegend
+  InteractiveLegend,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -26,9 +26,6 @@ import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 
 export interface ISidePanelProps {
   chartProps: IGenericChartProps;
-  jointDataset: JointDataset;
-  cohorts: Cohort[];
-  selectedCohortIndex: number;
   setColorOpen(): void;
   onChartTypeChange(
     ev?: React.SyntheticEvent<HTMLElement>,
@@ -37,6 +34,11 @@ export interface ISidePanelProps {
 }
 
 export class SidePanel extends React.Component<ISidePanelProps> {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private readonly chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Histogram,
@@ -47,6 +49,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
       text: localization.Interpret.DatasetExplorer.individualDatapoints
     }
   ];
+
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
     const colorSeries = this.buildColorLegend();
@@ -60,13 +63,13 @@ export class SidePanel extends React.Component<ISidePanelProps> {
               onClick={this.props.setColorOpen}
               text={
                 this.props.chartProps.colorAxis &&
-                this.props.jointDataset.metaDict[
+                this.context.jointDataset.metaDict[
                   this.props.chartProps.colorAxis.property
                 ].abbridgedLabel
               }
               title={
                 this.props.chartProps.colorAxis &&
-                this.props.jointDataset.metaDict[
+                this.context.jointDataset.metaDict[
                   this.props.chartProps.colorAxis.property
                 ].label
               }
@@ -114,14 +117,14 @@ export class SidePanel extends React.Component<ISidePanelProps> {
       if (
         colorAxis &&
         (colorAxis.options.bin ||
-          this.props.jointDataset.metaDict[colorAxis.property]
+          this.context.jointDataset.metaDict[colorAxis.property]
             .treatAsCategorical)
       ) {
-        this.props.cohorts[this.props.selectedCohortIndex].sort(
+        this.context.selectedCohort.cohort.sort(
           colorAxis.property
         );
         colorSeries =
-          this.props.jointDataset.metaDict[colorAxis.property]
+          this.context.jointDataset.metaDict[colorAxis.property]
             .sortedCategoricalValues || [];
       } else {
         // continuous color, handled by plotly for now
@@ -130,23 +133,23 @@ export class SidePanel extends React.Component<ISidePanelProps> {
     } else {
       const colorAxis = this.props.chartProps.yAxis;
       if (
-        this.props.jointDataset.metaDict[colorAxis.property]
+        this.context.jointDataset.metaDict[colorAxis.property]
           .treatAsCategorical &&
         colorAxis.property !== ColumnCategories.None
       ) {
-        this.props.cohorts[this.props.selectedCohortIndex].sort(
+        this.context.selectedCohort.cohort.sort(
           colorAxis.property
         );
         const includedIndexes = _.uniq(
-          this.props.cohorts[this.props.selectedCohortIndex].unwrap(
+          this.context.selectedCohort.cohort.unwrap(
             colorAxis.property
           )
         );
-        colorSeries = this.props.jointDataset.metaDict[colorAxis.property]
+        colorSeries = this.context.jointDataset.metaDict[colorAxis.property]
           .treatAsCategorical
           ? includedIndexes.map(
               (category) =>
-                this.props.jointDataset.metaDict[colorAxis.property]
+                this.context.jointDataset.metaDict[colorAxis.property]
                   .sortedCategoricalValues?.[category]
             )
           : includedIndexes;

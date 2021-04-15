@@ -326,6 +326,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         value={{
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts,
+          selectedCohort: this.state.selectedCohort,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -543,15 +544,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       ))}
                     </Pivot>
                     {this.state.activeGlobalTab ===
-                      GlobalTabKeys.DataExplorerTab && (
-                      <DatasetExplorerTab
-                        initialCohortIndex={this.state.cohorts.findIndex(
-                          (errorCohort) =>
-                            errorCohort.cohort.name ===
-                            this.state.selectedCohort.cohort.name
-                        )}
-                      />
-                    )}
+                      GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab

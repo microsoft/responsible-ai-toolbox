@@ -24,7 +24,6 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import React from "react";
-
 import {
   buildInitialExplanationContext,
   GlobalTabKeys,
@@ -88,6 +87,7 @@ export class NewExplanationDashboard extends React.PureComponent<
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
+          selectedCohort: new ErrorCohort(this.state.cohorts[0], this.state.jointDataset),
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,

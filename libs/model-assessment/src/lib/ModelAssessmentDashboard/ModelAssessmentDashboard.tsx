@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CausalInsightsTab } from "@responsible-ai/causality";
+// import { CausalInsightsTab } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
   getDatasetSummary,
@@ -15,7 +15,7 @@ import {
   IGenericChartProps,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
+// import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisOptions,
@@ -106,6 +106,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         value={{
           dataset: this.props.dataset,
           errorCohorts: this.state.cohorts,
+          selectedCohort: this.state.selectedCohort,
           jointDataset: this.state.jointDataset,
           modelExplanationData: this.props.modelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -384,8 +385,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         theme={this.props.theme}
                       />
                     )}
-                    <CausalInsightsTab />
-                    <CounterfactualsTab />
+                    {/* <CausalInsightsTab />
+                    <CounterfactualsTab /> */}
                   </div>
                 </Stack>
                 <CohortInfo
