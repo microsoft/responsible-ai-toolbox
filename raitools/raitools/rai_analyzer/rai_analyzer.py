@@ -248,18 +248,15 @@ class RAIAnalyzer(object):
             with open(top_dir / MODEL_PKL, 'rb') as file:
                 inst.__dict__[MODEL] = pickle.load(file)
         # load each of the individual managers
-        manager_names = ManagerNames.get_managers()
         managers = []
         kvp_manager = {ManagerNames.CAUSAL: CausalManager,
                        ManagerNames.COUNTERFACTUAL: CounterfactualManager,
                        ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
                        ManagerNames.EXPLAINER: ExplainerManager,
                        ManagerNames.FAIRNESS: FairnessManager}
-        for manager_name in manager_names:
-            manager_cls = kvp_manager[manager_name]
+        for manager_name, manager_cls in kvp_manager.items():
             manager = manager_cls.load(top_dir / manager_name, inst)
-            _manager_name = manager_name.replace(' ', '_')
-            inst.__dict__['_' + _manager_name + '_manager'] = manager
+            inst.__dict__['_' + manager_name + '_manager'] = manager
             managers.append(manager)
         inst.__dict__['_' + MANAGERS] = managers
         return inst

@@ -19,27 +19,9 @@ class ManagerNames(str):
 
     CAUSAL = 'causal'
     COUNTERFACTUAL = 'counterfactual'
-    ERROR_ANALYSIS = 'error analysis'
+    ERROR_ANALYSIS = 'error_analysis'
     EXPLAINER = 'explainer'
     FAIRNESS = 'fairness'
-
-    @classmethod
-    def _name_filter(cls, name):
-        return not name.startswith('__') and not callable(getattr(cls, name))
-
-    @classmethod
-    def get_managers(cls):
-        """Return the manager names
-
-        :param cls: ManagerNames input class.
-        :type cls: ManagerNames
-        :return: A set of manager names, e.g., 'causal', 'counterfactual', etc.
-        :rtype: set[str]
-        """
-        keys = vars(cls).keys()
-        fkeys = filter(cls._name_filter, keys)
-        values = map(lambda key: getattr(ManagerNames, key), fkeys)
-        return set(values)
 
 
 class Metadata(str):
