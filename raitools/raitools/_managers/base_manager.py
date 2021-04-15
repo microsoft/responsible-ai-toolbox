@@ -56,11 +56,11 @@ class BaseManager(ABC):
 
     @staticmethod
     @abstractmethod
-    def load(path, raianalyzer):
+    def load(path, rai_analyzer):
         """Static method to load the manager.
 
         :param path: The directory path to load the manager from.
         :type path: str
-        :param raianalyzer: The loaded parent RAIAnalyzer.
-        :type raianalyzer: RAIAnalyzer
+        :param rai_analyzer: The loaded parent RAIAnalyzer.
+        :type rai_analyzer: RAIAnalyzer
         """

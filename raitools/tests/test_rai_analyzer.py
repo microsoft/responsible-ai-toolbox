@@ -9,7 +9,7 @@ from tempfile import TemporaryDirectory
 from common_utils import (create_iris_data, create_cancer_data,
                           create_binary_classification_dataset, create_models)
 from raitools import RAIAnalyzer, ModelTask
-from raitools.raianalyzer.constants import ManagerNames, ListProperties
+from raitools.rai_analyzer.constants import ManagerNames, ListProperties
 
 LABELS = "labels"
 LIGHTGBM_METHOD = 'mimic.lightgbm'
@@ -17,7 +17,7 @@ LIGHTGBM_METHOD = 'mimic.lightgbm'
 
 class TestRAIAnalyzer(object):
 
-    def test_raianalyzer_iris(self):
+    def test_rai_analyzer_iris(self):
         x_train, x_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
         x_train = pd.DataFrame(x_train, columns=feature_names)
@@ -27,9 +27,9 @@ class TestRAIAnalyzer(object):
         x_test[LABELS] = y_test
 
         for model in models:
-            run_raianalyzer(model, x_train, x_test, LABELS, classes)
+            run_rai_analyzer(model, x_train, x_test, LABELS, classes)
 
-    def test_raianalyzer_cancer(self):
+    def test_rai_analyzer_cancer(self):
         x_train, x_test, y_train, y_test, feature_names, classes = \
             create_cancer_data()
         x_train = pd.DataFrame(x_train, columns=feature_names)
@@ -39,9 +39,9 @@ class TestRAIAnalyzer(object):
         x_test[LABELS] = y_test
 
         for model in models:
-            run_raianalyzer(model, x_train, x_test, LABELS, classes)
+            run_rai_analyzer(model, x_train, x_test, LABELS, classes)
 
-    def test_raianalyzer_binary(self):
+    def test_rai_analyzer_binary(self):
         x_train, y_train, x_test, y_test, classes = \
             create_binary_classification_dataset()
         x_train = pd.DataFrame(x_train)
@@ -51,45 +51,45 @@ class TestRAIAnalyzer(object):
         x_test[LABELS] = y_test
 
         for model in models:
-            run_raianalyzer(model, x_train, x_test, LABELS, classes)
+            run_rai_analyzer(model, x_train, x_test, LABELS, classes)
 
 
-def run_raianalyzer(model, x_train, x_test, target_column, classes):
+def run_rai_analyzer(model, x_train, x_test, target_column, classes):
     task_type = ModelTask.CLASSIFICATION
-    raianalyzer = RAIAnalyzer(model, x_train, x_test, target_column,
-                              task_type=task_type)
-    raianalyzer.explainer.add()
+    rai_analyzer = RAIAnalyzer(model, x_train, x_test, target_column,
+                               task_type=task_type)
+    rai_analyzer.explainer.add()
     # Validate calling add multiple times prints a warning
     with pytest.warns(UserWarning):
-        raianalyzer.explainer.add()
-    raianalyzer.explainer.compute()
-    validate_raianalyzer(raianalyzer, x_train, x_test, target_column,
-                         task_type)
-    validate_explainer(raianalyzer, x_train, x_test, classes)
+        rai_analyzer.explainer.add()
+    rai_analyzer.explainer.compute()
+    validate_rai_analyzer(rai_analyzer, x_train, x_test, target_column,
+                          task_type)
+    validate_explainer(rai_analyzer, x_train, x_test, classes)
     with TemporaryDirectory() as tempdir:
         path = Path(tempdir) / 'explanation'
-        # save the raianalyzer
-        raianalyzer.save(path)
-        # load the raianalyzer
-        raianalyzer = RAIAnalyzer.load(path)
-        raianalyzer.explainer.compute()
-        validate_raianalyzer(raianalyzer, x_train, x_test, target_column,
-                             task_type)
-        validate_explainer(raianalyzer, x_train, x_test, classes)
+        # save the rai_analyzer
+        rai_analyzer.save(path)
+        # load the rai_analyzer
+        rai_analyzer = RAIAnalyzer.load(path)
+        rai_analyzer.explainer.compute()
+        validate_rai_analyzer(rai_analyzer, x_train, x_test, target_column,
+                              task_type)
+        validate_explainer(rai_analyzer, x_train, x_test, classes)
 
 
-def validate_raianalyzer(raianalyzer, x_train, x_test, target_column,
-                         task_type):
-    pd.testing.assert_frame_equal(raianalyzer.train, x_train)
-    pd.testing.assert_frame_equal(raianalyzer.test, x_test)
-    assert raianalyzer.target_column == target_column
-    assert raianalyzer.task_type == task_type
-    np.testing.assert_array_equal(raianalyzer._classes,
+def validate_rai_analyzer(rai_analyzer, x_train, x_test, target_column,
+                          task_type):
+    pd.testing.assert_frame_equal(rai_analyzer.train, x_train)
+    pd.testing.assert_frame_equal(rai_analyzer.test, x_test)
+    assert rai_analyzer.target_column == target_column
+    assert rai_analyzer.task_type == task_type
+    np.testing.assert_array_equal(rai_analyzer._classes,
                                   x_train[target_column].unique())
 
 
-def validate_explainer(raianalyzer, x_train, x_test, classes):
-    explanations = raianalyzer.explainer.get()
+def validate_explainer(rai_analyzer, x_train, x_test, classes):
+    explanations = rai_analyzer.explainer.get()
     assert isinstance(explanations, list)
     assert len(explanations) == 1
     explanation = explanations[0]
@@ -97,7 +97,7 @@ def validate_explainer(raianalyzer, x_train, x_test, classes):
     assert len(explanation.local_importance_values[0]) == len(x_test)
     num_cols = len(x_train.columns) - 1
     assert len(explanation.local_importance_values[0][0]) == num_cols
-    properties = raianalyzer.explainer.list()
+    properties = rai_analyzer.explainer.list()
     assert properties[ListProperties.MANAGER_TYPE] == ManagerNames.EXPLAINER
     assert 'id' in properties
     assert properties['method'] == LIGHTGBM_METHOD

@@ -7,7 +7,7 @@ import json
 import pandas as pd
 import pickle
 from pathlib import Path
-from raitools.raianalyzer.constants import ManagerNames, Metadata
+from raitools.rai_analyzer.constants import ManagerNames, Metadata
 from raitools._managers.causal_manager import CausalManager
 from raitools._managers.counterfactual_manager import CounterfactualManager
 from raitools._managers.error_analysis_manager import ErrorAnalysisManager

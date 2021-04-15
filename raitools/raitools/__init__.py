@@ -3,7 +3,7 @@
 
 """Responsible AI analysis SDK package."""
 
-from raitools.raianalyzer import RAIAnalyzer, ModelTask
+from raitools.rai_analyzer import RAIAnalyzer, ModelTask
 from .__version__ import version
 
 __version__ = version

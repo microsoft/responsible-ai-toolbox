@@ -15,7 +15,7 @@ from interpret_community.mimic.models.linear_model import (
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
-from raitools.raianalyzer.constants import (
+from raitools.rai_analyzer.constants import (
     ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
 from raitools._managers.base_manager import BaseManager
 
@@ -176,13 +176,13 @@ class ExplainerManager(BaseManager):
             json.dump(meta, file)
 
     @staticmethod
-    def load(path, raianalyzer):
+    def load(path, rai_analyzer):
         """Load the ExplainerManager from the given path.
 
         :param path: The directory path to load the ExplainerManager from.
         :type path: str
-        :param raianalyzer: The loaded parent RAIAnalyzer.
-        :type raianalyzer: RAIAnalyzer
+        :param rai_analyzer: The loaded parent RAIAnalyzer.
+        :type rai_analyzer: RAIAnalyzer
         """
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle
@@ -192,16 +192,16 @@ class ExplainerManager(BaseManager):
         if explanation_path.exists():
             explanation = load_explanation(explanation_path)
             inst.__dict__['_' + EXPLANATION] = explanation
-        inst.__dict__['_' + MODEL] = raianalyzer.model
+        inst.__dict__['_' + MODEL] = rai_analyzer.model
 
         with open(top_dir / META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
-        inst.__dict__['_' + CLASSES] = raianalyzer._classes
-        target_column = raianalyzer.target_column
-        train = raianalyzer.train.drop(columns=[target_column])
-        test = raianalyzer.test.drop(columns=[target_column])
+        inst.__dict__['_' + CLASSES] = rai_analyzer._classes
+        target_column = rai_analyzer.target_column
+        train = rai_analyzer.train.drop(columns=[target_column])
+        test = rai_analyzer.test.drop(columns=[target_column])
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)

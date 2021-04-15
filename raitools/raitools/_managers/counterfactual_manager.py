@@ -3,7 +3,7 @@
 
 """Defines the Counterfactual Manager class."""
 
-from raitools.raianalyzer.constants import ManagerNames
+from raitools.rai_analyzer.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 
 
@@ -46,5 +46,5 @@ class CounterfactualManager(BaseManager):
         pass
 
     @staticmethod
-    def load(path, raianalyzer):
+    def load(path, rai_analyzer):
         pass
