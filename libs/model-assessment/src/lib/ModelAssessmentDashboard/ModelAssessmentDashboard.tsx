@@ -106,7 +106,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         value={{
           dataset: this.props.dataset,
           errorCohorts: this.state.cohorts,
-          selectedCohort: this.state.selectedCohort,
           jointDataset: this.state.jointDataset,
           modelExplanationData: this.props.modelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -115,6 +114,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
+          selectedCohort: this.state.selectedCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
@@ -312,7 +312,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                       <ModelPerformanceTab />
                     )}
                     {this.state.activeGlobalTab ===
-                      GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
+                      GlobalTabKeys.DataExplorerTab && (
+                      <DatasetExplorerTab showCohortSelection={false} />
+                    )}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab

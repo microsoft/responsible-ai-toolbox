@@ -24,6 +24,7 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 import React from "react";
+
 import {
   buildInitialExplanationContext,
   GlobalTabKeys,
@@ -87,7 +88,6 @@ export class NewExplanationDashboard extends React.PureComponent<
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
-          selectedCohort: new ErrorCohort(this.state.cohorts[0], this.state.jointDataset),
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -95,6 +95,10 @@ export class NewExplanationDashboard extends React.PureComponent<
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
+          selectedCohort: new ErrorCohort(
+            this.state.cohorts[0],
+            this.state.jointDataset
+          ),
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
@@ -160,7 +164,9 @@ export class NewExplanationDashboard extends React.PureComponent<
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExploration && <DatasetExplorerTab />}
+                    GlobalTabKeys.DataExploration && (
+                    <DatasetExplorerTab showCohortSelection={true} />
+                  )}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (
                     <GlobalExplanationTab

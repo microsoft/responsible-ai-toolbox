@@ -326,7 +326,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         value={{
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts,
-          selectedCohort: this.state.selectedCohort,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
@@ -334,6 +333,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
+          selectedCohort: this.state.selectedCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
@@ -544,7 +544,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       ))}
                     </Pivot>
                     {this.state.activeGlobalTab ===
-                      GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
+                      GlobalTabKeys.DataExplorerTab && (
+                      <DatasetExplorerTab showCohortSelection={false} />
+                    )}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab

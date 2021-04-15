@@ -6,6 +6,7 @@ import {
   ExpandableText,
   JointDataset,
   ColumnCategories,
+  cohortKey,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
@@ -19,7 +20,10 @@ import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   getTheme,
+  IDropdownOption,
+  Dropdown,
   DefaultButton,
+  Text,
   IChoiceGroupOption
 } from "office-ui-fabric-react";
 import React from "react";
@@ -28,12 +32,15 @@ import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 import { generatePlotlyProps } from "./generatePlotlyProps";
 import { SidePanel } from "./SidePanel";
 
-export class IDatasetExplorerTabProps {}
+export interface IDatasetExplorerTabProps {
+  showCohortSelection: boolean;
+}
 
 export interface IDatasetExplorerTabState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   colorDialogOpen: boolean;
+  selectedCohortIndex: number;
   calloutVisible: boolean;
   chartProps?: IGenericChartProps;
 }
@@ -51,16 +58,31 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
+
     this.state = {
       calloutVisible: false,
       colorDialogOpen: false,
+      selectedCohortIndex: 0,
       xDialogOpen: false,
       yDialogOpen: false
     };
   }
 
   public componentDidMount() {
-    this.setState({ chartProps: this.generateDefaultChartAxes() });
+    let initialCohortIndex: number;
+    if (this.props.showCohortSelection) {
+      initialCohortIndex = 0;
+    } else {
+      initialCohortIndex = this.context.errorCohorts.findIndex(
+        (errorCohort) =>
+          errorCohort.cohort.name === this.context.selectedCohort.cohort.name
+      );
+    }
+
+    this.setState({
+      chartProps: this.generateDefaultChartAxes(),
+      selectedCohortIndex: initialCohortIndex
+    });
   }
 
   public render(): React.ReactNode {
@@ -79,9 +101,19 @@ export class DatasetExplorerTab extends React.PureComponent<
     const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.selectedCohort.cohort
+      this.context.errorCohorts.map((errorCohort) => errorCohort.cohort)[
+        this.state.selectedCohortIndex
+      ]
     );
-    const cohortLength = this.context.selectedCohort.cohort.filteredData.length;
+    const cohortOptions =
+      this.state.chartProps.xAxis.property !== cohortKey
+        ? this.context.errorCohorts.map((errorCohort, index) => {
+            return { key: index, text: errorCohort.cohort.name };
+          })
+        : undefined;
+    const cohortLength = this.context.errorCohorts[
+      this.state.selectedCohortIndex
+    ].cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -103,6 +135,27 @@ export class DatasetExplorerTab extends React.PureComponent<
             {localization.Interpret.DatasetExplorer.collapsedHelperText}
           </ExpandableText>
         </div>
+        {
+          // show cohort selection only in dashboards without global cohort selection mechanism
+          this.props.showCohortSelection && (
+            <div className={classNames.cohortPickerWrapper}>
+              <Text
+                variant="mediumPlus"
+                className={classNames.cohortPickerLabel}
+              >
+                {localization.Interpret.ModelPerformance.cohortPickerLabel}
+              </Text>
+              {cohortOptions && (
+                <Dropdown
+                  styles={{ dropdown: { width: 150 } }}
+                  options={cohortOptions}
+                  selectedKey={this.state.selectedCohortIndex}
+                  onChange={this.setSelectedCohort}
+                />
+              )}
+            </div>
+          )
+        }
         <div className={classNames.mainArea} id={this.chartAndConfigsId}>
           <div className={classNames.chartWithAxes}>
             {this.state.yDialogOpen && (
@@ -210,6 +263,11 @@ export class DatasetExplorerTab extends React.PureComponent<
           </div>
           <SidePanel
             chartProps={this.state.chartProps}
+            cohorts={this.context.errorCohorts.map(
+              (errorCohort) => errorCohort.cohort
+            )}
+            jointDataset={this.context.jointDataset}
+            selectedCohortIndex={this.state.selectedCohortIndex}
             setColorOpen={this.setColorOpen}
             onChartTypeChange={this.onChartTypeChange}
           />
@@ -217,6 +275,15 @@ export class DatasetExplorerTab extends React.PureComponent<
       </div>
     );
   }
+
+  private setSelectedCohort = (
+    _: React.FormEvent<HTMLDivElement>,
+    item?: IDropdownOption
+  ): void => {
+    if (item?.key !== undefined) {
+      this.setState({ selectedCohortIndex: item.key as number });
+    }
+  };
 
   private onChartTypeChange = (
     _ev?: React.SyntheticEvent<HTMLElement>,

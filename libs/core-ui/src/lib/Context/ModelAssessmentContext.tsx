@@ -39,13 +39,13 @@ export interface IModelAssessmentContext {
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
   dataset: {} as IDataset,
   errorCohorts: [],
-  selectedCohort: {} as ErrorCohort,
   jointDataset: {} as JointDataset,
   modelExplanationData: {} as IModelExplanationData,
   modelMetadata: {} as IExplanationModelMetadata,
   precomputedExplanations: undefined,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
+  selectedCohort: {} as ErrorCohort,
   telemetryHook: () => undefined,
   theme: {} as ITheme
 };
