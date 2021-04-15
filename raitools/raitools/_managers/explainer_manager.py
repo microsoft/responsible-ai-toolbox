@@ -15,12 +15,11 @@ from interpret_community.mimic.models.linear_model import (
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
-from raitools.rai_analyzer.constants import (
+from raitools._internal.constants import (
     ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
 from raitools._managers.base_manager import BaseManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
-EXPLANATION = 'explanation'
 IS_RUN = 'is_run'
 IS_ADDED = 'is_added'
 CLASSES = 'classes'
@@ -40,11 +39,12 @@ class ExplainerManager(BaseManager):
         or function that accepts a 2d ndarray.
     :type model: object
     :param initialization_examples: A matrix of feature vector
-        examples (# examples x # features) for initializing the explainer.
+        examples (# examples x # features) for initializing the explainer,
+        with an additional label column.
     :type initialization_examples: pandas.DataFrame
     :param evaluation_examples: A matrix of feature vector
         examples (# examples x # features) on which to explain the
-        model's output.
+        model's output, with an additional label column.
     :type evaluation_examples: pandas.DataFrame
     :param target_column: The name of the label column.
     :type target_column: str
@@ -63,11 +63,12 @@ class ExplainerManager(BaseManager):
             or function that accepts a 2d ndarray.
         :type model: object
         :param initialization_examples: A matrix of feature vector
-            examples (# examples x # features) for initializing the explainer.
+            examples (# examples x # features) for initializing the explainer,
+            with an additional label column.
         :type initialization_examples: pandas.DataFrame
         :param evaluation_examples: A matrix of feature vector
             examples (# examples x # features) on which to explain the
-            model's output.
+            model's output, with an additional label column.
         :type evaluation_examples: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
@@ -169,7 +170,8 @@ class ExplainerManager(BaseManager):
         top_dir = Path(path)
         # save the explanation
         if self._explanation:
-            save_explanation(self._explanation, top_dir / EXPLANATION)
+            save_explanation(self._explanation,
+                             top_dir / ManagerNames.EXPLAINER)
         meta = {IS_RUN: self._is_run,
                 IS_ADDED: self._is_added}
         with open(Path(path) / META_JSON, 'w') as file:
@@ -188,10 +190,10 @@ class ExplainerManager(BaseManager):
         # function, similar to pickle
         inst = ExplainerManager.__new__(ExplainerManager)
         top_dir = Path(path)
-        explanation_path = top_dir / EXPLANATION
+        explanation_path = top_dir / ManagerNames.EXPLAINER
         if explanation_path.exists():
             explanation = load_explanation(explanation_path)
-            inst.__dict__['_' + EXPLANATION] = explanation
+            inst.__dict__['_' + ManagerNames.EXPLAINER] = explanation
         inst.__dict__['_' + MODEL] = rai_analyzer.model
 
         with open(top_dir / META_JSON, 'r') as meta_file:

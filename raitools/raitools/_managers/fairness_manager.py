@@ -3,7 +3,7 @@
 
 """Defines the Fairness Manager class."""
 
-from raitools.rai_analyzer.constants import ManagerNames
+from raitools._internal.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 
 

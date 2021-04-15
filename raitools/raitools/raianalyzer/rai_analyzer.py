@@ -7,24 +7,24 @@ import json
 import pandas as pd
 import pickle
 from pathlib import Path
-from raitools.rai_analyzer.constants import ManagerNames, Metadata
+from raitools._internal.constants import ManagerNames, Metadata
 from raitools._managers.causal_manager import CausalManager
 from raitools._managers.counterfactual_manager import CounterfactualManager
 from raitools._managers.error_analysis_manager import ErrorAnalysisManager
 from raitools._managers.explainer_manager import ExplainerManager
 from raitools._managers.fairness_manager import FairnessManager
 
-DTYPES = 'dtypes'
-TRAIN = 'train'
-TEST = 'test'
-TARGET_COLUMN = 'target_column'
-TASK_TYPE = 'task_type'
-MODEL = Metadata.MODEL
-MODEL_PKL = MODEL + '.pkl'
-SERIALIZER = 'serializer'
-CLASSES = 'classes'
-MANAGERS = 'managers'
-META_JSON = Metadata.META_JSON
+_DTYPES = 'dtypes'
+_TRAIN = 'train'
+_TEST = 'test'
+_TARGET_COLUMN = 'target_column'
+_TASK_TYPE = 'task_type'
+_MODEL = Metadata.MODEL
+_MODEL_PKL = _MODEL + '.pkl'
+_SERIALIZER = 'serializer'
+_CLASSES = 'classes'
+_MANAGERS = 'managers'
+_META_JSON = Metadata.META_JSON
 
 
 class RAIAnalyzer(object):
@@ -35,13 +35,13 @@ class RAIAnalyzer(object):
     features, validate fairness, compute counterfactuals and run causal
     analysis in a single API.
 
-    :param model: The model to explain.
+    :param model: The model to compute RAI insights for.
         A model that implements sklearn.predict or sklearn.predict_proba
         or function that accepts a 2d ndarray.
     :type model: object
-    :param train: The training dataset.
+    :param train: The training dataset including the label column.
     :type train: pandas.DataFrame
-    :param test: The test dataset.
+    :param test: The test dataset including the label column.
     :type test: pandas.DataFrame
     :param target_column: The name of the label column.
     :type target_column: str
@@ -62,13 +62,13 @@ class RAIAnalyzer(object):
         features, validate fairness, compute counterfactuals and run causal
         analysis in a single API.
 
-        :param model: The model to explain.
+        :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param train: The training dataset.
+        :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
-        :param test: The test dataset.
+        :param test: The test dataset including the label column.
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
@@ -179,24 +179,24 @@ class RAIAnalyzer(object):
             manager.save(top_dir / manager.name)
         # save current state
         dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(top_dir / (TRAIN + DTYPES),
+        self._write_to_file(top_dir / (_TRAIN + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(top_dir / TRAIN, self.train.to_json())
+        self._write_to_file(top_dir / _TRAIN, self.train.to_json())
         dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(top_dir / (TEST + DTYPES),
+        self._write_to_file(top_dir / (_TEST + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(top_dir / TEST, self.test.to_json())
-        meta = {TARGET_COLUMN: self.target_column,
-                TASK_TYPE: self.task_type}
-        with open(top_dir / META_JSON, 'w') as file:
+        self._write_to_file(top_dir / _TEST, self.test.to_json())
+        meta = {_TARGET_COLUMN: self.target_column,
+                _TASK_TYPE: self.task_type}
+        with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
             model_data = self._serializer.save(self.model)
             # save the serializer
-            with open(top_dir / SERIALIZER, 'wb') as file:
+            with open(top_dir / _SERIALIZER, 'wb') as file:
                 pickle.dump(self._serializer, file)
             # save the model
-            self._write_to_file(top_dir / MODEL_PKL, model_data)
+            self._write_to_file(top_dir / _MODEL_PKL, model_data)
         else:
             has_setstate = hasattr(self.model, '__setstate__')
             has_getstate = hasattr(self.model, '__getstate__')
@@ -204,7 +204,7 @@ class RAIAnalyzer(object):
                 raise ValueError(
                     "Model must be picklable or a custom serializer must"
                     " be specified")
-            with open(top_dir / MODEL_PKL, 'wb') as file:
+            with open(top_dir / _MODEL_PKL, 'wb') as file:
                 pickle.dump(self.model, file)
 
     @staticmethod
@@ -219,34 +219,34 @@ class RAIAnalyzer(object):
         inst = RAIAnalyzer.__new__(RAIAnalyzer)
         top_dir = Path(path)
         # load current state
-        with open(top_dir / (TRAIN + DTYPES), 'r') as file:
+        with open(top_dir / (_TRAIN + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(top_dir / TRAIN, 'r') as file:
+        with open(top_dir / _TRAIN, 'r') as file:
             train = pd.read_json(file, dtype=types)
-        inst.__dict__[TRAIN] = train
-        with open(top_dir / (TEST + DTYPES), 'r') as file:
+        inst.__dict__[_TRAIN] = train
+        with open(top_dir / (_TEST + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(top_dir / TEST, 'r') as file:
+        with open(top_dir / _TEST, 'r') as file:
             test = pd.read_json(file, dtype=types)
-        inst.__dict__[TEST] = test
-        with open(top_dir / META_JSON, 'r') as meta_file:
+        inst.__dict__[_TEST] = test
+        with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
-        target_column = meta[TARGET_COLUMN]
-        inst.__dict__[TARGET_COLUMN] = target_column
-        inst.__dict__[TASK_TYPE] = meta[TASK_TYPE]
-        inst.__dict__['_' + CLASSES] = train[target_column].unique()
-        serializer_path = top_dir / SERIALIZER
+        target_column = meta[_TARGET_COLUMN]
+        inst.__dict__[_TARGET_COLUMN] = target_column
+        inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
+        inst.__dict__['_' + _CLASSES] = train[target_column].unique()
+        serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:
                 serializer = pickle.load(file)
-            inst.__dict__['_' + SERIALIZER] = serializer
-            with open(top_dir / MODEL_PKL, 'rb') as file:
-                inst.__dict__[MODEL] = serializer.load(file)
+            inst.__dict__['_' + _SERIALIZER] = serializer
+            with open(top_dir / _MODEL_PKL, 'rb') as file:
+                inst.__dict__[_MODEL] = serializer.load(file)
         else:
-            inst.__dict__['_' + SERIALIZER] = None
-            with open(top_dir / MODEL_PKL, 'rb') as file:
-                inst.__dict__[MODEL] = pickle.load(file)
+            inst.__dict__['_' + _SERIALIZER] = None
+            with open(top_dir / _MODEL_PKL, 'rb') as file:
+                inst.__dict__[_MODEL] = pickle.load(file)
         # load each of the individual managers
         managers = []
         kvp_manager = {ManagerNames.CAUSAL: CausalManager,
@@ -258,5 +258,5 @@ class RAIAnalyzer(object):
             manager = manager_cls.load(top_dir / manager_name, inst)
             inst.__dict__['_' + manager_name + '_manager'] = manager
             managers.append(manager)
-        inst.__dict__['_' + MANAGERS] = managers
+        inst.__dict__['_' + _MANAGERS] = managers
         return inst

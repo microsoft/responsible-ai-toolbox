@@ -3,7 +3,7 @@
 
 """Implementation of the Responsible AI Analyzer."""
 
-from raitools.rai_analyzer.rai_analyzer import RAIAnalyzer
-from raitools.rai_analyzer.constants import ModelTask
+from raitools.raianalyzer.rai_analyzer import RAIAnalyzer
+from raitools.raianalyzer.constants import ModelTask
 
 __all__ = ["RAIAnalyzer", "ModelTask"]

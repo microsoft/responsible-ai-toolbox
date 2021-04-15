@@ -9,7 +9,7 @@ from tempfile import TemporaryDirectory
 from common_utils import (create_iris_data, create_cancer_data,
                           create_binary_classification_dataset, create_models)
 from raitools import RAIAnalyzer, ModelTask
-from raitools.rai_analyzer.constants import ManagerNames, ListProperties
+from raitools._internal.constants import ManagerNames, ListProperties
 
 LABELS = "labels"
 LIGHTGBM_METHOD = 'mimic.lightgbm'
