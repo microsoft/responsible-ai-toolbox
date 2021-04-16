@@ -6,10 +6,8 @@
 import json
 import pandas as pd
 import pickle
-from inspect import getattr_static
 from pathlib import Path
-from raitools._internal.constants import Metadata
-from raitools._managers.base_manager import BaseManager
+from raitools._internal.constants import ManagerNames, Metadata
 from raitools._managers.causal_manager import CausalManager
 from raitools._managers.counterfactual_manager import CounterfactualManager
 from raitools._managers.error_analysis_manager import ErrorAnalysisManager
@@ -252,15 +250,29 @@ class RAIAnalyzer(object):
                 inst.__dict__[_MODEL] = pickle.load(file)
         # load each of the individual managers
         managers = []
-        for prop_name, prop_type in dict(vars(RAIAnalyzer)).items():
-            if isinstance(prop_type, property):
-                static_attr = getattr_static(RAIAnalyzer, prop_name)
-                annotations = static_attr.fget.__annotations__
-                for ann_type in annotations.values():
-                    if issubclass(ann_type, BaseManager):
-                        manager_name = '_' + prop_name + '_manager'
-                        manager = ann_type.load(top_dir / prop_name, inst)
-                        inst.__dict__[manager_name] = manager
-                        managers.append(manager)
+        cm_name = '_' + ManagerNames.CAUSAL + '_manager'
+        causal_dir = top_dir / ManagerNames.CAUSAL
+        causal_manager = CausalManager.load(causal_dir, inst)
+        inst.__dict__[cm_name] = causal_manager
+        managers.append(causal_manager)
+        cfm_name = '_' + ManagerNames.COUNTERFACTUAL + '_manager'
+        cf_dir = top_dir / ManagerNames.COUNTERFACTUAL
+        counterfactual_manager = CounterfactualManager.load(cf_dir, inst)
+        inst.__dict__[cfm_name] = counterfactual_manager
+        managers.append(counterfactual_manager)
+        eam_name = '_' + ManagerNames.ERROR_ANALYSIS + '_manager'
+        ea_dir = top_dir / ManagerNames.ERROR_ANALYSIS
+        error_analysis_manager = ErrorAnalysisManager.load(ea_dir, inst)
+        inst.__dict__[eam_name] = error_analysis_manager
+        exm_name = '_' + ManagerNames.EXPLAINER + '_manager'
+        exp_dir = top_dir / ManagerNames.EXPLAINER
+        explainer_manager = ExplainerManager.load(exp_dir, inst)
+        inst.__dict__[exm_name] = explainer_manager
+        managers.append(explainer_manager)
+        fm_name = '_' + ManagerNames.FAIRNESS + '_manager'
+        fairness_dir = top_dir / ManagerNames.FAIRNESS
+        fairness_manager = FairnessManager.load(fairness_dir, inst)
+        inst.__dict__[fm_name] = fairness_manager
+        managers.append(fairness_manager)
         inst.__dict__['_' + _MANAGERS] = managers
         return inst
