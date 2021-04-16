@@ -275,7 +275,7 @@ export class InspectionView extends React.PureComponent<
           unsortedFeatureValues: JointDataset.datasetSlice(
             row,
             this.props.jointDataset.metaDict,
-            this.props.jointDataset.localExplanationFeatureCount
+            this.props.jointDataset.datasetFeatureCount
           )
         };
       }
