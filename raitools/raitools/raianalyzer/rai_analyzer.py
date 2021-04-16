@@ -6,13 +6,16 @@
 import json
 import pandas as pd
 import pickle
+from inspect import getattr_static
 from pathlib import Path
-from raitools._internal.constants import ManagerNames, Metadata
+from raitools._internal.constants import Metadata
+from raitools._managers.base_manager import BaseManager
 from raitools._managers.causal_manager import CausalManager
 from raitools._managers.counterfactual_manager import CounterfactualManager
 from raitools._managers.error_analysis_manager import ErrorAnalysisManager
 from raitools._managers.explainer_manager import ExplainerManager
 from raitools._managers.fairness_manager import FairnessManager
+
 
 _DTYPES = 'dtypes'
 _TRAIN = 'train'
@@ -97,7 +100,7 @@ class RAIAnalyzer(object):
                           self._fairness_manager]
 
     @property
-    def causal(self):
+    def causal(self) -> CausalManager:
         """Get the causal manager.
 
         :return: The causal manager.
@@ -106,7 +109,7 @@ class RAIAnalyzer(object):
         return self._causal_manager
 
     @property
-    def counterfactual(self):
+    def counterfactual(self) -> CounterfactualManager:
         """Get the counterfactual manager.
 
         :return: The counterfactual manager.
@@ -115,7 +118,7 @@ class RAIAnalyzer(object):
         return self._counterfactual_manager
 
     @property
-    def erroranalysis(self):
+    def error_analysis(self) -> ErrorAnalysisManager:
         """Get the error analysis manager.
 
         :return: The error analysis manager.
@@ -124,7 +127,7 @@ class RAIAnalyzer(object):
         return self._error_analysis_manager
 
     @property
-    def explainer(self):
+    def explainer(self) -> ExplainerManager:
         """Get the explainer manager.
 
         :return: The explainer manager.
@@ -133,7 +136,7 @@ class RAIAnalyzer(object):
         return self._explainer_manager
 
     @property
-    def fairness(self):
+    def fairness(self) -> FairnessManager:
         """Get the fairness manager.
 
         :return: The fairness manager.
@@ -249,14 +252,15 @@ class RAIAnalyzer(object):
                 inst.__dict__[_MODEL] = pickle.load(file)
         # load each of the individual managers
         managers = []
-        kvp_manager = {ManagerNames.CAUSAL: CausalManager,
-                       ManagerNames.COUNTERFACTUAL: CounterfactualManager,
-                       ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
-                       ManagerNames.EXPLAINER: ExplainerManager,
-                       ManagerNames.FAIRNESS: FairnessManager}
-        for manager_name, manager_cls in kvp_manager.items():
-            manager = manager_cls.load(top_dir / manager_name, inst)
-            inst.__dict__['_' + manager_name + '_manager'] = manager
-            managers.append(manager)
+        for prop_name, prop_type in dict(vars(RAIAnalyzer)).items():
+            if isinstance(prop_type, property):
+                static_attr = getattr_static(RAIAnalyzer, prop_name)
+                annotations = static_attr.fget.__annotations__
+                for ann_type in annotations.values():
+                    if issubclass(ann_type, BaseManager):
+                        manager_name = '_' + prop_name + '_manager'
+                        manager = ann_type.load(top_dir / prop_name, inst)
+                        inst.__dict__[manager_name] = manager
+                        managers.append(manager)
         inst.__dict__['_' + _MANAGERS] = managers
         return inst
