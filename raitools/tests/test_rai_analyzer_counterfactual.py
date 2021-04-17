@@ -104,8 +104,6 @@ def run_counterfactual_rai_analyzer(model, x_train, x_test, target_column,
     assert isinstance(cf_analyzer.counterfactual.get(), list)
     assert len(cf_analyzer.counterfactual.get()) == 2
 
-    # import pdb
-    # pdb.set_trace()
     # Add a bad configuration
     cf_analyzer.counterfactual.add(continuous_features=continuous_features,
                                    total_CFs=-1,
