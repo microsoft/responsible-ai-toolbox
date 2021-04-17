@@ -4,6 +4,7 @@
 """Defines the Counterfactual Manager class."""
 import dice_ml
 from dice_ml import Dice
+import numpy as np
 
 from raitools._managers.base_manager import BaseManager
 from raitools.raianalyzer.constants import ModelTask
@@ -17,6 +18,15 @@ class DuplicateCounterfactualConfig(Exception):
     :type exception_message: str
     """
     _error_code = "Duplicate counterfactual configuration detected."
+
+
+class UserConfigValidationException(Exception):
+    """An exception indicating that some user configuration is not valid.
+
+    :param exception_message: A message describing the error.
+    :type exception_message: str
+    """
+    _error_code = "Invalid config"
 
 
 class _CounterfactualConfig:
@@ -49,6 +59,25 @@ class _CounterfactualConfig:
 
 class CounterfactualManager(BaseManager):
     def __init__(self, model, train, test, target_column, task_type):
+        """Defines the CounterfactualManager for generating counterfactuals
+           from a model.
+
+        :param model: The model to generate counterfactuals from.
+            A model that implements sklearn.predict or sklearn.predict_proba
+            or function that accepts a 2d ndarray.
+        :type model: object
+        :param initialization_examples: A matrix of feature vector
+            examples (# examples x # features) for initializing the explainer.
+        :type initialization_examples: pandas.DataFrame
+        :param evaluation_examples: A matrix of feature vector
+            examples (# examples x # features) on which to explain the
+            model's output.
+        :type evaluation_examples: pandas.DataFrame
+        :param target_column: The name of the label column.
+        :type target_column: str
+        :param task_type: Task type is either 'classification/regression'
+        :type task_type: str
+        """
         self._model = model
         self._train = train
         self._test = test
@@ -74,6 +103,26 @@ class CounterfactualManager(BaseManager):
 
     def _add_counterfactual_config(self, new_counterfactual_config):
 
+        if self._task_type == ModelTask.CLASSIFICATION:
+            if new_counterfactual_config.desired_class is None:
+                raise UserConfigValidationException(
+                    "The desired_class attribute should be either 'opposite'"
+                    " or the class value for classification scenarios")
+
+            is_multiclass = len(np.unique(
+                self._train[self._target_column].values).tolist()) > 2
+            if is_multiclass and \
+                    new_counterfactual_config.desired_class == "opposite":
+                raise UserConfigValidationException(
+                    "The desired_class attribute should not be 'opposite'"
+                    " It should be the class value")
+
+        if self._task_type == ModelTask.REGRESSION:
+            if new_counterfactual_config.desired_range is None:
+                raise UserConfigValidationException(
+                    "The desired_range should not be None"
+                    " for regression scenarios")
+
         duplicate_counterfactual_config_found = False
         for counterfactual_config in self._counterfactual_config_list:
             if counterfactual_config == new_counterfactual_config:
@@ -90,10 +139,12 @@ class CounterfactualManager(BaseManager):
             continuous_features,
             total_CFs,
             method='random',
-            desired_class="opposite",
+            desired_class=None,
             desired_range=None,
             permitted_range=None,
             features_to_vary=None):
+        """Add a counterfactual generation configuration to be computed later.
+        """
 
         counterfactual_config = _CounterfactualConfig(
             method=method,
@@ -107,6 +158,8 @@ class CounterfactualManager(BaseManager):
         self._add_counterfactual_config(counterfactual_config)
 
     def compute(self):
+        """Computes the counterfactual examples by running the counterfactual
+           configuration."""
         for cf_config in self._counterfactual_config_list:
             if not cf_config.is_computed:
                 cf_config.is_computed = True
@@ -126,8 +179,6 @@ class CounterfactualManager(BaseManager):
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
                 except Exception as e:
-                    # import pdb
-                    # pdb.set_trace()
                     cf_config.has_computation_failed = True
                     cf_config.failure_reason = str(e)
 
