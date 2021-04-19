@@ -6,7 +6,8 @@ import pandas as pd
 from lightgbm import LGBMClassifier
 from enum import Enum
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (TRUE_Y,
+from erroranalysis._internal.constants import (PRED_Y,
+                                               TRUE_Y,
                                                ROW_INDEX,
                                                DIFF,
                                                SPLIT_INDEX,
@@ -15,6 +16,8 @@ from erroranalysis._internal.constants import (TRUE_Y,
                                                METHOD,
                                                METHOD_EXCLUDES,
                                                METHOD_INCLUDES)
+
+MODEL = 'model'
 
 
 class TreeSide(str, Enum):
@@ -35,22 +38,40 @@ def compute_json_error_tree(analyzer, features, filters,
                             composite_filters):
     # Fit a surrogate model on errors
     surrogate = LGBMClassifier(n_estimators=1, max_depth=3)
-    filtered_df = filter_from_cohort(analyzer.dataset,
-                                     filters,
-                                     composite_filters,
-                                     analyzer.feature_names,
-                                     analyzer.true_y,
-                                     analyzer.categorical_features,
-                                     analyzer.categories)
+    is_model_analyzer = hasattr(analyzer, MODEL)
+    if is_model_analyzer:
+        filtered_df = filter_from_cohort(analyzer.dataset,
+                                         filters,
+                                         composite_filters,
+                                         analyzer.feature_names,
+                                         analyzer.true_y,
+                                         analyzer.categorical_features,
+                                         analyzer.categories)
+    else:
+        filtered_df = filter_from_cohort(analyzer.dataset,
+                                         filters,
+                                         composite_filters,
+                                         analyzer.feature_names,
+                                         analyzer.true_y,
+                                         analyzer.categorical_features,
+                                         analyzer.categories,
+                                         analyzer.pred_y)
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
-    input_data = filtered_df.drop(columns=[TRUE_Y, ROW_INDEX])
+    dropped_cols = [TRUE_Y, ROW_INDEX]
+    if not is_model_analyzer:
+        pred_y = filtered_df[PRED_Y]
+        dropped_cols.append(PRED_Y)
+    input_data = filtered_df.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
         input_data = input_data.to_numpy()
-    diff = analyzer.model.predict(input_data) != true_y
+    if is_model_analyzer:
+        diff = analyzer.model.predict(input_data) != true_y
+    else:
+        diff = pred_y != true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     indexes = []

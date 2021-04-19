@@ -3,6 +3,7 @@
 
 """Defines the Error Analysis Manager class."""
 
+from raitools._internal.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 
 
@@ -31,13 +32,11 @@ class ErrorAnalysisManager(BaseManager):
         :return: The name of the error analysis manager.
         :rtype: str
         """
-        return "error analysis"
+        return ManagerNames.ERROR_ANALYSIS
 
     def save(self, path):
-        raise NotImplementedError(
-            "Save not implemented for ErrorAnalysisManager")
+        pass
 
     @staticmethod
-    def load(path):
-        raise NotImplementedError(
-            "Load not implemented for ErrorAnalysisManager")
+    def load(path, rai_analyzer):
+        pass

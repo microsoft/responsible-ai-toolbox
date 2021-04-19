@@ -3,25 +3,29 @@
 
 import numpy as np
 import pandas as pd
-from erroranalysis._internal.constants import (TRUE_Y,
+from erroranalysis._internal.constants import (PRED_Y,
+                                               TRUE_Y,
                                                ROW_INDEX,
                                                METHOD,
                                                METHOD_EXCLUDES,
                                                METHOD_INCLUDES)
 
 
-METHOD_EQUAL = "equal"
-METHOD_GREATER = "greater"
-METHOD_LESS_AND_EQUAL = "less and equal"
-METHOD_RANGE = "in the range of"
+METHOD_EQUAL = 'equal'
+METHOD_GREATER = 'greater'
+METHOD_LESS_AND_EQUAL = 'less and equal'
+METHOD_RANGE = 'in the range of'
 
 
 def filter_from_cohort(df, filters, composite_filters,
                        feature_names, true_y,
-                       categorical_features, categories):
+                       categorical_features, categories,
+                       pred_y=None):
     if not isinstance(df, pd.DataFrame):
         df = pd.DataFrame(df, columns=feature_names)
     df[TRUE_Y] = true_y
+    if pred_y is not None:
+        df[PRED_Y] = pred_y
     df[ROW_INDEX] = np.arange(0, len(true_y))
     df = apply_recursive_filter(df, filters, categorical_features, categories)
     df = apply_recursive_filter(df, composite_filters,
