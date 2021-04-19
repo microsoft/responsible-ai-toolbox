@@ -8,3 +8,4 @@ class ErrorAnalysisDashboardInterface(object):
     """Dictionary properties shared between python and javascript object."""
     TREE_URL = "treeUrl"
     MATRIX_URL = "matrixUrl"
+    ENABLE_PREDICT = 'enablePredict'
