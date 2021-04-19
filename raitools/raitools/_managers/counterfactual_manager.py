@@ -18,7 +18,7 @@ class DuplicateCounterfactualConfig(Exception):
     :param exception_message: A message describing the error.
     :type exception_message: str
     """
-    _error_code = "Duplicate counterfactual configuration detected."
+    _error_code = 'Duplicate counterfactual configuration detected.'
 
 
 class UserConfigValidationException(Exception):
@@ -27,12 +27,12 @@ class UserConfigValidationException(Exception):
     :param exception_message: A message describing the error.
     :type exception_message: str
     """
-    _error_code = "Invalid config"
+    _error_code = 'Invalid config'
 
 
 class _CounterfactualConfig:
     def __init__(self, method, continuous_features, total_CFs,
-                 desired_class="opposite", desired_range=None,
+                 desired_class='opposite', desired_range=None,
                  permitted_range=None, features_to_vary=None):
         self.method = method
         self.continuous_features = continuous_features
@@ -92,7 +92,7 @@ class CounterfactualManager(BaseManager):
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
 
-        model_type = "classifier" \
+        model_type = 'classifier' \
             if self._task_type == ModelTask.CLASSIFICATION else 'regressor'
         dice_model = dice_ml.Model(model=self._model,
                                    backend='sklearn',
@@ -107,22 +107,22 @@ class CounterfactualManager(BaseManager):
         if self._task_type == ModelTask.CLASSIFICATION:
             if new_counterfactual_config.desired_class is None:
                 raise UserConfigValidationException(
-                    "The desired_class attribute should be either 'opposite'"
-                    " or the class value for classification scenarios")
+                    'The desired_class attribute should be either \'opposite\''
+                    ' or the class value for classification scenarios')
 
             is_multiclass = len(np.unique(
                 self._train[self._target_column].values).tolist()) > 2
             if is_multiclass and \
-                    new_counterfactual_config.desired_class == "opposite":
+                    new_counterfactual_config.desired_class == 'opposite':
                 raise UserConfigValidationException(
-                    "The desired_class attribute should not be 'opposite'"
-                    " It should be the class value")
+                    'The desired_class attribute should not be \'opposite\''
+                    ' It should be the class value')
 
         if self._task_type == ModelTask.REGRESSION:
             if new_counterfactual_config.desired_range is None:
                 raise UserConfigValidationException(
-                    "The desired_range should not be None"
-                    " for regression scenarios")
+                    'The desired_range should not be None'
+                    ' for regression scenarios')
 
         duplicate_counterfactual_config_found = False
         for counterfactual_config in self._counterfactual_config_list:
@@ -132,7 +132,7 @@ class CounterfactualManager(BaseManager):
 
         if duplicate_counterfactual_config_found:
             raise DuplicateCounterfactualConfig(
-                "Duplicate counterfactual configuration detected")
+                'Duplicate counterfactual configuration detected')
         else:
             self._counterfactual_config_list.append(new_counterfactual_config)
 
@@ -193,13 +193,13 @@ class CounterfactualManager(BaseManager):
                             counterfactual_config.counterfactual_obj)
             return counterfactual_obj_list
         else:
-            feature_reason_list = []
+            failure_reason_list = []
             for counterfactual_config in self._counterfactual_config_list:
                 if counterfactual_config.is_computed:
                     if counterfactual_config.has_computation_failed:
-                        feature_reason_list.append(
+                        failure_reason_list.append(
                             counterfactual_config.failure_reason)
-            return feature_reason_list
+            return failure_reason_list
 
     def list(self):
         pass
