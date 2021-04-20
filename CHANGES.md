@@ -23,8 +23,35 @@ this file to understand what changed.
 - breaking changes
 - bug fixes
 - other
+
+## v0.4.0
+
+- educational materials
+  - cleanup commented out explainers from interpretability notebook
+- new features
+  - fix databricks environment with raiwidgets dashboards
+  - updates to `ErrorAnalysisDashboard`:
+    - improve the features list to use DetailsList
+    - added tooltips to legend
+    - initial static view for error analysis, specifically matrix filter and tree view
+    - fixed tooltip node hover
+    - fix indexing issue on cohort shift
+    - add new simple dashboard implementation, which only takes in predictions and does not need model or dataset
+  - updates to `ModelAssessmentDashboard`:
+    - set up tabs on the left side
+    - add model statistics tab
+    - add pivot for error analysis
+    - remove fullscreen button
+  - refactor error analysis python code into separate common package
+- breaking changes
+- bug fixes
+  - reduce the lower-bound on the lightgbm dependency
+  - update greenlet and gevent dependencies to fix releases
+- other
+  - use global context in interpret, error-analysis, and model-assessment
   - moved dataset explorer into a new project `dataset-explorer`
   - created new projects `causality` and `counterfactuals`
+  - remove fairness v1 dashboard
 
 ## v0.3.1
 
