@@ -8,6 +8,10 @@ from common_utils import (create_iris_data, create_cancer_data,
                           create_models_regression,
                           create_boston_data)
 from raitools import RAIAnalyzer, ModelTask
+from raitools.exceptions import (
+    DuplicateCounterfactualConfigException, UserConfigValidationException
+)
+
 
 LABELS = "labels"
 
@@ -83,10 +87,7 @@ def run_counterfactual_rai_analyzer(model, x_train, x_test, target_column,
     assert len(cf_analyzer.counterfactual.get()) == 1
 
     # Add a duplicate configuration
-    from raitools._managers.counterfactual_manager import (
-        DuplicateCounterfactualConfig, UserConfigValidationException
-    )
-    with pytest.raises(DuplicateCounterfactualConfig):
+    with pytest.raises(DuplicateCounterfactualConfigException):
         cf_analyzer.counterfactual.add(continuous_features=continuous_features,
                                        total_CFs=10,
                                        method='random',

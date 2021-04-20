@@ -9,31 +9,24 @@ import numpy as np
 from raitools._internal.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 from raitools.raianalyzer.constants import ModelTask
+from raitools.exceptions import (
+    UserConfigValidationException, DuplicateCounterfactualConfigException
+)
 
 
-class DuplicateCounterfactualConfig(Exception):
-    """An exception indicating that a duplicate counterfactual configuration
-    was detected.
-
-    :param exception_message: A message describing the error.
-    :type exception_message: str
-    """
-    _error_code = 'Duplicate counterfactual configuration detected.'
-
-
-class UserConfigValidationException(Exception):
-    """An exception indicating that some user configuration is not valid.
-
-    :param exception_message: A message describing the error.
-    :type exception_message: str
-    """
-    _error_code = 'Invalid config'
+class _CounterfactualConstants:
+    OPPOSITE = 'opposite'
+    CLASSIFIER = 'classifier'
+    REGRESSOR = 'regressor'
+    SKLEARN = 'sklearn'
+    RANDOM = 'random'
 
 
 class _CounterfactualConfig:
     def __init__(self, method, continuous_features, total_CFs,
-                 desired_class='opposite', desired_range=None,
-                 permitted_range=None, features_to_vary=None):
+                 desired_class=_CounterfactualConstants.OPPOSITE,
+                 desired_range=None, permitted_range=None,
+                 features_to_vary=None):
         self.method = method
         self.continuous_features = continuous_features
         self.total_CFs = total_CFs
@@ -92,10 +85,11 @@ class CounterfactualManager(BaseManager):
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
 
-        model_type = 'classifier' \
-            if self._task_type == ModelTask.CLASSIFICATION else 'regressor'
+        model_type = _CounterfactualConstants.CLASSIFIER \
+            if self._task_type == ModelTask.CLASSIFICATION else \
+            _CounterfactualConstants.REGRESSOR
         dice_model = dice_ml.Model(model=self._model,
-                                   backend='sklearn',
+                                   backend=_CounterfactualConstants.SKLEARN,
                                    model_type=model_type)
 
         dice_explainer = Dice(dice_data, dice_model, method=method)
@@ -107,22 +101,26 @@ class CounterfactualManager(BaseManager):
         if self._task_type == ModelTask.CLASSIFICATION:
             if new_counterfactual_config.desired_class is None:
                 raise UserConfigValidationException(
-                    'The desired_class attribute should be either \'opposite\''
-                    ' or the class value for classification scenarios')
+                    'The desired_class attribute should be either \'{0}\''
+                    ' or the class value for classification scenarios.'.format(
+                        _CounterfactualConstants.OPPOSITE))
 
             is_multiclass = len(np.unique(
                 self._train[self._target_column].values).tolist()) > 2
             if is_multiclass and \
-                    new_counterfactual_config.desired_class == 'opposite':
+                    new_counterfactual_config.desired_class == \
+                    _CounterfactualConstants.OPPOSITE:
                 raise UserConfigValidationException(
-                    'The desired_class attribute should not be \'opposite\''
-                    ' It should be the class value')
+                    'The desired_class attribute should not be \'{0}\''
+                    ' It should be the class value for multiclass'
+                    ' classification scenario.'.format(
+                        _CounterfactualConstants.OPPOSITE))
 
         if self._task_type == ModelTask.REGRESSION:
             if new_counterfactual_config.desired_range is None:
                 raise UserConfigValidationException(
                     'The desired_range should not be None'
-                    ' for regression scenarios')
+                    ' for regression scenarios.')
 
         duplicate_counterfactual_config_found = False
         for counterfactual_config in self._counterfactual_config_list:
@@ -131,15 +129,15 @@ class CounterfactualManager(BaseManager):
                 break
 
         if duplicate_counterfactual_config_found:
-            raise DuplicateCounterfactualConfig(
-                'Duplicate counterfactual configuration detected')
+            raise DuplicateCounterfactualConfigException(
+                'Duplicate counterfactual configuration detected.')
         else:
             self._counterfactual_config_list.append(new_counterfactual_config)
 
     def add(self,
             continuous_features,
             total_CFs,
-            method='random',
+            method=_CounterfactualConstants.RANDOM,
             desired_class=None,
             desired_range=None,
             permitted_range=None,
@@ -187,18 +185,18 @@ class CounterfactualManager(BaseManager):
         if not failed_to_compute:
             counterfactual_obj_list = []
             for counterfactual_config in self._counterfactual_config_list:
-                if counterfactual_config.is_computed:
-                    if not counterfactual_config.has_computation_failed:
-                        counterfactual_obj_list.append(
-                            counterfactual_config.counterfactual_obj)
+                if counterfactual_config.is_computed and \
+                        not counterfactual_config.has_computation_failed:
+                    counterfactual_obj_list.append(
+                        counterfactual_config.counterfactual_obj)
             return counterfactual_obj_list
         else:
             failure_reason_list = []
             for counterfactual_config in self._counterfactual_config_list:
-                if counterfactual_config.is_computed:
-                    if counterfactual_config.has_computation_failed:
-                        failure_reason_list.append(
-                            counterfactual_config.failure_reason)
+                if counterfactual_config.is_computed and \
+                        counterfactual_config.has_computation_failed:
+                    failure_reason_list.append(
+                        counterfactual_config.failure_reason)
             return failure_reason_list
 
     def list(self):
