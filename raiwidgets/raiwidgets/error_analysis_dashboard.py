@@ -94,7 +94,6 @@ class ErrorAnalysisDashboard(Dashboard):
             explanation, model, dataset, true_y, classes,
             features, locale, categorical_features,
             true_y_dataset, pred_y)
-
         super(ErrorAnalysisDashboard, self).__init__(
             dashboard_type="ErrorAnalysis",
             model_data=self.input.dashboard_input,

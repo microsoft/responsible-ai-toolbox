@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+from .error_analysis_constants import ErrorAnalysisDashboardInterface
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
 from scipy.sparse import issparse
@@ -15,6 +16,7 @@ from erroranalysis._internal.error_analyzer import (
 
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
+ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
 
 
 class ErrorAnalysisDashboardInput:
@@ -114,11 +116,15 @@ class ErrorAnalysisDashboardInput:
             if features is None and hasattr(explanation, 'features'):
                 features = explanation.features
 
-        if model is not None and pred_y is not None:
-            raise ValueError(
-                'Only model or pred_y need to be specified, not both')
+        model_available = model is not None
 
-        if model is not None:
+        if model_available and pred_y is not None:
+            raise ValueError(
+                'Only model or pred_y can be specified, not both')
+
+        self.dashboard_input[ENABLE_PREDICT] = model_available
+
+        if model_available:
             predicted_y = self.compute_predicted_y(model, dataset)
         else:
             predicted_y = self.predicted_y_to_list(pred_y)
@@ -169,7 +175,7 @@ class ErrorAnalysisDashboardInput:
                                  " feature names length differs"
                                  " from local explanations dimension")
             self.dashboard_input[FEATURE_NAMES] = features
-        if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
+        if model_available and hasattr(model, SKLearn.PREDICT_PROBA) \
                 and model.predict_proba is not None and dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
@@ -190,7 +196,7 @@ class ErrorAnalysisDashboardInput:
             ] = probability_y
         if locale is not None:
             self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
-        if model is not None:
+        if model_available:
             self._error_analyzer = ModelAnalyzer(model, full_dataset,
                                                  full_true_y, features,
                                                  categorical_features)
