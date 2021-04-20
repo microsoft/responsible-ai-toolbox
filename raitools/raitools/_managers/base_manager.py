@@ -47,7 +47,7 @@ class BaseManager(ABC):
         """
 
     @abstractmethod
-    def save(self, path):
+    def _save(self, path):
         """Abstract method to save the manager.
 
         :param path: The directory path to save the manager to.
@@ -56,7 +56,7 @@ class BaseManager(ABC):
 
     @staticmethod
     @abstractmethod
-    def load(path, rai_analyzer):
+    def _load(path, rai_analyzer):
         """Static method to load the manager.
 
         :param path: The directory path to load the manager from.
