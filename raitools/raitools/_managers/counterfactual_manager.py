@@ -14,7 +14,7 @@ from raitools.exceptions import (
 )
 
 
-class _CounterfactualConstants:
+class CounterfactualConstants:
     OPPOSITE = 'opposite'
     CLASSIFIER = 'classifier'
     REGRESSOR = 'regressor'
@@ -22,9 +22,9 @@ class _CounterfactualConstants:
     RANDOM = 'random'
 
 
-class _CounterfactualConfig:
+class CounterfactualConfig:
     def __init__(self, method, continuous_features, total_CFs,
-                 desired_class=_CounterfactualConstants.OPPOSITE,
+                 desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
                  features_to_vary=None):
         self.method = method
@@ -85,11 +85,11 @@ class CounterfactualManager(BaseManager):
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
 
-        model_type = _CounterfactualConstants.CLASSIFIER \
+        model_type = CounterfactualConstants.CLASSIFIER \
             if self._task_type == ModelTask.CLASSIFICATION else \
-            _CounterfactualConstants.REGRESSOR
+            CounterfactualConstants.REGRESSOR
         dice_model = dice_ml.Model(model=self._model,
-                                   backend=_CounterfactualConstants.SKLEARN,
+                                   backend=CounterfactualConstants.SKLEARN,
                                    model_type=model_type)
 
         dice_explainer = Dice(dice_data, dice_model, method=method)
@@ -103,18 +103,18 @@ class CounterfactualManager(BaseManager):
                 raise UserConfigValidationException(
                     'The desired_class attribute should be either \'{0}\''
                     ' or the class value for classification scenarios.'.format(
-                        _CounterfactualConstants.OPPOSITE))
+                        CounterfactualConstants.OPPOSITE))
 
             is_multiclass = len(np.unique(
                 self._train[self._target_column].values).tolist()) > 2
             if is_multiclass and \
                     new_counterfactual_config.desired_class == \
-                    _CounterfactualConstants.OPPOSITE:
+                    CounterfactualConstants.OPPOSITE:
                 raise UserConfigValidationException(
                     'The desired_class attribute should not be \'{0}\''
                     ' It should be the class value for multiclass'
                     ' classification scenario.'.format(
-                        _CounterfactualConstants.OPPOSITE))
+                        CounterfactualConstants.OPPOSITE))
 
         if self._task_type == ModelTask.REGRESSION:
             if new_counterfactual_config.desired_range is None:
@@ -137,7 +137,7 @@ class CounterfactualManager(BaseManager):
     def add(self,
             continuous_features,
             total_CFs,
-            method=_CounterfactualConstants.RANDOM,
+            method=CounterfactualConstants.RANDOM,
             desired_class=None,
             desired_range=None,
             permitted_range=None,
@@ -147,7 +147,7 @@ class CounterfactualManager(BaseManager):
         :param continuous_features: List of names of continuous features.
                                     The remaining features are categorical
                                     features.
-        :type continuous_features: List
+        :type continuous_features: list
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
         :param desired_class: Desired counterfactual class. For binary
@@ -157,18 +157,18 @@ class CounterfactualManager(BaseManager):
         :param desired_range: For regression problems.
                               Contains the outcome range
                               to generate counterfactuals in.
-        :type desired_range: List
+        :type desired_range: list
         :param permitted_range: Dictionary with feature names as keys and
                                 permitted range in list as values.
                                 Defaults to the range inferred from training
                                 data.
-        :type permitted_range: Dict
+        :type permitted_range: dict
         :param features_to_vary: Either a string "all" or a list of
                                  feature names to vary.
-        :type features_to_vary: List
+        :type features_to_vary: list
         """
 
-        counterfactual_config = _CounterfactualConfig(
+        counterfactual_config = CounterfactualConfig(
             method=method,
             continuous_features=continuous_features,
             total_CFs=total_CFs,
