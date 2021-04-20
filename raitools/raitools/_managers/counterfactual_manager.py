@@ -143,6 +143,29 @@ class CounterfactualManager(BaseManager):
             permitted_range=None,
             features_to_vary=None):
         """Add a counterfactual generation configuration to be computed later.
+
+        :param continuous_features: List of names of continuous features.
+                                    The remaining features are categorical
+                                    features.
+        :type continuous_features: List
+        :param total_CFs: Total number of counterfactuals required.
+        :type total_CFs: int
+        :param desired_class: Desired counterfactual class. For binary
+                              classification, this needs to be set as
+                              "opposite".
+        :type desired_class: string or int
+        :param desired_range: For regression problems.
+                              Contains the outcome range
+                              to generate counterfactuals in.
+        :type desired_range: List
+        :param permitted_range: Dictionary with feature names as keys and
+                                permitted range in list as values.
+                                Defaults to the range inferred from training
+                                data.
+        :type permitted_range: Dict
+        :param features_to_vary: Either a string "all" or a list of
+                                 feature names to vary.
+        :type features_to_vary: List
         """
 
         counterfactual_config = _CounterfactualConfig(
