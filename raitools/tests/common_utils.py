@@ -5,8 +5,9 @@
 import numpy as np
 import pandas as pd
 from sklearn import svm
-from sklearn.datasets import load_iris, load_breast_cancer, make_classification
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris, load_breast_cancer, \
+    make_classification, load_boston
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -51,6 +52,13 @@ def create_sklearn_logistic_regressor(X, y, pipeline=False):
     return model
 
 
+def create_sklearn_random_forest_regressor(X, y):
+    rfc = RandomForestRegressor(n_estimators=10, max_depth=4,
+                                random_state=777)
+    model = rfc.fit(X, y)
+    return model
+
+
 def create_iris_data():
     # Import Iris dataset
     iris = load_iris()
@@ -90,7 +98,17 @@ def create_binary_classification_dataset():
     return x_train, y_train, x_test, y_test, classes
 
 
-def create_models(x_train, y_train):
+def create_boston_data():
+    # Import Boston housing dataset
+    boston = load_boston()
+    # Split data into train and test
+    x_train, x_test, y_train, y_validation = train_test_split(
+        boston.data, boston.target,
+        test_size=0.2, random_state=7)
+    return x_train, x_test, y_train, y_validation, boston.feature_names
+
+
+def create_models_classification(x_train, y_train):
     svm_model = create_sklearn_svm_classifier(x_train, y_train)
     log_reg_model = create_sklearn_logistic_regressor(x_train, y_train)
     xgboost_model = create_xgboost_classifier(x_train, y_train)
@@ -98,3 +116,9 @@ def create_models(x_train, y_train):
     rf_model = create_sklearn_random_forest_classifier(x_train, y_train)
 
     return [svm_model, log_reg_model, xgboost_model, lgbm_model, rf_model]
+
+
+def create_models_regression(x_train, y_train):
+    rf_model = create_sklearn_random_forest_regressor(x_train, y_train)
+
+    return [rf_model]

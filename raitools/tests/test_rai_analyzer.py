@@ -7,7 +7,8 @@ import numpy as np
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from common_utils import (create_iris_data, create_cancer_data,
-                          create_binary_classification_dataset, create_models)
+                          create_binary_classification_dataset,
+                          create_models_classification)
 from raitools import RAIAnalyzer, ModelTask
 from raitools._internal.constants import ManagerNames, ListProperties
 
@@ -22,7 +23,7 @@ class TestRAIAnalyzer(object):
             create_iris_data()
         x_train = pd.DataFrame(x_train, columns=feature_names)
         x_test = pd.DataFrame(x_test, columns=feature_names)
-        models = create_models(x_train, y_train)
+        models = create_models_classification(x_train, y_train)
         x_train[LABELS] = y_train
         x_test[LABELS] = y_test
 
@@ -34,7 +35,7 @@ class TestRAIAnalyzer(object):
             create_cancer_data()
         x_train = pd.DataFrame(x_train, columns=feature_names)
         x_test = pd.DataFrame(x_test, columns=feature_names)
-        models = create_models(x_train, y_train)
+        models = create_models_classification(x_train, y_train)
         x_train[LABELS] = y_train
         x_test[LABELS] = y_test
 
@@ -46,7 +47,7 @@ class TestRAIAnalyzer(object):
             create_binary_classification_dataset()
         x_train = pd.DataFrame(x_train)
         x_test = pd.DataFrame(x_test)
-        models = create_models(x_train, y_train)
+        models = create_models_classification(x_train, y_train)
         x_train[LABELS] = y_train
         x_test[LABELS] = y_test
 

@@ -84,7 +84,9 @@ class RAIAnalyzer(object):
         self.task_type = task_type
         self._serializer = serializer
         self._causal_manager = CausalManager()
-        self._counterfactual_manager = CounterfactualManager()
+        self._counterfactual_manager = CounterfactualManager(
+            model=model, train=train, test=test,
+            target_column=target_column, task_type=task_type)
         self._error_analysis_manager = ErrorAnalysisManager()
         self._classes = train[target_column].unique()
         self._explainer_manager = ExplainerManager(model, train, test,
