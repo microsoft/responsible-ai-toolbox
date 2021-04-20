@@ -205,6 +205,12 @@ class CounterfactualManager(BaseManager):
                     cf_config.failure_reason = str(e)
 
     def get(self, failed_to_compute=False):
+        """Return the computed counterfactual examples objects or failure reason.
+
+        :param failed_to_compute: Get the failure reasons if counterfactual
+                                  examples failed to compute.
+        :type failed_to_compute: bool
+        """
         if not failed_to_compute:
             counterfactual_obj_list = []
             for counterfactual_config in self._counterfactual_config_list:
