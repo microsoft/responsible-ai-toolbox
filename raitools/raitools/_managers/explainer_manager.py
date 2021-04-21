@@ -168,6 +168,7 @@ class ExplainerManager(BaseManager):
         :type path: str
         """
         top_dir = Path(path)
+        top_dir.mkdir(parents=True, exist_ok=True)
         # save the explanation
         if self._explanation:
             save_explanation(self._explanation,

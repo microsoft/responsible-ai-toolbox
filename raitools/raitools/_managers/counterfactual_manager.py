@@ -8,6 +8,7 @@ import numpy as np
 
 from raitools._internal.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
+from raitools._config.base_config import BaseConfig
 from raitools.raianalyzer.constants import ModelTask
 from raitools.exceptions import (
     UserConfigValidationException, DuplicateCounterfactualConfigException
@@ -22,11 +23,12 @@ class CounterfactualConstants:
     RANDOM = 'random'
 
 
-class CounterfactualConfig:
+class CounterfactualConfig(BaseConfig):
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
                  features_to_vary=None):
+        super(CounterfactualConfig, self).__init__()
         self.method = method
         self.continuous_features = continuous_features
         self.total_CFs = total_CFs
@@ -34,7 +36,6 @@ class CounterfactualConfig:
         self.desired_class = desired_class
         self.permitted_range = permitted_range
         self.features_to_vary = features_to_vary
-        self.is_computed = False
         self.counterfactual_obj = None
         self.has_computation_failed = False
         self.failure_reason = None
@@ -122,13 +123,10 @@ class CounterfactualManager(BaseManager):
                     'The desired_range should not be None'
                     ' for regression scenarios.')
 
-        duplicate_counterfactual_config_found = False
-        for counterfactual_config in self._counterfactual_config_list:
-            if counterfactual_config == new_counterfactual_config:
-                duplicate_counterfactual_config_found = True
-                break
+        is_duplicate = new_counterfactual_config.is_duplicate(
+            self._counterfactual_config_list)
 
-        if duplicate_counterfactual_config_found:
+        if is_duplicate:
             raise DuplicateCounterfactualConfigException(
                 'Duplicate counterfactual configuration detected.')
         else:

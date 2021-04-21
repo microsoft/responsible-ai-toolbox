@@ -10,6 +10,7 @@ from sklearn.feature_selection import mutual_info_classif
 from erroranalysis._internal.matrix_filter import compute_json_matrix
 from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
+from erroranalysis._internal.error_report import ErrorReport
 
 
 class BaseAnalyzer(ABC):
@@ -75,9 +76,34 @@ class BaseAnalyzer(ABC):
     def compute_matrix(self, features, filters, composite_filters):
         return compute_json_matrix(self, features, filters, composite_filters)
 
-    def compute_error_tree(self, features, filters, composite_filters):
-        return compute_json_error_tree(self, features, filters,
-                                       composite_filters)
+    def compute_error_tree(self,
+                           features,
+                           filters,
+                           composite_filters,
+                           max_depth=None,
+                           num_leaves=None):
+        return compute_json_error_tree(self,
+                                       features,
+                                       filters,
+                                       composite_filters,
+                                       max_depth=max_depth,
+                                       num_leaves=num_leaves)
+
+    def create_error_report(self,
+                            filter_features,
+                            max_depth,
+                            num_leaves):
+        json_tree = self.compute_error_tree(self.feature_names,
+                                            None,
+                                            None,
+                                            max_depth=max_depth,
+                                            num_leaves=num_leaves)
+        json_matrix = None
+        if filter_features is not None:
+            json_matrix = self.compute_matrix(filter_features,
+                                              None,
+                                              None)
+        return ErrorReport(json_tree, json_matrix)
 
     def compute_importances(self):
         input_data = self.dataset

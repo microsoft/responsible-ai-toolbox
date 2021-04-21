@@ -87,7 +87,9 @@ class RAIAnalyzer(object):
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type)
-        self._error_analysis_manager = ErrorAnalysisManager()
+        self._error_analysis_manager = ErrorAnalysisManager(model,
+                                                            train,
+                                                            target_column)
         self._classes = train[target_column].unique()
         self._explainer_manager = ExplainerManager(model, train, test,
                                                    target_column,
