@@ -179,7 +179,7 @@ class RAIAnalyzer(object):
         top_dir = Path(path)
         # save each of the individual managers
         for manager in self._managers:
-            manager.save(top_dir / manager.name)
+            manager._save(top_dir / manager.name)
         # save current state
         dtypes = self.train.dtypes.astype(str).to_dict()
         self._write_to_file(top_dir / (_TRAIN + _DTYPES),
@@ -254,26 +254,26 @@ class RAIAnalyzer(object):
         managers = []
         cm_name = '_' + ManagerNames.CAUSAL + '_manager'
         causal_dir = top_dir / ManagerNames.CAUSAL
-        causal_manager = CausalManager.load(causal_dir, inst)
+        causal_manager = CausalManager._load(causal_dir, inst)
         inst.__dict__[cm_name] = causal_manager
         managers.append(causal_manager)
         cfm_name = '_' + ManagerNames.COUNTERFACTUAL + '_manager'
         cf_dir = top_dir / ManagerNames.COUNTERFACTUAL
-        counterfactual_manager = CounterfactualManager.load(cf_dir, inst)
+        counterfactual_manager = CounterfactualManager._load(cf_dir, inst)
         inst.__dict__[cfm_name] = counterfactual_manager
         managers.append(counterfactual_manager)
         eam_name = '_' + ManagerNames.ERROR_ANALYSIS + '_manager'
         ea_dir = top_dir / ManagerNames.ERROR_ANALYSIS
-        error_analysis_manager = ErrorAnalysisManager.load(ea_dir, inst)
+        error_analysis_manager = ErrorAnalysisManager._load(ea_dir, inst)
         inst.__dict__[eam_name] = error_analysis_manager
         exm_name = '_' + ManagerNames.EXPLAINER + '_manager'
         exp_dir = top_dir / ManagerNames.EXPLAINER
-        explainer_manager = ExplainerManager.load(exp_dir, inst)
+        explainer_manager = ExplainerManager._load(exp_dir, inst)
         inst.__dict__[exm_name] = explainer_manager
         managers.append(explainer_manager)
         fm_name = '_' + ManagerNames.FAIRNESS + '_manager'
         fairness_dir = top_dir / ManagerNames.FAIRNESS
-        fairness_manager = FairnessManager.load(fairness_dir, inst)
+        fairness_manager = FairnessManager._load(fairness_dir, inst)
         inst.__dict__[fm_name] = fairness_manager
         managers.append(fairness_manager)
         inst.__dict__['_' + _MANAGERS] = managers
