@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WeightVectorOption, Cohort } from "@responsible-ai/core-ui";
+import {
+  WeightVectorOption,
+  Cohort,
+  ModelAssessmentContext,
+  IDataset,
+  IModelExplanationData,
+  ErrorCohort
+} from "@responsible-ai/core-ui";
+import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -12,7 +20,8 @@ import {
   MessageBar,
   MessageBarType,
   Text,
-  Stack
+  Stack,
+  getTheme
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -21,9 +30,7 @@ import {
   GlobalTabKeys,
   INewExplanationDashboardState
 } from "./buildInitialExplanationContext";
-import { InterpretContext } from "./context/InterpretContext";
 import { CohortBar } from "./Controls/Cohort/CohortBar";
-import { DatasetExplorerTab } from "./Controls/DatasetExplorerTab/DatasetExplorerTab";
 import { GlobalExplanationTab } from "./Controls/GlobalExplanationTab/GlobalExplanationTab";
 import { ModelPerformanceTab } from "./Controls/ModelPerformanceTab/ModelPerformanceTab";
 import { WhatIfTab } from "./Controls/WhatIfTab/WhatIfTab";
@@ -75,10 +82,14 @@ export class NewExplanationDashboard extends React.PureComponent<
     );
     const classNames = explanationDashboardStyles();
     return (
-      <InterpretContext.Provider
+      <ModelAssessmentContext.Provider
         value={{
-          cohorts: this.state.cohorts,
+          dataset: {} as IDataset,
+          errorCohorts: this.state.cohorts.map(
+            (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
+          ),
           jointDataset: this.state.jointDataset,
+          modelExplanationData: {} as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
           precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
@@ -88,7 +99,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            })
+            }),
+          theme: getTheme()
         }}
       >
         <div className={classNames.page}>
@@ -121,11 +133,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             </MessageBar>
           )}
           {this.props.dashboardType === "ModelPerformance" ? (
-            <ModelPerformanceTab
-              jointDataset={this.state.jointDataset}
-              metadata={this.state.modelMetadata}
-              cohorts={this.state.cohorts}
-            />
+            <ModelPerformanceTab />
           ) : (
             <Stack horizontal={true}>
               <Stack.Item>
@@ -150,26 +158,12 @@ export class NewExplanationDashboard extends React.PureComponent<
                     ))}
                   </Pivot>
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.ModelPerformance && (
-                    <ModelPerformanceTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
-                    />
-                  )}
+                    GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExploration && (
-                    <DatasetExplorerTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
-                    />
-                  )}
+                    GlobalTabKeys.DataExploration && <DatasetExplorerTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (
                     <GlobalExplanationTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
                       cohorts={this.state.cohorts}
                       cohortIDs={cohortIDs}
                       selectedWeightVector={this.state.selectedWeightVector}
@@ -181,9 +175,6 @@ export class NewExplanationDashboard extends React.PureComponent<
                   )}
                   {this.state.activeGlobalTab === GlobalTabKeys.WhatIfTab && (
                     <WhatIfTab
-                      jointDataset={this.state.jointDataset}
-                      metadata={this.state.modelMetadata}
-                      cohorts={this.state.cohorts}
                       invokeModel={this.state.requestPredictions}
                       selectedWeightVector={this.state.selectedWeightVector}
                       weightOptions={this.state.weightVectorOptions}
@@ -196,7 +187,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             </Stack>
           )}
         </div>
-      </InterpretContext.Provider>
+      </ModelAssessmentContext.Provider>
     );
   }
 

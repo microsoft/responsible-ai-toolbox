@@ -105,7 +105,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [core-ui, mlchartlib, fairness, interpret, localization]
+        package:
+          [
+            core-ui,
+            mlchartlib,
+            dataset-explorer,
+            causality,
+            counterfactuals,
+            fairness,
+            interpret,
+            localization,
+            error-analysis,
+            model-assessment,
+          ]
 
     steps:
       - name: Use Node.js ${{ env.node-version }}
@@ -122,9 +134,10 @@ jobs:
         name: NPM Publish
         uses: JS-DevTools/npm-publish@v1
         with:
-          token: ${{ secrets.KE_NPM_TOKEN }}
+          token: ${{ secrets.NPM_TOKEN }}
           package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
           dry-run: false
+          access: public
           tag: next
       - if: steps.publish.type != 'none'
         run: |

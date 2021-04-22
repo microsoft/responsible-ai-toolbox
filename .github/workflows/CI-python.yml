@@ -10,7 +10,7 @@ jobs:
   ci-python:
     strategy:
       matrix:
-        packageDirectory: ["raiwidgets", "wrapped-flask"]
+        packageDirectory: ["raiwidgets", "wrapped-flask", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
@@ -23,9 +23,6 @@ jobs:
           - packageDirectory: "wrapped-flask"
             operatingSystem: macos-latest
             pythonVersion: 3.8
-          # lightgbm doesn't install properly on MacOS
-          - packageDirectory: "raiwidgets"
-            operatingSystem: macos-latest
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -36,6 +33,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.pythonVersion }}
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Use Homebrew to install libomp on MacOS for lightgbm
+        run: brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
 
       - name: Install dependencies
         run: |

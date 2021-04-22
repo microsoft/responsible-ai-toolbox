@@ -16,7 +16,7 @@ Note that it is not required to have an entry for every pull request.
 Instead, please try to add only changes that are meaningful to users who read
 this file to understand what changed.
 
-## v-next (post-v0.2.\*)
+## v-next (post-v0.3.1)
 
 - educational materials
 - new features
@@ -24,9 +24,36 @@ this file to understand what changed.
 - bug fixes
 - other
 
-## v0.3.1
+## v0.4.0
 
-Update to `raiwidgets` package.
+- educational materials
+  - cleanup commented out explainers from interpretability notebook
+- new features
+  - fix databricks environment with raiwidgets dashboards
+  - updates to `ErrorAnalysisDashboard`:
+    - improve the features list to use DetailsList
+    - added tooltips to legend
+    - initial static view for error analysis, specifically matrix filter and tree view
+    - fixed tooltip node hover
+    - fix indexing issue on cohort shift
+    - add new simple dashboard implementation, which only takes in predictions and does not need model or dataset
+  - updates to `ModelAssessmentDashboard`:
+    - set up tabs on the left side
+    - add model statistics tab
+    - add pivot for error analysis
+    - remove fullscreen button
+  - refactor error analysis python code into separate common package
+- breaking changes
+- bug fixes
+  - reduce the lower-bound on the lightgbm dependency
+  - update greenlet and gevent dependencies to fix releases
+- other
+  - use global context in interpret, error-analysis, and model-assessment
+  - moved dataset explorer into a new project `dataset-explorer`
+  - created new projects `causality` and `counterfactuals`
+  - remove fairness v1 dashboard
+
+## v0.3.1
 
 - Bug fix:
   - fix public VM failing requests in rai-core-flask package,
@@ -34,17 +61,13 @@ Update to `raiwidgets` package.
 
 ## v0.3.0
 
-Update to `raiwidgets` package.
-
-- Bug fix:
+- Bug fixes:
   - Fix all data cohort always appearing first in cohorts lists
   - Add number selected text under local explanation radio buttons
   - Fix the issue that categorical feature is not able to change in cohort editor.
   - Fix categorical feature in what-if tab
 
 ## v0.2.2
-
-Update to `raiwidgets` package.
 
 - Bug fix:
   - Fix categorical feature in ice plot
@@ -54,8 +77,6 @@ Update to `raiwidgets` package.
   - Fix indexing issue in heatmap when selecting all cells
 
 ## v0.2.1
-
-Update to `raiwidgets` package.
 
 - educational materials:
   - add imports for `MimicExplainer` and `PFIExplainer` in the

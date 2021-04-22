@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   ICategoricalRange,
@@ -17,8 +18,6 @@ import {
   TextField
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { FabricStyles } from "../FabricStyles";
 
 import { binningControlStyles } from "./BinningControl.styles";
 

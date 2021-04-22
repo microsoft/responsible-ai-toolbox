@@ -23,7 +23,7 @@ export interface ITreeViewRendererStyles {
   mainFrame: IStyle;
   node: IStyle;
   nodeText: IStyle;
-  nodesTransitionGroup: IStyle;
+  nodesGroup: IStyle;
   nopointer: IStyle;
   svgOuterFrame: IStyle;
   treeDescription: IStyle;
@@ -110,7 +110,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       stroke: "#089acc",
       strokeWidth: "0px"
     },
-    nodesTransitionGroup: {
+    nodesGroup: {
       transform: "translate(0px, 90px)"
     },
     nodeText: mergeStyles([

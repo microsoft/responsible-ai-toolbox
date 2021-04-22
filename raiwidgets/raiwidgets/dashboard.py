@@ -4,7 +4,6 @@
 """Defines the dashboard class."""
 
 from rai_core_flask import FlaskHelper  # , environment_detector
-from IPython.display import display, HTML
 import json
 import os
 from html.parser import HTMLParser
@@ -63,9 +62,9 @@ class Dashboard(object):
         self.id = uuid.uuid4().hex
 
         self.config = {
-            "dashboardType": dashboard_type,
-            "id": self.id,
-            "baseUrl": self._service.env.base_url,
+            'dashboardType': dashboard_type,
+            'id': self.id,
+            'baseUrl': self._service.env.base_url,
             'withCredentials': self._service.with_credentials
         }
         if add_local_url:
@@ -76,7 +75,7 @@ class Dashboard(object):
 
         html = self.load_index()
         print(f'{dashboard_type} started at {self._service.env.base_url}')
-        display(HTML(html), metadata=dict(isolated=True))
+        self._service.env.display(html)
 
     def add_route(self):
         # To enable multiple dashboards to run in the same notebook we need to

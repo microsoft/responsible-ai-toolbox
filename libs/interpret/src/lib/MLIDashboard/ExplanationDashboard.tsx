@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  FabricStyles,
   isTwoDimArray,
   IExplanationContext,
   IExplanationGenerators,
@@ -16,7 +17,8 @@ import {
   WeightVectorOption,
   WeightVectors,
   JointDataset,
-  IMultiClassBoundedCoordinates
+  IMultiClassBoundedCoordinates,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -64,9 +66,7 @@ import {
   SinglePointFeatureImportance
 } from "./Controls/SinglePointFeatureImportance";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
-import { FabricStyles } from "./FabricStyles";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
-import { TelemetryLevels } from "./Interfaces/ITelemetryMessage";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
 import { validateInputs } from "./validateInputs";
 

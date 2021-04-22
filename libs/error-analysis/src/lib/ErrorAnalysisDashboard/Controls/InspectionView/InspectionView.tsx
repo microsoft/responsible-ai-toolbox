@@ -6,13 +6,10 @@ import {
   WeightVectorOption,
   ModelExplanationUtils,
   IExplanationModelMetadata,
-  ErrorCohort
-} from "@responsible-ai/core-ui";
-import {
-  LocalImportancePlots,
-  IGlobalSeries,
+  ErrorCohort,
   FabricStyles
-} from "@responsible-ai/interpret";
+} from "@responsible-ai/core-ui";
+import { LocalImportancePlots, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,
@@ -278,7 +275,7 @@ export class InspectionView extends React.PureComponent<
           unsortedFeatureValues: JointDataset.datasetSlice(
             row,
             this.props.jointDataset.metaDict,
-            this.props.jointDataset.localExplanationFeatureCount
+            this.props.jointDataset.datasetFeatureCount
           )
         };
       }

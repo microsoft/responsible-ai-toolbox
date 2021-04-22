@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../../FabricStyles";
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 
 import { scatterStyles } from "./Scatter.styles";

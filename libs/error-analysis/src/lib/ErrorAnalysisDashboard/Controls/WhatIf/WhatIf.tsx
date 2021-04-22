@@ -3,14 +3,12 @@
 
 import {
   JointDataset,
-  IExplanationModelMetadata,
-  ErrorCohort
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  FabricStyles
 } from "@responsible-ai/core-ui";
-import {
-  FabricStyles,
-  WhatIfConstants,
-  WhatIfPanel
-} from "@responsible-ai/interpret";
+import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -27,8 +25,6 @@ export interface IWhatIfProps {
   isOpen: boolean;
   // hostId: string
   onDismiss: () => void;
-  jointDataset: JointDataset;
-  metadata: IExplanationModelMetadata;
   currentCohort: ErrorCohort;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   customPoints: Array<{ [key: string]: any }>;
@@ -38,6 +34,7 @@ export interface IWhatIfProps {
 
 export interface IWhatIfState {
   filteredFeatureList: IDropdownOption[];
+  featuresOption: IDropdownOption[];
   selectedWhatIfRootIndex: number;
   editingDataCustomIndex?: number;
   request?: AbortController;
@@ -49,42 +46,53 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
 };
 
 export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
+
   private rowOptions: IDropdownOption[] | undefined;
-  private stringifedValues: { [key: string]: string } = {};
+  private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
   private validationErrors: { [key: string]: string | undefined } = {};
-  private featuresOption: IDropdownOption[] = new Array(
-    this.props.jointDataset.datasetFeatureCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.DataLabelRoot + index.toString();
-      const meta = this.props.jointDataset.metaDict[key];
-      const options = meta.isCategorical
-        ? meta.sortedCategoricalValues?.map((optionText, index) => {
-            return { key: index, text: optionText };
-          })
-        : undefined;
-      return {
-        data: {
-          categoricalOptions: options,
-          fullLabel: meta.label.toLowerCase()
-        },
-        key,
-        text: meta.abbridgedLabel
-      };
-    });
+
   public constructor(props: IWhatIfProps) {
     super(props);
     this.state = {
       editingDataCustomIndex: undefined,
-      filteredFeatureList: this.featuresOption,
+      featuresOption: [],
+      filteredFeatureList: [],
       request: undefined,
       selectedWhatIfRootIndex: 0
     };
+  }
 
+  public componentDidMount() {
     this.createCopyOfFirstRow();
     this.buildRowOptions();
+
+    const featuresOption: IDropdownOption[] = new Array(
+      this.context.jointDataset.datasetFeatureCount
+    )
+      .fill(0)
+      .map((_, index) => {
+        const key = JointDataset.DataLabelRoot + index.toString();
+        const meta = this.context.jointDataset.metaDict[key];
+        const options = meta.isCategorical
+          ? meta.sortedCategoricalValues?.map((optionText, index) => {
+              return { key: index, text: optionText };
+            })
+          : undefined;
+        return {
+          data: {
+            categoricalOptions: options,
+            fullLabel: meta.label.toLowerCase()
+          },
+          key,
+          text: meta.abbridgedLabel
+        };
+      });
+    this.setState({ featuresOption, filteredFeatureList: featuresOption });
   }
 
   public componentDidUpdate(prevProps: IWhatIfProps): void {
@@ -118,8 +126,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
               filteredFeatureList={this.state.filteredFeatureList}
               isPanelOpen={this.props.isOpen}
               isInPanel={true}
-              jointDataset={this.props.jointDataset}
-              metadata={this.props.metadata}
+              jointDataset={this.context.jointDataset}
+              metadata={this.context.modelMetadata}
               openPanel={(): void => {
                 // do nothing
               }}
@@ -130,7 +138,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
               setCustomRowProperty={this.setCustomRowProperty}
               setCustomRowPropertyDropdown={this.setCustomRowPropertyDropdown}
               setSelectedIndex={this.setSelectedIndex}
-              stringifedValues={this.stringifedValues}
+              stringifiedValues={this.stringifiedValues}
               temporaryPoint={this.temporaryPoint}
               validationErrors={this.validationErrors}
               editingDataCustomIndex={this.state.editingDataCustomIndex}
@@ -147,10 +155,10 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     newValue?: string
   ): void => {
     if (newValue === undefined || newValue === null || !/\S/.test(newValue)) {
-      this.setState({ filteredFeatureList: this.featuresOption });
+      this.setState({ filteredFeatureList: this.state.featuresOption });
       return;
     }
-    const filteredFeatureList = this.featuresOption.filter((item) => {
+    const filteredFeatureList = this.state.featuresOption.filter((item) => {
       return item.data.fullLabel.includes(newValue.toLowerCase());
     });
     this.setState({ filteredFeatureList });
@@ -191,7 +199,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       return;
     }
     const editingData = this.temporaryPoint;
-    this.stringifedValues[key] = newValue;
+    this.stringifiedValues[key] = newValue;
     if (isString) {
       editingData[key] = newValue;
       this.forceUpdate();
@@ -226,7 +234,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       editingData[key] = option.key;
     } else if (value !== undefined) {
       // User typed a freeform option
-      const featureOption = this.featuresOption.find(
+      const featureOption = this.state.featuresOption.find(
         (feature) => feature.key === key
       );
       if (featureOption) {
@@ -249,7 +257,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
-    this.temporaryPoint = this.props.jointDataset.getRow(index);
+    this.temporaryPoint = this.context.jointDataset.getRow(index);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
@@ -259,7 +267,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -288,7 +296,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -312,8 +320,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     const abortController = new AbortController();
     const rawData = JointDataset.datasetSlice(
       fetchingReference,
-      this.props.jointDataset.metaDict,
-      this.props.jointDataset.datasetFeatureCount
+      this.context.jointDataset.metaDict,
+      this.context.jointDataset.datasetFeatureCount
     );
     // This seems to break the dashboard for long requests
     // fetchingReference[JointDataset.PredictedYLabel] = undefined;
@@ -341,10 +349,10 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           // prediction is a scalar, no probabilities
           fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
         }
-        if (this.props.jointDataset.hasTrueY) {
+        if (this.context.jointDataset.hasTrueY) {
           JointDataset.setErrorMetrics(
             fetchingReference,
-            this.props.metadata.modelType
+            this.context.modelMetadata.modelType
           );
         }
         this.setState({ request: undefined });

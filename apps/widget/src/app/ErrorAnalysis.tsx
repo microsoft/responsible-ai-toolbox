@@ -15,9 +15,11 @@ export class ErrorAnalysis extends React.Component {
     let requestDebugMLMethod = undefined;
     let requestImportancesMethod = undefined;
     if (config.baseUrl !== undefined) {
-      requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
-        return callFlaskService(data, "/predict");
-      };
+      if (modelData.enablePredict) {
+        requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
+          return callFlaskService(data, "/predict");
+        };
+      }
       requestMatrixMethod = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/matrix");
       };

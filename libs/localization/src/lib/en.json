@@ -641,6 +641,7 @@
     "MainMenu": {
       "treeMap": "Tree map",
       "heatMap": "Heat map",
+      "errorAnalysisLabel": "Error analysis",
       "errorExplorerLabel": "Error explorer:",
       "errorExplorer": "Error explorer",
       "fullscreen": "Fullscreen",

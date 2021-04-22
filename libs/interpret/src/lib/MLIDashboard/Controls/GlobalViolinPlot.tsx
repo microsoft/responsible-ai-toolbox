@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, Cohort } from "@responsible-ai/core-ui";
+import { JointDataset, Cohort, FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -13,7 +13,6 @@ import memoize from "memoize-one";
 import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { FabricStyles } from "../FabricStyles";
 import { IExplanationModelMetadata } from "../IExplanationContext";
 import { LoadingSpinner } from "../SharedComponents";
 

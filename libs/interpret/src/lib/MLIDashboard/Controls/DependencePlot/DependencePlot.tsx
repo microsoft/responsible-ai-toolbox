@@ -7,7 +7,8 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption,
-  IGenericChartProps
+  IGenericChartProps,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -18,8 +19,6 @@ import {
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
-
-import { FabricStyles } from "../../FabricStyles";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";
 
