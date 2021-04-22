@@ -26,13 +26,13 @@ export abstract class CohortBasedComponent<
   TProps extends ICohortBasedComponentProps,
   TState extends ICohortBasedComponentState
 > extends React.PureComponent<TProps, TState> {
-  public updateSelectedCohort(
+  public updateSelectedCohort = (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,
     cells: number,
     cohortStats: CohortStats | undefined
-  ): void {
+  ): void => {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
       filters,
@@ -70,5 +70,5 @@ export abstract class CohortBasedComponent<
       cohorts = [selectedCohort, ...cohorts];
     }
     this.setState({ cohorts, selectedCohort });
-  }
+  };
 }

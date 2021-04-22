@@ -19,7 +19,6 @@ import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
-import { D3ZoomEvent, zoom as d3zoom } from "d3-zoom";
 import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -126,20 +125,19 @@ export class TreeViewRenderer extends React.PureComponent<
       (d) => d.data.error / d.data.size
     )!;
 
-    const zoom = d3zoom<SVGSVGElement, ISVGDatum>()
-      .scaleExtent([1 / 3, 4])
-      .on("zoom", this.zoomed.bind(this));
+    // const zoom = d3zoom<SVGSVGElement, ISVGDatum>()
+    //   .scaleExtent([1 / 3, 4])
+    //   .on("zoom", this.zoomed.bind(this));
 
     if (svgOuterFrame.current) {
-      const svg = select<SVGSVGElement, undefined>(
-        svgOuterFrame.current!
-      ).datum<ISVGDatum>({
+      //const svg =
+      select<SVGSVGElement, undefined>(svgOuterFrame.current).datum<ISVGDatum>({
         filterBrushEvent: true,
         height: this.state.viewerHeight,
         width: this.state.viewerWidth
       });
 
-      svg.style("pointer-events", "all").call(zoom as any);
+      // svg.style("pointer-events", "all").call(zoom as any);
     }
 
     const linkVertical = d3linkVertical<any, HierarchyPointNode<ITreeNode>>()
@@ -687,16 +685,16 @@ export class TreeViewRenderer extends React.PureComponent<
       });
   }
 
-  private zoomed(zoomEvent: D3ZoomEvent<any, ISVGDatum>): void {
-    const newTransform: any = zoomEvent.transform;
-    select(treeZoomPane.current).attr("transform", newTransform);
-    if (
-      this.state.transform === undefined ||
-      newTransform.x !== this.state.transform.x ||
-      newTransform.y !== this.state.transform.y ||
-      newTransform.r !== this.state.transform.r
-    ) {
-      this.setState({ transform: newTransform });
-    }
-  }
+  // private zoomed(zoomEvent: D3ZoomEvent<any, ISVGDatum>): void {
+  //   const newTransform: any = zoomEvent.transform;
+  //   select(treeZoomPane.current).attr("transform", newTransform);
+  //   if (
+  //     this.state.transform === undefined ||
+  //     newTransform.x !== this.state.transform.x ||
+  //     newTransform.y !== this.state.transform.y ||
+  //     newTransform.r !== this.state.transform.r
+  //   ) {
+  //     this.setState({ transform: newTransform });
+  //   }
+  // }
 }

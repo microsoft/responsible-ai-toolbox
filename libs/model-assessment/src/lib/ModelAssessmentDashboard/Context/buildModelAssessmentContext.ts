@@ -85,7 +85,15 @@ export function buildInitialModelAssessmentContext(
     weightVectorOptions.push(index);
   });
   return {
-    activeGlobalTab: GlobalTabKeys.ModelStatisticsTab,
+    activeGlobalTabs: [
+      GlobalTabKeys.ErrorAnalysisTab,
+      GlobalTabKeys.ModelStatisticsTab,
+      GlobalTabKeys.DataExplorerTab,
+      GlobalTabKeys.GlobalExplanationTab,
+      GlobalTabKeys.LocalExplanationTab,
+      GlobalTabKeys.CausalInsightsTab,
+      GlobalTabKeys.CounterfactualsTab
+    ],
     baseCohort: cohorts[0],
     cohorts,
     customPoints: [],

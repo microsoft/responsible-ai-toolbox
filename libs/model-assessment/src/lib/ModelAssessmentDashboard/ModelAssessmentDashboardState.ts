@@ -21,7 +21,7 @@ import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
-  activeGlobalTab: GlobalTabKeys;
+  activeGlobalTabs: GlobalTabKeys[];
   customPoints: Array<{ [key: string]: any }>;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
@@ -35,16 +35,8 @@ export interface IModelAssessmentDashboardState
   sortVector?: number[];
   editingCohortIndex?: number;
   mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
-  openInfoPanel: boolean;
-  openCohortListPanel: boolean;
-  openEditCohort: boolean;
-  openMapShift: boolean;
-  openSaveCohort: boolean;
-  openShiftCohort: boolean;
-  openWhatIf: boolean;
   predictionTab: PredictionTabKeys;
   selectedWhatIfIndex: number | undefined;
-  editedCohort: ErrorCohort;
   selectedFeatures: string[];
   treeViewState: ITreeViewRendererState;
   matrixAreaState: IMatrixAreaState;
