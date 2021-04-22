@@ -240,9 +240,9 @@ class CounterfactualManager(BaseManager):
         """
         return ManagerNames.COUNTERFACTUAL
 
-    def save(self, path):
+    def _save(self, path):
         pass
 
     @staticmethod
-    def load(path, rai_analyzer):
+    def _load(path, rai_analyzer):
         pass

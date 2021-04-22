@@ -76,6 +76,7 @@ async function main() {
       await setVersion(workspace, eachPkg, version);
     }
     if (tag) {
+      console.log(`Creating tag v${version}`);
       execSync(`git config user.email "raiwidgets-maintain@microsoft.com"`);
       execSync(`git config user.name  "AML Rai Package Manager"`);
       execSync(`git add -A`);
