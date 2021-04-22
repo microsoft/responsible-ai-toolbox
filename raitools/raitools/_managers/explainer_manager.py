@@ -161,7 +161,7 @@ class ExplainerManager(BaseManager):
         """
         return ManagerNames.EXPLAINER
 
-    def save(self, path):
+    def _save(self, path):
         """Save the ExplainerManager to the given path.
 
         :param path: The directory path to save the ExplainerManager to.
@@ -178,7 +178,7 @@ class ExplainerManager(BaseManager):
             json.dump(meta, file)
 
     @staticmethod
-    def load(path, rai_analyzer):
+    def _load(path, rai_analyzer):
         """Load the ExplainerManager from the given path.
 
         :param path: The directory path to load the ExplainerManager from.
