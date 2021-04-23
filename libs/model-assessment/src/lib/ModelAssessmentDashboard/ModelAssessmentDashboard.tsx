@@ -89,6 +89,12 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             removeTab={this.removeTab}
           />
           <Stack>
+            {this.state.activeGlobalTabs[0]?.key !==
+              GlobalTabKeys.ErrorAnalysisTab && (
+              <div className={modelAssessmentDashboardStyles.section}>
+                <AddTabButton tabIndex={0} onAdd={this.addTab} />
+              </div>
+            )}
             {this.state.activeGlobalTabs.map((t, i) => (
               <div key={i} className={modelAssessmentDashboardStyles.section}>
                 {t.key === GlobalTabKeys.ErrorAnalysisTab && (
