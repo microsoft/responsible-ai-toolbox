@@ -2,11 +2,10 @@
 
 ### This package has been tested with Python 3.6, 3.7 and 3.8
 
-The Responsible AI Tools SDK enables users to analyze their machine learning models in one API. Users will be able to analyze errors, explain the most important features, validate fairness, compute counterfactuals and run causal analysis using a single API.
+The Responsible AI Tools SDK enables users to analyze their machine learning models in one API. Users will be able to analyze errors, explain the most important features, compute counterfactuals and run causal analysis using a single API.
 
 Highlights of the package include:
 
-- `fairness.add()` runs Fairlearn to assess model fairness
 - `explainer.add()` explains the model
 - `counterfactuals.add()` computes counterfactuals
 - `error_analysis.add()` runs error analysis
