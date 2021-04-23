@@ -17,5 +17,6 @@ export * from "./lib/components/PlotlyMode";
 export * from "./lib/components/PlotlyThemes";
 export * from "./lib/components/RangeTypes";
 export * from "./lib/components/SelectionContext";
+export * from "./lib/components/TreeView";
 export * from "./lib/util/roundDecimal";
 export * from "./lib/util/chartColors";
