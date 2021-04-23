@@ -12,11 +12,15 @@ ERROR = 'error'
 ID = 'id'
 
 
-def validate_error_analysis(rai_analyzer):
-    rai_analyzer.error_analysis.add()
-    with pytest.raises(DuplicateManagerConfigException):
+def setup_error_analysis(rai_analyzer, add_ea=True):
+    if add_ea:
         rai_analyzer.error_analysis.add()
+        with pytest.raises(DuplicateManagerConfigException):
+            rai_analyzer.error_analysis.add()
     rai_analyzer.error_analysis.compute()
+
+
+def validate_error_analysis(rai_analyzer):
     reports = rai_analyzer.error_analysis.get()
     assert isinstance(reports, list)
     assert len(reports) == 1

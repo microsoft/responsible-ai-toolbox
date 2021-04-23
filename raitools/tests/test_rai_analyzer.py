@@ -17,7 +17,8 @@ from raitools._internal.constants import ManagerNames
 from explainer_manager_validator import (setup_explainer,
                                          validate_explainer)
 from counterfactual_manager_validator import validate_counterfactual
-from error_analysis_validator import validate_error_analysis
+from error_analysis_validator import (setup_error_analysis,
+                                      validate_error_analysis)
 
 LABELS = "labels"
 DESIRED_CLASS = 'desired_class'
@@ -43,7 +44,8 @@ class TestRAIAnalyzer(object):
             run_rai_analyzer(model, x_train, x_test, LABELS,
                              manager_type, manager_args, classes)
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
+    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
     def test_rai_analyzer_cancer(self, manager_type):
         x_train, x_test, y_train, y_test, feature_names, classes = \
@@ -59,7 +61,8 @@ class TestRAIAnalyzer(object):
             run_rai_analyzer(model, x_train, x_test, LABELS,
                              manager_type, manager_args, classes)
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.EXPLAINER])
+    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER])
     def test_rai_analyzer_binary(self, manager_type):
         x_train, y_train, x_test, y_test, classes = \
             create_binary_classification_dataset()
@@ -103,6 +106,8 @@ def run_rai_analyzer(model, x_train, x_test, target_column,
                                task_type=task_type)
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(rai_analyzer)
+    if manager_type == ManagerNames.ERROR_ANALYSIS:
+        setup_error_analysis(rai_analyzer)
     validate_rai_analyzer(rai_analyzer, x_train, x_test, target_column,
                           task_type)
     if manager_type == ManagerNames.EXPLAINER:
@@ -120,7 +125,7 @@ def run_rai_analyzer(model, x_train, x_test, target_column,
     if manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(rai_analyzer)
     with TemporaryDirectory() as tempdir:
-        path = Path(tempdir) / 'explanation'
+        path = Path(tempdir) / 'rai_test_path'
         # save the rai_analyzer
         rai_analyzer.save(path)
         # load the rai_analyzer
@@ -131,6 +136,8 @@ def run_rai_analyzer(model, x_train, x_test, target_column,
                               target_column, task_type)
         if manager_type == ManagerNames.EXPLAINER:
             validate_explainer(rai_analyzer, x_train, x_test, classes)
+        if manager_type == ManagerNames.ERROR_ANALYSIS:
+            validate_error_analysis(rai_analyzer)
 
 
 def validate_rai_analyzer(rai_analyzer, x_train, x_test, target_column,
