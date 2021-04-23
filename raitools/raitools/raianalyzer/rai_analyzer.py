@@ -12,7 +12,6 @@ from raitools._managers.causal_manager import CausalManager
 from raitools._managers.counterfactual_manager import CounterfactualManager
 from raitools._managers.error_analysis_manager import ErrorAnalysisManager
 from raitools._managers.explainer_manager import ExplainerManager
-from raitools._managers.fairness_manager import FairnessManager
 
 
 _DTYPES = 'dtypes'
@@ -33,8 +32,8 @@ class RAIAnalyzer(object):
     """Defines the top-level RAI Analyzer.
 
     Use the RAI Analyzer to analyze errors, explain the most important
-    features, validate fairness, compute counterfactuals and run causal
-    analysis in a single API.
+    features, compute counterfactuals and run causal analysis in a
+    single API.
 
     :param model: The model to compute RAI insights for.
         A model that implements sklearn.predict or sklearn.predict_proba
@@ -60,8 +59,8 @@ class RAIAnalyzer(object):
         """Defines the top-level RAI Analyzer.
 
         Use the RAI Analyzer to analyze errors, explain the most important
-        features, validate fairness, compute counterfactuals and run causal
-        analysis in a single API.
+        features, compute counterfactuals and run causal analysis in a
+        single API.
 
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -94,12 +93,10 @@ class RAIAnalyzer(object):
         self._explainer_manager = ExplainerManager(model, train, test,
                                                    target_column,
                                                    self._classes)
-        self._fairness_manager = FairnessManager()
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
                           self._error_analysis_manager,
-                          self._explainer_manager,
-                          self._fairness_manager]
+                          self._explainer_manager]
 
     @property
     def causal(self) -> CausalManager:
@@ -136,15 +133,6 @@ class RAIAnalyzer(object):
         :rtype: ExplainerManager
         """
         return self._explainer_manager
-
-    @property
-    def fairness(self) -> FairnessManager:
-        """Get the fairness manager.
-
-        :return: The fairness manager.
-        :rtype: FairnessManager
-        """
-        return self._fairness_manager
 
     def compute(self):
         """Calls compute on each of the managers."""
@@ -273,10 +261,5 @@ class RAIAnalyzer(object):
         explainer_manager = ExplainerManager._load(exp_dir, inst)
         inst.__dict__[exm_name] = explainer_manager
         managers.append(explainer_manager)
-        fm_name = '_' + ManagerNames.FAIRNESS + '_manager'
-        fairness_dir = top_dir / ManagerNames.FAIRNESS
-        fairness_manager = FairnessManager._load(fairness_dir, inst)
-        inst.__dict__[fm_name] = fairness_manager
-        managers.append(fairness_manager)
         inst.__dict__['_' + _MANAGERS] = managers
         return inst

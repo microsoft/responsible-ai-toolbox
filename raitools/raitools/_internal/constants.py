@@ -11,7 +11,6 @@ class ManagerNames(str):
     COUNTERFACTUAL = 'counterfactual'
     ERROR_ANALYSIS = 'error_analysis'
     EXPLAINER = 'explainer'
-    FAIRNESS = 'fairness'
 
 
 class Metadata(str):
