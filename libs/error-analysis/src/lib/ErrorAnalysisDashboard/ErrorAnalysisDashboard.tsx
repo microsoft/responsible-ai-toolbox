@@ -324,6 +324,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
@@ -333,12 +334,14 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
+          selectedErrorCohort: this.state.selectedCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
               return;
             }),
-          theme: this.props.theme
+          theme: this.props.theme,
+          updateErrorCohorts: this.updateErrorCohorts
         }}
       >
         <div className={classNames.page}>
@@ -783,5 +786,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       errorCohort.cohort.clearCachedImportances()
     );
     this.setState({ selectedWeightVector: weightOption });
+  };
+
+  private updateErrorCohorts = (
+    cohorts: ErrorCohort[],
+    selectedCohort: ErrorCohort,
+    baseCohort?: ErrorCohort
+  ): void => {
+    this.setState({
+      baseCohort: baseCohort || this.state.baseCohort,
+      cohorts,
+      selectedCohort
+    });
   };
 }

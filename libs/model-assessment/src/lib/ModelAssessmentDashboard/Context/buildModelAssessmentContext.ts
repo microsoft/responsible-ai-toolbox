@@ -86,20 +86,40 @@ export function buildInitialModelAssessmentContext(
   });
   return {
     activeGlobalTabs: [
-      GlobalTabKeys.ErrorAnalysisTab,
-      GlobalTabKeys.ModelStatisticsTab,
-      GlobalTabKeys.DataExplorerTab,
-      GlobalTabKeys.GlobalExplanationTab,
-      GlobalTabKeys.LocalExplanationTab,
-      GlobalTabKeys.CausalInsightsTab,
-      GlobalTabKeys.CounterfactualsTab
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.ErrorAnalysisTab
+      },
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.ModelStatisticsTab
+      },
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.DataExplorerTab
+      },
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.GlobalExplanationTab
+      },
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.LocalExplanationTab
+      },
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.CausalAnalysisTab
+      },
+      {
+        dataCount: jointDataset.datasetRowCount,
+        key: GlobalTabKeys.CounterfactualsTab
+      }
     ],
     baseCohort: cohorts[0],
     cohorts,
     customPoints: [],
     dataChartConfig: undefined,
     dependenceProps: undefined,
-    editedCohort: cohorts[0],
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,
     globalImportanceIntercept: globalProps.globalImportanceIntercept,
@@ -112,13 +132,6 @@ export function buildInitialModelAssessmentContext(
     matrixFilterState: createInitialMatrixFilterState(),
     modelChartConfig: undefined,
     modelMetadata,
-    openCohortListPanel: false,
-    openEditCohort: false,
-    openInfoPanel: false,
-    openMapShift: false,
-    openSaveCohort: false,
-    openShiftCohort: false,
-    openWhatIf: false,
     predictionTab: PredictionTabKeys.CorrectPredictionTab,
     selectedCohort: cohorts[0],
     selectedFeatures: props.dataset.featureNames,

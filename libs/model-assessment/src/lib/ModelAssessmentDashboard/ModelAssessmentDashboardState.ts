@@ -5,7 +5,6 @@ import {
   IExplanationModelMetadata,
   IGenericChartProps,
   WeightVectorOption,
-  ErrorCohort,
   ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
 import {
@@ -21,7 +20,7 @@ import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
-  activeGlobalTabs: GlobalTabKeys[];
+  activeGlobalTabs: IModelAssessmentDashboardTab[];
   customPoints: Array<{ [key: string]: any }>;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
@@ -45,4 +44,9 @@ export interface IModelAssessmentDashboardState
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
+}
+
+export interface IModelAssessmentDashboardTab {
+  key: GlobalTabKeys;
+  dataCount: number;
 }

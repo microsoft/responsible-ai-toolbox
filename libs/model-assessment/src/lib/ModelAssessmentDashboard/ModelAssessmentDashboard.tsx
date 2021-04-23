@@ -5,12 +5,12 @@ import { CausalInsightsTab } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
   CohortBasedComponent,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
-  ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
   InstanceView,
   IMatrixAreaState,
@@ -23,9 +23,10 @@ import {
 } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { Stack, PivotItem, IconButton } from "office-ui-fabric-react";
+import { Stack } from "office-ui-fabric-react";
 import * as React from "react";
 
+import { AddTabButton } from "./AddTabButton";
 import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
 import { MainMenu } from "./Controls/MainMenu";
 import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.styles";
@@ -57,10 +58,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     const cohortIDs = this.state.cohorts.map((errorCohort) =>
       errorCohort.cohort.getCohortID().toString()
     );
-
     return (
       <ModelAssessmentContext.Provider
         value={{
+          baseErrorCohort: this.state.baseCohort,
           dataset: this.props.dataset,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
@@ -71,24 +72,26 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
+          selectedErrorCohort: this.state.selectedCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
               return;
             }),
-          theme: this.props.theme
+          theme: this.props.theme,
+          updateErrorCohorts: this.updateErrorCohorts
         }}
       >
         <div className={modelAssessmentDashboardStyles.page}>
           <MainMenu
             localUrl={this.props.localUrl}
-            errorAnalysisOption={this.state.errorAnalysisOption}
-            temporaryCohort={this.state.selectedCohort}
+            activeGlobalTabs={this.state.activeGlobalTabs}
+            removeTab={this.removeTab}
           />
           <Stack>
             {this.state.activeGlobalTabs.map((t, i) => (
               <div key={i} className={modelAssessmentDashboardStyles.section}>
-                {t === GlobalTabKeys.ErrorAnalysisTab && (
+                {t.key === GlobalTabKeys.ErrorAnalysisTab && (
                   <ErrorAnalysisViewTab
                     messages={
                       this.props.stringParams
@@ -125,7 +128,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         this.setState({ matrixFilterState });
                       }
                     }}
-                    handleErrorDetectorChanged={this.handleErrorDetectorChanged}
                     stringParams={this.props.stringParams}
                     selectFeatures={(features: string[]): void =>
                       this.setState({ selectedFeatures: features })
@@ -133,11 +135,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     importances={this.state.importances}
                   />
                 )}
-                {t === GlobalTabKeys.ModelStatisticsTab && (
+                {t.key === GlobalTabKeys.ModelStatisticsTab && (
                   <ModelPerformanceTab />
                 )}
-                {t === GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
-                {t === GlobalTabKeys.GlobalExplanationTab && (
+                {t.key === GlobalTabKeys.DataExplorerTab && (
+                  <DatasetExplorerTab />
+                )}
+                {t.key === GlobalTabKeys.GlobalExplanationTab && (
                   <GlobalExplanationTab
                     cohorts={this.state.cohorts.map((cohort) => cohort.cohort)}
                     cohortIDs={cohortIDs}
@@ -150,7 +154,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     }
                   />
                 )}
-                {t === GlobalTabKeys.LocalExplanationTab && (
+                {t.key === GlobalTabKeys.LocalExplanationTab && (
                   <InstanceView
                     messages={
                       this.props.stringParams
@@ -176,12 +180,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     }
                   />
                 )}
-                {t === GlobalTabKeys.CausalInsightsTab && <CausalInsightsTab />}
+                {t.key === GlobalTabKeys.CausalAnalysisTab && (
+                  <CausalInsightsTab />
+                )}
 
-                {t === GlobalTabKeys.CounterfactualsTab && (
+                {t.key === GlobalTabKeys.CounterfactualsTab && (
                   <CounterfactualsTab />
                 )}
-                <IconButton iconProps={{ iconName: "CircleAdditionSolid" }} />
+                <AddTabButton tabIndex={i + 1} onAdd={this.addTab} />
               </div>
             ))}
           </Stack>
@@ -189,6 +195,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+  private addTab = (index: number, tab: GlobalTabKeys) => {
+    const tabs = [...this.state.activeGlobalTabs];
+    tabs.splice(index, 0, { dataCount: 0, key: tab });
+    this.setState({ activeGlobalTabs: tabs });
+  };
+  private removeTab = (index: number) => {
+    const tabs = [...this.state.activeGlobalTabs];
+    tabs.splice(index, 1);
+    this.setState({ activeGlobalTabs: tabs });
+  };
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
@@ -198,33 +214,15 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({ selectedWeightVector: weightOption });
   };
 
-  private handleErrorDetectorChanged = (
-    item?: PivotItem,
-    _ev?: React.MouseEvent<HTMLElement>
+  private updateErrorCohorts = (
+    cohorts: ErrorCohort[],
+    selectedCohort: ErrorCohort,
+    baseCohort?: ErrorCohort
   ): void => {
-    if (item && item.props.itemKey) {
-      // Note comparison below is actually string comparison (key is string), we have to set the enum
-      if (item.props.itemKey === ErrorAnalysisOptions.HeatMap) {
-        const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;
-        this.setErrorDetector(selectedOptionHeatMap);
-      } else {
-        const selectedOptionTreeMap = ErrorAnalysisOptions.TreeMap;
-        this.setErrorDetector(selectedOptionTreeMap);
-      }
-    }
-  };
-
-  private setErrorDetector = (key: ErrorAnalysisOptions): void => {
-    alert(this.state.selectedCohort.isTemporary);
-    if (this.state.selectedCohort.isTemporary) {
-      this.setState({
-        mapShiftErrorAnalysisOption: key,
-        openMapShift: true
-      });
-    } else {
-      this.setState({
-        errorAnalysisOption: key
-      });
-    }
+    this.setState({
+      baseCohort: baseCohort || this.state.baseCohort,
+      cohorts,
+      selectedCohort
+    });
   };
 }
