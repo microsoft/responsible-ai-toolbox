@@ -7,8 +7,10 @@ import {
   FilterMethods,
   CohortSource,
   CohortStats,
-  ErrorCohort
+  ErrorCohort,
+  ExpandableText
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -19,8 +21,7 @@ import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
-import { D3ZoomEvent, zoom as d3zoom } from "d3-zoom";
-import { IProcessedStyleSet, ITheme } from "office-ui-fabric-react";
+import { IProcessedStyleSet, ITheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -113,38 +114,34 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public render(): React.ReactNode {
     if (!this.state.root) {
-      return <div></div>;
+      return React.Fragment;
     }
     const classNames = treeViewRendererStyles();
     const labelPaddingX = 20;
     const labelPaddingY = 8;
     const labelYOffset = 3;
 
-    const rootDescendents = this.state.root.descendants();
-    const max: number = d3max(
-      rootDescendents,
-      (d) => d.data.error / d.data.size
-    )!;
-
-    const zoom = d3zoom<SVGSVGElement, ISVGDatum>()
-      .scaleExtent([1 / 3, 4])
-      .on("zoom", this.zoomed.bind(this));
+    const rootDescendants = this.state.root.descendants();
+    const max = d3max(rootDescendants, (d) => d.data.error / d.data.size) || 0;
 
     if (svgOuterFrame.current) {
-      const svg = select<SVGSVGElement, undefined>(
-        svgOuterFrame.current!
-      ).datum<ISVGDatum>({
+      const svg = select<SVGSVGElement, undefined>(svgOuterFrame.current).datum<
+        ISVGDatum
+      >({
         filterBrushEvent: true,
         height: this.state.viewerHeight,
         width: this.state.viewerWidth
       });
 
-      svg.style("pointer-events", "all").call(zoom as any);
+      svg.style("pointer-events", "all");
     }
 
-    const linkVertical = d3linkVertical<any, HierarchyPointNode<ITreeNode>>()
-      .x((d: HierarchyPointNode<ITreeNode>) => d!.x!)
-      .y((d: HierarchyPointNode<ITreeNode>) => d!.y!);
+    const linkVertical = d3linkVertical<
+      unknown,
+      HierarchyPointNode<ITreeNode>
+    >()
+      .x((d: HierarchyPointNode<ITreeNode>) => d.x)
+      .y((d: HierarchyPointNode<ITreeNode>) => d.y);
     // GENERATES LINK DATA BETWEEN NODES
     // -------------------------------------------------------------------
     // The links between the nodes in the tree view are generated below.
@@ -153,17 +150,17 @@ export class TreeViewRenderer extends React.PureComponent<
     // or not we highlight it.  We use the d3 linkVertical which is a curved
     // spline to draw the link.  The thickness of the links depends on the
     // ratio of data going through the path versus overall data in the tree.
-    const links = rootDescendents
+    const links = rootDescendants
       .slice(1)
       .map((d: HierarchyPointNode<ITreeNode>) => {
         const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
         const lineColor = d.data.nodeState.onSelectedPath
           ? ColorPalette.SelectedLineColor
           : ColorPalette.UnselectedLineColor;
-        const id: string = d.id!;
+        const id = d.id || "";
         const linkVerticalD = linkVertical({ source: d.parent, target: d });
         return {
-          d: linkVerticalD!,
+          d: linkVerticalD || "",
           id: id + Math.random(),
           style: { fill: "white", stroke: lineColor, strokeWidth: thick }
         };
@@ -174,17 +171,17 @@ export class TreeViewRenderer extends React.PureComponent<
     // Generates the labels on the links.  This initially writes the text,
     // calculates the bounding box using getTextBB, and then returns the
     // properties (x, y, height, width and the text) of the link label.
-    const linkLabels = rootDescendents
+    const linkLabels = rootDescendants
       .slice(1)
       .filter(
         (d: HierarchyPointNode<ITreeNode>) => d.data.nodeState.onSelectedPath
       )
       .map((d: HierarchyPointNode<ITreeNode>) => {
-        const labelX = d!.x! + (d!.parent!.x! - d!.x!) * 0.5;
-        const labelY = 4 + d!.y! + (d!.parent!.y! - d!.y!) * 0.5;
+        const labelX = d.x + (d.parent?.x || 0 - d.x) * 0.5;
+        const labelY = 4 + d.y + (d.parent?.y || 0 - d.y) * 0.5;
         let bb: DOMRect;
         try {
-          bb = this.getTextBB(d!.data!.condition!, classNames);
+          bb = this.getTextBB(d.data.condition, classNames);
         } catch {
           bb = new DOMRect(1, 1, 1, 1);
         }
@@ -193,24 +190,24 @@ export class TreeViewRenderer extends React.PureComponent<
           bbWidth: bb.width + labelPaddingX,
           bbX: 0.5 * (bb.width + labelPaddingX),
           bbY: 0.5 * (bb.height + labelPaddingY) + labelYOffset,
-          id: `linkLabel${d!.id!}`,
+          id: `linkLabel${d.id}`,
           style: {
             transform: `translate(${labelX}px, ${labelY}px)`
           },
-          text: `${d!.data!.condition!}`
+          text: `${d.data.condition}`
         };
       });
 
     // GENERATES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
     // -------------------------------------------------------------------
     // The code below generates the circular nodes in the tree view.
-    const nodeData: Array<HierarchyPointNode<ITreeNode>> = rootDescendents.map(
+    const nodeData: Array<HierarchyPointNode<ITreeNode>> = rootDescendants.map(
       (d: HierarchyPointNode<ITreeNode>): HierarchyPointNode<ITreeNode> => {
         let selectedStyle: Record<string, number | string> = {
           fill: d.data.errorColor.fill
         };
 
-        if (d.data.nodeState.onSelectedPath!) {
+        if (d.data.nodeState.onSelectedPath) {
           selectedStyle = { fill: d.data.errorColor.fill, strokeWidth: 3 };
         }
 
@@ -220,7 +217,7 @@ export class TreeViewRenderer extends React.PureComponent<
           isSelectedLeaf: d.data.nodeState.isSelectedLeaf,
           onSelectedPath: d.data.nodeState.onSelectedPath,
           style: {
-            transform: `translate(${d!.x!}px, ${d!.y!}px)`
+            transform: `translate(${d.x}px, ${d.y}px)`
           }
         };
         return d;
@@ -230,9 +227,20 @@ export class TreeViewRenderer extends React.PureComponent<
     const minPct = this.state.rootLocalError * errorRatioThreshold * 100;
 
     return (
-      <div className={classNames.mainFrame} id="mainFrame">
-        <div className={classNames.innerFrame}>
-          <div className={classNames.legend}>
+      <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
+        <Stack.Item>
+          <ExpandableText
+            expandedText={
+              localization.ErrorAnalysis.TreeView.treeDescriptionExpanded
+            }
+            iconName="Info"
+            variant={"smallPlus"}
+          >
+            {localization.ErrorAnalysis.TreeView.treeDescription}
+          </ExpandableText>
+        </Stack.Item>
+        <Stack.Item>
+          <Stack horizontal>
             <TreeLegend
               selectedCohort={this.props.selectedCohort}
               baseCohort={this.props.baseCohort}
@@ -240,99 +248,99 @@ export class TreeViewRenderer extends React.PureComponent<
               minPct={minPct}
               max={max}
             />
-          </div>
-          <svg
-            ref={svgOuterFrame}
-            className={classNames.svgOuterFrame}
-            id="svgOuterFrame"
-            viewBox="0 0 952 1100"
-          >
-            <mask id="Mask">
-              <rect
-                className="nodeMask"
-                x="-26"
-                y="-26"
-                width="52"
-                height="52"
-                fill="white"
-              />
-            </mask>
+            <svg
+              ref={svgOuterFrame}
+              className={classNames.svgOuterFrame}
+              id="svgOuterFrame"
+              viewBox="0 0 952 1100"
+            >
+              <mask id="Mask">
+                <rect
+                  className="nodeMask"
+                  x="-26"
+                  y="-26"
+                  width="52"
+                  height="52"
+                  fill="white"
+                />
+              </mask>
 
-            <g ref={treeZoomPane} className="treeZoomPane">
-              {/* Tree */}
-              <TransitionGroup
-                component="g"
-                className={classNames.linksTransitionGroup}
-              >
-                {links.map((link) => (
-                  <CSSTransition
-                    key={link.id}
-                    in={true}
-                    timeout={200}
-                    className="links"
-                  >
-                    <path
+              <g ref={treeZoomPane}>
+                {/* Tree */}
+                <TransitionGroup
+                  component="g"
+                  className={classNames.linksTransitionGroup}
+                >
+                  {links.map((link) => (
+                    <CSSTransition
                       key={link.id}
-                      id={link.id}
-                      d={link.d}
-                      style={link.style}
-                    />
-                  </CSSTransition>
-                ))}
-              </TransitionGroup>
-              <g className={classNames.nodesGroup}>
-                {nodeData.map((node, index) => {
-                  return (
-                    <TreeViewNode
-                      key={index}
-                      node={node}
-                      onSelect={this.onSelectNode}
-                    />
-                  );
-                })}
-              </g>
-              <TransitionGroup
-                component="g"
-                className={classNames.linkLabelsTransitionGroup}
-              >
-                {linkLabels.map((linkLabel) => (
-                  <CSSTransition
-                    key={linkLabel.id}
-                    in={true}
-                    timeout={200}
-                    className="linkLabels"
-                  >
-                    <g
-                      key={linkLabel.id}
-                      style={linkLabel.style}
-                      pointerEvents="none"
+                      in={true}
+                      timeout={200}
+                      className="links"
                     >
-                      <rect
-                        x={-linkLabel.bbX}
-                        y={-linkLabel.bbY}
-                        width={linkLabel.bbWidth}
-                        height={linkLabel.bbHeight}
-                        fill="white"
-                        stroke={ColorPalette.LinkLabelOutline}
-                        strokeWidth="1px"
-                        rx="10"
-                        ry="10"
-                        pointerEvents="none"
+                      <path
+                        key={link.id}
+                        id={link.id}
+                        d={link.d}
+                        style={link.style}
                       />
-                      <text
-                        className={classNames.linkLabel}
+                    </CSSTransition>
+                  ))}
+                </TransitionGroup>
+                <g className={classNames.nodesGroup}>
+                  {nodeData.map((node, index) => {
+                    return (
+                      <TreeViewNode
+                        key={index}
+                        node={node}
+                        onSelect={this.onSelectNode}
+                      />
+                    );
+                  })}
+                </g>
+                <TransitionGroup
+                  component="g"
+                  className={classNames.linkLabelsTransitionGroup}
+                >
+                  {linkLabels.map((linkLabel) => (
+                    <CSSTransition
+                      key={linkLabel.id}
+                      in={true}
+                      timeout={200}
+                      className="linkLabels"
+                    >
+                      <g
+                        key={linkLabel.id}
+                        style={linkLabel.style}
                         pointerEvents="none"
                       >
-                        {linkLabel.text}
-                      </text>
-                    </g>
-                  </CSSTransition>
-                ))}
-              </TransitionGroup>
-            </g>
-          </svg>
-        </div>
-      </div>
+                        <rect
+                          x={-linkLabel.bbX}
+                          y={-linkLabel.bbY}
+                          width={linkLabel.bbWidth}
+                          height={linkLabel.bbHeight}
+                          fill="white"
+                          stroke={ColorPalette.LinkLabelOutline}
+                          strokeWidth="1px"
+                          rx="10"
+                          ry="10"
+                          pointerEvents="none"
+                        />
+                        <text
+                          className={classNames.linkLabel}
+                          pointerEvents="none"
+                        >
+                          {linkLabel.text}
+                        </text>
+                      </g>
+                    </CSSTransition>
+                  ))}
+                </TransitionGroup>
+              </g>
+            </svg>
+          </Stack>
+        </Stack.Item>{" "}
+      </Stack>
     );
   }
 
@@ -386,10 +394,6 @@ export class TreeViewRenderer extends React.PureComponent<
   ): ITreeViewRendererState => {
     const height = 300;
     const width = 800;
-    //   if (document.querySelector("#mainFrame")) {
-    //     height = document.querySelector("#mainFrame")!.clientHeight;
-    //     width = document.querySelector("#mainFrame")!.clientWidth;
-    //   }
     return {
       nodeDetail: state.nodeDetail,
       request: state.request,
@@ -685,18 +689,5 @@ export class TreeViewRenderer extends React.PureComponent<
         this.forceUpdate();
         this.reloadData(result as IRequestNode[]);
       });
-  }
-
-  private zoomed(zoomEvent: D3ZoomEvent<any, ISVGDatum>): void {
-    const newTransform: any = zoomEvent.transform;
-    select(treeZoomPane.current).attr("transform", newTransform);
-    if (
-      this.state.transform === undefined ||
-      newTransform.x !== this.state.transform.x ||
-      newTransform.y !== this.state.transform.y ||
-      newTransform.r !== this.state.transform.r
-    ) {
-      this.setState({ transform: newTransform });
-    }
   }
 }

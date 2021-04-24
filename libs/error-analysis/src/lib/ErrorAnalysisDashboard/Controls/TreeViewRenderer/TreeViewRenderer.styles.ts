@@ -15,12 +15,10 @@ export interface ITreeViewRendererStyles {
   clickedNodeFull: IStyle;
   detailLines: IStyle;
   filledNodeText: IStyle;
-  innerFrame: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
   linkLabelsTransitionGroup: IStyle;
   linksTransitionGroup: IStyle;
-  mainFrame: IStyle;
   node: IStyle;
   nodeText: IStyle;
   nodesGroup: IStyle;
@@ -72,15 +70,8 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
         fill: ColorPalette.ErrorAnalysisLightText
       }
     ]),
-    innerFrame: {
-      height: "100%",
-      margin: "0",
-      padding: "0",
-      width: "100%"
-    },
     legend: {
-      pointerEvents: "none",
-      position: "absolute"
+      pointerEvents: "none"
     },
     linkLabel: {
       fill: "#777",
@@ -94,12 +85,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     linksTransitionGroup: {
       transform: "translate(0px, 90px)"
-    },
-    mainFrame: {
-      height: "1100px",
-      margin: "0",
-      padding: "0",
-      width: "100%"
     },
     node: {
       ":hover": {
