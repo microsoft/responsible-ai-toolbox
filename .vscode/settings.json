@@ -48,6 +48,7 @@
     "Buildable",
     "Callout",
     "Chainable",
+    "Counterfactuals",
     "Fairness",
     "Importances",
     "Overprediction",

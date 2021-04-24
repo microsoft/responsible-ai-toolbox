@@ -7,7 +7,9 @@ export enum GlobalTabKeys {
   LocalExplanationTab = "LocalExplanationTab",
   ErrorAnalysisTab = "ErrorAnalysisTab",
   FairnessTab = "FairnessTab",
-  ModelStatisticsTab = "ModelStatisticsTab"
+  ModelStatisticsTab = "ModelStatisticsTab",
+  CausalAnalysisTab = "CausalInsightsTab",
+  CounterfactualsTab = "CounterfactualsTab"
 }
 
 export enum PredictionTabKeys {

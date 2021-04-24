@@ -22,6 +22,7 @@ import { ValidateProperties } from "./ValidateProperties";
 
 export interface INewExplanationDashboardState {
   cohorts: Cohort[];
+  selectedCohort: Cohort;
   activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
@@ -201,6 +202,7 @@ export function buildInitialExplanationContext(
     jointDataset,
     modelMetadata,
     requestPredictions: props.requestPredictions,
+    selectedCohort: cohorts[0],
     selectedWeightVector:
       modelMetadata.modelType === ModelTypes.Multiclass
         ? WeightVectors.AbsAvg
