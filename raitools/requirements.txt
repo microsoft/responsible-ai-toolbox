@@ -5,3 +5,4 @@ scikit-learn>=0.22.1
 lightgbm>=2.0.11
 interpret-community>=0.17.0
 dice-ml>=0.5.0
+erroranalysis>=0.1.2
