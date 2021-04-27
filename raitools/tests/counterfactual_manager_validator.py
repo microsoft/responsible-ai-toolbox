@@ -4,7 +4,7 @@
 import pytest
 from raitools import ModelTask
 from raitools.exceptions import (
-    DuplicateCounterfactualConfigException, UserConfigValidationException
+    DuplicateManagerConfigException, UserConfigValidationException
 )
 
 
@@ -24,7 +24,7 @@ def validate_counterfactual(cf_analyzer, x_train, target_column,
     assert len(cf_analyzer.counterfactual.get()) == 1
 
     # Add a duplicate configuration
-    with pytest.raises(DuplicateCounterfactualConfigException):
+    with pytest.raises(DuplicateManagerConfigException):
         cf_analyzer.counterfactual.add(continuous_features=continuous_features,
                                        total_CFs=10,
                                        method='random',

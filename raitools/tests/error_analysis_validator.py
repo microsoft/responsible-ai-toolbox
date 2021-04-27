@@ -1,8 +1,10 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
+import pytest
 
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX, VALUES)
+from raitools.exceptions import DuplicateManagerConfigException
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -12,6 +14,8 @@ ID = 'id'
 
 def validate_error_analysis(rai_analyzer):
     rai_analyzer.error_analysis.add()
+    with pytest.raises(DuplicateManagerConfigException):
+        rai_analyzer.error_analysis.add()
     rai_analyzer.error_analysis.compute()
     reports = rai_analyzer.error_analysis.get()
     assert isinstance(reports, list)

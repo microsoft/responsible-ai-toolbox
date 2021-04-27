@@ -11,7 +11,7 @@ from raitools._managers.base_manager import BaseManager
 from raitools._config.base_config import BaseConfig
 from raitools.raianalyzer.constants import ModelTask
 from raitools.exceptions import (
-    UserConfigValidationException, DuplicateCounterfactualConfigException
+    UserConfigValidationException, DuplicateManagerConfigException
 )
 
 
@@ -127,7 +127,7 @@ class CounterfactualManager(BaseManager):
             self._counterfactual_config_list)
 
         if is_duplicate:
-            raise DuplicateCounterfactualConfigException(
+            raise DuplicateManagerConfigException(
                 'Duplicate counterfactual configuration detected.')
         else:
             self._counterfactual_config_list.append(new_counterfactual_config)

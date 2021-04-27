@@ -6,6 +6,7 @@
 from raitools._internal.constants import ManagerNames
 from raitools._managers.base_manager import BaseManager
 from raitools._config.base_config import BaseConfig
+from raitools.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 
@@ -105,8 +106,9 @@ class ErrorAnalysisManager(BaseManager):
             self._ea_config_list)
 
         if is_duplicate:
-            raise ValueError(
-                "Duplicate config specified, config already added")
+            raise DuplicateManagerConfigException(
+                "Duplicate config specified for error analysis,"
+                "onfig already added")
         else:
             self._ea_config_list.append(ea_config)
 
