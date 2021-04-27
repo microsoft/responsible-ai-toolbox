@@ -108,7 +108,7 @@ class ErrorAnalysisManager(BaseManager):
         if is_duplicate:
             raise DuplicateManagerConfigException(
                 "Duplicate config specified for error analysis,"
-                "onfig already added")
+                "config already added")
         else:
             self._ea_config_list.append(ea_config)
 
