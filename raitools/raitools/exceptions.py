@@ -2,14 +2,14 @@
 # Licensed under the MIT License.
 
 
-class DuplicateCounterfactualConfigException(Exception):
-    """An exception indicating that a duplicate counterfactual configuration
-    was detected.
+class DuplicateManagerConfigException(Exception):
+    """An exception indicating that a duplicate configuration
+    was detected in any of the RAI managers.
 
     :param exception_message: A message describing the error.
     :type exception_message: str
     """
-    _error_code = 'Duplicate counterfactual configuration detected.'
+    _error_code = 'Duplicate RAI configuration detected.'
 
 
 class UserConfigValidationException(Exception):
