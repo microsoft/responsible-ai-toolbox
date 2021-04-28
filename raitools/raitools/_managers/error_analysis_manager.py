@@ -3,11 +3,58 @@
 
 """Defines the Error Analysis Manager class."""
 
-from raitools._internal.constants import ManagerNames
+from pathlib import Path
+import json
+from raitools._internal.constants import (
+    ManagerNames, ListProperties, ErrorAnalysisManagerKeys as Keys)
 from raitools._managers.base_manager import BaseManager
 from raitools._config.base_config import BaseConfig
 from raitools.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from erroranalysis._internal.error_report import (
+    json_converter as report_json_converter, as_error_report)
+
+REPORTS = 'reports'
+CONFIG = 'config'
+MAX_DEPTH = Keys.MAX_DEPTH
+NUM_LEAVES = Keys.NUM_LEAVES
+FILTER_FEATURES = Keys.FILTER_FEATURES
+
+
+def config_json_converter(obj):
+    """Helper function to convert ErrorAnalysisConfig object to json.
+
+    :param obj: Object to convert to json.
+    :type obj: object
+    :return: The converted json.
+    :rtype: dict
+    """
+    if isinstance(obj, ErrorAnalysisConfig):
+        return obj.__dict__
+    try:
+        return obj.to_json()
+    except AttributeError:
+        return obj.__dict__
+
+
+def as_error_config(json_dict):
+    """Helper function to convert json to an ErrorAnalysisConfig object.
+
+    :param json_dict: The json to convert.
+    :type json_dict: dict
+    :return: The converted ErrorAnalysisConfig.
+    :rtype: ErrorAnalysisConfig
+    """
+    has_max_depth = MAX_DEPTH in json_dict
+    has_num_leaves = NUM_LEAVES in json_dict
+    has_filter_features = FILTER_FEATURES in json_dict
+    if has_max_depth and has_num_leaves and has_filter_features:
+        max_depth = json_dict[MAX_DEPTH]
+        num_leaves = json_dict[NUM_LEAVES]
+        filter_features = json_dict[FILTER_FEATURES]
+        return ErrorAnalysisConfig(max_depth, num_leaves, filter_features)
+    else:
+        return json_dict
 
 
 class ErrorAnalysisConfig(BaseConfig):
@@ -50,6 +97,37 @@ class ErrorAnalysisConfig(BaseConfig):
             self.num_leaves == other_ea_config.num_leaves and
             self.filter_features == other_ea_config.filter_features
         )
+
+    @property
+    def __dict__(self):
+        """Returns the dictionary representation of the ErrorAnalysisConfig.
+
+        The dictionary contains the max depth, num leaves and list of
+        matrix filter features.
+
+        :return: The dictionary representation of the ErrorAnalysisConfig.
+        :rtype: dict
+        """
+        return {'max_depth': self.max_depth,
+                'num_leaves': self.num_leaves,
+                'filter_features': self.filter_features}
+
+    def to_json(self):
+        """Serialize ErrorAnalysisConfig object to json.
+
+        :return: The string json representation of the ErrorAnalysisConfig.
+        :rtype: str
+        """
+        return json.dumps(self, default=config_json_converter, indent=2)
+
+    @staticmethod
+    def from_json(json_str):
+        """Deserialize json string to an ErrorAnalysisConfig object.
+
+        :return: The deserialized ErrorAnalysisConfig.
+        :rtype: ErrorAnalysisConfig
+        """
+        return json.loads(json_str, object_hook=as_error_config)
 
 
 class ErrorAnalysisManager(BaseManager):
@@ -142,7 +220,22 @@ class ErrorAnalysisManager(BaseManager):
         return self._ea_report_list
 
     def list(self):
-        pass
+        """List information about the ErrorAnalysisManager.
+
+        :return: A dictionary of properties.
+        :rtype: dict
+        """
+        props = {ListProperties.MANAGER_TYPE: self.name}
+        reports = []
+        for config in self._ea_config_list:
+            report = {}
+            report[Keys.IS_COMPUTED] = config.is_computed
+            report[Keys.MAX_DEPTH] = config.max_depth
+            report[Keys.NUM_LEAVES] = config.num_leaves
+            report[Keys.FILTER_FEATURES] = config.filter_features
+            reports.append(report)
+        props[Keys.REPORTS] = reports
+        return props
 
     @property
     def name(self):
@@ -154,8 +247,50 @@ class ErrorAnalysisManager(BaseManager):
         return ManagerNames.ERROR_ANALYSIS
 
     def _save(self, path):
-        pass
+        """Save the ErrorAnalysisManager to the given path.
+
+        :param path: The directory path to save the ErrorAnalysisManager to.
+        :type path: str
+        """
+        top_dir = Path(path)
+        top_dir.mkdir(parents=True, exist_ok=True)
+        # save the reports
+        reports_path = top_dir / REPORTS
+        with open(reports_path, 'w') as file:
+            json.dump(self._ea_report_list, file,
+                      default=report_json_converter)
+        # save the configs
+        config_path = top_dir / CONFIG
+        with open(config_path, 'w') as file:
+            json.dump(self._ea_config_list, file,
+                      default=config_json_converter)
 
     @staticmethod
     def _load(path, rai_analyzer):
-        pass
+        """Load the ErrorAnalysisManager from the given path.
+
+        :param path: The directory path to load the ErrorAnalysisManager from.
+        :type path: str
+        :param rai_analyzer: The loaded parent RAIAnalyzer.
+        :type rai_analyzer: RAIAnalyzer
+        """
+        # create the ErrorAnalysisManager without any properties using
+        # the __new__ function, similar to pickle
+        inst = ErrorAnalysisManager.__new__(ErrorAnalysisManager)
+        top_dir = Path(path)
+        reports_path = top_dir / REPORTS
+        with open(reports_path, 'r') as file:
+            ea_report_list = json.load(file, object_hook=as_error_report)
+        inst.__dict__['_ea_report_list'] = ea_report_list
+        config_path = top_dir / CONFIG
+        with open(config_path, 'r') as file:
+            ea_config_list = json.load(file, object_hook=as_error_config)
+        inst.__dict__['_ea_config_list'] = ea_config_list
+        inst.__dict__['_categorical_features'] = None
+        target_column = rai_analyzer.target_column
+        y_train = rai_analyzer.train[target_column]
+        train = rai_analyzer.train.drop(columns=[target_column])
+        inst.__dict__['_train'] = train
+        inst.__dict__['_y_train'] = y_train
+        inst.__dict__['_feature_names'] = list(train.columns)
+        return inst
