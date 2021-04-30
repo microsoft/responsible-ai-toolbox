@@ -5,11 +5,11 @@
 
 from pathlib import Path
 import json
-from raitools._internal.constants import (
+from responsibleai._internal.constants import (
     ManagerNames, ListProperties, ErrorAnalysisManagerKeys as Keys)
-from raitools._managers.base_manager import BaseManager
-from raitools._config.base_config import BaseConfig
-from raitools.exceptions import DuplicateManagerConfigException
+from responsibleai._managers.base_manager import BaseManager
+from responsibleai._config.base_config import BaseConfig
+from responsibleai.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import (
     json_converter as report_json_converter, as_error_report)
@@ -266,13 +266,13 @@ class ErrorAnalysisManager(BaseManager):
                       default=config_json_converter)
 
     @staticmethod
-    def _load(path, rai_analyzer):
+    def _load(path, model_analysis):
         """Load the ErrorAnalysisManager from the given path.
 
         :param path: The directory path to load the ErrorAnalysisManager from.
         :type path: str
-        :param rai_analyzer: The loaded parent RAIAnalyzer.
-        :type rai_analyzer: RAIAnalyzer
+        :param model_analysis: The loaded parent ModelAnalysis.
+        :type model_analysis: ModelAnalysis
         """
         # create the ErrorAnalysisManager without any properties using
         # the __new__ function, similar to pickle
@@ -287,9 +287,9 @@ class ErrorAnalysisManager(BaseManager):
             ea_config_list = json.load(file, object_hook=as_error_config)
         inst.__dict__['_ea_config_list'] = ea_config_list
         inst.__dict__['_categorical_features'] = None
-        target_column = rai_analyzer.target_column
-        y_train = rai_analyzer.train[target_column]
-        train = rai_analyzer.train.drop(columns=[target_column])
+        target_column = model_analysis.target_column
+        y_train = model_analysis.train[target_column]
+        train = model_analysis.train.drop(columns=[target_column])
         inst.__dict__['_train'] = train
         inst.__dict__['_y_train'] = y_train
         inst.__dict__['_feature_names'] = list(train.columns)

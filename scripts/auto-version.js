@@ -8,7 +8,7 @@ const commander = require("commander");
 const versionCfgFile = "./version.cfg";
 const versionPyFiles = [
   "./raiwidgets/raiwidgets/__version__.py",
-  "./raitools/raitools/__version__.py"
+  "./responsibleai/responsibleai/__version__.py"
 ];
 
 function getVersion(release) {

@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-# Defines common utilities for raitools tests
+# Defines common utilities for responsibleai tests
 import numpy as np
 import pandas as pd
 from sklearn import svm

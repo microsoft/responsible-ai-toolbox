@@ -2,8 +2,8 @@
 # Licensed under the MIT License.
 
 import pytest
-from raitools import ModelTask
-from raitools.exceptions import (
+from responsibleai import ModelTask
+from responsibleai.exceptions import (
     DuplicateManagerConfigException, UserConfigValidationException
 )
 

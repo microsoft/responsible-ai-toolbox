@@ -6,7 +6,7 @@ import setuptools
 
 # Version will be read from version.py
 version = ''
-name = 'raitools'
+name = 'responsibleai'
 # Fetch Version
 with open(os.path.join(name, '__version__.py')) as f:
     code = compile(f.read(), f.name, 'exec')
