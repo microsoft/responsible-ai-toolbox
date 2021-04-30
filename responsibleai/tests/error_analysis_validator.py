@@ -4,7 +4,7 @@ import pytest
 
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX, VALUES)
-from raitools.exceptions import DuplicateManagerConfigException
+from responsibleai.exceptions import DuplicateManagerConfigException
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -12,27 +12,27 @@ ERROR = 'error'
 ID = 'id'
 
 
-def setup_error_analysis(rai_analyzer, add_ea=True):
+def setup_error_analysis(model_analysis, add_ea=True):
     if add_ea:
-        rai_analyzer.error_analysis.add()
+        model_analysis.error_analysis.add()
         with pytest.raises(DuplicateManagerConfigException):
-            rai_analyzer.error_analysis.add()
-    rai_analyzer.error_analysis.compute()
+            model_analysis.error_analysis.add()
+    model_analysis.error_analysis.compute()
 
 
-def validate_error_analysis(rai_analyzer):
-    reports = rai_analyzer.error_analysis.get()
+def validate_error_analysis(model_analysis):
+    reports = model_analysis.error_analysis.get()
     assert isinstance(reports, list)
     assert len(reports) == 1
     report = reports[0]
     json_matrix = report.json_matrix
 
-    ea_x_train = rai_analyzer.error_analysis._train
-    ea_y_train = rai_analyzer.error_analysis._y_train
+    ea_x_train = model_analysis.error_analysis._train
+    ea_y_train = model_analysis.error_analysis._y_train
 
     expected_count = len(ea_x_train)
     if json_matrix is not None:
-        predictions = rai_analyzer.model.predict(ea_x_train)
+        predictions = model_analysis.model.predict(ea_x_train)
         expected_false_count = sum(predictions != ea_y_train)
         validate_matrix(json_matrix, expected_count, expected_false_count)
 

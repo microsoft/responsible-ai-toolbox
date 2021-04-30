@@ -1,17 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-"""Defines the RAIAnalyzer class."""
+"""Defines the ModelAnalysis class."""
 
 import json
 import pandas as pd
 import pickle
 from pathlib import Path
-from raitools._internal.constants import ManagerNames, Metadata
-from raitools._managers.causal_manager import CausalManager
-from raitools._managers.counterfactual_manager import CounterfactualManager
-from raitools._managers.error_analysis_manager import ErrorAnalysisManager
-from raitools._managers.explainer_manager import ExplainerManager
+from responsibleai._internal.constants import ManagerNames, Metadata
+from responsibleai._managers.causal_manager import CausalManager
+from responsibleai._managers.counterfactual_manager import (
+    CounterfactualManager)
+from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
+from responsibleai._managers.explainer_manager import ExplainerManager
 
 
 _DTYPES = 'dtypes'
@@ -27,11 +28,11 @@ _MANAGERS = 'managers'
 _META_JSON = Metadata.META_JSON
 
 
-class RAIAnalyzer(object):
+class ModelAnalysis(object):
 
-    """Defines the top-level RAI Analyzer.
+    """Defines the top-level Model Analysis API.
 
-    Use the RAI Analyzer to analyze errors, explain the most important
+    Use ModelAnalysis to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
 
@@ -56,9 +57,9 @@ class RAIAnalyzer(object):
 
     def __init__(self, model, train, test, target_column,
                  task_type, serializer=None):
-        """Defines the top-level RAI Analyzer.
+        """Defines the top-level Model Analysis API.
 
-        Use the RAI Analyzer to analyze errors, explain the most important
+        Use ModelAnalysis to analyze errors, explain the most important
         features, compute counterfactuals and run causal analysis in a
         single API.
 
@@ -161,9 +162,9 @@ class RAIAnalyzer(object):
             file.write(content)
 
     def save(self, path):
-        """Save the RAIAnalyzer to the given path.
+        """Save the ModelAnalysis to the given path.
 
-        :param path: The directory path to save the RAIAnalyzer to.
+        :param path: The directory path to save the ModelAnalysis to.
         :type path: str
         """
         top_dir = Path(path)
@@ -202,14 +203,14 @@ class RAIAnalyzer(object):
 
     @staticmethod
     def load(path):
-        """Load the RAIAnalyzer from the given path.
+        """Load the ModelAnalysis from the given path.
 
-        :param path: The directory path to load the RAIAnalyzer from.
+        :param path: The directory path to load the ModelAnalysis from.
         :type path: str
         """
-        # create the RAIAnalyzer without any properties using the __new__
+        # create the ModelAnalysis without any properties using the __new__
         # function, similar to pickle
-        inst = RAIAnalyzer.__new__(RAIAnalyzer)
+        inst = ModelAnalysis.__new__(ModelAnalysis)
         top_dir = Path(path)
         # load current state
         with open(top_dir / (_TRAIN + _DTYPES), 'r') as file:
