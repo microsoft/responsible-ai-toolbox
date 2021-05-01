@@ -587,6 +587,9 @@
       "title": "Direct casual effect of each feature with 90% confidence interval",
       "whyMust": "Why must casual insights assume unconfoundedness?",
       "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The casual effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here"
+    },
+    "IndividualChart": {
+      "selectionLimit": "Maximum of 1 selected point"
     }
   },
   "ErrorAnalysis": {
