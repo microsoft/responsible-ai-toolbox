@@ -18,6 +18,8 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                METHOD_INCLUDES)
 
 MODEL = 'model'
+DEFAULT_MAX_DEPTH = 3
+DEFAULT_NUM_LEAVES = 31
 
 
 class TreeSide(str, Enum):
@@ -34,10 +36,19 @@ class TreeSide(str, Enum):
     UNKNOWN = 'unknown'
 
 
-def compute_json_error_tree(analyzer, features, filters,
-                            composite_filters):
+def compute_json_error_tree(analyzer,
+                            features,
+                            filters,
+                            composite_filters,
+                            max_depth=DEFAULT_MAX_DEPTH,
+                            num_leaves=DEFAULT_NUM_LEAVES):
     # Fit a surrogate model on errors
-    surrogate = LGBMClassifier(n_estimators=1, max_depth=3)
+    if max_depth is None:
+        max_depth = DEFAULT_MAX_DEPTH
+    if num_leaves is None:
+        num_leaves = DEFAULT_NUM_LEAVES
+    surrogate = LGBMClassifier(n_estimators=1, max_depth=max_depth,
+                               num_leaves=num_leaves)
     is_model_analyzer = hasattr(analyzer, MODEL)
     if is_model_analyzer:
         filtered_df = filter_from_cohort(analyzer.dataset,

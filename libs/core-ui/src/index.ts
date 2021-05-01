@@ -18,6 +18,7 @@ export * from "./lib/util/buildInitialContext";
 export * from "./lib/util/FabricStyles";
 export * from "./lib/util/JointDataset";
 export * from "./lib/util/generateRoute";
+export * from "./lib/util/getRandomId";
 export * from "./lib/util/IGenericChartProps";
 export * from "./lib/util/initializeOfficeFabric";
 export * from "./lib/util/ModelExplanationUtils";

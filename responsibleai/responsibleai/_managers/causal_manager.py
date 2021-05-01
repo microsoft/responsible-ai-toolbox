@@ -3,8 +3,8 @@
 
 """Defines the Causal Manager class."""
 
-from raitools._internal.constants import ManagerNames
-from raitools._managers.base_manager import BaseManager
+from responsibleai._internal.constants import ManagerNames
+from responsibleai._managers.base_manager import BaseManager
 
 
 class CausalManager(BaseManager):
@@ -32,9 +32,9 @@ class CausalManager(BaseManager):
         """
         return ManagerNames.CAUSAL
 
-    def save(self, path):
+    def _save(self, path):
         pass
 
     @staticmethod
-    def load(path, rai_analyzer):
+    def _load(path, model_analysis):
         pass

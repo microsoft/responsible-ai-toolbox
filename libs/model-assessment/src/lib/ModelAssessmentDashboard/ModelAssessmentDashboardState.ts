@@ -5,7 +5,6 @@ import {
   IExplanationModelMetadata,
   IGenericChartProps,
   WeightVectorOption,
-  ErrorCohort,
   ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
 import {
@@ -21,7 +20,7 @@ import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export interface IModelAssessmentDashboardState
   extends ICohortBasedComponentState {
-  activeGlobalTab: GlobalTabKeys;
+  activeGlobalTabs: IModelAssessmentDashboardTab[];
   customPoints: Array<{ [key: string]: any }>;
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
@@ -35,16 +34,8 @@ export interface IModelAssessmentDashboardState
   sortVector?: number[];
   editingCohortIndex?: number;
   mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
-  openInfoPanel: boolean;
-  openCohortListPanel: boolean;
-  openEditCohort: boolean;
-  openMapShift: boolean;
-  openSaveCohort: boolean;
-  openShiftCohort: boolean;
-  openWhatIf: boolean;
   predictionTab: PredictionTabKeys;
   selectedWhatIfIndex: number | undefined;
-  editedCohort: ErrorCohort;
   selectedFeatures: string[];
   treeViewState: ITreeViewRendererState;
   matrixAreaState: IMatrixAreaState;
@@ -53,4 +44,9 @@ export interface IModelAssessmentDashboardState
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
+}
+
+export interface IModelAssessmentDashboardTab {
+  key: GlobalTabKeys;
+  dataCount: number;
 }

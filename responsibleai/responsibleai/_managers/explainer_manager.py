@@ -15,9 +15,9 @@ from interpret_community.mimic.models.linear_model import (
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
-from raitools._internal.constants import (
+from responsibleai._internal.constants import (
     ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
-from raitools._managers.base_manager import BaseManager
+from responsibleai._managers.base_manager import BaseManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -161,13 +161,14 @@ class ExplainerManager(BaseManager):
         """
         return ManagerNames.EXPLAINER
 
-    def save(self, path):
+    def _save(self, path):
         """Save the ExplainerManager to the given path.
 
         :param path: The directory path to save the ExplainerManager to.
         :type path: str
         """
         top_dir = Path(path)
+        top_dir.mkdir(parents=True, exist_ok=True)
         # save the explanation
         if self._explanation:
             save_explanation(self._explanation,
@@ -178,13 +179,13 @@ class ExplainerManager(BaseManager):
             json.dump(meta, file)
 
     @staticmethod
-    def load(path, rai_analyzer):
+    def _load(path, model_analysis):
         """Load the ExplainerManager from the given path.
 
         :param path: The directory path to load the ExplainerManager from.
         :type path: str
-        :param rai_analyzer: The loaded parent RAIAnalyzer.
-        :type rai_analyzer: RAIAnalyzer
+        :param model_analysis: The loaded parent ModelAnalysis.
+        :type model_analysis: ModelAnalysis
         """
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle
@@ -194,16 +195,16 @@ class ExplainerManager(BaseManager):
         if explanation_path.exists():
             explanation = load_explanation(explanation_path)
             inst.__dict__['_' + ManagerNames.EXPLAINER] = explanation
-        inst.__dict__['_' + MODEL] = rai_analyzer.model
+        inst.__dict__['_' + MODEL] = model_analysis.model
 
         with open(top_dir / META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
-        inst.__dict__['_' + CLASSES] = rai_analyzer._classes
-        target_column = rai_analyzer.target_column
-        train = rai_analyzer.train.drop(columns=[target_column])
-        test = rai_analyzer.test.drop(columns=[target_column])
+        inst.__dict__['_' + CLASSES] = model_analysis._classes
+        target_column = model_analysis.target_column
+        train = model_analysis.train.drop(columns=[target_column])
+        test = model_analysis.test.drop(columns=[target_column])
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)

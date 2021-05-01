@@ -992,6 +992,30 @@
   "ModelAssessment": {
     "Navigation": {
       "modelStatistics": "Model statistics"
+    },
+    "AddingTab": {
+      "CalloutTitle": "Add component",
+      "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
+      "AddButtonText": "Add"
+    },
+    "ComponentNames": {
+      "DataExplorer": "Data explorer",
+      "GlobalExplanation": "Global explanation",
+      "LocalExplanation": "Local explanation",
+      "ErrorAnalysis": "Error analysis",
+      "Fairness": "Fairness",
+      "ModelStatistics": "Model statistics",
+      "CausalAnalysis": "Causal analysis",
+      "Counterfactuals": "Counterfactuals"
+    },
+    "MainMenu": {
+      "DashboardSettings": "Dashboard settings"
+    },
+    "DashboardSettings": {
+      "Title": "Dashboard layout",
+      "Content": "This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.",
+      "DashboardComponents": "Dashboard components",
+      "DataPoints": "Number of datapoints"
     }
   }
 }

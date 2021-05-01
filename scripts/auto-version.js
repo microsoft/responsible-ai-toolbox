@@ -8,7 +8,7 @@ const commander = require("commander");
 const versionCfgFile = "./version.cfg";
 const versionPyFiles = [
   "./raiwidgets/raiwidgets/__version__.py",
-  "./raitools/raitools/__version__.py"
+  "./responsibleai/responsibleai/__version__.py"
 ];
 
 function getVersion(release) {
@@ -76,6 +76,7 @@ async function main() {
       await setVersion(workspace, eachPkg, version);
     }
     if (tag) {
+      console.log(`Creating tag v${version}`);
       execSync(`git config user.email "raiwidgets-maintain@microsoft.com"`);
       execSync(`git config user.name  "AML Rai Package Manager"`);
       execSync(`git add -A`);
