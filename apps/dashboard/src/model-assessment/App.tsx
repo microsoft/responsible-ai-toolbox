@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IDataset, IModelExplanationData } from "@responsible-ai/core-ui";
+import { ICasualAnalysisData, IDataset, IModelExplanationData } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
@@ -30,6 +30,7 @@ import {
 interface IAppProps {
   dataset: IDataset;
   modelExplanationData: IModelExplanationData;
+  casualAnalysisData: ICasualAnalysisData;
   theme: ITheme;
   language: Language;
   version: 1;
@@ -50,6 +51,7 @@ export class App extends React.Component<IAppProps> {
     this.props.modelExplanationData.modelClass = "blackbox";
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
+      casualAnalysisData: this.props.casualAnalysisData,
       dataset: this.props.dataset,
       locale: this.props.language,
       localUrl: "",

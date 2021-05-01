@@ -34,6 +34,7 @@ export * from "./lib/components/MissingParametersPlaceholder";
 export * from "./lib/components/SVGToolTip";
 export * from "./lib/Interfaces/ExplanationInterfaces";
 export * from "./lib/Interfaces/IExplanationContext";
+export * from "./lib/Interfaces/ICasualAnalysisData";
 export * from "./lib/Interfaces/IFairnessData";
 export * from "./lib/Interfaces/IDataset";
 export * from "./lib/Interfaces/IGlobalExplanationProps";

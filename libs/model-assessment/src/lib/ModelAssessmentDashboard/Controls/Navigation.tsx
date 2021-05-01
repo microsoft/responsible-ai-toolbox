@@ -76,19 +76,18 @@ export class Navigation extends React.PureComponent<INavigationProps> {
       ],
       name: "Diagnose"
     });
-    // TODO: add causal analysis
-    // this.navLinkGroups.push({
-    //   name: "Actionable Insights",
-    //   links: [
-    //     {
-    //       name: "Causal analysis",
-    //       url: "",
-    //       key: "causal",
-    //       target: "_blank",
-    //       onClick: this.handleGlobalTabClick
-    //     }
-    //   ]
-    // });
+    this.navLinkGroups.push({
+      name: "Actionable Insights",
+      links: [
+        {
+          key: GlobalTabKeys.CasualAnalysisTab,
+          name: "Causal analysis",
+          onClick: this.props.handleGlobalTabClick,
+          url: "",          
+          target: "_blank"
+        }
+      ]
+    });
   }
 
   public render(): React.ReactNode {

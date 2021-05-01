@@ -15,7 +15,7 @@ import {
   IGenericChartProps,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
+// import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisOptions,
@@ -384,8 +384,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         theme={this.props.theme}
                       />
                     )}
-                    <CausalInsightsTab />
-                    <CounterfactualsTab />
+                    {this.state.activeGlobalTab ===
+                      GlobalTabKeys.CasualAnalysisTab && (
+                        <CausalInsightsTab data={this.props.casualAnalysisData}/>
+                    )}                    
+                    {/* <CounterfactualsTab /> */}
                   </div>
                 </Stack>
                 <CohortInfo

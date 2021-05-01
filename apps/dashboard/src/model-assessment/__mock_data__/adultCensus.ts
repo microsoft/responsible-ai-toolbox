@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IDataset, IModelExplanationData } from "@responsible-ai/core-ui";
+import { ICasualAnalysisData, IDataset, IModelExplanationData } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
   categoricalMap: {
@@ -2603,4 +2603,10 @@ export const adultCensusWithFairnessModelExplanationData: IModelExplanationData 
     [0.7355988315726243, 0.2644011684273757],
     [0.6804143936790036, 0.3195856063209964]
   ]
+};
+
+export const adultCensusCasualAnalysisData: ICasualAnalysisData = {
+  name: ["a", "b", "c"],
+  point: [0.5, 0.7, 0.8],
+  pValue: [0.2, 0.3, 0.5]
 };

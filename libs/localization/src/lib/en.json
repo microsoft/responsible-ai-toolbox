@@ -578,6 +578,17 @@
       "pfiDescription": "This explainer randomly shuffles data one feature at a time for the entire dataset and calculates how much the performance metric of interest changes (default performance metrics: F1 for binary classification, F1 Score with micro average for multiclass classification and mean absolute error for regression). The larger the change, the more important that feature is. This explainer can only explain the overall behavior of the underlying model but does not explain individual predictions. Feature importance value of a feature represents the delta in the performance of the model by perturbing that particular feature."
     }
   },
+  "CasualAnalysis": {
+    "MainMenu": {
+      "header": "Casual analysis",
+      "description": "Casual analysis answers the question of what would have changed if someone had behaved differently. This tool helps you identify the most important casual drivers that directly affect your outcome of interest - what actions were most important in determining outcomes in your data? Casual analysis required an important assumption of unconfoundedness: all variables that can potentially affect the outcome are observed in the data.",
+      "aggregate": "Aggregate casual effects",
+      "individual": "Individual casual effects",
+      "title": "Direct casual effect of each feature with 90% confidence interval",
+      "whyMust": "Why must casual insights assume unconfoundedness?",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The casual effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here"
+    }
+  },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",
     "_defaultClassNames.comment": " models that output classes have this as the default class names",
