@@ -255,185 +255,179 @@ export class CasualIndividualChart extends React.PureComponent<
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     return (
-      <div className={classNames.page}>
-        <div className={classNames.mainArea}>
-          <div className={classNames.chartsArea}>
-            <div
-              className={classNames.topArea}
-              id={"CasualIndividualContainer"}
-            >
-              <div
-                className={classNames.chartWithAxes}
-                id={this.chartAndConfigsId}
-              >
-                {this.state.yDialogOpen && (
-                  <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
-                    orderedGroupTitles={[
-                      ColumnCategories.Index,
-                      ColumnCategories.Dataset,
-                      ColumnCategories.Outcome
-                    ]}
-                    selectedColumn={this.state.chartProps.yAxis}
-                    canBin={false}
-                    mustBin={false}
-                    canDither={
-                      this.state.chartProps.chartType === ChartTypes.Scatter
-                    }
-                    onAccept={this.onYSet}
-                    onCancel={this.setYOpen.bind(this, false)}
-                  />
-                )}
-                {this.state.xDialogOpen && (
-                  <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
-                    orderedGroupTitles={[
-                      ColumnCategories.Index,
-                      ColumnCategories.Dataset,
-                      ColumnCategories.Outcome
-                    ]}
-                    selectedColumn={this.state.chartProps.xAxis}
-                    canBin={
-                      this.state.chartProps.chartType ===
-                        ChartTypes.Histogram ||
-                      this.state.chartProps.chartType === ChartTypes.Box
-                    }
-                    mustBin={
-                      this.state.chartProps.chartType ===
-                        ChartTypes.Histogram ||
-                      this.state.chartProps.chartType === ChartTypes.Box
-                    }
-                    canDither={
-                      this.state.chartProps.chartType === ChartTypes.Scatter
-                    }
-                    onAccept={this.onXSet}
-                    onCancel={this.setXOpen.bind(this, false)}
-                  />
-                )}
-                <div className={classNames.chartWithVertical}>
-                  <div className={classNames.verticalAxis}>
-                    <div className={classNames.rotatedVerticalBox}>
-                      <DefaultButton
-                        onClick={this.setYOpen.bind(this, true)}
-                        text={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.yAxis.property
-                          ].abbridgedLabel
-                        }
-                        title={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.yAxis.property
-                          ].label
-                        }
-                      />
-                    </div>
-                  </div>
-                  {!canRenderChart && (
-                    <MissingParametersPlaceholder>
-                      {localization.Interpret.ValidationErrors.datasizeError}
-                    </MissingParametersPlaceholder>
-                  )}
-                  {canRenderChart && (
-                    <AccessibleChart
-                      plotlyProps={plotlyProps}
-                      theme={getTheme() as any}
-                      onClickHandler={this.selectPointFromChart}
-                    />
-                  )}
-                </div>
-                <div className={classNames.horizontalAxisWithPadding}>
-                  <div className={classNames.paddingDiv}></div>
-                  <div className={classNames.horizontalAxis}>
-                    <div>
-                      <DefaultButton
-                        onClick={this.setXOpen.bind(this, true)}
-                        text={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.xAxis.property
-                          ].abbridgedLabel
-                        }
-                        title={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.xAxis.property
-                          ].label
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
+      <div
+        className={classNames.topArea}
+        id={"CasualIndividualContainer"}
+      >
+        <div
+          className={classNames.chartWithAxes}
+          id={this.chartAndConfigsId}
+        >
+          {this.state.yDialogOpen && (
+            <AxisConfigDialog
+              jointDataset={this.context.jointDataset}
+              orderedGroupTitles={[
+                ColumnCategories.Index,
+                ColumnCategories.Dataset,
+                ColumnCategories.Outcome
+              ]}
+              selectedColumn={this.state.chartProps.yAxis}
+              canBin={false}
+              mustBin={false}
+              canDither={
+                this.state.chartProps.chartType === ChartTypes.Scatter
+              }
+              onAccept={this.onYSet}
+              onCancel={this.setYOpen.bind(this, false)}
+            />
+          )}
+          {this.state.xDialogOpen && (
+            <AxisConfigDialog
+              jointDataset={this.context.jointDataset}
+              orderedGroupTitles={[
+                ColumnCategories.Index,
+                ColumnCategories.Dataset,
+                ColumnCategories.Outcome
+              ]}
+              selectedColumn={this.state.chartProps.xAxis}
+              canBin={
+                this.state.chartProps.chartType ===
+                  ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Box
+              }
+              mustBin={
+                this.state.chartProps.chartType ===
+                  ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Box
+              }
+              canDither={
+                this.state.chartProps.chartType === ChartTypes.Scatter
+              }
+              onAccept={this.onXSet}
+              onCancel={this.setXOpen.bind(this, false)}
+            />
+          )}
+          <div className={classNames.chartWithVertical}>
+            <div className={classNames.verticalAxis}>
+              <div className={classNames.rotatedVerticalBox}>
+                <DefaultButton
+                  onClick={this.setYOpen.bind(this, true)}
+                  text={
+                    this.context.jointDataset.metaDict[
+                      this.state.chartProps.yAxis.property
+                    ].abbridgedLabel
+                  }
+                  title={
+                    this.context.jointDataset.metaDict[
+                      this.state.chartProps.yAxis.property
+                    ].label
+                  }
+                />
               </div>
-              <div className={classNames.legendAndText}>
-                <div className={classNames.legendHlepWrapper}>
-                  <Text variant={"small"} className={classNames.legendHelpText}>
-                    {localization.Interpret.WhatIfTab.scatterLegendText}
-                  </Text>
-                </div>
-                <Text
-                  variant={"small"}
-                  block
-                  className={classNames.legendLabel}
-                >
-                  {localization.Interpret.WhatIfTab.realPoint}
-                </Text>
-                {this.selectedFeatureImportance.length > 0 && (
-                  <InteractiveLegend
-                    items={this.selectedFeatureImportance.map(
-                      (row, rowIndex) => {
-                        return {
-                          activated: this.state.pointIsActive[rowIndex],
-                          color: FabricStyles.fabricColorPalette[rowIndex],
-                          name: row.name,
-                          onClick: this.toggleActivation.bind(this, rowIndex),
-                          onDelete: this.toggleSelectionOfPoint.bind(
-                            this,
-                            row.id
-                          )
-                        };
-                      }
-                    )}
-                  />
-                )}
-                {this.state.showSelectionWarning && (
-                  <Text variant={"xSmall"} className={classNames.errorText}>
-                    {localization.CasualAnalysis.IndividualChart.selectionLimit}
-                  </Text>
-                )}
-                {this.selectedFeatureImportance.length === 0 && (
-                  <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.Interpret.WhatIfTab.noneSelectedYet}
-                  </Text>
-                )}
-                {this.state.customPoints.length > 0 && (
-                  <InteractiveLegend
-                    items={this.state.customPoints.map((row, rowIndex) => {
-                      return {
-                        activated: this.state.customPointIsActive[rowIndex],
-                        color:
-                          FabricStyles.fabricColorPalette[
-                            rowIndex + CasualIndivisualConstants.MAX_SELECTION + 1
-                          ],
-                        name: row[CasualIndivisualConstants.namePath],
-                        onClick: this.toggleCustomActivation.bind(
-                          this,
-                          rowIndex
-                        ),
-                        onDelete: this.removeCustomPoint.bind(this, rowIndex),
-                        onEdit: this.setTemporaryPointToCustomPoint.bind(
-                          this,
-                          rowIndex
-                        )
-                      };
-                    })}
-                  />
-                )}
-                {this.state.customPoints.length === 0 && (
-                  <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.Interpret.WhatIfTab.noneCreatedYet}
-                  </Text>
-                )}
+            </div>
+            {!canRenderChart && (
+              <MissingParametersPlaceholder>
+                {localization.Interpret.ValidationErrors.datasizeError}
+              </MissingParametersPlaceholder>
+            )}
+            {canRenderChart && (
+              <AccessibleChart
+                plotlyProps={plotlyProps}
+                theme={getTheme() as any}
+                onClickHandler={this.selectPointFromChart}
+              />
+            )}
+          </div>
+          <div className={classNames.horizontalAxisWithPadding}>
+            <div className={classNames.paddingDiv}></div>
+            <div className={classNames.horizontalAxis}>
+              <div>
+                <DefaultButton
+                  onClick={this.setXOpen.bind(this, true)}
+                  text={
+                    this.context.jointDataset.metaDict[
+                      this.state.chartProps.xAxis.property
+                    ].abbridgedLabel
+                  }
+                  title={
+                    this.context.jointDataset.metaDict[
+                      this.state.chartProps.xAxis.property
+                    ].label
+                  }
+                />
               </div>
             </div>
           </div>
+        </div>
+        <div className={classNames.legendAndText}>
+          <div className={classNames.legendHlepWrapper}>
+            <Text variant={"small"} className={classNames.legendHelpText}>
+              {localization.Interpret.WhatIfTab.scatterLegendText}
+            </Text>
+          </div>
+          <Text
+            variant={"small"}
+            block
+            className={classNames.legendLabel}
+          >
+            {localization.Interpret.WhatIfTab.realPoint}
+          </Text>
+          {this.selectedFeatureImportance.length > 0 && (
+            <InteractiveLegend
+              items={this.selectedFeatureImportance.map(
+                (row, rowIndex) => {
+                  return {
+                    activated: this.state.pointIsActive[rowIndex],
+                    color: FabricStyles.fabricColorPalette[rowIndex],
+                    name: row.name,
+                    onClick: this.toggleActivation.bind(this, rowIndex),
+                    onDelete: this.toggleSelectionOfPoint.bind(
+                      this,
+                      row.id
+                    )
+                  };
+                }
+              )}
+            />
+          )}
+          {this.state.showSelectionWarning && (
+            <Text variant={"xSmall"} className={classNames.errorText}>
+              {localization.CasualAnalysis.IndividualChart.selectionLimit}
+            </Text>
+          )}
+          {this.selectedFeatureImportance.length === 0 && (
+            <Text variant={"xSmall"} className={classNames.smallItalic}>
+              {localization.Interpret.WhatIfTab.noneSelectedYet}
+            </Text>
+          )}
+          {this.state.customPoints.length > 0 && (
+            <InteractiveLegend
+              items={this.state.customPoints.map((row, rowIndex) => {
+                return {
+                  activated: this.state.customPointIsActive[rowIndex],
+                  color:
+                    FabricStyles.fabricColorPalette[
+                      rowIndex + CasualIndivisualConstants.MAX_SELECTION + 1
+                    ],
+                  name: row[CasualIndivisualConstants.namePath],
+                  onClick: this.toggleCustomActivation.bind(
+                    this,
+                    rowIndex
+                  ),
+                  onDelete: this.removeCustomPoint.bind(this, rowIndex),
+                  onEdit: this.setTemporaryPointToCustomPoint.bind(
+                    this,
+                    rowIndex
+                  )
+                };
+              })}
+            />
+          )}
+          {this.state.customPoints.length === 0 && (
+            <Text variant={"xSmall"} className={classNames.smallItalic}>
+              {localization.Interpret.WhatIfTab.noneCreatedYet}
+            </Text>
+          )}
         </div>
       </div>
     );

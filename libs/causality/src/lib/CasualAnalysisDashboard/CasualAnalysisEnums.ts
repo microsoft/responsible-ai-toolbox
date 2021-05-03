@@ -3,5 +3,6 @@
 
 export enum CasualAnalysisOptions {
   Aggregate = "Aggregate casual effects",
-  Individual = "Individual casual effects"
+  Individual = "Individual casual effects",
+  Treatment = "Treatment policy"
 }

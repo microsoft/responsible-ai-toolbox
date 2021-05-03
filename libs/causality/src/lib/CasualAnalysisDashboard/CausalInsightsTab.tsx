@@ -55,6 +55,10 @@ export class CausalInsightsTab extends React.PureComponent<ICausalInsightsTabPro
               itemKey={CasualAnalysisOptions.Individual}
               headerText={localization.CasualAnalysis.MainMenu.individual}
             />
+            <PivotItem
+              itemKey={CasualAnalysisOptions.Treatment}
+              headerText={localization.CasualAnalysis.MainMenu.treatment}
+            />
           </Pivot>
         </Stack>
         <CasualAnalysisView viewOption={this.state.viewOption} data={this.props.data}/>

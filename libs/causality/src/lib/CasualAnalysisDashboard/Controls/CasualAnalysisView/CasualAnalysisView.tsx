@@ -12,6 +12,7 @@ import { CasualAnalysisOptions } from "../../CasualAnalysisEnums";
 
 import { CasualAggregateView } from "./CasualAggregateView/CasualAggregateView";
 import { CasualIndividualView } from "./CasualIndividualView/CasualIndividualView";
+import { TreatmentView } from "./TreatmentView/TreatmentView";
 
 export interface ICasualAnalysisViewProps {
   viewOption: string;
@@ -32,6 +33,9 @@ export class CasualAnalysisView extends React.PureComponent<ICasualAnalysisViewP
         )}
         {this.props.viewOption === CasualAnalysisOptions.Individual && (
           <CasualIndividualView data={this.props.data}/>
+        )}
+        {this.props.viewOption === CasualAnalysisOptions.Treatment && (
+          <TreatmentView data={this.props.data}/>
         )}
       </>
     );
