@@ -36,7 +36,7 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
     },
     {
       label: localization.Interpret.Statistics.precision,
-      stat: truePosCount / (truePosCount + trueNegCount)
+      stat: truePosCount / (truePosCount + falsePosCount)
     },
     {
       label: localization.Interpret.Statistics.recall,

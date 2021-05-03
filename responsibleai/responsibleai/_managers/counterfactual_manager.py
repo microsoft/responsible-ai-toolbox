@@ -6,12 +6,12 @@ import dice_ml
 from dice_ml import Dice
 import numpy as np
 
-from raitools._internal.constants import ManagerNames
-from raitools._managers.base_manager import BaseManager
-from raitools._config.base_config import BaseConfig
-from raitools.raianalyzer.constants import ModelTask
-from raitools.exceptions import (
-    UserConfigValidationException, DuplicateCounterfactualConfigException
+from responsibleai._internal.constants import ManagerNames
+from responsibleai._managers.base_manager import BaseManager
+from responsibleai._config.base_config import BaseConfig
+from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai.exceptions import (
+    UserConfigValidationException, DuplicateManagerConfigException
 )
 
 
@@ -127,7 +127,7 @@ class CounterfactualManager(BaseManager):
             self._counterfactual_config_list)
 
         if is_duplicate:
-            raise DuplicateCounterfactualConfigException(
+            raise DuplicateManagerConfigException(
                 'Duplicate counterfactual configuration detected.')
         else:
             self._counterfactual_config_list.append(new_counterfactual_config)
@@ -242,5 +242,5 @@ class CounterfactualManager(BaseManager):
         pass
 
     @staticmethod
-    def _load(path, rai_analyzer):
+    def _load(path, model_analysis):
         pass
