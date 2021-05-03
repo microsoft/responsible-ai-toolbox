@@ -44,9 +44,6 @@ export class CausalInsightsTab extends React.PureComponent<ICausalInsightsTabPro
           <Text variant={"xLarge"}>
             {localization.CasualAnalysis.MainMenu.header}
           </Text>
-          <Text variant={"medium"}>
-            {localization.CasualAnalysis.MainMenu.description}
-          </Text>
         </Stack>
         <Stack horizontal={true} tokens={{ childrenGap: "10px" }}>
           <Pivot onLinkClick={this.onViewTypeChange}>

@@ -581,12 +581,21 @@
   "CasualAnalysis": {
     "MainMenu": {
       "header": "Casual analysis",
-      "description": "Casual analysis answers the question of what would have changed if someone had behaved differently. This tool helps you identify the most important casual drivers that directly affect your outcome of interest - what actions were most important in determining outcomes in your data? Casual analysis required an important assumption of unconfoundedness: all variables that can potentially affect the outcome are observed in the data.",
       "aggregate": "Aggregate casual effects",
       "individual": "Individual casual effects",
-      "title": "Direct casual effect of each feature with 90% confidence interval",
+      "title": "Direct casual effect of each feature with 90% confidence interval"
+      },
+    "AggregateView": {
+      "description": "Casual analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
+      "directAggregate": "Direct aggregate casual effect of each treatment with 95% confidence interval",
       "whyMust": "Why must casual insights assume unconfoundedness?",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The casual effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here"
+      "unconfounding": "What are unconfounding variables?",
+      "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The casual effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
+      "continuous": "Continuouts treatment variables: ",
+      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
+      "binary": "Binary treatment variables: ",
+      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
     },
     "IndividualChart": {
       "selectionLimit": "Maximum of 1 selected point"
@@ -997,6 +1006,17 @@
       "CalloutTitle": "Add component",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
       "AddButtonText": "Add"
+    },
+    "CasualAnalysis": {
+      "Table": {
+        "name": "feature",
+        "point": "point",
+        "stderr": "stderr",
+        "zstat": "zstat",
+        "pValue": "p_value",
+        "ciLower": "ci_lower",
+        "ciUpper": "ci_upper"
+      }
     },
     "ComponentNames": {
       "DataExplorer": "Data explorer",

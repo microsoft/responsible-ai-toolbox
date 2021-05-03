@@ -2,18 +2,19 @@
 // Licensed under the MIT License.
 
 import {
-    defaultModelAssessmentContext,
+  defaultModelAssessmentContext,
   ICasualAnalysisData,
-    ModelAssessmentContext
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _, { isEqual } from "lodash";
 import { getTheme, Stack } from "office-ui-fabric-react";
+import { Datum } from "plotly.js";
 import React from "react";
 
-import { basePlotlyProperties } from "../../basePlotlyProperties";
-import { CasualChartStyles } from "../../CasualChartStyles";
+import { basePlotlyProperties } from "./basePlotlyProperties";
+import { CasualAggregateStyles } from "./CasualAggregateStyles";
 
 export interface ICasualAggregateChartProps {
   data: ICasualAnalysisData;
@@ -26,30 +27,25 @@ export class CasualAggregateChart extends React.PureComponent<ICasualAggregateCh
     > = defaultModelAssessmentContext;
   
     public render(): React.ReactNode {      
-      const styles = CasualChartStyles();
+      const styles = CasualAggregateStyles();
       return (
         <Stack horizontal={true} verticalFill={true} className={styles.container}>
-          <Stack.Item grow={false} shrink={false} className={styles.leftPane}>
+          <Stack.Item grow={true} className={styles.leftPane}>            
+            <AccessibleChart plotlyProps={this.generateCasualAggregatePlotlyProps()} theme={getTheme()} />
+          </Stack.Item>          
+          <Stack.Item grow={true} className={styles.rightPane}>
             <Stack horizontal={false}>
-              <Stack.Item>
-                <Stack horizontal className={styles.description}>
-                  <Stack.Item className={styles.header}>
-                    <div>{localization.CasualAnalysis.MainMenu.title}</div>
-                  </Stack.Item>
-                  <Stack.Item className={styles.whyMust}>
-                    <div className={styles.infoButton}>i</div>
-                    {localization.CasualAnalysis.MainMenu.whyMust}
-                  </Stack.Item>
-                </Stack>
+              <Stack.Item className={styles.label}>
+                <b>{localization.CasualAnalysis.AggregateView.continuous}</b>{localization.CasualAnalysis.AggregateView.continuousDescription} 
               </Stack.Item>
-              <Stack.Item>
-                <AccessibleChart plotlyProps={this.generateCasualAggregatePlotlyProps()} theme={getTheme()} />
-              </Stack.Item>   
-            </Stack> 
-          </Stack.Item> 
-          {/* <Stack.Item grow={true} className={styles.rightPane}>            
-            {localization.CasualAnalysis.MainMenu.lasso}
-          </Stack.Item>       */}
+              <Stack.Item className={styles.label}>
+                <b>{localization.CasualAnalysis.AggregateView.binary}</b>{localization.CasualAnalysis.AggregateView.binaryDescription} 
+              </Stack.Item>
+              <Stack.Item className={styles.lasso}>
+                {localization.CasualAnalysis.AggregateView.lasso}                
+              </Stack.Item>
+            </Stack>         
+          </Stack.Item>      
         </Stack>
       );
     }
@@ -66,7 +62,7 @@ export class CasualAggregateChart extends React.PureComponent<ICasualAggregateCh
         plotlyProps.data = [
             {
             error_y: {
-                array: this.props.data.pValue,
+                array: this.props.data.pValue as unknown as Datum[],
                 type: 'data',
                 visible: true
             },

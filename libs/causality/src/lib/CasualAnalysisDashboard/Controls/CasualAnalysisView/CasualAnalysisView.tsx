@@ -10,7 +10,8 @@ import React from "react";
 
 import { CasualAnalysisOptions } from "../../CasualAnalysisEnums";
 
-import { CasualAggregateChart } from "./CasualAggregateChart";
+import { CasualAggregateView } from "./CasualAggregateView/CasualAggregateView";
+import { CasualIndividualView } from "./CasualIndividualView/CasualIndividualView";
 
 export interface ICasualAnalysisViewProps {
   viewOption: string;
@@ -27,10 +28,10 @@ export class CasualAnalysisView extends React.PureComponent<ICasualAnalysisViewP
     return (
       <>
         {this.props.viewOption === CasualAnalysisOptions.Aggregate && (
-          <CasualAggregateChart data={this.props.data}/>
+          <CasualAggregateView data={this.props.data}/>
         )}
         {this.props.viewOption === CasualAnalysisOptions.Individual && (
-          <CasualAggregateChart data={this.props.data}/>
+          <CasualIndividualView data={this.props.data}/>
         )}
       </>
     );

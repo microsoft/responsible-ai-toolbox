@@ -4,5 +4,9 @@
 export interface ICasualAnalysisData {
     name: string[];
     point: number[];
-    pValue: number[];
+    pValue?: number[];
+    stderr?: number[];
+    zstat?: number[];
+    ciLower?: number[];
+    ciUpper?: number[];
   }
