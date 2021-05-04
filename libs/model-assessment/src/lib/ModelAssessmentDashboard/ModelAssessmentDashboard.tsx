@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CausalInsightsTab } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
   CohortBasedComponent,
   ModelAssessmentContext,
   ErrorCohort
 } from "@responsible-ai/core-ui";
+import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisViewTab,

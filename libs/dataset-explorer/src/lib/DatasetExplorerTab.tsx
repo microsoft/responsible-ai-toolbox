@@ -75,7 +75,8 @@ export class DatasetExplorerTab extends React.PureComponent<
     } else {
       initialCohortIndex = this.context.errorCohorts.findIndex(
         (errorCohort) =>
-          errorCohort.cohort.name === this.context.selectedCohort.cohort.name
+          errorCohort.cohort.name ===
+          this.context.selectedErrorCohort.cohort.name
       );
     }
 
