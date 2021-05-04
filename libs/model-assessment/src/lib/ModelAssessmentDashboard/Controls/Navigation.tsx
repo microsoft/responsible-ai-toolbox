@@ -77,16 +77,16 @@ export class Navigation extends React.PureComponent<INavigationProps> {
       name: "Diagnose"
     });
     this.navLinkGroups.push({
-      name: "Actionable Insights",
       links: [
         {
-          key: GlobalTabKeys.CasualAnalysisTab,
+          key: GlobalTabKeys.CausalAnalysisTab,
           name: "Causal analysis",
           onClick: this.props.handleGlobalTabClick,
-          url: "",          
-          target: "_blank"
+          target: "_blank",          
+          url: ""
         }
-      ]
+      ],
+      name: "Actionable Insights"
     });
   }
 

@@ -29,6 +29,6 @@ export class TreatmentView extends React.PureComponent<ITreatmentViewProps, ITre
   }
 
   public render(): React.ReactNode {
-    return <div>"Treatment ITreatmentViewState</div>;
+    return <div>Treatment View</div>;
   }
 }
