@@ -79,8 +79,7 @@ class TestModelAnalysis(object):
                                classes=classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
-                                              ManagerNames.EXPLAINER,
-                                              ManagerNames.ERROR_ANALYSIS])
+                                              ManagerNames.EXPLAINER])
     def test_modelanalysis_boston(self, manager_type):
         x_train, x_test, y_train, y_test, feature_names = \
             create_boston_data()
