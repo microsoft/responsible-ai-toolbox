@@ -84,6 +84,10 @@ export class NewExplanationDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          baseErrorCohort: new ErrorCohort(
+            this.state.cohorts[0],
+            this.state.jointDataset
+          ),
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
@@ -95,8 +99,8 @@ export class NewExplanationDashboard extends React.PureComponent<
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
-          selectedCohort: new ErrorCohort(
-            this.state.cohorts[0],
+          selectedErrorCohort: new ErrorCohort(
+            this.state.selectedCohort,
             this.state.jointDataset
           ),
           telemetryHook:
@@ -104,7 +108,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             ((): void => {
               return;
             }),
-          theme: getTheme()
+          theme: getTheme(),
+          updateErrorCohorts: this.updateErrorCohorts
         }}
       >
         <div className={classNames.page}>
@@ -240,5 +245,15 @@ export class NewExplanationDashboard extends React.PureComponent<
 
   private clearSizeWarning = (): void => {
     this.setState({ showingDataSizeWarning: false });
+  };
+
+  private updateErrorCohorts = (
+    cohorts: ErrorCohort[],
+    selectedCohort: ErrorCohort
+  ): void => {
+    this.setState({
+      cohorts: cohorts.map((c) => c.cohort),
+      selectedCohort: selectedCohort.cohort
+    });
   };
 }

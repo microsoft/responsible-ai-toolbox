@@ -3,7 +3,8 @@
 
 """Defines the Causal Manager class."""
 
-from raitools._managers.base_manager import BaseManager
+from responsibleai._internal.constants import ManagerNames
+from responsibleai._managers.base_manager import BaseManager
 
 
 class CausalManager(BaseManager):
@@ -29,11 +30,11 @@ class CausalManager(BaseManager):
         :return: The name of the causal manager.
         :rtype: str
         """
-        return "causal"
+        return ManagerNames.CAUSAL
 
-    def save(self, path):
-        raise NotImplementedError("Save not implemented for CausalManager")
+    def _save(self, path):
+        pass
 
     @staticmethod
-    def load(path):
-        raise NotImplementedError("Load not implemented for CausalManager")
+    def _load(path, model_analysis):
+        pass

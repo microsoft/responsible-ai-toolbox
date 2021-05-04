@@ -10,6 +10,7 @@ import socket
 import threading
 import atexit
 import uuid
+import time
 
 from gevent.pywsgi import WSGIServer
 
@@ -54,6 +55,9 @@ class FlaskHelper(object):
         self.env = build_environment(self)
         if self.env.base_url is None:
             return
+        # Sleep for 1 second in order to prevent random errors while
+        # socket is still closing
+        time.sleep(1)
         self._thread = threading.Thread(target=self.run, daemon=True)
         self._thread.start()
 
@@ -66,11 +70,15 @@ class FlaskHelper(object):
         """
         try:
             backlog = 5
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.bind((LOCALHOST, port))
-            sock.listen(backlog)
-            sock.close()
-        except socket.error:  # pragma: no cover
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                # See stack overflow to prevent "Only one usage" random
+                # errors in tests:
+                # https://stackoverflow.com/questions/30420512/python-socket-error-only-one-usage-of-each-socket-address-is-normally-permitted
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                sock.bind((LOCALHOST, port))
+                sock.listen(backlog)
+        except (socket.error, OSError):  # pragma: no cover
             if raise_error:
                 error_message = """Port {0} is not available.
                 Please specify another port for use via the 'port' parameter"""

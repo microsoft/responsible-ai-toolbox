@@ -6,7 +6,7 @@ import setuptools
 
 # Version will be read from version.py
 version = ''
-name = 'raitools'
+name = 'responsibleai'
 # Fetch Version
 with open(os.path.join(name, '__version__.py')) as f:
     code = compile(f.read(), f.name, 'exec')
@@ -25,8 +25,8 @@ setuptools.setup(
     version=version,  # noqa: F821
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
-    description="SDK API to assess fairness, explain "
-                "models, and analyze errors in Machine Learning",
+    description="SDK API to explain models, and analyze "
+                "errors in Machine Learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/microsoft/responsible-ai-widgets",

@@ -4,16 +4,30 @@
 """Defines the Explainer Manager class."""
 
 import warnings
+import json
 from scipy.sparse import issparse
+from pathlib import Path
 from interpret_community.mimic.mimic_explainer import MimicExplainer
 from interpret_community.mimic.models.lightgbm_model import (
     LGBMExplainableModel)
 from interpret_community.mimic.models.linear_model import (
     LinearExplainableModel)
 from interpret_community.common.constants import ModelTask
-from raitools._managers.base_manager import BaseManager
+from interpret_community.explanation.explanation import (
+    save_explanation, load_explanation, FeatureImportanceExplanation)
+from responsibleai._internal.constants import (
+    ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
+from responsibleai._managers.base_manager import BaseManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
+IS_RUN = 'is_run'
+IS_ADDED = 'is_added'
+CLASSES = 'classes'
+U_INITIALIZATION_EXAMPLES = '_initialization_examples'
+U_EVALUATION_EXAMPLES = '_evaluation_examples'
+FEATURES = 'features'
+META_JSON = Metadata.META_JSON
+MODEL = Metadata.MODEL
 
 
 class ExplainerManager(BaseManager):
@@ -25,11 +39,12 @@ class ExplainerManager(BaseManager):
         or function that accepts a 2d ndarray.
     :type model: object
     :param initialization_examples: A matrix of feature vector
-        examples (# examples x # features) for initializing the explainer.
+        examples (# examples x # features) for initializing the explainer,
+        with an additional label column.
     :type initialization_examples: pandas.DataFrame
     :param evaluation_examples: A matrix of feature vector
         examples (# examples x # features) on which to explain the
-        model's output.
+        model's output, with an additional label column.
     :type evaluation_examples: pandas.DataFrame
     :param target_column: The name of the label column.
     :type target_column: str
@@ -48,11 +63,12 @@ class ExplainerManager(BaseManager):
             or function that accepts a 2d ndarray.
         :type model: object
         :param initialization_examples: A matrix of feature vector
-            examples (# examples x # features) for initializing the explainer.
+            examples (# examples x # features) for initializing the explainer,
+            with an additional label column.
         :type initialization_examples: pandas.DataFrame
         :param evaluation_examples: A matrix of feature vector
             examples (# examples x # features) on which to explain the
-            model's output.
+            model's output, with an additional label column.
         :type evaluation_examples: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
@@ -117,7 +133,24 @@ class ExplainerManager(BaseManager):
             return []
 
     def list(self):
-        pass
+        """List information about the ExplainerManager.
+
+        :return: A dictionary of properties.
+        :rtype: dict
+        """
+        props = {ListProperties.MANAGER_TYPE: self.name}
+        if self._explanation:
+            props[Keys.ID] = self._explanation.id
+            props[Keys.METHOD] = self._explanation.method
+            props[Keys.MODEL_TASK] = self._explanation.model_task
+            props[Keys.MODEL_TYPE] = self._explanation.model_type
+            if FeatureImportanceExplanation._does_quack(self._explanation):
+                props[Keys.IS_RAW] = self._explanation.is_raw
+                props[Keys.IS_ENGINEERED] = self._explanation.is_engineered
+            props[Keys.IS_COMPUTED] = True
+        else:
+            props[Keys.IS_COMPUTED] = False
+        return props
 
     @property
     def name(self):
@@ -126,13 +159,57 @@ class ExplainerManager(BaseManager):
         :return: The name of the explainer manager.
         :rtype: str
         """
-        return "explain"
+        return ManagerNames.EXPLAINER
 
-    def save(self, path):
-        raise NotImplementedError(
-            "Save not implemented for ExplainerManager")
+    def _save(self, path):
+        """Save the ExplainerManager to the given path.
+
+        :param path: The directory path to save the ExplainerManager to.
+        :type path: str
+        """
+        top_dir = Path(path)
+        top_dir.mkdir(parents=True, exist_ok=True)
+        # save the explanation
+        if self._explanation:
+            save_explanation(self._explanation,
+                             top_dir / ManagerNames.EXPLAINER)
+        meta = {IS_RUN: self._is_run,
+                IS_ADDED: self._is_added}
+        with open(Path(path) / META_JSON, 'w') as file:
+            json.dump(meta, file)
 
     @staticmethod
-    def load(path):
-        raise NotImplementedError(
-            "Load not implemented for ExplainerManager")
+    def _load(path, model_analysis):
+        """Load the ExplainerManager from the given path.
+
+        :param path: The directory path to load the ExplainerManager from.
+        :type path: str
+        :param model_analysis: The loaded parent ModelAnalysis.
+        :type model_analysis: ModelAnalysis
+        """
+        # create the ExplainerManager without any properties using the __new__
+        # function, similar to pickle
+        inst = ExplainerManager.__new__(ExplainerManager)
+        top_dir = Path(path)
+        explanation_path = top_dir / ManagerNames.EXPLAINER
+        if explanation_path.exists():
+            explanation = load_explanation(explanation_path)
+            inst.__dict__['_' + ManagerNames.EXPLAINER] = explanation
+        inst.__dict__['_' + MODEL] = model_analysis.model
+
+        with open(top_dir / META_JSON, 'r') as meta_file:
+            meta = meta_file.read()
+        meta = json.loads(meta)
+        inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
+        inst.__dict__['_' + CLASSES] = model_analysis._classes
+        target_column = model_analysis.target_column
+        train = model_analysis.train.drop(columns=[target_column])
+        test = model_analysis.test.drop(columns=[target_column])
+        inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
+        inst.__dict__[U_EVALUATION_EXAMPLES] = test
+        inst.__dict__['_' + FEATURES] = list(train.columns)
+        inst.__dict__['_' + IS_ADDED] = False
+        # reset self._surrogate_model
+        if meta[IS_ADDED]:
+            inst.add()
+        return inst

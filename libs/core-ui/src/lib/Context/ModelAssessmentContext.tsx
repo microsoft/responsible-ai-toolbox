@@ -19,7 +19,8 @@ export interface IModelAssessmentContext {
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
   errorCohorts: ErrorCohort[];
-  selectedCohort: ErrorCohort;
+  readonly baseErrorCohort: ErrorCohort;
+  readonly selectedErrorCohort: ErrorCohort;
   precomputedExplanations?: IPrecomputedExplanations;
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
@@ -34,9 +35,15 @@ export interface IModelAssessmentContext {
         explanationAlgorithm?: string
       ) => Promise<any[]>)
     | undefined;
+  updateErrorCohorts(
+    cohorts: ErrorCohort[],
+    selectedCohort: ErrorCohort,
+    baseCohort?: ErrorCohort
+  ): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
+  baseErrorCohort: {} as ErrorCohort,
   dataset: {} as IDataset,
   errorCohorts: [],
   jointDataset: {} as JointDataset,
@@ -45,9 +52,10 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   precomputedExplanations: undefined,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
-  selectedCohort: {} as ErrorCohort,
+  selectedErrorCohort: {} as ErrorCohort,
   telemetryHook: () => undefined,
-  theme: {} as ITheme
+  theme: {} as ITheme,
+  updateErrorCohorts: () => undefined
 };
 const modelAssessmentContext = React.createContext<IModelAssessmentContext>(
   defaultModelAssessmentContext

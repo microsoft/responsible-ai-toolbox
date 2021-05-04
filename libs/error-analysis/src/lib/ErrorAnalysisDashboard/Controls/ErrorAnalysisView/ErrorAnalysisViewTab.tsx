@@ -38,7 +38,7 @@ const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   stringParams?: IStringsParam;
-  handleErrorDetectorChanged: (
+  handleErrorDetectorChanged?: (
     item?: PivotItem,
     ev?: React.MouseEvent<HTMLElement>
   ) => void;

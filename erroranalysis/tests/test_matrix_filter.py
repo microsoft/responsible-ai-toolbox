@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from erroranalysis._internal.error_analyzer import ErrorAnalyzer
+from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX, VALUES)
 from common_utils import (
@@ -56,7 +56,7 @@ class TestMatrixFilter(object):
 
 def run_error_analyzer(model, x_test, y_test, feature_names,
                        categorical_features):
-    error_analyzer = ErrorAnalyzer(model, x_test, y_test,
+    error_analyzer = ModelAnalyzer(model, x_test, y_test,
                                    feature_names,
                                    categorical_features)
     # features, filters, composite_filters

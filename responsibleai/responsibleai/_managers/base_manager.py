@@ -47,18 +47,20 @@ class BaseManager(ABC):
         """
 
     @abstractmethod
-    def save(self, path):
+    def _save(self, path):
         """Abstract method to save the manager.
 
-        :param path: The path to save the manager to.
+        :param path: The directory path to save the manager to.
         :type path: str
         """
 
     @staticmethod
     @abstractmethod
-    def load(path):
+    def _load(path, model_analysis):
         """Static method to load the manager.
 
-        :param path: The path to load the manager from.
+        :param path: The directory path to load the manager from.
         :type path: str
+        :param model_analysis: The loaded parent ModelAnalysis.
+        :type model_analysis: ModelAnalysis
         """

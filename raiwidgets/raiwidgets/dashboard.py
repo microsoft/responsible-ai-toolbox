@@ -62,9 +62,9 @@ class Dashboard(object):
         self.id = uuid.uuid4().hex
 
         self.config = {
-            "dashboardType": dashboard_type,
-            "id": self.id,
-            "baseUrl": self._service.env.base_url,
+            'dashboardType': dashboard_type,
+            'id': self.id,
+            'baseUrl': self._service.env.base_url,
             'withCredentials': self._service.with_credentials
         }
         if add_local_url:

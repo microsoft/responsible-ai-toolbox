@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from common_utils import create_iris_data, create_models
-from erroranalysis._internal.error_analyzer import ErrorAnalyzer
+from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -25,7 +25,7 @@ class TestSurrogateErrorTree(object):
 
 def run_error_analyzer(model, x_test, y_test, feature_names,
                        categorical_features):
-    error_analyzer = ErrorAnalyzer(model, x_test, y_test,
+    error_analyzer = ModelAnalyzer(model, x_test, y_test,
                                    feature_names,
                                    categorical_features)
     # features, filters, composite_filters
