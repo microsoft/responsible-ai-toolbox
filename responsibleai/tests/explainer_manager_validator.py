@@ -22,15 +22,23 @@ def validate_explainer(model_analysis, x_train, x_test, classes):
     assert isinstance(explanations, list)
     assert len(explanations) == 1
     explanation = explanations[0]
-    assert len(explanation.local_importance_values) == len(classes)
-    assert len(explanation.local_importance_values[0]) == len(x_test)
     num_cols = len(x_train.columns) - 1
-    assert len(explanation.local_importance_values[0][0]) == num_cols
+    if classes is not None:
+        assert len(explanation.local_importance_values) == len(classes)
+        assert len(explanation.local_importance_values[0]) == len(x_test)
+        assert len(explanation.local_importance_values[0][0]) == num_cols
+    else:
+        assert len(explanation.local_importance_values) == len(x_test)
+        assert len(explanation.local_importance_values[0]) == num_cols
+
     properties = model_analysis.explainer.list()
     assert properties[ListProperties.MANAGER_TYPE] == ManagerNames.EXPLAINER
     assert 'id' in properties
     assert properties['method'] == LIGHTGBM_METHOD
-    assert properties['model_task'] == ModelTask.CLASSIFICATION
+    if classes is not None:
+        assert properties['model_task'] == ModelTask.CLASSIFICATION
+    else:
+        assert properties['model_task'] == ModelTask.REGRESSION
     assert properties['model_type'] is None
     assert properties['is_raw'] is False
     assert properties['is_engineered'] is False
