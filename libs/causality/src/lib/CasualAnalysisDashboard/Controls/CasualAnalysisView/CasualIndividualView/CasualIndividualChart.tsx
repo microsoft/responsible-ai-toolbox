@@ -108,7 +108,6 @@ export class CasualIndividualChart extends React.PureComponent<
 
   public componentDidMount() {
     this.createCopyOfFirstRow();
-    this.buildRowOptions(0);
 
     const featuresOption = new Array(
       this.context.jointDataset.datasetFeatureCount
@@ -140,7 +139,7 @@ export class CasualIndividualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(
-    prevProps: ICasualIndividualChartProps,
+    _prevProps: ICasualIndividualChartProps,
     prevState: ICasualIndividualChartState
   ): void {
     if (!this.state) {
@@ -185,16 +184,6 @@ export class CasualIndividualChart extends React.PureComponent<
           };
         }
       );
-      this.selectedDatapoints = this.state.selectedPointsIndexes.map(
-        (rowIndex) => {
-          const row = this.context.jointDataset.getRow(rowIndex);
-          return JointDataset.datasetSlice(
-            row,
-            this.context.jointDataset.metaDict,
-            this.context.jointDataset.datasetFeatureCount
-          );
-        }
-      );
       if (
         this.state.sortingSeriesIndex === undefined ||
         !this.state.selectedPointsIndexes.includes(
@@ -210,15 +199,6 @@ export class CasualIndividualChart extends React.PureComponent<
           sortingSeriesIndex = undefined;
         }
       }
-    }
-    if (!customPointsAreEqual) {
-      this.customDatapoints = this.state.customPoints.map((row) => {
-        return JointDataset.datasetSlice(
-          row,
-          this.context.jointDataset.metaDict,
-          this.context.jointDataset.datasetFeatureCount
-        );
-      });
     }
     if (
       !selectionsAreEqual ||
@@ -440,24 +420,6 @@ export class CasualIndividualChart extends React.PureComponent<
     }
     return [];
   }
-
-
-  private buildRowOptions(cohortIndex: number): void {
-    this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
-    this.rowOptions = this.context.errorCohorts[cohortIndex].cohort
-      .unwrap(JointDataset.IndexLabel)
-      .map((index) => {
-        return {
-          key: index,
-          text: localization.formatString(
-            localization.Interpret.WhatIfTab.rowLabel,
-            index.toString()
-          )
-        };
-      })
-      .reverse();
-  }
-
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);

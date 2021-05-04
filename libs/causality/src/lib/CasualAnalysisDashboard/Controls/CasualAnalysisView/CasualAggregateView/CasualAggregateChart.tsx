@@ -3,7 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
+  ICasualAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -17,7 +17,7 @@ import { basePlotlyProperties } from "./basePlotlyProperties";
 import { CasualAggregateStyles } from "./CasualAggregateStyles";
 
 export interface ICasualAggregateChartProps {
-  data: ICasualAnalysisData;
+  data: ICasualAnalysisSingleData;
 }
 
 export class CasualAggregateChart extends React.PureComponent<ICasualAggregateChartProps> {

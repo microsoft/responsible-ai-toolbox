@@ -51,10 +51,10 @@ export class CasualAggregateView extends React.PureComponent<ICasualAggregateVie
           </Stack>
           <Stack>
             <Stack.Item className={styles.table}>
-              <CasualAggregateTable data={this.props.data}/>
+              <CasualAggregateTable data={this.props.data.global}/>
             </Stack.Item>
             <Stack.Item>
-              <CasualAggregateChart data={this.props.data}/>
+              <CasualAggregateChart data={this.props.data.global}/>
             </Stack.Item>
           </Stack>
         </Stack>

@@ -3,7 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
+  ICasualAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -13,7 +13,7 @@ import React from "react";
 
 
 export interface ICasualAggregateTableProps {
-  data: ICasualAnalysisData;
+  data: ICasualAnalysisSingleData;
 }
 
 export class CasualAggregateTable extends React.PureComponent<ICasualAggregateTableProps> {

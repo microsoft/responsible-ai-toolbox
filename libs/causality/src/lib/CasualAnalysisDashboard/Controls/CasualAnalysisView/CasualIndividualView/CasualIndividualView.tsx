@@ -57,10 +57,10 @@ export class CasualIndividualView extends React.PureComponent<ICasualIndividualV
             </ActionButton>
           </Stack>
           <Stack.Item className={styles.individualTable}>
-            <CasualAggregateTable data={this.props.data}/>
+            <CasualAggregateTable data={this.props.data.global}/>
           </Stack.Item>
           <Stack.Item>
-            <CasualAggregateChart data={this.props.data}/>
+            <CasualAggregateChart data={this.props.data.global}/>
           </Stack.Item>
         </Stack>
       );
