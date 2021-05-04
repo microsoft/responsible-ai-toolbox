@@ -82,7 +82,7 @@ export class Navigation extends React.PureComponent<INavigationProps> {
           key: GlobalTabKeys.CausalAnalysisTab,
           name: "Causal analysis",
           onClick: this.props.handleGlobalTabClick,
-          target: "_blank",          
+          target: "_blank",
           url: ""
         }
       ],

@@ -19,7 +19,9 @@ export interface ICasualAnalysisViewProps {
   data: ICasualAnalysisData;
 }
 
-export class CasualAnalysisView extends React.PureComponent<ICasualAnalysisViewProps> {
+export class CasualAnalysisView extends React.PureComponent<
+  ICasualAnalysisViewProps
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
@@ -29,22 +31,20 @@ export class CasualAnalysisView extends React.PureComponent<ICasualAnalysisViewP
     return (
       <>
         {this.props.viewOption === CasualAnalysisOptions.Aggregate && (
-          <CasualAggregateView data={this.props.data}/>
+          <CasualAggregateView data={this.props.data} />
         )}
         {this.props.viewOption === CasualAnalysisOptions.Individual && (
-          <CasualIndividualView data={this.props.data}/>
+          <CasualIndividualView data={this.props.data} />
         )}
         {this.props.viewOption === CasualAnalysisOptions.Treatment && (
-          <TreatmentView data={this.props.data}/>
+          <TreatmentView data={this.props.data} />
         )}
       </>
     );
   }
 
   public componentDidUpdate(prevProps: ICasualAnalysisViewProps): void {
-    if (
-      this.props.viewOption !== prevProps.viewOption
-    ) {
+    if (this.props.viewOption !== prevProps.viewOption) {
       this.forceUpdate();
     }
   }

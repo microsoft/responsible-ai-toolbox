@@ -8,7 +8,6 @@ import {
 } from "@responsible-ai/core-ui";
 import React from "react";
 
-
 export interface ITreatmentViewProps {
   data: ICasualAnalysisData;
 }
@@ -16,7 +15,10 @@ interface ITreatmentViewState {
   showModalHelp: boolean;
 }
 
-export class TreatmentView extends React.PureComponent<ITreatmentViewProps, ITreatmentViewState> {
+export class TreatmentView extends React.PureComponent<
+  ITreatmentViewProps,
+  ITreatmentViewState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext

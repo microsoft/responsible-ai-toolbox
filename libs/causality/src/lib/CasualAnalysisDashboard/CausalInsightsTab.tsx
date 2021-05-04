@@ -7,26 +7,23 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  Text,
-  Pivot,
-  PivotItem,
-  Stack
-} from "office-ui-fabric-react";
+import { Text, Pivot, PivotItem, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { CasualAnalysisOptions } from "./CasualAnalysisEnums";
 import { CasualAnalysisView } from "./Controls/CasualAnalysisView/CasualAnalysisView";
-
 
 export interface ICausalInsightsTabProps {
   data: ICasualAnalysisData;
 }
 
 interface ICausalInsightsTabState {
-  viewOption: string
+  viewOption: string;
 }
-export class CausalInsightsTab extends React.PureComponent<ICausalInsightsTabProps, ICausalInsightsTabState> {
+export class CausalInsightsTab extends React.PureComponent<
+  ICausalInsightsTabProps,
+  ICausalInsightsTabState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
@@ -61,7 +58,10 @@ export class CausalInsightsTab extends React.PureComponent<ICausalInsightsTabPro
             />
           </Pivot>
         </Stack>
-        <CasualAnalysisView viewOption={this.state.viewOption} data={this.props.data}/>
+        <CasualAnalysisView
+          viewOption={this.state.viewOption}
+          data={this.props.data}
+        />
       </Stack>
     );
   }
@@ -69,7 +69,11 @@ export class CausalInsightsTab extends React.PureComponent<ICausalInsightsTabPro
     item?: PivotItem,
     _ev?: React.MouseEvent<HTMLElement>
   ): void => {
-    if (item && item.props.itemKey && item.props.itemKey !== this.state.viewOption) {
+    if (
+      item &&
+      item.props.itemKey &&
+      item.props.itemKey !== this.state.viewOption
+    ) {
       this.setState({
         viewOption: item.props.itemKey
       });

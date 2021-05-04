@@ -585,7 +585,7 @@
       "individual": "Individual casual effects",
       "treatment": "Treatment policy",
       "title": "Direct casual effect of each feature with 90% confidence interval"
-      },
+    },
     "AggregateView": {
       "description": "Casual analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
       "directAggregate": "Direct aggregate casual effect of each treatment with 95% confidence interval",

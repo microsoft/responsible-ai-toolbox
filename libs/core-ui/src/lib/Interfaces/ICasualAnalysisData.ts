@@ -4,6 +4,6 @@
 import { ICasualAnalysisSingleData } from "./ICasualAnalysisSingleData";
 
 export interface ICasualAnalysisData {
-    global: ICasualAnalysisSingleData,
-    local:ICasualAnalysisSingleData[],
-  }
+  global: ICasualAnalysisSingleData;
+  local: ICasualAnalysisSingleData[];
+}

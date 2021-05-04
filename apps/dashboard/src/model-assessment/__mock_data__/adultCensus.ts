@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICasualAnalysisData, IDataset, IModelExplanationData } from "@responsible-ai/core-ui";
+import {
+  ICasualAnalysisData,
+  IDataset,
+  IModelExplanationData
+} from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
   categoricalMap: {
@@ -2607,12 +2611,24 @@ export const adultCensusWithFairnessModelExplanationData: IModelExplanationData 
 
 export const adultCensusCasualAnalysisData: ICasualAnalysisData = {
   global: {
-    ciLower: [-0.2419328967749073, 0.024554703670239472, 0.0000018156074109169128],
+    ciLower: [
+      -0.2419328967749073,
+      0.024554703670239472,
+      0.0000018156074109169128
+    ],
     ciUpper: [-0.1428698896693828, 0.07637320978494788, 0.0000162287897705993],
     name: ["OverTime (base=No): Yes", "StockOptionLevel", "MonthlyIncome"],
     point: [-0.19240139322214506, 0.05046395672759368, 0.000009022198590758107],
-    pValue: [2.6711762067333496e-14, 0.0001348326275600237, 0.014137461979327226],
-    stderr: [0.025271639654330606, 0.013219249568728346, 0.0000036768997985094956],
+    pValue: [
+      2.6711762067333496e-14,
+      0.0001348326275600237,
+      0.014137461979327226
+    ],
+    stderr: [
+      0.025271639654330606,
+      0.013219249568728346,
+      0.0000036768997985094956
+    ],
     zstat: [-7.613332409524711, 3.8174600203457816, 2.4537515529836944]
   },
   local: []

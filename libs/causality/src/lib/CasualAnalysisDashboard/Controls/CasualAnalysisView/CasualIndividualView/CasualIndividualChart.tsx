@@ -235,14 +235,8 @@ export class CasualIndividualChart extends React.PureComponent<
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     return (
-      <div
-        className={classNames.topArea}
-        id={"CasualIndividualContainer"}
-      >
-        <div
-          className={classNames.chartWithAxes}
-          id={this.chartAndConfigsId}
-        >
+      <div className={classNames.topArea} id={"CasualIndividualContainer"}>
+        <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
               jointDataset={this.context.jointDataset}
@@ -254,9 +248,7 @@ export class CasualIndividualChart extends React.PureComponent<
               selectedColumn={this.state.chartProps.yAxis}
               canBin={false}
               mustBin={false}
-              canDither={
-                this.state.chartProps.chartType === ChartTypes.Scatter
-              }
+              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYOpen.bind(this, false)}
             />
@@ -271,18 +263,14 @@ export class CasualIndividualChart extends React.PureComponent<
               ]}
               selectedColumn={this.state.chartProps.xAxis}
               canBin={
-                this.state.chartProps.chartType ===
-                  ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Histogram ||
                 this.state.chartProps.chartType === ChartTypes.Box
               }
               mustBin={
-                this.state.chartProps.chartType ===
-                  ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Histogram ||
                 this.state.chartProps.chartType === ChartTypes.Box
               }
-              canDither={
-                this.state.chartProps.chartType === ChartTypes.Scatter
-              }
+              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXOpen.bind(this, false)}
             />
@@ -345,29 +333,20 @@ export class CasualIndividualChart extends React.PureComponent<
               {localization.Interpret.WhatIfTab.scatterLegendText}
             </Text>
           </div>
-          <Text
-            variant={"small"}
-            block
-            className={classNames.legendLabel}
-          >
+          <Text variant={"small"} block className={classNames.legendLabel}>
             {localization.Interpret.WhatIfTab.realPoint}
           </Text>
           {this.selectedFeatureImportance.length > 0 && (
             <InteractiveLegend
-              items={this.selectedFeatureImportance.map(
-                (row, rowIndex) => {
-                  return {
-                    activated: this.state.pointIsActive[rowIndex],
-                    color: FabricStyles.fabricColorPalette[rowIndex],
-                    name: row.name,
-                    onClick: this.toggleActivation.bind(this, rowIndex),
-                    onDelete: this.toggleSelectionOfPoint.bind(
-                      this,
-                      row.id
-                    )
-                  };
-                }
-              )}
+              items={this.selectedFeatureImportance.map((row, rowIndex) => {
+                return {
+                  activated: this.state.pointIsActive[rowIndex],
+                  color: FabricStyles.fabricColorPalette[rowIndex],
+                  name: row.name,
+                  onClick: this.toggleActivation.bind(this, rowIndex),
+                  onDelete: this.toggleSelectionOfPoint.bind(this, row.id)
+                };
+              })}
             />
           )}
           {this.state.showSelectionWarning && (
@@ -390,10 +369,7 @@ export class CasualIndividualChart extends React.PureComponent<
                       rowIndex + CasualIndivisualConstants.MAX_SELECTION + 1
                     ],
                   name: row[CasualIndivisualConstants.namePath],
-                  onClick: this.toggleCustomActivation.bind(
-                    this,
-                    rowIndex
-                  ),
+                  onClick: this.toggleCustomActivation.bind(this, rowIndex),
                   onDelete: this.removeCustomPoint.bind(this, rowIndex),
                   onEdit: this.setTemporaryPointToCustomPoint.bind(
                     this,
@@ -423,7 +399,9 @@ export class CasualIndividualChart extends React.PureComponent<
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
-    this.temporaryPoint[CasualIndivisualConstants.namePath] = localization.formatString(
+    this.temporaryPoint[
+      CasualIndivisualConstants.namePath
+    ] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
     );
@@ -471,7 +449,9 @@ export class CasualIndividualChart extends React.PureComponent<
       return undefined;
     }
     this.temporaryPoint = this.context.jointDataset.getRow(indexes[0]);
-    this.temporaryPoint[CasualIndivisualConstants.namePath] = localization.formatString(
+    this.temporaryPoint[
+      CasualIndivisualConstants.namePath
+    ] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]
     );
@@ -515,7 +495,6 @@ export class CasualIndividualChart extends React.PureComponent<
     this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
-
   private readonly setXOpen = (val: boolean): void => {
     if (val && this.state.xDialogOpen === false) {
       this.setState({ xDialogOpen: true });
@@ -553,7 +532,8 @@ export class CasualIndividualChart extends React.PureComponent<
     const pointIsActive = [...this.state.pointIsActive];
     if (indexOf === -1) {
       if (
-        this.state.selectedPointsIndexes.length > CasualIndivisualConstants.MAX_SELECTION
+        this.state.selectedPointsIndexes.length >
+        CasualIndivisualConstants.MAX_SELECTION
       ) {
         this.setState({ showSelectionWarning: true });
         return;
@@ -576,7 +556,9 @@ export class CasualIndividualChart extends React.PureComponent<
     chartProps: IGenericChartProps,
     cohort: Cohort
   ): IPlotlyProperty {
-    const plotlyProps = _.cloneDeep(CasualIndivisualConstants.basePlotlyProperties);
+    const plotlyProps = _.cloneDeep(
+      CasualIndivisualConstants.basePlotlyProperties
+    );
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
     plotlyProps.data[0].type = chartProps.chartType;
@@ -619,7 +601,9 @@ export class CasualIndividualChart extends React.PureComponent<
         line: {
           color:
             FabricStyles.fabricColorPalette[
-              CasualIndivisualConstants.MAX_SELECTION + 1 + this.state.customPoints.length
+              CasualIndivisualConstants.MAX_SELECTION +
+                1 +
+                this.state.customPoints.length
             ],
           width: 2
         },

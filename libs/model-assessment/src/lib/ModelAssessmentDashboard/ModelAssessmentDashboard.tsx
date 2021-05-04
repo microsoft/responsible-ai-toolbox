@@ -187,9 +187,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   />
                 )}
                 {t.key === GlobalTabKeys.CausalAnalysisTab && (
-                  <CausalInsightsTab data={this.props.casualAnalysisData}/>
+                  <CausalInsightsTab data={this.props.casualAnalysisData} />
                 )}
-{/* 
+                {/* 
                 {t.key === GlobalTabKeys.CounterfactualsTab && (
                   <CounterfactualsTab />
                 )} */}
