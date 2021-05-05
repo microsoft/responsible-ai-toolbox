@@ -28,6 +28,7 @@ U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
 META_JSON = Metadata.META_JSON
 MODEL = Metadata.MODEL
+EXPLANATION = '_explanation'
 
 
 class ExplainerManager(BaseManager):
@@ -194,7 +195,7 @@ class ExplainerManager(BaseManager):
         explanation_path = top_dir / ManagerNames.EXPLAINER
         if explanation_path.exists():
             explanation = load_explanation(explanation_path)
-            inst.__dict__['_' + ManagerNames.EXPLAINER] = explanation
+            inst.__dict__[EXPLANATION] = explanation
         inst.__dict__['_' + MODEL] = model_analysis.model
 
         with open(top_dir / META_JSON, 'r') as meta_file:

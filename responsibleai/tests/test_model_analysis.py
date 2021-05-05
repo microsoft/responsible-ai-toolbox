@@ -124,14 +124,14 @@ def run_model_analysis(model, x_train, x_test, target_column,
                                 desired_class, desired_range)
     if manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(model_analysis)
+
     with TemporaryDirectory() as tempdir:
         path = Path(tempdir) / 'rai_test_path'
         # save the model_analysis
         model_analysis.save(path)
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
-        if manager_type == ManagerNames.EXPLAINER:
-            setup_explainer(model_analysis)
+
         validate_model_analysis(model_analysis, x_train, x_test,
                                 target_column, task_type)
         if manager_type == ManagerNames.EXPLAINER:
