@@ -145,7 +145,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   <ModelPerformanceTab />
                 )}
                 {t.key === GlobalTabKeys.DataExplorerTab && (
-                  <DatasetExplorerTab />
+                  <DatasetExplorerTab showCohortSelection={false} />
                 )}
                 {t.key === GlobalTabKeys.GlobalExplanationTab && (
                   <GlobalExplanationTab
