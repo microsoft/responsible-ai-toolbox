@@ -38,7 +38,7 @@ import { CasualIndivisualConstants } from "./CasualIndivisualConstants";
 import { IGlobalSeries } from "./IGlobalSeries";
 
 export interface ICasualIndividualChartProps {
-  test?: boolean;
+  onDataClick?: (data: number | undefined) => void;
 }
 
 export interface ICasualIndividualChartState {
@@ -46,9 +46,6 @@ export interface ICasualIndividualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   selectedWhatIfRootIndex: number;
-  editingDataCustomIndex?: number;
-  showSelectionWarning: boolean;
-  customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
   featuresOption: IDropdownOption[];
   filteredFeatureList: IDropdownOption[];
@@ -86,8 +83,6 @@ export class CasualIndividualChart extends React.PureComponent<
     this.state = {
       crossClassInfoVisible: false,
       customPointIsActive: [],
-      customPoints: [],
-      editingDataCustomIndex: undefined,
       featuresOption: [],
       filteredFeatureList: [],
       iceTooltipVisible: false,
@@ -97,7 +92,6 @@ export class CasualIndividualChart extends React.PureComponent<
       selectedFeatureKey: JointDataset.DataLabelRoot + "0",
       selectedPointsIndexes: [],
       selectedWhatIfRootIndex: 0,
-      showSelectionWarning: false,
       sortArray: [],
       sortingSeriesIndex: undefined,
       topK: 4,
@@ -107,8 +101,6 @@ export class CasualIndividualChart extends React.PureComponent<
   }
 
   public componentDidMount() {
-    this.createCopyOfFirstRow();
-
     const featuresOption = new Array(
       this.context.jointDataset.datasetFeatureCount
     )
@@ -155,8 +147,6 @@ export class CasualIndividualChart extends React.PureComponent<
       this.state.pointIsActive,
       prevState.pointIsActive
     );
-    const customPointsAreEqual =
-      this.state.customPoints === prevState.customPoints;
     const customActivePointsAreEqual = _.isEqual(
       this.state.customPointIsActive,
       prevState.customPointIsActive
@@ -203,7 +193,6 @@ export class CasualIndividualChart extends React.PureComponent<
     if (
       !selectionsAreEqual ||
       !activePointsAreEqual ||
-      !customPointsAreEqual ||
       !customActivePointsAreEqual
     ) {
       this.forceUpdate();
@@ -216,7 +205,7 @@ export class CasualIndividualChart extends React.PureComponent<
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
-          {localization.Interpret.WhatIfTab.missingParameters}
+          {localization.Interpret.IndividualChart.missingParameters}
         </MissingParametersPlaceholder>
       );
     }
@@ -343,58 +332,19 @@ export class CasualIndividualChart extends React.PureComponent<
                   activated: this.state.pointIsActive[rowIndex],
                   color: FabricStyles.fabricColorPalette[rowIndex],
                   name: row.name,
-                  onClick: this.toggleActivation.bind(this, rowIndex),
                   onDelete: this.toggleSelectionOfPoint.bind(this, row.id)
                 };
               })}
             />
-          )}
-          {this.state.showSelectionWarning && (
-            <Text variant={"xSmall"} className={classNames.errorText}>
-              {localization.CasualAnalysis.IndividualChart.selectionLimit}
-            </Text>
           )}
           {this.selectedFeatureImportance.length === 0 && (
             <Text variant={"xSmall"} className={classNames.smallItalic}>
               {localization.Interpret.WhatIfTab.noneSelectedYet}
             </Text>
           )}
-          {this.state.customPoints.length > 0 && (
-            <InteractiveLegend
-              items={this.state.customPoints.map((row, rowIndex) => {
-                return {
-                  activated: this.state.customPointIsActive[rowIndex],
-                  color:
-                    FabricStyles.fabricColorPalette[
-                      rowIndex + CasualIndivisualConstants.MAX_SELECTION + 1
-                    ],
-                  name: row[CasualIndivisualConstants.namePath],
-                  onClick: this.toggleCustomActivation.bind(this, rowIndex),
-                  onDelete: this.removeCustomPoint.bind(this, rowIndex),
-                  onEdit: this.setTemporaryPointToCustomPoint.bind(
-                    this,
-                    rowIndex
-                  )
-                };
-              })}
-            />
-          )}
-          {this.state.customPoints.length === 0 && (
-            <Text variant={"xSmall"} className={classNames.smallItalic}>
-              {localization.Interpret.WhatIfTab.noneCreatedYet}
-            </Text>
-          )}
         </div>
       </div>
     );
-  }
-
-  private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
-    const indexes = cohort.unwrap(JointDataset.IndexLabel);
-    if (indexes.length > 0) {
-      return [indexes[0]];
-    }
-    return [];
   }
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
@@ -406,75 +356,14 @@ export class CasualIndividualChart extends React.PureComponent<
       index
     );
     this.temporaryPoint[CasualIndivisualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
-        CasualIndivisualConstants.MAX_SELECTION + this.state.customPoints.length
-      ];
+      FabricStyles.fabricColorPalette[CasualIndivisualConstants.MAX_SELECTION];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
-      editingDataCustomIndex: undefined,
       selectedWhatIfRootIndex: index
     });
-  }
-
-  private setTemporaryPointToCustomPoint(index: number): void {
-    this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
-    Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
-      this.validationErrors[key] = undefined;
-    });
-    this.setState({
-      editingDataCustomIndex: index,
-      selectedWhatIfRootIndex: this.temporaryPoint[JointDataset.IndexLabel]
-    });
-  }
-
-  private removeCustomPoint(index: number): void {
-    this.setState((prevState) => {
-      const customPoints = [...prevState.customPoints];
-      customPoints.splice(index, 1);
-      const customPointIsActive = [...prevState.customPointIsActive];
-      customPointIsActive.splice(index, 1);
-      return { customPointIsActive, customPoints };
-    });
-  }
-
-  private createCopyOfFirstRow(): void {
-    const indexes = this.getDefaultSelectedPointIndexes(
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
-    );
-    if (indexes.length === 0) {
-      return undefined;
-    }
-    this.temporaryPoint = this.context.jointDataset.getRow(indexes[0]);
-    this.temporaryPoint[
-      CasualIndivisualConstants.namePath
-    ] = localization.formatString(
-      localization.Interpret.WhatIf.defaultCustomRootName,
-      indexes[0]
-    );
-    this.temporaryPoint[CasualIndivisualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
-        CasualIndivisualConstants.MAX_SELECTION + this.state.customPoints.length
-      ];
-    Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
-      this.validationErrors[key] = undefined;
-    });
-  }
-
-  private toggleActivation(index: number): void {
-    const pointIsActive = [...this.state.pointIsActive];
-    pointIsActive[index] = !pointIsActive[index];
-    this.setState({ pointIsActive });
-  }
-
-  private toggleCustomActivation(index: number): void {
-    const customPointIsActive = [...this.state.customPointIsActive];
-    customPointIsActive[index] = !customPointIsActive[index];
-    this.setState({ customPointIsActive });
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -513,14 +402,9 @@ export class CasualIndividualChart extends React.PureComponent<
 
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
-    // custom point
-    if (trace.curveNumber === 1) {
-      this.setTemporaryPointToCustomPoint(trace.pointNumber);
-    } else {
-      const index = trace.customdata[JointDataset.IndexLabel];
-      this.setTemporaryPointToCopyOfDatasetPoint(index);
-      this.toggleSelectionOfPoint(index);
-    }
+    const index = trace.customdata[JointDataset.IndexLabel];
+    this.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.toggleSelectionOfPoint(index);
   };
 
   private toggleSelectionOfPoint(index?: number): void {
@@ -528,26 +412,23 @@ export class CasualIndividualChart extends React.PureComponent<
       return;
     }
     const indexOf = this.state.selectedPointsIndexes.indexOf(index);
-    const newSelections = [...this.state.selectedPointsIndexes];
-    const pointIsActive = [...this.state.pointIsActive];
+    let newSelections = [...this.state.selectedPointsIndexes];
+    let pointIsActive = [...this.state.pointIsActive];
     if (indexOf === -1) {
-      if (
-        this.state.selectedPointsIndexes.length >
-        CasualIndivisualConstants.MAX_SELECTION
-      ) {
-        this.setState({ showSelectionWarning: true });
-        return;
-      }
-      newSelections.push(index);
-      pointIsActive.push(true);
+      newSelections = [index];
+      pointIsActive = [true];
     } else {
       newSelections.splice(indexOf, 1);
       pointIsActive.splice(indexOf, 1);
     }
+    if (this.props.onDataClick) {
+      this.props.onDataClick(
+        newSelections.length === 1 ? newSelections[0] : undefined
+      );
+    }
     this.setState({
       pointIsActive,
-      selectedPointsIndexes: newSelections,
-      showSelectionWarning: false
+      selectedPointsIndexes: newSelections
     });
   }
 
@@ -581,12 +462,6 @@ export class CasualIndividualChart extends React.PureComponent<
 
     plotlyProps.data[1] = {
       marker: {
-        color: this.state.customPoints.map(
-          (_, i) =>
-            FabricStyles.fabricColorPalette[
-              CasualIndivisualConstants.MAX_SELECTION + 1 + i
-            ]
-        ),
         size: 12,
         symbol: "star"
       },
@@ -601,9 +476,7 @@ export class CasualIndividualChart extends React.PureComponent<
         line: {
           color:
             FabricStyles.fabricColorPalette[
-              CasualIndivisualConstants.MAX_SELECTION +
-                1 +
-                this.state.customPoints.length
+              CasualIndivisualConstants.MAX_SELECTION + 1
             ],
           width: 2
         },
@@ -640,11 +513,7 @@ export class CasualIndividualChart extends React.PureComponent<
       chartProps,
       plotlyProps.data[0]
     );
-    this.generateDataTrace(
-      this.state.customPoints,
-      chartProps,
-      plotlyProps.data[1]
-    );
+    this.generateDataTrace([], chartProps, plotlyProps.data[1]);
     if (this.temporaryPoint) {
       this.generateDataTrace(
         [this.temporaryPoint],

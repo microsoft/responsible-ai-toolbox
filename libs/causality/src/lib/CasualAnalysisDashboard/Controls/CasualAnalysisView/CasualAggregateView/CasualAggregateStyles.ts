@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  FontWeights,
   getTheme,
   IProcessedStyleSet,
   IStyle,
@@ -9,12 +10,15 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ICasualAggregateStyles {
+  callout: IStyle;
   container: IStyle;
   description: IStyle;
   infoButton: IStyle;
   label: IStyle;
   lasso: IStyle;
+  link: IStyle;
   table: IStyle;
+  title: IStyle;
   leftPane: IStyle;
   rightPane: IStyle;
   modalContentHelp: IStyle;
@@ -26,6 +30,10 @@ export const CasualAggregateStyles: () => IProcessedStyleSet<
 > = () => {
   const theme = getTheme();
   return mergeStyleSets<ICasualAggregateStyles>({
+    callout: {
+      padding: "20px 24px",
+      width: 320
+    },
     container: {
       display: "flex",
       flex: 1,
@@ -37,7 +45,6 @@ export const CasualAggregateStyles: () => IProcessedStyleSet<
       padding: "10px"
     },
     infoButton: {
-      border: "1px solid",
       borderRadius: "50%",
       color: theme.semanticColors.bodyText,
       float: "left",
@@ -70,6 +77,10 @@ export const CasualAggregateStyles: () => IProcessedStyleSet<
       padding: "10px",
       width: "70%"
     },
+    link: {
+      display: "block",
+      marginTop: 20
+    },
     modalContentHelp: {
       float: "left",
       width: "350px"
@@ -84,6 +95,10 @@ export const CasualAggregateStyles: () => IProcessedStyleSet<
     },
     table: {
       width: "50%"
+    },
+    title: {
+      fontWeight: FontWeights.semilight,
+      marginBottom: 12
     }
   });
 };

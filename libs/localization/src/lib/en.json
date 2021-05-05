@@ -596,15 +596,18 @@
       "continuous": "Continuouts treatment variables: ",
       "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
       "binary": "Binary treatment variables: ",
-      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
+      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units",
+      "learnMore": "Learn more"
     },
     "IndividualView": {
       "description": "Individual casual effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
       "directIndividual": "Direct individual casual effect of each treatment with 95% confidence interval",
-      "whyMust": "Why must casual insights assume unconfoundedness?"
+      "whyMust": "Why must casual insights assume unconfoundedness?",
+      "dataRequired": "This tab requires a datapoint be selected."
     },
     "IndividualChart": {
-      "selectionLimit": "Maximum of 1 selected point"
+      "selectionLimit": "Maximum of 1 selected point",
+      "missingParameters": "This tab requires an evaluation dataset be supplied."
     }
   },
   "ErrorAnalysis": {
