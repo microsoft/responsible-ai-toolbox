@@ -50,7 +50,6 @@ export const CasualIndividualStyles: () => IProcessedStyleSet<
       width: "50%"
     },
     infoButton: {
-      border: "1px solid",
       borderRadius: "50%",
       color: theme.semanticColors.bodyText,
       float: "left",

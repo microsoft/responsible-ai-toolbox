@@ -58,7 +58,7 @@ export class CasualAggregateView extends React.PureComponent<
               className={styles.infoButton}
             />
             <Text variant={"medium"} className={styles.label}>
-              {localization.CasualAnalysis.AggregateView.whyMust}
+              {"Why must casual insights assume unconfoundedness?"}
             </Text>
           </Stack>
           {this.state.showCallout && (
@@ -88,7 +88,7 @@ export class CasualAggregateView extends React.PureComponent<
                 target="_blank"
                 className={styles.link}
               >
-                {localization.CasualAnalysis.AggregateView.learnMore}
+                {"Learn more"}
               </Link>
             </Callout>
           )}
