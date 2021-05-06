@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  ICasualAnalysisData,
   IDataset,
   IMetricRequest,
   IMetricResponse,
@@ -61,8 +62,14 @@ export class ModelAssessment extends React.Component {
       probabilityY: modelData.probabilityY
     };
 
+    const casualAnalysisData: ICasualAnalysisData = {
+      global: modelData.globalCasualAnalysis,
+      local: modelData.localCasualAnalysis
+    };
+
     return (
       <ModelAssessmentDashboard
+        casualAnalysisData={casualAnalysisData}
         dataset={dataset}
         modelExplanationData={modelExplanationData}
         requestPredictions={requestPredictionsMethod}

@@ -3,21 +3,34 @@
 
 import {
   defaultModelAssessmentContext,
+  ICasualAnalysisData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import React from "react";
 
-export class CausalInsightsTab extends React.PureComponent {
+export interface ITreatmentViewProps {
+  data: ICasualAnalysisData;
+}
+interface ITreatmentViewState {
+  showModalHelp: boolean;
+}
+
+export class TreatmentView extends React.PureComponent<
+  ITreatmentViewProps,
+  ITreatmentViewState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-
-  public constructor() {
-    super({});
+  constructor(props: ITreatmentViewProps) {
+    super(props);
+    this.state = {
+      showModalHelp: false
+    };
   }
 
   public render(): React.ReactNode {
-    return React.Fragment;
+    return <div>Treatment View</div>;
   }
 }
