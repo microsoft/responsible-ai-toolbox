@@ -1,14 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ConfirmationDialog,
-  IJointMeta,
-  JointDataset,
-  Cohort,
-  FilterMethods,
-  IFilter
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -25,6 +17,10 @@ import {
   IChoiceGroupOption
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
+import { ConfirmationDialog } from "../../components/ConfirmationDialog";
+import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
+import { IJointMeta, JointDataset } from "../../util/JointDataset";
+import { Cohort } from "../Cohort";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorFilter } from "./CohortEditorFilter";

@@ -1,12 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IExplanationModelMetadata,
-  JointDataset,
-  Cohort,
-  ICohort
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
@@ -18,6 +12,10 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
+import { ICohort } from "../../Interfaces/ICohort";
+import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
+import { JointDataset } from "../../util/JointDataset";
+import { Cohort } from "../Cohort";
 
 import { CohortEditor } from "./CohortEditor";
 import { CohortList } from "./CohortList";
