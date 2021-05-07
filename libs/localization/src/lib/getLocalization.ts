@@ -9,8 +9,17 @@ import { mapValues, merge } from "lodash";
 
 import { Language } from "./Language";
 
+type NestedPartial<T> = {
+  [P in keyof T]?: T[P] | NestedPartial<T[P]>;
+};
+
+interface Todo {
+  title: string;
+  description: string;
+  child: Todo;
+}
 export type ILocalizationConfig<T> = { en: T } & {
-  readonly [key in Language]: any;
+  readonly [key in Language]: NestedPartial<T>;
 };
 
 export type ILocalization<T> = Omit<LocalizedStrings<T>, "formatString"> & {
@@ -23,9 +32,17 @@ export type ILocalization<T> = Omit<LocalizedStrings<T>, "formatString"> & {
 export function getLocalization<T>(
   lang: ILocalizationConfig<T>
 ): ILocalization<T> {
+  const p: NestedPartial<Todo> = {
+    child: {
+      title: ""
+    },
+    description: "",
+    title: ""
+  };
+  console.log(p);
   const localization = new LocalizedStringsClass(
     mapValues(lang, (v) => merge({}, lang.en, v))
-  );
+  ) as ILocalization<T>;
   const originalFormat = localization.formatString.bind(localization);
   localization.formatString = (
     str: string,
