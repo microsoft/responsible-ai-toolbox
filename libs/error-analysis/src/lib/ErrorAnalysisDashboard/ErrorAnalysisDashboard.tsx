@@ -22,7 +22,7 @@ import {
   IDataset,
   IModelExplanationData,
   CohortSource,
-  CohortStats,
+  MetricCohortStats,
   ICompositeFilter,
   IFilter,
   WeightVectorOption,
@@ -665,7 +665,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ): void {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(

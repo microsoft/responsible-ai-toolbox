@@ -5,6 +5,8 @@ import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
+import { ErrorCohortStats } from "../CohortStats";
+import { Metrics } from "../Constants";
 import { ErrorCohort } from "../ErrorCohort";
 
 import { cohortStatsStyles } from "./CohortStats.styles";
@@ -34,33 +36,56 @@ export class CohortStats extends React.Component<ISaveCohortProps> {
                 {localization.ErrorAnalysis.errorCoverage}
               </div>
               <div className={classNames.tableData}>
-                {`${this.props.temporaryCohort.errorCoverage.toFixed(2)}%`}
+                {`${this.props.temporaryCohort.cohortStats.errorCoverage.toFixed(
+                  2
+                )}%`}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>
               <div className={classNames.tableData}>
-                {localization.ErrorAnalysis.errorRate}
+                {localization.ErrorAnalysis.Metrics.metricName}
               </div>
               <div className={classNames.tableData}>
-                {`${this.props.temporaryCohort.errorRate.toFixed(2)}%`}
+                {this.props.temporaryCohort.cohortStats.metricName}
               </div>
             </Stack>
             <Stack tokens={alignmentStackTokens}>
               <div className={classNames.tableData}>
-                {localization.ErrorAnalysis.correctTotal}
+                {localization.ErrorAnalysis.Metrics.metricValue}
               </div>
               <div className={classNames.tableData}>
-                {`${this.props.temporaryCohort.totalCohortCorrect} / ${this.props.temporaryCohort.totalCohort}`}
+                {this.props.temporaryCohort.cohortStats.metricName ===
+                  Metrics.ErrorRate &&
+                  `${this.props.temporaryCohort.cohortStats.metricValue.toFixed(
+                    2
+                  )}%`}
+                {this.props.temporaryCohort.cohortStats.metricName !==
+                  Metrics.ErrorRate &&
+                  this.props.temporaryCohort.cohortStats.metricValue.toFixed(2)}
               </div>
             </Stack>
-            <Stack tokens={alignmentStackTokens}>
-              <div className={classNames.tableData}>
-                {localization.ErrorAnalysis.incorrectTotal}
-              </div>
-              <div className={classNames.tableData}>
-                {`${this.props.temporaryCohort.totalCohortIncorrect} / ${this.props.temporaryCohort.totalCohort}`}
-              </div>
-            </Stack>
+            {this.props.temporaryCohort.cohortStats instanceof
+              ErrorCohortStats && (
+              <Stack tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.correctTotal}
+                </div>
+                <div className={classNames.tableData}>
+                  {`${this.props.temporaryCohort.cohortStats.totalCohortCorrect} / ${this.props.temporaryCohort.cohortStats.totalCohort}`}
+                </div>
+              </Stack>
+            )}
+            {this.props.temporaryCohort.cohortStats instanceof
+              ErrorCohortStats && (
+              <Stack tokens={alignmentStackTokens}>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.incorrectTotal}
+                </div>
+                <div className={classNames.tableData}>
+                  {`${this.props.temporaryCohort.cohortStats.totalCohortIncorrect} / ${this.props.temporaryCohort.cohortStats.totalCohort}`}
+                </div>
+              </Stack>
+            )}
           </Stack>
         </div>
       </div>

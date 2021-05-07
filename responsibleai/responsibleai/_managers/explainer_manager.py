@@ -110,7 +110,7 @@ class ExplainerManager(BaseManager):
         """Creates an explanation by running the explainer on the model."""
         if self._is_run:
             return
-        model_task = ModelTask.Unknown
+        model_task = ModelTask.UNKNOWN
         explainer = MimicExplainer(self._model,
                                    self._initialization_examples,
                                    self._surrogate_model,

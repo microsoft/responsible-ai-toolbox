@@ -7,7 +7,11 @@ from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y,
                                                TRUE_Y,
                                                ROW_INDEX,
-                                               DIFF)
+                                               DIFF,
+                                               ModelTask,
+                                               Metrics,
+                                               metric_to_display_name)
+from erroranalysis._internal.metrics import metric_to_func
 
 
 BIN_THRESHOLD = 8
@@ -18,6 +22,8 @@ FALSE_COUNT = "falseCount"
 INTERVAL_MIN = "intervalMin"
 INTERVAL_MAX = "intervalMax"
 MATRIX = "matrix"
+METRIC_VALUE = "metricValue"
+METRIC_NAME = "metricName"
 VALUES = "values"
 
 
@@ -54,10 +60,26 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
         true_y = true_y.to_numpy()
     else:
         input_data = input_data.to_numpy()
-    if is_model_analyzer:
-        diff = analyzer.model.predict(input_data) != true_y
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        if analyzer.metric is None:
+            metric = Metrics.ERROR_RATE
+        else:
+            metric = analyzer.metric
     else:
-        diff = pred_y != true_y
+        if analyzer.metric is None:
+            metric = Metrics.MEAN_SQUARED_ERROR
+        else:
+            metric = analyzer.metric
+    if is_model_analyzer:
+        if analyzer.model_task == ModelTask.CLASSIFICATION:
+            diff = analyzer.model.predict(input_data) != true_y
+        else:
+            diff = analyzer.model.predict(input_data) - true_y
+    else:
+        if analyzer.model_task == ModelTask.CLASSIFICATION:
+            diff = pred_y != true_y
+        else:
+            diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     indexes = []
@@ -72,7 +94,14 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
     df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
     df_err = df.copy()
     df_err[DIFF] = diff
-    df_err = df_err[df_err[DIFF]]
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        df_err = df_err[df_err[DIFF]]
+    else:
+        df[TRUE_Y] = true_y
+        df[PRED_Y] = pred_y
+        df_err[TRUE_Y] = true_y
+        df_err[PRED_Y] = pred_y
+        df[DIFF] = diff
     # construct json matrix
     json_matrix = []
     if len(dataset_sub_names) == 2:
@@ -105,12 +134,36 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
             tabdf2_err = df_err[feat2]
             categories2 = np.unique(tabdf2.to_numpy(),
                                     return_counts=True)[0]
-        matrix_total = pd.crosstab(tabdf1, tabdf2, rownames=[feat1],
-                                   colnames=[feat2])
-        matrix_error = pd.crosstab(tabdf1_err, tabdf2_err,
-                                   rownames=[feat1], colnames=[feat2])
+        if metric == Metrics.ERROR_RATE:
+            matrix_total = pd.crosstab(tabdf1,
+                                       tabdf2,
+                                       rownames=[feat1],
+                                       colnames=[feat2])
+            matrix_error = pd.crosstab(tabdf1_err,
+                                       tabdf2_err,
+                                       rownames=[feat1],
+                                       colnames=[feat2])
+        else:
+            aggfunc = _AggFunc(metric_to_func[metric])
+            matrix_total = pd.crosstab(tabdf1,
+                                       tabdf2,
+                                       rownames=[feat1],
+                                       colnames=[feat2],
+                                       values=list(zip(df[TRUE_Y],
+                                                       df[PRED_Y])),
+                                       aggfunc=aggfunc._agg_func_pair)
+            matrix_error = pd.crosstab(tabdf1_err,
+                                       tabdf2_err,
+                                       rownames=[feat1],
+                                       colnames=[feat2],
+                                       values=list(zip(df_err[TRUE_Y],
+                                                       df_err[PRED_Y])),
+                                       aggfunc=aggfunc._agg_func_pair)
+            matrix_total = matrix_total.fillna(0)
+            matrix_error = matrix_error.fillna(0)
         json_matrix = json_matrix_2d(categories1, categories2,
-                                     matrix_total, matrix_error)
+                                     matrix_total, matrix_error,
+                                     metric)
     else:
         feat1 = dataset_sub_names[0]
         unique_count1 = len(df[feat1].unique())
@@ -141,18 +194,28 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
             val_err = cutdf_err.cat.categories[val_err]
             json_matrix = json_matrix_1d(cutdf.cat.categories,
                                          val_err, counts,
-                                         counts_err)
+                                         counts_err, metric)
         else:
             values, counts = np.unique(df[feat1].to_numpy(),
                                        return_counts=True)
             val_err, counts_err = np.unique(df_err[feat1].to_numpy(),
                                             return_counts=True)
-            json_matrix = json_matrix_1d(values, val_err, counts, counts_err)
+            json_matrix = json_matrix_1d(values, val_err, counts,
+                                         counts_err, metric)
     return json_matrix
 
 
+class _AggFunc(object):
+    def __init__(self, aggfunc):
+        self.aggfunc = aggfunc
+
+    def _agg_func_pair(self, pair):
+        true_y, pred_y = zip(*pair.values.tolist())
+        return self.aggfunc(true_y, pred_y)
+
+
 def json_matrix_2d(categories1, categories2, matrix_counts,
-                   matrix_err_counts):
+                   matrix_err_counts, metric):
     json_matrix = []
     json_category1 = []
     json_category1_min_interval = []
@@ -168,18 +231,30 @@ def json_matrix_2d(categories1, categories2, matrix_counts,
             cat2 = categories2[col_index]
             index_exists_err = cat1 in matrix_err_counts.index
             col_exists_err = cat2 in matrix_err_counts.columns
-            false_count = 0
-            if index_exists_err and col_exists_err:
-                false_count = int(matrix_err_counts.loc[cat1, cat2])
+            if metric == Metrics.ERROR_RATE:
+                false_count = 0
+                if index_exists_err and col_exists_err:
+                    false_count = int(matrix_err_counts.loc[cat1, cat2])
+            else:
+                metric_value = 0
+                if index_exists_err and col_exists_err:
+                    metric_value = float(matrix_err_counts.loc[cat1, cat2])
             index_exists = cat1 in matrix_counts.index
             col_exists = cat2 in matrix_counts.columns
             total_count = 0
             if index_exists and col_exists:
                 total_count = int(matrix_counts.loc[cat1, cat2])
-            json_matrix_row.append({
-                FALSE_COUNT: false_count,
-                COUNT: total_count
-            })
+            if metric == Metrics.ERROR_RATE:
+                json_matrix_row.append({
+                    FALSE_COUNT: false_count,
+                    COUNT: total_count
+                })
+            else:
+                json_matrix_row.append({
+                    METRIC_VALUE: metric_value,
+                    METRIC_NAME: metric_to_display_name[metric],
+                    COUNT: total_count
+                })
         json_matrix.append(json_matrix_row)
 
     json_category2 = []
@@ -200,19 +275,33 @@ def json_matrix_2d(categories1, categories2, matrix_counts,
             CATEGORY2: category2}
 
 
-def json_matrix_1d(categories, values_err, counts, counts_err):
+def json_matrix_1d(categories, values_err, counts, counts_err,
+                   metric):
     json_matrix = []
     json_matrix_row = []
     for col_idx in range(len(categories)):
         cat = categories[col_idx]
-        false_count = 0
-        if cat in values_err:
-            index_err = list(values_err).index(cat)
-            false_count = int(counts_err[index_err])
-        json_matrix_row.append({
-            FALSE_COUNT: false_count,
-            COUNT: int(counts[col_idx])
-        })
+        if metric == Metrics.ERROR_RATE:
+            false_count = 0
+            if cat in values_err:
+                index_err = list(values_err).index(cat)
+                false_count = int(counts_err[index_err])
+        else:
+            metric_value = 0
+            if cat in values_err:
+                index_err = list(values_err).index(cat)
+                metric_value = float(counts_err[index_err])
+        if metric == Metrics.ERROR_RATE:
+            json_matrix_row.append({
+                FALSE_COUNT: false_count,
+                COUNT: int(counts[col_idx])
+            })
+        else:
+            json_matrix_row.append({
+                METRIC_VALUE: metric_value,
+                METRIC_NAME: metric_to_display_name[metric],
+                COUNT: int(counts[col_idx])
+            })
     json_matrix.append(json_matrix_row)
     json_category = []
     json_category_min_interval = []

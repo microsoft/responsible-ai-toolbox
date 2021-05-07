@@ -18,10 +18,11 @@ import React from "react";
 import {
   generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
-  generateFeatures,
+  generateBreastCancerFeatures,
   generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
-  createPredictionsRequestGenerator
+  createPredictionsRequestGenerator,
+  Dataset
 } from "../error-analysis/utils";
 import {
   generateRandomMetrics,
@@ -62,7 +63,7 @@ export class App extends React.Component<IAppProps> {
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
         this.props.dataset.featureNames,
-        false
+        Dataset.BreastCancer
       ),
       requestMatrix: generateJsonMatrix,
       requestMetrics: generateRandomMetrics.bind(this),
@@ -80,12 +81,12 @@ export class App extends React.Component<IAppProps> {
       return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
     }
 
-    modelAssessmentDashboardProps.dataset.featureNames = generateFeatures();
+    modelAssessmentDashboardProps.dataset.featureNames = generateBreastCancerFeatures();
     modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
     modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
     modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
       this.props.dataset.featureNames,
-      true
+      Dataset.BreastCancer
     );
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;

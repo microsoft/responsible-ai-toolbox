@@ -634,9 +634,6 @@
     "errorCoverage": "Error coverage",
     "errorCoverageInfo": "The error coverage shows the percentage of errors that are concentrated in the selection out of all errors present in the dataset.",
     "errorCoverageTitle": "Additional information on error coverage",
-    "errorRate": "Error rate",
-    "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
-    "errorRateTitle": "Additional information on error rate",
     "globalExplanationView": "Global explanation",
     "_globalExplanationView.comment": "Global explanation view",
     "localExplanationView": "Local explanation",
@@ -703,6 +700,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "Error explorer",

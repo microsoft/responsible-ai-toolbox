@@ -6,10 +6,12 @@ import {
   IFilter,
   FilterMethods,
   CohortSource,
-  CohortStats,
   ErrorCohort,
+  ErrorCohortStats,
   ExpandableText,
-  getRandomId
+  getRandomId,
+  Metrics,
+  MetricCohortStats
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Property } from "csstype";
@@ -69,7 +71,7 @@ export interface ITreeViewRendererProps {
     compositeFilters: ICompositeFilter[],
     source: CohortSource,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
@@ -132,7 +134,12 @@ export class TreeViewRenderer extends React.PureComponent<
     const labelYOffset = 3;
 
     const rootDescendants = this.state.root.descendants();
-    const max = d3max(rootDescendants, (d) => d.data.error / d.data.size) || 0;
+    let max = 0;
+    if (rootDescendants[0].data.metricName !== Metrics.ErrorRate) {
+      max = d3max(rootDescendants, (d) => d.data.metricValue) || 0;
+    } else {
+      max = d3max(rootDescendants, (d) => d.data.error / d.data.size) || 0;
+    }
 
     if (svgOuterFrame.current) {
       const svg = select<SVGSVGElement, undefined>(svgOuterFrame.current).datum<
@@ -241,7 +248,7 @@ export class TreeViewRenderer extends React.PureComponent<
       transform: `translate(${-minX}px, ${-minY}px)`
     });
     const nodeDetail = this.state.nodeDetail;
-    const minPct = this.state.rootLocalError * errorRatioThreshold * 100;
+    const minPct = this.state.rootLocalError * errorRatioThreshold;
 
     const svgWidth = maxX - minX;
     const svgHeight = maxY - minY;
@@ -295,6 +302,7 @@ export class TreeViewRenderer extends React.PureComponent<
                         key={index}
                         node={node}
                         onSelect={this.onSelectNode}
+                        fillOffset={node.data.error / node.data.rootErrorSize}
                       />
                     );
                   })}
@@ -339,25 +347,43 @@ export class TreeViewRenderer extends React.PureComponent<
     node: IRequestNode,
     rootErrorSize: number
   ): FilterProps {
-    const errorRate = (node.error / node.size) * 100;
+    let metricValue: number;
+    if (node.metricName === Metrics.ErrorRate) {
+      metricValue = (node.error / node.size) * 100;
+    } else {
+      metricValue = node.metricValue;
+    }
     const filterProps = new FilterProps(
       node.error,
       node.size,
       rootErrorSize,
-      errorRate
+      node.metricName,
+      metricValue
     );
     return filterProps;
   }
 
-  private calculateCohortStats(node: ITreeNode): CohortStats {
-    const errorRate = (node.error / node.size) * 100;
-    const cohortStats = new CohortStats(
-      node.error,
-      node.size,
-      this.state.rootErrorSize,
-      this.state.rootSize,
-      errorRate
-    );
+  private calculateCohortStats(node: ITreeNode): MetricCohortStats {
+    let cohortStats: MetricCohortStats;
+    if (node.metricName !== Metrics.ErrorRate) {
+      cohortStats = new MetricCohortStats(
+        node.size,
+        this.state.rootSize,
+        node.metricValue,
+        node.metricName,
+        (node.error / node.rootErrorSize) * 100
+      );
+    } else {
+      const errorRate = (node.error / node.size) * 100;
+      cohortStats = new ErrorCohortStats(
+        node.error,
+        node.size,
+        this.state.rootErrorSize,
+        this.state.rootSize,
+        errorRate,
+        Metrics.ErrorRate
+      );
+    }
     return cohortStats;
   }
 
@@ -379,13 +405,19 @@ export class TreeViewRenderer extends React.PureComponent<
 
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
-      const rootLocalError = rootErrorSize / rootSize;
+      const isErrorRate = requestTreeNodes[0].metricName === Metrics.ErrorRate;
+      const rootLocalError = isErrorRate
+        ? rootErrorSize / rootSize
+        : requestTreeNodes[0].metricValue;
 
-      const min: number = rootErrorSize / rootSize;
+      const min: number = rootLocalError;
       const max: number = Math.max(
         ...requestTreeNodes.map((node) => {
           if (node.size === 0) {
             return 0;
+          }
+          if (node.metricName !== Metrics.ErrorRate) {
+            return node.metricValue;
           }
           return node.error / node.size;
         })
@@ -404,14 +436,19 @@ export class TreeViewRenderer extends React.PureComponent<
       const treeNodes = requestTreeNodes.map(
         (node): ITreeNode => {
           const globalErrorPerc = node.error / rootErrorSize;
-          const localErrorPerc = node.error / node.size;
+          let errorPerc: number;
+          if (node.metricName !== Metrics.ErrorRate) {
+            errorPerc = node.metricValue;
+          } else {
+            errorPerc = node.error / node.size;
+          }
           const calcMaskShift = globalErrorPerc * 52;
           const filterProps = this.calculateFilterProps(node, rootErrorSize);
 
           let heatmapStyle: Property.Color = errorAvgColor;
 
-          if (node.error / node.size > rootLocalError * errorRatioThreshold) {
-            heatmapStyle = colorgrad(localErrorPerc) || errorAvgColor;
+          if (errorPerc > rootLocalError * errorRatioThreshold) {
+            heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
           }
 
           return {
@@ -421,8 +458,11 @@ export class TreeViewRenderer extends React.PureComponent<
             errorColor: heatmapStyle,
             filterProps,
             id: node.id,
+            isErrorMetric: node.isErrorMetric,
             maskShift: calcMaskShift,
             method: node.method,
+            metricName: node.metricName,
+            metricValue: node.metricValue,
             nodeIndex: node.nodeIndex,
             nodeName: node.nodeName,
             nodeState: {
@@ -432,12 +472,9 @@ export class TreeViewRenderer extends React.PureComponent<
             },
             parentId: node.parentId,
             parentNodeName: node.parentNodeName,
-            pathFromRoot: node.pathFromRoot,
             r: 28,
             rootErrorSize,
-            size: node.size,
-            sourceRowKeyHash: node.sourceRowKeyHash,
-            success: node.success
+            size: node.size
           };
         }
       );
@@ -456,7 +493,7 @@ export class TreeViewRenderer extends React.PureComponent<
         nodeDetail = this.state.nodeDetail;
       } else {
         (root as any).data.isSelectedLeaf = true;
-        nodeDetail = this.getNodeDetail(root, state);
+        nodeDetail = this.getNodeDetail(root);
       }
 
       return {
@@ -474,7 +511,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(reloadDataFunc);
     // Clear filters
     const filters: IFilter[] = [];
-    let cohortStats: CohortStats | undefined = undefined;
+    let cohortStats: MetricCohortStats | undefined = undefined;
     if (this.state.root) {
       cohortStats = this.calculateCohortStats(this.state.root.data);
     }
@@ -560,7 +597,7 @@ export class TreeViewRenderer extends React.PureComponent<
       );
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
-      const nodeDetail = this.getNodeDetail(node, state);
+      const nodeDetail = this.getNodeDetail(node);
       return {
         nodeDetail,
         request: state.request,
@@ -577,20 +614,11 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState(updateSelectedFunc);
   };
 
-  private getNodeDetail(
-    node: HierarchyPointNode<ITreeNode>,
-    state: ITreeViewRendererState
-  ): INodeDetail {
+  private getNodeDetail(node: HierarchyPointNode<ITreeNode>): INodeDetail {
     const nodeDetail = {
       errorColor: node.data.errorColor,
-      errorInfo: `${node.data.error} Error`,
-      globalError: ((node.data.error / state.rootErrorSize) * 100).toFixed(2),
-      instanceInfo: `${node.data.size} Instances`,
-      localError: ((node.data.error / node.data.size) * 100).toFixed(2),
       maskDown: { transform: `translate(0px, -${node.data.maskShift}px)` },
-      maskUp: { transform: `translate(0px, ${node.data.maskShift}px)` },
-      showSelected: { opacity: 1 },
-      successInfo: `${node.data.success} Success`
+      maskUp: { transform: `translate(0px, ${node.data.maskShift}px)` }
     };
     return nodeDetail;
   }

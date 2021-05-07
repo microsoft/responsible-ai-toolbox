@@ -100,6 +100,7 @@ export const applications: IApplications = <const>{
   errorAnalysis: {
     datasets: {
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
+      bostonData: { classDimension: 1, data: bostonData },
       breastCancerData: { classDimension: 2, data: breastCancerData }
     },
     versions: { "Live-Debug": 3, "Static-View": 2, "Version-1": 1 }

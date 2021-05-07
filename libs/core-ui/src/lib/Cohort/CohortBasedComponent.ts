@@ -8,7 +8,7 @@ import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
 import { JointDataset } from "../util/JointDataset";
 
 import { Cohort, CohortSource } from "./Cohort";
-import { CohortStats } from "./CohortStats";
+import { MetricCohortStats } from "./CohortStats";
 import { ErrorCohort } from "./ErrorCohort";
 
 export interface ICohortBasedComponentProps {
@@ -34,7 +34,7 @@ export abstract class CohortBasedComponent<
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ): void => {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(

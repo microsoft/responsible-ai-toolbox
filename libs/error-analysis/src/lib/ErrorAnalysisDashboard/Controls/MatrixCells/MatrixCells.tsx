@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Metrics } from "@responsible-ai/core-ui";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import {
@@ -44,10 +45,21 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
         ? classNames.matrixRow
         : classNames.matrixCol;
 
+    let totalError = 0;
     let falseCount = 0;
+    let maxMetricValue = 0;
+    let metricName: string;
     this.props.jsonMatrix.matrix.forEach((row: any) => {
       row.forEach((value: any) => {
-        falseCount += value.falseCount;
+        if ("falseCount" in value) {
+          falseCount += value.falseCount;
+        } else if ("metricValue" in value) {
+          metricName = value.metricName;
+          if (value.metricName === Metrics.MeanSquaredError) {
+            totalError += value.metricValue * value.count;
+            maxMetricValue = Math.max(maxMetricValue, value.metricValue);
+          }
+        }
       });
     });
     const matrixLength = this.props.jsonMatrix.matrix.length;
@@ -57,7 +69,14 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           let errorRatio = 0;
           let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
           if (value.count > 0) {
-            errorRatio = (value.falseCount / value.count) * 100;
+            if ("falseCount" in value) {
+              errorRatio = (value.falseCount / value.count) * 100;
+            } else {
+              metricName = value.metricName;
+              if (value.metricName === Metrics.MeanSquaredError) {
+                errorRatio = (value.metricValue / maxMetricValue) * 100;
+              }
+            }
             const bkgcolor = this.colorLookup(errorRatio);
             const color = this.textColorForBackground(bkgcolor);
             styledGradientMatrixCell = mergeStyles([
@@ -82,11 +101,24 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
               classNames.selectedMatrixCell
             ]);
           }
+          let error: number;
+          let baseError: number;
+          let metricValue: number;
+          if ("falseCount" in value) {
+            metricValue = errorRatio;
+            error = value.falseCount;
+            baseError = falseCount;
+          } else {
+            metricValue = value.metricValue;
+            error = value.metricValue * value.count;
+            baseError = totalError;
+          }
           const filterProps = new FilterProps(
-            value.falseCount,
+            error,
             value.count,
-            falseCount,
-            errorRatio
+            baseError,
+            metricName,
+            metricValue
           );
           const tooltipProps: ITooltipProps = {
             onRenderContent: () => (
