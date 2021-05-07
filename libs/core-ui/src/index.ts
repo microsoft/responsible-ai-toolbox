@@ -3,6 +3,7 @@
 
 export * from "./lib/cohortKey";
 export * from "./lib/Cohort/Cohort";
+export * from "./lib/Cohort/Constants";
 export * from "./lib/Cohort/ErrorCohort";
 export * from "./lib/Cohort/CohortStats";
 export * from "./lib/Cohort/CohortBasedComponent";

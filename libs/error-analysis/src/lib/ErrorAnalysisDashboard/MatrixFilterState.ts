@@ -4,7 +4,7 @@
 import { noFeature } from "./Constants";
 
 export interface IMatrixLegendState {
-  maxError: number;
+  maxMetricValue: number;
 }
 
 export interface IMatrixFilterState {
@@ -15,7 +15,7 @@ export interface IMatrixFilterState {
 
 export interface IMatrixAreaState {
   jsonMatrix?: any;
-  maxErrorRate: number;
+  maxMetricValue: number;
   selectedCells?: boolean[];
   matrixFeature1: string;
   matrixFeature2: string;
@@ -25,7 +25,7 @@ export interface IMatrixAreaState {
 
 export function createInitialMatrixFilterState(): IMatrixFilterState {
   return {
-    matrixLegendState: { maxError: 0 },
+    matrixLegendState: { maxMetricValue: 0 },
     selectedFeature1: noFeature,
     selectedFeature2: noFeature
   };
@@ -38,7 +38,7 @@ export function createInitialMatrixAreaState(): IMatrixAreaState {
     jsonMatrix: undefined,
     matrixFeature1: noFeature,
     matrixFeature2: noFeature,
-    maxErrorRate: 0,
+    maxMetricValue: 0,
     selectedCells: undefined
   };
 }

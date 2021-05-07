@@ -11,11 +11,17 @@ from erroranalysis._internal.matrix_filter import compute_json_matrix
 from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
 from erroranalysis._internal.error_report import ErrorReport
+from erroranalysis._internal.constants import ModelTask
 
 
 class BaseAnalyzer(ABC):
-    def __init__(self, dataset, true_y, feature_names,
-                 categorical_features):
+    def __init__(self,
+                 dataset,
+                 true_y,
+                 feature_names,
+                 categorical_features,
+                 model_task,
+                 metric):
         self._dataset = self._make_pandas_copy(dataset)
         self._true_y = true_y
         self._categorical_features = categorical_features
@@ -25,6 +31,8 @@ class BaseAnalyzer(ABC):
         self._categories = []
         self._categorical_indexes = []
         self._category_dictionary = {}
+        self._model_task = model_task
+        self._metric = metric
         if self._categorical_features:
             self._categorical_indexes = [feature_names.index(feature)
                                          for feature
@@ -72,6 +80,14 @@ class BaseAnalyzer(ABC):
     @property
     def true_y(self):
         return self._true_y
+
+    @property
+    def model_task(self):
+        return self._model_task
+
+    @property
+    def metric(self):
+        return self._metric
 
     def compute_matrix(self, features, filters, composite_filters):
         return compute_json_matrix(self, features, filters, composite_filters)
@@ -130,11 +146,28 @@ class BaseAnalyzer(ABC):
 
 
 class ModelAnalyzer(BaseAnalyzer):
-    def __init__(self, model, dataset, true_y, feature_names,
-                 categorical_features):
+    def __init__(self,
+                 model,
+                 dataset,
+                 true_y,
+                 feature_names,
+                 categorical_features,
+                 model_task=ModelTask.UNKNOWN,
+                 metric=None):
         self._model = model
-        super(ModelAnalyzer, self).__init__(dataset, true_y, feature_names,
-                                            categorical_features)
+        if model_task == ModelTask.UNKNOWN:
+            # Try to automatically infer the model task
+            predict_proba_flag = hasattr(model, 'predict_proba')
+            if predict_proba_flag:
+                model_task = ModelTask.CLASSIFICATION
+            else:
+                model_task = ModelTask.REGRESSION
+        super(ModelAnalyzer, self).__init__(dataset,
+                                            true_y,
+                                            feature_names,
+                                            categorical_features,
+                                            model_task,
+                                            metric)
 
     @property
     def model(self):
@@ -145,12 +178,24 @@ class ModelAnalyzer(BaseAnalyzer):
 
 
 class PredictionsAnalyzer(BaseAnalyzer):
-    def __init__(self, pred_y, dataset, true_y, feature_names,
-                 categorical_features):
+    def __init__(self,
+                 pred_y,
+                 dataset,
+                 true_y,
+                 feature_names,
+                 categorical_features,
+                 model_task=ModelTask.CLASSIFICATION,
+                 metric=None):
         self._pred_y = pred_y
-        super(PredictionsAnalyzer, self).__init__(dataset, true_y,
+        if model_task == ModelTask.UNKNOWN:
+            raise ValueError(
+                "ModelTask cannot be 'unknown' when passing predictions")
+        super(PredictionsAnalyzer, self).__init__(dataset,
+                                                  true_y,
                                                   feature_names,
-                                                  categorical_features)
+                                                  categorical_features,
+                                                  model_task,
+                                                  metric)
 
     @property
     def pred_y(self):

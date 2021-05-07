@@ -6,7 +6,7 @@ import {
   ICompositeFilter,
   CohortSource,
   ErrorCohort,
-  CohortStats
+  MetricCohortStats
 } from "@responsible-ai/core-ui";
 import {
   ComboBox,
@@ -35,7 +35,7 @@ export interface IMatrixFilterProps {
     compositeFilters: ICompositeFilter[],
     source: CohortSource,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
@@ -97,7 +97,7 @@ export class MatrixFilter extends React.PureComponent<
           <MatrixLegend
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
-            max={this.state.matrixLegendState.maxError}
+            max={this.state.matrixLegendState.maxMetricValue}
           />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
@@ -182,7 +182,7 @@ export class MatrixFilter extends React.PureComponent<
     }
   };
 
-  private updateMatrixLegendState = (maxError: number): void => {
-    this.setState({ matrixLegendState: { maxError } });
+  private updateMatrixLegendState = (maxMetricValue: number): void => {
+    this.setState({ matrixLegendState: { maxMetricValue } });
   };
 }
