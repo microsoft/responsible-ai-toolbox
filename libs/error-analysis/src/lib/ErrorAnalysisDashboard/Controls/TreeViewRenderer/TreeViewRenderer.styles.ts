@@ -25,7 +25,6 @@ export interface ITreeViewRendererStyles {
   nopointer: IStyle;
   svgOuterFrame: IStyle;
   treeDescription: IStyle;
-  tooltipTransitionGroup: IStyle;
 }
 
 export const treeViewRendererStyles: () => IProcessedStyleSet<
@@ -108,12 +107,9 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       pointerEvents: "none"
     },
     svgOuterFrame: {
-      margin: "0",
-      padding: "0",
-      width: "100%"
-    },
-    tooltipTransitionGroup: {
-      transform: "translate(40px, 90px)"
+      margin: 0,
+      padding: 0,
+      width: "auto"
     },
     treeDescription: {
       padding: "30px 0px 0px 35px"

@@ -21,9 +21,13 @@ import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
-import { IProcessedStyleSet, ITheme, Stack } from "office-ui-fabric-react";
+import {
+  getId,
+  IProcessedStyleSet,
+  ITheme,
+  Stack
+} from "office-ui-fabric-react";
 import React from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
@@ -88,7 +92,6 @@ export interface ISVGDatum {
 }
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
-const treeZoomPane: React.RefObject<SVGSVGElement> = React.createRef();
 const errorAvgColor = ColorPalette.ErrorAvgColor;
 const errorRatioThreshold = 1;
 
@@ -161,7 +164,7 @@ export class TreeViewRenderer extends React.PureComponent<
         const linkVerticalD = linkVertical({ source: d.parent, target: d });
         return {
           d: linkVerticalD || "",
-          id: id + Math.random(),
+          id: id + getId(),
           style: { fill: "white", stroke: lineColor, strokeWidth: thick }
         };
       });
@@ -177,8 +180,8 @@ export class TreeViewRenderer extends React.PureComponent<
         (d: HierarchyPointNode<ITreeNode>) => d.data.nodeState.onSelectedPath
       )
       .map((d: HierarchyPointNode<ITreeNode>) => {
-        const labelX = d.x + (d.parent?.x || 0 - d.x) * 0.5;
-        const labelY = 4 + d.y + (d.parent?.y || 0 - d.y) * 0.5;
+        const labelX = d.x + (d.parent?.x ? (d.parent.x - d.x) * 0.5 : 0);
+        const labelY = 4 + d.y + (d.parent?.x ? (d.parent.y - d.y) * 0.5 : 0);
         let bb: DOMRect;
         try {
           bb = this.getTextBB(d.data.condition, classNames);
@@ -254,92 +257,55 @@ export class TreeViewRenderer extends React.PureComponent<
               id="svgOuterFrame"
               viewBox="0 0 952 1100"
             >
-              <mask id="Mask">
-                <rect
-                  className="nodeMask"
-                  x="-26"
-                  y="-26"
-                  width="52"
-                  height="52"
-                  fill="white"
-                />
-              </mask>
-
-              <g ref={treeZoomPane}>
-                {/* Tree */}
-                <TransitionGroup
-                  component="g"
-                  className={classNames.linksTransitionGroup}
-                >
-                  {links.map((link) => (
-                    <CSSTransition
-                      key={link.id}
-                      in={true}
-                      timeout={200}
-                      className="links"
-                    >
-                      <path
-                        key={link.id}
-                        id={link.id}
-                        d={link.d}
-                        style={link.style}
-                      />
-                    </CSSTransition>
-                  ))}
-                </TransitionGroup>
-                <g className={classNames.nodesGroup}>
-                  {nodeData.map((node, index) => {
-                    return (
-                      <TreeViewNode
-                        key={index}
-                        node={node}
-                        onSelect={this.onSelectNode}
-                      />
-                    );
-                  })}
-                </g>
-                <TransitionGroup
-                  component="g"
-                  className={classNames.linkLabelsTransitionGroup}
-                >
-                  {linkLabels.map((linkLabel) => (
-                    <CSSTransition
-                      key={linkLabel.id}
-                      in={true}
-                      timeout={200}
-                      className="linkLabels"
-                    >
-                      <g
-                        key={linkLabel.id}
-                        style={linkLabel.style}
-                        pointerEvents="none"
-                      >
-                        <rect
-                          x={-linkLabel.bbX}
-                          y={-linkLabel.bbY}
-                          width={linkLabel.bbWidth}
-                          height={linkLabel.bbHeight}
-                          fill="white"
-                          stroke={ColorPalette.LinkLabelOutline}
-                          strokeWidth="1px"
-                          rx="10"
-                          ry="10"
-                          pointerEvents="none"
-                        />
-                        <text
-                          className={classNames.linkLabel}
-                          pointerEvents="none"
-                        >
-                          {linkLabel.text}
-                        </text>
-                      </g>
-                    </CSSTransition>
-                  ))}
-                </TransitionGroup>
+              <g className={classNames.linksTransitionGroup}>
+                {links.map((link) => (
+                  <path
+                    key={link.id}
+                    id={link.id}
+                    d={link.d}
+                    style={link.style}
+                  />
+                ))}
+              </g>
+              <g className={classNames.nodesGroup}>
+                {nodeData.map((node, index) => {
+                  return (
+                    <TreeViewNode
+                      key={index}
+                      node={node}
+                      onSelect={this.onSelectNode}
+                    />
+                  );
+                })}
+              </g>
+              <g className={classNames.linkLabelsTransitionGroup}>
+                {linkLabels.map((linkLabel) => (
+                  <g
+                    key={linkLabel.id}
+                    style={linkLabel.style}
+                    pointerEvents="none"
+                  >
+                    <rect
+                      x={-linkLabel.bbX}
+                      y={-linkLabel.bbY}
+                      width={linkLabel.bbWidth}
+                      height={linkLabel.bbHeight}
+                      fill="white"
+                      stroke={ColorPalette.LinkLabelOutline}
+                      strokeWidth="1px"
+                      rx="10"
+                      ry="10"
+                      pointerEvents="none"
+                    />
+                    <text className={classNames.linkLabel} pointerEvents="none">
+                      {linkLabel.text}
+                    </text>
+                  </g>
+                ))}
               </g>
             </svg>
           </Stack>
-        </Stack.Item>{" "}
+        </Stack.Item>
       </Stack>
     );
   }
@@ -459,7 +425,7 @@ export class TreeViewRenderer extends React.PureComponent<
           let heatmapStyle: { fill: string } = { fill: errorAvgColor };
 
           if (node.error / node.size > rootLocalError * errorRatioThreshold) {
-            heatmapStyle = { fill: colorgrad(localErrorPerc)! };
+            heatmapStyle = { fill: colorgrad(localErrorPerc) };
           }
 
           return {
