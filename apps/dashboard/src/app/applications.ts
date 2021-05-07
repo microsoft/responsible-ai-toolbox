@@ -6,7 +6,8 @@ import {
   ISerializedExplanationData,
   IFairnessData,
   IModelExplanationData,
-  IDataset
+  IDataset,
+  ICasualAnalysisData
 } from "@responsible-ai/core-ui";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
@@ -34,7 +35,8 @@ import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
 import {
   adultCensusWithFairnessDataset,
-  adultCensusWithFairnessModelExplanationData
+  adultCensusWithFairnessModelExplanationData,
+  adultCensusCasualAnalysisData
 } from "../model-assessment/__mock_data__/adultCensus";
 
 export interface IInterpretDataSet {
@@ -52,6 +54,7 @@ export interface IErrorAnalysisDataSet {
 }
 
 export interface IModelAssessmentDataSet {
+  casualAnalysisData: ICasualAnalysisData;
   dataset: IDataset;
   modelExplanationData: IModelExplanationData;
   classDimension?: 1 | 2 | 3;
@@ -139,6 +142,7 @@ export const applications: IApplications = <const>{
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
+        casualAnalysisData: adultCensusCasualAnalysisData,
         classDimension: 2,
         dataset: adultCensusWithFairnessDataset,
         modelExplanationData: adultCensusWithFairnessModelExplanationData

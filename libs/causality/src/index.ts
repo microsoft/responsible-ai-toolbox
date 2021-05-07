@@ -1,4 +1,4 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export * from "./lib/CausalInsightsTab";
+export * from "./lib/CasualAnalysisDashboard/CausalInsightsTab";

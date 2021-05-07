@@ -8,7 +8,7 @@ import {
   ModelAssessmentContext,
   ErrorCohort
 } from "@responsible-ai/core-ui";
-import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
+// import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisViewTab,
@@ -91,12 +91,15 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <Stack>
             {this.state.activeGlobalTabs[0]?.key !==
               GlobalTabKeys.ErrorAnalysisTab && (
-              <div className={modelAssessmentDashboardStyles.section}>
+              <Stack.Item className={modelAssessmentDashboardStyles.section}>
                 <AddTabButton tabIndex={0} onAdd={this.addTab} />
-              </div>
+              </Stack.Item>
             )}
             {this.state.activeGlobalTabs.map((t, i) => (
-              <div key={i} className={modelAssessmentDashboardStyles.section}>
+              <Stack.Item
+                key={i}
+                className={modelAssessmentDashboardStyles.section}
+              >
                 {t.key === GlobalTabKeys.ErrorAnalysisTab && (
                   <ErrorAnalysisViewTab
                     messages={
@@ -145,7 +148,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   <ModelPerformanceTab />
                 )}
                 {t.key === GlobalTabKeys.DataExplorerTab && (
-                  <DatasetExplorerTab />
+                  <DatasetExplorerTab showCohortSelection={false} />
                 )}
                 {t.key === GlobalTabKeys.GlobalExplanationTab && (
                   <GlobalExplanationTab
@@ -187,14 +190,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   />
                 )}
                 {t.key === GlobalTabKeys.CausalAnalysisTab && (
-                  <CausalInsightsTab />
+                  <CausalInsightsTab data={this.props.casualAnalysisData} />
                 )}
-
+                {/* 
                 {t.key === GlobalTabKeys.CounterfactualsTab && (
                   <CounterfactualsTab />
-                )}
+                )} */}
                 <AddTabButton tabIndex={i + 1} onAdd={this.addTab} />
-              </div>
+              </Stack.Item>
             ))}
           </Stack>
         </div>
