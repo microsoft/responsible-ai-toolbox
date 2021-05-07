@@ -5162,7 +5162,7 @@
         <Str Cat="Text">
           <Val><![CDATA[What-If is currently not supported in studio. Run this widget in a jupyter notebook to enable What-If.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La simulation n’est actuellement pas prise en charge dans le studio. Exécutez ce widget dans un bloc-notes de jupyter pour activer les simulations.]]></Val>
+            <Val><![CDATA[La simulation n’est actuellement pas prise en charge dans le studio. Exécutez ce widget dans un bloc-notes Jupyter pour activer les simulations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5252,7 +5252,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Toggle datapoints on and off in the plot by clicking on the legend items.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Basculez des points de données dans le traçage en cliquant sur les éléments de la légende.]]></Val>
+            <Val><![CDATA[Basculez des points de données dans le tracé en cliquant sur les éléments de la légende.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5360,7 +5360,7 @@
         <Str Cat="Text">
           <Val><![CDATA[What-If datapoint name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nom de points de données de simulation]]></Val>
+            <Val><![CDATA[Nom de point de données de simulation]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5414,7 +5414,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Dataset exploration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exploration des dataset]]></Val>
+            <Val><![CDATA[Exploration des jeux de données]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5577,6 +5577,150 @@
           <Val><![CDATA[Summary importance]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Importance combinée]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.AddingTab.AddButtonText" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.AddingTab.CalloutContent" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L’ajout de certains composants (arborescence d’erreurs, carte thermique d’erreur) vous permettra de filtrer les données du système global que vous voyez dans les composants ci-dessous.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.AddingTab.CalloutTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add component]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter un composant]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.CausalAnalysis" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Causal analysis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Analyse causale]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.Counterfactuals" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Counterfactuals]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Contrefactuels]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.DataExplorer" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Data explorer]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Explorateur de données]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.ErrorAnalysis" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Error analysis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Analyse des erreurs]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.Fairness" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fairness]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Justesse]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.GlobalExplanation" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Global explanation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Explication globale]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.LocalExplanation" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Local explanation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Explication locale]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.ModelStatistics" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Model statistics]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Statistiques du modèle]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.Content" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cette liste affiche la disposition du tableau de bord. Chaque composant balisé avec l’identification peut filtrer les données à afficher dans les composants sous-éléments. Vous pouvez ajouter des composants, les glisser-déposer pour réorganiser le flux ou supprimer des composants.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.DashboardComponents" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dashboard components]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Composants du tableau de bord]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.DataPoints" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Number of datapoints]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre de points de données]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.Title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dashboard layout]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Disposition du tableau de bord]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.DashboardSettings" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dashboard settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Paramètres de tableau de bord]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
