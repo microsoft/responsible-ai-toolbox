@@ -8,10 +8,12 @@ import {
   Dropdown,
   IconButton,
   IDropdownOption,
-  PrimaryButton
+  PrimaryButton,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { addTabButtonStyles } from "./AddTabButton.styles";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 export interface IAddTabButtonProps {
   tabIndex: number;
@@ -61,12 +63,15 @@ export class AddTabButton extends React.Component<
     };
   }
   public render(): React.ReactNode {
+    const style = addTabButtonStyles();
     return (
       <>
+        <div className={style.splitter} />
         <IconButton
           id={this.buttonId}
           iconProps={{ iconName: "CircleAdditionSolid" }}
           onClick={this.toggleIsCalloutVisible}
+          className={style.button}
         />
         {this.state.isCalloutVisible && (
           <Callout
@@ -74,13 +79,19 @@ export class AddTabButton extends React.Component<
             onDismiss={this.toggleIsCalloutVisible}
             role="status"
             aria-live="assertive"
+            className={style.callout}
           >
-            {localization.ModelAssessment.AddingTab.CalloutContent}
-            <Dropdown options={this.dropdownOptions} onChange={this.onChange} />
-            <PrimaryButton
-              onClick={this.addTab}
-              text={localization.ModelAssessment.AddingTab.AddButtonText}
-            />
+            <Stack tokens={{ childrenGap: "l1" }}>
+              {localization.ModelAssessment.AddingTab.CalloutContent}
+              <Dropdown
+                options={this.dropdownOptions}
+                onChange={this.onChange}
+              />
+              <PrimaryButton
+                onClick={this.addTab}
+                text={localization.ModelAssessment.AddingTab.AddButtonText}
+              />
+            </Stack>
           </Callout>
         )}
       </>
