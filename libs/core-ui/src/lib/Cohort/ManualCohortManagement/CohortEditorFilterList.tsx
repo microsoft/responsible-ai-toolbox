@@ -11,6 +11,7 @@ import {
   TooltipOverflowMode
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { JointDataset } from "../../util/JointDataset";
 

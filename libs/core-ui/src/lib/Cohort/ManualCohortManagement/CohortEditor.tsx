@@ -17,6 +17,7 @@ import {
   IChoiceGroupOption
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
+
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
@@ -35,7 +36,7 @@ export interface ICohortEditorProps {
   onSave: (newCohort: Cohort) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
 }
 
 export interface ICohortEditorState {
@@ -204,7 +205,9 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private deleteCohort = (): void => {
-    this.props.onDelete();
+    if (this.props.onDelete) {
+      this.props.onDelete();
+    }
   };
 
   private readonly onCancelClick = () => {

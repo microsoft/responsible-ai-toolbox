@@ -12,6 +12,7 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { ICohort } from "../../Interfaces/ICohort";
 import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
 import { JointDataset } from "../../util/JointDataset";

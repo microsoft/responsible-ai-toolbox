@@ -9,7 +9,11 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-import { IExplanationModelMetadata, ModelTypes } from "../../Interfaces/IExplanationContext";
+
+import {
+  IExplanationModelMetadata,
+  ModelTypes
+} from "../../Interfaces/IExplanationContext";
 import { JointDataset } from "../../util/JointDataset";
 import { limitStringLength } from "../../util/string";
 import { Cohort } from "../Cohort";

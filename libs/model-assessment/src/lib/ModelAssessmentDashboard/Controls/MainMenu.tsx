@@ -152,7 +152,6 @@ export class MainMenu extends React.PureComponent<
             onSave={this.saveManuallyCreatedCohort}
             closeCohortEditor={this.toggleCohortEditor}
             closeCohortEditorPanel={this.toggleCohortEditor}
-            onDelete={() => {}}
           />
         )}
         <SaveCohort
@@ -259,7 +258,7 @@ export class MainMenu extends React.PureComponent<
   };
 
   private saveManuallyCreatedCohort = (manuallyCreatedCohort: Cohort): void => {
-    let newErrorCohort = new ErrorCohort(
+    const newErrorCohort = new ErrorCohort(
       manuallyCreatedCohort,
       this.context.jointDataset,
       0,
