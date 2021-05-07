@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
+  CohortEditor,
   CohortInfo,
   CohortList,
+  CohortSource,
   defaultModelAssessmentContext,
   EditCohort,
   ErrorCohort,
@@ -34,6 +37,7 @@ export interface IMainMenuProps {
 interface IMainMenuState {
   infoPanelVisible: boolean;
   cohortListPanelVisible: boolean;
+  createCohortVisible: boolean;
   editCohortVisible: boolean;
   mapShiftVisible: boolean;
   saveCohortVisible: boolean;
@@ -43,7 +47,6 @@ interface IMainMenuState {
 }
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
-const infoIcon: IIconProps = { iconName: "Info" };
 
 const buttonStyle: IButtonStyles = {
   root: { padding: "0px 4px" }
@@ -74,30 +77,35 @@ export class MainMenu extends React.PureComponent<
               iconProps: { iconName: "Import" },
               key: "shiftCohort",
               onClick: this.toggleShiftCohort,
-              text: localization.ErrorAnalysis.MainMenu.shiftCohort
+              text: localization.ModelAssessment.MainMenu.shiftCohort
             },
             {
               iconProps: { iconName: "Save" },
               key: "saveCohort",
               onClick: this.toggleSaveCohort,
-              text: localization.ErrorAnalysis.MainMenu.saveCohort
+              text: localization.ModelAssessment.MainMenu.saveCohort
             },
             {
               iconProps: { iconName: "PageList" },
               key: "cohortList",
               onClick: this.toggleCohortListPanel,
-              text: localization.ErrorAnalysis.MainMenu.cohortList
+              text: localization.ModelAssessment.MainMenu.cohortList
+            },
+            {
+              iconProps: { iconName: "Add" },
+              key: "createCohort",
+              onClick: this.toggleCohortEditor,
+              text: localization.ModelAssessment.MainMenu.createCohort
+            },
+            {
+              iconProps: { iconName: "Info" },
+              key: "cohortInfo",
+              onClick: this.toggleInfoPanel,
+              text: localization.ModelAssessment.MainMenu.cohortInfo
             }
           ]
         },
-        text: localization.ErrorAnalysis.MainMenu.cohortSettings
-      },
-      {
-        buttonStyles: buttonStyle,
-        iconProps: infoIcon,
-        key: "cohortInfo",
-        onClick: this.toggleInfoPanel,
-        text: localization.ErrorAnalysis.MainMenu.cohortInfo
+        text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
         buttonStyles: buttonStyle,
@@ -132,6 +140,21 @@ export class MainMenu extends React.PureComponent<
           onDismiss={this.toggleCohortListPanel}
           onEditCohortClick={this.openEditCohort}
         />
+        {this.state.createCohortVisible && (
+          <CohortEditor
+            // We're only using it for new cohorts here, so we can
+            // ignore cases such as deletion or editing cohorts.
+            jointDataset={this.context.jointDataset}
+            filterList={this.context.selectedErrorCohort.cohort.filters}
+            cohortName={this.context.selectedErrorCohort.cohort.name}
+            isNewCohort={true}
+            deleteIsDisabled={true}
+            onSave={this.saveManuallyCreatedCohort}
+            closeCohortEditor={this.toggleCohortEditor}
+            closeCohortEditorPanel={this.toggleCohortEditor}
+            onDelete={() => {}}
+          />
+        )}
         <SaveCohort
           isOpen={this.state.saveCohortVisible}
           onDismiss={this.toggleSaveCohort}
@@ -164,14 +187,22 @@ export class MainMenu extends React.PureComponent<
 
   private toggleInfoPanel = () =>
     this.setState((prev) => ({ infoPanelVisible: !prev.infoPanelVisible }));
+
   private toggleCohortListPanel = () =>
     this.setState((prev) => ({
       cohortListPanelVisible: !prev.cohortListPanelVisible
     }));
 
+  private toggleCohortEditor = () =>
+    this.setState((prev) => ({
+      createCohortVisible: !prev.createCohortVisible
+    }));
+
   private openEditCohort = (editedCohort: ErrorCohort) =>
     this.setState({ editCohortVisible: true, editedCohort });
+
   private closeEditCohort = () => this.setState({ editCohortVisible: true });
+
   private saveEditCohort = (
     originalCohort: ErrorCohort,
     editedCohort: ErrorCohort
@@ -185,6 +216,7 @@ export class MainMenu extends React.PureComponent<
     }
     this.context.updateErrorCohorts([editedCohort, ...cohorts], selectedCohort);
   };
+
   private deleteEditCohort = (deletedCohort: ErrorCohort): void => {
     const cohorts = this.context.errorCohorts.filter(
       (errorCohort) => errorCohort.cohort.name !== deletedCohort.cohort.name
@@ -219,9 +251,23 @@ export class MainMenu extends React.PureComponent<
       selectedCohort
     );
   };
+
   private saveCohort = (savedCohort: ErrorCohort): void => {
     let newCohorts = [savedCohort, ...this.context.errorCohorts];
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
     this.context.updateErrorCohorts(newCohorts, savedCohort);
+  };
+
+  private saveManuallyCreatedCohort = (manuallyCreatedCohort: Cohort): void => {
+    let newErrorCohort = new ErrorCohort(
+      manuallyCreatedCohort,
+      this.context.jointDataset,
+      0,
+      CohortSource.ManuallyCreated
+    );
+    let newCohorts = [...this.context.errorCohorts, newErrorCohort];
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.context.updateErrorCohorts(newCohorts, newErrorCohort, newErrorCohort);
+    this.toggleCohortEditor();
   };
 }

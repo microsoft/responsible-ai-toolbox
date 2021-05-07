@@ -10,6 +10,7 @@ export * from "./lib/Cohort/CohortInfo/CohortInfo";
 export * from "./lib/Cohort/CohortList/CohortList";
 export * from "./lib/Cohort/EditCohort/EditCohort";
 export * from "./lib/Cohort/ManualCohortManagement/CohortBar";
+export * from "./lib/Cohort/ManualCohortManagement/CohortEditor";
 export * from "./lib/Cohort/PredictionPath/PredictionPath";
 export * from "./lib/Cohort/SaveCohort/SaveCohort";
 export * from "./lib/Cohort/ShiftCohort/ShiftCohort";
