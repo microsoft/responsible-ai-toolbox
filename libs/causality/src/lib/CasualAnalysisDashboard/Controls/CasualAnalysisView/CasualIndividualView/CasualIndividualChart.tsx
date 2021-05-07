@@ -6,7 +6,6 @@ import {
   ColumnCategories,
   JointDataset,
   Cohort,
-  ModelExplanationUtils,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
@@ -29,7 +28,9 @@ import {
   getTheme,
   Text,
   DefaultButton,
-  IDropdownOption
+  IDropdownOption,
+  ComboBox,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -48,17 +49,10 @@ export interface ICasualIndividualChartState {
   selectedWhatIfRootIndex: number;
   selectedCohortIndex: number;
   featuresOption: IDropdownOption[];
-  filteredFeatureList: IDropdownOption[];
-  request?: AbortController;
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  topK: number;
-  sortArray: number[];
-  sortingSeriesIndex: number | undefined;
   selectedFeatureKey: string;
-  crossClassInfoVisible: boolean;
-  iceTooltipVisible: boolean;
 }
 
 export class CasualIndividualChart extends React.PureComponent<
@@ -81,20 +75,13 @@ export class CasualIndividualChart extends React.PureComponent<
     super(props);
 
     this.state = {
-      crossClassInfoVisible: false,
       customPointIsActive: [],
       featuresOption: [],
-      filteredFeatureList: [],
-      iceTooltipVisible: false,
       pointIsActive: [],
-      request: undefined,
       selectedCohortIndex: 0,
       selectedFeatureKey: JointDataset.DataLabelRoot + "0",
       selectedPointsIndexes: [],
       selectedWhatIfRootIndex: 0,
-      sortArray: [],
-      sortingSeriesIndex: undefined,
-      topK: 4,
       xDialogOpen: false,
       yDialogOpen: false
     };
@@ -125,8 +112,7 @@ export class CasualIndividualChart extends React.PureComponent<
 
     this.setState({
       chartProps: this.generateDefaultChartAxes(),
-      featuresOption,
-      filteredFeatureList: featuresOption
+      featuresOption
     });
   }
 
@@ -137,8 +123,6 @@ export class CasualIndividualChart extends React.PureComponent<
     if (!this.state) {
       return;
     }
-    let sortingSeriesIndex = this.state.sortingSeriesIndex;
-    let sortArray = this.state.sortArray;
     const selectionsAreEqual = _.isEqual(
       this.state.selectedPointsIndexes,
       prevState.selectedPointsIndexes
@@ -174,21 +158,6 @@ export class CasualIndividualChart extends React.PureComponent<
           };
         }
       );
-      if (
-        this.state.sortingSeriesIndex === undefined ||
-        !this.state.selectedPointsIndexes.includes(
-          this.state.sortingSeriesIndex
-        )
-      ) {
-        if (this.state.selectedPointsIndexes.length !== 0) {
-          sortingSeriesIndex = 0;
-          sortArray = ModelExplanationUtils.getSortIndices(
-            this.selectedFeatureImportance[0].unsortedAggregateY
-          ).reverse();
-        } else {
-          sortingSeriesIndex = undefined;
-        }
-      }
     }
     if (
       !selectionsAreEqual ||
@@ -197,7 +166,6 @@ export class CasualIndividualChart extends React.PureComponent<
     ) {
       this.forceUpdate();
     }
-    this.setState({ sortArray, sortingSeriesIndex });
   }
 
   public render(): React.ReactNode {
@@ -290,7 +258,7 @@ export class CasualIndividualChart extends React.PureComponent<
             {canRenderChart && (
               <AccessibleChart
                 plotlyProps={plotlyProps}
-                theme={getTheme() as any}
+                theme={getTheme()}
                 onClickHandler={this.selectPointFromChart}
               />
             )}
@@ -298,51 +266,69 @@ export class CasualIndividualChart extends React.PureComponent<
           <div className={classNames.horizontalAxisWithPadding}>
             <div className={classNames.paddingDiv}></div>
             <div className={classNames.horizontalAxis}>
-              <div>
-                <DefaultButton
-                  onClick={this.setXOpen.bind(this, true)}
-                  text={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.xAxis.property
-                    ].abbridgedLabel
-                  }
-                  title={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.xAxis.property
-                    ].label
-                  }
-                />
-              </div>
+              <DefaultButton
+                onClick={this.setXOpen.bind(this, true)}
+                text={
+                  this.context.jointDataset.metaDict[
+                    this.state.chartProps.xAxis.property
+                  ].abbridgedLabel
+                }
+                title={
+                  this.context.jointDataset.metaDict[
+                    this.state.chartProps.xAxis.property
+                  ].label
+                }
+              />
             </div>
           </div>
         </div>
-        <div className={classNames.legendAndText}>
-          <div className={classNames.legendHlepWrapper}>
-            <Text variant={"small"} className={classNames.legendHelpText}>
-              {localization.Interpret.WhatIfTab.scatterLegendText}
+        <Stack horizontal={false}>
+          <div className={classNames.legendAndText}>
+            <Text variant={"small"} block className={classNames.legendLabel}>
+              {localization.CasualAnalysis.IndividualView.index}
             </Text>
+            {this.selectedFeatureImportance.length > 0 && (
+              <InteractiveLegend
+                items={this.selectedFeatureImportance.map((row, rowIndex) => {
+                  return {
+                    activated: this.state.pointIsActive[rowIndex],
+                    color: FabricStyles.fabricColorPalette[rowIndex],
+                    name: row.name,
+                    onDelete: this.toggleSelectionOfPoint.bind(this, row.id)
+                  };
+                })}
+              />
+            )}
+            {this.selectedFeatureImportance.length === 0 && (
+              <Text variant={"xSmall"} className={classNames.smallItalic}>
+                {localization.Interpret.WhatIfTab.noneSelectedYet}
+              </Text>
+            )}
           </div>
-          <Text variant={"small"} block className={classNames.legendLabel}>
-            {localization.Interpret.WhatIfTab.realPoint}
-          </Text>
-          {this.selectedFeatureImportance.length > 0 && (
-            <InteractiveLegend
-              items={this.selectedFeatureImportance.map((row, rowIndex) => {
-                return {
-                  activated: this.state.pointIsActive[rowIndex],
-                  color: FabricStyles.fabricColorPalette[rowIndex],
-                  name: row.name,
-                  onDelete: this.toggleSelectionOfPoint.bind(this, row.id)
-                };
-              })}
+          <div className={classNames.legendAndText}>
+            <ComboBox
+              label={localization.CasualAnalysis.IndividualView.selectTreatment}
+              // onChange={this.setChart}
+              options={[
+                {
+                  key: "a",
+                  text: "a"
+                },
+                {
+                  key: "b",
+                  text: "b"
+                },
+                {
+                  key: "c",
+                  text: "c"
+                }
+              ]}
+              ariaLabel={"chart type picker"}
+              useComboBoxAsMenuWidth={true}
+              styles={FabricStyles.smallDropdownStyle}
             />
-          )}
-          {this.selectedFeatureImportance.length === 0 && (
-            <Text variant={"xSmall"} className={classNames.smallItalic}>
-              {localization.Interpret.WhatIfTab.noneSelectedYet}
-            </Text>
-          )}
-        </div>
+          </div>
+        </Stack>
       </div>
     );
   }

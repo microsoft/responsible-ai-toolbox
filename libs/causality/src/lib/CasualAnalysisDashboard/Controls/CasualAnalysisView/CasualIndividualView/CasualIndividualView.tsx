@@ -8,9 +8,10 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Callout, IconButton, Link, Stack, Text } from "office-ui-fabric-react";
+import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { CasualCallout } from "../../Common/CasualCallout";
 import { CasualAggregateChart } from "../CasualAggregateView/CasualAggregateChart";
 import { CasualAggregateTable } from "../CasualAggregateView/CasualAggregateTable";
 
@@ -21,7 +22,6 @@ export interface ICasualIndividualViewProps {
   data: ICasualAnalysisData;
 }
 interface ICasualIndividualViewState {
-  showCallout: boolean;
   selectedDataIndex?: number;
 }
 
@@ -36,16 +36,12 @@ export class CasualIndividualView extends React.PureComponent<
   constructor(props: ICasualIndividualViewProps) {
     super(props);
     this.state = {
-      selectedDataIndex: undefined,
-      showCallout: false
+      selectedDataIndex: undefined
     };
   }
 
   public render(): React.ReactNode {
     const styles = CasualIndividualStyles();
-    const buttonId = "casualIndividualCalloutBtn";
-    const labelId = "casualIndividualCalloutLabel";
-    const descriptionId = "casualIndividualCalloutDesp";
     const selectedData =
       this.state.selectedDataIndex &&
       this.context.jointDataset.getRow(this.state.selectedDataIndex);
@@ -66,48 +62,7 @@ export class CasualIndividualView extends React.PureComponent<
                 {localization.CasualAnalysis.IndividualView.directIndividual}
               </b>
             </Text>
-            <Stack horizontal>
-              <IconButton
-                iconProps={{ iconName: "Info" }}
-                id={buttonId}
-                onClick={this.toggleInfo}
-                className={styles.infoButton}
-              />
-              <Text variant={"medium"} className={styles.label}>
-                {"Why must casual insights assume unconfoundedness?"}
-              </Text>
-            </Stack>
-            {this.state.showCallout && (
-              <Callout
-                className={styles.callout}
-                ariaLabelledBy={labelId}
-                ariaDescribedBy={descriptionId}
-                role="alertdialog"
-                gapSpace={0}
-                target={`#${buttonId}`}
-                onDismiss={this.toggleInfo}
-                setInitialFocus
-              >
-                <Text
-                  block
-                  variant="xLarge"
-                  className={styles.title}
-                  id={labelId}
-                >
-                  {localization.CasualAnalysis.AggregateView.unconfounding}
-                </Text>
-                <Text block variant="small" id={descriptionId}>
-                  {localization.CasualAnalysis.AggregateView.confoundingFeature}
-                </Text>
-                <Link
-                  href="http://microsoft.com"
-                  target="_blank"
-                  className={styles.link}
-                >
-                  {"Learn more"}
-                </Link>
-              </Callout>
-            )}
+            <CasualCallout />
           </Stack>
         </Stack.Item>
         <Stack.Item className={styles.individualTable}>
@@ -127,12 +82,6 @@ export class CasualIndividualView extends React.PureComponent<
       </Stack>
     );
   }
-
-  private readonly toggleInfo = (): void => {
-    this.setState((prevState) => {
-      return { showCallout: !prevState.showCallout };
-    });
-  };
   private readonly handleOnClick = (dataIndex: number | undefined): void => {
     this.setState({
       selectedDataIndex: dataIndex
