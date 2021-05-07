@@ -62,7 +62,6 @@
     "react-dom": "17.0.1",
     "react-plotly.js": "^2.5.0",
     "react-router-dom": "^5.0.0",
-    "react-transition-group": "^4.2.4",
     "tslib": "^2.2.0",
     "uuid": "^8.3.0"
   },
@@ -103,7 +102,6 @@
     "@types/react-dom": "16.9.9",
     "@types/react-plotly.js": "^2.2.4",
     "@types/react-router-dom": "5.1.6",
-    "@types/react-transition-group": "^4.2.4",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "4.3.0",
     "@typescript-eslint/parser": "4.3.0",
