@@ -53,7 +53,7 @@
     "eslint-plugin-sort-keys-fix": "^1.1.1",
     "jmespath": "^0.15.0",
     "localized-strings": "^0.2.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "memoize-one": "^5.1.1",
     "moment": "^2.24.0",
     "office-ui-fabric-react": "^7.117.0",
