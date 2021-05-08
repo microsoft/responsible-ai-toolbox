@@ -92,12 +92,15 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <Stack>
             {this.state.activeGlobalTabs[0]?.key !==
               GlobalTabKeys.ErrorAnalysisTab && (
-              <div className={modelAssessmentDashboardStyles.section}>
+              <Stack.Item className={modelAssessmentDashboardStyles.section}>
                 <AddTabButton tabIndex={0} onAdd={this.addTab} />
-              </div>
+              </Stack.Item>
             )}
             {this.state.activeGlobalTabs.map((t, i) => (
-              <div key={i} className={modelAssessmentDashboardStyles.section}>
+              <Stack.Item
+                key={i}
+                className={modelAssessmentDashboardStyles.section}
+              >
                 {t.key === GlobalTabKeys.ErrorAnalysisTab && (
                   <ErrorAnalysisViewTab
                     messages={
@@ -195,7 +198,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   <CounterfactualsTab />
                 )} */}
                 <AddTabButton tabIndex={i + 1} onAdd={this.addTab} />
-              </div>
+              </Stack.Item>
             ))}
           </Stack>
         </div>
