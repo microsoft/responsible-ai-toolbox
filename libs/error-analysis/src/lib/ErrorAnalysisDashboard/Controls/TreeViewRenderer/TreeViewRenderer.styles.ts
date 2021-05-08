@@ -97,6 +97,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     svgOuterFrame: {
       margin: 0,
+      maxWidth: "1200px",
       minHeight: "500px",
       minWidth: "800px",
       padding: 0
