@@ -29,7 +29,7 @@ export class CasualAggregateView extends React.PureComponent<
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-  constructor(props: ICasualAggregateViewProps) {
+  public constructor(props: ICasualAggregateViewProps) {
     super(props);
     this.state = {
       showCallout: false

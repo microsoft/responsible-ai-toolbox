@@ -100,7 +100,7 @@ export class CasualIndividualChart extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     const featuresOption = new Array(
       this.context.jointDataset.datasetFeatureCount
     )

@@ -19,7 +19,7 @@ export class ChartBuilder {
       ? ", " +
         Object.keys(datum.datapointLevelAccessors)
           .map((key) => {
-            return `${key}: [${datum.datapointLevelAccessors![key].path.join(
+            return `${key}: [${datum.datapointLevelAccessors?.[key].path.join(
               ", "
             )}]`;
           })
@@ -121,15 +121,18 @@ export class ChartBuilder {
       if (datum.sizeAccessor) {
         const size =
           (row.size * (datum.maxMarkerSize || 40) ** 2) / (2 * maxBubbleValue);
-        (series.marker!.size as number[]).push(Math.abs(size));
+        (series.marker?.size as number[]).push(Math.abs(size));
       }
       if (datum.datapointLevelAccessors !== undefined) {
         Object.keys(datum.datapointLevelAccessors).forEach((key) => {
-          const accessor = datum.datapointLevelAccessors![key];
+          if (!datum.datapointLevelAccessors) {
+            return;
+          }
+          const accessor = datum.datapointLevelAccessors[key];
           const plotlyPath = accessor.plotlyPath;
           let value =
             accessor.mapFunction !== undefined
-              ? accessorMappingFunctions[accessor.mapFunction!](
+              ? accessorMappingFunctions[accessor.mapFunction](
                   row[key],
                   datum,
                   accessor.mapArgs || []
@@ -169,12 +172,16 @@ export class ChartBuilder {
       series.y = [];
     }
     if (datum.sizeAccessor) {
-      series.marker!.size = [];
+      if (series.marker) {
+        series.marker.size = [];
+      }
     }
     if (datum.datapointLevelAccessors !== undefined) {
       Object.keys(datum.datapointLevelAccessors).forEach((key) => {
-        const plotlyPath = datum.datapointLevelAccessors![key].plotlyPath;
-        _.set(series, plotlyPath, []);
+        const plotlyPath = datum.datapointLevelAccessors?.[key].plotlyPath;
+        if (plotlyPath) {
+          _.set(series, plotlyPath, []);
+        }
       });
     }
     return series;

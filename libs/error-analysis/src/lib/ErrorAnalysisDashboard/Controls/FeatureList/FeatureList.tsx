@@ -181,9 +181,12 @@ export class FeatureList extends React.Component<
                 styles={searchBoxStyles}
                 onSearch={this.onSearch.bind(this)}
                 onClear={this.onSearch.bind(this)}
-                onChange={(_, newValue?: string): void =>
-                  this.onSearch.bind(this)(newValue!)
-                }
+                onChange={(_, newValue?: string): void => {
+                  if (newValue === undefined) {
+                    return;
+                  }
+                  this.onSearch.bind(this)(newValue);
+                }}
               />
             </Stack.Item>
             <Customizer
@@ -250,12 +253,15 @@ export class FeatureList extends React.Component<
   private renderRow: IRenderFunction<IDetailsRowProps> = (
     props?: IDetailsRowProps
   ): JSX.Element | null => {
+    if (!props) {
+      return <div></div>;
+    }
     return (
-      <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props!} />
+      <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props} />
     );
   };
 
-  private renderRowFields(props: IDetailsRowFieldsProps) {
+  private renderRowFields(props: IDetailsRowFieldsProps): JSX.Element {
     if (this.props.isEnabled) {
       return <DetailsRowFields {...props} />;
     }

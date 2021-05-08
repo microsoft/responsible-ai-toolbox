@@ -12,7 +12,6 @@ import {
   ModelAssessmentDashboard,
   IModelAssessmentDashboardProps
 } from "@responsible-ai/model-assessment";
-import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
@@ -62,7 +61,7 @@ export class App extends React.Component<IAppProps> {
       modelExplanationData: this.props.modelExplanationData,
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
-        this.props.dataset.featureNames!,
+        this.props.dataset.featureNames,
         false
       ),
       requestMatrix: generateJsonMatrix,

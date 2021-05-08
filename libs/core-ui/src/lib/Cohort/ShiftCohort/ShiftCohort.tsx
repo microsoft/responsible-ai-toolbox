@@ -73,7 +73,7 @@ export class ShiftCohort extends React.Component<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     const savedCohorts = this.context.errorCohorts.filter(
       (errorCohort) => !errorCohort.isTemporary
     );

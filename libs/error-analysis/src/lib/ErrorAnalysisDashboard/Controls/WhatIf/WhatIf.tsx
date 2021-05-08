@@ -67,7 +67,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.createCopyOfFirstRow();
     this.buildRowOptions();
 

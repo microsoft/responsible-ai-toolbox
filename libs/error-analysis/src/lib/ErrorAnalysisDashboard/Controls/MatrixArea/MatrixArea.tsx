@@ -239,7 +239,7 @@ export class MatrixArea extends React.PureComponent<
       selectedCells = new Array<boolean>(matrixLength * rowLength);
     } else {
       // Need to make a copy so setState re-renders
-      selectedCells = [...this.state.selectedCells!];
+      selectedCells = [...selectedCells];
     }
     const index = j + i * rowLength;
     selectedCells[index] = !selectedCells[index];
@@ -260,11 +260,11 @@ export class MatrixArea extends React.PureComponent<
     this.updateStateFromSelectedCells(selectedCells);
   }
 
-  private updateStateFromSelectedCells(selectedCells: boolean[]) {
+  private updateStateFromSelectedCells(selectedCells: boolean[]): void {
     // Create a composite filter from the selected cells
     const compositeFilter = createCompositeFilterFromCells(
       selectedCells,
-      this.state.jsonMatrix!,
+      this.state.jsonMatrix,
       this.props.selectedFeature1,
       this.props.selectedFeature2,
       this.props.baseCohort,
@@ -273,7 +273,7 @@ export class MatrixArea extends React.PureComponent<
     const cells = selectedCells.filter(Boolean).length;
     const cohortStats = createCohortStatsFromSelectedCells(
       selectedCells,
-      this.state.jsonMatrix!
+      this.state.jsonMatrix
     );
     this.props.updateSelectedCohort(
       [],

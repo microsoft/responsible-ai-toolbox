@@ -11,6 +11,7 @@ import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
+import Plotly from "plotly.js";
 import React from "react";
 
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";
@@ -165,7 +166,9 @@ export class FeatureImportanceBar extends React.PureComponent<
 
     const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
     const xOriginText = sortedIndexVector.map((i) => {
-      if (this.props.originX) return this.props.originX[i];
+      if (this.props.originX) {
+        return this.props.originX[i];
+      }
       return this.props.unsortedX[i];
     });
     if (this.props.chartType === ChartTypes.Bar) {

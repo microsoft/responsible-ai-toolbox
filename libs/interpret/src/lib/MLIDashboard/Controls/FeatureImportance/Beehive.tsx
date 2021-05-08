@@ -26,6 +26,7 @@ import {
   IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
+import Plotly from "plotly.js";
 import React from "react";
 
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";

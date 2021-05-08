@@ -1,4 +1,7 @@
 {
+  "globals": {
+    "JQuery": "readonly"
+  },
   "overrides": [
     {
       "files": ["src/plugins/index.js"],

@@ -8,7 +8,8 @@ import {
   CohortSource,
   CohortStats,
   ErrorCohort,
-  ExpandableText
+  ExpandableText,
+  getRandomId
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { max as d3max } from "d3-array";
@@ -22,7 +23,6 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import {
-  getId,
   IProcessedStyleSet,
   ITheme,
   mergeStyles,
@@ -170,7 +170,7 @@ export class TreeViewRenderer extends React.PureComponent<
         const linkVerticalD = linkVertical({ source: d.parent, target: d });
         return {
           d: linkVerticalD || "",
-          id: id + getId(),
+          id: id + getRandomId(),
           style: { fill: "white", stroke: lineColor, strokeWidth: thick }
         };
       });

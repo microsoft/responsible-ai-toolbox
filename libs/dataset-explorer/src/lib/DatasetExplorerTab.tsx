@@ -68,7 +68,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     let initialCohortIndex: number;
     if (this.props.showCohortSelection) {
       initialCohortIndex = 0;
