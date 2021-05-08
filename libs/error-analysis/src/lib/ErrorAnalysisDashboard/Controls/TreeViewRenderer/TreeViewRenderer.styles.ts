@@ -92,7 +92,8 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       pointerEvents: "none"
     },
     svgContainer: {
-      overflow: "auto"
+      overflow: "auto",
+      width: "100%"
     },
     svgOuterFrame: {
       margin: 0,

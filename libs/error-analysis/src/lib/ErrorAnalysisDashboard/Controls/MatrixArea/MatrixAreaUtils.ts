@@ -108,7 +108,7 @@ export function createCohortStatsFromSelectedCells(
 
 export function createCompositeFilterFromCells(
   selectedCells: boolean[],
-  jsonMatrix: { matrix: any[]; category1: unknown; category2: unknown },
+  jsonMatrix: { matrix: any[]; category1: any; category2: any },
   selectedFeature1: string,
   selectedFeature2: string,
   baseCohort: ErrorCohort,
