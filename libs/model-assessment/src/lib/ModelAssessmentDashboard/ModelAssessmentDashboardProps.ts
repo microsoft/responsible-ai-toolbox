@@ -10,7 +10,7 @@ import {
   ITelemetryMessage,
   ICasualAnalysisData
 } from "@responsible-ai/core-ui";
-import { IStringsParam } from "@responsible-ai/error-analysis";
+import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
 
 export interface IModelAssessmentDashboardProps
   extends IOfficeFabricProps,
@@ -30,7 +30,10 @@ export interface IModelAssessmentDashboardProps
     abortSignal: AbortSignal,
     explanationAlgorithm?: string
   ) => Promise<any[]>;
-  requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestDebugML?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IRequestNode[]>;
   requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
   requestImportances?: (
     request: any[],

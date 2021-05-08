@@ -25,12 +25,14 @@ import {
   getId,
   IProcessedStyleSet,
   ITheme,
+  mergeStyles,
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
+import { IRequestNode } from "../../Interfaces/IErrorAnalysisDashboardProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
   INodeDetail,
@@ -48,13 +50,19 @@ import {
 // Importing this solely to set the selectedPanelId. This component is NOT a statefulContainer
 // import StatefulContainer from '../../ap/mixins/statefulContainer.js'
 
+const viewerHeight = 300;
+const viewerWidth = 800;
+
 export interface ITreeViewRendererProps {
   theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   selectedFeatures: string[];
-  getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  staticTreeNodes?: any;
+  getTreeNodes?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IRequestNode[]>;
+  staticTreeNodes?: { data: IRequestNode[] };
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -66,23 +74,6 @@ export interface ITreeViewRendererProps {
   baseCohort: ErrorCohort;
   state: ITreeViewRendererState;
   setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
-}
-
-// Represents the data retrieved from the backend
-export interface IRequestNode {
-  arg: number;
-  condition: string;
-  error: number;
-  id: string;
-  method: string;
-  nodeIndex: number;
-  nodeName: string;
-  parentId: string;
-  parentNodeName: string;
-  pathFromRoot: string;
-  size: number;
-  sourceRowKeyHash: string;
-  success: number;
 }
 
 export interface ISVGDatum {
@@ -105,6 +96,16 @@ export class TreeViewRenderer extends React.PureComponent<
     this.state = this.props.state;
   }
 
+  public componentDidMount(): void {
+    window.addEventListener("resize", this.onResize);
+    if (!this.state.treeNodes?.[0]) {
+      this.fetchTreeNodes();
+    } else {
+      this.onResize();
+      this.forceUpdate();
+    }
+  }
+
   public componentDidUpdate(prevProps: ITreeViewRendererProps): void {
     if (
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
@@ -113,6 +114,11 @@ export class TreeViewRenderer extends React.PureComponent<
     ) {
       this.fetchTreeNodes();
     }
+  }
+
+  public componentWillUnmount(): void {
+    window.removeEventListener("resize", this.onResize);
+    this.props.setTreeViewState(this.state);
   }
 
   public render(): React.ReactNode {
@@ -132,8 +138,8 @@ export class TreeViewRenderer extends React.PureComponent<
         ISVGDatum
       >({
         filterBrushEvent: true,
-        height: this.state.viewerHeight,
-        width: this.state.viewerWidth
+        height: viewerHeight,
+        width: viewerWidth
       });
 
       svg.style("pointer-events", "all");
@@ -182,12 +188,9 @@ export class TreeViewRenderer extends React.PureComponent<
       .map((d: HierarchyPointNode<ITreeNode>) => {
         const labelX = d.x + (d.parent?.x ? (d.parent.x - d.x) * 0.5 : 0);
         const labelY = 4 + d.y + (d.parent?.x ? (d.parent.y - d.y) * 0.5 : 0);
-        let bb: DOMRect;
-        try {
-          bb = this.getTextBB(d.data.condition, classNames);
-        } catch {
-          bb = new DOMRect(1, 1, 1, 1);
-        }
+        const bb: DOMRect =
+          this.getTextBB(d.data.condition, classNames) ||
+          new DOMRect(1, 1, 1, 1);
         return {
           bbHeight: bb.height + labelPaddingY,
           bbWidth: bb.width + labelPaddingX,
@@ -206,7 +209,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // The code below generates the circular nodes in the tree view.
     const nodeData: Array<HierarchyPointNode<ITreeNode>> = rootDescendants.map(
       (d: HierarchyPointNode<ITreeNode>): HierarchyPointNode<ITreeNode> => {
-        let selectedStyle: Record<string, number | string> = {
+        let selectedStyle: Record<string, number | string | undefined> = {
           fill: d.data.errorColor.fill
         };
 
@@ -226,6 +229,16 @@ export class TreeViewRenderer extends React.PureComponent<
         return d;
       }
     );
+    const x = rootDescendants.map((d) => d.x);
+    const y = rootDescendants.map((d) => d.y);
+    const minX = Math.min(...x);
+    const maxX = Math.max(...x);
+    const minY = Math.min(...y);
+    const maxY = Math.max(...y);
+    console.log(minX, maxX, minY, maxY);
+    const containerStyles = mergeStyles({
+      transform: `translate(${-minX + 40}px, ${-minY + 40}px)`
+    });
     const nodeDetail = this.state.nodeDetail;
     const minPct = this.state.rootLocalError * errorRatioThreshold * 100;
 
@@ -244,89 +257,86 @@ export class TreeViewRenderer extends React.PureComponent<
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal>
-            <TreeLegend
-              selectedCohort={this.props.selectedCohort}
-              baseCohort={this.props.baseCohort}
-              nodeDetail={nodeDetail}
-              minPct={minPct}
-              max={max}
-            />
-            <svg
-              ref={svgOuterFrame}
-              className={classNames.svgOuterFrame}
-              id="svgOuterFrame"
-              viewBox="0 0 952 1100"
-            >
-              <g className={classNames.linksTransitionGroup}>
-                {links.map((link) => (
-                  <path
-                    key={link.id}
-                    id={link.id}
-                    d={link.d}
-                    style={link.style}
-                  />
-                ))}
-              </g>
-              <g className={classNames.nodesGroup}>
-                {nodeData.map((node, index) => {
-                  return (
-                    <TreeViewNode
-                      key={index}
-                      node={node}
-                      onSelect={this.onSelectNode}
-                    />
-                  );
-                })}
-              </g>
-              <g className={classNames.linkLabelsTransitionGroup}>
-                {linkLabels.map((linkLabel) => (
-                  <g
-                    key={linkLabel.id}
-                    style={linkLabel.style}
-                    pointerEvents="none"
-                  >
-                    <rect
-                      x={-linkLabel.bbX}
-                      y={-linkLabel.bbY}
-                      width={linkLabel.bbWidth}
-                      height={linkLabel.bbHeight}
-                      fill="white"
-                      stroke={ColorPalette.LinkLabelOutline}
-                      strokeWidth="1px"
-                      rx="10"
-                      ry="10"
-                      pointerEvents="none"
-                    />
-                    <text className={classNames.linkLabel} pointerEvents="none">
-                      {linkLabel.text}
-                    </text>
+            <Stack.Item>
+              <TreeLegend
+                selectedCohort={this.props.selectedCohort}
+                baseCohort={this.props.baseCohort}
+                nodeDetail={nodeDetail}
+                minPct={minPct}
+                max={max}
+              />
+            </Stack.Item>
+            <Stack.Item className={classNames.svgContainer}>
+              <svg
+                ref={svgOuterFrame}
+                className={classNames.svgOuterFrame}
+                id="svgOuterFrame"
+                /*
+                80:node size
+                100:tooltip width
+                40:tooltip height below node
+                */
+                viewBox={`0 0 ${maxX - minX + 80 + 100} ${
+                  maxY - minY + 80 + 40
+                }`}
+              >
+                <g className={containerStyles}>
+                  <g>
+                    {links.map((link) => (
+                      <path
+                        key={link.id}
+                        id={link.id}
+                        d={link.d}
+                        style={link.style}
+                      />
+                    ))}
                   </g>
-                ))}
-              </g>
-            </svg>
+                  <g>
+                    {nodeData.map((node, index) => {
+                      return (
+                        <TreeViewNode
+                          key={index}
+                          node={node}
+                          onSelect={this.onSelectNode}
+                        />
+                      );
+                    })}
+                  </g>
+                  <g>
+                    {linkLabels.map((linkLabel) => (
+                      <g
+                        key={linkLabel.id}
+                        style={linkLabel.style}
+                        pointerEvents="none"
+                      >
+                        <rect
+                          x={-linkLabel.bbX}
+                          y={-linkLabel.bbY}
+                          width={linkLabel.bbWidth}
+                          height={linkLabel.bbHeight}
+                          fill="white"
+                          stroke={ColorPalette.LinkLabelOutline}
+                          strokeWidth="1px"
+                          rx="10"
+                          ry="10"
+                          pointerEvents="none"
+                        />
+                        <text
+                          className={classNames.linkLabel}
+                          pointerEvents="none"
+                        >
+                          {linkLabel.text}
+                        </text>
+                      </g>
+                    ))}
+                  </g>
+                </g>
+              </svg>
+            </Stack.Item>
           </Stack>
         </Stack.Item>
       </Stack>
     );
-  }
-
-  public componentDidMount(): void {
-    window.addEventListener("resize", this.onResize.bind(this));
-    if (
-      !this.state.treeNodes ||
-      this.state.treeNodes.length === 0 ||
-      !this.state.treeNodes[0]
-    ) {
-      this.fetchTreeNodes();
-    } else {
-      this.onResize();
-      this.forceUpdate();
-    }
-  }
-
-  public componentWillUnmount(): void {
-    window.removeEventListener("resize", this.onResize.bind(this));
-    this.props.setTreeViewState(this.state);
   }
 
   private calculateFilterProps(
@@ -355,29 +365,9 @@ export class TreeViewRenderer extends React.PureComponent<
     return cohortStats;
   }
 
-  private resizeFunc = (
-    state: Readonly<ITreeViewRendererState>
-  ): ITreeViewRendererState => {
-    const height = 300;
-    const width = 800;
-    return {
-      nodeDetail: state.nodeDetail,
-      request: state.request,
-      root: state.root,
-      rootErrorSize: state.rootErrorSize,
-      rootLocalError: state.rootLocalError,
-      rootSize: state.rootSize,
-      selectedNode: state.selectedNode,
-      transform: state.transform,
-      treeNodes: state.treeNodes,
-      viewerHeight: height,
-      viewerWidth: width
-    };
+  private onResize = (): void => {
+    this.setState({});
   };
-
-  private onResize(): void {
-    this.setState(this.resizeFunc);
-  }
 
   private reloadData(requestTreeNodes: IRequestNode[]): void {
     const reloadDataFunc = (
@@ -422,7 +412,9 @@ export class TreeViewRenderer extends React.PureComponent<
           const calcMaskShift = globalErrorPerc * 52;
           const filterProps = this.calculateFilterProps(node, rootErrorSize);
 
-          let heatmapStyle: { fill: string } = { fill: errorAvgColor };
+          let heatmapStyle: { fill: string | undefined } = {
+            fill: errorAvgColor
+          };
 
           if (node.error / node.size > rootLocalError * errorRatioThreshold) {
             heatmapStyle = { fill: colorgrad(localErrorPerc) };
@@ -464,7 +456,7 @@ export class TreeViewRenderer extends React.PureComponent<
       );
 
       const tempRoot = d3stratify()(treeNodes);
-      const treemap = d3tree().size([state.viewerWidth, state.viewerHeight]);
+      const treemap = d3tree().size([viewerWidth, viewerHeight]);
       const root = treemap(tempRoot) as HierarchyPointNode<ITreeNode>;
 
       const selectedNode = state.selectedNode;
@@ -489,9 +481,7 @@ export class TreeViewRenderer extends React.PureComponent<
         rootSize,
         selectedNode: root,
         transform: state.transform,
-        treeNodes,
-        viewerHeight: state.viewerHeight,
-        viewerWidth: state.viewerWidth
+        treeNodes
       };
     };
     this.setState(reloadDataFunc);
@@ -513,7 +503,7 @@ export class TreeViewRenderer extends React.PureComponent<
   private getTextBB(
     labelText: string,
     classNames: IProcessedStyleSet<ITreeViewRendererStyles>
-  ): DOMRect {
+  ): DOMRect | undefined {
     const temp = select(svgOuterFrame.current).append("g");
     temp.selectAll("*").remove();
     temp
@@ -521,7 +511,7 @@ export class TreeViewRenderer extends React.PureComponent<
       .attr("className", classNames.linkLabel)
       .text(`${labelText}`);
 
-    const bb = temp!.node()!.getBBox();
+    const bb = temp.node()?.getBBox();
     temp.selectAll("*").remove();
     return bb;
   }
@@ -530,7 +520,7 @@ export class TreeViewRenderer extends React.PureComponent<
     if (!d) {
       return;
     }
-    d.data.nodeState!.onSelectedPath = true;
+    d.data.nodeState.onSelectedPath = true;
     this.selectParentNodes(d.parent);
   }
 
@@ -538,9 +528,9 @@ export class TreeViewRenderer extends React.PureComponent<
     if (!d) {
       return;
     }
-    d.data.nodeState!.onSelectedPath = false;
-    d.data.nodeState!.isSelectedLeaf = false;
-    this.unselectParentNodes(d.parent!);
+    d.data.nodeState.onSelectedPath = false;
+    d.data.nodeState.isSelectedLeaf = false;
+    this.unselectParentNodes(d.parent);
   }
 
   private getFilters(d: HierarchyPointNode<ITreeNode>): IFilter[] {
@@ -558,7 +548,7 @@ export class TreeViewRenderer extends React.PureComponent<
       column: d.parent.data.nodeName,
       method: d.data.method as FilterMethods
     };
-    return [filter, ...this.getFilters(d.parent!)];
+    return [filter, ...this.getFilters(d.parent)];
   }
 
   private onSelectNode = (node: HierarchyPointNode<ITreeNode>): void => {
@@ -593,9 +583,7 @@ export class TreeViewRenderer extends React.PureComponent<
         rootSize: state.rootSize,
         selectedNode: node,
         transform: state.transform,
-        treeNodes: state.treeNodes,
-        viewerHeight: state.viewerHeight,
-        viewerWidth: state.viewerWidth
+        treeNodes: state.treeNodes
       };
     };
 
@@ -629,7 +617,7 @@ export class TreeViewRenderer extends React.PureComponent<
         // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
         this.onResize();
         this.forceUpdate();
-        this.reloadData(this.props.staticTreeNodes.data as IRequestNode[]);
+        this.reloadData(this.props.staticTreeNodes.data);
       }
       return;
     }
@@ -653,7 +641,7 @@ export class TreeViewRenderer extends React.PureComponent<
       .then((result) => {
         this.onResize();
         this.forceUpdate();
-        this.reloadData(result as IRequestNode[]);
+        this.reloadData(result);
       });
   }
 }

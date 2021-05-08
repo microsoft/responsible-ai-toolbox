@@ -5,7 +5,8 @@ import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
-  mergeStyles
+  mergeStyles,
+  getTheme
 } from "office-ui-fabric-react";
 
 import { ColorPalette } from "../../ColorPalette";
@@ -17,27 +18,18 @@ export interface ITreeViewRendererStyles {
   filledNodeText: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
-  linkLabelsTransitionGroup: IStyle;
-  linksTransitionGroup: IStyle;
   node: IStyle;
   nodeText: IStyle;
-  nodesGroup: IStyle;
   nopointer: IStyle;
   svgOuterFrame: IStyle;
+  svgContainer: IStyle;
   treeDescription: IStyle;
 }
 
 export const treeViewRendererStyles: () => IProcessedStyleSet<
   ITreeViewRendererStyles
 > = () => {
-  const detailStyle = {
-    fill: "#777",
-    font: "normal 12px Arial",
-    fontFamily: "Arial, Helvetica, sans-serif",
-    fontWeight: "bold",
-    pointerEvents: "none",
-    textAnchor: "middle"
-  };
+  const theme = getTheme();
   const nodeTextStyle = {
     fontSize: "10px",
     fontWeight: "bolder",
@@ -56,13 +48,15 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       stroke: "#0078D4",
       strokeWidth: 2
     },
-    detailLines: mergeStyles([
-      detailStyle,
-      {
-        textAnchor: "start",
-        transform: "translate(0px, 10px)"
-      }
-    ]),
+    detailLines: {
+      fill: theme.semanticColors.inputBackground,
+      font: "normal 12px Arial",
+      fontFamily: "Arial, Helvetica, sans-serif",
+      fontWeight: "bold",
+      pointerEvents: "none",
+      textAnchor: "start",
+      transform: "translate(0px, 10px)"
+    },
     filledNodeText: mergeStyles([
       nodeTextStyle,
       {
@@ -79,12 +73,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       pointerEvents: "none",
       textAnchor: "middle"
     },
-    linkLabelsTransitionGroup: {
-      transform: "translate(0px, 90px)"
-    },
-    linksTransitionGroup: {
-      transform: "translate(0px, 90px)"
-    },
     node: {
       ":hover": {
         strokeWidth: "3px"
@@ -93,9 +81,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       opacity: "1",
       stroke: "#089acc",
       strokeWidth: "0px"
-    },
-    nodesGroup: {
-      transform: "translate(0px, 90px)"
     },
     nodeText: mergeStyles([
       nodeTextStyle,
@@ -106,10 +91,14 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     nopointer: {
       pointerEvents: "none"
     },
+    svgContainer: {
+      overflow: "auto"
+    },
     svgOuterFrame: {
       margin: 0,
-      padding: 0,
-      width: "auto"
+      minHeight: "500px",
+      minWidth: "800px",
+      padding: 0
     },
     treeDescription: {
       padding: "30px 0px 0px 35px"

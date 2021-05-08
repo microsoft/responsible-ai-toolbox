@@ -6,6 +6,8 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "plugin:@nrwl/nx/javascript",
         "./.eslintrc.comments.eslintrc",
         "./.eslintrc.filenames.eslintrc",
         "./.eslintrc.react.eslintrc",
@@ -312,19 +314,6 @@
         "no-unused-vars": "error",
         "no-useless-constructor": "error"
       }
-    },
-    {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "parserOptions": {
-        "project": "./tsconfig.*?.json"
-      },
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
-      "rules": {}
     }
   ]
 }

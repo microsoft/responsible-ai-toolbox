@@ -118,21 +118,23 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     treeViewState={this.state.treeViewState}
                     setTreeViewState={(
                       treeViewState: ITreeViewRendererState
-                    ) => {
+                    ): void => {
                       if (this.state.selectedCohort !== this.state.baseCohort) {
                         this.setState({ treeViewState });
                       }
                     }}
                     matrixAreaState={this.state.matrixAreaState}
                     matrixFilterState={this.state.matrixFilterState}
-                    setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
+                    setMatrixAreaState={(
+                      matrixAreaState: IMatrixAreaState
+                    ): void => {
                       if (this.state.selectedCohort !== this.state.baseCohort) {
                         this.setState({ matrixAreaState });
                       }
                     }}
                     setMatrixFilterState={(
                       matrixFilterState: IMatrixFilterState
-                    ) => {
+                    ): void => {
                       if (this.state.selectedCohort !== this.state.baseCohort) {
                         this.setState({ matrixFilterState });
                       }
@@ -184,7 +186,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     }}
                     customPoints={this.state.customPoints}
                     selectedCohort={this.state.selectedCohort}
-                    setWhatIfDatapoint={(index: number) =>
+                    setWhatIfDatapoint={(index: number): void =>
                       this.setState({ selectedWhatIfIndex: index })
                     }
                   />
@@ -204,12 +206,12 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       </ModelAssessmentContext.Provider>
     );
   }
-  private addTab = (index: number, tab: GlobalTabKeys) => {
+  private addTab = (index: number, tab: GlobalTabKeys): void => {
     const tabs = [...this.state.activeGlobalTabs];
     tabs.splice(index, 0, { dataCount: 0, key: tab });
     this.setState({ activeGlobalTabs: tabs });
   };
-  private removeTab = (index: number) => {
+  private removeTab = (index: number): void => {
     const tabs = [...this.state.activeGlobalTabs];
     tabs.splice(index, 1);
     this.setState({ activeGlobalTabs: tabs });
