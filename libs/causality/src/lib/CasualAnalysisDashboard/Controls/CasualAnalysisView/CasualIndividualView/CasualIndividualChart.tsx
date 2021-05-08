@@ -173,7 +173,7 @@ export class CasualIndividualChart extends React.PureComponent<
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
-          {"This tab requires an evaluation dataset be supplied."}
+          {localization.CasualAnalysis.IndividualView.dataRequired}
         </MissingParametersPlaceholder>
       );
     }

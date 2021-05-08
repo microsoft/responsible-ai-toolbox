@@ -4,6 +4,7 @@
 import {
   defaultModelAssessmentContext,
   ICasualAnalysisData,
+  ICasualAnalysisSingleData,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -22,7 +23,7 @@ export interface ICasualIndividualViewProps {
   data: ICasualAnalysisData;
 }
 interface ICasualIndividualViewState {
-  selectedDataIndex?: number;
+  selectedData?: ICasualAnalysisSingleData;
 }
 
 export class CasualIndividualView extends React.PureComponent<
@@ -36,15 +37,12 @@ export class CasualIndividualView extends React.PureComponent<
   constructor(props: ICasualIndividualViewProps) {
     super(props);
     this.state = {
-      selectedDataIndex: undefined
+      selectedData: undefined
     };
   }
 
   public render(): React.ReactNode {
     const styles = CasualIndividualStyles();
-    const selectedData =
-      this.state.selectedDataIndex &&
-      this.context.jointDataset.getRow(this.state.selectedDataIndex);
     return (
       <Stack grow={true} tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
@@ -66,8 +64,8 @@ export class CasualIndividualView extends React.PureComponent<
           </Stack>
         </Stack.Item>
         <Stack.Item className={styles.individualTable}>
-          {selectedData ? (
-            <CasualAggregateTable data={this.props.data.global} />
+          {this.state.selectedData ? (
+            <CasualAggregateTable data={this.state.selectedData} />
           ) : (
             <MissingParametersPlaceholder>
               {localization.CasualAnalysis.IndividualView.dataRequired}
@@ -75,8 +73,8 @@ export class CasualIndividualView extends React.PureComponent<
           )}
         </Stack.Item>
         <Stack.Item>
-          {selectedData && (
-            <CasualAggregateChart data={this.props.data.global} />
+          {this.state.selectedData && (
+            <CasualAggregateChart data={this.state.selectedData} />
           )}
         </Stack.Item>
       </Stack>
@@ -84,7 +82,23 @@ export class CasualIndividualView extends React.PureComponent<
   }
   private readonly handleOnClick = (dataIndex: number | undefined): void => {
     this.setState({
-      selectedDataIndex: dataIndex
+      selectedData: this.getDataFromIndex(dataIndex)
     });
+  };
+  private readonly getDataFromIndex = (
+    dataIndex: number | undefined
+  ): ICasualAnalysisSingleData | undefined => {
+    const casualLocal = this.context?.casualAnalysisData?.local;
+    if (!(dataIndex && dataIndex >= 0 && casualLocal)) {
+      return undefined;
+    }
+    const keys = Object.keys(casualLocal);
+    const localData = {};
+    keys.map(
+      (k) =>
+        (localData[k] =
+          k === "name" ? casualLocal[k] : [casualLocal[k][dataIndex]])
+    );
+    return (localData as unknown) as ICasualAnalysisSingleData;
   };
 }

@@ -62,6 +62,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       <ModelAssessmentContext.Provider
         value={{
           baseErrorCohort: this.state.baseCohort,
+          casualAnalysisData: this.props.casualAnalysisData,
           dataset: this.props.dataset,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,

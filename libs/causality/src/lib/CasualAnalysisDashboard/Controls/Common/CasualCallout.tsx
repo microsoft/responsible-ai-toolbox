@@ -92,7 +92,7 @@ export class CasualCallout extends React.Component<
             className={styles.infoButton}
           />
           <Text variant={"medium"} className={styles.label}>
-            {"Why must casual insights assume unconfoundedness?"}
+            {localization.CasualAnalysis.MainMenu.why}
           </Text>
         </Stack>
         {this.state.showCallout && (
@@ -117,7 +117,7 @@ export class CasualCallout extends React.Component<
               target="_blank"
               className={styles.link}
             >
-              {"Learn more"}
+              {localization.CasualAnalysis.MainMenu.learnMore}
             </Link>
           </Callout>
         )}
