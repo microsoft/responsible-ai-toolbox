@@ -12,9 +12,15 @@ export function describeModelPerformancePlot(
   name: keyof typeof interpretDatasets
 ): void {
   const datasetShape = interpretDatasets[name];
-  if (datasetShape.noDataset) {return;}
-  if (datasetShape.noPredict) {return;}
-  if (datasetShape.noY) {return;}
+  if (datasetShape.noDataset) {
+    return;
+  }
+  if (datasetShape.noPredict) {
+    return;
+  }
+  if (datasetShape.noY) {
+    return;
+  }
   describe(testName, () => {
     beforeEach(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
