@@ -70,7 +70,6 @@ import {
   IMatrixAreaState,
   IMatrixFilterState
 } from "./MatrixFilterState";
-import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import {
   ITreeViewRendererState,
   createInitialTreeViewState
@@ -91,7 +90,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
-    this.setSortVector = this.setSortVector.bind(this);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -301,7 +299,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           ? WeightVectors.AbsAvg
           : 0,
       selectedWhatIfIndex: undefined,
-      sortVector: undefined,
       treeViewState: createInitialTreeViewState(),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
@@ -516,7 +513,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       selectedKey={this.state.activeGlobalTab}
                       onLinkClick={this.handleGlobalTabClick}
                       linkSize={PivotLinkSize.normal}
-                      headersOnly={true}
+                      headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
                     >
                       {this.pivotItems.map((props) => (
@@ -724,14 +721,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       });
     }
   };
-
-  private setSortVector(): void {
-    this.setState({
-      sortVector: ModelExplanationUtils.getSortIndices(
-        this.state.cohorts[0].cohort.calculateAverageImportance()
-      ).reverse()
-    });
-  }
 
   private viewExplanation(): void {
     this.setState({

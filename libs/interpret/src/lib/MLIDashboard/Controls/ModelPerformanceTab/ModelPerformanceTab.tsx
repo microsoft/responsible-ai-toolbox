@@ -212,7 +212,7 @@ export class ModelPerformanceTab extends React.PureComponent<
             </div>
           </div>
           <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv}></div>
+            <div className={classNames.paddingDiv} />
             <div className={classNames.horizontalAxis}>
               <div>
                 <DefaultButton

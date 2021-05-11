@@ -102,7 +102,7 @@ export class CohortEditor extends React.PureComponent<
             return 0;
           }} // https://github.com/microsoft/fluentui/issues/6476
           id="cohortEditPanel"
-          isOpen={true}
+          isOpen
           onDismiss={this.props.closeCohortEditorPanel}
           onRenderFooter={this.renderFooter}
           isFooterAtBottom

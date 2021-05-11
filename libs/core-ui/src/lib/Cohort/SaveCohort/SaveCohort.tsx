@@ -90,11 +90,11 @@ export class SaveCohort extends React.Component<
           defaultValue={allDataCopy}
           styles={textFieldStyles}
         />
-        <CohortStats temporaryCohort={this.props.temporaryCohort}></CohortStats>
+        <CohortStats temporaryCohort={this.props.temporaryCohort} />
         <CohortBaseAndFilters
           cohort={this.props.temporaryCohort}
           baseCohort={this.props.baseCohort}
-        ></CohortBaseAndFilters>
+        />
         <DialogFooter>
           <PrimaryButton
             onClick={(): void => {

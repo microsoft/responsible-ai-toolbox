@@ -115,7 +115,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
             </div>
           </div>
           <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv}></div>
+            <div className={classNames.paddingDiv} />
             <div className={classNames.horizontalAxis}>
               <Text variant={"medium"}>
                 {

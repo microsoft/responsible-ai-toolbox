@@ -144,7 +144,7 @@ export class NewExplanationDashboard extends React.PureComponent<
           {this.props.dashboardType === "ModelPerformance" ? (
             <ModelPerformanceTab />
           ) : (
-            <Stack horizontal={true}>
+            <Stack horizontal>
               <Stack.Item>
                 <CohortBar
                   cohorts={this.state.cohorts}
@@ -159,7 +159,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick}
                     linkSize={PivotLinkSize.normal}
-                    headersOnly={true}
+                    headersOnly
                     id="DashboardPivot"
                   >
                     {this.pivotItems.map((props) => (
@@ -170,7 +170,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.DataExploration && (
-                    <DatasetExplorerTab showCohortSelection={true} />
+                    <DatasetExplorerTab showCohortSelection />
                   )}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (

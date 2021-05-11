@@ -39,7 +39,7 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
         </g>
         <g>
           <g className={classNames.errorCoverageCell}>
-            <rect className={classNames.metricBarBlack}></rect>
+            <rect className={classNames.metricBarBlack} />
             <g>
               <text className={classNames.smallHeader}>
                 {localization.ErrorAnalysis.errorCoverage}
@@ -50,7 +50,7 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
             </g>
           </g>
           <g className={classNames.errorRateCell}>
-            <rect className={classNames.metricBarRed}></rect>
+            <rect className={classNames.metricBarRed} />
             <g>
               <text className={classNames.smallHeader}>
                 {localization.ErrorAnalysis.errorRate}

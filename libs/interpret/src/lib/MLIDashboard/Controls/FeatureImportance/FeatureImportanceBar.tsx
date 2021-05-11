@@ -80,7 +80,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                   onChange={this.setChart}
                   options={this.props.chartTypeOptions}
                   ariaLabel={"chart type picker"}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
               )}
@@ -106,7 +106,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                 step={1}
                 value={this.props.config.topK}
                 onChange={this.setTopK}
-                showValue={true}
+                showValue
                 ariaLabel={
                   localization.Interpret.AggregateImportance.topKFeatures
                 }
@@ -119,7 +119,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                 onChange={this.onSortSelect}
                 options={this.sortOptions}
                 ariaLabel={"sort selector"}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.smallDropdownStyle}
               />
             )}
@@ -127,7 +127,7 @@ export class FeatureImportanceBar extends React.PureComponent<
           {this.state.isCalloutVisible && (
             <Callout
               target={"#" + this._iconId}
-              setInitialFocus={true}
+              setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
             >

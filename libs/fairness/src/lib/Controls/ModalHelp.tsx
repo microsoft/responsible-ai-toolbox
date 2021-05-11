@@ -52,7 +52,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
           titleAriaId="intro modal"
           isOpen={this.state?.showModalHelp}
           onDismiss={this.handleCloseModalHelp}
-          isModeless={true}
+          isModeless
           containerClassName={sharedStyles.modalContentHelp}
         >
           <div style={{ display: "flex" }}>

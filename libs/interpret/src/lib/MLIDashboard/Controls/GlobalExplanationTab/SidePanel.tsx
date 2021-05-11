@@ -44,7 +44,6 @@ export interface ISidePanelProps {
   onChartTypeChange(chartType: ChartTypes): void;
 }
 interface ISidePanelState {
-  crossClassInfoVisible: boolean;
   weightOptions: IDropdownOption[] | undefined;
 }
 export class SidePanel extends React.Component<
@@ -64,7 +63,6 @@ export class SidePanel extends React.Component<
   public constructor(props: ISidePanelProps) {
     super(props);
     this.state = {
-      crossClassInfoVisible: false,
       weightOptions: this.getWeightOptions()
     };
   }

@@ -226,7 +226,7 @@ export class MultiICEPlot extends React.PureComponent<
                 selectedKey={
                   this.state.rangeView.selectedOptionKeys as string[]
                 }
-                allowFreeform={true}
+                allowFreeform
                 autoComplete="on"
                 options={this.state.rangeView.categoricalOptions}
                 onChange={this.onCategoricalRangeChanged}

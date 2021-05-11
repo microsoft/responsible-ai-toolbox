@@ -24,9 +24,6 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
   private ref: React.RefObject<SVGGElement>;
   public constructor(props: ITreeViewNodeProps) {
     super(props);
-    this.state = {
-      isMouseOver: false
-    };
     this.ref = React.createRef<SVGGElement>();
   }
   public render(): React.ReactNode {

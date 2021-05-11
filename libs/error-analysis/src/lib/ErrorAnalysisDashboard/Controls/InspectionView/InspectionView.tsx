@@ -186,7 +186,7 @@ export class InspectionView extends React.PureComponent<
                     setKey="set"
                     layoutMode={DetailsListLayoutMode.justified}
                     onRenderItemColumn={this.renderItemColumn.bind(this)}
-                    selectionPreservedOnEmptyClick={true}
+                    selectionPreservedOnEmptyClick
                     ariaLabelForSelectionColumn="Toggle selection"
                     ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                     checkButtonAriaLabel="Row checkbox"
@@ -245,14 +245,14 @@ export class InspectionView extends React.PureComponent<
                 height: "100%",
                 width: "20px"
               })}
-            ></div>
+            />
           );
 
         default:
           return <span>{fieldContent}</span>;
       }
     }
-    return <span></span>;
+    return <span />;
   }
 
   private updateViewedFeatureImportances(
