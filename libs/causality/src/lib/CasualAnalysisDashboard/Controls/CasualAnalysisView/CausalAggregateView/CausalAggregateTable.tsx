@@ -7,7 +7,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _, { isEqual } from "lodash";
+import { isEqual } from "lodash";
 import {
   DetailsList,
   DetailsListLayoutMode,
