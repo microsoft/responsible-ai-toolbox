@@ -146,7 +146,6 @@ export class AxisConfigDialog extends React.PureComponent<
     );
     const minVal = this.getMinValue(selectedMeta);
     const maxVal = this.getMaxValue(selectedMeta);
-
     return (
       <Panel
         id="AxisConfigPanel"

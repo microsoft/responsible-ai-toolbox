@@ -11,7 +11,6 @@ import {
   HelpMessageDict
 } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
-import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
@@ -157,8 +156,9 @@ export class App extends React.Component<IAppProps> {
         localUrl: "https://www.bing.com/",
         requestDebugML: generateJsonTreeBreastCancer,
         requestImportances: createJsonImportancesGenerator(
-          "dataSummary" in this.props.dataset
-            ? this.props.dataset.dataSummary.featureNames!
+          "dataSummary" in this.props.dataset &&
+            this.props.dataset.dataSummary.featureNames
+            ? this.props.dataset.dataSummary.featureNames
             : [],
           true
         ),

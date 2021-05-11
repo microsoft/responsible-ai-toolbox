@@ -5,7 +5,8 @@ import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
-  mergeStyles
+  mergeStyles,
+  getTheme
 } from "office-ui-fabric-react";
 
 import { ColorPalette } from "../../ColorPalette";
@@ -15,32 +16,20 @@ export interface ITreeViewRendererStyles {
   clickedNodeFull: IStyle;
   detailLines: IStyle;
   filledNodeText: IStyle;
-  innerFrame: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
-  linkLabelsTransitionGroup: IStyle;
-  linksTransitionGroup: IStyle;
-  mainFrame: IStyle;
   node: IStyle;
   nodeText: IStyle;
-  nodesGroup: IStyle;
   nopointer: IStyle;
   svgOuterFrame: IStyle;
+  svgContainer: IStyle;
   treeDescription: IStyle;
-  tooltipTransitionGroup: IStyle;
 }
 
 export const treeViewRendererStyles: () => IProcessedStyleSet<
   ITreeViewRendererStyles
 > = () => {
-  const detailStyle = {
-    fill: "#777",
-    font: "normal 12px Arial",
-    fontFamily: "Arial, Helvetica, sans-serif",
-    fontWeight: "bold",
-    pointerEvents: "none",
-    textAnchor: "middle"
-  };
+  const theme = getTheme();
   const nodeTextStyle = {
     fontSize: "10px",
     fontWeight: "bolder",
@@ -59,47 +48,26 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       stroke: "#0078D4",
       strokeWidth: 2
     },
-    detailLines: mergeStyles([
-      detailStyle,
-      {
-        textAnchor: "start",
-        transform: "translate(0px, 10px)"
-      }
-    ]),
+    detailLines: {
+      fill: theme.semanticColors.inputBackground,
+      fontWeight: "bold",
+      pointerEvents: "none",
+      textAnchor: "start",
+      transform: "translate(0px, 10px)"
+    },
     filledNodeText: mergeStyles([
       nodeTextStyle,
       {
         fill: ColorPalette.ErrorAnalysisLightText
       }
     ]),
-    innerFrame: {
-      height: "100%",
-      margin: "0",
-      padding: "0",
-      width: "100%"
-    },
     legend: {
-      pointerEvents: "none",
-      position: "absolute"
+      pointerEvents: "none"
     },
     linkLabel: {
       fill: "#777",
-      font: "normal 12px Arial",
-      fontFamily: "Arial, Helvetica, sans-serif",
       pointerEvents: "none",
       textAnchor: "middle"
-    },
-    linkLabelsTransitionGroup: {
-      transform: "translate(0px, 90px)"
-    },
-    linksTransitionGroup: {
-      transform: "translate(0px, 90px)"
-    },
-    mainFrame: {
-      height: "1100px",
-      margin: "0",
-      padding: "0",
-      width: "100%"
     },
     node: {
       ":hover": {
@@ -110,9 +78,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       stroke: "#089acc",
       strokeWidth: "0px"
     },
-    nodesGroup: {
-      transform: "translate(0px, 90px)"
-    },
     nodeText: mergeStyles([
       nodeTextStyle,
       {
@@ -122,13 +87,14 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     nopointer: {
       pointerEvents: "none"
     },
-    svgOuterFrame: {
-      margin: "0",
-      padding: "0",
+    svgContainer: {
+      overflow: "auto",
       width: "100%"
     },
-    tooltipTransitionGroup: {
-      transform: "translate(40px, 90px)"
+    svgOuterFrame: {
+      margin: 0,
+      outline: "none",
+      padding: 0
     },
     treeDescription: {
       padding: "30px 0px 0px 35px"

@@ -38,8 +38,9 @@ export class SVGToolTip extends React.Component<
     }
   }
   public render(): React.ReactNode {
-    if (!this.state.svgElement || !this.state.isMouseOver)
+    if (!this.state.svgElement || !this.state.isMouseOver) {
       return React.Fragment;
+    }
     const classNames = SVGToolTipStyles();
     return ReactDom.createPortal(
       <g
@@ -83,7 +84,11 @@ export class SVGToolTip extends React.Component<
     this.setState({ isMouseOver: false });
   };
 
-  private svgPoint = (svg: SVGSVGElement, x: number, y: number) => {
+  private svgPoint = (
+    svg: SVGSVGElement,
+    x: number,
+    y: number
+  ): { x: number; y: number } => {
     const ctm = svg.getScreenCTM();
     if (svg.createSVGPoint && ctm) {
       let point = svg.createSVGPoint();

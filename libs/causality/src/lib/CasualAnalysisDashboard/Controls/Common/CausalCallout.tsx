@@ -31,7 +31,7 @@ export class CausalCallout extends React.Component<
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-  constructor(props: Record<string, unknown>) {
+  public constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
       showCallout: false

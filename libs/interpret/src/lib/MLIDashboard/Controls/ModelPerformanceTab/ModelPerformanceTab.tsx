@@ -64,7 +64,7 @@ export class ModelPerformanceTab extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.setState({ chartProps: this.generateDefaultChartAxes() });
   }
 

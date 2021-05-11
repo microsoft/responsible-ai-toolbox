@@ -110,7 +110,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     if (!this.context.jointDataset.hasLocalExplanations) {
       return;
     }

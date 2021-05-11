@@ -23,7 +23,7 @@ export class TreatmentView extends React.PureComponent<
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-  constructor(props: ITreatmentViewProps) {
+  public constructor(props: ITreatmentViewProps) {
     super(props);
     this.state = {
       showModalHelp: false

@@ -59,7 +59,7 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
 
-  constructor(props: IErrorAnalysisViewTabProps) {
+  public constructor(props: IErrorAnalysisViewTabProps) {
     super(props);
     this.state = { openFeatureList: false };
   }
@@ -105,7 +105,7 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
     );
   }
 
-  private saveFeatures(features: string[]) {
+  private saveFeatures(features: string[]): void {
     this.props.selectFeatures(features);
     this.setState({ openFeatureList: false });
   }

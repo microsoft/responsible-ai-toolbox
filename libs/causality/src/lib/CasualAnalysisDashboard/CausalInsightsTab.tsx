@@ -29,7 +29,7 @@ export class CausalInsightsTab extends React.PureComponent<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
 
-  constructor(props: ICausalInsightsTabProps) {
+  public constructor(props: ICausalInsightsTabProps) {
     super(props);
     this.state = { viewOption: CausalAnalysisOptions.Aggregate };
   }
@@ -65,10 +65,7 @@ export class CausalInsightsTab extends React.PureComponent<
       </Stack>
     );
   }
-  private onViewTypeChange = (
-    item?: PivotItem,
-    _ev?: React.MouseEvent<HTMLElement>
-  ): void => {
+  private onViewTypeChange = (item?: PivotItem): void => {
     if (
       item &&
       item.props.itemKey &&

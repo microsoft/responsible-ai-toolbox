@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { mergeStyleSets, IStyle, getTheme } from "office-ui-fabric-react";
+import {
+  mergeStyleSets,
+  IStyle,
+  getTheme,
+  IProcessedStyleSet
+} from "office-ui-fabric-react";
 
 export interface IAddTabButtonStyles {
   callout: IStyle;
@@ -9,7 +14,9 @@ export interface IAddTabButtonStyles {
   splitter: IStyle;
 }
 
-export const addTabButtonStyles = () => {
+export const addTabButtonStyles = (): IProcessedStyleSet<
+  IAddTabButtonStyles
+> => {
   const theme = getTheme();
   return mergeStyleSets<IAddTabButtonStyles>({
     button: {

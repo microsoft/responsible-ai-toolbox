@@ -130,7 +130,7 @@ export class WhatIfTab extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 

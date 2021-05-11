@@ -97,7 +97,7 @@ export class CausalAggregateTable extends React.PureComponent<
       this.forceUpdate();
     }
   }
-  private getItems = (columns: IColumn[]) => {
+  private getItems = (columns: IColumn[]): unknown[] => {
     const props = columns.map((c) => c.key);
     const items = [];
     const len = this.props.data[props[0]].length;

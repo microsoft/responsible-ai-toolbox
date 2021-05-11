@@ -6,7 +6,7 @@ import { HierarchyPointNode } from "d3-hierarchy";
 import { FilterProps } from "./FilterProps";
 
 export interface IErrorColorStyle {
-  fill: string;
+  fill: string | undefined;
 }
 
 export interface IShowSelectedStyle {
@@ -32,8 +32,6 @@ export interface INodeDetail {
 export interface ITreeViewRendererState {
   request?: AbortController;
   nodeDetail: INodeDetail;
-  viewerWidth: number;
-  viewerHeight: number;
   selectedNode: any;
   transform: any;
   treeNodes: any[];
@@ -74,7 +72,7 @@ export interface IFillStyleUp {
 
 // Contains node state that changes with UI clicks
 export interface INodeState {
-  errorStyle: Record<string, number | string> | undefined;
+  errorStyle: Record<string, number | string | undefined> | undefined;
   onSelectedPath: boolean;
   isSelectedLeaf: boolean;
   style: ITransform | undefined;
@@ -106,8 +104,6 @@ export function createInitialTreeViewState(): ITreeViewRendererState {
     rootSize: 0,
     selectedNode: undefined,
     transform: undefined,
-    treeNodes: [],
-    viewerHeight: 0,
-    viewerWidth: 0
+    treeNodes: []
   };
 }

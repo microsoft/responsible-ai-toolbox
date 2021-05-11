@@ -2,10 +2,15 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx"],
+  "globals": {
+    "JSX": "readonly"
+  },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "plugin:@nrwl/nx/javascript",
         "./.eslintrc.comments.eslintrc",
         "./.eslintrc.filenames.eslintrc",
         "./.eslintrc.react.eslintrc",
@@ -41,19 +46,6 @@
             " Licensed under the MIT License."
           ],
           2
-        ],
-        "@nrwl/nx/enforce-module-boundaries": [
-          "error",
-          {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
-              }
-            ]
-          }
         ],
         "camelcase": [
           "error",
@@ -312,19 +304,6 @@
         "no-unused-vars": "error",
         "no-useless-constructor": "error"
       }
-    },
-    {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "parserOptions": {
-        "project": "./tsconfig.*?.json"
-      },
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
-      "rules": {}
     }
   ]
 }

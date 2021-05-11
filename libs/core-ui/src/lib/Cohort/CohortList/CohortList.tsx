@@ -141,13 +141,7 @@ export class CohortList extends React.Component<
         case "column1":
           if (item.name !== "All data") {
             return (
-              <Link
-                onClick={() =>
-                  this.props.onEditCohortClick(
-                    this.getErrorCohort.bind(this)(item.name)
-                  )
-                }
-              >
+              <Link onClick={this.onEditCohortClick.bind(this, item.name)}>
                 {fieldContent}
               </Link>
             );
@@ -158,13 +152,16 @@ export class CohortList extends React.Component<
           return <span>{fieldContent}</span>;
       }
     }
-    return <div></div>;
+    return React.Fragment;
   }
 
-  private getErrorCohort(name: string): ErrorCohort {
-    return this.props.cohorts.find(
+  private onEditCohortClick(name: string): void {
+    const cohort = this.props.cohorts.find(
       (errorCohort) => errorCohort.cohort.name === name
-    )!;
+    );
+    if (cohort) {
+      this.props.onEditCohortClick(cohort);
+    }
   }
 
   private getCohortListItems(): ICohortListItem[] {

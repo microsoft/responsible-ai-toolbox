@@ -21,7 +21,7 @@ export interface INavigationProps {
 export class Navigation extends React.PureComponent<INavigationProps> {
   private navLinkGroups: INavLinkGroup[] = [];
 
-  constructor(props: INavigationProps) {
+  public constructor(props: INavigationProps) {
     super(props);
 
     this.navLinkGroups.push({
@@ -104,7 +104,7 @@ export class Navigation extends React.PureComponent<INavigationProps> {
   }
 }
 
-function onRenderGroupHeader(group?: INavLinkGroup) {
+function onRenderGroupHeader(group?: INavLinkGroup): JSX.Element {
   return (
     <h6 style={{ paddingLeft: "20px" }}>
       {group ? group.name?.toUpperCase() : ""}
@@ -112,7 +112,7 @@ function onRenderGroupHeader(group?: INavLinkGroup) {
   );
 }
 
-function onRenderLink(link?: INavLink) {
+function onRenderLink(link?: INavLink): JSX.Element {
   const theme = getTheme();
   return (
     <Text

@@ -354,16 +354,18 @@ export class ScatterUtils {
     PlotlyUtils.setColorProperty(props, colorOption, modelData, colorbarTitle);
     props.data[0].yAccessor = yAccessor;
     props.data[0].xAccessor = xAccessor;
-    props.data[0].datapointLevelAccessors!["text"].path = [
-      xAccessor,
-      yAccessor,
-      colorAccessor
-    ];
-    props.data[0].datapointLevelAccessors!["text"].mapArgs = [
-      localization.Interpret.ExplanationScatter.index,
-      modelData.featureNames[maxIndex],
-      localization.Interpret.ExplanationScatter.predictedY
-    ];
+    if (props.data[0].datapointLevelAccessors) {
+      props.data[0].datapointLevelAccessors["text"].path = [
+        xAccessor,
+        yAccessor,
+        colorAccessor
+      ];
+      props.data[0].datapointLevelAccessors["text"].mapArgs = [
+        localization.Interpret.ExplanationScatter.index,
+        modelData.featureNames[maxIndex],
+        localization.Interpret.ExplanationScatter.predictedY
+      ];
+    }
 
     _.set(
       props,
@@ -417,25 +419,27 @@ export class ScatterUtils {
     PlotlyUtils.setColorProperty(props, colorOption, modelData, colorbarTitle);
     props.data[0].xAccessor = xAccessor;
     props.data[0].yAccessor = yAccessor;
-    props.data[0].datapointLevelAccessors!["text"].path = [
-      xAccessor,
-      yAccessor,
-      colorAccessor
-    ];
-    props.data[0].datapointLevelAccessors!["text"].mapArgs = [
-      localization.formatString(
-        localization.Interpret.ExplanationScatter.dataLabel,
-        modelData.featureNames[maxIndex]
-      ),
-      localization.formatString(
-        localization.Interpret.ExplanationScatter.importanceLabel,
-        modelData.featureNames[maxIndex]
-      ),
-      localization.formatString(
-        localization.Interpret.ExplanationScatter.dataLabel,
-        modelData.featureNames[secondIndex]
-      )
-    ];
+    if (props.data[0].datapointLevelAccessors) {
+      props.data[0].datapointLevelAccessors["text"].path = [
+        xAccessor,
+        yAccessor,
+        colorAccessor
+      ];
+      props.data[0].datapointLevelAccessors["text"].mapArgs = [
+        localization.formatString(
+          localization.Interpret.ExplanationScatter.dataLabel,
+          modelData.featureNames[maxIndex]
+        ),
+        localization.formatString(
+          localization.Interpret.ExplanationScatter.importanceLabel,
+          modelData.featureNames[maxIndex]
+        ),
+        localization.formatString(
+          localization.Interpret.ExplanationScatter.dataLabel,
+          modelData.featureNames[secondIndex]
+        )
+      ];
+    }
 
     const yAxisLabel =
       modelData.modelType === ModelTypes.Binary

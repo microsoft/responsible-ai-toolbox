@@ -62,8 +62,7 @@ export const treeLegendStyles: () => IProcessedStyleSet<
       pointerEvents: "auto"
     },
     treeLegend: {
-      paddingLeft: "35px",
-      zIndex: "-1"
+      width: "15em"
     },
     valueBlack: mergeStyles(value, {
       color: theme.palette.black,
