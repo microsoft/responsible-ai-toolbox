@@ -44,9 +44,6 @@ export class App extends React.Component<IAppSetting, IAppState> {
         <div
           style={{
             backgroundColor: theme.semanticColors.bodyBackground,
-            borderColor: "gray",
-            borderStyle: "solid",
-            borderWidth: 10,
             height: "calc(100% - 70px)",
             minHeight: "500px",
             width: "calc(100%-20px)"

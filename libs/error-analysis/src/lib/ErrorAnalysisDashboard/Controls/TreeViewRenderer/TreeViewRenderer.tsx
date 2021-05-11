@@ -144,6 +144,8 @@ export class TreeViewRenderer extends React.PureComponent<
 
       svg.style("pointer-events", "all");
     }
+    let pathMin = viewerWidth;
+    let pathMax = 0;
 
     const linkVertical = d3linkVertical<
       unknown,
@@ -182,26 +184,31 @@ export class TreeViewRenderer extends React.PureComponent<
     // properties (x, y, height, width and the text) of the link label.
     const linkLabels = rootDescendants
       .slice(1)
-      .filter(
-        (d: HierarchyPointNode<ITreeNode>) => d.data.nodeState.onSelectedPath
-      )
       .map((d: HierarchyPointNode<ITreeNode>) => {
         const labelX = d.x + (d.parent?.x ? (d.parent.x - d.x) * 0.5 : 0);
         const labelY = 4 + d.y + (d.parent?.x ? (d.parent.y - d.y) * 0.5 : 0);
         const bb: DOMRect =
           this.getTextBB(d.data.condition, classNames) ||
           new DOMRect(1, 1, 1, 1);
-        return {
+        const element = {
           bbHeight: bb.height + labelPaddingY,
           bbWidth: bb.width + labelPaddingX,
-          bbX: 0.5 * (bb.width + labelPaddingX),
-          bbY: 0.5 * (bb.height + labelPaddingY) + labelYOffset,
+          bbX: -0.5 * (bb.width + labelPaddingX),
+          bbY: -0.5 * (bb.height + labelPaddingY) - labelYOffset,
           id: `linkLabel${d.id}`,
           style: {
+            display: d.data.nodeState.onSelectedPath ? undefined : "none",
             transform: `translate(${labelX}px, ${labelY}px)`
           },
-          text: `${d.data.condition}`
+          text: d.data.condition
         };
+        if (labelX + element.bbX < pathMin) {
+          pathMin = labelX + element.bbX;
+        }
+        if (labelX + element.bbX + element.bbWidth > pathMax) {
+          pathMax = labelX + element.bbX + element.bbWidth;
+        }
+        return element;
       });
 
     // GENERATES THE ACTUAL NODE COMPONENTS AND THEIR INTERACTIONS
@@ -231,13 +238,15 @@ export class TreeViewRenderer extends React.PureComponent<
     );
     const x = rootDescendants.map((d) => d.x);
     const y = rootDescendants.map((d) => d.y);
-    const minX = Math.min(...x);
-    const maxX = Math.max(...x);
-    const minY = Math.min(...y);
-    const maxY = Math.max(...y);
-    console.log(minX, maxX, minY, maxY);
+    const minX = Math.min(Math.min(...x) - 40, pathMin);
+    //100:tooltip width
+    const maxX = Math.max(Math.max(...x) + 40 + 100, pathMax);
+    const minY = Math.min(...y) - 40;
+    //40:tooltip height
+    const maxY = Math.max(...y) + 40 + 40;
+    console.log(minY, maxY);
     const containerStyles = mergeStyles({
-      transform: `translate(${-minX + 40}px, ${-minY + 40}px)`
+      transform: `translate(${-minX}px, ${-minY}px)`
     });
     const nodeDetail = this.state.nodeDetail;
     const minPct = this.state.rootLocalError * errorRatioThreshold * 100;
@@ -256,83 +265,72 @@ export class TreeViewRenderer extends React.PureComponent<
           </ExpandableText>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal>
-            <Stack.Item>
-              <TreeLegend
-                selectedCohort={this.props.selectedCohort}
-                baseCohort={this.props.baseCohort}
-                nodeDetail={nodeDetail}
-                minPct={minPct}
-                max={max}
-              />
-            </Stack.Item>
-            <Stack.Item className={classNames.svgContainer}>
-              <svg
-                ref={svgOuterFrame}
-                className={classNames.svgOuterFrame}
-                id="svgOuterFrame"
-                /*
-                80:node size
-                100:tooltip width
-                40:tooltip height below node
-                */
-                viewBox={`0 0 ${maxX - minX + 80 + 100} ${
-                  maxY - minY + 80 + 40
-                }`}
-              >
-                <g className={containerStyles}>
-                  <g>
-                    {links.map((link) => (
-                      <path
-                        key={link.id}
-                        id={link.id}
-                        d={link.d}
-                        style={link.style}
+          <Stack horizontal className={classNames.svgContainer}>
+            <TreeLegend
+              selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
+              nodeDetail={nodeDetail}
+              minPct={minPct}
+              max={max}
+            />
+            <svg
+              ref={svgOuterFrame}
+              className={classNames.svgOuterFrame}
+              id="svgOuterFrame"
+              viewBox={`0 0 ${maxX - minX} ${maxY - minY}`}
+            >
+              <g className={containerStyles}>
+                <g>
+                  {links.map((link) => (
+                    <path
+                      key={link.id}
+                      id={link.id}
+                      d={link.d}
+                      style={link.style}
+                    />
+                  ))}
+                </g>
+                <g>
+                  {nodeData.map((node, index) => {
+                    return (
+                      <TreeViewNode
+                        key={index}
+                        node={node}
+                        onSelect={this.onSelectNode}
                       />
-                    ))}
-                  </g>
-                  <g>
-                    {nodeData.map((node, index) => {
-                      return (
-                        <TreeViewNode
-                          key={index}
-                          node={node}
-                          onSelect={this.onSelectNode}
-                        />
-                      );
-                    })}
-                  </g>
-                  <g>
-                    {linkLabels.map((linkLabel) => (
-                      <g
-                        key={linkLabel.id}
-                        style={linkLabel.style}
+                    );
+                  })}
+                </g>
+                <g>
+                  {linkLabels.map((linkLabel) => (
+                    <g
+                      key={linkLabel.id}
+                      style={linkLabel.style}
+                      pointerEvents="none"
+                    >
+                      <rect
+                        x={linkLabel.bbX}
+                        y={linkLabel.bbY}
+                        width={linkLabel.bbWidth}
+                        height={linkLabel.bbHeight}
+                        fill="white"
+                        stroke={ColorPalette.LinkLabelOutline}
+                        strokeWidth="1px"
+                        rx="10"
+                        ry="10"
+                        pointerEvents="none"
+                      />
+                      <text
+                        className={classNames.linkLabel}
                         pointerEvents="none"
                       >
-                        <rect
-                          x={-linkLabel.bbX}
-                          y={-linkLabel.bbY}
-                          width={linkLabel.bbWidth}
-                          height={linkLabel.bbHeight}
-                          fill="white"
-                          stroke={ColorPalette.LinkLabelOutline}
-                          strokeWidth="1px"
-                          rx="10"
-                          ry="10"
-                          pointerEvents="none"
-                        />
-                        <text
-                          className={classNames.linkLabel}
-                          pointerEvents="none"
-                        >
-                          {linkLabel.text}
-                        </text>
-                      </g>
-                    ))}
-                  </g>
+                        {linkLabel.text}
+                      </text>
+                    </g>
+                  ))}
                 </g>
-              </svg>
-            </Stack.Item>
+              </g>
+            </svg>
           </Stack>
         </Stack.Item>
       </Stack>

@@ -100,6 +100,7 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       maxWidth: "1200px",
       minHeight: "500px",
       minWidth: "800px",
+      outline: "none",
       padding: 0
     },
     treeDescription: {

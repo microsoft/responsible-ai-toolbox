@@ -15,9 +15,6 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
     key="1"
     style={
       Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "gray",
-        "borderStyle": "solid",
         "borderWidth": 10,
         "height": "calc(100% - 70px)",
         "minHeight": "500px",
