@@ -280,7 +280,10 @@ export class TreeViewRenderer extends React.PureComponent<
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              style={{ height: svgHeight * 1.5, width: svgWidth * 1.5 }}
+              style={{
+                minWidth: svgWidth,
+                width: svgWidth * 1.5
+              }}
             >
               <g className={containerStyles}>
                 <g>
