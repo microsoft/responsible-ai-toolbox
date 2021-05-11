@@ -3,24 +3,24 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
+  ICausalAnalysisData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import React from "react";
 
-import { CausalAnalysisOptions } from "../../CasualAnalysisEnums";
+import { CausalAnalysisOptions } from "../../CausalAnalysisEnums";
 
-import { CasualAggregateView } from "./CasualAggregateView/CasualAggregateView";
-import { CasualIndividualView } from "./CasualIndividualView/CasualIndividualView";
+import { CausalAggregateView } from "./CausalAggregateView/CausalAggregateView";
+import { CausalIndividualView } from "./CausalIndividualView/CausalIndividualView";
 import { TreatmentView } from "./TreatmentView/TreatmentView";
 
-export interface ICasualAnalysisViewProps {
+export interface ICausalAnalysisViewProps {
   viewOption: string;
-  data: ICasualAnalysisData;
+  data: ICausalAnalysisData;
 }
 
-export class CasualAnalysisView extends React.PureComponent<
-  ICasualAnalysisViewProps
+export class CausalAnalysisView extends React.PureComponent<
+  ICausalAnalysisViewProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -31,10 +31,10 @@ export class CasualAnalysisView extends React.PureComponent<
     return (
       <>
         {this.props.viewOption === CausalAnalysisOptions.Aggregate && (
-          <CasualAggregateView data={this.props.data} />
+          <CausalAggregateView data={this.props.data} />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Individual && (
-          <CasualIndividualView data={this.props.data} />
+          <CausalIndividualView data={this.props.data} />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Treatment && (
           <TreatmentView data={this.props.data} />
@@ -43,7 +43,7 @@ export class CasualAnalysisView extends React.PureComponent<
     );
   }
 
-  public componentDidUpdate(prevProps: ICasualAnalysisViewProps): void {
+  public componentDidUpdate(prevProps: ICausalAnalysisViewProps): void {
     if (this.props.viewOption !== prevProps.viewOption) {
       this.forceUpdate();
     }

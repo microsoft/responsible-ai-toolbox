@@ -8,7 +8,7 @@ import {
   IMetricResponse,
   ICohortBasedComponentProps,
   ITelemetryMessage,
-  ICasualAnalysisData
+  ICausalAnalysisData
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -19,7 +19,7 @@ export interface IModelAssessmentDashboardProps
   stringParams?: IStringsParam;
 
   modelExplanationData: IModelExplanationData;
-  casualAnalysisData: ICasualAnalysisData;
+  causalAnalysisData: ICausalAnalysisData;
 
   requestPredictions?: (
     request: any[],

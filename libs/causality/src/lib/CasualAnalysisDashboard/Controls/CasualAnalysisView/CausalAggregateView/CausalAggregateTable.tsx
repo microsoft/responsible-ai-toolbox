@@ -3,7 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisSingleData,
+  ICausalAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -16,12 +16,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-export interface ICasualAggregateTableProps {
-  data: ICasualAnalysisSingleData;
+export interface ICausalAggregateTableProps {
+  data: ICausalAnalysisSingleData;
 }
 
-export class CasualAggregateTable extends React.PureComponent<
-  ICasualAggregateTableProps
+export class CausalAggregateTable extends React.PureComponent<
+  ICausalAggregateTableProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -92,7 +92,7 @@ export class CasualAggregateTable extends React.PureComponent<
     );
   }
 
-  public componentDidUpdate(prevProps: ICasualAggregateTableProps): void {
+  public componentDidUpdate(prevProps: ICausalAggregateTableProps): void {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.forceUpdate();
     }

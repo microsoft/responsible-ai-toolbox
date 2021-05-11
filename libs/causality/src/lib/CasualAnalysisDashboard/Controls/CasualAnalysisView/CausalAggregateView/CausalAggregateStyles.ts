@@ -7,19 +7,20 @@ import {
   mergeStyleSets
 } from "office-ui-fabric-react";
 
-export interface ICasualIndividualStyles {
+export interface ICausalAggregateStyles {
   container: IStyle;
   description: IStyle;
   label: IStyle;
   lasso: IStyle;
-  individualTable: IStyle;
-  individualChart: IStyle;
+  table: IStyle;
+  leftPane: IStyle;
+  rightPane: IStyle;
 }
 
-export const CasualIndividualStyles: () => IProcessedStyleSet<
-  ICasualIndividualStyles
+export const CausalAggregateStyles: () => IProcessedStyleSet<
+  ICausalAggregateStyles
 > = () => {
-  return mergeStyleSets<ICasualIndividualStyles>({
+  return mergeStyleSets<ICausalAggregateStyles>({
     container: {
       display: "flex",
       flex: 1,
@@ -30,12 +31,6 @@ export const CasualIndividualStyles: () => IProcessedStyleSet<
       justifyContent: "space-between",
       padding: "10px"
     },
-    individualChart: {
-      backgroundColor: "red"
-    },
-    individualTable: {
-      width: "50%"
-    },
     label: {
       display: "inline-block",
       flex: "1",
@@ -43,11 +38,23 @@ export const CasualIndividualStyles: () => IProcessedStyleSet<
       textAlign: "left"
     },
     lasso: {
+      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,
       paddingTop: "25px",
       textAlign: "left"
+    },
+    leftPane: {
+      height: "100%",
+      padding: "10px",
+      width: "70%"
+    },
+    rightPane: {
+      width: "25%"
+    },
+    table: {
+      width: "50%"
     }
   });
 };

@@ -62,7 +62,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       <ModelAssessmentContext.Provider
         value={{
           baseErrorCohort: this.state.baseCohort,
-          casualAnalysisData: this.props.casualAnalysisData,
+          causalAnalysisData: this.props.causalAnalysisData,
           dataset: this.props.dataset,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
@@ -191,7 +191,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   />
                 )}
                 {t.key === GlobalTabKeys.CausalAnalysisTab && (
-                  <CausalInsightsTab data={this.props.casualAnalysisData} />
+                  <CausalInsightsTab data={this.props.causalAnalysisData} />
                 )}
                 {/* 
                 {t.key === GlobalTabKeys.CounterfactualsTab && (

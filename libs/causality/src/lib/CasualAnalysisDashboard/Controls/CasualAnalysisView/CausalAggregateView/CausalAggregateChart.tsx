@@ -3,7 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisSingleData,
+  ICausalAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -14,14 +14,14 @@ import { Datum } from "plotly.js";
 import React from "react";
 
 import { basePlotlyProperties } from "./basePlotlyProperties";
-import { CasualAggregateStyles } from "./CasualAggregateStyles";
+import { CausalAggregateStyles } from "./CausalAggregateStyles";
 
-export interface ICasualAggregateChartProps {
-  data: ICasualAnalysisSingleData;
+export interface ICausalAggregateChartProps {
+  data: ICausalAnalysisSingleData;
 }
 
-export class CasualAggregateChart extends React.PureComponent<
-  ICasualAggregateChartProps
+export class CausalAggregateChart extends React.PureComponent<
+  ICausalAggregateChartProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -29,7 +29,7 @@ export class CasualAggregateChart extends React.PureComponent<
   > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    const styles = CasualAggregateStyles();
+    const styles = CausalAggregateStyles();
     return (
       <Stack horizontal={true} verticalFill={true} className={styles.container}>
         <Stack.Item grow={true} className={styles.leftPane}>
@@ -41,15 +41,15 @@ export class CasualAggregateChart extends React.PureComponent<
         <Stack.Item grow={true} className={styles.rightPane}>
           <Stack horizontal={false}>
             <Stack.Item className={styles.label}>
-              <b>{localization.CasualAnalysis.AggregateView.continuous}</b>
-              {localization.CasualAnalysis.AggregateView.continuousDescription}
+              <b>{localization.CausalAnalysis.AggregateView.continuous}</b>
+              {localization.CausalAnalysis.AggregateView.continuousDescription}
             </Stack.Item>
             <Stack.Item className={styles.label}>
-              <b>{localization.CasualAnalysis.AggregateView.binary}</b>
-              {localization.CasualAnalysis.AggregateView.binaryDescription}
+              <b>{localization.CausalAnalysis.AggregateView.binary}</b>
+              {localization.CausalAnalysis.AggregateView.binaryDescription}
             </Stack.Item>
             <Stack.Item className={styles.lasso}>
-              {localization.CasualAnalysis.AggregateView.lasso}
+              {localization.CausalAnalysis.AggregateView.lasso}
             </Stack.Item>
           </Stack>
         </Stack.Item>
@@ -57,7 +57,7 @@ export class CasualAggregateChart extends React.PureComponent<
     );
   }
 
-  public componentDidUpdate(prevProps: ICasualAggregateChartProps): void {
+  public componentDidUpdate(prevProps: ICausalAggregateChartProps): void {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.forceUpdate();
     }

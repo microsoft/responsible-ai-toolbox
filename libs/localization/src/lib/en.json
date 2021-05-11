@@ -578,7 +578,7 @@
       "pfiDescription": "This explainer randomly shuffles data one feature at a time for the entire dataset and calculates how much the performance metric of interest changes (default performance metrics: F1 for binary classification, F1 Score with micro average for multiclass classification and mean absolute error for regression). The larger the change, the more important that feature is. This explainer can only explain the overall behavior of the underlying model but does not explain individual predictions. Feature importance value of a feature represents the delta in the performance of the model by perturbing that particular feature."
     }
   },
-  "CasualAnalysis": {
+  "CausalAnalysis": {
     "MainMenu": {
       "header": "causal analysis",
       "aggregate": "Aggregate causal effects",
