@@ -40,10 +40,8 @@ export interface ICasualIndividualChartStyles {
   featureImportanceControls: IStyle;
   featureImportanceLegend: IStyle;
   featureImportanceChartAndLegend: IStyle;
-  legendHelpText: IStyle;
   legendLabel: IStyle;
   smallItalic: IStyle;
-  legendHlepWrapper: IStyle;
   choiceBoxArea: IStyle;
   choiceGroup: IStyle;
   choiceGroupFlexContainer: IStyle;
@@ -247,14 +245,6 @@ export const casualIndividualChartStyles: () => IProcessedStyleSet<
       paddingLeft: "10px",
       paddingRight: "10px",
       width: legendWidth
-    },
-    legendHelpText: {
-      fontWeight: "300",
-      lineHeight: "14px",
-      width: "120px"
-    },
-    legendHlepWrapper: {
-      width: "120px"
     },
     legendLabel: {
       fontWeight: "600",

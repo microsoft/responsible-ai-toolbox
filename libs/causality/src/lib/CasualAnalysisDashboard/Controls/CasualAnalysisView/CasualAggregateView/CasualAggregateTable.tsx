@@ -103,7 +103,13 @@ export class CasualAggregateTable extends React.PureComponent<
     const len = this.props.data[props[0]].length;
     for (let i = 0; i < len; i++) {
       const temp = {};
-      props.forEach((p) => (temp[p] = this.props.data?.[p]?.[i]));
+      props.forEach(
+        (p) =>
+          (temp[p] =
+            p === "name"
+              ? this.props.data?.[p]?.[i]
+              : this.props.data?.[p]?.[0]?.[0]?.[i])
+      );
       items.push(temp);
     }
     return items;
