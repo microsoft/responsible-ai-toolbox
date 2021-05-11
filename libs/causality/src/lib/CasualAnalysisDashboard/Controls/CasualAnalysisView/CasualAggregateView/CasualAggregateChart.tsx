@@ -67,14 +67,14 @@ export class CasualAggregateChart extends React.PureComponent<
     plotlyProps.data = [
       {
         error_y: {
-          array: (this.props.data.pValue as unknown) as Datum[],
+          array: (this.props.data?.pValue?.[0]?.[0] as unknown) as Datum[],
           type: "data",
           visible: true
         },
         mode: "markers",
         type: "scatter",
         x: this.props.data.name,
-        y: this.props.data.point
+        y: this.props.data.point[0][0]
       }
     ];
     return plotlyProps;

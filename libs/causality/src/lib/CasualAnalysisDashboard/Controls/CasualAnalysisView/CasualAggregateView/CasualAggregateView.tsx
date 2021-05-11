@@ -7,8 +7,10 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Callout, IconButton, Link, Stack, Text } from "office-ui-fabric-react";
+import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
+
+import { CasualCallout } from "../../Common/CasualCallout";
 
 import { CasualAggregateChart } from "./CasualAggregateChart";
 import { CasualAggregateStyles } from "./CasualAggregateStyles";
@@ -17,30 +19,17 @@ import { CasualAggregateTable } from "./CasualAggregateTable";
 export interface ICasualAggregateViewProps {
   data: ICasualAnalysisData;
 }
-interface ICasualAggregateViewState {
-  showCallout: boolean;
-}
 
 export class CasualAggregateView extends React.PureComponent<
-  ICasualAggregateViewProps,
-  ICasualAggregateViewState
+  ICasualAggregateViewProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-  public constructor(props: ICasualAggregateViewProps) {
-    super(props);
-    this.state = {
-      showCallout: false
-    };
-  }
 
   public render(): React.ReactNode {
     const styles = CasualAggregateStyles();
-    const buttonId = "casualAggregateCalloutBtn";
-    const labelId = "casualAggregateCalloutLabel";
-    const descriptionId = "casualAggregateCalloutDesp";
     return (
       <Stack grow={true} tokens={{ padding: "16px 24px" }}>
         <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
@@ -50,48 +39,7 @@ export class CasualAggregateView extends React.PureComponent<
           <Text variant={"medium"} className={styles.label}>
             <b>{localization.CasualAnalysis.AggregateView.directAggregate}</b>
           </Text>
-          <Stack horizontal>
-            <IconButton
-              iconProps={{ iconName: "Info" }}
-              id={buttonId}
-              onClick={this.toggleInfo}
-              className={styles.infoButton}
-            />
-            <Text variant={"medium"} className={styles.label}>
-              {"Why must casual insights assume unconfoundedness?"}
-            </Text>
-          </Stack>
-          {this.state.showCallout && (
-            <Callout
-              className={styles.callout}
-              ariaLabelledBy={labelId}
-              ariaDescribedBy={descriptionId}
-              role="alertdialog"
-              gapSpace={0}
-              target={`#${buttonId}`}
-              onDismiss={this.toggleInfo}
-              setInitialFocus
-            >
-              <Text
-                block
-                variant="xLarge"
-                className={styles.title}
-                id={labelId}
-              >
-                {localization.CasualAnalysis.AggregateView.unconfounding}
-              </Text>
-              <Text block variant="small" id={descriptionId}>
-                {localization.CasualAnalysis.AggregateView.confoundingFeature}
-              </Text>
-              <Link
-                href="http://microsoft.com"
-                target="_blank"
-                className={styles.link}
-              >
-                {"Learn more"}
-              </Link>
-            </Callout>
-          )}
+          <CasualCallout />
         </Stack>
         <Stack>
           <Stack.Item className={styles.table}>
@@ -104,10 +52,4 @@ export class CasualAggregateView extends React.PureComponent<
       </Stack>
     );
   }
-
-  private readonly toggleInfo = (): void => {
-    this.setState((prevState) => {
-      return { showCallout: !prevState.showCallout };
-    });
-  };
 }

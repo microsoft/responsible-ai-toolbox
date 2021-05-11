@@ -3,10 +3,10 @@
 
 export interface ICasualAnalysisSingleData {
   name: string[];
-  point: number[];
-  pValue?: number[];
-  stderr?: number[];
-  zstat?: number[];
-  ciLower?: number[];
-  ciUpper?: number[];
+  point: number[][][];
+  pValue: number[][][];
+  stderr: number[][][];
+  zstat: number[][][];
+  ciLower: number[][][];
+  ciUpper: number[][][];
 }

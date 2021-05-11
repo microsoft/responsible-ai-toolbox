@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
+import { ErrorCohort, ICasualAnalysisData } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
@@ -13,6 +13,7 @@ import { ITelemetryMessage } from "../util/ITelemetryMessage";
 import { JointDataset } from "../util/JointDataset";
 
 export interface IModelAssessmentContext {
+  casualAnalysisData?: ICasualAnalysisData;
   dataset: IDataset;
   modelExplanationData: IModelExplanationData;
   theme?: ITheme;
@@ -44,6 +45,7 @@ export interface IModelAssessmentContext {
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
   baseErrorCohort: {} as ErrorCohort,
+  casualAnalysisData: {} as ICasualAnalysisData,
   dataset: {} as IDataset,
   errorCohorts: [],
   jointDataset: {} as JointDataset,
