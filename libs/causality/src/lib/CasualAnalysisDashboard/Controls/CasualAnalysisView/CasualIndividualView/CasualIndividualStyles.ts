@@ -37,14 +37,12 @@ export const CasualIndividualStyles: () => IProcessedStyleSet<
       width: "50%"
     },
     label: {
-      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,
       textAlign: "left"
     },
     lasso: {
-      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,

@@ -32,7 +32,6 @@ export const CasualAggregateStyles: () => IProcessedStyleSet<
       padding: "10px"
     },
     label: {
-      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,

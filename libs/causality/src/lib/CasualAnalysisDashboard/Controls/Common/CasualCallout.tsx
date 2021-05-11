@@ -64,7 +64,6 @@ export class CasualCallout extends React.Component<
         width: "15px"
       },
       label: {
-        cursor: "pointer",
         display: "inline-block",
         flex: "1",
         fontSize: 14,

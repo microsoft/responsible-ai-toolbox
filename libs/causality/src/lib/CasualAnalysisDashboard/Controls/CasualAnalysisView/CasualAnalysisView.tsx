@@ -8,7 +8,7 @@ import {
 } from "@responsible-ai/core-ui";
 import React from "react";
 
-import { CasualAnalysisOptions } from "../../CasualAnalysisEnums";
+import { CausalAnalysisOptions } from "../../CasualAnalysisEnums";
 
 import { CasualAggregateView } from "./CasualAggregateView/CasualAggregateView";
 import { CasualIndividualView } from "./CasualIndividualView/CasualIndividualView";
@@ -30,13 +30,13 @@ export class CasualAnalysisView extends React.PureComponent<
   public render(): React.ReactNode {
     return (
       <>
-        {this.props.viewOption === CasualAnalysisOptions.Aggregate && (
+        {this.props.viewOption === CausalAnalysisOptions.Aggregate && (
           <CasualAggregateView data={this.props.data} />
         )}
-        {this.props.viewOption === CasualAnalysisOptions.Individual && (
+        {this.props.viewOption === CausalAnalysisOptions.Individual && (
           <CasualIndividualView data={this.props.data} />
         )}
-        {this.props.viewOption === CasualAnalysisOptions.Treatment && (
+        {this.props.viewOption === CausalAnalysisOptions.Treatment && (
           <TreatmentView data={this.props.data} />
         )}
       </>

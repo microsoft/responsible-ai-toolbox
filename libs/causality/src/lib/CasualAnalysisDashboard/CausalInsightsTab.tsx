@@ -10,7 +10,7 @@ import { localization } from "@responsible-ai/localization";
 import { Text, Pivot, PivotItem, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { CasualAnalysisOptions } from "./CasualAnalysisEnums";
+import { CausalAnalysisOptions } from "./CasualAnalysisEnums";
 import { CasualAnalysisView } from "./Controls/CasualAnalysisView/CasualAnalysisView";
 
 export interface ICausalInsightsTabProps {
@@ -31,7 +31,7 @@ export class CausalInsightsTab extends React.PureComponent<
 
   constructor(props: ICausalInsightsTabProps) {
     super(props);
-    this.state = { viewOption: CasualAnalysisOptions.Aggregate };
+    this.state = { viewOption: CausalAnalysisOptions.Aggregate };
   }
 
   public render(): React.ReactNode {
@@ -45,15 +45,15 @@ export class CausalInsightsTab extends React.PureComponent<
         <Stack horizontal={true} tokens={{ childrenGap: "10px" }}>
           <Pivot onLinkClick={this.onViewTypeChange}>
             <PivotItem
-              itemKey={CasualAnalysisOptions.Aggregate}
+              itemKey={CausalAnalysisOptions.Aggregate}
               headerText={localization.CasualAnalysis.MainMenu.aggregate}
             />
             <PivotItem
-              itemKey={CasualAnalysisOptions.Individual}
+              itemKey={CausalAnalysisOptions.Individual}
               headerText={localization.CasualAnalysis.MainMenu.individual}
             />
             <PivotItem
-              itemKey={CasualAnalysisOptions.Treatment}
+              itemKey={CausalAnalysisOptions.Treatment}
               headerText={localization.CasualAnalysis.MainMenu.treatment}
             />
           </Pivot>
