@@ -251,6 +251,8 @@ export class TreeViewRenderer extends React.PureComponent<
     const nodeDetail = this.state.nodeDetail;
     const minPct = this.state.rootLocalError * errorRatioThreshold * 100;
 
+    const svgWidth = maxX - minX;
+    const svgHeight = maxY - minY;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item>
@@ -277,7 +279,8 @@ export class TreeViewRenderer extends React.PureComponent<
               ref={svgOuterFrame}
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"
-              viewBox={`0 0 ${maxX - minX} ${maxY - minY}`}
+              viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+              style={{ height: svgHeight * 1.5, width: svgWidth * 1.5 }}
             >
               <g className={containerStyles}>
                 <g>

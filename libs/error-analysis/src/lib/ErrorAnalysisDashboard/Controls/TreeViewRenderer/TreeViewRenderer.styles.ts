@@ -50,8 +50,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     detailLines: {
       fill: theme.semanticColors.inputBackground,
-      font: "normal 12px Arial",
-      fontFamily: "Arial, Helvetica, sans-serif",
       fontWeight: "bold",
       pointerEvents: "none",
       textAnchor: "start",
@@ -68,8 +66,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     linkLabel: {
       fill: "#777",
-      font: "normal 12px Arial",
-      fontFamily: "Arial, Helvetica, sans-serif",
       pointerEvents: "none",
       textAnchor: "middle"
     },
@@ -97,9 +93,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     svgOuterFrame: {
       margin: 0,
-      maxWidth: "1200px",
-      minHeight: "500px",
-      minWidth: "800px",
       outline: "none",
       padding: 0
     },
