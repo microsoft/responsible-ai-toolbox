@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Property } from "csstype";
 import { HierarchyPointNode } from "d3-hierarchy";
 
 import { FilterProps } from "./FilterProps";
@@ -24,7 +25,7 @@ export interface INodeDetail {
   instanceInfo: string;
   errorInfo: string;
   successInfo: string;
-  errorColor: IErrorColorStyle;
+  errorColor: Property.Color;
   maskDown: ITransform;
   maskUp: ITransform;
 }
@@ -46,6 +47,7 @@ export interface ITreeNode {
   arg: number;
   condition: string;
   error: number;
+  rootErrorSize: number;
   id: string;
   method: string;
   nodeIndex: number;
@@ -56,9 +58,7 @@ export interface ITreeNode {
   size: number;
   sourceRowKeyHash: string;
   success: number;
-  errorColor: IErrorColorStyle;
-  fillstyleUp: IFillStyleUp;
-  fillstyleDown: ITransform;
+  errorColor: Property.Color;
   filterProps: FilterProps;
   maskShift: number;
   r: number;
@@ -72,7 +72,6 @@ export interface IFillStyleUp {
 
 // Contains node state that changes with UI clicks
 export interface INodeState {
-  errorStyle: Record<string, number | string | undefined> | undefined;
   onSelectedPath: boolean;
   isSelectedLeaf: boolean;
   style: ITransform | undefined;
@@ -81,9 +80,7 @@ export interface INodeState {
 export function createInitialTreeViewState(): ITreeViewRendererState {
   return {
     nodeDetail: {
-      errorColor: {
-        fill: "#eaeaea"
-      },
+      errorColor: "#eaeaea",
       errorInfo: "0 Errors",
       globalError: "0",
       instanceInfo: "0 Instances",

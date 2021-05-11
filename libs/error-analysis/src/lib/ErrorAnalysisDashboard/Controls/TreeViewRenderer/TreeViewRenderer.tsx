@@ -12,6 +12,7 @@ import {
   getRandomId
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { Property } from "csstype";
 import { max as d3max } from "d3-array";
 import {
   stratify as d3stratify,
@@ -216,17 +217,8 @@ export class TreeViewRenderer extends React.PureComponent<
     // The code below generates the circular nodes in the tree view.
     const nodeData: Array<HierarchyPointNode<ITreeNode>> = rootDescendants.map(
       (d: HierarchyPointNode<ITreeNode>): HierarchyPointNode<ITreeNode> => {
-        let selectedStyle: Record<string, number | string | undefined> = {
-          fill: d.data.errorColor.fill
-        };
-
-        if (d.data.nodeState.onSelectedPath) {
-          selectedStyle = { fill: d.data.errorColor.fill, strokeWidth: 3 };
-        }
-
         // Update node state based on new user actions
         d.data.nodeState = {
-          errorStyle: selectedStyle,
           isSelectedLeaf: d.data.nodeState.isSelectedLeaf,
           onSelectedPath: d.data.nodeState.onSelectedPath,
           style: {
@@ -402,7 +394,7 @@ export class TreeViewRenderer extends React.PureComponent<
       const minColor = ColorPalette.MinColor;
       const maxColor = ColorPalette.MaxColor;
 
-      const colorgrad = d3scaleLinear<string>()
+      const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
         .interpolate(d3interpolateHcl)
         .range([minColor, maxColor]);
@@ -416,12 +408,10 @@ export class TreeViewRenderer extends React.PureComponent<
           const calcMaskShift = globalErrorPerc * 52;
           const filterProps = this.calculateFilterProps(node, rootErrorSize);
 
-          let heatmapStyle: { fill: string | undefined } = {
-            fill: errorAvgColor
-          };
+          let heatmapStyle: Property.Color = errorAvgColor;
 
           if (node.error / node.size > rootLocalError * errorRatioThreshold) {
-            heatmapStyle = { fill: colorgrad(localErrorPerc) };
+            heatmapStyle = colorgrad(localErrorPerc) || errorAvgColor;
           }
 
           return {
@@ -429,13 +419,6 @@ export class TreeViewRenderer extends React.PureComponent<
             condition: node.condition,
             error: node.error,
             errorColor: heatmapStyle,
-            fillstyleDown: {
-              transform: `translate(0px, -${calcMaskShift}px)`
-            },
-            fillstyleUp: {
-              fill: ColorPalette.FillStyle,
-              transform: `translate(0px, ${calcMaskShift}px)`
-            },
             filterProps,
             id: node.id,
             maskShift: calcMaskShift,
@@ -443,7 +426,6 @@ export class TreeViewRenderer extends React.PureComponent<
             nodeIndex: node.nodeIndex,
             nodeName: node.nodeName,
             nodeState: {
-              errorStyle: undefined,
               isSelectedLeaf: false,
               onSelectedPath: false,
               style: undefined
@@ -452,6 +434,7 @@ export class TreeViewRenderer extends React.PureComponent<
             parentNodeName: node.parentNodeName,
             pathFromRoot: node.pathFromRoot,
             r: 28,
+            rootErrorSize,
             size: node.size,
             sourceRowKeyHash: node.sourceRowKeyHash,
             success: node.success

@@ -65,7 +65,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                 <circle
                   r="26"
                   className={classNames.node}
-                  style={this.props.nodeDetail.errorColor}
+                  style={{ fill: this.props.nodeDetail.errorColor }}
                 />
                 <g
                   style={this.props.nodeDetail.maskDown}
