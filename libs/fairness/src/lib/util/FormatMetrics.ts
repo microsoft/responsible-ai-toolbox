@@ -10,9 +10,8 @@ export class FormatMetrics {
     isRatio = false,
     sigDigits = 3
   ): string => {
-    if (value === null || value === undefined) {
-      return Number.NaN.toString();
-    }
+    if (value === null || value === undefined) return Number.NaN.toString();
+
     const styleObject: Intl.NumberFormatOptions = {
       maximumSignificantDigits: sigDigits
     };
@@ -20,9 +19,9 @@ export class FormatMetrics {
       performanceOptions[key] &&
       performanceOptions[key].isPercentage &&
       !isRatio
-    ) {
+    )
       styleObject.style = "percent";
-    }
+
     return value.toLocaleString(undefined, styleObject);
   };
 }

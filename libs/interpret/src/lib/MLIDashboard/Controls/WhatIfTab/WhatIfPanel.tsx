@@ -67,13 +67,10 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
     const classNames = whatIfTabStyles();
     const inputDisabled = !this.props.invokeModel;
     let panelStyle: string;
-    if (this.props.isInPanel) {
-      panelStyle = classNames.expandedInPanel;
-    } else if (this.props.isPanelOpen) {
-      panelStyle = classNames.expandedPanel;
-    } else {
-      panelStyle = classNames.collapsedPanel;
-    }
+    if (this.props.isInPanel) panelStyle = classNames.expandedInPanel;
+    else if (this.props.isPanelOpen) panelStyle = classNames.expandedPanel;
+    else panelStyle = classNames.collapsedPanel;
+
     return (
       <Stack className={panelStyle} horizontal>
         {!this.props.isInPanel &&

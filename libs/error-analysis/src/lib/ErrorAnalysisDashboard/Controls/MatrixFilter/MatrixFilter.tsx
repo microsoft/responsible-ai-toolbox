@@ -159,9 +159,8 @@ export class MatrixFilter extends React.PureComponent<
         this.selectedKey1 = this.options.findIndex(
           (option) => option.text === item.text
         );
-      } else {
-        this.selectedKey1 = 0;
-      }
+      } else this.selectedKey1 = 0;
+
       this.setState({ selectedFeature1: item.text });
     }
   };
@@ -175,9 +174,8 @@ export class MatrixFilter extends React.PureComponent<
         this.selectedKey2 = this.options.findIndex(
           (option) => option.text === item.text
         );
-      } else {
-        this.selectedKey2 = 0;
-      }
+      } else this.selectedKey2 = 0;
+
       this.setState({ selectedFeature2: item.text });
     }
   };

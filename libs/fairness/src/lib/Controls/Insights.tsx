@@ -42,9 +42,8 @@ export class Insights extends React.Component<IInsightsProps> {
       }
     });
     this.props.fairnessArray.forEach((value, index) => {
-      if (value >= maxFairnessValue) {
-        maxFairnessValue = value;
-      }
+      if (value >= maxFairnessValue) maxFairnessValue = value;
+
       if (value <= minFairnessValue) {
         minFairnessValueIndex = index;
         minFairnessValue = value;

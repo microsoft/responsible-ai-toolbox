@@ -28,9 +28,9 @@ export function fetchMatrix(
     props.getMatrix === undefined ||
     (props.selectedFeature1 === noFeature &&
       props.selectedFeature2 === noFeature)
-  ) {
+  )
     return;
-  }
+
   const filtersRelabeled = ErrorCohort.getLabeledFilters(
     props.baseCohort.cohort.filters,
     props.baseCohort.jointDataset
@@ -40,18 +40,17 @@ export function fetchMatrix(
     props.baseCohort.jointDataset
   );
   let selectedFeature1: string | undefined = props.selectedFeature1;
-  if (props.selectedFeature1 === noFeature) {
-    selectedFeature1 = undefined;
-  }
+  if (props.selectedFeature1 === noFeature) selectedFeature1 = undefined;
+
   let selectedFeature2: string | undefined = props.selectedFeature2;
   // Note: edge case, if both features selected are the same one, show just a row
   if (
     props.selectedFeature2 === noFeature ||
     (props.selectedFeature2 === props.selectedFeature1 &&
       selectedFeature1 !== undefined)
-  ) {
+  )
     selectedFeature2 = undefined;
-  }
+
   props
     .getMatrix(
       [
@@ -141,9 +140,7 @@ export function createCompositeFilterFromCells(
     cat1HasIntervals = false;
   } else {
     keyFeature1 = getKey(selectedFeature1, features);
-    if (feature2IsSelected) {
-      keyFeature2 = getKey(selectedFeature2, features);
-    }
+    if (feature2IsSelected) keyFeature2 = getKey(selectedFeature2, features);
   }
   // Create filters based on the selected cells in the matrix filter
   for (let i = 0; i < numRows; i++) {
@@ -223,9 +220,8 @@ export function extractCategories(category: {
   intervalMin: any[];
   intervalMax: any[];
 }): [any[], boolean] {
-  if (category === undefined) {
-    return [[], false];
-  }
+  if (category === undefined) return [[], false];
+
   const categoryValues = [];
   let catHasIntervals = false;
   for (let i = 0; i < category.values.length; i++) {

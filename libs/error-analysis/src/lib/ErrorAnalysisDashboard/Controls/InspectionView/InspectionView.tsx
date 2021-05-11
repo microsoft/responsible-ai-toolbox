@@ -290,9 +290,8 @@ export class InspectionView extends React.PureComponent<
       sortArray = ModelExplanationUtils.getSortIndices(
         includedFeatureImportance[0].unsortedAggregateY
       ).reverse();
-    } else {
-      sortingSeriesIndex = undefined;
-    }
+    } else sortingSeriesIndex = undefined;
+
     return {
       includedFeatureImportance,
       sortArray,

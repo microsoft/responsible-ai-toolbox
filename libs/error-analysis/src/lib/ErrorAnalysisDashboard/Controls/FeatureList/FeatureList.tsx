@@ -182,9 +182,8 @@ export class FeatureList extends React.Component<
                 onSearch={this.onSearch.bind(this)}
                 onClear={this.onSearch.bind(this)}
                 onChange={(_, newValue?: string): void => {
-                  if (newValue === undefined) {
-                    return;
-                  }
+                  if (newValue === undefined) return;
+
                   this.onSearch.bind(this)(newValue);
                 }}
               />
@@ -253,18 +252,16 @@ export class FeatureList extends React.Component<
   private renderRow: IRenderFunction<IDetailsRowProps> = (
     props?: IDetailsRowProps
   ): JSX.Element | null => {
-    if (!props) {
-      return <div></div>;
-    }
+    if (!props) return <div></div>;
+
     return (
       <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props} />
     );
   };
 
   private renderRowFields(props: IDetailsRowFieldsProps): JSX.Element {
-    if (this.props.isEnabled) {
-      return <DetailsRowFields {...props} />;
-    }
+    if (this.props.isEnabled) return <DetailsRowFields {...props} />;
+
     return (
       <span data-selection-disabled={true}>
         <DetailsRowFields {...props} />
@@ -283,9 +280,9 @@ export class FeatureList extends React.Component<
 
       switch (column.key) {
         case "checkbox":
-          if (this.state.selectedFeatures.includes(fieldContent)) {
+          if (this.state.selectedFeatures.includes(fieldContent))
             return <Checkbox checked={true} disabled />;
-          }
+
           return <Checkbox checked={false} disabled />;
         case "importances":
           return (
@@ -318,9 +315,8 @@ export class FeatureList extends React.Component<
     this._selection.setItems(this.state.tableState.rows);
     const featureNames = this.state.tableState.rows.map((row) => row[0]);
     featureNames.forEach((feature, index) => {
-      if (this.state.selectedFeatures.includes(feature)) {
+      if (this.state.selectedFeatures.includes(feature))
         this._selection.setIndexSelected(index, true, true);
-      }
     });
   }
 

@@ -44,8 +44,6 @@ export class CasualAnalysisView extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICasualAnalysisViewProps): void {
-    if (this.props.viewOption !== prevProps.viewOption) {
-      this.forceUpdate();
-    }
+    if (this.props.viewOption !== prevProps.viewOption) this.forceUpdate();
   }
 }

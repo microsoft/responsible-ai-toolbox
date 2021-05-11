@@ -99,9 +99,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     if (
       this.props.selectedIndex !== prevProps.selectedIndex &&
       this.props.selectedIndex !== undefined
-    ) {
+    )
       this.setTemporaryPointToCopyOfDatasetPoint(this.props.selectedIndex);
-    }
   }
 
   public render(): React.ReactNode {
@@ -181,9 +180,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   }
 
   private saveAsPoint = (): void => {
-    if (this.temporaryPoint) {
+    if (this.temporaryPoint)
       this.props.addCustomPoint(_.cloneDeep(this.temporaryPoint));
-    }
   };
 
   private savePoint = (): void => {
@@ -195,9 +193,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     isString: boolean,
     newValue?: string
   ): void => {
-    if (!this.temporaryPoint || !newValue) {
-      return;
-    }
+    if (!this.temporaryPoint || !newValue) return;
+
     const editingData = this.temporaryPoint;
     this.stringifiedValues[key] = newValue;
     if (isString) {
@@ -225,9 +222,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     option?: IComboBoxOption,
     value?: string
   ): void => {
-    if (!this.temporaryPoint) {
-      return;
-    }
+    if (!this.temporaryPoint) return;
+
     const editingData = this.temporaryPoint;
     if (option) {
       // User selected/de-selected an existing option
@@ -237,9 +233,9 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       const featureOption = this.state.featuresOption.find(
         (feature) => feature.key === key
       );
-      if (featureOption) {
+      if (featureOption)
         featureOption.data.categoricalOptions.push({ key: value, text: value });
-      }
+
       editingData[key] = value;
     }
 
@@ -251,9 +247,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     _event: React.FormEvent,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key !== undefined)
       this.setTemporaryPointToCopyOfDatasetPoint(item.key as number);
-    }
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
@@ -280,9 +275,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     const indexes = this.getDefaultSelectedPointIndexes(
       this.props.currentCohort
     );
-    if (indexes.length === 0) {
-      return undefined;
-    }
+    if (indexes.length === 0) return undefined;
+
     this.props.currentCohort.cohort.sort();
     this.temporaryPoint = this.props.currentCohort.cohort.filteredData[
       indexes[0]
@@ -303,20 +297,17 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
 
   private getDefaultSelectedPointIndexes(errorCohort: ErrorCohort): number[] {
     const indexes = errorCohort.cohort.unwrap(JointDataset.IndexLabel);
-    if (indexes.length > 0) {
-      return [indexes[0]];
-    }
+    if (indexes.length > 0) return [indexes[0]];
+
     return [];
   }
 
   // fetch prediction for temporary point
   private fetchData(fetchingReference: { [key: string]: any }): void {
-    if (!this.props.invokeModel) {
-      return;
-    }
-    if (this.state.request !== undefined) {
-      this.state.request.abort();
-    }
+    if (!this.props.invokeModel) return;
+
+    if (this.state.request !== undefined) this.state.request.abort();
+
     const abortController = new AbortController();
     const rawData = JointDataset.datasetSlice(
       fetchingReference,
@@ -357,9 +348,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         }
         this.setState({ request: undefined });
       } catch (error) {
-        if (error.name === "AbortError") {
-          return;
-        }
+        if (error.name === "AbortError") return;
+
         if (error.name === "PythonError") {
           alert(
             localization.formatString(

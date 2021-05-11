@@ -91,9 +91,8 @@ export class AxisConfigDialog extends React.PureComponent<
     if (
       metaVal === undefined ||
       !this.props.orderedGroupTitles.includes(metaVal.category)
-    ) {
+    )
       return previousValue;
-    }
 
     previousValue.push({ key, title: metaVal.abbridgedLabel });
     return previousValue;
@@ -321,39 +320,36 @@ export class AxisConfigDialog extends React.PureComponent<
   };
 
   private getMinValue(selectedMeta: IJointMeta): number | string {
-    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
-      return 0;
-    }
-    if (Number.isInteger(selectedMeta.featureRange.min)) {
+    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) return 0;
+
+    if (Number.isInteger(selectedMeta.featureRange.min))
       return selectedMeta.featureRange.min;
-    }
+
     return (Math.round(selectedMeta.featureRange.min * 10000) / 10000).toFixed(
       4
     );
   }
 
   private getMaxValue(selectedMeta: IJointMeta): number | string {
-    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
-      return 0;
-    }
-    if (Number.isInteger(selectedMeta.featureRange.max)) {
+    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) return 0;
+
+    if (Number.isInteger(selectedMeta.featureRange.max))
       return selectedMeta.featureRange.max;
-    }
+
     return (Math.round(selectedMeta.featureRange.max * 10000) / 10000).toFixed(
       4
     );
   }
 
   private extractSelectionKey(key: string): string {
-    if (key === undefined) {
-      return ColumnCategories.None;
-    }
-    if (key.includes(JointDataset.DataLabelRoot)) {
+    if (key === undefined) return ColumnCategories.None;
+
+    if (key.includes(JointDataset.DataLabelRoot))
       return JointDataset.DataLabelRoot;
-    }
-    if (key.includes(JointDataset.ProbabilityYRoot)) {
+
+    if (key.includes(JointDataset.ProbabilityYRoot))
       return JointDataset.ProbabilityYRoot;
-    }
+
     return key;
   }
 
@@ -361,9 +357,8 @@ export class AxisConfigDialog extends React.PureComponent<
     _ev?: React.FormEvent<HTMLElement>,
     checked?: boolean
   ): void => {
-    if (checked === undefined) {
-      return;
-    }
+    if (checked === undefined) return;
+
     this.props.jointDataset.setTreatAsCategorical(
       this.state.selectedColumn.property,
       checked
@@ -378,9 +373,8 @@ export class AxisConfigDialog extends React.PureComponent<
     _ev?: React.FormEvent<HTMLElement>,
     checked?: boolean
   ): void => {
-    if (checked === undefined) {
-      return;
-    }
+    if (checked === undefined) return;
+
     const property = this.state.selectedColumn.property;
     if (checked === false) {
       this.setState({
@@ -441,9 +435,9 @@ export class AxisConfigDialog extends React.PureComponent<
         !Number.isInteger(number) ||
         number > AxisConfigDialog.MAX_HIST_COLS ||
         number < AxisConfigDialog.MIN_HIST_COLS
-      ) {
+      )
         return this.state.binCount?.toString();
-      }
+
       this.setState({ binCount: number });
     } else {
       const prevVal = this.state.binCount as number;
@@ -451,9 +445,9 @@ export class AxisConfigDialog extends React.PureComponent<
       if (
         newVal > AxisConfigDialog.MAX_HIST_COLS ||
         newVal < AxisConfigDialog.MIN_HIST_COLS
-      ) {
+      )
         return prevVal.toString();
-      }
+
       this.setState({ binCount: newVal });
     }
   };
@@ -478,9 +472,8 @@ export class AxisConfigDialog extends React.PureComponent<
     _ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
     option?: IChoiceGroupOption | undefined
   ): void => {
-    if (typeof option?.key !== "string") {
-      return;
-    }
+    if (typeof option?.key !== "string") return;
+
     this.setState({ selectedFilterGroup: option.key });
     let property = option.key;
     if (property === ColumnCategories.None) {
@@ -498,9 +491,9 @@ export class AxisConfigDialog extends React.PureComponent<
     if (
       property === JointDataset.DataLabelRoot ||
       property === JointDataset.ProbabilityYRoot
-    ) {
+    )
       property += "0";
-    }
+
     this.setDefaultStateForKey(property);
   };
 

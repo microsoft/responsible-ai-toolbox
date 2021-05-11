@@ -35,9 +35,9 @@ export class BarChart extends Chart<IChartElement> {
     }
     const [, ...strCords] = exec;
     const [left, bottom, top, right, bottom2] = strCords.map((s) => Number(s));
-    if (bottom !== bottom2) {
+    if (bottom !== bottom2)
       throw new Error(`${idx}th path element in svg is not a rectangle`);
-    }
+
     return { bottom, left, right, top };
   };
 }

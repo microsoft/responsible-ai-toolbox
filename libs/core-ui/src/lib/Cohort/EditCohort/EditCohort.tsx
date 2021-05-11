@@ -130,9 +130,8 @@ export class EditCohort extends React.Component<
     _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void {
-    if (!newValue) {
-      newValue = "";
-    }
+    if (!newValue) newValue = "";
+
     this.setState({ cohortName: newValue });
   }
 

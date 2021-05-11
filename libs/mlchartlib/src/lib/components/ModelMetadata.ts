@@ -23,9 +23,9 @@ export class ModelMetadata {
     isCategoricalArray: boolean[] | undefined,
     categoricalMap?: { [key: number]: string[] }
   ): Array<INumericRange | ICategoricalRange> | undefined {
-    if (testData === undefined || isCategoricalArray === undefined) {
+    if (testData === undefined || isCategoricalArray === undefined)
       return undefined;
-    }
+
     return isCategoricalArray.map((isCategorical, featureIndex) => {
       if (isCategorical) {
         if (categoricalMap && categoricalMap[featureIndex] !== undefined) {
@@ -62,9 +62,9 @@ export class ModelMetadata {
     categoricalMap?: { [key: number]: string[] }
   ): boolean[] | undefined {
     const featureIndexArray = [...new Array(featureLength).keys()];
-    if (categoricalMap) {
+    if (categoricalMap)
       return featureIndexArray.map((i) => categoricalMap[i] !== undefined);
-    }
+
     if (testData) {
       return featureIndexArray.map((featureIndex) => {
         return !testData.every((row) => typeof row[featureIndex] === "number");

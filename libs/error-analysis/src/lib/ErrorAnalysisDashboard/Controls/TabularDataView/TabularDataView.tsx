@@ -59,9 +59,8 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   props,
   defaultRender
 ) => {
-  if (!props) {
-    return <div></div>;
-  }
+  if (!props) return <div></div>;
+
   const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
     tooltipHostProps
   ) => <TooltipHost {...tooltipHostProps} />;
@@ -153,9 +152,9 @@ export class TabularDataView extends React.Component<
       const cohortData = this.props.selectedCohort.cohort.filteredData;
       const numRows: number = cohortData.length;
       let viewedRows: number = numRows;
-      if (this.props.allSelectedIndexes) {
+      if (this.props.allSelectedIndexes)
         viewedRows = Math.min(numRows, this.props.allSelectedIndexes.length);
-      }
+
       rows = constructRows(
         cohortData,
         this.props.jointDataset,
@@ -205,19 +204,15 @@ export class TabularDataView extends React.Component<
   private tabularDataFilter(row: { [key: string]: number }): boolean {
     switch (this.props.dataView) {
       case DataViewKeys.CorrectInstances: {
-        if (
-          row[JointDataset.PredictedYLabel] !== row[JointDataset.TrueYLabel]
-        ) {
+        if (row[JointDataset.PredictedYLabel] !== row[JointDataset.TrueYLabel])
           return true;
-        }
+
         break;
       }
       case DataViewKeys.IncorrectInstances: {
-        if (
-          row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel]
-        ) {
+        if (row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel])
           return true;
-        }
+
         break;
       }
       case DataViewKeys.SelectedInstances:

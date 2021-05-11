@@ -53,9 +53,8 @@ export class MatrixArea extends React.PureComponent<
       maxErrorRate: this.props.state.maxErrorRate,
       selectedCells: this.props.state.selectedCells
     };
-    if (this.props.state.selectedCells === undefined) {
+    if (this.props.state.selectedCells === undefined)
       fetchMatrix(this.props, this.reloadData.bind(this));
-    }
   }
 
   public componentDidUpdate(prevProps: IMatrixAreaProps): void {
@@ -67,9 +66,8 @@ export class MatrixArea extends React.PureComponent<
       selectedFeature1Changed ||
       selectedFeature2Changed ||
       this.props.baseCohort !== prevProps.baseCohort
-    ) {
+    )
       fetchMatrix(this.props, this.reloadData.bind(this));
-    }
   }
 
   public componentWillUnmount(): void {
@@ -98,17 +96,16 @@ export class MatrixArea extends React.PureComponent<
     if (
       this.state.matrixFeature1 !== this.props.selectedFeature1 ||
       this.state.matrixFeature2 !== this.props.selectedFeature2
-    ) {
+    )
       return <div></div>;
-    }
+
     const sameFeatureSelected =
       this.props.selectedFeature1 === this.props.selectedFeature2;
     let rows = 0;
-    if (this.props.selectedFeature2 !== noFeature && !sameFeatureSelected) {
+    if (this.props.selectedFeature2 !== noFeature && !sameFeatureSelected)
       rows = Math.floor((this.state.jsonMatrix.matrix.length - 1) / 2);
-    } else {
-      rows = this.state.jsonMatrix.matrix.length / 2;
-    }
+    else rows = this.state.jsonMatrix.matrix.length / 2;
+
     const topPadding = rows * 50 - 14 + 60;
     const styledMatrixLabel: IStyle = mergeStyles([
       classNames.matrixLabel,
@@ -186,9 +183,8 @@ export class MatrixArea extends React.PureComponent<
     jsonMatrix.matrix.forEach((row: any): void => {
       row.forEach((value: any): void => {
         const errorRate = value.falseCount / value.count;
-        if (!Number.isNaN(errorRate)) {
+        if (!Number.isNaN(errorRate))
           maxErrorRate = Math.max(maxErrorRate, errorRate);
-        }
       });
     });
     this.props.updateMatrixLegendState(maxErrorRate);
@@ -206,9 +202,8 @@ export class MatrixArea extends React.PureComponent<
   private selectAll(matrixLength: number, rowLength: number): void {
     const size = matrixLength * rowLength;
     const selectedCells = new Array<boolean>(size);
-    for (let i = 0; i < size; i++) {
-      selectedCells[i] = true;
-    }
+    for (let i = 0; i < size; i++) selectedCells[i] = true;
+
     this.setState({
       disableClearAll: false,
       disableSelectAll: true,
@@ -235,9 +230,9 @@ export class MatrixArea extends React.PureComponent<
     rowLength: number
   ): void {
     let selectedCells = this.state.selectedCells;
-    if (selectedCells === undefined) {
+    if (selectedCells === undefined)
       selectedCells = new Array<boolean>(matrixLength * rowLength);
-    } else {
+    else {
       // Need to make a copy so setState re-renders
       selectedCells = [...selectedCells];
     }

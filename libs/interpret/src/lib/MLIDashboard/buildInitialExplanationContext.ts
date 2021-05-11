@@ -47,9 +47,9 @@ export enum GlobalTabKeys {
 const rowWarningSize = 6000;
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
-  if (props.modelInformation.method === "regressor") {
+  if (props.modelInformation.method === "regressor")
     return ModelTypes.Regression;
-  }
+
   switch (getClassLength(props)) {
     case 1:
       return ModelTypes.Regression;
@@ -72,17 +72,17 @@ function buildModelMetadata(
   let featureNamesAbridged: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
-    if (!featureNames.every((name) => typeof name === "string")) {
+    if (!featureNames.every((name) => typeof name === "string"))
       featureNames = featureNames.map((x) => x.toString());
-    }
+
     featureNamesAbridged = featureNames.map((name) => {
       return name.length <= maxLength ? name : `${name.slice(0, maxLength)}...`;
     });
   } else {
     let featureLength = 0;
-    if (props.testData && props.testData[0] !== undefined) {
+    if (props.testData && props.testData[0] !== undefined)
       featureLength = props.testData[0].length;
-    } else if (
+    else if (
       props.precomputedExplanations &&
       props.precomputedExplanations.globalFeatureImportance
     ) {
@@ -157,9 +157,9 @@ export function buildInitialExplanationContext(
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance
     | undefined;
-  if (props?.precomputedExplanations?.localFeatureImportance?.scores) {
+  if (props?.precomputedExplanations?.localFeatureImportance?.scores)
     localExplanations = props.precomputedExplanations.localFeatureImportance;
-  }
+
   const jointDataset = new JointDataset({
     dataset: props.testData,
     localExplanations,
@@ -186,9 +186,9 @@ export function buildInitialExplanationContext(
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
   const weightVectorOptions = [];
-  if (modelMetadata.modelType === ModelTypes.Multiclass) {
+  if (modelMetadata.modelType === ModelTypes.Multiclass)
     weightVectorOptions.push(WeightVectors.AbsAvg);
-  }
+
   modelMetadata.classNames.forEach((name, index) => {
     weightVectorLabels[index] = localization.formatString(
       localization.Interpret.WhatIfTab.classLabel,

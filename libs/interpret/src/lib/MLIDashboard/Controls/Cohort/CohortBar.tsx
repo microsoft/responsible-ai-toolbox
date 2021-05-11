@@ -183,9 +183,8 @@ export class CohortBar extends React.Component<
     cohort?: Cohort,
     index?: number
   ): React.ReactNode => {
-    if (!cohort || index === undefined) {
-      return <span />;
-    }
+    if (!cohort || index === undefined) return <span />;
+
     return (
       <Stack>
         <Text>{cohort.name}</Text>
@@ -207,9 +206,8 @@ export class CohortBar extends React.Component<
     cohort?: Cohort,
     index?: number
   ): React.ReactNode => {
-    if (!cohort || index === undefined) {
-      return <span />;
-    }
+    if (!cohort || index === undefined) return <span />;
+
     return (
       <Stack>
         <Text variant={"xSmall"}>

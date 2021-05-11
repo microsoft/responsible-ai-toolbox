@@ -125,9 +125,9 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     fill: string | undefined
   ): string {
     let nodeTextClassName = classNames.nodeText;
-    if (ratio > 50 && isColorDark(fill)) {
+    if (ratio > 50 && isColorDark(fill))
       nodeTextClassName = classNames.filledNodeText;
-    }
+
     return nodeTextClassName;
   }
 }

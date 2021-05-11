@@ -109,45 +109,42 @@ export class BoxChart extends Chart<IBox> {
         `box${idx} left: ${left}, ${left2}, ${left3} do not match`
       );
     }
-    if (right !== right2) {
+    if (right !== right2)
       throw new Error(`box${idx} right: ${right}, ${right2} do not match`);
-    }
-    if (bottom !== bottom2) {
+
+    if (bottom !== bottom2)
       throw new Error(`box${idx} bottom: ${bottom}, ${bottom2} do not match`);
-    }
-    if (q1 !== q12) {
-      throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
-    }
-    if (q3 !== q32) {
-      throw new Error(`box${idx} q3: ${q3}, ${q32} do not match`);
-    }
-    if (top !== top2) {
+
+    if (q1 !== q12) throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
+
+    if (q3 !== q32) throw new Error(`box${idx} q3: ${q3}, ${q32} do not match`);
+
+    if (top !== top2)
       throw new Error(`box${idx} top: ${top}, ${top2} do not match`);
-    }
-    if (q1 !== q12) {
-      throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
-    }
-    if (center !== center2) {
+
+    if (q1 !== q12) throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
+
+    if (center !== center2)
       throw new Error(`box${idx} center: ${center}, ${center2} do not match`);
-    }
-    if (sLeft !== sLeft2) {
+
+    if (sLeft !== sLeft2)
       throw new Error(`box${idx} sleft: ${sLeft}, ${sLeft2} do not match`);
-    }
-    if (sRight !== sRight2) {
+
+    if (sRight !== sRight2)
       throw new Error(`box${idx} sright: ${sRight}, ${sRight2} do not match`);
-    }
-    if (q1 > bottom) {
+
+    if (q1 > bottom)
       throw new Error(`box${idx} q1: ${q1} is greater than bottom: ${bottom} `);
-    }
-    if (q2 > q1) {
+
+    if (q2 > q1)
       throw new Error(`box${idx} q1: ${q2} is greater than q1: ${q1} `);
-    }
-    if (q3 > q2) {
+
+    if (q3 > q2)
       throw new Error(`box${idx} q1: ${q3} is greater than q2: ${q2} `);
-    }
-    if (top > q3) {
+
+    if (top > q3)
       throw new Error(`box${idx} top: ${top} is greater than q3: ${q3} `);
-    }
+
     if (Math.abs(Math.round(((left + right) / 2) * 100) / 100 - center) > 1) {
       throw new Error(
         `box${idx} center: ${center}, is not in the middle of left: ${left} and right ${right}`

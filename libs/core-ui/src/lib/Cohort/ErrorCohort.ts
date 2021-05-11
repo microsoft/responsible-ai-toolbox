@@ -135,15 +135,12 @@ export class ErrorCohort {
           ];
           return `${label} ${method} ${catArg}`;
         }
-      } else if (filter.method === FilterMethods.GreaterThan) {
-        method = ">";
-      } else if (filter.method === FilterMethods.GreaterThanEqualTo) {
+      } else if (filter.method === FilterMethods.GreaterThan) method = ">";
+      else if (filter.method === FilterMethods.GreaterThanEqualTo)
         method = ">=";
-      } else if (filter.method === FilterMethods.LessThan) {
-        method = "<";
-      } else if (filter.method === FilterMethods.LessThanEqualTo) {
-        method = "<=";
-      }
+      else if (filter.method === FilterMethods.LessThan) method = "<";
+      else if (filter.method === FilterMethods.LessThanEqualTo) method = "<=";
+
       return `${label} ${method} ${filter.arg[0].toFixed(2)}`;
     });
   }
@@ -152,15 +149,15 @@ export class ErrorCohort {
     compositeFilters: ICompositeFilter[]
   ): string[] {
     return compositeFilters.map((compositeFilter: ICompositeFilter): string => {
-      if (compositeFilter.method) {
+      if (compositeFilter.method)
         return this.cohortFiltersToString([compositeFilter as IFilter])[0];
-      }
+
       const cohortCompositeFiltersStrings = this.cohortCompositeFiltersToString(
         compositeFilter.compositeFilters
       );
-      if (cohortCompositeFiltersStrings.length === 1) {
+      if (cohortCompositeFiltersStrings.length === 1)
         return cohortCompositeFiltersStrings[0];
-      }
+
       return cohortCompositeFiltersStrings
         .map(
           (cohortCompositeFiltersString) => `(${cohortCompositeFiltersString})`
@@ -207,27 +204,24 @@ export class ErrorCohort {
       this.totalCohort = trueYsCohort.length;
       this.totalAll = trueYs.length;
 
-      for (let i = 0; i < this.totalAll; i++) {
+      for (let i = 0; i < this.totalAll; i++)
         this.totalCorrect += trueYs[i] === predYs[i] ? 1 : 0;
-      }
+
       this.totalIncorrect = this.totalAll - this.totalCorrect;
 
       this.totalCohortCorrect = 0;
-      for (let i = 0; i < this.totalCohort; i++) {
+      for (let i = 0; i < this.totalCohort; i++)
         this.totalCohortCorrect += trueYsCohort[i] === predYsCohort[i] ? 1 : 0;
-      }
+
       this.totalCohortIncorrect = this.totalCohort - this.totalCohortCorrect;
     }
     // Calculate error rate
-    if (this.totalCohort === 0) {
-      this.errorRate = 0;
-    } else {
-      this.errorRate = (this.totalCohortIncorrect / this.totalCohort) * 100;
-    }
+    if (this.totalCohort === 0) this.errorRate = 0;
+    else this.errorRate = (this.totalCohortIncorrect / this.totalCohort) * 100;
+
     // Calculate error coverage
-    if (this.totalIncorrect === 0) {
-      this.errorCoverage = 0;
-    } else {
+    if (this.totalIncorrect === 0) this.errorCoverage = 0;
+    else {
       this.errorCoverage =
         (this.totalCohortIncorrect / this.totalIncorrect) * 100;
     }

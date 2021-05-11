@@ -44,13 +44,10 @@ export class SelectionContext {
     const id = uuidv4();
     this.selectionSubs.set(id, subs.selectionCallback);
 
-    if (subs.hoverCallback) {
-      this.hoverSubs.set(id, subs.hoverCallback);
-    }
+    if (subs.hoverCallback) this.hoverSubs.set(id, subs.hoverCallback);
 
-    if (subs.listenerCountCallback) {
+    if (subs.listenerCountCallback)
       this.countSubs.set(id, subs.listenerCountCallback);
-    }
 
     this.listenerCount += 1;
     this.countSubs.forEach((val) => val(this.listenerCount));

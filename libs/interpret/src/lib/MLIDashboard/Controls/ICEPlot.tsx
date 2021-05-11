@@ -81,9 +81,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       xData?: Array<number | string>,
       yData?: number[] | number[][]
     ): IPlotlyProperty | undefined => {
-      if (yData === undefined || xData === undefined) {
-        return undefined;
-      }
+      if (yData === undefined || xData === undefined) return undefined;
+
       const transposedY: number[][] = Array.isArray(yData[0])
         ? ModelExplanationUtils.transpose2DArray(yData as number[][])
         : [yData as number[]];
@@ -189,9 +188,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   ): Array<string | undefined> {
     return xData.map((xValue, index) => {
       const yDatum = yData[index];
-      if (yDatum === undefined) {
-        return undefined;
-      }
+      if (yDatum === undefined) return undefined;
+
       const result = [];
       if (modelType !== ModelTypes.Regression) {
         result.push(
@@ -243,15 +241,13 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   }
 
   public componentDidUpdate(prevProps: IIcePlotProps): void {
-    if (this.props.datapointIndex !== prevProps.datapointIndex) {
+    if (this.props.datapointIndex !== prevProps.datapointIndex)
       this.fetchData();
-    }
   }
 
   public componentWillUnmount(): void {
-    if (this.state.abortController !== undefined) {
+    if (this.state.abortController !== undefined)
       this.state.abortController.abort();
-    }
   }
 
   public render(): React.ReactNode {
@@ -414,12 +410,10 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     _event: React.FormEvent<IComboBox>,
     item?: IDropdownOption
   ): void => {
-    if (this.props.invokeModel === undefined) {
-      return;
-    }
-    if (item?.key === undefined) {
-      return;
-    }
+    if (this.props.invokeModel === undefined) return;
+
+    if (item?.key === undefined) return;
+
     this.setState(
       { rangeView: this.buildRangeView(item.key as number) },
       () => {
@@ -434,9 +428,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   ): void => {
     const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     rangeView.min = val;
     if (
       Number.isNaN(val) ||
@@ -461,9 +454,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   ): void => {
     const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     rangeView.max = val;
     if (
       Number.isNaN(val) ||
@@ -488,9 +480,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   ): void => {
     const val = toNumber(newValue);
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     rangeView.steps = val;
     if (!Number.isInteger(val)) {
       rangeView.stepsErrorMessage = localization.Interpret.IcePlot.integerError;
@@ -510,9 +501,8 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     value?: string
   ): void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     const currentSelectedKeys = rangeView.selectedOptionKeys || [];
     if (option) {
       // User selected/de-selected an existing option
@@ -540,21 +530,18 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
   ): Array<string | number> => {
     selectedKeys = [...selectedKeys]; // modify a copy
     const index = selectedKeys.indexOf(option.key as string);
-    if (option.selected && index < 0) {
-      selectedKeys.push(option.key as string);
-    } else {
-      selectedKeys.splice(index, 1);
-    }
+    if (option.selected && index < 0) selectedKeys.push(option.key as string);
+    else selectedKeys.splice(index, 1);
+
     return selectedKeys;
   };
 
   private fetchData(): void {
-    if (this.state.abortController !== undefined) {
+    if (this.state.abortController !== undefined)
       this.state.abortController.abort();
-    }
-    if (!this.state.rangeView || !this.props.invokeModel) {
-      return;
-    }
+
+    if (!this.state.rangeView || !this.props.invokeModel) return;
+
     const abortController = new AbortController();
     const requestedRange = this.buildRange();
     const promise = this.props.invokeModel(
@@ -571,13 +558,11 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       async () => {
         try {
           const fetchedData = await promise;
-          if (Array.isArray(fetchedData)) {
+          if (Array.isArray(fetchedData))
             this.setState({ abortController: undefined, fetchedData });
-          }
         } catch (error) {
-          if (error.name === "AbortError") {
-            return;
-          }
+          if (error.name === "AbortError") return;
+
           if (error.name === "PythonError") {
             this.setState({
               errorMessage: localization.formatString(
@@ -597,9 +582,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       this.state.rangeView.minErrorMessage !== undefined ||
       this.state.rangeView.maxErrorMessage !== undefined ||
       this.state.rangeView.stepsErrorMessage !== undefined
-    ) {
+    )
       return [];
-    }
+
     const min = toNumber(this.state.rangeView.min);
     const max = toNumber(this.state.rangeView.max);
     const steps = toNumber(this.state.rangeView.steps);
@@ -608,9 +593,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     if (
       this.state.rangeView.type === RangeTypes.Categorical &&
       Array.isArray(this.state.rangeView.selectedOptionKeys)
-    ) {
+    )
       return this.state.rangeView.selectedOptionKeys;
-    } else if (
+    else if (
       !Number.isNaN(min) &&
       !Number.isNaN(max) &&
       Number.isInteger(steps)
@@ -631,9 +616,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     if (
       !this.props.explanationContext.testDataset.dataset ||
       !this.state.rangeView
-    ) {
+    )
       return [];
-    }
+
     const rangeView = this.state.rangeView;
     const selectedRow = this.props.explanationContext.testDataset.dataset[
       this.props.datapointIndex

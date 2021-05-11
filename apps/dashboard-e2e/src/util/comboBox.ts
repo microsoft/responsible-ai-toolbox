@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 function getItemSelector(item: string | number): string {
-  if (typeof item === "string") {
-    return `:contains("${item}")`;
-  }
+  if (typeof item === "string") return `:contains("${item}")`;
+
   return `:eq(${item})`;
 }
 export function selectComboBox(selector: string, item: string | number): void {

@@ -99,9 +99,8 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public componentDidMount(): void {
     window.addEventListener("resize", this.onResize);
-    if (!this.state.treeNodes?.[0]) {
-      this.fetchTreeNodes();
-    } else {
+    if (!this.state.treeNodes?.[0]) this.fetchTreeNodes();
+    else {
       this.onResize();
       this.forceUpdate();
     }
@@ -112,9 +111,8 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
       this.props.baseCohort !== prevProps.baseCohort ||
       this.props.state !== prevProps.state
-    ) {
+    )
       this.fetchTreeNodes();
-    }
   }
 
   public componentWillUnmount(): void {
@@ -123,9 +121,8 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    if (!this.state.root) {
-      return React.Fragment;
-    }
+    if (!this.state.root) return React.Fragment;
+
     const classNames = treeViewRendererStyles();
     const labelPaddingX = 20;
     const labelPaddingY = 8;
@@ -203,12 +200,11 @@ export class TreeViewRenderer extends React.PureComponent<
           },
           text: d.data.condition
         };
-        if (labelX + element.bbX < pathMin) {
-          pathMin = labelX + element.bbX;
-        }
-        if (labelX + element.bbX + element.bbWidth > pathMax) {
+        if (labelX + element.bbX < pathMin) pathMin = labelX + element.bbX;
+
+        if (labelX + element.bbX + element.bbWidth > pathMax)
           pathMax = labelX + element.bbX + element.bbWidth;
-        }
+
         return element;
       });
 
@@ -373,9 +369,8 @@ export class TreeViewRenderer extends React.PureComponent<
         !requestTreeNodes ||
         requestTreeNodes.length === 0 ||
         !requestTreeNodes[0]
-      ) {
+      )
         return state;
-      }
 
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
@@ -384,9 +379,8 @@ export class TreeViewRenderer extends React.PureComponent<
       const min: number = rootErrorSize / rootSize;
       const max: number = Math.max(
         ...requestTreeNodes.map((node) => {
-          if (node.size === 0) {
-            return 0;
-          }
+          if (node.size === 0) return 0;
+
           return node.error / node.size;
         })
       );
@@ -410,9 +404,8 @@ export class TreeViewRenderer extends React.PureComponent<
 
           let heatmapStyle: Property.Color = errorAvgColor;
 
-          if (node.error / node.size > rootLocalError * errorRatioThreshold) {
+          if (node.error / node.size > rootLocalError * errorRatioThreshold)
             heatmapStyle = colorgrad(localErrorPerc) || errorAvgColor;
-          }
 
           return {
             arg: node.arg,
@@ -447,14 +440,12 @@ export class TreeViewRenderer extends React.PureComponent<
       const root = treemap(tempRoot) as HierarchyPointNode<ITreeNode>;
 
       const selectedNode = state.selectedNode;
-      if (selectedNode) {
-        this.unselectParentNodes(selectedNode);
-      }
+      if (selectedNode) this.unselectParentNodes(selectedNode);
+
       this.selectParentNodes(root);
       let nodeDetail: INodeDetail;
-      if (root === undefined) {
-        nodeDetail = this.state.nodeDetail;
-      } else {
+      if (root === undefined) nodeDetail = this.state.nodeDetail;
+      else {
         (root as any).data.isSelectedLeaf = true;
         nodeDetail = this.getNodeDetail(root, state);
       }
@@ -475,9 +466,9 @@ export class TreeViewRenderer extends React.PureComponent<
     // Clear filters
     const filters: IFilter[] = [];
     let cohortStats: CohortStats | undefined = undefined;
-    if (this.state.root) {
+    if (this.state.root)
       cohortStats = this.calculateCohortStats(this.state.root.data);
-    }
+
     this.props.updateSelectedCohort(
       filters,
       [],
@@ -504,32 +495,27 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private selectParentNodes(d: HierarchyPointNode<ITreeNode> | null): void {
-    if (!d) {
-      return;
-    }
+    if (!d) return;
+
     d.data.nodeState.onSelectedPath = true;
     this.selectParentNodes(d.parent);
   }
 
   private unselectParentNodes(d: HierarchyPointNode<ITreeNode> | null): void {
-    if (!d) {
-      return;
-    }
+    if (!d) return;
+
     d.data.nodeState.onSelectedPath = false;
     d.data.nodeState.isSelectedLeaf = false;
     this.unselectParentNodes(d.parent);
   }
 
   private getFilters(d: HierarchyPointNode<ITreeNode>): IFilter[] {
-    if (!d || !d.parent) {
-      return [];
-    }
+    if (!d || !d.parent) return [];
+
     let filterArg: number[];
-    if (Array.isArray(d.data.arg)) {
-      filterArg = d.data.arg;
-    } else {
-      filterArg = [d.data.arg];
-    }
+    if (Array.isArray(d.data.arg)) filterArg = d.data.arg;
+    else filterArg = [d.data.arg];
+
     const filter = {
       arg: filterArg,
       column: d.parent.data.nodeName,
@@ -542,9 +528,8 @@ export class TreeViewRenderer extends React.PureComponent<
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
-      if (state.selectedNode) {
-        this.unselectParentNodes(state.selectedNode);
-      }
+      if (state.selectedNode) this.unselectParentNodes(state.selectedNode);
+
       this.selectParentNodes(node);
       node.data.nodeState.isSelectedLeaf = true;
 
@@ -596,9 +581,8 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private fetchTreeNodes(): void {
-    if (this.state.request) {
-      this.state.request.abort();
-    }
+    if (this.state.request) this.state.request.abort();
+
     if (!this.props.getTreeNodes) {
       if (this.props.staticTreeNodes) {
         // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call

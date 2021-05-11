@@ -93,9 +93,7 @@ export class CasualAggregateTable extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICasualAggregateTableProps): void {
-    if (!_.isEqual(prevProps.data, this.props.data)) {
-      this.forceUpdate();
-    }
+    if (!_.isEqual(prevProps.data, this.props.data)) this.forceUpdate();
   }
   private getItems = (columns: IColumn[]): unknown[] => {
     const props = columns.map((c) => c.key);

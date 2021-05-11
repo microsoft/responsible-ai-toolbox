@@ -198,9 +198,8 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     isCategorical: boolean | undefined,
     explanationContext: IExplanationContext
   ): IData[] {
-    if (!feature) {
-      return [];
-    }
+    if (!feature) return [];
+
     if (!isCategorical) {
       return EbmExplanation.buildContinuousSeries(
         feature,
@@ -241,8 +240,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (typeof item?.key === "number") {
+    if (typeof item?.key === "number")
       this.setState({ selectedFeature: item.key });
-    }
   };
 }

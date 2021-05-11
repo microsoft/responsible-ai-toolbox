@@ -193,9 +193,9 @@ export class ModelComparisonChart extends React.Component<
       const props = _.cloneDeep(this.plotlyProps);
       props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
         (series) => {
-          if (series.name) {
+          if (series.name)
             series.name = this.props.dashboardContext.modelNames[series.name];
-          }
+
           series.text = this.props.dashboardContext.modelNames;
           return series;
         }
@@ -206,12 +206,10 @@ export class ModelComparisonChart extends React.Component<
         fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey];
       const fairnessMetricTitle = fairnessMetric.title;
 
-      if (props.layout?.xaxis) {
+      if (props.layout?.xaxis)
         props.layout.xaxis.title = performanceMetricTitle;
-      }
-      if (props.layout?.yaxis) {
-        props.layout.yaxis.title = fairnessMetricTitle;
-      }
+
+      if (props.layout?.yaxis) props.layout.yaxis.title = fairnessMetricTitle;
 
       const cancelIcon: IIconProps = { iconName: "Cancel" };
 
@@ -361,9 +359,8 @@ export class ModelComparisonChart extends React.Component<
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
       const index = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
@@ -383,9 +380,8 @@ export class ModelComparisonChart extends React.Component<
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     const performanceKey = option.key.toString();
     if (this.state.performanceKey !== performanceKey) {
       this.props.performancePickerProps.onPerformanceChange(performanceKey);
@@ -397,9 +393,8 @@ export class ModelComparisonChart extends React.Component<
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     const fairnessKey = option.key.toString();
     if (this.state.fairnessKey !== fairnessKey) {
       this.props.fairnessPickerProps.onFairnessChange(fairnessKey);

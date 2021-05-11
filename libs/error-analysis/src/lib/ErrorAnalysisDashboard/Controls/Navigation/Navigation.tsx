@@ -52,9 +52,8 @@ export class Navigation extends React.Component<INavigationProps> {
           e?: React.MouseEvent<HTMLElement>,
           item?: IBreadcrumbItem
         ): void => {
-          if (e !== undefined && item !== undefined) {
+          if (e !== undefined && item !== undefined)
             this.errorDetectorBreadcrumbClicked(e, item);
-          }
         },
         text: localization.ErrorAnalysis.Navigation.errorExplorer
       });
@@ -87,9 +86,8 @@ export class Navigation extends React.Component<INavigationProps> {
               e?: React.MouseEvent<HTMLElement>,
               item?: IBreadcrumbItem
             ): void => {
-              if (e !== undefined && item !== undefined) {
+              if (e !== undefined && item !== undefined)
                 this.localExplanationBreadcrumbClicked(e, item);
-              }
             },
             text: localization.ErrorAnalysis.Navigation.localExplanation
           });
@@ -121,9 +119,8 @@ export class Navigation extends React.Component<INavigationProps> {
   private _onRenderItem: IRenderFunction<IBreadcrumbItem> = (
     item?: IBreadcrumbItem
   ): JSX.Element | null => {
-    if (!item) {
-      return <div></div>;
-    }
+    if (!item) return <div></div>;
+
     if (item.onClick) {
       return (
         <Link
@@ -150,9 +147,8 @@ export class Navigation extends React.Component<INavigationProps> {
     _: React.MouseEvent<HTMLElement>,
     item: IBreadcrumbItem
   ): void {
-    if (item !== undefined && item.key === ViewTypeKeys.ErrorAnalysisView) {
+    if (item !== undefined && item.key === ViewTypeKeys.ErrorAnalysisView)
       this.props.updateViewState(item.key);
-    }
   }
 
   private localExplanationBreadcrumbClicked(

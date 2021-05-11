@@ -169,9 +169,8 @@ export class WhatIfTab extends React.PureComponent<
     prevProps: IWhatIfTabProps,
     prevState: IWhatIfTabState
   ): void {
-    if (!this.state) {
-      return;
-    }
+    if (!this.state) return;
+
     let sortingSeriesIndex = this.state.sortingSeriesIndex;
     let sortArray = this.state.sortArray;
     const selectionsAreEqual = _.isEqual(
@@ -234,9 +233,7 @@ export class WhatIfTab extends React.PureComponent<
           sortArray = ModelExplanationUtils.getSortIndices(
             this.selectedFeatureImportance[0].unsortedAggregateY
           ).reverse();
-        } else {
-          sortingSeriesIndex = undefined;
-        }
+        } else sortingSeriesIndex = undefined;
       } else if (!weightVectorsAreEqual) {
         sortArray = ModelExplanationUtils.getSortIndices(
           this.selectedFeatureImportance[0].unsortedAggregateY
@@ -307,9 +304,8 @@ export class WhatIfTab extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    if (this.state.chartProps === undefined) {
-      return <div />;
-    }
+    if (this.state.chartProps === undefined) return <div />;
+
     const plotlyProps = this.generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
@@ -581,9 +577,8 @@ export class WhatIfTab extends React.PureComponent<
 
   private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
-    if (indexes.length > 0) {
-      return [indexes[0]];
-    }
+    if (indexes.length > 0) return [indexes[0]];
+
     return [];
   }
 
@@ -591,9 +586,8 @@ export class WhatIfTab extends React.PureComponent<
     _event: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
+    if (item?.key === undefined) return;
+
     this.buildRowOptions(item.key as number);
     this.setState({
       selectedCohortIndex: item.key as number,
@@ -622,9 +616,8 @@ export class WhatIfTab extends React.PureComponent<
     _event: React.FormEvent,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key !== undefined)
       this.setTemporaryPointToCopyOfDatasetPoint(item.key as number);
-    }
   };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
@@ -675,9 +668,8 @@ export class WhatIfTab extends React.PureComponent<
     isString: boolean,
     newValue?: string
   ): void => {
-    if (!this.temporaryPoint || !newValue) {
-      return;
-    }
+    if (!this.temporaryPoint || !newValue) return;
+
     const editingData = this.temporaryPoint;
     this.stringifiedValues[key] = newValue;
     if (isString) {
@@ -705,9 +697,8 @@ export class WhatIfTab extends React.PureComponent<
     option?: IComboBoxOption,
     value?: string
   ): void => {
-    if (!this.temporaryPoint || (!value && !option)) {
-      return;
-    }
+    if (!this.temporaryPoint || (!value && !option)) return;
+
     const editingData = this.temporaryPoint;
     if (option) {
       // User selected/de-selected an existing option
@@ -717,9 +708,9 @@ export class WhatIfTab extends React.PureComponent<
       const featureOption = this.state.featuresOption.find(
         (feature) => feature.key === key
       );
-      if (featureOption) {
+      if (featureOption)
         featureOption.data.categoricalOptions.push({ key: value, text: value });
-      }
+
       editingData[key] = value;
     }
 
@@ -729,9 +720,9 @@ export class WhatIfTab extends React.PureComponent<
 
   private savePoint = (): void => {
     const customPoints = [...this.state.customPoints];
-    if (this.state.editingDataCustomIndex && this.temporaryPoint) {
+    if (this.state.editingDataCustomIndex && this.temporaryPoint)
       customPoints[this.state.editingDataCustomIndex] = this.temporaryPoint;
-    }
+
     this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
     this.setState({ customPoints });
   };
@@ -743,9 +734,8 @@ export class WhatIfTab extends React.PureComponent<
         : this.state.customPoints.length;
     const customPoints = [...this.state.customPoints];
     const customPointIsActive = [...this.state.customPointIsActive];
-    if (this.temporaryPoint) {
-      customPoints.push(this.temporaryPoint);
-    }
+    if (this.temporaryPoint) customPoints.push(this.temporaryPoint);
+
     customPointIsActive.push(true);
     this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
     this.setState({
@@ -759,9 +749,8 @@ export class WhatIfTab extends React.PureComponent<
     const indexes = this.getDefaultSelectedPointIndexes(
       this.context.errorCohorts[this.state.selectedCohortIndex].cohort
     );
-    if (indexes.length === 0) {
-      return undefined;
-    }
+    if (indexes.length === 0) return undefined;
+
     this.temporaryPoint = this.context.jointDataset.getRow(indexes[0]);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
@@ -800,18 +789,16 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
     this.setState({ chartProps: newProps, xDialogOpen: false });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
     this.setState({ chartProps: newProps, yDialogOpen: false });
@@ -850,9 +837,9 @@ export class WhatIfTab extends React.PureComponent<
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
     // custom point
-    if (trace.curveNumber === 1) {
+    if (trace.curveNumber === 1)
       this.setTemporaryPointToCustomPoint(trace.pointNumber);
-    } else {
+    else {
       const index = trace.customdata[JointDataset.IndexLabel];
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
@@ -860,9 +847,8 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   private toggleSelectionOfPoint(index?: number): void {
-    if (index === undefined) {
-      return;
-    }
+    if (index === undefined) return;
+
     const indexOf = this.state.selectedPointsIndexes.indexOf(index);
     const newSelections = [...this.state.selectedPointsIndexes];
     const pointIsActive = [...this.state.pointIsActive];
@@ -888,12 +874,10 @@ export class WhatIfTab extends React.PureComponent<
 
   // fetch prediction for temporary point
   private fetchData(fetchingReference: { [key: string]: any }): void {
-    if (!this.props.invokeModel) {
-      return;
-    }
-    if (this.state.request !== undefined) {
-      this.state.request.abort();
-    }
+    if (!this.props.invokeModel) return;
+
+    if (this.state.request !== undefined) this.state.request.abort();
+
     const abortController = new AbortController();
     const rawData = JointDataset.datasetSlice(
       fetchingReference,
@@ -933,9 +917,8 @@ export class WhatIfTab extends React.PureComponent<
         }
         this.setState({ request: undefined });
       } catch (error) {
-        if (error.name === "AbortError") {
-          return;
-        }
+        if (error.name === "AbortError") return;
+
         if (error.name === "PythonError") {
           alert(
             localization.formatString(
@@ -963,9 +946,9 @@ export class WhatIfTab extends React.PureComponent<
         const selectionIndex = this.state.selectedPointsIndexes.indexOf(
           rowIndex
         );
-        if (selectionIndex === -1) {
+        if (selectionIndex === -1)
           return FabricStyles.fabricColorInactiveSeries;
-        }
+
         return FabricStyles.fabricColorPalette[selectionIndex];
       }) as any,
       size: 8,
@@ -1070,9 +1053,9 @@ export class WhatIfTab extends React.PureComponent<
       hovertemplate += metaX.label + ": %{customdata.X}<br>";
 
       rawX.forEach((val, index) => {
-        if (metaX.treatAsCategorical) {
+        if (metaX.treatAsCategorical)
           customdata[index]["X"] = metaX.sortedCategoricalValues?.[val];
-        } else {
+        else {
           customdata[index]["X"] = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
@@ -1086,9 +1069,7 @@ export class WhatIfTab extends React.PureComponent<
         trace.x = dither.map((ditherVal, index) => {
           return rawX[index] + ditherVal;
         });
-      } else {
-        trace.x = rawX;
-      }
+      } else trace.x = rawX;
     }
     if (chartProps.yAxis) {
       const metaY = this.context.jointDataset.metaDict[
@@ -1097,9 +1078,9 @@ export class WhatIfTab extends React.PureComponent<
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
       hovertemplate += metaY.label + ": %{customdata.Y}<br>";
       rawY.forEach((val, index) => {
-        if (metaY.treatAsCategorical) {
+        if (metaY.treatAsCategorical)
           customdata[index]["Y"] = metaY.sortedCategoricalValues?.[val];
-        } else {
+        else {
           customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
@@ -1113,9 +1094,7 @@ export class WhatIfTab extends React.PureComponent<
         trace.y = dither.map((ditherVal, index) => {
           return rawY[index] + ditherVal;
         });
-      } else {
-        trace.y = rawY;
-      }
+      } else trace.y = rawY;
     }
     hovertemplate +=
       localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";

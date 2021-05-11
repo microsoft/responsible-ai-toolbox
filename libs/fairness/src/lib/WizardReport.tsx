@@ -269,9 +269,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   }
 
   private readonly clearModelSelection = (): void => {
-    if (this.props.onChartClick) {
-      this.props.onChartClick();
-    }
+    if (this.props.onChartClick) this.props.onChartClick();
   };
 
   // private readonly onEditConfigs = (): void => {
@@ -289,9 +287,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     _: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
       const index = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
@@ -307,9 +304,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     const performanceKey = option.key.toString();
     if (this.state.performanceKey !== performanceKey) {
       this.props.performancePickerProps.onPerformanceChange(performanceKey);
@@ -321,9 +317,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     const fairnessKey = option.key.toString();
     if (this.state.fairnessKey !== fairnessKey) {
       this.props.fairnessPickerProps.onFairnessChange(fairnessKey);

@@ -155,9 +155,8 @@ export class ScatterUtils {
       if (explanationContext.testDataset.probabilityY) {
         explanationContext.testDataset.probabilityY[0].forEach((_, index) => {
           let className = explanationContext.modelMetadata.classNames[index];
-          if (!className) {
-            className = `class ${index}`;
-          }
+          if (!className) className = `class ${index}`;
+
           result.push({
             data: { isCategorical: false },
             key: `ProbabilityY[${index}]`,
@@ -227,9 +226,9 @@ export class ScatterUtils {
             if (
               explanationContext.modelMetadata.modelType ===
               ModelTypes.Regression
-            ) {
+            )
               result.PredictedY = rawPrediction;
-            } else {
+            else {
               result.PredictedYClassIndex = rawPrediction;
               result.PredictedY =
                 explanationContext.modelMetadata.classNames[rawPrediction];
@@ -240,9 +239,9 @@ export class ScatterUtils {
             if (
               explanationContext.modelMetadata.modelType ===
               ModelTypes.Regression
-            ) {
+            )
               result.TrueY = rawTruth;
-            } else {
+            else {
               result.TrueY =
                 explanationContext.modelMetadata.classNames[rawTruth];
               result.TrueYClassIndex = rawTruth;
@@ -551,15 +550,14 @@ export class ScatterUtils {
         _.get(plotlyProps.data[0], "datapointLevelAccessors.color.path")
       )
     );
-    if (foundOption !== undefined) {
-      return foundOption.key.toString();
-    }
+    if (foundOption !== undefined) return foundOption.key.toString();
+
     if (
       plotlyProps.data[0].groupBy === undefined ||
       plotlyProps.data[0].groupBy?.length < 1
-    ) {
+    )
       return undefined;
-    }
+
     foundOption = options.find(
       (option) => option.key === plotlyProps.data[0].groupBy?.[0]
     );

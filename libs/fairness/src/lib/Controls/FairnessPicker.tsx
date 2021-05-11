@@ -90,8 +90,6 @@ export class FairnessPicker extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (typeof item?.key === "string") {
-      this.props.onFairnessChange(item.key);
-    }
+    if (typeof item?.key === "string") this.props.onFairnessChange(item.key);
   };
 }

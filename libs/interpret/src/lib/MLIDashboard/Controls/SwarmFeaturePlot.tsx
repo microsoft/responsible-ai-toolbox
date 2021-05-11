@@ -74,9 +74,9 @@ export class SwarmFeaturePlot extends React.PureComponent<
           `${localization.Interpret.featureImportance}<br> ${localization.Interpret.ExplanationScatter.class} ${metadata.classNames[0]}`
         );
       }
-      if (selectedOption === undefined || selectedOption.key === "none") {
+      if (selectedOption === undefined || selectedOption.key === "none")
         PlotlyUtils.clearColorProperties(plotlyProps);
-      } else {
+      else {
         PlotlyUtils.setColorProperty(
           plotlyProps,
           selectedOption,
@@ -93,9 +93,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
             localization.Interpret.AggregateImportance.low,
             localization.Interpret.AggregateImportance.high
           ]);
-        } else {
-          _.set(plotlyProps.data[0], "marker.opacity", 0.6);
-        }
+        } else _.set(plotlyProps.data[0], "marker.opacity", 0.6);
       }
       const x = [];
       const y = [];
@@ -163,9 +161,8 @@ export class SwarmFeaturePlot extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ISwarmFeaturePlotProps): void {
-    if (this.props.sortVector !== prevProps.sortVector) {
+    if (this.props.sortVector !== prevProps.sortVector)
       this.setState({ plotlyProps: undefined });
-    }
   }
 
   public render(): React.ReactNode {

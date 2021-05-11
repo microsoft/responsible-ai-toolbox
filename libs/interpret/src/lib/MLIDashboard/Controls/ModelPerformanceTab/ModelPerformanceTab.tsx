@@ -77,9 +77,8 @@ export class ModelPerformanceTab extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    if (this.state.chartProps === undefined) {
-      return <div />;
-    }
+    if (this.state.chartProps === undefined) return <div />;
+
     const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
@@ -240,9 +239,8 @@ export class ModelPerformanceTab extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (typeof item?.key === "number") {
+    if (typeof item?.key === "number")
       this.setState({ selectedCohortIndex: item.key });
-    }
   };
 
   private readonly setXOpen = (val: boolean): void => {
@@ -263,9 +261,8 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   private onXSet = (value: ISelectorConfig): void => {
     const newProps = _.cloneDeep(this.state.chartProps);
-    if (!newProps) {
-      return;
-    }
+    if (!newProps) return;
+
     newProps.xAxis = value;
     newProps.chartType = this.context.jointDataset.metaDict[value.property]
       .treatAsCategorical
@@ -277,36 +274,31 @@ export class ModelPerformanceTab extends React.PureComponent<
 
   private onYSet = (value: ISelectorConfig): void => {
     const newProps = _.cloneDeep(this.state.chartProps);
-    if (!newProps) {
-      return;
-    }
+    if (!newProps) return;
+
     newProps.yAxis = value;
 
     this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    if (!this.context.jointDataset.hasPredictedY) {
-      return undefined;
-    }
+    if (!this.context.jointDataset.hasPredictedY) return undefined;
+
     let bestModelMetricKey: string;
     if (
       this.context.modelMetadata.modelType === ModelTypes.Binary &&
       this.context.jointDataset.hasPredictedProbabilities
-    ) {
+    )
       bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
-    } else if (this.context.modelMetadata.modelType === ModelTypes.Regression) {
+    else if (this.context.modelMetadata.modelType === ModelTypes.Regression) {
       if (
         this.context.jointDataset.hasPredictedY &&
         this.context.jointDataset.hasTrueY
-      ) {
+      )
         bestModelMetricKey = JointDataset.RegressionError;
-      } else {
-        bestModelMetricKey = JointDataset.PredictedYLabel;
-      }
-    } else {
-      bestModelMetricKey = JointDataset.PredictedYLabel;
-    } // not handling multiclass at this time
+      else bestModelMetricKey = JointDataset.PredictedYLabel;
+    } else bestModelMetricKey = JointDataset.PredictedYLabel;
+    // not handling multiclass at this time
 
     const chartProps: IGenericChartProps = {
       chartType: this.context.jointDataset.metaDict[bestModelMetricKey]
@@ -328,9 +320,8 @@ export class ModelPerformanceTab extends React.PureComponent<
   }
 
   private generateMetrics(): ILabeledStatistic[][] {
-    if (!this.state.chartProps) {
-      return [];
-    }
+    if (!this.state.chartProps) return [];
+
     if (this.state.chartProps.yAxis.property === cohortKey) {
       const indexes = this.context.errorCohorts.map((errorCohort) =>
         errorCohort.cohort.unwrap(JointDataset.IndexLabel)
@@ -442,9 +433,8 @@ function generatePlotlyProps(
   yLabels = yLabels?.map((val) => {
     const len = val.length;
     let result = " ";
-    for (let i = 0; i < len; i += 5) {
-      result += " ";
-    }
+    for (let i = 0; i < len; i += 5) result += " ";
+
     return result + val;
   });
   plotlyProps.data[0].hoverinfo = "all";
@@ -502,9 +492,8 @@ function generatePlotlyProps(
           type: "groupby"
         }
       ];
-      if (plotlyProps.layout) {
-        plotlyProps.layout.showlegend = true;
-      }
+      if (plotlyProps.layout) plotlyProps.layout.showlegend = true;
+
       plotlyProps.data[0].transforms = transforms;
       break;
     }

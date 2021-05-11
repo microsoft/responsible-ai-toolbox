@@ -78,9 +78,8 @@ export class LocalImportancePlots extends React.Component<
   public constructor(props: ILocalImportancePlotsProps) {
     super(props);
 
-    if (!this.props.jointDataset.hasDataset) {
-      return;
-    }
+    if (!this.props.jointDataset.hasDataset) return;
+
     if (this.props.metadata.modelType === ModelTypes.Multiclass) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
@@ -419,9 +418,8 @@ export class LocalImportancePlots extends React.Component<
     _event: React.FormEvent<IComboBox>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
+    if (item?.key === undefined) return;
+
     this.setState({ selectedFeatureKey: item.key as string });
   };
 
@@ -429,9 +427,8 @@ export class LocalImportancePlots extends React.Component<
     _event: React.FormEvent<IComboBox>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
+    if (item?.key === undefined) return;
+
     this.setState({ selectedICEClass: item.key as number });
   };
 
@@ -439,9 +436,8 @@ export class LocalImportancePlots extends React.Component<
     _event: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
+    if (item?.key === undefined) return;
+
     const newIndex = item.key as number;
     const sortArray = ModelExplanationUtils.getSortIndices(
       this.props.includedFeatureImportance[newIndex].unsortedAggregateY
@@ -453,9 +449,8 @@ export class LocalImportancePlots extends React.Component<
     _event: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
+    if (item?.key === undefined) return;
+
     const newIndex = item.key as WeightVectorOption;
     this.props.onWeightChange(newIndex);
   };
@@ -464,9 +459,8 @@ export class LocalImportancePlots extends React.Component<
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
   ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
+    if (item?.key === undefined) return;
+
     this.setState({ secondaryChartChoice: item.key });
   };
 

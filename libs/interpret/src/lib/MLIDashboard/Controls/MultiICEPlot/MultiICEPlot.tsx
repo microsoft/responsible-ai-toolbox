@@ -74,9 +74,9 @@ export class MultiICEPlot extends React.PureComponent<
     metadata: IExplanationModelMetadata,
     selectedClass: number
   ): string {
-    if (metadata.modelType === ModelTypes.Regression) {
+    if (metadata.modelType === ModelTypes.Regression)
       return localization.Interpret.IcePlot.prediction;
-    }
+
     return (
       localization.Interpret.IcePlot.predictedProbability +
       "<br>" +
@@ -101,9 +101,9 @@ export class MultiICEPlot extends React.PureComponent<
       xData === undefined ||
       yData.length === 0 ||
       yData.some((row: number[] | number[][]) => row === undefined)
-    ) {
+    )
       return undefined;
-    }
+
     const data: Data[] = map<number[] | number[][]>(
       yData,
       (singleRow: number[] | number[][], rowIndex: number) => {
@@ -175,26 +175,20 @@ export class MultiICEPlot extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: IMultiICEPlotProps): void {
-    if (this.props.datapoints !== prevProps.datapoints) {
-      this.fetchData();
-    }
-    if (this.props.feature !== prevProps.feature) {
-      this.onFeatureSelected();
-    }
+    if (this.props.datapoints !== prevProps.datapoints) this.fetchData();
+
+    if (this.props.feature !== prevProps.feature) this.onFeatureSelected();
   }
 
   public componentWillUnmount(): void {
     this.state.abortControllers.forEach((abortController) => {
-      if (abortController !== undefined) {
-        abortController.abort();
-      }
+      if (abortController !== undefined) abortController.abort();
     });
   }
 
   public render(): React.ReactNode {
-    if (this.props.invokeModel === undefined) {
-      return <NoDataMessage />;
-    }
+    if (this.props.invokeModel === undefined) return <NoDataMessage />;
+
     const classNames = multiIcePlotStyles();
     const hasOutgoingRequest = this.state.abortControllers.some(
       (x) => x !== undefined
@@ -339,25 +333,22 @@ export class MultiICEPlot extends React.PureComponent<
 
   private onMinRangeChanged(delta: number, stringVal: string): string | void {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     if (delta === 0 || rangeView.min === undefined) {
       const numberVal = +stringVal;
-      if (Number.isNaN(numberVal)) {
-        return rangeView.min?.toString();
-      }
+      if (Number.isNaN(numberVal)) return rangeView.min?.toString();
+
       rangeView.min = numberVal;
-    } else {
-      rangeView.min += delta;
-    }
+    } else rangeView.min += delta;
+
     if (
       rangeView.max !== undefined &&
       rangeView.min !== undefined &&
       rangeView.max <= rangeView.min
-    ) {
+    )
       return rangeView.min?.toString();
-    }
+
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
       {
@@ -374,25 +365,22 @@ export class MultiICEPlot extends React.PureComponent<
 
   private onMaxRangeChanged(delta: number, stringVal: string): string | void {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     if (delta === 0 || rangeView.max === undefined) {
       const numberVal = +stringVal;
-      if (Number.isNaN(numberVal)) {
-        return rangeView.max?.toString();
-      }
+      if (Number.isNaN(numberVal)) return rangeView.max?.toString();
+
       rangeView.max = numberVal;
-    } else {
-      rangeView.max += delta;
-    }
+    } else rangeView.max += delta;
+
     if (
       rangeView.max !== undefined &&
       rangeView.min !== undefined &&
       rangeView.max <= rangeView.min
-    ) {
+    )
       return rangeView.max.toString();
-    }
+
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
       {
@@ -409,21 +397,17 @@ export class MultiICEPlot extends React.PureComponent<
 
   private onStepsRangeChanged(delta: number, stringVal: string): string | void {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     if (delta === 0 || rangeView.steps === undefined) {
       const numberVal = +stringVal;
-      if (!Number.isInteger(numberVal)) {
-        return rangeView.steps?.toString();
-      }
+      if (!Number.isInteger(numberVal)) return rangeView.steps?.toString();
+
       rangeView.steps = numberVal;
-    } else {
-      rangeView.steps += delta;
-    }
-    if (rangeView.steps <= 0) {
-      return rangeView.steps.toString();
-    }
+    } else rangeView.steps += delta;
+
+    if (rangeView.steps <= 0) return rangeView.steps.toString();
+
     const xAxisArray = this.buildRange(rangeView);
     this.setState(
       {
@@ -445,9 +429,8 @@ export class MultiICEPlot extends React.PureComponent<
     value?: string
   ): void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
-    if (!rangeView) {
-      return;
-    }
+    if (!rangeView) return;
+
     const currentSelectedKeys = rangeView.selectedOptionKeys || [];
     if (option) {
       // User selected/de-selected an existing option
@@ -476,23 +459,18 @@ export class MultiICEPlot extends React.PureComponent<
   ): Array<string | number> => {
     selectedKeys = [...selectedKeys]; // modify a copy
     const index = selectedKeys.indexOf(option.key as string);
-    if (option.selected && index < 0) {
-      selectedKeys.push(option.key as string);
-    } else {
-      selectedKeys.splice(index, 1);
-    }
+    if (option.selected && index < 0) selectedKeys.push(option.key as string);
+    else selectedKeys.splice(index, 1);
+
     return selectedKeys;
   };
 
   private fetchData(): void {
-    if (!this.props.invokeModel) {
-      return;
-    }
+    if (!this.props.invokeModel) return;
+
     const invokeModel = this.props.invokeModel;
     this.state.abortControllers.forEach((abortController) => {
-      if (abortController !== undefined) {
-        abortController.abort();
-      }
+      if (abortController !== undefined) abortController.abort();
     });
     const promises = this.props.datapoints.map((row, index) => {
       const newController = [...this.state.abortControllers];
@@ -517,9 +495,8 @@ export class MultiICEPlot extends React.PureComponent<
           });
         }
       } catch (error) {
-        if (error.name === "AbortError") {
-          return;
-        }
+        if (error.name === "AbortError") return;
+
         if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(
@@ -536,9 +513,8 @@ export class MultiICEPlot extends React.PureComponent<
     row: Array<string | number>,
     range: Array<string | number>
   ): Array<Array<number | string>> {
-    if (!this.state.rangeView) {
-      return [];
-    }
+    if (!this.state.rangeView) return [];
+
     const rangeView = this.state.rangeView;
     return range.map((val: number | string) => {
       const copy = _.cloneDeep(row);
@@ -549,9 +525,8 @@ export class MultiICEPlot extends React.PureComponent<
 
   private buildRangeView(featureKey: string): IRangeView | undefined {
     const summary = this.props.jointDataset.metaDict[featureKey];
-    if (!summary || summary.index === undefined) {
-      return undefined;
-    }
+    if (!summary || summary.index === undefined) return undefined;
+
     if (summary.treatAsCategorical) {
       // Columns that are passed in as categorical strings should be strings when passed to predict
       if (summary.isCategorical) {
@@ -577,9 +552,8 @@ export class MultiICEPlot extends React.PureComponent<
         type: RangeTypes.Categorical
       };
     }
-    if (!summary.featureRange) {
-      return undefined;
-    }
+    if (!summary.featureRange) return undefined;
+
     return {
       featureIndex: summary.index,
       key: featureKey,
@@ -596,9 +570,9 @@ export class MultiICEPlot extends React.PureComponent<
       rangeView.minErrorMessage !== undefined ||
       rangeView.maxErrorMessage !== undefined ||
       rangeView.stepsErrorMessage !== undefined
-    ) {
+    )
       return [];
-    }
+
     const min = toNumber(rangeView.min);
     const max = toNumber(rangeView.max);
     const steps = toNumber(rangeView.steps);
@@ -606,9 +580,9 @@ export class MultiICEPlot extends React.PureComponent<
     if (
       rangeView.type === RangeTypes.Categorical &&
       Array.isArray(rangeView.selectedOptionKeys)
-    ) {
+    )
       return rangeView.selectedOptionKeys as string[];
-    } else if (
+    else if (
       !Number.isNaN(min) &&
       !Number.isNaN(max) &&
       Number.isInteger(steps)

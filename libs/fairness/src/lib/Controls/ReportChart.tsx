@@ -38,11 +38,9 @@ export interface IState {
 export class ReportChart extends React.Component<IReportChartProps, IState> {
   public constructor(props: IReportChartProps) {
     super(props);
-    if (this.props.chartKey) {
-      this.state = { chartKey: this.props.chartKey };
-    } else {
-      this.state = { chartKey: outcomeKey };
-    }
+    if (this.props.chartKey) this.state = { chartKey: this.props.chartKey };
+    else this.state = { chartKey: outcomeKey };
+
     this.props.onUpdateChartKey(this.state.chartKey);
   }
 
@@ -137,9 +135,8 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption | undefined
   ): void {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     if (option.key !== this.state.chartKey) {
       const newChartKey = option.key.toString();
       this.props.onUpdateChartKey(newChartKey);

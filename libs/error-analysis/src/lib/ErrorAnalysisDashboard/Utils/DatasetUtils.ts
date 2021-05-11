@@ -20,13 +20,11 @@ export function constructRows(
   const rows = [];
   for (let i = 0; i < viewedRows; i++) {
     let index = cohortData[i][JointDataset.IndexLabel];
-    if (indexes) {
-      index = indexes[i];
-    }
+    if (indexes) index = indexes[i];
+
     const row = jointDataset.getRow(index);
-    if (filterFunction && filterFunction(row)) {
-      continue;
-    }
+    if (filterFunction && filterFunction(row)) continue;
+
     const data = JointDataset.datasetSlice(
       row,
       jointDataset.metaDict,
@@ -34,15 +32,14 @@ export function constructRows(
     );
     const tableRow = [];
     tableRow.push(row[JointDataset.IndexLabel]);
-    if (colors) {
-      tableRow.push(colors[i]);
-    }
-    if (jointDataset.hasTrueY) {
+    if (colors) tableRow.push(colors[i]);
+
+    if (jointDataset.hasTrueY)
       pushRowData(tableRow, JointDataset.TrueYLabel, jointDataset, row);
-    }
-    if (jointDataset.hasPredictedY) {
+
+    if (jointDataset.hasPredictedY)
       pushRowData(tableRow, JointDataset.PredictedYLabel, jointDataset, row);
-    }
+
     tableRow.push(...data);
     rows.push(tableRow);
   }
@@ -138,9 +135,7 @@ function pushRowData(
   row: { [key: string]: number }
 ): void {
   const categories = jointDataset.metaDict[property].sortedCategoricalValues;
-  if (jointDataset.metaDict[property].isCategorical && categories) {
+  if (jointDataset.metaDict[property].isCategorical && categories)
     tableRow.push(categories[row[property]]);
-  } else {
-    tableRow.push(row[property]);
-  }
+  else tableRow.push(row[property]);
 }

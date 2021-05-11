@@ -29,17 +29,15 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
     let maxValue = Number.MIN_SAFE_INTEGER;
     this.props.binValues.forEach((value, index) => {
       if (value >= maxValue) {
-        if (value === maxValue) {
-          maxIndexes.push(index);
-        } else {
+        if (value === maxValue) maxIndexes.push(index);
+        else {
           maxIndexes = [index];
           maxValue = value;
         }
       }
       if (value <= minValue) {
-        if (value === minValue) {
-          minIndexes.push(index);
-        } else {
+        if (value === minValue) minIndexes.push(index);
+        else {
           minIndexes = [index];
           minValue = value;
         }
@@ -68,11 +66,8 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
           key: rowIndex
         };
         this.props.formattedBinValues.forEach((metricArray, colIndex) => {
-          if (metricArray) {
-            item["metric" + colIndex] = metricArray[rowIndex];
-          } else {
-            item["metric" + colIndex] = "empty";
-          }
+          if (metricArray) item["metric" + colIndex] = metricArray[rowIndex];
+          else item["metric" + colIndex] = "empty";
         });
         items.push(item);
       });
@@ -112,9 +107,8 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
   }
 
   private readonly renderBinColumn = (item?: any): React.ReactNode => {
-    if (!item) {
-      return undefined;
-    }
+    if (!item) return undefined;
+
     return (
       <Text
         styles={{

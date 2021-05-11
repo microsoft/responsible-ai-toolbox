@@ -40,9 +40,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 > {
   public constructor(props: IModelAssessmentDashboardProps) {
     super(props);
-    if (this.props.locale) {
-      localization.setLanguage(this.props.locale);
-    }
+    if (this.props.locale) localization.setLanguage(this.props.locale);
+
     this.state = buildInitialModelAssessmentContext(_.cloneDeep(props));
 
     if (this.props.requestImportances) {
@@ -123,31 +122,22 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                       setTreeViewState={(
                         treeViewState: ITreeViewRendererState
                       ): void => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
+                        if (this.state.selectedCohort !== this.state.baseCohort)
                           this.setState({ treeViewState });
-                        }
                       }}
                       matrixAreaState={this.state.matrixAreaState}
                       matrixFilterState={this.state.matrixFilterState}
                       setMatrixAreaState={(
                         matrixAreaState: IMatrixAreaState
                       ): void => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
+                        if (this.state.selectedCohort !== this.state.baseCohort)
                           this.setState({ matrixAreaState });
-                        }
                       }}
                       setMatrixFilterState={(
                         matrixFilterState: IMatrixFilterState
                       ): void => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
+                        if (this.state.selectedCohort !== this.state.baseCohort)
                           this.setState({ matrixFilterState });
-                        }
                       }}
                       stringParams={this.props.stringParams}
                       selectFeatures={(features: string[]): void =>

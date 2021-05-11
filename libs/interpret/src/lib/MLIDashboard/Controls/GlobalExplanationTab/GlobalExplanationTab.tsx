@@ -92,9 +92,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     super(props);
 
     let initialCohortIndex = 0;
-    if (this.props.initialCohortIndex !== undefined) {
+    if (this.props.initialCohortIndex !== undefined)
       initialCohortIndex = this.props.initialCohortIndex;
-    }
+
     this.state = {
       activeSeries: [],
       chartType: ChartTypes.Bar,
@@ -111,9 +111,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   public componentDidMount(): void {
-    if (!this.context.jointDataset.hasLocalExplanations) {
-      return;
-    }
+    if (!this.context.jointDataset.hasLocalExplanations) return;
 
     const minK = Math.min(
       4,
@@ -149,21 +147,18 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (
       this.props.cohorts !== prevProps.cohorts ||
       this.props.selectedWeightVector !== prevProps.selectedWeightVector
-    ) {
+    )
       this.updateIncludedCohortsOnCohortEdit();
-    }
   }
 
   public render(): React.ReactNode {
     const classNames = globalTabStyles();
 
-    if (!this.context.jointDataset.hasLocalExplanations) {
+    if (!this.context.jointDataset.hasLocalExplanations)
       return <GlobalOnlyChart />;
-    }
 
-    if (this.state.globalBarSettings === undefined) {
-      return <div />;
-    }
+    if (this.state.globalBarSettings === undefined) return <div />;
+
     const cohortOptions: IDropdownOption[] = this.props.cohorts.map(
       (cohort, index) => {
         return { key: index, text: cohort.name };
@@ -332,9 +327,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     _event: React.FormEvent,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key !== undefined)
       this.setState({ selectedCohortIndex: item.key as number });
-    }
   };
 
   private setTopK = (newValue: number): void => {
@@ -373,17 +367,17 @@ export class GlobalExplanationTab extends React.PureComponent<
   ): IGlobalSeries[] {
     // In the initial call this.state.cohortSeries isn't set yet.
     // The cohortSeries optional arg solves that problem.
-    if (cohortSeries) {
+    if (cohortSeries)
       return cohortSeries.filter((_series, idx) => activeArray[idx]);
-    }
+
     return this.state.cohortSeries.filter((_series, idx) => activeArray[idx]);
   }
 
   private updateIncludedCohortsOnCohortEdit(): void {
     let selectedCohortIndex = this.state.selectedCohortIndex;
-    if (selectedCohortIndex >= this.props.cohorts.length) {
+    if (selectedCohortIndex >= this.props.cohorts.length)
       selectedCohortIndex = 0;
-    }
+
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
     this.setState({
       activeSeries: this.getActiveCohortSeries(seriesIsActive),
@@ -418,9 +412,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (typeof item?.key === "string") {
       const key = item.key as string;
       const index = this.context.jointDataset.metaDict[key].index;
-      if (index !== undefined) {
+      if (index !== undefined)
         this.handleFeatureSelection(this.state.selectedCohortIndex, index);
-      }
     }
   };
 

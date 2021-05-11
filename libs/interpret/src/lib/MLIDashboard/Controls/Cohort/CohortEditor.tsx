@@ -71,9 +71,8 @@ export class CohortEditor extends React.PureComponent<
       previousValue.push({ key, text: "Dataset" });
       return previousValue;
     }
-    if (metaVal === undefined) {
-      return previousValue;
-    }
+    if (metaVal === undefined) return previousValue;
+
     previousValue.push({ key, text: metaVal.abbridgedLabel });
     return previousValue;
   }, []);
@@ -188,9 +187,8 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private readonly renderCancelDialog = (): React.ReactNode => {
-    if (!this.state.showConfirmation) {
-      return undefined;
-    }
+    if (!this.state.showConfirmation) return undefined;
+
     return (
       <ConfirmationDialog
         title={localization.Interpret.CohortEditor.cancelTitle}
@@ -231,9 +229,8 @@ export class CohortEditor extends React.PureComponent<
     _ev?: React.FormEvent,
     checked?: boolean
   ): void => {
-    if (checked === undefined || !this.state.openedFilter) {
-      return;
-    }
+    if (checked === undefined || !this.state.openedFilter) return;
+
     const openedFilter = this.state.openedFilter;
     this.props.jointDataset.setTreatAsCategorical(openedFilter.column, checked);
     if (checked) {
@@ -259,9 +256,9 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private _getErrorMessage = (): string | undefined => {
-    if (!this.state.cohortName?.length) {
+    if (!this.state.cohortName?.length)
       return localization.Interpret.CohortEditor.cohortNameError;
-    }
+
     return undefined;
   };
   private readonly onFilterCategoryChange = (
@@ -278,12 +275,10 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private readonly setSelection = (property: string): void => {
-    if (!this._isInitialized) {
-      return;
-    }
-    if (property === JointDataset.DataLabelRoot) {
-      property += "0";
-    }
+    if (!this._isInitialized) return;
+
+    if (property === JointDataset.DataLabelRoot) property += "0";
+
     this.setDefaultStateForKey(property);
   };
 
@@ -298,9 +293,8 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private saveState = (index?: number): void => {
-    if (!this.state.openedFilter || index === undefined) {
-      return;
-    }
+    if (!this.state.openedFilter || index === undefined) return;
+
     this.updateFilter(this.state.openedFilter, index);
     this.setState({ selectedFilterCategory: undefined });
   };
@@ -309,18 +303,15 @@ export class CohortEditor extends React.PureComponent<
     _ev?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!this.state.openedFilter || (!item?.key && item?.key !== 0)) {
-      return;
-    }
+    if (!this.state.openedFilter || (!item?.key && item?.key !== 0)) return;
+
     const openedFilter = this.state.openedFilter;
     const selectedVals = [...(openedFilter.arg as number[])];
 
     const index = selectedVals.indexOf(item.key as number);
-    if (item.selected && index === -1) {
-      selectedVals.push(item.key as number);
-    } else {
-      selectedVals.splice(index, 1);
-    }
+    if (item.selected && index === -1) selectedVals.push(item.key as number);
+    else selectedVals.splice(index, 1);
+
     this.setState({
       openedFilter: {
         arg: selectedVals,
@@ -334,9 +325,8 @@ export class CohortEditor extends React.PureComponent<
     _ev?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!this.state.openedFilter || !item) {
-      return;
-    }
+    if (!this.state.openedFilter || !item) return;
+
     const openedFilter = this.state.openedFilter;
     if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
@@ -363,9 +353,8 @@ export class CohortEditor extends React.PureComponent<
     index: number,
     stringVal: string
   ): string | void => {
-    if (!this.state.openedFilter) {
-      return;
-    }
+    if (!this.state.openedFilter) return;
+
     const openArg = this.state.openedFilter.arg;
     const max = column.featureRange?.max || Number.MAX_SAFE_INTEGER;
     const min = column.featureRange?.min || Number.MIN_SAFE_INTEGER;
@@ -376,23 +365,20 @@ export class CohortEditor extends React.PureComponent<
           column.featureRange?.rangeType === RangeTypes.Integer) ||
         numberVal > max ||
         numberVal < min
-      ) {
+      )
         return this.state.openedFilter.arg[index].toString();
-      }
+
       openArg[index] = numberVal;
     } else {
       const prevVal = openArg[index];
       const newVal = prevVal + delta;
-      if (newVal > max || newVal < min) {
-        return prevVal.toString();
-      }
+      if (newVal > max || newVal < min) return prevVal.toString();
+
       openArg[index] = newVal;
     }
 
     // in the range validation
-    if (openArg[1] <= openArg[0]) {
-      openArg[1] = max;
-    }
+    if (openArg[1] <= openArg[0]) openArg[1] = max;
 
     this.setState({
       openedFilter: {

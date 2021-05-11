@@ -44,9 +44,8 @@ export class NewExplanationDashboard extends React.PureComponent<
   private pivotItems: IPivotItemProps[] = [];
   public constructor(props: IExplanationDashboardProps) {
     super(props);
-    if (this.props.locale) {
-      localization.setLanguage(this.props.locale);
-    }
+    if (this.props.locale) localization.setLanguage(this.props.locale);
+
     this.state = buildInitialExplanationContext(_.cloneDeep(props));
     this.validatePredictMethod();
 
@@ -71,9 +70,8 @@ export class NewExplanationDashboard extends React.PureComponent<
   }
 
   public componentDidUpdate(prev: IExplanationDashboardProps): void {
-    if (this.props.locale && prev.locale !== this.props.locale) {
+    if (this.props.locale && prev.locale !== this.props.locale)
       localization.setLanguage(this.props.locale);
-    }
   }
 
   public render(): React.ReactNode {
@@ -214,9 +212,7 @@ export class NewExplanationDashboard extends React.PureComponent<
           [this.props.testData[0]],
           abortController.signal
         );
-        if (prediction === undefined) {
-          throw new Error(" ");
-        }
+        if (prediction === undefined) throw new Error(" ");
       } catch {
         this.setState({ requestPredictions: undefined });
       }
@@ -224,9 +220,8 @@ export class NewExplanationDashboard extends React.PureComponent<
   }
 
   private handleGlobalTabClick = (item?: PivotItem): void => {
-    if (item?.props.itemKey) {
+    if (item?.props.itemKey)
       this.setState({ activeGlobalTab: item.props.itemKey as GlobalTabKeys });
-    }
   };
 
   private onCohortsChange = (cohorts: Cohort[]): void => {

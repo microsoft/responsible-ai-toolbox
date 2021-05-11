@@ -31,9 +31,9 @@ export function generatePlotlyProps(
         chartProps.colorAxis &&
         (chartProps.colorAxis.options.bin ||
           jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
-      ) {
+      )
         cohort.sort(chartProps.colorAxis.property);
-      }
+
       plotlyProps.data[0].type = chartProps.chartType;
       plotlyProps.data[0].mode = PlotlyMode.Markers;
       if (chartProps.xAxis) {
@@ -51,9 +51,7 @@ export function generatePlotlyProps(
           plotlyProps.data[0].x = dithered.map((dither, index) => {
             return rawX[index] + dither;
           });
-        } else {
-          plotlyProps.data[0].x = rawX;
-        }
+        } else plotlyProps.data[0].x = rawX;
       }
       if (chartProps.yAxis) {
         if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
@@ -70,9 +68,7 @@ export function generatePlotlyProps(
           plotlyProps.data[0].y = dithered.map((dither, index) => {
             return rawY[index] + dither;
           });
-        } else {
-          plotlyProps.data[0].y = rawY;
-        }
+        } else plotlyProps.data[0].y = rawY;
       }
       if (chartProps.colorAxis) {
         const isBinned = chartProps.colorAxis.options?.bin;
@@ -103,9 +99,7 @@ export function generatePlotlyProps(
               type: "groupby"
             }
           ];
-          if (plotlyProps.layout) {
-            plotlyProps.layout.showlegend = false;
-          }
+          if (plotlyProps.layout) plotlyProps.layout.showlegend = false;
         } else {
           plotlyProps.data[0].marker = {
             color: rawColor,
@@ -131,9 +125,8 @@ export function generatePlotlyProps(
       // color series will be set by the y axis if it is categorical, otherwise no color for aggregate charts
       if (!jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
         plotlyProps.data[0].type = "box";
-        if (plotlyProps.layout) {
-          plotlyProps.layout.hovermode = false;
-        }
+        if (plotlyProps.layout) plotlyProps.layout.hovermode = false;
+
         plotlyProps.data[0].x = rawX;
         plotlyProps.data[0].y = cohort.unwrap(chartProps.yAxis.property, false);
         plotlyProps.data[0].marker = {

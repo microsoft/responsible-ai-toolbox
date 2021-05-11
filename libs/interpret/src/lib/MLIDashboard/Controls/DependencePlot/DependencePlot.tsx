@@ -133,9 +133,8 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
 
   private generatePlotlyProps(): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(DependencePlot.basePlotlyProperties);
-    if (!this.props.chartProps) {
-      return plotlyProps;
-    }
+    if (!this.props.chartProps) return plotlyProps;
+
     const chartProps = this.props.chartProps;
     const jointData = this.props.jointDataset;
     const cohort = this.props.cohort;
@@ -145,9 +144,9 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       chartProps.colorAxis &&
       (chartProps.colorAxis.options.bin ||
         jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
-    ) {
+    )
       cohort.sort(chartProps.colorAxis.property);
-    }
+
     const customdata = cohort.unwrap(JointDataset.IndexLabel).map((val) => {
       const dict = {};
       dict[JointDataset.IndexLabel] = val;
@@ -183,9 +182,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
               jointData.metaDict[
                 chartProps.xAxis.property
               ].sortedCategoricalValues?.[val];
-          } else {
-            customdata[index]["X"] = val;
-          }
+          } else customdata[index]["X"] = val;
         });
       } else {
         plotlyProps.data[0].x = rawX;

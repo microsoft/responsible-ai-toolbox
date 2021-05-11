@@ -14,12 +14,10 @@ function validLength(
   length: number | undefined,
   fieldName: string
 ): void {
-  if (y === undefined || length === undefined) {
-    return;
-  }
-  if (!Array.isArray(y)) {
-    throw new TypeError(`${fieldName} is not an array`);
-  }
+  if (y === undefined || length === undefined) return;
+
+  if (!Array.isArray(y)) throw new TypeError(`${fieldName} is not an array`);
+
   if (y.length !== length) {
     throw new Error(
       `Inconsistent dimensions. ${fieldName} has dimension [${y.length}], expected [${length}]`
@@ -31,16 +29,14 @@ function validElementLength(
   length: number | undefined,
   fieldName: string
 ): void {
-  if (y === undefined || length === undefined) {
-    return;
-  }
-  if (!Array.isArray(y)) {
-    throw new TypeError(`${fieldName} is not an array`);
-  }
+  if (y === undefined || length === undefined) return;
+
+  if (!Array.isArray(y)) throw new TypeError(`${fieldName} is not an array`);
+
   y?.forEach((row: number[] | number[][], idx: number) => {
-    if (!Array.isArray(row)) {
+    if (!Array.isArray(row))
       throw new TypeError(`${fieldName} ${idx} is not an array`);
-    }
+
     if (row.length !== length) {
       throw new Error(
         `Inconsistent dimensions. ${fieldName} ${idx} has dimensions [${row.length}], expected [${length}]`

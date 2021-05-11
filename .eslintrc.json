@@ -110,7 +110,7 @@
           }
         ],
         "complexity": "warn",
-        "curly": ["error", "all"],
+        "curly": ["error", "multi-or-nest"],
         "max-lines": "warn",
         "no-else-return": "error",
         "no-useless-call": "error",

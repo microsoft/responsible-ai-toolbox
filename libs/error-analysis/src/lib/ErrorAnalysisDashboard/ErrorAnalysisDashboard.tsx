@@ -92,9 +92,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
     this.setSortVector = this.setSortVector.bind(this);
-    if (this.props.locale) {
-      localization.setLanguage(this.props.locale);
-    }
+    if (this.props.locale) localization.setLanguage(this.props.locale);
+
     this.state = ErrorAnalysisDashboard.buildInitialExplanationContext(
       _.cloneDeep(props)
     );
@@ -133,9 +132,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     let featureNamesAbridged: string[];
     const maxLength = 18;
     if (featureNames !== undefined) {
-      if (!featureNames.every((name) => typeof name === "string")) {
+      if (!featureNames.every((name) => typeof name === "string"))
         featureNames = featureNames.map((x) => x.toString());
-      }
+
       featureNamesAbridged = featureNames.map((name) => {
         return name.length <= maxLength
           ? name
@@ -143,9 +142,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       });
     } else {
       let featureLength = 0;
-      if (props.testData && props.testData[0] !== undefined) {
+      if (props.testData && props.testData[0] !== undefined)
         featureLength = props.testData[0].length;
-      } else if (
+      else if (
         props.precomputedExplanations &&
         props.precomputedExplanations.globalFeatureImportance
       ) {
@@ -224,9 +223,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       props.precomputedExplanations &&
       props.precomputedExplanations.localFeatureImportance &&
       props.precomputedExplanations.localFeatureImportance.scores
-    ) {
+    )
       localExplanations = props.precomputedExplanations.localFeatureImportance;
-    }
+
     const jointDataset = new JointDataset({
       dataset: props.testData,
       localExplanations,
@@ -251,9 +250,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (modelMetadata.modelType === ModelTypes.Multiclass)
       weightVectorOptions.push(WeightVectors.AbsAvg);
-    }
+
     modelMetadata.classNames.forEach((name, index) => {
       weightVectorLabels[index] = localization.formatString(
         localization.Interpret.WhatIfTab.classLabel,
@@ -262,9 +261,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       weightVectorOptions.push(index);
     });
     let selectedFeatures = props.features;
-    if (props.requestDebugML === undefined) {
+    if (props.requestDebugML === undefined)
       selectedFeatures = props.staticDebugML.features;
-    }
+
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
       baseCohort: cohorts[0],
@@ -437,9 +436,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     errorCohort.cohort.name !== originalCohort.cohort.name
                 );
                 let selectedCohort = this.state.selectedCohort;
-                if (originalCohort.cohort.name === selectedCohort.cohort.name) {
+                if (originalCohort.cohort.name === selectedCohort.cohort.name)
                   selectedCohort = editedCohort;
-                }
+
                 this.setState({
                   cohorts: [...cohorts, editedCohort],
                   selectedCohort
@@ -636,21 +635,18 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     );
   }
   private setTreeViewState = (treeViewState: ITreeViewRendererState): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
+    if (this.state.selectedCohort !== this.state.baseCohort)
       this.setState({ treeViewState });
-    }
   };
   private setMatrixAreaState = (matrixAreaState: IMatrixAreaState): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
+    if (this.state.selectedCohort !== this.state.baseCohort)
       this.setState({ matrixAreaState });
-    }
   };
   private setMatrixFilterState = (
     matrixFilterState: IMatrixFilterState
   ): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
+    if (this.state.selectedCohort !== this.state.baseCohort)
       this.setState({ matrixFilterState });
-    }
   };
   private setWhatIfDatapoint = (index: number): void =>
     this.setState({ selectedWhatIfIndex: index });
@@ -678,9 +674,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
     let selectedCohortName = "";
     let addTemporaryCohort = true;
-    if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
+    if (source === CohortSource.TreeMap || source === CohortSource.HeatMap)
       selectedCohortName = "Unsaved";
-    } else {
+    else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;
     }
@@ -703,9 +699,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     let cohorts = this.state.cohorts.filter(
       (errorCohort) => !errorCohort.isTemporary
     );
-    if (addTemporaryCohort) {
-      cohorts = [...cohorts, selectedCohort];
-    }
+    if (addTemporaryCohort) cohorts = [...cohorts, selectedCohort];
+
     this.setState({
       cohorts,
       selectedCohort
@@ -744,9 +739,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     if (viewType !== ViewTypeKeys.ExplanationView) {
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
       this.setState({ openWhatIf: false, predictionTab, viewType });
-    } else {
-      this.setState({ viewType });
-    }
+    } else this.setState({ viewType });
   }
 
   private updatePredictionTabState(predictionTab: PredictionTabKeys): void {

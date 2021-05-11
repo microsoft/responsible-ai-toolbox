@@ -70,9 +70,8 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   public componentDidMount(): void {
     let initialCohortIndex: number;
-    if (this.props.showCohortSelection) {
-      initialCohortIndex = 0;
-    } else {
+    if (this.props.showCohortSelection) initialCohortIndex = 0;
+    else {
       initialCohortIndex = this.context.errorCohorts.findIndex(
         (errorCohort) =>
           errorCohort.cohort.name ===
@@ -96,9 +95,8 @@ export class DatasetExplorerTab extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    if (this.state.chartProps === undefined) {
-      return <div />;
-    }
+    if (this.state.chartProps === undefined) return <div />;
+
     const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
@@ -123,9 +121,9 @@ export class DatasetExplorerTab extends React.PureComponent<
       ColumnCategories.Dataset,
       ColumnCategories.Outcome
     ];
-    if (this.state.chartProps.chartType !== ChartTypes.Scatter) {
+    if (this.state.chartProps.chartType !== ChartTypes.Scatter)
       yAxisCategories.push(ColumnCategories.None);
-    }
+
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
@@ -281,9 +279,8 @@ export class DatasetExplorerTab extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key !== undefined)
       this.setState({ selectedCohortIndex: item.key as number });
-    }
   };
 
   private onChartTypeChange = (
@@ -291,13 +288,12 @@ export class DatasetExplorerTab extends React.PureComponent<
     item?: IChoiceGroupOption
   ): void => {
     const newProps = _.cloneDeep(this.state.chartProps);
-    if (item?.key === undefined || !newProps) {
-      return;
-    }
+    if (item?.key === undefined || !newProps) return;
+
     newProps.chartType = item.key as ChartTypes;
-    if (newProps.yAxis.property === ColumnCategories.None) {
+    if (newProps.yAxis.property === ColumnCategories.None)
       newProps.yAxis = this.generateDefaultYAxis();
-    }
+
     this.setState({ chartProps: newProps });
   };
 
@@ -326,36 +322,32 @@ export class DatasetExplorerTab extends React.PureComponent<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
     this.setState({ chartProps: newProps, xDialogOpen: false });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
     this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
   private onColorSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.colorAxis = value;
     this.setState({ chartProps: newProps, colorDialogOpen: false });
   };
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    if (!this.context.jointDataset.hasDataset) {
-      return;
-    }
+    if (!this.context.jointDataset.hasDataset) return;
+
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Histogram,
       colorAxis: {

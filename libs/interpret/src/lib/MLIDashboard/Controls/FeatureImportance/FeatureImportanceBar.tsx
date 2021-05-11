@@ -168,9 +168,8 @@ export class FeatureImportanceBar extends React.PureComponent<
     if (
       expContext.localExplanation &&
       expContext.localExplanation.percentComplete !== undefined
-    ) {
+    )
       return <LoadingSpinner />;
-    }
 
     const explanationStrings = this.props.messages
       ? this.props.messages.LocalOrGlobalAndTestReq
@@ -179,9 +178,9 @@ export class FeatureImportanceBar extends React.PureComponent<
   }
 
   private getSortVector = (featureByClassMatrix: number[][]): number[] => {
-    if (this.state.selectedSorting === FeatureKeys.AbsoluteGlobal) {
+    if (this.state.selectedSorting === FeatureKeys.AbsoluteGlobal)
       return ModelExplanationUtils.buildSortedVector(featureByClassMatrix);
-    }
+
     return ModelExplanationUtils.buildSortedVector(
       featureByClassMatrix,
       this.state.selectedSorting as number
@@ -206,9 +205,9 @@ export class FeatureImportanceBar extends React.PureComponent<
         undefined ||
       this.props.dashboardContext.explanationContext.globalExplanation
         .perClassFeatureImportances === undefined
-    ) {
+    )
       return [];
-    }
+
     const result: IDropdownOption[] = [
       {
         key: FeatureKeys.AbsoluteGlobal,
@@ -247,9 +246,8 @@ export class FeatureImportanceBar extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key !== undefined)
       this.setState({ selectedSorting: item.key as FeatureSortingKey });
-    }
   };
 
   private onIconClick = (): void => {

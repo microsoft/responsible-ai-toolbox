@@ -105,9 +105,8 @@ export class SidePanel extends React.Component<ISidePanelProps> {
   }
 
   private buildColorLegend(): string[] | undefined {
-    if (!this.props.chartProps) {
-      return;
-    }
+    if (!this.props.chartProps) return;
+
     let colorSeries: string[] = [];
     if (this.props.chartProps.chartType === ChartTypes.Scatter) {
       const colorAxis = this.props.chartProps.colorAxis;

@@ -61,9 +61,8 @@ export const getClassLength: (
     ) {
       const localImportances =
         precomputedExplanations.localFeatureImportance.scores;
-      if (isThreeDimArray(localImportances)) {
-        return localImportances.length;
-      }
+      if (isThreeDimArray(localImportances)) return localImportances.length;
+
       // 2d is regression (could be a non-scikit convention binary, but that is not supported)
       return 1;
     }
@@ -85,9 +84,9 @@ export const getClassLength: (
       Array.isArray(probabilityY) &&
       Array.isArray(probabilityY[0]) &&
       probabilityY[0].length > 0
-    ) {
+    )
       return probabilityY[0].length;
-    }
+
     // default to regression case
     return 1;
   }
@@ -99,9 +98,8 @@ export function getModelType(
   probabilityY?: number[][]
 ): ModelTypes {
   // If Python provides a hint, use it!
-  if (method && method === "regressor") {
-    return ModelTypes.Regression;
-  }
+  if (method && method === "regressor") return ModelTypes.Regression;
+
   switch (getClassLength(precomputedExplanations, probabilityY)) {
     case 1:
       return ModelTypes.Regression;

@@ -121,9 +121,7 @@ export class ShiftCohort extends React.Component<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item) {
-      this.setState({ selectedCohort: item.key as number });
-    }
+    if (item) this.setState({ selectedCohort: item.key as number });
   };
 
   private shiftCohort(): void {

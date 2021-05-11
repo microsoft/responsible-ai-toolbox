@@ -89,9 +89,9 @@ export class CasualIndividualView extends React.PureComponent<
     dataIndex: number | undefined
   ): ICasualAnalysisSingleData | undefined => {
     const casualLocal = this.context?.casualAnalysisData?.local;
-    if (!(dataIndex !== undefined && dataIndex >= 0 && casualLocal)) {
+    if (!(dataIndex !== undefined && dataIndex >= 0 && casualLocal))
       return undefined;
-    }
+
     const keys = Object.keys(casualLocal);
     const localData = {};
     keys.map(

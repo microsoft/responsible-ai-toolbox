@@ -193,9 +193,9 @@ export class ExplanationExploration extends React.PureComponent<
       this.props.dashboardContext.explanationContext.localExplanation &&
       this.props.dashboardContext.explanationContext.localExplanation
         .percentComplete !== undefined
-    ) {
+    )
       return <LoadingSpinner />;
-    }
+
     const explanationStrings = this.props.messages
       ? this.props.messages.LocalExpAndTestReq
       : undefined;
@@ -206,11 +206,9 @@ export class ExplanationExploration extends React.PureComponent<
     const clickedId = (data.points[0] as any).customdata;
     const selections: string[] = this.props.selectionContext.selectedIds.slice();
     const existingIndex = selections.indexOf(clickedId);
-    if (existingIndex !== -1) {
-      selections.splice(existingIndex, 1);
-    } else {
-      selections.push(clickedId);
-    }
+    if (existingIndex !== -1) selections.splice(existingIndex, 1);
+    else selections.push(clickedId);
+
     this.props.selectionContext.onSelect(selections);
   };
 

@@ -19,18 +19,14 @@ export function buildHoverTemplate(
   switch (chartProps.chartType) {
     case ChartTypes.Scatter: {
       if (chartProps.xAxis) {
-        if (chartProps.xAxis.options.dither) {
+        if (chartProps.xAxis.options.dither)
           hovertemplate += xName + ": %{customdata.X}<br>";
-        } else {
-          hovertemplate += xName + ": %{x}<br>";
-        }
+        else hovertemplate += xName + ": %{x}<br>";
       }
       if (chartProps.yAxis) {
-        if (chartProps.yAxis.options.dither) {
+        if (chartProps.yAxis.options.dither)
           hovertemplate += yName + ": %{customdata.Y}<br>";
-        } else {
-          hovertemplate += yName + ": %{y}<br>";
-        }
+        else hovertemplate += yName + ": %{y}<br>";
       }
       if (chartProps.colorAxis) {
         hovertemplate +=
@@ -47,9 +43,9 @@ export function buildHoverTemplate(
       if (
         chartProps.yAxis.property !== ColumnCategories.None &&
         jointData.metaDict[chartProps.yAxis.property].treatAsCategorical
-      ) {
+      )
         hovertemplate += yName + ": %{customdata.Y}<br>";
-      }
+
       hovertemplate += localization.formatString(
         localization.Interpret.Charts.countTooltipPrefix,
         "%{y}<br>"

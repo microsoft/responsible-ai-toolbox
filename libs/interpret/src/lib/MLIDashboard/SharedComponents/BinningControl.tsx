@@ -221,9 +221,8 @@ export class BinningControl extends React.PureComponent<
         ...currentSelectedKeys,
         newOption.key as string
       ];
-      if (rangeView.categoricalOptions) {
+      if (rangeView.categoricalOptions)
         rangeView.categoricalOptions.push(newOption);
-      }
     }
     this.setState(rangeView, () => {
       this.pushChange();
@@ -236,11 +235,9 @@ export class BinningControl extends React.PureComponent<
   ): string[] => {
     selectedKeys = [...selectedKeys]; // modify a copy
     const index = selectedKeys.indexOf(option.key as string);
-    if (option.selected && index < 0) {
-      selectedKeys.push(option.key as string);
-    } else {
-      selectedKeys.splice(index, 1);
-    }
+    if (option.selected && index < 0) selectedKeys.push(option.key as string);
+    else selectedKeys.splice(index, 1);
+
     return selectedKeys;
   };
 

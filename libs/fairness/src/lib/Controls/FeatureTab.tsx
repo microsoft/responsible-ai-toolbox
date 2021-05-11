@@ -47,12 +47,8 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
     this.selection = new Selection({
       onSelectionChanged: (): void => {
         const select = this.selection.getSelectedIndices()[0];
-        if (
-          select !== undefined &&
-          select !== this.props.selectedFeatureIndex
-        ) {
+        if (select !== undefined && select !== this.props.selectedFeatureIndex)
           this.props.selectedFeatureChange(select);
-        }
       }
     });
     this.state = {
@@ -168,9 +164,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
     item?: IBinnedResponse,
     index?: number | undefined
   ): React.ReactNode => {
-    if (index === undefined || !item) {
-      return undefined;
-    }
+    if (index === undefined || !item) return undefined;
 
     return (
       <>
@@ -223,9 +217,8 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
   private readonly renderSubGroupCell = (
     item?: IBinnedResponse
   ): React.ReactNode => {
-    if (!item) {
-      return undefined;
-    }
+    if (!item) return undefined;
+
     return <FeatureTabSubGroup item={item} />;
   };
 }

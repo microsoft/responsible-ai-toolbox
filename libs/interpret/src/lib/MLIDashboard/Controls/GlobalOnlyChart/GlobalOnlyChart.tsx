@@ -40,9 +40,9 @@ export class GlobalOnlyChart extends React.PureComponent<
     if (
       !this.context.precomputedExplanations?.globalFeatureImportance?.scores
         ?.length
-    ) {
+    )
       return;
-    }
+
     const globalImportance = this.buildGlobalProperties(
       this.context.precomputedExplanations?.globalFeatureImportance
     );
@@ -89,9 +89,8 @@ export class GlobalOnlyChart extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    if (!this.state) {
-      return React.Fragment;
-    }
+    if (!this.state) return React.Fragment;
+
     const classNames = globalTabStyles();
     return (
       <div className={classNames.page}>
@@ -148,11 +147,11 @@ export class GlobalOnlyChart extends React.PureComponent<
     globalFeatureImportance: IGlobalFeatureImportance
   ): number[][] {
     let globalImportance: number[][];
-    if (isTwoDimArray(globalFeatureImportance.scores)) {
+    if (isTwoDimArray(globalFeatureImportance.scores))
       globalImportance = globalFeatureImportance.scores;
-    } else {
+    else
       globalImportance = globalFeatureImportance.scores.map((value) => [value]);
-    }
+
     return globalImportance;
   }
 }

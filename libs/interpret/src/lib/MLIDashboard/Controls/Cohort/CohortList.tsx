@@ -28,13 +28,12 @@ export interface ICohortListProps {
 export class CohortList extends React.PureComponent<ICohortListProps> {
   public render(): React.ReactNode {
     let modelType: string;
-    if (this.props.metadata.modelType === ModelTypes.Binary) {
+    if (this.props.metadata.modelType === ModelTypes.Binary)
       modelType = localization.Interpret.CohortBanner.binaryClassifier;
-    } else if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    else if (this.props.metadata.modelType === ModelTypes.Multiclass)
       modelType = localization.Interpret.CohortBanner.multiclassClassifier;
-    } else {
-      modelType = localization.Interpret.CohortBanner.regressor;
-    }
+    else modelType = localization.Interpret.CohortBanner.regressor;
+
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item>

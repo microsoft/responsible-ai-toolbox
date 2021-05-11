@@ -71,9 +71,8 @@ export class DashboardSettings extends React.PureComponent<
     _item?: IModelAssessmentDashboardTab,
     index?: number | undefined
   ): React.ReactNode => {
-    if (!index) {
-      return React.Fragment;
-    }
+    if (!index) return React.Fragment;
+
     return (
       <DashboardSettingDeleteButton
         index={index}

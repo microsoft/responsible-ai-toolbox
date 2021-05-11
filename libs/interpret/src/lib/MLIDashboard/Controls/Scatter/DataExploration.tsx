@@ -120,11 +120,9 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
     const clickedId = (data.points[0] as any).customdata;
     const selections: string[] = this.props.selectionContext.selectedIds.slice();
     const existingIndex = selections.indexOf(clickedId);
-    if (existingIndex !== -1) {
-      selections.splice(existingIndex, 1);
-    } else {
-      selections.push(clickedId);
-    }
+    if (existingIndex !== -1) selections.splice(existingIndex, 1);
+    else selections.push(clickedId);
+
     this.props.selectionContext.onSelect(selections);
   };
 

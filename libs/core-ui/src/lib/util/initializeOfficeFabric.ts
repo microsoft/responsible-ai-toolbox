@@ -42,8 +42,7 @@ export interface IOfficeFabricProps {
 }
 
 export function initializeOfficeFabric(props: IOfficeFabricProps): void {
-  if (props.shouldInitializeIcons !== false) {
-    fabricInit(props.iconUrl);
-  }
+  if (props.shouldInitializeIcons !== false) fabricInit(props.iconUrl);
+
   loadTheme(props.theme || defaultTheme);
 }

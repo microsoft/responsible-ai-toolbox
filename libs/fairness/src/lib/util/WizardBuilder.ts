@@ -110,9 +110,9 @@ export class WizardBuilder {
     let featureNames = props.dataSummary?.featureNames;
     if (!featureNames) {
       let featureLength = 0;
-      if (props.testData && props.testData[0] !== undefined) {
+      if (props.testData && props.testData[0] !== undefined)
         featureLength = props.testData[0].length;
-      }
+
       featureNames =
         featureLength === 1
           ? [localization.Fairness.defaultSingleFeatureName]
@@ -170,22 +170,20 @@ export class WizardBuilder {
       specifiedType === PredictionTypes.BinaryClassification ||
       specifiedType === PredictionTypes.Probability ||
       specifiedType === PredictionTypes.Regression
-    ) {
+    )
       return specifiedType;
-    }
+
     const predictedIsPossibleProba = predictedY.every((predictionVector) =>
       predictionVector.every((x) => x >= 0 && x <= 1)
     );
     const trueIsBinary = _.uniq(trueY).length < 3;
-    if (!trueIsBinary) {
-      return PredictionTypes.Regression;
-    }
-    if (_.uniq(_.flatten(predictedY)).length < 3) {
+    if (!trueIsBinary) return PredictionTypes.Regression;
+
+    if (_.uniq(_.flatten(predictedY)).length < 3)
       return PredictionTypes.BinaryClassification;
-    }
-    if (predictedIsPossibleProba) {
-      return PredictionTypes.Probability;
-    }
+
+    if (predictedIsPossibleProba) return PredictionTypes.Probability;
+
     return PredictionTypes.Regression;
   }
 
@@ -197,9 +195,7 @@ export class WizardBuilder {
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
       const metric = performanceOptions[key];
       if (metric !== undefined) {
-        if (metric.userVisible) {
-          providedMetrics.push(metric);
-        }
+        if (metric.userVisible) providedMetrics.push(metric);
       } else {
         const customMetric = props.customMetrics?.find(
           (metric) => metric.id === key
@@ -235,18 +231,14 @@ export class WizardBuilder {
       [fairnessMetric: string]: IFairnessOption[];
     } = {};
     Object.values(fairnessOptions).forEach((fairnessOption) => {
-      if (fairnessOption.fairnessMetric in allFairnessMetrics) {
+      if (fairnessOption.fairnessMetric in allFairnessMetrics)
         allFairnessMetrics[fairnessOption.fairnessMetric].push(fairnessOption);
-      } else {
-        allFairnessMetrics[fairnessOption.fairnessMetric] = [fairnessOption];
-      }
+      else allFairnessMetrics[fairnessOption.fairnessMetric] = [fairnessOption];
     });
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
       if (key in allFairnessMetrics) {
         allFairnessMetrics[key].forEach((metric) => {
-          if (metric !== undefined) {
-            providedMetrics.push(metric);
-          }
+          if (metric !== undefined) providedMetrics.push(metric);
         });
       }
     });
@@ -269,9 +261,8 @@ export class WizardBuilder {
     value: IBinnedResponse,
     dataset: any[][] | undefined
   ): number[] {
-    if (!dataset) {
-      return [];
-    }
+    if (!dataset) return [];
+
     return dataset.map((row) => {
       const featureValue = row[value.featureIndex];
       if (value.rangeType === RangeTypes.Categorical) {

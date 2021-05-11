@@ -13,9 +13,8 @@ export function describeIndividualFeatureImportance(
   name: keyof typeof interpretDatasets
 ): void {
   const datasetShape = interpretDatasets[name];
-  if (datasetShape.noDataset) {
-    return;
-  }
+  if (datasetShape.noDataset) return;
+
   describe(testName, () => {
     beforeEach(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
@@ -26,8 +25,6 @@ export function describeIndividualFeatureImportance(
       );
     });
     describeDataPointChart(datasetShape);
-    if (!datasetShape.noPredict) {
-      describeWhatIf(datasetShape);
-    }
+    if (!datasetShape.noPredict) describeWhatIf(datasetShape);
   });
 }

@@ -52,9 +52,8 @@ export class PerturbationExploration extends React.Component<
 
   public componentDidUpdate(prevProps: IPerturbationExplorationProps): void {
     if (this.props.datapointIndex !== prevProps.datapointIndex) {
-      if (this.state.abortController) {
-        this.state.abortController.abort();
-      }
+      if (this.state.abortController) this.state.abortController.abort();
+
       this.setState({
         abortController: undefined,
         featureErrors: new Array(
@@ -195,11 +194,10 @@ export class PerturbationExploration extends React.Component<
       this.props.explanationContext.testDataset.dataset?.[
         this.props.datapointIndex
       ][featureIndex]
-    ) {
+    )
       perturbedDictionary[featureIndex] = undefined;
-    } else {
-      perturbedDictionary[featureIndex] = val;
-    }
+    else perturbedDictionary[featureIndex] = val;
+
     this.setState({ featureErrors, perturbedDictionary }, () => {
       this.fetchData();
     });
@@ -209,16 +207,15 @@ export class PerturbationExploration extends React.Component<
     if (
       !this.props.explanationContext.testDataset.dataset ||
       !this.props.invokeModel
-    ) {
+    )
       return;
-    }
-    if (this.state.abortController !== undefined) {
+
+    if (this.state.abortController !== undefined)
       this.state.abortController.abort();
-    }
+
     // skip if there are any errors.
-    if (this.state.featureErrors.some((val) => val)) {
-      return;
-    }
+    if (this.state.featureErrors.some((val) => val)) return;
+
     const data = _.cloneDeep(
       this.props.explanationContext.testDataset.dataset[
         this.props.datapointIndex
@@ -226,18 +223,16 @@ export class PerturbationExploration extends React.Component<
     );
     for (const key of Object.keys(this.state.perturbedDictionary)) {
       const index = +key;
-      if (this.state.perturbedDictionary[index] !== undefined) {
+      if (this.state.perturbedDictionary[index] !== undefined)
         data[index] = this.state.perturbedDictionary[index];
-      }
     }
     const abortController = new AbortController();
     const promise = this.props.invokeModel([data], abortController.signal);
     this.setState({ abortController, errorMessage: undefined }, async () => {
       try {
         const fetchedData = await promise;
-        if (abortController.signal.aborted) {
-          return;
-        }
+        if (abortController.signal.aborted) return;
+
         if (Array.isArray(fetchedData[0])) {
           const predictionVector = fetchedData[0];
           let predictedClass = 0;
@@ -260,9 +255,8 @@ export class PerturbationExploration extends React.Component<
           });
         }
       } catch (error) {
-        if (error.name === "AbortError") {
-          return;
-        }
+        if (error.name === "AbortError") return;
+
         if (error.name === "PythonError") {
           this.setState({
             errorMessage: localization.formatString(

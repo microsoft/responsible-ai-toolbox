@@ -159,9 +159,7 @@ export class CohortList extends React.Component<
     const cohort = this.props.cohorts.find(
       (errorCohort) => errorCohort.cohort.name === name
     );
-    if (cohort) {
-      this.props.onEditCohortClick(cohort);
-    }
+    if (cohort) this.props.onEditCohortClick(cohort);
   }
 
   private getCohortListItems(): ICohortListItem[] {

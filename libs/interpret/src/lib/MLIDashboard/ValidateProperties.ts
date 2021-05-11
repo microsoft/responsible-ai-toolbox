@@ -44,9 +44,8 @@ export class ValidateProperties {
       );
       return false;
     }
-    if (length === undefined) {
-      return true;
-    }
+    if (length === undefined) return true;
+
     if (y.length !== length) {
       this.errorStrings.push(
         localization.formatString(
@@ -66,9 +65,8 @@ export class ValidateProperties {
     length: number | undefined,
     fieldName: string
   ): boolean {
-    if (y === undefined) {
-      return true;
-    }
+    if (y === undefined) return true;
+
     return this.validate(y, length, fieldName);
   }
   private validate2D<T>(
@@ -76,16 +74,13 @@ export class ValidateProperties {
     length: [number | undefined, number],
     fieldName: string
   ): boolean {
-    if (y === undefined) {
-      return true;
-    }
-    if (!this.validate1D(y, length[0], fieldName)) {
-      return false;
-    }
+    if (y === undefined) return true;
+
+    if (!this.validate1D(y, length[0], fieldName)) return false;
+
     for (const [i, element] of y.entries()) {
-      if (!this.validate1D(element, length[1], `${fieldName}[${i}]`)) {
+      if (!this.validate1D(element, length[1], `${fieldName}[${i}]`))
         return false;
-      }
     }
     return true;
   }
@@ -94,18 +89,15 @@ export class ValidateProperties {
     length: [number | undefined, number | undefined, number],
     fieldName: string
   ): boolean {
-    if (y === undefined) {
-      return true;
-    }
-    if (!this.validate1D(y, length[0], fieldName)) {
-      return false;
-    }
+    if (y === undefined) return true;
+
+    if (!this.validate1D(y, length[0], fieldName)) return false;
+
     for (const [i, element] of y.entries()) {
       if (
         !this.validate2D(element, [length[1], length[2]], `${fieldName}[${i}]`)
-      ) {
+      )
         return false;
-      }
     }
     return true;
   }
@@ -118,36 +110,36 @@ export class ValidateProperties {
         this.rowLength,
         localization.Interpret.ValidationErrors.predictedY
       )
-    ) {
+    )
       this.props.predictedY = undefined;
-    }
+
     if (
       !this.validate2D(
         this.props.probabilityY,
         [this.rowLength, this.classLength],
         localization.Interpret.ValidationErrors.predictedProbability
       )
-    ) {
+    )
       this.props.probabilityY = undefined;
-    }
+
     if (
       !this.validate2D(
         this.props.testData,
         [this.rowLength, this.featureLength],
         localization.Interpret.ValidationErrors.evalData
       )
-    ) {
+    )
       this.props.testData = undefined;
-    }
+
     this.validateGlobalExplanation();
 
     this.validateLocalExplanation();
   }
 
   private validateGlobalExplanation(): void {
-    if (!this.props.precomputedExplanations?.globalFeatureImportance?.scores) {
+    if (!this.props.precomputedExplanations?.globalFeatureImportance?.scores)
       return;
-    }
+
     const globalExp = this.props.precomputedExplanations
       ?.globalFeatureImportance?.scores;
     const globalFeatureLength =
@@ -160,23 +152,21 @@ export class ValidateProperties {
           [globalFeatureLength, this.classLength],
           localization.Interpret.ValidationErrors.globalFeatureImportance
         )
-      ) {
+      )
         this.props.precomputedExplanations.globalFeatureImportance = undefined;
-      }
     } else if (
       !this.validate1D(
         globalExp,
         globalFeatureLength,
         localization.Interpret.ValidationErrors.globalFeatureImportance
       )
-    ) {
+    )
       this.props.precomputedExplanations.globalFeatureImportance = undefined;
-    }
   }
   private validateLocalExplanation(): void {
-    if (!this.props.precomputedExplanations?.localFeatureImportance?.scores) {
+    if (!this.props.precomputedExplanations?.localFeatureImportance?.scores)
       return;
-    }
+
     const localExp = this.props.precomputedExplanations.localFeatureImportance
       .scores;
     if (isThreeDimArray(localExp)) {
@@ -186,9 +176,8 @@ export class ValidateProperties {
           [this.classLength, this.rowLength, this.featureLength],
           localization.Interpret.ValidationErrors.localFeatureImportance
         )
-      ) {
+      )
         this.props.precomputedExplanations.localFeatureImportance = undefined;
-      }
     } else if (isTwoDimArray(localExp)) {
       if (
         !this.validate2D(
@@ -196,9 +185,8 @@ export class ValidateProperties {
           [this.rowLength, this.featureLength],
           localization.Interpret.ValidationErrors.localFeatureImportance
         )
-      ) {
+      )
         this.props.precomputedExplanations.localFeatureImportance = undefined;
-      }
     }
   }
 }

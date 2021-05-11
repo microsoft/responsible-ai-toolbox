@@ -166,9 +166,9 @@ export class ExplanationDashboard extends React.Component<
         (localImportances as number[][][]).every((dim1) => {
           return dim1.every((dim2) => Array.isArray(dim2));
         })
-      ) {
+      )
         return localImportances.length;
-      }
+
       // 2d is regression (could be a non-scikit convention binary, but that is not supported)
       return 1;
     }
@@ -191,9 +191,9 @@ export class ExplanationDashboard extends React.Component<
       Array.isArray(props.probabilityY) &&
       Array.isArray(props.probabilityY[0]) &&
       props.probabilityY[0].length > 0
-    ) {
+    )
       return props.probabilityY[0].length;
-    }
+
     // default to regression case
     return 1;
   });
@@ -206,9 +206,8 @@ export class ExplanationDashboard extends React.Component<
   public constructor(props: IExplanationDashboardProps) {
     super(props);
     ExplanationDashboard.initializeIcons(props);
-    if (this.props.locale) {
-      localization.setLanguage(this.props.locale);
-    }
+    if (this.props.locale) localization.setLanguage(this.props.locale);
+
     const explanationContext: IExplanationContext = ExplanationDashboard.buildInitialExplanationContext(
       props
     );
@@ -418,9 +417,8 @@ export class ExplanationDashboard extends React.Component<
         },
         featureList: props.precomputedExplanations.ebmGlobalExplanation.feature_list
           .map((featureExplanation) => {
-            if (featureExplanation.type !== "univariate") {
-              return undefined;
-            }
+            if (featureExplanation.type !== "univariate") return undefined;
+
             if (
               featureExplanation.scores &&
               isTwoDimArray(featureExplanation.scores)
@@ -519,9 +517,8 @@ export class ExplanationDashboard extends React.Component<
     testData: ITestDataset,
     weightVector: WeightVectorOption
   ): number[][] | undefined {
-    if (!localExplanations) {
-      return undefined;
-    }
+    if (!localExplanations) return undefined;
+
     switch (modelType) {
       case ModelTypes.Regression:
       case ModelTypes.Binary: {
@@ -541,9 +538,9 @@ export class ExplanationDashboard extends React.Component<
                 return classArray.reduce((a, b) => a + b) / classArray.length;
               }
               case WeightVectors.Predicted: {
-                if (testData.predictedY) {
+                if (testData.predictedY)
                   return classArray[testData.predictedY[rowIndex]];
-                }
+
                 return 0;
               }
               case WeightVectors.AbsAvg: {
@@ -581,9 +578,9 @@ export class ExplanationDashboard extends React.Component<
     let featureNamesAbridged: string[];
     const maxLength = 18;
     if (featureNames !== undefined) {
-      if (!featureNames.every((name) => typeof name === "string")) {
+      if (!featureNames.every((name) => typeof name === "string"))
         featureNames = featureNames.map((x) => x.toString());
-      }
+
       featureNamesAbridged = featureNames.map((name) => {
         return name.length <= maxLength
           ? name
@@ -591,9 +588,9 @@ export class ExplanationDashboard extends React.Component<
       });
     } else {
       let featureLength = 0;
-      if (props.testData && props.testData[0] !== undefined) {
+      if (props.testData && props.testData[0] !== undefined)
         featureLength = props.testData[0].length;
-      } else if (
+      else if (
         props.precomputedExplanations &&
         props.precomputedExplanations.globalFeatureImportance &&
         props.precomputedExplanations.globalFeatureImportance.scores
@@ -672,9 +669,9 @@ export class ExplanationDashboard extends React.Component<
 
   private static getModelType(props: IExplanationDashboardProps): ModelTypes {
     // If python gave us a hint, use it
-    if (props.modelInformation.method === "regressor") {
+    if (props.modelInformation.method === "regressor")
       return ModelTypes.Regression;
-    }
+
     switch (ExplanationDashboard.getClassLength(props)) {
       case 1:
         return ModelTypes.Regression;
@@ -691,9 +688,7 @@ export class ExplanationDashboard extends React.Component<
         let selectedRow: number | undefined;
         if (selections && selections.length > 0) {
           const numericValue = Number.parseInt(selections[0]);
-          if (!Number.isNaN(numericValue)) {
-            selectedRow = numericValue;
-          }
+          if (!Number.isNaN(numericValue)) selectedRow = numericValue;
         }
         this.setState({ selectedRow });
       }
@@ -702,12 +697,11 @@ export class ExplanationDashboard extends React.Component<
   }
 
   public componentDidUpdate(prevProps: IExplanationDashboardProps): void {
-    if (this.props.locale && prevProps.locale !== this.props.locale) {
+    if (this.props.locale && prevProps.locale !== this.props.locale)
       localization.setLanguage(this.props.locale);
-    }
-    if (_.isEqual(prevProps, this.props)) {
-      return;
-    }
+
+    if (_.isEqual(prevProps, this.props)) return;
+
     const newState = _.cloneDeep(this.state);
     newState.dashboardContext.explanationContext = ExplanationDashboard.buildInitialExplanationContext(
       this.props
@@ -722,9 +716,8 @@ export class ExplanationDashboard extends React.Component<
   }
 
   public componentWillUnmount(): void {
-    if (this.selectionSubscription) {
+    if (this.selectionSubscription)
       this.selectionContext.unsubscribe(this.selectionSubscription);
-    }
   }
 
   public render(): React.ReactNode {
@@ -733,9 +726,9 @@ export class ExplanationDashboard extends React.Component<
         <div>{this.state.dashboardContext.explanationContext.inputError}</div>
       );
     }
-    if (this.pivotItems.length === 0) {
+    if (this.pivotItems.length === 0)
       return <div>No valid views. Incomplete data.</div>;
-    }
+
     return (
       <div className={explanationDashboardStyles.explainerDashboard}>
         <div className={explanationDashboardStyles.chartsWrapper}>
@@ -961,9 +954,9 @@ export class ExplanationDashboard extends React.Component<
       !expContext.testDataset ||
       !expContext.testDataset.dataset ||
       !expContext.localExplanation?.values
-    ) {
+    )
       return;
-    }
+
     const requestLocalFeatureExplanations =
       expContext.explanationGenerators.requestLocalFeatureExplanations;
     const testDataset = expContext.testDataset;
@@ -985,9 +978,8 @@ export class ExplanationDashboard extends React.Component<
           dataset,
           new AbortController().signal
         ).then((result) => {
-          if (!result) {
-            return;
-          }
+          if (!result) return;
+
           this.setState((prevState) => {
             const weighting =
               prevState.dashboardContext.weightContext.selectedKey;
@@ -1027,9 +1019,8 @@ export class ExplanationDashboard extends React.Component<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
+
     this.setState((prevState) => {
       const newWeightContext = _.cloneDeep(
         prevState.dashboardContext.weightContext
@@ -1090,9 +1081,8 @@ export class ExplanationDashboard extends React.Component<
       typeof item?.props.itemKey == "string"
         ? ExplanationDashboard.globalTabKeys.indexOf(item.props.itemKey)
         : 0;
-    if (index === -1) {
-      index = 0;
-    }
+    if (index === -1) index = 0;
+
     this.setState({ activeGlobalTab: index });
   };
 
@@ -1101,9 +1091,8 @@ export class ExplanationDashboard extends React.Component<
       typeof item?.props.itemKey == "string"
         ? ExplanationDashboard.localTabKeys.indexOf(item.props.itemKey)
         : 0;
-    if (index === -1) {
-      index = 0;
-    }
+    if (index === -1) index = 0;
+
     this.setState({ activeLocalTab: index });
   };
 

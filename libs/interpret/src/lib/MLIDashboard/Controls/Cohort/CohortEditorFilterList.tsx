@@ -83,9 +83,7 @@ export class CohortEditorFilterList extends React.Component<
       const filterArgs = filter.arg;
       filterArgs.forEach((element) => {
         const value = selectedFilter.sortedCategoricalValues?.[element];
-        if (value) {
-          selectedValues.push(value);
-        }
+        if (value) selectedValues.push(value);
       });
       stringArgs = selectedValues.toString();
       if (selectedValues.length > 3) {
@@ -98,9 +96,9 @@ export class CohortEditorFilterList extends React.Component<
         );
       }
     } else {
-      for (let i = 0; i < filter.arg.length; i++) {
+      for (let i = 0; i < filter.arg.length; i++)
         filter.arg[i] = roundDecimal(filter.arg[i]);
-      }
+
       stringArgs = filter.arg.toString();
     }
 

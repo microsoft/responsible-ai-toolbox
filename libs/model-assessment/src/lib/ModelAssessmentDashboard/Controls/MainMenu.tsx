@@ -61,9 +61,8 @@ export class MainMenu extends React.PureComponent<
     });
   }
   public render(): React.ReactNode {
-    if (!this.state) {
-      return React.Fragment;
-    }
+    if (!this.state) return React.Fragment;
+
     const farItems: ICommandBarItemProps[] = [];
     const helpItems: ICommandBarItemProps[] = [
       {
@@ -183,9 +182,9 @@ export class MainMenu extends React.PureComponent<
       (errorCohort) => errorCohort.cohort.name !== originalCohort.cohort.name
     );
     let selectedCohort = this.context.selectedErrorCohort;
-    if (originalCohort.cohort.name === selectedCohort.cohort.name) {
+    if (originalCohort.cohort.name === selectedCohort.cohort.name)
       selectedCohort = editedCohort;
-    }
+
     this.context.updateErrorCohorts([editedCohort, ...cohorts], selectedCohort);
   };
   private deleteEditCohort = (deletedCohort: ErrorCohort): void => {

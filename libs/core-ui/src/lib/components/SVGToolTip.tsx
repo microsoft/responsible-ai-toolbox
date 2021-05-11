@@ -38,9 +38,9 @@ export class SVGToolTip extends React.Component<
     }
   }
   public render(): React.ReactNode {
-    if (!this.state.svgElement || !this.state.isMouseOver) {
+    if (!this.state.svgElement || !this.state.isMouseOver)
       return React.Fragment;
-    }
+
     const classNames = SVGToolTipStyles();
     return ReactDom.createPortal(
       <g

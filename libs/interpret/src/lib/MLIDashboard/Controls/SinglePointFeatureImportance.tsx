@@ -159,9 +159,9 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     if (
       localExplanation !== undefined &&
       localExplanation.percentComplete !== undefined
-    ) {
+    )
       return <LoadingSpinner />;
-    }
+
     const explanationStrings = this.props.messages
       ? this.props.messages.LocalExpAndTestReq
       : undefined;
@@ -241,9 +241,9 @@ export class SinglePointFeatureImportance extends React.PureComponent<
   }
 
   private getDefaultSorting(): FeatureSortingKey {
-    if (!this.props.explanationContext.testDataset.predictedY) {
+    if (!this.props.explanationContext.testDataset.predictedY)
       return FeatureKeys.AbsoluteGlobal;
-    }
+
     return this.props.explanationContext.modelMetadata.modelType ===
       ModelTypes.Multiclass
       ? this.props.explanationContext.testDataset.predictedY[
@@ -262,8 +262,6 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (item) {
-      this.setState({ selectedSorting: item.key as FeatureSortingKey });
-    }
+    if (item) this.setState({ selectedSorting: item.key as FeatureSortingKey });
   };
 }

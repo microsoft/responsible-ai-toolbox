@@ -17,9 +17,8 @@ export enum ColorPalette {
 }
 
 export function isColorDark(colorStr: string | undefined): boolean {
-  if (!colorStr) {
-    return false;
-  }
+  if (!colorStr) return false;
+
   const val = Lab(colorStr).l;
   return val <= 65;
 }

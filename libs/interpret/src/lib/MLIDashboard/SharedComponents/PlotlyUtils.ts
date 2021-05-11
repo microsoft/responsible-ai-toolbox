@@ -15,9 +15,9 @@ export class PlotlyUtils {
   ): void {
     PlotlyUtils.clearColorProperties(plotlyProp);
     if (item.data && item.data.isCategorical) {
-      if (item.data.sortProperty !== undefined) {
+      if (item.data.sortProperty !== undefined)
         plotlyProp.data[0].xAccessorPrefix = `sort_by(@, &${item.data.sortProperty})`;
-      }
+
       plotlyProp.data[0].groupBy = [item.key.toString()];
       _.set(plotlyProp, "layout.showlegend", true);
     } else if (

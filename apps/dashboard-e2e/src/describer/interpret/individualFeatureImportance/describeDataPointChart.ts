@@ -44,11 +44,9 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
       });
     });
 
-    if (!dataShape.noLocalImportance && !dataShape.noFeatureImportance) {
+    if (!dataShape.noLocalImportance && !dataShape.noFeatureImportance)
       describeSubBarChart(dataShape);
-    }
-    if (!dataShape.noPredict) {
-      describeSubLineChart(dataShape);
-    }
+
+    if (!dataShape.noPredict) describeSubLineChart(dataShape);
   });
 }

@@ -87,9 +87,9 @@ export class Violin extends React.PureComponent<
         plotlyProps.data[0],
         mappedData
       );
-      if (computedSeries.length === 1 && plotlyProps.layout) {
+      if (computedSeries.length === 1 && plotlyProps.layout)
         plotlyProps.layout.showlegend = false;
-      }
+
       plotlyProps.data = computedSeries;
       return plotlyProps;
     },
@@ -118,9 +118,8 @@ export class Violin extends React.PureComponent<
           const baseSeries: any = _.cloneDeep(plotlyProps.data[0]);
           baseSeries.scalegroup = featureIndex.toString();
           // Only add a legend item for the first instance
-          if (featureIndex !== 0) {
-            baseSeries.showlegend = false;
-          }
+          if (featureIndex !== 0) baseSeries.showlegend = false;
+
           const rowItems = featuresByRows[featureIndex].map(
             (value, rowIndex) => {
               return {
@@ -135,9 +134,8 @@ export class Violin extends React.PureComponent<
           series.forEach((singleSeries: any) => {
             const className = singleSeries.name;
             let classIndex = data.modelMetadata.classNames.indexOf(className);
-            if (classIndex === -1) {
-              classIndex = 0;
-            }
+            if (classIndex === -1) classIndex = 0;
+
             singleSeries.legendgroup = className;
             singleSeries.alignmentgroup = featureIndex;
             singleSeries.offsetgroup = className;
@@ -147,9 +145,8 @@ export class Violin extends React.PureComponent<
                   classIndex % FabricStyles.plotlyColorPalette.length
                 ]
             };
-            if (classIndex >= Violin.maxDefaultSeries) {
+            if (classIndex >= Violin.maxDefaultSeries)
               singleSeries.visible = "legendonly";
-            }
           });
           return series;
         })
@@ -165,9 +162,9 @@ export class Violin extends React.PureComponent<
       });
       plotlyProps.data = computedSeries;
       // a single series, no need for a legend
-      if (computedSeries.length === sortVector.length && plotlyProps.layout) {
+      if (computedSeries.length === sortVector.length && plotlyProps.layout)
         plotlyProps.layout.showlegend = false;
-      }
+
       return plotlyProps;
     },
     _.isEqual.bind(window)
@@ -453,9 +450,8 @@ export class Violin extends React.PureComponent<
       this.props.dashboardContext.explanationContext.localExplanation &&
       this.props.dashboardContext.explanationContext.localExplanation
         .percentComplete !== undefined
-    ) {
+    )
       return <LoadingSpinner />;
-    }
 
     const explanationStrings = this.props.messages
       ? this.props.messages.LocalExpAndTestReq
@@ -502,9 +498,9 @@ export class Violin extends React.PureComponent<
     if (
       this.props.dashboardContext.explanationContext.modelMetadata.modelType ===
       ModelTypes.Regression
-    ) {
+    )
       return [];
-    }
+
     const result: IDropdownOption[] = [
       {
         key: GroupByOptions.None,
@@ -538,9 +534,8 @@ export class Violin extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
+
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.displayMode = item.key as any;
     this.props.onChange(newConfig, this.props.config.id);
@@ -553,9 +548,8 @@ export class Violin extends React.PureComponent<
   };
 
   private showCrossClassInfo = (): void => {
-    if (this.state.calloutContent) {
-      this.onDismiss();
-    } else {
+    if (this.state.calloutContent) this.onDismiss();
+    else {
       const calloutContent = (
         <div>
           <span>{localization.Interpret.CrossClass.overviewInfo}</span>
@@ -571,9 +565,8 @@ export class Violin extends React.PureComponent<
   };
 
   private showGlobalSortInfo = (): void => {
-    if (this.state.calloutContent) {
-      this.onDismiss();
-    } else {
+    if (this.state.calloutContent) this.onDismiss();
+    else {
       const calloutContent = (
         <div>
           <span>
@@ -609,9 +602,8 @@ export class Violin extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
+
     this.setState({ groupBy: item.key as any });
   };
 }

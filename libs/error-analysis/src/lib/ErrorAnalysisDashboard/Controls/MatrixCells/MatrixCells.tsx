@@ -191,16 +191,12 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
   private colorLookup(ratio: number): string {
     let result = "#eaeaea";
 
-    if (!ratio) {
-      return result;
-    }
+    if (!ratio) return result;
 
     const rate = ratio / 100;
-    if (rate > 0.01 && rate <= 1) {
+    if (rate > 0.01 && rate <= 1)
       result = this.colorgradRatio(this.mapRange(0, 1, rate)) || "#ffffff";
-    } else {
-      result = "#ffffff";
-    }
+    else result = "#ffffff";
 
     return result;
   }

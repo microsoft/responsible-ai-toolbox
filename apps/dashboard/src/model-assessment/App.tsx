@@ -76,9 +76,8 @@ export class App extends React.Component<IAppProps> {
       theme: this.props.theme
     };
 
-    if ("categoricalMap" in this.props.dataset) {
+    if ("categoricalMap" in this.props.dataset)
       return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
-    }
 
     modelAssessmentDashboardProps.dataset.featureNames = generateFeatures();
     modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";

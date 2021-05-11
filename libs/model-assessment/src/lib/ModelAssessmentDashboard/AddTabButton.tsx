@@ -102,16 +102,14 @@ export class AddTabButton extends React.Component<
     _: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption | undefined
   ): void => {
-    if (!option) {
-      return;
-    }
+    if (!option) return;
+
     this.setState({ tabSelected: option.key as GlobalTabKeys });
   };
 
   private addTab = (): void => {
-    if (!this.state.tabSelected) {
-      return;
-    }
+    if (!this.state.tabSelected) return;
+
     this.props.onAdd(this.props.tabIndex, this.state.tabSelected);
     this.setState({
       isCalloutVisible: false

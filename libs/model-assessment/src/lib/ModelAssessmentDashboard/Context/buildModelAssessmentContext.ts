@@ -74,9 +74,9 @@ export function buildInitialModelAssessmentContext(
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
   const weightVectorOptions = [];
-  if (modelMetadata.modelType === ModelTypes.Multiclass) {
+  if (modelMetadata.modelType === ModelTypes.Multiclass)
     weightVectorOptions.push(WeightVectors.AbsAvg);
-  }
+
   modelMetadata.classNames.forEach((name, index) => {
     weightVectorLabels[index] = localization.formatString(
       localization.Interpret.WhatIfTab.classLabel,
@@ -160,17 +160,17 @@ function buildModelMetadata(
   let featureNamesAbridged: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
-    if (!featureNames.every((name) => typeof name === "string")) {
+    if (!featureNames.every((name) => typeof name === "string"))
       featureNames = featureNames.map((x) => x.toString());
-    }
+
     featureNamesAbridged = featureNames.map((name) => {
       return name.length <= maxLength ? name : `${name.slice(0, maxLength)}...`;
     });
   } else {
     let featureLength = 0;
-    if (props.dataset.features && props.dataset.features[0] !== undefined) {
+    if (props.dataset.features && props.dataset.features[0] !== undefined)
       featureLength = props.dataset.features[0].length;
-    } else if (
+    else if (
       props.modelExplanationData.precomputedExplanations &&
       props.modelExplanationData.precomputedExplanations.globalFeatureImportance
     ) {

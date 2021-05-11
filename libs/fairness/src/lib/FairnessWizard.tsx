@@ -90,9 +90,8 @@ export class FairnessWizardV2 extends React.PureComponent<
 > {
   public constructor(props: IFairnessProps) {
     super(props);
-    if (this.props.locale) {
-      localization.setLanguage(this.props.locale);
-    }
+    if (this.props.locale) localization.setLanguage(this.props.locale);
+
     let performanceMetrics: IPerformanceOption[];
     let fairnessMetrics: IFairnessOption[];
     let selectedPerformanceKey: string;
@@ -196,12 +195,11 @@ export class FairnessWizardV2 extends React.PureComponent<
   }
 
   public componentDidUpdate(prev: IFairnessProps): void {
-    if (prev.theme !== this.props.theme) {
+    if (prev.theme !== this.props.theme)
       loadTheme(this.props.theme || defaultTheme);
-    }
-    if (this.props.locale && prev.locale !== this.props.locale) {
+
+    if (this.props.locale && prev.locale !== this.props.locale)
       localization.setLanguage(this.props.locale);
-    }
   }
 
   public render(): React.ReactNode {
@@ -378,16 +376,14 @@ export class FairnessWizardV2 extends React.PureComponent<
       this.setState({ selectedModelId: undefined });
       return;
     }
-    if (data.points && data.points[0]) {
+    if (data.points && data.points[0])
       this.setState({ selectedModelId: data.points[0].customdata });
-    }
   };
 
   private readonly setPerformanceKey = (key: string): void => {
     const value: Partial<IWizardStateV2> = { selectedPerformanceKey: key };
-    if (flights.skipFairness) {
-      value.selectedFairnessKey = key;
-    }
+    if (flights.skipFairness) value.selectedFairnessKey = key;
+
     this.setState(value as IWizardStateV2);
   };
 
@@ -405,21 +401,17 @@ export class FairnessWizardV2 extends React.PureComponent<
       ].binLabels;
 
       this.setState({ dashboardContext: newContext, selectedBinIndex: index });
-    } else {
-      this.binningSet(this.state.featureBins[index]);
-    }
+    } else this.binningSet(this.state.featureBins[index]);
   };
 
   private readonly handleTabClick = (item?: PivotItem): void => {
-    if (item?.props?.itemKey) {
+    if (item?.props?.itemKey)
       this.setState({ activeTabKey: item.props.itemKey });
-    }
   };
 
   private readonly binningSet = (value: IBinnedResponse): void => {
-    if (!value || value.hasError || value.array.length === 0) {
-      return;
-    }
+    if (!value || value.hasError || value.array.length === 0) return;
+
     const newContext = _.cloneDeep(this.state.dashboardContext);
 
     newContext.binVector = WizardBuilder.generateBinVectorForBin(
@@ -448,9 +440,7 @@ export class FairnessWizardV2 extends React.PureComponent<
   ): string {
     const keys = new Set(Object.values(metrics).map((metric) => metric.key));
     for (const metricKey of prioritization) {
-      if (keys.has(metricKey)) {
-        return metricKey;
-      }
+      if (keys.has(metricKey)) return metricKey;
     }
 
     // if none of the prioritized default metrics are available return first item

@@ -41,9 +41,9 @@ export abstract class CohortBasedComponent<
 
     let selectedCohortName = "";
     let addTemporaryCohort = true;
-    if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
+    if (source === CohortSource.TreeMap || source === CohortSource.HeatMap)
       selectedCohortName = "Unsaved";
-    } else {
+    else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;
     }
@@ -66,9 +66,8 @@ export abstract class CohortBasedComponent<
     let cohorts = this.state.cohorts.filter(
       (errorCohort) => !errorCohort.isTemporary
     );
-    if (addTemporaryCohort) {
-      cohorts = [selectedCohort, ...cohorts];
-    }
+    if (addTemporaryCohort) cohorts = [selectedCohort, ...cohorts];
+
     this.setState({ cohorts, selectedCohort });
   };
 }

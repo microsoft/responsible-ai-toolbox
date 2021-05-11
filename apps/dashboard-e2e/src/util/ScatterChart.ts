@@ -21,9 +21,8 @@ export class ScatterChart extends Chart<IScatter> {
   }
   public clickNthPoint(idx: number): void {
     const offset = this.getNthPointOffset(idx);
-    if (!offset) {
-      return;
-    }
+    if (!offset) return;
+
     cy.get(`${this.container} .nsewdrag.drag`).trigger("mousedown", {
       clientX: offset.left,
       clientY: offset.top,

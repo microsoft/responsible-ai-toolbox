@@ -58,9 +58,7 @@ export class CasualAggregateChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICasualAggregateChartProps): void {
-    if (!isEqual(prevProps.data, this.props.data)) {
-      this.forceUpdate();
-    }
+    if (!isEqual(prevProps.data, this.props.data)) this.forceUpdate();
   }
   private generateCasualAggregatePlotlyProps(): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(basePlotlyProperties);

@@ -53,12 +53,9 @@ export class BinnedResponseBuilder {
           index
         );
         binCount = Math.min(5, uniqueValues.length);
-      } else {
-        binCount = 5;
-      }
-    } else {
-      binCount = binCountIn;
-    }
+      } else binCount = 5;
+    } else binCount = binCountIn;
+
     const delta = featureRange.max - featureRange.min;
     if (delta === 0 || binCount === 0) {
       return {
@@ -98,9 +95,8 @@ export class BinnedResponseBuilder {
     // handle integer case, increment delta since we include the ends as discrete values
     const intDelta = delta / binCount;
     const array = new Array(binCount).fill(0).map((_, index) => {
-      if (index === binCount - 1) {
-        return featureRange.max;
-      }
+      if (index === binCount - 1) return featureRange.max;
+
       return Math.ceil(featureRange.min - 1 + intDelta * (index + 1));
     });
     let previousVal = featureRange.min;

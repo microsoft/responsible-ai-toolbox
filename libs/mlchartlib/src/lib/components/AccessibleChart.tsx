@@ -32,9 +32,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   private timer: number | undefined;
 
   public componentWillUnmount(): void {
-    if (this.timer) {
-      window.clearTimeout(this.timer);
-    }
+    if (this.timer) window.clearTimeout(this.timer);
   }
 
   public render(): React.ReactNode {
@@ -92,9 +90,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             const yDataLength = datum.y ? datum.y.length : 0;
             const tableWidth = Math.max(xDataLength, yDataLength);
             // Building this table is slow, need better accessibility for large charts than an unreadable table
-            if (tableWidth > 500) {
-              return undefined;
-            }
+            if (tableWidth > 500) return undefined;
 
             const xRowCells = [];
             const yRowCells = [];

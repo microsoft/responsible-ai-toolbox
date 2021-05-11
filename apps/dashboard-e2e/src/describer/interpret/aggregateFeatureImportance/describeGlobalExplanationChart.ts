@@ -11,9 +11,8 @@ import { IInterpretData } from "../IInterpretData";
 const topKLabelReg = /^Top 1-(\d+) features$/;
 function getTopKValue(): number {
   const exec = topKLabelReg.exec(cy.$$("#TopKSliderContainer label").text());
-  if (!exec || !exec[1]) {
-    throw new Error("Cannot find top k label");
-  }
+  if (!exec || !exec[1]) throw new Error("Cannot find top k label");
+
   return toNumber(exec[1]);
 }
 

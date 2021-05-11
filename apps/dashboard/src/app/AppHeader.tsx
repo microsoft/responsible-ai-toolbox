@@ -115,9 +115,8 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     item?: IContextualMenuItem
   ): boolean {
-    if (item?.data) {
-      this.props.onSettingChanged(field, item?.data);
-    }
+    if (item?.data) this.props.onSettingChanged(field, item?.data);
+
     return true;
   }
 }

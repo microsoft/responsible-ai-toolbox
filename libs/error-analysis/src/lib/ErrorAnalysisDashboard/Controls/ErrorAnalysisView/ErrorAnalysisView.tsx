@@ -97,8 +97,7 @@ export class ErrorAnalysisView extends React.PureComponent<
       this.props.treeViewState !== prevProps.treeViewState ||
       this.props.matrixFilterState !== prevProps.matrixFilterState ||
       this.props.matrixAreaState !== prevProps.matrixAreaState
-    ) {
+    )
       this.forceUpdate();
-    }
   }
 }

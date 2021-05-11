@@ -120,9 +120,8 @@ export class CasualIndividualChart extends React.PureComponent<
     _prevProps: ICasualIndividualChartProps,
     prevState: ICasualIndividualChartState
   ): void {
-    if (!this.state) {
-      return;
-    }
+    if (!this.state) return;
+
     const selectionsAreEqual = _.isEqual(
       this.state.selectedPointsIndexes,
       prevState.selectedPointsIndexes
@@ -163,9 +162,8 @@ export class CasualIndividualChart extends React.PureComponent<
       !selectionsAreEqual ||
       !activePointsAreEqual ||
       !customActivePointsAreEqual
-    ) {
+    )
       this.forceUpdate();
-    }
   }
 
   public render(): React.ReactNode {
@@ -177,9 +175,8 @@ export class CasualIndividualChart extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
-    if (this.state.chartProps === undefined) {
-      return <div />;
-    }
+    if (this.state.chartProps === undefined) return <div />;
+
     const plotlyProps = this.generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
@@ -353,18 +350,16 @@ export class CasualIndividualChart extends React.PureComponent<
   }
 
   private onXSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
     this.setState({ chartProps: newProps, xDialogOpen: false });
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
+    if (!this.state.chartProps) return;
+
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
     this.setState({ chartProps: newProps, yDialogOpen: false });
@@ -394,9 +389,8 @@ export class CasualIndividualChart extends React.PureComponent<
   };
 
   private toggleSelectionOfPoint(index?: number): void {
-    if (index === undefined) {
-      return;
-    }
+    if (index === undefined) return;
+
     const indexOf = this.state.selectedPointsIndexes.indexOf(index);
     let newSelections = [...this.state.selectedPointsIndexes];
     let pointIsActive = [...this.state.pointIsActive];
@@ -435,9 +429,9 @@ export class CasualIndividualChart extends React.PureComponent<
         const selectionIndex = this.state.selectedPointsIndexes.indexOf(
           rowIndex
         );
-        if (selectionIndex === -1) {
+        if (selectionIndex === -1)
           return FabricStyles.fabricColorInactiveSeries;
-        }
+
         return FabricStyles.fabricColorPalette[selectionIndex];
       }) as any,
       size: 8,
@@ -532,9 +526,9 @@ export class CasualIndividualChart extends React.PureComponent<
       hovertemplate += metaX.label + ": %{customdata.X}<br>";
 
       rawX.forEach((val, index) => {
-        if (metaX.treatAsCategorical) {
+        if (metaX.treatAsCategorical)
           customdata[index]["X"] = metaX.sortedCategoricalValues?.[val];
-        } else {
+        else {
           customdata[index]["X"] = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
@@ -548,9 +542,7 @@ export class CasualIndividualChart extends React.PureComponent<
         trace.x = dither.map((ditherVal, index) => {
           return rawX[index] + ditherVal;
         });
-      } else {
-        trace.x = rawX;
-      }
+      } else trace.x = rawX;
     }
     if (chartProps.yAxis) {
       const metaY = this.context.jointDataset.metaDict[
@@ -559,9 +551,9 @@ export class CasualIndividualChart extends React.PureComponent<
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
       hovertemplate += metaY.label + ": %{customdata.Y}<br>";
       rawY.forEach((val, index) => {
-        if (metaY.treatAsCategorical) {
+        if (metaY.treatAsCategorical)
           customdata[index]["Y"] = metaY.sortedCategoricalValues?.[val];
-        } else {
+        else {
           customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
@@ -575,9 +567,7 @@ export class CasualIndividualChart extends React.PureComponent<
         trace.y = dither.map((ditherVal, index) => {
           return rawY[index] + ditherVal;
         });
-      } else {
-        trace.y = rawY;
-      }
+      } else trace.y = rawY;
     }
     hovertemplate +=
       localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";

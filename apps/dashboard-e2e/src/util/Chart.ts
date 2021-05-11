@@ -15,9 +15,8 @@ export abstract class Chart<TElement extends IChartElement> {
   public abstract get Elements(): TElement[];
   public get VisibleElements(): TElement[] {
     const svgWidth = this.getSvgWidth();
-    if (!svgWidth) {
-      throw new Error("Failed to determine svg width");
-    }
+    if (!svgWidth) throw new Error("Failed to determine svg width");
+
     return this.Elements.filter((b) => b && b.right < svgWidth);
   }
   protected getHtmlElements(selector: string): HTMLElement[] {

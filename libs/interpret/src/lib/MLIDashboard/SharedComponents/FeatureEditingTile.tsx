@@ -61,12 +61,11 @@ export class FeatureEditingTile extends React.Component<
     if (
       this.state.value !== this.props.defaultValue.toString() &&
       this.state.errorMessage === undefined
-    ) {
+    )
       tileClass += " " + featureEditingTileStyles.edited;
-    }
-    if (this.state.errorMessage !== undefined) {
+
+    if (this.state.errorMessage !== undefined)
       tileClass += " " + featureEditingTileStyles.error;
-    }
 
     return (
       <div className={tileClass}>
@@ -123,9 +122,8 @@ export class FeatureEditingTile extends React.Component<
     value?: string | undefined
   ): void => {
     const newVal = option ? option.text : value;
-    if (newVal) {
-      this.props.onEdit(this.props.index, newVal);
-    }
+    if (newVal) this.props.onEdit(this.props.index, newVal);
+
     this.setState({ value: newVal });
   };
 }

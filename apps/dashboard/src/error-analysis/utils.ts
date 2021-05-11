@@ -37,9 +37,8 @@ export function getJsonTreeAdultCensusIncome(featureNames: string[]): any {
 }
 
 export function getJsonTree(isBreastCancer: boolean): any {
-  if (isBreastCancer) {
-    return _.cloneDeep(dummyTreeBreastCancerData);
-  }
+  if (isBreastCancer) return _.cloneDeep(dummyTreeBreastCancerData);
+
   return _.cloneDeep(dummyTreeAdultCensusIncomeData);
 }
 
@@ -50,11 +49,8 @@ export function generateJsonTree(
 ): Promise<any> {
   const promise = new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
-      if (isBreastCancer) {
-        resolve(_.cloneDeep(dummyTreeBreastCancerData));
-      } else {
-        resolve(_.cloneDeep(dummyTreeAdultCensusIncomeData));
-      }
+      if (isBreastCancer) resolve(_.cloneDeep(dummyTreeBreastCancerData));
+      else resolve(_.cloneDeep(dummyTreeAdultCensusIncomeData));
     }, 300);
     signal.addEventListener("abort", () => {
       clearTimeout(timeout);
@@ -89,13 +85,11 @@ export function generateJsonMatrix(
         data.length === 3 &&
         data[0][0] === "mean radius" &&
         data[0][1] === "mean texture"
-      ) {
+      )
         resolve(_.cloneDeep(dummyMatrix2dInterval));
-      } else if (data[0][0] === "mean radius" || data[0][1] === "mean radius") {
+      else if (data[0][0] === "mean radius" || data[0][1] === "mean radius")
         resolve(_.cloneDeep(dummyMatrix1dInterval));
-      } else {
-        resolve(_.cloneDeep(dummyMatrixData));
-      }
+      else resolve(_.cloneDeep(dummyMatrixData));
     }, 300);
     signal.addEventListener("abort", () => {
       clearTimeout(timeout);
@@ -113,11 +107,9 @@ export function createJsonImportancesGenerator(
   return (_data: any[], signal: AbortSignal): Promise<any> => {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        if (isBreastCancer) {
+        if (isBreastCancer)
           resolve(generateFeatures().map(() => Math.random()));
-        } else {
-          resolve(featureNames.map(() => Math.random()));
-        }
+        else resolve(featureNames.map(() => Math.random()));
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);

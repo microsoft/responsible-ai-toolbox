@@ -125,9 +125,9 @@ export class BinDialog extends React.PureComponent<
           this.props.dataset
         )
       );
-    } else if (this.props.bins.rangeType === RangeTypes.Integer) {
+    } else if (this.props.bins.rangeType === RangeTypes.Integer)
       this.setState(this.props.bins);
-    } else {
+    else {
       this.setState(
         BinnedResponseBuilder.buildNumeric(
           this.props.range,
@@ -148,9 +148,9 @@ export class BinDialog extends React.PureComponent<
         !Number.isInteger(number) ||
         number > BinDialog.maxBins ||
         number < BinDialog.minBins
-      ) {
+      )
         return this.state.array.length.toString();
-      }
+
       this.setState(
         BinnedResponseBuilder.buildNumeric(
           this.props.range,
@@ -162,9 +162,9 @@ export class BinDialog extends React.PureComponent<
     } else {
       const prevVal = this.state.array.length;
       const binCount = prevVal + delta;
-      if (binCount > BinDialog.maxBins || binCount < BinDialog.minBins) {
+      if (binCount > BinDialog.maxBins || binCount < BinDialog.minBins)
         return prevVal.toString();
-      }
+
       this.setState(
         BinnedResponseBuilder.buildNumeric(
           this.props.range,

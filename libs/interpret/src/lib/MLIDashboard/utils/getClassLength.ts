@@ -15,9 +15,9 @@ export function getClassLength(props: IExplanationDashboardProps): number {
       (localImportances as number[][][]).every((dim1) => {
         return dim1.every((dim2) => Array.isArray(dim2));
       })
-    ) {
+    )
       return localImportances.length;
-    }
+
     // 2d is regression (could be a non-scikit convention binary, but that is not supported)
     return 1;
   }
@@ -40,9 +40,9 @@ export function getClassLength(props: IExplanationDashboardProps): number {
     Array.isArray(props.probabilityY) &&
     Array.isArray(props.probabilityY[0]) &&
     props.probabilityY[0].length > 0
-  ) {
+  )
     return props.probabilityY[0].length;
-  }
+
   // default to regression case
   return 1;
 }

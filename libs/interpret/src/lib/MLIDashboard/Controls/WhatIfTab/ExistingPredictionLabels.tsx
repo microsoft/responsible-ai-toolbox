@@ -67,9 +67,8 @@ export class ExistingPredictionLabels extends React.Component<
         if (!tempPredictedProb) {
           predictedProb =
             row[JointDataset.ProbabilityYRoot + predictedClass?.toString()];
-        } else {
-          predictedProb = tempPredictedProb;
-        }
+        } else predictedProb = tempPredictedProb;
+
         const predictedProbs = JointDataset.predictProbabilitySlice(
           row,
           this.props.metadata.classNames.length

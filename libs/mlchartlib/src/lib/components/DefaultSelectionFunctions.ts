@@ -19,9 +19,7 @@ export class DefaultSelectionFunctions {
             if (trace.customdata) {
               trace.customdata.forEach((data, index) => {
                 const id = data?.toString();
-                if (id && selections.includes(id)) {
-                  selectedIndexes.push(index);
-                }
+                if (id && selections.includes(id)) selectedIndexes.push(index);
               });
             }
             return selectedIndexes;
@@ -36,9 +34,7 @@ export class DefaultSelectionFunctions {
               const newWidths: number[] = new Array(customData.length).fill(0);
               customData.forEach((data, index) => {
                 const id = data?.toString();
-                if (id && selections.includes(id)) {
-                  newWidths[index] = 2;
-                }
+                if (id && selections.includes(id)) newWidths[index] = 2;
               });
               return newWidths;
             }

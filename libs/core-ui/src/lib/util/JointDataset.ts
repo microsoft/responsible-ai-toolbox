@@ -157,9 +157,7 @@ export class JointDataset {
             if (args.metadata.featureIsCategorical?.[colIndex]) {
               this.dataDict[index][key] =
                 this.metaDict[key].sortedCategoricalValues?.indexOf(val) || 0;
-            } else {
-              this.dataDict[index][key] = val;
-            }
+            } else this.dataDict[index][key] = val;
           }
         });
       });
@@ -168,9 +166,8 @@ export class JointDataset {
     if (args.predictedY) {
       this.initializeDataDictIfNeeded(args.predictedY);
       args.predictedY.forEach((val, index) => {
-        if (this.dataDict) {
+        if (this.dataDict)
           this.dataDict[index][JointDataset.PredictedYLabel] = val;
-        }
       });
       this.metaDict[JointDataset.PredictedYLabel] = {
         abbridgedLabel: localization.Interpret.ExplanationScatter.predictedY,
@@ -236,9 +233,7 @@ export class JointDataset {
     if (args.trueY) {
       this.initializeDataDictIfNeeded(args.trueY);
       args.trueY.forEach((val, index) => {
-        if (this.dataDict) {
-          this.dataDict[index][JointDataset.TrueYLabel] = val;
-        }
+        if (this.dataDict) this.dataDict[index][JointDataset.TrueYLabel] = val;
       });
       this.metaDict[JointDataset.TrueYLabel] = {
         abbridgedLabel: localization.Interpret.ExplanationScatter.trueY,
@@ -312,9 +307,7 @@ export class JointDataset {
       this.buildLocalFlattenMatrix(WeightVectors.AbsAvg);
       this.hasLocalExplanations = true;
     }
-    if (this.dataDict === undefined) {
-      this.initializeDataDictIfNeeded([]);
-    }
+    if (this.dataDict === undefined) this.initializeDataDictIfNeeded([]);
   }
 
   // creating public static methods of the class instance methonds.
@@ -344,11 +337,9 @@ export class JointDataset {
     const result = new Array(length);
     for (let i = 0; i < length; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
-      if (metaDict[key].isCategorical) {
+      if (metaDict[key].isCategorical)
         result[i] = metaDict[key].sortedCategoricalValues?.[row[key]];
-      } else {
-        result[i] = row[key];
-      }
+      else result[i] = row[key];
     }
     return result;
   }
@@ -359,9 +350,9 @@ export class JointDataset {
     length: number
   ): number[] {
     const result: number[] = new Array(length);
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++)
       result[i] = row[JointDataset.ReducedLocalImportanceRoot + i.toString()];
-    }
+
     return result;
   }
 
@@ -370,9 +361,9 @@ export class JointDataset {
     length: number
   ): number[] {
     const result: number[] = new Array(length);
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++)
       result[i] = row[JointDataset.ProbabilityYRoot + i.toString()];
-    }
+
     return result;
   }
 
@@ -451,9 +442,9 @@ export class JointDataset {
   }
 
   public unwrap(key: string, binVector?: number[]): any[] {
-    if (this.dataDict) {
+    if (this.dataDict)
       return JointDataset.unwrap(this.dataDict, key, binVector);
-    }
+
     return [];
   }
 
@@ -483,9 +474,8 @@ export class JointDataset {
 
   public addBin(key: string, binCountIn?: number): void {
     const meta = this.metaDict[key];
-    if (!meta.featureRange) {
-      return;
-    }
+    if (!meta.featureRange) return;
+
     const featureRange = meta.featureRange;
     // use data-dict for undefined binCount (building default bin)
     // use filtered data for user provided binCount
@@ -529,9 +519,8 @@ export class JointDataset {
     // handle integer case, increment delta since we include the ends as discrete values
     const intDelta = delta / binCount;
     const array = new Array(binCount).fill(0).map((_, index) => {
-      if (index === binCount - 1) {
-        return featureRange.max;
-      }
+      if (index === binCount - 1) return featureRange.max;
+
       return Math.ceil(featureRange.min - 1 + intDelta * (index + 1));
     });
     let previousVal = featureRange.min;
@@ -555,9 +544,8 @@ export class JointDataset {
 
   // project the 3d array based on the selected vector weights. Costly to do, so avoid when possible.
   public buildLocalFlattenMatrix(weightVector: WeightVectorOption): void {
-    if (!this.rawLocalImportance) {
-      return;
-    }
+    if (!this.rawLocalImportance) return;
+
     const featuresMinArray = new Array(this.rawLocalImportance[0].length).fill(
       Number.MAX_SAFE_INTEGER
     );
@@ -571,12 +559,12 @@ export class JointDataset {
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
             const val = classArray[0];
-            if (val > featuresMaxArray[featureIndex]) {
+            if (val > featuresMaxArray[featureIndex])
               featuresMaxArray[featureIndex] = val;
-            }
-            if (val < featuresMinArray[featureIndex]) {
+
+            if (val < featuresMinArray[featureIndex])
               featuresMinArray[featureIndex] = val;
-            }
+
             if (this.dataDict) {
               this.dataDict[rowIndex][
                 JointDataset.ReducedLocalImportanceRoot +
@@ -611,12 +599,12 @@ export class JointDataset {
                 value = classArray[weightVector];
               }
             }
-            if (value > featuresMaxArray[featureIndex]) {
+            if (value > featuresMaxArray[featureIndex])
               featuresMaxArray[featureIndex] = value;
-            }
-            if (value < featuresMinArray[featureIndex]) {
+
+            if (value < featuresMinArray[featureIndex])
               featuresMinArray[featureIndex] = value;
-            }
+
             if (this.dataDict) {
               this.dataDict[rowIndex][
                 JointDataset.ReducedLocalImportanceRoot +
@@ -655,9 +643,8 @@ export class JointDataset {
   }
 
   private initializeDataDictIfNeeded(arr: any[]): void {
-    if (arr === undefined) {
-      return;
-    }
+    if (arr === undefined) return;
+
     if (this.dataDict !== undefined) {
       if (this.dataDict.length !== arr.length) {
         throw new Error(

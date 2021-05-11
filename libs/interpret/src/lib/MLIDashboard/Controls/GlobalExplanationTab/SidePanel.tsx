@@ -140,18 +140,15 @@ export class SidePanel extends React.Component<
     _event?: React.FormEvent,
     item?: IDropdownOption
   ): void => {
-    if (typeof item?.key === "number") {
-      this.props.setSortIndex(item.key);
-    }
+    if (typeof item?.key === "number") this.props.setSortIndex(item.key);
   };
 
   private onChartTypeChange = (
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key !== undefined)
       this.props.onChartTypeChange(item.key as ChartTypes);
-    }
   };
 
   private getWeightOptions(): IDropdownOption[] | undefined {

@@ -13,9 +13,8 @@ export function describeAggregateFeatureImportance(
   name: keyof typeof interpretDatasets
 ): void {
   const datasetShape = interpretDatasets[name];
-  if (datasetShape.noFeatureImportance) {
-    return;
-  }
+  if (datasetShape.noFeatureImportance) return;
+
   describe(testName, () => {
     beforeEach(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
@@ -27,8 +26,7 @@ export function describeAggregateFeatureImportance(
       );
     });
     describeGlobalExplanationBarChart(datasetShape);
-    if (!datasetShape.noLocalImportance) {
+    if (!datasetShape.noLocalImportance)
       describeGlobalExplanationBoxChart(datasetShape);
-    }
   });
 }

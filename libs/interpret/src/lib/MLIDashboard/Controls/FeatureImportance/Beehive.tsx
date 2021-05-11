@@ -244,9 +244,9 @@ export class Beehive extends React.PureComponent<
           `${localization.Interpret.featureImportance}<br> ${localization.Interpret.ExplanationScatter.class} ${explanationContext.modelMetadata.classNames[0]}`
         );
       }
-      if (selectedOption === undefined || selectedOption.key === "none") {
+      if (selectedOption === undefined || selectedOption.key === "none")
         PlotlyUtils.clearColorProperties(plotlyProps);
-      } else {
+      else {
         PlotlyUtils.setColorProperty(
           plotlyProps,
           selectedOption,
@@ -263,9 +263,7 @@ export class Beehive extends React.PureComponent<
             localization.Interpret.AggregateImportance.low,
             localization.Interpret.AggregateImportance.high
           ]);
-        } else {
-          _.set(plotlyProps.data[0], "marker.opacity", 0.6);
-        }
+        } else _.set(plotlyProps.data[0], "marker.opacity", 0.6);
       }
       plotlyProps.data = ChartBuilder.buildPlotlySeries(
         plotlyProps.data[0],
@@ -334,12 +332,11 @@ export class Beehive extends React.PureComponent<
     rowIndex: number,
     featureIndex: number
   ): string | number {
-    if (!data.localExplanation?.flattenedValues) {
-      return "";
-    }
-    if ((data.localExplanation?.flattenedValues?.length || 0) > 500) {
+    if (!data.localExplanation?.flattenedValues) return "";
+
+    if ((data.localExplanation?.flattenedValues?.length || 0) > 500)
       return data.localExplanation.flattenedValues[rowIndex][featureIndex];
-    }
+
     return data.localExplanation.flattenedValues[rowIndex][
       featureIndex
     ].toLocaleString(undefined, {
@@ -582,9 +579,8 @@ export class Beehive extends React.PureComponent<
       this.props.dashboardContext.explanationContext.localExplanation &&
       this.props.dashboardContext.explanationContext.localExplanation
         .percentComplete !== undefined
-    ) {
+    )
       return <LoadingSpinner />;
-    }
 
     const explanationStrings = this.props.messages
       ? this.props.messages.LocalExpAndTestReq
@@ -614,18 +610,15 @@ export class Beehive extends React.PureComponent<
     const clickedId = (data.points[0] as any).customdata;
     const selections: string[] = this.props.selectionContext.selectedIds.slice();
     const existingIndex = selections.indexOf(clickedId);
-    if (existingIndex !== -1) {
-      selections.splice(existingIndex, 1);
-    } else {
-      selections.push(clickedId);
-    }
+    if (existingIndex !== -1) selections.splice(existingIndex, 1);
+    else selections.push(clickedId);
+
     this.props.selectionContext.onSelect(selections);
   };
 
   private showCrossClassInfo = (): void => {
-    if (this.state.calloutContent) {
-      this.onDismiss();
-    } else {
+    if (this.state.calloutContent) this.onDismiss();
+    else {
       const calloutContent = (
         <div>
           <span>{localization.Interpret.CrossClass.overviewInfo}</span>
@@ -641,9 +634,8 @@ export class Beehive extends React.PureComponent<
   };
 
   private showGlobalSortInfo = (): void => {
-    if (this.state.calloutContent) {
-      this.onDismiss();
-    } else {
+    if (this.state.calloutContent) this.onDismiss();
+    else {
       const calloutContent = (
         <div>
           <span>
@@ -718,9 +710,8 @@ export class Beehive extends React.PureComponent<
     _event?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!item?.key) {
-      return;
-    }
+    if (!item?.key) return;
+
     const newConfig = _.cloneDeep(this.props.config);
     newConfig.displayMode = item.key as any;
     this.props.onChange(newConfig, this.props.config.id);
@@ -734,9 +725,8 @@ export class Beehive extends React.PureComponent<
     _event?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (!item?.key) {
-      return;
-    }
+    if (!item?.key) return;
+
     this.setState({
       plotlyProps: undefined,
       selectedColorOption: item.key as string

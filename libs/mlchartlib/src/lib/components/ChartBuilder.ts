@@ -49,9 +49,9 @@ export class ChartBuilder {
       if (datum.groupBy && datum.groupBy.length > 0) {
         const key = row.group;
         if (key === undefined || key === null) {
-          if (defaultSeries === undefined) {
+          if (defaultSeries === undefined)
             defaultSeries = ChartBuilder.buildDefaultSeries(datum);
-          }
+
           series = defaultSeries;
         } else {
           if (groupingDictionary[key] === undefined) {
@@ -62,9 +62,9 @@ export class ChartBuilder {
           series = groupingDictionary[key];
         }
       } else {
-        if (defaultSeries === undefined) {
+        if (defaultSeries === undefined)
           defaultSeries = ChartBuilder.buildDefaultSeries(datum);
-        }
+
         series = defaultSeries;
       }
 
@@ -88,15 +88,12 @@ export class ChartBuilder {
       }
       if (hasVectorValues) {
         // for making scalars into a vector, fill the vector with that scalar value
-        if (!Array.isArray(row.x)) {
-          row.x = new Array(maxLength).fill(row.x);
-        }
-        if (!Array.isArray(row.y)) {
-          row.y = new Array(maxLength).fill(row.y);
-        }
-        if (!Array.isArray(row.size)) {
+        if (!Array.isArray(row.x)) row.x = new Array(maxLength).fill(row.x);
+
+        if (!Array.isArray(row.y)) row.y = new Array(maxLength).fill(row.y);
+
+        if (!Array.isArray(row.size))
           row.size = new Array(maxLength).fill(row.size);
-        }
 
         // for padding too-short of arrays, set length to be uniform
         row.x.length = maxLength;
@@ -105,18 +102,12 @@ export class ChartBuilder {
       }
 
       if (datum.xAccessor) {
-        if (Array.isArray(row.x)) {
-          (series.x as Datum[]).push(...row.x);
-        } else {
-          (series.x as Datum[]).push(row.x);
-        }
+        if (Array.isArray(row.x)) (series.x as Datum[]).push(...row.x);
+        else (series.x as Datum[]).push(row.x);
       }
       if (datum.yAccessor) {
-        if (Array.isArray(row.y)) {
-          (series.y as Datum[]).push(...row.y);
-        } else {
-          (series.y as Datum[]).push(row.y);
-        }
+        if (Array.isArray(row.y)) (series.y as Datum[]).push(...row.y);
+        else (series.y as Datum[]).push(row.y);
       }
       if (datum.sizeAccessor) {
         const size =
@@ -125,9 +116,8 @@ export class ChartBuilder {
       }
       if (datum.datapointLevelAccessors !== undefined) {
         Object.keys(datum.datapointLevelAccessors).forEach((key) => {
-          if (!datum.datapointLevelAccessors) {
-            return;
-          }
+          if (!datum.datapointLevelAccessors) return;
+
           const accessor = datum.datapointLevelAccessors[key];
           const plotlyPath = accessor.plotlyPath;
           let value =
@@ -139,19 +129,14 @@ export class ChartBuilder {
                 )
               : row[key];
           if (hasVectorValues) {
-            if (!Array.isArray(value)) {
-              value = new Array(maxLength).fill(value);
-            }
+            if (!Array.isArray(value)) value = new Array(maxLength).fill(value);
+
             value.length = maxLength;
           }
-          if (!_.has(series, plotlyPath)) {
-            _.set(series, plotlyPath, []);
-          }
-          if (Array.isArray(value)) {
-            _.get(series, plotlyPath).push(...value);
-          } else {
-            _.get(series, plotlyPath).push(value);
-          }
+          if (!_.has(series, plotlyPath)) _.set(series, plotlyPath, []);
+
+          if (Array.isArray(value)) _.get(series, plotlyPath).push(...value);
+          else _.get(series, plotlyPath).push(value);
         });
       }
     });
@@ -165,23 +150,17 @@ export class ChartBuilder {
   private static buildDefaultSeries(datum: IData): Partial<Data> {
     const series: Partial<Data> = _.cloneDeep(datum);
     // defining an x/y accessor will overwrite any hardcoded x or y values.
-    if (datum.xAccessor) {
-      series.x = [];
-    }
-    if (datum.yAccessor) {
-      series.y = [];
-    }
+    if (datum.xAccessor) series.x = [];
+
+    if (datum.yAccessor) series.y = [];
+
     if (datum.sizeAccessor) {
-      if (series.marker) {
-        series.marker.size = [];
-      }
+      if (series.marker) series.marker.size = [];
     }
     if (datum.datapointLevelAccessors !== undefined) {
       Object.keys(datum.datapointLevelAccessors).forEach((key) => {
         const plotlyPath = datum.datapointLevelAccessors?.[key].plotlyPath;
-        if (plotlyPath) {
-          _.set(series, plotlyPath, []);
-        }
+        if (plotlyPath) _.set(series, plotlyPath, []);
       });
     }
     return series;

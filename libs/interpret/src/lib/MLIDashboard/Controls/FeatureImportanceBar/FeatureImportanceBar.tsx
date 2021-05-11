@@ -54,9 +54,8 @@ export class FeatureImportanceBar extends React.PureComponent<
       this.props.unsortedSeries !== prevProps.unsortedSeries ||
       this.props.sortArray !== prevProps.sortArray ||
       this.props.chartType !== prevProps.chartType
-    ) {
+    )
       this.setState({ plotlyProps: undefined });
-    }
   }
 
   public render(): React.ReactNode {
@@ -64,9 +63,8 @@ export class FeatureImportanceBar extends React.PureComponent<
       "xaxis.range": [-0.5, +this.props.topK - 0.5]
     };
     const plotlyProps = this.state.plotlyProps;
-    if (plotlyProps) {
+    if (plotlyProps)
       _.set(plotlyProps, "layout.xaxis.range", [-0.5, +this.props.topK - 0.5]);
-    }
 
     if (
       !this.props.unsortedSeries ||
@@ -166,9 +164,8 @@ export class FeatureImportanceBar extends React.PureComponent<
 
     const xText = sortedIndexVector.map((i) => this.props.unsortedX[i]);
     const xOriginText = sortedIndexVector.map((i) => {
-      if (this.props.originX) {
-        return this.props.originX[i];
-      }
+      if (this.props.originX) return this.props.originX[i];
+
       return this.props.unsortedX[i];
     });
     if (this.props.chartType === ChartTypes.Bar) {
@@ -257,9 +254,8 @@ export class FeatureImportanceBar extends React.PureComponent<
   }
 
   private selectPointFromChart = (data: any): void => {
-    if (this.props.onFeatureSelection === undefined) {
-      return;
-    }
+    if (this.props.onFeatureSelection === undefined) return;
+
     const trace = data.points[0];
     const featureNumber = this.props.sortArray[trace.x];
     this.props.onFeatureSelection(trace.curveNumber, featureNumber);

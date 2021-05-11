@@ -39,9 +39,7 @@ export class Cohort {
   }
 
   public updateFilter(filter: IFilter, index?: number): void {
-    if (index === undefined) {
-      index = this.filters.length;
-    }
+    if (index === undefined) index = this.filters.length;
 
     this.filters[index] = filter;
     this.filteredData = this.applyFilters();
@@ -72,9 +70,8 @@ export class Cohort {
       this.currentSortKey = columnName;
       this.currentSortReversed = false;
     }
-    if (reverse === undefined) {
-      reverse = false;
-    }
+    if (reverse === undefined) reverse = false;
+
     if (this.currentSortReversed !== reverse) {
       this.filteredData.reverse();
       this.currentSortReversed = true;
@@ -106,15 +103,12 @@ export class Cohort {
   }
 
   public calculateAverageImportance(): number[] {
-    if (this.cachedAverageImportance) {
-      return this.cachedAverageImportance;
-    }
+    if (this.cachedAverageImportance) return this.cachedAverageImportance;
 
     this.cachedAverageImportance = this.transposedLocalFeatureImportances().map(
       (featureValues) => {
-        if (!featureValues || featureValues.length === 0) {
-          return Number.NaN;
-        }
+        if (!featureValues || featureValues.length === 0) return Number.NaN;
+
         const total = featureValues.reduce((prev, current) => {
           return prev + Math.abs(current);
         }, 0);
@@ -125,9 +119,9 @@ export class Cohort {
   }
 
   public transposedLocalFeatureImportances(): number[][] {
-    if (this.cachedTransposedLocalFeatureImportances) {
+    if (this.cachedTransposedLocalFeatureImportances)
       return this.cachedTransposedLocalFeatureImportances;
-    }
+
     const featureLength = this.jointDataset.localExplanationFeatureCount;
     const localFeatureImportances = this.filteredData.map((row) => {
       return JointDataset.localExplanationSlice(row, featureLength);
@@ -176,9 +170,9 @@ export class Cohort {
     row: { [key: string]: number },
     compositeFilter: ICompositeFilter
   ): boolean {
-    if (compositeFilter.method) {
+    if (compositeFilter.method)
       return this.filterRow(row, [compositeFilter as IFilter]);
-    }
+
     return this.filterComposite(
       row,
       compositeFilter.compositeFilters,
@@ -204,9 +198,8 @@ export class Cohort {
   private applyFilters(): Array<{ [key: string]: number }> {
     this.clearCachedImportances();
     let filteredData = this.jointDataset.dataDict;
-    if (!filteredData) {
-      return [];
-    }
+    if (!filteredData) return [];
+
     const hasFilters = this.filters.length > 0;
     const hasCompositeFilters = this.compositeFilters.length > 0;
     if (hasFilters) {
@@ -219,9 +212,8 @@ export class Cohort {
         this.filterComposite(row, this.compositeFilters, Operations.And)
       );
     }
-    if (!hasFilters && !hasCompositeFilters) {
-      filteredData = [...filteredData];
-    }
+    if (!hasFilters && !hasCompositeFilters) filteredData = [...filteredData];
+
     return filteredData;
   }
 }

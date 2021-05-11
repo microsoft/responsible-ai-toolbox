@@ -15,9 +15,8 @@ export class MetricsCache {
     private fetchMethod?: (request: IMetricRequest) => Promise<IMetricResponse>,
     precomputedCache?: Array<Array<{ [key: string]: IMetricResponse }>>
   ) {
-    if (precomputedCache) {
-      this.cache = precomputedCache;
-    } else {
+    if (precomputedCache) this.cache = precomputedCache;
+    else {
       this.cache = new Array(featureCount).fill(0).map(() =>
         new Array(numberOfModels).fill(0).map(() => {
           return {};
@@ -72,9 +71,8 @@ export class MetricsCache {
     if (
       falsePositiveRateMetric === Number.NaN ||
       truePositiveRateMetric === Number.NaN
-    ) {
+    )
       return Number.NaN;
-    }
 
     if (fairnessMethod === FairnessModes.Difference) {
       const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
@@ -112,9 +110,7 @@ export class MetricsCache {
       });
       this.cache[featureIndex][modelIndex][metricKey] = value;
     }
-    if (!value?.bins) {
-      return Number.NaN;
-    }
+    if (!value?.bins) return Number.NaN;
 
     const bins = value.bins
       .slice()
@@ -123,28 +119,19 @@ export class MetricsCache {
     const min = _.min(bins);
     const max = _.max(bins);
 
-    if (min === undefined || max === undefined) {
-      return Number.NaN;
-    }
+    if (min === undefined || max === undefined) return Number.NaN;
 
-    if (fairnessMethod === FairnessModes.Min) {
-      return min;
-    }
+    if (fairnessMethod === FairnessModes.Min) return min;
 
-    if (fairnessMethod === FairnessModes.Max) {
-      return max;
-    }
+    if (fairnessMethod === FairnessModes.Max) return max;
 
     if (fairnessMethod === FairnessModes.Ratio) {
-      if (max === 0) {
-        return Number.NaN;
-      }
+      if (max === 0) return Number.NaN;
+
       return min / max;
     }
 
-    if (fairnessMethod === FairnessModes.Difference) {
-      return max - min;
-    }
+    if (fairnessMethod === FairnessModes.Difference) return max - min;
 
     return Number.NaN;
   }
@@ -165,9 +152,7 @@ export class MetricsCache {
       });
       this.cache[featureIndex][modelIndex][key] = value;
     }
-    if (!value?.bins) {
-      return Number.NaN;
-    }
+    if (!value?.bins) return Number.NaN;
 
     const bins = value.bins
       .slice()
@@ -179,9 +164,9 @@ export class MetricsCache {
       min === undefined ||
       max === undefined ||
       (max === 0 && fairnessMethod === FairnessModes.Ratio)
-    ) {
+    )
       return Number.NaN;
-    }
+
     return fairnessMethod === FairnessModes.Difference ? max - min : min / max;
   }
 

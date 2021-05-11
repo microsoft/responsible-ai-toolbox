@@ -35,15 +35,13 @@ export async function callFlaskService<TRequest, TResponse>(
     method: "post"
   })
     .then((resp) => {
-      if (resp.status >= 200 && resp.status < 300) {
-        return resp.json();
-      }
+      if (resp.status >= 200 && resp.status < 300) return resp.json();
+
       return Promise.reject(new Error(resp.statusText));
     })
     .then((json) => {
-      if (json.error !== undefined) {
-        throw new Error(json.error);
-      }
+      if (json.error !== undefined) throw new Error(json.error);
+
       return Promise.resolve(json.data);
     });
 }

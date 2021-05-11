@@ -105,9 +105,9 @@ export class PerformancePlot extends React.PureComponent<
           }
         ];
       }
-      if (barPlotlyProps.layout?.xaxis) {
+      if (barPlotlyProps.layout?.xaxis)
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
-      }
+
       performanceChartModalHelpStrings = [
         localization.Fairness.Report.classificationPerformanceHowToReadV2
       ];

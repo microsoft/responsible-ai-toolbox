@@ -94,12 +94,10 @@ export class SelectionList extends React.Component<ISelectionListProps> {
     this._sortedItems = this.props.items.sort((a, b) => {
       const groupA = this.getGroupFromMetric(a.metric);
       const groupB = this.getGroupFromMetric(b.metric);
-      if (groupA > groupB) {
-        return 1;
-      }
-      if (groupA < groupB) {
-        return -1;
-      }
+      if (groupA > groupB) return 1;
+
+      if (groupA < groupB) return -1;
+
       return 0;
     });
 
@@ -124,9 +122,8 @@ export class SelectionList extends React.Component<ISelectionListProps> {
         }
 
         // don't collapse if the default selection is in this group
-        if (item.key === this.props.defaultSelectedKey) {
+        if (item.key === this.props.defaultSelectedKey)
           this._groups[this._groups.length - 1].isCollapsed = false;
-        }
       }
       item.description = item.description ?? "";
     });

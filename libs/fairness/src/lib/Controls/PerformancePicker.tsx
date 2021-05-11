@@ -89,8 +89,6 @@ export class PerformancePicker extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (typeof item?.key === "string") {
-      this.props.onPerformanceChange(item.key);
-    }
+    if (typeof item?.key === "string") this.props.onPerformanceChange(item.key);
   };
 }

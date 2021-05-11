@@ -27,9 +27,9 @@ export class NoDataMessage extends React.PureComponent<{
     if (
       this.props.explanationStrings === undefined ||
       this.props.explanationStrings.length === 0
-    ) {
+    )
       return;
-    }
+
     const children = this.props.explanationStrings.map((message, index) => {
       return <span key={index}>{message.displayText}</span>;
     });

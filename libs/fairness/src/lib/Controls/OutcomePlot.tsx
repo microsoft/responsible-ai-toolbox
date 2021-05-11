@@ -61,9 +61,9 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: groupNamesWithBuffer
         }
       ];
-      if (barPlotlyProps.layout?.xaxis) {
+      if (barPlotlyProps.layout?.xaxis)
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
-      }
+
       outcomeChartModalHelpStrings = [
         localization.Fairness.Report.classificationOutcomesHowToRead
       ];
