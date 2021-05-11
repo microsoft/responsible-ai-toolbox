@@ -154,9 +154,8 @@ export class ChartBuilder {
 
     if (datum.yAccessor) series.y = [];
 
-    if (datum.sizeAccessor) {
-      if (series.marker) series.marker.size = [];
-    }
+    if (datum.sizeAccessor && series.marker) series.marker.size = [];
+
     if (datum.datapointLevelAccessors !== undefined) {
       Object.keys(datum.datapointLevelAccessors).forEach((key) => {
         const plotlyPath = datum.datapointLevelAccessors?.[key].plotlyPath;

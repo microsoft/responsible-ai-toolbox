@@ -439,9 +439,8 @@ export class FairnessWizardV2 extends React.PureComponent<
     prioritization: string[]
   ): string {
     const keys = new Set(Object.values(metrics).map((metric) => metric.key));
-    for (const metricKey of prioritization) {
+    for (const metricKey of prioritization)
       if (keys.has(metricKey)) return metricKey;
-    }
 
     // if none of the prioritized default metrics are available return first item
     return metrics[0].key;
