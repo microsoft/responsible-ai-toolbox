@@ -34,7 +34,7 @@ export class CasualIndividualView extends React.PureComponent<
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-  constructor(props: ICasualIndividualViewProps) {
+  public constructor(props: ICasualIndividualViewProps) {
     super(props);
     this.state = {
       selectedData: undefined

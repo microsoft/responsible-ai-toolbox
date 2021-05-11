@@ -7,7 +7,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _, { isEqual } from "lodash";
+import _ from "lodash";
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -93,11 +93,11 @@ export class CasualAggregateTable extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICasualAggregateTableProps): void {
-    if (!isEqual(prevProps.data, this.props.data)) {
+    if (!_.isEqual(prevProps.data, this.props.data)) {
       this.forceUpdate();
     }
   }
-  private getItems = (columns: IColumn[]) => {
+  private getItems = (columns: IColumn[]): unknown[] => {
     const props = columns.map((c) => c.key);
     const items = [];
     const len = this.props.data[props[0]].length;

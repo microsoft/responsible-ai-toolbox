@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import React from "react";
 
 export enum WeightVectors {
   Equal = "equal",

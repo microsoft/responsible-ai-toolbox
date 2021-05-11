@@ -109,7 +109,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
             <div
               key={`${i}_${j}cell`}
               className={classNames.matrixCell}
-              onClick={() =>
+              onClick={(): void =>
                 this.props.selectedCellHandler(i, j, matrixLength, row.length)
               }
               role="button"
@@ -181,11 +181,11 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
     return outputMin + (outputMax - outputMin) * value;
   }
 
-  private colorgradRatio(value: number): string {
+  private colorgradRatio(value: number): string | undefined {
     return d3scaleLinear<string>()
       .domain([0, 1])
       .interpolate(d3interpolateHcl)
-      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value)!;
+      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value);
   }
 
   private colorLookup(ratio: number): string {
@@ -197,7 +197,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
 
     const rate = ratio / 100;
     if (rate > 0.01 && rate <= 1) {
-      result = this.colorgradRatio(this.mapRange(0, 1, rate));
+      result = this.colorgradRatio(this.mapRange(0, 1, rate)) || "#ffffff";
     } else {
       result = "#ffffff";
     }

@@ -67,7 +67,7 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   ) => <TooltipHost {...tooltipHostProps} />;
   return (
     <div>
-      {defaultRender!({
+      {defaultRender?.({
         ...props,
         onRenderColumnHeaderTooltip,
         selectAllVisibility: SelectAllVisibility.hidden

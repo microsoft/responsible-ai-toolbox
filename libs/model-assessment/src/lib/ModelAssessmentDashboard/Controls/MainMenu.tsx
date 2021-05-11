@@ -55,13 +55,15 @@ export class MainMenu extends React.PureComponent<
 > {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.setState({
       editedCohort: this.context.errorCohorts[0]
     });
   }
   public render(): React.ReactNode {
-    if (!this.state) return React.Fragment;
+    if (!this.state) {
+      return React.Fragment;
+    }
     const farItems: ICommandBarItemProps[] = [];
     const helpItems: ICommandBarItemProps[] = [
       {
@@ -162,16 +164,17 @@ export class MainMenu extends React.PureComponent<
     );
   }
 
-  private toggleInfoPanel = () =>
+  private toggleInfoPanel = (): void =>
     this.setState((prev) => ({ infoPanelVisible: !prev.infoPanelVisible }));
-  private toggleCohortListPanel = () =>
+  private toggleCohortListPanel = (): void =>
     this.setState((prev) => ({
       cohortListPanelVisible: !prev.cohortListPanelVisible
     }));
 
-  private openEditCohort = (editedCohort: ErrorCohort) =>
+  private openEditCohort = (editedCohort: ErrorCohort): void =>
     this.setState({ editCohortVisible: true, editedCohort });
-  private closeEditCohort = () => this.setState({ editCohortVisible: true });
+  private closeEditCohort = (): void =>
+    this.setState({ editCohortVisible: true });
   private saveEditCohort = (
     originalCohort: ErrorCohort,
     editedCohort: ErrorCohort
@@ -197,13 +200,13 @@ export class MainMenu extends React.PureComponent<
     );
   };
 
-  private toggleShiftCohort = () =>
+  private toggleShiftCohort = (): void =>
     this.setState((prev) => ({ shiftCohortVisible: !prev.shiftCohortVisible }));
 
-  private toggleSaveCohort = () =>
+  private toggleSaveCohort = (): void =>
     this.setState((prev) => ({ saveCohortVisible: !prev.saveCohortVisible }));
 
-  private toggleDashboardSettings = () =>
+  private toggleDashboardSettings = (): void =>
     this.setState((prev) => ({
       dashboardSettingsVisible: !prev.dashboardSettingsVisible
     }));

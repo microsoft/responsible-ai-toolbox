@@ -92,125 +92,145 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <Stack>
             {this.state.activeGlobalTabs[0]?.key !==
               GlobalTabKeys.ErrorAnalysisTab && (
-              <Stack.Item className={modelAssessmentDashboardStyles.section}>
+              <Stack.Item
+                className={modelAssessmentDashboardStyles.buttonSection}
+              >
                 <AddTabButton tabIndex={0} onAdd={this.addTab} />
               </Stack.Item>
             )}
             {this.state.activeGlobalTabs.map((t, i) => (
-              <Stack.Item
-                key={i}
-                className={modelAssessmentDashboardStyles.section}
-              >
-                {t.key === GlobalTabKeys.ErrorAnalysisTab && (
-                  <ErrorAnalysisViewTab
-                    messages={
-                      this.props.stringParams
-                        ? this.props.stringParams.contextualHelp
-                        : undefined
-                    }
-                    getTreeNodes={this.props.requestDebugML}
-                    getMatrix={this.props.requestMatrix}
-                    updateSelectedCohort={this.updateSelectedCohort}
-                    features={this.props.dataset.featureNames}
-                    selectedFeatures={this.state.selectedFeatures}
-                    errorAnalysisOption={this.state.errorAnalysisOption}
-                    selectedCohort={this.state.selectedCohort}
-                    baseCohort={this.state.baseCohort}
-                    treeViewState={this.state.treeViewState}
-                    setTreeViewState={(
-                      treeViewState: ITreeViewRendererState
-                    ) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ treeViewState });
+              <>
+                <Stack.Item
+                  key={i}
+                  className={modelAssessmentDashboardStyles.section}
+                >
+                  {t.key === GlobalTabKeys.ErrorAnalysisTab && (
+                    <ErrorAnalysisViewTab
+                      messages={
+                        this.props.stringParams
+                          ? this.props.stringParams.contextualHelp
+                          : undefined
                       }
-                    }}
-                    matrixAreaState={this.state.matrixAreaState}
-                    matrixFilterState={this.state.matrixFilterState}
-                    setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ matrixAreaState });
+                      getTreeNodes={this.props.requestDebugML}
+                      getMatrix={this.props.requestMatrix}
+                      updateSelectedCohort={this.updateSelectedCohort}
+                      features={this.props.dataset.featureNames}
+                      selectedFeatures={this.state.selectedFeatures}
+                      errorAnalysisOption={this.state.errorAnalysisOption}
+                      selectedCohort={this.state.selectedCohort}
+                      baseCohort={this.state.baseCohort}
+                      treeViewState={this.state.treeViewState}
+                      setTreeViewState={(
+                        treeViewState: ITreeViewRendererState
+                      ): void => {
+                        if (
+                          this.state.selectedCohort !== this.state.baseCohort
+                        ) {
+                          this.setState({ treeViewState });
+                        }
+                      }}
+                      matrixAreaState={this.state.matrixAreaState}
+                      matrixFilterState={this.state.matrixFilterState}
+                      setMatrixAreaState={(
+                        matrixAreaState: IMatrixAreaState
+                      ): void => {
+                        if (
+                          this.state.selectedCohort !== this.state.baseCohort
+                        ) {
+                          this.setState({ matrixAreaState });
+                        }
+                      }}
+                      setMatrixFilterState={(
+                        matrixFilterState: IMatrixFilterState
+                      ): void => {
+                        if (
+                          this.state.selectedCohort !== this.state.baseCohort
+                        ) {
+                          this.setState({ matrixFilterState });
+                        }
+                      }}
+                      stringParams={this.props.stringParams}
+                      selectFeatures={(features: string[]): void =>
+                        this.setState({ selectedFeatures: features })
                       }
-                    }}
-                    setMatrixFilterState={(
-                      matrixFilterState: IMatrixFilterState
-                    ) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ matrixFilterState });
+                      importances={this.state.importances}
+                    />
+                  )}
+                  {t.key === GlobalTabKeys.ModelStatisticsTab && (
+                    <ModelPerformanceTab />
+                  )}
+                  {t.key === GlobalTabKeys.DataExplorerTab && (
+                    <DatasetExplorerTab showCohortSelection={false} />
+                  )}
+                  {t.key === GlobalTabKeys.GlobalExplanationTab && (
+                    <GlobalExplanationTab
+                      cohorts={this.state.cohorts.map(
+                        (cohort) => cohort.cohort
+                      )}
+                      cohortIDs={cohortIDs}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                      explanationMethod={
+                        this.props.modelExplanationData.explanationMethod
                       }
-                    }}
-                    stringParams={this.props.stringParams}
-                    selectFeatures={(features: string[]): void =>
-                      this.setState({ selectedFeatures: features })
-                    }
-                    importances={this.state.importances}
-                  />
-                )}
-                {t.key === GlobalTabKeys.ModelStatisticsTab && (
-                  <ModelPerformanceTab />
-                )}
-                {t.key === GlobalTabKeys.DataExplorerTab && (
-                  <DatasetExplorerTab showCohortSelection={false} />
-                )}
-                {t.key === GlobalTabKeys.GlobalExplanationTab && (
-                  <GlobalExplanationTab
-                    cohorts={this.state.cohorts.map((cohort) => cohort.cohort)}
-                    cohortIDs={cohortIDs}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightOptions={this.state.weightVectorOptions}
-                    weightLabels={this.state.weightVectorLabels}
-                    onWeightChange={this.onWeightVectorChange}
-                    explanationMethod={
-                      this.props.modelExplanationData.explanationMethod
-                    }
-                  />
-                )}
-                {t.key === GlobalTabKeys.LocalExplanationTab && (
-                  <InstanceView
-                    messages={
-                      this.props.stringParams
-                        ? this.props.stringParams.contextualHelp
-                        : undefined
-                    }
-                    features={this.props.dataset.featureNames}
-                    invokeModel={this.props.requestPredictions}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightOptions={this.state.weightVectorOptions}
-                    weightLabels={this.state.weightVectorLabels}
-                    onWeightChange={this.onWeightVectorChange}
-                    activePredictionTab={this.state.predictionTab}
-                    setActivePredictionTab={(key: PredictionTabKeys): void => {
-                      this.setState({
-                        predictionTab: key
-                      });
-                    }}
-                    customPoints={this.state.customPoints}
-                    selectedCohort={this.state.selectedCohort}
-                    setWhatIfDatapoint={(index: number) =>
-                      this.setState({ selectedWhatIfIndex: index })
-                    }
-                  />
-                )}
-                {t.key === GlobalTabKeys.CausalAnalysisTab && (
-                  <CausalInsightsTab data={this.props.casualAnalysisData} />
-                )}
-                {/* 
+                    />
+                  )}
+                  {t.key === GlobalTabKeys.LocalExplanationTab && (
+                    <InstanceView
+                      messages={
+                        this.props.stringParams
+                          ? this.props.stringParams.contextualHelp
+                          : undefined
+                      }
+                      features={this.props.dataset.featureNames}
+                      invokeModel={this.props.requestPredictions}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightOptions={this.state.weightVectorOptions}
+                      weightLabels={this.state.weightVectorLabels}
+                      onWeightChange={this.onWeightVectorChange}
+                      activePredictionTab={this.state.predictionTab}
+                      setActivePredictionTab={(
+                        key: PredictionTabKeys
+                      ): void => {
+                        this.setState({
+                          predictionTab: key
+                        });
+                      }}
+                      customPoints={this.state.customPoints}
+                      selectedCohort={this.state.selectedCohort}
+                      setWhatIfDatapoint={(index: number): void =>
+                        this.setState({ selectedWhatIfIndex: index })
+                      }
+                    />
+                  )}
+                  {t.key === GlobalTabKeys.CausalAnalysisTab && (
+                    <CausalInsightsTab data={this.props.casualAnalysisData} />
+                  )}
+                  {/* 
                 {t.key === GlobalTabKeys.CounterfactualsTab && (
                   <CounterfactualsTab />
                 )} */}
-                <AddTabButton tabIndex={i + 1} onAdd={this.addTab} />
-              </Stack.Item>
+                </Stack.Item>
+                <Stack.Item
+                  className={modelAssessmentDashboardStyles.buttonSection}
+                >
+                  <AddTabButton tabIndex={0} onAdd={this.addTab} />
+                </Stack.Item>
+              </>
             ))}
           </Stack>
         </div>
       </ModelAssessmentContext.Provider>
     );
   }
-  private addTab = (index: number, tab: GlobalTabKeys) => {
+  private addTab = (index: number, tab: GlobalTabKeys): void => {
     const tabs = [...this.state.activeGlobalTabs];
     tabs.splice(index, 0, { dataCount: 0, key: tab });
     this.setState({ activeGlobalTabs: tabs });
   };
-  private removeTab = (index: number) => {
+  private removeTab = (index: number): void => {
     const tabs = [...this.state.activeGlobalTabs];
     tabs.splice(index, 1);
     this.setState({ activeGlobalTabs: tabs });

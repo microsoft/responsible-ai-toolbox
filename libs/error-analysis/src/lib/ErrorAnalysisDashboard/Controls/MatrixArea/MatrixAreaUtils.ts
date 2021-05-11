@@ -68,7 +68,7 @@ export function fetchMatrix(
 
 export function createCohortStatsFromSelectedCells(
   selectedCells: boolean[],
-  jsonMatrix: any
+  jsonMatrix: { matrix: unknown[] }
 ): CohortStats {
   let falseCohortCount = 0;
   let totalCohortCount = 0;
@@ -108,7 +108,7 @@ export function createCohortStatsFromSelectedCells(
 
 export function createCompositeFilterFromCells(
   selectedCells: boolean[],
-  jsonMatrix: any,
+  jsonMatrix: { matrix: any[]; category1: any; category2: any },
   selectedFeature1: string,
   selectedFeature2: string,
   baseCohort: ErrorCohort,
@@ -151,50 +151,50 @@ export function createCompositeFilterFromCells(
       const index = j + i * numCols;
       const cellCompositeFilters: ICompositeFilter[] = [];
       if (selectedCells[index]) {
-        if (category1Values.length > 0) {
+        if (category1Values.length > 0 && keyFeature1) {
           if (cat1HasIntervals) {
             cellCompositeFilters.push({
               arg: [
                 category1Values[i].minIntervalCat,
                 category1Values[i].maxIntervalCat
               ],
-              column: keyFeature1!,
+              column: keyFeature1,
               method: FilterMethods.InTheRangeOf
             });
           } else {
             let cat1arg = category1Values[i].value;
             if (typeof cat1arg == "string") {
               cat1arg = baseCohort.jointDataset.metaDict[
-                keyFeature1!
+                keyFeature1
               ].sortedCategoricalValues?.indexOf(cat1arg);
             }
             cellCompositeFilters.push({
               arg: [cat1arg],
-              column: keyFeature1!,
+              column: keyFeature1,
               method: FilterMethods.Equal
             });
           }
         }
-        if (category2Values.length > 0) {
+        if (category2Values.length > 0 && keyFeature2) {
           if (cat2HasIntervals) {
             cellCompositeFilters.push({
               arg: [
                 category2Values[j].minIntervalCat,
                 category2Values[j].maxIntervalCat
               ],
-              column: keyFeature2!,
+              column: keyFeature2,
               method: FilterMethods.InTheRangeOf
             });
           } else {
             let cat2arg = category2Values[j].value;
             if (typeof cat2arg == "string") {
               cat2arg = baseCohort.jointDataset.metaDict[
-                keyFeature2!
+                keyFeature2
               ].sortedCategoricalValues?.indexOf(cat2arg);
             }
             cellCompositeFilters.push({
               arg: [cat2arg],
-              column: keyFeature2!,
+              column: keyFeature2,
               method: FilterMethods.Equal
             });
           }
@@ -218,7 +218,11 @@ export function createCompositeFilterFromCells(
   return compositeFilters;
 }
 
-export function extractCategories(category: any): [any[], boolean] {
+export function extractCategories(category: {
+  values: any[];
+  intervalMin: any[];
+  intervalMax: any[];
+}): [any[], boolean] {
   if (category === undefined) {
     return [[], false];
   }

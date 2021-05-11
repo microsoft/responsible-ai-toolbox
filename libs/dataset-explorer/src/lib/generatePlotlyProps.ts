@@ -11,7 +11,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { DataTransform } from "plotly.js";
+import Plotly, { DataTransform } from "plotly.js";
 
 import { basePlotlyProperties } from "./basePlotlyProperties";
 import { buildCustomData } from "./buildCustomData";

@@ -3,6 +3,7 @@
 
 import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
+import Plotly from "plotly.js";
 import React from "react";
 import Plot from "react-plotly.js";
 import { v4 } from "uuid";

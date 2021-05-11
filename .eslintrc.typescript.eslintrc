@@ -17,6 +17,7 @@
     ],
     "@typescript-eslint/member-ordering": ["error"],
     "@typescript-eslint/no-for-in-array": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/unbound-method": "error",
     "@typescript-eslint/naming-convention": [
       "error",
