@@ -83,7 +83,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     : undefined;
 
   private defaultMinK = 4;
-  private defaultMaxK = 30;
 
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
