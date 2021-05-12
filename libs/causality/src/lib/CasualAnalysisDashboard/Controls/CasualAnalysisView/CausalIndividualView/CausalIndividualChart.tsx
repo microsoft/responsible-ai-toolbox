@@ -233,7 +233,7 @@ export class CausalIndividualChart extends React.PureComponent<
             options={this.getDataOptions()}
             selectedKey={"" + this.state.selectedPointsIndexes[0]}
             ariaLabel={"datapoint picker"}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
           <ComboBox
@@ -253,7 +253,7 @@ export class CausalIndividualChart extends React.PureComponent<
               }
             ]}
             ariaLabel={"treatment picker"}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
           <div>
@@ -272,7 +272,7 @@ export class CausalIndividualChart extends React.PureComponent<
               }
             ]}
             ariaLabel={"treatment value picker"}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
         </Stack>
