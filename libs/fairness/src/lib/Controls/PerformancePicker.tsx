@@ -56,13 +56,13 @@ export class PerformancePicker extends React.PureComponent<
             onChange={this.onPerformanceChange}
             options={options}
             ariaLabel={"Performance selector"}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
           />
         </div>
         {this.state.showCallout && (
           <Callout
             target={"#" + this._performanceDropdownHelpId}
-            setInitialFocus={true}
+            setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"
           >

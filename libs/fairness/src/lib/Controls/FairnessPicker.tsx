@@ -57,13 +57,13 @@ export class FairnessPicker extends React.PureComponent<
             onChange={this.onFairnessChange}
             options={options}
             ariaLabel={"Fairness selector"}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
           />
         </div>
         {this.state.showCallout && (
           <Callout
             target={"#" + this._fairnessDropdownHelpId}
-            setInitialFocus={true}
+            setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"
           >

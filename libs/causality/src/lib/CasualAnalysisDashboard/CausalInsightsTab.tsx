@@ -36,13 +36,13 @@ export class CausalInsightsTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
           <Text variant={"xLarge"}>
             {localization.CausalAnalysis.MainMenu.header}
           </Text>
         </Stack>
-        <Stack horizontal={true} tokens={{ childrenGap: "10px" }}>
+        <Stack horizontal tokens={{ childrenGap: "10px" }}>
           <Pivot onLinkClick={this.onViewTypeChange}>
             <PivotItem
               itemKey={CausalAnalysisOptions.Aggregate}

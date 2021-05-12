@@ -60,7 +60,7 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   defaultRender
 ) => {
   if (!props) {
-    return <div></div>;
+    return <div />;
   }
   const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
     tooltipHostProps
@@ -122,7 +122,7 @@ export class TabularDataView extends React.Component<
                 layoutMode={DetailsListLayoutMode.fixedColumns}
                 constrainMode={ConstrainMode.unconstrained}
                 onRenderDetailsHeader={onRenderDetailsHeader}
-                selectionPreservedOnEmptyClick={true}
+                selectionPreservedOnEmptyClick
                 ariaLabelForSelectionColumn="Toggle selection"
                 ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                 checkButtonAriaLabel="Row checkbox"

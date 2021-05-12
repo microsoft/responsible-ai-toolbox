@@ -32,7 +32,7 @@ export class CohortBaseAndFilters extends React.Component<
     const filters = this.props.cohort.filtersToString().join(", ");
     return (
       <div>
-        <div className={classNames.section}></div>
+        <div className={classNames.section} />
         <div className={classNames.subsection}>
           <div className={classNames.header}>Base cohort and filters</div>
           <Stack horizontal>

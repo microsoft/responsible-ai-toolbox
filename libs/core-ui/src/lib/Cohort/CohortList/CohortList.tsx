@@ -108,7 +108,7 @@ export class CohortList extends React.Component<
         onDismiss={this.props.onDismiss}
         styles={panelStyles}
       >
-        <div className={classNames.divider}></div>
+        <div className={classNames.divider} />
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div className={classNames.header}>Cohort List</div>
@@ -117,7 +117,7 @@ export class CohortList extends React.Component<
               columns={this.columns}
               setKey="set"
               layoutMode={DetailsListLayoutMode.justified}
-              selectionPreservedOnEmptyClick={true}
+              selectionPreservedOnEmptyClick
               checkboxVisibility={CheckboxVisibility.hidden}
               onRenderItemColumn={this.renderItemColumn.bind(this)}
             />

@@ -85,7 +85,7 @@ export class FeatureEditingTile extends React.Component<
         {this.props.enumeratedValues !== undefined && (
           <ComboBox
             text={this.state.value}
-            allowFreeform={true}
+            allowFreeform
             ariaLabel={this.props.featureName}
             autoComplete="on"
             options={this.options}

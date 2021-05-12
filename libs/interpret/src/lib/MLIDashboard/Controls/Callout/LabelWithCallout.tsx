@@ -61,9 +61,9 @@ export class LabelWithCallout extends React.Component<
         )}
         {this.state.showCallout && (
           <FabricCallout
-            doNotLayer={true}
+            doNotLayer
             target={`#${id}`}
-            setInitialFocus={true}
+            setInitialFocus
             onDismiss={this.toggleCallout}
             role="alertdialog"
             styles={{ container: FabricStyles.calloutContainer }}

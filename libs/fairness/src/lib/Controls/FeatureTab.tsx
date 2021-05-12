@@ -35,7 +35,6 @@ export interface IFeatureTabProps extends IWizardTabProps {
 }
 
 interface IState {
-  expandedBins: Set<number>;
   editingFeatureIndex: number | undefined;
 }
 
@@ -56,8 +55,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
       }
     });
     this.state = {
-      editingFeatureIndex: undefined,
-      expandedBins: new Set<number>()
+      editingFeatureIndex: undefined
     };
     this.columns = [
       {
@@ -136,7 +134,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             columns={this.columns}
             selectionMode={SelectionMode.single}
             selection={this.selection}
-            selectionPreservedOnEmptyClick={true}
+            selectionPreservedOnEmptyClick
             getKey={this.getKey}
             setKey="set"
             layoutMode={DetailsListLayoutMode.justified}

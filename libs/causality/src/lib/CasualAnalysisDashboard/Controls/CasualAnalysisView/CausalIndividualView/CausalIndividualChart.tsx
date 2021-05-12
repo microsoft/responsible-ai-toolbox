@@ -208,7 +208,7 @@ export class CausalIndividualChart extends React.PureComponent<
             )}
           </div>
           <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv}></div>
+            <div className={classNames.paddingDiv} />
             <div className={classNames.horizontalAxis}>
               <DefaultButton
                 onClick={this.setXOpen.bind(this, true)}

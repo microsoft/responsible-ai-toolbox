@@ -474,7 +474,7 @@ export class Beehive extends React.PureComponent<
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
               ariaLabel={"chart type picker"}
-              useComboBoxAsMenuWidth={true}
+              useComboBoxAsMenuWidth
               styles={FabricStyles.smallDropdownStyle}
             />
             {this.colorOptions.length > 1 && (
@@ -485,7 +485,7 @@ export class Beehive extends React.PureComponent<
                 onChange={this.setColor}
                 options={this.colorOptions}
                 ariaLabel={"color picker"}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.smallDropdownStyle}
               />
             )}
@@ -521,7 +521,7 @@ export class Beehive extends React.PureComponent<
                 step={1}
                 value={this.props.config.topK}
                 onChange={(value: number): void => this.setK(value)}
-                showValue={true}
+                showValue
               />
             </div>
             {this.props.dashboardContext.explanationContext.modelMetadata
@@ -545,7 +545,7 @@ export class Beehive extends React.PureComponent<
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
               </div>
@@ -554,7 +554,7 @@ export class Beehive extends React.PureComponent<
           {this.state.calloutContent && (
             <Callout
               target={"#" + this.state.calloutId}
-              setInitialFocus={true}
+              setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
             >

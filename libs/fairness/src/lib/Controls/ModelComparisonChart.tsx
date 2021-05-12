@@ -53,7 +53,6 @@ export interface IModelComparisonProps {
 }
 
 export interface IState {
-  showModalIntro?: boolean;
   showModalHelp?: boolean;
   featureKey?: string;
   performanceKey?: string;
@@ -140,8 +139,7 @@ export class ModelComparisonChart extends React.Component<
     super(props);
     this.state = {
       fairnessKey: this.props.fairnessPickerProps.selectedFairnessKey,
-      performanceKey: this.props.performancePickerProps.selectedPerformanceKey,
-      showModalIntro: this.props.showIntro
+      performanceKey: this.props.performancePickerProps.selectedPerformanceKey
     };
   }
 
@@ -249,7 +247,7 @@ export class ModelComparisonChart extends React.Component<
                 titleAriaId="help modal"
                 isOpen={this.state.showModalHelp}
                 onDismiss={this.handleCloseModalHelp}
-                isModeless={true}
+                isModeless
                 containerClassName={styles.modalContentHelp}
               >
                 <IconButton

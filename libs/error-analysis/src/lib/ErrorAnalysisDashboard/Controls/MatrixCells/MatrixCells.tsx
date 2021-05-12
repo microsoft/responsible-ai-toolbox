@@ -153,7 +153,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                 <div
                   key={`${i}_${j}category1`}
                   className={classNames.matrixCellPivot1Categories}
-                ></div>,
+                />,
                 cellData
               ];
             }

@@ -23,7 +23,7 @@ export class CohortStats extends React.Component<ISaveCohortProps> {
     const classNames = cohortStatsStyles();
     return (
       <div>
-        <div className={classNames.section}></div>
+        <div className={classNames.section} />
         <div className={classNames.subsection}>
           <div className={classNames.header}>
             {localization.ErrorAnalysis.cohortInfo}

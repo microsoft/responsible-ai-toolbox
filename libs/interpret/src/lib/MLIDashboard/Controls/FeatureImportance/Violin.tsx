@@ -346,7 +346,7 @@ export class Violin extends React.PureComponent<
               onChange={this.setChart}
               options={this.props.chartTypeOptions}
               ariaLabel={"chart type picker"}
-              useComboBoxAsMenuWidth={true}
+              useComboBoxAsMenuWidth
               styles={FabricStyles.smallDropdownStyle}
             />
             {this.props.dashboardContext.explanationContext.modelMetadata
@@ -359,7 +359,7 @@ export class Violin extends React.PureComponent<
                   onChange={this.onGroupSelect}
                   options={this.groupByOptions}
                   ariaLabel={"chart type picker"}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
               )}
@@ -390,7 +390,7 @@ export class Violin extends React.PureComponent<
                 step={1}
                 value={this.props.config.topK}
                 onChange={this.setTopK}
-                showValue={true}
+                showValue
               />
             </div>
             {this.props.dashboardContext.explanationContext.modelMetadata
@@ -417,7 +417,7 @@ export class Violin extends React.PureComponent<
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
               </div>
@@ -426,7 +426,7 @@ export class Violin extends React.PureComponent<
           {this.state.calloutContent && (
             <Callout
               target={"#" + this.state.calloutId}
-              setInitialFocus={true}
+              setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
             >

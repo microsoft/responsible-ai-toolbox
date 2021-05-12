@@ -57,14 +57,11 @@ export interface IGlobalExplanationTabProps {
 
 interface IGlobalExplanationTabState {
   topK: number;
-  minK: number;
-  maxK: number;
   sortingSeriesIndex: number;
   sortArray: number[];
   seriesIsActive: boolean[];
   selectedCohortIndex: number;
   selectedFeatureIndex?: number;
-  crossClassInfoVisible: boolean;
   chartType: ChartTypes;
   globalBarSettings?: IGlobalBarSettings;
   dependenceProps?: IGenericChartProps;
@@ -86,7 +83,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     : undefined;
 
   private defaultMinK = 4;
-  private defaultMaxK = 30;
 
   public constructor(props: IGlobalExplanationTabProps) {
     super(props);
@@ -99,9 +95,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       activeSeries: [],
       chartType: ChartTypes.Bar,
       cohortSeries: [],
-      crossClassInfoVisible: false,
-      maxK: this.defaultMaxK,
-      minK: this.defaultMinK,
       selectedCohortIndex: initialCohortIndex,
       seriesIsActive: this.props.cohorts.map(() => true),
       sortArray: [],
@@ -114,16 +107,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     if (!this.context.jointDataset.hasLocalExplanations) {
       return;
     }
-
-    const minK = Math.min(
-      4,
-      this.context.jointDataset.localExplanationFeatureCount
-    );
-
-    const maxK = Math.min(
-      this.defaultMaxK,
-      this.context.jointDataset.localExplanationFeatureCount
-    );
 
     const sortArray = ModelExplanationUtils.getSortIndices(
       this.props.cohorts[
@@ -139,8 +122,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       ),
       cohortSeries,
       globalBarSettings: this.getDefaultSettings(),
-      maxK,
-      minK,
       sortArray
     });
   }

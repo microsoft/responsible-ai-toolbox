@@ -140,7 +140,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
             />
           )}
         </div>
-        <Redirect to={generatePath(App.route, this.state)} push={true} />
+        <Redirect to={generatePath(App.route, this.state)} push />
       </>
     );
   }

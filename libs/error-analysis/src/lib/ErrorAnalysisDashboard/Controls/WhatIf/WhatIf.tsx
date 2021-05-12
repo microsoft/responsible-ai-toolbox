@@ -117,7 +117,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         isBlocking={false}
         onDismiss={this.props.onDismiss}
       >
-        <div className={classNames.divider}></div>
+        <div className={classNames.divider} />
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <WhatIfPanel
@@ -125,7 +125,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
               filterFeatures={this.filterFeatures}
               filteredFeatureList={this.state.filteredFeatureList}
               isPanelOpen={this.props.isOpen}
-              isInPanel={true}
+              isInPanel
               jointDataset={this.context.jointDataset}
               metadata={this.context.modelMetadata}
               openPanel={(): void => {

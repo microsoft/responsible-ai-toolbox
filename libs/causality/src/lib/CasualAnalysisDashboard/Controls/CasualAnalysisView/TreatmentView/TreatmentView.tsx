@@ -31,6 +31,10 @@ export class TreatmentView extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    return <div>Treatment View</div>;
+    return this.state.showModalHelp ? (
+      <div>Treatment View</div>
+    ) : (
+      <div>Treatment View</div>
+    );
   }
 }

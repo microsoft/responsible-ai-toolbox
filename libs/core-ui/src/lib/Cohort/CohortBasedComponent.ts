@@ -26,7 +26,10 @@ export abstract class CohortBasedComponent<
   TProps extends ICohortBasedComponentProps,
   TState extends ICohortBasedComponentState
 > extends React.PureComponent<TProps, TState> {
-  public updateSelectedCohort = (
+  protected getSelectedCohort = (): ErrorCohort => {
+    return this.state.selectedCohort;
+  };
+  protected updateSelectedCohort = (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,

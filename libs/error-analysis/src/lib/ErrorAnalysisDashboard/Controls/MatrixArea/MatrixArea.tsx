@@ -99,7 +99,7 @@ export class MatrixArea extends React.PureComponent<
       this.state.matrixFeature1 !== this.props.selectedFeature1 ||
       this.state.matrixFeature2 !== this.props.selectedFeature2
     ) {
-      return <div></div>;
+      return <div />;
     }
     const sameFeatureSelected =
       this.props.selectedFeature1 === this.props.selectedFeature2;
@@ -143,13 +143,13 @@ export class MatrixArea extends React.PureComponent<
           <div>
             {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
               <div className={classNames.matrixLabelBottom}>
-                <div className={classNames.matrixLabelTab}></div>
+                <div className={classNames.matrixLabelTab} />
                 <div>{this.props.selectedFeature2}</div>
               </div>
             )}
             {(this.props.selectedFeature2 === noFeature ||
               sameFeatureSelected) && (
-              <div className={classNames.emptyLabelPadding}></div>
+              <div className={classNames.emptyLabelPadding} />
             )}
             <MatrixCells
               jsonMatrix={this.state.jsonMatrix}

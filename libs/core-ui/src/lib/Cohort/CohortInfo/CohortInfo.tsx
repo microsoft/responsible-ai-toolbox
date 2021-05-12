@@ -57,7 +57,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         onDismiss={this.props.onDismiss}
         styles={panelStyles}
       >
-        <div className={classNames.divider}></div>
+        <div className={classNames.divider} />
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <DefaultButton
@@ -65,7 +65,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               onClick={(): any => this.props.onSaveCohortClick()}
             />
           </div>
-          <div className={classNames.section}></div>
+          <div className={classNames.section} />
           <div className={classNames.subsection}>
             <div className={classNames.header}>Basic Information</div>
             {this.props.currentCohort.cohort.name !== "All data" && (
@@ -77,7 +77,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </div>
           </div>
         </div>
-        <div className={classNames.divider}></div>
+        <div className={classNames.divider} />
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div>Instances in base cohort</div>
@@ -128,7 +128,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </Stack>
           </div>
         </div>
-        <div className={classNames.divider}></div>
+        <div className={classNames.divider} />
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div className={classNames.header}>Prediction path (filters)</div>
