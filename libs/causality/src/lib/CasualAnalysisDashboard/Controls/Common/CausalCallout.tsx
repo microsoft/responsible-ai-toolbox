@@ -18,14 +18,14 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-interface ICasualCalloutState {
+interface ICausalCalloutState {
   showCallout: boolean;
   selectedDataIndex?: number;
 }
 
-export class CasualCallout extends React.Component<
+export class CausalCallout extends React.Component<
   Record<string, unknown>,
-  ICasualCalloutState
+  ICausalCalloutState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -64,7 +64,6 @@ export class CasualCallout extends React.Component<
         width: "15px"
       },
       label: {
-        cursor: "pointer",
         display: "inline-block",
         flex: "1",
         fontSize: 14,
@@ -92,7 +91,7 @@ export class CasualCallout extends React.Component<
             className={styles.infoButton}
           />
           <Text variant={"medium"} className={styles.label}>
-            {localization.CasualAnalysis.MainMenu.why}
+            {localization.CausalAnalysis.MainMenu.why}
           </Text>
         </Stack>
         {this.state.showCallout && (
@@ -107,17 +106,17 @@ export class CasualCallout extends React.Component<
             setInitialFocus
           >
             <Text block variant="xLarge" className={styles.title} id={labelId}>
-              {localization.CasualAnalysis.AggregateView.unconfounding}
+              {localization.CausalAnalysis.AggregateView.unconfounding}
             </Text>
             <Text block variant="small" id={descriptionId}>
-              {localization.CasualAnalysis.AggregateView.confoundingFeature}
+              {localization.CausalAnalysis.AggregateView.confoundingFeature}
             </Text>
             <Link
               href="http://microsoft.com"
               target="_blank"
               className={styles.link}
             >
-              {localization.CasualAnalysis.MainMenu.learnMore}
+              {localization.CausalAnalysis.MainMenu.learnMore}
             </Link>
           </Callout>
         )}

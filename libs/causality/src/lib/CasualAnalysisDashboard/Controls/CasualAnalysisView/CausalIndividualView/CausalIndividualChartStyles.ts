@@ -75,7 +75,7 @@ export interface ICasualIndividualChartStyles {
   notAvailable: IStyle;
 }
 
-export const casualIndividualChartStyles: () => IProcessedStyleSet<
+export const causalIndividualChartStyles: () => IProcessedStyleSet<
   ICasualIndividualChartStyles
 > = () => {
   const legendWidth = "160px";

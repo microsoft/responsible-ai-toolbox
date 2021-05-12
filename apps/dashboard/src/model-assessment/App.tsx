@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import {
-  ICasualAnalysisData,
+  ICausalAnalysisData,
   IDataset,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
@@ -33,7 +33,7 @@ import {
 interface IAppProps {
   dataset: IDataset;
   modelExplanationData: IModelExplanationData;
-  casualAnalysisData: ICasualAnalysisData;
+  causalAnalysisData: ICausalAnalysisData;
   theme: ITheme;
   language: Language;
   version: 1;
@@ -54,7 +54,7 @@ export class App extends React.Component<IAppProps> {
     this.props.modelExplanationData.modelClass = "blackbox";
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
-      casualAnalysisData: this.props.casualAnalysisData,
+      causalAnalysisData: this.props.causalAnalysisData,
       dataset: this.props.dataset,
       locale: this.props.language,
       localUrl: "",

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface ICasualAnalysisSingleData {
+export interface ICausalAnalysisSingleData {
   name: string[];
   point: number[][][];
   pValue: number[][][];

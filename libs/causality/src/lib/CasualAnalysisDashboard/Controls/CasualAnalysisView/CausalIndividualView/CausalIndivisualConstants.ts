@@ -3,7 +3,7 @@
 
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
-export class CasualIndivisualConstants {
+export class CausalIndivisualConstants {
   public static basePlotlyProperties: IPlotlyProperty = {
     config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],

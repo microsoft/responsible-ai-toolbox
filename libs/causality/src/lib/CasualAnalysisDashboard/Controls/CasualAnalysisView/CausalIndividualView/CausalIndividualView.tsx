@@ -3,8 +3,8 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
-  ICasualAnalysisSingleData,
+  ICausalAnalysisData,
+  ICausalAnalysisSingleData,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -12,29 +12,29 @@ import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { CasualCallout } from "../../Common/CasualCallout";
-import { CasualAggregateChart } from "../CasualAggregateView/CasualAggregateChart";
-import { CasualAggregateTable } from "../CasualAggregateView/CasualAggregateTable";
+import { CausalCallout } from "../../Common/CausalCallout";
+import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
+import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
 
-import { CasualIndividualChart } from "./CasualIndividualChart";
-import { CasualIndividualStyles } from "./CasualIndividualStyles";
+import { CausalIndividualChart } from "./CausalIndividualChart";
+import { CausalIndividualStyles } from "./CausalIndividualStyles";
 
-export interface ICasualIndividualViewProps {
-  data: ICasualAnalysisData;
+export interface ICausalIndividualViewProps {
+  data: ICausalAnalysisData;
 }
-interface ICasualIndividualViewState {
-  selectedData?: ICasualAnalysisSingleData;
+interface ICausalIndividualViewState {
+  selectedData?: ICausalAnalysisSingleData;
 }
 
-export class CasualIndividualView extends React.PureComponent<
-  ICasualIndividualViewProps,
-  ICasualIndividualViewState
+export class CausalIndividualView extends React.PureComponent<
+  ICausalIndividualViewProps,
+  ICausalIndividualViewState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
-  public constructor(props: ICasualIndividualViewProps) {
+  public constructor(props: ICausalIndividualViewProps) {
     super(props);
     this.state = {
       selectedData: undefined
@@ -42,39 +42,39 @@ export class CasualIndividualView extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const styles = CasualIndividualStyles();
+    const styles = CausalIndividualStyles();
     return (
       <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.label}>
-            {localization.CasualAnalysis.IndividualView.description}
+            {localization.CausalAnalysis.IndividualView.description}
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <CasualIndividualChart onDataClick={this.handleOnClick} />
+          <CausalIndividualChart onDataClick={this.handleOnClick} />
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
             <Text variant={"medium"} className={styles.label}>
               <b>
-                {localization.CasualAnalysis.IndividualView.directIndividual}
+                {localization.CausalAnalysis.IndividualView.directIndividual}
               </b>
             </Text>
-            <CasualCallout />
+            <CausalCallout />
           </Stack>
         </Stack.Item>
         <Stack.Item className={styles.individualTable}>
           {this.state.selectedData ? (
-            <CasualAggregateTable data={this.state.selectedData} />
+            <CausalAggregateTable data={this.state.selectedData} />
           ) : (
             <MissingParametersPlaceholder>
-              {localization.CasualAnalysis.IndividualView.dataRequired}
+              {localization.CausalAnalysis.IndividualView.dataRequired}
             </MissingParametersPlaceholder>
           )}
         </Stack.Item>
         <Stack.Item>
           {this.state.selectedData && (
-            <CasualAggregateChart data={this.state.selectedData} />
+            <CausalAggregateChart data={this.state.selectedData} />
           )}
         </Stack.Item>
       </Stack>
@@ -87,8 +87,8 @@ export class CasualIndividualView extends React.PureComponent<
   };
   private readonly getDataFromIndex = (
     dataIndex: number | undefined
-  ): ICasualAnalysisSingleData | undefined => {
-    const casualLocal = this.context?.casualAnalysisData?.local;
+  ): ICausalAnalysisSingleData | undefined => {
+    const casualLocal = this.context?.causalAnalysisData?.local;
     if (!(dataIndex !== undefined && dataIndex >= 0 && casualLocal)) {
       return undefined;
     }
@@ -99,6 +99,6 @@ export class CasualIndividualView extends React.PureComponent<
         (localData[k] =
           k === "name" ? casualLocal[k] : [casualLocal[k][dataIndex]])
     );
-    return (localData as unknown) as ICasualAnalysisSingleData;
+    return (localData as unknown) as ICausalAnalysisSingleData;
   };
 }
