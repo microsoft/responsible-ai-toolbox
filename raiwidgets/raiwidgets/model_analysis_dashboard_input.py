@@ -11,15 +11,10 @@ from .error_handling import _format_exception
 from ._input_processing import _serialize_json_safe
 
 
-class ExplanationDashboardInput:
+class ModelAnalysisDashboardInput:
     def __init__(
             self,
-            explanation,
-            model,
-            dataset,
-            true_y,
-            classes,
-            features):
+            analysis: ModelAnalysis):
         """Initialize the Explanation Dashboard Input.
 
         :param explanation: An object that represents an explanation.

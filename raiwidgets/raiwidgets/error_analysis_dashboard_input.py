@@ -28,7 +28,6 @@ class ErrorAnalysisDashboardInput:
             true_y,
             classes,
             features,
-            locale,
             categorical_features,
             true_y_dataset,
             pred_y):
@@ -83,6 +82,8 @@ class ErrorAnalysisDashboardInput:
             model.predict_proba is not None
         self._dataframeColumns = None
         self.dashboard_input = {}
+        local_url = ExplanationDashboardInterface.LOCAL_URL
+        self.dashboard_input[local_url] = self._service.env.base_url
         has_explanation = explanation is not None
         feature_length = None
 
@@ -194,8 +195,6 @@ class ErrorAnalysisDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.PROBABILITY_Y
             ] = probability_y
-        if locale is not None:
-            self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
         if model_available:
             self._error_analyzer = ModelAnalyzer(model, full_dataset,
                                                  full_true_y, features,

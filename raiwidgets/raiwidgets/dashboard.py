@@ -45,9 +45,9 @@ class Dashboard(object):
     def __init__(self, *,
                  dashboard_type,
                  model_data,
-                 public_ip=None,
-                 port=None,
-                 add_local_url=False):
+                 public_ip,
+                 port,
+                 locale):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
@@ -65,11 +65,9 @@ class Dashboard(object):
             'dashboardType': dashboard_type,
             'id': self.id,
             'baseUrl': self._service.env.base_url,
-            'withCredentials': self._service.with_credentials
+            'withCredentials': self._service.with_credentials,
+            'locale': locale
         }
-        if add_local_url:
-            local_url = ExplanationDashboardInterface.LOCAL_URL
-            model_data[local_url] = self._service.env.base_url
         self.model_data = model_data
         self.add_route()
 

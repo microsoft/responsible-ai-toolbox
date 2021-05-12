@@ -78,7 +78,7 @@ export class ModelAssessment extends React.Component {
         requestMetrics={requestMetricsMethod}
         requestImportances={requestImportancesMethod}
         localUrl={modelData.localUrl}
-        locale={modelData.locale}
+        locale={config.locale}
         theme={modelData.theme}
         supportedBinaryClassificationPerformanceKeys={
           modelData.classification_methods

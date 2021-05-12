@@ -8,8 +8,10 @@ from .dashboard import Dashboard
 
 from flask import jsonify, request
 
+from responsibleai import ModelAnalysis
 
-class ExplanationDashboard(Dashboard):
+
+class ModelAnalysisDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
     :param explanation: An object that represents an explanation.
@@ -42,15 +44,12 @@ class ExplanationDashboard(Dashboard):
 
     """
 
-    def __init__(self, explanation, model=None, dataset=None,
-                 true_y=None, classes=None, features=None,
+    def __init__(self, analysis: ModelAnalysis,
                  public_ip=None, port=None, locale=None):
-        """Initialize the ExplanationDashboard."""
-        self.input = ExplanationDashboardInput(
-            explanation, model, dataset, true_y, classes, features)
+        self.input = analysis
 
-        super(ExplanationDashboard, self).__init__(
-            dashboard_type="Interpret",
+        super(ModelAnalysisDashboard, self).__init__(
+            dashboard_type="ModelAnalysis",
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
             port=port,
@@ -58,5 +57,5 @@ class ExplanationDashboard(Dashboard):
 
         def predict():
             data = request.get_json(force=True)
-            return jsonify(self.input.on_predict(data))
+            return jsonify(self.input.model.on_predict(data))
         self.add_url_rule(predict, '/predict', methods=["POST"])

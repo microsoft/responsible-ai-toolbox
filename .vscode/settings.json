@@ -61,6 +61,7 @@
     "camelcase",
     "cssmodule",
     "jmespath",
+    "jsonify",
     "mlchartlib",
     "multiclass",
     "nrwl",

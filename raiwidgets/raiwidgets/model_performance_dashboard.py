@@ -46,7 +46,7 @@ class ModelPerformanceDashboard(Dashboard):
         """Initialize the model performance dashboard."""
 
         self.input = ExplanationDashboardInput(
-            None, model, dataset, true_y, classes, features, locale)
+            None, model, dataset, true_y, classes, features)
 
         Dashboard.__init__(self, dashboard_type="ModelPerformance",
                            model_data=self.input.dashboard_input,
