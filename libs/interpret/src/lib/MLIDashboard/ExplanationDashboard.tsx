@@ -748,7 +748,7 @@ export class ExplanationDashboard extends React.Component<
               onLinkClick={this.handleGlobalTabClick}
               linkFormat={PivotLinkFormat.tabs}
               linkSize={PivotLinkSize.normal}
-              headersOnly={true}
+              headersOnly
               styles={FabricStyles.verticalTabsStyle}
             >
               {this.pivotItems.map((props) => (
@@ -860,7 +860,7 @@ export class ExplanationDashboard extends React.Component<
                     onLinkClick={this.handleLocalTabClick}
                     linkFormat={PivotLinkFormat.tabs}
                     linkSize={PivotLinkSize.normal}
-                    headersOnly={true}
+                    headersOnly
                     styles={FabricStyles.verticalTabsStyle}
                   >
                     <PivotItem

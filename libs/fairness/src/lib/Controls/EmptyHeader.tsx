@@ -12,7 +12,7 @@ export class EmptyHeader extends React.Component {
         horizontalAlign="space-between"
         verticalAlign="center"
         style={{ height: "36px" }}
-      ></Stack>
+      />
     );
   }
 }

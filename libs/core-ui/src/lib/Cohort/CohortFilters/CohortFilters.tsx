@@ -29,7 +29,7 @@ export class CohortFilters extends React.Component<ICohortFiltersProps> {
     const filters = this.props.cohort.filtersToString().join(", ");
     return (
       <div>
-        <div className={classNames.section}></div>
+        <div className={classNames.section} />
         <div className={classNames.subsection}>
           <div className={classNames.header}>Filters</div>
           <Stack>

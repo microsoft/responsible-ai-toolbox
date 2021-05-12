@@ -150,7 +150,7 @@ export class AxisConfigDialog extends React.PureComponent<
       <Panel
         id="AxisConfigPanel"
         onDismiss={this.props.onCancel}
-        isOpen={true}
+        isOpen
         onRenderFooter={this.renderFooter}
         isFooterAtBottom={false}
         isLightDismiss

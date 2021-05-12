@@ -54,7 +54,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
           </Text>
           <Stack horizontal>
             <Stack horizontal>
-              <div className={classNames.metricBarBlack}></div>
+              <div className={classNames.metricBarBlack} />
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
                   {localization.ErrorAnalysis.cells}
@@ -62,7 +62,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                     iconId={this._cellsIconId}
                     infoText={localization.ErrorAnalysis.cellsInfo}
                     title={localization.ErrorAnalysis.cellsTitle}
-                  ></InfoCallout>
+                  />
                 </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.cells === 0
@@ -72,7 +72,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
               </Stack>
             </Stack>
             <Stack horizontal>
-              <div className={classNames.metricBarBlack}></div>
+              <div className={classNames.metricBarBlack} />
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
                   {localization.ErrorAnalysis.errorCoverage}
@@ -80,7 +80,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                     iconId={this._errorCoverageIconId}
                     infoText={localization.ErrorAnalysis.errorCoverageInfo}
                     title={localization.ErrorAnalysis.errorCoverageTitle}
-                  ></InfoCallout>
+                  />
                 </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorCoverage.toFixed(2)}%
@@ -89,7 +89,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
             </Stack>
             <Stack>
               <Stack horizontal>
-                <div className={classNames.metricBarRed}></div>
+                <div className={classNames.metricBarRed} />
                 <Stack tokens={cellTokens}>
                   <div className={classNames.smallHeader}>
                     {localization.ErrorAnalysis.errorRate}
@@ -97,7 +97,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                       iconId={this._errorRateIconId}
                       infoText={localization.ErrorAnalysis.errorRateInfo}
                       title={localization.ErrorAnalysis.errorRateTitle}
-                    ></InfoCallout>
+                    />
                   </div>
                   <div className={classNames.valueBlack}>
                     {this.props.selectedCohort.errorRate.toFixed(2)}%

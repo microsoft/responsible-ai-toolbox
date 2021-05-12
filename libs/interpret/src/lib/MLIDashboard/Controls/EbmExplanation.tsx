@@ -228,7 +228,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             onChange={this.onFeatureSelect}
             options={this.featureOptions}
             ariaLabel={"feature picker"}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
         </div>

@@ -31,14 +31,14 @@ export class CasualAggregateChart extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CasualAggregateStyles();
     return (
-      <Stack horizontal={true} verticalFill={true} className={styles.container}>
-        <Stack.Item grow={true} className={styles.leftPane}>
+      <Stack horizontal verticalFill className={styles.container}>
+        <Stack.Item grow className={styles.leftPane}>
           <AccessibleChart
             plotlyProps={this.generateCasualAggregatePlotlyProps()}
             theme={getTheme()}
           />
         </Stack.Item>
-        <Stack.Item grow={true} className={styles.rightPane}>
+        <Stack.Item grow className={styles.rightPane}>
           <Stack horizontal={false}>
             <Stack.Item className={styles.label}>
               <b>{localization.CasualAnalysis.AggregateView.continuous}</b>

@@ -28,14 +28,14 @@ export class PredictionPath extends React.Component<IPredictionPathProps> {
           <div key={index}>
             <Stack horizontal tokens={alignmentStackTokens}>
               <Stack verticalAlign="center">
-                <i className={classNames.filterCircle}></i>
+                <i className={classNames.filterCircle} />
               </Stack>
               <Stack verticalAlign="center">
                 <div>{filter}</div>
               </Stack>
             </Stack>
             {index !== filters.length - 1 && (
-              <div className={classNames.stepBar}></div>
+              <div className={classNames.stepBar} />
             )}
           </div>
         ))}

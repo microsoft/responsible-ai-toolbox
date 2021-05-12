@@ -154,7 +154,7 @@ export class CustomPredictionLabels extends React.Component<
               <IconButton
                 className={classNames.tooltipHost}
                 iconProps={{ iconName: "More" }}
-              ></IconButton>
+              />
             </TooltipHost>
             <div>
               <div>
@@ -184,8 +184,8 @@ export class CustomPredictionLabels extends React.Component<
             <IconButton
               className={classNames.tooltipHost}
               iconProps={{ iconName: "More" }}
-              disabled={true}
-            ></IconButton>
+              disabled
+            />
           </div>
           <div>
             <div>

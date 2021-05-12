@@ -134,7 +134,7 @@ export class ExistingPredictionLabels extends React.Component<
               <IconButton
                 className={classNames.tooltipHost}
                 iconProps={{ iconName: "More" }}
-              ></IconButton>
+              />
             </TooltipHost>
             <div>
               {trueClass !== undefined && (

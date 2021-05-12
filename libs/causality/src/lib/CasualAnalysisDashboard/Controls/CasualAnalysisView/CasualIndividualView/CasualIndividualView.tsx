@@ -44,7 +44,7 @@ export class CasualIndividualView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CasualIndividualStyles();
     return (
-      <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.label}>
             {localization.CasualAnalysis.IndividualView.description}

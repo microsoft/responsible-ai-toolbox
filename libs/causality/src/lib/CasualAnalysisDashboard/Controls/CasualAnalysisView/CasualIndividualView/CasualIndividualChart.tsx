@@ -28,7 +28,6 @@ import {
   getTheme,
   Text,
   DefaultButton,
-  IDropdownOption,
   ComboBox,
   Stack
 } from "office-ui-fabric-react";
@@ -46,13 +45,10 @@ export interface ICasualIndividualChartState {
   chartProps?: IGenericChartProps;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
-  selectedWhatIfRootIndex: number;
   selectedCohortIndex: number;
-  featuresOption: IDropdownOption[];
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  selectedFeatureKey: string;
 }
 
 export class CasualIndividualChart extends React.PureComponent<
@@ -76,43 +72,17 @@ export class CasualIndividualChart extends React.PureComponent<
 
     this.state = {
       customPointIsActive: [],
-      featuresOption: [],
       pointIsActive: [],
       selectedCohortIndex: 0,
-      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
       selectedPointsIndexes: [],
-      selectedWhatIfRootIndex: 0,
       xDialogOpen: false,
       yDialogOpen: false
     };
   }
 
   public componentDidMount(): void {
-    const featuresOption = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
-
     this.setState({
-      chartProps: this.generateDefaultChartAxes(),
-      featuresOption
+      chartProps: this.generateDefaultChartAxes()
     });
   }
 
@@ -264,7 +234,7 @@ export class CasualIndividualChart extends React.PureComponent<
             )}
           </div>
           <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv}></div>
+            <div className={classNames.paddingDiv} />
             <div className={classNames.horizontalAxis}>
               <DefaultButton
                 onClick={this.setXOpen.bind(this, true)}
@@ -324,7 +294,7 @@ export class CasualIndividualChart extends React.PureComponent<
                 }
               ]}
               ariaLabel={"chart type picker"}
-              useComboBoxAsMenuWidth={true}
+              useComboBoxAsMenuWidth
               styles={FabricStyles.smallDropdownStyle}
             />
           </div>
@@ -346,9 +316,6 @@ export class CasualIndividualChart extends React.PureComponent<
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
-    });
-    this.setState({
-      selectedWhatIfRootIndex: index
     });
   }
 

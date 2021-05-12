@@ -31,7 +31,7 @@ export class CasualAggregateView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CasualAggregateStyles();
     return (
-      <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
           <Text variant={"medium"} className={styles.label}>
             {localization.CasualAnalysis.AggregateView.description}

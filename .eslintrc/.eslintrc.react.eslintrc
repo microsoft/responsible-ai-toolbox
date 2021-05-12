@@ -11,6 +11,15 @@
     "plugin:react-hooks/recommended"
   ],
   "rules": {
+    "react/no-multi-comp": "error",
+    "react/no-this-in-sfc": "error",
+    "react/no-unsafe": "error",
+    "react/no-unused-prop-types": "error",
+    "react/no-unused-state": "error",
+    "react/self-closing-comp": "error",
+    "react/sort-prop-types": "error",
+    "react/state-in-constructor": "error",
+    "react/jsx-boolean-value": "error",
     "react/forbid-foreign-prop-types": [
       "error",
       {

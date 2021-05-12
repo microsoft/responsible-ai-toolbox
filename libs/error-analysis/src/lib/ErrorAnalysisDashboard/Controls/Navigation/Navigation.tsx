@@ -122,7 +122,7 @@ export class Navigation extends React.Component<INavigationProps> {
     item?: IBreadcrumbItem
   ): JSX.Element | null => {
     if (!item) {
-      return <div></div>;
+      return <div />;
     }
     if (item.onClick) {
       return (
