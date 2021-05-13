@@ -55,7 +55,7 @@ export class SVGToolTip extends React.Component<
           width="80"
           y="0"
           x="0"
-        ></rect>
+        />
         {this.props.children}
       </g>,
       this.state.svgElement

@@ -155,7 +155,7 @@ export class CohortEditorFilter extends React.Component<
               selectedKey={this.props.openedFilter.arg}
               onChange={this.props.setCategoricalValues}
               options={categoricalOptions}
-              useComboBoxAsMenuWidth={true}
+              useComboBoxAsMenuWidth
               calloutProps={FabricStyles.calloutProps}
               styles={FabricStyles.limitedSizeMenuDropdown}
             />
@@ -176,7 +176,7 @@ export class CohortEditorFilter extends React.Component<
               selectedKey={this.props.openedFilter.method}
               onChange={this.props.setComparison}
               options={this.comparisonOptions}
-              useComboBoxAsMenuWidth={true}
+              useComboBoxAsMenuWidth
               calloutProps={FabricStyles.calloutProps}
             />
             {selectedMeta.featureRange &&

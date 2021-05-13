@@ -104,7 +104,7 @@ export class CohortBar extends React.Component<
               deleteIsDisabled={this.props.cohorts.length === 1}
             />
           ) : (
-            <Panel isOpen={true} onDismiss={this.hideEditList} isLightDismiss>
+            <Panel isOpen onDismiss={this.hideEditList} isLightDismiss>
               <DetailsList
                 items={this.props.cohorts}
                 selectionMode={SelectionMode.none}
@@ -189,7 +189,7 @@ export class CohortBar extends React.Component<
     return (
       <Stack>
         <Text>{cohort.name}</Text>
-        <Stack horizontal={true} tokens={{ childrenGap: "s1" }}>
+        <Stack horizontal tokens={{ childrenGap: "s1" }}>
           {index && (
             <Link onClick={this.editCohort.bind(this, index)}>
               {localization.Interpret.CohortBanner.editCohort}

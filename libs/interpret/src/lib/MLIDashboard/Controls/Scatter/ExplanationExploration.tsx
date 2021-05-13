@@ -96,7 +96,7 @@ export class ExplanationExploration extends React.PureComponent<
                 label={localization.Interpret.ExplanationScatter.xValue}
                 ariaLabel="x picker"
                 selectedKey={this.plotlyProps.data[0].xAccessor}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
@@ -107,7 +107,7 @@ export class ExplanationExploration extends React.PureComponent<
                 label={localization.Interpret.ExplanationScatter.colorValue}
                 ariaLabel="color picker"
                 selectedKey={initialColorOption}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
@@ -120,7 +120,7 @@ export class ExplanationExploration extends React.PureComponent<
                 label={localization.Interpret.ExplanationScatter.yValue}
                 ariaLabel="y picker"
                 selectedKey={this.plotlyProps.data[0].yAccessor}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
@@ -146,7 +146,7 @@ export class ExplanationExploration extends React.PureComponent<
                   onChange={weightContext.onSelection}
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   styles={FabricStyles.defaultDropdownStyle}
                 />
               </div>
@@ -155,7 +155,7 @@ export class ExplanationExploration extends React.PureComponent<
           {this.state.isCalloutVisible && (
             <Callout
               target={"#" + this.iconId}
-              setInitialFocus={true}
+              setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
             >

@@ -75,7 +75,7 @@ export class BinningControl extends React.PureComponent<
             label={localization.Interpret.IcePlot.featurePickerLabel}
             ariaLabel="feature picker"
             selectedKey={this.state ? this.state.featureIndex : undefined}
-            useComboBoxAsMenuWidth={true}
+            useComboBoxAsMenuWidth
             styles={FabricStyles.defaultDropdownStyle}
           />
         </div>
@@ -85,7 +85,7 @@ export class BinningControl extends React.PureComponent<
               <ComboBox
                 multiSelect
                 selectedKey={this.state.selectedOptionKeys}
-                allowFreeform={true}
+                allowFreeform
                 autoComplete="on"
                 options={this.state.categoricalOptions}
                 onChange={this.onCategoricalRangeChanged}

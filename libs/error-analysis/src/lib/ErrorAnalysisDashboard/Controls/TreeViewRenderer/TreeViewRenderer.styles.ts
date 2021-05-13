@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Property } from "csstype";
 import {
   IStyle,
   mergeStyleSets,
@@ -14,7 +15,6 @@ import { ColorPalette } from "../../ColorPalette";
 export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
-  detailLines: IStyle;
   filledNodeText: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
@@ -26,9 +26,10 @@ export interface ITreeViewRendererStyles {
   treeDescription: IStyle;
 }
 
-export const treeViewRendererStyles: () => IProcessedStyleSet<
-  ITreeViewRendererStyles
-> = () => {
+export const treeViewRendererStyles = (props?: {
+  onSelectedPath?: boolean;
+  fill?: Property.Color;
+}): IProcessedStyleSet<ITreeViewRendererStyles> => {
   const theme = getTheme();
   const nodeTextStyle = {
     fontSize: "10px",
@@ -48,13 +49,6 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
       stroke: "#0078D4",
       strokeWidth: 2
     },
-    detailLines: {
-      fill: theme.semanticColors.inputBackground,
-      fontWeight: "bold",
-      pointerEvents: "none",
-      textAnchor: "start",
-      transform: "translate(0px, 10px)"
-    },
     filledNodeText: mergeStyles([
       nodeTextStyle,
       {
@@ -71,12 +65,13 @@ export const treeViewRendererStyles: () => IProcessedStyleSet<
     },
     node: {
       ":hover": {
-        strokeWidth: "3px"
+        stroke: `${theme.semanticColors.link} !important`,
+        strokeWidth: "3px !important"
       },
       cursor: "pointer",
-      opacity: "1",
-      stroke: "#089acc",
-      strokeWidth: "0px"
+
+      stroke: props?.onSelectedPath ? theme.semanticColors.link : props?.fill,
+      strokeWidth: props?.onSelectedPath ? 3 : 2
     },
     nodeText: mergeStyles([
       nodeTextStyle,

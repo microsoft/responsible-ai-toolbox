@@ -14,14 +14,12 @@ import { localization } from "@responsible-ai/localization";
 import { Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
 export interface IGlobalOnlyChartState {
   topK: number;
-  sortingSeriesKey: number | string;
   sortArray: number[];
   globalSeries: IGlobalSeries[];
   featureNames: string[];
@@ -72,7 +70,6 @@ export class GlobalOnlyChart extends React.PureComponent<
       sortArray: ModelExplanationUtils.buildSortedVector(
         globalImportance
       ).reverse(),
-      sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
       topK: Math.min(
         4,
         this.context.precomputedExplanations?.globalFeatureImportance?.scores

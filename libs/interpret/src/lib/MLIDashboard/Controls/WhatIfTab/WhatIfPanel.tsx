@@ -170,7 +170,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                         key={item.key}
                         label={metaInfo.abbridgedLabel}
                         autoComplete={"on"}
-                        allowFreeform={true}
+                        allowFreeform
                         selectedKey={this.props.temporaryPoint?.[item.key]}
                         options={item.data.categoricalOptions}
                         onChange={this.setCustomRowPropertyDropdown.bind(

@@ -222,9 +222,9 @@ export class LocalImportancePlots extends React.Component<
                     )}
                     {this.state.crossClassInfoVisible && (
                       <Callout
-                        doNotLayer={true}
+                        doNotLayer
                         target={"#cross-class-weight-info"}
-                        setInitialFocus={true}
+                        setInitialFocus
                         onDismiss={this.toggleCrossClassInfo}
                         directionalHint={DirectionalHint.leftCenter}
                         role="alertdialog"
@@ -297,9 +297,9 @@ export class LocalImportancePlots extends React.Component<
             />
             {this.state.iceTooltipVisible && (
               <Callout
-                doNotLayer={true}
+                doNotLayer
                 target={"#explanation-info"}
-                setInitialFocus={true}
+                setInitialFocus
                 onDismiss={this.toggleICETooltip}
                 role="alertdialog"
                 styles={{ container: FabricStyles.calloutContainer }}
@@ -350,7 +350,7 @@ export class LocalImportancePlots extends React.Component<
                 label={localization.Interpret.IcePlot.featurePickerLabel}
                 ariaLabel="feature picker"
                 selectedKey={this.state.selectedFeatureKey}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 calloutProps={FabricStyles.calloutProps}
                 styles={FabricStyles.limitedSizeMenuDropdown}
               />
@@ -363,7 +363,7 @@ export class LocalImportancePlots extends React.Component<
                   label={localization.Interpret.WhatIfTab.classPickerLabel}
                   ariaLabel="class picker"
                   selectedKey={this.state.selectedICEClass}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   calloutProps={FabricStyles.calloutProps}
                   styles={FabricStyles.limitedSizeMenuDropdown}
                 />

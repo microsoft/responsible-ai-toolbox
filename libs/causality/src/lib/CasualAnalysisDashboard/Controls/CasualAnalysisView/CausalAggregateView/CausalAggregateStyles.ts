@@ -7,7 +7,7 @@ import {
   mergeStyleSets
 } from "office-ui-fabric-react";
 
-export interface ICasualAggregateStyles {
+export interface ICausalAggregateStyles {
   container: IStyle;
   description: IStyle;
   label: IStyle;
@@ -17,10 +17,10 @@ export interface ICasualAggregateStyles {
   rightPane: IStyle;
 }
 
-export const CasualAggregateStyles: () => IProcessedStyleSet<
-  ICasualAggregateStyles
+export const CausalAggregateStyles: () => IProcessedStyleSet<
+  ICausalAggregateStyles
 > = () => {
-  return mergeStyleSets<ICasualAggregateStyles>({
+  return mergeStyleSets<ICausalAggregateStyles>({
     container: {
       display: "flex",
       flex: 1,
@@ -32,7 +32,6 @@ export const CasualAggregateStyles: () => IProcessedStyleSet<
       padding: "10px"
     },
     label: {
-      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,

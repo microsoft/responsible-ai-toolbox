@@ -120,10 +120,10 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.dataset
                 ].modelExplanationData
               }
-              casualAnalysisData={
+              causalAnalysisData={
                 applications[this.state.application].datasets[
                   this.state.dataset
-                ].casualAnalysisData
+                ].causalAnalysisData
               }
               classDimension={
                 applications[this.state.application].datasets[
@@ -140,7 +140,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
             />
           )}
         </div>
-        <Redirect to={generatePath(App.route, this.state)} push={true} />
+        <Redirect to={generatePath(App.route, this.state)} push />
       </>
     );
   }

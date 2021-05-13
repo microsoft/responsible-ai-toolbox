@@ -95,8 +95,8 @@ export class EditCohort extends React.Component<
           defaultValue={this.state.cohortName}
           styles={textFieldStyles}
         />
-        <CohortStats temporaryCohort={this.props.errorCohort}></CohortStats>
-        <CohortFilters cohort={this.props.errorCohort}></CohortFilters>
+        <CohortStats temporaryCohort={this.props.errorCohort} />
+        <CohortFilters cohort={this.props.errorCohort} />
         <DialogFooter>
           <Stack
             horizontal

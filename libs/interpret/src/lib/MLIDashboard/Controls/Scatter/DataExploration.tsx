@@ -19,7 +19,6 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
   private plotlyProps: IPlotlyProperty;
   public constructor(props: IScatterProps) {
     super(props);
-    this.state = { isCalloutVisible: false };
     this.plotlyProps =
       this.props.plotlyProps !== undefined
         ? _.cloneDeep(this.props.plotlyProps)
@@ -73,7 +72,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 label={localization.Interpret.ExplanationScatter.xValue}
                 ariaLabel="x picker"
                 selectedKey={this.plotlyProps.data[0].xAccessor}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
@@ -84,7 +83,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 label={localization.Interpret.ExplanationScatter.colorValue}
                 ariaLabel="color picker"
                 selectedKey={initialColorOption}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
@@ -97,7 +96,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 label={localization.Interpret.ExplanationScatter.yValue}
                 ariaLabel="y picker"
                 selectedKey={this.plotlyProps.data[0].yAccessor}
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>

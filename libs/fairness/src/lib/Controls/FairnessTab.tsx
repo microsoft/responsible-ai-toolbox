@@ -43,7 +43,7 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
           />
         </Stack>
         <SelectionList
-          grouped={true}
+          grouped
           defaultSelectedKey={
             this.props.fairnessPickerProps.selectedFairnessKey
           }

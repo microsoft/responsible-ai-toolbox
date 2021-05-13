@@ -3,18 +3,18 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
+  ICausalAnalysisData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Text, Pivot, PivotItem, Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { CasualAnalysisOptions } from "./CasualAnalysisEnums";
-import { CasualAnalysisView } from "./Controls/CasualAnalysisView/CasualAnalysisView";
+import { CausalAnalysisOptions } from "./CausalAnalysisEnums";
+import { CausalAnalysisView } from "./Controls/CasualAnalysisView/CausalAnalysisView";
 
 export interface ICausalInsightsTabProps {
-  data: ICasualAnalysisData;
+  data: ICausalAnalysisData;
 }
 
 interface ICausalInsightsTabState {
@@ -31,34 +31,34 @@ export class CausalInsightsTab extends React.PureComponent<
 
   public constructor(props: ICausalInsightsTabProps) {
     super(props);
-    this.state = { viewOption: CasualAnalysisOptions.Aggregate };
+    this.state = { viewOption: CausalAnalysisOptions.Aggregate };
   }
 
   public render(): React.ReactNode {
     return (
-      <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
           <Text variant={"xLarge"}>
-            {localization.CasualAnalysis.MainMenu.header}
+            {localization.CausalAnalysis.MainMenu.header}
           </Text>
         </Stack>
-        <Stack horizontal={true} tokens={{ childrenGap: "10px" }}>
+        <Stack horizontal tokens={{ childrenGap: "10px" }}>
           <Pivot onLinkClick={this.onViewTypeChange}>
             <PivotItem
-              itemKey={CasualAnalysisOptions.Aggregate}
-              headerText={localization.CasualAnalysis.MainMenu.aggregate}
+              itemKey={CausalAnalysisOptions.Aggregate}
+              headerText={localization.CausalAnalysis.MainMenu.aggregate}
             />
             <PivotItem
-              itemKey={CasualAnalysisOptions.Individual}
-              headerText={localization.CasualAnalysis.MainMenu.individual}
+              itemKey={CausalAnalysisOptions.Individual}
+              headerText={localization.CausalAnalysis.MainMenu.individual}
             />
             <PivotItem
-              itemKey={CasualAnalysisOptions.Treatment}
-              headerText={localization.CasualAnalysis.MainMenu.treatment}
+              itemKey={CausalAnalysisOptions.Treatment}
+              headerText={localization.CausalAnalysis.MainMenu.treatment}
             />
           </Pivot>
         </Stack>
-        <CasualAnalysisView
+        <CausalAnalysisView
           viewOption={this.state.viewOption}
           data={this.props.data}
         />

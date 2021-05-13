@@ -37,7 +37,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
           </Text>
           <Stack>
             <Stack horizontal>
-              <div className={classNames.metricBarBlack}></div>
+              <div className={classNames.metricBarBlack} />
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
                   {localization.ErrorAnalysis.errorCoverage}
@@ -45,7 +45,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                     iconId={this._errorCoverageIconId}
                     infoText={localization.ErrorAnalysis.errorCoverageInfo}
                     title={localization.ErrorAnalysis.errorCoverageTitle}
-                  ></InfoCallout>
+                  />
                 </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorCoverage.toFixed(2)}%
@@ -65,7 +65,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                 <circle
                   r="26"
                   className={classNames.node}
-                  style={this.props.nodeDetail.errorColor}
+                  style={{ fill: this.props.nodeDetail.errorColor }}
                 />
                 <g
                   style={this.props.nodeDetail.maskDown}
@@ -84,7 +84,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
           </Stack>
           <Stack>
             <Stack horizontal>
-              <div className={classNames.metricBarRed}></div>
+              <div className={classNames.metricBarRed} />
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
                   {localization.ErrorAnalysis.errorRate}
@@ -92,7 +92,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                     iconId={this._errorRateIconId}
                     infoText={localization.ErrorAnalysis.errorRateInfo}
                     title={localization.ErrorAnalysis.errorRateTitle}
-                  ></InfoCallout>
+                  />
                 </div>
                 <div className={classNames.valueBlack}>
                   {this.props.selectedCohort.errorRate.toFixed(2)}%

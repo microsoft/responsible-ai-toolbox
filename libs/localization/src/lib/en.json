@@ -578,22 +578,22 @@
       "pfiDescription": "This explainer randomly shuffles data one feature at a time for the entire dataset and calculates how much the performance metric of interest changes (default performance metrics: F1 for binary classification, F1 Score with micro average for multiclass classification and mean absolute error for regression). The larger the change, the more important that feature is. This explainer can only explain the overall behavior of the underlying model but does not explain individual predictions. Feature importance value of a feature represents the delta in the performance of the model by perturbing that particular feature."
     }
   },
-  "CasualAnalysis": {
+  "CausalAnalysis": {
     "MainMenu": {
-      "header": "Casual analysis",
-      "aggregate": "Aggregate casual effects",
-      "individual": "Individual casual effects",
+      "header": "causal analysis",
+      "aggregate": "Aggregate causal effects",
+      "individual": "Individual causal effects",
       "treatment": "Treatment policy",
-      "title": "Direct casual effect of each feature with 90% confidence interval",
-      "why": "Why must casual insights assume unconfoundedness?",
+      "title": "Direct causal effect of each feature with 90% confidence interval",
+      "why": "Why must causal insights assume unconfoundedness?",
       "learnMore": "Learn more"
     },
     "AggregateView": {
-      "description": "Casual analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
-      "directAggregate": "Direct aggregate casual effect of each treatment with 95% confidence interval",
+      "description": "Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
+      "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
       "unconfounding": "What are unconfounding variables?",
       "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The casual effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
       "continuous": "Continuouts treatment variables: ",
       "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
       "binary": "Binary treatment variables: ",
@@ -601,11 +601,14 @@
     },
     "IndividualView": {
       "index": "Datapoint index",
-      "description": "Individual casual effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
-      "directIndividual": "Direct individual casual effect of each treatment with 95% confidence interval",
+      "description": "Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
+      "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "dataRequired": "This tab requires a datapoint be selected.",
-      "selectTreatment": "Select treatment"
+      "datapointIndex": "Datapoint index",
+      "selectTreatment": "Select treatment",
+      "currentTreatment": "Current treatment value",
+      "setNewTreatment": "Set new treatment value"
     }
   },
   "ErrorAnalysis": {
