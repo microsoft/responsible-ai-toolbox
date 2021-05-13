@@ -149,6 +149,18 @@ class ModelAnalysis(object):
         configs = {}
         for manager in self._managers:
             configs[manager.name] = manager.list()
+        return configs
+
+    def get(self):
+        """List information about each of the managers.
+
+        :return: Information about each of the managers.
+        :rtype: dict
+        """
+        configs = {}
+        for manager in self._managers:
+            configs[manager.name] = manager.get()
+        return configs
 
     def _write_to_file(self, file_path, content):
         """Save the string content to the given file path.

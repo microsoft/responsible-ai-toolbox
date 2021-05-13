@@ -3,7 +3,7 @@
 
 """Defines the Explanation dashboard class."""
 
-from .explanation_dashboard_input import ExplanationDashboardInput
+from .model_analysis_dashboard_input import ModelAnalysisDashboardInput
 from .dashboard import Dashboard
 
 from flask import jsonify, request
@@ -46,7 +46,7 @@ class ModelAnalysisDashboard(Dashboard):
 
     def __init__(self, analysis: ModelAnalysis,
                  public_ip=None, port=None, locale=None):
-        self.input = analysis
+        self.input = ModelAnalysisDashboardInput(analysis)
 
         super(ModelAnalysisDashboard, self).__init__(
             dashboard_type="ModelAnalysis",

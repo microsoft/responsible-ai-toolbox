@@ -3,6 +3,8 @@
 
 export interface IDataset {
   trueY: number[];
+  predictedY?: number[];
+  probabilityY?: number[][];
   features: any[][];
   featureNames: string[];
   categoricalMap?: { [key: number]: string[] };
