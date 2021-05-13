@@ -8,6 +8,7 @@ import {
   ModelAssessmentContext,
   ErrorCohort
 } from "@responsible-ai/core-ui";
+import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 // import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
@@ -208,10 +209,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   {t.key === GlobalTabKeys.CausalAnalysisTab && (
                     <CausalInsightsTab data={this.props.causalAnalysisData} />
                   )}
-                  {/* 
-                {t.key === GlobalTabKeys.CounterfactualsTab && (
-                  <CounterfactualsTab />
-                )} */}
+
+                  {t.key === GlobalTabKeys.CounterfactualsTab && (
+                    <CounterfactualsTab data={this.props.causalAnalysisData} />
+                  )}
                 </Stack.Item>
                 <Stack.Item
                   className={modelAssessmentDashboardStyles.buttonSection}

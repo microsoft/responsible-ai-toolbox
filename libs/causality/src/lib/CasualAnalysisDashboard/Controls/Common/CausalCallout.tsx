@@ -112,7 +112,7 @@ export class CausalCallout extends React.Component<
               {localization.CausalAnalysis.AggregateView.confoundingFeature}
             </Text>
             <Link
-              href="http://microsoft.com"
+              href="https://www.microsoft.com/en-us/research/project/econml/#!how-to"
               target="_blank"
               className={styles.link}
             >
