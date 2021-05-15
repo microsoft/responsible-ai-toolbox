@@ -4,18 +4,19 @@
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
-  ICausalAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { CounterfactualChart } from "./CounterfactualChart";
+
 export interface ICounterfactualsViewProps {
   data: ICausalAnalysisData;
 }
 interface ICounterfactualsViewState {
-  selectedData?: ICausalAnalysisSingleData;
+  selectedIndex?: number;
 }
 
 export class CounterfactualsView extends React.PureComponent<
@@ -29,12 +30,11 @@ export class CounterfactualsView extends React.PureComponent<
   public constructor(props: ICounterfactualsViewProps) {
     super(props);
     this.state = {
-      selectedData: undefined
+      selectedIndex: undefined
     };
   }
 
   public render(): React.ReactNode {
-    // const styles = CausalIndividualStyles();
     return (
       <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
@@ -43,14 +43,17 @@ export class CounterfactualsView extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <div>Test</div>
+          <CounterfactualChart onDataClick={this.handleOnClick} />
+        </Stack.Item>
+        <Stack.Item>
+          <div>{this.state.selectedIndex}</div>
         </Stack.Item>
       </Stack>
     );
   }
-  //   private readonly handleOnClick = (dataIndex: number | undefined): void => {
-  //     this.setState({
-  //       selectedData: this.getDataFromIndex(dataIndex)
-  //     });
-  //   };
+  private readonly handleOnClick = (dataIndex: number | undefined): void => {
+    this.setState({
+      selectedIndex: dataIndex
+    });
+  };
 }
