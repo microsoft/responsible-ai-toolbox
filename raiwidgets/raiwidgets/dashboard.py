@@ -8,7 +8,6 @@ import json
 import os
 from html.parser import HTMLParser
 import uuid
-from .explanation_constants import ExplanationDashboardInterface
 from ._input_processing import _safe_serializer
 
 
@@ -105,7 +104,8 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_config__", json.dumps(self.config))
             content = content.replace(
-                "__rai_model_data__", json.dumps(self.model_data, default=_safe_serializer))
+                "__rai_model_data__", json.dumps(self.model_data,
+                                                 default=_safe_serializer))
             return content
 
     def add_url_rule(self, func, route, methods):

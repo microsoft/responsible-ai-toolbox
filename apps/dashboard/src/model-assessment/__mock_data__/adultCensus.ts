@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import {
-  ICasualAnalysisData,
+  ICausalAnalysisData,
   IDataset,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
@@ -2612,7 +2612,7 @@ export const adultCensusWithFairnessModelExplanationData: Omit<
   }
 };
 
-export const adultCensusCasualAnalysisData: ICasualAnalysisData = {
+export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
   global: {
     ciLower: [
       [[-0.2419328967749073, 0.024554703670239472, 0.0000018156074109169128]]

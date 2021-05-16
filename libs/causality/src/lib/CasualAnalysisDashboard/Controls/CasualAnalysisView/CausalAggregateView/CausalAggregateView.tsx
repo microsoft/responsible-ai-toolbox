@@ -3,25 +3,25 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
+  ICausalAnalysisData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { CasualCallout } from "../../Common/CasualCallout";
+import { CausalCallout } from "../../Common/CausalCallout";
 
-import { CasualAggregateChart } from "./CasualAggregateChart";
-import { CasualAggregateStyles } from "./CasualAggregateStyles";
-import { CasualAggregateTable } from "./CasualAggregateTable";
+import { CausalAggregateChart } from "./CausalAggregateChart";
+import { CausalAggregateStyles } from "./CausalAggregateStyles";
+import { CausalAggregateTable } from "./CausalAggregateTable";
 
-export interface ICasualAggregateViewProps {
-  data: ICasualAnalysisData;
+export interface ICausalAggregateViewProps {
+  data: ICausalAnalysisData;
 }
 
-export class CasualAggregateView extends React.PureComponent<
-  ICasualAggregateViewProps
+export class CausalAggregateView extends React.PureComponent<
+  ICausalAggregateViewProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -29,24 +29,24 @@ export class CasualAggregateView extends React.PureComponent<
   > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    const styles = CasualAggregateStyles();
+    const styles = CausalAggregateStyles();
     return (
       <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
           <Text variant={"medium"} className={styles.label}>
-            {localization.CasualAnalysis.AggregateView.description}
+            {localization.CausalAnalysis.AggregateView.description}
           </Text>
           <Text variant={"medium"} className={styles.label}>
-            <b>{localization.CasualAnalysis.AggregateView.directAggregate}</b>
+            <b>{localization.CausalAnalysis.AggregateView.directAggregate}</b>
           </Text>
-          <CasualCallout />
+          <CausalCallout />
         </Stack>
         <Stack>
           <Stack.Item className={styles.table}>
-            <CasualAggregateTable data={this.props.data.global} />
+            <CausalAggregateTable data={this.props.data.global} />
           </Stack.Item>
           <Stack.Item>
-            <CasualAggregateChart data={this.props.data.global} />
+            <CausalAggregateChart data={this.props.data.global} />
           </Stack.Item>
         </Stack>
       </Stack>

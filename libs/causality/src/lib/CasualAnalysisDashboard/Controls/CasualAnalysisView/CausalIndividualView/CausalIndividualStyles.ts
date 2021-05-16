@@ -7,7 +7,7 @@ import {
   mergeStyleSets
 } from "office-ui-fabric-react";
 
-export interface ICasualIndividualStyles {
+export interface ICausalIndividualStyles {
   container: IStyle;
   description: IStyle;
   label: IStyle;
@@ -16,10 +16,10 @@ export interface ICasualIndividualStyles {
   individualChart: IStyle;
 }
 
-export const CasualIndividualStyles: () => IProcessedStyleSet<
-  ICasualIndividualStyles
+export const CausalIndividualStyles: () => IProcessedStyleSet<
+  ICausalIndividualStyles
 > = () => {
-  return mergeStyleSets<ICasualIndividualStyles>({
+  return mergeStyleSets<ICausalIndividualStyles>({
     container: {
       display: "flex",
       flex: 1,
@@ -37,14 +37,12 @@ export const CasualIndividualStyles: () => IProcessedStyleSet<
       width: "50%"
     },
     label: {
-      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,
       textAlign: "left"
     },
     lasso: {
-      cursor: "pointer",
       display: "inline-block",
       flex: "1",
       fontSize: 14,

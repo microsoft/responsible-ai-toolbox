@@ -13,7 +13,6 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  InteractiveLegend,
   rowErrorSize
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -26,22 +25,22 @@ import {
 import _ from "lodash";
 import {
   getTheme,
-  Text,
   DefaultButton,
   ComboBox,
-  Stack
+  Stack,
+  IComboBoxOption,
+  IComboBox
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { casualIndividualChartStyles } from "./CasualIndividualChartStyles";
-import { CasualIndivisualConstants } from "./CasualIndivisualConstants";
-import { IGlobalSeries } from "./IGlobalSeries";
+import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
+import { CausalIndivisualConstants } from "./CausalIndivisualConstants";
 
-export interface ICasualIndividualChartProps {
+export interface ICausalIndividualChartProps {
   onDataClick?: (data: number | undefined) => void;
 }
 
-export interface ICasualIndividualChartState {
+export interface ICausalIndividualChartState {
   chartProps?: IGenericChartProps;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
@@ -49,25 +48,23 @@ export interface ICasualIndividualChartState {
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
+  treatmentValue?: string;
 }
 
-export class CasualIndividualChart extends React.PureComponent<
-  ICasualIndividualChartProps,
-  ICasualIndividualChartState
+export class CausalIndividualChart extends React.PureComponent<
+  ICausalIndividualChartProps,
+  ICausalIndividualChartState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
 
-  private readonly chartAndConfigsId = "CasualIndividualChart";
-
-  private selectedFeatureImportance: IGlobalSeries[] = [];
-  private validationErrors: { [key: string]: string | undefined } = {};
+  private readonly chartAndConfigsId = "CausalIndividualChart";
   private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
 
-  public constructor(props: ICasualIndividualChartProps) {
+  public constructor(props: ICausalIndividualChartProps) {
     super(props);
 
     this.state = {
@@ -75,6 +72,7 @@ export class CasualIndividualChart extends React.PureComponent<
       pointIsActive: [],
       selectedCohortIndex: 0,
       selectedPointsIndexes: [],
+      treatmentValue: "",
       xDialogOpen: false,
       yDialogOpen: false
     };
@@ -87,8 +85,8 @@ export class CasualIndividualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(
-    _prevProps: ICasualIndividualChartProps,
-    prevState: ICasualIndividualChartState
+    _prevProps: ICausalIndividualChartProps,
+    prevState: ICausalIndividualChartState
   ): void {
     if (!this.state) {
       return;
@@ -105,30 +103,6 @@ export class CasualIndividualChart extends React.PureComponent<
       this.state.customPointIsActive,
       prevState.customPointIsActive
     );
-    if (!selectionsAreEqual) {
-      this.selectedFeatureImportance = this.state.selectedPointsIndexes.map(
-        (rowIndex, colorIndex) => {
-          const row = this.context.jointDataset.getRow(rowIndex);
-          return {
-            colorIndex,
-            id: rowIndex,
-            name: localization.formatString(
-              localization.Interpret.WhatIfTab.rowLabel,
-              rowIndex.toString()
-            ),
-            unsortedAggregateY: JointDataset.localExplanationSlice(
-              row,
-              this.context.jointDataset.localExplanationFeatureCount
-            ) as number[],
-            unsortedFeatureValues: JointDataset.datasetSlice(
-              row,
-              this.context.jointDataset.metaDict,
-              this.context.jointDataset.localExplanationFeatureCount
-            )
-          };
-        }
-      );
-    }
     if (
       !selectionsAreEqual ||
       !activePointsAreEqual ||
@@ -139,11 +113,11 @@ export class CasualIndividualChart extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const classNames = casualIndividualChartStyles();
+    const classNames = causalIndividualChartStyles();
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
-          {localization.CasualAnalysis.IndividualView.dataRequired}
+          {localization.CausalAnalysis.IndividualView.dataRequired}
         </MissingParametersPlaceholder>
       );
     }
@@ -252,52 +226,55 @@ export class CasualIndividualChart extends React.PureComponent<
             </div>
           </div>
         </div>
-        <Stack horizontal={false}>
-          <div className={classNames.legendAndText}>
-            <Text variant={"small"} block className={classNames.legendLabel}>
-              {localization.CasualAnalysis.IndividualView.index}
-            </Text>
-            {this.selectedFeatureImportance.length > 0 && (
-              <InteractiveLegend
-                items={this.selectedFeatureImportance.map((row, rowIndex) => {
-                  return {
-                    activated: this.state.pointIsActive[rowIndex],
-                    color: FabricStyles.fabricColorPalette[rowIndex],
-                    name: row.name,
-                    onDelete: this.toggleSelectionOfPoint.bind(this, row.id)
-                  };
-                })}
-              />
-            )}
-            {this.selectedFeatureImportance.length === 0 && (
-              <Text variant={"xSmall"} className={classNames.smallItalic}>
-                {localization.Interpret.WhatIfTab.noneSelectedYet}
-              </Text>
-            )}
+        <Stack horizontal={false} gap={15} className={classNames.legendAndText}>
+          <ComboBox
+            label={localization.CausalAnalysis.IndividualView.datapointIndex}
+            onChange={this.selectPointFromDropdown}
+            options={this.getDataOptions()}
+            selectedKey={"" + this.state.selectedPointsIndexes[0]}
+            ariaLabel={"datapoint picker"}
+            useComboBoxAsMenuWidth
+            styles={FabricStyles.smallDropdownStyle}
+          />
+          <ComboBox
+            label={localization.CausalAnalysis.IndividualView.selectTreatment}
+            options={[
+              {
+                key: "a",
+                text: "a"
+              },
+              {
+                key: "b",
+                text: "b"
+              },
+              {
+                key: "c",
+                text: "c"
+              }
+            ]}
+            ariaLabel={"treatment picker"}
+            useComboBoxAsMenuWidth
+            styles={FabricStyles.smallDropdownStyle}
+          />
+          <div>
+            <b>{`${localization.CausalAnalysis.IndividualView.currentTreatment}: ${this.state.treatmentValue}`}</b>
           </div>
-          <div className={classNames.legendAndText}>
-            <ComboBox
-              label={localization.CasualAnalysis.IndividualView.selectTreatment}
-              // onChange={this.setChart}
-              options={[
-                {
-                  key: "a",
-                  text: "a"
-                },
-                {
-                  key: "b",
-                  text: "b"
-                },
-                {
-                  key: "c",
-                  text: "c"
-                }
-              ]}
-              ariaLabel={"chart type picker"}
-              useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
-            />
-          </div>
+          <ComboBox
+            label={localization.CausalAnalysis.IndividualView.setNewTreatment}
+            options={[
+              {
+                key: "a",
+                text: "No tech support"
+              },
+              {
+                key: "b",
+                text: "Tech support"
+              }
+            ]}
+            ariaLabel={"treatment value picker"}
+            useComboBoxAsMenuWidth
+            styles={FabricStyles.smallDropdownStyle}
+          />
         </Stack>
       </div>
     );
@@ -306,16 +283,15 @@ export class CasualIndividualChart extends React.PureComponent<
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
     this.temporaryPoint[
-      CasualIndivisualConstants.namePath
+      CausalIndivisualConstants.namePath
     ] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
     );
-    this.temporaryPoint[CasualIndivisualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[CasualIndivisualConstants.MAX_SELECTION];
+    this.temporaryPoint[CausalIndivisualConstants.colorPath] =
+      FabricStyles.fabricColorPalette[CausalIndivisualConstants.MAX_SELECTION];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
-      this.validationErrors[key] = undefined;
     });
   }
 
@@ -360,6 +336,17 @@ export class CasualIndividualChart extends React.PureComponent<
     this.toggleSelectionOfPoint(index);
   };
 
+  private selectPointFromDropdown = (
+    _event: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (typeof item?.key === "string") {
+      const index = Number.parseInt(item.key);
+      this.setTemporaryPointToCopyOfDatasetPoint(index);
+      this.toggleSelectionOfPoint(index);
+    }
+  };
+
   private toggleSelectionOfPoint(index?: number): void {
     if (index === undefined) {
       return;
@@ -391,7 +378,7 @@ export class CasualIndividualChart extends React.PureComponent<
     cohort: Cohort
   ): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(
-      CasualIndivisualConstants.basePlotlyProperties
+      CausalIndivisualConstants.basePlotlyProperties
     );
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -429,7 +416,7 @@ export class CasualIndividualChart extends React.PureComponent<
         line: {
           color:
             FabricStyles.fabricColorPalette[
-              CasualIndivisualConstants.MAX_SELECTION + 1
+              CausalIndivisualConstants.MAX_SELECTION + 1
             ],
           width: 2
         },
@@ -574,5 +561,18 @@ export class CasualIndividualChart extends React.PureComponent<
       }
     };
     return chartProps;
+  }
+
+  private getDataOptions(): IComboBoxOption[] {
+    const indexes = this.context.errorCohorts[
+      this.state.selectedCohortIndex
+    ].cohort.unwrap(JointDataset.IndexLabel);
+    indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
+    return indexes.map((index) => {
+      return {
+        key: "" + index,
+        text: `Index ${index}`
+      };
+    });
   }
 }

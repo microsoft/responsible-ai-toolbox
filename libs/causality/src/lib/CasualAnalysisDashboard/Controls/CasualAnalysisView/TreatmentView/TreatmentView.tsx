@@ -3,13 +3,13 @@
 
 import {
   defaultModelAssessmentContext,
-  ICasualAnalysisData,
+  ICausalAnalysisData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import React from "react";
 
 export interface ITreatmentViewProps {
-  data: ICasualAnalysisData;
+  data: ICausalAnalysisData;
 }
 interface ITreatmentViewState {
   showModalHelp: boolean;

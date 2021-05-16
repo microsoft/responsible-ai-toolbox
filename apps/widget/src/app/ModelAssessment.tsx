@@ -3,8 +3,8 @@
 
 import { IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
 import {
-  IModelAssessmentData,
-  ModelAssessmentDashboard
+  ModelAssessmentDashboard,
+  IModelAssessmentData
 } from "@responsible-ai/model-assessment";
 import React from "react";
 

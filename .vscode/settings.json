@@ -74,5 +74,6 @@
     "shap",
     "uifabric"
   ],
-  "python.pythonPath": "C:\\Users\\xuke\\Miniconda3\\envs\\dev\\python.exe"
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--max-line-length=80"]
 }

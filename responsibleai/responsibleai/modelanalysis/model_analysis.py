@@ -56,7 +56,8 @@ class ModelAnalysis(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features, train_labels=None, serializer=None):
+                 task_type, categorical_features, train_labels=None,
+                 serializer=None):
         """Defines the top-level Model Analysis API.
 
         Use ModelAnalysis to analyze errors, explain the most important
