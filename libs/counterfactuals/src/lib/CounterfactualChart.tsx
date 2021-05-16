@@ -34,7 +34,6 @@ import _ from "lodash";
 import {
   getTheme,
   Text,
-  IComboBoxOption,
   DefaultButton,
   Dropdown,
   IDropdownOption
@@ -54,7 +53,6 @@ export interface ICounterfactualChartState {
   chartProps?: IGenericChartProps;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
-  editingDataCustomIndex?: number;
   showSelectionWarning: boolean;
   customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
@@ -88,7 +86,6 @@ export class CounterfactualChart extends React.PureComponent<
   private temporaryPoint: { [key: string]: any } | undefined;
   private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
   private testableDatapointNames: string[] = [];
-  private rowOptions: IDropdownOption[] | undefined;
 
   public constructor(props: ICounterfactualChartProps) {
     super(props);
@@ -96,7 +93,6 @@ export class CounterfactualChart extends React.PureComponent<
     this.state = {
       customPointIsActive: [],
       customPoints: [],
-      editingDataCustomIndex: undefined,
       featuresOption: [],
       pointIsActive: [],
       request: undefined,
@@ -551,28 +547,7 @@ export class CounterfactualChart extends React.PureComponent<
 
   private buildRowOptions(cohortIndex: number): void {
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
-    this.rowOptions = this.context.errorCohorts[cohortIndex].cohort
-      .unwrap(JointDataset.IndexLabel)
-      .map((index) => {
-        return {
-          key: index,
-          text: localization.formatString(
-            localization.Interpret.WhatIfTab.rowLabel,
-            index.toString()
-          )
-        };
-      })
-      .reverse();
   }
-
-  private setSelectedIndex = (
-    _event: React.FormEvent,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key !== undefined) {
-      this.setTemporaryPointToCopyOfDatasetPoint(item.key as number);
-    }
-  };
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
@@ -588,9 +563,6 @@ export class CounterfactualChart extends React.PureComponent<
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
-    this.setState({
-      editingDataCustomIndex: undefined
-    });
   }
 
   private setTemporaryPointToCustomPoint(index: number): void {
@@ -599,10 +571,6 @@ export class CounterfactualChart extends React.PureComponent<
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
-    this.setState({
-      editingDataCustomIndex: index
-    });
-    this.openPanel();
   }
 
   private removeCustomPoint(index: number): void {
@@ -614,91 +582,6 @@ export class CounterfactualChart extends React.PureComponent<
       return { customPointIsActive, customPoints };
     });
   }
-
-  private setCustomRowProperty = (
-    key: string | number,
-    isString: boolean,
-    newValue?: string
-  ): void => {
-    if (!this.temporaryPoint || !newValue) {
-      return;
-    }
-    const editingData = this.temporaryPoint;
-    this.stringifiedValues[key] = newValue;
-    if (isString) {
-      editingData[key] = newValue;
-      this.forceUpdate();
-    } else {
-      const asNumber = +newValue;
-      // because " " evaluates to 0 in js
-      const isWhitespaceOnly = /^\s*$/.test(newValue);
-      if (Number.isNaN(asNumber) || isWhitespaceOnly) {
-        this.validationErrors[key] =
-          localization.Interpret.WhatIfTab.nonNumericValue;
-        this.forceUpdate();
-      } else {
-        editingData[key] = asNumber;
-        this.validationErrors[key] = undefined;
-        this.forceUpdate();
-        this.fetchData(editingData);
-      }
-    }
-  };
-
-  private setCustomRowPropertyDropdown = (
-    key: string | number,
-    option?: IComboBoxOption,
-    value?: string
-  ): void => {
-    if (!this.temporaryPoint || (!value && !option)) {
-      return;
-    }
-    const editingData = this.temporaryPoint;
-    if (option) {
-      // User selected/de-selected an existing option
-      editingData[key] = option.key;
-    } else if (value !== undefined) {
-      // User typed a freeform option
-      const featureOption = this.state.featuresOption.find(
-        (feature) => feature.key === key
-      );
-      if (featureOption) {
-        featureOption.data.categoricalOptions.push({ key: value, text: value });
-      }
-      editingData[key] = value;
-    }
-
-    this.forceUpdate();
-    this.fetchData(editingData);
-  };
-
-  private savePoint = (): void => {
-    const customPoints = [...this.state.customPoints];
-    if (this.state.editingDataCustomIndex && this.temporaryPoint) {
-      customPoints[this.state.editingDataCustomIndex] = this.temporaryPoint;
-    }
-    this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
-    this.setState({ customPoints });
-  };
-
-  private saveAsPoint = (): void => {
-    const editingDataCustomIndex =
-      this.state.editingDataCustomIndex !== undefined
-        ? this.state.editingDataCustomIndex
-        : this.state.customPoints.length;
-    const customPoints = [...this.state.customPoints];
-    const customPointIsActive = [...this.state.customPointIsActive];
-    if (this.temporaryPoint) {
-      customPoints.push(this.temporaryPoint);
-    }
-    customPointIsActive.push(true);
-    this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
-    this.setState({
-      customPointIsActive,
-      customPoints,
-      editingDataCustomIndex
-    });
-  };
 
   private createCopyOfFirstRow(): void {
     const indexes = this.getDefaultSelectedPointIndexes(
