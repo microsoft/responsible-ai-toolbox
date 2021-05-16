@@ -1,22 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
 import {
-  ICasualAnalysisData,
-  IDataset,
-  IMetricRequest,
-  IMetricResponse,
-  IModelExplanationData
-} from "@responsible-ai/core-ui";
-import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
+  IModelAssessmentData,
+  ModelAssessmentDashboard
+} from "@responsible-ai/model-assessment";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
 import { config } from "./config";
-import { modelData } from "./modelData";
+import { modelData as modelDataImported } from "./modelData";
 
 export class ModelAssessment extends React.Component {
   public render(): React.ReactNode {
+    const modelData: IModelAssessmentData = modelDataImported;
     let requestPredictionsMethod = undefined;
     let requestMatrixMethod = undefined;
     let requestDebugMLMethod = undefined;
@@ -42,49 +40,20 @@ export class ModelAssessment extends React.Component {
       };
     }
 
-    const dataset: IDataset = {
-      categoricalMap: modelData.categoricalMap,
-      classNames: modelData.classNames,
-      featureNames: modelData.featureNames,
-      features: modelData.features,
-      sensitiveFeatures: modelData.sensitiveFeatures,
-      trueY: modelData.trueY
-    };
-
-    const modelExplanationData: IModelExplanationData = {
-      modelClass: "modelClass" in modelData ? modelData.modelClass : "blackbox",
-      precomputedExplanations: {
-        ebmGlobalExplanation: modelData.ebmData,
-        globalFeatureImportance: modelData.globalExplanation,
-        localFeatureImportance: modelData.localExplanations
-      },
-      predictedY: modelData.predictedY,
-      probabilityY: modelData.probabilityY
-    };
-
-    const casualAnalysisData: ICasualAnalysisData = {
-      global: modelData.globalCasualAnalysis,
-      local: modelData.localCasualAnalysis
-    };
-
     return (
       <ModelAssessmentDashboard
-        casualAnalysisData={casualAnalysisData}
-        dataset={dataset}
-        modelExplanationData={modelExplanationData}
+        {...modelData}
         requestPredictions={requestPredictionsMethod}
         requestDebugML={requestDebugMLMethod}
         requestMatrix={requestMatrixMethod}
         requestMetrics={requestMetricsMethod}
         requestImportances={requestImportancesMethod}
-        localUrl={modelData.localUrl}
+        localUrl={config.baseUrl}
         locale={config.locale}
-        theme={modelData.theme}
-        supportedBinaryClassificationPerformanceKeys={
-          modelData.classification_methods
-        }
-        supportedRegressionPerformanceKeys={modelData.regression_methods}
-        supportedProbabilityPerformanceKeys={modelData.probability_methods}
+        theme={undefined}
+        supportedBinaryClassificationPerformanceKeys={[]}
+        supportedRegressionPerformanceKeys={[]}
+        supportedProbabilityPerformanceKeys={[]}
       />
     );
   }

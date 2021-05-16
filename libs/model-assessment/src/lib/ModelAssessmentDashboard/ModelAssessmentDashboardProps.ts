@@ -6,20 +6,25 @@ import {
   IModelExplanationData,
   IMetricRequest,
   IMetricResponse,
-  ICohortBasedComponentProps,
   ITelemetryMessage,
-  ICasualAnalysisData
+  ICasualAnalysisData,
+  IDataset,
+  IErrorAnalysisConfig
 } from "@responsible-ai/core-ui";
 import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
 
+export interface IModelAssessmentData {
+  dataset: IDataset;
+  modelExplanationData?: IModelExplanationData[];
+  casualAnalysisData?: ICasualAnalysisData[];
+  errorAnalysisConfig?: IErrorAnalysisConfig[];
+}
+
 export interface IModelAssessmentDashboardProps
   extends IOfficeFabricProps,
-    ICohortBasedComponentProps {
+    IModelAssessmentData {
   locale?: string;
   stringParams?: IStringsParam;
-
-  modelExplanationData: IModelExplanationData;
-  casualAnalysisData: ICasualAnalysisData;
 
   requestPredictions?: (
     request: any[],

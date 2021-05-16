@@ -65,6 +65,7 @@
     "mlchartlib",
     "multiclass",
     "nrwl",
+    "numpy",
     "pytest",
     "raiwidget",
     "raiwidgets",
@@ -72,5 +73,6 @@
     "sdist",
     "shap",
     "uifabric"
-  ]
+  ],
+  "python.pythonPath": "C:\\Users\\xuke\\Miniconda3\\envs\\dev\\python.exe"
 }

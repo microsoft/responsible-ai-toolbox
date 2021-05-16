@@ -319,9 +319,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
-          modelExplanationData: {} as IModelExplanationData,
+          modelExplanationData: {
+            precomputedExplanations: this.props.precomputedExplanations
+          } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,

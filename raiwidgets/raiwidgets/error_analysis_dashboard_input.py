@@ -56,7 +56,7 @@ class ErrorAnalysisDashboardInput:
         :type classes: numpy.array or list[]
         :param features: Feature names.
         :type features: numpy.array or list[]
-            :param categorical_features: The categorical feature names.
+        :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param true_y_dataset: The true labels for the provided dataset.
         Only needed if the explanation has a sample of instances from the
