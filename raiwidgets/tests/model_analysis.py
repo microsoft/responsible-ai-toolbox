@@ -1,4 +1,4 @@
-from raiwidgets import ModelAnalysisDashboard, ExplanationDashboard
+from raiwidgets import ModelAnalysisDashboard
 from responsibleai import ModelAnalysis
 import sklearn
 import shap
@@ -25,13 +25,15 @@ print(test)
 
 
 ma = ModelAnalysis(knn, train, test, "income", "classification",
-                   categorical_features=['Workclass', 'Marital Status', 'Occupation',
-                                         'Relationship', 'Race', 'Sex',
-                                         'Country'])
+                   categorical_features=['Workclass', 'Marital Status',
+                                         'Occupation', 'Relationship', 'Race',
+                                         'Sex', 'Country'])
 ma.explainer.add()
-ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status', 'Occupation',
-                       'Relationship', 'Race', 'Sex', 'Capital Gain', 'Capital Loss',
-                       'Hours per week', 'Country'], 10, desired_class="opposite")
+ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
+                       'Occupation', 'Relationship', 'Race', 'Sex',
+                       'Capital Gain', 'Capital Loss',
+                       'Hours per week', 'Country'], 10,
+                      desired_class="opposite")
 ma.error_analysis.add()
 # ma.causal.add()
 ma.compute()
