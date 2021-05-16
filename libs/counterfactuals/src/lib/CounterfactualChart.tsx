@@ -4,8 +4,10 @@
 import {
   AxisConfigDialog,
   ColumnCategories,
+  WeightVectorOption,
   JointDataset,
   Cohort,
+  ModelExplanationUtils,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
@@ -13,8 +15,14 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
+  InteractiveLegend,
   rowErrorSize
 } from "@responsible-ai/core-ui";
+import {
+  WhatIfConstants,
+  LocalImportancePlots,
+  IGlobalSeries
+} from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -25,31 +33,38 @@ import {
 import _ from "lodash";
 import {
   getTheme,
-  DefaultButton,
-  ComboBox,
-  Stack,
+  Text,
   IComboBoxOption,
-  IComboBox,
-  PrimaryButton
+  DefaultButton,
+  Dropdown,
+  IDropdownOption
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
-import { CounterfactualConstants } from "./CounterfactualConstants";
-
 export interface ICounterfactualChartProps {
-  onDataClick?: (data: number | undefined) => void;
+  selectedWeightVector: WeightVectorOption;
+  weightOptions: WeightVectorOption[];
+  weightLabels: any;
+  invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  onWeightChange: (option: WeightVectorOption) => void;
 }
 
 export interface ICounterfactualChartState {
   chartProps?: IGenericChartProps;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
+  editingDataCustomIndex?: number;
+  showSelectionWarning: boolean;
+  customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
+  featuresOption: IDropdownOption[];
+  request?: AbortController;
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  counterfactualClass?: string;
+  sortArray: number[];
+  sortingSeriesIndex: number | undefined;
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -61,56 +76,205 @@ export class CounterfactualChart extends React.PureComponent<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
 
-  private readonly chartAndConfigsId = "CounterfactualChart";
+  private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
+
+  private includedFeatureImportance: IGlobalSeries[] = [];
+  private selectedFeatureImportance: IGlobalSeries[] = [];
+  private validationErrors: { [key: string]: string | undefined } = {};
   private stringifiedValues: { [key: string]: string } = {};
+  private selectedDatapoints: any[][] = [];
+  private customDatapoints: any[][] = [];
+  private testableDatapoints: any[][] = [];
   private temporaryPoint: { [key: string]: any } | undefined;
+  private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
+  private testableDatapointNames: string[] = [];
+  private rowOptions: IDropdownOption[] | undefined;
 
   public constructor(props: ICounterfactualChartProps) {
     super(props);
 
     this.state = {
-      counterfactualClass: "malignant",
       customPointIsActive: [],
+      customPoints: [],
+      editingDataCustomIndex: undefined,
+      featuresOption: [],
       pointIsActive: [],
+      request: undefined,
       selectedCohortIndex: 0,
       selectedPointsIndexes: [],
+      showSelectionWarning: false,
+      sortArray: [],
+      sortingSeriesIndex: undefined,
       xDialogOpen: false,
       yDialogOpen: false
     };
   }
 
   public componentDidMount(): void {
+    this.createCopyOfFirstRow();
+    this.buildRowOptions(0);
+
+    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+
+    const featuresOption = new Array(
+      this.context.jointDataset.datasetFeatureCount
+    )
+      .fill(0)
+      .map((_, index) => {
+        const key = JointDataset.DataLabelRoot + index.toString();
+        const meta = this.context.jointDataset.metaDict[key];
+        const options = meta.isCategorical
+          ? meta.sortedCategoricalValues?.map((optionText, index) => {
+              return { key: index, text: optionText };
+            })
+          : undefined;
+        return {
+          data: {
+            categoricalOptions: options,
+            fullLabel: meta.label.toLowerCase()
+          },
+          key,
+          text: meta.abbridgedLabel
+        };
+      });
+
     this.setState({
-      chartProps: this.generateDefaultChartAxes()
+      chartProps: this.generateDefaultChartAxes(),
+      featuresOption
     });
   }
 
   public componentDidUpdate(
-    _prevProps: ICounterfactualChartProps,
+    prevProps: ICounterfactualChartProps,
     prevState: ICounterfactualChartState
   ): void {
     if (!this.state) {
       return;
     }
+    let sortingSeriesIndex = this.state.sortingSeriesIndex;
+    let sortArray = this.state.sortArray;
     const selectionsAreEqual = _.isEqual(
       this.state.selectedPointsIndexes,
       prevState.selectedPointsIndexes
     );
+    const weightVectorsAreEqual =
+      this.props.selectedWeightVector === prevProps.selectedWeightVector;
     const activePointsAreEqual = _.isEqual(
       this.state.pointIsActive,
       prevState.pointIsActive
     );
+    const customPointsAreEqual =
+      this.state.customPoints === prevState.customPoints;
     const customActivePointsAreEqual = _.isEqual(
       this.state.customPointIsActive,
       prevState.customPointIsActive
     );
+    if (!selectionsAreEqual || !weightVectorsAreEqual) {
+      this.selectedFeatureImportance = this.state.selectedPointsIndexes.map(
+        (rowIndex, colorIndex) => {
+          const row = this.context.jointDataset.getRow(rowIndex);
+          return {
+            colorIndex,
+            id: rowIndex,
+            name: localization.formatString(
+              localization.Interpret.WhatIfTab.rowLabel,
+              rowIndex.toString()
+            ),
+            unsortedAggregateY: JointDataset.localExplanationSlice(
+              row,
+              this.context.jointDataset.localExplanationFeatureCount
+            ) as number[],
+            unsortedFeatureValues: JointDataset.datasetSlice(
+              row,
+              this.context.jointDataset.metaDict,
+              this.context.jointDataset.localExplanationFeatureCount
+            )
+          };
+        }
+      );
+      this.selectedDatapoints = this.state.selectedPointsIndexes.map(
+        (rowIndex) => {
+          const row = this.context.jointDataset.getRow(rowIndex);
+          return JointDataset.datasetSlice(
+            row,
+            this.context.jointDataset.metaDict,
+            this.context.jointDataset.datasetFeatureCount
+          );
+        }
+      );
+      if (
+        this.state.sortingSeriesIndex === undefined ||
+        !this.state.selectedPointsIndexes.includes(
+          this.state.sortingSeriesIndex
+        )
+      ) {
+        if (this.state.selectedPointsIndexes.length !== 0) {
+          sortingSeriesIndex = 0;
+          sortArray = ModelExplanationUtils.getSortIndices(
+            this.selectedFeatureImportance[0].unsortedAggregateY
+          ).reverse();
+        } else {
+          sortingSeriesIndex = undefined;
+        }
+      } else if (!weightVectorsAreEqual) {
+        sortArray = ModelExplanationUtils.getSortIndices(
+          this.selectedFeatureImportance[0].unsortedAggregateY
+        ).reverse();
+      }
+    }
+    if (!customPointsAreEqual) {
+      this.customDatapoints = this.state.customPoints.map((row) => {
+        return JointDataset.datasetSlice(
+          row,
+          this.context.jointDataset.metaDict,
+          this.context.jointDataset.datasetFeatureCount
+        );
+      });
+    }
     if (
       !selectionsAreEqual ||
       !activePointsAreEqual ||
-      !customActivePointsAreEqual
+      !customPointsAreEqual ||
+      !customActivePointsAreEqual ||
+      !weightVectorsAreEqual
     ) {
+      this.includedFeatureImportance = this.selectedFeatureImportance.filter(
+        (_f, i) => this.state.pointIsActive[i]
+      );
+      const includedColors = this.includedFeatureImportance.map(
+        (item) => FabricStyles.fabricColorPalette[item.colorIndex]
+      );
+      const includedNames = this.includedFeatureImportance.map(
+        (item) => item.name
+      );
+      const includedRows = this.selectedDatapoints.filter(
+        (_f, i) => this.state.pointIsActive[i]
+      );
+      const includedCustomRows = this.customDatapoints.filter((_f, i) => {
+        if (this.state.pointIsActive[i]) {
+          includedColors.push(
+            FabricStyles.fabricColorPalette[
+              WhatIfConstants.MAX_SELECTION + i + 1
+            ]
+          );
+          includedColors.push(
+            FabricStyles.fabricColorPalette[
+              WhatIfConstants.MAX_SELECTION + i + 1
+            ]
+          );
+          includedNames.push(
+            this.state.customPoints[i][WhatIfConstants.namePath]
+          );
+          return true;
+        }
+        return false;
+      });
+      this.testableDatapoints = [...includedRows, ...includedCustomRows];
+      this.testableDatapointColors = includedColors;
+      this.testableDatapointNames = includedNames;
       this.forceUpdate();
     }
+    this.setState({ sortArray, sortingSeriesIndex });
   }
 
   public render(): React.ReactNode {
@@ -118,7 +282,7 @@ export class CounterfactualChart extends React.PureComponent<
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
-          {localization.CausalAnalysis.IndividualView.dataRequired}
+          {localization.Interpret.WhatIfTab.missingParameters}
         </MissingParametersPlaceholder>
       );
     }
@@ -136,150 +300,438 @@ export class CounterfactualChart extends React.PureComponent<
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
+    const cohortOptions: IDropdownOption[] = this.context.errorCohorts.map(
+      (errorCohort, index) => {
+        return { key: index, text: errorCohort.cohort.name };
+      }
+    );
     return (
-      <div className={classNames.topArea} id={"CasualIndividualContainer"}>
-        <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
-          {this.state.yDialogOpen && (
-            <AxisConfigDialog
-              jointDataset={this.context.jointDataset}
-              orderedGroupTitles={[
-                ColumnCategories.Index,
-                ColumnCategories.Dataset,
-                ColumnCategories.Outcome
-              ]}
-              selectedColumn={this.state.chartProps.yAxis}
-              canBin={false}
-              mustBin={false}
-              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
-              onAccept={this.onYSet}
-              onCancel={this.setYOpen.bind(this, false)}
-            />
-          )}
-          {this.state.xDialogOpen && (
-            <AxisConfigDialog
-              jointDataset={this.context.jointDataset}
-              orderedGroupTitles={[
-                ColumnCategories.Index,
-                ColumnCategories.Dataset,
-                ColumnCategories.Outcome
-              ]}
-              selectedColumn={this.state.chartProps.xAxis}
-              canBin={
-                this.state.chartProps.chartType === ChartTypes.Histogram ||
-                this.state.chartProps.chartType === ChartTypes.Box
-              }
-              mustBin={
-                this.state.chartProps.chartType === ChartTypes.Histogram ||
-                this.state.chartProps.chartType === ChartTypes.Box
-              }
-              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
-              onAccept={this.onXSet}
-              onCancel={this.setXOpen.bind(this, false)}
-            />
-          )}
-          <div className={classNames.chartWithVertical}>
-            <div className={classNames.verticalAxis}>
-              <div className={classNames.rotatedVerticalBox}>
-                <DefaultButton
-                  onClick={this.setYOpen.bind(this, true)}
-                  text={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.yAxis.property
-                    ].abbridgedLabel
-                  }
-                  title={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.yAxis.property
-                    ].label
-                  }
+      <div className={classNames.page}>
+        <div className={classNames.mainArea}>
+          <div className={classNames.chartsArea}>
+            {cohortOptions && (
+              <div className={classNames.cohortPickerWrapper}>
+                <Text
+                  variant="mediumPlus"
+                  className={classNames.cohortPickerLabel}
+                >
+                  {localization.Counterfactuals.showOnly}
+                </Text>
+                <Dropdown
+                  styles={{ dropdown: { width: 150 } }}
+                  options={cohortOptions}
+                  selectedKey={this.state.selectedCohortIndex}
+                  onChange={this.setSelectedCohort}
                 />
               </div>
-            </div>
-            {!canRenderChart && (
-              <MissingParametersPlaceholder>
-                {localization.Interpret.ValidationErrors.datasizeError}
-              </MissingParametersPlaceholder>
             )}
-            {canRenderChart && (
-              <AccessibleChart
-                plotlyProps={plotlyProps}
-                theme={getTheme()}
-                onClickHandler={this.selectPointFromChart}
-              />
-            )}
-          </div>
-          <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv} />
-            <div className={classNames.horizontalAxis}>
-              <DefaultButton
-                onClick={this.setXOpen.bind(this, true)}
-                text={
-                  this.context.jointDataset.metaDict[
-                    this.state.chartProps.xAxis.property
-                  ].abbridgedLabel
-                }
-                title={
-                  this.context.jointDataset.metaDict[
-                    this.state.chartProps.xAxis.property
-                  ].label
-                }
-              />
+            <div
+              className={classNames.topArea}
+              id={"IndividualFeatureContainer"}
+            >
+              <div
+                className={classNames.chartWithAxes}
+                id={this.chartAndConfigsId}
+              >
+                {this.state.yDialogOpen && (
+                  <AxisConfigDialog
+                    jointDataset={this.context.jointDataset}
+                    orderedGroupTitles={[
+                      ColumnCategories.Index,
+                      ColumnCategories.Dataset,
+                      ColumnCategories.Outcome
+                    ]}
+                    selectedColumn={this.state.chartProps.yAxis}
+                    canBin={false}
+                    mustBin={false}
+                    canDither={
+                      this.state.chartProps.chartType === ChartTypes.Scatter
+                    }
+                    onAccept={this.onYSet}
+                    onCancel={this.setYOpen.bind(this, false)}
+                  />
+                )}
+                {this.state.xDialogOpen && (
+                  <AxisConfigDialog
+                    jointDataset={this.context.jointDataset}
+                    orderedGroupTitles={[
+                      ColumnCategories.Index,
+                      ColumnCategories.Dataset,
+                      ColumnCategories.Outcome
+                    ]}
+                    selectedColumn={this.state.chartProps.xAxis}
+                    canBin={
+                      this.state.chartProps.chartType ===
+                        ChartTypes.Histogram ||
+                      this.state.chartProps.chartType === ChartTypes.Box
+                    }
+                    mustBin={
+                      this.state.chartProps.chartType ===
+                        ChartTypes.Histogram ||
+                      this.state.chartProps.chartType === ChartTypes.Box
+                    }
+                    canDither={
+                      this.state.chartProps.chartType === ChartTypes.Scatter
+                    }
+                    onAccept={this.onXSet}
+                    onCancel={this.setXOpen.bind(this, false)}
+                  />
+                )}
+                <div className={classNames.chartWithVertical}>
+                  <div className={classNames.verticalAxis}>
+                    <div className={classNames.rotatedVerticalBox}>
+                      <DefaultButton
+                        onClick={this.setYOpen.bind(this, true)}
+                        text={
+                          this.context.jointDataset.metaDict[
+                            this.state.chartProps.yAxis.property
+                          ].abbridgedLabel
+                        }
+                        title={
+                          this.context.jointDataset.metaDict[
+                            this.state.chartProps.yAxis.property
+                          ].label
+                        }
+                      />
+                    </div>
+                  </div>
+                  {!canRenderChart && (
+                    <MissingParametersPlaceholder>
+                      {localization.Interpret.ValidationErrors.datasizeError}
+                    </MissingParametersPlaceholder>
+                  )}
+                  {canRenderChart && (
+                    <AccessibleChart
+                      plotlyProps={plotlyProps}
+                      theme={getTheme() as any}
+                      onClickHandler={this.selectPointFromChart}
+                    />
+                  )}
+                </div>
+                <div className={classNames.horizontalAxisWithPadding}>
+                  <div className={classNames.paddingDiv} />
+                  <div className={classNames.horizontalAxis}>
+                    <div>
+                      <DefaultButton
+                        onClick={this.setXOpen.bind(this, true)}
+                        text={
+                          this.context.jointDataset.metaDict[
+                            this.state.chartProps.xAxis.property
+                          ].abbridgedLabel
+                        }
+                        title={
+                          this.context.jointDataset.metaDict[
+                            this.state.chartProps.xAxis.property
+                          ].label
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={classNames.legendAndText}>
+                <Text
+                  variant={"small"}
+                  block
+                  className={classNames.legendLabel}
+                >
+                  {localization.Counterfactuals.selectedDatapoint}
+                </Text>
+                {this.selectedFeatureImportance.length > 0 && (
+                  <InteractiveLegend
+                    items={this.selectedFeatureImportance.map(
+                      (row, rowIndex) => {
+                        return {
+                          activated: this.state.pointIsActive[rowIndex],
+                          color: FabricStyles.fabricColorPalette[rowIndex],
+                          name: row.name,
+                          onClick: this.toggleActivation.bind(this, rowIndex),
+                          onDelete: this.toggleSelectionOfPoint.bind(
+                            this,
+                            row.id
+                          )
+                        };
+                      }
+                    )}
+                  />
+                )}
+                {this.state.showSelectionWarning && (
+                  <Text variant={"xSmall"} className={classNames.errorText}>
+                    {localization.Interpret.WhatIfTab.selectionLimit}
+                  </Text>
+                )}
+                {this.selectedFeatureImportance.length === 0 && (
+                  <Text variant={"xSmall"} className={classNames.smallItalic}>
+                    {localization.Interpret.WhatIfTab.noneSelectedYet}
+                  </Text>
+                )}
+                {this.props.invokeModel && (
+                  <Text
+                    variant={"small"}
+                    block
+                    className={classNames.legendLabel}
+                  >
+                    {localization.Interpret.WhatIfTab.whatIfDatapoints}
+                  </Text>
+                )}
+                {this.state.customPoints.length > 0 && (
+                  <InteractiveLegend
+                    items={this.state.customPoints.map((row, rowIndex) => {
+                      return {
+                        activated: this.state.customPointIsActive[rowIndex],
+                        color:
+                          FabricStyles.fabricColorPalette[
+                            rowIndex + WhatIfConstants.MAX_SELECTION + 1
+                          ],
+                        name: row[WhatIfConstants.namePath],
+                        onClick: this.toggleCustomActivation.bind(
+                          this,
+                          rowIndex
+                        ),
+                        onDelete: this.removeCustomPoint.bind(this, rowIndex),
+                        onEdit: this.setTemporaryPointToCustomPoint.bind(
+                          this,
+                          rowIndex
+                        )
+                      };
+                    })}
+                  />
+                )}
+                {this.state.customPoints.length === 0 && (
+                  <Text variant={"xSmall"} className={classNames.smallItalic}>
+                    {localization.Interpret.WhatIfTab.noneCreatedYet}
+                  </Text>
+                )}
+              </div>
             </div>
+            <LocalImportancePlots
+              includedFeatureImportance={this.includedFeatureImportance}
+              jointDataset={this.context.jointDataset}
+              metadata={this.context.modelMetadata}
+              selectedWeightVector={this.props.selectedWeightVector}
+              weightOptions={this.props.weightOptions}
+              weightLabels={this.props.weightLabels}
+              invokeModel={this.props.invokeModel}
+              onWeightChange={this.props.onWeightChange}
+              testableDatapoints={this.testableDatapoints}
+              testableDatapointNames={this.testableDatapointNames}
+              testableDatapointColors={this.testableDatapointColors}
+              featuresOption={this.state.featuresOption}
+              sortArray={this.state.sortArray}
+              sortingSeriesIndex={this.state.sortingSeriesIndex}
+            />
           </div>
         </div>
-        <Stack horizontal={false} gap={15} className={classNames.legendAndText}>
-          <ComboBox
-            label={localization.Counterfactuals.selectedDatapoint}
-            onChange={this.selectPointFromDropdown}
-            options={this.getDataOptions()}
-            selectedKey={"" + this.state.selectedPointsIndexes[0]}
-            ariaLabel={"datapoint picker"}
-            useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
-          />
-          <ComboBox
-            label={localization.Counterfactuals.desiredClass}
-            onChange={this.selectClassFromDropdown}
-            options={[
-              {
-                key: "a",
-                text: "a"
-              },
-              {
-                key: "b",
-                text: "b"
-              }
-            ]}
-            ariaLabel={"treatment picker"}
-            useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
-          />
-          <div>
-            <b>{`${localization.Counterfactuals.currentClass}: ${this.state.counterfactualClass}`}</b>
-          </div>
-          <div style={{ display: "flex", paddingBottom: "20px" }}>
-            <PrimaryButton className={classNames.createBtn}>
-              {localization.Counterfactuals.createCounterfactual}
-            </PrimaryButton>
-          </div>
-        </Stack>
       </div>
     );
   }
 
+  private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
+    const indexes = cohort.unwrap(JointDataset.IndexLabel);
+    if (indexes.length > 0) {
+      return [indexes[0]];
+    }
+    return [];
+  }
+
+  private setSelectedCohort = (
+    _event: React.FormEvent<HTMLDivElement>,
+    item?: IDropdownOption
+  ): void => {
+    if (item?.key === undefined) {
+      return;
+    }
+    this.buildRowOptions(item.key as number);
+    this.setState({
+      selectedCohortIndex: item.key as number,
+      selectedPointsIndexes: [],
+      showSelectionWarning: false
+    });
+  };
+
+  private buildRowOptions(cohortIndex: number): void {
+    this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
+    this.rowOptions = this.context.errorCohorts[cohortIndex].cohort
+      .unwrap(JointDataset.IndexLabel)
+      .map((index) => {
+        return {
+          key: index,
+          text: localization.formatString(
+            localization.Interpret.WhatIfTab.rowLabel,
+            index.toString()
+          )
+        };
+      })
+      .reverse();
+  }
+
+  private setSelectedIndex = (
+    _event: React.FormEvent,
+    item?: IDropdownOption
+  ): void => {
+    if (item?.key !== undefined) {
+      this.setTemporaryPointToCopyOfDatasetPoint(item.key as number);
+    }
+  };
+
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
-    this.temporaryPoint[
-      CounterfactualConstants.namePath
-    ] = localization.formatString(
+    this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
     );
-    this.temporaryPoint[CounterfactualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[CounterfactualConstants.MAX_SELECTION];
+    this.temporaryPoint[WhatIfConstants.colorPath] =
+      FabricStyles.fabricColorPalette[
+        WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
+      ];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.validationErrors[key] = undefined;
     });
+    this.setState({
+      editingDataCustomIndex: undefined
+    });
+  }
+
+  private setTemporaryPointToCustomPoint(index: number): void {
+    this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
+    Object.keys(this.temporaryPoint).forEach((key) => {
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.validationErrors[key] = undefined;
+    });
+    this.setState({
+      editingDataCustomIndex: index
+    });
+    this.openPanel();
+  }
+
+  private removeCustomPoint(index: number): void {
+    this.setState((prevState) => {
+      const customPoints = [...prevState.customPoints];
+      customPoints.splice(index, 1);
+      const customPointIsActive = [...prevState.customPointIsActive];
+      customPointIsActive.splice(index, 1);
+      return { customPointIsActive, customPoints };
+    });
+  }
+
+  private setCustomRowProperty = (
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ): void => {
+    if (!this.temporaryPoint || !newValue) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    this.stringifiedValues[key] = newValue;
+    if (isString) {
+      editingData[key] = newValue;
+      this.forceUpdate();
+    } else {
+      const asNumber = +newValue;
+      // because " " evaluates to 0 in js
+      const isWhitespaceOnly = /^\s*$/.test(newValue);
+      if (Number.isNaN(asNumber) || isWhitespaceOnly) {
+        this.validationErrors[key] =
+          localization.Interpret.WhatIfTab.nonNumericValue;
+        this.forceUpdate();
+      } else {
+        editingData[key] = asNumber;
+        this.validationErrors[key] = undefined;
+        this.forceUpdate();
+        this.fetchData(editingData);
+      }
+    }
+  };
+
+  private setCustomRowPropertyDropdown = (
+    key: string | number,
+    option?: IComboBoxOption,
+    value?: string
+  ): void => {
+    if (!this.temporaryPoint || (!value && !option)) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    if (option) {
+      // User selected/de-selected an existing option
+      editingData[key] = option.key;
+    } else if (value !== undefined) {
+      // User typed a freeform option
+      const featureOption = this.state.featuresOption.find(
+        (feature) => feature.key === key
+      );
+      if (featureOption) {
+        featureOption.data.categoricalOptions.push({ key: value, text: value });
+      }
+      editingData[key] = value;
+    }
+
+    this.forceUpdate();
+    this.fetchData(editingData);
+  };
+
+  private savePoint = (): void => {
+    const customPoints = [...this.state.customPoints];
+    if (this.state.editingDataCustomIndex && this.temporaryPoint) {
+      customPoints[this.state.editingDataCustomIndex] = this.temporaryPoint;
+    }
+    this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
+    this.setState({ customPoints });
+  };
+
+  private saveAsPoint = (): void => {
+    const editingDataCustomIndex =
+      this.state.editingDataCustomIndex !== undefined
+        ? this.state.editingDataCustomIndex
+        : this.state.customPoints.length;
+    const customPoints = [...this.state.customPoints];
+    const customPointIsActive = [...this.state.customPointIsActive];
+    if (this.temporaryPoint) {
+      customPoints.push(this.temporaryPoint);
+    }
+    customPointIsActive.push(true);
+    this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
+    this.setState({
+      customPointIsActive,
+      customPoints,
+      editingDataCustomIndex
+    });
+  };
+
+  private createCopyOfFirstRow(): void {
+    const indexes = this.getDefaultSelectedPointIndexes(
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+    );
+    if (indexes.length === 0) {
+      return undefined;
+    }
+    this.temporaryPoint = this.context.jointDataset.getRow(indexes[0]);
+    this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
+      localization.Interpret.WhatIf.defaultCustomRootName,
+      indexes[0]
+    );
+    this.temporaryPoint[WhatIfConstants.colorPath] =
+      FabricStyles.fabricColorPalette[
+        WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
+      ];
+    Object.keys(this.temporaryPoint).forEach((key) => {
+      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.validationErrors[key] = undefined;
+    });
+  }
+
+  private toggleActivation(index: number): void {
+    const pointIsActive = [...this.state.pointIsActive];
+    pointIsActive[index] = !pointIsActive[index];
+    this.setState({ pointIsActive });
+  }
+
+  private toggleCustomActivation(index: number): void {
+    const customPointIsActive = [...this.state.customPointIsActive];
+    customPointIsActive[index] = !customPointIsActive[index];
+    this.setState({ customPointIsActive });
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -318,30 +770,13 @@ export class CounterfactualChart extends React.PureComponent<
 
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
-    this.setTemporaryPointToCopyOfDatasetPoint(index);
-    this.toggleSelectionOfPoint(index);
-  };
-
-  private selectPointFromDropdown = (
-    _event: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    if (typeof item?.key === "string") {
-      const index = Number.parseInt(item.key);
+    // custom point
+    if (trace.curveNumber === 1) {
+      this.setTemporaryPointToCustomPoint(trace.pointNumber);
+    } else {
+      const index = trace.customdata[JointDataset.IndexLabel];
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
-    }
-  };
-
-  private selectClassFromDropdown = (
-    _event: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    if (typeof item?.key === "string") {
-      this.setState({
-        counterfactualClass: item.key
-      });
     }
   };
 
@@ -350,23 +785,87 @@ export class CounterfactualChart extends React.PureComponent<
       return;
     }
     const indexOf = this.state.selectedPointsIndexes.indexOf(index);
-    let newSelections = [...this.state.selectedPointsIndexes];
-    let pointIsActive = [...this.state.pointIsActive];
+    const newSelections = [...this.state.selectedPointsIndexes];
+    const pointIsActive = [...this.state.pointIsActive];
     if (indexOf === -1) {
-      newSelections = [index];
-      pointIsActive = [true];
+      if (
+        this.state.selectedPointsIndexes.length > WhatIfConstants.MAX_SELECTION
+      ) {
+        this.setState({ showSelectionWarning: true });
+        return;
+      }
+      newSelections.push(index);
+      pointIsActive.push(true);
     } else {
       newSelections.splice(indexOf, 1);
       pointIsActive.splice(indexOf, 1);
     }
-    if (this.props.onDataClick) {
-      this.props.onDataClick(
-        newSelections.length === 1 ? newSelections[0] : undefined
-      );
-    }
     this.setState({
       pointIsActive,
-      selectedPointsIndexes: newSelections
+      selectedPointsIndexes: newSelections,
+      showSelectionWarning: false
+    });
+  }
+
+  // fetch prediction for temporary point
+  private fetchData(fetchingReference: { [key: string]: any }): void {
+    if (!this.props.invokeModel) {
+      return;
+    }
+    if (this.state.request !== undefined) {
+      this.state.request.abort();
+    }
+    const abortController = new AbortController();
+    const rawData = JointDataset.datasetSlice(
+      fetchingReference,
+      this.context.jointDataset.metaDict,
+      this.context.jointDataset.datasetFeatureCount
+    );
+    fetchingReference[JointDataset.PredictedYLabel] = undefined;
+    const promise = this.props.invokeModel([rawData], abortController.signal);
+
+    this.setState({ request: abortController }, async () => {
+      try {
+        const fetchedData = await promise;
+        // returns predicted probabilities
+        if (Array.isArray(fetchedData[0])) {
+          const predictionVector = fetchedData[0];
+          let predictedClass = 0;
+          let maxProb = Number.MIN_SAFE_INTEGER;
+          for (const [i, element] of predictionVector.entries()) {
+            fetchingReference[
+              JointDataset.ProbabilityYRoot + i.toString()
+            ] = element;
+            if (element > maxProb) {
+              predictedClass = i;
+              maxProb = element;
+            }
+          }
+          fetchingReference[JointDataset.PredictedYLabel] = predictedClass;
+        } else {
+          // prediction is a scalar, no probabilities
+          fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
+        }
+        if (this.context.jointDataset.hasTrueY) {
+          JointDataset.setErrorMetrics(
+            fetchingReference,
+            this.context.modelMetadata.modelType
+          );
+        }
+        this.setState({ request: undefined });
+      } catch (error) {
+        if (error.name === "AbortError") {
+          return;
+        }
+        if (error.name === "PythonError") {
+          alert(
+            localization.formatString(
+              localization.Interpret.IcePlot.errorPrefix,
+              error.message
+            )
+          );
+        }
+      }
     });
   }
 
@@ -375,9 +874,7 @@ export class CounterfactualChart extends React.PureComponent<
     chartProps: IGenericChartProps,
     cohort: Cohort
   ): IPlotlyProperty {
-    const plotlyProps = _.cloneDeep(
-      CounterfactualConstants.basePlotlyProperties
-    );
+    const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
     plotlyProps.data[0].type = chartProps.chartType;
@@ -400,6 +897,12 @@ export class CounterfactualChart extends React.PureComponent<
 
     plotlyProps.data[1] = {
       marker: {
+        color: this.state.customPoints.map(
+          (_, i) =>
+            FabricStyles.fabricColorPalette[
+              WhatIfConstants.MAX_SELECTION + 1 + i
+            ]
+        ),
         size: 12,
         symbol: "star"
       },
@@ -414,7 +917,7 @@ export class CounterfactualChart extends React.PureComponent<
         line: {
           color:
             FabricStyles.fabricColorPalette[
-              CounterfactualConstants.MAX_SELECTION + 1
+              WhatIfConstants.MAX_SELECTION + 1 + this.state.customPoints.length
             ],
           width: 2
         },
@@ -451,7 +954,11 @@ export class CounterfactualChart extends React.PureComponent<
       chartProps,
       plotlyProps.data[0]
     );
-    this.generateDataTrace([], chartProps, plotlyProps.data[1]);
+    this.generateDataTrace(
+      this.state.customPoints,
+      chartProps,
+      plotlyProps.data[1]
+    );
     if (this.temporaryPoint) {
       this.generateDataTrace(
         [this.temporaryPoint],
@@ -559,18 +1066,5 @@ export class CounterfactualChart extends React.PureComponent<
       }
     };
     return chartProps;
-  }
-
-  private getDataOptions(): IComboBoxOption[] {
-    const indexes = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.unwrap(JointDataset.IndexLabel);
-    indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
-    return indexes.map((index) => {
-      return {
-        key: "" + index,
-        text: `Index ${index}`
-      };
-    });
   }
 }

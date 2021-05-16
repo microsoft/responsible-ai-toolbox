@@ -2,21 +2,30 @@
 // Licensed under the MIT License.
 
 import {
+  Cohort,
   defaultModelAssessmentContext,
   ICausalAnalysisData,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  ModelTypes,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { buildCounterfactualState } from "./buildCounterfactualState";
 import { CounterfactualChart } from "./CounterfactualChart";
 
 export interface ICounterfactualsViewProps {
   data: ICausalAnalysisData;
 }
-interface ICounterfactualsViewState {
+export interface ICounterfactualsViewState {
   selectedIndex?: number;
+  cohorts: Cohort[];
+  weightVectorOptions: WeightVectorOption[];
+  weightVectorLabels: Dictionary<string>;
+  selectedWeightVector: WeightVectorOption;
 }
 
 export class CounterfactualsView extends React.PureComponent<
@@ -29,9 +38,11 @@ export class CounterfactualsView extends React.PureComponent<
   > = defaultModelAssessmentContext;
   public constructor(props: ICounterfactualsViewProps) {
     super(props);
-    this.state = {
-      selectedIndex: undefined
-    };
+    this.state = buildCounterfactualState(
+      this.context.dataset,
+      this.context.jointDataset,
+      ModelTypes.Multiclass
+    );
   }
 
   public render(): React.ReactNode {
@@ -39,11 +50,16 @@ export class CounterfactualsView extends React.PureComponent<
       <Stack grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
           <Text variant={"medium"}>
-            {localization.CausalAnalysis.IndividualView.description}
+            {localization.Counterfactuals.whatifDescription}
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <CounterfactualChart onDataClick={this.handleOnClick} />
+          <CounterfactualChart
+            selectedWeightVector={this.state.selectedWeightVector}
+            weightOptions={this.state.weightVectorOptions}
+            weightLabels={this.state.weightVectorLabels}
+            onWeightChange={this.onWeightVectorChange}
+          />
         </Stack.Item>
         <Stack.Item>
           <div>{this.state.selectedIndex}</div>
@@ -51,9 +67,10 @@ export class CounterfactualsView extends React.PureComponent<
       </Stack>
     );
   }
-  private readonly handleOnClick = (dataIndex: number | undefined): void => {
-    this.setState({
-      selectedIndex: dataIndex
-    });
+
+  private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
+    this.context.jointDataset.buildLocalFlattenMatrix(weightOption);
+    this.state.cohorts.forEach((cohort) => cohort.clearCachedImportances());
+    this.setState({ selectedWeightVector: weightOption });
   };
 }
