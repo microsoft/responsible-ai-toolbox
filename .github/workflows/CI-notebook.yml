@@ -36,8 +36,9 @@ jobs:
           pip install --upgrade interpret-community
           pip install --upgrade fairlearn
           pip install wrapped-flask/.
-          pip install -r raiwidgets/requirements-dev.txt
-          pip install raiwidgets/.
+          cd raiwidgets
+          pip install -r requirements-dev.txt
+          pip install .
 
       - name: Run notebook tests
         run: python -m pytest notebooks
