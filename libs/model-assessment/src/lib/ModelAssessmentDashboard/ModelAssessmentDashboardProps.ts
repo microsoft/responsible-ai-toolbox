@@ -4,8 +4,6 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  IMetricRequest,
-  IMetricResponse,
   ITelemetryMessage,
   IDataset,
   IErrorAnalysisConfig,
@@ -44,10 +42,6 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
-  requestMetrics?: (
-    request: IMetricRequest,
-    abortSignal?: AbortSignal
-  ) => Promise<IMetricResponse>;
   localUrl: string;
 
   telemetryHook?: (message: ITelemetryMessage) => void;

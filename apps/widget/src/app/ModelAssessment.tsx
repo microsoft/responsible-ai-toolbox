@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData
@@ -19,7 +18,6 @@ export class ModelAssessment extends React.Component {
     let requestMatrixMethod = undefined;
     let requestDebugMLMethod = undefined;
     let requestImportancesMethod = undefined;
-    let requestMetricsMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
@@ -33,11 +31,6 @@ export class ModelAssessment extends React.Component {
       requestImportancesMethod = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/importances");
       };
-      requestMetricsMethod = async (
-        data: IMetricRequest
-      ): Promise<IMetricResponse> => {
-        return callFlaskService(data, "/metrics") as Promise<IMetricResponse>;
-      };
     }
 
     return (
@@ -46,7 +39,6 @@ export class ModelAssessment extends React.Component {
         requestPredictions={requestPredictionsMethod}
         requestDebugML={requestDebugMLMethod}
         requestMatrix={requestMatrixMethod}
-        requestMetrics={requestMetricsMethod}
         requestImportances={requestImportancesMethod}
         localUrl={config.baseUrl}
         locale={config.locale}

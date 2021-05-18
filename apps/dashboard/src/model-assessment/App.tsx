@@ -19,7 +19,6 @@ import {
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator
 } from "../error-analysis/utils";
-import { generateRandomMetrics } from "../fairness/utils";
 
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
@@ -57,7 +56,6 @@ export class App extends React.Component<IAppProps> {
         false
       ),
       requestMatrix: generateJsonMatrix,
-      requestMetrics: generateRandomMetrics.bind(this),
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
