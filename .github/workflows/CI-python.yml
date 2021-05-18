@@ -10,7 +10,8 @@ jobs:
   ci-python:
     strategy:
       matrix:
-        packageDirectory: ["raiwidgets", "wrapped-flask", "erroranalysis"]
+        packageDirectory:
+          ["raiwidgets", "responsibleai", "wrapped-flask", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
