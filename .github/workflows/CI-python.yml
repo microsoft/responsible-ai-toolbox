@@ -45,8 +45,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements-dev.txt
-          pip install .
+          pip install -v -r requirements-dev.txt
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Install package
+        run: |
+          pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: flake8
