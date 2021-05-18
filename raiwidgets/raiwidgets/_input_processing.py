@@ -104,11 +104,7 @@ def _convert_to_string_list_dict(
 
 
 def _safe_object_serializer(o):
-    # Attempt to convert Numpy type
-    try:
-        return o.item()
-    except Exception:
-        return o.__dict__
+    return _serialize_json_safe(o, True)
 
 
 def _serialize_json_safe(o, forObject=False):
