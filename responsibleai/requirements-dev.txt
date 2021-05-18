@@ -1,0 +1,22 @@
+# Requirements for raiwidgets development
+
+pytest==5.0.1
+mock==4.0.1
+pytest-mock==3.1.1
+requests==2.24.0
+
+autopep8==1.5.3
+requirements-parser==0.2.0
+
+wheel
+
+# Required for notebook tests
+nbformat
+papermill
+scrapbook
+jupyter
+nbval
+
+sphinx==3.1.1
+sphinx-gallery==0.8.1
+pydata-sphinx-theme==0.3.0
