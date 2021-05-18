@@ -24,7 +24,8 @@ class ModelAnalysisDashboardInput:
             analysis: ModelAnalysis):
         """Initialize the Explanation Dashboard Input.
 
-        :param analysis: An ModelAnalysis object that represents an explanation.
+        :param analysis:
+            An ModelAnalysis object that represents an explanation.
         :type analysis: ModelAnalysis
         """
         self._analysis = analysis
@@ -231,11 +232,14 @@ class ModelAnalysisDashboardInput:
         else:
             mli_explanations = None
         local_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY, mli_explanations)
+            ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY,
+            mli_explanations)
         global_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_GLOBAL_EXPLANATION_KEY, mli_explanations)
+            ExplanationDashboardInterface.MLI_GLOBAL_EXPLANATION_KEY,
+            mli_explanations)
         ebm_explanation = self._find_first_explanation(
-            ExplanationDashboardInterface.MLI_EBM_GLOBAL_EXPLANATION_KEY, mli_explanations)
+            ExplanationDashboardInterface.MLI_EBM_GLOBAL_EXPLANATION_KEY,
+            mli_explanations)
 
         if explanation is not None and hasattr(explanation, 'method'):
             interpretation.method = explanation.method
@@ -262,7 +266,8 @@ class ModelAnalysisDashboardInput:
                 # the numpy values will need to be converted to python,
                 # otherwise serialization fails.
                 local_explanation["perf"] = None
-                interpretation.precomputedExplanations.localFeatureImportance = local_feature_importance
+                interpretation.precomputedExplanations.localFeatureImportance\
+                    = local_feature_importance
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -273,13 +278,15 @@ class ModelAnalysisDashboardInput:
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(
                         "Local explanation expected to be a 2D or 3D list")
-                if len(local_dim) == 2 and (local_dim[1] != self._feature_length or
-                                            local_dim[0] != self._row_length):
+                if (len(local_dim) == 2 and
+                    (local_dim[1] != self._feature_length or
+                     local_dim[0] != self._row_length)):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         "length differs from dataset")
-                if len(local_dim) == 3 and (local_dim[2] != self._feature_length or
-                                            local_dim[1] != self._row_length):
+                if(len(local_dim) == 3 and
+                   (local_dim[2] != self._feature_length or
+                        local_dim[1] != self._row_length)):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         " length differs from dataset")
@@ -289,9 +296,11 @@ class ModelAnalysisDashboardInput:
                 global_feature_importance.scores = self._convert_to_list(
                     global_explanation["scores"])
                 if 'intercept' in global_explanation:
-                    global_feature_importance.intercept = self._convert_to_list(
-                        global_explanation["intercept"])
-                interpretation.precomputedExplanations.globalFeatureImportance = global_explanation
+                    global_feature_importance.intercept\
+                        = self._convert_to_list(
+                            global_explanation["intercept"])
+                interpretation.precomputedExplanations.globalFeatureImportance\
+                    = global_explanation
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError("Unsupported global explanation type,"
@@ -299,8 +308,10 @@ class ModelAnalysisDashboardInput:
         if ebm_explanation is not None:
             try:
                 ebm_feature_importance = EBMGlobalExplanation()
-                ebm_feature_importance.feature_list = ebm_explanation["feature_list"]
-                interpretation.precomputedExplanations.ebmGlobalExplanation = ebm_feature_importance
+                ebm_feature_importance.feature_list\
+                    = ebm_explanation["feature_list"]
+                interpretation.precomputedExplanations.ebmGlobalExplanation\
+                    = ebm_feature_importance
 
             except Exception as ex:
                 ex_str = _format_exception(ex)
