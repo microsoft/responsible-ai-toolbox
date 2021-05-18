@@ -46,6 +46,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
 
+      - name: Upgrade setup tools
+        run: |
+          python install setuptools --upgrade
+
       - name: Install dependencies
         run: |
           pip install -v -r requirements-dev.txt

@@ -28,9 +28,7 @@ print(test)
 
 
 ma = ModelAnalysis(knn, train, test, "income", "classification",
-                   categorical_features=['Workclass', 'Marital Status',
-                                         'Occupation', 'Relationship', 'Race',
-                                         'Sex', 'Country'])
+                   categorical_features=[])
 ma.explainer.add()
 ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
                        'Occupation', 'Relationship', 'Race', 'Sex',

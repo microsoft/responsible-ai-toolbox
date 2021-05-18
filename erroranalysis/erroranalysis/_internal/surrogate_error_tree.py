@@ -189,14 +189,18 @@ def node_to_json(df, tree, nodeid, categories, json,
                 arg = [float(i) for i in parent_threshold.split('||')]
                 categorical_values = categories[0]
                 categorical_indexes = categories[1]
+                thresholds = []
                 catcoli = categorical_indexes.index(parent[SPLIT_FEATURE])
                 catvals = categorical_values[catcoli]
-                thresholds = [str(catvals[int(argi)]) for argi in arg]
+                for argi in arg:
+                    encoded_val = catvals[int(argi)]
+                    thresholds.append(encoded_val)
                 threshold_str = " | ".join(thresholds)
                 condition = "{} == {}".format(p_node_name,
                                               threshold_str)
-                query = ["`" + p_node_name + "` == " +
-                         str(argi) for argi in arg]
+                query = []
+                for argi in arg:
+                    query.append("`" + p_node_name + "` == " + str(argi))
                 df = df.query(" | ".join(query))
         elif side == TreeSide.LEFT_CHILD:
             if parent_decision_type == '<=':
@@ -211,9 +215,12 @@ def node_to_json(df, tree, nodeid, categories, json,
                 arg = [float(i) for i in parent_threshold.split('||')]
                 categorical_values = categories[0]
                 categorical_indexes = categories[1]
+                thresholds = []
                 catcoli = categorical_indexes.index(parent[SPLIT_FEATURE])
                 catvals = categorical_values[catcoli]
-                thresholds = [str(catvals[int(argi)]) for argi in arg]
+                for argi in arg:
+                    encoded_val = catvals[int(argi)]
+                    thresholds.append(encoded_val)
                 threshold_str = " | ".join(thresholds)
                 condition = "{} != {}".format(p_node_name,
                                               threshold_str)
