@@ -19,8 +19,8 @@ jobs:
           - packageDirectory: "wrapped-flask"
             operatingSystem: ubuntu-latest
           # temperately disabled related to an shap issue
-          - packageDirectory: "raiwidgets"
-            pythonVersion: 3.6
+          # - packageDirectory: "raiwidgets"
+          #   pythonVersion: 3.6
           - packageDirectory: "wrapped-flask"
             operatingSystem: macos-latest
             pythonVersion: 3.7
