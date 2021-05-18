@@ -41,7 +41,7 @@ class TestModelAnalysis(object):
         manager_args = {DESIRED_CLASS: 0}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, [],
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
@@ -58,7 +58,7 @@ class TestModelAnalysis(object):
         manager_args = {DESIRED_CLASS: 'opposite'}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, [],
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
@@ -74,7 +74,7 @@ class TestModelAnalysis(object):
         manager_args = None
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, [],
                                manager_type, manager_args,
                                classes=classes)
 
@@ -91,12 +91,13 @@ class TestModelAnalysis(object):
         manager_args = {DESIRED_RANGE: [10, 20]}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, ['RM'],
                                manager_type, manager_args)
 
 
 def run_model_analysis(model, x_train, x_test, target_column,
-                       manager_type, manager_args=None, classes=None):
+                       categorical_features, manager_type,
+                       manager_args=None, classes=None):
     if classes is not None:
         task_type = ModelTask.CLASSIFICATION
     else:
@@ -104,7 +105,7 @@ def run_model_analysis(model, x_train, x_test, target_column,
     if manager_type == ManagerNames.COUNTERFACTUAL:
         x_test = x_test[0:1]
     model_analysis = ModelAnalysis(model, x_train, x_test, target_column,
-                                   task_type=task_type)
+                                   categorical_features=categorical_features, task_type=task_type)
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(model_analysis)
     if manager_type == ManagerNames.ERROR_ANALYSIS:
