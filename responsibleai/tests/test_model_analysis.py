@@ -105,7 +105,8 @@ def run_model_analysis(model, x_train, x_test, target_column,
     if manager_type == ManagerNames.COUNTERFACTUAL:
         x_test = x_test[0:1]
     model_analysis = ModelAnalysis(model, x_train, x_test, target_column,
-                                   categorical_features=categorical_features, task_type=task_type)
+                                   categorical_features=categorical_features,
+                                   task_type=task_type)
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(model_analysis)
     if manager_type == ManagerNames.ERROR_ANALYSIS:
