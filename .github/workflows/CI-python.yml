@@ -10,13 +10,17 @@ jobs:
   ci-python:
     strategy:
       matrix:
-        packageDirectory: ["responsibleai", "wrapped-flask", "erroranalysis"]
+        packageDirectory:
+          ["raiwidgets", "responsibleai", "wrapped-flask", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
           # segfaults in wrapped-flask tests in most OS-Python version combinations
           - packageDirectory: "wrapped-flask"
             operatingSystem: ubuntu-latest
+          # temperately disabled related to an shap issue
+          - packageDirectory: "raiwidgets"
+            pythonVersion: 3.6
           - packageDirectory: "wrapped-flask"
             operatingSystem: macos-latest
             pythonVersion: 3.7
