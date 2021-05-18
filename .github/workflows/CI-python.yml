@@ -39,15 +39,11 @@ jobs:
         name: Use Homebrew to install libomp on MacOS for lightgbm
         run: brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
 
-      - name: Upgrade pi
-        run: |
-          python -m pip install --upgrade pip
-
       - name: Install dependencies
         run: |
-          pip install -r requirements-dev.txt
-          pip install .
-        working-directory: ${{ matrix.packageDirectory }}
+          python -m pip install --upgrade pip
+          pip install -r ${{ matrix.packageDirectory }}/requirements-dev.txt
+          pip install ${{ matrix.packageDirectory }}/
 
       - name: flake8
         run: flake8
