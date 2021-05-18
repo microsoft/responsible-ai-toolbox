@@ -82,8 +82,6 @@ class ErrorAnalysisDashboardInput:
             model.predict_proba is not None
         self._dataframeColumns = None
         self.dashboard_input = {}
-        local_url = ExplanationDashboardInterface.LOCAL_URL
-        self.dashboard_input[local_url] = self._service.env.base_url
         has_explanation = explanation is not None
         feature_length = None
 
