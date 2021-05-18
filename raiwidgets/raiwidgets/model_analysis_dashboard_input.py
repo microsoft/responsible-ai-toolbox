@@ -40,11 +40,13 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input.modelExplanationData = [
             self._get_interpret(i) for i in self._analysis.explainer.get()]
         self.dashboard_input.errorAnalysisConfig = [
-            self._get_error_analysis(i) for i in self._analysis.error_analysis.list()["reports"]]
+            self._get_error_analysis(i)
+            for i in self._analysis.error_analysis.list()["reports"]]
         x_test = analysis.test.drop(columns=[analysis.target_column])
         y_test = analysis.test[analysis.target_column]
         self._error_analyzer = ModelAnalyzer(model, x_test,
-                                             y_test, x_test.columns.values.tolist(),
+                                             y_test,
+                                             x_test.columns.values.tolist(),
                                              analysis.categorical_features)
 
     def on_predict(self, data):
@@ -157,7 +159,8 @@ class ModelAnalysisDashboardInput:
                     "Model prediction output of unsupported type,"
                     "inner error: {}".format(ex_str))
         if predicted_y is not None:
-            if(self._analysis.task_type == "classification" and dashboard_dataset.classNames is not None):
+            if(self._analysis.task_type == "classification" and
+                    dashboard_dataset.classNames is not None):
                 predicted_y = [dashboard_dataset.classNames.index(
                     y) for y in predicted_y]
             dashboard_dataset.predictedY = predicted_y
@@ -181,7 +184,8 @@ class ModelAnalysisDashboardInput:
         true_y = self._analysis.test[self._analysis.target_column]
 
         if true_y is not None and len(true_y) == row_length:
-            if(self._analysis.task_type == "classification" and dashboard_dataset.classNames is not None):
+            if(self._analysis.task_type == "classification" and
+               dashboard_dataset.classNames is not None):
                 true_y = [dashboard_dataset.classNames.index(
                     y) for y in true_y]
             dashboard_dataset.trueY = self._convert_to_list(true_y)
@@ -196,8 +200,10 @@ class ModelAnalysisDashboardInput:
                                  " from local explanations dimension")
             dashboard_dataset.featureNames = features
 
-        if self._analysis.model is not None and hasattr(self._analysis.model, SKLearn.PREDICT_PROBA) \
-                and self._analysis.model.predict_proba is not None and dataset is not None:
+        if (self._analysis.model is not None and
+                hasattr(self._analysis.model, SKLearn.PREDICT_PROBA) and
+                self._analysis.model.predict_proba is not None and
+                dataset is not None):
             try:
                 probability_y = self._analysis.model.predict_proba(dataset)
             except Exception as ex:
