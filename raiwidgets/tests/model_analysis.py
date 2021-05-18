@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
 from raiwidgets import ModelAnalysisDashboard
 from responsibleai import ModelAnalysis
 import sklearn
