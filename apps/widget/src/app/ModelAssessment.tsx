@@ -51,9 +51,6 @@ export class ModelAssessment extends React.Component {
         localUrl={config.baseUrl}
         locale={config.locale}
         theme={undefined}
-        supportedBinaryClassificationPerformanceKeys={[]}
-        supportedRegressionPerformanceKeys={[]}
-        supportedProbabilityPerformanceKeys={[]}
       />
     );
   }

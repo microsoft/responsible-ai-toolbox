@@ -19,12 +19,7 @@ import {
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator
 } from "../error-analysis/utils";
-import {
-  generateRandomMetrics,
-  supportedBinaryClassificationPerformanceKeys,
-  supportedProbabilityPerformanceKeys,
-  supportedRegressionPerformanceKeys
-} from "../fairness/utils";
+import { generateRandomMetrics } from "../fairness/utils";
 
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
@@ -67,9 +62,6 @@ export class App extends React.Component<IAppProps> {
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
       stringParams: { contextualHelp: this.messages },
-      supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys,
       theme: this.props.theme
     };
 

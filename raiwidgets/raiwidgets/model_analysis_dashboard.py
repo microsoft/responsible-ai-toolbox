@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-"""Defines the Explanation dashboard class."""
+"""Defines the Model Analysis Dashboard class."""
 
 from .model_analysis_dashboard_input import ModelAnalysisDashboardInput
 from .dashboard import Dashboard

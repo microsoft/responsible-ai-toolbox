@@ -54,8 +54,4 @@ export interface IModelAssessmentDashboardProps
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;
-
-  supportedBinaryClassificationPerformanceKeys: string[];
-  supportedRegressionPerformanceKeys: string[];
-  supportedProbabilityPerformanceKeys: string[];
 }
