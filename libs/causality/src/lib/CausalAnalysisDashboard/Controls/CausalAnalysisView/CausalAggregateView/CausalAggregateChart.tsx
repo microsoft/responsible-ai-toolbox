@@ -34,7 +34,7 @@ export class CausalAggregateChart extends React.PureComponent<
       <Stack horizontal verticalFill className={styles.container}>
         <Stack.Item grow className={styles.leftPane}>
           <AccessibleChart
-            plotlyProps={this.generateCasualAggregatePlotlyProps()}
+            plotlyProps={this.generateCausalAggregatePlotlyProps()}
             theme={getTheme()}
           />
         </Stack.Item>
@@ -62,7 +62,7 @@ export class CausalAggregateChart extends React.PureComponent<
       this.forceUpdate();
     }
   }
-  private generateCasualAggregatePlotlyProps(): IPlotlyProperty {
+  private generateCausalAggregatePlotlyProps(): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(basePlotlyProperties);
     plotlyProps.data = [
       {

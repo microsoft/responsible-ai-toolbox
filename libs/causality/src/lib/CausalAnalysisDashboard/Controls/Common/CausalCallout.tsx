@@ -78,9 +78,9 @@ export class CausalCallout extends React.Component<
         marginBottom: 12
       }
     });
-    const buttonId = "casualCalloutBtn";
-    const labelId = "casualCalloutLabel";
-    const descriptionId = "casualCalloutDesp";
+    const buttonId = "causalCalloutBtn";
+    const labelId = "causalCalloutLabel";
+    const descriptionId = "causalCalloutDesp";
     return (
       <>
         <Stack horizontal>

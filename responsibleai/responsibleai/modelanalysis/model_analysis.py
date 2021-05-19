@@ -56,7 +56,8 @@ class ModelAnalysis(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, serializer=None):
+                 task_type, categorical_features, train_labels=None,
+                 serializer=None):
         """Defines the top-level Model Analysis API.
 
         Use ModelAnalysis to analyze errors, explain the most important
@@ -73,15 +74,20 @@ class ModelAnalysis(object):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
+        :param train_labels: The class labels in the training dataset
+        :type train_labels: ndarray
         """
         self.model = model
         self.train = train
         self.test = test
         self.target_column = target_column
         self.task_type = task_type
+        self.categorical_features = categorical_features
         self._serializer = serializer
         self._causal_manager = CausalManager()
         self._counterfactual_manager = CounterfactualManager(
@@ -90,7 +96,10 @@ class ModelAnalysis(object):
         self._error_analysis_manager = ErrorAnalysisManager(model,
                                                             train,
                                                             target_column)
-        self._classes = train[target_column].unique()
+        if train_labels is None:
+            self._classes = train[target_column].unique()
+        else:
+            self._classes = train_labels
         self._explainer_manager = ExplainerManager(model, train, test,
                                                    target_column,
                                                    self._classes)
@@ -149,6 +158,18 @@ class ModelAnalysis(object):
         configs = {}
         for manager in self._managers:
             configs[manager.name] = manager.list()
+        return configs
+
+    def get(self):
+        """List information about each of the managers.
+
+        :return: Information about each of the managers.
+        :rtype: dict
+        """
+        configs = {}
+        for manager in self._managers:
+            configs[manager.name] = manager.get()
+        return configs
 
     def _write_to_file(self, file_path, content):
         """Save the string content to the given file path.

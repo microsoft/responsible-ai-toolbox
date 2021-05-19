@@ -9,7 +9,9 @@ import {
   CohortStats,
   ErrorCohort,
   ExpandableText,
-  getRandomId
+  getRandomId,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Property } from "csstype";
@@ -91,6 +93,10 @@ export class TreeViewRenderer extends React.PureComponent<
   ITreeViewRendererProps,
   ITreeViewRendererState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
   public constructor(props: ITreeViewRendererProps) {
     super(props);
     // Note: we take state from props in case
@@ -621,7 +627,9 @@ export class TreeViewRenderer extends React.PureComponent<
         [
           this.props.selectedFeatures,
           filtersRelabeled,
-          compositeFiltersRelabeled
+          compositeFiltersRelabeled,
+          this.context.errorAnalysisConfig?.maxDepth,
+          this.context.errorAnalysisConfig?.numLeaves
         ],
         new AbortController().signal
       )

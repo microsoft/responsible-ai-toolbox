@@ -8,7 +8,7 @@ import json
 import os
 from html.parser import HTMLParser
 import uuid
-from .explanation_constants import ExplanationDashboardInterface
+from ._input_processing import _safe_object_serializer
 
 
 class InLineScript(HTMLParser):
@@ -45,9 +45,9 @@ class Dashboard(object):
     def __init__(self, *,
                  dashboard_type,
                  model_data,
-                 public_ip=None,
-                 port=None,
-                 add_local_url=False):
+                 public_ip,
+                 port,
+                 locale):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
@@ -65,11 +65,9 @@ class Dashboard(object):
             'dashboardType': dashboard_type,
             'id': self.id,
             'baseUrl': self._service.env.base_url,
-            'withCredentials': self._service.with_credentials
+            'withCredentials': self._service.with_credentials,
+            'locale': locale
         }
-        if add_local_url:
-            local_url = ExplanationDashboardInterface.LOCAL_URL
-            model_data[local_url] = self._service.env.base_url
         self.model_data = model_data
         self.add_route()
 
@@ -106,7 +104,9 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_config__", json.dumps(self.config))
             content = content.replace(
-                "__rai_model_data__", json.dumps(self.model_data))
+                "__rai_model_data__",
+                json.dumps(self.model_data,
+                           default=_safe_object_serializer))
             return content
 
     def add_url_rule(self, func, route, methods):

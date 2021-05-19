@@ -9,7 +9,7 @@ import {
   IStyle
 } from "office-ui-fabric-react";
 
-export interface ICasualIndividualChartStyles {
+export interface ICausalIndividualChartStyles {
   page: IStyle;
   blackIcon: IStyle;
   expandedPanel: IStyle;
@@ -76,11 +76,11 @@ export interface ICasualIndividualChartStyles {
 }
 
 export const causalIndividualChartStyles: () => IProcessedStyleSet<
-  ICasualIndividualChartStyles
+  ICausalIndividualChartStyles
 > = () => {
   const legendWidth = "160px";
   const theme = getTheme();
-  return mergeStyleSets<ICasualIndividualChartStyles>({
+  return mergeStyleSets<ICausalIndividualChartStyles>({
     blackIcon: {
       color: theme.semanticColors.bodyText
     },

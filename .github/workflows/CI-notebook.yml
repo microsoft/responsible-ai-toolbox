@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        pythonVersion: [3.6, 3.7]
+        pythonVersion: [3.6, 3.7, 3.8]
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -36,8 +36,16 @@ jobs:
           pip install --upgrade interpret-community
           pip install --upgrade fairlearn
           pip install wrapped-flask/.
-          pip install -r raiwidgets/requirements-dev.txt
-          pip install raiwidgets/.
+          cd raiwidgets
+          pip install -r requirements-dev.txt
+          pip install .
 
       - name: Run notebook tests
         run: python -m pytest notebooks
+
+      - name: Upload notebook test result
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: notebook-test-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
+          path: notebooks
