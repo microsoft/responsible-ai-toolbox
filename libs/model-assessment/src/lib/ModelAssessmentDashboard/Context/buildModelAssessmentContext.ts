@@ -144,7 +144,9 @@ export function buildInitialModelAssessmentContext(
     treeViewState: createInitialTreeViewState(),
     weightVectorLabels,
     weightVectorOptions,
-    whatIfChartConfig: undefined
+    whatIfChartConfig: undefined,
+    createCohortVisible: false,
+    shiftCohortVisible: false
   };
 }
 

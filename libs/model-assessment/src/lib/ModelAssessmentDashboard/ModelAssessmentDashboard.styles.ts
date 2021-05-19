@@ -17,6 +17,6 @@ export const modelAssessmentDashboardStyles = mergeStyleSets<
     width: "100%"
   },
   section: {
-    textAlign: "center"
+    textAlign: "left"
   }
 });
