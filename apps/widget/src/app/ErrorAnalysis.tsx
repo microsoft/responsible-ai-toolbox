@@ -52,8 +52,8 @@ export class ErrorAnalysis extends React.Component {
         requestDebugML={requestDebugMLMethod}
         requestMatrix={requestMatrixMethod}
         requestImportances={requestImportancesMethod}
-        localUrl={modelData.localUrl}
-        locale={modelData.locale}
+        localUrl={config.baseUrl}
+        locale={config.locale}
         features={modelData.featureNames}
       />
     );
