@@ -235,7 +235,6 @@ export class FeatureImportanceBar extends React.PureComponent<
             (index) => series.unsortedIndividualY?.[index] || []
           )
         );
-        console.log(x, y);
         baseSeries.data.push({
           boxmean: true,
           marker: {

@@ -4,22 +4,25 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  IMetricRequest,
-  IMetricResponse,
-  ICohortBasedComponentProps,
   ITelemetryMessage,
+  IDataset,
+  IErrorAnalysisConfig,
   ICausalAnalysisData
 } from "@responsible-ai/core-ui";
 import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
 
+export interface IModelAssessmentData {
+  dataset: IDataset;
+  modelExplanationData?: IModelExplanationData[];
+  causalAnalysisData?: ICausalAnalysisData[];
+  errorAnalysisConfig?: IErrorAnalysisConfig[];
+}
+
 export interface IModelAssessmentDashboardProps
   extends IOfficeFabricProps,
-    ICohortBasedComponentProps {
+    IModelAssessmentData {
   locale?: string;
   stringParams?: IStringsParam;
-
-  modelExplanationData: IModelExplanationData;
-  causalAnalysisData: ICausalAnalysisData;
 
   requestPredictions?: (
     request: any[],
@@ -39,18 +42,10 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
-  requestMetrics?: (
-    request: IMetricRequest,
-    abortSignal?: AbortSignal
-  ) => Promise<IMetricResponse>;
   localUrl: string;
 
   telemetryHook?: (message: ITelemetryMessage) => void;
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;
-
-  supportedBinaryClassificationPerformanceKeys: string[];
-  supportedRegressionPerformanceKeys: string[];
-  supportedProbabilityPerformanceKeys: string[];
 }

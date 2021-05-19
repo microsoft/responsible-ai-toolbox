@@ -4,11 +4,9 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData,
-  IModelExplanationData,
-  IDataset,
-  ICausalAnalysisData
+  IFairnessData
 } from "@responsible-ai/core-ui";
+import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
@@ -53,10 +51,7 @@ export interface IErrorAnalysisDataSet {
   classDimension?: 1 | 2 | 3;
 }
 
-export interface IModelAssessmentDataSet {
-  causalAnalysisData: ICausalAnalysisData;
-  dataset: IDataset;
-  modelExplanationData: IModelExplanationData;
+export interface IModelAssessmentDataSet extends IModelAssessmentData {
   classDimension?: 1 | 2 | 3;
 }
 
@@ -102,7 +97,7 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
       breastCancerData: { classDimension: 2, data: breastCancerData }
     },
-    versions: { "Live-Debug": 3, "Static-View": 2, "Version-1": 1 }
+    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
   },
   fairness: {
     datasets: {
@@ -142,11 +137,11 @@ export const applications: IApplications = <const>{
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
-        causalAnalysisData: adultCensusCausalAnalysisData,
+        causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
         dataset: adultCensusWithFairnessDataset,
-        modelExplanationData: adultCensusWithFairnessModelExplanationData
-      }
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet
     },
     versions: { "Version-1": 1 }
   }

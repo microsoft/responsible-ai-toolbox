@@ -593,9 +593,10 @@
       "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
       "unconfounding": "What are unconfounding variables?",
       "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning",
       "continuous": "Continuouts treatment variables: ",
       "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
+      "here": "here",
       "binary": "Binary treatment variables: ",
       "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
     },
@@ -610,6 +611,15 @@
       "currentTreatment": "Current treatment value",
       "setNewTreatment": "Set new treatment value"
     }
+  },
+  "Counterfactuals": {
+    "header": "What-If analysis",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "showOnly": "Show only",
+    "selectedDatapoint": "Selected datapoint",
+    "desiredClass": "Desired class for counterfactual(s)",
+    "currentClass": "Current class",
+    "createCounterfactual": "Create what-if counterfactual"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",
@@ -1017,7 +1027,7 @@
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
       "AddButtonText": "Add"
     },
-    "CasualAnalysis": {
+    "CausalAnalysis": {
       "Table": {
         "name": "feature",
         "point": "point",

@@ -93,9 +93,10 @@ export class NewExplanationDashboard extends React.PureComponent<
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
           jointDataset: this.state.jointDataset,
-          modelExplanationData: {} as IModelExplanationData,
+          modelExplanationData: {
+            precomputedExplanations: this.props.precomputedExplanations
+          } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
