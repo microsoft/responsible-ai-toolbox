@@ -10,6 +10,231 @@
     <Disp Icon="Expand" Expand="true" Disp="true" LocTbl="false" />
     <Item ItemId=";Strings" ItemType="0" PsrId="306" Leaf="false">
       <Disp Icon="Str" Disp="true" LocTbl="false" />
+      <Item ItemId=";CausalAnalysis.AggregateView.binary" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Binary treatment variables: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Variáveis binárias de tratamento: ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.binaryDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[On average in this sample, turing on this feature will cause the outcome to increase by X units]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Em média, nesta amostra, a duração deste recurso fará com que o resultado aumente em X unidades.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.confoundingFeature" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um recurso confuso está correlacionado tanto com o motivador causal quanto com o resultado do interesse. O fundador cria um caminho de correlação extra desde o motivador causal até o resultado em cima do efeito causal direto. A menos que os recursos confusos sejam medidos e incluídos no modelo, essas correlações extras podem fazer estimativas parciais do efeito causal. O desvio pode ser positivo ou negativo, dependendo das direções das correlações entre os confundidores omitidos, os motivadores causais e os resultados.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.continuous" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Continuouts treatment variables: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Variáveis contínuas de tratamento: ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.continuousDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Em média nesta amostra, o aumento deste recurso em 1 unidade fará com que o resultado aumente em X unidades]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A análise causal responde 'e se' perguntas sobre como os resultados do mundo real teriam sido alterados se alguém tivesse se comportado de maneira diferente, como a busca de uma estratégia de preço diferente para um produto ou um tratamento alternativo para um paciente. Ao contrário das previsões de modelos que identificam padrões de correlação importantes, estas ferramentas ajudam você a identificar as características causais mais importantes que afetam diretamente seu resultado de interesse. Estes modelos identificam o efeito causal de um recurso, mantendo constantes outros recursos confusos. Para um bom desempenho, certifique-se de incluir um amplo conjunto de recursos que possam se correlacionar com o resultado como confundidores.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.directAggregate" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Direct aggregate causal effect of each treatment with 95% confidence interval]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Efeito causal direto agregado de cada tratamento com intervalo de confiança de 95%.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.lasso" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A lasso was fit to predict y from X[-i]5D;, and a lasso was fit to predict X[i]5D; from X[-i]5D;. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uma ferramenta laço era adequado para prever y de X[-i]5D;, e uma ferramenta laço era adequado para prever X[i]5D; de X[-i]5D;. O efeito causal pode ser visto como a correlação das variações residuais/explicadas das duas tarefas de previsão. Saiba mais sobre a Dupla Machine Learning aqui]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.unconfounding" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What are unconfounding variables?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O que são variáveis inconfundíveis?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.currentTreatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Current treatment value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Valor atual do tratamento]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.dataRequired" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This tab requires a datapoint be selected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Esta guia requer que seja selecionado um DataPoint.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.datapointIndex" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Datapoint index]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Índice DataPoint]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Os efeitos causais individuais podem informar intervenções direcionadas ou personalizadas, tais como uma promoção direcionada aos clientes ou um plano de tratamento individualizado. Como um indivíduo com um conjunto particular de recursos responderá a uma alteração em um motivador causal? Estes gráficos mostram a alteração insignificante em um resultado quando cada motivador causal é alterado. A ferramenta causal do tipo "e se" calcula os resultados do mundo real contrafactual para um indivíduo em particular, se você mudar seus motivadores. Para esta ferramenta, você precisa especificar o resultado atual e a opção de tratamento atual para uma observação, e então especificar o tratamento contrafactual que você gostaria de explorar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.directIndividual" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Direct individual causal effect of each treatment with 95% confidence interval]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Efeito causal individual direto de cada tratamento com intervalo de confiança de 95%.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.index" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Datapoint index]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Índice DataPoint]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.missingParameters" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This tab requires an evaluation dataset be supplied.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Esta guia requer que um conjunto de dados de avaliação seja fornecido.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.selectTreatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select treatment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Selecionar o tratamento]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.setNewTreatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Set new treatment value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Definir novo tratamento de valor]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.aggregate" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Aggregate causal effects]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Efeitos causais agregados]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.header" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[causal analysis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[análise de causa]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.individual" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Individual causal effects]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Efeitos causais individuais]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.learnMore" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Learn more]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Saiba mais]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Direct causal effect of each feature with 90% confidence interval]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Efeito causal direto de cada recurso com intervalo de confiança de 90%.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.treatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Treatment policy]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Política de tratamento]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.MainMenu.why" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Why must causal insights assume unconfoundedness?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Por que os insights causais devem assumir inconfundíveis?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Core.ExpandableText.SeeLess" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[See less]]></Val>
@@ -5604,6 +5829,69 @@
           <Val><![CDATA[Add component]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Adicionar um componente]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.ciLower" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ci_lower]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ci_lower]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.ciUpper" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ci_upper]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ci_upper]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[feature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[recurso]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.pValue" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[p_value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[p_value]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.point" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[point]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ponto]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.stderr" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[stderr]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[stderr]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.zstat" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[zstat]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[zstat]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
