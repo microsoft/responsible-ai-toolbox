@@ -35,49 +35,49 @@ export class CausalAggregateTable extends React.PureComponent<
         key: "name",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.name
+        name: localization.ModelAssessment.CausalAnalysis.Table.name
       },
       {
         fieldName: "point",
         key: "point",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.point
+        name: localization.ModelAssessment.CausalAnalysis.Table.point
       },
       {
         fieldName: "stderr",
         key: "stderr",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.stderr
+        name: localization.ModelAssessment.CausalAnalysis.Table.stderr
       },
       {
         fieldName: "zstat",
         key: "zstat",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.zstat
+        name: localization.ModelAssessment.CausalAnalysis.Table.zstat
       },
       {
         fieldName: "pValue",
         key: "pValue",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.pValue
+        name: localization.ModelAssessment.CausalAnalysis.Table.pValue
       },
       {
         fieldName: "ciLower",
         key: "ciLower",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.ciLower
+        name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
         fieldName: "ciUpper",
         key: "ciUpper",
         maxWidth: 75,
         minWidth: 50,
-        name: localization.ModelAssessment.CasualAnalysis.Table.ciUpper
+        name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
     const items = this.getItems(columns);

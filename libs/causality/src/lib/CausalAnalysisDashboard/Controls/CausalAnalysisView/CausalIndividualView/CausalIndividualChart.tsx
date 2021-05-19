@@ -137,7 +137,7 @@ export class CausalIndividualChart extends React.PureComponent<
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     return (
-      <div className={classNames.topArea} id={"CasualIndividualContainer"}>
+      <div className={classNames.topArea} id={"CausalIndividualContainer"}>
         <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog

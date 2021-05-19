@@ -63,14 +63,19 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       <ModelAssessmentContext.Provider
         value={{
           baseErrorCohort: this.state.baseCohort,
-          causalAnalysisData: this.props.causalAnalysisData,
+          causalAnalysisData: this.props.causalAnalysisData?.[0],
           dataset: this.props.dataset,
+          errorAnalysisConfig: this.props.errorAnalysisConfig?.[0],
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
-          modelExplanationData: this.props.modelExplanationData,
+          modelExplanationData: this.props.modelExplanationData?.[0]
+            ? {
+                ...this.props.modelExplanationData?.[0],
+                predictedY: this.props.dataset.predictedY,
+                probabilityY: this.props.dataset.probabilityY
+              }
+            : undefined,
           modelMetadata: this.state.modelMetadata,
-          precomputedExplanations: this.props.modelExplanationData
-            .precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
@@ -105,79 +110,81 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   key={i}
                   className={modelAssessmentDashboardStyles.section}
                 >
-                  {t.key === GlobalTabKeys.ErrorAnalysisTab && (
-                    <ErrorAnalysisViewTab
-                      messages={
-                        this.props.stringParams
-                          ? this.props.stringParams.contextualHelp
-                          : undefined
-                      }
-                      getTreeNodes={this.props.requestDebugML}
-                      getMatrix={this.props.requestMatrix}
-                      updateSelectedCohort={this.updateSelectedCohort}
-                      features={this.props.dataset.featureNames}
-                      selectedFeatures={this.state.selectedFeatures}
-                      errorAnalysisOption={this.state.errorAnalysisOption}
-                      selectedCohort={this.state.selectedCohort}
-                      baseCohort={this.state.baseCohort}
-                      treeViewState={this.state.treeViewState}
-                      setTreeViewState={(
-                        treeViewState: ITreeViewRendererState
-                      ): void => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
-                          this.setState({ treeViewState });
+                  {t.key === GlobalTabKeys.ErrorAnalysisTab &&
+                    this.props.errorAnalysisConfig?.[0] && (
+                      <ErrorAnalysisViewTab
+                        messages={
+                          this.props.stringParams
+                            ? this.props.stringParams.contextualHelp
+                            : undefined
                         }
-                      }}
-                      matrixAreaState={this.state.matrixAreaState}
-                      matrixFilterState={this.state.matrixFilterState}
-                      setMatrixAreaState={(
-                        matrixAreaState: IMatrixAreaState
-                      ): void => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
-                          this.setState({ matrixAreaState });
+                        getTreeNodes={this.props.requestDebugML}
+                        getMatrix={this.props.requestMatrix}
+                        updateSelectedCohort={this.updateSelectedCohort}
+                        features={this.props.dataset.featureNames}
+                        selectedFeatures={this.state.selectedFeatures}
+                        errorAnalysisOption={this.state.errorAnalysisOption}
+                        selectedCohort={this.state.selectedCohort}
+                        baseCohort={this.state.baseCohort}
+                        treeViewState={this.state.treeViewState}
+                        setTreeViewState={(
+                          treeViewState: ITreeViewRendererState
+                        ): void => {
+                          if (
+                            this.state.selectedCohort !== this.state.baseCohort
+                          ) {
+                            this.setState({ treeViewState });
+                          }
+                        }}
+                        matrixAreaState={this.state.matrixAreaState}
+                        matrixFilterState={this.state.matrixFilterState}
+                        setMatrixAreaState={(
+                          matrixAreaState: IMatrixAreaState
+                        ): void => {
+                          if (
+                            this.state.selectedCohort !== this.state.baseCohort
+                          ) {
+                            this.setState({ matrixAreaState });
+                          }
+                        }}
+                        setMatrixFilterState={(
+                          matrixFilterState: IMatrixFilterState
+                        ): void => {
+                          if (
+                            this.state.selectedCohort !== this.state.baseCohort
+                          ) {
+                            this.setState({ matrixFilterState });
+                          }
+                        }}
+                        stringParams={this.props.stringParams}
+                        selectFeatures={(features: string[]): void =>
+                          this.setState({ selectedFeatures: features })
                         }
-                      }}
-                      setMatrixFilterState={(
-                        matrixFilterState: IMatrixFilterState
-                      ): void => {
-                        if (
-                          this.state.selectedCohort !== this.state.baseCohort
-                        ) {
-                          this.setState({ matrixFilterState });
-                        }
-                      }}
-                      stringParams={this.props.stringParams}
-                      selectFeatures={(features: string[]): void =>
-                        this.setState({ selectedFeatures: features })
-                      }
-                      importances={this.state.importances}
-                    />
-                  )}
+                        importances={this.state.importances}
+                      />
+                    )}
                   {t.key === GlobalTabKeys.ModelStatisticsTab && (
                     <ModelPerformanceTab />
                   )}
                   {t.key === GlobalTabKeys.DataExplorerTab && (
                     <DatasetExplorerTab showCohortSelection={false} />
                   )}
-                  {t.key === GlobalTabKeys.GlobalExplanationTab && (
-                    <GlobalExplanationTab
-                      cohorts={this.state.cohorts.map(
-                        (cohort) => cohort.cohort
-                      )}
-                      cohortIDs={cohortIDs}
-                      selectedWeightVector={this.state.selectedWeightVector}
-                      weightOptions={this.state.weightVectorOptions}
-                      weightLabels={this.state.weightVectorLabels}
-                      onWeightChange={this.onWeightVectorChange}
-                      explanationMethod={
-                        this.props.modelExplanationData.explanationMethod
-                      }
-                    />
-                  )}
+                  {t.key === GlobalTabKeys.GlobalExplanationTab &&
+                    this.props.modelExplanationData?.[0] && (
+                      <GlobalExplanationTab
+                        cohorts={this.state.cohorts.map(
+                          (cohort) => cohort.cohort
+                        )}
+                        cohortIDs={cohortIDs}
+                        selectedWeightVector={this.state.selectedWeightVector}
+                        weightOptions={this.state.weightVectorOptions}
+                        weightLabels={this.state.weightVectorLabels}
+                        onWeightChange={this.onWeightVectorChange}
+                        explanationMethod={
+                          this.props.modelExplanationData[0].explanationMethod
+                        }
+                      />
+                    )}
                   {t.key === GlobalTabKeys.LocalExplanationTab && (
                     <InstanceView
                       messages={

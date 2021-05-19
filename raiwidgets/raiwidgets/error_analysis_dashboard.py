@@ -92,14 +92,14 @@ class ErrorAnalysisDashboard(Dashboard):
         """
         self.input = ErrorAnalysisDashboardInput(
             explanation, model, dataset, true_y, classes,
-            features, locale, categorical_features,
+            features, categorical_features,
             true_y_dataset, pred_y)
         super(ErrorAnalysisDashboard, self).__init__(
             dashboard_type="ErrorAnalysis",
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
             port=port,
-            add_local_url=True)
+            locale=locale)
 
         if pred_y is None:
             def predict():

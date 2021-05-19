@@ -2,26 +2,22 @@
 // Licensed under the MIT License.
 
 import {
-  ICausalAnalysisData,
-  IDataset,
-  IMetricRequest,
-  IMetricResponse,
-  IModelExplanationData
-} from "@responsible-ai/core-ui";
-import { ModelAssessmentDashboard } from "@responsible-ai/model-assessment";
+  ModelAssessmentDashboard,
+  IModelAssessmentData
+} from "@responsible-ai/model-assessment";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
 import { config } from "./config";
-import { modelData } from "./modelData";
+import { modelData as modelDataImported } from "./modelData";
 
 export class ModelAssessment extends React.Component {
   public render(): React.ReactNode {
+    const modelData: IModelAssessmentData = modelDataImported;
     let requestPredictionsMethod = undefined;
     let requestMatrixMethod = undefined;
     let requestDebugMLMethod = undefined;
     let requestImportancesMethod = undefined;
-    let requestMetricsMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
@@ -35,56 +31,18 @@ export class ModelAssessment extends React.Component {
       requestImportancesMethod = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/importances");
       };
-      requestMetricsMethod = async (
-        data: IMetricRequest
-      ): Promise<IMetricResponse> => {
-        return callFlaskService(data, "/metrics") as Promise<IMetricResponse>;
-      };
     }
-
-    const dataset: IDataset = {
-      categoricalMap: modelData.categoricalMap,
-      classNames: modelData.classNames,
-      featureNames: modelData.featureNames,
-      features: modelData.features,
-      sensitiveFeatures: modelData.sensitiveFeatures,
-      trueY: modelData.trueY
-    };
-
-    const modelExplanationData: IModelExplanationData = {
-      modelClass: "modelClass" in modelData ? modelData.modelClass : "blackbox",
-      precomputedExplanations: {
-        ebmGlobalExplanation: modelData.ebmData,
-        globalFeatureImportance: modelData.globalExplanation,
-        localFeatureImportance: modelData.localExplanations
-      },
-      predictedY: modelData.predictedY,
-      probabilityY: modelData.probabilityY
-    };
-
-    const causalAnalysisData: ICausalAnalysisData = {
-      global: modelData.globalCasualAnalysis,
-      local: modelData.localCasualAnalysis
-    };
 
     return (
       <ModelAssessmentDashboard
-        causalAnalysisData={causalAnalysisData}
-        dataset={dataset}
-        modelExplanationData={modelExplanationData}
+        {...modelData}
         requestPredictions={requestPredictionsMethod}
         requestDebugML={requestDebugMLMethod}
         requestMatrix={requestMatrixMethod}
-        requestMetrics={requestMetricsMethod}
         requestImportances={requestImportancesMethod}
-        localUrl={modelData.localUrl}
-        locale={modelData.locale}
-        theme={modelData.theme}
-        supportedBinaryClassificationPerformanceKeys={
-          modelData.classification_methods
-        }
-        supportedRegressionPerformanceKeys={modelData.regression_methods}
-        supportedProbabilityPerformanceKeys={modelData.probability_methods}
+        localUrl={config.baseUrl}
+        locale={config.locale}
+        theme={undefined}
       />
     );
   }

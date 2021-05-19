@@ -11,7 +11,7 @@ import { Text, Pivot, PivotItem, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { CausalAnalysisOptions } from "./CausalAnalysisEnums";
-import { CausalAnalysisView } from "./Controls/CasualAnalysisView/CausalAnalysisView";
+import { CausalAnalysisView } from "./Controls/CausalAnalysisView/CausalAnalysisView";
 
 export interface ICausalInsightsTabProps {
   data: ICausalAnalysisData;
