@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   getTheme,
@@ -11,12 +10,8 @@ import {
 
 export interface ICounterfactualChartStyles {
   page: IStyle;
-  blackIcon: IStyle;
-  expandedPanel: IStyle;
-  expandedInPanel: IStyle;
   parameterList: IStyle;
   featureList: IStyle;
-  collapsedPanel: IStyle;
   mainArea: IStyle;
   infoIcon: IStyle;
   helperText: IStyle;
@@ -26,10 +21,8 @@ export interface ICounterfactualChartStyles {
   legendAndText: IStyle;
   cohortPickerWrapper: IStyle;
   cohortPickerLabel: IStyle;
-  boldText: IStyle;
   chartWithAxes: IStyle;
   chartWithVertical: IStyle;
-  createBtn: IStyle;
   verticalAxis: IStyle;
   rotatedVerticalBox: IStyle;
   horizontalAxisWithPadding: IStyle;
@@ -49,8 +42,6 @@ export interface ICounterfactualChartStyles {
   panelIconAndLabel: IStyle;
   predictedBlock: IStyle;
   upperWhatIfPanel: IStyle;
-  saveButton: IStyle;
-  customPredictBlock: IStyle;
   featureSearch: IStyle;
   iceFeatureSelection: IStyle;
   iceClassSelection: IStyle;
@@ -65,12 +56,6 @@ export interface ICounterfactualChartStyles {
   tooltipWrapper: IStyle;
   multiclassWeightLabel: IStyle;
   multiclassWeightLabelText: IStyle;
-  calloutWrapper: IStyle;
-  calloutHeader: IStyle;
-  calloutTitle: IStyle;
-  calloutInner: IStyle;
-  calloutActions: IStyle;
-  calloutLink: IStyle;
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
@@ -82,29 +67,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
   const legendWidth = "160px";
   const theme = getTheme();
   return mergeStyleSets<ICounterfactualChartStyles>({
-    blackIcon: {
-      color: theme.semanticColors.bodyText
-    },
-    boldText: {
-      fontWeight: "600",
-      paddingBottom: "5px"
-    },
-    calloutActions: {
-      marginTop: 20,
-      position: "relative",
-      whiteSpace: "nowrap",
-      width: "100%"
-    },
-    calloutHeader: [FabricStyles.calloutHeader],
-    calloutInner: [FabricStyles.calloutInner],
-    calloutLink: [
-      theme.fonts.medium,
-      {
-        color: theme.palette.neutralPrimary
-      }
-    ],
-    calloutTitle: [FabricStyles.calloutTitle],
-    calloutWrapper: [FabricStyles.calloutWrapper],
     chartsArea: {
       flex: 1
     },
@@ -145,39 +107,11 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       paddingLeft: "63px",
       paddingTop: "13px"
     },
-    collapsedPanel: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      boxShadow:
-        "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
-      width: "40px",
-      zIndex: 99999
-    },
-    createBtn: {
-      height: "35px",
-      margin: "auto",
-      padding: "5px"
-    },
-    customPredictBlock: {
-      paddingTop: "5px"
-    },
     disclaimerWrapper: {
       padding: "5px 15px 10px 26px"
     },
     errorText: {
       color: theme.semanticColors.errorText
-    },
-    expandedInPanel: {
-      marginTop: "10px",
-      paddingRight: "40px"
-    },
-    expandedPanel: {
-      backgroundColor: theme.semanticColors.bodyBackground,
-      boxShadow:
-        "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
-      marginTop: "10px",
-      paddingRight: "40px",
-      width: "250px",
-      zIndex: 99999
     },
     featureImportanceArea: {
       width: "100%"
@@ -323,9 +257,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       top: "50%",
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
       width: "max-content"
-    },
-    saveButton: {
-      margin: "0 0 10px 24px"
     },
     sliderLabel: {
       fontWeight: "600",

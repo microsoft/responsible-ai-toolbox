@@ -15,7 +15,6 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  InteractiveLegend,
   rowErrorSize
 } from "@responsible-ai/core-ui";
 import {
@@ -36,11 +35,16 @@ import {
   Text,
   DefaultButton,
   Dropdown,
-  IDropdownOption
+  IDropdownOption,
+  IComboBoxOption,
+  ComboBox,
+  IComboBox,
+  PrimaryButton
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
+import { CounterfactualPanel } from "./CounterfactualPanel";
 export interface ICounterfactualChartProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
@@ -53,7 +57,7 @@ export interface ICounterfactualChartState {
   chartProps?: IGenericChartProps;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
-  showSelectionWarning: boolean;
+  isPanelOpen: boolean;
   customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
   featuresOption: IDropdownOption[];
@@ -63,6 +67,8 @@ export interface ICounterfactualChartState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
+  selectedCounterfactual: string | undefined;
+  currentClass: string | undefined;
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -91,14 +97,16 @@ export class CounterfactualChart extends React.PureComponent<
     super(props);
 
     this.state = {
+      currentClass: "maglinant",
       customPointIsActive: [],
       customPoints: [],
       featuresOption: [],
+      isPanelOpen: false,
       pointIsActive: [],
       request: undefined,
       selectedCohortIndex: 0,
+      selectedCounterfactual: undefined,
       selectedPointsIndexes: [],
-      showSelectionWarning: false,
       sortArray: [],
       sortingSeriesIndex: undefined,
       xDialogOpen: false,
@@ -304,6 +312,10 @@ export class CounterfactualChart extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.mainArea}>
+          <CounterfactualPanel
+            closePanel={this.togglePanel}
+            isPanelOpen={this.state.isPanelOpen}
+          />
           <div className={classNames.chartsArea}>
             {cohortOptions && (
               <div className={classNames.cohortPickerWrapper}>
@@ -426,78 +438,32 @@ export class CounterfactualChart extends React.PureComponent<
                 </div>
               </div>
               <div className={classNames.legendAndText}>
-                <Text
-                  variant={"small"}
-                  block
-                  className={classNames.legendLabel}
-                >
-                  {localization.Counterfactuals.selectedDatapoint}
-                </Text>
-                {this.selectedFeatureImportance.length > 0 && (
-                  <InteractiveLegend
-                    items={this.selectedFeatureImportance.map(
-                      (row, rowIndex) => {
-                        return {
-                          activated: this.state.pointIsActive[rowIndex],
-                          color: FabricStyles.fabricColorPalette[rowIndex],
-                          name: row.name,
-                          onClick: this.toggleActivation.bind(this, rowIndex),
-                          onDelete: this.toggleSelectionOfPoint.bind(
-                            this,
-                            row.id
-                          )
-                        };
-                      }
-                    )}
-                  />
-                )}
-                {this.state.showSelectionWarning && (
-                  <Text variant={"xSmall"} className={classNames.errorText}>
-                    {localization.Interpret.WhatIfTab.selectionLimit}
-                  </Text>
-                )}
-                {this.selectedFeatureImportance.length === 0 && (
-                  <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.Interpret.WhatIfTab.noneSelectedYet}
-                  </Text>
-                )}
-                {this.props.invokeModel && (
-                  <Text
-                    variant={"small"}
-                    block
-                    className={classNames.legendLabel}
-                  >
-                    {localization.Interpret.WhatIfTab.whatIfDatapoints}
-                  </Text>
-                )}
-                {this.state.customPoints.length > 0 && (
-                  <InteractiveLegend
-                    items={this.state.customPoints.map((row, rowIndex) => {
-                      return {
-                        activated: this.state.customPointIsActive[rowIndex],
-                        color:
-                          FabricStyles.fabricColorPalette[
-                            rowIndex + WhatIfConstants.MAX_SELECTION + 1
-                          ],
-                        name: row[WhatIfConstants.namePath],
-                        onClick: this.toggleCustomActivation.bind(
-                          this,
-                          rowIndex
-                        ),
-                        onDelete: this.removeCustomPoint.bind(this, rowIndex),
-                        onEdit: this.setTemporaryPointToCustomPoint.bind(
-                          this,
-                          rowIndex
-                        )
-                      };
-                    })}
-                  />
-                )}
-                {this.state.customPoints.length === 0 && (
-                  <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.Interpret.WhatIfTab.noneCreatedYet}
-                  </Text>
-                )}
+                <ComboBox
+                  label={localization.Counterfactuals.selectedDatapoint}
+                  onChange={this.selectPointFromDropdown}
+                  options={this.getDataOptions()}
+                  selectedKey={"" + this.state.selectedPointsIndexes[0]}
+                  ariaLabel={"datapoint picker"}
+                  useComboBoxAsMenuWidth
+                  styles={FabricStyles.smallDropdownStyle}
+                />
+                <ComboBox
+                  label={localization.Counterfactuals.desiredClass}
+                  onChange={this.selectCounterfactuals}
+                  options={this.getCounterfactualsOptions()}
+                  selectedKey={this.state.selectedCounterfactual}
+                  ariaLabel={"counterfactuals picker"}
+                  useComboBoxAsMenuWidth
+                  styles={FabricStyles.smallDropdownStyle}
+                />
+                <div>
+                  <b>{`${localization.Counterfactuals.currentClass}: `}</b>
+                  {`${this.state.currentClass}`}
+                </div>
+                <PrimaryButton
+                  onClick={this.togglePanel}
+                  text={localization.Counterfactuals.createCounterfactual}
+                />
               </div>
             </div>
             <LocalImportancePlots
@@ -540,8 +506,7 @@ export class CounterfactualChart extends React.PureComponent<
     this.buildRowOptions(item.key as number);
     this.setState({
       selectedCohortIndex: item.key as number,
-      selectedPointsIndexes: [],
-      showSelectionWarning: false
+      selectedPointsIndexes: []
     });
   };
 
@@ -565,24 +530,6 @@ export class CounterfactualChart extends React.PureComponent<
     });
   }
 
-  private setTemporaryPointToCustomPoint(index: number): void {
-    this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
-    Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
-      this.validationErrors[key] = undefined;
-    });
-  }
-
-  private removeCustomPoint(index: number): void {
-    this.setState((prevState) => {
-      const customPoints = [...prevState.customPoints];
-      customPoints.splice(index, 1);
-      const customPointIsActive = [...prevState.customPointIsActive];
-      customPointIsActive.splice(index, 1);
-      return { customPointIsActive, customPoints };
-    });
-  }
-
   private createCopyOfFirstRow(): void {
     const indexes = this.getDefaultSelectedPointIndexes(
       this.context.errorCohorts[this.state.selectedCohortIndex].cohort
@@ -603,18 +550,6 @@ export class CounterfactualChart extends React.PureComponent<
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
-  }
-
-  private toggleActivation(index: number): void {
-    const pointIsActive = [...this.state.pointIsActive];
-    pointIsActive[index] = !pointIsActive[index];
-    this.setState({ pointIsActive });
-  }
-
-  private toggleCustomActivation(index: number): void {
-    const customPointIsActive = [...this.state.customPointIsActive];
-    customPointIsActive[index] = !customPointIsActive[index];
-    this.setState({ customPointIsActive });
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -653,14 +588,9 @@ export class CounterfactualChart extends React.PureComponent<
 
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
-    // custom point
-    if (trace.curveNumber === 1) {
-      this.setTemporaryPointToCustomPoint(trace.pointNumber);
-    } else {
-      const index = trace.customdata[JointDataset.IndexLabel];
-      this.setTemporaryPointToCopyOfDatasetPoint(index);
-      this.toggleSelectionOfPoint(index);
-    }
+    const index = trace.customdata[JointDataset.IndexLabel];
+    this.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.toggleSelectionOfPoint(index);
   };
 
   private toggleSelectionOfPoint(index?: number): void {
@@ -668,25 +598,18 @@ export class CounterfactualChart extends React.PureComponent<
       return;
     }
     const indexOf = this.state.selectedPointsIndexes.indexOf(index);
-    const newSelections = [...this.state.selectedPointsIndexes];
-    const pointIsActive = [...this.state.pointIsActive];
+    let newSelections = [...this.state.selectedPointsIndexes];
+    let pointIsActive = [...this.state.pointIsActive];
     if (indexOf === -1) {
-      if (
-        this.state.selectedPointsIndexes.length > WhatIfConstants.MAX_SELECTION
-      ) {
-        this.setState({ showSelectionWarning: true });
-        return;
-      }
-      newSelections.push(index);
-      pointIsActive.push(true);
+      newSelections = [index];
+      pointIsActive = [true];
     } else {
       newSelections.splice(indexOf, 1);
       pointIsActive.splice(indexOf, 1);
     }
     this.setState({
       pointIsActive,
-      selectedPointsIndexes: newSelections,
-      showSelectionWarning: false
+      selectedPointsIndexes: newSelections
     });
   }
 
@@ -949,5 +872,58 @@ export class CounterfactualChart extends React.PureComponent<
       }
     };
     return chartProps;
+  }
+
+  private selectPointFromDropdown = (
+    _event: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (typeof item?.key === "string") {
+      const index = Number.parseInt(item.key);
+      this.setTemporaryPointToCopyOfDatasetPoint(index);
+      this.toggleSelectionOfPoint(index);
+    }
+  };
+
+  private selectCounterfactuals = (
+    _event: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
+  ): void => {
+    if (typeof item?.key === "string") {
+      this.setState({
+        selectedCounterfactual: item.key
+      });
+    }
+  };
+
+  private getDataOptions(): IComboBoxOption[] {
+    const indexes = this.context.errorCohorts[
+      this.state.selectedCohortIndex
+    ].cohort.unwrap(JointDataset.IndexLabel);
+    indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
+    return indexes.map((index) => {
+      return {
+        key: "" + index,
+        text: `Index ${index}`
+      };
+    });
+  }
+  private togglePanel = (): void => {
+    this.setState((preState) => {
+      return { isPanelOpen: !preState.isPanelOpen };
+    });
+  };
+
+  private getCounterfactualsOptions(): IComboBoxOption[] {
+    return [
+      {
+        key: "benign",
+        text: "benign"
+      },
+      {
+        key: "malignant",
+        text: "malignant"
+      }
+    ];
   }
 }
