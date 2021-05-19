@@ -88,16 +88,16 @@ export class CausalIndividualView extends React.PureComponent<
   private readonly getDataFromIndex = (
     dataIndex: number | undefined
   ): ICausalAnalysisSingleData | undefined => {
-    const casualLocal = this.context?.causalAnalysisData?.local;
-    if (!(dataIndex !== undefined && dataIndex >= 0 && casualLocal)) {
+    const causalLocal = this.context?.causalAnalysisData?.local;
+    if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
       return undefined;
     }
-    const keys = Object.keys(casualLocal);
+    const keys = Object.keys(causalLocal);
     const localData = {};
     keys.map(
       (k) =>
         (localData[k] =
-          k === "name" ? casualLocal[k] : [casualLocal[k][dataIndex]])
+          k === "name" ? causalLocal[k] : [causalLocal[k][dataIndex]])
     );
     return (localData as unknown) as ICausalAnalysisSingleData;
   };

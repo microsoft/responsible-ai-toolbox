@@ -28,7 +28,6 @@ class ErrorAnalysisDashboardInput:
             true_y,
             classes,
             features,
-            locale,
             categorical_features,
             true_y_dataset,
             pred_y):
@@ -57,7 +56,7 @@ class ErrorAnalysisDashboardInput:
         :type classes: numpy.array or list[]
         :param features: Feature names.
         :type features: numpy.array or list[]
-            :param categorical_features: The categorical feature names.
+        :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param true_y_dataset: The true labels for the provided dataset.
         Only needed if the explanation has a sample of instances from the
@@ -194,8 +193,6 @@ class ErrorAnalysisDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.PROBABILITY_Y
             ] = probability_y
-        if locale is not None:
-            self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
         if model_available:
             self._error_analyzer = ModelAnalyzer(model, full_dataset,
                                                  full_true_y, features,

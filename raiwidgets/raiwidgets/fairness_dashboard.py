@@ -82,14 +82,12 @@ class FairnessDashboard(Dashboard):
                 metrics_module.probability_methods,
         }
 
-        if locale is not None:
-            fairness_input['locale'] = locale
-
         super(FairnessDashboard, self).__init__(
             dashboard_type="Fairness",
             model_data=fairness_input,
             public_ip=public_ip,
-            port=port)
+            port=port,
+            locale=locale)
 
         self.fairness_metrics_module = metrics_module
 

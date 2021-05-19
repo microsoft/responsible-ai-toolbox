@@ -239,7 +239,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Shift cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cohort verplaatsen]]></Val>
+            <Val><![CDATA[Shiftcohort]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -302,7 +302,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Shift]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dienst]]></Val>
+            <Val><![CDATA[Shift]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -320,7 +320,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Map shift]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kaartverschuiving]]></Val>
+            <Val><![CDATA[Kaartshift]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -37,7 +37,7 @@ export class Interpret extends React.Component<IInterpretProps> {
           localFeatureImportance: modelData.localExplanations
         }}
         requestPredictions={requestMethod}
-        locale={modelData.locale}
+        locale={config.locale}
         explanationMethod={modelData.explanation_method}
       />
     );

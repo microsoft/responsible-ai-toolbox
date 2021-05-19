@@ -19,8 +19,7 @@ class ExplanationDashboardInput:
             dataset,
             true_y,
             classes,
-            features,
-            locale):
+            features):
         """Initialize the Explanation Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -250,8 +249,6 @@ class ExplanationDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.PROBABILITY_Y
             ] = probability_y
-        if locale is not None:
-            self.dashboard_input[ExplanationDashboardInterface.LOCALE] = locale
 
     def on_predict(self, data):
         try:

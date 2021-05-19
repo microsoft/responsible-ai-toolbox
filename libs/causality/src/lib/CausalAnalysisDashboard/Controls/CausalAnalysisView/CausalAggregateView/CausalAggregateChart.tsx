@@ -9,7 +9,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _, { isEqual } from "lodash";
-import { getTheme, Stack } from "office-ui-fabric-react";
+import { getTheme, Link, Stack } from "office-ui-fabric-react";
 import { Datum } from "plotly.js";
 import React from "react";
 
@@ -34,7 +34,7 @@ export class CausalAggregateChart extends React.PureComponent<
       <Stack horizontal verticalFill className={styles.container}>
         <Stack.Item grow className={styles.leftPane}>
           <AccessibleChart
-            plotlyProps={this.generateCasualAggregatePlotlyProps()}
+            plotlyProps={this.generateCausalAggregatePlotlyProps()}
             theme={getTheme()}
           />
         </Stack.Item>
@@ -49,7 +49,13 @@ export class CausalAggregateChart extends React.PureComponent<
               {localization.CausalAnalysis.AggregateView.binaryDescription}
             </Stack.Item>
             <Stack.Item className={styles.lasso}>
-              {localization.CausalAnalysis.AggregateView.lasso}
+              {localization.CausalAnalysis.AggregateView.lasso}{" "}
+              <Link
+                href="https://econml.azurewebsites.net/spec/estimation/dml.html"
+                target="_blank"
+              >
+                {localization.CausalAnalysis.AggregateView.here}
+              </Link>
             </Stack.Item>
           </Stack>
         </Stack.Item>
@@ -62,7 +68,7 @@ export class CausalAggregateChart extends React.PureComponent<
       this.forceUpdate();
     }
   }
-  private generateCasualAggregatePlotlyProps(): IPlotlyProperty {
+  private generateCausalAggregatePlotlyProps(): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(basePlotlyProperties);
     plotlyProps.data = [
       {

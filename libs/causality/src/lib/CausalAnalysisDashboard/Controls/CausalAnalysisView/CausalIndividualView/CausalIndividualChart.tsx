@@ -29,7 +29,8 @@ import {
   ComboBox,
   Stack,
   IComboBoxOption,
-  IComboBox
+  IComboBox,
+  Slider
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -136,7 +137,7 @@ export class CausalIndividualChart extends React.PureComponent<
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
     return (
-      <div className={classNames.topArea} id={"CasualIndividualContainer"}>
+      <div className={classNames.topArea} id={"CausalIndividualContainer"}>
         <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
@@ -259,21 +260,14 @@ export class CausalIndividualChart extends React.PureComponent<
           <div>
             <b>{`${localization.CausalAnalysis.IndividualView.currentTreatment}: ${this.state.treatmentValue}`}</b>
           </div>
-          <ComboBox
+          <Slider
             label={localization.CausalAnalysis.IndividualView.setNewTreatment}
-            options={[
-              {
-                key: "a",
-                text: "No tech support"
-              },
-              {
-                key: "b",
-                text: "Tech support"
-              }
-            ]}
-            ariaLabel={"treatment value picker"}
-            useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
+            min={0}
+            max={100}
+            step={5}
+            defaultValue={20}
+            showValue
+            snapToStep
           />
         </Stack>
       </div>

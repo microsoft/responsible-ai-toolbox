@@ -36,19 +36,21 @@ export class GlobalOnlyChart extends React.PureComponent<
 
   public componentDidMount(): void {
     if (
-      !this.context.precomputedExplanations?.globalFeatureImportance?.scores
-        ?.length
+      !this.context.modelExplanationData?.precomputedExplanations
+        ?.globalFeatureImportance?.scores?.length
     ) {
       return;
     }
     const globalImportance = this.buildGlobalProperties(
-      this.context.precomputedExplanations?.globalFeatureImportance
+      this.context.modelExplanationData?.precomputedExplanations
+        ?.globalFeatureImportance
     );
     const perClassExplanationDimension = globalImportance[0].length || 0;
     this.setState({
       featureNames:
-        this.context.precomputedExplanations.globalFeatureImportance
-          .featureNames || this.context.modelMetadata.featureNamesAbridged,
+        this.context.modelExplanationData?.precomputedExplanations
+          .globalFeatureImportance.featureNames ||
+        this.context.modelMetadata.featureNamesAbridged,
       globalSeries:
         perClassExplanationDimension === 1
           ? [
@@ -72,14 +74,17 @@ export class GlobalOnlyChart extends React.PureComponent<
       ).reverse(),
       topK: Math.min(
         4,
-        this.context.precomputedExplanations?.globalFeatureImportance?.scores
-          .length || 0
+        this.context.modelExplanationData?.precomputedExplanations
+          ?.globalFeatureImportance?.scores.length || 0
       )
     });
   }
 
   public render(): React.ReactNode {
-    if (!this.context.precomputedExplanations?.globalFeatureImportance) {
+    if (
+      !this.context.modelExplanationData?.precomputedExplanations
+        ?.globalFeatureImportance
+    ) {
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.GlobalTab.missingParameters}
@@ -110,8 +115,8 @@ export class GlobalOnlyChart extends React.PureComponent<
             className={classNames.startingK}
             ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
             max={
-              this.context.precomputedExplanations.globalFeatureImportance
-                .scores.length
+              this.context.modelExplanationData?.precomputedExplanations
+                .globalFeatureImportance.scores.length
             }
             min={1}
             step={1}

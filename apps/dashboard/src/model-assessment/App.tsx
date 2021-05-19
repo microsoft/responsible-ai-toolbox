@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ICausalAnalysisData,
-  IDataset,
-  IModelExplanationData
-} from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
   ModelAssessmentDashboard,
-  IModelAssessmentDashboardProps
+  IModelAssessmentDashboardProps,
+  IModelAssessmentData
 } from "@responsible-ai/model-assessment";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
@@ -23,17 +19,8 @@ import {
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator
 } from "../error-analysis/utils";
-import {
-  generateRandomMetrics,
-  supportedBinaryClassificationPerformanceKeys,
-  supportedProbabilityPerformanceKeys,
-  supportedRegressionPerformanceKeys
-} from "../fairness/utils";
 
-interface IAppProps {
-  dataset: IDataset;
-  modelExplanationData: IModelExplanationData;
-  causalAnalysisData: ICausalAnalysisData;
+interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
   language: Language;
   version: 1;
@@ -51,7 +38,11 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
-    this.props.modelExplanationData.modelClass = "blackbox";
+    if (this.props.modelExplanationData) {
+      for (const exp of this.props.modelExplanationData) {
+        exp.modelClass = "blackbox";
+      }
+    }
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       causalAnalysisData: this.props.causalAnalysisData,
@@ -65,14 +56,10 @@ export class App extends React.Component<IAppProps> {
         false
       ),
       requestMatrix: generateJsonMatrix,
-      requestMetrics: generateRandomMetrics.bind(this),
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
       stringParams: { contextualHelp: this.messages },
-      supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys,
       theme: this.props.theme
     };
 

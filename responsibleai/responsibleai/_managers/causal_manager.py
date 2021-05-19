@@ -18,7 +18,7 @@ class CausalManager(BaseManager):
         pass
 
     def get(self):
-        raise NotImplementedError("Get not implemented for CausalManager")
+        pass
 
     def list(self):
         pass

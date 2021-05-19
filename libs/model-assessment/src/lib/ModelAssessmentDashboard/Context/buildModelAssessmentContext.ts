@@ -39,25 +39,23 @@ export function buildInitialModelAssessmentContext(
     | ISingleClassLocalFeatureImportance
     | undefined = undefined;
   if (
-    props &&
-    props.modelExplanationData.precomputedExplanations &&
-    props.modelExplanationData.precomputedExplanations.localFeatureImportance &&
-    props.modelExplanationData.precomputedExplanations.localFeatureImportance
-      .scores
+    props.modelExplanationData?.[0]?.precomputedExplanations
+      ?.localFeatureImportance?.scores
   ) {
     localExplanations =
-      props.modelExplanationData.precomputedExplanations.localFeatureImportance;
+      props.modelExplanationData[0].precomputedExplanations
+        .localFeatureImportance;
   }
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
     localExplanations,
     metadata: modelMetadata,
-    predictedProbabilities: props.modelExplanationData.probabilityY,
-    predictedY: props.modelExplanationData.predictedY,
+    predictedProbabilities: props.dataset.probabilityY,
+    predictedY: props.dataset.predictedY,
     trueY: props.dataset.trueY
   });
   const globalProps = buildGlobalProperties(
-    props.modelExplanationData.precomputedExplanations
+    props.modelExplanationData?.[0]?.precomputedExplanations
   );
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
@@ -152,9 +150,9 @@ function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(
-    props.modelExplanationData.method,
-    props.modelExplanationData.precomputedExplanations,
-    props.modelExplanationData.probabilityY
+    props.modelExplanationData?.[0]?.method,
+    props.modelExplanationData?.[0]?.precomputedExplanations,
+    props.modelExplanationData?.[0]?.probabilityY
   );
   let featureNames = props.dataset.featureNames;
   let featureNamesAbridged: string[];
@@ -171,33 +169,38 @@ function buildModelMetadata(
     if (props.dataset.features && props.dataset.features[0] !== undefined) {
       featureLength = props.dataset.features[0].length;
     } else if (
-      props.modelExplanationData.precomputedExplanations &&
-      props.modelExplanationData.precomputedExplanations.globalFeatureImportance
+      props.modelExplanationData?.[0]?.precomputedExplanations &&
+      props.modelExplanationData?.[0]?.precomputedExplanations
+        .globalFeatureImportance
     ) {
       featureLength =
-        props.modelExplanationData.precomputedExplanations
+        props.modelExplanationData?.[0]?.precomputedExplanations
           .globalFeatureImportance.scores.length;
     } else if (
-      props.modelExplanationData.precomputedExplanations &&
-      props.modelExplanationData.precomputedExplanations.localFeatureImportance
+      props.modelExplanationData?.[0]?.precomputedExplanations &&
+      props.modelExplanationData?.[0]?.precomputedExplanations
+        .localFeatureImportance
     ) {
       const localImportances =
-        props.modelExplanationData.precomputedExplanations
+        props.modelExplanationData?.[0]?.precomputedExplanations
           .localFeatureImportance.scores;
       if (isThreeDimArray(localImportances)) {
-        featureLength = (props.modelExplanationData.precomputedExplanations
-          .localFeatureImportance.scores[0][0] as number[]).length;
+        featureLength = (props.modelExplanationData?.[0]
+          ?.precomputedExplanations.localFeatureImportance
+          .scores[0][0] as number[]).length;
       } else {
-        featureLength = (props.modelExplanationData.precomputedExplanations
-          .localFeatureImportance.scores[0] as number[]).length;
+        featureLength = (props.modelExplanationData?.[0]
+          ?.precomputedExplanations.localFeatureImportance
+          .scores[0] as number[]).length;
       }
     } else if (
-      props.modelExplanationData.precomputedExplanations &&
-      props.modelExplanationData.precomputedExplanations.ebmGlobalExplanation
+      props.modelExplanationData?.[0]?.precomputedExplanations &&
+      props.modelExplanationData?.[0]?.precomputedExplanations
+        .ebmGlobalExplanation
     ) {
       featureLength =
-        props.modelExplanationData.precomputedExplanations.ebmGlobalExplanation
-          .feature_list.length;
+        props.modelExplanationData?.[0]?.precomputedExplanations
+          .ebmGlobalExplanation.feature_list.length;
     }
     featureNames = buildIndexedNames(
       featureLength,
@@ -207,8 +210,8 @@ function buildModelMetadata(
   }
   let classNames = props.dataset.classNames;
   const classLength = getClassLength(
-    props.modelExplanationData.precomputedExplanations,
-    props.modelExplanationData.probabilityY
+    props.modelExplanationData?.[0]?.precomputedExplanations,
+    props.modelExplanationData?.[0]?.probabilityY
   );
   if (!classNames || classNames.length !== classLength) {
     classNames = buildIndexedNames(
