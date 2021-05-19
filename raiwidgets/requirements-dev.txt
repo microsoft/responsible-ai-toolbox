@@ -17,8 +17,6 @@ requirements-parser==0.2.0
 
 wheel
 
-interpret-community==0.17.2
-
 fairlearn==0.6.0
 
 # Required for notebook tests
