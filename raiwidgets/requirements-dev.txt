@@ -17,6 +17,8 @@ requirements-parser==0.2.0
 
 wheel
 
+lightgbm<3.0.0
+
 fairlearn==0.6.0
 
 # Required for notebook tests
