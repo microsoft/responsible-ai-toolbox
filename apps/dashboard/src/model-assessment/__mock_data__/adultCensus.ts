@@ -4,6 +4,7 @@
 import {
   ICausalAnalysisData,
   IDataset,
+  IErrorAnalysisConfig,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
 
@@ -2935,4 +2936,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       [[-1.8402269496005346, 1.4349294613271277, 2.9718086199129394]]
     ]
   }
+};
+export const adultCensusCausalErrorAnalysisConfig: IErrorAnalysisConfig = {
+  maxDepth: 3,
+  numLeaves: 11
 };

@@ -110,26 +110,9 @@ export class App extends React.Component<IAppSetting, IAppState> {
           )}
           {this.state.application === "modelAssessment" && (
             <ModelAssessment
-              dataset={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].dataset
-              }
-              modelExplanationData={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].modelExplanationData
-              }
-              causalAnalysisData={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].causalAnalysisData
-              }
-              classDimension={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].classDimension
-              }
+              {...applications[this.state.application].datasets[
+                this.state.dataset
+              ]}
               theme={theme}
               language={Language[this.state.language]}
               version={
