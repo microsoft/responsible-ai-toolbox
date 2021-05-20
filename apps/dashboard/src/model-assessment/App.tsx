@@ -45,11 +45,9 @@ export class App extends React.Component<IAppProps> {
     }
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
-      causalAnalysisData: this.props.causalAnalysisData,
-      dataset: this.props.dataset,
+      ...this.props,
       locale: this.props.language,
       localUrl: "",
-      modelExplanationData: this.props.modelExplanationData,
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
         this.props.dataset.featureNames,
@@ -59,8 +57,7 @@ export class App extends React.Component<IAppProps> {
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
-      stringParams: { contextualHelp: this.messages },
-      theme: this.props.theme
+      stringParams: { contextualHelp: this.messages }
     };
 
     if ("categoricalMap" in this.props.dataset) {
