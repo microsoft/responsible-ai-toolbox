@@ -7,7 +7,8 @@ import {
   ITelemetryMessage,
   IDataset,
   IErrorAnalysisConfig,
-  ICausalAnalysisData
+  ICausalAnalysisData,
+  ICounterfactualData
 } from "@responsible-ai/core-ui";
 import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -15,6 +16,7 @@ export interface IModelAssessmentData {
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData[];
   causalAnalysisData?: ICausalAnalysisData[];
+  counterfactualData?: ICounterfactualData;
   errorAnalysisConfig?: IErrorAnalysisConfig[];
 }
 

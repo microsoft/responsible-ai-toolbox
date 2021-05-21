@@ -34,7 +34,8 @@ import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount"
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
-  adultCensusCausalAnalysisData
+  adultCensusCausalAnalysisData,
+  adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 
 export interface IInterpretDataSet {
@@ -139,6 +140,8 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
+        counfactualData: adultCounterfactualData,
+        counterfactualData: adultCounterfactualData,
         dataset: adultCensusWithFairnessDataset,
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet

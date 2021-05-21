@@ -125,6 +125,11 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.dataset
                 ].causalAnalysisData
               }
+              counterfactualData={
+                applications[this.state.application].datasets[
+                  this.state.dataset
+                ].counterfactualData
+              }
               classDimension={
                 applications[this.state.application].datasets[
                   this.state.dataset

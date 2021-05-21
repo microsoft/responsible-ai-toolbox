@@ -14,7 +14,6 @@ export interface ICounterfactualChartStyles {
   featureList: IStyle;
   mainArea: IStyle;
   infoIcon: IStyle;
-  helperText: IStyle;
   infoWithText: IStyle;
   chartsArea: IStyle;
   topArea: IStyle;
@@ -29,42 +28,21 @@ export interface ICounterfactualChartStyles {
   paddingDiv: IStyle;
   horizontalAxis: IStyle;
   featureImportanceArea: IStyle;
-  sliderLabel: IStyle;
-  startingK: IStyle;
   featureImportanceControls: IStyle;
   featureImportanceLegend: IStyle;
   featureImportanceChartAndLegend: IStyle;
   legendLabel: IStyle;
-  smallItalic: IStyle;
-  choiceBoxArea: IStyle;
-  choiceGroup: IStyle;
-  choiceGroupFlexContainer: IStyle;
   panelIconAndLabel: IStyle;
-  predictedBlock: IStyle;
-  upperWhatIfPanel: IStyle;
-  featureSearch: IStyle;
-  iceFeatureSelection: IStyle;
-  iceClassSelection: IStyle;
-  disclaimerWrapper: IStyle;
-  errorText: IStyle;
-  tooltipColumn: IStyle;
-  tooltipTable: IStyle;
-  tooltipTitle: IStyle;
-  tooltipHost: IStyle;
-  negativeNumber: IStyle;
-  positiveNumber: IStyle;
-  tooltipWrapper: IStyle;
   multiclassWeightLabel: IStyle;
   multiclassWeightLabelText: IStyle;
   infoButton: IStyle;
-  rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
 }
 
 export const counterfactualChartStyles: () => IProcessedStyleSet<
   ICounterfactualChartStyles
 > = () => {
-  const legendWidth = "160px";
+  const legendWidth = "200px";
   const theme = getTheme();
   return mergeStyleSets<ICounterfactualChartStyles>({
     chartsArea: {
@@ -82,19 +60,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       flexDirection: "row",
       flexGrow: "1"
     },
-    choiceBoxArea: {
-      alignItems: "baseline",
-      display: "flex",
-      flexDirection: "row"
-    },
-    choiceGroup: {
-      paddingLeft: "30px"
-    },
-    choiceGroupFlexContainer: {
-      display: "inline-flex",
-      justifyContent: "space-between",
-      width: "500px"
-    },
     cohortPickerLabel: {
       fontWeight: "600",
       paddingRight: "8px"
@@ -106,12 +71,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       height: "32px",
       paddingLeft: "63px",
       paddingTop: "13px"
-    },
-    disclaimerWrapper: {
-      padding: "5px 15px 10px 26px"
-    },
-    errorText: {
-      color: theme.semanticColors.errorText
     },
     featureImportanceArea: {
       width: "100%"
@@ -139,14 +98,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       maxHeight: "350px",
       overflowY: "auto"
     },
-    featureSearch: {
-      marginBottom: "8px",
-      marginRight: "10px"
-    },
-    helperText: {
-      paddingLeft: "15px",
-      paddingRight: "120px"
-    },
     horizontalAxis: {
       flex: 1,
       textAlign: "center"
@@ -155,12 +106,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "row",
       paddingBottom: "30px"
-    },
-    iceClassSelection: {
-      margin: "10px 10px 10px 0"
-    },
-    iceFeatureSelection: {
-      margin: "43px 10px 10px 0"
     },
     infoButton: {
       margin: "5px",
@@ -187,8 +132,7 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       width: legendWidth
     },
     legendLabel: {
-      fontWeight: "600",
-      paddingBottom: "5px",
+      paddingBottom: "10px",
       paddingTop: "10px"
     },
     mainArea: {
@@ -205,9 +149,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
     multiclassWeightLabelText: {
       fontWeight: "600",
       paddingTop: "5px"
-    },
-    negativeNumber: {
-      color: theme.palette.red
     },
     notAvailable: {
       backgroundColor: theme.semanticColors.warningBackground
@@ -233,23 +174,6 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       margin: "8px 18px 30px 22px",
       padding: "6px 0 6px 12px"
     },
-    positiveNumber: {
-      color: theme.palette.green
-    },
-    predictedBlock: {
-      alignContent: "stretch",
-      display: "flex",
-      flexDirection: "row",
-      paddingTop: "5px"
-    },
-    rightJustifiedContainer: {
-      boxSizing: "border-box",
-      display: "inline-flex",
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      paddingRight: legendWidth,
-      width: "100%"
-    },
     rotatedVerticalBox: {
       marginLeft: "28px",
       position: "absolute",
@@ -258,54 +182,11 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<
       transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
       width: "max-content"
     },
-    sliderLabel: {
-      fontWeight: "600",
-      paddingRight: "10px"
-    },
-    smallItalic: {
-      color: theme.semanticColors.disabledBodyText,
-      fontStyle: "italic",
-      padding: "0 0 5px 5px"
-    },
-    startingK: {
-      flex: 1,
-      paddingRight: legendWidth
-    },
-    tooltipColumn: {
-      alignItems: "flex-start",
-      boxSizing: "border-box",
-      display: "flex",
-      flex: "auto",
-      flexDirection: "column",
-      maxWidth: "200px",
-      minWidth: "60px",
-      paddingRight: "10px",
-      width: "max-content"
-    },
-    tooltipHost: {
-      display: "inline-block",
-      height: "100%",
-      marginRight: "4px"
-    },
-    tooltipTable: {
-      display: "flex",
-      flexDirection: "row"
-    },
-    tooltipTitle: {
-      paddingBottom: "8px"
-    },
-    tooltipWrapper: {
-      padding: "10px 15px"
-    },
     topArea: {
       display: "flex",
       flexDirection: "row",
       height: "400px",
       width: "100%"
-    },
-    upperWhatIfPanel: {
-      paddingLeft: "32px",
-      paddingRight: "32px"
     },
     verticalAxis: {
       height: "auto",

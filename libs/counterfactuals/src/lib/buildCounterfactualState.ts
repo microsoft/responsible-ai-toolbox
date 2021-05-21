@@ -42,7 +42,6 @@ export function buildCounterfactualState(
 
   return {
     cohorts,
-    selectedIndex: undefined,
     selectedWeightVector,
     weightVectorLabels,
     weightVectorOptions

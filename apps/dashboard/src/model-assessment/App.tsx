@@ -46,6 +46,7 @@ export class App extends React.Component<IAppProps> {
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       causalAnalysisData: this.props.causalAnalysisData,
+      counterfactualData: this.props.counterfactualData,
       dataset: this.props.dataset,
       locale: this.props.language,
       localUrl: "",
