@@ -13,11 +13,7 @@ import {
   Stack,
   PrimaryButton,
   TextField,
-  IColumn,
-  IDetailsFooterProps,
-  DetailsRow,
-  SelectionMode,
-  DetailsRowCheck
+  IColumn
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -82,7 +78,7 @@ export class CounterfactualPanel extends React.Component<
               setKey="set"
               constrainMode={ConstrainMode.unconstrained}
               layoutMode={DetailsListLayoutMode.fixedColumns}
-              onRenderDetailsFooter={this.onRenderDetailsFooter.bind(this)}
+              // onRenderDetailsFooter={this.onRenderDetailsFooter.bind(this)}
             />
           </Stack.Item>
           <Stack.Item>
@@ -113,39 +109,39 @@ export class CounterfactualPanel extends React.Component<
       </Panel>
     );
   }
-  private onRenderDetailsFooter(
-    detailsFooterProps: IDetailsFooterProps
-  ): JSX.Element {
-    return (
-      <DetailsRow
-        {...detailsFooterProps}
-        columns={detailsFooterProps.columns}
-        item={{}}
-        itemIndex={-1}
-        groupNestingDepth={detailsFooterProps.groupNestingDepth}
-        selectionMode={SelectionMode.single}
-        selection={detailsFooterProps.selection}
-        onRenderItemColumn={this.renderDetailsFooterItemColumn.bind(this)}
-        onRenderCheck={this.onRenderCheckForFooterRow.bind(this)}
-      />
-    );
-  }
-  private renderDetailsFooterItemColumn(
-    item: any,
-    index: any,
-    column: any
-  ): React.ReactNode | undefined {
-    if (column) {
-      return (
-        <div>
-          <b>{column.name + "AAA"}</b>
-        </div>
-      );
-    }
-    return undefined;
-  }
+  // private onRenderDetailsFooter(
+  //   detailsFooterProps: IDetailsFooterProps
+  // ): JSX.Element {
+  //   return (
+  //     <DetailsRow
+  //       {...detailsFooterProps}
+  //       columns={detailsFooterProps.columns}
+  //       item={{}}
+  //       itemIndex={-1}
+  //       groupNestingDepth={detailsFooterProps.groupNestingDepth}
+  //       selectionMode={SelectionMode.single}
+  //       selection={detailsFooterProps.selection}
+  //       onRenderItemColumn={this.renderDetailsFooterItemColumn.bind(this)}
+  //       onRenderCheck={this.onRenderCheckForFooterRow.bind(this)}
+  //     />
+  //   );
+  // }
+  // private renderDetailsFooterItemColumn(
+  //   item: any,
+  //   index: any,
+  //   column: any
+  // ): React.ReactNode | undefined {
+  //   if (column) {
+  //     return (
+  //       <div>
+  //         <b>{column.name + "AAA"}</b>
+  //       </div>
+  //     );
+  //   }
+  //   return undefined;
+  // }
 
-  private onRenderCheckForFooterRow(props: any): JSX.Element {
-    return <DetailsRowCheck {...props} selected />;
-  }
+  // private onRenderCheckForFooterRow(props: any): JSX.Element {
+  //   return <DetailsRowCheck {...props} selected />;
+  // }
 }
