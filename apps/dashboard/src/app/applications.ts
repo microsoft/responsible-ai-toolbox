@@ -141,7 +141,6 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
-        counfactualData: adultCounterfactualData,
         counterfactualData: adultCounterfactualData,
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
