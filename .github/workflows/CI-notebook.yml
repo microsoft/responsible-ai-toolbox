@@ -29,14 +29,29 @@ jobs:
           yarn install
           yarn buildall
 
-      - name: Install dependencies
+      - name: Setup tools
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools
-          pip install wrapped-flask/.
-          cd raiwidgets
-          pip install -r requirements-dev.txt
+          pip install --upgrade pip-tools
+
+      - name: Pip compile
+        run: |
+          pip-compile requirements-dev.txt
+          cat requirements-dev.txt
+        working-directory: raiwidgets
+
+      - name: Upload requirements
+        uses: actions/upload-artifact@v2
+        with:
+          name: requirements-dev.txt
+          path: raiwidgets/requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          pip-sync requirements-dev.txt
           pip install .
+        working-directory: raiwidgets
 
       - name: Run notebook tests
         run: python -m pytest notebooks
