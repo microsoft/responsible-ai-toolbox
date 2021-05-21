@@ -17,7 +17,7 @@ requirements-parser==0.2.0
 
 wheel
 
-# temp solution to fix notebook pipeline
+# Required for interpret-community 0.18.0
 lightgbm==2.3.0
 
 fairlearn==0.6.0
@@ -33,4 +33,4 @@ sphinx==3.1.1
 sphinx-gallery==0.8.1
 pydata-sphinx-theme==0.3.0
 
--e ../responsibleai/.
+../responsibleai/.
