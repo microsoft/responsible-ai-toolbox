@@ -9,7 +9,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 import { ErrorCohort } from "../ErrorCohort";
-import { DefaultButton, Panel, Stack, Text } from "office-ui-fabric-react";
+import { DefaultButton, Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
 import { CohortList } from "../CohortList/CohortList";
 
 export interface ICohortSettingsPanelProps {
@@ -40,6 +40,7 @@ export class CohortSettingsPanel extends React.PureComponent<
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         title={localization.ModelAssessment.CohortSettings.CohortSettingsTitle}
+        type={PanelType.medium}
       >
         <Stack tokens={{ childrenGap: 20 }}>
           <Text>
@@ -55,14 +56,12 @@ export class CohortSettingsPanel extends React.PureComponent<
                   .ChangeGlobalCohort
               }
               onClick={this.props.toggleShiftCohortVisibility}
-              styles={{ root: { padding: "20px 0 20px 0" } }}
             />
             <DefaultButton
               text={
                 localization.ModelAssessment.CohortInformation.CreateNewCohort
               }
               onClick={this.props.toggleCreateCohortVisibility}
-              styles={{ root: { padding: "20px 0 20px 0" } }}
             />
           </Stack>
           <CohortList
