@@ -23,11 +23,11 @@ jobs:
         with:
           python-version: ${{ matrix.pythonVersion }}
 
-      - name: build typescript
-        run: |
-          yarn config set network-timeout 300000
-          yarn install
-          yarn buildall
+      # - name: build typescript
+      #   run: |
+      #     yarn config set network-timeout 300000
+      #     yarn install
+      #     yarn buildall
 
       - name: Setup tools
         run: |
