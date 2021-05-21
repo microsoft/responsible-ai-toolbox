@@ -17,7 +17,8 @@ requirements-parser==0.2.0
 
 wheel
 
-interpret-community==0.17.2
+# temp solution to fix notebook pipeline
+lightgbm==2.3.0
 
 fairlearn==0.6.0
 
