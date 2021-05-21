@@ -49,7 +49,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip sync requirements-dev.txt
+          pip-sync requirements-dev.txt
           pip install .
         working-directory: raiwidgets
 

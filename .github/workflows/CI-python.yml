@@ -62,7 +62,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip sync requirements-dev.txt
+          pip-sync requirements-dev.txt
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Install package
