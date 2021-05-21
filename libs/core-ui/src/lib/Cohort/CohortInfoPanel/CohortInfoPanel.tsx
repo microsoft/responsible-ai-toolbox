@@ -14,24 +14,15 @@ export interface ICohortInfoPanelProps {
   toggleShiftCohortVisibility: () => void;
   toggleCreateCohortVisibility: () => void;
 }
-interface ICohortInfoPanelState {
-  editCohortVisible: boolean;
-  saveCohortVisible: boolean;
-}
 
 export class CohortInfoPanel extends React.PureComponent<
-  ICohortInfoPanelProps,
-  ICohortInfoPanelState
+  ICohortInfoPanelProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
   public constructor(props: ICohortInfoPanelProps) {
     super(props);
-    this.setState({
-      editCohortVisible: false,
-      saveCohortVisible: false
-    });
   }
 
   public render(): React.ReactNode {
@@ -40,7 +31,10 @@ export class CohortInfoPanel extends React.PureComponent<
     // add (default) if it's the default cohort
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
-    if (currentCohort.cohort.filters.length == 0) {
+    if (
+      currentCohort.cohort.filters.length == 0 &&
+      currentCohort.cohort.name === localization.Interpret.Cohort.defaultLabel
+    ) {
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }

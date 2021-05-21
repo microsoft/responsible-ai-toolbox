@@ -11,7 +11,7 @@ import {
   ModelTypes,
   WeightVectors,
   CohortInfo,
-  CohortList,
+  CohortListPanel,
   ErrorCohort,
   SaveCohort,
   buildGlobalProperties,
@@ -622,7 +622,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   isEnabled={this.props.requestDebugML !== undefined}
                   selectedFeatures={this.state.selectedFeatures}
                 />
-                <CohortList
+                <CohortListPanel
                   isOpen={this.state.openCohortListPanel}
                   cohorts={this.state.cohorts}
                   onDismiss={(): void =>

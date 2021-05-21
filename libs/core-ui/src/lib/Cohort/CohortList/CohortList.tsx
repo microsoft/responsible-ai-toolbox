@@ -1,17 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   IColumn,
-  IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
-  IStyleFunctionOrObject,
   CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   Link,
-  Panel
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -20,11 +18,10 @@ import { ErrorCohort } from "../ErrorCohort";
 import { cohortListStyles } from "./CohortList.styles";
 
 export interface ICohortListProps {
-  isOpen: boolean;
-  cohorts: ErrorCohort[];
-  // hostId: string
-  onDismiss: () => void;
+  errorCohorts: ErrorCohort[];
   onEditCohortClick: (editedCohort: ErrorCohort) => void;
+  includeDetails: boolean;
+  enableEditing: boolean;
 }
 
 export interface ICohortListState {
@@ -36,16 +33,8 @@ export interface ICohortListItem {
   name: string;
   coverage: string;
   errorRate: string;
+  details?: string[];
 }
-
-const focusTrapZoneProps: IFocusTrapZoneProps = {
-  forceFocusInsideTrap: false,
-  isClickableOutsideFocusTrap: true
-};
-
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
-};
 
 export class CohortList extends React.Component<
   ICohortListProps,
@@ -62,15 +51,29 @@ export class CohortList extends React.Component<
       {
         fieldName: "name",
         isResizable: true,
-        key: "column1",
+        key: "nameColumn",
         maxWidth: 200,
         minWidth: 50,
         name: "Name"
-      },
+      }
+    ];
+
+    if (this.props.includeDetails) {
+      this.columns.push({
+        fieldName: "details",
+        isResizable: true,
+        key: "detailsColumn",
+        maxWidth: 100,
+        minWidth: 75,
+        name: "Details"
+      });
+    }
+
+    this.columns.push(
       {
         fieldName: "coverage",
         isResizable: true,
-        key: "column2",
+        key: "coverageColumn",
         maxWidth: 100,
         minWidth: 75,
         name: "Coverage"
@@ -78,16 +81,16 @@ export class CohortList extends React.Component<
       {
         fieldName: "errorRate",
         isResizable: true,
-        key: "column3",
+        key: "errorRateColumn",
         maxWidth: 100,
         minWidth: 75,
         name: "Error rate"
       }
-    ];
+    );
   }
 
   public componentDidUpdate(prevProps: ICohortListProps): void {
-    if (this.props.cohorts !== prevProps.cohorts) {
+    if (this.props.errorCohorts !== prevProps.errorCohorts) {
       const cohortListItems = this.getCohortListItems();
       this.setState({ items: cohortListItems });
     }
@@ -97,33 +100,20 @@ export class CohortList extends React.Component<
     const classNames = cohortListStyles();
     const items = this.state.items;
     return (
-      <Panel
-        headerText="Cohort List"
-        isOpen={this.props.isOpen}
-        focusTrapZoneProps={focusTrapZoneProps}
-        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-        closeButtonAriaLabel="Close"
-        // layerProps={{ hostId: this.props.hostId }}
-        isBlocking={false}
-        onDismiss={this.props.onDismiss}
-        styles={panelStyles}
-      >
-        <div className={classNames.divider}></div>
-        <div className={classNames.section}>
-          <div className={classNames.subsection}>
-            <div className={classNames.header}>Cohort List</div>
-            <DetailsList
-              items={items}
-              columns={this.columns}
-              setKey="set"
-              layoutMode={DetailsListLayoutMode.justified}
-              selectionPreservedOnEmptyClick={true}
-              checkboxVisibility={CheckboxVisibility.hidden}
-              onRenderItemColumn={this.renderItemColumn.bind(this)}
-            />
-          </div>
+      <div className={classNames.section}>
+        <div className={classNames.subsection}>
+          <div className={classNames.header}>Cohort List</div>
+          <DetailsList
+            items={items}
+            columns={this.columns}
+            setKey="set"
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionPreservedOnEmptyClick={true}
+            checkboxVisibility={CheckboxVisibility.hidden}
+            onRenderItemColumn={this.renderItemColumn.bind(this)}
+          />
         </div>
-      </Panel>
+      </div>
     );
   }
 
@@ -138,8 +128,8 @@ export class CohortList extends React.Component<
       ] as string;
 
       switch (column.key) {
-        case "column1":
-          if (item.name !== "All data") {
+        case "nameColumn":
+          if (this.props.enableEditing && item.name !== "All data") {
             return (
               <Link
                 onClick={() =>
@@ -153,7 +143,15 @@ export class CohortList extends React.Component<
             );
           }
           return <span>{fieldContent}</span>;
-
+        case "detailsColumn":
+          if (item.details && item.details.length == 2) {
+            return (
+              <Stack>
+                <Text variant={"xSmall"}>{item.details[0]}</Text>
+                <Text variant={"xSmall"}>{item.details[1]}</Text>
+              </Stack>
+            );
+          }
         default:
           return <span>{fieldContent}</span>;
       }
@@ -162,20 +160,31 @@ export class CohortList extends React.Component<
   }
 
   private getErrorCohort(name: string): ErrorCohort {
-    return this.props.cohorts.find(
-      (errorCohort) => errorCohort.cohort.name === name
+    return this.props.errorCohorts.find(
+      (errorCohort: ErrorCohort) => errorCohort.cohort.name === name
     )!;
   }
 
   private getCohortListItems(): ICohortListItem[] {
-    const allItems = this.props.cohorts
-      .filter((errorCohort) => !errorCohort.isTemporary)
+    const allItems = this.props.errorCohorts
+      .filter((errorCohort: ErrorCohort) => !errorCohort.isTemporary)
       .map((errorCohort: ErrorCohort, index: number) => {
+        let details = [
+          localization.formatString(
+            localization.Interpret.CohortBanner.datapoints,
+            errorCohort.cohort.filteredData.length
+          ),
+          localization.formatString(
+            localization.Interpret.CohortBanner.filters,
+            errorCohort.cohort.filters.length
+          )
+        ];
         return {
           coverage: errorCohort.errorCoverage.toFixed(2),
           errorRate: errorCohort.errorRate.toFixed(2),
           key: index,
-          name: errorCohort.cohort.name
+          name: errorCohort.cohort.name,
+          details: details
         };
       });
     return allItems;

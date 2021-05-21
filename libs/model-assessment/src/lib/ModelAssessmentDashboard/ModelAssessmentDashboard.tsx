@@ -92,6 +92,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
+            toggleShiftCohortVisibility={() => {
+              this.setState((prev) => ({
+                shiftCohortVisible: !prev.shiftCohortVisible
+              }));
+            }}
+            toggleCreateCohortVisibility={() => {
+              this.setState((prev) => ({
+                createCohortVisible: !prev.createCohortVisible
+              }));
+            }}
+            onEditCohortClick={(_: ErrorCohort) => {}}
           />
           <Stack>
             <Stack.Item className={modelAssessmentDashboardStyles.section}>
@@ -244,7 +255,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             <CohortEditor
               jointDataset={this.state.jointDataset}
               filterList={this.state.baseCohort.cohort.filters}
-              cohortName={this.state.baseCohort.cohort.name}
+              cohortName={
+                localization.Interpret.Cohort.cohort + " " +
+                (this.state.cohorts.length + 1).toString()
+              }
               onSave={(manuallyCreatedCohort: Cohort): void => {
                 const newErrorCohort = new ErrorCohort(
                   manuallyCreatedCohort,

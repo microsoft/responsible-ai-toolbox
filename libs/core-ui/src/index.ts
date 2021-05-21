@@ -9,7 +9,7 @@ export * from "./lib/Cohort/CohortBasedComponent";
 export * from "./lib/Cohort/CohortInfo/CohortInfo";
 export * from "./lib/Cohort/CohortInfoPanel/CohortInfoPanel";
 export * from "./lib/Cohort/CohortSettingsPanel/CohortSettingsPanel";
-export * from "./lib/Cohort/CohortList/CohortList";
+export * from "./lib/Cohort/CohortList/CohortListPanel";
 export * from "./lib/Cohort/EditCohort/EditCohort";
 export * from "./lib/Cohort/ManualCohortManagement/CohortBar";
 export * from "./lib/Cohort/ManualCohortManagement/CohortEditor";
