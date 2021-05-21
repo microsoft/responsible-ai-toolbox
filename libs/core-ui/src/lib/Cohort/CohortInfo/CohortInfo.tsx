@@ -4,12 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
-  IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
   IStackTokens,
-  IStyleFunctionOrObject,
-  Panel,
   Stack
 } from "office-ui-fabric-react";
 import React from "react";
@@ -20,25 +15,13 @@ import { PredictionPath } from "../PredictionPath/PredictionPath";
 import { cohortInfoStyles } from "./CohortInfo.styles";
 
 export interface ICohortInfoProps {
-  isOpen: boolean;
   currentCohort: ErrorCohort;
-  // hostId: string
-  onDismiss: () => void;
   onSaveCohortClick: () => void;
 }
-
-const focusTrapZoneProps: IFocusTrapZoneProps = {
-  forceFocusInsideTrap: false,
-  isClickableOutsideFocusTrap: true
-};
 
 const alignmentStackTokens: IStackTokens = {
   childrenGap: 5,
   padding: 2
-};
-
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
 };
 
 export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
@@ -46,18 +29,8 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
     const classNames = cohortInfoStyles();
 
     return (
-      <Panel
-        headerText={localization.ErrorAnalysis.CohortInfo.cohortInformation}
-        isOpen={this.props.isOpen}
-        focusTrapZoneProps={focusTrapZoneProps}
-        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-        closeButtonAriaLabel="Close"
-        // layerProps={{ hostId: this.props.hostId }}
-        isBlocking={false}
-        onDismiss={this.props.onDismiss}
-        styles={panelStyles}
-      >
-        <div className={classNames.divider}></div>
+      <>
+        {" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <DefaultButton
@@ -135,7 +108,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             <PredictionPath temporaryCohort={this.props.currentCohort} />
           </div>
         </div>
-      </Panel>
+      </>
     );
   }
 }

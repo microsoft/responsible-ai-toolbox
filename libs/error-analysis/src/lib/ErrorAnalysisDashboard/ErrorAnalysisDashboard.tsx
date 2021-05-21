@@ -10,7 +10,7 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectors,
-  CohortInfo,
+  CohortInfoPanel,
   CohortListPanel,
   ErrorCohort,
   SaveCohort,
@@ -599,7 +599,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     )}
                   </div>
                 )}
-                <CohortInfo
+                <CohortInfoPanel
                   isOpen={this.state.openInfoPanel}
                   currentCohort={this.state.selectedCohort}
                   onDismiss={(): void =>

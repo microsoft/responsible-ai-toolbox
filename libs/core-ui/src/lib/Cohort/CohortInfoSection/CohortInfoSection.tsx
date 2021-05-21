@@ -10,18 +10,18 @@ import React from "react";
 import { DefaultButton, Stack, Text } from "office-ui-fabric-react";
 import { localization } from "@responsible-ai/localization";
 
-export interface ICohortInfoPanelProps {
+export interface ICohortInfoSectionProps {
   toggleShiftCohortVisibility: () => void;
   toggleCreateCohortVisibility: () => void;
 }
 
-export class CohortInfoPanel extends React.PureComponent<
-  ICohortInfoPanelProps
+export class CohortInfoSection extends React.PureComponent<
+  ICohortInfoSectionProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
-  public constructor(props: ICohortInfoPanelProps) {
+  public constructor(props: ICohortInfoSectionProps) {
     super(props);
   }
 

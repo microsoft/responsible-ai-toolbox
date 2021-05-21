@@ -7,11 +7,12 @@ import {
   CohortBasedComponent,
   ModelAssessmentContext,
   ErrorCohort,
-  CohortInfoPanel,
+  CohortInfoSection,
   ShiftCohort,
   CohortEditor,
   CohortSource,
-  Cohort
+  Cohort,
+  SaveCohort
 } from "@responsible-ai/core-ui";
 // import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
@@ -106,7 +107,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           />
           <Stack>
             <Stack.Item className={modelAssessmentDashboardStyles.section}>
-              <CohortInfoPanel
+              <CohortInfoSection
                 toggleShiftCohortVisibility={() => {
                   this.setState((prev) => ({
                     shiftCohortVisible: !prev.shiftCohortVisible
@@ -172,6 +173,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                       this.setState({ selectedFeatures: features })
                     }
                     importances={this.state.importances}
+                    onSaveCohortClick={() => {
+                      this.setState({ saveCohortVisible: true });
+                    }}
                   />
                 )}
                 {t.key === GlobalTabKeys.ModelStatisticsTab && (
@@ -256,7 +260,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               jointDataset={this.state.jointDataset}
               filterList={this.state.baseCohort.cohort.filters}
               cohortName={
-                localization.Interpret.Cohort.cohort + " " +
+                localization.Interpret.Cohort.cohort +
+                " " +
                 (this.state.cohorts.length + 1).toString()
               }
               onSave={(manuallyCreatedCohort: Cohort): void => {
@@ -289,6 +294,24 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   createCohortVisible: !prev.createCohortVisible
                 }));
               }}
+            />
+          )}
+          {this.state.saveCohortVisible && (
+            <SaveCohort
+              isOpen={this.state.saveCohortVisible}
+              onDismiss={(): void =>
+                this.setState({ saveCohortVisible: false })
+              }
+              onSave={(savedCohort: ErrorCohort): void => {
+                let newCohorts = [...this.state.cohorts, savedCohort];
+                newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+                this.setState({
+                  cohorts: newCohorts,
+                  selectedCohort: savedCohort
+                });
+              }}
+              temporaryCohort={this.state.selectedCohort}
+              baseCohort={this.state.baseCohort}
             />
           )}
         </div>

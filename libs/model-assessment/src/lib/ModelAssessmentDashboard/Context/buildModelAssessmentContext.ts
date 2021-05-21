@@ -146,7 +146,8 @@ export function buildInitialModelAssessmentContext(
     weightVectorOptions,
     whatIfChartConfig: undefined,
     createCohortVisible: false,
-    shiftCohortVisible: false
+    shiftCohortVisible: false,
+    saveCohortVisible: false
   };
 }
 

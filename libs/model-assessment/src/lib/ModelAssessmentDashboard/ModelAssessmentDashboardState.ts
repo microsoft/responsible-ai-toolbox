@@ -46,6 +46,7 @@ export interface IModelAssessmentDashboardState
   weightVectorLabels: Dictionary<string>;
   createCohortVisible: boolean;
   shiftCohortVisible: boolean;
+  saveCohortVisible: boolean;
 }
 
 export interface IModelAssessmentDashboardTab {
