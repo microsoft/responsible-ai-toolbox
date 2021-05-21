@@ -35,6 +35,7 @@ import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
+  adultCensusCausalErrorAnalysisConfig,
   adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 
@@ -143,6 +144,7 @@ export const applications: IApplications = <const>{
         counfactualData: adultCounterfactualData,
         counterfactualData: adultCounterfactualData,
         dataset: adultCensusWithFairnessDataset,
+        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },
