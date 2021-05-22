@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
+import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
+import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
 import { INodeDetail } from "../../TreeViewState";
-import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
+import { Gradient } from "../Gradient/Gradient";
 import { InfoCallout } from "../InfoCallout/InfoCallout";
 
 import { treeLegendStyles } from "./TreeLegend.styles";
@@ -25,10 +26,11 @@ const stackTokens: IStackTokens = { childrenGap: 5 };
 const cellTokens: IStackTokens = { padding: 10 };
 
 export class TreeLegend extends React.Component<ITreeLegendProps> {
-  private readonly _errorRateIconId = "errorRateIconId";
+  private readonly _metricIconId = "metricIconId";
   private readonly _errorCoverageIconId = "errorCoverageIconId";
   public render(): React.ReactNode {
     const classNames = treeLegendStyles();
+    const isRate = this.props.selectedCohort.metricName === Metrics.ErrorRate;
     return (
       <div className={classNames.treeLegend}>
         <Stack tokens={stackTokens}>
@@ -48,7 +50,10 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                   />
                 </div>
                 <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.errorCoverage.toFixed(2)}%
+                  {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
+                    2
+                  )}
+                  %
                 </div>
               </Stack>
             </Stack>
@@ -87,24 +92,35 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               <div className={classNames.metricBarRed} />
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
-                  {localization.ErrorAnalysis.errorRate}
+                  {MetricUtils.getLocalizedMetric(
+                    this.props.selectedCohort.metricName,
+                    MetricLocalizationType.Name
+                  )}
                   <InfoCallout
-                    iconId={this._errorRateIconId}
-                    infoText={localization.ErrorAnalysis.errorRateInfo}
-                    title={localization.ErrorAnalysis.errorRateTitle}
+                    iconId={this._metricIconId}
+                    infoText={MetricUtils.getLocalizedMetric(
+                      this.props.selectedCohort.metricName,
+                      MetricLocalizationType.Info
+                    )}
+                    title={MetricUtils.getLocalizedMetric(
+                      this.props.selectedCohort.metricName,
+                      MetricLocalizationType.Title
+                    )}
                   />
                 </div>
                 <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.errorRate.toFixed(2)}%
+                  {this.props.selectedCohort.metricValue.toFixed(2)}
+                  {isRate ? "%" : ""}
                 </div>
               </Stack>
             </Stack>
             <svg width="60" height="60" viewBox="0 0 40 40">
               <g>
-                <ErrorRateGradient
+                <Gradient
                   max={this.props.max}
-                  minPct={0}
-                  selectedCohort={this.props.selectedCohort}
+                  minPct={this.props.minPct}
+                  value={this.props.selectedCohort.metricValue}
+                  isRate={isRate}
                 />
               </g>
             </svg>

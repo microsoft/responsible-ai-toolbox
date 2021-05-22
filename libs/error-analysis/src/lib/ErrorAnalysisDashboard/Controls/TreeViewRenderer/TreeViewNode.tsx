@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getRandomId, SVGToolTip } from "@responsible-ai/core-ui";
+import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
 import { getTheme, IProcessedStyleSet } from "office-ui-fabric-react";
 import React from "react";
@@ -16,6 +16,7 @@ import {
 } from "./TreeViewRenderer.styles";
 
 export interface ITreeViewNodeProps {
+  fillOffset: number;
   node: HierarchyPointNode<ITreeNode>;
   onSelect(node: HierarchyPointNode<ITreeNode>): void;
 }
@@ -46,20 +47,12 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               stopColor={this.props.node.data.errorColor}
             />
             <stop
-              offset={`${
-                (this.props.node.data.error /
-                  this.props.node.data.rootErrorSize) *
-                100
-              }%`}
+              offset={`${this.props.fillOffset * 100}%`}
               stopOpacity="1"
               stopColor={this.props.node.data.errorColor}
             />
             <stop
-              offset={`${
-                (this.props.node.data.error /
-                  this.props.node.data.rootErrorSize) *
-                100
-              }%`}
+              offset={`${this.props.fillOffset * 100}%`}
               stopOpacity="1"
               stopColor={theme.semanticColors.bodyBackgroundChecked}
             />
@@ -99,7 +92,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               node.data.errorColor
             )}
           >
-            {node.data.error}/{node.data.size}
+            {this.getNodeText(node)}
           </text>
         </g>
         <SVGToolTip target={this.ref} spacing={15}>
@@ -115,6 +108,16 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
   private onSelect = (): void => {
     this.props.onSelect(this.props.node);
   };
+
+  private getNodeText(node: HierarchyPointNode<ITreeNode>): string {
+    if (
+      node.data.metricName !== Metrics.ErrorRate &&
+      node.data.metricName !== undefined
+    ) {
+      return node.data.metricValue.toFixed(2);
+    }
+    return node.data.error + "/" + node.data.size;
+  }
 
   private getNodeClassName(
     classNames: IProcessedStyleSet<ITreeViewRendererStyles>,
