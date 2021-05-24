@@ -5,8 +5,8 @@ import {
   IFilter,
   ICompositeFilter,
   CohortSource,
-  CohortStats,
-  ErrorCohort
+  ErrorCohort,
+  MetricCohortStats
 } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 
@@ -24,7 +24,7 @@ export interface IMatrixAreaProps {
     compositeFilters: ICompositeFilter[],
     source: CohortSource,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;

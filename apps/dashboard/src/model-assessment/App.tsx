@@ -14,10 +14,10 @@ import React from "react";
 import {
   generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
-  generateFeatures,
   generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
-  createPredictionsRequestGenerator
+  createPredictionsRequestGenerator,
+  DatasetName
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -51,7 +51,7 @@ export class App extends React.Component<IAppProps> {
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
         this.props.dataset.featureNames,
-        false
+        DatasetName.BreastCancer
       ),
       requestMatrix: generateJsonMatrix,
       requestPredictions: !this.props.classDimension
@@ -64,12 +64,12 @@ export class App extends React.Component<IAppProps> {
       return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
     }
 
-    modelAssessmentDashboardProps.dataset.featureNames = generateFeatures();
+    modelAssessmentDashboardProps.dataset.featureNames = this.props.dataset.featureNames;
     modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
     modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
     modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
       this.props.dataset.featureNames,
-      true
+      DatasetName.BreastCancer
     );
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;

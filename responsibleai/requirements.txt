@@ -1,6 +1,6 @@
 dice-ml>=0.5.0
 econml>=0.11.0
-erroranalysis>=0.1.3
+erroranalysis>=0.1.4
 interpret-community>=0.17.0
 lightgbm>=2.0.11
 numpy>=1.17.2
