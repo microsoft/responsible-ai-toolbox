@@ -25,7 +25,6 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<
       verticalAlign: "center"
     },
     container: {
-      overflow: "hidden",
       width: "100%"
     },
     cPanel: {

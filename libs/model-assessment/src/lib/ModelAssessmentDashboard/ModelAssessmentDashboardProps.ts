@@ -16,7 +16,7 @@ export interface IModelAssessmentData {
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData[];
   causalAnalysisData?: ICausalAnalysisData[];
-  counterfactualData?: ICounterfactualData;
+  counterfactualData?: ICounterfactualData[];
   errorAnalysisConfig?: IErrorAnalysisConfig[];
 }
 

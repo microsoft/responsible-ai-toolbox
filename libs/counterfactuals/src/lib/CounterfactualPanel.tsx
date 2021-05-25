@@ -65,7 +65,7 @@ export class CounterfactualPanel extends React.Component<
         closeButtonAriaLabel="Close"
         headerText={localization.Counterfactuals.panelHeader}
       >
-        <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
+        <Stack tokens={{ childrenGap: "m1" }}>
           <Stack.Item>
             <Text variant={"medium"}>
               {localization.Counterfactuals.panelDescription}
