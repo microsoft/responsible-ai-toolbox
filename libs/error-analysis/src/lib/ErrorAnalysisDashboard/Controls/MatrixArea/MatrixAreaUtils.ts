@@ -6,8 +6,10 @@ import {
   Operations,
   FilterMethods,
   JointDataset,
-  CohortStats,
-  ErrorCohort
+  ErrorCohortStats,
+  ErrorCohort,
+  Metrics,
+  MetricCohortStats
 } from "@responsible-ai/core-ui";
 
 import { noFeature } from "../../Constants";
@@ -69,40 +71,82 @@ export function fetchMatrix(
 export function createCohortStatsFromSelectedCells(
   selectedCells: boolean[],
   jsonMatrix: { matrix: unknown[] }
-): CohortStats {
+): MetricCohortStats {
   let falseCohortCount = 0;
   let totalCohortCount = 0;
+  let metricName = Metrics.ErrorRate;
+  let totalCohortError = 0;
+  let totalError = 0;
   let falseCount = 0;
   let totalCount = 0;
   let existsSelectedCell = false;
   jsonMatrix.matrix.forEach((row: any, i: number) => {
     row.forEach((value: any, j: number) => {
       if (selectedCells !== undefined && selectedCells[j + i * row.length]) {
-        falseCohortCount += value.falseCount;
+        if (value.falseCount) {
+          falseCohortCount += value.falseCount;
+        } else if (value.metricValue) {
+          metricName = value.metricName;
+          if (value.metricName === Metrics.MeanSquaredError) {
+            totalCohortError += value.metricValue * value.count;
+          }
+        }
         totalCohortCount += value.count;
         existsSelectedCell = true;
       }
-      falseCount += value.falseCount;
+      if (value.falseCount) {
+        falseCount += value.falseCount;
+      } else if (value.metricValue) {
+        metricName = value.metricName;
+        if (value.metricName === Metrics.MeanSquaredError) {
+          totalError += value.metricValue * value.count;
+        }
+      }
       totalCount += value.count;
     });
   });
+  let metricValue: number;
   if (existsSelectedCell) {
-    const errorRate = (falseCohortCount / totalCohortCount) * 100;
-    return new CohortStats(
-      falseCohortCount,
+    if (metricName === Metrics.ErrorRate) {
+      metricValue = (falseCohortCount / totalCohortCount) * 100;
+      return new ErrorCohortStats(
+        falseCohortCount,
+        totalCohortCount,
+        falseCount,
+        totalCount,
+        metricValue,
+        metricName
+      );
+    }
+    metricValue = totalCohortError / totalCohortCount;
+    const coverage = (totalCohortError / totalError) * 100;
+    return new MetricCohortStats(
       totalCohortCount,
-      falseCount,
       totalCount,
-      errorRate
+      metricValue,
+      metricName,
+      coverage
     );
   }
-  const errorRate = (falseCount / totalCount) * 100;
-  return new CohortStats(
-    falseCount,
+  if (metricName === Metrics.ErrorRate) {
+    metricValue = (falseCount / totalCount) * 100;
+    return new ErrorCohortStats(
+      falseCount,
+      totalCount,
+      falseCount,
+      totalCount,
+      metricValue,
+      metricName
+    );
+  }
+  metricValue = totalError / totalCount;
+  const coverage = 100;
+  return new MetricCohortStats(
+    totalCohortCount,
     totalCount,
-    falseCount,
-    totalCount,
-    errorRate
+    metricValue,
+    metricName,
+    coverage
   );
 }
 

@@ -8,7 +8,7 @@ from scipy.sparse import issparse
 import numpy as np
 import pandas as pd
 import traceback
-from .constants import SKLearn
+from .constants import ModelTask, SKLearn
 from .error_handling import _format_exception
 from ._input_processing import _serialize_json_safe
 from erroranalysis._internal.error_analyzer import (
@@ -30,7 +30,9 @@ class ErrorAnalysisDashboardInput:
             features,
             categorical_features,
             true_y_dataset,
-            pred_y):
+            pred_y,
+            model_task,
+            metric):
         """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -66,6 +68,20 @@ class ErrorAnalysisDashboardInput:
             alternative to the model and explanation for a more limited
             view.
         :type pred_y: numpy.ndarray or list[]
+        :param model_task: Optional parameter to specify whether the model
+            is a classification or regression model. In most cases, the
+            type of the model can be inferred based on the shape of the
+            output, where a classifier has a predict_proba method and
+            outputs a 2 dimensional array, while a regressor has a
+            predict method and outputs a 1 dimensional array.
+        :type model_task: str
+        :param metric: The metric name to evaluate at each tree node or
+            heatmap grid.  Currently supported classification metrics
+            include 'error_rate', 'recall_score', 'precision_score',
+            'f1_score', and 'accuracy_score'. Supported regression
+            metrics include 'mean_absolute_error', 'mean_squared_error',
+            'r2_score', and 'median_absolute_error'.
+        :type metric: str
         """
         self._model = model
         full_dataset = dataset
@@ -194,13 +210,25 @@ class ErrorAnalysisDashboardInput:
                 ExplanationDashboardInterface.PROBABILITY_Y
             ] = probability_y
         if model_available:
-            self._error_analyzer = ModelAnalyzer(model, full_dataset,
-                                                 full_true_y, features,
-                                                 categorical_features)
+            self._error_analyzer = ModelAnalyzer(model,
+                                                 full_dataset,
+                                                 full_true_y,
+                                                 features,
+                                                 categorical_features,
+                                                 model_task,
+                                                 metric)
         else:
-            self._error_analyzer = PredictionsAnalyzer(pred_y, full_dataset,
-                                                       full_true_y, features,
-                                                       categorical_features)
+            # Model task cannot be unknown when passing predictions
+            # Assume classification for backwards compatibility
+            if model_task == ModelTask.UNKNOWN:
+                model_task = ModelTask.CLASSIFICATION
+            self._error_analyzer = PredictionsAnalyzer(pred_y,
+                                                       full_dataset,
+                                                       full_true_y,
+                                                       features,
+                                                       categorical_features,
+                                                       model_task,
+                                                       metric)
         if self._categorical_features:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
+import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IStackStyles,
@@ -11,7 +11,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ErrorRateGradient } from "../ErrorRateGradient/ErrorRateGradient";
+import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
+import { Gradient } from "../Gradient/Gradient";
 import { InfoCallout } from "../InfoCallout/InfoCallout";
 
 import { matrixLegendStyles } from "./MatrixLegend.styles";
@@ -38,6 +39,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
 
   public render(): React.ReactNode {
     const classNames = matrixLegendStyles();
+    const isRate = this.props.selectedCohort.metricName === Metrics.ErrorRate;
     return (
       <div className={classNames.matrixLegend}>
         <Stack
@@ -83,7 +85,10 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                   />
                 </div>
                 <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.errorCoverage.toFixed(2)}%
+                  {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
+                    2
+                  )}
+                  %
                 </div>
               </Stack>
             </Stack>
@@ -92,24 +97,35 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                 <div className={classNames.metricBarRed} />
                 <Stack tokens={cellTokens}>
                   <div className={classNames.smallHeader}>
-                    {localization.ErrorAnalysis.errorRate}
+                    {MetricUtils.getLocalizedMetric(
+                      this.props.selectedCohort.metricName,
+                      MetricLocalizationType.Name
+                    )}
                     <InfoCallout
                       iconId={this._errorRateIconId}
-                      infoText={localization.ErrorAnalysis.errorRateInfo}
-                      title={localization.ErrorAnalysis.errorRateTitle}
+                      infoText={MetricUtils.getLocalizedMetric(
+                        this.props.selectedCohort.metricName,
+                        MetricLocalizationType.Info
+                      )}
+                      title={MetricUtils.getLocalizedMetric(
+                        this.props.selectedCohort.metricName,
+                        MetricLocalizationType.Title
+                      )}
                     />
                   </div>
                   <div className={classNames.valueBlack}>
-                    {this.props.selectedCohort.errorRate.toFixed(2)}%
+                    {this.props.selectedCohort.metricValue.toFixed(2)}
+                    {isRate ? "%" : ""}
                   </div>
                 </Stack>
               </Stack>
               <svg width="60" height="60" viewBox="0 0 40 40">
                 <g>
-                  <ErrorRateGradient
+                  <Gradient
                     max={this.props.max}
                     minPct={0}
-                    selectedCohort={this.props.selectedCohort}
+                    value={this.props.selectedCohort.metricValue}
+                    isRate={isRate}
                   />
                 </g>
               </svg>

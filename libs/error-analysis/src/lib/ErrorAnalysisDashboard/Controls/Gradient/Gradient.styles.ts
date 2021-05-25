@@ -7,14 +7,12 @@ import {
   IProcessedStyleSet
 } from "office-ui-fabric-react";
 
-export interface IErrorRateGradientStyles {
+export interface IGradientStyles {
   gradientTick: IStyle;
 }
 
-export const errorRateGradientStyles: () => IProcessedStyleSet<
-  IErrorRateGradientStyles
-> = () => {
-  return mergeStyleSets<IErrorRateGradientStyles>({
+export const gradientStyles: () => IProcessedStyleSet<IGradientStyles> = () => {
+  return mergeStyleSets<IGradientStyles>({
     gradientTick: {
       stroke: "black",
       strokeWidth: 1

@@ -1,30 +1,32 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 
-import { errorRateGradientStyles } from "./ErrorRateGradient.styles";
+import { gradientStyles } from "./Gradient.styles";
 
-export interface IErrorRateGradientProps {
+export interface IGradientProps {
   max: number;
   minPct: number;
-  selectedCohort: ErrorCohort;
+  value: number;
+  isRate: boolean;
 }
 
-export class ErrorRateGradient extends React.Component<
-  IErrorRateGradientProps
-> {
+export class Gradient extends React.Component<IGradientProps> {
   public render(): React.ReactNode {
-    const classNames = errorRateGradientStyles();
+    const classNames = gradientStyles();
     const errorRateRectHeight = 40;
+    let maxValue: number = this.props.max;
+    if (this.props.isRate) {
+      maxValue = maxValue * 100;
+    }
     const errorRateLineHeight =
-      errorRateRectHeight -
-      (this.props.selectedCohort.errorRate / (this.props.max * 100)) *
-        errorRateRectHeight;
-    const gradientMidPct = `${100 - (1 / this.props.max) * this.props.minPct}%`;
+      errorRateRectHeight - (this.props.value / maxValue) * errorRateRectHeight;
+    const gradientMidPct = `${
+      100 - (1 / (maxValue / 100)) * this.props.minPct
+    }%`;
     const minColor = ColorPalette.MinColor;
     const maxColor = ColorPalette.MaxColor;
     const errorAvgColor = ColorPalette.ErrorAvgColor;
