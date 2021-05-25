@@ -5,6 +5,7 @@ import { ErrorCohort, ICausalAnalysisData } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
+import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisConfig } from "../Interfaces/IErrorAnalysisConfig";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
@@ -14,6 +15,7 @@ import { JointDataset } from "../util/JointDataset";
 
 export interface IModelAssessmentContext {
   causalAnalysisData?: ICausalAnalysisData;
+  counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData;
   errorAnalysisConfig?: IErrorAnalysisConfig;

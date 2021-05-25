@@ -35,7 +35,8 @@ import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
-  adultCensusCausalErrorAnalysisConfig
+  adultCensusCausalErrorAnalysisConfig,
+  adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 
 export interface IInterpretDataSet {
@@ -141,6 +142,7 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
+        counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]

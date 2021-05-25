@@ -64,6 +64,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         value={{
           baseErrorCohort: this.state.baseCohort,
           causalAnalysisData: this.props.causalAnalysisData?.[0],
+          counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
           errorAnalysisConfig: this.props.errorAnalysisConfig?.[0],
           errorCohorts: this.state.cohorts,

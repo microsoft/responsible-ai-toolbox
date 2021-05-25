@@ -21,7 +21,6 @@ export interface ICounterfactualsViewProps {
   data: ICausalAnalysisData;
 }
 export interface ICounterfactualsViewState {
-  selectedIndex?: number;
   cohorts: Cohort[];
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
@@ -60,9 +59,6 @@ export class CounterfactualsView extends React.PureComponent<
             weightLabels={this.state.weightVectorLabels}
             onWeightChange={this.onWeightVectorChange}
           />
-        </Stack.Item>
-        <Stack.Item>
-          <div>{this.state.selectedIndex}</div>
         </Stack.Item>
       </Stack>
     );
