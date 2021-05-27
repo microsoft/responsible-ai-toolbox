@@ -3,6 +3,7 @@
 
 export * from "./lib/cohortKey";
 export * from "./lib/Cohort/Cohort";
+export * from "./lib/Cohort/Constants";
 export * from "./lib/Cohort/ErrorCohort";
 export * from "./lib/Cohort/CohortStats";
 export * from "./lib/Cohort/CohortBasedComponent";
@@ -36,6 +37,7 @@ export * from "./lib/components/SVGToolTip";
 export * from "./lib/Interfaces/ExplanationInterfaces";
 export * from "./lib/Interfaces/IExplanationContext";
 export * from "./lib/Interfaces/ICausalAnalysisData";
+export * from "./lib/Interfaces/ICounterfactualData";
 export * from "./lib/Interfaces/ICausalAnalysisSingleData";
 export * from "./lib/Interfaces/IFairnessData";
 export * from "./lib/Interfaces/IDataset";

@@ -169,8 +169,8 @@ export class CohortList extends React.Component<
       .filter((errorCohort) => !errorCohort.isTemporary)
       .map((errorCohort: ErrorCohort, index: number) => {
         return {
-          coverage: errorCohort.errorCoverage.toFixed(2),
-          errorRate: errorCohort.errorRate.toFixed(2),
+          coverage: errorCohort.cohortStats.errorCoverage.toFixed(2),
+          errorRate: errorCohort.cohortStats.metricValue.toFixed(2),
           key: index,
           name: errorCohort.cohort.name
         };

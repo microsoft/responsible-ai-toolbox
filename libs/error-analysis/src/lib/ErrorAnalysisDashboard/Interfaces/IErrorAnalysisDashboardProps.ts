@@ -30,16 +30,19 @@ export interface IRequestNode {
   condition: string;
   error: number;
   id: string;
+  isErrorMetric: boolean;
   method: string;
+  metricName: string;
+  metricValue: number;
   nodeIndex: number;
   nodeName: string;
   parentId: string;
   parentNodeName: string;
-  pathFromRoot: string;
   size: number;
   sourceRowKeyHash: string;
   success: number;
 }
+
 export interface IErrorAnalysisDashboardProps
   extends IExplanationDashboardData,
     IOfficeFabricProps {

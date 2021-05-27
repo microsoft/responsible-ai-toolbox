@@ -4,10 +4,18 @@
 import _ from "lodash";
 
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
+import { dummyMatrixBostonData } from "./__mock_data__/dummyMatrixBoston";
 import { dummyMatrix1dInterval } from "./__mock_data__/dummyMatrixOnedInterval";
 import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
 import { dummyTreeAdultCensusIncomeData } from "./__mock_data__/dummyTreeAdultCensusIncome";
+import { dummyTreeBostonData } from "./__mock_data__/dummyTreeBoston";
 import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer";
+
+export enum DatasetName {
+  AdultCensusIncome = 1,
+  BreastCancer,
+  Boston
+}
 
 export function getJsonMatrix(): any {
   return {
@@ -16,16 +24,16 @@ export function getJsonMatrix(): any {
   };
 }
 
-export function getJsonTreeBreastCancer(): any {
+export function getJsonTreeBreastCancer(featureNames: string[]): any {
   return {
-    data: getJsonTree(true),
-    features: generateFeatures().filter((feature) => feature.startsWith("mean"))
+    data: getJsonTree(DatasetName.BreastCancer),
+    features: featureNames.filter((feature) => feature.startsWith("mean"))
   };
 }
 
 export function getJsonTreeAdultCensusIncome(featureNames: string[]): any {
   return {
-    data: getJsonTree(false),
+    data: getJsonTree(DatasetName.AdultCensusIncome),
     features: featureNames.filter(
       (feature) =>
         feature.startsWith("a") ||
@@ -36,9 +44,18 @@ export function getJsonTreeAdultCensusIncome(featureNames: string[]): any {
   };
 }
 
-export function getJsonTree(isBreastCancer: boolean): any {
-  if (isBreastCancer) {
+export function getJsonTreeBoston(featureNames: string[]): any {
+  return {
+    data: getJsonTree(DatasetName.Boston),
+    features: featureNames
+  };
+}
+
+export function getJsonTree(dataset: DatasetName): any {
+  if (dataset === DatasetName.BreastCancer) {
     return _.cloneDeep(dummyTreeBreastCancerData);
+  } else if (dataset === DatasetName.Boston) {
+    return _.cloneDeep(dummyTreeBostonData);
   }
   return _.cloneDeep(dummyTreeAdultCensusIncomeData);
 }
@@ -46,14 +63,16 @@ export function getJsonTree(isBreastCancer: boolean): any {
 export function generateJsonTree(
   _data: any[],
   signal: AbortSignal,
-  isBreastCancer: boolean
+  dataset: DatasetName
 ): Promise<any> {
   const promise = new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
-      if (isBreastCancer) {
+      if (dataset === DatasetName.BreastCancer) {
         resolve(_.cloneDeep(dummyTreeBreastCancerData));
-      } else {
+      } else if (dataset === DatasetName.AdultCensusIncome) {
         resolve(_.cloneDeep(dummyTreeAdultCensusIncomeData));
+      } else {
+        resolve(_.cloneDeep(dummyTreeBostonData));
       }
     }, 300);
     signal.addEventListener("abort", () => {
@@ -69,14 +88,21 @@ export function generateJsonTreeBreastCancer(
   _data: any[],
   signal: AbortSignal
 ): Promise<any> {
-  return generateJsonTree(_data, signal, true);
+  return generateJsonTree(_data, signal, DatasetName.BreastCancer);
 }
 
 export function generateJsonTreeAdultCensusIncome(
   _data: any[],
   signal: AbortSignal
 ): Promise<any> {
-  return generateJsonTree(_data, signal, false);
+  return generateJsonTree(_data, signal, DatasetName.AdultCensusIncome);
+}
+
+export function generateJsonTreeBoston(
+  _data: any[],
+  signal: AbortSignal
+): Promise<any> {
+  return generateJsonTree(_data, signal, DatasetName.Boston);
 }
 
 export function generateJsonMatrix(
@@ -93,6 +119,12 @@ export function generateJsonMatrix(
         resolve(_.cloneDeep(dummyMatrix2dInterval));
       } else if (data[0][0] === "mean radius" || data[0][1] === "mean radius") {
         resolve(_.cloneDeep(dummyMatrix1dInterval));
+      } else if (
+        data.length === 3 &&
+        data[0][0] === "CRIM" &&
+        data[0][1] === "ZN"
+      ) {
+        resolve(_.cloneDeep(dummyMatrixBostonData));
       } else {
         resolve(_.cloneDeep(dummyMatrixData));
       }
@@ -108,13 +140,15 @@ export function generateJsonMatrix(
 
 export function createJsonImportancesGenerator(
   featureNames: string[],
-  isBreastCancer: boolean
+  dataset: DatasetName
 ) {
   return (_data: any[], signal: AbortSignal): Promise<any> => {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        if (isBreastCancer) {
-          resolve(generateFeatures().map(() => Math.random()));
+        if (dataset === DatasetName.BreastCancer) {
+          resolve(featureNames.map(() => Math.random()));
+        } else if (dataset === DatasetName.AdultCensusIncome) {
+          resolve(featureNames.map(() => Math.random()));
         } else {
           resolve(featureNames.map(() => Math.random()));
         }
@@ -174,39 +208,4 @@ export function generateRandomProbs(
   });
 
   return promise;
-}
-
-export function generateFeatures(): string[] {
-  return [
-    "mean radius",
-    "mean texture",
-    "mean perimeter",
-    "mean area",
-    "mean smoothness",
-    "mean compactness",
-    "mean concavity",
-    "mean concave points",
-    "mean symmetry",
-    "mean fractal dimension",
-    "radius error",
-    "texture error",
-    "perimeter error",
-    "area error",
-    "smoothness error",
-    "compactness error",
-    "concavity error",
-    "concave points error",
-    "symmetry error",
-    "fractal dimension error",
-    "worst radius",
-    "worst texture",
-    "worst perimeter",
-    "worst area",
-    "worst smoothness",
-    "worst compactness",
-    "worst concavity",
-    "worst concave points",
-    "worst symmetry",
-    "worst fractal dimension"
-  ];
 }

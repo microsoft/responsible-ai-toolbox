@@ -19,12 +19,6 @@ export interface ITransform {
 }
 
 export interface INodeDetail {
-  showSelected: IShowSelectedStyle;
-  globalError: string;
-  localError: string;
-  instanceInfo: string;
-  errorInfo: string;
-  successInfo: string;
   errorColor: Property.Color;
   maskDown: ITransform;
   maskUp: ITransform;
@@ -49,15 +43,15 @@ export interface ITreeNode {
   error: number;
   rootErrorSize: number;
   id: string;
+  isErrorMetric: boolean;
   method: string;
+  metricName: string;
+  metricValue: number;
   nodeIndex: number;
   nodeName: string;
   parentId: string;
   parentNodeName: string;
-  pathFromRoot: string;
   size: number;
-  sourceRowKeyHash: string;
-  success: number;
   errorColor: Property.Color;
   filterProps: FilterProps;
   maskShift: number;
@@ -81,18 +75,12 @@ export function createInitialTreeViewState(): ITreeViewRendererState {
   return {
     nodeDetail: {
       errorColor: "#eaeaea",
-      errorInfo: "0 Errors",
-      globalError: "0",
-      instanceInfo: "0 Instances",
-      localError: "0",
       maskDown: {
         transform: "translate(0px, -13px)"
       },
       maskUp: {
         transform: "translate(0px, 13px)"
-      },
-      showSelected: { opacity: 0 },
-      successInfo: "0 Success"
+      }
     },
     request: undefined,
     root: undefined,

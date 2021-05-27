@@ -619,7 +619,12 @@
     "selectedDatapoint": "Selected datapoint",
     "desiredClass": "Desired class for counterfactual(s)",
     "currentClass": "Current class",
-    "createCounterfactual": "Create what-if counterfactual"
+    "createCounterfactual": "Create what-if counterfactual",
+    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "counterfactualName": "What-if counterfactual name",
+    "saveAsNew": "Save as new datapoint",
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention."
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",
@@ -644,9 +649,6 @@
     "errorCoverage": "Error coverage",
     "errorCoverageInfo": "The error coverage shows the percentage of errors that are concentrated in the selection out of all errors present in the dataset.",
     "errorCoverageTitle": "Additional information on error coverage",
-    "errorRate": "Error rate",
-    "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
-    "errorRateTitle": "Additional information on error rate",
     "globalExplanationView": "Global explanation",
     "_globalExplanationView.comment": "Global explanation view",
     "localExplanationView": "Local explanation",
@@ -672,6 +674,12 @@
     "FeatureList": {
       "importances": "Importances",
       "features": "Features"
+    },
+    "FilterTooltip": {
+      "correctNum": "Correct (#): ",
+      "incorrectNum": "Incorrect (#): ",
+      "countNum": "Count (#): ",
+      "errorSum": "Error sum: "
     },
     "InspectionView": {
       "emptyError": "Please select datapoints in the incorrect and correct categories by clicking the checkboxes.",
@@ -713,6 +721,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "Error explorer",

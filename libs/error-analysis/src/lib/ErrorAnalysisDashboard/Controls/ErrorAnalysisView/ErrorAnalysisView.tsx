@@ -5,9 +5,9 @@ import {
   ICompositeFilter,
   IFilter,
   CohortSource,
-  CohortStats,
-  ErrorCohort,
   defaultModelAssessmentContext,
+  ErrorCohort,
+  MetricCohortStats,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import React from "react";
@@ -33,7 +33,7 @@ export interface IErrorAnalysisViewProps {
     compositeFilters: ICompositeFilter[],
     source: CohortSource,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;

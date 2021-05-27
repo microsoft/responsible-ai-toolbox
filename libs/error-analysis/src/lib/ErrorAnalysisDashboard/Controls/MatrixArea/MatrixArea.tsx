@@ -50,7 +50,7 @@ export class MatrixArea extends React.PureComponent<
       jsonMatrix: this.props.state.jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
-      maxErrorRate: this.props.state.maxErrorRate,
+      maxMetricValue: this.props.state.maxMetricValue,
       selectedCells: this.props.state.selectedCells
     };
     if (this.props.state.selectedCells === undefined) {
@@ -182,23 +182,30 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private reloadData(jsonMatrix: any): void {
-    let maxErrorRate = 0;
+    let maxMetricValue = 0;
     jsonMatrix.matrix.forEach((row: any): void => {
       row.forEach((value: any): void => {
-        const errorRate = value.falseCount / value.count;
-        if (!Number.isNaN(errorRate)) {
-          maxErrorRate = Math.max(maxErrorRate, errorRate);
+        if (value.falseCount) {
+          const errorRate = value.falseCount / value.count;
+          if (!Number.isNaN(errorRate)) {
+            maxMetricValue = Math.max(maxMetricValue, errorRate);
+          }
+        } else {
+          const metricValue = value.metricValue;
+          if (!Number.isNaN(metricValue)) {
+            maxMetricValue = Math.max(maxMetricValue, metricValue);
+          }
         }
       });
     });
-    this.props.updateMatrixLegendState(maxErrorRate);
+    this.props.updateMatrixLegendState(maxMetricValue);
     this.setState({
       disableClearAll: true,
       disableSelectAll: false,
       jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
-      maxErrorRate,
+      maxMetricValue,
       selectedCells: undefined
     });
   }

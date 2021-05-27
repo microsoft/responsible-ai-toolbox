@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { FilterProps } from "../../FilterProps";
+import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
 
 import { filterTooltipStyles } from "./FilterTooltip.styles";
 
@@ -17,15 +19,34 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
   public render(): React.ReactNode {
     const classNames = filterTooltipStyles();
     const theme = getTheme();
+    const isErrorRate = this.props.filterProps.metricName === Metrics.ErrorRate;
     return (
       <>
         <g>
-          <text className={classNames.numCorrect}>
-            Correct (#): {this.props.filterProps.numCorrect}
-          </text>
-          <text className={classNames.numIncorrect}>
-            Incorrect (#): {this.props.filterProps.numIncorrect}
-          </text>
+          {isErrorRate && (
+            <g>
+              <text className={classNames.numCorrect}>
+                {localization.ErrorAnalysis.FilterTooltip.correctNum}
+                {this.props.filterProps.numCorrect}
+              </text>
+              <text className={classNames.numIncorrect}>
+                {localization.ErrorAnalysis.FilterTooltip.incorrectNum}
+                {this.props.filterProps.numIncorrect}
+              </text>
+            </g>
+          )}
+          {!isErrorRate && (
+            <g>
+              <text className={classNames.numCorrect}>
+                {localization.ErrorAnalysis.FilterTooltip.countNum}
+                {this.props.filterProps.totalCount.toFixed(0)}
+              </text>
+              <text className={classNames.numIncorrect}>
+                {localization.ErrorAnalysis.FilterTooltip.errorSum}
+                {this.props.filterProps.numIncorrect.toFixed(2)}
+              </text>
+            </g>
+          )}
           <line
             x1="1"
             y1="30"
@@ -53,10 +74,14 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
             <rect className={classNames.metricBarRed} />
             <g>
               <text className={classNames.smallHeader}>
-                {localization.ErrorAnalysis.errorRate}
+                {MetricUtils.getLocalizedMetric(
+                  this.props.filterProps.metricName,
+                  MetricLocalizationType.Short
+                )}
               </text>
               <text className={classNames.valueBlack}>
-                {this.props.filterProps.errorRate.toFixed(2)}%
+                {this.props.filterProps.metricValue.toFixed(2)}
+                {isErrorRate ? "%" : ""}
               </text>
             </g>
           </g>

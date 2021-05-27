@@ -313,8 +313,10 @@ export class CounterfactualChart extends React.PureComponent<
       <div className={classNames.page}>
         <div className={classNames.mainArea}>
           <CounterfactualPanel
+            selectedIndex={this.state.selectedPointsIndexes[0]}
             closePanel={this.togglePanel}
             isPanelOpen={this.state.isPanelOpen}
+            data={this.context.counterfactualData}
           />
           <div className={classNames.chartsArea}>
             {cohortOptions && (
@@ -439,6 +441,7 @@ export class CounterfactualChart extends React.PureComponent<
               </div>
               <div className={classNames.legendAndText}>
                 <ComboBox
+                  className={classNames.legendLabel}
                   label={localization.Counterfactuals.selectedDatapoint}
                   onChange={this.selectPointFromDropdown}
                   options={this.getDataOptions()}
@@ -448,6 +451,7 @@ export class CounterfactualChart extends React.PureComponent<
                   styles={FabricStyles.smallDropdownStyle}
                 />
                 <ComboBox
+                  className={classNames.legendLabel}
                   label={localization.Counterfactuals.desiredClass}
                   onChange={this.selectCounterfactuals}
                   options={this.getCounterfactualsOptions()}
@@ -456,12 +460,17 @@ export class CounterfactualChart extends React.PureComponent<
                   useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
-                <div>
+                <div className={classNames.legendLabel}>
                   <b>{`${localization.Counterfactuals.currentClass}: `}</b>
                   {`${this.state.currentClass}`}
                 </div>
                 <PrimaryButton
+                  className={classNames.legendLabel}
                   onClick={this.togglePanel}
+                  disabled={
+                    this.state.selectedPointsIndexes[0] === undefined ||
+                    !this.state.selectedCounterfactual
+                  }
                   text={localization.Counterfactuals.createCounterfactual}
                 />
               </div>

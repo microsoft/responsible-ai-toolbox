@@ -160,9 +160,9 @@ class ModelTask(str, Enum):
     'classification' or 'regression'.
     """
 
-    Classification = 'classification'
-    Regression = 'regression'
-    Unknown = 'unknown'
+    CLASSIFICATION = 'classification'
+    REGRESSION = 'regression'
+    UNKNOWN = 'unknown'
 
 
 class LightGBMParams(object):
