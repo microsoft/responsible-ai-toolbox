@@ -24,13 +24,13 @@ test = pd.merge(x_test, pd.DataFrame(y_test, columns=[
 
 ma = ModelAnalysis(knn, train, test, "income", "classification",
                    categorical_features=[])
-# ma.explainer.add()
-# ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
-#                        'Occupation', 'Relationship', 'Race', 'Sex',
-#                        'Capital Gain', 'Capital Loss',
-#                        'Hours per week', 'Country'], 10,
-#                       desired_class="opposite")
-# ma.error_analysis.add()
+ma.explainer.add()
+ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
+                       'Occupation', 'Relationship', 'Race', 'Sex',
+                       'Capital Gain', 'Capital Loss',
+                       'Hours per week', 'Country'], 10,
+                      desired_class="opposite")
+ma.error_analysis.add()
 ma.causal.add()
 ma.compute()
 
