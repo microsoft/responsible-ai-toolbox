@@ -72,7 +72,8 @@ export class CausalAggregateChart extends React.PureComponent<
     plotlyProps.data = [
       {
         error_y: {
-          array: this.props.data.map((d) => d.p_value),
+          array: this.props.data.map((d) => d.ci_upper - d.point),
+          arrayminus: this.props.data.map((d) => d.point - d.ci_lower),
           type: "data",
           visible: true
         },

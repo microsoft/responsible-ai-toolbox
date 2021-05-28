@@ -39,7 +39,7 @@ export class CausalAggregateTable extends React.PureComponent<
         name: localization.ModelAssessment.CausalAnalysis.Table.name
       },
       {
-        fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
+        fieldName: nameof<ICausalAnalysisSingleData>("point"),
         key: "point",
         maxWidth: 75,
         minWidth: 50,
