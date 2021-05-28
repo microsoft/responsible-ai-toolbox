@@ -7,7 +7,6 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { CustomPredictionLabels } from "libs/interpret/src/lib/MLIDashboard/Controls/WhatIfTab/CustomPredictionLabels";
 import _, { toNumber } from "lodash";
 import {
   ConstrainMode,
@@ -31,6 +30,7 @@ import {
 import React from "react";
 
 import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { CustomPredictionLabels } from "./CustomPredictionLabels";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
@@ -209,9 +209,10 @@ export class CounterfactualPanel extends React.Component<
     evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void {
-    const name = evt.target?.name;
+    const target = evt.target as Element;
+    const id = target.id;
     this.setState((prevState) => {
-      prevState.data[name] = toNumber(newValue);
+      prevState.data[id] = toNumber(newValue);
       return { data: prevState.data };
     });
   }
@@ -234,7 +235,7 @@ export class CounterfactualPanel extends React.Component<
             <TextField
               value={this.state.data[column.key]}
               label={column.key}
-              name={column.key}
+              id={column.key}
               onChange={this.updateData.bind(this)}
             />
           </Stack.Item>
