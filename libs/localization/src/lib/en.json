@@ -624,6 +624,7 @@
     "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
     "counterfactualName": "What-if counterfactual name",
     "saveAsNew": "Save as new datapoint",
+    "seePrediction": "See prediction deltas",
     "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention."
   },
   "ErrorAnalysis": {
