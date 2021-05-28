@@ -24,4 +24,6 @@ scrapbook
 jupyter
 nbval
 
+# Required for responsibleai package tests
+deptree~=0.0.10
 xgboost<=1.0.0
