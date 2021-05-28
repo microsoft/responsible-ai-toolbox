@@ -10,13 +10,9 @@ from responsibleai.exceptions import (
 
 
 def validate_causal(model_analysis, data, target_column):
-    features = list(set(data.columns) - set([target_column]))
-    categorical_features = []
 
     # Add the first configuration
-    model_analysis.causal.add(features=features,
-                              categorical_features=categorical_features,
-                              nuisance_model='automl')
+    model_analysis.causal.add(nuisance_model='automl')
     model_analysis.causal.compute()
     results = model_analysis.causal.get()
     assert results is not None
@@ -28,14 +24,10 @@ def validate_causal(model_analysis, data, target_column):
     # Add a duplicate configuration
     message = "Duplicate causal configuration detected."
     with pytest.raises(DuplicateManagerConfigException, match=message):
-        model_analysis.causal.add(features=features,
-                                  categorical_features=categorical_features,
-                                  nuisance_model='automl')
+        model_analysis.causal.add(nuisance_model='automl')
 
     # Add the second configuration
-    model_analysis.causal.add(features=features,
-                              categorical_features=categorical_features,
-                              nuisance_model='linear')
+    model_analysis.causal.add(nuisance_model='linear')
     model_analysis.causal.compute()
     results = model_analysis.causal.get()
     assert results is not None
@@ -43,9 +35,7 @@ def validate_causal(model_analysis, data, target_column):
     assert len(results) == 2
 
     # Add a bad configuration
-    model_analysis.causal.add(features=features,
-                              categorical_features=categorical_features,
-                              nuisance_model='fake_model')
+    model_analysis.causal.add(nuisance_model='fake_model')
     with pytest.raises(UserConfigValidationException):
         model_analysis.causal.compute()
 
