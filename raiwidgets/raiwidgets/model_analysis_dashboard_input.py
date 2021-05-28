@@ -11,7 +11,7 @@ from scipy.sparse import issparse
 from .interfaces import WidgetRequestResponseConstants,\
     ModelAnalysisDashboardData, Dataset, ModelExplanationData,\
     PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation,\
-    ErrorAnalysisConfig
+    ErrorAnalysisConfig, CausalData
 from .explanation_constants import ExplanationDashboardInterface
 import traceback
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
@@ -43,6 +43,9 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input.errorAnalysisConfig = [
             self._get_error_analysis(i)
             for i in self._analysis.error_analysis.list()["reports"]]
+        self.dashboard_input.causalData = [
+            self._get_causal(i)
+            for i in self._analysis.causal.get()]
         x_test = analysis.test.drop(columns=[analysis.target_column])
         y_test = analysis.test[analysis.target_column]
         self._error_analyzer = ModelAnalyzer(model, x_test,
@@ -324,6 +327,16 @@ class ModelAnalysisDashboardInput:
         error_analysis.maxDepth = report[ErrorAnalysisManagerKeys.MAX_DEPTH]
         error_analysis.numLeaves = report[ErrorAnalysisManagerKeys.NUM_LEAVES]
         return error_analysis
+
+    def _get_causal(self, causal):
+        causal_data = CausalData()
+        causal_data.globalCausalEffects = causal["global_causal_effects"]\
+            .reset_index().to_dict(orient="records")
+        causal_data.localCausalEffects = causal["local_causal_effects"]\
+            .groupby("sample").apply(
+                lambda x: x.reset_index().to_dict(
+                    orient='records')).values
+        return causal_data
 
     def _convert_to_list(self, array):
         if issparse(array):

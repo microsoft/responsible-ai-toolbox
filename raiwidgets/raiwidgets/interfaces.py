@@ -65,9 +65,25 @@ class ErrorAnalysisConfig(object):
     numLeaves: int
 
 
+class CausalMetric(object):
+    ci_lower: float
+    ci_upper: float
+    feature: str
+    p_value: float
+    point: float
+    stderr: float
+    zstat: float
+
+
+class CausalData(object):
+    globalCausalEffects: CausalMetric
+    localCausalEffects: CausalMetric
+
+
 class ModelAnalysisDashboardData(object):
     dataset: Dataset
     modelExplanationData: List[ModelExplanationData]
+    causalData: List[CausalData]
     errorAnalysisConfig: List[ErrorAnalysisConfig]
 
 

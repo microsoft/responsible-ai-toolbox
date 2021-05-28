@@ -32,6 +32,9 @@
       "error",
       {
         "allow": [
+          "ci_lower",
+          "ci_upper",
+          "p_value",
           "accuracy_score",
           "accuracy_score_difference",
           "accuracy_score_min",

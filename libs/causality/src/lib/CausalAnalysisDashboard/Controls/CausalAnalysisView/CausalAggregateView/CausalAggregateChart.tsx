@@ -10,14 +10,13 @@ import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _, { isEqual } from "lodash";
 import { getTheme, Link, Stack } from "office-ui-fabric-react";
-import { Datum } from "plotly.js";
 import React from "react";
 
 import { basePlotlyProperties } from "./basePlotlyProperties";
 import { CausalAggregateStyles } from "./CausalAggregateStyles";
 
 export interface ICausalAggregateChartProps {
-  data: ICausalAnalysisSingleData;
+  data: ICausalAnalysisSingleData[];
 }
 
 export class CausalAggregateChart extends React.PureComponent<
@@ -73,14 +72,15 @@ export class CausalAggregateChart extends React.PureComponent<
     plotlyProps.data = [
       {
         error_y: {
-          array: (this.props.data?.pValue?.[0]?.[0] as unknown) as Datum[],
+          array: this.props.data.map((d) => d.ci_upper - d.point),
+          arrayminus: this.props.data.map((d) => d.point - d.ci_lower),
           type: "data",
           visible: true
         },
         mode: "markers",
         type: "scatter",
-        x: this.props.data.name,
-        y: this.props.data.point[0][0]
+        x: this.props.data.map((d) => d.feature),
+        y: this.props.data.map((d) => d.point)
       }
     ];
     return plotlyProps;
