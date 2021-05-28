@@ -313,7 +313,7 @@ export class CounterfactualChart extends React.PureComponent<
       <div className={classNames.page}>
         <div className={classNames.mainArea}>
           <CounterfactualPanel
-            selectedIndex={this.state.selectedPointsIndexes[0]}
+            selectedIndex={this.state.selectedPointsIndexes[0] || 0}
             closePanel={this.togglePanel}
             isPanelOpen={this.state.isPanelOpen}
             data={this.context.counterfactualData}
