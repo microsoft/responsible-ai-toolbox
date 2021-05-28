@@ -10,6 +10,7 @@ from responsibleai._config.base_config import BaseConfig
 from responsibleai.modelanalysis.constants import ModelTask
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
+import pandas as pd
 
 
 class CausalConstants:
@@ -110,8 +111,10 @@ class CausalManager(BaseManager):
                     raise UserConfigValidationException(message)
 
                 is_classification = self._task_type == ModelTask.CLASSIFICATION
-                X = self._train.drop([self._target_column], axis=1)
-                y = self._train[self._target_column].values.ravel()
+                X = pd.concat([self._train, self._test], ignore_index=True)\
+                    .drop([self._target_column], axis=1)
+                y = pd.concat([self._train, self._test], ignore_index=True)[
+                    self._target_column].values.ravel()
                 causal_analysis = CausalAnalysis(
                     X.columns.values.tolist(),
                     self._categorical_features,

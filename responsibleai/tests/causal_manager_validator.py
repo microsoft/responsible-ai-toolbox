@@ -41,4 +41,5 @@ def validate_causal(model_analysis, data, target_column):
 
 
 def _check_causal_effects(causal_effects):
-    assert isinstance(causal_effects, pd.DataFrame)
+    assert isinstance(causal_effects["global_causal_effects"], pd.DataFrame)
+    assert isinstance(causal_effects["local_causal_effects"], pd.DataFrame)
