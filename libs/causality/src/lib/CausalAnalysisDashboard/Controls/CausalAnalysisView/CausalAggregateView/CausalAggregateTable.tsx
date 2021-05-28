@@ -4,7 +4,8 @@
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisSingleData,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  nameof
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
@@ -17,7 +18,7 @@ import {
 import React from "react";
 
 export interface ICausalAggregateTableProps {
-  data: ICausalAnalysisSingleData;
+  data: ICausalAnalysisSingleData[];
 }
 
 export class CausalAggregateTable extends React.PureComponent<
@@ -31,56 +32,56 @@ export class CausalAggregateTable extends React.PureComponent<
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {
-        fieldName: "name",
+        fieldName: nameof<ICausalAnalysisSingleData>("feature"),
         key: "name",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.name
       },
       {
-        fieldName: "point",
+        fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
         key: "point",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.point
       },
       {
-        fieldName: "stderr",
+        fieldName: nameof<ICausalAnalysisSingleData>("stderr"),
         key: "stderr",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.stderr
       },
       {
-        fieldName: "zstat",
+        fieldName: nameof<ICausalAnalysisSingleData>("zstat"),
         key: "zstat",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.zstat
       },
       {
-        fieldName: "pValue",
+        fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
         key: "pValue",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.pValue
       },
       {
-        fieldName: "ciLower",
+        fieldName: nameof<ICausalAnalysisSingleData>("ci_lower"),
         key: "ciLower",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
-        fieldName: "ciUpper",
+        fieldName: nameof<ICausalAnalysisSingleData>("ci_upper"),
         key: "ciUpper",
         maxWidth: 75,
         minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
-    const items = this.getItems(columns);
+    const items = this.props.data;
     return (
       <DetailsList
         items={items}
@@ -97,21 +98,4 @@ export class CausalAggregateTable extends React.PureComponent<
       this.forceUpdate();
     }
   }
-  private getItems = (columns: IColumn[]): unknown[] => {
-    const props = columns.map((c) => c.key);
-    const items = [];
-    const len = this.props.data[props[0]].length;
-    for (let i = 0; i < len; i++) {
-      const temp = {};
-      props.forEach(
-        (p) =>
-          (temp[p] =
-            p === "name"
-              ? this.props.data?.[p]?.[i]
-              : this.props.data?.[p]?.[0]?.[0]?.[i])
-      );
-      items.push(temp);
-    }
-    return items;
-  };
 }

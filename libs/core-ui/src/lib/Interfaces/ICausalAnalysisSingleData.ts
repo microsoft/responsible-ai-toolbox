@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 export interface ICausalAnalysisSingleData {
-  name: string[];
-  point: number[][][];
-  pValue: number[][][];
-  stderr: number[][][];
-  zstat: number[][][];
-  ciLower: number[][][];
-  ciUpper: number[][][];
+  ci_lower: number;
+  ci_upper: number;
+  feature: string;
+  p_value: number;
+  point: number;
+  stderr: number;
+  zstat: number;
 }

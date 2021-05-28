@@ -17,7 +17,7 @@ import { basePlotlyProperties } from "./basePlotlyProperties";
 import { CausalAggregateStyles } from "./CausalAggregateStyles";
 
 export interface ICausalAggregateChartProps {
-  data: ICausalAnalysisSingleData;
+  data: ICausalAnalysisSingleData[];
 }
 
 export class CausalAggregateChart extends React.PureComponent<

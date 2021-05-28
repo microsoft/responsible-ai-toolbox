@@ -22,23 +22,17 @@ train = pd.merge(x, pd.DataFrame(
 test = pd.merge(x_test, pd.DataFrame(y_test, columns=[
                 "income"]), left_index=True, right_index=True)
 
-
-print(train)
-print(test)
-
-
 ma = ModelAnalysis(knn, train, test, "income", "classification",
                    categorical_features=[])
-ma.explainer.add()
-ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
-                       'Occupation', 'Relationship', 'Race', 'Sex',
-                       'Capital Gain', 'Capital Loss',
-                       'Hours per week', 'Country'], 10,
-                      desired_class="opposite")
-ma.error_analysis.add()
-# ma.causal.add()
+# ma.explainer.add()
+# ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
+#                        'Occupation', 'Relationship', 'Race', 'Sex',
+#                        'Capital Gain', 'Capital Loss',
+#                        'Hours per week', 'Country'], 10,
+#                       desired_class="opposite")
+# ma.error_analysis.add()
+ma.causal.add()
 ma.compute()
-
 
 ModelAnalysisDashboard(ma)
 

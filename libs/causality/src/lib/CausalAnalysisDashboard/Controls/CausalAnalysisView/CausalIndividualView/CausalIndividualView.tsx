@@ -23,7 +23,7 @@ export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;
 }
 interface ICausalIndividualViewState {
-  selectedData?: ICausalAnalysisSingleData;
+  selectedData?: ICausalAnalysisSingleData[];
 }
 
 export class CausalIndividualView extends React.PureComponent<
@@ -87,18 +87,11 @@ export class CausalIndividualView extends React.PureComponent<
   };
   private readonly getDataFromIndex = (
     dataIndex: number | undefined
-  ): ICausalAnalysisSingleData | undefined => {
+  ): ICausalAnalysisSingleData[] | undefined => {
     const causalLocal = this.context?.causalAnalysisData?.local;
     if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
       return undefined;
     }
-    const keys = Object.keys(causalLocal);
-    const localData = {};
-    keys.map(
-      (k) =>
-        (localData[k] =
-          k === "name" ? causalLocal[k] : [causalLocal[k][dataIndex]])
-    );
-    return (localData as unknown) as ICausalAnalysisSingleData;
+    return causalLocal[dataIndex];
   };
 }

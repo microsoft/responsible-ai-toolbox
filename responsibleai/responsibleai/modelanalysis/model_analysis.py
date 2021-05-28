@@ -85,7 +85,8 @@ class ModelAnalysis(object):
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
-        self._causal_manager = CausalManager(train, target_column, task_type)
+        self._causal_manager = CausalManager(
+            train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type)
