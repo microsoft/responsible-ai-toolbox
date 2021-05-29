@@ -10,7 +10,6 @@ from responsibleai.exceptions import (
 
 
 def validate_causal(model_analysis, data, target_column):
-
     # Add the first configuration
     model_analysis.causal.add(nuisance_model='automl')
     model_analysis.causal.compute()
@@ -18,8 +17,8 @@ def validate_causal(model_analysis, data, target_column):
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 1
-    causal_effects = results[0]
-    _check_causal_effects(causal_effects)
+    causal_analysis = results[0]
+    _check_causal_analysis(causal_analysis)
 
     # Add a duplicate configuration
     message = "Duplicate causal configuration detected."
@@ -40,6 +39,6 @@ def validate_causal(model_analysis, data, target_column):
         model_analysis.causal.compute()
 
 
-def _check_causal_effects(causal_effects):
-    assert isinstance(causal_effects["global_causal_effects"], pd.DataFrame)
-    assert isinstance(causal_effects["local_causal_effects"], pd.DataFrame)
+def _check_causal_analysis(causal_analysis):
+    assert isinstance(causal_analysis["global_causal_effects"], pd.DataFrame)
+    assert isinstance(causal_analysis["local_causal_effects"], pd.DataFrame)
