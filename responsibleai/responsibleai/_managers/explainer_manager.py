@@ -206,13 +206,11 @@ class ExplainerManager(BaseManager):
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
         inst.__dict__['_' + CLASSES] = model_analysis._classes
         target_column = model_analysis.target_column
-        initialization_examples = model_analysis.dataset.drop(
-            columns=[target_column])
-        evaluation_examples = model_analysis.subsample.drop(
-            columns=[target_column])
-        inst.__dict__[U_INITIALIZATION_EXAMPLES] = initialization_examples
-        inst.__dict__[U_EVALUATION_EXAMPLES] = evaluation_examples
-        inst.__dict__['_' + FEATURES] = list(initialization_examples.columns)
+        train = model_analysis.train.drop(columns=[target_column])
+        test = model_analysis.test.drop(columns=[target_column])
+        inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
+        inst.__dict__[U_EVALUATION_EXAMPLES] = test
+        inst.__dict__['_' + FEATURES] = list(train.columns)
         inst.__dict__['_' + IS_ADDED] = False
         # reset self._surrogate_model
         if meta[IS_ADDED]:

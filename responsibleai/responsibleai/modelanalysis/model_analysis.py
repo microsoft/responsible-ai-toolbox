@@ -30,7 +30,30 @@ _META_JSON = Metadata.META_JSON
 
 class ModelAnalysis(object):
 
-    def __init__(self, model, dataset, subsample_indexes, target_column,
+    """Defines the top-level Model Analysis API.
+    Use ModelAnalysis to analyze errors, explain the most important
+    features, compute counterfactuals and run causal analysis in a
+    single API.
+    :param model: The model to compute RAI insights for.
+        A model that implements sklearn.predict or sklearn.predict_proba
+        or function that accepts a 2d ndarray.
+    :type model: object
+    :param train: The training dataset including the label column.
+    :type train: pandas.DataFrame
+    :param test: The test dataset including the label column.
+    :type test: pandas.DataFrame
+    :param target_column: The name of the label column.
+    :type target_column: str
+    :param task_type: The task to run, can be `classification` or
+        `regression`.
+    :type task_type: str
+    :param serializer: Picklable custom serializer with save and load
+        methods defined for model that is not serializable. The save
+        method returns a dictionary state and load method returns the model.
+    :type serializer: object
+    """
+
+    def __init__(self, model, train, test, target_column,
                  task_type, categorical_features, train_labels=None,
                  serializer=None):
         """Defines the top-level Model Analysis API.
@@ -41,12 +64,11 @@ class ModelAnalysis(object):
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param dataset: The dataset including the label column.
-        :type: pandas.DataFrame
-        :param subsample_indexes:
-            The index array to subsample dataset for computing local values,
-            eg: local explanations, local causal effects
-        :type subsample_indexes: list
+        :param train: The training dataset including the label column.
+        :type train: pandas.DataFrame
+        :param test: The test dataset including the label column.
+        :type test: pandas.DataFrame
+        :param target_column: The name of the label column.
         :type target_column: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
@@ -57,27 +79,25 @@ class ModelAnalysis(object):
         :type train_labels: ndarray
         """
         self.model = model
-        self.dataset = dataset
-        self.subsample = dataset.loc[subsample_indexes]
+        self.train = train
+        self.test = test
         self.target_column = target_column
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
         self._causal_manager = CausalManager(
-            dataset, self.subsample, target_column,
-            task_type, categorical_features)
+            train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
-            model=model, full_dataset=dataset, subsample=self.subsample,
+            model=model, train=train, test=test,
             target_column=target_column, task_type=task_type)
         self._error_analysis_manager = ErrorAnalysisManager(model,
-                                                            dataset,
+                                                            train,
                                                             target_column)
         if train_labels is None:
-            self._classes = dataset[target_column].unique()
+            self._classes = train[target_column].unique()
         else:
             self._classes = train_labels
-        self._explainer_manager = ExplainerManager(model, dataset,
-                                                   self.subsample,
+        self._explainer_manager = ExplainerManager(model, train, test,
                                                    target_column,
                                                    self._classes)
         self._managers = [self._causal_manager,

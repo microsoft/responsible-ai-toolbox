@@ -138,37 +138,32 @@ class ErrorAnalysisManager(BaseManager):
         A model that implements sklearn.predict or sklearn.predict_proba
         or function that accepts a 2d ndarray.
     :type model: object
-    :param dataset: The dataset including the label column.
-    :type dataset: pandas.DataFrame
+    :param train: The training dataset including the label column.
+    :type train: pandas.DataFrame
     :param target_column: The name of the label column.
     :type target_column: str
     """
 
-    def __init__(self, model, dataset, target_column):
+    def __init__(self, model, train, target_column):
         """Defines the ErrorAnalysisManager for discovering errors in a model.
 
         :param model: The model to analyze errors on.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param dataset: The dataset including the label column.
-        :type dataset: pandas.DataFrame
+        :param train: The training dataset including the label column.
+        :type train: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
         """
         self._model = model
-        self._y = dataset[target_column]
-        self._x = dataset.drop(columns=[target_column])
-        self._feature_names = list(self._x.columns)
+        self._y_train = train[target_column]
+        self._train = train.drop(columns=[target_column])
+        self._feature_names = list(self._train.columns)
         # TODO: Add categorical features support
         self._categorical_features = None
         self._ea_config_list = []
         self._ea_report_list = []
-        self.analyzer = ModelAnalyzer(self._model,
-                                      self._x,
-                                      self._y,
-                                      self._feature_names,
-                                      self._categorical_features)
 
     def add(self, max_depth=3, num_leaves=31, filter_features=None):
         """Add an error analyzer to be computed later.
@@ -202,11 +197,16 @@ class ErrorAnalysisManager(BaseManager):
             if config.is_computed:
                 continue
             config.is_computed = True
+            analyzer = ModelAnalyzer(self._model,
+                                     self._train,
+                                     self._y_train,
+                                     self._feature_names,
+                                     self._categorical_features)
             max_depth = config.max_depth
             num_leaves = config.num_leaves
-            report = self.analyzer.create_error_report(config.filter_features,
-                                                       max_depth=max_depth,
-                                                       num_leaves=num_leaves)
+            report = analyzer.create_error_report(config.filter_features,
+                                                  max_depth=max_depth,
+                                                  num_leaves=num_leaves)
             self._ea_report_list.append(report)
 
     def get(self):
@@ -288,9 +288,9 @@ class ErrorAnalysisManager(BaseManager):
         inst.__dict__['_ea_config_list'] = ea_config_list
         inst.__dict__['_categorical_features'] = None
         target_column = model_analysis.target_column
-        y = model_analysis.dataset[target_column]
-        x = model_analysis.dataset.drop(columns=[target_column])
-        inst.__dict__['_x'] = x
-        inst.__dict__['_y'] = y
-        inst.__dict__['_feature_names'] = list(x.columns)
+        y_train = model_analysis.train[target_column]
+        train = model_analysis.train.drop(columns=[target_column])
+        inst.__dict__['_train'] = train
+        inst.__dict__['_y_train'] = y_train
+        inst.__dict__['_feature_names'] = list(train.columns)
         return inst

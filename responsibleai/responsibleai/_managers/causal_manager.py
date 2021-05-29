@@ -10,6 +10,7 @@ from responsibleai._config.base_config import BaseConfig
 from responsibleai.modelanalysis.constants import ModelTask
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
+import pandas as pd
 
 
 class CausalConstants:
@@ -47,15 +48,15 @@ class CausalConfig(BaseConfig):
 
 
 class CausalManager(BaseManager):
-    def __init__(self, full_dataset, subsample, target_column, task_type,
+    def __init__(self, train, test, target_column, task_type,
                  categorical_features):
         """Construct a CausalManager for generating causal effects from a dataset.
-        :param full_dataset: Dataset on which to compute global causal effects
+        :param train: Dataset on which to compute global causal effects
                      (#samples x #features).
-        :type full_dataset: pandas.DataFrame
-        :param subsample: Dataset on which to compute local causal effects
+        :type train: pandas.DataFrame
+        :param test: Dataset on which to compute local causal effects
                      (#samples x #features).
-        :type subsample: pandas.DataFrame
+        :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
         :param task_type: Task type is either 'classification/regression'
@@ -63,8 +64,8 @@ class CausalManager(BaseManager):
         :param categorical_features: All categorical feature names.
         :type categorical_features: list
         """
-        self._full_dataset = full_dataset
-        self._subsample = subsample
+        self._train = train
+        self._test = test
         self._target_column = target_column
         self._task_type = task_type
         self._categorical_features = categorical_features
@@ -110,8 +111,10 @@ class CausalManager(BaseManager):
                     raise UserConfigValidationException(message)
 
                 is_classification = self._task_type == ModelTask.CLASSIFICATION
-                X = self._full_dataset.drop([self._target_column], axis=1)
-                y = self._full_dataset[self._target_column].values.ravel()
+                X = pd.concat([self._train, self._test], ignore_index=True)\
+                    .drop([self._target_column], axis=1)
+                y = pd.concat([self._train, self._test], ignore_index=True)[
+                    self._target_column].values.ravel()
                 causal_analysis = CausalAnalysis(
                     X.columns.values.tolist(),
                     self._categorical_features,
@@ -125,7 +128,7 @@ class CausalManager(BaseManager):
                         alpha=0.05)
                 config.local_causal_effects = causal_analysis\
                     .local_causal_effect(
-                        self._subsample.drop([self._target_column], axis=1),
+                        self._test.drop([self._target_column], axis=1),
                         alpha=0.05)
                 self._causal_analysis_list.append(causal_analysis)
 

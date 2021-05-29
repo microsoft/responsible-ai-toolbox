@@ -14,6 +14,7 @@ from .interfaces import WidgetRequestResponseConstants,\
     ErrorAnalysisConfig, CausalData
 from .explanation_constants import ExplanationDashboardInterface
 import traceback
+from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys
 
 
@@ -45,6 +46,12 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input.causalData = [
             self._get_causal(i)
             for i in self._analysis.causal.get()]
+        x_test = analysis.test.drop(columns=[analysis.target_column])
+        y_test = analysis.test[analysis.target_column]
+        self._error_analyzer = ModelAnalyzer(model, x_test,
+                                             y_test,
+                                             x_test.columns.values.tolist(),
+                                             analysis.categorical_features)
 
     def on_predict(self, data):
         try:
@@ -71,10 +78,9 @@ class ModelAnalysisDashboardInput:
     def debug_ml(self, data):
         try:
             features, filters, composite_filters, max_depth, num_leaves = data
-            json_tree = self._analysis.error_analysis.analyzer\
-                .compute_error_tree(
-                    features, filters, composite_filters,
-                    max_depth, num_leaves)
+            json_tree = self._error_analyzer.compute_error_tree(
+                features, filters, composite_filters,
+                max_depth, num_leaves)
             return {
                 WidgetRequestResponseConstants.data: json_tree
             }
@@ -92,9 +98,8 @@ class ModelAnalysisDashboardInput:
             features, filters, composite_filters = data
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.data: []}
-            json_matrix = self._analysis.error_analysis.analyzer\
-                .compute_matrix(
-                    features, filters, composite_filters)
+            json_matrix = self._error_analyzer.compute_matrix(
+                features, filters, composite_filters)
             return {
                 WidgetRequestResponseConstants.data: json_matrix
             }
@@ -109,8 +114,7 @@ class ModelAnalysisDashboardInput:
 
     def importances(self):
         try:
-            scores = self._analysis.error_analysis.analyzer\
-                .compute_importances()
+            scores = self._error_analyzer.compute_importances()
             return {
                 WidgetRequestResponseConstants.data: scores
             }
@@ -131,7 +135,7 @@ class ModelAnalysisDashboardInput:
         predicted_y = None
         feature_length = None
 
-        dataset: pd.DataFrame = self._analysis.subsample.drop(
+        dataset: pd.DataFrame = self._analysis.test.drop(
             [self._analysis.target_column], axis=1)
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
@@ -181,7 +185,7 @@ class ModelAnalysisDashboardInput:
             dashboard_dataset.features = _serialize_json_safe(
                 list_dataset)
 
-        true_y = self._analysis.subsample[self._analysis.target_column]
+        true_y = self._analysis.test[self._analysis.target_column]
 
         if true_y is not None and len(true_y) == row_length:
             if(self._analysis.task_type == "classification" and
@@ -272,7 +276,7 @@ class ModelAnalysisDashboardInput:
                 raise ValueError(
                     "Unsupported local explanation type,"
                     "inner error: {}".format(ex_str))
-            if self._analysis.subsample is not None:
+            if self._analysis.test is not None:
                 local_dim = np.shape(local_feature_importance.scores)
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(

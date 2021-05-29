@@ -53,8 +53,7 @@ class CounterfactualConfig(BaseConfig):
 
 
 class CounterfactualManager(BaseManager):
-    def __init__(self, model, full_dataset, subsample, target_column,
-                 task_type):
+    def __init__(self, model, train, test, target_column, task_type):
         """Defines the CounterfactualManager for generating counterfactuals
            from a model.
 
@@ -62,27 +61,28 @@ class CounterfactualManager(BaseManager):
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param full_dataset: Dataset on which to compute global causal effects
-                     (#samples x #features).
-        :type full_dataset: pandas.DataFrame
-        :param subsample: Dataset on which to compute local causal effects
-                     (#samples x #features).
-        :type subsample: pandas.DataFrame
+        :param initialization_examples: A matrix of feature vector
+            examples (# examples x # features) for initializing the explainer.
+        :type initialization_examples: pandas.DataFrame
+        :param evaluation_examples: A matrix of feature vector
+            examples (# examples x # features) on which to explain the
+            model's output.
+        :type evaluation_examples: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
         :param task_type: Task type is either 'classification/regression'
         :type task_type: str
         """
         self._model = model
-        self._full_dataset = full_dataset
-        self._subsample = subsample
+        self._train = train
+        self._test = test
         self._target_column = target_column
         self._task_type = task_type
         self._counterfactual_config_list = []
 
     def _create_diceml_explainer(self, method, continuous_features):
 
-        dice_data = dice_ml.Data(dataframe=self._full_dataset,
+        dice_data = dice_ml.Data(dataframe=self._train,
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
 
@@ -107,7 +107,7 @@ class CounterfactualManager(BaseManager):
                         CounterfactualConstants.OPPOSITE))
 
             is_multiclass = len(np.unique(
-                self._full_dataset[self._target_column].values).tolist()) > 2
+                self._train[self._target_column].values).tolist()) > 2
             if is_multiclass and \
                     new_counterfactual_config.desired_class == \
                     CounterfactualConstants.OPPOSITE:
@@ -188,8 +188,7 @@ class CounterfactualManager(BaseManager):
                         method=cf_config.method,
                         continuous_features=cf_config.continuous_features)
 
-                    X_test = self._subsample.drop(
-                        [self._target_column], axis=1)
+                    X_test = self._test.drop([self._target_column], axis=1)
 
                     counterfactual_obj = \
                         dice_explainer.generate_counterfactuals(
