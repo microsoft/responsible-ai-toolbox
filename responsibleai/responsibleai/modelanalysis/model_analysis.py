@@ -16,8 +16,8 @@ from responsibleai._managers.explainer_manager import ExplainerManager
 
 
 _DTYPES = 'dtypes'
-_TRAIN = 'train'
-_TEST = 'test'
+_DATASET = 'dataset'
+_SUBSAMPLE = 'subsample'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _MODEL = Metadata.MODEL
@@ -163,14 +163,14 @@ class ModelAnalysis(object):
         for manager in self._managers:
             manager._save(top_dir / manager.name)
         # save current state
-        dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(top_dir / (_TRAIN + _DTYPES),
+        dtypes = self.dataset.dtypes.astype(str).to_dict()
+        self._write_to_file(top_dir / (_DATASET + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(top_dir / _TRAIN, self.train.to_json())
-        dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(top_dir / (_TEST + _DTYPES),
+        self._write_to_file(top_dir / _DATASET, self.dataset.to_json())
+        dtypes = self.subsample.dtypes.astype(str).to_dict()
+        self._write_to_file(top_dir / (_SUBSAMPLE + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(top_dir / _TEST, self.test.to_json())
+        self._write_to_file(top_dir / _SUBSAMPLE, self.subsample.to_json())
         meta = {_TARGET_COLUMN: self.target_column,
                 _TASK_TYPE: self.task_type}
         with open(top_dir / _META_JSON, 'w') as file:
@@ -203,23 +203,23 @@ class ModelAnalysis(object):
         inst = ModelAnalysis.__new__(ModelAnalysis)
         top_dir = Path(path)
         # load current state
-        with open(top_dir / (_TRAIN + _DTYPES), 'r') as file:
+        with open(top_dir / (_DATASET + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(top_dir / _TRAIN, 'r') as file:
-            train = pd.read_json(file, dtype=types)
-        inst.__dict__[_TRAIN] = train
-        with open(top_dir / (_TEST + _DTYPES), 'r') as file:
+        with open(top_dir / _DATASET, 'r') as file:
+            dataset = pd.read_json(file, dtype=types)
+        inst.__dict__[_DATASET] = dataset
+        with open(top_dir / (_SUBSAMPLE + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(top_dir / _TEST, 'r') as file:
-            test = pd.read_json(file, dtype=types)
-        inst.__dict__[_TEST] = test
+        with open(top_dir / _SUBSAMPLE, 'r') as file:
+            subsample = pd.read_json(file, dtype=types)
+        inst.__dict__[_SUBSAMPLE] = subsample
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         target_column = meta[_TARGET_COLUMN]
         inst.__dict__[_TARGET_COLUMN] = target_column
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
-        inst.__dict__['_' + _CLASSES] = train[target_column].unique()
+        inst.__dict__['_' + _CLASSES] = dataset[target_column].unique()
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:

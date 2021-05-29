@@ -111,7 +111,7 @@ def run_model_analysis(model, train_data, test_data, target_column,
     if manager_type == ManagerNames.COUNTERFACTUAL:
         test_data = test_data[0:1]
 
-    model_analysis = ModelAnalysis(model, train_data, test_data,
+    model_analysis = ModelAnalysis(model, train_data, test_data.index,
                                    target_column,
                                    categorical_features=categorical_features,
                                    task_type=task_type)
@@ -167,8 +167,9 @@ def validate_model_analysis(
     target_column,
     task_type
 ):
-    pd.testing.assert_frame_equal(model_analysis.train, train_data)
-    pd.testing.assert_frame_equal(model_analysis.test, test_data)
+    pd.testing.assert_frame_equal(model_analysis.dataset, train_data)
+    pd.testing.assert_index_equal(model_analysis.subsample.index,
+                                  test_data.index)
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
     np.testing.assert_array_equal(model_analysis._classes,
