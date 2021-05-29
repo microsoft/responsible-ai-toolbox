@@ -2,15 +2,17 @@
 # Licensed under the MIT License.
 
 """Defines the Causal Manager class."""
+import numpy as np
+import pandas as pd
+
 from econml.solutions.causal_analysis import CausalAnalysis
 
+from responsibleai._config.base_config import BaseConfig
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai._config.base_config import BaseConfig
-from responsibleai.modelanalysis.constants import ModelTask
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
-import pandas as pd
+from responsibleai.modelanalysis.constants import ModelTask
 
 
 class CausalConstants:
@@ -36,7 +38,8 @@ class CausalConfig(BaseConfig):
 
     def __eq__(self, other):
         return (
-            self.treatment_features == other.treatment_features and
+            np.array_equal(self.treatment_features,
+                           other.treatment_features) and
             self.nuisance_model == other.nuisance_model and
             self.heterogeneity_model == other.heterogeneity_model
         )
