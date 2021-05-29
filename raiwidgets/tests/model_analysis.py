@@ -19,10 +19,8 @@ knn.fit(x_train, y_train)
 
 train = pd.merge(x, pd.DataFrame(
     y, columns=["income"]), left_index=True, right_index=True)
-test = pd.merge(x_test, pd.DataFrame(y_test, columns=[
-                "income"]), left_index=True, right_index=True)
 
-ma = ModelAnalysis(knn, train, test, "income", "classification",
+ma = ModelAnalysis(knn, train, x_test.index, "income", "classification",
                    categorical_features=[])
 ma.explainer.add()
 ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
