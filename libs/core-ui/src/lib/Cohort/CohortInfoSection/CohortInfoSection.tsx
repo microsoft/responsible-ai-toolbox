@@ -41,7 +41,7 @@ export class CohortInfoSection extends React.PureComponent<
     let datapointsCountString =
       localization.ModelAssessment.CohortInformation.DataPoints +
       " = " +
-      currentCohort.totalCohort.toString();
+      currentCohort.cohortStats.totalCohort.toString();
     let filtersCountString =
       localization.ModelAssessment.CohortInformation.Filters +
       " = " +
