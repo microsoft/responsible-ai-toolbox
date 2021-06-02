@@ -2,11 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import {
-  DefaultButton,
-  IStackTokens,
-  Stack
-} from "office-ui-fabric-react";
+import { DefaultButton, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
@@ -17,6 +13,7 @@ import { cohortInfoStyles } from "./CohortInfo.styles";
 export interface ICohortInfoProps {
   currentCohort: ErrorCohort;
   onSaveCohortClick: () => void;
+  includeDividers: boolean;
 }
 
 const alignmentStackTokens: IStackTokens = {
@@ -29,8 +26,10 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
     const classNames = cohortInfoStyles();
 
     return (
-      <>
-        {" "}
+      <Stack>
+        {this.props.includeDividers && (
+          <div className={classNames.divider}></div>
+        )}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <DefaultButton
@@ -50,7 +49,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </div>
           </div>
         </div>
-        <div className={classNames.divider}></div>
+        {this.props.includeDividers && (
+          <div className={classNames.divider}></div>
+        )}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div>Instances in base cohort</div>
@@ -101,14 +102,16 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </Stack>
           </div>
         </div>
-        <div className={classNames.divider}></div>
+        {this.props.includeDividers && (
+          <div className={classNames.divider}></div>
+        )}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div className={classNames.header}>Prediction path (filters)</div>
             <PredictionPath temporaryCohort={this.props.currentCohort} />
           </div>
         </div>
-      </>
+      </Stack>
     );
   }
 }

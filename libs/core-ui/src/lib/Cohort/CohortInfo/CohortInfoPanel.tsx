@@ -7,13 +7,12 @@ import {
   IPanelProps,
   IPanelStyles,
   IStyleFunctionOrObject,
-  Panel} from "office-ui-fabric-react";
+  Panel
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
 import { CohortInfo } from "./CohortInfo";
-
-import { cohortInfoStyles } from "./CohortInfo.styles";
 
 export interface ICohortInfoPanelProps {
   isOpen: boolean;
@@ -32,10 +31,10 @@ const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
   main: { zIndex: 1 }
 };
 
-export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> {
+export class CohortInfoPanel extends React.PureComponent<
+  ICohortInfoPanelProps
+> {
   public render(): React.ReactNode {
-    const classNames = cohortInfoStyles();
-
     return (
       <Panel
         headerText={localization.ErrorAnalysis.CohortInfo.cohortInformation}
@@ -48,10 +47,10 @@ export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> 
         onDismiss={this.props.onDismiss}
         styles={panelStyles}
       >
-        <div className={classNames.divider}></div>
         <CohortInfo
           onSaveCohortClick={this.props.onSaveCohortClick}
           currentCohort={this.props.currentCohort}
+          includeDividers={true}
         />
       </Panel>
     );

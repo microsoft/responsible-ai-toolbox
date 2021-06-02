@@ -14,7 +14,8 @@ import {
   Text,
   Pivot,
   PivotItem,
-  Stack
+  Stack,
+  Separator
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -106,10 +107,16 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
             selectedFeatures={this.props.features}
           />
         </Stack>
-        <CohortInfo
-          currentCohort={this.context.selectedErrorCohort}
-          onSaveCohortClick={this.props.onSaveCohortClick}
-        />
+        <Stack tokens={{ padding: "100px 0 0 0" }}>
+          <Separator vertical />
+        </Stack>
+        <Stack tokens={{ padding: "100px 80px 0 0" }}>
+          <CohortInfo
+            currentCohort={this.context.selectedErrorCohort}
+            onSaveCohortClick={this.props.onSaveCohortClick}
+            includeDividers={false}
+          />
+        </Stack>
       </Stack>
     );
   }
