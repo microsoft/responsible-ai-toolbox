@@ -20,8 +20,16 @@ this file to understand what changed.
 
 - educational materials
 - new features
+  - added support for causal, counterfactual, and error analysis tools in responsibleai
+  - added model analysis widget to raiwidgets
+  - added support for regression to error analysis
 - breaking changes
+  - renamed package raitools to responsibleai
+  - renamed top-level class RAIAnalyzer to ModelAnalysis
+  - removed support for fairness in responsibleai package
 - bug fixes
+  - fixed bug in precision statistic calculation in dashboard
+  - fixed bug in loading explanations with ModelAnalysis
 - other
 
 ## v0.4.0
