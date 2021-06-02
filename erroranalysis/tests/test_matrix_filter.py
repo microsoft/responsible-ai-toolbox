@@ -8,6 +8,7 @@ from common_utils import (
     create_iris_data, create_cancer_data, create_simple_titanic_data,
     create_titanic_pipeline, create_binary_classification_dataset,
     create_models)
+from erroranalysis._internal.constants import ModelTask
 
 
 class TestMatrixFilter(object):
@@ -20,7 +21,8 @@ class TestMatrixFilter(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, x_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features,
+                               model_task=ModelTask.CLASSIFICATION)
 
     def test_matrix_filter_cancer(self):
         x_train, x_test, y_train, y_test, feature_names, _ = \
@@ -31,7 +33,8 @@ class TestMatrixFilter(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, x_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features,
+                               model_task=ModelTask.CLASSIFICATION)
 
     def test_matrix_filter_binary_classification(self):
         x_train, y_train, x_test, y_test, _ = \
@@ -42,7 +45,8 @@ class TestMatrixFilter(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, x_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features,
+                               model_task=ModelTask.CLASSIFICATION)
 
     def test_matrix_filter_titanic(self):
         x_train, x_test, y_train, y_test, numeric, categorical = \
@@ -51,14 +55,22 @@ class TestMatrixFilter(object):
         clf = create_titanic_pipeline(x_train, y_train)
         categorical_features = categorical
         run_error_analyzer(clf, x_test, y_test, feature_names,
-                           categorical_features)
+                           categorical_features,
+                           model_task=ModelTask.CLASSIFICATION)
 
 
-def run_error_analyzer(model, x_test, y_test, feature_names,
-                       categorical_features):
-    error_analyzer = ModelAnalyzer(model, x_test, y_test,
+def run_error_analyzer(model,
+                       x_test,
+                       y_test,
+                       feature_names,
+                       categorical_features,
+                       model_task):
+    error_analyzer = ModelAnalyzer(model,
+                                   x_test,
+                                   y_test,
                                    feature_names,
-                                   categorical_features)
+                                   categorical_features,
+                                   model_task=model_task)
     # features, filters, composite_filters
     features = [feature_names[0], feature_names[1]]
     filters = None

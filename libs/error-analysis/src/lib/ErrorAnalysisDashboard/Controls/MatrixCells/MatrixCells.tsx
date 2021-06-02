@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Metrics } from "@responsible-ai/core-ui";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import {
@@ -44,10 +45,21 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
         ? classNames.matrixRow
         : classNames.matrixCol;
 
+    let totalError = 0;
     let falseCount = 0;
+    let maxMetricValue = 0;
+    let metricName: string;
     this.props.jsonMatrix.matrix.forEach((row: any) => {
       row.forEach((value: any) => {
-        falseCount += value.falseCount;
+        if (value.falseCount) {
+          falseCount += value.falseCount;
+        } else if (value.metricValue) {
+          metricName = value.metricName;
+          if (value.metricName === Metrics.MeanSquaredError) {
+            totalError += value.metricValue * value.count;
+            maxMetricValue = Math.max(maxMetricValue, value.metricValue);
+          }
+        }
       });
     });
     const matrixLength = this.props.jsonMatrix.matrix.length;
@@ -57,7 +69,14 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           let errorRatio = 0;
           let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
           if (value.count > 0) {
-            errorRatio = (value.falseCount / value.count) * 100;
+            if (value.falseCount) {
+              errorRatio = (value.falseCount / value.count) * 100;
+            } else {
+              metricName = value.metricName;
+              if (value.metricName === Metrics.MeanSquaredError) {
+                errorRatio = (value.metricValue / maxMetricValue) * 100;
+              }
+            }
             const bkgcolor = this.colorLookup(errorRatio);
             const color = this.textColorForBackground(bkgcolor);
             styledGradientMatrixCell = mergeStyles([
@@ -82,11 +101,24 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
               classNames.selectedMatrixCell
             ]);
           }
+          let error: number;
+          let baseError: number;
+          let metricValue: number;
+          if (value.falseCount) {
+            metricValue = errorRatio;
+            error = value.falseCount;
+            baseError = falseCount;
+          } else {
+            metricValue = value.metricValue;
+            error = value.metricValue * value.count;
+            baseError = totalError;
+          }
           const filterProps = new FilterProps(
-            value.falseCount,
+            error,
             value.count,
-            falseCount,
-            errorRatio
+            baseError,
+            metricName,
+            metricValue
           );
           const tooltipProps: ITooltipProps = {
             onRenderContent: () => (
@@ -109,7 +141,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
             <div
               key={`${i}_${j}cell`}
               className={classNames.matrixCell}
-              onClick={() =>
+              onClick={(): void =>
                 this.props.selectedCellHandler(i, j, matrixLength, row.length)
               }
               role="button"
@@ -153,7 +185,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                 <div
                   key={`${i}_${j}category1`}
                   className={classNames.matrixCellPivot1Categories}
-                ></div>,
+                />,
                 cellData
               ];
             }
@@ -181,11 +213,11 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
     return outputMin + (outputMax - outputMin) * value;
   }
 
-  private colorgradRatio(value: number): string {
+  private colorgradRatio(value: number): string | undefined {
     return d3scaleLinear<string>()
       .domain([0, 1])
       .interpolate(d3interpolateHcl)
-      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value)!;
+      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value);
   }
 
   private colorLookup(ratio: number): string {
@@ -197,7 +229,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
 
     const rate = ratio / 100;
     if (rate > 0.01 && rate <= 1) {
-      result = this.colorgradRatio(this.mapRange(0, 1, rate));
+      result = this.colorgradRatio(this.mapRange(0, 1, rate)) || "#ffffff";
     } else {
       result = "#ffffff";
     }

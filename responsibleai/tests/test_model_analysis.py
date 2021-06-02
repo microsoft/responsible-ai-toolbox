@@ -12,13 +12,16 @@ from common_utils import (create_boston_data,
                           create_binary_classification_dataset,
                           create_models_classification,
                           create_models_regression)
+
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
-from explainer_manager_validator import (setup_explainer,
-                                         validate_explainer)
+
+from causal_manager_validator import validate_causal
 from counterfactual_manager_validator import validate_counterfactual
-from error_analysis_validator import (setup_error_analysis,
-                                      validate_error_analysis)
+from error_analysis_validator import (
+    setup_error_analysis, validate_error_analysis)
+from explainer_manager_validator import setup_explainer, validate_explainer
+
 
 LABELS = "labels"
 DESIRED_CLASS = 'desired_class'
@@ -27,8 +30,8 @@ DESIRED_RANGE = 'desired_range'
 
 class TestModelAnalysis(object):
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
-                                              ManagerNames.COUNTERFACTUAL,
+    @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_iris(self, manager_type):
         x_train, x_test, y_train, y_test, feature_names, classes = \
@@ -41,7 +44,7 @@ class TestModelAnalysis(object):
         manager_args = {DESIRED_CLASS: 0}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, [],
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
@@ -58,10 +61,11 @@ class TestModelAnalysis(object):
         manager_args = {DESIRED_CLASS: 'opposite'}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, [],
                                manager_type, manager_args, classes)
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_binary(self, manager_type):
         x_train, y_train, x_test, y_test, classes = \
@@ -74,11 +78,12 @@ class TestModelAnalysis(object):
         manager_args = None
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, [],
                                manager_type, manager_args,
                                classes=classes)
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
     def test_modelanalysis_boston(self, manager_type):
         x_train, x_test, y_train, y_test, feature_names = \
@@ -91,29 +96,37 @@ class TestModelAnalysis(object):
         manager_args = {DESIRED_RANGE: [10, 20]}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS,
+            run_model_analysis(model, x_train, x_test, LABELS, ['RM'],
                                manager_type, manager_args)
 
 
-def run_model_analysis(model, x_train, x_test, target_column,
-                       manager_type, manager_args=None, classes=None):
+def run_model_analysis(model, train_data, test_data, target_column,
+                       categorical_features, manager_type,
+                       manager_args=None, classes=None):
     if classes is not None:
         task_type = ModelTask.CLASSIFICATION
     else:
         task_type = ModelTask.REGRESSION
+
     if manager_type == ManagerNames.COUNTERFACTUAL:
-        x_test = x_test[0:1]
-    model_analysis = ModelAnalysis(model, x_train, x_test, target_column,
+        test_data = test_data[0:1]
+
+    model_analysis = ModelAnalysis(model, train_data, test_data,
+                                   target_column,
+                                   categorical_features=categorical_features,
                                    task_type=task_type)
+
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(model_analysis)
-    if manager_type == ManagerNames.ERROR_ANALYSIS:
+    elif manager_type == ManagerNames.ERROR_ANALYSIS:
         setup_error_analysis(model_analysis)
-    validate_model_analysis(model_analysis, x_train, x_test, target_column,
-                            task_type)
-    if manager_type == ManagerNames.EXPLAINER:
-        validate_explainer(model_analysis, x_train, x_test, classes)
-    if manager_type == ManagerNames.COUNTERFACTUAL:
+
+    validate_model_analysis(model_analysis, train_data, test_data,
+                            target_column, task_type)
+
+    if manager_type == ManagerNames.CAUSAL:
+        validate_causal(model_analysis, train_data, target_column)
+    elif manager_type == ManagerNames.COUNTERFACTUAL:
         desired_range = None
         desired_class = None
         if manager_args is not None:
@@ -121,10 +134,12 @@ def run_model_analysis(model, x_train, x_test, target_column,
                 desired_class = manager_args[DESIRED_CLASS]
             if DESIRED_RANGE in manager_args:
                 desired_range = manager_args[DESIRED_RANGE]
-        validate_counterfactual(model_analysis, x_train, target_column,
+        validate_counterfactual(model_analysis, train_data, target_column,
                                 desired_class, desired_range)
-    if manager_type == ManagerNames.ERROR_ANALYSIS:
+    elif manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(model_analysis)
+    elif manager_type == ManagerNames.EXPLAINER:
+        validate_explainer(model_analysis, train_data, test_data, classes)
 
     with TemporaryDirectory() as tempdir:
         path = Path(tempdir) / 'rai_test_path'
@@ -133,19 +148,28 @@ def run_model_analysis(model, x_train, x_test, target_column,
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
 
-        validate_model_analysis(model_analysis, x_train, x_test,
-                                target_column, task_type)
         if manager_type == ManagerNames.EXPLAINER:
-            validate_explainer(model_analysis, x_train, x_test, classes)
+            setup_explainer(model_analysis)
+
+        validate_model_analysis(model_analysis, train_data, test_data,
+                                target_column, task_type)
+
         if manager_type == ManagerNames.ERROR_ANALYSIS:
             validate_error_analysis(model_analysis)
+        elif manager_type == ManagerNames.EXPLAINER:
+            validate_explainer(model_analysis, train_data, test_data, classes)
 
 
-def validate_model_analysis(model_analysis, x_train, x_test, target_column,
-                            task_type):
-    pd.testing.assert_frame_equal(model_analysis.train, x_train)
-    pd.testing.assert_frame_equal(model_analysis.test, x_test)
+def validate_model_analysis(
+    model_analysis,
+    train_data,
+    test_data,
+    target_column,
+    task_type
+):
+    pd.testing.assert_frame_equal(model_analysis.train, train_data)
+    pd.testing.assert_frame_equal(model_analysis.test, test_data)
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
     np.testing.assert_array_equal(model_analysis._classes,
-                                  x_train[target_column].unique())
+                                  train_data[target_column].unique())

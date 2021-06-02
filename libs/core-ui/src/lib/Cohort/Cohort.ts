@@ -133,6 +133,9 @@ export class Cohort {
     const localFeatureImportances = this.filteredData.map((row) => {
       return JointDataset.localExplanationSlice(row, featureLength);
     });
+    if (localFeatureImportances.length === 0) {
+      return [];
+    }
     this.cachedTransposedLocalFeatureImportances = ModelExplanationUtils.transpose2DArray(
       localFeatureImportances
     );

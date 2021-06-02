@@ -24,6 +24,25 @@ import { IStringsParam } from "./IStringsParam";
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
 
+// Represents the data retrieved from the backend
+export interface IRequestNode {
+  arg: number;
+  condition: string;
+  error: number;
+  id: string;
+  isErrorMetric: boolean;
+  method: string;
+  metricName: string;
+  metricValue: number;
+  nodeIndex: number;
+  nodeName: string;
+  parentId: string;
+  parentNodeName: string;
+  size: number;
+  sourceRowKeyHash: string;
+  success: number;
+}
+
 export interface IErrorAnalysisDashboardProps
   extends IExplanationDashboardData,
     IOfficeFabricProps {

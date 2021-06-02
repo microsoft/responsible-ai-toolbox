@@ -108,7 +108,7 @@ export class CohortList extends React.Component<
             columns={this.columns}
             setKey="set"
             layoutMode={DetailsListLayoutMode.justified}
-            selectionPreservedOnEmptyClick={true}
+            selectionPreservedOnEmptyClick
             checkboxVisibility={CheckboxVisibility.hidden}
             onRenderItemColumn={this.renderItemColumn.bind(this)}
           />
@@ -131,13 +131,7 @@ export class CohortList extends React.Component<
         case "nameColumn":
           if (this.props.enableEditing && item.name !== "All data") {
             return (
-              <Link
-                onClick={() =>
-                  this.props.onEditCohortClick(
-                    this.getErrorCohort.bind(this)(item.name)
-                  )
-                }
-              >
+              <Link onClick={this.onEditCohortClick.bind(this, item.name)}>
                 {fieldContent}
               </Link>
             );
@@ -156,13 +150,16 @@ export class CohortList extends React.Component<
           return <span>{fieldContent}</span>;
       }
     }
-    return <div></div>;
+    return React.Fragment;
   }
 
-  private getErrorCohort(name: string): ErrorCohort {
-    return this.props.errorCohorts.find(
-      (errorCohort: ErrorCohort) => errorCohort.cohort.name === name
-    )!;
+  private onEditCohortClick(name: string): void {
+    const cohort = this.props.errorCohorts.find(
+      (errorCohort) => errorCohort.cohort.name === name
+    );
+    if (cohort) {
+      this.props.onEditCohortClick(cohort);
+    }
   }
 
   private getCohortListItems(): ICohortListItem[] {
@@ -180,8 +177,8 @@ export class CohortList extends React.Component<
           )
         ];
         return {
-          coverage: errorCohort.errorCoverage.toFixed(2),
-          errorRate: errorCohort.errorRate.toFixed(2),
+          coverage: errorCohort.cohortStats.errorCoverage.toFixed(2),
+          errorRate: errorCohort.cohortStats.metricValue.toFixed(2),
           key: index,
           name: errorCohort.cohort.name,
           details: details

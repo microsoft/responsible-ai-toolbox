@@ -122,7 +122,7 @@ export class Navigation extends React.Component<INavigationProps> {
     item?: IBreadcrumbItem
   ): JSX.Element | null => {
     if (!item) {
-      return <div></div>;
+      return <div />;
     }
     if (item.onClick) {
       return (
@@ -131,7 +131,7 @@ export class Navigation extends React.Component<INavigationProps> {
           className="ms-Breadcrumb-itemLink"
           href={item.href}
           onClick={(e: React.MouseEvent<HTMLElement>): void =>
-            item.onClick!(e, item)
+            item.onClick?.(e, item)
           }
           color="blue"
         >

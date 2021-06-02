@@ -1,40 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ICasualAnalysisData,
-  IDataset,
-  IModelExplanationData
-} from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
   ModelAssessmentDashboard,
-  IModelAssessmentDashboardProps
+  IModelAssessmentDashboardProps,
+  IModelAssessmentData
 } from "@responsible-ai/model-assessment";
-import _ from "lodash";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
   generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
-  generateFeatures,
   generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
-  createPredictionsRequestGenerator
+  createPredictionsRequestGenerator,
+  DatasetName
 } from "../error-analysis/utils";
-import {
-  generateRandomMetrics,
-  supportedBinaryClassificationPerformanceKeys,
-  supportedProbabilityPerformanceKeys,
-  supportedRegressionPerformanceKeys
-} from "../fairness/utils";
 
-interface IAppProps {
-  dataset: IDataset;
-  modelExplanationData: IModelExplanationData;
-  casualAnalysisData: ICasualAnalysisData;
+interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
   language: Language;
   version: 1;
@@ -52,41 +38,38 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
-    this.props.modelExplanationData.modelClass = "blackbox";
+    if (this.props.modelExplanationData) {
+      for (const exp of this.props.modelExplanationData) {
+        exp.modelClass = "blackbox";
+      }
+    }
 
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
-      casualAnalysisData: this.props.casualAnalysisData,
-      dataset: this.props.dataset,
+      ...this.props,
       locale: this.props.language,
       localUrl: "",
-      modelExplanationData: this.props.modelExplanationData,
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
-        this.props.dataset.featureNames!,
-        false
+        this.props.dataset.featureNames,
+        DatasetName.BreastCancer
       ),
       requestMatrix: generateJsonMatrix,
-      requestMetrics: generateRandomMetrics.bind(this),
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
-      stringParams: { contextualHelp: this.messages },
-      supportedBinaryClassificationPerformanceKeys,
-      supportedProbabilityPerformanceKeys,
-      supportedRegressionPerformanceKeys,
-      theme: this.props.theme
+      stringParams: { contextualHelp: this.messages }
     };
 
     if ("categoricalMap" in this.props.dataset) {
       return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
     }
 
-    modelAssessmentDashboardProps.dataset.featureNames = generateFeatures();
+    modelAssessmentDashboardProps.dataset.featureNames = this.props.dataset.featureNames;
     modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
     modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
     modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
       this.props.dataset.featureNames,
-      true
+      DatasetName.BreastCancer
     );
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;

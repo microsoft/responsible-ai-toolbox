@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { DefaultButton, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
+import { ErrorCohortStats } from "../CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
 import { PredictionPath } from "../PredictionPath/PredictionPath";
 
@@ -37,7 +38,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               onClick={(): any => this.props.onSaveCohortClick()}
             />
           </div>
-          <div className={classNames.section}></div>
+          <div className={classNames.section} />
           <div className={classNames.subsection}>
             <div className={classNames.header}>Basic Information</div>
             {this.props.currentCohort.cohort.name !== "All data" && (
@@ -59,21 +60,27 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               <Stack horizontal tokens={alignmentStackTokens}>
                 <div className={classNames.tableData}>Total</div>
                 <div className={classNames.tableData}>
-                  {this.props.currentCohort.totalAll}
+                  {this.props.currentCohort.cohortStats.totalAll}
                 </div>
               </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Correct</div>
-                <div className={classNames.tableData}>
-                  {this.props.currentCohort.totalCorrect}
-                </div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Incorrect</div>
-                <div className={classNames.tableData}>
-                  {this.props.currentCohort.totalIncorrect}
-                </div>
-              </Stack>
+              {this.props.currentCohort.cohortStats instanceof
+                ErrorCohortStats && (
+                <Stack horizontal tokens={alignmentStackTokens}>
+                  <div className={classNames.tableData}>Correct</div>
+                  <div className={classNames.tableData}>
+                    {this.props.currentCohort.cohortStats.totalCorrect}
+                  </div>
+                </Stack>
+              )}
+              {this.props.currentCohort.cohortStats instanceof
+                ErrorCohortStats && (
+                <Stack horizontal tokens={alignmentStackTokens}>
+                  <div className={classNames.tableData}>Incorrect</div>
+                  <div className={classNames.tableData}>
+                    {this.props.currentCohort.cohortStats.totalIncorrect}
+                  </div>
+                </Stack>
+              )}
             </Stack>
           </div>
         </div>
@@ -84,21 +91,27 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               <Stack horizontal tokens={alignmentStackTokens}>
                 <div className={classNames.tableData}>Total</div>
                 <div className={classNames.tableData}>
-                  {this.props.currentCohort.totalCohort}
+                  {this.props.currentCohort.cohortStats.totalCohort}
                 </div>
               </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Correct</div>
-                <div className={classNames.tableData}>
-                  {this.props.currentCohort.totalCohortCorrect}
-                </div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Incorrect</div>
-                <div className={classNames.tableData}>
-                  {this.props.currentCohort.totalCohortIncorrect}
-                </div>
-              </Stack>
+              {this.props.currentCohort.cohortStats instanceof
+                ErrorCohortStats && (
+                <Stack horizontal tokens={alignmentStackTokens}>
+                  <div className={classNames.tableData}>Correct</div>
+                  <div className={classNames.tableData}>
+                    {this.props.currentCohort.cohortStats.totalCohortCorrect}
+                  </div>
+                </Stack>
+              )}
+              {this.props.currentCohort.cohortStats instanceof
+                ErrorCohortStats && (
+                <Stack horizontal tokens={alignmentStackTokens}>
+                  <div className={classNames.tableData}>Incorrect</div>
+                  <div className={classNames.tableData}>
+                    {this.props.currentCohort.cohortStats.totalCohortIncorrect}
+                  </div>
+                </Stack>
+              )}
             </Stack>
           </div>
         </div>

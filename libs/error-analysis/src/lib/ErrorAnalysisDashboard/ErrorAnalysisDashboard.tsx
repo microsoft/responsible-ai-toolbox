@@ -22,10 +22,9 @@ import {
   IDataset,
   IModelExplanationData,
   CohortSource,
-  CohortStats,
+  MetricCohortStats,
   ICompositeFilter,
   IFilter,
-  IGenericChartProps,
   WeightVectorOption,
   EditCohort,
   ShiftCohort
@@ -71,7 +70,6 @@ import {
   IMatrixAreaState,
   IMatrixFilterState
 } from "./MatrixFilterState";
-import { ModelExplanationUtils } from "./ModelExplanationUtils";
 import {
   ITreeViewRendererState,
   createInitialTreeViewState
@@ -92,12 +90,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
 
   public constructor(props: IErrorAnalysisDashboardProps) {
     super(props);
-    this.onModelConfigChanged = this.onModelConfigChanged.bind(this);
-    this.onConfigChanged = this.onConfigChanged.bind(this);
-    this.onWhatIfConfigChanged = this.onWhatIfConfigChanged.bind(this);
-    this.onDependenceChange = this.onDependenceChange.bind(this);
-    this.handleGlobalTabClick = this.handleGlobalTabClick.bind(this);
-    this.setSortVector = this.setSortVector.bind(this);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -307,7 +299,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           ? WeightVectors.AbsAvg
           : 0,
       selectedWhatIfIndex: undefined,
-      sortVector: undefined,
       treeViewState: createInitialTreeViewState(),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
@@ -328,9 +319,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
-          modelExplanationData: {} as IModelExplanationData,
+          modelExplanationData: {
+            precomputedExplanations: this.props.precomputedExplanations
+          } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
@@ -507,27 +499,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     selectedCohort={this.state.selectedCohort}
                     baseCohort={this.state.baseCohort}
                     treeViewState={this.state.treeViewState}
-                    setTreeViewState={(
-                      treeViewState: ITreeViewRendererState
-                    ) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ treeViewState });
-                      }
-                    }}
+                    setTreeViewState={this.setTreeViewState}
                     matrixAreaState={this.state.matrixAreaState}
                     matrixFilterState={this.state.matrixFilterState}
-                    setMatrixAreaState={(matrixAreaState: IMatrixAreaState) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ matrixAreaState });
-                      }
-                    }}
-                    setMatrixFilterState={(
-                      matrixFilterState: IMatrixFilterState
-                    ) => {
-                      if (this.state.selectedCohort !== this.state.baseCohort) {
-                        this.setState({ matrixFilterState });
-                      }
-                    }}
+                    setMatrixAreaState={this.setMatrixAreaState}
+                    setMatrixFilterState={this.setMatrixFilterState}
                   />
                 )}
                 {this.state.viewType === ViewTypeKeys.ExplanationView && (
@@ -536,9 +512,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   >
                     <Pivot
                       selectedKey={this.state.activeGlobalTab}
-                      onLinkClick={this.handleGlobalTabClick.bind(this)}
+                      onLinkClick={this.handleGlobalTabClick}
                       linkSize={PivotLinkSize.normal}
-                      headersOnly={true}
+                      headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
                     >
                       {this.pivotItems.map((props) => (
@@ -592,9 +568,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         }}
                         customPoints={this.state.customPoints}
                         selectedCohort={this.state.selectedCohort}
-                        setWhatIfDatapoint={(index: number) =>
-                          this.setState({ selectedWhatIfIndex: index })
-                        }
+                        setWhatIfDatapoint={this.setWhatIfDatapoint}
                       />
                     )}
                   </div>
@@ -641,7 +615,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   currentCohort={this.state.selectedCohort}
                   invokeModel={this.props.requestPredictions}
                   customPoints={this.state.customPoints}
-                  addCustomPoint={this.addCustomPoint.bind(this)}
+                  addCustomPoint={this.addCustomPoint}
                   selectedIndex={this.state.selectedWhatIfIndex}
                 />
               </Layer>
@@ -659,21 +633,40 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+  private setTreeViewState = (treeViewState: ITreeViewRendererState): void => {
+    if (this.state.selectedCohort !== this.state.baseCohort) {
+      this.setState({ treeViewState });
+    }
+  };
+  private setMatrixAreaState = (matrixAreaState: IMatrixAreaState): void => {
+    if (this.state.selectedCohort !== this.state.baseCohort) {
+      this.setState({ matrixAreaState });
+    }
+  };
+  private setMatrixFilterState = (
+    matrixFilterState: IMatrixFilterState
+  ): void => {
+    if (this.state.selectedCohort !== this.state.baseCohort) {
+      this.setState({ matrixFilterState });
+    }
+  };
+  private setWhatIfDatapoint = (index: number): void =>
+    this.setState({ selectedWhatIfIndex: index });
 
-  private addCustomPoint(temporaryPoint: { [key: string]: any }): void {
+  private addCustomPoint = (temporaryPoint: { [key: string]: any }): void => {
     this.setState({
       customPoints: [...this.state.customPoints, temporaryPoint],
       openWhatIf: false,
       predictionTab: PredictionTabKeys.WhatIfDatapointsTab
     });
-  }
+  };
 
   private updateSelectedCohort(
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,
     cells: number,
-    cohortStats: CohortStats | undefined
+    cohortStats: MetricCohortStats | undefined
   ): void {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
@@ -717,25 +710,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
   }
 
-  private onConfigChanged(newConfig: IGenericChartProps): void {
-    this.setState({ dataChartConfig: newConfig });
-  }
-
-  private onModelConfigChanged(newConfig: IGenericChartProps): void {
-    this.setState({ modelChartConfig: newConfig });
-  }
-
-  private onWhatIfConfigChanged(newConfig: IGenericChartProps): void {
-    this.setState({ whatIfChartConfig: newConfig });
-  }
-
-  private onDependenceChange(newConfig: IGenericChartProps): void {
-    this.setState({ dependenceProps: newConfig });
-  }
-
-  private handleGlobalTabClick(item: PivotItem | undefined): void {
-    if (item !== undefined) {
-      const itemKey: string = item.props.itemKey!;
+  private handleGlobalTabClick = (item: PivotItem | undefined): void => {
+    if (item?.props.itemKey) {
+      const itemKey: string = item.props.itemKey;
       const index: GlobalTabKeys = GlobalTabKeys[itemKey];
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
       this.setState({
@@ -744,15 +721,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         predictionTab
       });
     }
-  }
-
-  private setSortVector(): void {
-    this.setState({
-      sortVector: ModelExplanationUtils.getSortIndices(
-        this.state.cohorts[0].cohort.calculateAverageImportance()
-      ).reverse()
-    });
-  }
+  };
 
   private viewExplanation(): void {
     this.setState({

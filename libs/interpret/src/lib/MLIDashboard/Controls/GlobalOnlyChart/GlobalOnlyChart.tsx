@@ -14,14 +14,12 @@ import { localization } from "@responsible-ai/localization";
 import { Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { FeatureKeys } from "../../SharedComponents/IBarChartConfig";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
 export interface IGlobalOnlyChartState {
   topK: number;
-  sortingSeriesKey: number | string;
   sortArray: number[];
   globalSeries: IGlobalSeries[];
   featureNames: string[];
@@ -38,19 +36,21 @@ export class GlobalOnlyChart extends React.PureComponent<
 
   public componentDidMount(): void {
     if (
-      !this.context.precomputedExplanations?.globalFeatureImportance?.scores
-        ?.length
+      !this.context.modelExplanationData?.precomputedExplanations
+        ?.globalFeatureImportance?.scores?.length
     ) {
       return;
     }
     const globalImportance = this.buildGlobalProperties(
-      this.context.precomputedExplanations?.globalFeatureImportance
+      this.context.modelExplanationData?.precomputedExplanations
+        ?.globalFeatureImportance
     );
     const perClassExplanationDimension = globalImportance[0].length || 0;
     this.setState({
       featureNames:
-        this.context.precomputedExplanations.globalFeatureImportance
-          .featureNames || this.context.modelMetadata.featureNamesAbridged,
+        this.context.modelExplanationData?.precomputedExplanations
+          .globalFeatureImportance.featureNames ||
+        this.context.modelMetadata.featureNamesAbridged,
       globalSeries:
         perClassExplanationDimension === 1
           ? [
@@ -72,17 +72,19 @@ export class GlobalOnlyChart extends React.PureComponent<
       sortArray: ModelExplanationUtils.buildSortedVector(
         globalImportance
       ).reverse(),
-      sortingSeriesKey: FeatureKeys.AbsoluteGlobal,
       topK: Math.min(
         4,
-        this.context.precomputedExplanations?.globalFeatureImportance?.scores
-          .length || 0
+        this.context.modelExplanationData?.precomputedExplanations
+          ?.globalFeatureImportance?.scores.length || 0
       )
     });
   }
 
   public render(): React.ReactNode {
-    if (!this.context.precomputedExplanations?.globalFeatureImportance) {
+    if (
+      !this.context.modelExplanationData?.precomputedExplanations
+        ?.globalFeatureImportance
+    ) {
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.GlobalTab.missingParameters}
@@ -113,8 +115,8 @@ export class GlobalOnlyChart extends React.PureComponent<
             className={classNames.startingK}
             ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
             max={
-              this.context.precomputedExplanations.globalFeatureImportance
-                .scores.length
+              this.context.modelExplanationData?.precomputedExplanations
+                .globalFeatureImportance.scores.length
             }
             min={1}
             step={1}

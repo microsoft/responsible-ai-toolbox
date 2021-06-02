@@ -146,12 +146,11 @@ export class AxisConfigDialog extends React.PureComponent<
     );
     const minVal = this.getMinValue(selectedMeta);
     const maxVal = this.getMaxValue(selectedMeta);
-
     return (
       <Panel
         id="AxisConfigPanel"
         onDismiss={this.props.onCancel}
-        isOpen={true}
+        isOpen
         onRenderFooter={this.renderFooter}
         isFooterAtBottom={false}
         isLightDismiss

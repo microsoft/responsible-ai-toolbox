@@ -88,7 +88,7 @@ export function constructCols(
     columns.push({
       fieldName: `${index}`,
       isResizable: true,
-      key: `color`,
+      key: "color",
       maxWidth: 100,
       minWidth: 50,
       name: "Color"
@@ -137,8 +137,8 @@ function pushRowData(
   jointDataset: JointDataset,
   row: { [key: string]: number }
 ): void {
-  if (jointDataset.metaDict[property].isCategorical) {
-    const categories = jointDataset.metaDict[property].sortedCategoricalValues!;
+  const categories = jointDataset.metaDict[property].sortedCategoricalValues;
+  if (jointDataset.metaDict[property].isCategorical && categories) {
     tableRow.push(categories[row[property]]);
   } else {
     tableRow.push(row[property]);

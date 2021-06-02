@@ -3,6 +3,6 @@
 
 import { v4 } from "uuid";
 
-export function getRandomId() {
+export function getRandomId(): string {
   return `Id_${v4()}`;
 }

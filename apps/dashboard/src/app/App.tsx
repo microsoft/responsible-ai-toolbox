@@ -44,9 +44,6 @@ export class App extends React.Component<IAppSetting, IAppState> {
         <div
           style={{
             backgroundColor: theme.semanticColors.bodyBackground,
-            borderColor: "gray",
-            borderStyle: "solid",
-            borderWidth: 10,
             height: "calc(100% - 70px)",
             minHeight: "500px",
             width: "calc(100%-20px)"
@@ -113,26 +110,9 @@ export class App extends React.Component<IAppSetting, IAppState> {
           )}
           {this.state.application === "modelAssessment" && (
             <ModelAssessment
-              dataset={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].dataset
-              }
-              modelExplanationData={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].modelExplanationData
-              }
-              casualAnalysisData={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].casualAnalysisData
-              }
-              classDimension={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].classDimension
-              }
+              {...applications[this.state.application].datasets[
+                this.state.dataset
+              ]}
               theme={theme}
               language={Language[this.state.language]}
               version={
@@ -143,7 +123,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
             />
           )}
         </div>
-        <Redirect to={generatePath(App.route, this.state)} push={true} />
+        <Redirect to={generatePath(App.route, this.state)} push />
       </>
     );
   }

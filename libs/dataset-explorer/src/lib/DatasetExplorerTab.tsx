@@ -41,7 +41,6 @@ export interface IDatasetExplorerTabState {
   yDialogOpen: boolean;
   colorDialogOpen: boolean;
   selectedCohortIndex: number;
-  calloutVisible: boolean;
   chartProps?: IGenericChartProps;
 }
 
@@ -60,7 +59,6 @@ export class DatasetExplorerTab extends React.PureComponent<
     super(props);
 
     this.state = {
-      calloutVisible: false,
       colorDialogOpen: false,
       selectedCohortIndex: 0,
       xDialogOpen: false,
@@ -68,7 +66,7 @@ export class DatasetExplorerTab extends React.PureComponent<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     let initialCohortIndex: number;
     if (this.props.showCohortSelection) {
       initialCohortIndex = 0;
@@ -206,7 +204,7 @@ export class DatasetExplorerTab extends React.PureComponent<
                   ColumnCategories.Outcome
                 ]}
                 selectedColumn={this.state.chartProps.colorAxis}
-                canBin={true}
+                canBin
                 mustBin={false}
                 canDither={false}
                 onAccept={this.onColorSet}
@@ -242,7 +240,7 @@ export class DatasetExplorerTab extends React.PureComponent<
               )}
             </div>
             <div className={classNames.horizontalAxisWithPadding}>
-              <div className={classNames.paddingDiv}></div>
+              <div className={classNames.paddingDiv} />
               <div className={classNames.horizontalAxis}>
                 <div>
                   <DefaultButton

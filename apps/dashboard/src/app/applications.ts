@@ -4,11 +4,9 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData,
-  IModelExplanationData,
-  IDataset,
-  ICasualAnalysisData
+  IFairnessData
 } from "@responsible-ai/core-ui";
+import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
@@ -36,7 +34,9 @@ import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount"
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
-  adultCensusCasualAnalysisData
+  adultCensusCausalAnalysisData,
+  adultCensusCausalErrorAnalysisConfig,
+  adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 
 export interface IInterpretDataSet {
@@ -53,10 +53,7 @@ export interface IErrorAnalysisDataSet {
   classDimension?: 1 | 2 | 3;
 }
 
-export interface IModelAssessmentDataSet {
-  casualAnalysisData: ICasualAnalysisData;
-  dataset: IDataset;
-  modelExplanationData: IModelExplanationData;
+export interface IModelAssessmentDataSet extends IModelAssessmentData {
   classDimension?: 1 | 2 | 3;
 }
 
@@ -100,9 +97,10 @@ export const applications: IApplications = <const>{
   errorAnalysis: {
     datasets: {
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
+      bostonData: { classDimension: 1, data: bostonData },
       breastCancerData: { classDimension: 2, data: breastCancerData }
     },
-    versions: { "Live-Debug": 3, "Static-View": 2, "Version-1": 1 }
+    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
   },
   fairness: {
     datasets: {
@@ -142,11 +140,13 @@ export const applications: IApplications = <const>{
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
-        casualAnalysisData: adultCensusCasualAnalysisData,
+        causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
+        counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
-        modelExplanationData: adultCensusWithFairnessModelExplanationData
-      }
+        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet
     },
     versions: { "Version-1": 1 }
   }

@@ -68,14 +68,8 @@ export interface IWhatIfTabState {
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  topK: number;
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
-  secondaryChartChoice: string;
-  selectedFeatureKey: string;
-  selectedICEClass: number;
-  crossClassInfoVisible: boolean;
-  iceTooltipVisible: boolean;
 }
 
 export class WhatIfTab extends React.PureComponent<
@@ -105,32 +99,26 @@ export class WhatIfTab extends React.PureComponent<
     super(props);
 
     this.state = {
-      crossClassInfoVisible: false,
       customPointIsActive: [],
       customPoints: [],
       editingDataCustomIndex: undefined,
       featuresOption: [],
       filteredFeatureList: [],
-      iceTooltipVisible: false,
       isPanelOpen: this.props.invokeModel !== undefined,
       pointIsActive: [],
       request: undefined,
-      secondaryChartChoice: WhatIfConstants.featureImportanceKey,
       selectedCohortIndex: 0,
-      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
-      selectedICEClass: 0,
       selectedPointsIndexes: [],
       selectedWhatIfRootIndex: 0,
       showSelectionWarning: false,
       sortArray: [],
       sortingSeriesIndex: undefined,
-      topK: 4,
       xDialogOpen: false,
       yDialogOpen: false
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
@@ -457,7 +445,7 @@ export class WhatIfTab extends React.PureComponent<
                   )}
                 </div>
                 <div className={classNames.horizontalAxisWithPadding}>
-                  <div className={classNames.paddingDiv}></div>
+                  <div className={classNames.paddingDiv} />
                   <div className={classNames.horizontalAxis}>
                     <div>
                       <DefaultButton

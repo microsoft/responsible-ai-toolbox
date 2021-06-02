@@ -33,7 +33,7 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
               <div
                 key={`${this.props.matrixLength}_${0}category1`}
                 className={classNames.matrixCellPivot1Categories}
-              ></div>
+              />
               {this.props.category1Values.map((category: any, i: number) => {
                 return (
                   <div
@@ -57,7 +57,7 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
               <div
                 key={`${this.props.matrixLength}_${0}category1`}
                 className={classNames.matrixCellPivot1Categories}
-              ></div>
+              />
               {this.props.category2Values.map((category: any, i: number) => {
                 return (
                   <div

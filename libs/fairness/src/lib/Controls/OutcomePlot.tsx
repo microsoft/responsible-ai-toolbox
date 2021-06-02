@@ -141,7 +141,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         >
           <div className={sharedStyles.chartWrapper}>
             <Stack horizontal horizontalAlign={"space-between"}>
-              <div className={sharedStyles.chartSubHeader}></div>
+              <div className={sharedStyles.chartSubHeader} />
               <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
             </Stack>
             <div className={sharedStyles.chartBody}>

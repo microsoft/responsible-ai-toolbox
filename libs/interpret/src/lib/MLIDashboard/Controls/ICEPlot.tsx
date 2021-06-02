@@ -299,7 +299,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     ? this.state.rangeView.featureIndex
                     : undefined
                 }
-                useComboBoxAsMenuWidth={true}
+                useComboBoxAsMenuWidth
                 styles={FabricStyles.defaultDropdownStyle}
               />
             </div>
@@ -311,7 +311,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     selectedKey={
                       this.state.rangeView.selectedOptionKeys as string[]
                     }
-                    allowFreeform={true}
+                    allowFreeform
                     autoComplete="on"
                     options={this.state.rangeView.categoricalOptions}
                     onChange={this.onCategoricalRangeChanged}

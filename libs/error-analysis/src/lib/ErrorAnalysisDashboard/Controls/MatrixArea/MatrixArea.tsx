@@ -50,7 +50,7 @@ export class MatrixArea extends React.PureComponent<
       jsonMatrix: this.props.state.jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
-      maxErrorRate: this.props.state.maxErrorRate,
+      maxMetricValue: this.props.state.maxMetricValue,
       selectedCells: this.props.state.selectedCells
     };
     if (this.props.state.selectedCells === undefined) {
@@ -99,7 +99,7 @@ export class MatrixArea extends React.PureComponent<
       this.state.matrixFeature1 !== this.props.selectedFeature1 ||
       this.state.matrixFeature2 !== this.props.selectedFeature2
     ) {
-      return <div></div>;
+      return <div />;
     }
     const sameFeatureSelected =
       this.props.selectedFeature1 === this.props.selectedFeature2;
@@ -143,13 +143,13 @@ export class MatrixArea extends React.PureComponent<
           <div>
             {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
               <div className={classNames.matrixLabelBottom}>
-                <div className={classNames.matrixLabelTab}></div>
+                <div className={classNames.matrixLabelTab} />
                 <div>{this.props.selectedFeature2}</div>
               </div>
             )}
             {(this.props.selectedFeature2 === noFeature ||
               sameFeatureSelected) && (
-              <div className={classNames.emptyLabelPadding}></div>
+              <div className={classNames.emptyLabelPadding} />
             )}
             <MatrixCells
               jsonMatrix={this.state.jsonMatrix}
@@ -182,23 +182,30 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private reloadData(jsonMatrix: any): void {
-    let maxErrorRate = 0;
+    let maxMetricValue = 0;
     jsonMatrix.matrix.forEach((row: any): void => {
       row.forEach((value: any): void => {
-        const errorRate = value.falseCount / value.count;
-        if (!Number.isNaN(errorRate)) {
-          maxErrorRate = Math.max(maxErrorRate, errorRate);
+        if (value.falseCount) {
+          const errorRate = value.falseCount / value.count;
+          if (!Number.isNaN(errorRate)) {
+            maxMetricValue = Math.max(maxMetricValue, errorRate);
+          }
+        } else {
+          const metricValue = value.metricValue;
+          if (!Number.isNaN(metricValue)) {
+            maxMetricValue = Math.max(maxMetricValue, metricValue);
+          }
         }
       });
     });
-    this.props.updateMatrixLegendState(maxErrorRate);
+    this.props.updateMatrixLegendState(maxMetricValue);
     this.setState({
       disableClearAll: true,
       disableSelectAll: false,
       jsonMatrix,
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
-      maxErrorRate,
+      maxMetricValue,
       selectedCells: undefined
     });
   }
@@ -239,7 +246,7 @@ export class MatrixArea extends React.PureComponent<
       selectedCells = new Array<boolean>(matrixLength * rowLength);
     } else {
       // Need to make a copy so setState re-renders
-      selectedCells = [...this.state.selectedCells!];
+      selectedCells = [...selectedCells];
     }
     const index = j + i * rowLength;
     selectedCells[index] = !selectedCells[index];
@@ -260,11 +267,11 @@ export class MatrixArea extends React.PureComponent<
     this.updateStateFromSelectedCells(selectedCells);
   }
 
-  private updateStateFromSelectedCells(selectedCells: boolean[]) {
+  private updateStateFromSelectedCells(selectedCells: boolean[]): void {
     // Create a composite filter from the selected cells
     const compositeFilter = createCompositeFilterFromCells(
       selectedCells,
-      this.state.jsonMatrix!,
+      this.state.jsonMatrix,
       this.props.selectedFeature1,
       this.props.selectedFeature2,
       this.props.baseCohort,
@@ -273,7 +280,7 @@ export class MatrixArea extends React.PureComponent<
     const cells = selectedCells.filter(Boolean).length;
     const cohortStats = createCohortStatsFromSelectedCells(
       selectedCells,
-      this.state.jsonMatrix!
+      this.state.jsonMatrix
     );
     this.props.updateSelectedCohort(
       [],

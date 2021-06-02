@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SVGToolTip } from "@responsible-ai/core-ui";
+import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
-import { IProcessedStyleSet } from "office-ui-fabric-react";
+import { getTheme, IProcessedStyleSet } from "office-ui-fabric-react";
 import React from "react";
 
 import { isColorDark } from "../../ColorPalette";
@@ -16,6 +16,7 @@ import {
 } from "./TreeViewRenderer.styles";
 
 export interface ITreeViewNodeProps {
+  fillOffset: number;
   node: HierarchyPointNode<ITreeNode>;
   onSelect(node: HierarchyPointNode<ITreeNode>): void;
 }
@@ -24,14 +25,13 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
   private ref: React.RefObject<SVGGElement>;
   public constructor(props: ITreeViewNodeProps) {
     super(props);
-    this.state = {
-      isMouseOver: false
-    };
     this.ref = React.createRef<SVGGElement>();
   }
   public render(): React.ReactNode {
     const { node } = this.props;
     const classNames = treeViewRendererStyles();
+    const gradientFillId = getRandomId();
+    const theme = getTheme();
     return (
       <>
         <g
@@ -40,10 +40,39 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
           pointerEvents="all"
           ref={this.ref}
         >
+          <linearGradient id={gradientFillId} x1="0.5" y1="1" x2="0.5" y2="0">
+            <stop
+              offset="0%"
+              stopOpacity="1"
+              stopColor={this.props.node.data.errorColor}
+            />
+            <stop
+              offset={`${this.props.fillOffset * 100}%`}
+              stopOpacity="1"
+              stopColor={this.props.node.data.errorColor}
+            />
+            <stop
+              offset={`${this.props.fillOffset * 100}%`}
+              stopOpacity="1"
+              stopColor={theme.semanticColors.bodyBackgroundChecked}
+            />
+            <stop
+              offset="100%"
+              stopOpacity="1"
+              stopColor={theme.semanticColors.bodyBackgroundChecked}
+            />
+          </linearGradient>
           <circle
             r={node.data.r}
             className={classNames.node}
-            style={node.data.nodeState.errorStyle}
+            style={{
+              color: "black",
+              stroke: this.props.node.data.nodeState.onSelectedPath
+                ? theme.semanticColors.link
+                : this.props.node.data.errorColor,
+              strokeWidth: this.props.node.data.nodeState.onSelectedPath ? 3 : 2
+            }}
+            fill={`url(#${gradientFillId})`}
           />
           {node.data.nodeState.onSelectedPath && (
             <circle
@@ -55,22 +84,15 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               }
             />
           )}
-          <g
-            style={node.data.fillstyleDown}
-            mask="url(#Mask)"
-            className={classNames.nopointer}
-          >
-            <circle r="26" style={node.data.fillstyleUp} />
-          </g>
           <text
             textAnchor="middle"
             className={this.getNodeClassName(
               classNames,
               node.data.filterProps.errorCoverage,
-              node.data.errorColor.fill
+              node.data.errorColor
             )}
           >
-            {node.data.error}/{node.data.size}
+            {this.getNodeText(node)}
           </text>
         </g>
         <SVGToolTip target={this.ref} spacing={15}>
@@ -87,10 +109,20 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     this.props.onSelect(this.props.node);
   };
 
+  private getNodeText(node: HierarchyPointNode<ITreeNode>): string {
+    if (
+      node.data.metricName !== Metrics.ErrorRate &&
+      node.data.metricName !== undefined
+    ) {
+      return node.data.metricValue.toFixed(2);
+    }
+    return node.data.error + "/" + node.data.size;
+  }
+
   private getNodeClassName(
     classNames: IProcessedStyleSet<ITreeViewRendererStyles>,
     ratio: number,
-    fill: string
+    fill: string | undefined
   ): string {
     let nodeTextClassName = classNames.nodeText;
     if (ratio > 50 && isColorDark(fill)) {

@@ -31,11 +31,9 @@ _META_JSON = Metadata.META_JSON
 class ModelAnalysis(object):
 
     """Defines the top-level Model Analysis API.
-
     Use ModelAnalysis to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
-
     :param model: The model to compute RAI insights for.
         A model that implements sklearn.predict or sklearn.predict_proba
         or function that accepts a 2d ndarray.
@@ -56,13 +54,12 @@ class ModelAnalysis(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, serializer=None):
+                 task_type, categorical_features, train_labels=None,
+                 serializer=None):
         """Defines the top-level Model Analysis API.
-
         Use ModelAnalysis to analyze errors, explain the most important
         features, compute counterfactuals and run causal analysis in a
         single API.
-
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -73,24 +70,33 @@ class ModelAnalysis(object):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
+        :param train_labels: The class labels in the training dataset
+        :type train_labels: ndarray
         """
         self.model = model
         self.train = train
         self.test = test
         self.target_column = target_column
         self.task_type = task_type
+        self.categorical_features = categorical_features
         self._serializer = serializer
-        self._causal_manager = CausalManager()
+        self._causal_manager = CausalManager(
+            train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type)
         self._error_analysis_manager = ErrorAnalysisManager(model,
                                                             train,
                                                             target_column)
-        self._classes = train[target_column].unique()
+        if train_labels is None:
+            self._classes = train[target_column].unique()
+        else:
+            self._classes = train_labels
         self._explainer_manager = ExplainerManager(model, train, test,
                                                    target_column,
                                                    self._classes)
@@ -102,7 +108,6 @@ class ModelAnalysis(object):
     @property
     def causal(self) -> CausalManager:
         """Get the causal manager.
-
         :return: The causal manager.
         :rtype: CausalManager
         """
@@ -111,7 +116,6 @@ class ModelAnalysis(object):
     @property
     def counterfactual(self) -> CounterfactualManager:
         """Get the counterfactual manager.
-
         :return: The counterfactual manager.
         :rtype: CounterfactualManager
         """
@@ -120,7 +124,6 @@ class ModelAnalysis(object):
     @property
     def error_analysis(self) -> ErrorAnalysisManager:
         """Get the error analysis manager.
-
         :return: The error analysis manager.
         :rtype: ErrorAnalysisManager
         """
@@ -129,7 +132,6 @@ class ModelAnalysis(object):
     @property
     def explainer(self) -> ExplainerManager:
         """Get the explainer manager.
-
         :return: The explainer manager.
         :rtype: ExplainerManager
         """
@@ -142,17 +144,27 @@ class ModelAnalysis(object):
 
     def list(self):
         """List information about each of the managers.
-
         :return: Information about each of the managers.
         :rtype: dict
         """
         configs = {}
         for manager in self._managers:
             configs[manager.name] = manager.list()
+        return configs
+
+    def get(self):
+        """List information about each of the managers.
+
+        :return: Information about each of the managers.
+        :rtype: dict
+        """
+        configs = {}
+        for manager in self._managers:
+            configs[manager.name] = manager.get()
+        return configs
 
     def _write_to_file(self, file_path, content):
         """Save the string content to the given file path.
-
         :param file_path: The file path to save the content to.
         :type file_path: str
         :param content: The string content to save.
@@ -163,7 +175,6 @@ class ModelAnalysis(object):
 
     def save(self, path):
         """Save the ModelAnalysis to the given path.
-
         :param path: The directory path to save the ModelAnalysis to.
         :type path: str
         """
@@ -204,7 +215,6 @@ class ModelAnalysis(object):
     @staticmethod
     def load(path):
         """Load the ModelAnalysis from the given path.
-
         :param path: The directory path to load the ModelAnalysis from.
         :type path: str
         """
@@ -241,6 +251,7 @@ class ModelAnalysis(object):
             inst.__dict__['_' + _SERIALIZER] = None
             with open(top_dir / _MODEL_PKL, 'rb') as file:
                 inst.__dict__[_MODEL] = pickle.load(file)
+
         # load each of the individual managers
         managers = []
         cm_name = '_' + ManagerNames.CAUSAL + '_manager'
@@ -248,19 +259,23 @@ class ModelAnalysis(object):
         causal_manager = CausalManager._load(causal_dir, inst)
         inst.__dict__[cm_name] = causal_manager
         managers.append(causal_manager)
+
         cfm_name = '_' + ManagerNames.COUNTERFACTUAL + '_manager'
         cf_dir = top_dir / ManagerNames.COUNTERFACTUAL
         counterfactual_manager = CounterfactualManager._load(cf_dir, inst)
         inst.__dict__[cfm_name] = counterfactual_manager
         managers.append(counterfactual_manager)
+
         eam_name = '_' + ManagerNames.ERROR_ANALYSIS + '_manager'
         ea_dir = top_dir / ManagerNames.ERROR_ANALYSIS
         error_analysis_manager = ErrorAnalysisManager._load(ea_dir, inst)
         inst.__dict__[eam_name] = error_analysis_manager
+
         exm_name = '_' + ManagerNames.EXPLAINER + '_manager'
         exp_dir = top_dir / ManagerNames.EXPLAINER
         explainer_manager = ExplainerManager._load(exp_dir, inst)
         inst.__dict__[exm_name] = explainer_manager
         managers.append(explainer_manager)
+
         inst.__dict__['_' + _MANAGERS] = managers
         return inst

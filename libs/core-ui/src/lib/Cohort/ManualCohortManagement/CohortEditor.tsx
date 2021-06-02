@@ -95,11 +95,11 @@ export class CohortEditor extends React.PureComponent<
     return (
       <>
         <Panel
-          onOuterClick={() => {
+          onOuterClick={(): number => {
             return 0;
           }} // https://github.com/microsoft/fluentui/issues/6476
           id="cohortEditPanel"
-          isOpen={true}
+          isOpen
           onDismiss={this.props.closeCohortEditorPanel}
           onRenderFooter={this.renderFooter}
           isFooterAtBottom
@@ -210,11 +210,11 @@ export class CohortEditor extends React.PureComponent<
     }
   };
 
-  private readonly onCancelClick = () => {
+  private readonly onCancelClick = (): void => {
     this.setState({ showConfirmation: true });
   };
 
-  private readonly onCancelConfirm = async () => {
+  private readonly onCancelConfirm = async (): Promise<void> => {
     const callback = this.props.isNewCohort
       ? this.props.closeCohortEditorPanel
       : this.props.closeCohortEditor;
@@ -222,7 +222,7 @@ export class CohortEditor extends React.PureComponent<
     this.setState({ showConfirmation: false });
   };
 
-  private readonly onCancelClose = () => {
+  private readonly onCancelClose = (): void => {
     this.setState({ showConfirmation: false });
   };
 

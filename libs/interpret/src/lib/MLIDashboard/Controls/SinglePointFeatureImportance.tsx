@@ -119,7 +119,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
                 step={1}
                 value={this.props.config.topK}
                 onChange={this.setTopK}
-                showValue={true}
+                showValue
               />
               {this.sortOptions.length > 1 && (
                 <ComboBox
@@ -128,7 +128,7 @@ export class SinglePointFeatureImportance extends React.PureComponent<
                   onChange={this.onSortSelect}
                   options={this.sortOptions}
                   ariaLabel={"sort selector"}
-                  useComboBoxAsMenuWidth={true}
+                  useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
               )}

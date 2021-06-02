@@ -69,8 +69,6 @@ const checkboxStackTokens: IStackTokens = {
 export interface IFeatureListState {
   searchedFeatures: string[];
   selectedFeatures: string[];
-  percents: number[];
-  sortedFeatures: string[];
   enableApplyButton: boolean;
   lastAppliedFeatures: Set<string>;
   tableState: ITableState;
@@ -103,10 +101,8 @@ export class FeatureList extends React.Component<
     this.state = {
       enableApplyButton: false,
       lastAppliedFeatures: new Set<string>(this.props.features),
-      percents: sortedPercents,
       searchedFeatures,
       selectedFeatures: this.props.selectedFeatures,
-      sortedFeatures,
       tableState
     };
     this.layerHostId = getId("featuresListHost");
@@ -145,9 +141,7 @@ export class FeatureList extends React.Component<
         this.props.isEnabled
       );
       this.setState({
-        percents: sortedPercents,
         searchedFeatures,
-        sortedFeatures,
         tableState
       });
       this.updateSelection();
@@ -181,9 +175,12 @@ export class FeatureList extends React.Component<
                 styles={searchBoxStyles}
                 onSearch={this.onSearch.bind(this)}
                 onClear={this.onSearch.bind(this)}
-                onChange={(_, newValue?: string): void =>
-                  this.onSearch.bind(this)(newValue!)
-                }
+                onChange={(_, newValue?: string): void => {
+                  if (newValue === undefined) {
+                    return;
+                  }
+                  this.onSearch.bind(this)(newValue);
+                }}
               />
             </Stack.Item>
             <Customizer
@@ -208,7 +205,7 @@ export class FeatureList extends React.Component<
                         this,
                         theme
                       )}
-                      selectionPreservedOnEmptyClick={true}
+                      selectionPreservedOnEmptyClick
                       ariaLabelForSelectionColumn="Toggle selection"
                       ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                       checkButtonAriaLabel="Row checkbox"
@@ -250,17 +247,20 @@ export class FeatureList extends React.Component<
   private renderRow: IRenderFunction<IDetailsRowProps> = (
     props?: IDetailsRowProps
   ): JSX.Element | null => {
+    if (!props) {
+      return <div />;
+    }
     return (
-      <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props!} />
+      <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props} />
     );
   };
 
-  private renderRowFields(props: IDetailsRowFieldsProps) {
+  private renderRowFields(props: IDetailsRowFieldsProps): JSX.Element {
     if (this.props.isEnabled) {
       return <DetailsRowFields {...props} />;
     }
     return (
-      <span data-selection-disabled={true}>
+      <span data-selection-disabled>
         <DetailsRowFields {...props} />
       </span>
     );
@@ -278,7 +278,7 @@ export class FeatureList extends React.Component<
       switch (column.key) {
         case "checkbox":
           if (this.state.selectedFeatures.includes(fieldContent)) {
-            return <Checkbox checked={true} disabled />;
+            return <Checkbox checked disabled />;
           }
           return <Checkbox checked={false} disabled />;
         case "importances":
@@ -290,13 +290,13 @@ export class FeatureList extends React.Component<
                   width="100%"
                   height="4"
                   rx="5"
-                ></rect>
+                />
                 <rect
                   fill={theme.palette.neutralSecondary}
                   width={`${fieldContent}%`}
                   height="4"
                   rx="5"
-                ></rect>
+                />
               </g>
             </svg>
           );
@@ -305,7 +305,7 @@ export class FeatureList extends React.Component<
           return <span>{fieldContent}</span>;
       }
     }
-    return <span></span>;
+    return <span />;
   }
 
   private updateSelection(): void {

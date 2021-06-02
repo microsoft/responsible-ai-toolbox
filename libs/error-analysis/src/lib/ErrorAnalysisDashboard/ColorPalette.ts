@@ -16,7 +16,10 @@ export enum ColorPalette {
   ErrorAnalysisDarkGreyText = "#555"
 }
 
-export function isColorDark(colorStr: string): boolean {
+export function isColorDark(colorStr: string | undefined): boolean {
+  if (!colorStr) {
+    return false;
+  }
   const val = Lab(colorStr).l;
   return val <= 65;
 }

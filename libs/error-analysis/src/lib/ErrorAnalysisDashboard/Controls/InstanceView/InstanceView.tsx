@@ -245,7 +245,7 @@ export class InstanceView extends React.Component<
                 this.state.selectionDetails.selectedAllSelectedIndexes
               }
               selectedCohort={this.props.selectedCohort}
-              setWhatIfDatapoint={(_: number) => {
+              setWhatIfDatapoint={(): void => {
                 // do nothing.
               }}
             />
@@ -371,7 +371,7 @@ export class InstanceView extends React.Component<
 
   private onRenderLabel = (type: SelectionType) => (
     p: IChoiceGroupOption | undefined
-  ) => {
+  ): JSX.Element => {
     const classNames = InstanceViewStyles();
     let selectionText = "";
     switch (type) {
@@ -405,8 +405,8 @@ export class InstanceView extends React.Component<
     return (
       <Stack>
         <Stack.Item align="start">
-          <span id={p!.labelId} className="ms-ChoiceFieldLabel">
-            {p!.text}
+          <span id={p?.labelId} className="ms-ChoiceFieldLabel">
+            {p?.text}
           </span>
         </Stack.Item>
         <Stack.Item align="start" styles={stackItemStyles}>

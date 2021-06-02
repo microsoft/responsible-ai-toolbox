@@ -3,7 +3,7 @@
 
 import numpy as np
 import pandas as pd
-from lightgbm import LGBMClassifier
+from lightgbm import LGBMClassifier, LGBMRegressor
 from enum import Enum
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y,
@@ -15,7 +15,14 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                LEAF_INDEX,
                                                METHOD,
                                                METHOD_EXCLUDES,
-                                               METHOD_INCLUDES)
+                                               METHOD_INCLUDES,
+                                               ModelTask,
+                                               Metrics,
+                                               metric_to_display_name,
+                                               error_metrics)
+from sklearn.metrics import (
+    mean_absolute_error, mean_squared_error, median_absolute_error,
+    r2_score, f1_score, precision_score, recall_score)
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -47,8 +54,22 @@ def compute_json_error_tree(analyzer,
         max_depth = DEFAULT_MAX_DEPTH
     if num_leaves is None:
         num_leaves = DEFAULT_NUM_LEAVES
-    surrogate = LGBMClassifier(n_estimators=1, max_depth=max_depth,
-                               num_leaves=num_leaves)
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        if analyzer.metric is None:
+            metric = Metrics.ERROR_RATE
+        else:
+            metric = analyzer.metric
+        surrogate = LGBMClassifier(n_estimators=1,
+                                   max_depth=max_depth,
+                                   num_leaves=num_leaves)
+    else:
+        if analyzer.metric is None:
+            metric = Metrics.MEAN_SQUARED_ERROR
+        else:
+            metric = analyzer.metric
+        surrogate = LGBMRegressor(n_estimators=1,
+                                  max_depth=max_depth,
+                                  num_leaves=num_leaves)
     is_model_analyzer = hasattr(analyzer, MODEL)
     if is_model_analyzer:
         filtered_df = filter_from_cohort(analyzer.dataset,
@@ -80,9 +101,11 @@ def compute_json_error_tree(analyzer,
     else:
         input_data = input_data.to_numpy()
     if is_model_analyzer:
-        diff = analyzer.model.predict(input_data) != true_y
-    else:
+        pred_y = analyzer.model.predict(input_data)
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
+    else:
+        diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     indexes = []
@@ -114,6 +137,8 @@ def compute_json_error_tree(analyzer,
     filtered_indexed_df = pd.DataFrame(dataset_sub_features,
                                        columns=dataset_sub_names)
     filtered_indexed_df[DIFF] = diff
+    filtered_indexed_df[TRUE_Y] = true_y
+    filtered_indexed_df[PRED_Y] = pred_y
     model_json = surrogate._Booster.dump_model()
     tree_structure = model_json["tree_info"][0]['tree_structure']
     max_split_index = get_max_split_index(tree_structure) + 1
@@ -122,7 +147,9 @@ def compute_json_error_tree(analyzer,
                          max_split_index,
                          (categories_reindexed,
                           cat_ind_reindexed),
-                         [], dataset_sub_names)
+                         [],
+                         dataset_sub_names,
+                         metric=metric)
     return json_tree
 
 
@@ -136,9 +163,15 @@ def get_max_split_index(tree):
         return 0
 
 
-def traverse(df, tree, max_split_index,
-             categories, json, feature_names, parent=None,
-             side=TreeSide.UNKNOWN):
+def traverse(df,
+             tree,
+             max_split_index,
+             categories,
+             json,
+             feature_names,
+             parent=None,
+             side=TreeSide.UNKNOWN,
+             metric=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -148,7 +181,7 @@ def traverse(df, tree, max_split_index,
 
     # write current node to json
     json, df = node_to_json(df, tree, nodeid, categories, json,
-                            feature_names, parent, side)
+                            feature_names, metric, parent, side)
 
     # write children to json
     if 'leaf_value' not in tree:
@@ -156,15 +189,15 @@ def traverse(df, tree, max_split_index,
         right_child = tree[TreeSide.RIGHT_CHILD]
         json = traverse(df, left_child, max_split_index,
                         categories, json, feature_names,
-                        tree, TreeSide.LEFT_CHILD)
+                        tree, TreeSide.LEFT_CHILD, metric)
         json = traverse(df, right_child, max_split_index,
                         categories, json, feature_names,
-                        tree, TreeSide.RIGHT_CHILD)
+                        tree, TreeSide.RIGHT_CHILD, metric)
     return json
 
 
 def node_to_json(df, tree, nodeid, categories, json,
-                 feature_names, parent=None,
+                 feature_names, metric, parent=None,
                  side=TreeSide.UNKNOWN):
     p_node_name = None
     condition = None
@@ -228,16 +261,52 @@ def node_to_json(df, tree, nodeid, categories, json,
                 for argi in arg:
                     query.append("`" + p_node_name + "` != " + str(argi))
                 df = df.query(" & ".join(query))
-    error = df[DIFF].values.sum()
+    success = 0
     total = df.shape[0]
-    success = total - error
+    if df.shape[0] == 0 and metric != Metrics.ERROR_RATE:
+        metric_value = 0
+        error = 0
+        success = 0
+    elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
+        pred_y, true_y, error = get_regression_metric_data(df)
+        metric_value = mean_absolute_error(pred_y, true_y)
+    elif metric == Metrics.MEAN_SQUARED_ERROR:
+        pred_y, true_y, error = get_regression_metric_data(df)
+        metric_value = mean_squared_error(pred_y, true_y)
+    elif metric == Metrics.MEDIAN_ABSOLUTE_ERROR:
+        pred_y, true_y, error = get_regression_metric_data(df)
+        metric_value = median_absolute_error(pred_y, true_y)
+    elif metric == Metrics.R2_SCORE:
+        pred_y, true_y, error = get_regression_metric_data(df)
+        metric_value = r2_score(pred_y, true_y)
+    elif metric == Metrics.F1_SCORE:
+        pred_y, true_y, error = get_classification_metric_data(df)
+        metric_value = f1_score(pred_y, true_y)
+        success = total - error
+    elif metric == Metrics.PRECISION_SCORE:
+        pred_y, true_y, error = get_classification_metric_data(df)
+        metric_value = precision_score(pred_y, true_y)
+        success = total - error
+    elif metric == Metrics.RECALL_SCORE:
+        pred_y, true_y, error = get_classification_metric_data(df)
+        metric_value = recall_score(pred_y, true_y)
+        success = total - error
+    else:
+        error = df[DIFF].values.sum()
+        if total == 0:
+            metric_value = 0
+        else:
+            metric_value = error / total
+        success = total - error
+    metric_name = metric_to_display_name[metric]
+    is_error_metric = metric in error_metrics
     if SPLIT_FEATURE in tree:
         node_name = feature_names[tree[SPLIT_FEATURE]]
     else:
         node_name = None
     json.append({
         "arg": arg,
-        "badFeaturesRowCount": 0,
+        "badFeaturesRowCount": 0,  # Note: remove this eventually
         "condition": condition,
         "error": float(error),
         "id": int(nodeid),
@@ -246,9 +315,27 @@ def node_to_json(df, tree, nodeid, categories, json,
         "nodeName": node_name,
         "parentId": parentid,
         "parentNodeName": p_node_name,
-        "pathFromRoot": "",
-        "size": float(success + error),
-        "sourceRowKeyHash": "hashkey",
-        "success": float(success)
+        "pathFromRoot": "",  # Note: remove this eventually
+        "size": float(total),
+        "sourceRowKeyHash": "hashkey",  # Note: remove this eventually
+        "success": float(success),  # Note: remove this eventually
+        "metricName": metric_name,
+        "metricValue": float(metric_value),
+        "isErrorMetric": is_error_metric
     })
     return json, df
+
+
+def get_regression_metric_data(df):
+    pred_y = df[PRED_Y]
+    true_y = df[TRUE_Y]
+    # total abs error at the node
+    error = sum(abs(pred_y - true_y))
+    return pred_y, true_y, error
+
+
+def get_classification_metric_data(df):
+    pred_y = df[PRED_Y]
+    true_y = df[TRUE_Y]
+    error = df[DIFF].values.sum()
+    return pred_y, true_y, error

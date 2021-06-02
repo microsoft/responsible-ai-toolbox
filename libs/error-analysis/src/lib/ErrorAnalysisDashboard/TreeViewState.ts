@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Property } from "csstype";
 import { HierarchyPointNode } from "d3-hierarchy";
 
 import { FilterProps } from "./FilterProps";
 
 export interface IErrorColorStyle {
-  fill: string;
+  fill: string | undefined;
 }
 
 export interface IShowSelectedStyle {
@@ -18,13 +19,7 @@ export interface ITransform {
 }
 
 export interface INodeDetail {
-  showSelected: IShowSelectedStyle;
-  globalError: string;
-  localError: string;
-  instanceInfo: string;
-  errorInfo: string;
-  successInfo: string;
-  errorColor: IErrorColorStyle;
+  errorColor: Property.Color;
   maskDown: ITransform;
   maskUp: ITransform;
 }
@@ -32,8 +27,6 @@ export interface INodeDetail {
 export interface ITreeViewRendererState {
   request?: AbortController;
   nodeDetail: INodeDetail;
-  viewerWidth: number;
-  viewerHeight: number;
   selectedNode: any;
   transform: any;
   treeNodes: any[];
@@ -48,19 +41,18 @@ export interface ITreeNode {
   arg: number;
   condition: string;
   error: number;
+  rootErrorSize: number;
   id: string;
+  isErrorMetric: boolean;
   method: string;
+  metricName: string;
+  metricValue: number;
   nodeIndex: number;
   nodeName: string;
   parentId: string;
   parentNodeName: string;
-  pathFromRoot: string;
   size: number;
-  sourceRowKeyHash: string;
-  success: number;
-  errorColor: IErrorColorStyle;
-  fillstyleUp: IFillStyleUp;
-  fillstyleDown: ITransform;
+  errorColor: Property.Color;
   filterProps: FilterProps;
   maskShift: number;
   r: number;
@@ -74,7 +66,6 @@ export interface IFillStyleUp {
 
 // Contains node state that changes with UI clicks
 export interface INodeState {
-  errorStyle: Record<string, number | string> | undefined;
   onSelectedPath: boolean;
   isSelectedLeaf: boolean;
   style: ITransform | undefined;
@@ -83,21 +74,13 @@ export interface INodeState {
 export function createInitialTreeViewState(): ITreeViewRendererState {
   return {
     nodeDetail: {
-      errorColor: {
-        fill: "#eaeaea"
-      },
-      errorInfo: "0 Errors",
-      globalError: "0",
-      instanceInfo: "0 Instances",
-      localError: "0",
+      errorColor: "#eaeaea",
       maskDown: {
         transform: "translate(0px, -13px)"
       },
       maskUp: {
         transform: "translate(0px, 13px)"
-      },
-      showSelected: { opacity: 0 },
-      successInfo: "0 Success"
+      }
     },
     request: undefined,
     root: undefined,
@@ -106,8 +89,6 @@ export function createInitialTreeViewState(): ITreeViewRendererState {
     rootSize: 0,
     selectedNode: undefined,
     transform: undefined,
-    treeNodes: [],
-    viewerHeight: 0,
-    viewerWidth: 0
+    treeNodes: []
   };
 }

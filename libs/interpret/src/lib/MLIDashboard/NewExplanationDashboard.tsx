@@ -93,9 +93,10 @@ export class NewExplanationDashboard extends React.PureComponent<
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
           jointDataset: this.state.jointDataset,
-          modelExplanationData: {} as IModelExplanationData,
+          modelExplanationData: {
+            precomputedExplanations: this.props.precomputedExplanations
+          } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          precomputedExplanations: this.props.precomputedExplanations,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
@@ -144,7 +145,7 @@ export class NewExplanationDashboard extends React.PureComponent<
           {this.props.dashboardType === "ModelPerformance" ? (
             <ModelPerformanceTab />
           ) : (
-            <Stack horizontal={true}>
+            <Stack horizontal>
               <Stack.Item>
                 <CohortBar
                   cohorts={this.state.cohorts}
@@ -159,7 +160,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick}
                     linkSize={PivotLinkSize.normal}
-                    headersOnly={true}
+                    headersOnly
                     id="DashboardPivot"
                   >
                     {this.pivotItems.map((props) => (
@@ -170,7 +171,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.DataExploration && (
-                    <DatasetExplorerTab showCohortSelection={true} />
+                    <DatasetExplorerTab showCohortSelection />
                   )}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (

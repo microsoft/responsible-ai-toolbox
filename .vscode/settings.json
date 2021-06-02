@@ -61,9 +61,11 @@
     "camelcase",
     "cssmodule",
     "jmespath",
+    "jsonify",
     "mlchartlib",
     "multiclass",
     "nrwl",
+    "numpy",
     "pytest",
     "raiwidget",
     "raiwidgets",
@@ -71,5 +73,7 @@
     "sdist",
     "shap",
     "uifabric"
-  ]
+  ],
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--max-line-length=80"]
 }

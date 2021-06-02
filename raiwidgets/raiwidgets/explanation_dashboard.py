@@ -47,13 +47,14 @@ class ExplanationDashboard(Dashboard):
                  public_ip=None, port=None, locale=None):
         """Initialize the ExplanationDashboard."""
         self.input = ExplanationDashboardInput(
-            explanation, model, dataset, true_y, classes, features, locale)
+            explanation, model, dataset, true_y, classes, features)
 
         super(ExplanationDashboard, self).__init__(
             dashboard_type="Interpret",
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
-            port=port)
+            port=port,
+            locale=locale)
 
         def predict():
             data = request.get_json(force=True)

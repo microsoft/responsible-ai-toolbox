@@ -10,13 +10,17 @@ jobs:
   ci-python:
     strategy:
       matrix:
-        packageDirectory: ["raiwidgets", "wrapped-flask", "erroranalysis"]
+        packageDirectory:
+          ["raiwidgets", "responsibleai", "wrapped-flask", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
           # segfaults in wrapped-flask tests in most OS-Python version combinations
           - packageDirectory: "wrapped-flask"
             operatingSystem: ubuntu-latest
+          # temperately disabled related to an shap issue
+          # - packageDirectory: "raiwidgets"
+          #   pythonVersion: 3.6
           - packageDirectory: "wrapped-flask"
             operatingSystem: macos-latest
             pythonVersion: 3.7
@@ -38,11 +42,33 @@ jobs:
         name: Use Homebrew to install libomp on MacOS for lightgbm
         run: brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
 
-      - name: Install dependencies
+      - name: Setup tools
         run: |
           python -m pip install --upgrade pip
-          pip install -r ${{ matrix.packageDirectory }}/requirements-dev.txt
-          pip install ${{ matrix.packageDirectory }}/
+          pip install --upgrade setuptools
+          pip install --upgrade pip-tools
+
+      - name: Pip compile
+        run: |
+          pip-compile requirements-dev.txt
+          cat requirements-dev.txt
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Upload requirements
+        uses: actions/upload-artifact@v2
+        with:
+          name: requirements-dev.txt
+          path: ${{ matrix.packageDirectory }}/requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          pip-sync requirements-dev.txt
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Install package
+        run: |
+          pip install -v .
+        working-directory: ${{ matrix.packageDirectory }}
 
       - name: flake8
         run: flake8

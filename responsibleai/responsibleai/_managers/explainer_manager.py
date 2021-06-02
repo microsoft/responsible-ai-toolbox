@@ -108,6 +108,8 @@ class ExplainerManager(BaseManager):
 
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
+        if not self._is_added:
+            return
         if self._is_run:
             return
         model_task = ModelTask.Unknown
