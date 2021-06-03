@@ -16,6 +16,8 @@ from .explanation_constants import ExplanationDashboardInterface
 import traceback
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys
+from raiwidgets.interfaces import CounterfactualData
+import json
 
 
 class ModelAnalysisDashboardInput:
@@ -46,6 +48,9 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input.causalData = [
             self._get_causal(i)
             for i in self._analysis.causal.get()]
+        self.dashboard_input.counterfactualData = [
+            self._get_counterfactual(i)
+            for i in self._analysis.counterfactual.get()]
         x_test = analysis.test.drop(columns=[analysis.target_column])
         y_test = analysis.test[analysis.target_column]
         self._error_analyzer = ModelAnalyzer(model, x_test,
@@ -337,6 +342,14 @@ class ModelAnalysisDashboardInput:
                 lambda x: x.reset_index().to_dict(
                     orient='records')).values
         return causal_data
+
+    def _get_counterfactual(self, counterfactual):
+        counterfactual_data = CounterfactualData()
+        json_data = json.loads(counterfactual.to_json())
+        counterfactual_data.cfsList = json_data["cfs_list"]
+        counterfactual_data.featureNames = json_data[
+            "feature_names_including_target"]
+        return counterfactual_data
 
     def _convert_to_list(self, array):
         if issparse(array):

@@ -70,8 +70,10 @@
     "raiwidget",
     "raiwidgets",
     "relayout",
+    "responsibleai",
     "sdist",
     "shap",
+    "sklearn",
     "uifabric"
   ],
   "python.linting.flake8Enabled": true,
