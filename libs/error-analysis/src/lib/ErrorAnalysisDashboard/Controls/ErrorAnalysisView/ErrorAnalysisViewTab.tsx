@@ -112,6 +112,7 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
             matrixAreaState={this.props.matrixAreaState}
             setMatrixAreaState={this.props.setMatrixAreaState}
             setMatrixFilterState={this.props.setMatrixFilterState}
+            showCohortName={this.props.showCohortName}
           />
           <FeatureList
             isOpen={this.state.openFeatureList}

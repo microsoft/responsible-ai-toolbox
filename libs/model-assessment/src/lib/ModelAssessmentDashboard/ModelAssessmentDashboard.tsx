@@ -194,6 +194,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         onSaveCohortClick={() => {
                           this.setState({ saveCohortVisible: true });
                         }}
+                        showCohortName={false}
                       />
                     )}
                   {t.key === GlobalTabKeys.ModelStatisticsTab && (

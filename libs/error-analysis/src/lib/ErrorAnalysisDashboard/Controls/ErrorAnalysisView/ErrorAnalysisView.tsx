@@ -43,6 +43,7 @@ export interface IErrorAnalysisViewProps {
   matrixAreaState: IMatrixAreaState;
   setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
   setMatrixFilterState: (matrixFilterState: IMatrixFilterState) => void;
+  showCohortName: boolean;
 }
 
 export class ErrorAnalysisView extends React.PureComponent<
@@ -69,6 +70,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             baseCohort={this.props.baseCohort}
             state={this.props.treeViewState}
             setTreeViewState={this.props.setTreeViewState}
+            showCohortName={this.props.showCohortName}
           />
         )}
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (

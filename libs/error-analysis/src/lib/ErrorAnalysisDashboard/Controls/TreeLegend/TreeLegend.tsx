@@ -20,6 +20,7 @@ export interface ITreeLegendProps {
   nodeDetail: INodeDetail;
   minPct: number;
   max: number;
+  showCohortName: boolean;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -34,9 +35,11 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
     return (
       <div className={classNames.treeLegend}>
         <Stack tokens={stackTokens}>
-          <Text variant={"xLarge"} block>
-            Cohort: {this.props.baseCohort.cohort.name}
-          </Text>
+          {this.props.showCohortName && (
+            <Text variant={"xLarge"} block>
+              Cohort: {this.props.baseCohort.cohort.name}
+            </Text>
+          )}
           <Stack>
             <Stack horizontal>
               <div className={classNames.metricBarBlack} />

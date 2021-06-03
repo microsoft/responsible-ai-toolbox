@@ -504,6 +504,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     matrixFilterState={this.state.matrixFilterState}
                     setMatrixAreaState={this.setMatrixAreaState}
                     setMatrixFilterState={this.setMatrixFilterState}
+                    showCohortName
                   />
                 )}
                 {this.state.viewType === ViewTypeKeys.ExplanationView && (

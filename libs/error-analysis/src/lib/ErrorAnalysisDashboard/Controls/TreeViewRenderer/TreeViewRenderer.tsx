@@ -79,6 +79,7 @@ export interface ITreeViewRendererProps {
   baseCohort: ErrorCohort;
   state: ITreeViewRendererState;
   setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
+  showCohortName: boolean;
 }
 
 export interface ISVGDatum {
@@ -279,6 +280,7 @@ export class TreeViewRenderer extends React.PureComponent<
               nodeDetail={nodeDetail}
               minPct={minPct}
               max={max}
+              showCohortName={this.props.showCohortName}
             />
             <svg
               ref={svgOuterFrame}
