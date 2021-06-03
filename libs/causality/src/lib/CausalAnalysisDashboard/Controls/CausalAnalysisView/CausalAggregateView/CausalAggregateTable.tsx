@@ -34,50 +34,50 @@ export class CausalAggregateTable extends React.PureComponent<
       {
         fieldName: nameof<ICausalAnalysisSingleData>("feature"),
         key: "name",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.name
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("point"),
         key: "point",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.point
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("stderr"),
         key: "stderr",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.stderr
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("zstat"),
         key: "zstat",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.zstat
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
         key: "pValue",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.pValue
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("ci_lower"),
         key: "ciLower",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("ci_upper"),
         key: "ciUpper",
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 125,
+        minWidth: 100,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
