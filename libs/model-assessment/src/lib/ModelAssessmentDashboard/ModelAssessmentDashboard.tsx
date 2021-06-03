@@ -278,16 +278,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 }));
               }}
               onApply={(selectedCohort: ErrorCohort): void => {
-                let cohorts = this.state.cohorts;
-                cohorts = cohorts.filter(
-                  (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
-                );
                 this.setState({
                   baseCohort: selectedCohort,
-                  cohorts: [...cohorts, selectedCohort],
+                  cohorts: this.state.cohorts,
                   selectedCohort
                 });
               }}
+              defaultCohort={this.state.baseCohort}
             />
           )}
           {this.state.createCohortVisible && (

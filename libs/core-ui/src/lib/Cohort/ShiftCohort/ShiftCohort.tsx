@@ -25,6 +25,7 @@ export interface IShiftCohortProps {
   isOpen: boolean;
   onDismiss: () => void;
   onApply: (selectedCohort: ErrorCohort) => void;
+  defaultCohort?: ErrorCohort;
 }
 
 export interface IShiftCohortState {
@@ -82,9 +83,20 @@ export class ShiftCohort extends React.Component<
         return { key: index, text: savedCohort.cohort.name };
       }
     );
+    let defaultCohort = 0;
+    if (this.props.defaultCohort) {
+      let defaultCohortName = this.props.defaultCohort.cohort.name;
+      let index = savedCohorts.findIndex((errorCohort) => {
+        return errorCohort.cohort.name === defaultCohortName;
+      });
+      if (index !== -1) {
+        defaultCohort = index;
+      }
+    }
     this.setState({
       options,
-      savedCohorts
+      savedCohorts,
+      selectedCohort: defaultCohort
     });
   }
 
