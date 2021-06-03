@@ -187,7 +187,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             this.setState({ matrixFilterState });
                           }
                         }}
-                        stringParams={this.props.stringParams}
                         selectFeatures={(features: string[]): void =>
                           this.setState({ selectedFeatures: features })
                         }
@@ -305,13 +304,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 );
                 let newCohorts = [...this.state.cohorts, newErrorCohort];
                 newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-                this.updateErrorCohorts(
-                  newCohorts,
-                  newErrorCohort,
-                  newErrorCohort
-                );
+                // this.updateErrorCohorts(
+                //   newCohorts,
+                //   newErrorCohort,
+                //   newErrorCohort
+                // );
                 this.setState((prev) => ({
-                  createCohortVisible: !prev.createCohortVisible
+                  createCohortVisible: !prev.createCohortVisible,
+                  baseCohort: newErrorCohort,
+                  selectedCohort: newErrorCohort,
+                  cohorts: newCohorts
                 }));
               }}
               isNewCohort={true}

@@ -20,7 +20,6 @@ import {
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
-import { IStringsParam } from "../../Interfaces/IStringsParam";
 import { FeatureList } from "../FeatureList/FeatureList";
 
 import {
@@ -39,7 +38,6 @@ const buttonStyle: IButtonStyles = {
 const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
-  stringParams?: IStringsParam;
   handleErrorDetectorChanged?: (
     item?: PivotItem,
     ev?: React.MouseEvent<HTMLElement>
@@ -96,7 +94,25 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
               />
             )}
           </Stack>
-          <ErrorAnalysisView {...this.props} />
+          <ErrorAnalysisView
+            messages={this.props.messages}
+            features={this.props.features}
+            selectedFeatures={this.props.selectedFeatures}
+            getTreeNodes={this.props.getTreeNodes}
+            getMatrix={this.props.getMatrix}
+            staticTreeNodes={this.props.staticTreeNodes}
+            staticMatrix={this.props.staticMatrix}
+            errorAnalysisOption={this.props.errorAnalysisOption}
+            updateSelectedCohort={this.props.updateSelectedCohort}
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            treeViewState={this.props.treeViewState}
+            setTreeViewState={this.props.setTreeViewState}
+            matrixFilterState={this.props.matrixFilterState}
+            matrixAreaState={this.props.matrixAreaState}
+            setMatrixAreaState={this.props.setMatrixAreaState}
+            setMatrixFilterState={this.props.setMatrixFilterState}
+          />
           <FeatureList
             isOpen={this.state.openFeatureList}
             onDismiss={(): void => this.setState({ openFeatureList: false })}
