@@ -39,6 +39,8 @@ class CausalConfig(BaseConfig):
         self.causal_analysis = None
         self.global_effects = None
         self.local_effects = None
+        self.policy_tree = None
+        self.policy_gains = None
 
     def __eq__(self, other):
         return (
@@ -58,6 +60,8 @@ class CausalConfig(BaseConfig):
             'causal_analysis': self.causal_analysis,
             'global_effects': self.global_effects,
             'local_effects': self.local_effects,
+            'policy_tree': self.policy_tree,
+            'policy_gains': self.policy_gains,
         }
 
 
@@ -119,37 +123,44 @@ class CausalManager(BaseManager):
     def compute(self):
         """Computes the causal effects by running the causal configuration."""
         for config in self._causal_config_list:
-            if not config.is_computed:
-                config.is_computed = True
-                if config.nuisance_model not in [CausalConstants.AUTOML,
-                                                 CausalConstants.LINEAR]:
-                    message = (f"nuisance_model should be one of "
-                               f"['{CausalConstants.AUTOML}', "
-                               f"'{CausalConstants.LINEAR}'], "
-                               f"got {config.nuisance_model}")
-                    raise UserConfigValidationException(message)
+            if config.is_computed:
+                continue
 
-                is_classification = self._task_type == ModelTask.CLASSIFICATION
-                X = pd.concat([self._train, self._test], ignore_index=True)\
-                    .drop([self._target_column], axis=1)
-                y = pd.concat([self._train, self._test], ignore_index=True)[
-                    self._target_column].values.ravel()
+            config.is_computed = True
+            if config.nuisance_model not in [CausalConstants.AUTOML,
+                                             CausalConstants.LINEAR]:
+                message = (f"nuisance_model should be one of "
+                           f"['{CausalConstants.AUTOML}', "
+                           f"'{CausalConstants.LINEAR}'], "
+                           f"got {config.nuisance_model}")
+                raise UserConfigValidationException(message)
 
-                causal_analysis = CausalAnalysis(
-                    X.columns.values.tolist(),
-                    self._categorical_features,
-                    heterogeneity_inds=config.treatment_features,
-                    classification=is_classification,
-                    nuisance_models=config.nuisance_model,
-                    n_jobs=-1)
-                causal_analysis.fit(X, y)
+            is_classification = self._task_type == ModelTask.CLASSIFICATION
+            X = pd.concat([self._train, self._test], ignore_index=True)\
+                .drop([self._target_column], axis=1)
+            y = pd.concat([self._train, self._test], ignore_index=True)[
+                self._target_column].values.ravel()
 
-                config.causal_analysis = causal_analysis
-                config.global_effects = causal_analysis.global_causal_effect(
-                    alpha=config.alpha)
-                X_test = self._test.drop([self._target_column], axis=1)
-                config.local_effects = causal_analysis.local_causal_effect(
-                    X_test, alpha=config.alpha)
+            causal_analysis = CausalAnalysis(
+                X.columns.values.tolist(),
+                self._categorical_features,
+                heterogeneity_inds=config.treatment_features,
+                classification=is_classification,
+                nuisance_models=config.nuisance_model,
+                n_jobs=-1)
+            causal_analysis.fit(X, y)
+
+            config.causal_analysis = causal_analysis
+
+            config.global_effects = causal_analysis._global_causal_effect_dict(
+                alpha=config.alpha)
+
+            X_test = self._test.drop([self._target_column], axis=1)
+            config.local_effects = causal_analysis._local_causal_effect_dict(
+                X_test, alpha=config.alpha)
+
+            config.policy_tree = {}
+            config.policy_gains = {}
 
     def get(self):
         """Get the computed causal effects."""
