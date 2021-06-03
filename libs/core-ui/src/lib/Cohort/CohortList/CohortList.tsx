@@ -19,7 +19,7 @@ import { cohortListStyles } from "./CohortList.styles";
 
 export interface ICohortListProps {
   errorCohorts: ErrorCohort[];
-  onEditCohortClick: (editedCohort: ErrorCohort) => void;
+  onEditCohortClick?: (editedCohort: ErrorCohort) => void;
   includeDetails: boolean;
   enableEditing: boolean;
 }
@@ -157,7 +157,7 @@ export class CohortList extends React.Component<
     const cohort = this.props.errorCohorts.find(
       (errorCohort) => errorCohort.cohort.name === name
     );
-    if (cohort) {
+    if (cohort && this.props.onEditCohortClick) {
       this.props.onEditCohortClick(cohort);
     }
   }
@@ -166,7 +166,7 @@ export class CohortList extends React.Component<
     const allItems = this.props.errorCohorts
       .filter((errorCohort: ErrorCohort) => !errorCohort.isTemporary)
       .map((errorCohort: ErrorCohort, index: number) => {
-        let details = [
+        const details = [
           localization.formatString(
             localization.Interpret.CohortBanner.datapoints,
             errorCohort.cohort.filteredData.length
@@ -178,10 +178,10 @@ export class CohortList extends React.Component<
         ];
         return {
           coverage: errorCohort.cohortStats.errorCoverage.toFixed(2),
+          details,
           errorRate: errorCohort.cohortStats.metricValue.toFixed(2),
           key: index,
-          name: errorCohort.cohort.name,
-          details: details
+          name: errorCohort.cohort.name
         };
       });
     return allItems;

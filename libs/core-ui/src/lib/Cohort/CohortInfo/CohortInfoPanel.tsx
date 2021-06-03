@@ -12,6 +12,7 @@ import {
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
+
 import { CohortInfo } from "./CohortInfo";
 
 export interface ICohortInfoPanelProps {
@@ -50,7 +51,7 @@ export class CohortInfoPanel extends React.PureComponent<
         <CohortInfo
           onSaveCohortClick={this.props.onSaveCohortClick}
           currentCohort={this.props.currentCohort}
-          includeDividers={true}
+          includeDividers
         />
       </Panel>
     );

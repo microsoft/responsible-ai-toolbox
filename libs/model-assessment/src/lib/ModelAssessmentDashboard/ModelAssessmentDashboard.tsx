@@ -100,27 +100,26 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
-            toggleShiftCohortVisibility={() => {
+            toggleShiftCohortVisibility={(): void => {
               this.setState((prev) => ({
                 shiftCohortVisible: !prev.shiftCohortVisible
               }));
             }}
-            toggleCreateCohortVisibility={() => {
+            toggleCreateCohortVisibility={(): void => {
               this.setState((prev) => ({
                 createCohortVisible: !prev.createCohortVisible
               }));
             }}
-            onEditCohortClick={(_: ErrorCohort) => {}}
           />
           <Stack>
             <Stack.Item className={modelAssessmentDashboardStyles.section}>
               <CohortInfoSection
-                toggleShiftCohortVisibility={() => {
+                toggleShiftCohortVisibility={(): void => {
                   this.setState((prev) => ({
                     shiftCohortVisible: !prev.shiftCohortVisible
                   }));
                 }}
-                toggleCreateCohortVisibility={() => {
+                toggleCreateCohortVisibility={(): void => {
                   this.setState((prev) => ({
                     createCohortVisible: !prev.createCohortVisible
                   }));
@@ -191,7 +190,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           this.setState({ selectedFeatures: features })
                         }
                         importances={this.state.importances}
-                        onSaveCohortClick={() => {
+                        onSaveCohortClick={(): void => {
                           this.setState({ saveCohortVisible: true });
                         }}
                         showCohortName={false}
@@ -272,7 +271,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           {this.state.shiftCohortVisible && (
             <ShiftCohort
               isOpen={this.state.shiftCohortVisible}
-              onDismiss={() => {
+              onDismiss={(): void => {
                 this.setState((prev) => ({
                   shiftCohortVisible: !prev.shiftCohortVisible
                 }));
@@ -305,26 +304,21 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 );
                 let newCohorts = [...this.state.cohorts, newErrorCohort];
                 newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-                // this.updateErrorCohorts(
-                //   newCohorts,
-                //   newErrorCohort,
-                //   newErrorCohort
-                // );
                 this.setState((prev) => ({
-                  createCohortVisible: !prev.createCohortVisible,
                   baseCohort: newErrorCohort,
-                  selectedCohort: newErrorCohort,
-                  cohorts: newCohorts
+                  cohorts: newCohorts,
+                  createCohortVisible: !prev.createCohortVisible,
+                  selectedCohort: newErrorCohort
                 }));
               }}
-              isNewCohort={true}
-              deleteIsDisabled={true}
-              closeCohortEditor={() => {
+              isNewCohort
+              deleteIsDisabled
+              closeCohortEditor={(): void => {
                 this.setState((prev) => ({
                   createCohortVisible: !prev.createCohortVisible
                 }));
               }}
-              closeCohortEditorPanel={() => {
+              closeCohortEditorPanel={(): void => {
                 this.setState((prev) => ({
                   createCohortVisible: !prev.createCohortVisible
                 }));

@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
+import { DefaultButton, Stack, Text } from "office-ui-fabric-react";
+import React from "react";
+
 import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
-import React from "react";
-import { DefaultButton, Stack, Text } from "office-ui-fabric-react";
-import { localization } from "@responsible-ai/localization";
 
 export interface ICohortInfoSectionProps {
   toggleShiftCohortVisibility: () => void;
@@ -26,8 +27,8 @@ export class CohortInfoSection extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    let currentCohort = this.context.baseErrorCohort;
-    let cohortName = currentCohort.cohort.name;
+    const currentCohort = this.context.baseErrorCohort;
+    const cohortName = currentCohort.cohort.name;
     // add (default) if it's the default cohort
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
@@ -38,22 +39,22 @@ export class CohortInfoSection extends React.PureComponent<
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }
-    let datapointsCountString =
+    const datapointsCountString =
       localization.ModelAssessment.CohortInformation.DataPoints +
       " = " +
       currentCohort.cohortStats.totalCohort.toString();
-    let filtersCountString =
+    const filtersCountString =
       localization.ModelAssessment.CohortInformation.Filters +
       " = " +
       currentCohort.cohort.filters.length.toString();
     return (
-      <Stack grow={true} tokens={{ padding: "16px 24px", childrenGap: 10 }}>
+      <Stack grow tokens={{ childrenGap: 10, padding: "16px 24px" }}>
         <Text variant={"xLarge"}>{cohortInfoTitle}</Text>
         <Stack>
           <Text>{datapointsCountString}</Text>
           <Text>{filtersCountString}</Text>
         </Stack>
-        <Stack horizontal={true} tokens={{ childrenGap: 25 }}>
+        <Stack horizontal tokens={{ childrenGap: 25 }}>
           <DefaultButton
             text={
               localization.ModelAssessment.CohortInformation.ChangeGlobalCohort

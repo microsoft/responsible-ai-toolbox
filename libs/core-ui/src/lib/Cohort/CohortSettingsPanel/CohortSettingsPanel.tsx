@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
+import { DefaultButton, Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
+import React from "react";
+
 import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
-import { localization } from "@responsible-ai/localization";
-import React from "react";
-import { ErrorCohort } from "../ErrorCohort";
-import { DefaultButton, Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
 import { CohortList } from "../CohortList/CohortList";
+import { ErrorCohort } from "../ErrorCohort";
 
 export interface ICohortSettingsPanelProps {
   errorCohorts: ErrorCohort[];
@@ -18,7 +19,6 @@ export interface ICohortSettingsPanelProps {
   onDismiss: () => void;
   toggleShiftCohortVisibility: () => void;
   toggleCreateCohortVisibility: () => void;
-  onEditCohortClick: (editedCohort: ErrorCohort) => void;
 }
 
 export class CohortSettingsPanel extends React.PureComponent<
@@ -49,7 +49,7 @@ export class CohortSettingsPanel extends React.PureComponent<
                 .CohortSettingsDescription
             }
           </Text>
-          <Stack horizontal={true} tokens={{ childrenGap: 25 }}>
+          <Stack horizontal tokens={{ childrenGap: 25 }}>
             <DefaultButton
               text={
                 localization.ModelAssessment.CohortInformation
@@ -66,8 +66,7 @@ export class CohortSettingsPanel extends React.PureComponent<
           </Stack>
           <CohortList
             errorCohorts={this.props.errorCohorts}
-            includeDetails={true}
-            onEditCohortClick={this.props.onEditCohortClick}
+            includeDetails
             enableEditing={false}
           />
         </Stack>

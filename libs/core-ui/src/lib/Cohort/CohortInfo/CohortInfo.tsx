@@ -29,7 +29,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
     return (
       <Stack>
         {this.props.includeDividers && (
-          <div className={classNames.divider}></div>
+          <div className={classNames.divider} />
         )}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
@@ -51,7 +51,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
           </div>
         </div>
         {this.props.includeDividers && (
-          <div className={classNames.divider}></div>
+          <div className={classNames.divider} />
         )}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
@@ -116,7 +116,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
           </div>
         </div>
         {this.props.includeDividers && (
-          <div className={classNames.divider}></div>
+          <div className={classNames.divider} />
         )}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>

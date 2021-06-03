@@ -85,8 +85,8 @@ export class ShiftCohort extends React.Component<
     );
     let defaultCohort = 0;
     if (this.props.defaultCohort) {
-      let defaultCohortName = this.props.defaultCohort.cohort.name;
-      let index = savedCohorts.findIndex((errorCohort) => {
+      const defaultCohortName = this.props.defaultCohort.cohort.name;
+      const index = savedCohorts.findIndex((errorCohort) => {
         return errorCohort.cohort.name === defaultCohortName;
       });
       if (index !== -1) {

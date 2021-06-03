@@ -11,6 +11,7 @@ import {
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
+
 import { CohortList } from "./CohortList";
 import { cohortListStyles } from "./CohortList.styles";
 
@@ -37,7 +38,7 @@ export class CohortListPanel extends React.Component<ICohortListPanelProps> {
   }
 
   public render(): React.ReactNode {
-    let classNames = cohortListStyles();
+    const classNames = cohortListStyles();
     return (
       <Panel
         headerText="Cohort List"
@@ -50,12 +51,12 @@ export class CohortListPanel extends React.Component<ICohortListPanelProps> {
         onDismiss={this.props.onDismiss}
         styles={panelStyles}
       >
-        <div className={classNames.divider}></div>
+        <div className={classNames.divider} />
         <CohortList
           errorCohorts={this.props.cohorts}
           onEditCohortClick={this.props.onEditCohortClick}
           includeDetails={false}
-          enableEditing={true}
+          enableEditing
         />
       </Panel>
     );

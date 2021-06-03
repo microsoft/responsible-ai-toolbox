@@ -67,7 +67,7 @@ export class AddTabButton extends React.Component<
     return (
       <>
         <div className={style.splitter} />
-        <Stack horizontal={true} horizontalAlign={"center"}>
+        <Stack horizontal horizontalAlign={"center"}>
           <IconButton
             id={this.buttonId}
             iconProps={{ iconName: "CircleAdditionSolid" }}

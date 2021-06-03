@@ -4,7 +4,6 @@
 import {
   CohortSettingsPanel,
   defaultModelAssessmentContext,
-  ErrorCohort,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -24,10 +23,9 @@ import { mainMenuStyles } from "./MainMenu.styles";
 
 export interface IMainMenuProps {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
-  removeTab(index: number): void;
   toggleShiftCohortVisibility: () => void;
   toggleCreateCohortVisibility: () => void;
-  onEditCohortClick: (editedCohort: ErrorCohort) => void;
+  removeTab(index: number): void;
 }
 interface IMainMenuState {
   cohortSettingsPanelVisible: boolean;
@@ -92,7 +90,6 @@ export class MainMenu extends React.PureComponent<
           onDismiss={this.toggleCohortSettingsPanel}
           toggleCreateCohortVisibility={this.props.toggleCreateCohortVisibility}
           toggleShiftCohortVisibility={this.props.toggleShiftCohortVisibility}
-          onEditCohortClick={this.props.onEditCohortClick}
         />
         <DashboardSettings
           isOpen={this.state.dashboardSettingsVisible}
@@ -104,12 +101,12 @@ export class MainMenu extends React.PureComponent<
     );
   }
 
-  private toggleCohortSettingsPanel = () =>
+  private toggleCohortSettingsPanel = (): void =>
     this.setState((prev) => ({
       cohortSettingsPanelVisible: !prev.cohortSettingsPanelVisible
     }));
 
-  private toggleDashboardSettings = () =>
+  private toggleDashboardSettings = (): void =>
     this.setState((prev) => ({
       dashboardSettingsVisible: !prev.dashboardSettingsVisible
     }));

@@ -67,12 +67,12 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack horizontal={true}>
-        <Stack grow={true} tokens={{ padding: "16px 24px" }}>
+      <Stack horizontal>
+        <Stack grow tokens={{ padding: "16px 24px" }}>
           <Text variant={"xLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
-          <Stack horizontal={true} tokens={{ childrenGap: "10px" }}>
+          <Stack horizontal tokens={{ childrenGap: "10px" }}>
             <Pivot onLinkClick={this.props.handleErrorDetectorChanged}>
               <PivotItem
                 itemKey={ErrorAnalysisOptions.TreeMap}
