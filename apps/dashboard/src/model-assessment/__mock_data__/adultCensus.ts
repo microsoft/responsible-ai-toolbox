@@ -2828,6 +2828,7 @@ export const adultCounterfactualData: ICounterfactualData = {
     ]
   ],
   featureNames: [
+    "row",
     "sepal length (cm)",
     "sepal width (cm)",
     "petal length (cm)",
