@@ -60,7 +60,7 @@ export class CounterfactualPanel extends React.Component<
       onSelectionChanged: (): void => {
         const select = this.selection.getSelectedIndices()[0];
         this.setState({
-          data: this.processSelectionData(select)
+          data: this.processSelectionData(this.state.items, select)
         });
       }
     });
@@ -68,7 +68,7 @@ export class CounterfactualPanel extends React.Component<
     const columns = this.getColumns();
     this.state = {
       columns,
-      data: items[0],
+      data: this.processSelectionData(items, 0),
       items,
       showCallout: false
     };
@@ -123,7 +123,7 @@ export class CounterfactualPanel extends React.Component<
                 <TextField
                   id="whatIfNameLabel"
                   label={localization.Counterfactuals.counterfactualName}
-                  value={" " + this.props.selectedIndex}
+                  value={this.state.data["row"]}
                   styles={{ fieldGroup: { width: 200 } }}
                 />
               </Stack.Item>
@@ -154,20 +154,25 @@ export class CounterfactualPanel extends React.Component<
       selectedData.forEach((point, i) => {
         const temp = {};
         this.props.data?.featureNames.forEach((f, j) => {
-          temp[f] = i === 0 || originData[j] !== point[j] ? point[j] : "-";
+          if (f === "row") {
+            temp[f] = `Row ${i}`;
+          } else {
+            temp[f] = i === 0 || originData[j] !== point[j] ? point[j] : "-";
+          }
         });
         items.push(temp);
       });
     }
     return items;
   }
-  private processSelectionData(index: number): any {
-    if (index === 0) {
-      return this.state.items[0];
-    }
-    const data = _.cloneDeep(this.state.items[index]);
+  private processSelectionData(items: any, row: number): any {
+    const data = _.cloneDeep(items[row]);
     Object.keys(data).forEach(
-      (k) => (data[k] = data[k] === "-" ? this.state.items[0][k] : data[k])
+      (k) => (data[k] = data[k] === "-" ? items[0][k] : data[k])
+    );
+    data["row"] = localization.formatString(
+      localization.Interpret.WhatIf.defaultCustomRootName,
+      row
     );
     return data;
   }
@@ -236,10 +241,11 @@ export class CounterfactualPanel extends React.Component<
               value={this.state.data[column.key]}
               label={column.key}
               id={column.key}
+              disabled={column.key === "row"}
               onChange={this.updateData.bind(this)}
             />
           </Stack.Item>
-          {column.key === this.state.columns[0].key && (
+          {column.key === this.state.columns[1].key && (
             <Stack.Item>
               <Link
                 id={"predictionLink"}
