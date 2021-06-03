@@ -124,7 +124,7 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
           />
         </Stack>
         <Stack tokens={{ padding: "100px 0 0 0" }}>
-          <Separator vertical styles={{ root: { height: "100px" } }} />
+          <Separator vertical styles={{ root: { height: "100%" } }} />
         </Stack>
         <Stack tokens={{ padding: "100px 80px 0 0" }}>
           <CohortInfo
