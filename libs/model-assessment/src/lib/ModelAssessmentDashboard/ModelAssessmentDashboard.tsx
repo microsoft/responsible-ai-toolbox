@@ -222,9 +222,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     )}
 
                   {t.key === GlobalTabKeys.CounterfactualsTab &&
-                    this.props.causalAnalysisData?.[0] && (
+                    this.props.counterfactualData?.[0] && (
                       <CounterfactualsTab
-                        data={this.props.causalAnalysisData?.[0]}
+                        data={this.props.counterfactualData?.[0]}
                       />
                     )}
                 </Stack.Item>

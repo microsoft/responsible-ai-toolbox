@@ -10,6 +10,7 @@ import pandas as pd
 x, y = shap.datasets.adult()
 y = [1 if r else 0 for r in y]
 
+
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(
     x, y, test_size=0.2, random_state=7)
 
@@ -23,12 +24,14 @@ test = pd.merge(x_test, pd.DataFrame(y_test, columns=[
                 "income"]), left_index=True, right_index=True)
 
 ma = ModelAnalysis(knn, train, test, "income", "classification",
-                   categorical_features=[])
+                   categorical_features=['Workclass', 'Education-Num',
+                                         'Marital Status',
+                                         'Occupation', 'Relationship', 'Race',
+                                         'Sex', 'Country'])
 ma.explainer.add()
-ma.counterfactual.add(['Age', 'Workclass', 'Education-Num', 'Marital Status',
-                       'Occupation', 'Relationship', 'Race', 'Sex',
+ma.counterfactual.add(['Age',
                        'Capital Gain', 'Capital Loss',
-                       'Hours per week', 'Country'], 10,
+                       'Hours per week'], 10,
                       desired_class="opposite")
 ma.error_analysis.add()
 ma.causal.add()

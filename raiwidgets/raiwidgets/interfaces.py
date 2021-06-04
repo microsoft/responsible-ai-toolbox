@@ -80,10 +80,16 @@ class CausalData(object):
     localCausalEffects: CausalMetric
 
 
+class CounterfactualData(object):
+    cfsList: List[List[List[float]]]
+    featureNames: List[float]
+
+
 class ModelAnalysisDashboardData(object):
     dataset: Dataset
     modelExplanationData: List[ModelExplanationData]
     causalData: List[CausalData]
+    counterfactualData: List[CounterfactualData]
     errorAnalysisConfig: List[ErrorAnalysisConfig]
 
 
