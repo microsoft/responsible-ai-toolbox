@@ -42,7 +42,6 @@ export class CohortSettingsPanel extends React.PureComponent<
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
-        // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         title={localization.ModelAssessment.CohortSettings.CohortSettingsTitle}
