@@ -28,9 +28,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
 
     return (
       <Stack>
-        {this.props.includeDividers && (
-          <div className={classNames.divider} />
-        )}
+        {this.props.includeDividers && <div className={classNames.divider} />}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <DefaultButton
@@ -50,9 +48,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </div>
           </div>
         </div>
-        {this.props.includeDividers && (
-          <div className={classNames.divider} />
-        )}{" "}
+        {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div>Instances in base cohort</div>
@@ -115,9 +111,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </Stack>
           </div>
         </div>
-        {this.props.includeDividers && (
-          <div className={classNames.divider} />
-        )}{" "}
+        {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div className={classNames.header}>Prediction path (filters)</div>

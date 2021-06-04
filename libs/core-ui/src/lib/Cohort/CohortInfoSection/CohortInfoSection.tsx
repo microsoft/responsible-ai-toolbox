@@ -22,10 +22,6 @@ export class CohortInfoSection extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
-  public constructor(props: ICohortInfoSectionProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     const currentCohort = this.context.baseErrorCohort;
     const cohortName = currentCohort.cohort.name;
@@ -33,7 +29,7 @@ export class CohortInfoSection extends React.PureComponent<
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
     if (
-      currentCohort.cohort.filters.length == 0 &&
+      currentCohort.cohort.filters.length === 0 &&
       currentCohort.cohort.name === localization.Interpret.Cohort.defaultLabel
     ) {
       cohortInfoTitle +=

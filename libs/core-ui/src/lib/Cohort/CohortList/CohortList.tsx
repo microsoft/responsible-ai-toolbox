@@ -138,7 +138,7 @@ export class CohortList extends React.Component<
           }
           return <span>{fieldContent}</span>;
         case "detailsColumn":
-          if (item.details && item.details.length == 2) {
+          if (item.details && item.details.length === 2) {
             return (
               <Stack>
                 <Text variant={"xSmall"}>{item.details[0]}</Text>
@@ -146,6 +146,7 @@ export class CohortList extends React.Component<
               </Stack>
             );
           }
+          return <span>{fieldContent}</span>;
         default:
           return <span>{fieldContent}</span>;
       }

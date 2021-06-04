@@ -33,10 +33,6 @@ const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
 };
 
 export class CohortListPanel extends React.Component<ICohortListPanelProps> {
-  public constructor(props: ICohortListPanelProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     const classNames = cohortListStyles();
     return (

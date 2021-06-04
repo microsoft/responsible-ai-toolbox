@@ -2,7 +2,13 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
+import {
+  DefaultButton,
+  Panel,
+  PanelType,
+  Stack,
+  Text
+} from "office-ui-fabric-react";
 import React from "react";
 
 import {
