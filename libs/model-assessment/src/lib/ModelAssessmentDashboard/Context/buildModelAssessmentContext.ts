@@ -98,11 +98,7 @@ export function buildInitialModelAssessmentContext(
       },
       {
         dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.GlobalExplanationTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.LocalExplanationTab
+        key: GlobalTabKeys.FeatureImportancesTab
       },
       {
         dataCount: jointDataset.datasetRowCount,

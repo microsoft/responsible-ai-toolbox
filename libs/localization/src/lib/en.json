@@ -1064,8 +1064,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "Data explorer",
-      "GlobalExplanation": "Global explanation",
-      "LocalExplanation": "Local explanation",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "ModelStatistics": "Model statistics",
