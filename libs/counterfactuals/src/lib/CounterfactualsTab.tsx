@@ -3,7 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
-  ICausalAnalysisData,
+  ICounterfactualData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -13,7 +13,7 @@ import React from "react";
 import { CounterfactualsView } from "./CounterfactualsView";
 
 export interface ICounterfactualsTabProps {
-  data: ICausalAnalysisData;
+  data: ICounterfactualData;
 }
 
 export class CounterfactualsTab extends React.PureComponent<

@@ -54,7 +54,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<
       width: "25%"
     },
     table: {
-      width: "50%"
+      width: "70%"
     }
   });
 };

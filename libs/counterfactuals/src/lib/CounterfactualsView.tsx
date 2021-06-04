@@ -4,7 +4,7 @@
 import {
   Cohort,
   defaultModelAssessmentContext,
-  ICausalAnalysisData,
+  ICounterfactualData,
   ModelAssessmentContext,
   ModelTypes,
   WeightVectorOption
@@ -18,7 +18,7 @@ import { buildCounterfactualState } from "./buildCounterfactualState";
 import { CounterfactualChart } from "./CounterfactualChart";
 
 export interface ICounterfactualsViewProps {
-  data: ICausalAnalysisData;
+  data: ICounterfactualData;
 }
 export interface ICounterfactualsViewState {
   cohorts: Cohort[];
