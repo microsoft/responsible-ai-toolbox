@@ -23,9 +23,17 @@ from error_analysis_validator import (
 from explainer_manager_validator import setup_explainer, validate_explainer
 
 
-LABELS = "labels"
-DESIRED_CLASS = 'desired_class'
-DESIRED_RANGE = 'desired_range'
+LABELS = 'labels'
+
+
+class ManagerParams:
+    # Counterfactual
+    DESIRED_CLASS = 'desired_class'
+    DESIRED_RANGE = 'desired_range'
+
+    # Causal
+    TREATMENT_FEATURES = 'treatment_features'
+    MAX_CAT_EXPANSION = 'max_cat_expansion'
 
 
 class TestModelAnalysis(object):
@@ -41,7 +49,7 @@ class TestModelAnalysis(object):
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
-        manager_args = {DESIRED_CLASS: 0}
+        manager_args = {ManagerParams.DESIRED_CLASS: 0}
 
         for model in models:
             run_model_analysis(model, X_train, X_test, LABELS, [],
@@ -58,7 +66,7 @@ class TestModelAnalysis(object):
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
-        manager_args = {DESIRED_CLASS: 'opposite'}
+        manager_args = {ManagerParams.DESIRED_CLASS: 'opposite'}
 
         for model in models:
             run_model_analysis(model, X_train, X_test, LABELS, [],
@@ -93,16 +101,24 @@ class TestModelAnalysis(object):
         models = create_models_regression(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
-        manager_args = {DESIRED_RANGE: [10, 20]}
+
+        manager_args = {
+            ManagerParams.DESIRED_RANGE: [10, 20],
+            ManagerParams.TREATMENT_FEATURES: ['CHAS'],
+            ManagerParams.MAX_CAT_EXPANSION: 12
+        }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, ['RM'],
+            run_model_analysis(model, X_train, X_test, LABELS, ['CHAS'],
                                manager_type, manager_args)
 
 
 def run_model_analysis(model, train_data, test_data, target_column,
                        categorical_features, manager_type,
                        manager_args=None, classes=None):
+    if manager_args is None:
+        manager_args = {}
+
     if classes is not None:
         task_type = ModelTask.CLASSIFICATION
     else:
@@ -125,15 +141,13 @@ def run_model_analysis(model, train_data, test_data, target_column,
                             target_column, task_type)
 
     if manager_type == ManagerNames.CAUSAL:
-        validate_causal(model_analysis, train_data, target_column)
+        treatment_features = manager_args.get(ManagerParams.TREATMENT_FEATURES)
+        max_cat_expansion = manager_args.get(ManagerParams.MAX_CAT_EXPANSION)
+        validate_causal(model_analysis, train_data, target_column,
+                        treatment_features, max_cat_expansion)
     elif manager_type == ManagerNames.COUNTERFACTUAL:
-        desired_range = None
-        desired_class = None
-        if manager_args is not None:
-            if DESIRED_CLASS in manager_args:
-                desired_class = manager_args[DESIRED_CLASS]
-            if DESIRED_RANGE in manager_args:
-                desired_range = manager_args[DESIRED_RANGE]
+        desired_class = manager_args.get(ManagerParams.DESIRED_CLASS)
+        desired_range = manager_args.get(ManagerParams.DESIRED_RANGE)
         validate_counterfactual(model_analysis, train_data, target_column,
                                 desired_class, desired_range)
     elif manager_type == ManagerNames.ERROR_ANALYSIS:
