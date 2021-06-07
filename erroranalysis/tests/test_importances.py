@@ -12,50 +12,50 @@ TOL = 1e-10
 class TestImportances(object):
 
     def test_importances_iris(self):
-        x_train, x_test, y_train, y_test, feature_names, _ = create_iris_data()
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
-        models = create_models(x_train, y_train)
+        models = create_models(X_train, y_train)
 
         for model in models:
             categorical_features = []
-            run_error_analyzer(model, x_test, y_test, feature_names,
+            run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
     def test_importances_cancer(self):
-        x_train, x_test, y_train, y_test, feature_names, _ = \
+        X_train, X_test, y_train, y_test, feature_names, _ = \
             create_cancer_data()
 
-        models = create_models(x_train, y_train)
+        models = create_models(X_train, y_train)
 
         for model in models:
             categorical_features = []
-            run_error_analyzer(model, x_test, y_test, feature_names,
+            run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
     def test_importances_binary_classification(self):
-        x_train, y_train, x_test, y_test, _ = \
+        X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset()
-        feature_names = list(x_train.columns)
-        models = create_models(x_train, y_train)
+        feature_names = list(X_train.columns)
+        models = create_models(X_train, y_train)
 
         for model in models:
             categorical_features = []
-            run_error_analyzer(model, x_test, y_test, feature_names,
+            run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
     def test_importances_titanic(self):
-        x_train, x_test, y_train, y_test, numeric, categorical = \
+        X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
         feature_names = categorical + numeric
-        clf = create_titanic_pipeline(x_train, y_train)
+        clf = create_titanic_pipeline(X_train, y_train)
         categorical_features = categorical
-        run_error_analyzer(clf, x_test, y_test, feature_names,
+        run_error_analyzer(clf, X_test, y_test, feature_names,
                            categorical_features)
 
 
-def run_error_analyzer(model, x_test, y_test, feature_names,
+def run_error_analyzer(model, X_test, y_test, feature_names,
                        categorical_features):
-    model_analyzer = ModelAnalyzer(model, x_test, y_test,
+    model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                    feature_names,
                                    categorical_features)
     scores = model_analyzer.compute_importances()

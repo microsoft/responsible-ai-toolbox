@@ -52,7 +52,7 @@ Please refer to [Interpret-Community](https://github.com/interpretml/interpret-c
 ```python
 from raiwidgets import ExplanationDashboard
 
-ExplanationDashboard(global_explanation, model, dataset=x_test, true_y=y_test)
+ExplanationDashboard(global_explanation, model, dataset=X_test, true_y=y_test)
 ```
 Once you load the visualization dashboard, you can investigate different aspects of your dataset and trained model via four tab views: 
 
