@@ -5,7 +5,8 @@ import { CausalInsightsTab } from "@responsible-ai/causality";
 import {
   CohortBasedComponent,
   ModelAssessmentContext,
-  ErrorCohort
+  ErrorCohort,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
@@ -15,9 +16,7 @@ import {
   IMatrixFilterState,
   ITreeViewRendererState
 } from "@responsible-ai/error-analysis";
-import {
-  ModelPerformanceTab
-} from "@responsible-ai/interpret";
+import { ModelPerformanceTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import { Stack } from "office-ui-fabric-react";
@@ -30,7 +29,7 @@ import { MainMenu } from "./Controls/MainMenu";
 import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.styles";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
-import { GlobalTabKeys } from "./ModelAssessmentEnums";
+import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
@@ -178,6 +177,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         setWhatIfDatapoint={(index: number): void =>
                           this.setState({ selectedWhatIfIndex: index })
                         }
+                        setActivePredictionTab={(
+                          key: PredictionTabKeys
+                        ): void => {
+                          this.setState({
+                            predictionTab: key
+                          });
+                        }}
+                        onWeightVectorChange={this.onWeightVectorChange}
                       />
                     )}
                   {t.key === GlobalTabKeys.CausalAnalysisTab &&
@@ -229,5 +236,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts,
       selectedCohort
     });
+  };
+
+  private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
+    this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
+    this.state.cohorts.forEach((errorCohort) =>
+      errorCohort.cohort.clearCachedImportances()
+    );
+    this.setState({ selectedWeightVector: weightOption });
   };
 }

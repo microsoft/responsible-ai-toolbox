@@ -1079,6 +1079,10 @@
       "Content": "This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.",
       "DashboardComponents": "Dashboard components",
       "DataPoints": "Number of datapoints"
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance"
     }
   }
 }
