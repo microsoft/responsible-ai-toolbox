@@ -21,7 +21,8 @@ const interpretDatasets = {
       "Column4",
       "Column14"
     ],
-    noDataset: true
+    noDataset: true,
+    noPredict: true
   },
   bostonData: {
     datapoint: 102,

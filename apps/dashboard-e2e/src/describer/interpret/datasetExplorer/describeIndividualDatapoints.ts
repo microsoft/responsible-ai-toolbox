@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getMenu } from "../../../util/getMenu";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
@@ -14,10 +13,9 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Dataset explorer", "#DashboardPivot")
-        .click()
-        .get('#ChartTypeSelection label:contains("Individual datapoints")')
-        .click();
+      cy.get(
+        '#ChartTypeSelection label:contains("Individual datapoints")'
+      ).click();
       props.chart = new ScatterChart("#DatasetExplorerChart");
     });
     describe("Dataset explorer Chart", () => {

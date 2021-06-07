@@ -21,11 +21,6 @@ export function describeAggregateFeatureImportance(
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
       getMenu("Aggregate feature importance", "#DashboardPivot").click();
     });
-    it("Tab Header should exist", () => {
-      getMenu("Aggregate feature importance", "#DashboardPivot").should(
-        "exist"
-      );
-    });
     describeGlobalExplanationBarChart(datasetShape);
     if (!datasetShape.noLocalImportance) {
       describeGlobalExplanationBoxChart(datasetShape);

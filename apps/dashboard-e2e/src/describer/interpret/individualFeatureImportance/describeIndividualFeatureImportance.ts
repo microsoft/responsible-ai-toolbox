@@ -13,18 +13,19 @@ export function describeIndividualFeatureImportance(
   name: keyof typeof interpretDatasets
 ): void {
   const datasetShape = interpretDatasets[name];
-  if (datasetShape.noDataset) {
-    return;
-  }
   describe(testName, () => {
     beforeEach(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
+      getMenu("Individual feature importance", "#DashboardPivot").click();
     });
-    it("Tab Header should exist", () => {
-      getMenu("Individual feature importance", "#DashboardPivot").should(
-        "exist"
-      );
-    });
+    if (datasetShape.noDataset) {
+      it("should render no data message", () => {
+        cy.get("#MissingParameterPlaceHolder").contains(
+          "This tab requires an evaluation dataset be supplied."
+        );
+      });
+      return;
+    }
     describeDataPointChart(datasetShape);
     if (!datasetShape.noPredict) {
       describeWhatIf(datasetShape);
