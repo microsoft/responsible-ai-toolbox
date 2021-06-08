@@ -61,11 +61,11 @@ def create_iris_data():
     # Import Iris dataset
     iris = load_iris()
     # Split data into train and test
-    x_train, x_test, y_train, y_validation = train_test_split(
+    X_train, X_test, y_train, y_validation = train_test_split(
         iris.data, iris.target, test_size=0.2, random_state=0)
     feature_names = [name.replace(' (cm)', '') for name in iris.feature_names]
     classes = iris.target_names
-    return x_train, x_test, y_train, y_validation, feature_names, classes
+    return X_train, X_test, y_train, y_validation, feature_names, classes
 
 
 def create_cancer_data():
@@ -73,27 +73,27 @@ def create_cancer_data():
     classes = breast_cancer_data.target_names.tolist()
 
     # Split data into train and test
-    x_train, x_test, y_train, y_test = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
         breast_cancer_data.data, breast_cancer_data.target,
         test_size=0.2, random_state=0)
     feature_names = breast_cancer_data.feature_names
     classes = breast_cancer_data.target_names.tolist()
-    return x_train, x_test, y_train, y_test, feature_names, classes
+    return X_train, X_test, y_train, y_test, feature_names, classes
 
 
 def create_binary_classification_dataset():
     X, y = make_classification()
 
     # Split data into train and test
-    x_train, x_test, y_train, y_test = train_test_split(X,
+    X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
                                                         test_size=0.2,
                                                         random_state=0)
     classes = np.unique(y_train).tolist()
-    feature_names = ["col" + str(i) for i in list(range(x_train.shape[1]))]
-    x_train = pd.DataFrame(x_train, columns=feature_names)
-    x_test = pd.DataFrame(x_test, columns=feature_names)
-    return x_train, y_train, x_test, y_test, classes
+    feature_names = ["col" + str(i) for i in list(range(X_train.shape[1]))]
+    X_train = pd.DataFrame(X_train, columns=feature_names)
+    X_test = pd.DataFrame(X_test, columns=feature_names)
+    return X_train, y_train, X_test, y_test, classes
 
 
 def create_simple_titanic_data():
@@ -115,17 +115,17 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_models(x_train, y_train):
-    svm_model = create_sklearn_svm_classifier(x_train, y_train)
-    log_reg_model = create_sklearn_logistic_regressor(x_train, y_train)
-    xgboost_model = create_xgboost_classifier(x_train, y_train)
-    lgbm_model = create_lightgbm_classifier(x_train, y_train)
-    rf_model = create_sklearn_random_forest_classifier(x_train, y_train)
+def create_models(X_train, y_train):
+    svm_model = create_sklearn_svm_classifier(X_train, y_train)
+    log_reg_model = create_sklearn_logistic_regressor(X_train, y_train)
+    xgboost_model = create_xgboost_classifier(X_train, y_train)
+    lgbm_model = create_lightgbm_classifier(X_train, y_train)
+    rf_model = create_sklearn_random_forest_classifier(X_train, y_train)
 
     return [svm_model, log_reg_model, xgboost_model, lgbm_model, rf_model]
 
 
-def create_titanic_pipeline(x_train, y_train):
+def create_titanic_pipeline(X_train, y_train):
     def conv(X):
         if isinstance(X, pd.Series):
             return X.values
@@ -154,5 +154,5 @@ def create_titanic_pipeline(x_train, y_train):
     clf = Pipeline(steps=[('preprocessor', transformations),
                           ('classifier',
                            LogisticRegression(solver='lbfgs'))])
-    clf.fit(x_train, y_train)
+    clf.fit(X_train, y_train)
     return clf

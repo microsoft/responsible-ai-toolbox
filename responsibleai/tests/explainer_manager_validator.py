@@ -17,18 +17,18 @@ def setup_explainer(model_analysis, add_explainer=True):
     model_analysis.explainer.compute()
 
 
-def validate_explainer(model_analysis, x_train, x_test, classes):
+def validate_explainer(model_analysis, X_train, X_test, classes):
     explanations = model_analysis.explainer.get()
     assert isinstance(explanations, list)
     assert len(explanations) == 1
     explanation = explanations[0]
-    num_cols = len(x_train.columns) - 1
+    num_cols = len(X_train.columns) - 1
     if classes is not None:
         assert len(explanation.local_importance_values) == len(classes)
-        assert len(explanation.local_importance_values[0]) == len(x_test)
+        assert len(explanation.local_importance_values[0]) == len(X_test)
         assert len(explanation.local_importance_values[0][0]) == num_cols
     else:
-        assert len(explanation.local_importance_values) == len(x_test)
+        assert len(explanation.local_importance_values) == len(X_test)
         assert len(explanation.local_importance_values[0]) == num_cols
 
     properties = model_analysis.explainer.list()
