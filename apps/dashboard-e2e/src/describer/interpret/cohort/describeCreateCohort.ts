@@ -4,12 +4,6 @@
 import { IInterpretData } from "../IInterpretData";
 
 export function describeCreateCohort(dataShape: IInterpretData): void {
-  after(() => {
-    cy.get('button:contains("Cancel")')
-      .click()
-      .get('button:contains("Yes")')
-      .click();
-  });
   it("should have no filter by default", () => {
     cy.get('button:contains("New cohort")')
       .click()
@@ -76,6 +70,10 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     it("should not have options of dataset", () => {
       cy.get('button:contains("New cohort")').click();
       cy.get('#cohortEditPanel span:contains("Dataset")').should("not.exist");
+      cy.get('button:contains("Cancel")')
+        .click()
+        .get('button:contains("Yes")')
+        .click();
     });
   }
 }
