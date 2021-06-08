@@ -51,11 +51,11 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input.counterfactualData = [
             self._get_counterfactual(i)
             for i in self._analysis.counterfactual.get()]
-        x_test = analysis.test.drop(columns=[analysis.target_column])
+        X_test = analysis.test.drop(columns=[analysis.target_column])
         y_test = analysis.test[analysis.target_column]
-        self._error_analyzer = ModelAnalyzer(model, x_test,
+        self._error_analyzer = ModelAnalyzer(model, X_test,
                                              y_test,
-                                             x_test.columns.values.tolist(),
+                                             X_test.columns.values.tolist(),
                                              analysis.categorical_features)
 
     def on_predict(self, data):

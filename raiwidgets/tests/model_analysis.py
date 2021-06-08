@@ -11,16 +11,16 @@ x, y = shap.datasets.adult()
 y = [1 if r else 0 for r in y]
 
 
-x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(
+X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(
     x, y, test_size=0.2, random_state=7)
 
 knn = sklearn.neighbors.KNeighborsClassifier()
-knn.fit(x_train, y_train)
+knn.fit(X_train, y_train)
 
 
 train = pd.merge(x, pd.DataFrame(
     y, columns=["income"]), left_index=True, right_index=True)
-test = pd.merge(x_test, pd.DataFrame(y_test, columns=[
+test = pd.merge(X_test, pd.DataFrame(y_test, columns=[
                 "income"]), left_index=True, right_index=True)
 
 ma = ModelAnalysis(knn, train, test, "income", "classification",

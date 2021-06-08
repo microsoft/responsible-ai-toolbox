@@ -8,9 +8,9 @@ from responsibleai.exceptions import (
 )
 
 
-def validate_counterfactual(cf_analyzer, x_train, target_column,
+def validate_counterfactual(cf_analyzer, X_train, target_column,
                             desired_class=None, desired_range=None):
-    continuous_features = list(set(x_train.columns) - set([target_column]))
+    continuous_features = list(set(X_train.columns) - set([target_column]))
 
     # Add the first configuration
     cf_analyzer.counterfactual.add(continuous_features=continuous_features,
