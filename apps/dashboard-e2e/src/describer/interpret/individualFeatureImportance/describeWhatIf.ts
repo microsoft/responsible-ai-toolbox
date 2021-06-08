@@ -52,7 +52,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
             .siblings("button")
             .click()
             .get(
-              `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}"))`
+              `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}")):first`
             )
             .click();
           cy.get(selector).should("not.have.text", predict);
