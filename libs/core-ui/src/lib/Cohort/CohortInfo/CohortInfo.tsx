@@ -2,16 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import {
-  DefaultButton,
-  IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
-  IStackTokens,
-  IStyleFunctionOrObject,
-  Panel,
-  Stack
-} from "office-ui-fabric-react";
+import { DefaultButton, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohortStats } from "../CohortStats";
@@ -21,25 +12,14 @@ import { PredictionPath } from "../PredictionPath/PredictionPath";
 import { cohortInfoStyles } from "./CohortInfo.styles";
 
 export interface ICohortInfoProps {
-  isOpen: boolean;
   currentCohort: ErrorCohort;
-  // hostId: string
-  onDismiss: () => void;
   onSaveCohortClick: () => void;
+  includeDividers: boolean;
 }
-
-const focusTrapZoneProps: IFocusTrapZoneProps = {
-  forceFocusInsideTrap: false,
-  isClickableOutsideFocusTrap: true
-};
 
 const alignmentStackTokens: IStackTokens = {
   childrenGap: 5,
   padding: 2
-};
-
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
 };
 
 export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
@@ -47,18 +27,8 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
     const classNames = cohortInfoStyles();
 
     return (
-      <Panel
-        headerText={localization.ErrorAnalysis.CohortInfo.cohortInformation}
-        isOpen={this.props.isOpen}
-        focusTrapZoneProps={focusTrapZoneProps}
-        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-        closeButtonAriaLabel="Close"
-        // layerProps={{ hostId: this.props.hostId }}
-        isBlocking={false}
-        onDismiss={this.props.onDismiss}
-        styles={panelStyles}
-      >
-        <div className={classNames.divider} />
+      <Stack>
+        {this.props.includeDividers && <div className={classNames.divider} />}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <DefaultButton
@@ -78,7 +48,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </div>
           </div>
         </div>
-        <div className={classNames.divider} />
+        {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div>Instances in base cohort</div>
@@ -141,14 +111,14 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             </Stack>
           </div>
         </div>
-        <div className={classNames.divider} />
+        {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
             <div className={classNames.header}>Prediction path (filters)</div>
             <PredictionPath temporaryCohort={this.props.currentCohort} />
           </div>
         </div>
-      </Panel>
+      </Stack>
     );
   }
 }

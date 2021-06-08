@@ -157,7 +157,6 @@ export class FeatureList extends React.Component<
         focusTrapZoneProps={focusTrapZoneProps}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
-        // layerProps={{ hostId: this.props.hostId }}
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         styles={panelStyles}
