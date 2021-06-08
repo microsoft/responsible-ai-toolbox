@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getMenu } from "../../../util/getMenu";
 import { getText } from "../../../util/getText";
 import { getValue } from "../../../util/getValue";
 import { setValue } from "../../../util/setValue";
@@ -9,9 +8,6 @@ import { IInterpretData } from "../IInterpretData";
 
 export function describeWhatIf(datasetShape: IInterpretData): void {
   describe("What if tab", () => {
-    beforeEach(() => {
-      getMenu("Individual feature importance", "#DashboardPivot").click();
-    });
     it("should have no datapoint selected by default", () => {
       cy.get("#IndividualFeatureContainer").should(
         "contain.text",
@@ -56,7 +52,7 @@ export function describeWhatIf(datasetShape: IInterpretData): void {
             .siblings("button")
             .click()
             .get(
-              `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}"))`
+              `#WhatIfFeatureComboBox-list button:not(:contains("${comboBoxValue}")):first`
             )
             .click();
           cy.get(selector).should("not.have.text", predict);

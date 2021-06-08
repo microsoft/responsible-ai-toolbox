@@ -10,7 +10,7 @@ const testName = "Cohort";
 export function describeCohort(name: keyof typeof interpretDatasets): void {
   const dataShape = interpretDatasets[name];
   describe(testName, () => {
-    beforeEach(() => {
+    before(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
     });
     it("should hide cohort edit panel by default", () => {
@@ -24,6 +24,10 @@ export function describeCohort(name: keyof typeof interpretDatasets): void {
       it("should cohort edit panel when click create", () => {
         cy.get('button:contains("New cohort")').click();
         cy.get("#cohortEditPanel").should("exist");
+        cy.get('button:contains("Cancel")')
+          .click()
+          .get('button:contains("Yes")')
+          .click();
       });
       describeCreateCohort(dataShape);
     }
