@@ -16,7 +16,10 @@ export class MissingParametersPlaceholder extends React.Component<
   public render(): React.ReactNode {
     const classNames = missingParametersPlaceholderStyles();
     return (
-      <div className={classNames.missingParametersPlaceholder}>
+      <div
+        id="MissingParameterPlaceHolder"
+        className={classNames.missingParametersPlaceholder}
+      >
         <div className={classNames.missingParametersPlaceholderSpacer}>
           <Text variant="large" className={classNames.faintText}>
             {this.props.children}

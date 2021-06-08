@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getMenu } from "../../../util/getMenu";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
@@ -15,7 +14,6 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Individual feature importance", "#DashboardPivot").click();
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {
@@ -41,6 +39,7 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
           '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
         ).should("contain.text", "Row");
         cy.get("#noPointSelectedInfo").should("not.exist");
+        props.chart.clickNthPoint(0);
       });
     });
 

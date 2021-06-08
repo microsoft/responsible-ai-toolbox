@@ -12,22 +12,19 @@ export function describeModelPerformancePlot(
   name: keyof typeof interpretDatasets
 ): void {
   const datasetShape = interpretDatasets[name];
-  if (datasetShape.noDataset) {
-    return;
-  }
-  if (datasetShape.noPredict) {
-    return;
-  }
-  if (datasetShape.noY) {
-    return;
-  }
   describe(testName, () => {
-    beforeEach(() => {
+    before(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
-    });
-    beforeEach(() => {
       getMenu("Model performance", "#DashboardPivot").click();
     });
+    if (datasetShape.noPredict) {
+      it("should render no data message", () => {
+        cy.get("#MissingParameterPlaceHolder").contains(
+          "This tab requires the array of predicted values from the model be supplied."
+        );
+      });
+      return;
+    }
     describe("Model performance Chart", () => {
       describeAxisConfigDialog();
     });
