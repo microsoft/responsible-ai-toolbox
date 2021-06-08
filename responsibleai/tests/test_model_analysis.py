@@ -34,51 +34,51 @@ class TestModelAnalysis(object):
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_iris(self, manager_type):
-        x_train, x_test, y_train, y_test, feature_names, classes = \
+        X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
-        x_train = pd.DataFrame(x_train, columns=feature_names)
-        x_test = pd.DataFrame(x_test, columns=feature_names)
-        models = create_models_classification(x_train, y_train)
-        x_train[LABELS] = y_train
-        x_test[LABELS] = y_test
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
         manager_args = {DESIRED_CLASS: 0}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, [],
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_cancer(self, manager_type):
-        x_train, x_test, y_train, y_test, feature_names, classes = \
+        X_train, X_test, y_train, y_test, feature_names, classes = \
             create_cancer_data()
-        x_train = pd.DataFrame(x_train, columns=feature_names)
-        x_test = pd.DataFrame(x_test, columns=feature_names)
-        models = create_models_classification(x_train, y_train)
-        x_train[LABELS] = y_train
-        x_test[LABELS] = y_test
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
         manager_args = {DESIRED_CLASS: 'opposite'}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, [],
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_binary(self, manager_type):
-        x_train, y_train, x_test, y_test, classes = \
+        X_train, y_train, X_test, y_test, classes = \
             create_binary_classification_dataset()
-        x_train = pd.DataFrame(x_train)
-        x_test = pd.DataFrame(x_test)
-        models = create_models_classification(x_train, y_train)
-        x_train[LABELS] = y_train
-        x_test[LABELS] = y_test
+        X_train = pd.DataFrame(X_train)
+        X_test = pd.DataFrame(X_test)
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
         manager_args = None
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, [],
                                manager_type, manager_args,
                                classes=classes)
 
@@ -86,17 +86,17 @@ class TestModelAnalysis(object):
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
     def test_modelanalysis_boston(self, manager_type):
-        x_train, x_test, y_train, y_test, feature_names = \
+        X_train, X_test, y_train, y_test, feature_names = \
             create_boston_data()
-        x_train = pd.DataFrame(x_train, columns=feature_names)
-        x_test = pd.DataFrame(x_test, columns=feature_names)
-        models = create_models_regression(x_train, y_train)
-        x_train[LABELS] = y_train
-        x_test[LABELS] = y_test
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        models = create_models_regression(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
         manager_args = {DESIRED_RANGE: [10, 20]}
 
         for model in models:
-            run_model_analysis(model, x_train, x_test, LABELS, ['RM'],
+            run_model_analysis(model, X_train, X_test, LABELS, ['RM'],
                                manager_type, manager_args)
 
 

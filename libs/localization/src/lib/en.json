@@ -1072,7 +1072,13 @@
       "Counterfactuals": "Counterfactuals"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard settings"
+      "DashboardSettings": "Dashboard settings",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "Dashboard layout",
@@ -1083,6 +1089,18 @@
     "FeatureImportances": {
       "GlobalExplanation": "Aggregate feature importance",
       "LocalExplanation": "Individual feature importance"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }

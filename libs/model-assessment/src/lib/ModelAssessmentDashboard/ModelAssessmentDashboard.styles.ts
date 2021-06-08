@@ -7,6 +7,7 @@ export interface IModelAssessmentDashboardStyles {
   page: IStyle;
   section: IStyle;
   buttonSection: IStyle;
+  sectionHeader: IStyle;
 }
 
 export const modelAssessmentDashboardStyles = mergeStyleSets<
@@ -20,5 +21,10 @@ export const modelAssessmentDashboardStyles = mergeStyleSets<
     padding: "16px 40px 0 14px",
     width: "100%"
   },
-  section: {}
+  section: {
+    textAlign: "left"
+  },
+  sectionHeader: {
+    padding: "16px 24px 16px 40px"
+  }
 });

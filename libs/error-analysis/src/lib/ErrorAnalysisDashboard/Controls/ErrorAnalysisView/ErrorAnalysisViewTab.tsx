@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  CohortInfo,
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -13,12 +14,12 @@ import {
   Text,
   Pivot,
   PivotItem,
-  Stack
+  Stack,
+  Separator
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
-import { IStringsParam } from "../../Interfaces/IStringsParam";
 import { FeatureList } from "../FeatureList/FeatureList";
 
 import {
@@ -37,13 +38,13 @@ const buttonStyle: IButtonStyles = {
 const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
-  stringParams?: IStringsParam;
   handleErrorDetectorChanged?: (
     item?: PivotItem,
     ev?: React.MouseEvent<HTMLElement>
   ) => void;
   selectFeatures: (features: string[]) => void;
   importances: number[];
+  onSaveCohortClick: () => void;
 }
 
 interface IErrorAnalysisViewTabState {
@@ -66,41 +67,73 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack grow tokens={{ padding: "16px 24px" }}>
-        <Text variant={"xLarge"}>
-          {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
-        </Text>
-        <Stack horizontal tokens={{ childrenGap: "10px" }}>
-          <Pivot onLinkClick={this.props.handleErrorDetectorChanged}>
-            <PivotItem
-              itemKey={ErrorAnalysisOptions.TreeMap}
-              headerText={localization.ErrorAnalysis.MainMenu.treeMap}
-            />
-            <PivotItem
-              itemKey={ErrorAnalysisOptions.HeatMap}
-              headerText={localization.ErrorAnalysis.MainMenu.heatMap}
-            />
-          </Pivot>
-          {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
-            <CommandBarButton
-              styles={buttonStyle}
-              iconProps={featureListIcon}
-              key={"featureList"}
-              onClick={(): void => this.setState({ openFeatureList: true })}
-              text={localization.ErrorAnalysis.MainMenu.featureList}
-            />
-          )}
+      <Stack horizontal>
+        <Stack grow tokens={{ padding: "16px 24px" }}>
+          <Text variant={"xLarge"}>
+            {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
+          </Text>
+          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+            <Pivot onLinkClick={this.props.handleErrorDetectorChanged}>
+              <PivotItem
+                itemKey={ErrorAnalysisOptions.TreeMap}
+                headerText={localization.ErrorAnalysis.MainMenu.treeMap}
+              />
+              <PivotItem
+                itemKey={ErrorAnalysisOptions.HeatMap}
+                headerText={localization.ErrorAnalysis.MainMenu.heatMap}
+              />
+            </Pivot>
+            {this.props.errorAnalysisOption ===
+              ErrorAnalysisOptions.TreeMap && (
+              <CommandBarButton
+                styles={buttonStyle}
+                iconProps={featureListIcon}
+                key={"featureList"}
+                onClick={(): void => this.setState({ openFeatureList: true })}
+                text={localization.ErrorAnalysis.MainMenu.featureList}
+              />
+            )}
+          </Stack>
+          <ErrorAnalysisView
+            messages={this.props.messages}
+            features={this.props.features}
+            selectedFeatures={this.props.selectedFeatures}
+            getTreeNodes={this.props.getTreeNodes}
+            getMatrix={this.props.getMatrix}
+            staticTreeNodes={this.props.staticTreeNodes}
+            staticMatrix={this.props.staticMatrix}
+            errorAnalysisOption={this.props.errorAnalysisOption}
+            updateSelectedCohort={this.props.updateSelectedCohort}
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            treeViewState={this.props.treeViewState}
+            setTreeViewState={this.props.setTreeViewState}
+            matrixFilterState={this.props.matrixFilterState}
+            matrixAreaState={this.props.matrixAreaState}
+            setMatrixAreaState={this.props.setMatrixAreaState}
+            setMatrixFilterState={this.props.setMatrixFilterState}
+            showCohortName={this.props.showCohortName}
+          />
+          <FeatureList
+            isOpen={this.state.openFeatureList}
+            onDismiss={(): void => this.setState({ openFeatureList: false })}
+            saveFeatures={this.saveFeatures.bind(this)}
+            features={this.props.features}
+            importances={this.props.importances}
+            isEnabled
+            selectedFeatures={this.props.features}
+          />
         </Stack>
-        <ErrorAnalysisView {...this.props} />
-        <FeatureList
-          isOpen={this.state.openFeatureList}
-          onDismiss={(): void => this.setState({ openFeatureList: false })}
-          saveFeatures={this.saveFeatures.bind(this)}
-          features={this.props.features}
-          importances={this.props.importances}
-          isEnabled
-          selectedFeatures={this.props.features}
-        />
+        <Stack tokens={{ padding: "100px 0 0 0" }}>
+          <Separator vertical styles={{ root: { height: "100%" } }} />
+        </Stack>
+        <Stack tokens={{ padding: "100px 80px 0 0" }}>
+          <CohortInfo
+            currentCohort={this.context.selectedErrorCohort}
+            onSaveCohortClick={this.props.onSaveCohortClick}
+            includeDividers={false}
+          />
+        </Stack>
       </Stack>
     );
   }

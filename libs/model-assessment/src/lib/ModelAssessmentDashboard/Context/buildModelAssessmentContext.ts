@@ -111,6 +111,7 @@ export function buildInitialModelAssessmentContext(
     ],
     baseCohort: cohorts[0],
     cohorts,
+    createCohortVisible: false,
     customPoints: [],
     dataChartConfig: undefined,
     dependenceProps: undefined,
@@ -127,6 +128,7 @@ export function buildInitialModelAssessmentContext(
     modelChartConfig: undefined,
     modelMetadata,
     predictionTab: PredictionTabKeys.CorrectPredictionTab,
+    saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedFeatures: props.dataset.featureNames,
     selectedWeightVector:
@@ -134,6 +136,7 @@ export function buildInitialModelAssessmentContext(
         ? WeightVectors.AbsAvg
         : 0,
     selectedWhatIfIndex: undefined,
+    shiftCohortVisible: false,
     sortVector: undefined,
     treeViewState: createInitialTreeViewState(),
     weightVectorLabels,

@@ -21,7 +21,8 @@ const interpretDatasets = {
       "Column4",
       "Column14"
     ],
-    noDataset: true
+    noDataset: true,
+    noPredict: true
   },
   bostonData: {
     datapoint: 102,
@@ -89,8 +90,7 @@ const interpretDatasets = {
       "ZN",
       "CHAS"
     ],
-    noPredict: true,
-    noY: true
+    noPredict: true
   },
   bostonDataNoY: {
     datapoint: 102,
@@ -112,6 +112,7 @@ const interpretDatasets = {
       "ZN",
       "CHAS"
     ],
+    noPredict: true,
     noY: true
   },
   breastCancerData: {
@@ -320,6 +321,7 @@ const interpretDatasets = {
     isMulticlass: true,
     noDataset: true,
     noLocalImportance: true,
+    noPredict: true,
     noY: true
   },
   irisNoData: {
@@ -331,7 +333,9 @@ const interpretDatasets = {
     ],
     isClassification: true,
     isMulticlass: true,
-    noDataset: true
+    noDataset: true,
+    noPredict: true,
+    noY: true
   },
   irisNoFeatures: {
     datapoint: 30,
