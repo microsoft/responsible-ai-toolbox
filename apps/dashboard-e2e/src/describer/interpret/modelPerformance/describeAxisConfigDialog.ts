@@ -11,9 +11,6 @@ export function describeAxisConfigDialog(): void {
         cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
       });
       it("should be able to hide settings", () => {
-        cy.get(
-          '#ModelPerformanceChart div[class*="rotatedVerticalBox"] button'
-        ).click();
         cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
         cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
       });
@@ -44,9 +41,6 @@ export function describeAxisConfigDialog(): void {
         cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
       });
       it("should be able to hide settings", () => {
-        cy.get(
-          '#ModelPerformanceChart div[class*="horizontalAxis"] button'
-        ).click();
         cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
         cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
       });

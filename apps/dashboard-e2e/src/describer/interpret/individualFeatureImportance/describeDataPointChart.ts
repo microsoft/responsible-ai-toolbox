@@ -39,6 +39,7 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
           '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
         ).should("contain.text", "Row");
         cy.get("#noPointSelectedInfo").should("not.exist");
+        props.chart.clickNthPoint(0);
       });
     });
 

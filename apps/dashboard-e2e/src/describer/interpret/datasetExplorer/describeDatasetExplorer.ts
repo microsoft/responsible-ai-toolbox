@@ -14,7 +14,7 @@ export function describeDatasetExplorer(
 ): void {
   const datasetShape = interpretDatasets[name];
   describe(testName, () => {
-    beforeEach(() => {
+    before(() => {
       cy.visit(`#/interpret/${name}/light/english/Version-2`);
       getMenu("Dataset explorer", "#DashboardPivot").click();
     });
