@@ -10,7 +10,7 @@
   "screenshotsFolder": "../../dist/cypress/apps/dashboard-e2e/screenshots",
   "chromeWebSecurity": false,
   "requestTimeout": 30000,
-  "numTestsKeptInMemory": 10,
+  "numTestsKeptInMemory": 30,
   "responseTimeout": 50000,
   "pageLoadTimeout": 100000,
   "execTimeout": 300000,

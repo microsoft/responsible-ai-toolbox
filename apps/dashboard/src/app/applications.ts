@@ -19,6 +19,7 @@ import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
 import { bostonDataNoDataset } from "../interpret/__mock_data__/bostonDataNoDataset";
+import { bostonDataNoPredict } from "../interpret/__mock_data__/bostonDataNoPredict";
 import { bostonDataNoY } from "../interpret/__mock_data__/bostonDataNoY";
 import { breastCancerData } from "../interpret/__mock_data__/breastCancerData";
 import { ebmData } from "../interpret/__mock_data__/ebmData";
@@ -121,7 +122,10 @@ export const applications: IApplications = <const>{
       bostonData: { classDimension: 1, data: bostonData },
       bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },
       bostonDataNoDataset: { classDimension: 1, data: bostonDataNoDataset },
-      bostonDataNoPredict: { classDimension: undefined, data: bostonData },
+      bostonDataNoPredict: {
+        classDimension: undefined,
+        data: bostonDataNoPredict
+      },
       bostonDataNoY: { classDimension: 1, data: bostonDataNoY },
       breastCancerData: { classDimension: 2, data: breastCancerData },
       ebmData: { classDimension: 2, data: ebmData },

@@ -119,6 +119,9 @@ export class WhatIfTab extends React.PureComponent<
   }
 
   public componentDidMount(): void {
+    if (!this.context.jointDataset.hasDataset) {
+      return;
+    }
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
