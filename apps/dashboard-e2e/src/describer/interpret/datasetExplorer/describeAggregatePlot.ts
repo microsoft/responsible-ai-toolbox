@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { BoxChart } from "../../../util/BoxChart";
-import { getMenu } from "../../../util/getMenu";
 import { IInterpretData } from "../IInterpretData";
 
 import { describeAxisConfigDialog } from "./describeAxisConfigDialog";
@@ -14,10 +13,7 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
       dataShape
     };
     beforeEach(() => {
-      getMenu("Dataset explorer", "#DashboardPivot")
-        .click()
-        .get('#ChartTypeSelection label:contains("Aggregate plots")')
-        .click();
+      cy.get('#ChartTypeSelection label:contains("Aggregate plots")').click();
       props.chart = new BoxChart("#DatasetExplorerChart");
     });
     describe("Dataset explorer Chart", () => {

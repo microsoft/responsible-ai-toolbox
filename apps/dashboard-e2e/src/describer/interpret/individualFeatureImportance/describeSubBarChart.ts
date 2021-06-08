@@ -12,12 +12,15 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
     subBarChart: (undefined as unknown) as BarChart
   };
   describe("Sub bar chart", () => {
-    beforeEach(() => {
+    before(() => {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
       props.chart.clickNthPoint(0);
     });
+    after(() => {
+      props.chart.clickNthPoint(0);
+    });
     it("should have right number of bars", () => {
-      cy.get("svg .plot .points .point path").should(
+      cy.get("#FeatureImportanceBar svg .plot .points .point path").should(
         "have.length",
         props.dataShape.featureNames.length
       );

@@ -14,6 +14,7 @@ export function describeAxisConfigDialog(
           '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
         ).click();
         cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
+        cy.get('button:contains("Cancel")').click();
       });
       it("should be able to hide settings", () => {
         cy.get(
@@ -47,6 +48,18 @@ export function describeAxisConfigDialog(
                 '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button:eq(0)'
               ).contains(text1);
             });
+          cy.get(
+            '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
+          )
+            .click()
+            .get(
+              "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:contains('Dataset')"
+            )
+            .click()
+            .get("#AxisConfigPanel")
+            .find("button")
+            .contains("Select")
+            .click();
         });
       }
     });
@@ -56,6 +69,7 @@ export function describeAxisConfigDialog(
           '#DatasetExplorerChart div[class*="horizontalAxis"] button'
         ).click();
         cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
+        cy.get('button:contains("Cancel")').click();
       });
       it("should be able to hide settings", () => {
         cy.get(
@@ -89,6 +103,16 @@ export function describeAxisConfigDialog(
                 '#DatasetExplorerChart div[class*="horizontalAxis"] button:eq(0)'
               ).contains(text1);
             });
+          cy.get('#DatasetExplorerChart div[class*="horizontalAxis"] button')
+            .click()
+            .get(
+              "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:contains('Index')"
+            )
+            .click()
+            .get("#AxisConfigPanel")
+            .find("button")
+            .contains("Select")
+            .click();
         });
       }
     });
@@ -99,6 +123,7 @@ export function describeAxisConfigDialog(
         });
         it("should display settings dialog", () => {
           cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
+          cy.get('button:contains("Cancel")').click();
         });
         it("should be able to hide settings", () => {
           cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
