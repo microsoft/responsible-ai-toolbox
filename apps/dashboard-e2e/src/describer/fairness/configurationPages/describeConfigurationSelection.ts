@@ -18,6 +18,9 @@ export function checkSensitiveFeatureSelectionPage(): void {
   getSpan(
     "Along which features would you like to evaluate your model's fairness?"
   ).should("exist");
+  getSpan("Sensitive features").should("exist");
+  getSpan("Sensitive feature 0").should("exist");
+  getSpan("Sensitive feature 1").should("exist");
 }
 
 export function checkPerformanceMetricSelectionPage(): void {
