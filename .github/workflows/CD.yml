@@ -69,23 +69,28 @@ jobs:
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ${{ env.widgetDirectory }}
-      - name: build wheel
+
+      - name: build wheel for rai
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.widgetDirectory }}
 
+      - name: build wheel for widget
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.raiDirectory }}
+
       # run tests before publishing
-      - name: install wheel locally
+      - name: install wheel locally for rai
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.raiDirectory }}
-      - name: run tests
+      - name: run tests for rai
         run: pytest ./tests/
         working-directory: ${{ env.raiDirectory }}
 
       # run tests before publishing
-      - name: install wheel locally
+      - name: install wheel locally for widget
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
-      - name: run tests
+      - name: run tests for widget
         run: pytest ./tests/
         working-directory: ${{ env.widgetDirectory }}
 
