@@ -45,7 +45,7 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input.errorAnalysisConfig = [
             self._get_error_analysis(i)
             for i in self._analysis.error_analysis.list()["reports"]]
-        self.dashboard_input.causalData = [
+        self.dashboard_input.causalAnalysisData = [
             self._get_causal(i)
             for i in self._analysis.causal.get()]
         self.dashboard_input.counterfactualData = [
@@ -335,9 +335,9 @@ class ModelAnalysisDashboardInput:
 
     def _get_causal(self, causal):
         causal_data = CausalData()
-        causal_data.globalCausalEffects = causal["global_causal_effects"]\
+        causal_data.globalCausalEffects = causal["global_effects"]\
             .reset_index().to_dict(orient="records")
-        causal_data.localCausalEffects = causal["local_causal_effects"]\
+        causal_data.localCausalEffects = causal["local_effects"]\
             .groupby("sample").apply(
                 lambda x: x.reset_index().to_dict(
                     orient='records')).values

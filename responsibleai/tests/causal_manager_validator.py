@@ -3,6 +3,8 @@
 
 import pytest
 
+import pandas as pd
+
 from responsibleai.exceptions import (
     DuplicateManagerConfigException,
     UserConfigValidationException)
@@ -11,21 +13,21 @@ from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
 
 
 EFFECTS_ATTRIBUTES = [
-    'raw_name',
-    'name',
-    'cat',
-    'type',
-    'version',
-    'causal_computation_type',
-    'confounding_interval',
-    'init_args',
+    # 'raw_name',
+    # 'name',
+    # 'cat',
+    # 'type',
+    # 'version',
+    # 'causal_computation_type',
+    # 'confounding_interval',
+    # 'init_args',
     'point',
     'stderr',
     'zstat',
     'ci_lower',
     'ci_upper',
     'p_value',
-    'view',
+    # 'view',
 ]
 
 LOCAL_POLICY_ATTRIBUTES = [
@@ -91,15 +93,15 @@ def _check_causal_analysis(causal_analysis):
 
 
 def _check_global_effects(global_effects):
-    assert isinstance(global_effects, dict)
+    assert isinstance(global_effects, pd.DataFrame)
     for attribute in EFFECTS_ATTRIBUTES:
-        assert attribute in global_effects
+        assert attribute in global_effects.columns.to_list()
 
 
 def _check_local_effects(local_effects):
-    assert isinstance(local_effects, dict)
+    assert isinstance(local_effects, pd.DataFrame)
     for attribute in EFFECTS_ATTRIBUTES:
-        assert attribute in local_effects
+        assert attribute in local_effects.columns.to_list()
 
 
 def _check_policies(policies):

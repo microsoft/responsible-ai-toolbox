@@ -7,8 +7,9 @@ env:
   blob_account: responsibleai
   blob_container: latest
   blob_container_for_raiwidget: raiwidgets
-  node-version: 12.x
-  packageDirectory: raiwidgets
+  node-version: 16.x
+  widgetDirectory: raiwidgets
+  raiDirectory: responsibleai
 
 on:
   push:
@@ -51,29 +52,47 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
-      - name: install requirements.txt
+      - name: install requirements.txt for rai
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-        working-directory: ${{ env.packageDirectory }}
+        working-directory: ${{ env.raiDirectory }}
+      - name: install requirements.txt for widget
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
       - name: pip freeze
         run: pip freeze
       - name: replace README for raiwidgets
-        if: ${{ env.packageDirectory == 'raiwidgets' }}
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
-          cp ./README.md ./raiwidgets/
-      - name: build wheel
-        run: python setup.py sdist bdist_wheel
-        working-directory: ${{ env.packageDirectory }}
+          cp ./README.md ${{ env.widgetDirectory }}
 
-      # run tests before publishing to PyPI
-      - name: install wheel locally
+      - name: build wheel for rai
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.widgetDirectory }}
+
+      - name: build wheel for widget
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.raiDirectory }}
+
+      # run tests before publishing
+      - name: install wheel locally for rai
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ env.packageDirectory }}
-      - name: run tests
+        working-directory: ${{ env.raiDirectory }}
+      - name: run tests for rai
         run: pytest ./tests/
-        working-directory: ${{ env.packageDirectory }}
+        working-directory: ${{ env.raiDirectory }}
+
+      # run tests before publishing
+      - name: install wheel locally for widget
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.widgetDirectory }}
+      - name: run tests for widget
+        run: pytest ./tests/
+        working-directory: ${{ env.widgetDirectory }}
+
       - name: Upload a Build result
         uses: actions/upload-artifact@v2
         with:
@@ -98,7 +117,14 @@ jobs:
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.packageDirectory }}/dist/" -d "${{steps.version.outputs.version}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+
+      - name: Upload package ${{steps.package_url.outputs.url}}
+        uses: Azure/cli@v1.0.0
+        with:
+          azcliversion: 2.16.0
+          inlineScript: |
+            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
   cd-typescript-publish:
     needs: cd-build
