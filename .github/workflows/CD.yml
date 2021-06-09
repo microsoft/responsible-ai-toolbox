@@ -13,8 +13,7 @@ env:
 
 on:
   push:
-    branches: [main, xuke/addraitocd]
-  workflow_dispatch:
+    branches: [main]
 
 jobs:
   cd-build:
