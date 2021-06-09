@@ -46,12 +46,17 @@ class TestModelAnalysis:
         ma.compute()
 
         widget = ModelAnalysisDashboard(ma)
-        assert isinstance(widget.input.dashboard_input.dataset, Dataset)
+        assert isinstance(widget.input.dashboard_input.dataset,
+                          Dataset)
         assert isinstance(
-            widget.input.dashboard_input.modelExplanationData[0], ModelExplanationData)
+            widget.input.dashboard_input.modelExplanationData[0],
+            ModelExplanationData)
         assert isinstance(
-            widget.input.dashboard_input.errorAnalysisConfig[0], ErrorAnalysisConfig)
+            widget.input.dashboard_input.errorAnalysisConfig[0],
+            ErrorAnalysisConfig)
         assert isinstance(
-            widget.input.dashboard_input.causalAnalysisData[0], CausalData)
+            widget.input.dashboard_input.causalAnalysisData[0],
+            CausalData)
         assert isinstance(
-            widget.input.dashboard_input.counterfactualData[0], CounterfactualData)
+            widget.input.dashboard_input.counterfactualData[0],
+            CounterfactualData)
