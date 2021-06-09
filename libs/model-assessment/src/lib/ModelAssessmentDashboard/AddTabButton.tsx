@@ -61,7 +61,7 @@ export class AddTabButton extends React.Component<
   public render(): React.ReactNode {
     const style = addTabButtonStyles();
     return (
-      <>
+      <div style={{padding: "10px 0 10px 0"}}>
         <div className={style.splitter} />
         <Stack horizontal horizontalAlign={"center"}>
           <IconButton
@@ -92,7 +92,7 @@ export class AddTabButton extends React.Component<
             </Callout>
           )}
         </Stack>
-      </>
+      </div>
     );
   }
 
