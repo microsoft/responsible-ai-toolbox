@@ -35,12 +35,8 @@ export class AddTabButton extends React.Component<
       text: localization.ModelAssessment.ComponentNames.DataExplorer
     },
     {
-      key: GlobalTabKeys.GlobalExplanationTab,
-      text: localization.ModelAssessment.ComponentNames.GlobalExplanation
-    },
-    {
-      key: GlobalTabKeys.LocalExplanationTab,
-      text: localization.ModelAssessment.ComponentNames.LocalExplanation
+      key: GlobalTabKeys.FeatureImportancesTab,
+      text: localization.ModelAssessment.ComponentNames.FeatureImportances
     },
     {
       key: GlobalTabKeys.ModelStatisticsTab,
