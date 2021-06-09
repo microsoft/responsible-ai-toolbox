@@ -21,7 +21,9 @@ export const modelAssessmentDashboardStyles = mergeStyleSets<
     padding: "16px 40px 0 14px",
     width: "100%"
   },
-  section: {},
+  section: {
+    textAlign: "left"
+  },
   sectionHeader: {
     padding: "16px 24px 16px 40px"
   }

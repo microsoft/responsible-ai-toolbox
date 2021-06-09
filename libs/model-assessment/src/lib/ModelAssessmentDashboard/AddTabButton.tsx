@@ -35,12 +35,8 @@ export class AddTabButton extends React.Component<
       text: localization.ModelAssessment.ComponentNames.DataExplorer
     },
     {
-      key: GlobalTabKeys.GlobalExplanationTab,
-      text: localization.ModelAssessment.ComponentNames.GlobalExplanation
-    },
-    {
-      key: GlobalTabKeys.LocalExplanationTab,
-      text: localization.ModelAssessment.ComponentNames.LocalExplanation
+      key: GlobalTabKeys.FeatureImportancesTab,
+      text: localization.ModelAssessment.ComponentNames.FeatureImportances
     },
     {
       key: GlobalTabKeys.ModelStatisticsTab,
@@ -67,33 +63,35 @@ export class AddTabButton extends React.Component<
     return (
       <>
         <div className={style.splitter} />
-        <IconButton
-          id={this.buttonId}
-          iconProps={{ iconName: "CircleAdditionSolid" }}
-          onClick={this.toggleIsCalloutVisible}
-          className={style.button}
-        />
-        {this.state.isCalloutVisible && (
-          <Callout
-            target={`#${this.buttonId}`}
-            onDismiss={this.toggleIsCalloutVisible}
-            role="status"
-            aria-live="assertive"
-            className={style.callout}
-          >
-            <Stack tokens={{ childrenGap: "l1" }}>
-              {localization.ModelAssessment.AddingTab.CalloutContent}
-              <Dropdown
-                options={this.dropdownOptions}
-                onChange={this.onChange}
-              />
-              <PrimaryButton
-                onClick={this.addTab}
-                text={localization.ModelAssessment.AddingTab.AddButtonText}
-              />
-            </Stack>
-          </Callout>
-        )}
+        <Stack horizontal horizontalAlign={"center"}>
+          <IconButton
+            id={this.buttonId}
+            iconProps={{ iconName: "CircleAdditionSolid" }}
+            onClick={this.toggleIsCalloutVisible}
+            className={style.button}
+          />
+          {this.state.isCalloutVisible && (
+            <Callout
+              target={`#${this.buttonId}`}
+              onDismiss={this.toggleIsCalloutVisible}
+              role="status"
+              aria-live="assertive"
+              className={style.callout}
+            >
+              <Stack tokens={{ childrenGap: "l1" }}>
+                {localization.ModelAssessment.AddingTab.CalloutContent}
+                <Dropdown
+                  options={this.dropdownOptions}
+                  onChange={this.onChange}
+                />
+                <PrimaryButton
+                  onClick={this.addTab}
+                  text={localization.ModelAssessment.AddingTab.AddButtonText}
+                />
+              </Stack>
+            </Callout>
+          )}
+        </Stack>
       </>
     );
   }

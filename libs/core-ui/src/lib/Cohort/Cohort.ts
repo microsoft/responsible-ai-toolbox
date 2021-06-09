@@ -13,7 +13,8 @@ import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 export enum CohortSource {
   None = "None",
   TreeMap = "Tree map",
-  HeatMap = "Heat map"
+  HeatMap = "Heat map",
+  ManuallyCreated = "Manually created"
 }
 
 export class Cohort {

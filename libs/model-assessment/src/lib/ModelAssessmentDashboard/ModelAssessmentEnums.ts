@@ -3,8 +3,7 @@
 
 export enum GlobalTabKeys {
   DataExplorerTab = "DataExplorerTab",
-  GlobalExplanationTab = "GlobalExplanationTab",
-  LocalExplanationTab = "LocalExplanationTab",
+  FeatureImportancesTab = "FeatureImportancesTab",
   ErrorAnalysisTab = "ErrorAnalysisTab",
   FairnessTab = "FairnessTab",
   ModelStatisticsTab = "ModelStatisticsTab",

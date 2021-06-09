@@ -1064,8 +1064,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "Data explorer",
-      "GlobalExplanation": "Aggregate feature importance",
-      "LocalExplanation": "Individual feature importance",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "ModelStatistics": "Model statistics",
@@ -1073,13 +1072,35 @@
       "Counterfactuals": "Counterfactuals"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard settings"
+      "DashboardSettings": "Dashboard settings",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "Dashboard layout",
       "Content": "This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.",
       "DashboardComponents": "Dashboard components",
       "DataPoints": "Number of datapoints"
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }

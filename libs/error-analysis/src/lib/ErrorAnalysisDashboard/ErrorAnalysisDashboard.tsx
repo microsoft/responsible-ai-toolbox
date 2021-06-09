@@ -10,8 +10,8 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectors,
-  CohortInfo,
-  CohortList,
+  CohortInfoPanel,
+  CohortListPanel,
   ErrorCohort,
   SaveCohort,
   buildGlobalProperties,
@@ -504,6 +504,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     matrixFilterState={this.state.matrixFilterState}
                     setMatrixAreaState={this.setMatrixAreaState}
                     setMatrixFilterState={this.setMatrixFilterState}
+                    showCohortName
                   />
                 )}
                 {this.state.viewType === ViewTypeKeys.ExplanationView && (
@@ -573,7 +574,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     )}
                   </div>
                 )}
-                <CohortInfo
+                <CohortInfoPanel
                   isOpen={this.state.openInfoPanel}
                   currentCohort={this.state.selectedCohort}
                   onDismiss={(): void =>
@@ -596,7 +597,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   isEnabled={this.props.requestDebugML !== undefined}
                   selectedFeatures={this.state.selectedFeatures}
                 />
-                <CohortList
+                <CohortListPanel
                   isOpen={this.state.openCohortListPanel}
                   cohorts={this.state.cohorts}
                   onDismiss={(): void =>

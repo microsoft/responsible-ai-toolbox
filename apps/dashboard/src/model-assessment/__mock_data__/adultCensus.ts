@@ -2838,7 +2838,7 @@ export const adultCounterfactualData: ICounterfactualData = {
 };
 
 export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
-  global: [
+  globalCausalEffects: [
     {
       ci_lower: -0.2419328967749073,
       ci_upper: -0.1428698896693828,
@@ -2867,7 +2867,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       zstat: 2.4537515529836944
     }
   ],
-  local: [
+  localCausalEffects: [
     [
       {
         ci_lower: -0.6205969134844145,

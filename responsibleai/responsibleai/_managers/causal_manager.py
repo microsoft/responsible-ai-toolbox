@@ -28,40 +28,57 @@ class CausalConfig(BaseConfig):
         nuisance_model=None,
         heterogeneity_model=None,
         alpha=0.05,
+        max_cat_expansion=5,
+        treatment_cost=0,
+        min_tree_leaf_samples=2,
+        max_tree_depth=3,
     ):
         super().__init__()
         self.treatment_features = treatment_features
         self.nuisance_model = nuisance_model
         self.heterogeneity_model = heterogeneity_model
         self.alpha = alpha
+        self.max_cat_expansion = max_cat_expansion
+        self.treatment_cost = treatment_cost
+        self.min_tree_leaf_samples = min_tree_leaf_samples
+        self.max_tree_depth = max_tree_depth
 
         # Outputs
         self.causal_analysis = None
         self.global_effects = None
         self.local_effects = None
-        self.policy_tree = None
-        self.policy_gains = None
+        self.policies = None
 
     def __eq__(self, other):
-        return (
+        return all([
             np.array_equal(self.treatment_features,
-                           other.treatment_features) and
-            self.nuisance_model == other.nuisance_model and
-            self.heterogeneity_model == other.heterogeneity_model
-        )
+                           other.treatment_features),
+            self.nuisance_model == other.nuisance_model,
+            self.heterogeneity_model == other.heterogeneity_model,
+            self.alpha == other.alpha,
+            self.max_cat_expansion == other.max_cat_expansion,
+            self.treatment_cost == other.treatment_cost,
+            self.min_tree_leaf_samples == other.min_tree_leaf_samples,
+            self.max_tree_depth == other.max_tree_depth,
+        ])
 
     def __repr__(self):
         return ("CausalConfig("
                 f"treatment_features={self.treatment_features}, "
-                f"nuisance_model={self.nuisance_model})")
+                f"nuisance_model={self.nuisance_model}, "
+                f"heterogeneity_model={self.heterogeneity_model}, "
+                f"alpha={self.alpha}, "
+                f"max_cat_expansion={self.max_cat_expansion}, "
+                f"treatment_cost={self.treatment_cost}, "
+                f"min_tree_leaf_samples={self.min_tree_leaf_samples}, "
+                f"max_tree_depth={self.max_tree_depth})")
 
     def to_result(self):
         return {
             'causal_analysis': self.causal_analysis,
             'global_effects': self.global_effects,
             'local_effects': self.local_effects,
-            'policy_tree': self.policy_tree,
-            'policy_gains': self.policy_gains,
+            'policies': self.policies,
         }
 
 
@@ -97,6 +114,10 @@ class CausalManager(BaseManager):
         nuisance_model=CausalConstants.AUTOML,
         heterogeneity_model=None,
         alpha=0.05,
+        max_cat_expansion=5,
+        treatment_cost=0,
+        min_tree_leaf_samples=2,
+        max_tree_depth=3,
     ):
         """Add a causal configuration to be computed later.
         :param treatment_features: All treatment feature names.
@@ -108,11 +129,25 @@ class CausalManager(BaseManager):
         :type heterogeneity_model: str
         :param alpha: Confidence level of confidence intervals.
         :type alpha: float
+        :param max_cat_expansion: Maximum expansion for categorical features.
+        :type max_cat_expansion: int
+        :param treatment_cost: Cost to treat one individual or
+                               per-individual costs as an array.
+        :type treatment_cost: float or array
+        :param min_tree_leaf_samples: Minimum number of samples per leaf
+                                      in policy tree.
+        :type min_tree_leaf_samples: int
+        :param max_tree_depth: Maximum depth of policy tree.
+        :type max_tree_depth: int
         """
-        causal_config = CausalConfig(treatment_features=treatment_features,
-                                     nuisance_model=nuisance_model,
-                                     heterogeneity_model=heterogeneity_model,
-                                     alpha=alpha)
+        causal_config = CausalConfig(
+            treatment_features=treatment_features,
+            nuisance_model=nuisance_model,
+            heterogeneity_model=heterogeneity_model,
+            alpha=alpha,
+            treatment_cost=treatment_cost,
+            min_tree_leaf_samples=min_tree_leaf_samples,
+            max_tree_depth=max_tree_depth)
 
         if causal_config.is_duplicate(self._causal_config_list):
             raise DuplicateManagerConfigException(
@@ -141,26 +176,49 @@ class CausalManager(BaseManager):
             y = pd.concat([self._train, self._test], ignore_index=True)[
                 self._target_column].values.ravel()
 
-            causal_analysis = CausalAnalysis(
+            analysis = CausalAnalysis(
                 X.columns.values.tolist(),
                 self._categorical_features,
                 heterogeneity_inds=config.treatment_features,
                 classification=is_classification,
                 nuisance_models=config.nuisance_model,
+                upper_bound_on_cat_expansion=config.max_cat_expansion,
                 n_jobs=-1)
-            causal_analysis.fit(X, y)
+            analysis.fit(X, y)
 
-            config.causal_analysis = causal_analysis
+            config.causal_analysis = analysis
 
-            config.global_effects = causal_analysis._global_causal_effect_dict(
-                alpha=config.alpha)
-
+            config.global_effects = analysis.global_causal_effect(
+                alpha=0.05)
             X_test = self._test.drop([self._target_column], axis=1)
-            config.local_effects = causal_analysis._local_causal_effect_dict(
-                X_test, alpha=config.alpha)
+            config.local_effects = analysis.local_causal_effect(
+                X_test)
 
-            config.policy_tree = {}
-            config.policy_gains = {}
+            config.policies = []
+            if config.treatment_features is not None:
+                for treatment_feature in config.treatment_features:
+                    local_policies = analysis._individualized_policy_dict(
+                        X_test, treatment_feature,
+                        treatment_costs=config.treatment_cost,
+                        alpha=config.alpha)
+
+                    policy_tree, recommended_gains, treatment_gains = \
+                        analysis._policy_tree_output(
+                            X_test, treatment_feature,
+                            treatment_costs=config.treatment_cost,
+                            max_depth=config.max_tree_depth,
+                            min_samples_leaf=config.min_tree_leaf_samples,
+                            alpha=config.alpha)
+
+                    policy = {
+                        'local_policies': local_policies,
+                        'policy_tree': policy_tree,
+                        'policy_gains': {
+                            'recommended_policy_gains': recommended_gains,
+                            'treatment_gains': treatment_gains,
+                        }
+                    }
+                    config.policies.append(policy)
 
     def get(self):
         """Get the computed causal effects."""
