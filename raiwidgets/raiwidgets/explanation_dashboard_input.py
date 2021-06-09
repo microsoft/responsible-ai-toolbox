@@ -86,6 +86,7 @@ class ExplanationDashboardInput:
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
+            self._dfdtypes = dataset.dtypes
         try:
             list_dataset = self._convert_to_list(dataset)
         except Exception as ex:
@@ -254,6 +255,7 @@ class ExplanationDashboardInput:
         try:
             if self._dataframeColumns is not None:
                 data = pd.DataFrame(data, columns=self._dataframeColumns)
+                data = data.astype(dict(self._dfdtypes))
             if (self._is_classifier):
                 prediction = self._convert_to_list(
                     self._model.predict_proba(data))
