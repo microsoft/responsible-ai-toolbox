@@ -17,8 +17,9 @@ with open("README.md", "r") as fh:
 
 # Use requirements.txt to set the install_requires
 with open('requirements.txt') as f:
+    # Note: use ["responsibleai==%s" % version] eventually
     install_requires = [line.strip() for line in f] + \
-        ["responsibleai==%s" % version]
+        ["responsibleai==0.0.2"]
 
 setuptools.setup(
     name="raiwidgets",
