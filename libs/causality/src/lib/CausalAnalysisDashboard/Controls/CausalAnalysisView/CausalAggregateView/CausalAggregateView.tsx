@@ -43,10 +43,10 @@ export class CausalAggregateView extends React.PureComponent<
         </Stack>
         <Stack>
           <Stack.Item className={styles.table}>
-            <CausalAggregateTable data={this.props.data.global} />
+            <CausalAggregateTable data={this.props.data.globalCausalEffects} />
           </Stack.Item>
           <Stack.Item>
-            <CausalAggregateChart data={this.props.data.global} />
+            <CausalAggregateChart data={this.props.data.globalCausalEffects} />
           </Stack.Item>
         </Stack>
       </Stack>

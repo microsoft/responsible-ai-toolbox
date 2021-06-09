@@ -11,8 +11,11 @@ x, y = shap.datasets.adult()
 y = [1 if r else 0 for r in y]
 
 
+x, y = sklearn.utils.resample(
+    x, y, n_samples=10000, random_state=7, stratify=y)
+
 X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(
-    x, y, test_size=0.2, random_state=7)
+    x, y, test_size=0.2, random_state=7, stratify=y)
 
 knn = sklearn.neighbors.KNeighborsClassifier()
 knn.fit(X_train, y_train)
@@ -38,6 +41,3 @@ ma.causal.add()
 ma.compute()
 
 ModelAnalysisDashboard(ma)
-
-
-input("Press Enter to continue...")
