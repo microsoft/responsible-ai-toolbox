@@ -118,14 +118,14 @@ jobs:
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
       - name: Upload package ${{steps.package_url.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
   cd-typescript-publish:
     needs: cd-build
