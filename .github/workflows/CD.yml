@@ -7,7 +7,7 @@ env:
   blob_account: responsibleai
   blob_container: latest
   blob_container_for_raiwidget: raiwidgets
-  node-version: 12.x
+  node-version: 16.x
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
 

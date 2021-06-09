@@ -8,6 +8,8 @@ on:
 
 jobs:
   ci-python:
+    env:
+      node-version: 16.x
     strategy:
       matrix:
         packageDirectory:
