@@ -13,6 +13,7 @@ from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
 from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai._interfaces import CausalData
 
 
 class CausalConstants:
@@ -231,6 +232,25 @@ class CausalManager(BaseManager):
 
     def list(self):
         pass
+
+    def get_data(self):
+        """Get causal data
+
+        :return: A array of CausalData.
+        :rtype: List[CausalData]
+        """
+        return [self._get_causal(i)
+                for i in self.get()]
+
+    def _get_causal(self, causal):
+        causal_data = CausalData()
+        causal_data.globalCausalEffects = causal["global_effects"]\
+            .reset_index().to_dict(orient="records")
+        causal_data.localCausalEffects = causal["local_effects"]\
+            .groupby("sample").apply(
+                lambda x: x.reset_index().to_dict(
+                    orient='records')).values
+        return causal_data
 
     @property
     def name(self):

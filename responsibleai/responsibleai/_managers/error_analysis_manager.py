@@ -13,6 +13,7 @@ from responsibleai.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import (
     json_converter as report_json_converter, as_error_report)
+from responsibleai._interfaces import ErrorAnalysisData
 
 REPORTS = 'reports'
 CONFIG = 'config'
@@ -236,6 +237,21 @@ class ErrorAnalysisManager(BaseManager):
             reports.append(report)
         props[Keys.REPORTS] = reports
         return props
+
+    def get_data(self):
+        """Get error analysis data
+
+        :return: A array of ErrorAnalysisConfig.
+        :rtype: List[ErrorAnalysisConfig]
+        """
+        return [
+            self._get_error_analysis(i) for i in self.list()["reports"]]
+
+    def _get_error_analysis(self, report):
+        error_analysis = ErrorAnalysisData()
+        error_analysis.maxDepth = report[Keys.MAX_DEPTH]
+        error_analysis.numLeaves = report[Keys.NUM_LEAVES]
+        return error_analysis
 
     @property
     def name(self):

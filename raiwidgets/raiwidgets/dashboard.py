@@ -8,7 +8,7 @@ import json
 import os
 from html.parser import HTMLParser
 import uuid
-from ._input_processing import _safe_object_serializer
+from responsibleai._input_processing import _safe_object_serializer
 
 
 class InLineScript(HTMLParser):

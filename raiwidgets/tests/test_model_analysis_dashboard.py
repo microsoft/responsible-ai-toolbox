@@ -6,8 +6,8 @@ import shap
 import sklearn
 from responsibleai import ModelAnalysis
 from raiwidgets import ModelAnalysisDashboard
-from raiwidgets.interfaces import CausalData, CounterfactualData, Dataset,\
-    ErrorAnalysisConfig, ModelExplanationData
+from responsibleai._interfaces import CausalData, CounterfactualData, Dataset,\
+    ErrorAnalysisData, ModelExplanationData
 
 
 class TestModelAnalysisDashboard:
@@ -16,7 +16,7 @@ class TestModelAnalysisDashboard:
         y = [1 if r else 0 for r in y]
 
         x, y = sklearn.utils.resample(
-            x, y, n_samples=10000, random_state=7, stratify=y)
+            x, y, n_samples=1000, random_state=7, stratify=y)
 
         X_train, X_test, y_train, y_test = train_test_split(
             x, y, test_size=0.2, random_state=7, stratify=y)
@@ -50,7 +50,7 @@ class TestModelAnalysisDashboard:
             ModelExplanationData)
         assert isinstance(
             widget.input.dashboard_input.errorAnalysisConfig[0],
-            ErrorAnalysisConfig)
+            ErrorAnalysisData)
         assert isinstance(
             widget.input.dashboard_input.causalAnalysisData[0],
             CausalData)
