@@ -182,13 +182,13 @@ class ModelAnalysis(object):
     def _get_dataset(self):
         dashboard_dataset = Dataset()
         dashboard_dataset.classNames = self._convert_to_list(
-            self._analysis._classes)
+            self._classes)
 
         predicted_y = None
         feature_length = None
 
-        dataset: pd.DataFrame = self._analysis.test.drop(
-            [self._analysis.target_column], axis=1)
+        dataset: pd.DataFrame = self.test.drop(
+            [self.target_column], axis=1)
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
@@ -197,9 +197,9 @@ class ModelAnalysis(object):
         except Exception as ex:
             raise ValueError(
                 "Unsupported dataset type") from ex
-        if dataset is not None and self._analysis.model is not None:
+        if dataset is not None and self.model is not None:
             try:
-                predicted_y = self._analysis.model.predict(dataset)
+                predicted_y = self.model.predict(dataset)
             except Exception as ex:
                 msg = "Model does not support predict method for given"
                 "dataset type"
@@ -210,7 +210,7 @@ class ModelAnalysis(object):
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
-            if(self._analysis.task_type == "classification" and
+            if(self.task_type == "classification" and
                     dashboard_dataset.classNames is not None):
                 predicted_y = [dashboard_dataset.classNames.index(
                     y) for y in predicted_y]
@@ -231,10 +231,10 @@ class ModelAnalysis(object):
                                  " dataset.")
             dashboard_dataset.features = list_dataset
 
-        true_y = self._analysis.test[self._analysis.target_column]
+        true_y = self.test[self.target_column]
 
         if true_y is not None and len(true_y) == row_length:
-            if(self._analysis.task_type == "classification" and
+            if(self.task_type == "classification" and
                dashboard_dataset.classNames is not None):
                 true_y = [dashboard_dataset.classNames.index(
                     y) for y in true_y]
@@ -250,12 +250,12 @@ class ModelAnalysis(object):
                                  " from local explanations dimension")
             dashboard_dataset.featureNames = features
 
-        if (self._analysis.model is not None and
-                hasattr(self._analysis.model, SKLearn.PREDICT_PROBA) and
-                self._analysis.model.predict_proba is not None and
+        if (self.model is not None and
+                hasattr(self.model, SKLearn.PREDICT_PROBA) and
+                self.model.predict_proba is not None and
                 dataset is not None):
             try:
-                probability_y = self._analysis.model.predict_proba(dataset)
+                probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex

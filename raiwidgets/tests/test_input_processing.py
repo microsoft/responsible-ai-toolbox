@@ -4,7 +4,7 @@
 import numpy as np
 import pandas as pd
 
-from raiwidgets._input_processing import _convert_to_string_list_dict
+from responsibleai._input_processing import _convert_to_string_list_dict
 
 
 class TestConvertToStringListDict:

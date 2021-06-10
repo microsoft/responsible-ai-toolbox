@@ -215,7 +215,7 @@ class ExplainerManager(BaseManager):
             except Exception as ex:
                 raise ValueError(
                     "Unsupported local explanation type") from ex
-            if self._analysis.test is not None:
+            if self._evaluation_examples is not None:
                 local_dim = np.shape(local_feature_importance.scores)
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(
