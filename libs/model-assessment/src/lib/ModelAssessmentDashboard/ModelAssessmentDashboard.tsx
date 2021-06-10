@@ -17,15 +17,20 @@ import {
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
+  createInitialMatrixAreaState,
+  createInitialMatrixFilterState,
+  createInitialTreeViewState,
+  ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
   IMatrixAreaState,
   IMatrixFilterState,
-  ITreeViewRendererState
+  ITreeViewRendererState,
+  MapShift
 } from "@responsible-ai/error-analysis";
 import { ModelPerformanceTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { Stack, Text } from "office-ui-fabric-react";
+import { PivotItem, Stack, Text } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { AddTabButton } from "./AddTabButton";
@@ -187,6 +192,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           this.setState({ saveCohortVisible: true });
                         }}
                         showCohortName={false}
+                        handleErrorDetectorChanged={
+                          this.handleErrorDetectorChanged
+                        }
                       />
                     )}
                   {t.key === GlobalTabKeys.ModelStatisticsTab && (
@@ -340,6 +348,28 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               baseCohort={this.state.baseCohort}
             />
           )}
+          {this.state.mapShiftVisible && (
+            <MapShift
+              isOpen={this.state.mapShiftVisible}
+              onDismiss={(): void => this.setState({ mapShiftVisible: false })}
+              onSave={(): void => {
+                this.setState({
+                  mapShiftVisible: false,
+                  saveCohortVisible: true
+                });
+              }}
+              onShift={(): void => {
+                this.setState({
+                  errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
+                  mapShiftVisible: false,
+                  matrixAreaState: createInitialMatrixAreaState(),
+                  matrixFilterState: createInitialMatrixFilterState(),
+                  selectedCohort: this.state.baseCohort,
+                  treeViewState: createInitialTreeViewState()
+                });
+              }}
+            />
+          )}
         </div>
       </ModelAssessmentContext.Provider>
     );
@@ -375,5 +405,31 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       errorCohort.cohort.clearCachedImportances()
     );
     this.setState({ selectedWeightVector: weightOption });
+  };
+
+  private handleErrorDetectorChanged = (item?: PivotItem): void => {
+    if (item && item.props.itemKey) {
+      // Note comparison below is actually string comparison (key is string), we have to set the enum
+      if (item.props.itemKey === ErrorAnalysisOptions.HeatMap) {
+        const selectedOptionHeatMap = ErrorAnalysisOptions.HeatMap;
+        this.setErrorDetector(selectedOptionHeatMap);
+      } else {
+        const selectedOptionTreeMap = ErrorAnalysisOptions.TreeMap;
+        this.setErrorDetector(selectedOptionTreeMap);
+      }
+    }
+  };
+
+  private setErrorDetector = (key: ErrorAnalysisOptions): void => {
+    if (this.state.selectedCohort.isTemporary) {
+      this.setState({
+        mapShiftErrorAnalysisOption: key,
+        mapShiftVisible: true
+      });
+    } else {
+      this.setState({
+        errorAnalysisOption: key
+      });
+    }
   };
 }

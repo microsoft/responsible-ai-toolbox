@@ -38,7 +38,7 @@ const buttonStyle: IButtonStyles = {
 const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
-  handleErrorDetectorChanged?: (
+  handleErrorDetectorChanged: (
     item?: PivotItem,
     ev?: React.MouseEvent<HTMLElement>
   ) => void;
