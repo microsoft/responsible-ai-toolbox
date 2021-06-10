@@ -7,7 +7,7 @@ import sklearn
 from responsibleai import ModelAnalysis
 from raiwidgets import ModelAnalysisDashboard
 from responsibleai._interfaces import CausalData, CounterfactualData, Dataset,\
-    ErrorAnalysisConfig, ModelExplanationData
+    ErrorAnalysisData, ModelExplanationData
 
 
 class TestModelAnalysisDashboard:
@@ -49,8 +49,8 @@ class TestModelAnalysisDashboard:
             widget.input.dashboard_input.modelExplanationData[0],
             ModelExplanationData)
         assert isinstance(
-            widget.input.dashboard_input.errorAnalysisConfig[0],
-            ErrorAnalysisConfig)
+            widget.input.dashboard_input.ErrorAnalysisData[0],
+            ErrorAnalysisData)
         assert isinstance(
             widget.input.dashboard_input.causalAnalysisData[0],
             CausalData)
