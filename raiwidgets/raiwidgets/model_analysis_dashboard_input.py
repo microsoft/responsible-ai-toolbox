@@ -7,7 +7,6 @@ import pandas as pd
 import numpy as np
 from scipy.sparse import issparse
 from .interfaces import WidgetRequestResponseConstants
-from .explanation_constants import ExplanationDashboardInterface
 import traceback
 
 
@@ -124,15 +123,3 @@ class ModelAnalysisDashboardInput:
         if (isinstance(array, pd.Index)):
             return array.tolist()
         return array
-
-    def _find_first_explanation(self, key, mli_explanations):
-        if mli_explanations is None:
-            return None
-        new_array = [explanation for explanation
-                     in mli_explanations
-                     if explanation[
-                         ExplanationDashboardInterface.MLI_EXPLANATION_TYPE_KEY
-                     ] == key]
-        if len(new_array) > 0:
-            return new_array[0]["value"]
-        return None

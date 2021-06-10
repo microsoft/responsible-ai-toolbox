@@ -16,6 +16,7 @@ from responsibleai._managers.counterfactual_manager import (
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai._interfaces import ModelAnalysisData, Dataset
+from responsibleai._input_processing import _convert_to_list
 
 
 _DTYPES = 'dtypes'
@@ -178,10 +179,11 @@ class ModelAnalysis(object):
         data.errorAnalysisConfig = self.error_analysis.get_data()
         data.causalAnalysisData = self.causal.get_data()
         data.counterfactualData = self.counterfactual.get_data()
+        return data
 
     def _get_dataset(self):
         dashboard_dataset = Dataset()
-        dashboard_dataset.classNames = self._convert_to_list(
+        dashboard_dataset.classNames = _convert_to_list(
             self._classes)
 
         predicted_y = None
@@ -193,7 +195,7 @@ class ModelAnalysis(object):
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
         try:
-            list_dataset = self._convert_to_list(dataset)
+            list_dataset = _convert_to_list(dataset)
         except Exception as ex:
             raise ValueError(
                 "Unsupported dataset type") from ex
@@ -205,7 +207,7 @@ class ModelAnalysis(object):
                 "dataset type"
                 raise ValueError(msg) from ex
             try:
-                predicted_y = self._convert_to_list(predicted_y)
+                predicted_y = _convert_to_list(predicted_y)
             except Exception as ex:
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
@@ -238,12 +240,12 @@ class ModelAnalysis(object):
                dashboard_dataset.classNames is not None):
                 true_y = [dashboard_dataset.classNames.index(
                     y) for y in true_y]
-            dashboard_dataset.trueY = self._convert_to_list(true_y)
+            dashboard_dataset.trueY = _convert_to_list(true_y)
 
         features = dataset.columns
 
         if features is not None:
-            features = self._convert_to_list(features)
+            features = _convert_to_list(features)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
@@ -260,7 +262,7 @@ class ModelAnalysis(object):
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex
             try:
-                probability_y = self._convert_to_list(probability_y)
+                probability_y = _convert_to_list(probability_y)
             except Exception as ex:
                 raise ValueError(
                     "Model predict_proba output of unsupported type,") from ex

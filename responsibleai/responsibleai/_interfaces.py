@@ -60,7 +60,7 @@ class ModelExplanationData(object):
     precomputedExplanations: PrecomputedExplanations
 
 
-class ErrorAnalysisConfig(object):
+class ErrorAnalysisData(object):
     maxDepth: int
     numLeaves: int
 
@@ -90,4 +90,4 @@ class ModelAnalysisData(object):
     modelExplanationData: List[ModelExplanationData]
     causalAnalysisData: List[CausalData]
     counterfactualData: List[CounterfactualData]
-    errorAnalysisConfig: List[ErrorAnalysisConfig]
+    errorAnalysisConfig: List[ErrorAnalysisData]

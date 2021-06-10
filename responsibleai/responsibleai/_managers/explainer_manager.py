@@ -22,6 +22,7 @@ from responsibleai._internal.constants import (
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._interfaces import ModelExplanationData,\
     PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
+from responsibleai._input_processing import _convert_to_list
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -198,13 +199,13 @@ class ExplainerManager(BaseManager):
         if local_explanation is not None:
             try:
                 local_feature_importance = FeatureImportance()
-                local_feature_importance.scores = self._convert_to_list(
+                local_feature_importance.scores = _convert_to_list(
                     local_explanation["scores"])
                 if np.shape(local_feature_importance.scores)[-1] > 1000:
                     raise ValueError("Exceeds maximum number of features for "
                                      "visualization (1000). Please regenerate"
                                      " the explanation using fewer features.")
-                local_feature_importance.intercept = self._convert_to_list(
+                local_feature_importance.intercept = _convert_to_list(
                     local_explanation["intercept"])
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
@@ -217,30 +218,33 @@ class ExplainerManager(BaseManager):
                 raise ValueError(
                     "Unsupported local explanation type") from ex
             if self._evaluation_examples is not None:
+
+                _feature_length = self._evaluation_examples.shape[1]
+                _row_length = self._evaluation_examples.shape[0]
                 local_dim = np.shape(local_feature_importance.scores)
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(
                         "Local explanation expected to be a 2D or 3D list")
                 if (len(local_dim) == 2 and
-                    (local_dim[1] != self._feature_length or
-                     local_dim[0] != self._row_length)):
+                    (local_dim[1] != _feature_length or
+                     local_dim[0] != _row_length)):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         "length differs from dataset")
                 if(len(local_dim) == 3 and
-                   (local_dim[2] != self._feature_length or
-                        local_dim[1] != self._row_length)):
+                   (local_dim[2] != _feature_length or
+                        local_dim[1] != _row_length)):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         " length differs from dataset")
         if global_explanation is not None:
             try:
                 global_feature_importance = FeatureImportance()
-                global_feature_importance.scores = self._convert_to_list(
+                global_feature_importance.scores = _convert_to_list(
                     global_explanation["scores"])
                 if 'intercept' in global_explanation:
                     global_feature_importance.intercept\
-                        = self._convert_to_list(
+                        = _convert_to_list(
                             global_explanation["intercept"])
                 interpretation.precomputedExplanations.globalFeatureImportance\
                     = global_explanation
@@ -320,3 +324,15 @@ class ExplainerManager(BaseManager):
         if meta[IS_ADDED]:
             inst.add()
         return inst
+
+    def _find_first_explanation(self, key, mli_explanations):
+        if mli_explanations is None:
+            return None
+        new_array = [explanation for explanation
+                     in mli_explanations
+                     if explanation[
+                         ExplanationKeys.MLI_EXPLANATION_TYPE_KEY
+                     ] == key]
+        if len(new_array) > 0:
+            return new_array[0]["value"]
+        return None
