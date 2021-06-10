@@ -10,7 +10,7 @@ from raiwidgets.interfaces import CausalData, CounterfactualData, Dataset,\
     ErrorAnalysisConfig, ModelExplanationData
 
 
-class TestModelAnalysis:
+class TestModelAnalysisDashboard:
     def test_model_analysis_adult(self):
         x, y = shap.datasets.adult()
         y = [1 if r else 0 for r in y]
