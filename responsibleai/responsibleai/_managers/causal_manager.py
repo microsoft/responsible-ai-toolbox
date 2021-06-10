@@ -145,6 +145,7 @@ class CausalManager(BaseManager):
             nuisance_model=nuisance_model,
             heterogeneity_model=heterogeneity_model,
             alpha=alpha,
+            max_cat_expansion=max_cat_expansion,
             treatment_cost=treatment_cost,
             min_tree_leaf_samples=min_tree_leaf_samples,
             max_tree_depth=max_tree_depth)
@@ -188,12 +189,11 @@ class CausalManager(BaseManager):
 
             config.causal_analysis = analysis
 
-            config.global_effects = analysis._global_causal_effect_dict(
-                alpha=config.alpha)
-
+            config.global_effects = analysis.global_causal_effect(
+                alpha=0.05)
             X_test = self._test.drop([self._target_column], axis=1)
-            config.local_effects = analysis._local_causal_effect_dict(
-                X_test, alpha=config.alpha)
+            config.local_effects = analysis.local_causal_effect(
+                X_test)
 
             config.policies = []
             if config.treatment_features is not None:

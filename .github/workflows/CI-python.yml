@@ -8,6 +8,8 @@ on:
 
 jobs:
   ci-python:
+    env:
+      node-version: 16.x
     strategy:
       matrix:
         packageDirectory:
@@ -37,6 +39,18 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.pythonVersion }}
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: npm install yarn -g
+      - name: Install
+        run: yarn install --frozen-lock-file
+      - name: Build Typescript
+        run: yarn buildall
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS for lightgbm

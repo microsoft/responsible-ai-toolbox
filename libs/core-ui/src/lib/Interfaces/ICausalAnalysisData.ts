@@ -4,6 +4,6 @@
 import { ICausalAnalysisSingleData } from "./ICausalAnalysisSingleData";
 
 export interface ICausalAnalysisData {
-  global: ICausalAnalysisSingleData[];
-  local: ICausalAnalysisSingleData[][];
+  globalCausalEffects: ICausalAnalysisSingleData[];
+  localCausalEffects: ICausalAnalysisSingleData[][];
 }

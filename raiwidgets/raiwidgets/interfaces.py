@@ -76,8 +76,8 @@ class CausalMetric(object):
 
 
 class CausalData(object):
-    globalCausalEffects: CausalMetric
-    localCausalEffects: CausalMetric
+    globalCausalEffects: List[CausalMetric]
+    localCausalEffects: List[List[CausalMetric]]
 
 
 class CounterfactualData(object):
@@ -88,7 +88,7 @@ class CounterfactualData(object):
 class ModelAnalysisDashboardData(object):
     dataset: Dataset
     modelExplanationData: List[ModelExplanationData]
-    causalData: List[CausalData]
+    causalAnalysisData: List[CausalData]
     counterfactualData: List[CounterfactualData]
     errorAnalysisConfig: List[ErrorAnalysisConfig]
 
