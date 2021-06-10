@@ -13,10 +13,13 @@ from .error_handling import _format_exception
 from responsibleai._input_processing import _serialize_json_safe
 from erroranalysis._internal.error_analyzer import (
     ModelAnalyzer, PredictionsAnalyzer)
+from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.constants import Metrics, metric_to_display_name
 
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
+ROOT_COVERAGE = 100
 
 
 class ErrorAnalysisDashboardInput:
@@ -32,7 +35,9 @@ class ErrorAnalysisDashboardInput:
             true_y_dataset,
             pred_y,
             model_task,
-            metric):
+            metric,
+            max_depth,
+            num_leaves):
         """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -82,6 +87,12 @@ class ErrorAnalysisDashboardInput:
             metrics include 'mean_absolute_error', 'mean_squared_error',
             'r2_score', and 'median_absolute_error'.
         :type metric: str
+        :param max_depth: The maximum depth of the surrogate tree trained
+            on errors.
+        :type max_depth: int
+        :param num_leaves: The number of leaves of the surrogate tree
+            trained on errors.
+        :type num_leaves: int
         """
         self._model = model
         full_dataset = dataset
@@ -100,6 +111,8 @@ class ErrorAnalysisDashboardInput:
         self.dashboard_input = {}
         has_explanation = explanation is not None
         feature_length = None
+        self._max_depth = max_depth
+        self._num_leaves = num_leaves
 
         if has_explanation:
             if classes is None:
@@ -234,6 +247,46 @@ class ErrorAnalysisDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP
             ] = self._error_analyzer.category_dictionary
+        # Compute metrics on all data cohort
+        if self._error_analyzer.model_task == ModelTask.CLASSIFICATION:
+            if self._error_analyzer.metric is None:
+                metric = Metrics.ERROR_RATE
+            else:
+                metric = self._error_analyzer.metric
+        else:
+            if self._error_analyzer.metric is None:
+                metric = Metrics.MEAN_SQUARED_ERROR
+            else:
+                metric = self._error_analyzer.metric
+        if model_available and true_y_dataset is not None:
+            full_predicted_y = self.compute_predicted_y(model, full_dataset)
+        else:
+            full_predicted_y = predicted_y
+        self.set_root_metric(full_predicted_y, full_true_y, metric)
+
+    def set_root_metric(self, predicted_y, true_y, metric):
+        if metric != Metrics.ERROR_RATE:
+            metric_func = metric_to_func[metric]
+            metric_value = metric_func(predicted_y, true_y)
+        else:
+            total = len(true_y)
+            if total == 0:
+                metric_value = 0
+            else:
+                diff = predicted_y != true_y
+                error = sum(diff)
+                metric_value = error / total
+        metric_name = metric_to_display_name[metric]
+        root_stats = {
+            ExplanationDashboardInterface.ROOT_METRIC_NAME: metric_name,
+            ExplanationDashboardInterface.ROOT_METRIC_VALUE: metric_value,
+            ExplanationDashboardInterface.ROOT_TOTAL_SIZE: len(true_y),
+            ExplanationDashboardInterface.ROOT_ERROR_COVERAGE: ROOT_COVERAGE
+        }
+
+        self.dashboard_input[
+            ExplanationDashboardInterface.ROOT_STATS
+        ] = root_stats
 
     def compute_predicted_y(self, model, dataset):
         predicted_y = None
@@ -359,7 +412,9 @@ class ErrorAnalysisDashboardInput:
     def debug_ml(self, features, filters, composite_filters):
         try:
             json_tree = self._error_analyzer.compute_error_tree(
-                features, filters, composite_filters)
+                features, filters, composite_filters,
+                max_depth=self._max_depth,
+                num_leaves=self._num_leaves)
             return {
                 WidgetRequestResponseConstants.DATA: json_tree
             }

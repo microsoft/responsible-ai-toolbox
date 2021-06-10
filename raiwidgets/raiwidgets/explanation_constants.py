@@ -30,6 +30,11 @@ class ExplanationDashboardInterface(object):
     TRAINING_DATA = "trainingData"
     TRUE_Y = "trueY"
     LOCAL_URL = "localUrl"
+    ROOT_METRIC_NAME = 'metricName'
+    ROOT_METRIC_VALUE = 'metricValue'
+    ROOT_TOTAL_SIZE = 'totalSize'
+    ROOT_ERROR_COVERAGE = 'errorCoverage'
+    ROOT_STATS = 'rootStats'
 
 
 class DatabricksInterfaceConstants(object):
