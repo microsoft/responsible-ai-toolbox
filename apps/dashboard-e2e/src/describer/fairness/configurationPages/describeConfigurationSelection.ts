@@ -23,7 +23,7 @@ export function checkSensitiveFeatureSelectionPage(): void {
   getSpan("Sensitive feature 1").should("exist");
 }
 
-export function checkPerformanceMetricSelectionPage(): void {
+export function checkPerformanceMetricSelectionPage(name: string): void {
   cy.get(`button:contains("${sensitiveFeaturesTab}")`).should("exist");
   cy.get(`button:contains("${performanceMetricsTab}")`).should(
     "have.class",
@@ -31,7 +31,18 @@ export function checkPerformanceMetricSelectionPage(): void {
   );
   cy.get(`button:contains("${fairnessMetricsTab}")`).should("exist");
   getSpan("How do you want to measure performance?").should("exist");
-  getSpan("Accuracy").should("exist");
+  if( name == 'binaryClassification') {
+    getSpan("Accuracy").should("exist");
+  }
+  else if( name == 'probability') {
+    getSpan('Balanced root mean squared error').should("exist");
+  }
+  else if( name == 'regression') {
+    getSpan("Mean absolute error").should("exist");
+  }
+  else {
+    throw 'Unrecognised name: ' + name
+  }
 }
 
 export function checkFairnessMetricSelectionPage(): void {
@@ -44,7 +55,7 @@ export function checkFairnessMetricSelectionPage(): void {
   getSpan("How do you want to measure fairness?").should("exist");
 }
 
-export function describeConfigurationPages(): void {
+export function describeConfigurationPages(name: string): void {
   describe("configuration pages", () => {
     it("should navigate through configuration pages", () => {
       // move to the first configuration page
@@ -52,7 +63,7 @@ export function describeConfigurationPages(): void {
 
       checkSensitiveFeatureSelectionPage();
       cy.get('button:contains("Next")').click();
-      checkPerformanceMetricSelectionPage();
+      checkPerformanceMetricSelectionPage(name);
       cy.get('button:contains("Next")').click();
       checkFairnessMetricSelectionPage();
       cy.get('button:contains("Next")').click();
