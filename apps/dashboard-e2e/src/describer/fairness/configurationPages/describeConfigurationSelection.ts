@@ -31,6 +31,7 @@ export function checkPerformanceMetricSelectionPage(): void {
   );
   cy.get(`button:contains("${fairnessMetricsTab}")`).should("exist");
   getSpan("How do you want to measure performance?").should("exist");
+  getSpan("Accuracy").should("exist");
 }
 
 export function checkFairnessMetricSelectionPage(): void {
