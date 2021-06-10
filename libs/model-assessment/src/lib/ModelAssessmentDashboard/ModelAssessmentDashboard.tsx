@@ -195,6 +195,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         handleErrorDetectorChanged={
                           this.handleErrorDetectorChanged
                         }
+                        selectedKey={this.state.errorAnalysisOption}
                       />
                     )}
                   {t.key === GlobalTabKeys.ModelStatisticsTab && (
@@ -351,7 +352,12 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           {this.state.mapShiftVisible && (
             <MapShift
               isOpen={this.state.mapShiftVisible}
-              onDismiss={(): void => this.setState({ mapShiftVisible: false })}
+              onDismiss={(): void =>
+                this.setState({
+                  errorAnalysisOption: this.state.errorAnalysisOption,
+                  mapShiftVisible: false
+                })
+              }
               onSave={(): void => {
                 this.setState({
                   mapShiftVisible: false,
