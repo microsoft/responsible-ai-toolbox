@@ -92,15 +92,17 @@ jobs:
       - name: run tests
         run: pytest
 
-      - name: Upload a Build result
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist
       - id: skip publish for pull request
         if: ${{ github.event_name  == 'pull_request' }}
         run: |
           echo "skip publish for pull request"
+
+      - name: Upload a Build result
+        if: ${{ github.event_name  == 'push' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
 
       - id: publish_url
         if: ${{ github.event_name  == 'push' }}
@@ -136,6 +138,7 @@ jobs:
             az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
   cd-typescript-publish:
+    if: ${{ github.event_name  == 'push' }}
     needs: cd-build
     runs-on: ubuntu-latest
     strategy:
