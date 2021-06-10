@@ -13,11 +13,12 @@ from interpret_community.mimic.models.lightgbm_model import (
     LGBMExplainableModel)
 from interpret_community.mimic.models.linear_model import (
     LinearExplainableModel)
-from interpret_community.common.constants import ModelTask, ExplanationKeys
+from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
 from responsibleai._internal.constants import (
-    ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
+    ManagerNames, Metadata, ListProperties, ExplanationKeys,
+    ExplainerManagerKeys as Keys)
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._interfaces import ModelExplanationData,\
     PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
