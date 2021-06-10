@@ -44,3 +44,21 @@ class ErrorAnalysisManagerKeys(object):
     NUM_LEAVES = 'num_leaves'
     FILTER_FEATURES = 'filter_features'
     REPORTS = 'reports'
+
+
+class SKLearn(object):
+    """Provide scikit-learn related constants."""
+
+    EXAMPLES = 'examples'
+    LABELS = 'labels'
+    PREDICTIONS = 'predictions'
+    PREDICT_PROBA = 'predict_proba'
+
+
+class ExplanationKeys(object):
+
+    MLI_EBM_GLOBAL_EXPLANATION_KEY = "ebm_global"
+    MLI_EXPLANATION_DATASET_KEY = "evaluation_dataset"
+    MLI_EXPLANATION_TYPE_KEY = "explanation_type"
+    MLI_GLOBAL_EXPLANATION_KEY = "global_feature_importance"
+    MLI_LOCAL_EXPLANATION_KEY = "local_feature_importance"

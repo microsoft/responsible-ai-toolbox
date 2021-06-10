@@ -6,7 +6,7 @@ import shap
 import sklearn
 from responsibleai import ModelAnalysis
 from raiwidgets import ModelAnalysisDashboard
-from raiwidgets.interfaces import CausalData, CounterfactualData, Dataset,\
+from responsibleai._interfaces import CausalData, CounterfactualData, Dataset,\
     ErrorAnalysisConfig, ModelExplanationData
 
 
