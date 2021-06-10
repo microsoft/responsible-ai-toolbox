@@ -5,6 +5,7 @@
 
 import warnings
 import json
+import numpy as np
 from scipy.sparse import issparse
 from pathlib import Path
 from interpret_community.mimic.mimic_explainer import MimicExplainer
@@ -12,12 +13,14 @@ from interpret_community.mimic.models.lightgbm_model import (
     LGBMExplainableModel)
 from interpret_community.mimic.models.linear_model import (
     LinearExplainableModel)
-from interpret_community.common.constants import ModelTask
+from interpret_community.common.constants import ModelTask, ExplanationKeys
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
 from responsibleai._internal.constants import (
     ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
 from responsibleai._managers.base_manager import BaseManager
+from responsibleai._interfaces import ModelExplanationData,\
+    PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -154,6 +157,106 @@ class ExplainerManager(BaseManager):
         else:
             props[Keys.IS_COMPUTED] = False
         return props
+
+    def get_data(self):
+        """Get explanation data
+
+        :return: A array of ModelExplanationData.
+        :rtype: List[ModelExplanationData]
+        """
+        return [
+            self._get_interpret(i) for i in self.get()]
+
+    def _get_interpret(self, explanation):
+        interpretation = ModelExplanationData()
+
+        # List of explanations, key of explanation type is "explanation_type"
+        if explanation is not None:
+            mli_explanations = explanation.data(-1)["mli"]
+        else:
+            mli_explanations = None
+        local_explanation = self._find_first_explanation(
+            ExplanationKeys.MLI_LOCAL_EXPLANATION_KEY,
+            mli_explanations)
+        global_explanation = self._find_first_explanation(
+            ExplanationKeys.MLI_GLOBAL_EXPLANATION_KEY,
+            mli_explanations)
+        ebm_explanation = self._find_first_explanation(
+            ExplanationKeys.MLI_EBM_GLOBAL_EXPLANATION_KEY,
+            mli_explanations)
+
+        if explanation is not None and hasattr(explanation, 'method'):
+            interpretation.method = explanation.method
+
+        local_dim = None
+
+        if local_explanation is not None or global_explanation is not None\
+                or ebm_explanation is not None:
+            interpretation.precomputedExplanations = PrecomputedExplanations()
+
+        if local_explanation is not None:
+            try:
+                local_feature_importance = FeatureImportance()
+                local_feature_importance.scores = self._convert_to_list(
+                    local_explanation["scores"])
+                if np.shape(local_feature_importance.scores)[-1] > 1000:
+                    raise ValueError("Exceeds maximum number of features for "
+                                     "visualization (1000). Please regenerate"
+                                     " the explanation using fewer features.")
+                local_feature_importance.intercept = self._convert_to_list(
+                    local_explanation["intercept"])
+                # We can ignore perf explanation data.
+                # Note if it is added back at any point,
+                # the numpy values will need to be converted to python,
+                # otherwise serialization fails.
+                local_explanation["perf"] = None
+                interpretation.precomputedExplanations.localFeatureImportance\
+                    = local_feature_importance
+            except Exception as ex:
+                raise ValueError(
+                    "Unsupported local explanation type") from ex
+            if self._analysis.test is not None:
+                local_dim = np.shape(local_feature_importance.scores)
+                if len(local_dim) != 2 and len(local_dim) != 3:
+                    raise ValueError(
+                        "Local explanation expected to be a 2D or 3D list")
+                if (len(local_dim) == 2 and
+                    (local_dim[1] != self._feature_length or
+                     local_dim[0] != self._row_length)):
+                    raise ValueError(
+                        "Shape mismatch: local explanation"
+                        "length differs from dataset")
+                if(len(local_dim) == 3 and
+                   (local_dim[2] != self._feature_length or
+                        local_dim[1] != self._row_length)):
+                    raise ValueError(
+                        "Shape mismatch: local explanation"
+                        " length differs from dataset")
+        if global_explanation is not None:
+            try:
+                global_feature_importance = FeatureImportance()
+                global_feature_importance.scores = self._convert_to_list(
+                    global_explanation["scores"])
+                if 'intercept' in global_explanation:
+                    global_feature_importance.intercept\
+                        = self._convert_to_list(
+                            global_explanation["intercept"])
+                interpretation.precomputedExplanations.globalFeatureImportance\
+                    = global_explanation
+            except Exception as ex:
+                raise ValueError("Unsupported global explanation type") from ex
+        if ebm_explanation is not None:
+            try:
+                ebm_feature_importance = EBMGlobalExplanation()
+                ebm_feature_importance.feature_list\
+                    = ebm_explanation["feature_list"]
+                interpretation.precomputedExplanations.ebmGlobalExplanation\
+                    = ebm_feature_importance
+
+            except Exception as ex:
+                raise ValueError(
+                    "Unsupported ebm explanation type") from ex
+        return interpretation
 
     @property
     def name(self):

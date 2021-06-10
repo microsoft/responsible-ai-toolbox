@@ -8,17 +8,14 @@ import pandas as pd
 import numpy as np
 import pickle
 from pathlib import Path
-from responsibleai._internal.constants import ErrorAnalysisManagerKeys,\
-    ExplanationKeys, ManagerNames, Metadata, SKLearn
+from responsibleai._internal.constants import\
+    ManagerNames, Metadata, SKLearn
 from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._managers.counterfactual_manager import (
     CounterfactualManager)
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
-from responsibleai._interfaces import ModelAnalysisData,\
-    Dataset, ModelExplanationData,\
-    PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation,\
-    ErrorAnalysisConfig, CausalData, CounterfactualData
+from responsibleai._interfaces import ModelAnalysisData, Dataset
 
 
 _DTYPES = 'dtypes'
@@ -177,17 +174,10 @@ class ModelAnalysis(object):
         """
         data = ModelAnalysisData()
         data.dataset = self._get_dataset()
-        data.modelExplanationData = [
-            self._get_interpret(i) for i in self._analysis.explainer.get()]
-        data.errorAnalysisConfig = [
-            self._get_error_analysis(i)
-            for i in self._analysis.error_analysis.list()["reports"]]
-        data.causalAnalysisData = [
-            self._get_causal(i)
-            for i in self._analysis.causal.get()]
-        data.counterfactualData = [
-            self._get_counterfactual(i)
-            for i in self._analysis.counterfactual.get()]
+        data.modelExplanationData = self.explainer.get_data()
+        data.errorAnalysisConfig = self.error_analysis.get_data()
+        data.causalAnalysisData = self.causal.get_data()
+        data.counterfactualData = self.counterfactual.get_data()
 
     def _get_dataset(self):
         dashboard_dataset = Dataset()
@@ -277,121 +267,6 @@ class ModelAnalysis(object):
             dashboard_dataset.probabilityY = probability_y
 
         return dashboard_dataset
-
-    def _get_interpret(self, explanation):
-        interpretation = ModelExplanationData()
-
-        # List of explanations, key of explanation type is "explanation_type"
-        if explanation is not None:
-            mli_explanations = explanation.data(-1)["mli"]
-        else:
-            mli_explanations = None
-        local_explanation = self._find_first_explanation(
-            ExplanationKeys.MLI_LOCAL_EXPLANATION_KEY,
-            mli_explanations)
-        global_explanation = self._find_first_explanation(
-            ExplanationKeys.MLI_GLOBAL_EXPLANATION_KEY,
-            mli_explanations)
-        ebm_explanation = self._find_first_explanation(
-            ExplanationKeys.MLI_EBM_GLOBAL_EXPLANATION_KEY,
-            mli_explanations)
-
-        if explanation is not None and hasattr(explanation, 'method'):
-            interpretation.method = explanation.method
-
-        local_dim = None
-
-        if local_explanation is not None or global_explanation is not None\
-                or ebm_explanation is not None:
-            interpretation.precomputedExplanations = PrecomputedExplanations()
-
-        if local_explanation is not None:
-            try:
-                local_feature_importance = FeatureImportance()
-                local_feature_importance.scores = self._convert_to_list(
-                    local_explanation["scores"])
-                if np.shape(local_feature_importance.scores)[-1] > 1000:
-                    raise ValueError("Exceeds maximum number of features for "
-                                     "visualization (1000). Please regenerate"
-                                     " the explanation using fewer features.")
-                local_feature_importance.intercept = self._convert_to_list(
-                    local_explanation["intercept"])
-                # We can ignore perf explanation data.
-                # Note if it is added back at any point,
-                # the numpy values will need to be converted to python,
-                # otherwise serialization fails.
-                local_explanation["perf"] = None
-                interpretation.precomputedExplanations.localFeatureImportance\
-                    = local_feature_importance
-            except Exception as ex:
-                raise ValueError(
-                    "Unsupported local explanation type") from ex
-            if self._analysis.test is not None:
-                local_dim = np.shape(local_feature_importance.scores)
-                if len(local_dim) != 2 and len(local_dim) != 3:
-                    raise ValueError(
-                        "Local explanation expected to be a 2D or 3D list")
-                if (len(local_dim) == 2 and
-                    (local_dim[1] != self._feature_length or
-                     local_dim[0] != self._row_length)):
-                    raise ValueError(
-                        "Shape mismatch: local explanation"
-                        "length differs from dataset")
-                if(len(local_dim) == 3 and
-                   (local_dim[2] != self._feature_length or
-                        local_dim[1] != self._row_length)):
-                    raise ValueError(
-                        "Shape mismatch: local explanation"
-                        " length differs from dataset")
-        if global_explanation is not None:
-            try:
-                global_feature_importance = FeatureImportance()
-                global_feature_importance.scores = self._convert_to_list(
-                    global_explanation["scores"])
-                if 'intercept' in global_explanation:
-                    global_feature_importance.intercept\
-                        = self._convert_to_list(
-                            global_explanation["intercept"])
-                interpretation.precomputedExplanations.globalFeatureImportance\
-                    = global_explanation
-            except Exception as ex:
-                raise ValueError("Unsupported global explanation type") from ex
-        if ebm_explanation is not None:
-            try:
-                ebm_feature_importance = EBMGlobalExplanation()
-                ebm_feature_importance.feature_list\
-                    = ebm_explanation["feature_list"]
-                interpretation.precomputedExplanations.ebmGlobalExplanation\
-                    = ebm_feature_importance
-
-            except Exception as ex:
-                raise ValueError(
-                    "Unsupported ebm explanation type") from ex
-        return interpretation
-
-    def _get_error_analysis(self, report):
-        error_analysis = ErrorAnalysisConfig()
-        error_analysis.maxDepth = report[ErrorAnalysisManagerKeys.MAX_DEPTH]
-        error_analysis.numLeaves = report[ErrorAnalysisManagerKeys.NUM_LEAVES]
-        return error_analysis
-
-    def _get_causal(self, causal):
-        causal_data = CausalData()
-        causal_data.globalCausalEffects = causal["global_effects"]\
-            .reset_index().to_dict(orient="records")
-        causal_data.localCausalEffects = causal["local_effects"]\
-            .groupby("sample").apply(
-                lambda x: x.reset_index().to_dict(
-                    orient='records')).values
-        return causal_data
-
-    def _get_counterfactual(self, counterfactual):
-        counterfactual_data = CounterfactualData()
-        json_data = json.loads(counterfactual.to_json())
-        counterfactual_data.cfsList = json_data["cfs_list"]
-        counterfactual_data.featureNames = json_data[
-            "feature_names_including_target"]
-        return counterfactual_data
 
     def _write_to_file(self, file_path, content):
         """Save the string content to the given file path.
