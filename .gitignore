@@ -46,6 +46,7 @@ Thumbs.db
 # Python
 **.pyc
 **/__pycache__/*
+**/.pytest_cache/*
 **-checkpoint.ipynb
 **.egg-info/
 raiwidgets/build/
