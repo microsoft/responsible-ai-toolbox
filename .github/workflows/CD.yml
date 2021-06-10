@@ -92,7 +92,7 @@ jobs:
       - name: run tests
         run: pytest
 
-      - id: skip publish for pull request
+      - name: skip publish for pull request
         if: ${{ github.event_name  == 'pull_request' }}
         run: |
           echo "skip publish for pull request"
