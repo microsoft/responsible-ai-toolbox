@@ -20,13 +20,13 @@ def _convert_to_list(array):
             raise ValueError("Exceeds maximum number of features for "
                              "visualization (1000)")
         return array.toarray().tolist()
-    if (isinstance(array, pd.DataFrame)):
+    if isinstance(array, pd.DataFrame):
         return array.values.tolist()
-    if (isinstance(array, pd.Series)):
+    if isinstance(array, pd.Series):
         return array.values.tolist()
-    if (isinstance(array, np.ndarray)):
+    if isinstance(array, np.ndarray):
         return array.tolist()
-    if (isinstance(array, pd.Index)):
+    if isinstance(array, pd.Index):
         return array.tolist()
     return array
 

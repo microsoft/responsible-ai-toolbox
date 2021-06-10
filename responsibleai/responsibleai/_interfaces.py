@@ -5,7 +5,7 @@ from enum import Enum
 from typing import List
 
 
-class Dataset(object):
+class Dataset:
     predictedY: List
     features: List[List[int]]
     featureNames: List[str]
@@ -14,7 +14,7 @@ class Dataset(object):
     classNames: List[str]
 
 
-class BoundedCoordinates(object):
+class BoundedCoordinates:
     type: str
     names: List
     scores: List
@@ -23,17 +23,17 @@ class BoundedCoordinates(object):
     lower_bounds: List
 
 
-class EBMGlobalExplanation (object):
+class EBMGlobalExplanation:
     feature_list: List[BoundedCoordinates]
 
 
-class FeatureImportance(object):
+class FeatureImportance:
     scores: List
     intercept: float
     featureNames: List[str]
 
 
-class PrecomputedExplanations(object):
+class PrecomputedExplanations:
     localFeatureImportance: FeatureImportance
     globalFeatureImportance: FeatureImportance
     ebmGlobalExplanation: EBMGlobalExplanation
@@ -41,17 +41,17 @@ class PrecomputedExplanations(object):
 
 
 class ModelClass(str, Enum):
-    Tree = "Tree"
-    EBM = "EBM"
-    blackbox = "blackbox"
+    TREE = 'Tree'
+    EBM = 'EBM'
+    BLACKBOX = 'blackbox'
 
 
 class ModelMethod(str, Enum):
-    classifier = "classifier"
-    regressor = "regressor"
+    CLASSIFIER = 'classifier'
+    REGRESSOR = 'regressor'
 
 
-class ModelExplanationData(object):
+class ModelExplanationData:
     modelClass: ModelClass
     method: ModelMethod
     predictedY: List
@@ -60,12 +60,12 @@ class ModelExplanationData(object):
     precomputedExplanations: PrecomputedExplanations
 
 
-class ErrorAnalysisData(object):
+class ErrorAnalysisData:
     maxDepth: int
     numLeaves: int
 
 
-class CausalMetric(object):
+class CausalMetric:
     ci_lower: float
     ci_upper: float
     feature: str
@@ -75,17 +75,17 @@ class CausalMetric(object):
     zstat: float
 
 
-class CausalData(object):
+class CausalData:
     globalCausalEffects: List[CausalMetric]
     localCausalEffects: List[List[CausalMetric]]
 
 
-class CounterfactualData(object):
+class CounterfactualData:
     cfsList: List[List[List[float]]]
     featureNames: List[float]
 
 
-class ModelAnalysisData(object):
+class ModelAnalysisData:
     dataset: Dataset
     modelExplanationData: List[ModelExplanationData]
     causalAnalysisData: List[CausalData]

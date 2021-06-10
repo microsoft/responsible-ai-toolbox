@@ -57,8 +57,7 @@ class SKLearn(object):
 
 class ExplanationKeys(object):
 
-    MLI_EBM_GLOBAL_EXPLANATION_KEY = "ebm_global"
-    MLI_EXPLANATION_DATASET_KEY = "evaluation_dataset"
-    MLI_EXPLANATION_TYPE_KEY = "explanation_type"
-    MLI_GLOBAL_EXPLANATION_KEY = "global_feature_importance"
-    MLI_LOCAL_EXPLANATION_KEY = "local_feature_importance"
+    EBM_GLOBAL_EXPLANATION_KEY = 'ebm_global'
+    EXPLANATION_TYPE_KEY = 'explanation_type'
+    GLOBAL_EXPLANATION_KEY = 'global_feature_importance'
+    LOCAL_EXPLANATION_KEY = 'local_feature_importance'

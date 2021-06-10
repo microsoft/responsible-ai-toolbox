@@ -178,13 +178,13 @@ class ExplainerManager(BaseManager):
         else:
             mli_explanations = None
         local_explanation = self._find_first_explanation(
-            ExplanationKeys.MLI_LOCAL_EXPLANATION_KEY,
+            ExplanationKeys.LOCAL_EXPLANATION_KEY,
             mli_explanations)
         global_explanation = self._find_first_explanation(
-            ExplanationKeys.MLI_GLOBAL_EXPLANATION_KEY,
+            ExplanationKeys.GLOBAL_EXPLANATION_KEY,
             mli_explanations)
         ebm_explanation = self._find_first_explanation(
-            ExplanationKeys.MLI_EBM_GLOBAL_EXPLANATION_KEY,
+            ExplanationKeys.EBM_GLOBAL_EXPLANATION_KEY,
             mli_explanations)
 
         if explanation is not None and hasattr(explanation, 'method'):
@@ -331,7 +331,7 @@ class ExplainerManager(BaseManager):
         new_array = [explanation for explanation
                      in mli_explanations
                      if explanation[
-                         ExplanationKeys.MLI_EXPLANATION_TYPE_KEY
+                         ExplanationKeys.EXPLANATION_TYPE_KEY
                      ] == key]
         if len(new_array) > 0:
             return new_array[0]["value"]
