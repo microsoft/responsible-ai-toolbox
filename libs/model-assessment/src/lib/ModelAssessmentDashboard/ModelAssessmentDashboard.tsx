@@ -25,7 +25,7 @@ import {
 import { ModelPerformanceTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { Stack, Text } from "office-ui-fabric-react";
+import { DefaultEffects, Stack, Text } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { AddTabButton } from "./AddTabButton";
@@ -104,8 +104,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }));
             }}
           />
-          <Stack>
-            <Stack.Item className={modelAssessmentDashboardStyles.section}>
+          <Stack tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}>
+            <Stack.Item
+              className={modelAssessmentDashboardStyles.section}
+              styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
+            >
               <CohortInfoSection
                 toggleShiftCohortVisibility={(): void => {
                   this.setState((prev) => ({
@@ -132,6 +135,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 <Stack.Item
                   key={i}
                   className={modelAssessmentDashboardStyles.section}
+                  styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
                 >
                   {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                     this.props.errorAnalysisConfig?.[0] && (
