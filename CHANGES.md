@@ -24,6 +24,29 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.5.0
+
+- educational materials
+  - cleanup commented out explainers from interpretability notebook
+- new features
+  - added support for causal, counterfactual, and error analysis tools in responsibleai
+  - added model analysis widget to raiwidgets
+  - added support for regression to error analysis
+  - added policy tree to causal manager
+- breaking changes
+  - renamed package raitools to responsibleai
+  - renamed top-level class RAIAnalyzer to ModelAnalysis
+  - removed support for fairness in responsibleai package
+- bug fixes
+  - fixed bug in precision statistic calculation in dashboard
+  - fixed bug in loading explanations with ModelAnalysis
+  - fixed on predict method to use correct dtypes
+  - fixed individual importances chart when no data available
+- other
+  - create combined feature importances tab for local and global explanation in model assessment
+  - add section headers to model assessment dashboard
+  - add manual cohort creation to the model assessment dashboard
+
 ## v0.4.0
 
 - educational materials
