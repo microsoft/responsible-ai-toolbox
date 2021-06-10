@@ -5,7 +5,8 @@
 
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
-from ._input_processing import _convert_to_string_list_dict, _convert_to_list
+from responsibleai._input_processing import _convert_to_string_list_dict,\
+    _convert_to_list
 
 from flask import jsonify, request
 import numpy as np

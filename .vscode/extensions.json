@@ -4,6 +4,7 @@
     "streetsidesoftware.code-spell-checker",
     "esbenp.prettier-vscode",
     "nrwl.angular-console",
-    "firsttris.vscode-jest-runner"
+    "firsttris.vscode-jest-runner",
+    "ms-python.python"
   ]
 }
