@@ -145,6 +145,7 @@ class CausalManager(BaseManager):
             nuisance_model=nuisance_model,
             heterogeneity_model=heterogeneity_model,
             alpha=alpha,
+            max_cat_expansion=max_cat_expansion,
             treatment_cost=treatment_cost,
             min_tree_leaf_samples=min_tree_leaf_samples,
             max_tree_depth=max_tree_depth)

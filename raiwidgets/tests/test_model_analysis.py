@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 from sklearn.model_selection import train_test_split
-import pandas as pd
 import shap
 import sklearn
 from responsibleai import ModelAnalysis
@@ -25,12 +24,10 @@ class TestModelAnalysis:
         knn = sklearn.neighbors.KNeighborsClassifier()
         knn.fit(X_train, y_train)
 
-        train = pd.merge(x, pd.DataFrame(
-            y, columns=["income"]), left_index=True, right_index=True)
-        test = pd.merge(X_test, pd.DataFrame(y_test, columns=[
-                        "income"]), left_index=True, right_index=True)
+        x["income"] = y
+        X_test["income"] = y_test
 
-        ma = ModelAnalysis(knn, train, test, "income", "classification",
+        ma = ModelAnalysis(knn, x, X_test, "income", "classification",
                            categorical_features=['Workclass', 'Education-Num',
                                                  'Marital Status',
                                                  'Occupation', 'Relationship',
