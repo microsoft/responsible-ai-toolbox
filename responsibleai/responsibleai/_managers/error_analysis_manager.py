@@ -164,6 +164,11 @@ class ErrorAnalysisManager(BaseManager):
         self._categorical_features = None
         self._ea_config_list = []
         self._ea_report_list = []
+        self.analyzer = ModelAnalyzer(self._model,
+                                      self._train,
+                                      self._y_train,
+                                      self._feature_names,
+                                      self._categorical_features)
 
     def add(self, max_depth=3, num_leaves=31, filter_features=None):
         """Add an error analyzer to be computed later.
@@ -197,16 +202,11 @@ class ErrorAnalysisManager(BaseManager):
             if config.is_computed:
                 continue
             config.is_computed = True
-            analyzer = ModelAnalyzer(self._model,
-                                     self._train,
-                                     self._y_train,
-                                     self._feature_names,
-                                     self._categorical_features)
             max_depth = config.max_depth
             num_leaves = config.num_leaves
-            report = analyzer.create_error_report(config.filter_features,
-                                                  max_depth=max_depth,
-                                                  num_leaves=num_leaves)
+            report = self.analyzer.create_error_report(config.filter_features,
+                                                       max_depth=max_depth,
+                                                       num_leaves=num_leaves)
             self._ea_report_list.append(report)
 
     def get(self):
