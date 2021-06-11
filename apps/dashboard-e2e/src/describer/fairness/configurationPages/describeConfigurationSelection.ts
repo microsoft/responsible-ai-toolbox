@@ -38,7 +38,7 @@ export function checkPerformanceMetricSelectionPage(name: string): void {
   } else if (name === "regression") {
     getSpan("Mean absolute error").should("exist");
   } else {
-    throw "Unrecognised name: " + name;
+    throw new RangeError("Unrecognised name: " + name);
   }
 }
 
