@@ -123,6 +123,7 @@ export function buildInitialModelAssessmentContext(
       globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
     mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
+    mapShiftVisible: false,
     matrixAreaState: createInitialMatrixAreaState(),
     matrixFilterState: createInitialMatrixFilterState(),
     modelChartConfig: undefined,
