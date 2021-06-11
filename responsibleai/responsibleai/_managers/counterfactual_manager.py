@@ -185,48 +185,31 @@ class CounterfactualManager(BaseManager):
         for cf_config in self._counterfactual_config_list:
             if not cf_config.is_computed:
                 cf_config.is_computed = True
-                try:
-                    dice_explainer = self._create_diceml_explainer(
-                        method=cf_config.method,
-                        continuous_features=cf_config.continuous_features)
+                dice_explainer = self._create_diceml_explainer(
+                    method=cf_config.method,
+                    continuous_features=cf_config.continuous_features)
 
-                    X_test = self._test.drop([self._target_column], axis=1)
+                X_test = self._test.drop([self._target_column], axis=1)
 
-                    counterfactual_obj = \
-                        dice_explainer.generate_counterfactuals(
-                            X_test, total_CFs=cf_config.total_CFs,
-                            desired_class=cf_config.desired_class,
-                            desired_range=cf_config.desired_range)
+                counterfactual_obj = \
+                    dice_explainer.generate_counterfactuals(
+                        X_test, total_CFs=cf_config.total_CFs,
+                        desired_class=cf_config.desired_class,
+                        desired_range=cf_config.desired_range)
 
-                    cf_config.counterfactual_obj = \
-                        counterfactual_obj
-                except Exception as e:
-                    cf_config.has_computation_failed = True
-                    cf_config.failure_reason = str(e)
+                cf_config.counterfactual_obj = \
+                    counterfactual_obj
 
-    def get(self, failed_to_compute=False):
-        """Return the computed counterfactual examples objects or failure reason.
-
-        :param failed_to_compute: Get the failure reasons if counterfactual
-                                  examples failed to compute.
-        :type failed_to_compute: bool
+    def get(self):
+        """Return the computed counterfactual examples
         """
-        if not failed_to_compute:
-            counterfactual_obj_list = []
-            for counterfactual_config in self._counterfactual_config_list:
-                if counterfactual_config.is_computed and \
-                        not counterfactual_config.has_computation_failed:
-                    counterfactual_obj_list.append(
-                        counterfactual_config.counterfactual_obj)
-            return counterfactual_obj_list
-        else:
-            failure_reason_list = []
-            for counterfactual_config in self._counterfactual_config_list:
-                if counterfactual_config.is_computed and \
-                        counterfactual_config.has_computation_failed:
-                    failure_reason_list.append(
-                        counterfactual_config.failure_reason)
-            return failure_reason_list
+        counterfactual_obj_list = []
+        for counterfactual_config in self._counterfactual_config_list:
+            if counterfactual_config.is_computed and \
+                    not counterfactual_config.has_computation_failed:
+                counterfactual_obj_list.append(
+                    counterfactual_config.counterfactual_obj)
+        return counterfactual_obj_list
 
     def list(self):
         pass
