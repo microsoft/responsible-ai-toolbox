@@ -38,13 +38,14 @@ const buttonStyle: IButtonStyles = {
 const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
-  handleErrorDetectorChanged?: (
+  handleErrorDetectorChanged: (
     item?: PivotItem,
     ev?: React.MouseEvent<HTMLElement>
   ) => void;
   selectFeatures: (features: string[]) => void;
   importances: number[];
   onSaveCohortClick: () => void;
+  selectedKey: ErrorAnalysisOptions;
 }
 
 interface IErrorAnalysisViewTabState {
@@ -73,7 +74,10 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
           <Stack horizontal tokens={{ childrenGap: "10px" }}>
-            <Pivot onLinkClick={this.props.handleErrorDetectorChanged}>
+            <Pivot
+              onLinkClick={this.props.handleErrorDetectorChanged}
+              selectedKey={this.props.selectedKey}
+            >
               <PivotItem
                 itemKey={ErrorAnalysisOptions.TreeMap}
                 headerText={localization.ErrorAnalysis.MainMenu.treeMap}
