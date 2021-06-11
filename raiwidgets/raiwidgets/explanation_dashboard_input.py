@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from .constants import SKLearn
 from .error_handling import _format_exception
-from ._input_processing import _serialize_json_safe
+from responsibleai._input_processing import _serialize_json_safe
 
 
 class ExplanationDashboardInput:

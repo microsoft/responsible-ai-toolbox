@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 """Defines the Counterfactual Manager class."""
+import json
 import dice_ml
 from dice_ml import Dice
 import numpy as np
@@ -13,6 +14,7 @@ from responsibleai.modelanalysis.constants import ModelTask
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException
 )
+from responsibleai._interfaces import CounterfactualData
 
 
 class CounterfactualConstants:
@@ -228,6 +230,23 @@ class CounterfactualManager(BaseManager):
 
     def list(self):
         pass
+
+    def get_data(self):
+        """Get counterfactual data
+
+        :return: A array of CounterfactualData.
+        :rtype: List[CounterfactualData]
+        """
+        return [
+            self._get_counterfactual(i) for i in self.get()]
+
+    def _get_counterfactual(self, counterfactual):
+        counterfactual_data = CounterfactualData()
+        json_data = json.loads(counterfactual.to_json())
+        counterfactual_data.cfsList = json_data["cfs_list"]
+        counterfactual_data.featureNames = json_data[
+            "feature_names_including_target"]
+        return counterfactual_data
 
     @property
     def name(self):
