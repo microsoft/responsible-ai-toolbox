@@ -37,6 +37,7 @@ export interface ICounterfactualPanelProps {
   data?: ICounterfactualData;
   isPanelOpen: boolean;
   closePanel(): void;
+  saveAsPoint(): void;
 }
 interface ICounterfactualState {
   data: any;
@@ -119,7 +120,7 @@ export class CounterfactualPanel extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: "15px" }}>
-              <Stack.Item grow={1}>
+              <Stack.Item align="end" grow={1}>
                 <TextField
                   id="whatIfNameLabel"
                   label={localization.Counterfactuals.counterfactualName}
@@ -127,13 +128,14 @@ export class CounterfactualPanel extends React.Component<
                   styles={{ fieldGroup: { width: 200 } }}
                 />
               </Stack.Item>
-              <Stack.Item grow={3}>
+              <Stack.Item align="end" grow={5}>
                 <PrimaryButton
                   className={classes.button}
                   text={localization.Counterfactuals.saveAsNew}
+                  onClick={this.handleSavePoint.bind(this)}
                 />
               </Stack.Item>
-              <Stack.Item grow={3}>
+              <Stack.Item align="end" grow={3}>
                 <Text variant={"medium"}>
                   {localization.Counterfactuals.saveDescription}
                 </Text>
@@ -221,6 +223,7 @@ export class CounterfactualPanel extends React.Component<
       return { data: prevState.data };
     });
   }
+
   private toggleCallout(): void {
     this.setState((preState) => {
       return {
@@ -228,6 +231,12 @@ export class CounterfactualPanel extends React.Component<
       };
     });
   }
+
+  private handleSavePoint(): void {
+    this.props.saveAsPoint();
+    this.props.closePanel();
+  }
+
   private renderDetailsFooterItemColumn(
     _item: any,
     _index?: number,

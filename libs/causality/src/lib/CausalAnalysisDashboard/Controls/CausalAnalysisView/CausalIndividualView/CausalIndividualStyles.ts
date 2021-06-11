@@ -34,7 +34,7 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<
       backgroundColor: "red"
     },
     individualTable: {
-      width: "50%"
+      width: "70%"
     },
     label: {
       display: "inline-block",
