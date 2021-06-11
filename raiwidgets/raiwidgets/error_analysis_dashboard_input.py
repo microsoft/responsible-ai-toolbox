@@ -10,7 +10,7 @@ import pandas as pd
 import traceback
 from .constants import ModelTask, SKLearn
 from .error_handling import _format_exception
-from ._input_processing import _serialize_json_safe
+from responsibleai._input_processing import _serialize_json_safe
 from erroranalysis._internal.error_analyzer import (
     ModelAnalyzer, PredictionsAnalyzer)
 

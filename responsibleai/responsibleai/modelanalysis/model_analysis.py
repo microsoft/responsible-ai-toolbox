@@ -5,14 +5,18 @@
 
 import json
 import pandas as pd
+import numpy as np
 import pickle
 from pathlib import Path
-from responsibleai._internal.constants import ManagerNames, Metadata
+from responsibleai._internal.constants import\
+    ManagerNames, Metadata, SKLearn
 from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._managers.counterfactual_manager import (
     CounterfactualManager)
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
+from responsibleai._interfaces import ModelAnalysisData, Dataset
+from responsibleai._input_processing import _convert_to_list
 
 
 _DTYPES = 'dtypes'
@@ -162,6 +166,109 @@ class ModelAnalysis(object):
         for manager in self._managers:
             configs[manager.name] = manager.get()
         return configs
+
+    def get_data(self):
+        """Get all data as ModelAnalysisData object
+
+        :return: Model Analysis Data
+        :rtype: ModelAnalysisData
+        """
+        data = ModelAnalysisData()
+        data.dataset = self._get_dataset()
+        data.modelExplanationData = self.explainer.get_data()
+        data.errorAnalysisConfig = self.error_analysis.get_data()
+        data.causalAnalysisData = self.causal.get_data()
+        data.counterfactualData = self.counterfactual.get_data()
+        return data
+
+    def _get_dataset(self):
+        dashboard_dataset = Dataset()
+        dashboard_dataset.classNames = _convert_to_list(
+            self._classes)
+
+        predicted_y = None
+        feature_length = None
+
+        dataset: pd.DataFrame = self.test.drop(
+            [self.target_column], axis=1)
+
+        if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
+            self._dataframeColumns = dataset.columns
+        try:
+            list_dataset = _convert_to_list(dataset)
+        except Exception as ex:
+            raise ValueError(
+                "Unsupported dataset type") from ex
+        if dataset is not None and self.model is not None:
+            try:
+                predicted_y = self.model.predict(dataset)
+            except Exception as ex:
+                msg = "Model does not support predict method for given"
+                "dataset type"
+                raise ValueError(msg) from ex
+            try:
+                predicted_y = _convert_to_list(predicted_y)
+            except Exception as ex:
+                raise ValueError(
+                    "Model prediction output of unsupported type,") from ex
+        if predicted_y is not None:
+            if(self.task_type == "classification" and
+                    dashboard_dataset.classNames is not None):
+                predicted_y = [dashboard_dataset.classNames.index(
+                    y) for y in predicted_y]
+            dashboard_dataset.predictedY = predicted_y
+        row_length = 0
+
+        if list_dataset is not None:
+            row_length, feature_length = np.shape(list_dataset)
+            if row_length > 100000:
+                raise ValueError(
+                    "Exceeds maximum number of rows"
+                    "for visualization (100000)")
+            if feature_length > 1000:
+                raise ValueError("Exceeds maximum number of features for"
+                                 " visualization (1000). Please regenerate the"
+                                 " explanation using fewer features or"
+                                 " initialize the dashboard without passing a"
+                                 " dataset.")
+            dashboard_dataset.features = list_dataset
+
+        true_y = self.test[self.target_column]
+
+        if true_y is not None and len(true_y) == row_length:
+            if(self.task_type == "classification" and
+               dashboard_dataset.classNames is not None):
+                true_y = [dashboard_dataset.classNames.index(
+                    y) for y in true_y]
+            dashboard_dataset.trueY = _convert_to_list(true_y)
+
+        features = dataset.columns
+
+        if features is not None:
+            features = _convert_to_list(features)
+            if feature_length is not None and len(features) != feature_length:
+                raise ValueError("Feature vector length mismatch:"
+                                 " feature names length differs"
+                                 " from local explanations dimension")
+            dashboard_dataset.featureNames = features
+
+        if (self.model is not None and
+                hasattr(self.model, SKLearn.PREDICT_PROBA) and
+                self.model.predict_proba is not None and
+                dataset is not None):
+            try:
+                probability_y = self.model.predict_proba(dataset)
+            except Exception as ex:
+                raise ValueError("Model does not support predict_proba method"
+                                 " for given dataset type,") from ex
+            try:
+                probability_y = _convert_to_list(probability_y)
+            except Exception as ex:
+                raise ValueError(
+                    "Model predict_proba output of unsupported type,") from ex
+            dashboard_dataset.probabilityY = probability_y
+
+        return dashboard_dataset
 
     def _write_to_file(self, file_path, content):
         """Save the string content to the given file path.
