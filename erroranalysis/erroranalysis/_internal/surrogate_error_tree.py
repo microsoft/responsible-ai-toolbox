@@ -55,18 +55,10 @@ def compute_json_error_tree(analyzer,
     if num_leaves is None:
         num_leaves = DEFAULT_NUM_LEAVES
     if analyzer.model_task == ModelTask.CLASSIFICATION:
-        if analyzer.metric is None:
-            metric = Metrics.ERROR_RATE
-        else:
-            metric = analyzer.metric
         surrogate = LGBMClassifier(n_estimators=1,
                                    max_depth=max_depth,
                                    num_leaves=num_leaves)
     else:
-        if analyzer.metric is None:
-            metric = Metrics.MEAN_SQUARED_ERROR
-        else:
-            metric = analyzer.metric
         surrogate = LGBMRegressor(n_estimators=1,
                                   max_depth=max_depth,
                                   num_leaves=num_leaves)
@@ -149,7 +141,7 @@ def compute_json_error_tree(analyzer,
                           cat_ind_reindexed),
                          [],
                          dataset_sub_names,
-                         metric=metric)
+                         metric=analyzer.metric)
     return json_tree
 
 
