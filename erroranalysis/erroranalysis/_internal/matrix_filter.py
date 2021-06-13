@@ -56,22 +56,13 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
         dropped_cols.append(PRED_Y)
     input_data = filtered_df.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
+    metric = analyzer.metric
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
         input_data = input_data.to_numpy()
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
-    if analyzer.model_task == ModelTask.CLASSIFICATION:
-        if analyzer.metric is None:
-            metric = Metrics.ERROR_RATE
-        else:
-            metric = analyzer.metric
-    else:
-        if analyzer.metric is None:
-            metric = Metrics.MEAN_SQUARED_ERROR
-        else:
-            metric = analyzer.metric
     if is_model_analyzer:
         if analyzer.model_task == ModelTask.CLASSIFICATION:
             diff = analyzer.model.predict(input_data) != true_y
@@ -84,6 +75,10 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
             diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
+    if not isinstance(pred_y, np.ndarray):
+        pred_y = np.array(pred_y)
+    if not isinstance(true_y, np.ndarray):
+        true_y = np.array(true_y)
     indexes = []
     for feature in features:
         if feature is None:
@@ -99,11 +94,8 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         df_err = df_err[df_err[DIFF]]
     else:
-        df[TRUE_Y] = true_y
-        df[PRED_Y] = pred_y
         df_err[TRUE_Y] = true_y
         df_err[PRED_Y] = pred_y
-        df[DIFF] = diff
     # construct json matrix
     json_matrix = []
     if len(dataset_sub_names) == 2:
@@ -150,10 +142,7 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
             matrix_total = pd.crosstab(tabdf1,
                                        tabdf2,
                                        rownames=[feat1],
-                                       colnames=[feat2],
-                                       values=list(zip(df[TRUE_Y],
-                                                       df[PRED_Y])),
-                                       aggfunc=aggfunc._agg_func_pair)
+                                       colnames=[feat2])
             matrix_error = pd.crosstab(tabdf1_err,
                                        tabdf2_err,
                                        rownames=[feat1],

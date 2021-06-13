@@ -6,8 +6,9 @@ import numpy as np
 import pandas as pd
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import load_iris, load_breast_cancer, make_classification
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import (
+    load_boston, load_breast_cancer, load_iris, make_classification)
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -54,6 +55,13 @@ def create_sklearn_logistic_regressor(X, y, pipeline=False):
     if pipeline:
         lin = Pipeline([('lin', lin)])
     model = lin.fit(X, y)
+    return model
+
+
+def create_sklearn_random_forest_regressor(X, y):
+    rfc = RandomForestRegressor(n_estimators=10, max_depth=4,
+                                random_state=777)
+    model = rfc.fit(X, y)
     return model
 
 
@@ -115,7 +123,17 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_models(X_train, y_train):
+def create_boston_data():
+    # Import Boston housing dataset
+    boston = load_boston()
+    # Split data into train and test
+    X_train, X_test, y_train, y_validation = train_test_split(
+        boston.data, boston.target,
+        test_size=0.2, random_state=7)
+    return X_train, X_test, y_train, y_validation, boston.feature_names
+
+
+def create_models_classification(X_train, y_train):
     svm_model = create_sklearn_svm_classifier(X_train, y_train)
     log_reg_model = create_sklearn_logistic_regressor(X_train, y_train)
     xgboost_model = create_xgboost_classifier(X_train, y_train)
@@ -123,6 +141,12 @@ def create_models(X_train, y_train):
     rf_model = create_sklearn_random_forest_classifier(X_train, y_train)
 
     return [svm_model, log_reg_model, xgboost_model, lgbm_model, rf_model]
+
+
+def create_models_regression(X_train, y_train):
+    rf_model = create_sklearn_random_forest_regressor(X_train, y_train)
+
+    return [rf_model]
 
 
 def create_titanic_pipeline(X_train, y_train):
