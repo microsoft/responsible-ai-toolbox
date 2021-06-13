@@ -185,7 +185,7 @@ export class MatrixArea extends React.PureComponent<
     let maxMetricValue = 0;
     jsonMatrix.matrix.forEach((row: any): void => {
       row.forEach((value: any): void => {
-        if (value.falseCount) {
+        if (value.falseCount !== undefined) {
           const errorRate = value.falseCount / value.count;
           if (!Number.isNaN(errorRate)) {
             maxMetricValue = Math.max(maxMetricValue, errorRate);
