@@ -3,4 +3,4 @@
 
 # Version will be populated during release from version.cfg file
 # by running `yarn auto-version`
-version = "0.6.0"
+version = "0.0.0"
