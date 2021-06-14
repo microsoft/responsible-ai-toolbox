@@ -11,7 +11,7 @@ from erroranalysis._internal.matrix_filter import compute_json_matrix
 from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
 from erroranalysis._internal.error_report import ErrorReport
-from erroranalysis._internal.constants import ModelTask
+from erroranalysis._internal.constants import ModelTask, Metrics
 
 
 class BaseAnalyzer(ABC):
@@ -32,6 +32,12 @@ class BaseAnalyzer(ABC):
         self._categorical_indexes = []
         self._category_dictionary = {}
         self._model_task = model_task
+        if model_task == ModelTask.CLASSIFICATION:
+            if metric is None:
+                metric = Metrics.ERROR_RATE
+        else:
+            if metric is None:
+                metric = Metrics.MEAN_SQUARED_ERROR
         self._metric = metric
         if self._categorical_features:
             self._categorical_indexes = [feature_names.index(feature)

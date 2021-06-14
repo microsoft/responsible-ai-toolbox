@@ -2,8 +2,10 @@
 # Licensed under the MIT License.
 
 from common_utils import (
-    create_iris_data, create_cancer_data, create_binary_classification_dataset,
-    create_models, create_simple_titanic_data, create_titanic_pipeline)
+    create_iris_data, create_cancer_data,
+    create_binary_classification_dataset,
+    create_models_classification, create_simple_titanic_data,
+    create_titanic_pipeline)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 TOL = 1e-10
@@ -14,7 +16,7 @@ class TestImportances(object):
     def test_importances_iris(self):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
-        models = create_models(X_train, y_train)
+        models = create_models_classification(X_train, y_train)
 
         for model in models:
             categorical_features = []
@@ -25,7 +27,7 @@ class TestImportances(object):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_cancer_data()
 
-        models = create_models(X_train, y_train)
+        models = create_models_classification(X_train, y_train)
 
         for model in models:
             categorical_features = []
@@ -36,7 +38,7 @@ class TestImportances(object):
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset()
         feature_names = list(X_train.columns)
-        models = create_models(X_train, y_train)
+        models = create_models_classification(X_train, y_train)
 
         for model in models:
             categorical_features = []

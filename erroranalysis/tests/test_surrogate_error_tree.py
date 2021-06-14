@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from common_utils import create_iris_data, create_models
+from common_utils import create_iris_data, create_models_classification
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 SIZE = 'size'
@@ -15,7 +15,7 @@ class TestSurrogateErrorTree(object):
     def test_surrogate_error_tree_iris(self):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
-        models = create_models(X_train, y_train)
+        models = create_models_classification(X_train, y_train)
 
         for model in models:
             categorical_features = []
