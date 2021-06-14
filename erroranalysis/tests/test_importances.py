@@ -2,11 +2,12 @@
 # Licensed under the MIT License.
 
 from common_utils import (
-    create_iris_data, create_cancer_data,
+    create_boston_data, create_iris_data, create_cancer_data,
     create_binary_classification_dataset,
-    create_models_classification, create_simple_titanic_data,
-    create_titanic_pipeline)
+    create_models_classification, create_models_regression,
+    create_simple_titanic_data, create_titanic_pipeline)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from erroranalysis._internal.constants import ModelTask
 
 TOL = 1e-10
 
@@ -54,6 +55,16 @@ class TestImportances(object):
         run_error_analyzer(clf, X_test, y_test, feature_names,
                            categorical_features)
 
+    def test_importances_boston(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_boston_data()
+        models = create_models_regression(X_train, y_train)
+
+        for model in models:
+            categorical_features = []
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               categorical_features)
+
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        categorical_features):
@@ -61,7 +72,10 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
                                    feature_names,
                                    categorical_features)
     scores = model_analyzer.compute_importances()
-    diff = model.predict(model_analyzer.dataset) != model_analyzer.true_y
+    if model_analyzer.model_task == ModelTask.CLASSIFICATION:
+        diff = model.predict(model_analyzer.dataset) != model_analyzer.true_y
+    else:
+        diff = model.predict(model_analyzer.dataset) - model_analyzer.true_y
     assert isinstance(scores, list)
     assert len(scores) == len(feature_names)
     # If model predicted perfectly, assert all scores are zeros

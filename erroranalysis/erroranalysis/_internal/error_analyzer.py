@@ -6,7 +6,8 @@ import numpy as np
 from abc import ABC, abstractmethod
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
-from sklearn.feature_selection import mutual_info_classif
+from sklearn.feature_selection import (
+    mutual_info_classif, mutual_info_regression)
 from erroranalysis._internal.matrix_filter import compute_json_matrix
 from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
@@ -138,8 +139,11 @@ class BaseAnalyzer(ABC):
             string_ind_data = self.string_indexed_data
             for idx, c_i in enumerate(indexes):
                 input_data[:, c_i] = string_ind_data[:, idx]
-        # compute the feature importances using mutual information
-        return mutual_info_classif(input_data, diff).tolist()
+        if self._model_task == ModelTask.CLASSIFICATION:
+            # compute the feature importances using mutual information
+            return mutual_info_classif(input_data, diff).tolist()
+        else:
+            return mutual_info_regression(input_data, diff).tolist()
 
     def _make_pandas_copy(self, dataset):
         if isinstance(dataset, pd.DataFrame):
@@ -180,7 +184,10 @@ class ModelAnalyzer(BaseAnalyzer):
         return self._model
 
     def get_diff(self):
-        return self.model.predict(self.dataset) != self.true_y
+        if self._model_task == ModelTask.CLASSIFICATION:
+            return self.model.predict(self.dataset) != self.true_y
+        else:
+            return self.model.predict(self.dataset) - self.true_y
 
 
 class PredictionsAnalyzer(BaseAnalyzer):
