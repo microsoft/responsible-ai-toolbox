@@ -9,7 +9,7 @@ on:
         required: true
         default: "Test"
       packageDirectory:
-        description: "raiwidgets or wrapped-flask?"
+        description: "responsibleai, raiwidgets or wrapped-flask?"
         required: true
 
 jobs:
@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: fail if neither raiwidgets nor wrapped-flask
-        if: ${{ github.event.inputs.packageDirectory != 'raiwidgets' && github.event.inputs.packageDirectory != 'wrapped-flask' }}
+      - name: fail if neither responsibleai, raiwidgets nor wrapped-flask
+        if: ${{ ! (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'wrapped-flask' || github.event.inputs.packageDirectory == 'responsibleai' }}
         run: |
-          echo "Only raiwidgets or wrapped-flask can be used."
+          echo "Only raiwidgets, responsibleai or wrapped-flask can be used."
           exit 1
 
       # build wheel
@@ -34,11 +34,11 @@ jobs:
           yarn install
 
       - name: auto version
-        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
+        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Test' }}
         run: |
           yarn auto-version -r
       - name: auto version
-        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
+        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Prod' }}
         run: |
           yarn auto-version -r -t
 
@@ -61,6 +61,11 @@ jobs:
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ./raiwidgets/
+      - name: replace README for responsibleai
+        if: ${{ github.event.inputs.packageDirectory == 'responsibleai' }}
+        run: |
+          sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
+          cp ./README.md ./responsibleai/
       - name: build wheel
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ github.event.inputs.packageDirectory }}
@@ -75,7 +80,7 @@ jobs:
 
       # publish to PyPI
       - name: publish package to Test PyPI
-        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
+        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
@@ -83,7 +88,7 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
           packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
       - name: Publish package to PyPI
-        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
+        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
