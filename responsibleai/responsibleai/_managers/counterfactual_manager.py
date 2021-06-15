@@ -203,7 +203,7 @@ class CounterfactualManager(BaseManager):
                 except Exception as e:
                     cf_config.has_computation_failed = True
                     cf_config.failure_reason = str(e)
-                    raise Exception("Failed to compute counter factual") from e
+                    raise e
 
     def get(self, failed_to_compute=False):
         """Return the computed counterfactual examples objects or failure reason.
