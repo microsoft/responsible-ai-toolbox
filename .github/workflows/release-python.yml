@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: fail if neither responsibleai, raiwidgets nor wrapped-flask
-        if: ${{ ! (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'wrapped-flask' || github.event.inputs.packageDirectory == 'responsibleai' }}
+        if: ${{ ! (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'wrapped-flask' || github.event.inputs.packageDirectory == 'responsibleai') }}
         run: |
           echo "Only raiwidgets, responsibleai or wrapped-flask can be used."
           exit 1
