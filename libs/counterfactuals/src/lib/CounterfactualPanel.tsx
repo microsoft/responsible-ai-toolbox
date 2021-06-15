@@ -6,6 +6,7 @@ import {
   ICounterfactualData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _, { toNumber } from "lodash";
 import {
@@ -36,8 +37,14 @@ export interface ICounterfactualPanelProps {
   selectedIndex: number;
   data?: ICounterfactualData;
   isPanelOpen: boolean;
+  temporaryPoint: { [key: string]: any } | undefined;
   closePanel(): void;
   saveAsPoint(): void;
+  setCustomRowProperty(
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ): void;
 }
 interface ICounterfactualState {
   data: any;
@@ -124,7 +131,12 @@ export class CounterfactualPanel extends React.Component<
                 <TextField
                   id="whatIfNameLabel"
                   label={localization.Counterfactuals.counterfactualName}
-                  value={this.state.data["row"]}
+                  value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
+                  onChange={this.setCustomRowProperty.bind(
+                    this,
+                    WhatIfConstants.namePath,
+                    true
+                  )}
                   styles={{ fieldGroup: { width: 200 } }}
                 />
               </Stack.Item>
@@ -223,7 +235,14 @@ export class CounterfactualPanel extends React.Component<
       return { data: prevState.data };
     });
   }
-
+  private setCustomRowProperty = (
+    key: string | number,
+    isString: boolean,
+    _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    newValue?: string
+  ): void => {
+    this.props.setCustomRowProperty(key, isString, newValue);
+  };
   private toggleCallout(): void {
     this.setState((preState) => {
       return {
