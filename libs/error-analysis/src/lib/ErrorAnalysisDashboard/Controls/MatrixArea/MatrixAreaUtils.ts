@@ -83,9 +83,9 @@ export function createCohortStatsFromSelectedCells(
   jsonMatrix.matrix.forEach((row: any, i: number) => {
     row.forEach((value: any, j: number) => {
       if (selectedCells !== undefined && selectedCells[j + i * row.length]) {
-        if (value.falseCount) {
+        if (value.falseCount !== undefined) {
           falseCohortCount += value.falseCount;
-        } else if (value.metricValue) {
+        } else if (value.metricValue !== undefined) {
           metricName = value.metricName;
           if (value.metricName === Metrics.MeanSquaredError) {
             totalCohortError += value.metricValue * value.count;
@@ -94,9 +94,9 @@ export function createCohortStatsFromSelectedCells(
         totalCohortCount += value.count;
         existsSelectedCell = true;
       }
-      if (value.falseCount) {
+      if (value.falseCount !== undefined) {
         falseCount += value.falseCount;
-      } else if (value.metricValue) {
+      } else if (value.metricValue !== undefined) {
         metricName = value.metricName;
         if (value.metricName === Metrics.MeanSquaredError) {
           totalError += value.metricValue * value.count;
