@@ -125,39 +125,39 @@ jobs:
 
       ####### publish to PyPI
       # raiwidgets
-      - name: Publish package to Test PyPI
-        if: ${{ github.event.inputs.targetPackage == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
+      - name: Publish raiwidgets package to Test PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: raiwidgets/dist/
-      - name: Publish package to PyPI
-        if: ${{ github.event.inputs.targetPackage == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
+      - name: Publish raiwidgets package to PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
           packages_dir: raiwidgets/dist/
       # responsibleai
-      - name: publish package to Test PyPI
-        if: ${{ github.event.inputs.targetPackage == 'responsibleai' && github.event.inputs.pypiType == 'Test' }}
+      - name: publish responsibleai package to Test PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: responsibleai/dist/
-      - name: Publish package to PyPI
-        if: ${{ github.event.inputs.targetPackage == 'responsibleai' && github.event.inputs.pypiType == 'Prod' }}
+      - name: Publish responsibleai package to PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
           packages_dir: responsibleai/dist/
       # wrapped-flask
-      - name: Publish package to Test PyPI
+      - name: Publish wrapped-flask package to Test PyPI
         if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -165,7 +165,7 @@ jobs:
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: wrapped-flask/dist/
-      - name: Publish package to PyPI
+      - name: Publish wrapped-flask package to PyPI
         if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
