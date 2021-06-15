@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: fail if neither responsibleai, raiwidgets nor wrapped-flask
-        if: ${{ ! (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'wrapped-flask' || github.event.inputs.packageDirectory == 'responsibleai' }}
+        if: ${{ ! (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'wrapped-flask' || github.event.inputs.packageDirectory == 'responsibleai') }}
         run: |
           echo "Only raiwidgets, responsibleai or wrapped-flask can be used."
           exit 1
@@ -78,9 +78,10 @@ jobs:
         run: pytest ./tests/
         working-directory: ${{ github.event.inputs.packageDirectory }}
 
-      # publish to PyPI
+      ####### publish to PyPI
+      # raiwidgets
       - name: publish package to Test PyPI
-        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Test' }}
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
@@ -88,12 +89,29 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
           packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
       - name: Publish package to PyPI
-        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Prod' }}
+        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
           packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
+      # responsibleai
+      - name: publish package to Test PyPI
+        if: ${{ github.event.inputs.packageDirectory == 'responsibleai' && github.event.inputs.pypiType == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
+      - name: Publish package to PyPI
+        if: ${{ github.event.inputs.packageDirectory == 'responsibleai' && github.event.inputs.pypiType == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
+          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
+      # wrapped-flask
       - name: Publish package to Test PyPI
         if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
