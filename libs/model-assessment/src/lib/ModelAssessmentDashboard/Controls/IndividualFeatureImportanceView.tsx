@@ -295,10 +295,8 @@ export class IndividualFeatureImportanceView extends React.Component<
     selectionDetails: ISelectionDetails,
     activePredictionTab: PredictionTabKeys
   ): IIndividualFeatureImportanceState {
-    const includedIndexes = IndividualFeatureImportanceView.getSelectionDetails(
-      selectionDetails
-    );
-    const inspectedFeatureImportance = this.state.selectionDetails.selectedAllSelectedIndexes.map(
+    const includedIndexes = selectionDetails.selectedAllSelectedIndexes;
+    const inspectedFeatureImportance = selectionDetails.selectedAllSelectedIndexes.map(
       (rowIndex, colorIndex): IGlobalSeries => {
         const row = this.context.jointDataset.getRow(rowIndex);
         return {
@@ -321,7 +319,7 @@ export class IndividualFeatureImportanceView extends React.Component<
       }
     );
     const featureImportances = inspectedFeatureImportance.filter((row) => {
-      if (row.id) {
+      if (row.id !== undefined) {
         return includedIndexes.includes(row.id);
       }
       return false;
@@ -343,10 +341,5 @@ export class IndividualFeatureImportanceView extends React.Component<
       selectionDetails,
       activePredictionTab
     };
-  }
-
-  private static getSelectionDetails(selection: ISelectionDetails): number[] {
-    const selectedRows = selection.selectedAllSelectedIndexes;
-    return selectedRows.map((row) => row[0] as number);
   }
 }
