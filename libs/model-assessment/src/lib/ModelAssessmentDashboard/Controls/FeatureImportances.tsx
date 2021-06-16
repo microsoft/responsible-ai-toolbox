@@ -8,7 +8,6 @@ import {
   ModelAssessmentContext,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
-import { InstanceView } from "@responsible-ai/error-analysis";
 import { GlobalExplanationTab, IStringsParam } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -21,7 +20,7 @@ import {
 } from "office-ui-fabric-react";
 import * as React from "react";
 
-import { PredictionTabKeys } from "./../ModelAssessmentEnums";
+import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
   stringParams?: IStringsParam;
@@ -32,11 +31,7 @@ interface IFeatureImportancesProps {
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
-  predictionTab: PredictionTabKeys;
-  customPoints: Array<{ [key: string]: any }>;
-  setWhatIfDatapoint: (index: number) => void;
   modelExplanationData?: IModelExplanationData[];
-  setActivePredictionTab: (key: PredictionTabKeys) => void;
   onWeightVectorChange: (weightOption: WeightVectorOption) => void;
 }
 
@@ -139,7 +134,7 @@ export class FeatureImportancesTab extends React.PureComponent<
         )}
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.LocalExplanation && (
-          <InstanceView
+          <IndividualFeatureImportanceView
             messages={
               this.props.stringParams
                 ? this.props.stringParams.contextualHelp
@@ -151,11 +146,7 @@ export class FeatureImportancesTab extends React.PureComponent<
             weightOptions={this.props.weightVectorOptions}
             weightLabels={this.props.weightVectorLabels}
             onWeightChange={this.props.onWeightVectorChange}
-            activePredictionTab={this.props.predictionTab}
-            setActivePredictionTab={this.props.setActivePredictionTab}
-            customPoints={this.props.customPoints}
             selectedCohort={this.context.selectedErrorCohort}
-            setWhatIfDatapoint={this.props.setWhatIfDatapoint}
           />
         )}
       </Stack>

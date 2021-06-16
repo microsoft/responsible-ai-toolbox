@@ -40,7 +40,7 @@ import { MainMenu } from "./Controls/MainMenu";
 import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.styles";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
-import { GlobalTabKeys, PredictionTabKeys } from "./ModelAssessmentEnums";
+import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
@@ -236,23 +236,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     this.props.modelExplanationData?.[0] && (
                       <FeatureImportancesTab
                         modelExplanationData={this.props.modelExplanationData}
-                        customPoints={this.state.customPoints}
-                        predictionTab={this.state.predictionTab}
                         selectedWeightVector={this.state.selectedWeightVector}
                         weightVectorOptions={this.state.weightVectorOptions}
                         weightVectorLabels={this.state.weightVectorLabels}
                         requestPredictions={this.props.requestPredictions}
                         stringParams={this.props.stringParams}
-                        setWhatIfDatapoint={(index: number): void =>
-                          this.setState({ selectedWhatIfIndex: index })
-                        }
-                        setActivePredictionTab={(
-                          key: PredictionTabKeys
-                        ): void => {
-                          this.setState({
-                            predictionTab: key
-                          });
-                        }}
                         onWeightVectorChange={this.onWeightVectorChange}
                       />
                     )}

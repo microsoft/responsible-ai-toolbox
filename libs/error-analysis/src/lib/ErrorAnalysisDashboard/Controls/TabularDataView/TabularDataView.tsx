@@ -8,7 +8,6 @@ import {
   DetailsListLayoutMode,
   IDetailsHeaderProps,
   IDetailsColumnRenderTooltipProps,
-  ITheme,
   Selection,
   SelectionMode,
   Fabric,
@@ -32,7 +31,6 @@ import {
 import { tabularDataViewStyles } from "./TabularDataView.styles";
 
 export interface ITabularDataViewProps {
-  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;
@@ -42,7 +40,7 @@ export interface ITabularDataViewProps {
   allSelectedIndexes?: number[];
   customPoints?: Array<{ [key: string]: any }>;
   selectedCohort: ErrorCohort;
-  setWhatIfDatapoint: (index: number) => void;
+  setWhatIfDatapoint?: (index: number) => void;
 }
 
 export interface ITabularDataViewState {
@@ -91,7 +89,7 @@ export class TabularDataView extends React.Component<
       onSelectionChanged: (): void => {
         const selectionDetails = this.getSelectionDetails();
         this.props.setSelectedIndexes(selectionDetails);
-        this.props.setWhatIfDatapoint(selectionDetails[0]);
+        this.props.setWhatIfDatapoint?.(selectionDetails[0]);
       }
     });
     this.updateSelection();
@@ -100,7 +98,8 @@ export class TabularDataView extends React.Component<
   public componentDidUpdate(prevProps: ITabularDataViewProps): void {
     if (
       this.props.customPoints !== prevProps.customPoints ||
-      this.props.selectedCohort !== prevProps.selectedCohort
+      this.props.selectedCohort !== prevProps.selectedCohort ||
+      this.props.selectedIndexes !== prevProps.selectedIndexes
     ) {
       const newTableState = this.updateItems();
       this.setState({ tableState: newTableState });
@@ -199,7 +198,7 @@ export class TabularDataView extends React.Component<
   }
 
   private onItemInvoked(item: any): void {
-    this.props.setWhatIfDatapoint(item[0] as number);
+    this.props.setWhatIfDatapoint?.(item[0] as number);
   }
 
   private tabularDataFilter(row: { [key: string]: number }): boolean {

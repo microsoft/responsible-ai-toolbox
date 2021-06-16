@@ -27,7 +27,7 @@ import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "../ModelAssessmentDashboardState";
-import { PredictionTabKeys, GlobalTabKeys } from "../ModelAssessmentEnums";
+import { GlobalTabKeys } from "../ModelAssessmentEnums";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
@@ -128,7 +128,6 @@ export function buildInitialModelAssessmentContext(
     matrixFilterState: createInitialMatrixFilterState(),
     modelChartConfig: undefined,
     modelMetadata,
-    predictionTab: PredictionTabKeys.CorrectPredictionTab,
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedFeatures: props.dataset.featureNames,

@@ -14,7 +14,5 @@ export enum GlobalTabKeys {
 export enum PredictionTabKeys {
   CorrectPredictionTab = "CorrectPredictionTab",
   IncorrectPredictionTab = "IncorrectPredictionTab",
-  WhatIfDatapointsTab = "WhatIfDatapointsTab",
   AllSelectedTab = "AllSelectedTab",
-  InspectionTab = "InspectionTab"
 }
