@@ -6,7 +6,9 @@ from responsibleai import ModelTask
 from responsibleai.exceptions import (
     DuplicateManagerConfigException, UserConfigValidationException
 )
-from dice_ml.utils.exception import UserConfigValidationException as DiceException
+from dice_ml.utils.exception import (
+    UserConfigValidationException as DiceException
+)
 
 
 def validate_counterfactual(cf_analyzer, X_train, target_column,
