@@ -219,76 +219,67 @@ export class IndividualFeatureImportanceView extends React.Component<
   }
 
   private setCorrectSelectedIndexes(indexes: number[]): void {
-    const reloadDataFunc = (
-      state: Readonly<IIndividualFeatureImportanceState>
-    ): IIndividualFeatureImportanceState => {
-      let selectionDetails = state.selectionDetails;
-      const selectedCorrectIndexes = indexes;
-      const selectedIncorrectIndexes =
-        selectionDetails.selectedIncorrectDatasetIndexes;
-      const selectedIndexes = [
-        ...selectedCorrectIndexes,
-        ...selectedIncorrectIndexes
-      ];
-      selectionDetails = {
-        selectedAllSelectedIndexes: selectedIndexes,
-        selectedCorrectDatasetIndexes: selectedCorrectIndexes,
-        selectedDatasetIndexes: selectedIndexes,
-        selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
-      } as ISelectionDetails;
-      return this.updateViewedFeatureImportances(
+    let selectionDetails = this.state.selectionDetails;
+    const selectedCorrectIndexes = indexes;
+    const selectedIncorrectIndexes =
+      selectionDetails.selectedIncorrectDatasetIndexes;
+    const selectedIndexes = [
+      ...selectedCorrectIndexes,
+      ...selectedIncorrectIndexes
+    ];
+    selectionDetails = {
+      selectedAllSelectedIndexes: selectedIndexes,
+      selectedCorrectDatasetIndexes: selectedCorrectIndexes,
+      selectedDatasetIndexes: selectedIndexes,
+      selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
+    } as ISelectionDetails;
+    this.setState(
+      this.updateViewedFeatureImportances(
         selectionDetails,
         PredictionTabKeys.CorrectPredictionTab
-      );
-    };
-    this.setState(reloadDataFunc);
+      )
+    );
   }
 
   private setIncorrectSelectedIndexes(indexes: number[]): void {
-    const reloadDataFunc = (
-      state: Readonly<IIndividualFeatureImportanceState>
-    ): IIndividualFeatureImportanceState => {
-      let selectionDetails = state.selectionDetails;
-      const selectedCorrectIndexes =
-        selectionDetails.selectedCorrectDatasetIndexes;
-      const selectedIncorrectIndexes = indexes;
-      const selectedIndexes = [
-        ...selectedCorrectIndexes,
-        ...selectedIncorrectIndexes
-      ];
-      selectionDetails = {
-        selectedAllSelectedIndexes: selectedIndexes,
-        selectedCorrectDatasetIndexes: selectedCorrectIndexes,
-        selectedDatasetIndexes: selectedIndexes,
-        selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
-      } as ISelectionDetails;
-      return this.updateViewedFeatureImportances(
+    let selectionDetails = this.state.selectionDetails;
+    const selectedCorrectIndexes =
+      selectionDetails.selectedCorrectDatasetIndexes;
+    const selectedIncorrectIndexes = indexes;
+    const selectedIndexes = [
+      ...selectedCorrectIndexes,
+      ...selectedIncorrectIndexes
+    ];
+    selectionDetails = {
+      selectedAllSelectedIndexes: selectedIndexes,
+      selectedCorrectDatasetIndexes: selectedCorrectIndexes,
+      selectedDatasetIndexes: selectedIndexes,
+      selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
+    } as ISelectionDetails;
+    this.setState(
+      this.updateViewedFeatureImportances(
         selectionDetails,
         PredictionTabKeys.IncorrectPredictionTab
-      );
-    };
-    this.setState(reloadDataFunc);
+      )
+    );
   }
 
   private updateAllSelectedIndexes(indexes: number[]): void {
-    const reloadDataFunc = (
-      state: Readonly<IIndividualFeatureImportanceState>
-    ): IIndividualFeatureImportanceState => {
-      let selectionDetails = state.selectionDetails;
-      selectionDetails = {
-        selectedAllSelectedIndexes: indexes,
-        selectedCorrectDatasetIndexes:
-          selectionDetails.selectedCorrectDatasetIndexes,
-        selectedDatasetIndexes: selectionDetails.selectedDatasetIndexes,
-        selectedIncorrectDatasetIndexes:
-          selectionDetails.selectedIncorrectDatasetIndexes
-      } as ISelectionDetails;
-      return this.updateViewedFeatureImportances(
+    let selectionDetails = this.state.selectionDetails;
+    selectionDetails = {
+      selectedAllSelectedIndexes: indexes,
+      selectedCorrectDatasetIndexes:
+        selectionDetails.selectedCorrectDatasetIndexes,
+      selectedDatasetIndexes: selectionDetails.selectedDatasetIndexes,
+      selectedIncorrectDatasetIndexes:
+        selectionDetails.selectedIncorrectDatasetIndexes
+    } as ISelectionDetails;
+    this.setState(
+      this.updateViewedFeatureImportances(
         selectionDetails,
         PredictionTabKeys.AllSelectedTab
-      );
-    };
-    this.setState(reloadDataFunc);
+      )
+    );
   }
 
   private updateViewedFeatureImportances(
