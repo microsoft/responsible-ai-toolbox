@@ -12,3 +12,4 @@ flake8-logging-format==0.6.0
 flake8-rst-docstrings==0.0.13
 requirements-parser==0.2.0
 xgboost<=1.0.0
+shap>=0.20.0, <=0.39.0
