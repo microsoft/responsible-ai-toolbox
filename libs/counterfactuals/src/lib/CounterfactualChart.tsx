@@ -319,6 +319,8 @@ export class CounterfactualChart extends React.PureComponent<
             selectedIndex={this.state.selectedPointsIndexes[0] || 0}
             closePanel={this.togglePanel}
             saveAsPoint={this.saveAsPoint}
+            setCustomRowProperty={this.setCustomRowProperty}
+            temporaryPoint={this.temporaryPoint}
             isPanelOpen={this.state.isPanelOpen}
             data={this.context.counterfactualData}
           />
@@ -961,6 +963,36 @@ export class CounterfactualChart extends React.PureComponent<
       customPoints,
       editingDataCustomIndex
     });
+  };
+
+  private setCustomRowProperty = (
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ): void => {
+    if (!this.temporaryPoint || !newValue) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    this.stringifiedValues[key] = newValue;
+    if (isString) {
+      editingData[key] = newValue;
+      this.forceUpdate();
+    } else {
+      const asNumber = +newValue;
+      // because " " evaluates to 0 in js
+      const isWhitespaceOnly = /^\s*$/.test(newValue);
+      if (Number.isNaN(asNumber) || isWhitespaceOnly) {
+        this.validationErrors[key] =
+          localization.Interpret.WhatIfTab.nonNumericValue;
+        this.forceUpdate();
+      } else {
+        editingData[key] = asNumber;
+        this.validationErrors[key] = undefined;
+        this.forceUpdate();
+        this.fetchData(editingData);
+      }
+    }
   };
 
   private getDataOptions(): IComboBoxOption[] {

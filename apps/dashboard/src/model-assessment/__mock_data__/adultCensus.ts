@@ -2829,10 +2829,10 @@ export const adultCounterfactualData: ICounterfactualData = {
   ],
   featureNames: [
     "row",
-    "sepal length (cm)",
-    "sepal width (cm)",
-    "petal length (cm)",
-    "petal width (cm)",
+    "fnlwgt",
+    "capital-gain",
+    "capital-loss",
+    "hours-per-week",
     "target"
   ]
 };
