@@ -190,11 +190,11 @@ class CausalManager(BaseManager):
 
             config.causal_analysis = analysis
 
-            config.global_effects = analysis.global_causal_effect(
-                alpha=0.05)
+            config.global_effects = analysis._global_causal_effect_dict(
+                alpha=config.alpha)
             X_test = self._test.drop([self._target_column], axis=1)
-            config.local_effects = analysis.local_causal_effect(
-                X_test)
+            config.local_effects = analysis._local_causal_effect_dict(
+                X_test, alpha=config.alpha)
 
             config.policies = []
             if config.treatment_features is not None:
