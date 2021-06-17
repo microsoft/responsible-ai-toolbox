@@ -38,23 +38,31 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
           </div>
           <div className={classNames.section} />
           <div className={classNames.subsection}>
-            <div className={classNames.header}>Basic Information</div>
-            {this.props.currentCohort.cohort.name !== "All data" && (
+            <div className={classNames.header}>
+              {localization.ErrorAnalysis.CohortInfo.basicInformation}
+            </div>
+            {this.props.currentCohort.cohort.name !==
+              localization.ErrorAnalysis.Cohort.defaultLabel && (
               <div>{this.props.currentCohort.cohort.name}</div>
             )}
             <div>
-              All data ({this.props.currentCohort.cohort.filters.length}{" "}
-              filters)
+              {localization.ErrorAnalysis.Cohort.defaultLabel} (
+              {this.props.currentCohort.cohort.filters.length}{" "}
+              {localization.ErrorAnalysis.CohortInfo.filters})
             </div>
           </div>
         </div>
         {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
-            <div>Instances in base cohort</div>
+            <div>
+              {localization.ErrorAnalysis.CohortInfo.baseCohortInstances}
+            </div>
             <Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Total</div>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.CohortInfo.total}
+                </div>
                 <div className={classNames.tableData}>
                   {this.props.currentCohort.cohortStats.totalAll}
                 </div>
@@ -62,7 +70,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               {this.props.currentCohort.cohortStats instanceof
                 ErrorCohortStats && (
                 <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>Correct</div>
+                  <div className={classNames.tableData}>
+                    {localization.ErrorAnalysis.CohortInfo.correct}
+                  </div>
                   <div className={classNames.tableData}>
                     {this.props.currentCohort.cohortStats.totalCorrect}
                   </div>
@@ -71,7 +81,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               {this.props.currentCohort.cohortStats instanceof
                 ErrorCohortStats && (
                 <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>Incorrect</div>
+                  <div className={classNames.tableData}>
+                    {localization.ErrorAnalysis.CohortInfo.incorrect}
+                  </div>
                   <div className={classNames.tableData}>
                     {this.props.currentCohort.cohortStats.totalIncorrect}
                   </div>
@@ -82,10 +94,14 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         </div>
         <div className={classNames.section}>
           <div className={classNames.subsection}>
-            <div>Instances in the selected cohort</div>
+            <div>
+              {localization.ErrorAnalysis.CohortInfo.selectedCohortInstances}
+            </div>
             <Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Total</div>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.CohortInfo.total}
+                </div>
                 <div className={classNames.tableData}>
                   {this.props.currentCohort.cohortStats.totalCohort}
                 </div>
@@ -93,7 +109,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               {this.props.currentCohort.cohortStats instanceof
                 ErrorCohortStats && (
                 <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>Correct</div>
+                  <div className={classNames.tableData}>
+                    {localization.ErrorAnalysis.CohortInfo.correct}
+                  </div>
                   <div className={classNames.tableData}>
                     {this.props.currentCohort.cohortStats.totalCohortCorrect}
                   </div>
@@ -102,7 +120,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
               {this.props.currentCohort.cohortStats instanceof
                 ErrorCohortStats && (
                 <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>Incorrect</div>
+                  <div className={classNames.tableData}>
+                    {localization.ErrorAnalysis.CohortInfo.incorrect}
+                  </div>
                   <div className={classNames.tableData}>
                     {this.props.currentCohort.cohortStats.totalCohortIncorrect}
                   </div>
@@ -114,7 +134,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
           <div className={classNames.subsection}>
-            <div className={classNames.header}>Prediction path (filters)</div>
+            <div className={classNames.header}>
+              {localization.ErrorAnalysis.CohortInfo.predictionPath}
+            </div>
             <PredictionPath temporaryCohort={this.props.currentCohort} />
           </div>
         </div>

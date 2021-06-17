@@ -9,6 +9,9 @@ from .constants import ModelTask
 
 from flask import jsonify, request
 
+DEFAULT_MAX_DEPTH = 3
+DEFAULT_NUM_LEAVES = 31
+
 
 class ErrorAnalysisDashboard(Dashboard):
     """ErrorAnalysis Dashboard Class.
@@ -64,6 +67,12 @@ class ErrorAnalysisDashboard(Dashboard):
         metrics include 'mean_absolute_error', 'mean_squared_error',
         'r2_score', and 'median_absolute_error'.
     :type metric: str
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
     """
 
     def __init__(self, explanation=None, model=None, *, dataset=None,
@@ -71,7 +80,8 @@ class ErrorAnalysisDashboard(Dashboard):
                  locale=None, public_ip=None,
                  categorical_features=None, true_y_dataset=None,
                  pred_y=None, model_task=ModelTask.UNKNOWN,
-                 metric=None):
+                 metric=None, max_depth=DEFAULT_MAX_DEPTH,
+                 num_leaves=DEFAULT_NUM_LEAVES):
         """ErrorAnalysis Dashboard Class.
 
         :param explanation: An object that represents an explanation.
@@ -125,11 +135,18 @@ class ErrorAnalysisDashboard(Dashboard):
             metrics include 'mean_absolute_error', 'mean_squared_error',
             'r2_score', and 'median_absolute_error'.
         :type metric: str
+        :param max_depth: The maximum depth of the surrogate tree trained
+            on errors.
+        :type max_depth: int
+        :param num_leaves: The number of leaves of the surrogate tree
+            trained on errors.
+        :type num_leaves: int
         """
         self.input = ErrorAnalysisDashboardInput(
             explanation, model, dataset, true_y, classes,
             features, categorical_features,
-            true_y_dataset, pred_y, model_task, metric)
+            true_y_dataset, pred_y, model_task, metric,
+            max_depth, num_leaves)
         super(ErrorAnalysisDashboard, self).__init__(
             dashboard_type="ErrorAnalysis",
             model_data=self.input.dashboard_input,

@@ -48,7 +48,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
     let totalError = 0;
     let falseCount = 0;
     let maxMetricValue = 0;
-    let metricName: string;
+    let metricName: string = Metrics.ErrorRate;
     this.props.jsonMatrix.matrix.forEach((row: any) => {
       row.forEach((value: any) => {
         if (value.falseCount !== undefined) {

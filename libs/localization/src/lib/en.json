@@ -666,7 +666,18 @@
     },
     "CohortInfo": {
       "cohortInformation": "Cohort information",
-      "saveCohort": "Save as a new cohort"
+      "saveCohort": "Save as a new cohort",
+      "filters": "filters",
+      "basicInformation": "Basic Information",
+      "baseCohortInstances": "Instances in base cohort",
+      "selectedCohortInstances": "Instances in the selected cohort",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "total": "Total",
+      "predictionPath": "Prediction path (filters)"
+    },
+    "CohortList": {
+      "coverage": "Coverage"
     },
     "EditCohort": {
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort.",
