@@ -93,13 +93,13 @@ def _check_causal_analysis(causal_analysis):
 def _check_global_effects(global_effects):
     assert isinstance(global_effects, dict)
     for attribute in EFFECTS_ATTRIBUTES:
-        assert attribute in global_effects.columns.to_list()
+        assert attribute in global_effects[0].keys()
 
 
 def _check_local_effects(local_effects):
     assert isinstance(local_effects, dict)
     for attribute in EFFECTS_ATTRIBUTES:
-        assert attribute in local_effects.columns.to_list()
+        assert attribute in local_effects[0].keys()
 
 
 def _check_policies(policies):
