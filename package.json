@@ -52,6 +52,7 @@
     "document-register-element": "1.13.1",
     "eslint-plugin-sort-keys-fix": "^1.1.1",
     "jmespath": "^0.15.0",
+    "json5": "^2.2.0",
     "localized-strings": "^0.2.4",
     "lodash": "^4.17.21",
     "memoize-one": "^5.1.1",

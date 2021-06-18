@@ -191,10 +191,12 @@ class CausalManager(BaseManager):
             config.causal_analysis = analysis
 
             config.global_effects = analysis.global_causal_effect(
-                alpha=0.05)
+                alpha=0.05).reset_index().to_dict(orient="records")
             X_test = self._test.drop([self._target_column], axis=1)
             config.local_effects = analysis.local_causal_effect(
-                X_test)
+                X_test).groupby("sample").apply(
+                lambda x: x.reset_index().to_dict(
+                    orient='records')).values.tolist()
 
             config.policies = []
             if config.treatment_features is not None:
@@ -244,12 +246,8 @@ class CausalManager(BaseManager):
 
     def _get_causal(self, causal):
         causal_data = CausalData()
-        causal_data.globalCausalEffects = causal["global_effects"]\
-            .reset_index().to_dict(orient="records")
-        causal_data.localCausalEffects = causal["local_effects"]\
-            .groupby("sample").apply(
-                lambda x: x.reset_index().to_dict(
-                    orient='records')).values
+        causal_data.global_effects = causal["global_effects"]
+        causal_data.local_effects = causal["local_effects"]
         return causal_data
 
     @property

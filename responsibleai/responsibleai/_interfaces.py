@@ -76,8 +76,8 @@ class CausalMetric:
 
 
 class CausalData:
-    globalCausalEffects: List[CausalMetric]
-    localCausalEffects: List[List[CausalMetric]]
+    global_effects: List[CausalMetric]
+    local_effects: List[List[CausalMetric]]
 
 
 class CounterfactualData:
