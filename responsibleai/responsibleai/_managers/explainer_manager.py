@@ -117,6 +117,9 @@ class ExplainerManager(BaseManager):
             return
         if self._is_run:
             return
+        print('Current Status: Explaining {0} features'.format(len(self._features)))
+        import timeit
+        start_time = timeit.default_timer()
         model_task = ModelTask.Unknown
         explainer = MimicExplainer(self._model,
                                    self._initialization_examples,
@@ -125,6 +128,11 @@ class ExplainerManager(BaseManager):
                                    model_task=model_task,
                                    classes=self._classes)
         self._explanation = explainer.explain_global(self._evaluation_examples)
+        self.elapsed = timeit.default_timer() - start_time
+        m, s = divmod(self.elapsed, 60)
+        print('Current Status: Explained {0} features. Time taken: {1} min {2} sec'.format(
+              len(self._features), m, s)
+        )
 
     def get(self):
         """Get the computed explanation.
