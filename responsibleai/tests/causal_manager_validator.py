@@ -3,6 +3,8 @@
 
 import pytest
 
+import pandas as pd
+
 from responsibleai.exceptions import (
     DuplicateManagerConfigException,
     UserConfigValidationException)
@@ -91,15 +93,15 @@ def _check_causal_analysis(causal_analysis):
 
 
 def _check_global_effects(global_effects):
-    assert isinstance(global_effects, dict)
+    assert isinstance(global_effects, pd.DataFrame)
     for attribute in EFFECTS_ATTRIBUTES:
-        assert attribute in global_effects[0].keys()
+        assert attribute in global_effects.columns.to_list()
 
 
 def _check_local_effects(local_effects):
-    assert isinstance(local_effects, dict)
+    assert isinstance(local_effects, pd.DataFrame)
     for attribute in EFFECTS_ATTRIBUTES:
-        assert attribute in local_effects[0].keys()
+        assert attribute in local_effects.columns.to_list()
 
 
 def _check_policies(policies):
