@@ -3,6 +3,6 @@
 
 export interface ICounterfactualData {
   // TODO: remove featureNames when sdk integration
-  cfsList: number[][][];
-  featureNames: string[];
+  cfs_list: number[][][];
+  feature_names: string[];
 }

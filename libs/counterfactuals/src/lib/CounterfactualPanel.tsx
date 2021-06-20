@@ -160,14 +160,14 @@ export class CounterfactualPanel extends React.Component<
   }
   private getItems(): any {
     const items: any = [];
-    const selectedData = this.props.data?.cfsList[
-      this.props.selectedIndex % this.props.data?.cfsList.length
+    const selectedData = this.props.data?.cfs_list[
+      this.props.selectedIndex % this.props.data?.cfs_list.length
     ];
     const originData = selectedData?.[0];
     if (selectedData && originData) {
       selectedData.forEach((point, i) => {
         const temp = {};
-        this.props.data?.featureNames.forEach((f, j) => {
+        this.props.data?.feature_names.forEach((f, j) => {
           if (f === "row") {
             temp[f] = `Row ${i}`;
           } else {
@@ -193,7 +193,7 @@ export class CounterfactualPanel extends React.Component<
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
     if (this.props.data) {
-      this.props.data.featureNames.forEach((f) =>
+      this.props.data.feature_names.forEach((f) =>
         columns.push({
           fieldName: f,
           isResizable: true,

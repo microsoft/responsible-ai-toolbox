@@ -91,7 +91,9 @@
           "upper_bounds",
           "zero_one_loss",
           "global_effects",
-          "local_effects"
+          "local_effects",
+          "cfs_list",
+          "feature_names"
         ]
       }
     ],

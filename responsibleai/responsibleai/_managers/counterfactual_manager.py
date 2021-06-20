@@ -259,9 +259,9 @@ class CounterfactualManager(BaseManager):
     def _get_counterfactual(self, counterfactual):
         counterfactual_data = CounterfactualData()
         json_data = json.loads(counterfactual.to_json())
-        counterfactual_data.cfsList = json_data["cfs_list"]
-        counterfactual_data.featureNames = json_data[
-            "feature_names_including_target"]
+        counterfactual_data.cfs_list = json_data["cfs_list"]
+        counterfactual_data.feature_names = json_data[
+            "feature_names"]
         return counterfactual_data
 
     @property

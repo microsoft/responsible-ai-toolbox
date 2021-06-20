@@ -2615,7 +2615,7 @@ export const adultCensusWithFairnessModelExplanationData: Omit<
 };
 
 export const adultCounterfactualData: ICounterfactualData = {
-  cfsList: [
+  cfs_list: [
     [
       [5, 3.4, 4.3, 2.4, 2],
       [5, 3.4, 5.8, 2.4, 2],
@@ -2827,7 +2827,7 @@ export const adultCounterfactualData: ICounterfactualData = {
       [6, 2.7, 4.3, 1.8, 2]
     ]
   ],
-  featureNames: [
+  feature_names: [
     "row",
     "fnlwgt",
     "capital-gain",
