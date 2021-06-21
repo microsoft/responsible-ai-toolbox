@@ -240,7 +240,12 @@
       "statusbar",
       "stop",
       "toolbar",
-      "top"
+      "top",
+      "summary_importance",
+      "local_importance",
+      "model_type",
+      "desired_class",
+      "desired_range"
     ],
     "no-unexpected-multiline": "error",
     "no-unreachable": "error",

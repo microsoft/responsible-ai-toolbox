@@ -83,6 +83,11 @@ class CausalData:
 class CounterfactualData:
     cfs_list: List[List[List[float]]]
     feature_names: List[str]
+    summary_importance: List[float]
+    local_importance: List[List[float]]
+    model_type: str
+    desired_class: str
+    desired_range: List[float]
 
 
 class ModelAnalysisData:
