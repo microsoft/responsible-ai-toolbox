@@ -29,7 +29,7 @@ class CounterfactualConfig(BaseConfig):
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
-                 features_to_vary=None):
+                 features_to_vary=None, feature_importance=False):
         super(CounterfactualConfig, self).__init__()
         self.method = method
         self.continuous_features = continuous_features
@@ -38,6 +38,7 @@ class CounterfactualConfig(BaseConfig):
         self.desired_class = desired_class
         self.permitted_range = permitted_range
         self.features_to_vary = features_to_vary
+        self.feature_importance = feature_importance
         self.counterfactual_obj = None
         self.has_computation_failed = False
         self.failure_reason = None
@@ -50,7 +51,8 @@ class CounterfactualConfig(BaseConfig):
             self.desired_range == other_cf_config.desired_range and
             self.desired_class == other_cf_config.desired_class and
             self.permitted_range == other_cf_config.permitted_range and
-            self.features_to_vary == other_cf_config.features_to_vary
+            self.features_to_vary == other_cf_config.features_to_vary and
+            self.feature_importance == other_cf_config.feature_importance
         )
 
 
@@ -141,7 +143,8 @@ class CounterfactualManager(BaseManager):
             desired_class=None,
             desired_range=None,
             permitted_range=None,
-            features_to_vary=None):
+            features_to_vary=None,
+            feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
         :param continuous_features: List of names of continuous features.
@@ -166,6 +169,9 @@ class CounterfactualManager(BaseManager):
         :param features_to_vary: Either a string "all" or a list of
                                  feature names to vary.
         :type features_to_vary: list
+        :param feature_importance: Flag to compute feature importance using
+                                   dice-ml.
+        :type feature_importance: bool
         """
 
         counterfactual_config = CounterfactualConfig(
@@ -175,7 +181,8 @@ class CounterfactualManager(BaseManager):
             desired_class=desired_class,
             desired_range=desired_range,
             permitted_range=permitted_range,
-            features_to_vary=features_to_vary)
+            features_to_vary=features_to_vary,
+            feature_importance=feature_importance)
 
         self._add_counterfactual_config(counterfactual_config)
 
@@ -192,11 +199,19 @@ class CounterfactualManager(BaseManager):
 
                     X_test = self._test.drop([self._target_column], axis=1)
 
-                    counterfactual_obj = \
-                        dice_explainer.generate_counterfactuals(
-                            X_test, total_CFs=cf_config.total_CFs,
-                            desired_class=cf_config.desired_class,
-                            desired_range=cf_config.desired_range)
+                    if not cf_config.feature_importance:
+                        counterfactual_obj = \
+                            dice_explainer.generate_counterfactuals(
+                                X_test, total_CFs=cf_config.total_CFs,
+                                desired_class=cf_config.desired_class,
+                                desired_range=cf_config.desired_range)
+                    else:
+                        counterfactual_obj = \
+                            dice_explainer.global_feature_importance(
+                                X_test,
+                                total_CFs=cf_config.total_CFs,
+                                desired_class=cf_config.desired_class,
+                                desired_range=cf_config.desired_range)
 
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
