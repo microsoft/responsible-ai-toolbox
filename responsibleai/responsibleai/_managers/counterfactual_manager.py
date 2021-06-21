@@ -144,7 +144,7 @@ class CounterfactualManager(BaseManager):
             desired_range=None,
             permitted_range=None,
             features_to_vary=None,
-            feature_importance=False):
+            feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
         :param continuous_features: List of names of continuous features.
