@@ -91,7 +91,10 @@
           "upper_bounds",
           "zero_one_loss",
           "global_effects",
-          "local_effects"
+          "local_effects",
+          "local_policies",
+          "policy_tree",
+          "policy_gains"
         ]
       }
     ],

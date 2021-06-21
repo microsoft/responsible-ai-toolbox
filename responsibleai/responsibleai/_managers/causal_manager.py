@@ -13,7 +13,7 @@ from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
 from responsibleai.modelanalysis.constants import ModelTask
-from responsibleai._interfaces import CausalData
+from responsibleai._interfaces import CausalData, CausalTreatmentPolicy
 
 
 class CausalConstants:
@@ -199,7 +199,7 @@ class CausalManager(BaseManager):
             config.policies = []
             if config.treatment_features is not None:
                 for treatment_feature in config.treatment_features:
-                    local_policies = analysis._individualized_policy_dict(
+                    local_policies = analysis.individualized_policy(
                         X_test, treatment_feature,
                         treatment_costs=config.treatment_cost,
                         alpha=config.alpha)
@@ -250,6 +250,13 @@ class CausalManager(BaseManager):
             .groupby("sample").apply(
                 lambda x: x.reset_index().to_dict(
                     orient='records')).values
+        if causal["policy"] is not None:
+            policy = causal["policy"]
+            causal_data.policy = CausalTreatmentPolicy()
+            causal_data.policy.local_policies = policy["local_policies"]\
+                .reset_index().to_dict(orient="records")
+            causal_data.policy.policy_tree = policy["policy_tree"]
+            causal_data.policy.policy_gains = policy["policy_gains"]
         return causal_data
 
     @property

@@ -75,9 +75,16 @@ class CausalMetric:
     zstat: float
 
 
+class CausalTreatmentPolicy:
+    local_policies: list
+    policy_tree: dict
+    policy_gains: dict
+
+
 class CausalData:
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
+    policy: CausalTreatmentPolicy
 
 
 class CounterfactualData:
