@@ -89,7 +89,9 @@
           "true_positive_rate_difference",
           "true_positive_rate_ratio",
           "upper_bounds",
-          "zero_one_loss"
+          "zero_one_loss",
+          "global_effects",
+          "local_effects"
         ]
       }
     ],
