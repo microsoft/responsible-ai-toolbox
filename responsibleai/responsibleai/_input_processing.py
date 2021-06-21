@@ -107,10 +107,10 @@ def _convert_to_string_list_dict(
 
 
 def _safe_object_serializer(o):
-    return _serialize_json_safe(o, True)
+    return _serialize_json_safe(o, for_object=True)
 
 
-def _serialize_json_safe(o, forObject=False):
+def _serialize_json_safe(o, for_object=False):
     """
     Convert a value into something that is safe to parse into JSON.
 
@@ -137,4 +137,4 @@ def _serialize_json_safe(o, forObject=False):
         try:
             return o.item()
         except Exception:
-            return o.__dict__ if forObject else o
+            return o.__dict__ if for_object else o

@@ -25,14 +25,15 @@ class CausalConstants:
 class CausalConfig(BaseConfig):
     def __init__(
         self,
-        treatment_features=None,
-        nuisance_model=None,
-        heterogeneity_model=None,
-        alpha=0.05,
-        max_cat_expansion=5,
-        treatment_cost=0,
-        min_tree_leaf_samples=2,
-        max_tree_depth=3,
+        treatment_features,
+        nuisance_model,
+        heterogeneity_model,
+        alpha,
+        max_cat_expansion,
+        treatment_cost,
+        min_tree_leaf_samples,
+        max_tree_depth,
+        skip_cat_limit_checks,
     ):
         super().__init__()
         self.treatment_features = treatment_features
@@ -43,11 +44,14 @@ class CausalConfig(BaseConfig):
         self.treatment_cost = treatment_cost
         self.min_tree_leaf_samples = min_tree_leaf_samples
         self.max_tree_depth = max_tree_depth
+        self.skip_cat_limit_checks = skip_cat_limit_checks
 
         # Outputs
         self.causal_analysis = None
         self.global_effects = None
         self.local_effects = None
+        self.global_effects_dict = None
+        self.local_effects_dict = None
         self.policies = None
 
     def __eq__(self, other):
@@ -61,6 +65,7 @@ class CausalConfig(BaseConfig):
             self.treatment_cost == other.treatment_cost,
             self.min_tree_leaf_samples == other.min_tree_leaf_samples,
             self.max_tree_depth == other.max_tree_depth,
+            self.skip_cat_limit_checks == other.skip_cat_limit_checks,
         ])
 
     def __repr__(self):
@@ -72,18 +77,28 @@ class CausalConfig(BaseConfig):
                 f"max_cat_expansion={self.max_cat_expansion}, "
                 f"treatment_cost={self.treatment_cost}, "
                 f"min_tree_leaf_samples={self.min_tree_leaf_samples}, "
-                f"max_tree_depth={self.max_tree_depth})")
+                f"max_tree_depth={self.max_tree_depth}, "
+                f"skip_cat_limit_checks={self.skip_cat_limit_checks})")
 
     def to_result(self):
         return {
             'causal_analysis': self.causal_analysis,
             'global_effects': self.global_effects,
+            'global_effects_dict': self.global_effects_dict,
             'local_effects': self.local_effects,
+            'local_effects_dict': self.local_effects_dict,
             'policies': self.policies,
         }
 
 
 class CausalManager(BaseManager):
+    TREATMENT_FEATURE = 'treatment_feature'
+    LOCAL_POLICIES = 'local_policies'
+    POLICY_TREE = 'policy_tree'
+    POLICY_GAINS = 'policy_gains'
+    RECOMMENDED_POLICY_GAINS = 'recommended_policy_gains'
+    TREATMENT_GAINS = 'treatment_gains'
+
     def __init__(self, train, test, target_column, task_type,
                  categorical_features):
         """Construct a CausalManager for generating causal analyses
@@ -119,6 +134,7 @@ class CausalManager(BaseManager):
         treatment_cost=0,
         min_tree_leaf_samples=2,
         max_tree_depth=3,
+        skip_cat_limit_checks=False,
     ):
         """Add a causal configuration to be computed later.
         :param treatment_features: All treatment feature names.
@@ -140,6 +156,12 @@ class CausalManager(BaseManager):
         :type min_tree_leaf_samples: int
         :param max_tree_depth: Maximum depth of policy tree.
         :type max_tree_depth: int
+        :param skip_cat_limit_checks: By default, categorical features need
+                                      to have several instances of each
+                                      category in order for a model to be
+                                      fit robustly. Setting this to True
+                                      will skip these checks.
+        :type skip_cat_limit_checks: bool
         """
         causal_config = CausalConfig(
             treatment_features=treatment_features,
@@ -149,7 +171,8 @@ class CausalManager(BaseManager):
             max_cat_expansion=max_cat_expansion,
             treatment_cost=treatment_cost,
             min_tree_leaf_samples=min_tree_leaf_samples,
-            max_tree_depth=max_tree_depth)
+            max_tree_depth=max_tree_depth,
+            skip_cat_limit_checks=skip_cat_limit_checks)
 
         if causal_config.is_duplicate(self._causal_config_list):
             raise DuplicateManagerConfigException(
@@ -158,7 +181,7 @@ class CausalManager(BaseManager):
         self._causal_config_list.append(causal_config)
 
     def compute(self):
-        """Computes the causal effects by running the causal configuration."""
+        """Computes the causal insights by running the causal configuration."""
         for config in self._causal_config_list:
             if config.is_computed:
                 continue
@@ -185,21 +208,29 @@ class CausalManager(BaseManager):
                 classification=is_classification,
                 nuisance_models=config.nuisance_model,
                 upper_bound_on_cat_expansion=config.max_cat_expansion,
+                skip_cat_limit_checks=config.skip_cat_limit_checks,
                 n_jobs=-1)
             analysis.fit(X, y)
 
             config.causal_analysis = analysis
 
+            X_test = self._test.drop([self._target_column], axis=1)
+
             config.global_effects = analysis.global_causal_effect(
                 alpha=config.alpha)
-            X_test = self._test.drop([self._target_column], axis=1)
             config.local_effects = analysis.local_causal_effect(
+                X_test, alpha=config.alpha)
+
+            config.global_effects_dict = analysis._global_causal_effect_dict(
+                alpha=config.alpha)
+            config.local_effects_dict = analysis._local_causal_effect_dict(
                 X_test, alpha=config.alpha)
 
             config.policies = []
             if config.treatment_features is not None:
                 for treatment_feature in config.treatment_features:
-                    local_policies = analysis._individualized_policy_dict(
+                    # TODO: Update to dataframe
+                    local_policies = analysis.individualized_policy(
                         X_test, treatment_feature,
                         treatment_costs=config.treatment_cost,
                         alpha=config.alpha)
@@ -213,17 +244,18 @@ class CausalManager(BaseManager):
                             alpha=config.alpha)
 
                     policy = {
-                        'local_policies': local_policies,
-                        'policy_tree': policy_tree,
-                        'policy_gains': {
-                            'recommended_policy_gains': recommended_gains,
-                            'treatment_gains': treatment_gains,
+                        self.TREATMENT_FEATURE: treatment_feature,
+                        self.LOCAL_POLICIES: local_policies,
+                        self.POLICY_TREE: policy_tree,
+                        self.POLICY_GAINS: {
+                            self.RECOMMENDED_POLICY_GAINS: recommended_gains,
+                            self.TREATMENT_GAINS: treatment_gains,
                         }
                     }
                     config.policies.append(policy)
 
     def get(self):
-        """Get the computed causal effects."""
+        """Get the computed causal insights."""
         results = []
         for config in self._causal_config_list:
             if config.is_computed:
@@ -239,17 +271,20 @@ class CausalManager(BaseManager):
         :return: A array of CausalData.
         :rtype: List[CausalData]
         """
-        return [self._get_causal(i)
-                for i in self.get()]
+        return [self._get_causal(insights) for insights in self.get()]
 
-    def _get_causal(self, causal):
+    def _get_causal(self, causal_insights):
         causal_data = CausalData()
-        causal_data.global_effects = causal["global_effects"]\
-            .reset_index().to_dict(orient="records")
-        causal_data.local_effects = causal["local_effects"]\
-            .groupby("sample").apply(
+        causal_data.global_effects = causal_insights['global_effects']\
+            .reset_index().to_dict(orient='records')
+        causal_data.local_effects = causal_insights['local_effects']\
+            .groupby('sample').apply(
                 lambda x: x.reset_index().to_dict(
                     orient='records')).values
+
+        # TODO: serialize individual policies, reset index too
+
+        causal_data.policies = causal_insights['policies']
         return causal_data
 
     @property
