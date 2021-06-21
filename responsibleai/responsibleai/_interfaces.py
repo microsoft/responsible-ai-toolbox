@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 
 class Dataset:
@@ -87,7 +87,7 @@ class CounterfactualData:
     local_importance: List[List[float]]
     model_type: str
     desired_class: str
-    desired_range: List[float]
+    desired_range: List[Tuple[float]]
 
 
 class ModelAnalysisData:
