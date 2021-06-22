@@ -137,4 +137,4 @@ def _serialize_json_safe(o, for_object=False):
         try:
             return o.item()
         except Exception:
-            return o.__dict__ if for_object else o
+            return _serialize_json_safe(o.__dict__) if for_object else o

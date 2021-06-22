@@ -8,12 +8,14 @@ import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._config.base_config import BaseConfig
+from responsibleai._interfaces import (
+    CausalData, CausalPolicy, CausalPolicyGains,
+    CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
 from responsibleai.modelanalysis.constants import ModelTask
-from responsibleai._interfaces import CausalData
 
 
 class CausalConstants:
@@ -50,8 +52,6 @@ class CausalConfig(BaseConfig):
         self.causal_analysis = None
         self.global_effects = None
         self.local_effects = None
-        self.global_effects_dict = None
-        self.local_effects_dict = None
         self.policies = None
 
     def __eq__(self, other):
@@ -84,9 +84,7 @@ class CausalConfig(BaseConfig):
         return {
             'causal_analysis': self.causal_analysis,
             'global_effects': self.global_effects,
-            'global_effects_dict': self.global_effects_dict,
             'local_effects': self.local_effects,
-            'local_effects_dict': self.local_effects_dict,
             'policies': self.policies,
         }
 
@@ -98,6 +96,14 @@ class CausalManager(BaseManager):
     POLICY_GAINS = 'policy_gains'
     RECOMMENDED_POLICY_GAINS = 'recommended_policy_gains'
     TREATMENT_GAINS = 'treatment_gains'
+
+    LEAF = 'leaf'
+    N_SAMPLES = 'n_samples'
+    TREATMENT = 'treatment'
+    FEATURE = 'feature'
+    THRESHOLD = 'threshold'
+    LEFT = 'left'
+    RIGHT = 'right'
 
     def __init__(self, train, test, target_column, task_type,
                  categorical_features):
@@ -221,11 +227,6 @@ class CausalManager(BaseManager):
             config.local_effects = analysis.local_causal_effect(
                 X_test, alpha=config.alpha)
 
-            config.global_effects_dict = analysis._global_causal_effect_dict(
-                alpha=config.alpha)
-            config.local_effects_dict = analysis._local_causal_effect_dict(
-                X_test, alpha=config.alpha)
-
             config.policies = []
             if config.treatment_features is not None:
                 for treatment_feature in config.treatment_features:
@@ -246,11 +247,11 @@ class CausalManager(BaseManager):
                     policy = {
                         self.TREATMENT_FEATURE: treatment_feature,
                         self.LOCAL_POLICIES: local_policies,
-                        self.POLICY_TREE: policy_tree,
                         self.POLICY_GAINS: {
                             self.RECOMMENDED_POLICY_GAINS: recommended_gains,
                             self.TREATMENT_GAINS: treatment_gains,
-                        }
+                        },
+                        self.POLICY_TREE: policy_tree
                     }
                     config.policies.append(policy)
 
@@ -268,24 +269,68 @@ class CausalManager(BaseManager):
     def get_data(self):
         """Get causal data
 
-        :return: A array of CausalData.
+        :return: List of CausalData objects.
         :rtype: List[CausalData]
         """
-        return [self._get_causal(insights) for insights in self.get()]
+        return [self._get_causal_object(insights) for insights in self.get()]
 
-    def _get_causal(self, causal_insights):
+    def _get_causal_object(self, causal_insights):
         causal_data = CausalData()
         causal_data.global_effects = causal_insights['global_effects']\
             .reset_index().to_dict(orient='records')
-        causal_data.local_effects = causal_insights['local_effects']\
-            .groupby('sample').apply(
+        causal_data.local_effects = [list(v) for v in causal_insights[
+            'local_effects'].groupby('sample').apply(
                 lambda x: x.reset_index().to_dict(
-                    orient='records')).values
+                    orient='records')).values]
 
-        # TODO: serialize individual policies, reset index too
+        causal_data.policies = [self._get_policy_object(p) for p in
+                                causal_insights['policies']]
 
-        causal_data.policies = causal_insights['policies']
         return causal_data
+
+    def _get_policy_object(self, policy):
+        policy_object = CausalPolicy()
+        policy_object.treatment_feature = self._get_treatment_feature_object(
+            policy[self.TREATMENT_FEATURE])
+        policy_object.local_policies = self._get_local_policies_object(
+            policy[self.LOCAL_POLICIES])
+        policy_object.policy_gains = self._get_policy_gains_object(
+            policy[self.POLICY_GAINS])
+        policy_object.policy_tree = self._get_policy_tree_object(
+            policy[self.POLICY_TREE])
+        return policy_object
+
+    def _get_treatment_feature_object(self, treatment_feature):
+        return treatment_feature
+
+    def _get_local_policies_object(self, local_policies):
+        return local_policies.reset_index().\
+            to_dict(orient='records')
+
+    def _get_policy_tree_object(self, policy_tree):
+        if policy_tree[self.LEAF]:
+            policy_tree_object = CausalPolicyTreeLeaf()
+            policy_tree_object.leaf = policy_tree[self.LEAF]
+            policy_tree_object.n_samples = policy_tree[self.N_SAMPLES]
+            policy_tree_object.treatment = policy_tree[self.TREATMENT]
+        else:
+            policy_tree_object = CausalPolicyTreeInternal()
+            policy_tree_object.leaf = policy_tree[self.LEAF]
+            policy_tree_object.feature = policy_tree[self.FEATURE]
+            policy_tree_object.threshold = policy_tree[self.THRESHOLD]
+            policy_tree_object.left = self._get_policy_tree_object(
+                policy_tree[self.LEFT])
+            policy_tree_object.right = self._get_policy_tree_object(
+                policy_tree[self.RIGHT])
+        return policy_tree_object
+
+    def _get_policy_gains_object(self, policy_gains):
+        policy_gains_object = CausalPolicyGains()
+        policy_gains_object.recommended_policy_gains = \
+            policy_gains[self.RECOMMENDED_POLICY_GAINS]
+        policy_gains_object.treatment_gains = \
+            policy_gains[self.TREATMENT_GAINS]
+        return policy_gains_object
 
     @property
     def name(self):

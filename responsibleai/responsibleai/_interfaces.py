@@ -89,16 +89,16 @@ class CausalPolicyTreeLeaf:
 class CausalPolicyTreeInternal:
     leaf: bool
     feature: str
+    threshold: Union[float, str]  # TODO: Categorical features
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
-    threshold: Union[float, str]  # TODO: Categorical features
 
 
 class CausalPolicy:
     treatment_feature: str
     local_policies: Dict[str, List[float]]
-    policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
     policy_gains: CausalPolicyGains
+    policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
 
 class CausalData:
