@@ -4,6 +4,7 @@
 # Defines common utilities for error analysis tests
 import numpy as np
 import pandas as pd
+import shap
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
 from sklearn.datasets import (
@@ -12,6 +13,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import (
     StandardScaler, OneHotEncoder, FunctionTransformer)
@@ -50,6 +52,12 @@ def create_sklearn_svm_classifier(X, y, probability=True):
     return model
 
 
+def create_kneighbors_classifier(X, y):
+    knn = KNeighborsClassifier()
+    model = knn.fit(X, y)
+    return model
+
+
 def create_sklearn_logistic_regressor(X, y, pipeline=False):
     lin = LogisticRegression(solver='liblinear')
     if pipeline:
@@ -74,6 +82,24 @@ def create_iris_data():
     feature_names = [name.replace(' (cm)', '') for name in iris.feature_names]
     classes = iris.target_names
     return X_train, X_test, y_train, y_validation, feature_names, classes
+
+
+def create_adult_census_data():
+    X, y = shap.datasets.adult()
+    y = [1 if r else 0 for r in y]
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=7, stratify=y)
+
+    categorical_features = ['Workclass',
+                            'Education-Num',
+                            'Marital Status',
+                            'Occupation',
+                            'Relationship',
+                            'Race',
+                            'Sex',
+                            'Country']
+    return X_train, X_test, y_train, y_test, categorical_features
 
 
 def create_cancer_data():
