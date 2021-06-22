@@ -261,6 +261,8 @@ class CounterfactualManager(BaseManager):
         json_data = json.loads(counterfactual.to_json())
         cfdata.cfs_list = json_data["cfs_list"]
         cfdata.feature_names = json_data["feature_names"]
+        cfdata.feature_names_including_target = json_data[
+            "feature_names_including_target"]
         cfdata.summary_importance = json_data["summary_importance"]
         cfdata.local_importance = json_data["local_importance"]
         cfdata.model_type = json_data["model_type"]
