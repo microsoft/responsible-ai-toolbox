@@ -28,6 +28,7 @@ class CausalConfig(BaseConfig):
     def __init__(
         self,
         treatment_features,
+        heterogeneity_features,
         nuisance_model,
         heterogeneity_model,
         alpha,
@@ -39,6 +40,7 @@ class CausalConfig(BaseConfig):
     ):
         super().__init__()
         self.treatment_features = treatment_features
+        self.heterogeneity_features = heterogeneity_features
         self.nuisance_model = nuisance_model
         self.heterogeneity_model = heterogeneity_model
         self.alpha = alpha
@@ -58,6 +60,8 @@ class CausalConfig(BaseConfig):
         return all([
             np.array_equal(self.treatment_features,
                            other.treatment_features),
+            np.array_equal(self.heterogeneity_features,
+                           other.heterogeneity_features),
             self.nuisance_model == other.nuisance_model,
             self.heterogeneity_model == other.heterogeneity_model,
             self.alpha == other.alpha,
@@ -71,6 +75,7 @@ class CausalConfig(BaseConfig):
     def __repr__(self):
         return ("CausalConfig("
                 f"treatment_features={self.treatment_features}, "
+                f"heterogeneity_features={self.heterogeneity_features}, "
                 f"nuisance_model={self.nuisance_model}, "
                 f"heterogeneity_model={self.heterogeneity_model}, "
                 f"alpha={self.alpha}, "
@@ -132,7 +137,8 @@ class CausalManager(BaseManager):
 
     def add(
         self,
-        treatment_features=None,
+        treatment_features,
+        heterogeneity_features=None,
         nuisance_model=CausalConstants.AUTOML,
         heterogeneity_model=None,
         alpha=0.05,
@@ -143,8 +149,10 @@ class CausalManager(BaseManager):
         skip_cat_limit_checks=False,
     ):
         """Add a causal configuration to be computed later.
-        :param treatment_features: All treatment feature names.
+        :param treatment_features: Treatment feature names.
         :type treatment_features: list
+        :param heterogeneity_features: Features that mediate the causal effect.
+        :type heterogeneity_features: list
         :param nuisance_model: Model type to use for nuisance estimation.
         :type nuisance_model: str
         :param heterogeneity_model: Model type to use for
@@ -170,7 +178,8 @@ class CausalManager(BaseManager):
         :type skip_cat_limit_checks: bool
         """
         causal_config = CausalConfig(
-            treatment_features=treatment_features,
+            treatment_features,
+            heterogeneity_features=heterogeneity_features,
             nuisance_model=nuisance_model,
             heterogeneity_model=heterogeneity_model,
             alpha=alpha,
@@ -208,9 +217,9 @@ class CausalManager(BaseManager):
                 self._target_column].values.ravel()
 
             analysis = CausalAnalysis(
-                X.columns.values.tolist(),
+                config.treatment_features,
                 self._categorical_features,
-                heterogeneity_inds=config.treatment_features,
+                heterogeneity_inds=config.heterogeneity_features,
                 classification=is_classification,
                 nuisance_models=config.nuisance_model,
                 upper_bound_on_cat_expansion=config.max_cat_expansion,
