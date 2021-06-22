@@ -257,12 +257,18 @@ class CounterfactualManager(BaseManager):
             self._get_counterfactual(i) for i in self.get()]
 
     def _get_counterfactual(self, counterfactual):
-        counterfactual_data = CounterfactualData()
+        cfdata = CounterfactualData()
         json_data = json.loads(counterfactual.to_json())
-        counterfactual_data.cfsList = json_data["cfs_list"]
-        counterfactual_data.featureNames = json_data[
+        cfdata.cfs_list = json_data["cfs_list"]
+        cfdata.feature_names = json_data["feature_names"]
+        cfdata.feature_names_including_target = json_data[
             "feature_names_including_target"]
-        return counterfactual_data
+        cfdata.summary_importance = json_data["summary_importance"]
+        cfdata.local_importance = json_data["local_importance"]
+        cfdata.model_type = json_data["model_type"]
+        cfdata.desired_class = json_data["desired_class"]
+        cfdata.desired_range = json_data["desired_range"]
+        return cfdata
 
     @property
     def name(self):
