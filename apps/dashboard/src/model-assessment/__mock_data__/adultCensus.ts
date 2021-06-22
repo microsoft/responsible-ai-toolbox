@@ -2832,6 +2832,13 @@ export const adultCounterfactualData: ICounterfactualData = {
     "fnlwgt",
     "capital-gain",
     "capital-loss",
+    "hours-per-week"
+  ],
+  feature_names_including_target: [
+    "row",
+    "fnlwgt",
+    "capital-gain",
+    "capital-loss",
     "hours-per-week",
     "target"
   ]
