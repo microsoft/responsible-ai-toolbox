@@ -61,7 +61,7 @@ class ExplainerManager(BaseManager):
     """
 
     def __init__(self, model, initialization_examples, evaluation_examples,
-                 target_column, classes=None):
+                 target_column, classes=None, categorical_features=None):
         """Defines the ExplainerManager for explaining a model.
 
         :param model: The model to explain.
@@ -95,6 +95,7 @@ class ExplainerManager(BaseManager):
         self._classes = classes
         self._target_column = target_column
         self._explanation = None
+        self._categorical_features = categorical_features
 
     def add(self):
         """Add an explainer to be computed later."""
@@ -123,7 +124,8 @@ class ExplainerManager(BaseManager):
                                    self._surrogate_model,
                                    features=self._features,
                                    model_task=model_task,
-                                   classes=self._classes)
+                                   classes=self._classes,
+                                   categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
 
     def get(self):
