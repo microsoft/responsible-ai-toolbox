@@ -239,7 +239,6 @@ class CausalManager(BaseManager):
             config.policies = []
             if config.treatment_features is not None:
                 for treatment_feature in config.treatment_features:
-                    # TODO: Update to dataframe
                     local_policies = analysis.individualized_policy(
                         X_test, treatment_feature,
                         treatment_costs=config.treatment_cost,
