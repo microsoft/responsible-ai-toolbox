@@ -240,7 +240,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         weightVectorOptions={this.state.weightVectorOptions}
                         weightVectorLabels={this.state.weightVectorLabels}
                         requestPredictions={this.props.requestPredictions}
-                        stringParams={this.props.stringParams}
                         onWeightVectorChange={this.onWeightVectorChange}
                       />
                     )}

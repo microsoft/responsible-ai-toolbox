@@ -38,7 +38,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ITableState } from "../../Utils/DatasetUtils";
+import { ITableState } from "@responsible-ai/core-ui";
 
 import { updateItems, updatePercents, sortByPercent } from "./FeatureListUtils";
 

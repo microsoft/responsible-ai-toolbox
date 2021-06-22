@@ -4,7 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 import { IColumn } from "office-ui-fabric-react";
 
-import { ITableState } from "../../Utils/DatasetUtils";
+import { ITableState } from "@responsible-ai/core-ui";
 
 export function updateItems(
   percents: number[],

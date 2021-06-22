@@ -8,7 +8,7 @@ import {
   ModelAssessmentContext,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
-import { GlobalExplanationTab, IStringsParam } from "@responsible-ai/interpret";
+import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
@@ -23,7 +23,6 @@ import * as React from "react";
 import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
-  stringParams?: IStringsParam;
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
@@ -135,12 +134,8 @@ export class FeatureImportancesTab extends React.PureComponent<
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.LocalExplanation && (
           <IndividualFeatureImportanceView
-            messages={
-              this.props.stringParams
-                ? this.props.stringParams.contextualHelp
-                : undefined
-            }
-            features={this.context.dataset.featureNames}
+            features={this.context.modelMetadata.featureNames}
+            jointDataset={this.context.jointDataset}
             invokeModel={this.props.requestPredictions}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightVectorOptions}

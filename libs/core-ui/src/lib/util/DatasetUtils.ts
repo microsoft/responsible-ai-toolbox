@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
+import { JointDataset } from "../util/JointDataset";
 import { IColumn } from "office-ui-fabric-react";
 
 export interface ITableState {

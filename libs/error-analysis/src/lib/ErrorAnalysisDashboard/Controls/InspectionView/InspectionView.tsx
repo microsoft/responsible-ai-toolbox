@@ -7,7 +7,9 @@ import {
   ModelExplanationUtils,
   IExplanationModelMetadata,
   ErrorCohort,
-  FabricStyles
+  FabricStyles,
+  constructRows,
+  constructCols
 } from "@responsible-ai/core-ui";
 import { LocalImportancePlots, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -28,7 +30,6 @@ import {
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { constructRows, constructCols } from "../../Utils/DatasetUtils";
 
 export interface IInspectionViewProps {
   theme?: ITheme;
