@@ -29,9 +29,9 @@ def serialize_json_safe(o: Any):
         return tuple(serialize_json_safe(v) for v in o)
     elif isinstance(o, np.ndarray):
         return serialize_json_safe(o.tolist())
+    elif hasattr(o, 'item'):
+        return o.item()  # numpy types
+    elif hasattr(o, '__dict__'):
+        return serialize_json_safe(o.__dict__)  # objects
     else:
-        # Attempt to convert Numpy type
-        try:
-            return o.item()
-        except Exception:
-            return serialize_json_safe(o.__dict__)
+        return o

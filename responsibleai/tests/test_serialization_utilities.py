@@ -23,3 +23,8 @@ class TestSerializationUtilities:
     def test_numpy(self):
         result = serialize_json_safe(np.array([1, 2, 3]))
         assert result == [1, 2, 3]
+
+    def test_unknown(self):
+        c = complex(1, 2)
+        result = serialize_json_safe([c, 42])
+        assert result == [c, 42]
