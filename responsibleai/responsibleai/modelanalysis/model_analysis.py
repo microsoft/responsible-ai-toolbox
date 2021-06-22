@@ -101,10 +101,11 @@ class ModelAnalysis(object):
             self._classes = train[target_column].unique()
         else:
             self._classes = train_labels
-        self._explainer_manager = ExplainerManager(model, train, test,
-                                                   target_column,
-                                                   self._classes,
-                                                   categorical_features=categorical_features)
+        self._explainer_manager = ExplainerManager(
+            model, train, test,
+            target_column,
+            self._classes,
+            categorical_features=categorical_features)
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
                           self._error_analysis_manager,

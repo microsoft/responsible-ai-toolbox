@@ -119,13 +119,14 @@ class ExplainerManager(BaseManager):
         if self._is_run:
             return
         model_task = ModelTask.Unknown
-        explainer = MimicExplainer(self._model,
-                                   self._initialization_examples,
-                                   self._surrogate_model,
-                                   features=self._features,
-                                   model_task=model_task,
-                                   classes=self._classes,
-                                   categorical_features=self._categorical_features)
+        explainer = MimicExplainer(
+            self._model,
+            self._initialization_examples,
+            self._surrogate_model,
+            features=self._features,
+            model_task=model_task,
+            classes=self._classes,
+            categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
 
     def get(self):
