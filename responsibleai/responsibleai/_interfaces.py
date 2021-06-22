@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 
 class Dataset:
@@ -81,8 +81,14 @@ class CausalData:
 
 
 class CounterfactualData:
-    cfsList: List[List[List[float]]]
-    featureNames: List[float]
+    cfs_list: List[List[List[float]]]
+    feature_names: List[str]
+    feature_names_including_target: List[str]
+    summary_importance: List[float]
+    local_importance: List[List[float]]
+    model_type: str
+    desired_class: str
+    desired_range: List[Tuple[float]]
 
 
 class ModelAnalysisData:
