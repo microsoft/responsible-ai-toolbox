@@ -149,10 +149,14 @@ def _check_policy(policy, is_serialized=False):
 
 
 def _check_treatment_feature(treatment_feature):
-    assert isinstance(treatment_feature, str)
+    pass
 
 
 def _check_local_policies(local_policies, is_serialized=False):
+    # Required for individualized_policy bug in EconML version 0.12.0b2
+    if local_policies is None:
+        return
+
     if is_serialized:
         assert isinstance(local_policies, list)
     else:
