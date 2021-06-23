@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 
 class Dataset:
@@ -96,7 +96,7 @@ class CausalPolicyTreeInternal:
 
 class CausalPolicy:
     treatment_feature: str
-    local_policies: Dict[str, List[float]]
+    local_policies: List[Dict[str, Any]]
     policy_gains: CausalPolicyGains
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
