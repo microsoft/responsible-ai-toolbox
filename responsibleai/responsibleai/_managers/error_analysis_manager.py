@@ -145,7 +145,7 @@ class ErrorAnalysisManager(BaseManager):
     :type target_column: str
     """
 
-    def __init__(self, model, train, target_column):
+    def __init__(self, model, train, target_column, categorical_features=None):
         """Defines the ErrorAnalysisManager for discovering errors in a model.
 
         :param model: The model to analyze errors on.
@@ -161,8 +161,7 @@ class ErrorAnalysisManager(BaseManager):
         self._y_train = train[target_column]
         self._train = train.drop(columns=[target_column])
         self._feature_names = list(self._train.columns)
-        # TODO: Add categorical features support
-        self._categorical_features = None
+        self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
         self.analyzer = ModelAnalyzer(self._model,
