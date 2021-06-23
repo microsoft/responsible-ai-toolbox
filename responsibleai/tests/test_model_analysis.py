@@ -10,6 +10,7 @@ from .common_utils import (create_boston_data,
                            create_cancer_data,
                            create_iris_data,
                            create_binary_classification_dataset,
+                           create_adult_income_dataset,
                            create_models_classification,
                            create_models_regression)
 
@@ -85,8 +86,26 @@ class TestModelAnalysis(object):
     def test_model_analysis_binary(self, manager_type):
         X_train, y_train, X_test, y_test, classes = \
             create_binary_classification_dataset()
-        X_train = pd.DataFrame(X_train)
-        X_test = pd.DataFrame(X_test)
+
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [0]
+        }
+
+        for model in models:
+            run_model_analysis(model, X_train, X_test, LABELS, [],
+                               manager_type, manager_args,
+                               classes=classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER])
+    def test_model_analysis_binary_mixed_types(self, manager_type):
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test

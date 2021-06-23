@@ -108,6 +108,20 @@ def create_boston_data():
     return X_train, X_test, y_train, y_validation, boston.feature_names
 
 
+def create_adult_income_dataset():
+    from dice_ml.utils import helpers
+    dataset = helpers.load_adult_income_dataset()
+    continuous_features = ['age', 'hours_per_week']
+    target_name = 'income'
+    target = dataset([target_name], axis=1)
+    categorical_features = list(set(dataset.columns) - set(continuous_features)) - set([target_name])
+    # Split data into train and test
+    data_train, data_test, y_train, y_test = train_test_split(
+        dataset, target,
+        test_size=0.2, random_state=7, stratify=target)
+    return data_train, data_test, y_train, y_test, categorical_features, continuous_features, target_name
+
+
 def create_models_classification(X_train, y_train):
     svm_model = create_sklearn_svm_classifier(X_train, y_train)
     log_reg_model = create_sklearn_logistic_regressor(X_train, y_train)
