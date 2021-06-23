@@ -99,7 +99,14 @@
           "true_positive_rate_difference",
           "true_positive_rate_ratio",
           "upper_bounds",
-          "zero_one_loss"
+          "zero_one_loss",
+          "recommended_policy_gains",
+          "treatment_gains",
+          "n_samples",
+          "treatment_feature",
+          "local_policies",
+          "policy_gains",
+          "policy_tree"
         ]
       }
     ],
