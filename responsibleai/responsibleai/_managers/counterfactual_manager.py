@@ -89,7 +89,6 @@ class CounterfactualManager(BaseManager):
         dice_data = dice_ml.Data(dataframe=self._train,
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
-
         model_type = CounterfactualConstants.CLASSIFIER \
             if self._task_type == ModelTask.CLASSIFICATION else \
             CounterfactualConstants.REGRESSOR

@@ -2,15 +2,18 @@
 # Licensed under the MIT License.
 
 # Defines common utilities for responsibleai tests
+from dice_ml.utils import helpers
 import numpy as np
 import pandas as pd
 from sklearn import svm
+from sklearn.compose import ColumnTransformer
 from sklearn.datasets import load_iris, load_breast_cancer, \
     make_classification, load_boston
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 
@@ -109,7 +112,6 @@ def create_boston_data():
 
 
 def create_adult_income_dataset():
-    from dice_ml.utils import helpers
     dataset = helpers.load_adult_income_dataset()
     continuous_features = ['age', 'hours_per_week']
     target_name = 'income'
@@ -128,11 +130,6 @@ def create_adult_income_dataset():
 
 def create_complex_classification_pipeline(
         X_train, y_train, continuous_features, categorical_features):
-    from sklearn.compose import ColumnTransformer
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.pipeline import Pipeline
-    from sklearn.preprocessing import StandardScaler, OneHotEncoder
-
     # We create the preprocessing pipelines for both
     # numeric and categorical data.
     numeric_transformer = Pipeline(steps=[
