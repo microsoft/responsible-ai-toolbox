@@ -37,9 +37,10 @@ LOCAL_POLICY_ATTRIBUTES = [
 def validate_causal(model_analysis, data, target_column,
                     treatment_features, max_cat_expansion):
     # Add the first configuration
-    model_analysis.causal.add(nuisance_model='automl',
-                              treatment_features=treatment_features,
-                              max_cat_expansion=max_cat_expansion)
+    model_analysis.causal.add(
+        treatment_features,
+        nuisance_model='automl',
+        upper_bound_on_cat_expansion=max_cat_expansion)
     model_analysis.causal.compute()
 
     results = model_analysis.causal.get()
@@ -57,9 +58,10 @@ def validate_causal(model_analysis, data, target_column,
     # Add a duplicate configuration
     message = "Duplicate causal configuration detected."
     with pytest.raises(DuplicateManagerConfigException, match=message):
-        model_analysis.causal.add(treatment_features,
-                                  nuisance_model='automl',
-                                  max_cat_expansion=max_cat_expansion)
+        model_analysis.causal.add(
+            treatment_features,
+            nuisance_model='automl',
+            upper_bound_on_cat_expansion=max_cat_expansion)
 
     # Add the second configuration
     model_analysis.causal.add(treatment_features,
