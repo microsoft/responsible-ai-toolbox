@@ -113,13 +113,42 @@ def create_adult_income_dataset():
     dataset = helpers.load_adult_income_dataset()
     continuous_features = ['age', 'hours_per_week']
     target_name = 'income'
-    target = dataset([target_name], axis=1)
-    categorical_features = list(set(dataset.columns) - set(continuous_features)) - set([target_name])
+    target = dataset[target_name]
+    classes = list(np.unique(target))
+    categorical_features = list(set(dataset.columns) - set(continuous_features) - set([target_name]))
     # Split data into train and test
     data_train, data_test, y_train, y_test = train_test_split(
         dataset, target,
         test_size=0.2, random_state=7, stratify=target)
-    return data_train, data_test, y_train, y_test, categorical_features, continuous_features, target_name
+    return data_train, data_test, y_train, y_test, categorical_features, \
+        continuous_features, target_name, classes
+
+
+def create_complex_classification_pipeline(
+        X_train, y_train, continuous_features, categorical_features):
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+    # We create the preprocessing pipelines for both
+    # numeric and categorical data.
+    numeric_transformer = Pipeline(steps=[
+        ('scaler', StandardScaler())])
+
+    categorical_transformer = Pipeline(steps=[
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+    transformations = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, continuous_features),
+            ('cat', categorical_transformer, categorical_features)])
+
+    # Append classifier to preprocessing pipeline.
+    # Now we have a full prediction pipeline.
+    pipeline = Pipeline(steps=[('preprocessor', transformations),
+                            ('classifier', RandomForestClassifier())])
+    return pipeline.fit(X_train, y_train)
 
 
 def create_models_classification(X_train, y_train):

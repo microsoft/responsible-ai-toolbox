@@ -12,6 +12,7 @@ from .common_utils import (create_boston_data,
                            create_binary_classification_dataset,
                            create_adult_income_dataset,
                            create_models_classification,
+                           create_complex_classification_pipeline,
                            create_models_regression)
 
 from responsibleai import ModelAnalysis, ModelTask
@@ -99,24 +100,27 @@ class TestModelAnalysis(object):
                                manager_type, manager_args,
                                classes=classes)
 
-    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
-                                              ManagerNames.ERROR_ANALYSIS,
+    @pytest.mark.parametrize('manager_type', [
+                                            #   ManagerNames.CAUSAL,
+                                            #   ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_binary_mixed_types(self, manager_type):
-        X_train, y_train, X_test, y_test, classes = \
-            create_binary_classification_dataset()
 
-        models = create_models_classification(X_train, y_train)
-        X_train[LABELS] = y_train
-        X_test[LABELS] = y_test
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes = create_adult_income_dataset()
+        X_train = data_train.drop([target_name], axis=1)
+        X_test = data_test.drop([target_name], axis=1)
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features, categorical_features)
         manager_args = {
-            ManagerParams.TREATMENT_FEATURES: [0]
+            ManagerParams.TREATMENT_FEATURES: [0],
+            ManagerParams.DESIRED_CLASS: 'opposite',
+            ManagerParams.FEATURE_IMPORTANCE: False
         }
 
-        for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
-                               manager_type, manager_args,
-                               classes=classes)
+        run_model_analysis(model, data_train, data_test, target_name, categorical_features,
+                           manager_type, manager_args,
+                           classes=classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.COUNTERFACTUAL,
