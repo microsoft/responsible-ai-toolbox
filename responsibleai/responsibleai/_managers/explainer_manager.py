@@ -31,6 +31,7 @@ CLASSES = 'classes'
 U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
+CATEGORICAL_FEATURES = 'categorical_features'
 META_JSON = Metadata.META_JSON
 MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
@@ -61,7 +62,7 @@ class ExplainerManager(BaseManager):
     """
 
     def __init__(self, model, initialization_examples, evaluation_examples,
-                 target_column, classes=None):
+                 target_column, classes=None, categorical_features=None):
         """Defines the ExplainerManager for explaining a model.
 
         :param model: The model to explain.
@@ -95,6 +96,7 @@ class ExplainerManager(BaseManager):
         self._classes = classes
         self._target_column = target_column
         self._explanation = None
+        self._categorical_features = categorical_features
 
     def add(self):
         """Add an explainer to be computed later."""
@@ -118,12 +120,14 @@ class ExplainerManager(BaseManager):
         if self._is_run:
             return
         model_task = ModelTask.Unknown
-        explainer = MimicExplainer(self._model,
-                                   self._initialization_examples,
-                                   self._surrogate_model,
-                                   features=self._features,
-                                   model_task=model_task,
-                                   classes=self._classes)
+        explainer = MimicExplainer(
+            self._model,
+            self._initialization_examples,
+            self._surrogate_model,
+            features=self._features,
+            model_task=model_task,
+            classes=self._classes,
+            categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
 
     def get(self):
@@ -313,6 +317,8 @@ class ExplainerManager(BaseManager):
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
         inst.__dict__['_' + CLASSES] = model_analysis._classes
+        inst.__dict__['_' + CATEGORICAL_FEATURES] = \
+            model_analysis.categorical_features
         target_column = model_analysis.target_column
         train = model_analysis.train.drop(columns=[target_column])
         test = model_analysis.test.drop(columns=[target_column])

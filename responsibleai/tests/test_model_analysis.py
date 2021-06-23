@@ -100,16 +100,15 @@ class TestModelAnalysis(object):
                                manager_type, manager_args,
                                classes=classes)
 
-    @pytest.mark.parametrize('manager_type', [
-                                            #   ManagerNames.CAUSAL,
-                                            #   ManagerNames.ERROR_ANALYSIS,
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_binary_mixed_types(self, manager_type):
 
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = create_adult_income_dataset()
+            continuous_features, target_name, classes = \
+            create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
-        X_test = data_test.drop([target_name], axis=1)
         model = create_complex_classification_pipeline(
             X_train, y_train, continuous_features, categorical_features)
         manager_args = {
@@ -118,7 +117,8 @@ class TestModelAnalysis(object):
             ManagerParams.FEATURE_IMPORTANCE: False
         }
 
-        run_model_analysis(model, data_train, data_test, target_name, categorical_features,
+        run_model_analysis(model, data_train, data_test, target_name,
+                           categorical_features,
                            manager_type, manager_args,
                            classes=classes)
 
@@ -187,8 +187,10 @@ def run_model_analysis(model, train_data, test_data, target_column,
         desired_range = manager_args.get(ManagerParams.DESIRED_RANGE)
         feature_importance = manager_args.get(ManagerParams.FEATURE_IMPORTANCE)
         validate_counterfactual(model_analysis, train_data, target_column,
-                                desired_class, desired_range,
-                                feature_importance)
+                                categorical_features=categorical_features,
+                                desired_class=desired_class,
+                                desired_range=desired_range,
+                                feature_importance=feature_importance)
     elif manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(model_analysis)
     elif manager_type == ManagerNames.EXPLAINER:

@@ -115,7 +115,9 @@ def create_adult_income_dataset():
     target_name = 'income'
     target = dataset[target_name]
     classes = list(np.unique(target))
-    categorical_features = list(set(dataset.columns) - set(continuous_features) - set([target_name]))
+    categorical_features = list(set(dataset.columns) -
+                                set(continuous_features) -
+                                set([target_name]))
     # Split data into train and test
     data_train, data_test, y_train, y_test = train_test_split(
         dataset, target,
@@ -147,7 +149,7 @@ def create_complex_classification_pipeline(
     # Append classifier to preprocessing pipeline.
     # Now we have a full prediction pipeline.
     pipeline = Pipeline(steps=[('preprocessor', transformations),
-                            ('classifier', RandomForestClassifier())])
+                               ('classifier', RandomForestClassifier())])
     return pipeline.fit(X_train, y_train)
 
 
