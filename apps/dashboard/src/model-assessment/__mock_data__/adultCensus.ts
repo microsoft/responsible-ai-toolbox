@@ -5281,7 +5281,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
     ],
     policy_gains: {
       recommended_policy_gains: 12.231,
-      treatment_gains: [6.35, 4.22]
+      treatment_gains: [6.35, 4.22],
+      treatments: ["increase", "decrease"]
     },
     policy_tree: {
       feature: "age",

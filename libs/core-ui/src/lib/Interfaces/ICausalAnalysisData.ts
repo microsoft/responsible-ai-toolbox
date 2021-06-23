@@ -10,6 +10,7 @@ export interface ICausalAnalysisData {
 export interface ICausalPolicyGains {
   recommended_policy_gains: number;
   treatment_gains: number[];
+  treatments: string[];
 }
 
 export interface ICausalPolicyTreeLeaf {

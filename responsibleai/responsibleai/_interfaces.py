@@ -78,6 +78,7 @@ class CausalMetric:
 class CausalPolicyGains:
     recommended_policy_gains: float
     treatment_gains: List[float]
+    treatments: List[str]
 
 
 class CausalPolicyTreeLeaf:
