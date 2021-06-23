@@ -29,6 +29,7 @@ _MODEL_PKL = _MODEL + '.pkl'
 _SERIALIZER = 'serializer'
 _CLASSES = 'classes'
 _MANAGERS = 'managers'
+_CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 
 
@@ -301,7 +302,8 @@ class ModelAnalysis(object):
                             json.dumps(dtypes))
         self._write_to_file(top_dir / _TEST, self.test.to_json())
         meta = {_TARGET_COLUMN: self.target_column,
-                _TASK_TYPE: self.task_type}
+                _TASK_TYPE: self.task_type,
+                _CATEGORICAL_FEATURES: self.categorical_features}
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
@@ -349,6 +351,7 @@ class ModelAnalysis(object):
         inst.__dict__[_TARGET_COLUMN] = target_column
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
         inst.__dict__['_' + _CLASSES] = train[target_column].unique()
+        inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:

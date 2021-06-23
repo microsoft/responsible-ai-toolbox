@@ -31,6 +31,7 @@ CLASSES = 'classes'
 U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
+CATEGORICAL_FEATURES = 'categorical_features'
 META_JSON = Metadata.META_JSON
 MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
@@ -316,6 +317,8 @@ class ExplainerManager(BaseManager):
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
         inst.__dict__['_' + CLASSES] = model_analysis._classes
+        inst.__dict__['_' + CATEGORICAL_FEATURES] = \
+            model_analysis.categorical_features
         target_column = model_analysis.target_column
         train = model_analysis.train.drop(columns=[target_column])
         test = model_analysis.test.drop(columns=[target_column])
