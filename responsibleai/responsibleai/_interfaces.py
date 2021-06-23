@@ -78,16 +78,17 @@ class CausalMetric:
 class CausalPolicyGains:
     recommended_policy_gains: float
     treatment_gains: List[float]
+    treatments: List[str]
 
 
 class CausalPolicyTreeLeaf:
-    leaf: bool
+    leaf: True
     n_samples: int
     treatment: str
 
 
 class CausalPolicyTreeInternal:
-    leaf: bool
+    leaf: False
     feature: str
     threshold: Union[float, str]  # TODO: Categorical features
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
