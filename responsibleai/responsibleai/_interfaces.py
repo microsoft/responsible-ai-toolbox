@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import List, Tuple
+from typing import Dict, List, Tuple, Union
 
 
 class Dataset:
@@ -75,9 +75,36 @@ class CausalMetric:
     zstat: float
 
 
+class CausalPolicyGains:
+    recommended_policy_gains: float
+    treatment_gains: List[float]
+
+
+class CausalPolicyTreeLeaf:
+    leaf: bool
+    n_samples: int
+    treatment: str
+
+
+class CausalPolicyTreeInternal:
+    leaf: bool
+    feature: str
+    threshold: Union[float, str]  # TODO: Categorical features
+    left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
+    right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
+
+
+class CausalPolicy:
+    treatment_feature: str
+    local_policies: Dict[str, List[float]]
+    policy_gains: CausalPolicyGains
+    policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
+
+
 class CausalData:
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
+    policies: List[CausalPolicy]
 
 
 class CounterfactualData:

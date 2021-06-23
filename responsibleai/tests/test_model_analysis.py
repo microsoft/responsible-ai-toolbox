@@ -90,7 +90,9 @@ class TestModelAnalysis(object):
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
-        manager_args = None
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [0]
+        }
 
         for model in models:
             run_model_analysis(model, X_train, X_test, LABELS, [],
