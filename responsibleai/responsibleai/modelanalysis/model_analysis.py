@@ -58,7 +58,7 @@ class ModelAnalysis(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features, train_labels=None,
+                 task_type, categorical_features=None, train_labels=None,
                  serializer=None):
         """Defines the top-level Model Analysis API.
         Use ModelAnalysis to analyze errors, explain the most important
@@ -94,9 +94,11 @@ class ModelAnalysis(object):
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type)
-        self._error_analysis_manager = ErrorAnalysisManager(model,
-                                                            train,
-                                                            target_column)
+        error_analysis_manager = ErrorAnalysisManager(model,
+                                                      train,
+                                                      target_column,
+                                                      categorical_features)
+        self._error_analysis_manager = error_analysis_manager
         if train_labels is None:
             self._classes = train[target_column].unique()
         else:
