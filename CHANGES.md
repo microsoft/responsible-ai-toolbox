@@ -24,6 +24,31 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.7.0
+
+- educational materials
+- new features
+  - added widget serialization for causal analysis
+- breaking changes
+- bug fixes
+- other
+
+## v0.6.1
+
+- educational materials
+- new features
+- breaking changes
+- bug fixes
+- other
+
+## v0.6.0
+
+- educational materials
+- new features
+- breaking changes
+- bug fixes
+- other
+
 ## v0.5.0
 
 - educational materials
