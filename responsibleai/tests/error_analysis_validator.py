@@ -12,32 +12,32 @@ ERROR = 'error'
 ID = 'id'
 
 
-def setup_error_analysis(model_analysis, add_ea=True):
+def setup_error_analysis(model_analysis, add_ea=True, max_depth=3):
     if add_ea:
-        model_analysis.error_analysis.add()
+        model_analysis.error_analysis.add(max_depth=max_depth)
         with pytest.raises(DuplicateManagerConfigException):
-            model_analysis.error_analysis.add()
+            model_analysis.error_analysis.add(max_depth=max_depth)
     model_analysis.error_analysis.compute()
 
 
-def validate_error_analysis(model_analysis):
+def validate_error_analysis(model_analysis, expected_reports=1):
     reports = model_analysis.error_analysis.get()
     assert isinstance(reports, list)
-    assert len(reports) == 1
-    report = reports[0]
-    json_matrix = report.json_matrix
+    assert len(reports) == expected_reports
+    for report in reports:
+        json_matrix = report.json_matrix
 
-    ea_x_train = model_analysis.error_analysis._train
-    ea_y_train = model_analysis.error_analysis._y_train
+        ea_x_train = model_analysis.error_analysis._train
+        ea_y_train = model_analysis.error_analysis._y_train
 
-    expected_count = len(ea_x_train)
-    if json_matrix is not None:
-        predictions = model_analysis.model.predict(ea_x_train)
-        expected_false_count = sum(predictions != ea_y_train)
-        validate_matrix(json_matrix, expected_count, expected_false_count)
+        expected_count = len(ea_x_train)
+        if json_matrix is not None:
+            predictions = model_analysis.model.predict(ea_x_train)
+            expected_false_count = sum(predictions != ea_y_train)
+            validate_matrix(json_matrix, expected_count, expected_false_count)
 
-    json_tree = report.json_tree
-    validate_tree(json_tree, expected_count)
+        json_tree = report.json_tree
+        validate_tree(json_tree, expected_count)
 
 
 def validate_matrix(json_matrix, exp_total_count, exp_total_false_count):
