@@ -2827,6 +2827,11 @@ export const adultCounterfactualData: ICounterfactualData = {
       [6, 2.7, 4.3, 1.8, 2]
     ]
   ],
+  desired_class: "maglinant",
+  desired_range: [
+    [1, 2],
+    [4, 7]
+  ],
   feature_names: [
     "row",
     "fnlwgt",
