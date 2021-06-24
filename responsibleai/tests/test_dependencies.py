@@ -16,6 +16,7 @@ DISALLOWED_DEPENDENCIES = [
     'keras',
     'pytorch',
     'matplotlib',
+    'graphviz'
 ]
 
 
@@ -30,8 +31,11 @@ def dep_trees():
 class TestDependencies:
 
     @pytest.mark.parametrize('required', REQUIRED_DEPENDENCIES)
-    @pytest.mark.parametrize('disallowed', DISALLOWED_DEPENDENCIES)
-    def test_econml_dependencies(self, dep_trees, required, disallowed):
+    @pytest.mark.parametrize('disallowed_dependency', DISALLOWED_DEPENDENCIES)
+    def test_econml_dependencies(self, dep_trees, required,
+                                 disallowed_dependency):
         tree = dep_trees[required]
         assert tree is not None
-        assert disallowed not in tree
+        if required == 'econml' and disallowed_dependency == 'graphviz':
+            pytest.skip('econml carries graphviz as required dependency')
+        assert disallowed_dependency not in tree
