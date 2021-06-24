@@ -19,6 +19,10 @@ DISALLOWED_DEPENDENCIES = [
     'graphviz'
 ]
 
+EXCEPTIONS = {
+    'econml': ['graphviz']
+}
+
 
 @pytest.fixture(scope='class')
 def dep_trees():
@@ -31,11 +35,12 @@ def dep_trees():
 class TestDependencies:
 
     @pytest.mark.parametrize('required', REQUIRED_DEPENDENCIES)
-    @pytest.mark.parametrize('disallowed_dependency', DISALLOWED_DEPENDENCIES)
-    def test_econml_dependencies(self, dep_trees, required,
-                                 disallowed_dependency):
+    @pytest.mark.parametrize('disallowed', DISALLOWED_DEPENDENCIES)
+    def test_dependencies(self, dep_trees, required, disallowed):
+        if required in EXCEPTIONS and disallowed in EXCEPTIONS[required]:
+            pytest.skip("Validation skipped for {} dependency of {}".format(
+                disallowed, required))
+
         tree = dep_trees[required]
         assert tree is not None
-        if required == 'econml' and disallowed_dependency == 'graphviz':
-            pytest.skip('econml carries graphviz as required dependency')
-        assert disallowed_dependency not in tree
+        assert disallowed not in tree
