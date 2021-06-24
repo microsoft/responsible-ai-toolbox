@@ -217,6 +217,9 @@ def run_model_analysis(model, train_data, test_data, target_column,
 
         if manager_type == ManagerNames.ERROR_ANALYSIS:
             validate_error_analysis(model_analysis)
+            # validate adding new reports after deserialization works
+            setup_error_analysis(model_analysis, max_depth=4)
+            validate_error_analysis(model_analysis, expected_reports=2)
         elif manager_type == ManagerNames.EXPLAINER:
             validate_explainer(model_analysis, train_data, test_data, classes)
 

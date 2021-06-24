@@ -29,7 +29,7 @@ class ModelAnalysisDashboardInput:
         self.dashboard_input = analysis.get_data()
         self._feature_length = len(self.dashboard_input.dataset.featureNames)
         self._row_length = len(self.dashboard_input.dataset.features)
-        self._error_analyzer = analysis.error_analysis.analyzer
+        self._error_analyzer = analysis.error_analysis._analyzer
 
     def on_predict(self, data):
         try:
