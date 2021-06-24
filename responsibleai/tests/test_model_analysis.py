@@ -10,7 +10,9 @@ from .common_utils import (create_boston_data,
                            create_cancer_data,
                            create_iris_data,
                            create_binary_classification_dataset,
+                           create_adult_income_dataset,
                            create_models_classification,
+                           create_complex_classification_pipeline,
                            create_models_regression)
 
 from responsibleai import ModelAnalysis, ModelTask
@@ -85,8 +87,7 @@ class TestModelAnalysis(object):
     def test_model_analysis_binary(self, manager_type):
         X_train, y_train, X_test, y_test, classes = \
             create_binary_classification_dataset()
-        X_train = pd.DataFrame(X_train)
-        X_test = pd.DataFrame(X_test)
+
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
@@ -98,6 +99,29 @@ class TestModelAnalysis(object):
             run_model_analysis(model, X_train, X_test, LABELS, [],
                                manager_type, manager_args,
                                classes=classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_model_analysis_binary_mixed_types(self, manager_type):
+
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes = \
+            create_adult_income_dataset()
+        X_train = data_train.drop([target_name], axis=1)
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features, categorical_features)
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [0],
+            ManagerParams.DESIRED_CLASS: 'opposite',
+            ManagerParams.FEATURE_IMPORTANCE: False
+        }
+
+        run_model_analysis(model, data_train, data_test, target_name,
+                           categorical_features,
+                           manager_type, manager_args,
+                           classes=classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.COUNTERFACTUAL,
@@ -152,7 +176,9 @@ def run_model_analysis(model, train_data, test_data, target_column,
         setup_error_analysis(model_analysis)
 
     validate_model_analysis(model_analysis, train_data, test_data,
-                            target_column, task_type)
+                            target_column, task_type, categorical_features,
+                            should_ignore_data_comparison=(
+                                manager_type == ManagerNames.COUNTERFACTUAL))
 
     if manager_type == ManagerNames.CAUSAL:
         treatment_features = manager_args.get(ManagerParams.TREATMENT_FEATURES)
@@ -164,8 +190,10 @@ def run_model_analysis(model, train_data, test_data, target_column,
         desired_range = manager_args.get(ManagerParams.DESIRED_RANGE)
         feature_importance = manager_args.get(ManagerParams.FEATURE_IMPORTANCE)
         validate_counterfactual(model_analysis, train_data, target_column,
-                                desired_class, desired_range,
-                                feature_importance)
+                                categorical_features=categorical_features,
+                                desired_class=desired_class,
+                                desired_range=desired_range,
+                                feature_importance=feature_importance)
     elif manager_type == ManagerNames.ERROR_ANALYSIS:
         validate_error_analysis(model_analysis)
     elif manager_type == ManagerNames.EXPLAINER:
@@ -181,8 +209,11 @@ def run_model_analysis(model, train_data, test_data, target_column,
         if manager_type == ManagerNames.EXPLAINER:
             setup_explainer(model_analysis)
 
-        validate_model_analysis(model_analysis, train_data, test_data,
-                                target_column, task_type)
+        validate_model_analysis(
+            model_analysis, train_data, test_data,
+            target_column, task_type, categorical_features,
+            should_ignore_data_comparison=(
+                manager_type == ManagerNames.COUNTERFACTUAL))
 
         if manager_type == ManagerNames.ERROR_ANALYSIS:
             validate_error_analysis(model_analysis)
@@ -195,11 +226,15 @@ def validate_model_analysis(
     train_data,
     test_data,
     target_column,
-    task_type
+    task_type,
+    categorical_features,
+    should_ignore_data_comparison=False
 ):
-    pd.testing.assert_frame_equal(model_analysis.train, train_data)
-    pd.testing.assert_frame_equal(model_analysis.test, test_data)
+    if not should_ignore_data_comparison:
+        pd.testing.assert_frame_equal(model_analysis.train, train_data)
+        pd.testing.assert_frame_equal(model_analysis.test, test_data)
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
+    assert model_analysis.categorical_features == categorical_features
     np.testing.assert_array_equal(model_analysis._classes,
                                   train_data[target_column].unique())
