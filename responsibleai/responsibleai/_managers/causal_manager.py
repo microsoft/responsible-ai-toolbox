@@ -23,6 +23,8 @@ class CausalConstants:
     AUTOML = 'automl'
     LINEAR = 'linear'
 
+    DEFAULT_ALPHA = 0.05
+
 
 class CausalConfig(BaseConfig):
     def __init__(
@@ -139,10 +141,10 @@ class CausalManager(BaseManager):
         self,
         treatment_features,
         heterogeneity_features=None,
-        nuisance_model=CausalConstants.AUTOML,
+        nuisance_model=CausalConstants.LINEAR,
         heterogeneity_model=None,
-        alpha=0.05,
-        upper_bound_on_cat_expansion=5,
+        alpha=CausalConstants.DEFAULT_ALPHA,
+        upper_bound_on_cat_expansion=50,
         treatment_cost=0,
         min_tree_leaf_samples=2,
         max_tree_depth=3,
