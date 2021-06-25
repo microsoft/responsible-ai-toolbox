@@ -34,10 +34,7 @@ class TestModelAnalysisDashboard:
                                                  'Race',
                                                  'Sex', 'Country'])
         ma.explainer.add()
-        ma.counterfactual.add(['Age',
-                               'Capital Gain', 'Capital Loss',
-                               'Hours per week'], 10,
-                              desired_class='opposite')
+        ma.counterfactual.add(10, desired_class='opposite')
         ma.error_analysis.add()
         ma.causal.add(treatment_features=['Hours per week', 'Occupation'],
                       heterogeneity_features=None,
