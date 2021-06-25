@@ -39,7 +39,7 @@ export abstract class CohortBasedComponent<
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
       filters,
-      this.props.dataset.featureNames
+      this.props.dataset.feature_names
     );
 
     let selectedCohortName = "";

@@ -16,7 +16,12 @@ DISALLOWED_DEPENDENCIES = [
     'keras',
     'pytorch',
     'matplotlib',
+    'graphviz'
 ]
+
+EXCEPTIONS = {
+    'econml': ['graphviz']
+}
 
 
 @pytest.fixture(scope='class')
@@ -31,7 +36,11 @@ class TestDependencies:
 
     @pytest.mark.parametrize('required', REQUIRED_DEPENDENCIES)
     @pytest.mark.parametrize('disallowed', DISALLOWED_DEPENDENCIES)
-    def test_econml_dependencies(self, dep_trees, required, disallowed):
+    def test_dependencies(self, dep_trees, required, disallowed):
+        if required in EXCEPTIONS and disallowed in EXCEPTIONS[required]:
+            pytest.skip("Validation skipped for {} dependency of {}".format(
+                disallowed, required))
+
         tree = dep_trees[required]
         assert tree is not None
         assert disallowed not in tree

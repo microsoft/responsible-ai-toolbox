@@ -22,9 +22,16 @@ def verify_counterfactual_object(counterfactual_obj, feature_importance=False):
 
 
 def validate_counterfactual(cf_analyzer, X_train, target_column,
+                            categorical_features=None,
                             desired_class=None, desired_range=None,
                             feature_importance=False):
-    continuous_features = list(set(X_train.columns) - set([target_column]))
+
+    if categorical_features is None:
+        continuous_features = list(set(X_train.columns) - set([target_column]))
+    else:
+        continuous_features = list(set(X_train.columns) -
+                                   set([target_column]) -
+                                   set(categorical_features))
 
     # Add the first configuration
     cf_analyzer.counterfactual.add(continuous_features=continuous_features,
