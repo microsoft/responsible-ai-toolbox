@@ -27,7 +27,7 @@ class ModelAnalysisDashboardInput:
             model.predict_proba is not None
         self._dataframeColumns = None
         self.dashboard_input = analysis.get_data()
-        self._feature_length = len(self.dashboard_input.dataset.featureNames)
+        self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
         self._error_analyzer = analysis.error_analysis._analyzer
 

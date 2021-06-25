@@ -29,7 +29,7 @@ export function buildCounterfactualState(
   if (modelType === ModelTypes.Multiclass) {
     weightVectorOptions.push(WeightVectors.AbsAvg);
   }
-  const classNames = dataset.classNames;
+  const classNames = dataset.class_names;
   if (classNames) {
     classNames.forEach((name, index) => {
       weightVectorLabels[index] = localization.formatString(
