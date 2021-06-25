@@ -34,9 +34,7 @@ import {
 import _ from "lodash";
 import {
   getTheme,
-  Text,
   DefaultButton,
-  Dropdown,
   IDropdownOption,
   IComboBoxOption,
   ComboBox,
@@ -63,7 +61,6 @@ export interface ICounterfactualChartState {
   isPanelOpen: boolean;
   editingDataCustomIndex?: number;
   customPoints: Array<{ [key: string]: any }>;
-  selectedCohortIndex: number;
   featuresOption: IDropdownOption[];
   request?: AbortController;
   selectedPointsIndexes: number[];
@@ -71,6 +68,7 @@ export interface ICounterfactualChartState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
+  originalData?: any;
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -104,9 +102,9 @@ export class CounterfactualChart extends React.PureComponent<
       editingDataCustomIndex: undefined,
       featuresOption: [],
       isPanelOpen: false,
+      originalData: undefined,
       pointIsActive: [],
       request: undefined,
-      selectedCohortIndex: 0,
       selectedPointsIndexes: [],
       sortArray: [],
       sortingSeriesIndex: undefined,
@@ -297,48 +295,29 @@ export class CounterfactualChart extends React.PureComponent<
     const plotlyProps = this.generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+      this.context.selectedErrorCohort.cohort
     );
-    const cohortLength = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.filteredData.length;
+    const cohortLength = this.context.selectedErrorCohort.cohort.filteredData
+      .length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
-    const cohortOptions: IDropdownOption[] = this.context.errorCohorts.map(
-      (errorCohort, index) => {
-        return { key: index, text: errorCohort.cohort.name };
-      }
-    );
     return (
       <div className={classNames.page}>
         <div className={classNames.mainArea}>
-          <CounterfactualPanel
-            selectedIndex={this.state.selectedPointsIndexes[0] || 0}
-            closePanel={this.togglePanel}
-            saveAsPoint={this.saveAsPoint}
-            setCustomRowProperty={this.setCustomRowProperty}
-            temporaryPoint={this.temporaryPoint}
-            isPanelOpen={this.state.isPanelOpen}
-            data={this.context.counterfactualData}
-          />
+          {this.state.originalData && (
+            <CounterfactualPanel
+              originalData={this.state.originalData}
+              selectedIndex={this.state.selectedPointsIndexes[0] || 0}
+              closePanel={this.togglePanel}
+              saveAsPoint={this.saveAsPoint}
+              setCustomRowProperty={this.setCustomRowProperty}
+              temporaryPoint={this.temporaryPoint}
+              isPanelOpen={this.state.isPanelOpen}
+              data={this.context.counterfactualData}
+            />
+          )}
           <div className={classNames.chartsArea}>
-            {cohortOptions && (
-              <div className={classNames.cohortPickerWrapper}>
-                <Text
-                  variant="mediumPlus"
-                  className={classNames.cohortPickerLabel}
-                >
-                  {localization.Counterfactuals.showOnly}
-                </Text>
-                <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
-                  options={cohortOptions}
-                  selectedKey={this.state.selectedCohortIndex}
-                  onChange={this.setSelectedCohort}
-                />
-              </div>
-            )}
             <div
               className={classNames.topArea}
               id={"IndividualFeatureContainer"}
@@ -526,20 +505,6 @@ export class CounterfactualChart extends React.PureComponent<
     return "";
   }
 
-  private setSelectedCohort = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    this.buildRowOptions(item.key as number);
-    this.setState({
-      selectedCohortIndex: item.key as number,
-      selectedPointsIndexes: []
-    });
-  };
-
   private buildRowOptions(cohortIndex: number): void {
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
   }
@@ -562,7 +527,7 @@ export class CounterfactualChart extends React.PureComponent<
 
   private createCopyOfFirstRow(): void {
     const indexes = this.getDefaultSelectedPointIndexes(
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+      this.context.selectedErrorCohort.cohort
     );
     if (indexes.length === 0) {
       return undefined;
@@ -623,6 +588,22 @@ export class CounterfactualChart extends React.PureComponent<
     this.toggleSelectionOfPoint(index);
   };
 
+  private getOriginalData(index: number): { [key: string]: any } | undefined {
+    const row = this.context.jointDataset.getRow(index);
+    const dataPoint = JointDataset.datasetSlice(
+      row,
+      this.context.jointDataset.metaDict,
+      this.context.jointDataset.datasetFeatureCount
+    );
+    const data = {};
+    data["row"] = "Row 0";
+    const featureNames = this.context?.dataset?.featureNames;
+    featureNames.forEach((f, index) => {
+      data[f] = dataPoint[index];
+    });
+    return data;
+  }
+
   private toggleSelectionOfPoint(index?: number): void {
     if (index === undefined) {
       return;
@@ -630,14 +611,17 @@ export class CounterfactualChart extends React.PureComponent<
     const indexOf = this.state.selectedPointsIndexes.indexOf(index);
     let newSelections = [...this.state.selectedPointsIndexes];
     let pointIsActive = [...this.state.pointIsActive];
+    let originalData;
     if (indexOf === -1) {
       newSelections = [index];
       pointIsActive = [true];
+      originalData = this.getOriginalData(index);
     } else {
       newSelections.splice(indexOf, 1);
       pointIsActive.splice(indexOf, 1);
     }
     this.setState({
+      originalData,
       pointIsActive,
       selectedPointsIndexes: newSelections
     });
@@ -981,9 +965,9 @@ export class CounterfactualChart extends React.PureComponent<
   };
 
   private getDataOptions(): IComboBoxOption[] {
-    const indexes = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.unwrap(JointDataset.IndexLabel);
+    const indexes = this.context.selectedErrorCohort.cohort.unwrap(
+      JointDataset.IndexLabel
+    );
     indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
     return indexes.map((index) => {
       return {
