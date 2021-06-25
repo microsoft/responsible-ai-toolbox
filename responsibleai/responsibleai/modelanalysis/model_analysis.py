@@ -94,7 +94,8 @@ class ModelAnalysis(object):
             train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type)
+            target_column=target_column, task_type=task_type,
+            categorical_features=categorical_features)
         error_analysis_manager = ErrorAnalysisManager(model,
                                                       train,
                                                       target_column,

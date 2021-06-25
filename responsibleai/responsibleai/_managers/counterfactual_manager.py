@@ -57,7 +57,8 @@ class CounterfactualConfig(BaseConfig):
 
 
 class CounterfactualManager(BaseManager):
-    def __init__(self, model, train, test, target_column, task_type):
+    def __init__(self, model, train, test, target_column, task_type,
+                 categorical_features):
         """Defines the CounterfactualManager for generating counterfactuals
            from a model.
 
@@ -76,12 +77,15 @@ class CounterfactualManager(BaseManager):
         :type target_column: str
         :param task_type: Task type is either 'classification/regression'
         :type task_type: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         """
         self._model = model
         self._train = train
         self._test = test
         self._target_column = target_column
         self._task_type = task_type
+        self._categorical_features = categorical_features
         self._counterfactual_config_list = []
 
     def _create_diceml_explainer(self, method, continuous_features):
@@ -136,7 +140,6 @@ class CounterfactualManager(BaseManager):
             self._counterfactual_config_list.append(new_counterfactual_config)
 
     def add(self,
-            continuous_features,
             total_CFs,
             method=CounterfactualConstants.RANDOM,
             desired_class=None,
@@ -146,10 +149,6 @@ class CounterfactualManager(BaseManager):
             feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
-        :param continuous_features: List of names of continuous features.
-                                    The remaining features are categorical
-                                    features.
-        :type continuous_features: list
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
         :param desired_class: Desired counterfactual class. For binary
@@ -172,6 +171,13 @@ class CounterfactualManager(BaseManager):
                                    dice-ml.
         :type feature_importance: bool
         """
+        if self._categorical_features is None:
+            continuous_features = \
+                list(set(self._train.columns) - set([self._target_column]))
+        else:
+            continuous_features = list(set(self._train.columns) -
+                                       set([self._target_column]) -
+                                       set(self._categorical_features))
 
         counterfactual_config = CounterfactualConfig(
             method=method,
