@@ -76,8 +76,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           modelExplanationData: this.props.modelExplanationData?.[0]
             ? {
                 ...this.props.modelExplanationData?.[0],
-                predictedY: this.props.dataset.predictedY,
-                probabilityY: this.props.dataset.probabilityY
+                predictedY: this.props.dataset.predicted_y,
+                probabilityY: this.props.dataset.probability_y
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
@@ -153,7 +153,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         getTreeNodes={this.props.requestDebugML}
                         getMatrix={this.props.requestMatrix}
                         updateSelectedCohort={this.updateSelectedCohort}
-                        features={this.props.dataset.featureNames}
+                        features={this.props.dataset.feature_names}
                         selectedFeatures={this.state.selectedFeatures}
                         errorAnalysisOption={this.state.errorAnalysisOption}
                         selectedCohort={this.state.selectedCohort}

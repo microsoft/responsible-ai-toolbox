@@ -14,7 +14,9 @@ import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
 
 export interface IModelAssessmentData {
   dataset: IDataset;
-  modelExplanationData?: IModelExplanationData[];
+  modelExplanationData?: Array<
+    Omit<IModelExplanationData, "method" | "predictedY" | "probabilityY">
+  >;
   causalAnalysisData?: ICausalAnalysisData[];
   counterfactualData?: ICounterfactualData[];
   errorAnalysisConfig?: IErrorAnalysisConfig[];
