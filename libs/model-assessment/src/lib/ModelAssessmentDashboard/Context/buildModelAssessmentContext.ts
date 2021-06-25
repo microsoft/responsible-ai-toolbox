@@ -150,7 +150,7 @@ function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(
-    props.dataset.task_type == "regression" ? "regressor" : "classifier",
+    props.dataset.task_type === "regression" ? "regressor" : "classifier",
     props.modelExplanationData?.[0]?.precomputedExplanations,
     props.dataset.probability_y
   );

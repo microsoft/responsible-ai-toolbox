@@ -6,11 +6,10 @@ import {
   ICounterfactualData,
   IDataset,
   IErrorAnalysisConfig,
-  IModelExplanationData,
+  IModelExplanationData
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
-  task_type: "classification",
   categorical_map: {
     "1": [
       " ?",
@@ -953,6 +952,7 @@ export const adultCensusWithFairnessDataset: IDataset = {
     [0.7355988315726243, 0.2644011684273757],
     [0.6804143936790036, 0.3195856063209964]
   ],
+  task_type: "classification",
   true_y: [
     1,
     0,
