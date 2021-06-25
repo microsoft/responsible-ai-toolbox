@@ -5,13 +5,20 @@ from enum import Enum
 from typing import Any, Dict, List, Tuple, Union
 
 
+class TaskType(str, Enum):
+    CLASSIFICATION = 'classification'
+    REGRESSION = 'regression'
+
+
 class Dataset:
-    predictedY: List
+    task_type: TaskType
+    predicted_y: List
     features: List[List[int]]
-    featureNames: List[str]
-    probabilityY: List
-    trueY: List
-    classNames: List[str]
+    feature_names: List[str]
+    probability_y: List
+    true_y: List
+    class_names: List[str]
+    categorical_map: Dict[int, List[str]]
 
 
 class BoundedCoordinates:
@@ -46,16 +53,8 @@ class ModelClass(str, Enum):
     BLACKBOX = 'blackbox'
 
 
-class ModelMethod(str, Enum):
-    CLASSIFIER = 'classifier'
-    REGRESSOR = 'regressor'
-
-
 class ModelExplanationData:
     modelClass: ModelClass
-    method: ModelMethod
-    predictedY: List
-    probabilityY: List[List[float]]
     explanationMethod: str
     precomputedExplanations: PrecomputedExplanations
 
