@@ -63,7 +63,6 @@
           "false_positive_rate_ratio",
           "feature_list",
           "feature_names",
-          "feature_names",
           "feature_names_including_target",
           "global_effects",
           "local_effects",
