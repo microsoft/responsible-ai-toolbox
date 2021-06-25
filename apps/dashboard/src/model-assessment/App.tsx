@@ -50,7 +50,7 @@ export class App extends React.Component<IAppProps> {
       localUrl: "",
       requestDebugML: generateJsonTreeAdultCensusIncome,
       requestImportances: createJsonImportancesGenerator(
-        this.props.dataset.featureNames,
+        this.props.dataset.feature_names,
         DatasetName.BreastCancer
       ),
       requestMatrix: generateJsonMatrix,
@@ -64,11 +64,10 @@ export class App extends React.Component<IAppProps> {
       return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
     }
 
-    modelAssessmentDashboardProps.dataset.featureNames = this.props.dataset.featureNames;
     modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
     modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
     modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
-      this.props.dataset.featureNames,
+      this.props.dataset.feature_names,
       DatasetName.BreastCancer
     );
 

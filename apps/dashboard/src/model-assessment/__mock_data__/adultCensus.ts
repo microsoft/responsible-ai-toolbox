@@ -10,7 +10,7 @@ import {
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
-  categoricalMap: {
+  categorical_map: {
     "1": [
       " ?",
       " Federal-gov",
@@ -65,8 +65,8 @@ export const adultCensusWithFairnessDataset: IDataset = {
     "9": [" Female", " Male"],
     "13": [" ?", " Canada", " El-Salvador", " Ireland", " United-States"]
   },
-  classNames: ["<=50K", ">50K"],
-  featureNames: [
+  class_names: ["<=50K", ">50K"],
+  feature_names: [
     "age",
     "workclass",
     "fnlwgt",
@@ -852,7 +852,7 @@ export const adultCensusWithFairnessDataset: IDataset = {
       " United-States"
     ]
   ],
-  predictedY: [
+  predicted_y: [
     1,
     0,
     0,
@@ -902,7 +902,7 @@ export const adultCensusWithFairnessDataset: IDataset = {
     0,
     1
   ],
-  probabilityY: [
+  probability_y: [
     [0.7510962272030672, 0.24890377279693277],
     [0.7802282829948453, 0.21977171700515474],
     [0.780312141589862, 0.2196878584101381],
@@ -952,62 +952,8 @@ export const adultCensusWithFairnessDataset: IDataset = {
     [0.7355988315726243, 0.2644011684273757],
     [0.6804143936790036, 0.3195856063209964]
   ],
-  sensitiveFeatureCategoricalMap: {
-    "0": ["Asian-Pac-Islander", "Black", "White"],
-    "1": ["Female", "Male"]
-  },
-  sensitiveFeatureNames: ["race", "gender"],
-  sensitiveFeatures: [
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["Asian-Pac-Islander", "Male"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["Black", "Female"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["Black", "Male"],
-    ["White", "Male"],
-    ["Black", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["Black", "Male"],
-    ["Black", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["Black", "Male"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["White", "Female"],
-    ["White", "Male"],
-    ["White", "Male"],
-    ["White", "Female"]
-  ],
-  trueY: [
+  task_type: "classification",
+  true_y: [
     1,
     0,
     0,

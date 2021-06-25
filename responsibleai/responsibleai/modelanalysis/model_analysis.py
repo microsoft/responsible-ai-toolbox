@@ -87,6 +87,8 @@ class ModelAnalysis(object):
         self.train = train
         self.test = test
         self.target_column = target_column
+        if (task_type != "classification" and task_type != "regression"):
+            raise ValueError("Unsupported task_type")
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
@@ -188,7 +190,8 @@ class ModelAnalysis(object):
 
     def _get_dataset(self):
         dashboard_dataset = Dataset()
-        dashboard_dataset.classNames = _convert_to_list(
+        dashboard_dataset.task_type = self.task_type
+        dashboard_dataset.class_names = _convert_to_list(
             self._classes)
 
         predicted_y = None
@@ -218,10 +221,10 @@ class ModelAnalysis(object):
                     "Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
             if(self.task_type == "classification" and
-                    dashboard_dataset.classNames is not None):
-                predicted_y = [dashboard_dataset.classNames.index(
+                    dashboard_dataset.class_names is not None):
+                predicted_y = [dashboard_dataset.class_names.index(
                     y) for y in predicted_y]
-            dashboard_dataset.predictedY = predicted_y
+            dashboard_dataset.predicted_y = predicted_y
         row_length = 0
 
         if list_dataset is not None:
@@ -242,10 +245,10 @@ class ModelAnalysis(object):
 
         if true_y is not None and len(true_y) == row_length:
             if(self.task_type == "classification" and
-               dashboard_dataset.classNames is not None):
-                true_y = [dashboard_dataset.classNames.index(
+               dashboard_dataset.class_names is not None):
+                true_y = [dashboard_dataset.class_names.index(
                     y) for y in true_y]
-            dashboard_dataset.trueY = _convert_to_list(true_y)
+            dashboard_dataset.true_y = _convert_to_list(true_y)
 
         features = dataset.columns
 
@@ -255,7 +258,7 @@ class ModelAnalysis(object):
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
                                  " from local explanations dimension")
-            dashboard_dataset.featureNames = features
+            dashboard_dataset.feature_names = features
 
         if (self.model is not None and
                 hasattr(self.model, SKLearn.PREDICT_PROBA) and
@@ -271,7 +274,7 @@ class ModelAnalysis(object):
             except Exception as ex:
                 raise ValueError(
                     "Model predict_proba output of unsupported type,") from ex
-            dashboard_dataset.probabilityY = probability_y
+            dashboard_dataset.probability_y = probability_y
 
         return dashboard_dataset
 

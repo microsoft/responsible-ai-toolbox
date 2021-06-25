@@ -2,16 +2,14 @@
 // Licensed under the MIT License.
 
 export interface IDataset {
-  trueY: number[];
-  predictedY?: number[];
-  probabilityY?: number[][];
+  task_type: "classification" | "regression";
+  true_y: number[];
+  predicted_y?: number[];
+  probability_y?: number[][];
   features: any[][];
-  featureNames: string[];
-  categoricalMap?: { [key: number]: string[] };
-  sensitiveFeatures?: any[][];
-  sensitiveFeatureNames?: string[];
-  sensitiveFeatureCategoricalMap?: { [key: number]: string[] };
-  classNames?: string[];
+  feature_names: string[];
+  categorical_map?: { [key: number]: string[] };
+  class_names?: string[];
 }
 
 // TODO Remove DatasetSummary when possible
@@ -19,19 +17,4 @@ export interface IDatasetSummary {
   featureNames?: string[];
   classNames?: string[];
   categoricalMap?: { [key: number]: string[] };
-}
-
-export function getDatasetSummary(
-  dataset: IDataset,
-  isFairness: boolean
-): IDatasetSummary {
-  return {
-    categoricalMap: isFairness
-      ? dataset.sensitiveFeatureCategoricalMap
-      : dataset.categoricalMap,
-    classNames: dataset.classNames,
-    featureNames: isFairness
-      ? dataset.sensitiveFeatureNames
-      : dataset.featureNames
-  };
 }
