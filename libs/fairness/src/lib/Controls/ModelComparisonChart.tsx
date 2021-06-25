@@ -46,6 +46,7 @@ export interface IModelComparisonProps {
   modelCount: number;
   performancePickerProps: IPerformancePickerPropsV2;
   fairnessPickerProps: IFairnessPickerPropsV2;
+  errorPickerProps: any;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
   onEditConfigs: () => void;
@@ -59,6 +60,7 @@ export interface IState {
   fairnessKey?: string;
   performanceArray?: number[];
   fairnessArray?: number[];
+  errorKey?: string;
 }
 
 export class ModelComparisonChart extends React.Component<
@@ -100,6 +102,12 @@ export class ModelComparisonChart extends React.Component<
         type: "scatter",
         xAccessor: "Performance",
         yAccessor: "Fairness"
+        // error_y: {
+        //   type: "data",
+        //   array: [1, 2, 3],
+        //   arrayminus: [3, 2, 1],
+        //   visible: true
+        //}
       } as any
     ],
     layout: {
@@ -138,6 +146,7 @@ export class ModelComparisonChart extends React.Component<
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
+      errorKey: this.props.errorPickerProps.selectedErrorKey,
       fairnessKey: this.props.fairnessPickerProps.selectedFairnessKey,
       performanceKey: this.props.performancePickerProps.selectedPerformanceKey
     };
@@ -301,7 +310,7 @@ export class ModelComparisonChart extends React.Component<
     return (
       <Stack className={styles.frame}>
         <div className={sharedStyles.header} style={{ padding: "0 90px" }}>
-          <Text variant={"large"} className={sharedStyles.headerTitle} block>
+          <Text variant={"medium"} className={sharedStyles.headerTitle} block>
             {localization.Fairness.ModelComparison.title} <b>assessment</b>
           </Text>
         </div>
@@ -309,10 +318,12 @@ export class ModelComparisonChart extends React.Component<
           dashboardContext={this.props.dashboardContext}
           performancePickerProps={this.props.performancePickerProps}
           fairnessPickerProps={this.props.fairnessPickerProps}
+          errorPickerProps={this.props.errorPickerProps}
           featureBinPickerProps={this.props.featureBinPickerProps}
           parentFeatureChanged={this.featureChanged}
           parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
+          parentErrorChanged={this.errorChanged}
         />
         {mainChart}
       </Stack>
@@ -329,6 +340,7 @@ export class ModelComparisonChart extends React.Component<
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
             this.props.performancePickerProps.selectedPerformanceKey
+            // this.props.errorPickerProps.selectedErrorKey
           );
         });
       const fairnessOption =
@@ -346,9 +358,28 @@ export class ModelComparisonChart extends React.Component<
         });
 
       const performanceArray = (await Promise.all(performancePromises)).map(
-        (metric) => metric.global
+        (metric) => {
+          console.log(metric);
+          return metric.global;
+        }
       );
-      const fairnessArray = await Promise.all(fairnessPromises);
+
+      const performanceBounds = (await Promise.all(performancePromises)).map(
+        (metric) => {
+          console.log(metric);
+          return metric.bounds;
+        }
+      );
+
+      const fairnessArray = (await Promise.all(fairnessPromises)).map(
+        (metric) => {
+          console.log(metric);
+          return metric;
+        }
+      );
+      console.log(performanceArray);
+      console.log(performanceBounds);
+      console.log(fairnessArray);
       this.setState({ fairnessArray, performanceArray });
     } catch {
       // todo;
@@ -402,6 +433,20 @@ export class ModelComparisonChart extends React.Component<
     if (this.state.fairnessKey !== fairnessKey) {
       this.props.fairnessPickerProps.onFairnessChange(fairnessKey);
       this.setState({ fairnessArray: undefined, fairnessKey });
+    }
+  };
+
+  private readonly errorChanged = (
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
+  ): void => {
+    if (!option) {
+      return;
+    }
+    const errorKey = option.key.toString();
+    if (this.state.errorKey !== errorKey) {
+      this.props.errorPickerProps.onFairnessChange(errorKey);
+      this.setState({ errorKey });
     }
   };
 

@@ -30,6 +30,7 @@ export interface IState {
   featureKey?: string;
   fairnessKey?: string;
   performanceKey?: string;
+  errorKey?: string;
   showModalHelp?: boolean;
   chartKey?: string;
 }
@@ -54,6 +55,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
     const fairnessKey = this.props.fairnessPickerProps.selectedFairnessKey;
+    // const errorKey = this.props.errorPickerProps.selectedErrorKey;
     const outcomeKey: string =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -258,10 +260,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           dashboardContext={this.props.dashboardContext}
           performancePickerProps={this.props.performancePickerProps}
           fairnessPickerProps={this.props.fairnessPickerProps}
+          errorPickerProps={this.props.errorPickerProps}
           featureBinPickerProps={this.props.featureBinPickerProps}
           parentFeatureChanged={this.featureChanged}
           parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
+          parentErrorChanged={this.errorChanged}
         />
         {mainChart}
       </Stack>
@@ -328,6 +332,20 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     if (this.state.fairnessKey !== fairnessKey) {
       this.props.fairnessPickerProps.onFairnessChange(fairnessKey);
       this.setState({ fairnessKey, metrics: undefined });
+    }
+  };
+
+  private readonly errorChanged = (
+    _ev: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
+  ): void => {
+    if (!option) {
+      return;
+    }
+    const errorKey = option.key.toString();
+    if (this.state.errorKey !== errorKey) {
+      this.props.errorPickerProps.onErrorChange(errorKey);
+      this.setState({ errorKey, metrics: undefined });
     }
   };
 

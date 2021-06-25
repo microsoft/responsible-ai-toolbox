@@ -116,9 +116,14 @@ export class MetricsCache {
       return Number.NaN;
     }
 
-    const bins = value.bins
+    let bins = value.bins
       .slice()
-      .filter((x) => x !== undefined && !Number.isNaN(x));
+      .filter((x) => x !== undefined && !Number.isNaN(x) && !_.isArray(x[0])); // filters out confidence bounds
+
+    // convert from object to array (assumes first array is the metric)
+    if (typeof bins[0] === "object") {
+      bins = _.values(bins[0]);
+    }
 
     const min = _.min(bins);
     const max = _.max(bins);

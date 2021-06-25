@@ -19,6 +19,7 @@ export type PredictionType =
 export interface IMetricResponse {
   global: number;
   bins: number[];
+  bounds?: number[];
 }
 
 export interface IMetricRequest {

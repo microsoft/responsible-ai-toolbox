@@ -1050,7 +1050,8 @@
     "DropdownHeaders": {
       "sensitiveFeature": "Sensitive feature",
       "performanceMetric": "Performance metric",
-      "fairnessMetric": "Fairness metric"
+      "fairnessMetric": "Fairness metric",
+      "errorMetric": "Error Bar function"
     }
   },
   "ModelAssessment": {
