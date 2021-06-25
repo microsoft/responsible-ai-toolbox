@@ -166,7 +166,7 @@ export class CounterfactualPanel extends React.Component<
       selectedData.forEach((point, i) => {
         const temp = {};
         temp["row"] = `Row ${i + 1}`;
-        this.props.data?.feature_names_including_target.forEach((f, j) => {
+        this.props.data?.feature_names.forEach((f, j) => {
           temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
         });
         items.push(temp);
@@ -195,7 +195,7 @@ export class CounterfactualPanel extends React.Component<
       name: "row"
     });
     if (this.props.data) {
-      this.props.data.feature_names_including_target.forEach((f) =>
+      this.props.data.feature_names.forEach((f) =>
         columns.push({
           fieldName: f,
           isResizable: true,

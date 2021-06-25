@@ -597,7 +597,7 @@ export class CounterfactualChart extends React.PureComponent<
     );
     const data = {};
     data["row"] = "Row 0";
-    const featureNames = this.context?.dataset?.featureNames;
+    const featureNames = this.context?.dataset?.feature_names;
     featureNames.forEach((f, index) => {
       data[f] = dataPoint[index];
     });
