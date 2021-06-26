@@ -246,15 +246,10 @@ class CausalManager(BaseManager):
 
             config.policies = []
             for treatment_feature in config.treatment_features:
-                # Error handling required to mitigate
-                # individualized_policy bug in EconML version 0.12.0b2
-                try:
-                    local_policies = analysis.individualized_policy(
-                        X_test, treatment_feature,
-                        treatment_costs=config.treatment_cost,
-                        alpha=config.alpha)
-                except (IndexError, ValueError):
-                    local_policies = None
+                local_policies = analysis.individualized_policy(
+                    X_test, treatment_feature,
+                    treatment_costs=config.treatment_cost,
+                    alpha=config.alpha)
 
                 policy_tree, recommended_gains, treatment_gains = \
                     analysis._policy_tree_output(

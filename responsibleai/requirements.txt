@@ -1,5 +1,5 @@
 dice-ml>=0.6.1,<0.7
-econml>=0.12.0b2
+econml>=0.12.0b3
 erroranalysis>=0.1.8
 interpret-community>=0.18.1
 lightgbm>=2.0.11
