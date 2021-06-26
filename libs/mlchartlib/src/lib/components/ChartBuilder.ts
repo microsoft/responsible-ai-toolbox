@@ -30,18 +30,22 @@ export class ChartBuilder {
       y: any;
       group: any;
       size: any;
+      xLB: any;
+      xUB: any;
+      yLB: any;
+      yUB: any;
     }> = jmespath.search(
       rows,
       `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${
         datum.yAccessor
-      }, group: ${datum.groupBy}, size: ${
-        datum.sizeAccessor
-      }${datumLevelPaths}}`
+      }, xLB: ${datum.xAccessorLB}, xUB: ${datum.xAccessorUB}
+      , group: ${datum.groupBy}, size: ${datum.sizeAccessor}${datumLevelPaths}}`
     );
     // for bubble charts, we scale all sizes to the max size, only needs to be done once since its global
     // Due to https://github.com/plotly/plotly.js/issues/2080 we have to set size explicitly rather than use
     // the preferred solution of size ref
     const maxBubbleValue = 10;
+    // eslint-disable-next-line complexity
     projectedRows.forEach((row) => {
       let series: Partial<Data>;
 
@@ -118,6 +122,7 @@ export class ChartBuilder {
           (series.y as Datum[]).push(row.y);
         }
       }
+
       if (datum.sizeAccessor) {
         const size =
           (row.size * (datum.maxMarkerSize || 40) ** 2) / (2 * maxBubbleValue);
@@ -159,6 +164,29 @@ export class ChartBuilder {
     Object.keys(groupingDictionary).forEach((key) => {
       result.push(groupingDictionary[key]);
     });
+
+    const performanceLB: any = [];
+    const performanceUB: any = [];
+    projectedRows.forEach((row) => {
+      console.log(row);
+      performanceLB.push(row.xLB);
+      performanceUB.push(row.xUB);
+    });
+
+    result[0].error_x = {
+      array: performanceUB,
+      arrayminus: performanceLB,
+      type: "data",
+      visible: true
+    };
+
+    // result[0].error_y = {
+    //   array: fairnessUB,
+    //   arrayminus: fairnessLB,
+    //   type: "data",
+    //   visible: true
+    // };
+
     return result;
   }
 

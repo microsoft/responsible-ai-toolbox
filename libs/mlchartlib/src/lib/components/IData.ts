@@ -7,8 +7,12 @@ import { IAccessor } from "./IAccessor";
 
 export interface IData extends Data {
   xAccessor?: string;
+  xAccessorLB?: string;
+  xAccessorUB?: string;
   xAccessorPrefix?: string;
   yAccessor?: string;
+  yAccessorLB?: string;
+  yAccessorUB?: string;
   yAccessorPrefix?: string;
   groupBy?: string[];
   groupByPrefix?: string;

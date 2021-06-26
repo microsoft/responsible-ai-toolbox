@@ -59,6 +59,7 @@ export interface IState {
   performanceKey?: string;
   fairnessKey?: string;
   performanceArray?: number[];
+  performanceBounds?: Array<number[] | undefined>;
   fairnessArray?: number[];
   errorKey?: string;
 }
@@ -101,7 +102,10 @@ export class ModelComparisonChart extends React.Component<
         textposition: "top",
         type: "scatter",
         xAccessor: "Performance",
-        yAccessor: "Fairness"
+        xAccessorLB: "PerformanceLB",
+        xAccessorUB: "PerformanceUB",
+        yAccessor: "Fairness",
+        yErrorAccessor: "Fairness"
         // error_y: {
         //   type: "data",
         //   array: [1, 2, 3],
@@ -171,14 +175,23 @@ export class ModelComparisonChart extends React.Component<
         />
       );
     } else {
-      const { fairnessArray } = this.state;
+      const { fairnessArray, performanceBounds } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
           Fairness: fairnessArray[index],
           index,
-          Performance: performance
+          Performance: performance,
+          PerformanceLB: 0,
+          PerformanceUB: 0
         };
       });
+
+      if (_.isArray(performanceBounds)) {
+        performanceBounds.forEach((bounds, index) => {
+          data[index].PerformanceLB = data[index].Performance - bounds[0];
+          data[index].PerformanceUB = bounds[1] - data[index].Performance;
+        });
+      }
 
       const selectedMetric =
         performanceOptions[
@@ -310,7 +323,7 @@ export class ModelComparisonChart extends React.Component<
     return (
       <Stack className={styles.frame}>
         <div className={sharedStyles.header} style={{ padding: "0 90px" }}>
-          <Text variant={"medium"} className={sharedStyles.headerTitle} block>
+          <Text variant={"large"} className={sharedStyles.headerTitle} block>
             {localization.Fairness.ModelComparison.title} <b>assessment</b>
           </Text>
         </div>
@@ -380,7 +393,8 @@ export class ModelComparisonChart extends React.Component<
       console.log(performanceArray);
       console.log(performanceBounds);
       console.log(fairnessArray);
-      this.setState({ fairnessArray, performanceArray });
+
+      this.setState({ fairnessArray, performanceArray, performanceBounds });
     } catch {
       // todo;
     }
