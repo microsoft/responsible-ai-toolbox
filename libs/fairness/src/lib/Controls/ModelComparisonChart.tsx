@@ -175,7 +175,7 @@ export class ModelComparisonChart extends React.Component<
         />
       );
     } else {
-      const { fairnessArray, performanceBounds } = this.state;
+      const { fairnessArray, performanceBounds, errorKey } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
           Fairness: fairnessArray[index],
@@ -186,10 +186,12 @@ export class ModelComparisonChart extends React.Component<
         };
       });
 
-      if (_.isArray(performanceBounds)) {
+      if (_.isArray(performanceBounds) && errorKey !== "disabled") {
         performanceBounds.forEach((bounds, index) => {
-          data[index].PerformanceLB = data[index].Performance - bounds[0];
-          data[index].PerformanceUB = bounds[1] - data[index].Performance;
+          if (bounds !== undefined) {
+            data[index].PerformanceLB = data[index].Performance - bounds[0];
+            data[index].PerformanceUB = bounds[1] - data[index].Performance;
+          }
         });
       }
 
@@ -352,8 +354,8 @@ export class ModelComparisonChart extends React.Component<
             this.props.dashboardContext.binVector,
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
-            this.props.performancePickerProps.selectedPerformanceKey
-            // this.props.errorPickerProps.selectedErrorKey
+            this.props.performancePickerProps.selectedPerformanceKey,
+            this.props.errorPickerProps.selectedErrorKey
           );
         });
       const fairnessOption =
@@ -366,7 +368,8 @@ export class ModelComparisonChart extends React.Component<
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
             this.props.fairnessPickerProps.selectedFairnessKey,
-            fairnessOption.fairnessMode
+            fairnessOption.fairnessMode,
+            this.props.errorPickerProps.selectedErrorKey
           );
         });
 
@@ -459,7 +462,7 @@ export class ModelComparisonChart extends React.Component<
     }
     const errorKey = option.key.toString();
     if (this.state.errorKey !== errorKey) {
-      this.props.errorPickerProps.onFairnessChange(errorKey);
+      this.props.errorPickerProps.onErrorChange(errorKey);
       this.setState({ errorKey });
     }
   };

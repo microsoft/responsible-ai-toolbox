@@ -17,7 +17,7 @@ export interface IDropdownBarProps {
   dashboardContext: IFairnessContext;
   performancePickerProps: IPerformancePickerPropsV2;
   fairnessPickerProps: IFairnessPickerPropsV2;
-  errorPickerProps: any;
+  errorPickerProps: any; // TODO: Fix
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   parentPerformanceChanged: {
     (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void;
@@ -90,10 +90,13 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           style={{ minWidth: "240px" }}
           id="errorMetricDropdown"
           label={localization.Fairness.DropdownHeaders.errorMetric}
-          defaultSelectedKey={"Recall Wilson"}
-          options={[{ key: "Recall Wilson", text: "Recall Wilson" }]}
+          defaultSelectedKey={this.props.errorPickerProps.selectedErrorKey}
+          options={[
+            { key: "disabled", text: "Disabled" },
+            { key: "enabled", text: "Enabled" }
+          ]}
           disabled={false}
-          onChange={this.props.parentFairnessChanged}
+          onChange={this.props.parentErrorChanged}
         />
       </Stack>
     );

@@ -26,6 +26,7 @@ export interface IMetricRequest {
   metricKey: string;
   binVector: number[];
   modelIndex: number;
+  errorKey?: string;
 }
 
 export interface IFeatureBinMeta {

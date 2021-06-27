@@ -30,12 +30,17 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    key: string
+    key: string,
+    errorKey: string
   ): Promise<IMetricResponse> {
     let value = this.cache[featureIndex][modelIndex][key];
-    if (value === undefined && this.fetchMethod) {
+    if (
+      (value === undefined || (!value["bounds"] && errorKey !== "disabled")) &&
+      this.fetchMethod
+    ) {
       value = await this.fetchMethod({
         binVector: binIndexVector,
+        errorKey,
         metricKey: key,
         modelIndex
       });
@@ -48,7 +53,8 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    fairnessMethod: FairnessModes
+    fairnessMethod: FairnessModes,
+    errorKey: string
   ): Promise<number> {
     const falsePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
@@ -57,7 +63,8 @@ export class MetricsCache {
       fairnessMethod === FairnessModes.Difference
         ? "false_positive_rate_difference"
         : "false_positive_rate_ratio",
-      fairnessMethod
+      fairnessMethod,
+      errorKey
     );
     const truePositiveRateMetric = await this.getFairnessMetric(
       binIndexVector,
@@ -66,7 +73,8 @@ export class MetricsCache {
       fairnessMethod === FairnessModes.Difference
         ? "true_positive_rate_difference"
         : "true_positive_rate_ratio",
-      fairnessMethod
+      fairnessMethod,
+      errorKey
     );
 
     if (
@@ -90,7 +98,8 @@ export class MetricsCache {
     featureIndex: number,
     modelIndex: number,
     key: string,
-    fairnessMethod: FairnessModes
+    fairnessMethod: FairnessModes,
+    errorKey: string
   ): Promise<number> {
     // Equalized Odds is calculated based on two other fairness metrics.
     if (key.startsWith("equalized_odds")) {
@@ -98,15 +107,20 @@ export class MetricsCache {
         binIndexVector,
         featureIndex,
         modelIndex,
-        fairnessMethod
+        fairnessMethod,
+        errorKey
       );
     }
 
     const metricKey = fairnessOptions[key].fairnessMetric;
     let value = this.cache[featureIndex][modelIndex][metricKey];
-    if (value === undefined && this.fetchMethod) {
+    if (
+      (value === undefined || (!value["bounds"] && errorKey !== "disabled")) &&
+      this.fetchMethod
+    ) {
       value = await this.fetchMethod({
         binVector: binIndexVector,
+        errorKey,
         metricKey,
         modelIndex
       });

@@ -3,6 +3,9 @@
 
 import importlib
 from packaging import version
+from sklearn.metrics import confusion_matrix
+
+import numpy as np
 
 
 MODULE_NOT_INSTALLED_ERROR_MESSAGE = "{} is not installed. " \
@@ -12,6 +15,62 @@ FAIRLEARN_PRE_V0_5_0_ERROR_MESSAGE = "fairlearn<0.5.0 is not compatible " \
 METRICFRAME_NOT_AVAILABLE_ERROR_MESSAGE = "The fairness metric module " \
     "needs to provide a MetricFrame class to calculate metrics. For an " \
     "refer to fairlearn.metrics.MetricFrame"
+
+z_score = 1.959964
+digits_of_precision = 4
+def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
+    """ Returns lower and upper bound 
+    
+    Binomial Proportion
+    """
+    denominator = 1 + z**2 / n
+    centre_adjusted_probability = p + z * z / (2 * n)
+    adjusted_standard_deviation = np.sqrt(
+        (p * (1 - p) + z * z / (4 * n))) / np.sqrt(n)
+    lower_bound = (centre_adjusted_probability - z *
+                   adjusted_standard_deviation) / denominator
+    upper_bound = (centre_adjusted_probability + z *
+                   adjusted_standard_deviation) / denominator
+    return (round(lower_bound, digits), round(upper_bound, digits))
+
+
+def compute_standard_normal_error(metric_value, sample_size, z_score):
+    """ Standard Error Calculation (Binary Classification)
+
+    Assumes infinitely large population,
+    Should be used when the sampling fraction is small.
+    For sampling fraction > 5%, may want to use finite population correction
+    https://en.wikipedia.org/wiki/Margin_of_error
+
+    Note: 
+        Returns absolute error (%)
+    """
+    return z_score * np.sqrt(metric_value * (1.0 - metric_value)) / np.sqrt(sample_size)
+
+def recall_wilson(y_true, y_pred):
+    assert len(y_true) == len(y_pred)
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    bounds = compute_wilson_bounds(tp / (tp + fn), tp + fn, digits_of_precision, z_score)
+    return bounds
+
+def recall_standard_normal(y_true, y_pred):
+    assert len(y_true) == len(y_pred)
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    recall = tp / (tp + fn)
+    error = compute_standard_normal_error(recall, tp + fn, z_score)
+    return (recall - error, recall + error)
+
+def accuracy_wilson(y_true, y_pred):
+    assert len(y_true) == len(y_pred)
+    accuracy = sum(y_true == y_pred) / len(y_true)
+    bounds = compute_wilson_bounds(accuracy, len(y_true), digits_of_precision, z_score)
+    return bounds
+
+def accuracy_standard_normal(y_true, y_pred):
+    assert len(y_true) == len(y_pred)
+    accuracy = sum(y_true == y_pred) / len(y_true)
+    error = compute_standard_normal_error(accuracy, len(y_true), z_score)
+    return (accuracy - error, accuracy + error)
 
 
 class FairnessMetricModule:
@@ -52,7 +111,8 @@ class FairnessMetricModule:
             self._metric_methods = {
                 "accuracy_score": {
                     "model_type": ["classification"],
-                    "function": skm.accuracy_score
+                    "function": skm.accuracy_score,
+                    "error_function": accuracy_wilson
                 },
                 "balanced_accuracy_score": {
                     "model_type": ["classification"],
@@ -64,7 +124,8 @@ class FairnessMetricModule:
                 },
                 "recall_score": {
                     "model_type": ["classification"],
-                    "function": skm.recall_score
+                    "function": skm.recall_score,
+                    "error_function": recall_wilson
                 },
                 "zero_one_loss": {
                     "model_type": [],
