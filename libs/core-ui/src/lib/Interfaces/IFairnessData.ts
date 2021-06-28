@@ -20,6 +20,7 @@ export interface IMetricResponse {
   global: number;
   bins: number[];
   bounds?: number[];
+  binBounds?: number[][];
 }
 
 export interface IMetricRequest {

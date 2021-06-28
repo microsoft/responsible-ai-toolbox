@@ -8,6 +8,7 @@ export interface IMetrics {
   performance: IMetricResponse;
   outcomes: IMetricResponse;
   disparities: Dictionary<number>;
+  disparityBounds?: Dictionary<number[]>;
   // Optional, based on model type
   falsePositiveRates?: IMetricResponse;
   falseNegativeRates?: IMetricResponse;

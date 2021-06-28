@@ -106,6 +106,17 @@ class FairnessDashboard(Dashboard):
         self.fairness_metrics_module = metrics_module
 
         def metrics():
+            """ 
+            Note:
+                This function always calculates the error_function, if available,
+                so that the value is cached in the MetricsCache
+
+                Params
+                    binVector
+                    errorKey
+                    metricKey
+                    modelIndex
+            """
             try:
                 data = request.get_json(force=True)
 
@@ -114,15 +125,16 @@ class FairnessDashboard(Dashboard):
                         str(bin_) for bin_ in data['binVector']]
 
                 errorKey = data['errorKey']
-                error_function_name = f"{data['metricKey']} bounds"
+                metric_name = data['metricKey']
+                error_function_name = f"{metric_name} bounds"
                 metric_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("function")
                 metric_method = {
-                    data['metricKey']: metric_function
+                    metric_name: metric_function
                 }
-                if errorKey != "disabled":
-                    error_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("error_function")
-                    if error_function is not None:
-                        metric_method.update({error_function_name: error_function})
+                # if errorKey != "disabled":
+                error_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("error_function")
+                if error_function is not None:
+                    metric_method.update({error_function_name: error_function})
 
                 metric_frame = self.fairness_metrics_module.MetricFrame(
                     metric_method,
@@ -131,11 +143,17 @@ class FairnessDashboard(Dashboard):
                     sensitive_features=data["binVector"])
 
                 result = {"data": {
-                    "global": metric_frame.overall[data["metricKey"]],
+                    "global": metric_frame.overall[metric_name],
                     "bins": list(metric_frame.by_group.to_dict().values()),
                 }}
                 if error_function_name in metric_method:
-                    result["data"].update({"bounds": metric_frame.overall[error_function_name]})
+                    # [(x1, y1), (x2, y2), (x3, y3)...]
+                    binBounds = list(metric_frame.by_group[error_function_name].to_dict().values())
+                    result["data"].update({
+                        "bounds": metric_frame.overall[error_function_name],
+                        # [[x1, x2, x3...), [y1, y2, y3...]]
+                        "binBounds": [[pair[0] for pair in binBounds], [pair[1] for pair in binBounds]]
+                    })
                 return jsonify(result)
             except Exception as ex:
                 import sys

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { IMetricResponse, IMetricRequest } from "@responsible-ai/core-ui";
-import _, { max, min } from "lodash";
+import _ from "lodash";
 
 import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 
@@ -49,49 +49,53 @@ export class MetricsCache {
     return this.cache[featureIndex][modelIndex][key];
   }
 
-  public async getEqualizedOdds(
-    binIndexVector: number[],
-    featureIndex: number,
-    modelIndex: number,
-    fairnessMethod: FairnessModes,
-    errorKey: string
-  ): Promise<number> {
-    const falsePositiveRateMetric = await this.getFairnessMetric(
-      binIndexVector,
-      featureIndex,
-      modelIndex,
-      fairnessMethod === FairnessModes.Difference
-        ? "false_positive_rate_difference"
-        : "false_positive_rate_ratio",
-      fairnessMethod,
-      errorKey
-    );
-    const truePositiveRateMetric = await this.getFairnessMetric(
-      binIndexVector,
-      featureIndex,
-      modelIndex,
-      fairnessMethod === FairnessModes.Difference
-        ? "true_positive_rate_difference"
-        : "true_positive_rate_ratio",
-      fairnessMethod,
-      errorKey
-    );
+  // public async getEqualizedOdds(
+  //   binIndexVector: number[],
+  //   featureIndex: number,
+  //   modelIndex: number,
+  //   fairnessMethod: FairnessModes,
+  //   errorKey: string
+  // ): Promise<number> {
+  //   const falsePositiveRateMetric = (
+  //     await this.getFairnessMetric(
+  //       binIndexVector,
+  //       featureIndex,
+  //       modelIndex,
+  //       fairnessMethod === FairnessModes.Difference
+  //         ? "false_positive_rate_difference"
+  //         : "false_positive_rate_ratio",
+  //       fairnessMethod,
+  //       errorKey
+  //     )
+  //   )["overall"];
+  //   const truePositiveRateMetric = (
+  //     await this.getFairnessMetric(
+  //       binIndexVector,
+  //       featureIndex,
+  //       modelIndex,
+  //       fairnessMethod === FairnessModes.Difference
+  //         ? "true_positive_rate_difference"
+  //         : "true_positive_rate_ratio",
+  //       fairnessMethod,
+  //       errorKey
+  //     )
+  //   )["overall"];
 
-    if (
-      falsePositiveRateMetric === Number.NaN ||
-      truePositiveRateMetric === Number.NaN
-    ) {
-      return Number.NaN;
-    }
+  //   if (
+  //     falsePositiveRateMetric === Number.NaN ||
+  //     truePositiveRateMetric === Number.NaN
+  //   ) {
+  //     return Number.NaN;
+  //   }
 
-    if (fairnessMethod === FairnessModes.Difference) {
-      const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
-      return maxMetric === undefined ? Number.NaN : maxMetric;
-    }
+  //   if (fairnessMethod === FairnessModes.Difference) {
+  //     const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
+  //     return maxMetric === undefined ? Number.NaN : maxMetric;
+  //   }
 
-    const minMetric = min([falsePositiveRateMetric, truePositiveRateMetric]);
-    return minMetric === undefined ? Number.NaN : minMetric;
-  }
+  //   const minMetric = min([falsePositiveRateMetric, truePositiveRateMetric]);
+  //   return minMetric === undefined ? Number.NaN : minMetric;
+  // }
 
   public async getFairnessMetric(
     binIndexVector: number[],
@@ -100,17 +104,17 @@ export class MetricsCache {
     key: string,
     fairnessMethod: FairnessModes,
     errorKey: string
-  ): Promise<number> {
-    // Equalized Odds is calculated based on two other fairness metrics.
-    if (key.startsWith("equalized_odds")) {
-      return this.getEqualizedOdds(
-        binIndexVector,
-        featureIndex,
-        modelIndex,
-        fairnessMethod,
-        errorKey
-      );
-    }
+  ): Promise<{ overall: number; bounds?: number[] }> {
+    // // Equalized Odds is calculated based on two other fairness metrics.
+    // if (key.startsWith("equalized_odds")) {
+    //   return this.getEqualizedOdds(
+    //     binIndexVector,
+    //     featureIndex,
+    //     modelIndex,
+    //     fairnessMethod,
+    //     errorKey
+    //   );
+    // }
 
     const metricKey = fairnessOptions[key].fairnessMetric;
     let value = this.cache[featureIndex][modelIndex][metricKey];
@@ -127,7 +131,26 @@ export class MetricsCache {
       this.cache[featureIndex][modelIndex][metricKey] = value;
     }
     if (!value?.bins) {
-      return Number.NaN;
+      return { overall: Number.NaN };
+    }
+
+    let minLowerBound;
+    let maxLowerBound;
+    let minUpperBound;
+    let maxUpperBound;
+
+    let response;
+
+    // Use confidence bounds for each bin if they exist
+    if (value?.binBounds) {
+      const binBounds = value.binBounds
+        .slice()
+        .filter((x) => x !== undefined && !Number.isNaN(x));
+
+      minLowerBound = _.min(binBounds[0]);
+      maxLowerBound = _.max(binBounds[0]);
+      minUpperBound = _.min(binBounds[1]);
+      maxUpperBound = _.max(binBounds[1]);
     }
 
     let bins = value.bins
@@ -143,29 +166,55 @@ export class MetricsCache {
     const max = _.max(bins);
 
     if (min === undefined || max === undefined) {
-      return Number.NaN;
+      return { overall: Number.NaN };
     }
 
     if (fairnessMethod === FairnessModes.Min) {
-      return min;
+      response = { overall: min };
+      if (minLowerBound && maxLowerBound) {
+        response["bounds"] = [minLowerBound, maxLowerBound];
+      }
+      return response;
     }
 
     if (fairnessMethod === FairnessModes.Max) {
-      return max;
+      response = { overall: min };
+      if (minUpperBound && maxUpperBound) {
+        response["bounds"] = [minUpperBound, maxUpperBound];
+      }
+      return response;
     }
 
     if (fairnessMethod === FairnessModes.Ratio) {
       if (max === 0) {
-        return Number.NaN;
+        return { overall: 0 };
       }
-      return min / max;
+      if (minLowerBound === 0 || minLowerBound === 0) {
+        return { overall: min / max };
+      }
+      if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
+        return {
+          bounds: [
+            minLowerBound / maxUpperBound,
+            maxLowerBound / minUpperBound
+          ],
+          overall: min / max
+        };
+      }
     }
 
     if (fairnessMethod === FairnessModes.Difference) {
-      return max - min;
+      response = { overall: max - min };
+      if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
+        response["bounds"] = [
+          minUpperBound - maxLowerBound,
+          maxUpperBound - minLowerBound
+        ];
+      }
+      return response;
     }
 
-    return Number.NaN;
+    return { overall: Number.NaN };
   }
 
   public async getFairnessMetricV1(

@@ -38,7 +38,8 @@ export class ChartBuilder {
       rows,
       `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${
         datum.yAccessor
-      }, xLB: ${datum.xAccessorLB}, xUB: ${datum.xAccessorUB}
+      }, xLB: ${datum.xAccessorLB}, xUB: ${datum.xAccessorUB},
+      yLB: ${datum.yAccessorLB}, yUB: ${datum.yAccessorUB}
       , group: ${datum.groupBy}, size: ${datum.sizeAccessor}${datumLevelPaths}}`
     );
     // for bubble charts, we scale all sizes to the max size, only needs to be done once since its global
@@ -180,13 +181,20 @@ export class ChartBuilder {
       visible: true
     };
 
-    // result[0].error_y = {
-    //   array: fairnessUB,
-    //   arrayminus: fairnessLB,
-    //   type: "data",
-    //   visible: true
-    // };
+    const fairnessLB: any = [];
+    const fairnessUB: any = [];
+    projectedRows.forEach((row) => {
+      console.log(row);
+      fairnessLB.push(row.yLB);
+      fairnessUB.push(row.yUB);
+    });
 
+    result[0].error_y = {
+      array: fairnessLB,
+      arrayminus: fairnessUB,
+      type: "data",
+      visible: true
+    };
     return result;
   }
 

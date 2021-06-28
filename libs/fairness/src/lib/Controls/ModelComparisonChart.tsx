@@ -61,6 +61,7 @@ export interface IState {
   performanceArray?: number[];
   performanceBounds?: Array<number[] | undefined>;
   fairnessArray?: number[];
+  fairnessBounds?: Array<number[] | undefined>;
   errorKey?: string;
 }
 
@@ -105,7 +106,8 @@ export class ModelComparisonChart extends React.Component<
         xAccessorLB: "PerformanceLB",
         xAccessorUB: "PerformanceUB",
         yAccessor: "Fairness",
-        yErrorAccessor: "Fairness"
+        yAccessorLB: "FairnessLB",
+        yAccessorUB: "FairnessUB"
         // error_y: {
         //   type: "data",
         //   array: [1, 2, 3],
@@ -175,10 +177,17 @@ export class ModelComparisonChart extends React.Component<
         />
       );
     } else {
-      const { fairnessArray, performanceBounds, errorKey } = this.state;
+      const {
+        fairnessArray,
+        fairnessBounds,
+        performanceBounds,
+        errorKey
+      } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
           Fairness: fairnessArray[index],
+          FairnessLB: 0,
+          FairnessUB: 0,
           index,
           Performance: performance,
           PerformanceLB: 0,
@@ -191,6 +200,15 @@ export class ModelComparisonChart extends React.Component<
           if (bounds !== undefined) {
             data[index].PerformanceLB = data[index].Performance - bounds[0];
             data[index].PerformanceUB = bounds[1] - data[index].Performance;
+          }
+        });
+      }
+
+      if (_.isArray(fairnessBounds) && errorKey !== "disabled") {
+        fairnessBounds.forEach((bounds, index) => {
+          if (bounds !== undefined) {
+            data[index].FairnessLB = data[index].Fairness - bounds[0];
+            data[index].FairnessUB = bounds[1] - data[index].Fairness;
           }
         });
       }
@@ -390,14 +408,27 @@ export class ModelComparisonChart extends React.Component<
       const fairnessArray = (await Promise.all(fairnessPromises)).map(
         (metric) => {
           console.log(metric);
-          return metric;
+          return metric.overall;
+        }
+      );
+
+      const fairnessBounds = (await Promise.all(fairnessPromises)).map(
+        (metric) => {
+          console.log(metric);
+          return metric.bounds;
         }
       );
       console.log(performanceArray);
       console.log(performanceBounds);
       console.log(fairnessArray);
+      console.log(fairnessBounds);
 
-      this.setState({ fairnessArray, performanceArray, performanceBounds });
+      this.setState({
+        fairnessArray,
+        fairnessBounds,
+        performanceArray,
+        performanceBounds
+      });
     } catch {
       // todo;
     }
