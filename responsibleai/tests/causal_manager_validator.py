@@ -6,7 +6,6 @@ import pytest
 import pandas as pd
 
 from responsibleai.exceptions import (
-    DuplicateManagerConfigException,
     UserConfigValidationException)
 
 from responsibleai._interfaces import (
@@ -37,11 +36,10 @@ LOCAL_POLICY_ATTRIBUTES = [
 def validate_causal(model_analysis, data, target_column,
                     treatment_features, max_cat_expansion):
     # Add the first configuration
-    model_analysis.causal.add(
+    model_analysis.causal.compute(
         treatment_features,
         nuisance_model='automl',
         upper_bound_on_cat_expansion=max_cat_expansion)
-    model_analysis.causal.compute()
 
     results = model_analysis.causal.get()
     assert results is not None
@@ -55,28 +53,18 @@ def validate_causal(model_analysis, data, target_column,
     assert len(results) == 1
     _check_causal_results(results[0], is_serialized=True)
 
-    # Add a duplicate configuration
-    message = "Duplicate causal configuration detected."
-    with pytest.raises(DuplicateManagerConfigException, match=message):
-        model_analysis.causal.add(
-            treatment_features,
-            nuisance_model='automl',
-            upper_bound_on_cat_expansion=max_cat_expansion)
-
     # Add the second configuration
-    model_analysis.causal.add(treatment_features,
-                              nuisance_model='linear')
-    model_analysis.causal.compute()
+    model_analysis.causal.compute(
+        treatment_features, nuisance_model='linear')
     results = model_analysis.causal.get()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 2
 
     # Add a bad configuration
-    model_analysis.causal.add(treatment_features,
-                              nuisance_model='fake_model')
     with pytest.raises(UserConfigValidationException):
-        model_analysis.causal.compute()
+        model_analysis.causal.compute(
+            treatment_features, nuisance_model='fake_model')
 
 
 def _check_causal_results(causal_results, is_serialized=False):

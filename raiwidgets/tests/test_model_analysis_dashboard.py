@@ -33,14 +33,13 @@ class TestModelAnalysisDashboard:
                                                  'Occupation', 'Relationship',
                                                  'Race',
                                                  'Sex', 'Country'])
-        ma.explainer.add()
-        ma.counterfactual.add(10, desired_class='opposite')
-        ma.error_analysis.add()
-        ma.causal.add(treatment_features=['Hours per week', 'Occupation'],
+        ma.explainer.compute()
+        ma.counterfactual.compute(10, desired_class='opposite')
+        ma.error_analysis.compute()
+        ma.causal.compute(treatment_features=['Hours per week', 'Occupation'],
                       heterogeneity_features=None,
                       upper_bound_on_cat_expansion=42,
                       skip_cat_limit_checks=True)
-        ma.compute()
 
         widget = ModelAnalysisDashboard(ma)
         assert isinstance(widget.input.dashboard_input.dataset,

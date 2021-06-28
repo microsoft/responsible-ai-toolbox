@@ -14,12 +14,8 @@ class BaseManager(ABC):
         super(BaseManager, self).__init__(*args, **kwargs)
 
     @abstractmethod
-    def add(self):
-        """Abstract method to add a computation to the manager."""
-
-    @abstractmethod
     def compute(self):
-        """Abstract method to compute the new work in the add method."""
+        """Abstract method to compute new model analysis insights."""
 
     @abstractmethod
     def get(self):
