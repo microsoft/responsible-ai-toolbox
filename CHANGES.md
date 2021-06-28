@@ -16,13 +16,26 @@ Note that it is not required to have an entry for every pull request.
 Instead, please try to add only changes that are meaningful to users who read
 this file to understand what changed.
 
-## v-next (post-v0.3.1)
+## v-next
 
 - educational materials
 - new features
 - breaking changes
 - bug fixes
 - other
+
+## v0.8.0
+
+- educational materials
+- new features
+  - enabled categoricals on MimicExplainer for the explainer manager
+  - updated causal constants to enable linear models and allow high cardinality features by default
+  - support newest policy output format from econml
+- breaking changes
+- bug fixes
+  - fixed error analysis add after model analysis deserialization 
+- other
+  - improved tests for visualization dependencies
 
 ## v0.7.0
 
