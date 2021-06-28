@@ -33,7 +33,7 @@ this file to understand what changed.
   - support newest policy output format from econml
 - breaking changes
 - bug fixes
-  - fixed error analysis add after model analysis deserialization 
+  - fixed error analysis add after model analysis deserialization
 - other
   - improved tests for visualization dependencies
 
