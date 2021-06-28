@@ -23,6 +23,13 @@ class CausalConstants:
     AUTOML = 'automl'
     LINEAR = 'linear'
 
+    DEFAULT_ALPHA = 0.05
+    DEFAULT_MAX_CAT_EXPANSION = 50
+    DEFAULT_TREATMENT_COST = 0
+    DEFAULT_MIN_TREE_LEAF_SAMPLES = 2
+    DEFAULT_MAX_TREE_DEPTH = 3
+    DEFAULT_SKIP_CAT_LIMIT_CHECKS = False
+
 
 class CausalConfig(BaseConfig):
     def __init__(
@@ -139,14 +146,14 @@ class CausalManager(BaseManager):
         self,
         treatment_features,
         heterogeneity_features=None,
-        nuisance_model=CausalConstants.AUTOML,
+        nuisance_model=CausalConstants.LINEAR,
         heterogeneity_model=None,
-        alpha=0.05,
-        upper_bound_on_cat_expansion=5,
-        treatment_cost=0,
-        min_tree_leaf_samples=2,
-        max_tree_depth=3,
-        skip_cat_limit_checks=False,
+        alpha=CausalConstants.DEFAULT_ALPHA,
+        upper_bound_on_cat_expansion=CausalConstants.DEFAULT_MAX_CAT_EXPANSION,
+        treatment_cost=CausalConstants.DEFAULT_TREATMENT_COST,
+        min_tree_leaf_samples=CausalConstants.DEFAULT_MIN_TREE_LEAF_SAMPLES,
+        max_tree_depth=CausalConstants.DEFAULT_MAX_TREE_DEPTH,
+        skip_cat_limit_checks=CausalConstants.DEFAULT_SKIP_CAT_LIMIT_CHECKS,
     ):
         """Add a causal configuration to be computed later.
         :param treatment_features: Treatment feature names.
