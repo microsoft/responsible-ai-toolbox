@@ -132,23 +132,30 @@ def _check_policy(policy, is_serialized=False):
     if is_serialized:
         assert isinstance(policy, CausalPolicy)
         treatment_feature = policy.treatment_feature
+        control_treatment = policy.control_treatment
         local_policies = policy.local_policies
         policy_gains = policy.policy_gains
         policy_tree = policy.policy_tree
     else:
         assert isinstance(policy, dict)
         treatment_feature = policy['treatment_feature']
+        control_treatment = policy['control_treatment']
         local_policies = policy['local_policies']
         policy_gains = policy['policy_gains']
         policy_tree = policy['policy_tree']
 
     _check_treatment_feature(treatment_feature)
+    _check_control_treatment(control_treatment)
     _check_local_policies(local_policies, is_serialized=is_serialized)
     _check_policy_gains(policy_gains, is_serialized=is_serialized)
     _check_policy_tree(policy_tree, is_serialized=is_serialized)
 
 
 def _check_treatment_feature(treatment_feature):
+    pass
+
+
+def _check_control_treatment(control_treatment):
     pass
 
 
@@ -175,8 +182,10 @@ def _check_policy_gains(policy_gains, is_serialized=False):
 
     assert isinstance(recommended_policy_gains, float)
 
-    assert isinstance(treatment_gains, list)
-    assert all(isinstance(v, float) for v in treatment_gains)
+    assert isinstance(treatment_gains, dict)
+    for treatment_name, treatment_value in treatment_gains.items():
+        assert isinstance(treatment_name, str)
+        assert isinstance(treatment_value, float)
 
 
 def _check_policy_tree(policy_tree, is_serialized=False):
