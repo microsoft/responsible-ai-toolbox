@@ -9,6 +9,7 @@ REQUIRED_DEPENDENCIES = [
     'econml',
     'dice-ml',
     'interpret-community',
+    'erroranalysis',
 ]
 
 DISALLOWED_DEPENDENCIES = [
@@ -16,12 +17,11 @@ DISALLOWED_DEPENDENCIES = [
     'keras',
     'pytorch',
     'matplotlib',
-    'graphviz'
+    'graphviz',
+    'jupyter'
 ]
 
-EXCEPTIONS = {
-    'econml': ['graphviz']
-}
+EXCEPTIONS = {}
 
 
 @pytest.fixture(scope='class')
