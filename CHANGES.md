@@ -32,6 +32,7 @@ this file to understand what changed.
   - updated causal constants to enable linear models and allow high cardinality features by default
   - support newest policy output format from econml
 - breaking changes
+  - continuous_features in CounterfactualManager.add() is deprecated in favor of categorical_features in ModelAnalysis
 - bug fixes
   - fixed error analysis add after model analysis deserialization
 - other
