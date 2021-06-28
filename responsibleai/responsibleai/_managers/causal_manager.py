@@ -252,7 +252,7 @@ class CausalManager(BaseManager):
                     treatment_costs=config.treatment_cost,
                     alpha=config.alpha)
 
-                tree_output = analysis._policy_tree_output(
+                tree = analysis._policy_tree_output(
                     X_test, treatment_feature,
                     treatment_costs=config.treatment_cost,
                     max_depth=config.max_tree_depth,
@@ -261,13 +261,13 @@ class CausalManager(BaseManager):
 
                 policy = {
                     self.TREATMENT_FEATURE: treatment_feature,
-                    self.CONTROL_TREATMENT: tree_output.control_name,
+                    self.CONTROL_TREATMENT: tree.control_name,
                     self.LOCAL_POLICIES: local_policies,
                     self.POLICY_GAINS: {
-                        self.RECOMMENDED_POLICY_GAINS: tree_output.policy_value,
-                        self.TREATMENT_GAINS: tree_output.always_treat,
+                        self.RECOMMENDED_POLICY_GAINS: tree.policy_value,
+                        self.TREATMENT_GAINS: tree.always_treat,
                     },
-                    self.POLICY_TREE: tree_output.tree_dictionary
+                    self.POLICY_TREE: tree.tree_dictionary
                 }
                 config.policies.append(policy)
 
