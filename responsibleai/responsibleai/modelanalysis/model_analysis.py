@@ -116,6 +116,10 @@ class ModelAnalysis(object):
                           self._counterfactual_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
+        self._add_managers = [
+            self._error_analysis_manager,
+            self._explainer_manager,
+        ]
 
     @property
     def causal(self) -> CausalManager:
@@ -151,7 +155,7 @@ class ModelAnalysis(object):
 
     def compute(self):
         """Calls compute on each of the managers."""
-        for manager in self._managers:
+        for manager in self._add_managers:
             manager.compute()
 
     def list(self):

@@ -2,19 +2,17 @@
 # Licensed under the MIT License.
 
 """Defines the Counterfactual Manager class."""
-import json
 import dice_ml
-from dice_ml import Dice
+import json
 import numpy as np
 
+from dice_ml import Dice
+
+from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai._config.base_config import BaseConfig
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.constants import ModelTask
-from responsibleai.exceptions import (
-    UserConfigValidationException, DuplicateManagerConfigException
-)
-from responsibleai._interfaces import CounterfactualData
 
 
 class CounterfactualConstants:
@@ -25,35 +23,32 @@ class CounterfactualConstants:
     RANDOM = 'random'
 
 
-class CounterfactualConfig(BaseConfig):
-    def __init__(self, method, continuous_features, total_CFs,
-                 desired_class=CounterfactualConstants.OPPOSITE,
-                 desired_range=None, permitted_range=None,
-                 features_to_vary=None, feature_importance=False):
-        super(CounterfactualConfig, self).__init__()
-        self.method = method
-        self.continuous_features = continuous_features
-        self.total_CFs = total_CFs
-        self.desired_range = desired_range
-        self.desired_class = desired_class
-        self.permitted_range = permitted_range
-        self.features_to_vary = features_to_vary
-        self.feature_importance = feature_importance
-        self.counterfactual_obj = None
-        self.has_computation_failed = False
-        self.failure_reason = None
+class CounterfactualResult:
+    def __init__(
+        self,
+        explainer=False,
+        counterfactual_output=False,
+    ):
+        self.explainer = explainer
+        self.counterfactual_output = counterfactual_output
 
-    def __eq__(self, other_cf_config):
-        return (
-            self.method == other_cf_config.method and
-            self.continuous_features == other_cf_config.continuous_features and
-            self.total_CFs == other_cf_config.total_CFs and
-            self.desired_range == other_cf_config.desired_range and
-            self.desired_class == other_cf_config.desired_class and
-            self.permitted_range == other_cf_config.permitted_range and
-            self.features_to_vary == other_cf_config.features_to_vary and
-            self.feature_importance == other_cf_config.feature_importance
-        )
+    def to_dict(self):
+        return self.counterfactual_output
+
+    def serialize(self):
+        data = CounterfactualData()
+        json_data = json.loads(self.counterfactual_output.to_json())
+
+        data.cfs_list = json_data['cfs_list']
+        data.feature_names = json_data['feature_names']
+        data.feature_names_including_target = json_data[
+            'feature_names_including_target']
+        data.summary_importance = json_data['summary_importance']
+        data.local_importance = json_data['local_importance']
+        data.model_type = json_data['model_type']
+        data.desired_class = json_data['desired_class']
+        data.desired_range = json_data['desired_range']
+        return data
 
 
 class CounterfactualManager(BaseManager):
@@ -86,7 +81,8 @@ class CounterfactualManager(BaseManager):
         self._target_column = target_column
         self._task_type = task_type
         self._categorical_features = categorical_features
-        self._counterfactual_config_list = []
+
+        self._results = []
 
     def _create_diceml_explainer(self, method, continuous_features):
 
@@ -96,18 +92,46 @@ class CounterfactualManager(BaseManager):
         model_type = CounterfactualConstants.CLASSIFIER \
             if self._task_type == ModelTask.CLASSIFICATION else \
             CounterfactualConstants.REGRESSOR
-        dice_model = dice_ml.Model(model=self._model,
-                                   backend=CounterfactualConstants.SKLEARN,
-                                   model_type=model_type)
 
-        dice_explainer = Dice(dice_data, dice_model, method=method)
+        backend = CounterfactualConstants.SKLEARN
+        dice_model = dice_ml.Model(
+            model=self._model, backend=backend, model_type=model_type)
 
-        return dice_explainer
+        return Dice(dice_data, dice_model, method=method)
 
-    def _add_counterfactual_config(self, new_counterfactual_config):
+    def compute(
+        self,
+        total_CFs,
+        method=CounterfactualConstants.RANDOM,
+        desired_class=None,
+        desired_range=None,
+        permitted_range=None,
+        features_to_vary=None,
+        feature_importance=True,
+    ):
+        """Compute diverse counterfactual insights.
 
+        :param total_CFs: Total number of counterfactuals required.
+        :type total_CFs: int
+        :param desired_class: Desired counterfactual class. For binary
+            classification, this needs to be set as "opposite".
+        :type desired_class: string or int
+        :param desired_range: For regression problems.
+            Contains the outcome range to generate counterfactuals in.
+        :type desired_range: list
+        :param permitted_range: Dictionary with feature names as keys and
+            permitted range in list as values. Defaults to the range
+            inferred from training data.
+        :type permitted_range: dict
+        :param features_to_vary: Either a string "all" or a list of feature
+            names to vary.
+        :type features_to_vary: list
+        :param feature_importance: Flag to compute feature importance
+            using dice-ml.
+        :type feature_importance: bool
+        """
         if self._task_type == ModelTask.CLASSIFICATION:
-            if new_counterfactual_config.desired_class is None:
+            if desired_class is None:
                 raise UserConfigValidationException(
                     'The desired_class attribute should be either \'{0}\''
                     ' or the class value for classification scenarios.'.format(
@@ -115,62 +139,20 @@ class CounterfactualManager(BaseManager):
 
             is_multiclass = len(np.unique(
                 self._train[self._target_column].values).tolist()) > 2
-            if is_multiclass and \
-                    new_counterfactual_config.desired_class == \
-                    CounterfactualConstants.OPPOSITE:
+            class_is_opposite = desired_class == \
+                CounterfactualConstants.OPPOSITE
+            if is_multiclass and class_is_opposite:
                 raise UserConfigValidationException(
                     'The desired_class attribute should not be \'{0}\''
                     ' It should be the class value for multiclass'
                     ' classification scenario.'.format(
                         CounterfactualConstants.OPPOSITE))
-
-        if self._task_type == ModelTask.REGRESSION:
-            if new_counterfactual_config.desired_range is None:
+        elif self._task_type == ModelTask.REGRESSION:
+            if desired_range is None:
                 raise UserConfigValidationException(
-                    'The desired_range should not be None'
-                    ' for regression scenarios.')
+                    "The desired_range should not be None"
+                    " for regression scenarios.")
 
-        is_duplicate = new_counterfactual_config.is_duplicate(
-            self._counterfactual_config_list)
-
-        if is_duplicate:
-            raise DuplicateManagerConfigException(
-                'Duplicate counterfactual configuration detected.')
-        else:
-            self._counterfactual_config_list.append(new_counterfactual_config)
-
-    def add(self,
-            total_CFs,
-            method=CounterfactualConstants.RANDOM,
-            desired_class=None,
-            desired_range=None,
-            permitted_range=None,
-            features_to_vary=None,
-            feature_importance=True):
-        """Add a counterfactual generation configuration to be computed later.
-
-        :param total_CFs: Total number of counterfactuals required.
-        :type total_CFs: int
-        :param desired_class: Desired counterfactual class. For binary
-                              classification, this needs to be set as
-                              "opposite".
-        :type desired_class: string or int
-        :param desired_range: For regression problems.
-                              Contains the outcome range
-                              to generate counterfactuals in.
-        :type desired_range: list
-        :param permitted_range: Dictionary with feature names as keys and
-                                permitted range in list as values.
-                                Defaults to the range inferred from training
-                                data.
-        :type permitted_range: dict
-        :param features_to_vary: Either a string "all" or a list of
-                                 feature names to vary.
-        :type features_to_vary: list
-        :param feature_importance: Flag to compute feature importance using
-                                   dice-ml.
-        :type feature_importance: bool
-        """
         if self._categorical_features is None:
             continuous_features = \
                 list(set(self._train.columns) - set([self._target_column]))
@@ -178,76 +160,31 @@ class CounterfactualManager(BaseManager):
             continuous_features = list(set(self._train.columns) -
                                        set([self._target_column]) -
                                        set(self._categorical_features))
+        result = CounterfactualResult()
 
-        counterfactual_config = CounterfactualConfig(
-            method=method,
-            continuous_features=continuous_features,
-            total_CFs=total_CFs,
-            desired_class=desired_class,
-            desired_range=desired_range,
-            permitted_range=permitted_range,
-            features_to_vary=features_to_vary,
-            feature_importance=feature_importance)
+        result.explainer = self._create_diceml_explainer(
+            method=method, continuous_features=continuous_features)
 
-        self._add_counterfactual_config(counterfactual_config)
+        X_test = self._test.drop([self._target_column], axis=1)
 
-    def compute(self):
-        """Computes the counterfactual examples by running the counterfactual
-           configuration."""
-        for cf_config in self._counterfactual_config_list:
-            if not cf_config.is_computed:
-                cf_config.is_computed = True
-                try:
-                    dice_explainer = self._create_diceml_explainer(
-                        method=cf_config.method,
-                        continuous_features=cf_config.continuous_features)
-
-                    X_test = self._test.drop([self._target_column], axis=1)
-
-                    if not cf_config.feature_importance:
-                        counterfactual_obj = \
-                            dice_explainer.generate_counterfactuals(
-                                X_test, total_CFs=cf_config.total_CFs,
-                                desired_class=cf_config.desired_class,
-                                desired_range=cf_config.desired_range)
-                    else:
-                        counterfactual_obj = \
-                            dice_explainer.global_feature_importance(
-                                X_test,
-                                total_CFs=cf_config.total_CFs,
-                                desired_class=cf_config.desired_class,
-                                desired_range=cf_config.desired_range)
-
-                    cf_config.counterfactual_obj = \
-                        counterfactual_obj
-                except Exception as e:
-                    cf_config.has_computation_failed = True
-                    cf_config.failure_reason = str(e)
-                    raise e
-
-    def get(self, failed_to_compute=False):
-        """Return the computed counterfactual examples objects or failure reason.
-
-        :param failed_to_compute: Get the failure reasons if counterfactual
-                                  examples failed to compute.
-        :type failed_to_compute: bool
-        """
-        if not failed_to_compute:
-            counterfactual_obj_list = []
-            for counterfactual_config in self._counterfactual_config_list:
-                if counterfactual_config.is_computed and \
-                        not counterfactual_config.has_computation_failed:
-                    counterfactual_obj_list.append(
-                        counterfactual_config.counterfactual_obj)
-            return counterfactual_obj_list
+        if not feature_importance:
+            result.counterfactual_output = \
+                result.explainer.generate_counterfactuals(
+                    X_test, total_CFs=total_CFs,
+                    desired_class=desired_class,
+                    desired_range=desired_range)
         else:
-            failure_reason_list = []
-            for counterfactual_config in self._counterfactual_config_list:
-                if counterfactual_config.is_computed and \
-                        counterfactual_config.has_computation_failed:
-                    failure_reason_list.append(
-                        counterfactual_config.failure_reason)
-            return failure_reason_list
+            result.counterfactual_output = \
+                result.explainer.global_feature_importance(
+                    X_test, total_CFs=total_CFs,
+                    desired_class=desired_class,
+                    desired_range=desired_range)
+
+        self._results.append(result)
+
+    def get(self):
+        """Return the computed counterfactual insights."""
+        return [result.to_dict() for result in self._results]
 
     def list(self):
         pass
@@ -255,25 +192,10 @@ class CounterfactualManager(BaseManager):
     def get_data(self):
         """Get counterfactual data
 
-        :return: A array of CounterfactualData.
+        :return: List of CounterfactualData objects.
         :rtype: List[CounterfactualData]
         """
-        return [
-            self._get_counterfactual(i) for i in self.get()]
-
-    def _get_counterfactual(self, counterfactual):
-        cfdata = CounterfactualData()
-        json_data = json.loads(counterfactual.to_json())
-        cfdata.cfs_list = json_data["cfs_list"]
-        cfdata.feature_names = json_data["feature_names"]
-        cfdata.feature_names_including_target = json_data[
-            "feature_names_including_target"]
-        cfdata.summary_importance = json_data["summary_importance"]
-        cfdata.local_importance = json_data["local_importance"]
-        cfdata.model_type = json_data["model_type"]
-        cfdata.desired_class = json_data["desired_class"]
-        cfdata.desired_range = json_data["desired_range"]
-        return cfdata
+        return [result.serialize() for result in self._results]
 
     @property
     def name(self):

@@ -131,8 +131,14 @@ class CausalResult:
 
 
 class CausalManager(BaseManager):
-    def __init__(self, train, test, target_column, task_type,
-                 categorical_features):
+    def __init__(
+        self,
+        train,
+        test,
+        target_column,
+        task_type,
+        categorical_features
+    ):
         """Construct a CausalManager for generating causal analyses
            from a dataset.
 
@@ -154,6 +160,7 @@ class CausalManager(BaseManager):
         self._target_column = target_column
         self._task_type = task_type
         self._categorical_features = categorical_features
+
         self._results = []
 
     def compute(
@@ -161,7 +168,7 @@ class CausalManager(BaseManager):
         treatment_features,
         heterogeneity_features=None,
         nuisance_model=CausalConstants.LINEAR,
-        heterogeneity_model=None,
+        heterogeneity_model=CausalConstants.LINEAR,
         alpha=CausalConstants.DEFAULT_ALPHA,
         upper_bound_on_cat_expansion=CausalConstants.DEFAULT_MAX_CAT_EXPANSION,
         treatment_cost=CausalConstants.DEFAULT_TREATMENT_COST,
@@ -219,6 +226,7 @@ class CausalManager(BaseManager):
             heterogeneity_inds=heterogeneity_features,
             classification=is_classification,
             nuisance_models=nuisance_model,
+            heterogeneity_model=heterogeneity_model,
             upper_bound_on_cat_expansion=upper_bound_on_cat_expansion,
             skip_cat_limit_checks=skip_cat_limit_checks,
             n_jobs=-1)
