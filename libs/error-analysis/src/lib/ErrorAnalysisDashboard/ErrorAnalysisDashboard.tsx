@@ -235,6 +235,16 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     const globalProps = buildGlobalProperties(props.precomputedExplanations);
     // consider taking filters in as param arg for programmatic users
+    let metricStats: MetricCohortStats | undefined = undefined;
+    if (props.rootStats) {
+      metricStats = new MetricCohortStats(
+        props.rootStats.totalSize,
+        props.rootStats.totalSize,
+        props.rootStats.metricValue,
+        props.rootStats.metricName,
+        props.rootStats.errorCoverage
+      );
+    }
     const cohorts = [
       new ErrorCohort(
         new Cohort(
@@ -242,7 +252,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           jointDataset,
           []
         ),
-        jointDataset
+        jointDataset,
+        0,
+        CohortSource.None,
+        false,
+        metricStats
       )
     ];
     const weightVectorLabels = {

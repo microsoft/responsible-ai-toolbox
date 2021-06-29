@@ -6,12 +6,13 @@ import numpy as np
 from abc import ABC, abstractmethod
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
-from sklearn.feature_selection import mutual_info_classif
+from sklearn.feature_selection import (
+    mutual_info_classif, mutual_info_regression)
 from erroranalysis._internal.matrix_filter import compute_json_matrix
 from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
 from erroranalysis._internal.error_report import ErrorReport
-from erroranalysis._internal.constants import ModelTask
+from erroranalysis._internal.constants import ModelTask, Metrics
 
 
 class BaseAnalyzer(ABC):
@@ -32,6 +33,12 @@ class BaseAnalyzer(ABC):
         self._categorical_indexes = []
         self._category_dictionary = {}
         self._model_task = model_task
+        if model_task == ModelTask.CLASSIFICATION:
+            if metric is None:
+                metric = Metrics.ERROR_RATE
+        else:
+            if metric is None:
+                metric = Metrics.MEAN_SQUARED_ERROR
         self._metric = metric
         if self._categorical_features:
             self._categorical_indexes = [feature_names.index(feature)
@@ -106,9 +113,9 @@ class BaseAnalyzer(ABC):
                                        num_leaves=num_leaves)
 
     def create_error_report(self,
-                            filter_features,
-                            max_depth,
-                            num_leaves):
+                            filter_features=None,
+                            max_depth=None,
+                            num_leaves=None):
         json_tree = self.compute_error_tree(self.feature_names,
                                             None,
                                             None,
@@ -132,8 +139,11 @@ class BaseAnalyzer(ABC):
             string_ind_data = self.string_indexed_data
             for idx, c_i in enumerate(indexes):
                 input_data[:, c_i] = string_ind_data[:, idx]
-        # compute the feature importances using mutual information
-        return mutual_info_classif(input_data, diff).tolist()
+        if self._model_task == ModelTask.CLASSIFICATION:
+            # compute the feature importances using mutual information
+            return mutual_info_classif(input_data, diff).tolist()
+        else:
+            return mutual_info_regression(input_data, diff).tolist()
 
     def _make_pandas_copy(self, dataset):
         if isinstance(dataset, pd.DataFrame):
@@ -174,7 +184,10 @@ class ModelAnalyzer(BaseAnalyzer):
         return self._model
 
     def get_diff(self):
-        return self.model.predict(self.dataset) != self.true_y
+        if self._model_task == ModelTask.CLASSIFICATION:
+            return self.model.predict(self.dataset) != self.true_y
+        else:
+            return self.model.predict(self.dataset) - self.true_y
 
 
 class PredictionsAnalyzer(BaseAnalyzer):

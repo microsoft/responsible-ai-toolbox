@@ -13,12 +13,14 @@ from responsibleai.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import (
     json_converter as report_json_converter, as_error_report)
+from responsibleai._interfaces import ErrorAnalysisData
 
 REPORTS = 'reports'
 CONFIG = 'config'
 MAX_DEPTH = Keys.MAX_DEPTH
 NUM_LEAVES = Keys.NUM_LEAVES
 FILTER_FEATURES = Keys.FILTER_FEATURES
+IS_COMPUTED = 'is_computed'
 
 
 def config_json_converter(obj):
@@ -48,11 +50,16 @@ def as_error_config(json_dict):
     has_max_depth = MAX_DEPTH in json_dict
     has_num_leaves = NUM_LEAVES in json_dict
     has_filter_features = FILTER_FEATURES in json_dict
-    if has_max_depth and has_num_leaves and has_filter_features:
+    has_is_computed = IS_COMPUTED in json_dict
+    has_all_fields = (has_max_depth and has_num_leaves and
+                      has_filter_features and has_is_computed)
+    if has_all_fields:
         max_depth = json_dict[MAX_DEPTH]
         num_leaves = json_dict[NUM_LEAVES]
         filter_features = json_dict[FILTER_FEATURES]
-        return ErrorAnalysisConfig(max_depth, num_leaves, filter_features)
+        config = ErrorAnalysisConfig(max_depth, num_leaves, filter_features)
+        config.is_computed = json_dict[IS_COMPUTED]
+        return config
     else:
         return json_dict
 
@@ -110,7 +117,8 @@ class ErrorAnalysisConfig(BaseConfig):
         """
         return {'max_depth': self.max_depth,
                 'num_leaves': self.num_leaves,
-                'filter_features': self.filter_features}
+                'filter_features': self.filter_features,
+                'is_computed': self.is_computed}
 
     def to_json(self):
         """Serialize ErrorAnalysisConfig object to json.
@@ -144,7 +152,7 @@ class ErrorAnalysisManager(BaseManager):
     :type target_column: str
     """
 
-    def __init__(self, model, train, target_column):
+    def __init__(self, model, train, target_column, categorical_features=None):
         """Defines the ErrorAnalysisManager for discovering errors in a model.
 
         :param model: The model to analyze errors on.
@@ -156,14 +164,17 @@ class ErrorAnalysisManager(BaseManager):
         :param target_column: The name of the label column.
         :type target_column: str
         """
-        self._model = model
         self._y_train = train[target_column]
         self._train = train.drop(columns=[target_column])
         self._feature_names = list(self._train.columns)
-        # TODO: Add categorical features support
-        self._categorical_features = None
+        self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
+        self._analyzer = ModelAnalyzer(model,
+                                       self._train,
+                                       self._y_train,
+                                       self._feature_names,
+                                       self._categorical_features)
 
     def add(self, max_depth=3, num_leaves=31, filter_features=None):
         """Add an error analyzer to be computed later.
@@ -197,16 +208,12 @@ class ErrorAnalysisManager(BaseManager):
             if config.is_computed:
                 continue
             config.is_computed = True
-            analyzer = ModelAnalyzer(self._model,
-                                     self._train,
-                                     self._y_train,
-                                     self._feature_names,
-                                     self._categorical_features)
             max_depth = config.max_depth
             num_leaves = config.num_leaves
-            report = analyzer.create_error_report(config.filter_features,
-                                                  max_depth=max_depth,
-                                                  num_leaves=num_leaves)
+            filter_features = config.filter_features
+            report = self._analyzer.create_error_report(filter_features,
+                                                        max_depth=max_depth,
+                                                        num_leaves=num_leaves)
             self._ea_report_list.append(report)
 
     def get(self):
@@ -236,6 +243,21 @@ class ErrorAnalysisManager(BaseManager):
             reports.append(report)
         props[Keys.REPORTS] = reports
         return props
+
+    def get_data(self):
+        """Get error analysis data
+
+        :return: A array of ErrorAnalysisConfig.
+        :rtype: List[ErrorAnalysisConfig]
+        """
+        return [
+            self._get_error_analysis(i) for i in self.list()["reports"]]
+
+    def _get_error_analysis(self, report):
+        error_analysis = ErrorAnalysisData()
+        error_analysis.maxDepth = report[Keys.MAX_DEPTH]
+        error_analysis.numLeaves = report[Keys.NUM_LEAVES]
+        return error_analysis
 
     @property
     def name(self):
@@ -286,11 +308,18 @@ class ErrorAnalysisManager(BaseManager):
         with open(config_path, 'r') as file:
             ea_config_list = json.load(file, object_hook=as_error_config)
         inst.__dict__['_ea_config_list'] = ea_config_list
-        inst.__dict__['_categorical_features'] = None
+        categorical_features = model_analysis.categorical_features
+        inst.__dict__['_categorical_features'] = categorical_features
         target_column = model_analysis.target_column
         y_train = model_analysis.train[target_column]
         train = model_analysis.train.drop(columns=[target_column])
         inst.__dict__['_train'] = train
         inst.__dict__['_y_train'] = y_train
-        inst.__dict__['_feature_names'] = list(train.columns)
+        feature_names = list(train.columns)
+        inst.__dict__['_feature_names'] = feature_names
+        inst.__dict__['_analyzer'] = ModelAnalyzer(model_analysis.model,
+                                                   train,
+                                                   y_train,
+                                                   feature_names,
+                                                   categorical_features)
         return inst

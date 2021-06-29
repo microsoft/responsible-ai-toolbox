@@ -2,9 +2,16 @@
 # Licensed under the MIT License.
 
 import json
+import uuid
 
 _ErrorReportVersion = '1.0'
 _AllVersions = [_ErrorReportVersion]
+_VERSION = 'version'
+
+JSON_TREE = 'json_tree'
+JSON_MATRIX = 'json_matrix'
+ID = 'id'
+METADATA = 'metadata'
 
 
 def json_converter(obj):
@@ -32,14 +39,16 @@ def as_error_report(json_dict):
     :return: The converted ErrorReport.
     :rtype: ErrorReport
     """
-    if 'metadata' in json_dict:
-        version = json_dict['metadata'].get('version')
+    if METADATA in json_dict:
+        version = json_dict[METADATA].get(_VERSION)
         if version is None:
-            raise ValueError("No version field in the json input")
+            raise ValueError('No version field in the json input')
         elif version not in _AllVersions:
             raise ValueError(
                 "Unknown version in read ErrorReport: {}".format(version))
-        return ErrorReport(json_dict["json_tree"], json_dict["json_matrix"])
+        return ErrorReport(json_dict[JSON_TREE],
+                           json_dict[JSON_MATRIX],
+                           json_dict[ID])
     else:
         return json_dict
 
@@ -52,19 +61,26 @@ class ErrorReport(object):
     :type json_tree: dict
     :param json_matrix: The json representation of the matrix filter.
     :type json_matrix: dict
+    :param id: The unique identifier for the ErrorReport.
+        A new unique id is created if none is specified.
+    :type id: str
     """
 
-    def __init__(self, json_tree, json_matrix):
+    def __init__(self, json_tree, json_matrix, id=None):
         """Defines the ErrorReport, which contains the tree and matrix filter.
 
         :param json_tree: The json representation of the tree.
         :type json_tree: dict
         :param json_matrix: The json representation of the matrix filter.
         :type json_matrix: dict
+        :param id: The unique identifier for the ErrorReport.
+            A new unique id is created if none is specified.
+        :type id: str
         """
+        self._id = id or str(uuid.uuid4())
         self._json_tree = json_tree
         self._json_matrix = json_matrix
-        self._metadata = {'version': _ErrorReportVersion}
+        self._metadata = {_VERSION: _ErrorReportVersion}
 
     @property
     def __dict__(self):
@@ -76,9 +92,10 @@ class ErrorReport(object):
         :return: The dictionary representation of the Error Report.
         :rtype: dict
         """
-        return {'json_tree': self._json_tree,
-                'json_matrix': self._json_matrix,
-                'metadata': self._metadata}
+        return {JSON_TREE: self._json_tree,
+                JSON_MATRIX: self._json_matrix,
+                ID: self._id,
+                METADATA: self._metadata}
 
     @property
     def json_tree(self):
@@ -97,6 +114,15 @@ class ErrorReport(object):
         :rtype: dict
         """
         return self._json_matrix
+
+    @property
+    def id(self):
+        """Returns the unique identifier for this ErrorReport.
+
+        :return: The unique identifier for this ErrorReport.
+        :rtype: str
+        """
+        return self._id
 
     def to_json(self):
         """Serialize ErrorReport object to json.

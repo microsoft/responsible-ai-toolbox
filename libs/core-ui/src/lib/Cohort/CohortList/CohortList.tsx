@@ -32,7 +32,8 @@ export interface ICohortListItem {
   key: number;
   name: string;
   coverage: string;
-  errorRate: string;
+  metricName: string;
+  metricValue: string;
   details?: string[];
 }
 
@@ -76,15 +77,23 @@ export class CohortList extends React.Component<
         key: "coverageColumn",
         maxWidth: 100,
         minWidth: 75,
-        name: "Coverage"
+        name: localization.ErrorAnalysis.CohortList.coverage
       },
       {
-        fieldName: "errorRate",
+        fieldName: "metricName",
         isResizable: true,
-        key: "errorRateColumn",
+        key: "metricNameColumn",
         maxWidth: 100,
         minWidth: 75,
-        name: "Error rate"
+        name: localization.ErrorAnalysis.Metrics.metricName
+      },
+      {
+        fieldName: "metricValue",
+        isResizable: true,
+        key: "metricValueColumn",
+        maxWidth: 100,
+        minWidth: 75,
+        name: localization.ErrorAnalysis.Metrics.metricValue
       }
     );
   }
@@ -180,8 +189,9 @@ export class CohortList extends React.Component<
         return {
           coverage: errorCohort.cohortStats.errorCoverage.toFixed(2),
           details,
-          errorRate: errorCohort.cohortStats.metricValue.toFixed(2),
           key: index,
+          metricName: errorCohort.cohortStats.metricName,
+          metricValue: errorCohort.cohortStats.metricValue.toFixed(2),
           name: errorCohort.cohort.name
         };
       });

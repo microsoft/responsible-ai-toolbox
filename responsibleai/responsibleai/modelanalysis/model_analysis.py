@@ -5,14 +5,18 @@
 
 import json
 import pandas as pd
+import numpy as np
 import pickle
 from pathlib import Path
-from responsibleai._internal.constants import ManagerNames, Metadata
+from responsibleai._internal.constants import\
+    ManagerNames, Metadata, SKLearn
 from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._managers.counterfactual_manager import (
     CounterfactualManager)
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
+from responsibleai._interfaces import ModelAnalysisData, Dataset
+from responsibleai._input_processing import _convert_to_list
 
 
 _DTYPES = 'dtypes'
@@ -25,6 +29,7 @@ _MODEL_PKL = _MODEL + '.pkl'
 _SERIALIZER = 'serializer'
 _CLASSES = 'classes'
 _MANAGERS = 'managers'
+_CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 
 
@@ -54,7 +59,7 @@ class ModelAnalysis(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features, train_labels=None,
+                 task_type, categorical_features=None, train_labels=None,
                  serializer=None):
         """Defines the top-level Model Analysis API.
         Use ModelAnalysis to analyze errors, explain the most important
@@ -82,6 +87,8 @@ class ModelAnalysis(object):
         self.train = train
         self.test = test
         self.target_column = target_column
+        if (task_type != "classification" and task_type != "regression"):
+            raise ValueError("Unsupported task_type")
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
@@ -89,17 +96,22 @@ class ModelAnalysis(object):
             train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type)
-        self._error_analysis_manager = ErrorAnalysisManager(model,
-                                                            train,
-                                                            target_column)
+            target_column=target_column, task_type=task_type,
+            categorical_features=categorical_features)
+        error_analysis_manager = ErrorAnalysisManager(model,
+                                                      train,
+                                                      target_column,
+                                                      categorical_features)
+        self._error_analysis_manager = error_analysis_manager
         if train_labels is None:
             self._classes = train[target_column].unique()
         else:
             self._classes = train_labels
-        self._explainer_manager = ExplainerManager(model, train, test,
-                                                   target_column,
-                                                   self._classes)
+        self._explainer_manager = ExplainerManager(
+            model, train, test,
+            target_column,
+            self._classes,
+            categorical_features=categorical_features)
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
                           self._error_analysis_manager,
@@ -163,6 +175,110 @@ class ModelAnalysis(object):
             configs[manager.name] = manager.get()
         return configs
 
+    def get_data(self):
+        """Get all data as ModelAnalysisData object
+
+        :return: Model Analysis Data
+        :rtype: ModelAnalysisData
+        """
+        data = ModelAnalysisData()
+        data.dataset = self._get_dataset()
+        data.modelExplanationData = self.explainer.get_data()
+        data.errorAnalysisConfig = self.error_analysis.get_data()
+        data.causalAnalysisData = self.causal.get_data()
+        data.counterfactualData = self.counterfactual.get_data()
+        return data
+
+    def _get_dataset(self):
+        dashboard_dataset = Dataset()
+        dashboard_dataset.task_type = self.task_type
+        dashboard_dataset.class_names = _convert_to_list(
+            self._classes)
+
+        predicted_y = None
+        feature_length = None
+
+        dataset: pd.DataFrame = self.test.drop(
+            [self.target_column], axis=1)
+
+        if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
+            self._dataframeColumns = dataset.columns
+        try:
+            list_dataset = _convert_to_list(dataset)
+        except Exception as ex:
+            raise ValueError(
+                "Unsupported dataset type") from ex
+        if dataset is not None and self.model is not None:
+            try:
+                predicted_y = self.model.predict(dataset)
+            except Exception as ex:
+                msg = "Model does not support predict method for given"
+                "dataset type"
+                raise ValueError(msg) from ex
+            try:
+                predicted_y = _convert_to_list(predicted_y)
+            except Exception as ex:
+                raise ValueError(
+                    "Model prediction output of unsupported type,") from ex
+        if predicted_y is not None:
+            if(self.task_type == "classification" and
+                    dashboard_dataset.class_names is not None):
+                predicted_y = [dashboard_dataset.class_names.index(
+                    y) for y in predicted_y]
+            dashboard_dataset.predicted_y = predicted_y
+        row_length = 0
+
+        if list_dataset is not None:
+            row_length, feature_length = np.shape(list_dataset)
+            if row_length > 100000:
+                raise ValueError(
+                    "Exceeds maximum number of rows"
+                    "for visualization (100000)")
+            if feature_length > 1000:
+                raise ValueError("Exceeds maximum number of features for"
+                                 " visualization (1000). Please regenerate the"
+                                 " explanation using fewer features or"
+                                 " initialize the dashboard without passing a"
+                                 " dataset.")
+            dashboard_dataset.features = list_dataset
+
+        true_y = self.test[self.target_column]
+
+        if true_y is not None and len(true_y) == row_length:
+            if(self.task_type == "classification" and
+               dashboard_dataset.class_names is not None):
+                true_y = [dashboard_dataset.class_names.index(
+                    y) for y in true_y]
+            dashboard_dataset.true_y = _convert_to_list(true_y)
+
+        features = dataset.columns
+
+        if features is not None:
+            features = _convert_to_list(features)
+            if feature_length is not None and len(features) != feature_length:
+                raise ValueError("Feature vector length mismatch:"
+                                 " feature names length differs"
+                                 " from local explanations dimension")
+            dashboard_dataset.feature_names = features
+
+        if (self.model is not None and
+                hasattr(self.model, SKLearn.PREDICT_PROBA) and
+                self.model.predict_proba is not None and
+                dataset is not None):
+            try:
+                probability_y = self.model.predict_proba(dataset)
+            except Exception as ex:
+                raise ValueError("Model does not support predict_proba method"
+                                 " for given dataset type,") from ex
+            try:
+                probability_y = _convert_to_list(probability_y)
+            except Exception as ex:
+                raise ValueError(
+                    "Model predict_proba output of unsupported type,") from ex
+            dashboard_dataset.probability_y = probability_y
+
+        return dashboard_dataset
+
     def _write_to_file(self, file_path, content):
         """Save the string content to the given file path.
         :param file_path: The file path to save the content to.
@@ -192,7 +308,8 @@ class ModelAnalysis(object):
                             json.dumps(dtypes))
         self._write_to_file(top_dir / _TEST, self.test.to_json())
         meta = {_TARGET_COLUMN: self.target_column,
-                _TASK_TYPE: self.task_type}
+                _TASK_TYPE: self.task_type,
+                _CATEGORICAL_FEATURES: self.categorical_features}
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
@@ -240,6 +357,7 @@ class ModelAnalysis(object):
         inst.__dict__[_TARGET_COLUMN] = target_column
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
         inst.__dict__['_' + _CLASSES] = train[target_column].unique()
+        inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:

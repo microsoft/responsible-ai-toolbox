@@ -30,7 +30,7 @@ export function describeFairness(name: keyof typeof fairnessDatasets): void {
     }
 
     describeGetStartedPage();
-    describeConfigurationPages();
+    describeConfigurationPages(name);
     describeModelComparisonView(fairnessDatasets[name]);
     describeSingleModelView(fairnessDatasets[name]);
   });

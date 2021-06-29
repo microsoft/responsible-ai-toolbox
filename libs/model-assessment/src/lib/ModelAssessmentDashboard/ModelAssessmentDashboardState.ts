@@ -34,6 +34,7 @@ export interface IModelAssessmentDashboardState
   sortVector?: number[];
   editingCohortIndex?: number;
   mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
+  mapShiftVisible: boolean;
   predictionTab: PredictionTabKeys;
   selectedWhatIfIndex: number | undefined;
   selectedFeatures: string[];

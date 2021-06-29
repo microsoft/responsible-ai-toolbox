@@ -6,6 +6,7 @@ import {
   ICounterfactualData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _, { toNumber } from "lodash";
 import {
@@ -36,7 +37,14 @@ export interface ICounterfactualPanelProps {
   selectedIndex: number;
   data?: ICounterfactualData;
   isPanelOpen: boolean;
+  temporaryPoint: { [key: string]: any } | undefined;
   closePanel(): void;
+  saveAsPoint(): void;
+  setCustomRowProperty(
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ): void;
 }
 interface ICounterfactualState {
   data: any;
@@ -119,21 +127,27 @@ export class CounterfactualPanel extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: "15px" }}>
-              <Stack.Item grow={1}>
+              <Stack.Item align="end" grow={1}>
                 <TextField
                   id="whatIfNameLabel"
                   label={localization.Counterfactuals.counterfactualName}
-                  value={this.state.data["row"]}
+                  value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
+                  onChange={this.setCustomRowProperty.bind(
+                    this,
+                    WhatIfConstants.namePath,
+                    true
+                  )}
                   styles={{ fieldGroup: { width: 200 } }}
                 />
               </Stack.Item>
-              <Stack.Item grow={3}>
+              <Stack.Item align="end" grow={5}>
                 <PrimaryButton
                   className={classes.button}
                   text={localization.Counterfactuals.saveAsNew}
+                  onClick={this.handleSavePoint.bind(this)}
                 />
               </Stack.Item>
-              <Stack.Item grow={3}>
+              <Stack.Item align="end" grow={3}>
                 <Text variant={"medium"}>
                   {localization.Counterfactuals.saveDescription}
                 </Text>
@@ -146,14 +160,14 @@ export class CounterfactualPanel extends React.Component<
   }
   private getItems(): any {
     const items: any = [];
-    const selectedData = this.props.data?.cfsList[
-      this.props.selectedIndex % this.props.data?.cfsList.length
+    const selectedData = this.props.data?.cfs_list[
+      this.props.selectedIndex % this.props.data?.cfs_list.length
     ];
     const originData = selectedData?.[0];
     if (selectedData && originData) {
       selectedData.forEach((point, i) => {
         const temp = {};
-        this.props.data?.featureNames.forEach((f, j) => {
+        this.props.data?.feature_names_including_target.forEach((f, j) => {
           if (f === "row") {
             temp[f] = `Row ${i}`;
           } else {
@@ -179,7 +193,7 @@ export class CounterfactualPanel extends React.Component<
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
     if (this.props.data) {
-      this.props.data.featureNames.forEach((f) =>
+      this.props.data.feature_names_including_target.forEach((f) =>
         columns.push({
           fieldName: f,
           isResizable: true,
@@ -221,6 +235,14 @@ export class CounterfactualPanel extends React.Component<
       return { data: prevState.data };
     });
   }
+  private setCustomRowProperty = (
+    key: string | number,
+    isString: boolean,
+    _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    newValue?: string
+  ): void => {
+    this.props.setCustomRowProperty(key, isString, newValue);
+  };
   private toggleCallout(): void {
     this.setState((preState) => {
       return {
@@ -228,6 +250,12 @@ export class CounterfactualPanel extends React.Component<
       };
     });
   }
+
+  private handleSavePoint(): void {
+    this.props.saveAsPoint();
+    this.props.closePanel();
+  }
+
   private renderDetailsFooterItemColumn(
     _item: any,
     _index?: number,

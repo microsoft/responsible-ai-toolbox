@@ -55,18 +55,10 @@ def compute_json_error_tree(analyzer,
     if num_leaves is None:
         num_leaves = DEFAULT_NUM_LEAVES
     if analyzer.model_task == ModelTask.CLASSIFICATION:
-        if analyzer.metric is None:
-            metric = Metrics.ERROR_RATE
-        else:
-            metric = analyzer.metric
         surrogate = LGBMClassifier(n_estimators=1,
                                    max_depth=max_depth,
                                    num_leaves=num_leaves)
     else:
-        if analyzer.metric is None:
-            metric = Metrics.MEAN_SQUARED_ERROR
-        else:
-            metric = analyzer.metric
         surrogate = LGBMRegressor(n_estimators=1,
                                   max_depth=max_depth,
                                   num_leaves=num_leaves)
@@ -108,6 +100,10 @@ def compute_json_error_tree(analyzer,
         diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
+    if not isinstance(pred_y, np.ndarray):
+        pred_y = np.array(pred_y)
+    if not isinstance(true_y, np.ndarray):
+        true_y = np.array(true_y)
     indexes = []
     for feature in features:
         indexes.append(analyzer.feature_names.index(feature))
@@ -149,7 +145,7 @@ def compute_json_error_tree(analyzer,
                           cat_ind_reindexed),
                          [],
                          dataset_sub_names,
-                         metric=metric)
+                         metric=analyzer.metric)
     return json_tree
 
 
@@ -196,6 +192,37 @@ def traverse(df,
     return json
 
 
+def create_categorical_arg(parent_threshold):
+    return [float(i) for i in parent_threshold.split('||')]
+
+
+def create_categorical_query(method, arg, p_node_name, parent, categories):
+    if method == METHOD_INCLUDES:
+        operation = "=="
+    else:
+        operation = "!="
+    categorical_values = categories[0]
+    categorical_indexes = categories[1]
+    thresholds = []
+    catcoli = categorical_indexes.index(parent[SPLIT_FEATURE])
+    catvals = categorical_values[catcoli]
+    for argi in arg:
+        encoded_val = catvals[int(argi)]
+        if not isinstance(encoded_val, str):
+            encoded_val = str(encoded_val)
+        thresholds.append(encoded_val)
+    threshold_str = " | ".join(thresholds)
+    condition = "{} {} {}".format(p_node_name, operation, threshold_str)
+    query = []
+    for argi in arg:
+        query.append("`" + p_node_name + "` " + operation + " " + str(argi))
+    if method == METHOD_INCLUDES:
+        query = " | ".join(query)
+    else:
+        query = " & ".join(query)
+    return query, condition
+
+
 def node_to_json(df, tree, nodeid, categories, json,
                  feature_names, metric, parent=None,
                  side=TreeSide.UNKNOWN):
@@ -219,22 +246,13 @@ def node_to_json(df, tree, nodeid, categories, json,
                 df = df.query(query)
             elif parent_decision_type == '==':
                 method = METHOD_INCLUDES
-                arg = [float(i) for i in parent_threshold.split('||')]
-                categorical_values = categories[0]
-                categorical_indexes = categories[1]
-                thresholds = []
-                catcoli = categorical_indexes.index(parent[SPLIT_FEATURE])
-                catvals = categorical_values[catcoli]
-                for argi in arg:
-                    encoded_val = catvals[int(argi)]
-                    thresholds.append(encoded_val)
-                threshold_str = " | ".join(thresholds)
-                condition = "{} == {}".format(p_node_name,
-                                              threshold_str)
-                query = []
-                for argi in arg:
-                    query.append("`" + p_node_name + "` == " + str(argi))
-                df = df.query(" | ".join(query))
+                arg = create_categorical_arg(parent_threshold)
+                query, condition = create_categorical_query(method,
+                                                            arg,
+                                                            p_node_name,
+                                                            parent,
+                                                            categories)
+                df = df.query(query)
         elif side == TreeSide.LEFT_CHILD:
             if parent_decision_type == '<=':
                 method = "greater"
@@ -245,22 +263,13 @@ def node_to_json(df, tree, nodeid, categories, json,
                 df = df.query(query)
             elif parent_decision_type == '==':
                 method = METHOD_EXCLUDES
-                arg = [float(i) for i in parent_threshold.split('||')]
-                categorical_values = categories[0]
-                categorical_indexes = categories[1]
-                thresholds = []
-                catcoli = categorical_indexes.index(parent[SPLIT_FEATURE])
-                catvals = categorical_values[catcoli]
-                for argi in arg:
-                    encoded_val = catvals[int(argi)]
-                    thresholds.append(encoded_val)
-                threshold_str = " | ".join(thresholds)
-                condition = "{} != {}".format(p_node_name,
-                                              threshold_str)
-                query = []
-                for argi in arg:
-                    query.append("`" + p_node_name + "` != " + str(argi))
-                df = df.query(" & ".join(query))
+                arg = create_categorical_arg(parent_threshold)
+                query, condition = create_categorical_query(method,
+                                                            arg,
+                                                            p_node_name,
+                                                            parent,
+                                                            categories)
+                df = df.query(query)
     success = 0
     total = df.shape[0]
     if df.shape[0] == 0 and metric != Metrics.ERROR_RATE:

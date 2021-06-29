@@ -46,10 +46,10 @@ Thumbs.db
 # Python
 **.pyc
 **/__pycache__/*
+**/.pytest_cache/*
+**/build/*
 **-checkpoint.ipynb
 **.egg-info/
-raiwidgets/build/
-wrapped-flask/build/
 **-py3-none-any.whl
 **.tar.gz
 **.zip

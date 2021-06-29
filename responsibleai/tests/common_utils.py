@@ -2,15 +2,18 @@
 # Licensed under the MIT License.
 
 # Defines common utilities for responsibleai tests
+from dice_ml.utils import helpers
 import numpy as np
 import pandas as pd
 from sklearn import svm
+from sklearn.compose import ColumnTransformer
 from sklearn.datasets import load_iris, load_breast_cancer, \
     make_classification, load_boston
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 
@@ -106,6 +109,45 @@ def create_boston_data():
         boston.data, boston.target,
         test_size=0.2, random_state=7)
     return X_train, X_test, y_train, y_validation, boston.feature_names
+
+
+def create_adult_income_dataset():
+    dataset = helpers.load_adult_income_dataset()
+    continuous_features = ['age', 'hours_per_week']
+    target_name = 'income'
+    target = dataset[target_name]
+    classes = list(np.unique(target))
+    categorical_features = list(set(dataset.columns) -
+                                set(continuous_features) -
+                                set([target_name]))
+    # Split data into train and test
+    data_train, data_test, y_train, y_test = train_test_split(
+        dataset, target,
+        test_size=0.2, random_state=7, stratify=target)
+    return data_train, data_test, y_train, y_test, categorical_features, \
+        continuous_features, target_name, classes
+
+
+def create_complex_classification_pipeline(
+        X_train, y_train, continuous_features, categorical_features):
+    # We create the preprocessing pipelines for both
+    # numeric and categorical data.
+    numeric_transformer = Pipeline(steps=[
+        ('scaler', StandardScaler())])
+
+    categorical_transformer = Pipeline(steps=[
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+    transformations = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, continuous_features),
+            ('cat', categorical_transformer, categorical_features)])
+
+    # Append classifier to preprocessing pipeline.
+    # Now we have a full prediction pipeline.
+    pipeline = Pipeline(steps=[('preprocessor', transformations),
+                               ('classifier', RandomForestClassifier())])
+    return pipeline.fit(X_train, y_train)
 
 
 def create_models_classification(X_train, y_train):

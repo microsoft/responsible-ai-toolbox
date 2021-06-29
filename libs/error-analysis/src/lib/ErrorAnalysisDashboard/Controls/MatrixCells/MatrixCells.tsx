@@ -48,12 +48,12 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
     let totalError = 0;
     let falseCount = 0;
     let maxMetricValue = 0;
-    let metricName: string;
+    let metricName: string = Metrics.ErrorRate;
     this.props.jsonMatrix.matrix.forEach((row: any) => {
       row.forEach((value: any) => {
-        if (value.falseCount) {
+        if (value.falseCount !== undefined) {
           falseCount += value.falseCount;
-        } else if (value.metricValue) {
+        } else if (value.metricValue !== undefined) {
           metricName = value.metricName;
           if (value.metricName === Metrics.MeanSquaredError) {
             totalError += value.metricValue * value.count;
@@ -69,7 +69,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           let errorRatio = 0;
           let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
           if (value.count > 0) {
-            if (value.falseCount) {
+            if (value.falseCount !== undefined) {
               errorRatio = (value.falseCount / value.count) * 100;
             } else {
               metricName = value.metricName;
@@ -104,7 +104,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           let error: number;
           let baseError: number;
           let metricValue: number;
-          if (value.falseCount) {
+          if (value.falseCount !== undefined) {
             metricValue = errorRatio;
             error = value.falseCount;
             baseError = falseCount;

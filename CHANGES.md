@@ -16,13 +16,75 @@ Note that it is not required to have an entry for every pull request.
 Instead, please try to add only changes that are meaningful to users who read
 this file to understand what changed.
 
-## v-next (post-v0.3.1)
+## v-next
 
 - educational materials
 - new features
 - breaking changes
 - bug fixes
 - other
+
+## v0.8.0
+
+- educational materials
+- new features
+  - enabled categoricals on MimicExplainer for the explainer manager
+  - updated causal constants to enable linear models and allow high cardinality features by default
+  - support newest policy output format from econml
+- breaking changes
+  - continuous_features in CounterfactualManager.add() is deprecated in favor of categorical_features in ModelAnalysis
+- bug fixes
+  - fixed error analysis add after model analysis deserialization
+- other
+  - improved tests for visualization dependencies
+
+## v0.7.0
+
+- educational materials
+- new features
+  - added widget serialization for causal analysis
+- breaking changes
+- bug fixes
+- other
+
+## v0.6.1
+
+- educational materials
+- new features
+- breaking changes
+- bug fixes
+- other
+
+## v0.6.0
+
+- educational materials
+- new features
+- breaking changes
+- bug fixes
+- other
+
+## v0.5.0
+
+- educational materials
+  - cleanup commented out explainers from interpretability notebook
+- new features
+  - added support for causal, counterfactual, and error analysis tools in responsibleai
+  - added model analysis widget to raiwidgets
+  - added support for regression to error analysis
+  - added policy tree to causal manager
+- breaking changes
+  - renamed package raitools to responsibleai
+  - renamed top-level class RAIAnalyzer to ModelAnalysis
+  - removed support for fairness in responsibleai package
+- bug fixes
+  - fixed bug in precision statistic calculation in dashboard
+  - fixed bug in loading explanations with ModelAnalysis
+  - fixed on predict method to use correct dtypes
+  - fixed individual importances chart when no data available
+- other
+  - create combined feature importances tab for local and global explanation in model assessment
+  - add section headers to model assessment dashboard
+  - add manual cohort creation to the model assessment dashboard
 
 ## v0.4.0
 

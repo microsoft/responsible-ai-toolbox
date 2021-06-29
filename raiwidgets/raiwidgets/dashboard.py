@@ -3,12 +3,14 @@
 
 """Defines the dashboard class."""
 
-from rai_core_flask import FlaskHelper  # , environment_detector
 import json
 import os
-from html.parser import HTMLParser
 import uuid
-from ._input_processing import _safe_object_serializer
+
+from html.parser import HTMLParser
+from rai_core_flask import FlaskHelper  # , environment_detector
+
+from responsibleai.serialization_utilities import serialize_json_safe
 
 
 class InLineScript(HTMLParser):
@@ -106,7 +108,7 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_model_data__",
                 json.dumps(self.model_data,
-                           default=_safe_object_serializer))
+                           default=serialize_json_safe))
             return content
 
     def add_url_rule(self, func, route, methods):

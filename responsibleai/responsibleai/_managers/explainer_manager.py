@@ -5,6 +5,7 @@
 
 import warnings
 import json
+import numpy as np
 from scipy.sparse import issparse
 from pathlib import Path
 from interpret_community.mimic.mimic_explainer import MimicExplainer
@@ -16,8 +17,12 @@ from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
 from responsibleai._internal.constants import (
-    ManagerNames, Metadata, ListProperties, ExplainerManagerKeys as Keys)
+    ManagerNames, Metadata, ListProperties, ExplanationKeys,
+    ExplainerManagerKeys as Keys)
 from responsibleai._managers.base_manager import BaseManager
+from responsibleai._interfaces import ModelExplanationData,\
+    PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
+from responsibleai._input_processing import _convert_to_list
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -26,6 +31,7 @@ CLASSES = 'classes'
 U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
+CATEGORICAL_FEATURES = 'categorical_features'
 META_JSON = Metadata.META_JSON
 MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
@@ -56,7 +62,7 @@ class ExplainerManager(BaseManager):
     """
 
     def __init__(self, model, initialization_examples, evaluation_examples,
-                 target_column, classes=None):
+                 target_column, classes=None, categorical_features=None):
         """Defines the ExplainerManager for explaining a model.
 
         :param model: The model to explain.
@@ -90,6 +96,7 @@ class ExplainerManager(BaseManager):
         self._classes = classes
         self._target_column = target_column
         self._explanation = None
+        self._categorical_features = categorical_features
 
     def add(self):
         """Add an explainer to be computed later."""
@@ -113,12 +120,14 @@ class ExplainerManager(BaseManager):
         if self._is_run:
             return
         model_task = ModelTask.Unknown
-        explainer = MimicExplainer(self._model,
-                                   self._initialization_examples,
-                                   self._surrogate_model,
-                                   features=self._features,
-                                   model_task=model_task,
-                                   classes=self._classes)
+        explainer = MimicExplainer(
+            self._model,
+            self._initialization_examples,
+            self._surrogate_model,
+            features=self._features,
+            model_task=model_task,
+            classes=self._classes,
+            categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
 
     def get(self):
@@ -154,6 +163,109 @@ class ExplainerManager(BaseManager):
         else:
             props[Keys.IS_COMPUTED] = False
         return props
+
+    def get_data(self):
+        """Get explanation data
+
+        :return: A array of ModelExplanationData.
+        :rtype: List[ModelExplanationData]
+        """
+        return [
+            self._get_interpret(i) for i in self.get()]
+
+    def _get_interpret(self, explanation):
+        interpretation = ModelExplanationData()
+
+        # List of explanations, key of explanation type is "explanation_type"
+        if explanation is not None:
+            mli_explanations = explanation.data(-1)["mli"]
+        else:
+            mli_explanations = None
+        local_explanation = self._find_first_explanation(
+            ExplanationKeys.LOCAL_EXPLANATION_KEY,
+            mli_explanations)
+        global_explanation = self._find_first_explanation(
+            ExplanationKeys.GLOBAL_EXPLANATION_KEY,
+            mli_explanations)
+        ebm_explanation = self._find_first_explanation(
+            ExplanationKeys.EBM_GLOBAL_EXPLANATION_KEY,
+            mli_explanations)
+
+        if explanation is not None and hasattr(explanation, 'method'):
+            interpretation.method = explanation.method
+
+        local_dim = None
+
+        if local_explanation is not None or global_explanation is not None\
+                or ebm_explanation is not None:
+            interpretation.precomputedExplanations = PrecomputedExplanations()
+
+        if local_explanation is not None:
+            try:
+                local_feature_importance = FeatureImportance()
+                local_feature_importance.scores = _convert_to_list(
+                    local_explanation["scores"])
+                if np.shape(local_feature_importance.scores)[-1] > 1000:
+                    raise ValueError("Exceeds maximum number of features for "
+                                     "visualization (1000). Please regenerate"
+                                     " the explanation using fewer features.")
+                local_feature_importance.intercept = _convert_to_list(
+                    local_explanation["intercept"])
+                # We can ignore perf explanation data.
+                # Note if it is added back at any point,
+                # the numpy values will need to be converted to python,
+                # otherwise serialization fails.
+                local_explanation["perf"] = None
+                interpretation.precomputedExplanations.localFeatureImportance\
+                    = local_feature_importance
+            except Exception as ex:
+                raise ValueError(
+                    "Unsupported local explanation type") from ex
+            if self._evaluation_examples is not None:
+
+                _feature_length = self._evaluation_examples.shape[1]
+                _row_length = self._evaluation_examples.shape[0]
+                local_dim = np.shape(local_feature_importance.scores)
+                if len(local_dim) != 2 and len(local_dim) != 3:
+                    raise ValueError(
+                        "Local explanation expected to be a 2D or 3D list")
+                if (len(local_dim) == 2 and
+                    (local_dim[1] != _feature_length or
+                     local_dim[0] != _row_length)):
+                    raise ValueError(
+                        "Shape mismatch: local explanation"
+                        "length differs from dataset")
+                if(len(local_dim) == 3 and
+                   (local_dim[2] != _feature_length or
+                        local_dim[1] != _row_length)):
+                    raise ValueError(
+                        "Shape mismatch: local explanation"
+                        " length differs from dataset")
+        if global_explanation is not None:
+            try:
+                global_feature_importance = FeatureImportance()
+                global_feature_importance.scores = _convert_to_list(
+                    global_explanation["scores"])
+                if 'intercept' in global_explanation:
+                    global_feature_importance.intercept\
+                        = _convert_to_list(
+                            global_explanation["intercept"])
+                interpretation.precomputedExplanations.globalFeatureImportance\
+                    = global_explanation
+            except Exception as ex:
+                raise ValueError("Unsupported global explanation type") from ex
+        if ebm_explanation is not None:
+            try:
+                ebm_feature_importance = EBMGlobalExplanation()
+                ebm_feature_importance.feature_list\
+                    = ebm_explanation["feature_list"]
+                interpretation.precomputedExplanations.ebmGlobalExplanation\
+                    = ebm_feature_importance
+
+            except Exception as ex:
+                raise ValueError(
+                    "Unsupported ebm explanation type") from ex
+        return interpretation
 
     @property
     def name(self):
@@ -205,6 +317,8 @@ class ExplainerManager(BaseManager):
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
         inst.__dict__['_' + CLASSES] = model_analysis._classes
+        inst.__dict__['_' + CATEGORICAL_FEATURES] = \
+            model_analysis.categorical_features
         target_column = model_analysis.target_column
         train = model_analysis.train.drop(columns=[target_column])
         test = model_analysis.test.drop(columns=[target_column])
@@ -216,3 +330,15 @@ class ExplainerManager(BaseManager):
         if meta[IS_ADDED]:
             inst.add()
         return inst
+
+    def _find_first_explanation(self, key, mli_explanations):
+        if mli_explanations is None:
+            return None
+        new_array = [explanation for explanation
+                     in mli_explanations
+                     if explanation[
+                         ExplanationKeys.EXPLANATION_TYPE_KEY
+                     ] == key]
+        if len(new_array) > 0:
+            return new_array[0]["value"]
+        return None

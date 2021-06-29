@@ -15,7 +15,8 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  rowErrorSize
+  rowErrorSize,
+  InteractiveLegend
 } from "@responsible-ai/core-ui";
 import {
   WhatIfConstants,
@@ -58,6 +59,7 @@ export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   isPanelOpen: boolean;
+  editingDataCustomIndex?: number;
   customPoints: Array<{ [key: string]: any }>;
   selectedCohortIndex: number;
   featuresOption: IDropdownOption[];
@@ -100,6 +102,7 @@ export class CounterfactualChart extends React.PureComponent<
       currentClass: "maglinant",
       customPointIsActive: [],
       customPoints: [],
+      editingDataCustomIndex: undefined,
       featuresOption: [],
       isPanelOpen: false,
       pointIsActive: [],
@@ -315,6 +318,9 @@ export class CounterfactualChart extends React.PureComponent<
           <CounterfactualPanel
             selectedIndex={this.state.selectedPointsIndexes[0] || 0}
             closePanel={this.togglePanel}
+            saveAsPoint={this.saveAsPoint}
+            setCustomRowProperty={this.setCustomRowProperty}
+            temporaryPoint={this.temporaryPoint}
             isPanelOpen={this.state.isPanelOpen}
             data={this.context.counterfactualData}
           />
@@ -473,6 +479,25 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   text={localization.Counterfactuals.createCounterfactual}
                 />
+                {this.state.customPoints.length > 0 && (
+                  <InteractiveLegend
+                    items={this.state.customPoints.map((row, rowIndex) => {
+                      return {
+                        activated: this.state.customPointIsActive[rowIndex],
+                        color:
+                          FabricStyles.fabricColorPalette[
+                            rowIndex + WhatIfConstants.MAX_SELECTION + 1
+                          ],
+                        name: row[WhatIfConstants.namePath],
+                        onClick: this.toggleCustomActivation.bind(
+                          this,
+                          rowIndex
+                        ),
+                        onDelete: this.removeCustomPoint.bind(this, rowIndex)
+                      };
+                    })}
+                  />
+                )}
               </div>
             </div>
             <LocalImportancePlots
@@ -894,6 +919,22 @@ export class CounterfactualChart extends React.PureComponent<
     }
   };
 
+  private toggleCustomActivation(index: number): void {
+    const customPointIsActive = [...this.state.customPointIsActive];
+    customPointIsActive[index] = !customPointIsActive[index];
+    this.setState({ customPointIsActive });
+  }
+
+  private removeCustomPoint(index: number): void {
+    this.setState((prevState) => {
+      const customPoints = [...prevState.customPoints];
+      customPoints.splice(index, 1);
+      const customPointIsActive = [...prevState.customPointIsActive];
+      customPointIsActive.splice(index, 1);
+      return { customPointIsActive, customPoints };
+    });
+  }
+
   private selectCounterfactuals = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -902,6 +943,55 @@ export class CounterfactualChart extends React.PureComponent<
       this.setState({
         selectedCounterfactual: item.key
       });
+    }
+  };
+
+  private saveAsPoint = (): void => {
+    const editingDataCustomIndex =
+      this.state.editingDataCustomIndex !== undefined
+        ? this.state.editingDataCustomIndex
+        : this.state.customPoints.length;
+    const customPoints = [...this.state.customPoints];
+    const customPointIsActive = [...this.state.customPointIsActive];
+    if (this.temporaryPoint) {
+      customPoints.push(this.temporaryPoint);
+    }
+    customPointIsActive.push(true);
+    this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
+    this.setState({
+      customPointIsActive,
+      customPoints,
+      editingDataCustomIndex
+    });
+  };
+
+  private setCustomRowProperty = (
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ): void => {
+    if (!this.temporaryPoint || !newValue) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    this.stringifiedValues[key] = newValue;
+    if (isString) {
+      editingData[key] = newValue;
+      this.forceUpdate();
+    } else {
+      const asNumber = +newValue;
+      // because " " evaluates to 0 in js
+      const isWhitespaceOnly = /^\s*$/.test(newValue);
+      if (Number.isNaN(asNumber) || isWhitespaceOnly) {
+        this.validationErrors[key] =
+          localization.Interpret.WhatIfTab.nonNumericValue;
+        this.forceUpdate();
+      } else {
+        editingData[key] = asNumber;
+        this.validationErrors[key] = undefined;
+        this.forceUpdate();
+        this.fetchData(editingData);
+      }
     }
   };
 

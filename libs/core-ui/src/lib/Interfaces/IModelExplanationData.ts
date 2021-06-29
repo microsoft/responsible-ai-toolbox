@@ -13,4 +13,4 @@ export interface IModelExplanationData {
 }
 
 export type Method = "classifier" | "regressor";
-export type ModelClass = "Tree" | "EBM" | "blackbox";
+export type ModelClass = "tree" | "ebm" | "blackbox";

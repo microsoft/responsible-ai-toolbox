@@ -2,47 +2,44 @@
 # Licensed under the MIT License.
 
 from sklearn.model_selection import train_test_split
-import pandas as pd
 import shap
 import sklearn
 from responsibleai import ModelAnalysis
 from raiwidgets import ModelAnalysisDashboard
-from raiwidgets.interfaces import CausalData, CounterfactualData, Dataset,\
-    ErrorAnalysisConfig, ModelExplanationData
+from responsibleai._interfaces import CausalData, CounterfactualData, Dataset,\
+    ErrorAnalysisData, ModelExplanationData
 
 
-class TestModelAnalysis:
+class TestModelAnalysisDashboard:
     def test_model_analysis_adult(self):
-        x, y = shap.datasets.adult()
+        X, y = shap.datasets.adult()
         y = [1 if r else 0 for r in y]
 
-        x, y = sklearn.utils.resample(
-            x, y, n_samples=10000, random_state=7, stratify=y)
+        X, y = sklearn.utils.resample(
+            X, y, n_samples=1000, random_state=7, stratify=y)
 
         X_train, X_test, y_train, y_test = train_test_split(
-            x, y, test_size=0.2, random_state=7, stratify=y)
+            X, y, test_size=0.2, random_state=7, stratify=y)
 
         knn = sklearn.neighbors.KNeighborsClassifier()
         knn.fit(X_train, y_train)
 
-        train = pd.merge(x, pd.DataFrame(
-            y, columns=["income"]), left_index=True, right_index=True)
-        test = pd.merge(X_test, pd.DataFrame(y_test, columns=[
-                        "income"]), left_index=True, right_index=True)
+        X['Income'] = y
+        X_test['Income'] = y_test
 
-        ma = ModelAnalysis(knn, train, test, "income", "classification",
+        ma = ModelAnalysis(knn, X, X_test, 'Income', 'classification',
                            categorical_features=['Workclass', 'Education-Num',
                                                  'Marital Status',
                                                  'Occupation', 'Relationship',
                                                  'Race',
                                                  'Sex', 'Country'])
         ma.explainer.add()
-        ma.counterfactual.add(['Age',
-                               'Capital Gain', 'Capital Loss',
-                               'Hours per week'], 10,
-                              desired_class="opposite")
+        ma.counterfactual.add(10, desired_class='opposite')
         ma.error_analysis.add()
-        ma.causal.add()
+        ma.causal.add(treatment_features=['Hours per week', 'Occupation'],
+                      heterogeneity_features=None,
+                      upper_bound_on_cat_expansion=42,
+                      skip_cat_limit_checks=True)
         ma.compute()
 
         widget = ModelAnalysisDashboard(ma)
@@ -53,7 +50,7 @@ class TestModelAnalysis:
             ModelExplanationData)
         assert isinstance(
             widget.input.dashboard_input.errorAnalysisConfig[0],
-            ErrorAnalysisConfig)
+            ErrorAnalysisData)
         assert isinstance(
             widget.input.dashboard_input.causalAnalysisData[0],
             CausalData)

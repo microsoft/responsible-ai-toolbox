@@ -50,9 +50,9 @@ export function buildInitialModelAssessmentContext(
     dataset: props.dataset.features,
     localExplanations,
     metadata: modelMetadata,
-    predictedProbabilities: props.dataset.probabilityY,
-    predictedY: props.dataset.predictedY,
-    trueY: props.dataset.trueY
+    predictedProbabilities: props.dataset.probability_y,
+    predictedY: props.dataset.predicted_y,
+    trueY: props.dataset.true_y
   });
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
@@ -123,6 +123,7 @@ export function buildInitialModelAssessmentContext(
       globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
     mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
+    mapShiftVisible: false,
     matrixAreaState: createInitialMatrixAreaState(),
     matrixFilterState: createInitialMatrixFilterState(),
     modelChartConfig: undefined,
@@ -130,7 +131,7 @@ export function buildInitialModelAssessmentContext(
     predictionTab: PredictionTabKeys.CorrectPredictionTab,
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
-    selectedFeatures: props.dataset.featureNames,
+    selectedFeatures: props.dataset.feature_names,
     selectedWeightVector:
       modelMetadata.modelType === ModelTypes.Multiclass
         ? WeightVectors.AbsAvg
@@ -149,11 +150,11 @@ function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(
-    props.modelExplanationData?.[0]?.method,
+    props.dataset.task_type === "regression" ? "regressor" : "classifier",
     props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.modelExplanationData?.[0]?.probabilityY
+    props.dataset.probability_y
   );
-  let featureNames = props.dataset.featureNames;
+  let featureNames = props.dataset.feature_names;
   let featureNamesAbridged: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
@@ -207,10 +208,10 @@ function buildModelMetadata(
     );
     featureNamesAbridged = featureNames;
   }
-  let classNames = props.dataset.classNames;
+  let classNames = props.dataset.class_names;
   const classLength = getClassLength(
     props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.modelExplanationData?.[0]?.probabilityY
+    props.dataset.probability_y
   );
   if (!classNames || classNames.length !== classLength) {
     classNames = buildIndexedNames(
@@ -221,13 +222,13 @@ function buildModelMetadata(
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
     props.dataset.features,
-    props.dataset.categoricalMap
+    props.dataset.categorical_map
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
       props.dataset.features,
       featureIsCategorical,
-      props.dataset.categoricalMap
+      props.dataset.categorical_map
     ) || [];
   return {
     classNames,

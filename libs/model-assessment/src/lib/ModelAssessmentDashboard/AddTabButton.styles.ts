@@ -12,6 +12,7 @@ export interface IAddTabButtonStyles {
   callout: IStyle;
   button: IStyle;
   splitter: IStyle;
+  buttonSection: IStyle;
 }
 
 export const addTabButtonStyles = (): IProcessedStyleSet<
@@ -26,6 +27,9 @@ export const addTabButtonStyles = (): IProcessedStyleSet<
           fontSize: "32px"
         }
       }
+    },
+    buttonSection: {
+      padding: "10px 0 10px 0"
     },
     callout: {
       padding: "1em",

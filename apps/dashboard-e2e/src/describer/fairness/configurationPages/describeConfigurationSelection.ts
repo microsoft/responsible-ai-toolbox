@@ -18,9 +18,12 @@ export function checkSensitiveFeatureSelectionPage(): void {
   getSpan(
     "Along which features would you like to evaluate your model's fairness?"
   ).should("exist");
+  getSpan("Sensitive features").should("exist");
+  getSpan("Sensitive feature 0").should("exist");
+  getSpan("Sensitive feature 1").should("exist");
 }
 
-export function checkPerformanceMetricSelectionPage(): void {
+export function checkPerformanceMetricSelectionPage(name: string): void {
   cy.get(`button:contains("${sensitiveFeaturesTab}")`).should("exist");
   cy.get(`button:contains("${performanceMetricsTab}")`).should(
     "have.class",
@@ -28,6 +31,15 @@ export function checkPerformanceMetricSelectionPage(): void {
   );
   cy.get(`button:contains("${fairnessMetricsTab}")`).should("exist");
   getSpan("How do you want to measure performance?").should("exist");
+  if (name === "binaryClassification") {
+    getSpan("Accuracy").should("exist");
+  } else if (name === "probability") {
+    getSpan("Balanced root mean squared error").should("exist");
+  } else if (name === "regression") {
+    getSpan("Mean absolute error").should("exist");
+  } else {
+    throw new RangeError("Unrecognised name: " + name);
+  }
 }
 
 export function checkFairnessMetricSelectionPage(): void {
@@ -40,7 +52,7 @@ export function checkFairnessMetricSelectionPage(): void {
   getSpan("How do you want to measure fairness?").should("exist");
 }
 
-export function describeConfigurationPages(): void {
+export function describeConfigurationPages(name: string): void {
   describe("configuration pages", () => {
     it("should navigate through configuration pages", () => {
       // move to the first configuration page
@@ -48,7 +60,7 @@ export function describeConfigurationPages(): void {
 
       checkSensitiveFeatureSelectionPage();
       cy.get('button:contains("Next")').click();
-      checkPerformanceMetricSelectionPage();
+      checkPerformanceMetricSelectionPage(name);
       cy.get('button:contains("Next")').click();
       checkFairnessMetricSelectionPage();
       cy.get('button:contains("Next")').click();

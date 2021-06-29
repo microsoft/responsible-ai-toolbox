@@ -145,7 +145,7 @@ export class FeatureImportancesTab extends React.PureComponent<
                 ? this.props.stringParams.contextualHelp
                 : undefined
             }
-            features={this.context.dataset.featureNames}
+            features={this.context.dataset.feature_names}
             invokeModel={this.props.requestPredictions}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightVectorOptions}
