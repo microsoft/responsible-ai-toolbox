@@ -76,7 +76,7 @@ class CausalMetric:
 
 class CausalPolicyGains:
     recommended_policy_gains: float
-    treatment_gains: List[float]
+    treatment_gains: Dict[str, float]
     treatments: List[str]
 
 
@@ -96,6 +96,7 @@ class CausalPolicyTreeInternal:
 
 class CausalPolicy:
     treatment_feature: str
+    control_treatment: str
     local_policies: List[Dict[str, Any]]
     policy_gains: CausalPolicyGains
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
