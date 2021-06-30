@@ -2774,11 +2774,7 @@ export const adultCounterfactualData: ICounterfactualData = {
       [6, 2.7, 4.3, 1.8, 2]
     ]
   ],
-  desired_class: "maglinant",
-  desired_range: [
-    [1, 2],
-    [4, 7]
-  ],
+  desired_class: "opposite",
   feature_names: ["age", "capital-gain", "capital-loss", "hours-per-week"],
   feature_names_including_target: [
     "age",
