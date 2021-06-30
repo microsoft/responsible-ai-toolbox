@@ -48,8 +48,8 @@ class PrecomputedExplanations:
 
 
 class ModelClass(str, Enum):
-    TREE = 'tree'
-    EBM = 'ebm'
+    TREE = 'Tree'
+    EBM = 'EBM'
     BLACKBOX = 'blackbox'
 
 
