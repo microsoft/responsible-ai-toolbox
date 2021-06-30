@@ -103,6 +103,7 @@
           "shap_tree",
           "specificity_score",
           "summary_importance",
+          "target_column",
           "task_type",
           "treatment_feature",
           "treatment_gains",
