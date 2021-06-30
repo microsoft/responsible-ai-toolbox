@@ -260,7 +260,7 @@ class ModelAnalysis(object):
                                  " feature names length differs"
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
-
+        dashboard_dataset.target_column = self.target_column
         if (self.model is not None and
                 hasattr(self.model, SKLearn.PREDICT_PROBA) and
                 self.model.predict_proba is not None and
