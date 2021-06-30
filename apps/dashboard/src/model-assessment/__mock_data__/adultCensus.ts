@@ -952,6 +952,7 @@ export const adultCensusWithFairnessDataset: IDataset = {
     [0.7355988315726243, 0.2644011684273757],
     [0.6804143936790036, 0.3195856063209964]
   ],
+  target_column: "income",
   task_type: "classification",
   true_y: [
     1,
@@ -5227,8 +5228,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
     ],
     policy_gains: {
       recommended_policy_gains: 12.231,
-      treatment_gains: [6.35, 4.22],
-      treatments: ["increase", "decrease"]
+      treatment_gains: { decrease: 4.22, increase: 6.35 }
     },
     policy_tree: {
       feature: "age",

@@ -19,6 +19,7 @@ class Dataset:
     true_y: List
     class_names: List[str]
     categorical_map: Dict[int, List[str]]
+    target_column: str
 
 
 class BoundedCoordinates:
@@ -77,7 +78,6 @@ class CausalMetric:
 class CausalPolicyGains:
     recommended_policy_gains: float
     treatment_gains: Dict[str, float]
-    treatments: List[str]
 
 
 class CausalPolicyTreeLeaf:
