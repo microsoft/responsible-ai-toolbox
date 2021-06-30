@@ -30,10 +30,17 @@ import {
 import { ModelPerformanceTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { DefaultEffects, PivotItem, Stack, Text } from "office-ui-fabric-react";
+import {
+  DefaultEffects,
+  IDropdownOption,
+  PivotItem,
+  Stack,
+  Text
+} from "office-ui-fabric-react";
 import * as React from "react";
 
 import { AddTabButton } from "./AddTabButton";
+import { getAvailableTabs } from "./AvailableTabs";
 import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
 import { FeatureImportancesTab } from "./Controls/FeatureImportances";
 import { MainMenu } from "./Controls/MainMenu";
@@ -46,12 +53,20 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
   IModelAssessmentDashboardState
 > {
+  private addTabDropdownOptions: IDropdownOption[];
+
   public constructor(props: IModelAssessmentDashboardProps) {
     super(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
     this.state = buildInitialModelAssessmentContext(_.cloneDeep(props));
+
+    this.addTabDropdownOptions = getAvailableTabs(
+      this.props,
+      this.state.jointDataset,
+      true
+    );
 
     if (this.props.requestImportances) {
       this.props
@@ -132,7 +147,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               <Stack.Item
                 className={modelAssessmentDashboardStyles.buttonSection}
               >
-                <AddTabButton tabIndex={0} onAdd={this.addTab} />
+                <AddTabButton
+                  tabIndex={0}
+                  onAdd={this.addTab}
+                  availableTabs={this.addTabDropdownOptions}
+                />
               </Stack.Item>
             )}
             {this.state.activeGlobalTabs.map((t, i) => (
@@ -145,11 +164,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                     this.props.errorAnalysisConfig?.[0] && (
                       <ErrorAnalysisViewTab
-                        messages={
-                          this.props.stringParams
-                            ? this.props.stringParams.contextualHelp
-                            : undefined
-                        }
+                        messages={this.props.stringParams?.contextualHelp}
                         getTreeNodes={this.props.requestDebugML}
                         getMatrix={this.props.requestMatrix}
                         updateSelectedCohort={this.updateSelectedCohort}
@@ -273,7 +288,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 <Stack.Item
                   className={modelAssessmentDashboardStyles.buttonSection}
                 >
-                  <AddTabButton tabIndex={0} onAdd={this.addTab} />
+                  <AddTabButton
+                    tabIndex={0}
+                    onAdd={this.addTab}
+                    availableTabs={this.addTabDropdownOptions}
+                  />
                 </Stack.Item>
               </>
             ))}

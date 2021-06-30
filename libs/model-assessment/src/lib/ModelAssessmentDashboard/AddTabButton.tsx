@@ -17,6 +17,7 @@ import { addTabButtonStyles } from "./AddTabButton.styles";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 export interface IAddTabButtonProps {
   tabIndex: number;
+  availableTabs: IDropdownOption[];
   onAdd(index: number, tab: GlobalTabKeys): void;
 }
 interface IAddTabButtonState {
@@ -29,28 +30,6 @@ export class AddTabButton extends React.Component<
   IAddTabButtonState
 > {
   private buttonId = getRandomId();
-  private dropdownOptions: IDropdownOption[] = [
-    {
-      key: GlobalTabKeys.DataExplorerTab,
-      text: localization.ModelAssessment.ComponentNames.DataExplorer
-    },
-    {
-      key: GlobalTabKeys.FeatureImportancesTab,
-      text: localization.ModelAssessment.ComponentNames.FeatureImportances
-    },
-    {
-      key: GlobalTabKeys.ModelStatisticsTab,
-      text: localization.ModelAssessment.ComponentNames.ModelStatistics
-    },
-    {
-      key: GlobalTabKeys.CounterfactualsTab,
-      text: localization.ModelAssessment.ComponentNames.Counterfactuals
-    },
-    {
-      key: GlobalTabKeys.CausalAnalysisTab,
-      text: localization.ModelAssessment.ComponentNames.CausalAnalysis
-    }
-  ];
   public constructor(props: IAddTabButtonProps) {
     super(props);
     this.state = {
@@ -81,7 +60,7 @@ export class AddTabButton extends React.Component<
               <Stack tokens={{ childrenGap: "l1" }}>
                 {localization.ModelAssessment.AddingTab.CalloutContent}
                 <Dropdown
-                  options={this.dropdownOptions}
+                  options={this.props.availableTabs}
                   onChange={this.onChange}
                 />
                 <PrimaryButton

@@ -4,7 +4,8 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData
+  IFairnessData,
+  IDataset
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -150,6 +151,32 @@ export const applications: IApplications = <const>{
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      adultCensusIncomeNoCausalData: {
+        classDimension: 2,
+        counterfactualData: [adultCounterfactualData],
+        dataset: adultCensusWithFairnessDataset,
+        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      adultCensusIncomeNoCounterfactualData: {
+        causalAnalysisData: [adultCensusCausalAnalysisData],
+        classDimension: 2,
+        dataset: adultCensusWithFairnessDataset,
+        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      adultCensusIncomeNoModelData: {
+        classDimension: 2,
+        dataset: {
+          categorical_map: adultCensusWithFairnessDataset.categorical_map,
+          class_names: adultCensusWithFairnessDataset.class_names,
+          feature_names: adultCensusWithFairnessDataset.feature_names,
+          features: adultCensusWithFairnessDataset.features,
+          target_column: adultCensusWithFairnessDataset.target_column,
+          task_type: adultCensusWithFairnessDataset.task_type,
+          true_y: adultCensusWithFairnessDataset.true_y
+        } as IDataset
       } as IModelAssessmentDataSet
     },
     versions: { "Version-1": 1 }
