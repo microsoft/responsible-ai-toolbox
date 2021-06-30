@@ -12,7 +12,6 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
-  generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
   generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
@@ -47,8 +46,8 @@ export class App extends React.Component<IAppProps> {
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
       locale: this.props.language,
-      localUrl: "",
-      requestDebugML: generateJsonTreeAdultCensusIncome,
+      localUrl: "https://www.bing.com/",
+      requestDebugML: generateJsonTreeBreastCancer,
       requestImportances: createJsonImportancesGenerator(
         this.props.dataset.feature_names,
         DatasetName.BreastCancer
@@ -59,17 +58,6 @@ export class App extends React.Component<IAppProps> {
         : createPredictionsRequestGenerator(this.props.classDimension),
       stringParams: { contextualHelp: this.messages }
     };
-
-    if ("categoricalMap" in this.props.dataset) {
-      return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
-    }
-
-    modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
-    modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
-    modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
-      this.props.dataset.feature_names,
-      DatasetName.BreastCancer
-    );
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
   }
