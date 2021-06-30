@@ -54,6 +54,7 @@ export class CounterfactualsView extends React.PureComponent<
         </Stack.Item>
         <Stack.Item>
           <CounterfactualChart
+            data={this.props.data}
             selectedWeightVector={this.state.selectedWeightVector}
             weightOptions={this.state.weightVectorOptions}
             weightLabels={this.state.weightVectorLabels}
