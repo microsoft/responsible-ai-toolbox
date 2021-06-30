@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import pickle
 from pathlib import Path
+
 from responsibleai._internal.constants import\
     ManagerNames, Metadata, SKLearn
 from responsibleai._managers.causal_manager import CausalManager
@@ -17,6 +18,8 @@ from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai._interfaces import ModelAnalysisData, Dataset
 from responsibleai._input_processing import _convert_to_list
+from responsibleai.modelanalysis._model_analysis_validations import \
+    _validate_model_analysis_input_parameters
 
 
 _DTYPES = 'dtypes'
@@ -52,6 +55,10 @@ class ModelAnalysis(object):
     :param task_type: The task to run, can be `classification` or
         `regression`.
     :type task_type: str
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
+    :param train_labels: The class labels in the training dataset
+    :type train_labels: ndarray
     :param serializer: Picklable custom serializer with save and load
         methods defined for model that is not serializable. The save
         method returns a dictionary state and load method returns the model.
@@ -75,20 +82,29 @@ class ModelAnalysis(object):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         :param train_labels: The class labels in the training dataset
         :type train_labels: ndarray
+        :param serializer: Picklable custom serializer with save and load
+            methods defined for model that is not serializable. The save
+            method returns a dictionary state and load method returns the
+            model.
+        :type serializer: object
         """
+        _validate_model_analysis_input_parameters(
+            model=model, train=train, test=test,
+            target_column=target_column, task_type=task_type,
+            categorical_features=categorical_features,
+            train_labels=train_labels,
+            serializer=serializer)
         self.model = model
         self.train = train
         self.test = test
         self.target_column = target_column
-        if (task_type != "classification" and task_type != "regression"):
-            raise ValueError("Unsupported task_type")
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
