@@ -38,6 +38,7 @@ export interface ICounterfactualPanelProps {
   data?: ICounterfactualData;
   isPanelOpen: boolean;
   temporaryPoint: { [key: string]: any } | undefined;
+  originalData: { [key: string]: any };
   closePanel(): void;
   saveAsPoint(): void;
   setCustomRowProperty(
@@ -48,9 +49,7 @@ export interface ICounterfactualPanelProps {
 }
 interface ICounterfactualState {
   data: any;
-  items: any;
   showCallout: boolean;
-  columns: IColumn[];
 }
 
 export class CounterfactualPanel extends React.Component<
@@ -68,16 +67,12 @@ export class CounterfactualPanel extends React.Component<
       onSelectionChanged: (): void => {
         const select = this.selection.getSelectedIndices()[0];
         this.setState({
-          data: this.processSelectionData(this.state.items, select)
+          data: this.processSelectionData(this.getItems(), select)
         });
       }
     });
-    const items = this.getItems();
-    const columns = this.getColumns();
     this.state = {
-      columns,
-      data: this.processSelectionData(items, 0),
-      items,
+      data: this.processSelectionData(this.getItems(), 0),
       showCallout: false
     };
   }
@@ -87,7 +82,8 @@ export class CounterfactualPanel extends React.Component<
   ): void {
     if (
       !_.isEqual(prevProps.data, this.props.data) ||
-      !_.isEqual(preState.data, this.state.data)
+      !_.isEqual(preState.data, this.state.data) ||
+      !_.isEqual(prevProps.originalData, this.props.originalData)
     ) {
       this.forceUpdate();
     }
@@ -99,6 +95,8 @@ export class CounterfactualPanel extends React.Component<
   }
   public render(): React.ReactNode {
     const classes = counterfactualPanelStyles();
+    const items = this.getItems();
+    const columns = this.getColumns();
     return (
       <Panel
         isOpen={this.props.isPanelOpen}
@@ -115,8 +113,8 @@ export class CounterfactualPanel extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <DetailsList
-              items={this.state.items}
-              columns={this.state.columns}
+              items={items}
+              columns={columns}
               selection={this.selection}
               selectionMode={SelectionMode.single}
               setKey="set"
@@ -163,16 +161,13 @@ export class CounterfactualPanel extends React.Component<
     const selectedData = this.props.data?.cfs_list[
       this.props.selectedIndex % this.props.data?.cfs_list.length
     ];
-    const originData = selectedData?.[0];
-    if (selectedData && originData) {
+    if (selectedData && this.props.originalData) {
+      items.push(this.props.originalData);
       selectedData.forEach((point, i) => {
         const temp = {};
-        this.props.data?.feature_names_including_target.forEach((f, j) => {
-          if (f === "row") {
-            temp[f] = `Row ${i}`;
-          } else {
-            temp[f] = i === 0 || originData[j] !== point[j] ? point[j] : "-";
-          }
+        temp["row"] = `Row ${i + 1}`;
+        this.props.data?.feature_names.forEach((f, j) => {
+          temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
         });
         items.push(temp);
       });
@@ -192,8 +187,15 @@ export class CounterfactualPanel extends React.Component<
   }
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
+    columns.push({
+      fieldName: "row",
+      isResizable: true,
+      key: "row",
+      minWidth: 150,
+      name: "row"
+    });
     if (this.props.data) {
-      this.props.data.feature_names_including_target.forEach((f) =>
+      this.props.data.feature_names.forEach((f) =>
         columns.push({
           fieldName: f,
           isResizable: true,
@@ -273,7 +275,7 @@ export class CounterfactualPanel extends React.Component<
               onChange={this.updateData.bind(this)}
             />
           </Stack.Item>
-          {column.key === this.state.columns[1].key && (
+          {column.key === "row" && (
             <Stack.Item>
               <Link
                 id={"predictionLink"}
