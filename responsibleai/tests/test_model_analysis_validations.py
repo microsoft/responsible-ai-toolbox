@@ -5,8 +5,7 @@ import pytest
 from .common_utils import (create_iris_data,
                            create_cancer_data,
                            create_lightgbm_classifier)
-from responsibleai.modelanalysis._model_analysis_validations import \
-    _validate_model_analysis_input_parameters
+from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 from responsibleai.exceptions import UserConfigValidationException
 
 
@@ -20,7 +19,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException):
-            _validate_model_analysis_input_parameters(
+            ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -36,7 +35,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException):
-            _validate_model_analysis_input_parameters(
+            ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -52,7 +51,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException):
-            _validate_model_analysis_input_parameters(
+            ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -69,7 +68,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException):
-            _validate_model_analysis_input_parameters(
+            ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -89,7 +88,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            _validate_model_analysis_input_parameters(
+            ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
