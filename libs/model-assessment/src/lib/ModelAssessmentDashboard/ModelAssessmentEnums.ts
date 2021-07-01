@@ -10,9 +10,3 @@ export enum GlobalTabKeys {
   CausalAnalysisTab = "CausalAnalysisTab",
   CounterfactualsTab = "CounterfactualsTab"
 }
-
-export enum PredictionTabKeys {
-  CorrectPredictionTab = "CorrectPredictionTab",
-  IncorrectPredictionTab = "IncorrectPredictionTab",
-  AllSelectedTab = "AllSelectedTab",
-}

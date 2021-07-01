@@ -10,7 +10,6 @@ import {
   ModelExplanationUtils,
   FabricStyles,
   constructRows,
-  ITableState,
   constructCols
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -18,7 +17,6 @@ import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
-  Dropdown,
   Fabric,
   IDetailsColumnRenderTooltipProps,
   IDetailsHeaderProps,
@@ -32,12 +30,13 @@ import {
   SelectionMode,
   Stack,
   TooltipHost,
-  IObjectWithKey
+  IColumn,
+  IGroup
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { PredictionTabKeys } from "../ModelAssessmentEnums";
 import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
+import { table } from "console";
 
 export interface IIndividualFeatureImportanceProps {
   features: string[];
@@ -50,14 +49,17 @@ export interface IIndividualFeatureImportanceProps {
   selectedCohort: ErrorCohort;
 }
 
-export interface IIndividualFeatureImportanceState {
-  activePredictionTab: PredictionTabKeys;
+export interface IIndividualFeatureImportanceTableState {
+  rows: any[];
+  columns: IColumn[];
+  groups?: IGroup[];
+}
+
+export interface IIndividualFeatureImportanceState
+  extends IIndividualFeatureImportanceTableState {
   featureImportances: IGlobalSeries[];
   sortArray: number[];
   sortingSeriesIndex?: number;
-  tableState: ITableState;
-  selectedCorrectItems: IObjectWithKey[];
-  selectedIncorrectItems: IObjectWithKey[];
 }
 
 export class IndividualFeatureImportanceView extends React.Component<
@@ -71,65 +73,35 @@ export class IndividualFeatureImportanceView extends React.Component<
 
   private selection: Selection = new Selection({
     onSelectionChanged: (): void => {
-      // if (!(this.selection as any)._hasChanged) {
-      //   return;
-      // }
-      let newState: IIndividualFeatureImportanceState = this.state;
-      newState = {
-        ...newState,
-        ...this.updateSelectedItems(this.state.activePredictionTab)
-      };
-      const allSelectedItems = [
-        ...newState.selectedCorrectItems,
-        ...newState.selectedIncorrectItems
-      ].sort();
-
-      this.setState({
-        ...newState,
-        ...this.updateViewedFeatureImportances(allSelectedItems)
-      });
+      this.updateViewedFeatureImportances();
     }
   });
-  private dropdownItems: IDropdownOption[] = [];
 
   public constructor(props: IIndividualFeatureImportanceProps) {
     super(props);
 
-    this.update();
+    const tableState = this.updateItems();
 
-    this.dropdownItems.push({
-      key: PredictionTabKeys.CorrectPredictionTab,
-      text: localization.ErrorAnalysis.correctPrediction
-    });
-    this.dropdownItems.push({
-      key: PredictionTabKeys.IncorrectPredictionTab,
-      text: localization.ErrorAnalysis.incorrectPrediction
-    });
-    this.dropdownItems.push({
-      key: PredictionTabKeys.AllSelectedTab,
-      text: localization.ErrorAnalysis.allSelected
-    });
+    this.state = {
+      featureImportances: [],
+      sortArray: [],
+      ...tableState
+    };
   }
 
   public componentDidUpdate(
-    prevProps: IIndividualFeatureImportanceProps,
-    prevState: IIndividualFeatureImportanceState
+    prevProps: IIndividualFeatureImportanceProps
   ): void {
     if (this.props.selectedCohort !== prevProps.selectedCohort) {
-      this.setState({ selectedCorrectItems: [], selectedIncorrectItems: [] });
-    }
-    if (
-      this.props.selectedCohort !== prevProps.selectedCohort ||
-      this.state.activePredictionTab != prevState.activePredictionTab
-    ) {
-      this.update();
+      this.setState(this.updateItems());
     }
   }
 
   public render(): React.ReactNode {
-    if (this.state.tableState === undefined) {
+    if (this.state.rows === undefined || this.state.columns === undefined) {
       return React.Fragment;
     }
+    // TODO handle regression case without groups!!!
     const testableDatapoints = this.state.featureImportances.map(
       (item) => item.unsortedFeatureValues as any[]
     );
@@ -164,20 +136,15 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return (
       <Stack tokens={{ padding: "15px 38px 0 38px", childrenGap: "10px" }}>
-        <Dropdown
-          selectedKey={this.state.activePredictionTab}
-          options={this.dropdownItems}
-          onChange={this.onDropdownSelectionChange.bind(this)}
-          styles={{ dropdown: { width: 180 } }}
-        />
         <div className="tabularDataView">
           <div style={{ height: "800px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
                 <MarqueeSelection selection={this.selection}>
                   <DetailsList
-                    items={this.state.tableState.rows}
-                    columns={this.state.tableState.columns}
+                    items={this.state.rows}
+                    columns={this.state.columns}
+                    groups={this.state.groups}
                     setKey="set"
                     layoutMode={DetailsListLayoutMode.fixedColumns}
                     constrainMode={ConstrainMode.unconstrained}
@@ -186,6 +153,8 @@ export class IndividualFeatureImportanceView extends React.Component<
                     ariaLabelForSelectionColumn="Toggle selection"
                     ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                     checkButtonAriaLabel="Row checkbox"
+                    // checkButtonGroupAriaLabel="Group checkbox"
+                    groupProps={{ showEmptyGroups: true }}
                     selectionMode={SelectionMode.multiple}
                     selection={this.selection}
                   />
@@ -214,35 +183,24 @@ export class IndividualFeatureImportanceView extends React.Component<
     );
   }
 
-  private onDropdownSelectionChange(
-    _?: React.FormEvent<HTMLElement | HTMLInputElement>,
-    option?: IDropdownOption
-  ): void {
-    if (option) {
-      this.setState({
-        activePredictionTab: PredictionTabKeys[option.key]
-      });
-    }
-  }
-
-  private updateViewedFeatureImportances(
-    allSelectedItems: IObjectWithKey[]
-  ): Partial<IIndividualFeatureImportanceState> {
+  private updateViewedFeatureImportances(): void {
+    const allSelectedItems = this.selection.getSelection();
     const featureImportances = allSelectedItems.map(
       (row, colorIndex): IGlobalSeries => {
+        const rowDict = this.props.jointDataset.getRow(row[0]);
         return {
           colorIndex,
-          id: row[JointDataset.IndexLabel],
+          id: rowDict[JointDataset.IndexLabel],
           name: localization.formatString(
             localization.Interpret.WhatIfTab.rowLabel,
-            row[JointDataset.IndexLabel].toString()
+            rowDict[JointDataset.IndexLabel].toString()
           ),
           unsortedAggregateY: JointDataset.localExplanationSlice(
-            row,
+            rowDict,
             this.props.jointDataset.localExplanationFeatureCount
           ) as number[],
           unsortedFeatureValues: JointDataset.datasetSlice(
-            row,
+            rowDict,
             this.props.jointDataset.metaDict,
             this.props.jointDataset.datasetFeatureCount
           )
@@ -259,90 +217,59 @@ export class IndividualFeatureImportanceView extends React.Component<
     } else {
       sortingSeriesIndex = undefined;
     }
-    return {
+    this.setState({
       featureImportances,
       sortArray,
       sortingSeriesIndex
-    };
+    });
   }
 
-  private updateSelection(
-    allSelectedItems: IObjectWithKey[],
-    tableState: ITableState
-  ): void {
-    // first unselect all items
-    //this.selection.setChangeEvents(false);
-    //this.selection.setItems(tableState.rows, true);
-    //this.selection.setChangeEvents(true);
-
-    // this.selection.getSelectedIndices().forEach((index) => {
-    //   this.selection.setIndexSelected(index, false, false);
-    // });
-
-    // this.selection = new Selection({
-    //   onSelectionChanged: (): void => {
-    //     let newState: IIndividualFeatureImportanceState = this.state;
-    //     newState = {
-    //       ...newState,
-    //       ...this.updateSelectedItems(this.state.activePredictionTab)
-    //     };
-    //     const allSelectedItems = [
-    //       ...newState.selectedCorrectItems,
-    //       ...newState.selectedIncorrectItems
-    //     ].sort();
-
-    //     this.setState({
-    //       ...newState,
-    //       ...this.updateViewedFeatureImportances(allSelectedItems)
-    //     });
-    //   },
-    //   items: tableState.rows
-    // });
-
-    // // then select the ones that should be selected
-    // allSelectedItems.forEach((row) => {
-    //   const index = tableState.rows
-    //     .map((row) => row[0])
-    //     .indexOf(row[JointDataset.IndexLabel]);
-    //   if (index === -1) {
-    //     return;
-    //   }
-    //   this.selection.setIndexSelected(index, true, true);
-    // });
-    return;
-  }
-
-  private updateItems(): ITableState {
+  private updateItems(): IIndividualFeatureImportanceTableState {
     let rows = [];
 
-    this.props.selectedCohort.cohort.sort();
+    this.props.selectedCohort.cohort.sortByGroup(
+      JointDataset.IndexLabel,
+      (row) =>
+        row[JointDataset.TrueYLabel] === row[JointDataset.PredictedYLabel]
+    );
     const cohortData = this.props.selectedCohort.cohort.filteredData;
-    const numRows: number = cohortData.length;
-    let viewedRows: number = numRows;
-    let indices: number[] | undefined;
-
-    switch (this.state?.activePredictionTab) {
-      case PredictionTabKeys.CorrectPredictionTab:
-        indices = this.getCorrectIndices();
-        break;
-      case PredictionTabKeys.IncorrectPredictionTab:
-        indices = this.getIncorrectIndices();
-        break;
-      case PredictionTabKeys.AllSelectedTab:
-        indices = this.getAllIndices();
-        break;
-    }
-    if (indices) {
-      viewedRows = Math.min(viewedRows, indices.length);
-    }
+    let numRows: number = cohortData.length;
+    let indices = this.props.selectedCohort.cohort.filteredData.map(
+      (row: { [key: string]: number }) => {
+        return row[JointDataset.IndexLabel] as number;
+      }
+    );
 
     rows = constructRows(
       cohortData,
       this.props.jointDataset,
-      viewedRows,
-      this.tabularDataFilter.bind(this),
+      numRows,
+      () => false, // don't filter any items
       indices
     );
+
+    // find first incorrect item
+    const firstIncorrectItemIndex = cohortData.findIndex(
+      (row) =>
+        row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+    );
+
+    let groups = [
+      {
+        key: "groupCorrect",
+        name: "Correct predictions",
+        startIndex: 0,
+        count: firstIncorrectItemIndex,
+        level: 0
+      },
+      {
+        key: "groupIncorrect",
+        name: "Incorrect predictions",
+        startIndex: firstIncorrectItemIndex,
+        count: numRows - firstIncorrectItemIndex,
+        level: 0
+      }
+    ];
 
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
@@ -353,143 +280,12 @@ export class IndividualFeatureImportanceView extends React.Component<
       this.props.jointDataset,
       false
     );
+
     return {
       columns,
-      rows
+      rows,
+      groups
     };
-  }
-
-  private tabularDataFilter(row: { [key: string]: number }): boolean {
-    let activePredictionTab = this.state
-      ? this.state.activePredictionTab
-      : PredictionTabKeys.AllSelectedTab;
-    switch (activePredictionTab) {
-      case PredictionTabKeys.CorrectPredictionTab: {
-        if (
-          row[JointDataset.PredictedYLabel] !== row[JointDataset.TrueYLabel]
-        ) {
-          return true;
-        }
-        break;
-      }
-      case PredictionTabKeys.IncorrectPredictionTab: {
-        if (
-          row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel]
-        ) {
-          return true;
-        }
-        break;
-      }
-      case PredictionTabKeys.AllSelectedTab:
-      default:
-        break;
-    }
-    return false;
-  }
-
-  private getIncorrectIndices() {
-    return this.props.selectedCohort.cohort.filteredData
-      .filter((row: { [key: string]: number }) => {
-        return (
-          row[JointDataset.PredictedYLabel] !== row[JointDataset.TrueYLabel]
-        );
-      })
-      .map((row: { [key: string]: number }) => {
-        return row[JointDataset.IndexLabel] as number;
-      });
-  }
-
-  private getCorrectIndices() {
-    return this.props.selectedCohort.cohort.filteredData
-      .filter((row: { [key: string]: number }) => {
-        return (
-          row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel]
-        );
-      })
-      .map((row: { [key: string]: number }) => {
-        return row[JointDataset.IndexLabel] as number;
-      });
-  }
-
-  private getAllIndices() {
-    return this.props.selectedCohort.cohort.filteredData.map(
-      (row: { [key: string]: number }) => {
-        return row[JointDataset.IndexLabel] as number;
-      }
-    );
-  }
-
-  private updateSelectedItems(
-    activePredictionTab: PredictionTabKeys
-  ): Partial<IIndividualFeatureImportanceState> {
-    // Merge currently visible selection with overall selection
-    // which may include currently hidden items.
-    const currentSelectionItems = this.selection.getSelection().map((row) => {
-      return this.props.jointDataset.getRow(row[0]);
-    });
-    const currentlySelectedCorrectItems = currentSelectionItems.filter(
-      (row) =>
-        row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel]
-    );
-    const currentlySelectedIncorrectItems = currentSelectionItems.filter(
-      (row) =>
-        row[JointDataset.PredictedYLabel] !== row[JointDataset.TrueYLabel]
-    );
-
-    // Only update the indices if they are currently visible.
-    // The indices that are currently hidden can't be updated.
-    switch (activePredictionTab) {
-      case PredictionTabKeys.AllSelectedTab:
-        return {
-          selectedCorrectItems: currentlySelectedCorrectItems,
-          selectedIncorrectItems: currentlySelectedIncorrectItems
-        };
-      case PredictionTabKeys.CorrectPredictionTab:
-        return {
-          selectedCorrectItems: currentlySelectedCorrectItems
-        };
-      case PredictionTabKeys.IncorrectPredictionTab:
-        return {
-          selectedIncorrectItems: currentlySelectedIncorrectItems
-        };
-    }
-  }
-
-  private update() {
-    let newState: IIndividualFeatureImportanceState = this.state;
-    if (newState === undefined) {
-      newState = {
-        activePredictionTab: PredictionTabKeys.AllSelectedTab,
-        featureImportances: [],
-        sortArray: [],
-        tableState: {} as ITableState,
-        selectedCorrectItems: [],
-        selectedIncorrectItems: []
-      };
-    }
-    newState.tableState = this.updateItems();
-
-    newState = {
-      ...newState,
-      ...this.updateSelectedItems(newState.activePredictionTab)
-    };
-
-    const allSelectedItems = [
-      ...newState.selectedCorrectItems,
-      ...newState.selectedIncorrectItems
-    ].sort();
-
-    this.updateSelection(allSelectedItems, newState.tableState);
-
-    newState = {
-      ...newState,
-      ...this.updateViewedFeatureImportances(allSelectedItems)
-    };
-    if (this.state === undefined) {
-      this.state = newState;
-    } else {
-      this.setState(newState);
-    }
   }
 }
 
