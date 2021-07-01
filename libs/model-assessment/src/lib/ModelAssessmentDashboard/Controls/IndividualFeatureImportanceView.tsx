@@ -257,14 +257,14 @@ export class IndividualFeatureImportanceView extends React.Component<
     let groups = [
       {
         key: "groupCorrect",
-        name: "Correct predictions",
+        name: localization.ModelAssessment.FeatureImportances.CorrectPredictions,
         startIndex: 0,
         count: firstIncorrectItemIndex,
         level: 0
       },
       {
         key: "groupIncorrect",
-        name: "Incorrect predictions",
+        name: localization.ModelAssessment.FeatureImportances.IncorrectPredictions,
         startIndex: firstIncorrectItemIndex,
         count: numRows - firstIncorrectItemIndex,
         level: 0
