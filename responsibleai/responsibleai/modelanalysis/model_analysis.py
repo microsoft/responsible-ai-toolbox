@@ -159,7 +159,8 @@ class ModelAnalysis(object):
         :type train_labels: ndarray
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
-            method returns a dictionary state and load method returns the model.
+            method returns a dictionary state and load method returns the
+            model.
         :type serializer: object
         """
 
@@ -183,22 +184,25 @@ class ModelAnalysis(object):
                         target_column)
                 )
 
-            if categorical_features is not None and len(categorical_features) > 0:
+            if categorical_features is not None and \
+                    len(categorical_features) > 0:
                 if target_column in categorical_features:
                     raise UserConfigValidationException(
-                        'Found target name {0} in categorical feature list'.format(
+                        'Found target name {0} in '
+                        'categorical feature list'.format(
                             target_column)
                     )
 
                 if not set(categorical_features).issubset(set(train.columns)):
                     raise UserConfigValidationException(
-                        'Found some feature names in categorical feature which do'
-                        ' not occur in train data'
+                        'Found some feature names in categorical feature which'
+                        ' do not occur in train data'
                     )
 
             # Run predict of the model
             try:
-                small_train_data = train.iloc[0:2].drop([target_column], axis=1)
+                small_train_data = train.iloc[0:2].drop(
+                    [target_column], axis=1)
                 small_test_data = test.iloc[0:2].drop([target_column], axis=1)
                 model.predict(small_train_data)
                 model.predict(small_test_data)
