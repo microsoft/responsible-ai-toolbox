@@ -37,7 +37,7 @@ export class CausalAnalysisView extends React.PureComponent<
           <CausalIndividualView data={this.props.data} />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Treatment && (
-          <TreatmentView data={this.props.data} />
+          <TreatmentView data={this.props.data.policies} />
         )}
       </>
     );
