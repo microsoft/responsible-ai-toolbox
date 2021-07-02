@@ -142,6 +142,7 @@ export class FeatureImportancesTab extends React.PureComponent<
             weightLabels={this.props.weightVectorLabels}
             onWeightChange={this.props.onWeightVectorChange}
             selectedCohort={this.context.selectedErrorCohort}
+            modelType={this.props.modelExplanationData?.[0].method}
           />
         )}
       </Stack>

@@ -10,7 +10,8 @@ import {
   ModelExplanationUtils,
   FabricStyles,
   constructRows,
-  constructCols
+  constructCols,
+  Method
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -36,7 +37,6 @@ import {
 import React from "react";
 
 import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
-import { table } from "console";
 
 export interface IIndividualFeatureImportanceProps {
   features: string[];
@@ -47,6 +47,7 @@ export interface IIndividualFeatureImportanceProps {
   weightLabels: any;
   onWeightChange: (option: WeightVectorOption) => void;
   selectedCohort: ErrorCohort;
+  modelType?: Method;
 }
 
 export interface IIndividualFeatureImportanceTableState {
@@ -225,13 +226,47 @@ export class IndividualFeatureImportanceView extends React.Component<
   }
 
   private updateItems(): IIndividualFeatureImportanceTableState {
-    let rows = [];
+    let groups: IGroup[] | undefined;
 
-    this.props.selectedCohort.cohort.sortByGroup(
-      JointDataset.IndexLabel,
-      (row) =>
-        row[JointDataset.TrueYLabel] === row[JointDataset.PredictedYLabel]
-    );
+    // assume classifier by default, otherwise regressor
+    if (this.props.modelType && this.props.modelType === "regressor") {
+      // don't use groups since there are no correct/incorrect buckets
+      this.props.selectedCohort.cohort.sort();
+    } else {
+      this.props.selectedCohort.cohort.sortByGroup(
+        JointDataset.IndexLabel,
+        (row) =>
+          row[JointDataset.TrueYLabel] === row[JointDataset.PredictedYLabel]
+      );
+      // find first incorrect item
+      const firstIncorrectItemIndex = this.props.selectedCohort.cohort.filteredData.findIndex(
+        (row) =>
+          row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+      );
+
+      groups = [
+        {
+          key: "groupCorrect",
+          name:
+            localization.ModelAssessment.FeatureImportances.CorrectPredictions,
+          startIndex: 0,
+          count: firstIncorrectItemIndex,
+          level: 0
+        },
+        {
+          key: "groupIncorrect",
+          name:
+            localization.ModelAssessment.FeatureImportances
+              .IncorrectPredictions,
+          startIndex: firstIncorrectItemIndex,
+          count:
+            this.props.selectedCohort.cohort.filteredData.length -
+            firstIncorrectItemIndex,
+          level: 0
+        }
+      ];
+    }
+
     const cohortData = this.props.selectedCohort.cohort.filteredData;
     let numRows: number = cohortData.length;
     let indices = this.props.selectedCohort.cohort.filteredData.map(
@@ -240,36 +275,13 @@ export class IndividualFeatureImportanceView extends React.Component<
       }
     );
 
-    rows = constructRows(
+    const rows = constructRows(
       cohortData,
       this.props.jointDataset,
       numRows,
       () => false, // don't filter any items
       indices
     );
-
-    // find first incorrect item
-    const firstIncorrectItemIndex = cohortData.findIndex(
-      (row) =>
-        row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
-    );
-
-    let groups = [
-      {
-        key: "groupCorrect",
-        name: localization.ModelAssessment.FeatureImportances.CorrectPredictions,
-        startIndex: 0,
-        count: firstIncorrectItemIndex,
-        level: 0
-      },
-      {
-        key: "groupIncorrect",
-        name: localization.ModelAssessment.FeatureImportances.IncorrectPredictions,
-        startIndex: firstIncorrectItemIndex,
-        count: numRows - firstIncorrectItemIndex,
-        level: 0
-      }
-    ];
 
     const numCols: number = this.props.jointDataset.datasetFeatureCount;
     const featureNames: string[] = this.props.features;
