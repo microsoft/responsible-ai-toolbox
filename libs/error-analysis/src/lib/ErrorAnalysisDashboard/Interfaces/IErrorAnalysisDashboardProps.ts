@@ -43,6 +43,13 @@ export interface IRequestNode {
   success: number;
 }
 
+export interface IRootStats {
+  metricName: string;
+  metricValue: number;
+  totalSize: number;
+  errorCoverage: number;
+}
+
 export interface IErrorAnalysisDashboardProps
   extends IExplanationDashboardData,
     IOfficeFabricProps {
@@ -67,5 +74,6 @@ export interface IErrorAnalysisDashboardProps
   localUrl: string;
   staticDebugML?: any;
   staticMatrix?: any;
+  rootStats?: IRootStats;
   telemetryHook?: (message: ITelemetryMessage) => void;
 }

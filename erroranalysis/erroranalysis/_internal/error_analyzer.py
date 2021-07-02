@@ -113,9 +113,9 @@ class BaseAnalyzer(ABC):
                                        num_leaves=num_leaves)
 
     def create_error_report(self,
-                            filter_features,
-                            max_depth,
-                            num_leaves):
+                            filter_features=None,
+                            max_depth=None,
+                            num_leaves=None):
         json_tree = self.compute_error_tree(self.feature_names,
                                             None,
                                             None,

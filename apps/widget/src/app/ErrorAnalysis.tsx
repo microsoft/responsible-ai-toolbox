@@ -55,6 +55,7 @@ export class ErrorAnalysis extends React.Component {
         localUrl={config.baseUrl}
         locale={config.locale}
         features={modelData.featureNames}
+        rootStats={modelData.rootStats}
       />
     );
   }

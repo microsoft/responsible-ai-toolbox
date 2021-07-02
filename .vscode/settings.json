@@ -74,10 +74,11 @@
     "sdist",
     "shap",
     "sklearn",
-    "uifabric"
+    "uifabric",
+    "zstat"
   ],
   "python.linting.flake8Enabled": true,
-  "python.linting.flake8Args": ["--max-line-length=80"],
+  "python.linting.flake8Args": ["--max-line-length=79"],
   "python.testing.pytestArgs": [],
   "python.testing.unittestEnabled": false,
   "python.testing.nosetestsEnabled": false,

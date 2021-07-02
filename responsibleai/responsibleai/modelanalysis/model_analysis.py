@@ -29,6 +29,7 @@ _MODEL_PKL = _MODEL + '.pkl'
 _SERIALIZER = 'serializer'
 _CLASSES = 'classes'
 _MANAGERS = 'managers'
+_CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 
 
@@ -58,7 +59,7 @@ class ModelAnalysis(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features, train_labels=None,
+                 task_type, categorical_features=None, train_labels=None,
                  serializer=None):
         """Defines the top-level Model Analysis API.
         Use ModelAnalysis to analyze errors, explain the most important
@@ -86,6 +87,8 @@ class ModelAnalysis(object):
         self.train = train
         self.test = test
         self.target_column = target_column
+        if (task_type != "classification" and task_type != "regression"):
+            raise ValueError("Unsupported task_type")
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
@@ -93,17 +96,22 @@ class ModelAnalysis(object):
             train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type)
-        self._error_analysis_manager = ErrorAnalysisManager(model,
-                                                            train,
-                                                            target_column)
+            target_column=target_column, task_type=task_type,
+            categorical_features=categorical_features)
+        error_analysis_manager = ErrorAnalysisManager(model,
+                                                      train,
+                                                      target_column,
+                                                      categorical_features)
+        self._error_analysis_manager = error_analysis_manager
         if train_labels is None:
             self._classes = train[target_column].unique()
         else:
             self._classes = train_labels
-        self._explainer_manager = ExplainerManager(model, train, test,
-                                                   target_column,
-                                                   self._classes)
+        self._explainer_manager = ExplainerManager(
+            model, train, test,
+            target_column,
+            self._classes,
+            categorical_features=categorical_features)
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
                           self._error_analysis_manager,
@@ -183,7 +191,8 @@ class ModelAnalysis(object):
 
     def _get_dataset(self):
         dashboard_dataset = Dataset()
-        dashboard_dataset.classNames = _convert_to_list(
+        dashboard_dataset.task_type = self.task_type
+        dashboard_dataset.class_names = _convert_to_list(
             self._classes)
 
         predicted_y = None
@@ -213,10 +222,10 @@ class ModelAnalysis(object):
                     "Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
             if(self.task_type == "classification" and
-                    dashboard_dataset.classNames is not None):
-                predicted_y = [dashboard_dataset.classNames.index(
+                    dashboard_dataset.class_names is not None):
+                predicted_y = [dashboard_dataset.class_names.index(
                     y) for y in predicted_y]
-            dashboard_dataset.predictedY = predicted_y
+            dashboard_dataset.predicted_y = predicted_y
         row_length = 0
 
         if list_dataset is not None:
@@ -237,10 +246,10 @@ class ModelAnalysis(object):
 
         if true_y is not None and len(true_y) == row_length:
             if(self.task_type == "classification" and
-               dashboard_dataset.classNames is not None):
-                true_y = [dashboard_dataset.classNames.index(
+               dashboard_dataset.class_names is not None):
+                true_y = [dashboard_dataset.class_names.index(
                     y) for y in true_y]
-            dashboard_dataset.trueY = _convert_to_list(true_y)
+            dashboard_dataset.true_y = _convert_to_list(true_y)
 
         features = dataset.columns
 
@@ -250,8 +259,8 @@ class ModelAnalysis(object):
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
                                  " from local explanations dimension")
-            dashboard_dataset.featureNames = features
-
+            dashboard_dataset.feature_names = features
+        dashboard_dataset.target_column = self.target_column
         if (self.model is not None and
                 hasattr(self.model, SKLearn.PREDICT_PROBA) and
                 self.model.predict_proba is not None and
@@ -266,7 +275,7 @@ class ModelAnalysis(object):
             except Exception as ex:
                 raise ValueError(
                     "Model predict_proba output of unsupported type,") from ex
-            dashboard_dataset.probabilityY = probability_y
+            dashboard_dataset.probability_y = probability_y
 
         return dashboard_dataset
 
@@ -299,7 +308,8 @@ class ModelAnalysis(object):
                             json.dumps(dtypes))
         self._write_to_file(top_dir / _TEST, self.test.to_json())
         meta = {_TARGET_COLUMN: self.target_column,
-                _TASK_TYPE: self.task_type}
+                _TASK_TYPE: self.task_type,
+                _CATEGORICAL_FEATURES: self.categorical_features}
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
@@ -347,6 +357,7 @@ class ModelAnalysis(object):
         inst.__dict__[_TARGET_COLUMN] = target_column
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
         inst.__dict__['_' + _CLASSES] = train[target_column].unique()
+        inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:

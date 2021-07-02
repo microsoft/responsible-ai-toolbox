@@ -8,8 +8,8 @@ on:
         description: "Test or Prod PyPI?"
         required: true
         default: "Test"
-      packageDirectory:
-        description: "responsibleai, raiwidgets or wrapped-flask?"
+      targetPackage:
+        description: "rai-tooling (for both responsibleai and raiwidgets) or wrapped-flask?"
         required: true
 
 jobs:
@@ -18,9 +18,9 @@ jobs:
 
     steps:
       - name: fail if neither responsibleai, raiwidgets nor wrapped-flask
-        if: ${{ ! (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'wrapped-flask' || github.event.inputs.packageDirectory == 'responsibleai' }}
+        if: ${{ ! (github.event.inputs.targetPackage == 'rai-tooling' || github.event.inputs.targetPackage == 'wrapped-flask') }}
         run: |
-          echo "Only raiwidgets, responsibleai or wrapped-flask can be used."
+          echo "Only rai-tooling or wrapped-flask can be used."
           exit 1
 
       # build wheel
@@ -34,11 +34,11 @@ jobs:
           yarn install
 
       - name: auto version
-        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Test' }}
+        if: ${{ (github.event.inputs.targetPackage == 'rai-tooling') && github.event.inputs.pypiType == 'Test' }}
         run: |
           yarn auto-version -r
       - name: auto version
-        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Prod' }}
+        if: ${{ (github.event.inputs.targetPackage == 'rai-tooling') && github.event.inputs.pypiType == 'Prod' }}
         run: |
           yarn auto-version -r -t
 
@@ -49,63 +49,126 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
-      - name: install requirements.txt
+      #
+      - name: install requirements.txt for wrapped-flask
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-        working-directory: ${{ github.event.inputs.packageDirectory }}
+        working-directory: wrapped-flask
+        if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' }}
+      - name: install requirements.txt for raiwidgets
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: raiwidgets
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
+      - name: install requirements.txt for responsibleai
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: responsibleai
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
       - name: pip freeze
         run: pip freeze
+      #
       - name: replace README for raiwidgets
-        if: ${{ github.event.inputs.packageDirectory == 'raiwidgets' }}
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ./raiwidgets/
       - name: replace README for responsibleai
-        if: ${{ github.event.inputs.packageDirectory == 'responsibleai' }}
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ./responsibleai/
-      - name: build wheel
+      # =====
+      - name: build wheel for wrapped flask
         run: python setup.py sdist bdist_wheel
-        working-directory: ${{ github.event.inputs.packageDirectory }}
+        working-directory: wrapped-flask
+        if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' }}
+      - name: build wheel for raiwidgets
+        run: python setup.py sdist bdist_wheel
+        working-directory: raiwidgets
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
+      - name: build wheel for responsibleai
+        run: python setup.py sdist bdist_wheel
+        working-directory: responsibleai
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
 
       # run tests before publishing to PyPI
-      - name: install wheel locally
-        run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: ${{ github.event.inputs.packageDirectory }}
-      - name: run tests
-        run: pytest ./tests/
-        working-directory: ${{ github.event.inputs.packageDirectory }}
 
-      # publish to PyPI
-      - name: publish package to Test PyPI
-        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Test' }}
+      - name: install wrapped-flask wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: wrapped-flask
+        if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' }}
+      - name: install raiwidgets wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: raiwidgets
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
+      - name: install responsible wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: responsibleai
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
+
+      - name: run wrapped-flask tests
+        run: pytest ./tests/
+        working-directory: wrapped-flask
+        if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' }}
+      - name: run raiwidgets tests
+        run: pytest ./tests/
+        working-directory: raiwidgets
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
+      - name: run responsibleai tests
+        run: pytest ./tests/
+        working-directory: responsibleai
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' }}
+
+      ####### publish to PyPI
+      # raiwidgets
+      - name: Publish raiwidgets package to Test PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
-      - name: Publish package to PyPI
-        if: ${{ (github.event.inputs.packageDirectory == 'raiwidgets' || github.event.inputs.packageDirectory == 'responsibleai') && github.event.inputs.pypiType == 'Prod' }}
+          packages_dir: raiwidgets/dist/
+      - name: Publish raiwidgets package to PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
-          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
-      - name: Publish package to Test PyPI
-        if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
+          packages_dir: raiwidgets/dist/
+      # responsibleai
+      - name: publish responsibleai package to Test PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: responsibleai/dist/
+      - name: Publish responsibleai package to PyPI
+        if: ${{ github.event.inputs.targetPackage == 'rai-tooling' && github.event.inputs.pypiType == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
+          packages_dir: responsibleai/dist/
+      # wrapped-flask
+      - name: Publish wrapped-flask package to Test PyPI
+        if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' && github.event.inputs.pypiType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
-      - name: Publish package to PyPI
-        if: ${{ github.event.inputs.packageDirectory == 'wrapped-flask' && github.event.inputs.pypiType == 'Prod' }}
+          packages_dir: wrapped-flask/dist/
+      - name: Publish wrapped-flask package to PyPI
+        if: ${{ github.event.inputs.targetPackage == 'wrapped-flask' && github.event.inputs.pypiType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAI_CORE_FLASK }}
-          packages_dir: ${{ github.event.inputs.packageDirectory }}/dist/
+          packages_dir: wrapped-flask/dist/
