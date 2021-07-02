@@ -625,7 +625,15 @@
     "counterfactualName": "What-if counterfactual name",
     "saveAsNew": "Save as new datapoint",
     "seePrediction": "See prediction deltas",
-    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention."
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "treatmentDescription": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+    "treatmentTableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+    "treatmentTable": "The table can be read by taking a row and then taking a column of that specific row.",
+    "treatmentSize": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+    "nSample": "n = {0}",
+    "treatment": "Recommended treatment = {0}",
+    "treatmentLeft": "{0} <= {1}",
+    "treatmentRight": "{0} > {1}"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",

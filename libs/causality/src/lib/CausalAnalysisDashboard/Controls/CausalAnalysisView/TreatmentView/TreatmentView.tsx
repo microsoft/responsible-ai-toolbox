@@ -1,40 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  defaultModelAssessmentContext,
-  ICausalAnalysisData,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
+import { ICausalPolicy } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { TreatmentStyles } from "./TreatmentStyles";
+import { TreatmentTableSection } from "./TreatmentTableSection";
+
 export interface ITreatmentViewProps {
-  data: ICausalAnalysisData;
-}
-interface ITreatmentViewState {
-  showModalHelp: boolean;
+  data?: ICausalPolicy;
 }
 
-export class TreatmentView extends React.PureComponent<
-  ITreatmentViewProps,
-  ITreatmentViewState
-> {
-  public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
-  public constructor(props: ITreatmentViewProps) {
-    super(props);
-    this.state = {
-      showModalHelp: false
-    };
-  }
-
+export class TreatmentView extends React.PureComponent<ITreatmentViewProps> {
   public render(): React.ReactNode {
-    return this.state.showModalHelp ? (
-      <div>Treatment View</div>
-    ) : (
-      <div>Treatment View</div>
+    const styles = TreatmentStyles();
+    return (
+      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
+        <Text variant={"medium"} className={styles.label}>
+          {localization.Counterfactuals.treatmentDescription}
+        </Text>
+        <TreatmentTableSection data={this.props.data} />
+      </Stack>
     );
   }
 }
