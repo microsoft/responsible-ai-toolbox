@@ -11,8 +11,9 @@ import {
   FabricStyles,
   constructRows,
   constructCols,
-  Method
+  ModelTypes
 } from "@responsible-ai/core-ui";
+import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   ConstrainMode,
@@ -36,8 +37,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
-
 export interface IIndividualFeatureImportanceProps {
   features: string[];
   jointDataset: JointDataset;
@@ -47,7 +46,7 @@ export interface IIndividualFeatureImportanceProps {
   weightLabels: any;
   onWeightChange: (option: WeightVectorOption) => void;
   selectedCohort: ErrorCohort;
-  modelType?: Method;
+  modelType?: ModelTypes;
 }
 
 export interface IIndividualFeatureImportanceTableState {
@@ -136,7 +135,7 @@ export class IndividualFeatureImportanceView extends React.Component<
       });
 
     return (
-      <Stack tokens={{ padding: "15px 38px 0 38px", childrenGap: "10px" }}>
+      <Stack tokens={{ childrenGap: "10px", padding: "15px 38px 0 38px" }}>
         <div className="tabularDataView">
           <div style={{ height: "800px", position: "relative" }}>
             <Fabric>
@@ -149,7 +148,7 @@ export class IndividualFeatureImportanceView extends React.Component<
                     setKey="set"
                     layoutMode={DetailsListLayoutMode.fixedColumns}
                     constrainMode={ConstrainMode.unconstrained}
-                    onRenderDetailsHeader={onRenderDetailsHeader}
+                    onRenderDetailsHeader={this.onRenderDetailsHeader}
                     selectionPreservedOnEmptyClick
                     ariaLabelForSelectionColumn="Toggle selection"
                     ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -229,7 +228,10 @@ export class IndividualFeatureImportanceView extends React.Component<
     let groups: IGroup[] | undefined;
 
     // assume classifier by default, otherwise regressor
-    if (this.props.modelType && this.props.modelType === "regressor") {
+    if (
+      this.props.modelType &&
+      this.props.modelType === ModelTypes.Regression
+    ) {
       // don't use groups since there are no correct/incorrect buckets
       this.props.selectedCohort.cohort.sort();
     } else {
@@ -246,30 +248,30 @@ export class IndividualFeatureImportanceView extends React.Component<
 
       groups = [
         {
+          count: firstIncorrectItemIndex,
           key: "groupCorrect",
+          level: 0,
           name:
             localization.ModelAssessment.FeatureImportances.CorrectPredictions,
-          startIndex: 0,
-          count: firstIncorrectItemIndex,
-          level: 0
+          startIndex: 0
         },
         {
-          key: "groupIncorrect",
-          name:
-            localization.ModelAssessment.FeatureImportances
-              .IncorrectPredictions,
-          startIndex: firstIncorrectItemIndex,
           count:
             this.props.selectedCohort.cohort.filteredData.length -
             firstIncorrectItemIndex,
-          level: 0
+          key: "groupIncorrect",
+          level: 0,
+          name:
+            localization.ModelAssessment.FeatureImportances
+              .IncorrectPredictions,
+          startIndex: firstIncorrectItemIndex
         }
       ];
     }
 
     const cohortData = this.props.selectedCohort.cohort.filteredData;
-    let numRows: number = cohortData.length;
-    let indices = this.props.selectedCohort.cohort.filteredData.map(
+    const numRows: number = cohortData.length;
+    const indices = this.props.selectedCohort.cohort.filteredData.map(
       (row: { [key: string]: number }) => {
         return row[JointDataset.IndexLabel] as number;
       }
@@ -295,29 +297,29 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return {
       columns,
-      rows,
-      groups
+      groups,
+      rows
     };
   }
-}
 
-const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
-  props,
-  defaultRender
-) => {
-  if (!props) {
-    return <div />;
-  }
-  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
-    tooltipHostProps
-  ) => <TooltipHost {...tooltipHostProps} />;
-  return (
-    <div>
-      {defaultRender?.({
-        ...props,
-        onRenderColumnHeaderTooltip,
-        selectAllVisibility: SelectAllVisibility.hidden
-      })}
-    </div>
-  );
-};
+  private onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
+    props,
+    defaultRender
+  ) => {
+    if (!props) {
+      return <div />;
+    }
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
+      tooltipHostProps
+    ) => <TooltipHost {...tooltipHostProps} />;
+    return (
+      <div>
+        {defaultRender?.({
+          ...props,
+          onRenderColumnHeaderTooltip,
+          selectAllVisibility: SelectAllVisibility.hidden
+        })}
+      </div>
+    );
+  };
+}

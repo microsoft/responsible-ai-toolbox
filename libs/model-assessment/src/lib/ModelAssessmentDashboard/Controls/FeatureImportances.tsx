@@ -6,7 +6,8 @@ import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext,
-  IModelExplanationData
+  IModelExplanationData,
+  IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -31,6 +32,7 @@ interface IFeatureImportancesProps {
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   modelExplanationData?: IModelExplanationData[];
+  modelMetadata: IExplanationModelMetadata;
   onWeightVectorChange: (weightOption: WeightVectorOption) => void;
 }
 
@@ -142,7 +144,7 @@ export class FeatureImportancesTab extends React.PureComponent<
             weightLabels={this.props.weightVectorLabels}
             onWeightChange={this.props.onWeightVectorChange}
             selectedCohort={this.context.selectedErrorCohort}
-            modelType={this.props.modelExplanationData?.[0].method}
+            modelType={this.props.modelMetadata.modelType}
           />
         )}
       </Stack>

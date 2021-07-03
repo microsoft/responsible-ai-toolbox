@@ -250,6 +250,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   {t.key === GlobalTabKeys.FeatureImportancesTab &&
                     this.props.modelExplanationData?.[0] && (
                       <FeatureImportancesTab
+                        modelMetadata={this.state.modelMetadata}
                         modelExplanationData={this.props.modelExplanationData}
                         selectedWeightVector={this.state.selectedWeightVector}
                         weightVectorOptions={this.state.weightVectorOptions}

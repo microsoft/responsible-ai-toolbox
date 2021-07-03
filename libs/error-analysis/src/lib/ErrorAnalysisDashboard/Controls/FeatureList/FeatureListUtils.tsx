@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITableState } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IColumn } from "office-ui-fabric-react";
-
-import { ITableState } from "@responsible-ai/core-ui";
 
 export function updateItems(
   percents: number[],

@@ -40,6 +40,11 @@ import {
   adultCensusCausalErrorAnalysisConfig,
   adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
+import {
+  bostonData as bostonDataMAD,
+  bostonErrorAnalysisConfig,
+  bostonWithFairnessModelExplanationData
+} from "../model-assessment/__mock_data__/bostonData";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;
@@ -177,6 +182,12 @@ export const applications: IApplications = <const>{
           task_type: adultCensusWithFairnessDataset.task_type,
           true_y: adultCensusWithFairnessDataset.true_y
         } as IDataset
+      } as IModelAssessmentDataSet,
+      bostonData: {
+        classDimension: 1,
+        dataset: bostonDataMAD,
+        errorAnalysisConfig: [bostonErrorAnalysisConfig],
+        modelExplanationData: [bostonWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "Version-1": 1 }
