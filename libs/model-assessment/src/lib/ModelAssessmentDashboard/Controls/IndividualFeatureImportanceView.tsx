@@ -101,7 +101,6 @@ export class IndividualFeatureImportanceView extends React.Component<
     if (this.state.rows === undefined || this.state.columns === undefined) {
       return React.Fragment;
     }
-    // TODO handle regression case without groups!!!
     const testableDatapoints = this.state.featureImportances.map(
       (item) => item.unsortedFeatureValues as any[]
     );
