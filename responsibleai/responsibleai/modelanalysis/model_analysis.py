@@ -96,7 +96,8 @@ class ModelAnalysis(object):
             train, test, target_column, task_type, categorical_features)
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type)
+            target_column=target_column, task_type=task_type,
+            categorical_features=categorical_features)
         error_analysis_manager = ErrorAnalysisManager(model,
                                                       train,
                                                       target_column,
@@ -259,7 +260,7 @@ class ModelAnalysis(object):
                                  " feature names length differs"
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
-
+        dashboard_dataset.target_column = self.target_column
         if (self.model is not None and
                 hasattr(self.model, SKLearn.PREDICT_PROBA) and
                 self.model.predict_proba is not None and

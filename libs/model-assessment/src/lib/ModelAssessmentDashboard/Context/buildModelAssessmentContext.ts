@@ -25,8 +25,12 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
+import { getAvailableTabs } from "../AvailableTabs";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
-import { IModelAssessmentDashboardState } from "../ModelAssessmentDashboardState";
+import {
+  IModelAssessmentDashboardState,
+  IModelAssessmentDashboardTab
+} from "../ModelAssessmentDashboardState";
 import { PredictionTabKeys, GlobalTabKeys } from "../ModelAssessmentEnums";
 
 export function buildInitialModelAssessmentContext(
@@ -82,33 +86,21 @@ export function buildInitialModelAssessmentContext(
     );
     weightVectorOptions.push(index);
   });
+
+  // only include tabs for which we have the required data
+  const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
+    props,
+    jointDataset,
+    false
+  ).map((item) => {
+    return {
+      dataCount: jointDataset.datasetRowCount,
+      key: item.key as GlobalTabKeys
+    };
+  });
+
   return {
-    activeGlobalTabs: [
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.ErrorAnalysisTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.ModelStatisticsTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.DataExplorerTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.FeatureImportancesTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.CausalAnalysisTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.CounterfactualsTab
-      }
-    ],
+    activeGlobalTabs,
     baseCohort: cohorts[0],
     cohorts,
     createCohortVisible: false,

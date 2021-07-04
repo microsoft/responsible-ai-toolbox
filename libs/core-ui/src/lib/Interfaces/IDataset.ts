@@ -10,6 +10,7 @@ export interface IDataset {
   feature_names: string[];
   categorical_map?: { [key: number]: string[] };
   class_names?: string[];
+  target_column?: string;
 }
 
 // TODO Remove DatasetSummary when possible
