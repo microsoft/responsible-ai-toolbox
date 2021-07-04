@@ -46,7 +46,6 @@ export class ChartBuilder {
     // Due to https://github.com/plotly/plotly.js/issues/2080 we have to set size explicitly rather than use
     // the preferred solution of size ref
     const maxBubbleValue = 10;
-    // eslint-disable-next-line complexity
     projectedRows.forEach((row) => {
       let series: Partial<Data>;
 
@@ -179,7 +178,7 @@ export class ChartBuilder {
       arrayminus: performanceLB,
       type: "data",
       visible: true
-    };
+    }; // eslint-disable-line no-use-before-define
 
     const fairnessLB: any = [];
     const fairnessUB: any = [];
@@ -194,7 +193,7 @@ export class ChartBuilder {
       arrayminus: fairnessUB,
       type: "data",
       visible: true
-    };
+    }; // eslint-disable-line no-use-before-define
     return result;
   }
 

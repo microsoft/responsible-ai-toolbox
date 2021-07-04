@@ -140,19 +140,6 @@ export class MetricsCache {
     let maxUpperBound;
 
     let response;
-
-    // Use confidence bounds for each bin if they exist
-    if (value?.binBounds) {
-      const binBounds = value.binBounds
-        .slice()
-        .filter((x) => x !== undefined && !Number.isNaN(x));
-
-      minLowerBound = _.min(binBounds[0]);
-      maxLowerBound = _.max(binBounds[0]);
-      minUpperBound = _.min(binBounds[1]);
-      maxUpperBound = _.max(binBounds[1]);
-    }
-
     let bins = value.bins
       .slice()
       .filter((x) => x !== undefined && !Number.isNaN(x) && !_.isArray(x[0])); // filters out confidence bounds
@@ -169,18 +156,34 @@ export class MetricsCache {
       return { overall: Number.NaN };
     }
 
+    // Use confidence bounds for each bin if they exist
+    if (value?.binBounds) {
+      const binBounds = value.binBounds
+        .slice()
+        .filter((x) => x !== undefined && !Number.isNaN(x));
+
+      const minIndex = _.indexOf(bins, min, 0);
+      const maxIndex = _.indexOf(bins, max, 0);
+
+      minLowerBound = binBounds[minIndex][0];
+      minUpperBound = binBounds[minIndex][1];
+
+      maxLowerBound = binBounds[maxIndex][0];
+      maxUpperBound = binBounds[maxIndex][1];
+    }
+
     if (fairnessMethod === FairnessModes.Min) {
       response = { overall: min };
-      if (minLowerBound && maxLowerBound) {
-        response["bounds"] = [minLowerBound, maxLowerBound];
+      if (minLowerBound && minUpperBound) {
+        response["bounds"] = [minLowerBound, minUpperBound];
       }
       return response;
     }
 
     if (fairnessMethod === FairnessModes.Max) {
       response = { overall: min };
-      if (minUpperBound && maxUpperBound) {
-        response["bounds"] = [minUpperBound, maxUpperBound];
+      if (maxLowerBound && maxUpperBound) {
+        response["bounds"] = [maxLowerBound, maxUpperBound];
       }
       return response;
     }
@@ -189,14 +192,14 @@ export class MetricsCache {
       if (max === 0) {
         return { overall: 0 };
       }
-      if (minLowerBound === 0 || minLowerBound === 0) {
+      if (maxUpperBound === 0 || maxLowerBound === 0) {
         return { overall: min / max };
       }
       if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
         return {
           bounds: [
             minLowerBound / maxUpperBound,
-            maxLowerBound / minUpperBound
+            minUpperBound / maxLowerBound
           ],
           overall: min / max
         };
@@ -207,8 +210,8 @@ export class MetricsCache {
       response = { overall: max - min };
       if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
         response["bounds"] = [
-          minUpperBound - maxLowerBound,
-          maxUpperBound - minLowerBound
+          _.max([maxLowerBound - minUpperBound, 0]),
+          _.max([minUpperBound - maxLowerBound, maxUpperBound - minLowerBound])
         ];
       }
       return response;

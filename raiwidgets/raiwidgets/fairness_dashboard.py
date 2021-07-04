@@ -147,12 +147,10 @@ class FairnessDashboard(Dashboard):
                     "bins": list(metric_frame.by_group.to_dict().values()),
                 }}
                 if error_function_name in metric_method:
-                    # [(x1, y1), (x2, y2), (x3, y3)...]
-                    binBounds = list(metric_frame.by_group[error_function_name].to_dict().values())
                     result["data"].update({
                         "bounds": metric_frame.overall[error_function_name],
-                        # [[x1, x2, x3...), [y1, y2, y3...]]
-                        "binBounds": [[pair[0] for pair in binBounds], [pair[1] for pair in binBounds]]
+                        # [(x1, y1), (x2, y2), (x3, y3)...]
+                        "binBounds": list(metric_frame.by_group[error_function_name].to_dict().values())
                     })
                 return jsonify(result)
             except Exception as ex:

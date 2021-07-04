@@ -3,10 +3,15 @@
 
 import importlib
 from packaging import version
+import numpy as np
 from sklearn.metrics import confusion_matrix
 
-import numpy as np
-
+import sklearn.metrics as skm
+from fairlearn.metrics._extra_metrics import (
+    _balanced_root_mean_squared_error, _mean_overprediction,
+    _mean_underprediction, _root_mean_squared_error,
+    false_negative_rate, false_positive_rate, mean_prediction,
+    selection_rate, true_negative_rate)
 
 MODULE_NOT_INSTALLED_ERROR_MESSAGE = "{} is not installed. " \
     "Either install fairlearn or provide another fairness metric module."
@@ -47,31 +52,32 @@ def compute_standard_normal_error(metric_value, sample_size, z_score):
     """
     return z_score * np.sqrt(metric_value * (1.0 - metric_value)) / np.sqrt(sample_size)
 
+def wilson_wrapper(y_true, y_pred, func):
+    assert len(y_true) == len(y_pred)
+    p = func(y_true, y_pred)
+    n = len(y_true)
+    return compute_wilson_bounds(p, n, digits_of_precision, z_score)
+
+# custom recall/precision error bar functions to have n =/= len(y_pred)
+# because it should be n = (tp + fn) and n = (tp+fp), respectively
 def recall_wilson(y_true, y_pred):
     assert len(y_true) == len(y_pred)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
     bounds = compute_wilson_bounds(tp / (tp + fn), tp + fn, digits_of_precision, z_score)
     return bounds
 
-def recall_standard_normal(y_true, y_pred):
+def precision_wilson(y_true, y_pred):
     assert len(y_true) == len(y_pred)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-    recall = tp / (tp + fn)
-    error = compute_standard_normal_error(recall, tp + fn, z_score)
-    return (recall - error, recall + error)
-
-def accuracy_wilson(y_true, y_pred):
-    assert len(y_true) == len(y_pred)
-    accuracy = sum(y_true == y_pred) / len(y_true)
-    bounds = compute_wilson_bounds(accuracy, len(y_true), digits_of_precision, z_score)
+    bounds = compute_wilson_bounds(tp / (tp + fp), tp + fp, digits_of_precision, z_score)
     return bounds
 
-def accuracy_standard_normal(y_true, y_pred):
+def standard_normal_wrapper(y_true, y_pred, func):
     assert len(y_true) == len(y_pred)
-    accuracy = sum(y_true == y_pred) / len(y_true)
-    error = compute_standard_normal_error(accuracy, len(y_true), z_score)
-    return (accuracy - error, accuracy + error)
-
+    metric_value = func(y_true, y_pred)
+    sample_size = len(y_true)
+    error = compute_standard_normal_error(metric_value, sample_size, z_score)
+    return (metric_value - error, metric_value + error)
 
 class FairnessMetricModule:
     def __init__(self, module_name=None, mapping=None):
@@ -112,15 +118,17 @@ class FairnessMetricModule:
                 "accuracy_score": {
                     "model_type": ["classification"],
                     "function": skm.accuracy_score,
-                    "error_function": accuracy_wilson
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, skm.accuracy_score)
                 },
                 "balanced_accuracy_score": {
                     "model_type": ["classification"],
-                    "function": skm.balanced_accuracy_score
+                    "function": skm.balanced_accuracy_score,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, skm.balanced_accuracy_score)
                 },
                 "precision_score": {
                     "model_type": ["classification"],
-                    "function": skm.precision_score
+                    "function": skm.precision_score,
+                    "error_function": precision_wilson
                 },
                 "recall_score": {
                     "model_type": ["classification"],
@@ -129,55 +137,68 @@ class FairnessMetricModule:
                 },
                 "zero_one_loss": {
                     "model_type": [],
-                    "function": skm.zero_one_loss
+                    "function": skm.zero_one_loss,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.zero_one_loss)
                 },
                 "specificity_score": {
                     "model_type": [],
-                    "function": true_negative_rate
+                    "function": true_negative_rate,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, true_negative_rate)
                 },
                 "miss_rate": {
                     "model_type": [],
-                    "function": false_negative_rate
+                    "function": false_negative_rate,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, false_negative_rate)
                 },
                 "fallout_rate": {
                     "model_type": [],
-                    "function": false_positive_rate
+                    "function": false_positive_rate,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, false_positive_rate)
                 },
                 "selection_rate": {
                     "model_type": [],
-                    "function": selection_rate
+                    "function": selection_rate,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, selection_rate)
                 },
                 "auc": {
                     "model_type": ["probability"],
-                    "function": skm.roc_auc_score
+                    "function": skm.roc_auc_score,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.roc_auc_score)
                 },
                 "root_mean_squared_error": {
                     "model_type": ["regression", "probability"],
-                    "function": _root_mean_squared_error
+                    "function": _root_mean_squared_error,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _root_mean_squared_error)
                 },
                 "balanced_root_mean_squared_error": {
                     "model_type": ["probability"],
-                    "function": _balanced_root_mean_squared_error
+                    "function": _balanced_root_mean_squared_error,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _balanced_root_mean_squared_error)
                 },
                 "mean_squared_error": {
                     "model_type": ["regression", "probability"],
-                    "function": skm.mean_squared_error
+                    "function": skm.mean_squared_error,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_squared_error)
                 },
                 "mean_absolute_error": {
                     "model_type": ["regression", "probability"],
-                    "function": skm.mean_absolute_error
+                    "function": skm.mean_absolute_error,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_absolute_error)
                 },
                 "r2_score": {
                     "model_type": ["regression"],
-                    "function": skm.r2_score
+                    "function": skm.r2_score,
+                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.r2_score)
                 },
                 "f1_score": {
                     "model_type": ["classification"],
-                    "function": skm.f1_score
+                    "function": skm.f1_score,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, skm.f1_score)
                 },
                 "log_loss": {
                     "model_type": ["probability"],
-                    "function": skm.log_loss
+                    "function": skm.log_loss,
+                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, skm.log_loss)
                 },
                 "overprediction": {
                     "model_type": [],

@@ -358,7 +358,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
-      let fairnessResponse: { overall: number; bounds?: number[] };
+      const fairnessResponse: { overall: number; bounds?: number[] };
       const disparities: Dictionary<number> = {};
       const disparityBounds: Dictionary<number[]> = {};
       const performance = await this.getMetric(
