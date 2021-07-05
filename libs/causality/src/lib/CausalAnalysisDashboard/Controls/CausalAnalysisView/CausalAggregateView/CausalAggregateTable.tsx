@@ -17,6 +17,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { getCausalDisplayFeatureName } from "../../../getCausalDisplayFeatureName";
+
 export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];
 }
@@ -36,7 +38,8 @@ export class CausalAggregateTable extends React.PureComponent<
         key: "name",
         maxWidth: 125,
         minWidth: 100,
-        name: localization.ModelAssessment.CausalAnalysis.Table.name
+        name: localization.ModelAssessment.CausalAnalysis.Table.name,
+        onRender: getCausalDisplayFeatureName
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("point"),

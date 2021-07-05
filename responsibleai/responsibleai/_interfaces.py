@@ -69,6 +69,7 @@ class CausalMetric:
     ci_lower: float
     ci_upper: float
     feature: str
+    feature_value: str
     p_value: float
     point: float
     stderr: float

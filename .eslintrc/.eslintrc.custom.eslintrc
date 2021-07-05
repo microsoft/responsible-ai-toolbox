@@ -65,6 +65,7 @@
           "feature_list",
           "feature_names",
           "feature_names_including_target",
+          "feature_value",
           "global_effects",
           "local_effects",
           "local_importance",

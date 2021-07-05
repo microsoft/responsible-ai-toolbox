@@ -12,6 +12,8 @@ import _, { isEqual } from "lodash";
 import { getTheme, Link, Stack } from "office-ui-fabric-react";
 import React from "react";
 
+import { getCausalDisplayFeatureName } from "../../../getCausalDisplayFeatureName";
+
 import { basePlotlyProperties } from "./basePlotlyProperties";
 import { CausalAggregateStyles } from "./CausalAggregateStyles";
 
@@ -79,7 +81,7 @@ export class CausalAggregateChart extends React.PureComponent<
         },
         mode: "markers",
         type: "scatter",
-        x: this.props.data.map((d) => d.feature),
+        x: this.props.data.map((d) => getCausalDisplayFeatureName(d)),
         y: this.props.data.map((d) => d.point)
       }
     ];
