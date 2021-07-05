@@ -5,6 +5,7 @@ import importlib
 from packaging import version
 import numpy as np
 from sklearn.metrics import confusion_matrix
+from scipy import stats
 
 import sklearn.metrics as skm
 from fairlearn.metrics._extra_metrics import (
@@ -22,6 +23,7 @@ METRICFRAME_NOT_AVAILABLE_ERROR_MESSAGE = "The fairness metric module " \
     "refer to fairlearn.metrics.MetricFrame"
 
 z_score = 1.959964
+alpha = 0.95
 digits_of_precision = 4
 def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
     """ Returns lower and upper bound 
@@ -39,7 +41,7 @@ def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
     return (round(lower_bound, digits), round(upper_bound, digits))
 
 
-def compute_standard_normal_error(metric_value, sample_size, z_score):
+def compute_standard_normal_error_binomial(metric_value, sample_size, z_score):
     """ Standard Error Calculation (Binary Classification)
 
     Assumes infinitely large population,
@@ -52,11 +54,28 @@ def compute_standard_normal_error(metric_value, sample_size, z_score):
     """
     return z_score * np.sqrt(metric_value * (1.0 - metric_value)) / np.sqrt(sample_size)
 
+def compute_standard_normal_error(metric_value, y_true, y_pred, sample_size, z_score):
+    """ Standard Error Calculation (Binary Classification)
+
+    Assumes infinitely large population,
+    Should be used when the sampling fraction is small.
+    For sampling fraction > 5%, may want to use finite population correction
+    https://en.wikipedia.org/wiki/Margin_of_error
+
+    Note: 
+        Returns absolute error (%)
+    """
+
+    return z_score * np.sqrt() / np.sqrt(sample_size)
+
 def wilson_wrapper(y_true, y_pred, func):
     assert len(y_true) == len(y_pred)
     p = func(y_true, y_pred)
     n = len(y_true)
-    return compute_wilson_bounds(p, n, digits_of_precision, z_score)
+    result = compute_wilson_bounds(p, n, digits_of_precision, z_score)
+    if float('nan') in result:
+        return [None, None]
+    return result
 
 # custom recall/precision error bar functions to have n =/= len(y_pred)
 # because it should be n = (tp + fn) and n = (tp+fp), respectively
@@ -78,6 +97,14 @@ def standard_normal_wrapper(y_true, y_pred, func):
     sample_size = len(y_true)
     error = compute_standard_normal_error(metric_value, sample_size, z_score)
     return (metric_value - error, metric_value + error)
+
+def rmse_standard_normal(y_true, y_pred):
+    assert len(y_true) == len(y_pred)
+    rmse = _root_mean_squared_error(y_true, y_pred)
+    sample_size = len(y_true)
+
+    c1, c2 = stats.chi2.ppf([(1 - alpha) / 2, (1 + alpha) / 2], sample_size)
+    return np.sqrt(sample_size / c2) * rmse, np.sqrt(sample_size / c1) * rmse
 
 class FairnessMetricModule:
     def __init__(self, module_name=None, mapping=None):
@@ -138,7 +165,7 @@ class FairnessMetricModule:
                 "zero_one_loss": {
                     "model_type": [],
                     "function": skm.zero_one_loss,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.zero_one_loss)
+                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.zero_one_loss)
                 },
                 "specificity_score": {
                     "model_type": [],
@@ -163,32 +190,32 @@ class FairnessMetricModule:
                 "auc": {
                     "model_type": ["probability"],
                     "function": skm.roc_auc_score,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.roc_auc_score)
+                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.roc_auc_score)
                 },
                 "root_mean_squared_error": {
                     "model_type": ["regression", "probability"],
                     "function": _root_mean_squared_error,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _root_mean_squared_error)
+                    "error_function": rmse_standard_normal
                 },
                 "balanced_root_mean_squared_error": {
                     "model_type": ["probability"],
                     "function": _balanced_root_mean_squared_error,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _balanced_root_mean_squared_error)
+                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _balanced_root_mean_squared_error)
                 },
                 "mean_squared_error": {
                     "model_type": ["regression", "probability"],
                     "function": skm.mean_squared_error,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_squared_error)
+                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_squared_error)
                 },
                 "mean_absolute_error": {
                     "model_type": ["regression", "probability"],
                     "function": skm.mean_absolute_error,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_absolute_error)
+                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_absolute_error)
                 },
                 "r2_score": {
                     "model_type": ["regression"],
                     "function": skm.r2_score,
-                    "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.r2_score)
+                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.r2_score)
                 },
                 "f1_score": {
                     "model_type": ["classification"],

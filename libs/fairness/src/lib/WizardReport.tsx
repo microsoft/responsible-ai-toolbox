@@ -358,7 +358,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let predictions: number[] | undefined;
       let errors: number[] | undefined;
       let outcomes: IMetricResponse;
-      const fairnessResponse: { overall: number; bounds?: number[] };
+
       const disparities: Dictionary<number> = {};
       const disparityBounds: Dictionary<number[]> = {};
       const performance = await this.getMetric(
@@ -367,7 +367,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
       // TODO: extend disparities to query for all possible kinds of disparities
       // https://github.com/microsoft/responsible-ai-widgets/issues/65
-      fairnessResponse = await this.getFairnessMetric(
+      const fairnessResponse: {
+        overall: number;
+        bounds?: number[];
+      } = await this.getFairnessMetric(
         this.props.fairnessPickerProps.selectedFairnessKey,
         fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
           .fairnessMode,
