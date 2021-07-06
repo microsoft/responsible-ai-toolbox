@@ -19,6 +19,7 @@ class Dataset:
     true_y: List
     class_names: List[str]
     categorical_map: Dict[int, List[str]]
+    target_column: str
 
 
 class BoundedCoordinates:
@@ -76,8 +77,7 @@ class CausalMetric:
 
 class CausalPolicyGains:
     recommended_policy_gains: float
-    treatment_gains: List[float]
-    treatments: List[str]
+    treatment_gains: Dict[str, float]
 
 
 class CausalPolicyTreeLeaf:
@@ -96,6 +96,7 @@ class CausalPolicyTreeInternal:
 
 class CausalPolicy:
     treatment_feature: str
+    control_treatment: str
     local_policies: List[Dict[str, Any]]
     policy_gains: CausalPolicyGains
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]

@@ -23,6 +23,13 @@ class CausalConstants:
     AUTOML = 'automl'
     LINEAR = 'linear'
 
+    DEFAULT_ALPHA = 0.05
+    DEFAULT_MAX_CAT_EXPANSION = 50
+    DEFAULT_TREATMENT_COST = 0
+    DEFAULT_MIN_TREE_LEAF_SAMPLES = 2
+    DEFAULT_MAX_TREE_DEPTH = 3
+    DEFAULT_SKIP_CAT_LIMIT_CHECKS = False
+
 
 class CausalConfig(BaseConfig):
     def __init__(
@@ -99,6 +106,7 @@ class CausalManager(BaseManager):
     LOCAL_POLICIES = 'local_policies'
     POLICY_TREE = 'policy_tree'
     POLICY_GAINS = 'policy_gains'
+    CONTROL_TREATMENT = 'control_treatment'
     RECOMMENDED_POLICY_GAINS = 'recommended_policy_gains'
     TREATMENT_GAINS = 'treatment_gains'
 
@@ -139,14 +147,14 @@ class CausalManager(BaseManager):
         self,
         treatment_features,
         heterogeneity_features=None,
-        nuisance_model=CausalConstants.AUTOML,
+        nuisance_model=CausalConstants.LINEAR,
         heterogeneity_model=None,
-        alpha=0.05,
-        upper_bound_on_cat_expansion=5,
-        treatment_cost=0,
-        min_tree_leaf_samples=2,
-        max_tree_depth=3,
-        skip_cat_limit_checks=False,
+        alpha=CausalConstants.DEFAULT_ALPHA,
+        upper_bound_on_cat_expansion=CausalConstants.DEFAULT_MAX_CAT_EXPANSION,
+        treatment_cost=CausalConstants.DEFAULT_TREATMENT_COST,
+        min_tree_leaf_samples=CausalConstants.DEFAULT_MIN_TREE_LEAF_SAMPLES,
+        max_tree_depth=CausalConstants.DEFAULT_MAX_TREE_DEPTH,
+        skip_cat_limit_checks=CausalConstants.DEFAULT_SKIP_CAT_LIMIT_CHECKS,
     ):
         """Add a causal configuration to be computed later.
         :param treatment_features: Treatment feature names.
@@ -239,32 +247,27 @@ class CausalManager(BaseManager):
 
             config.policies = []
             for treatment_feature in config.treatment_features:
-                # Error handling required to mitigate
-                # individualized_policy bug in EconML version 0.12.0b2
-                try:
-                    local_policies = analysis.individualized_policy(
-                        X_test, treatment_feature,
-                        treatment_costs=config.treatment_cost,
-                        alpha=config.alpha)
-                except (IndexError, ValueError):
-                    local_policies = None
+                local_policies = analysis.individualized_policy(
+                    X_test, treatment_feature,
+                    treatment_costs=config.treatment_cost,
+                    alpha=config.alpha)
 
-                policy_tree, recommended_gains, treatment_gains = \
-                    analysis._policy_tree_output(
-                        X_test, treatment_feature,
-                        treatment_costs=config.treatment_cost,
-                        max_depth=config.max_tree_depth,
-                        min_samples_leaf=config.min_tree_leaf_samples,
-                        alpha=config.alpha)
+                tree = analysis._policy_tree_output(
+                    X_test, treatment_feature,
+                    treatment_costs=config.treatment_cost,
+                    max_depth=config.max_tree_depth,
+                    min_samples_leaf=config.min_tree_leaf_samples,
+                    alpha=config.alpha)
 
                 policy = {
                     self.TREATMENT_FEATURE: treatment_feature,
+                    self.CONTROL_TREATMENT: tree.control_name,
                     self.LOCAL_POLICIES: local_policies,
                     self.POLICY_GAINS: {
-                        self.RECOMMENDED_POLICY_GAINS: recommended_gains,
-                        self.TREATMENT_GAINS: treatment_gains,
+                        self.RECOMMENDED_POLICY_GAINS: tree.policy_value,
+                        self.TREATMENT_GAINS: tree.always_treat,
                     },
-                    self.POLICY_TREE: policy_tree
+                    self.POLICY_TREE: tree.tree_dictionary
                 }
                 config.policies.append(policy)
 
@@ -303,8 +306,8 @@ class CausalManager(BaseManager):
 
     def _get_policy_object(self, policy):
         policy_object = CausalPolicy()
-        policy_object.treatment_feature = self._get_treatment_feature_object(
-            policy[self.TREATMENT_FEATURE])
+        policy_object.treatment_feature = policy[self.TREATMENT_FEATURE]
+        policy_object.control_treatment = policy[self.CONTROL_TREATMENT]
         policy_object.local_policies = self._get_local_policies_object(
             policy[self.LOCAL_POLICIES])
         policy_object.policy_gains = self._get_policy_gains_object(
@@ -312,9 +315,6 @@ class CausalManager(BaseManager):
         policy_object.policy_tree = self._get_policy_tree_object(
             policy[self.POLICY_TREE])
         return policy_object
-
-    def _get_treatment_feature_object(self, treatment_feature):
-        return treatment_feature
 
     def _get_local_policies_object(self, local_policies):
         if local_policies is None:

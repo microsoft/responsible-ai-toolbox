@@ -21,21 +21,12 @@ def verify_counterfactual_object(counterfactual_obj, feature_importance=False):
         assert counterfactual_obj.summary_importance is None
 
 
-def validate_counterfactual(cf_analyzer, X_train, target_column,
-                            categorical_features=None,
+def validate_counterfactual(cf_analyzer,
                             desired_class=None, desired_range=None,
                             feature_importance=False):
 
-    if categorical_features is None:
-        continuous_features = list(set(X_train.columns) - set([target_column]))
-    else:
-        continuous_features = list(set(X_train.columns) -
-                                   set([target_column]) -
-                                   set(categorical_features))
-
     # Add the first configuration
-    cf_analyzer.counterfactual.add(continuous_features=continuous_features,
-                                   total_CFs=10,
+    cf_analyzer.counterfactual.add(total_CFs=10,
                                    method='random',
                                    desired_class=desired_class,
                                    desired_range=desired_range,
@@ -49,16 +40,14 @@ def validate_counterfactual(cf_analyzer, X_train, target_column,
 
     # Add a duplicate configuration
     with pytest.raises(DuplicateManagerConfigException):
-        cf_analyzer.counterfactual.add(continuous_features=continuous_features,
-                                       total_CFs=10,
+        cf_analyzer.counterfactual.add(total_CFs=10,
                                        method='random',
                                        desired_class=desired_class,
                                        desired_range=desired_range,
                                        feature_importance=feature_importance)
 
     # Add the second configuration
-    cf_analyzer.counterfactual.add(continuous_features=continuous_features,
-                                   total_CFs=20,
+    cf_analyzer.counterfactual.add(total_CFs=20,
                                    method='random',
                                    desired_class=desired_class,
                                    desired_range=desired_range,
@@ -74,8 +63,7 @@ def validate_counterfactual(cf_analyzer, X_train, target_column,
 
     # Add a bad configuration
     with pytest.raises(DiceException):
-        cf_analyzer.counterfactual.add(continuous_features=continuous_features,
-                                       total_CFs=-20,
+        cf_analyzer.counterfactual.add(total_CFs=-20,
                                        method='random',
                                        desired_class=desired_class,
                                        desired_range=desired_range,
@@ -90,7 +78,6 @@ def validate_counterfactual(cf_analyzer, X_train, target_column,
     if task_type == ModelTask.REGRESSION:
         with pytest.raises(UserConfigValidationException):
             cf_analyzer.counterfactual.add(
-                continuous_features=continuous_features,
                 total_CFs=10,
                 method='random',
                 desired_range=None,
@@ -98,7 +85,6 @@ def validate_counterfactual(cf_analyzer, X_train, target_column,
     else:
         with pytest.raises(UserConfigValidationException):
             cf_analyzer.counterfactual.add(
-                continuous_features=continuous_features,
                 total_CFs=10,
                 method='random',
                 desired_class=None,

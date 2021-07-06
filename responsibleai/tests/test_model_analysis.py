@@ -189,8 +189,7 @@ def run_model_analysis(model, train_data, test_data, target_column,
         desired_class = manager_args.get(ManagerParams.DESIRED_CLASS)
         desired_range = manager_args.get(ManagerParams.DESIRED_RANGE)
         feature_importance = manager_args.get(ManagerParams.FEATURE_IMPORTANCE)
-        validate_counterfactual(model_analysis, train_data, target_column,
-                                categorical_features=categorical_features,
+        validate_counterfactual(model_analysis,
                                 desired_class=desired_class,
                                 desired_range=desired_range,
                                 feature_importance=feature_importance)
