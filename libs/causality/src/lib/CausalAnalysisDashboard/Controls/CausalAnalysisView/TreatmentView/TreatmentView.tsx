@@ -6,6 +6,8 @@ import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { TreatmentBarChartSection } from "./TreatmentBarChartSection";
+import { TreatmentListSection } from "./TreatmentListSection";
 import { TreatmentStyles } from "./TreatmentStyles";
 import { TreatmentTableSection } from "./TreatmentTableSection";
 
@@ -22,6 +24,8 @@ export class TreatmentView extends React.PureComponent<ITreatmentViewProps> {
           {localization.Counterfactuals.treatmentDescription}
         </Text>
         <TreatmentTableSection data={this.props.data} />
+        <TreatmentBarChartSection data={this.props.data} />
+        <TreatmentListSection data={this.props.data} />
       </Stack>
     );
   }

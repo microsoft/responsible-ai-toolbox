@@ -9,6 +9,9 @@ import {
 
 export interface ITreatmentTableStyles {
   cell: IStyle;
+  description: IStyle;
+  detailsList: IStyle;
+  detailsListDescription: IStyle;
   table: IStyle;
   label: IStyle;
 }
@@ -26,6 +29,18 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       height: "100px",
       minWidth: "250px",
       textAlign: "center"
+    },
+    description: {
+      paddingTop: "110px"
+    },
+    detailsList: {
+      width: "75%"
+    },
+    detailsListDescription: {
+      fontSize: "14px",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      paddingTop: "20px"
     },
     label: {
       display: "inline-block",

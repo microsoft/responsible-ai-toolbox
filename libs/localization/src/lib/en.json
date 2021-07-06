@@ -633,7 +633,18 @@
     "nSample": "n = {0}",
     "treatment": "Recommended treatment = {0}",
     "treatmentLeft": "{0} <= {1}",
-    "treatmentRight": "{0} > {1}"
+    "treatmentRight": "{0} > {1}",
+    "averageGain": "Average gains of alternative policies over no {0} treatment",
+    "treatmentBarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating everyone in your population with {0} = 0.",
+    "treatmentBarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken.",
+    "recommendedPolicy": "Recommended policy gain",
+    "individualTreatment": "Recommended individual treatment policy",
+    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "RecommendedTreatment": "Recommended treatment",
+    "EffectOfTreatment": "Effect",
+    "EffectLowerBound": "CI lower",
+    "EffectUpperBound": "CI upper"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",
