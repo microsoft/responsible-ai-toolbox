@@ -9,7 +9,6 @@ import {
 } from "@responsible-ai/core-ui";
 import {
   ErrorAnalysisOptions,
-  PredictionTabKeys,
   ITreeViewRendererState,
   IMatrixAreaState,
   IMatrixFilterState
@@ -35,7 +34,6 @@ export interface IModelAssessmentDashboardState
   editingCohortIndex?: number;
   mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
   mapShiftVisible: boolean;
-  predictionTab: PredictionTabKeys;
   selectedWhatIfIndex: number | undefined;
   selectedFeatures: string[];
   treeViewState: ITreeViewRendererState;

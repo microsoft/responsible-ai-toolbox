@@ -1107,7 +1107,9 @@
     },
     "FeatureImportances": {
       "GlobalExplanation": "Aggregate feature importance",
-      "LocalExplanation": "Individual feature importance"
+      "LocalExplanation": "Individual feature importance",
+      "CorrectPredictions": "Correct predictions",
+      "IncorrectPredictions": "Incorrect predictions"
     },
     "CohortInformation": {
       "GlobalCohort": "Global cohort: ",
