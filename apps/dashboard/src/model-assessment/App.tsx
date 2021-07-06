@@ -16,7 +16,8 @@ import {
   generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator,
-  DatasetName
+  DatasetName,
+  generateJsonTreeBoston
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -47,17 +48,29 @@ export class App extends React.Component<IAppProps> {
       ...this.props,
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
-      requestDebugML: generateJsonTreeBreastCancer,
-      requestImportances: createJsonImportancesGenerator(
-        this.props.dataset.feature_names,
-        DatasetName.BreastCancer
-      ),
       requestMatrix: generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
-      stringParams: { contextualHelp: this.messages }
+      stringParams: { contextualHelp: this.messages },
+      theme: this.props.theme
     };
+
+    if (this.props.classDimension === 1) {
+      // Boston
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBoston;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.Boston
+      );
+    } else {
+      // Adult
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.BreastCancer
+      );
+    }
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
   }
