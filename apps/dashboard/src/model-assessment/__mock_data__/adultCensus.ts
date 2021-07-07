@@ -3086,7 +3086,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
     {
       ci_lower: -0.2419328967749073,
       ci_upper: -0.1428698896693828,
-      feature: "OverTime (base=No): Yes",
+      feature: "OverTime",
+      feature_value: "Yes",
       p_value: 2.6711762067333496e-14,
       point: -0.19240139322214506,
       stderr: 0.025271639654330606,
@@ -3116,7 +3117,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3145,7 +3147,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3174,7 +3177,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3203,7 +3207,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3232,7 +3237,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3261,7 +3267,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3290,7 +3297,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3319,7 +3327,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3348,7 +3357,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3377,7 +3387,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3406,7 +3417,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3435,7 +3447,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3464,7 +3477,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3493,7 +3507,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3522,7 +3537,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3551,7 +3567,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3580,7 +3597,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3609,7 +3627,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3638,7 +3657,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3667,7 +3687,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3696,7 +3717,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3725,7 +3747,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3754,7 +3777,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3783,7 +3807,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3812,7 +3837,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3841,7 +3867,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3870,7 +3897,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3899,7 +3927,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3928,7 +3957,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -3957,7 +3987,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -3986,7 +4017,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4015,7 +4047,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4044,7 +4077,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4073,7 +4107,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4102,7 +4137,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4131,7 +4167,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4160,7 +4197,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4189,7 +4227,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4218,7 +4257,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4247,7 +4287,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4276,7 +4317,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4305,7 +4347,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4334,7 +4377,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4363,7 +4407,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4392,7 +4437,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4421,7 +4467,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -4450,7 +4497,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -4479,7 +4527,8 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "OverTime",
+        feature_value: "Yes",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
