@@ -60,9 +60,11 @@ export class TreatmentListSection extends React.Component<
                   <SpinButton
                     min={1}
                     max={100}
-                    value={this.state.topN}
+                    defaultValue={this.state.topN}
                     step={1}
-                    onChange={this.handleSpinChange.bind(this)}
+                    onValidate={this.handleSpinChange}
+                    onIncrement={this.onIncrement}
+                    onDecrement={this.onDecrement}
                     incrementButtonAriaLabel="Increase value by 1"
                     decrementButtonAriaLabel="Decrease value by 1"
                   />
@@ -86,13 +88,25 @@ export class TreatmentListSection extends React.Component<
       </Stack>
     );
   }
-  private handleSpinChange(
-    _: React.ChangeEvent<HTMLInputElement>,
-    newValue?: string
-  ): void {
-    if (!newValue) {
+  private readonly onIncrement = (value: string): string => {
+    return this.onStep(value, 1);
+  };
+  private readonly onDecrement = (value: string): string => {
+    return this.onStep(value, -1);
+  };
+  private readonly onStep = (value: string, step: number): string => {
+    if (!value || Number.isNaN(Number.parseInt(value))) {
+      value = "10";
+    }
+    const newValue = (Number.parseInt(value, 10) + step).toString();
+    this.setState({ topN: newValue });
+    return newValue;
+  };
+  private readonly handleSpinChange = (newValue?: string): string => {
+    if (!newValue || Number.isNaN(Number.parseInt(newValue))) {
       newValue = "10";
     }
     this.setState({ topN: newValue });
-  }
+    return newValue;
+  };
 }
