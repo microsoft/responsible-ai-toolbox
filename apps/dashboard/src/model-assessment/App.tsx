@@ -13,11 +13,11 @@ import React from "react";
 
 import {
   generateJsonMatrix,
-  generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator,
   DatasetName,
-  generateJsonTreeBoston
+  generateJsonTreeBoston,
+  generateJsonTreeAdultCensusIncome
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -65,10 +65,10 @@ export class App extends React.Component<IAppProps> {
       );
     } else {
       // Adult
-      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeAdultCensusIncome;
       modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
         this.props.dataset.feature_names,
-        DatasetName.BreastCancer
+        DatasetName.AdultCensusIncome
       );
     }
 
