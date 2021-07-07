@@ -645,7 +645,9 @@
     "RecommendedTreatment": "Recommended treatment",
     "EffectOfTreatment": "Effect",
     "EffectLowerBound": "CI lower",
-    "EffectUpperBound": "CI upper"
+    "EffectUpperBound": "CI upper",
+    "increaseByOne": "Increase value by 1",
+    "decreaseByOne": "Decrease value by 1"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",
