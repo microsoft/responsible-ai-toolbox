@@ -31,7 +31,7 @@ export class TreatmentBarChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     if (!this.props.data) {
-      return <>No Data</>;
+      return <span>{localization.Counterfactuals.noData}</span>;
     }
     const plotlyProps = this.buildPlotlyProps();
     const themedProps = this.props.theme

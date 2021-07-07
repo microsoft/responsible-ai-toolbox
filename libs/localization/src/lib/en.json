@@ -647,7 +647,8 @@
     "EffectLowerBound": "CI lower",
     "EffectUpperBound": "CI upper",
     "increaseByOne": "Increase value by 1",
-    "decreaseByOne": "Decrease value by 1"
+    "decreaseByOne": "Decrease value by 1",
+    "noData": "No data"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",

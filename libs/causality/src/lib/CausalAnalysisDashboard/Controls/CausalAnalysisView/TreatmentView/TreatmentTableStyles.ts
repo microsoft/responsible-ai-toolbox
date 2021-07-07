@@ -12,6 +12,7 @@ export interface ITreatmentTableStyles {
   description: IStyle;
   detailsList: IStyle;
   detailsListDescription: IStyle;
+  header: IStyle;
   spinButton: IStyle;
   spinButtonText: IStyle;
   table: IStyle;
@@ -43,6 +44,12 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       fontStyle: "normal",
       fontWeight: "normal",
       paddingTop: "50px"
+    },
+    header: {
+      fontFamily: "Segoe UI",
+      fontSize: "14px",
+      fontWeight: "25px",
+      lineHeight: "16px"
     },
     label: {
       display: "inline-block",

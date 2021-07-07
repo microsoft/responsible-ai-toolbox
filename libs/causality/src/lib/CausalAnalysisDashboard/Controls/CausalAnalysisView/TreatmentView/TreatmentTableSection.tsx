@@ -30,13 +30,11 @@ export class TreatmentTableSection extends React.PureComponent<
     return (
       <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Stack.Item>
-          <Text variant={"medium"} className={styles.label}>
-            <b>
-              {localization.formatString(
-                localization.Counterfactuals.treatmentSize,
-                this.props.data?.local_policies?.length
-              )}
-            </b>
+          <Text variant={"medium"} className={styles.header}>
+            {localization.formatString(
+              localization.Counterfactuals.treatmentSize,
+              this.props.data?.local_policies?.length
+            )}
           </Text>
         </Stack.Item>
         <Stack.Item>

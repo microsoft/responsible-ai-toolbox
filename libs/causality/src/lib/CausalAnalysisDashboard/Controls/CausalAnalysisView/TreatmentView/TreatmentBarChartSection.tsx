@@ -30,13 +30,11 @@ export class TreatmentBarChartSection extends React.PureComponent<
     return (
       <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
-          <Text variant={"medium"} className={styles.label}>
-            <b>
-              {localization.formatString(
-                localization.Counterfactuals.averageGain,
-                "Tech support"
-              )}
-            </b>
+          <Text variant={"medium"} className={styles.header}>
+            {localization.formatString(
+              localization.Counterfactuals.averageGain,
+              "Tech support"
+            )}
           </Text>
         </Stack.Item>
         <Stack.Item>
