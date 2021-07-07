@@ -25,6 +25,8 @@ export class TreatmentListSection extends React.Component<
   ITreatmentListSectionState
 > {
   public static contextType = ModelAssessmentContext;
+  public minCount = 1;
+  public maxCount = 100;
   public context: React.ContextType<
     typeof ModelAssessmentContext
   > = defaultModelAssessmentContext;
@@ -38,14 +40,14 @@ export class TreatmentListSection extends React.Component<
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
+      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.label}>
             <b>{localization.Counterfactuals.individualTreatment}</b>
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
+          <Stack horizontal grow tokens={{ padding: "l1" }}>
             <Stack.Item className={styles.detailsList}>
               <Stack horizontal>
                 <Stack.Item className={styles.spinButtonText}>
@@ -58,15 +60,17 @@ export class TreatmentListSection extends React.Component<
                 </Stack.Item>
                 <Stack.Item className={styles.spinButton}>
                   <SpinButton
-                    min={1}
-                    max={100}
                     defaultValue={this.state.topN}
                     step={1}
                     onValidate={this.handleSpinChange}
                     onIncrement={this.onIncrement}
                     onDecrement={this.onDecrement}
-                    incrementButtonAriaLabel="Increase value by 1"
-                    decrementButtonAriaLabel="Decrease value by 1"
+                    incrementButtonAriaLabel={
+                      localization.Counterfactuals.increaseByOne
+                    }
+                    decrementButtonAriaLabel={
+                      localization.Counterfactuals.decreaseByOne
+                    }
                   />
                 </Stack.Item>
               </Stack>
@@ -98,9 +102,15 @@ export class TreatmentListSection extends React.Component<
     if (!value || Number.isNaN(Number.parseInt(value))) {
       value = "10";
     }
-    const newValue = (Number.parseInt(value, 10) + step).toString();
-    this.setState({ topN: newValue });
-    return newValue;
+    let newValue = Number.parseInt(value, 10) + step;
+    if (newValue < this.minCount) {
+      newValue = this.minCount;
+    }
+    if (newValue > this.maxCount) {
+      newValue = this.maxCount;
+    }
+    this.setState({ topN: newValue.toString() });
+    return newValue.toString();
   };
   private readonly handleSpinChange = (newValue?: string): string => {
     if (!newValue || Number.isNaN(Number.parseInt(newValue))) {

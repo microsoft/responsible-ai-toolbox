@@ -28,7 +28,7 @@ export class TreatmentTableSection extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
+      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.label}>
             <b>
@@ -40,7 +40,7 @@ export class TreatmentTableSection extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
+          <Stack horizontal grow tokens={{ padding: "l1" }}>
             <Stack.Item>
               <TreatmentTable data={this.props.data?.policy_tree} />
             </Stack.Item>
