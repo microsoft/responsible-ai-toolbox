@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITableState } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   Checkbox,
@@ -37,8 +38,6 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { ITableState } from "../../Utils/DatasetUtils";
 
 import { updateItems, updatePercents, sortByPercent } from "./FeatureListUtils";
 
