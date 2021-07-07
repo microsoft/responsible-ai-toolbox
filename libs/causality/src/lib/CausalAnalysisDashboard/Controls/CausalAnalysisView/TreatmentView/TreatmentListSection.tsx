@@ -60,11 +60,16 @@ export class TreatmentListSection extends React.Component<
                   <SpinButton
                     min={1}
                     max={100}
-                    value={this.state.topN}
+                    disabled
+                    defaultValue={this.state.topN}
                     step={1}
-                    onChange={this.handleSpinChange.bind(this)}
-                    incrementButtonAriaLabel="Increase value by 1"
-                    decrementButtonAriaLabel="Decrease value by 1"
+                    onValidate={this.handleSpinChange.bind(this)}
+                    incrementButtonAriaLabel={
+                      localization.Counterfactuals.increaseByOne
+                    }
+                    decrementButtonAriaLabel={
+                      localization.Counterfactuals.decreaseByOne
+                    }
                   />
                 </Stack.Item>
               </Stack>
@@ -86,10 +91,7 @@ export class TreatmentListSection extends React.Component<
       </Stack>
     );
   }
-  private handleSpinChange(
-    _: React.ChangeEvent<HTMLInputElement>,
-    newValue?: string
-  ): void {
+  private handleSpinChange(newValue: string): void {
     if (!newValue) {
       newValue = "10";
     }
