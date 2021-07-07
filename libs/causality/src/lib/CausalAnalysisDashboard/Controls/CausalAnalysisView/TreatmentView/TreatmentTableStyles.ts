@@ -12,6 +12,8 @@ export interface ITreatmentTableStyles {
   description: IStyle;
   detailsList: IStyle;
   detailsListDescription: IStyle;
+  spinButton: IStyle;
+  spinButtonText: IStyle;
   table: IStyle;
   label: IStyle;
 }
@@ -40,7 +42,7 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       fontSize: "14px",
       fontStyle: "normal",
       fontWeight: "normal",
-      paddingTop: "20px"
+      paddingTop: "50px"
     },
     label: {
       display: "inline-block",
@@ -50,6 +52,14 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       paddingBottom: "10px",
       paddingLeft: "30px",
       textAlign: "left"
+    },
+    spinButton: {
+      paddingLeft: "10px",
+      width: "10px"
+    },
+    spinButtonText: {
+      paddingTop: "5px",
+      verticalAlign: "bottom"
     },
     table: {
       border: "2px solid",

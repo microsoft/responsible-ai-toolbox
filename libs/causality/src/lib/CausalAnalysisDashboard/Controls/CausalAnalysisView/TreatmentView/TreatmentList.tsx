@@ -16,9 +16,10 @@ import React from "react";
 
 export interface ITreatmentListProps {
   data?: Array<{ [key: string]: any }>;
+  topN: number;
 }
 
-export class TreatmentList extends React.PureComponent<ITreatmentListProps> {
+export class TreatmentList extends React.Component<ITreatmentListProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
     typeof ModelAssessmentContext
@@ -73,7 +74,10 @@ export class TreatmentList extends React.PureComponent<ITreatmentListProps> {
       };
     });
     const columns = [...defaultColumns, ...leftColumns];
-    const items = this.props.data;
+    const maxCount = Math.min(this.props.data.length, this.props.topN);
+    const items = this.props.data
+      .sort((a, b) => b["Effect of treatment"] - a["Effect of treatment"])
+      .slice(0, maxCount);
     return (
       <DetailsList
         items={items}

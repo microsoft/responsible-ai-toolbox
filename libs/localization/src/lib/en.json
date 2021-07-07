@@ -641,6 +641,7 @@
     "individualTreatment": "Recommended individual treatment policy",
     "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
     "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
     "RecommendedTreatment": "Recommended treatment",
     "EffectOfTreatment": "Effect",
     "EffectLowerBound": "CI lower",
