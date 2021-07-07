@@ -21,6 +21,7 @@ export * from "./lib/Cohort/ShiftCohort/ShiftCohort";
 export * from "./lib/Context/ModelAssessmentContext";
 export * from "./lib/util/array";
 export * from "./lib/util/buildInitialContext";
+export * from "./lib/util/DatasetUtils";
 export * from "./lib/util/FabricStyles";
 export * from "./lib/util/JointDataset";
 export * from "./lib/util/generateRoute";
