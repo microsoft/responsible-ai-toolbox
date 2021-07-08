@@ -4,7 +4,7 @@
 export interface ICausalAnalysisData {
   global_effects: ICausalAnalysisSingleData[];
   local_effects: ICausalAnalysisSingleData[][];
-  policies?: ICausalPolicy;
+  policies?: ICausalPolicy[];
 }
 
 export interface ICausalPolicyGains {
