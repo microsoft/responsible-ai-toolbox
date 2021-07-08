@@ -31,7 +31,7 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
     }
     if (this.props.data.leaf) {
       return (
-        <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
+        <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
           <Stack.Item>
             <Text>
               {localization.formatString(
