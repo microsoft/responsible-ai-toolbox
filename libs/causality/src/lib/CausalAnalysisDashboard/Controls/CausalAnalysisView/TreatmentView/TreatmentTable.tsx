@@ -35,7 +35,7 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
           <Stack.Item>
             <Text>
               {localization.formatString(
-                localization.Counterfactuals.nSample,
+                localization.CausalAnalysis.TreatmentPolicy.nSample,
                 this.props.data.n_samples
               )}
             </Text>
@@ -43,7 +43,7 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
           <Stack.Item>
             <Text>
               {localization.formatString(
-                localization.Counterfactuals.treatment,
+                localization.CausalAnalysis.TreatmentPolicy.Recommended,
                 this.props.data.treatment
               )}
             </Text>
@@ -57,7 +57,7 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
           <tr>
             <th className={styles.cell}>
               {localization.formatString(
-                localization.Counterfactuals.treatmentLeft,
+                localization.CausalAnalysis.TreatmentPolicy.Left,
                 this.props.data.feature,
                 this.props.data.threshold
               )}
@@ -72,7 +72,7 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
           <tr>
             <th className={styles.cell}>
               {localization.formatString(
-                localization.Counterfactuals.treatmentRight,
+                localization.CausalAnalysis.TreatmentPolicy.Right,
                 this.props.data.feature,
                 this.props.data.threshold
               )}
@@ -92,14 +92,14 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
         <tr>
           <th className={styles.cell}>
             {localization.formatString(
-              localization.Counterfactuals.treatmentLeft,
+              localization.CausalAnalysis.TreatmentPolicy.Left,
               this.props.data.feature,
               this.props.data.threshold
             )}
           </th>
           <th className={styles.cell}>
             {localization.formatString(
-              localization.Counterfactuals.treatmentRight,
+              localization.CausalAnalysis.TreatmentPolicy.Right,
               this.props.data.feature,
               this.props.data.threshold
             )}
