@@ -14,7 +14,7 @@ import { TreatmentBarChart } from "./TreatmentBarChart";
 import { TreatmentTableStyles } from "./TreatmentTableStyles";
 
 export interface ITreatmentBarChartSectionProps {
-  data?: ICausalPolicy;
+  data: ICausalPolicy;
 }
 
 export class TreatmentBarChartSection extends React.PureComponent<
@@ -46,7 +46,8 @@ export class TreatmentBarChartSection extends React.PureComponent<
               <Text variant={"medium"} className={styles.label}>
                 {localization.formatString(
                   localization.CausalAnalysis.TreatmentPolicy.BarDescription,
-                  "Tech support"
+                  this.props.data?.treatment_feature,
+                  this.props.data?.control_treatment
                 )}
               </Text>
               <Text variant={"medium"} className={styles.label}>

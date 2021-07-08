@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalPolicy } from "@responsible-ai/core-ui";
+import { ICausalPolicy, NoData } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Stack, Text, Dropdown, IDropdownOption } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
@@ -38,7 +38,7 @@ export class TreatmentView extends React.Component<
   }
   public render(): React.ReactNode {
     const styles = TreatmentStyles();
-    return (
+    return this.state.selectedPolicy ? (
       <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Text variant={"medium"} className={styles.label}>
           {localization.CausalAnalysis.TreatmentPolicy.Description}
@@ -52,6 +52,8 @@ export class TreatmentView extends React.Component<
         <TreatmentBarChartSection data={this.state.selectedPolicy} />
         <TreatmentListSection data={this.state.selectedPolicy} />
       </Stack>
+    ) : (
+      <NoData />
     );
   }
   private onSelect = (

@@ -4556,6 +4556,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
   ],
   policies: [
     {
+      control_treatment: "decrease",
       local_policies: [
         {
           age: 50,
@@ -5598,6 +5599,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       treatment_feature: "hours-per-week"
     },
     {
+      control_treatment: "decrease",
       local_policies: [
         {
           age: 26,

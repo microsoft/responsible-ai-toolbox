@@ -30,6 +30,7 @@ export interface ICausalPolicyTreeInternal {
 
 export interface ICausalPolicy {
   treatment_feature: string;
+  control_treatment: string;
   local_policies?: Array<{ [key: string]: any }>;
   policy_gains?: ICausalPolicyGains;
   policy_tree?: ICausalPolicyTreeInternal | ICausalPolicyTreeLeaf;
