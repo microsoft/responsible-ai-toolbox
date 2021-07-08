@@ -33,7 +33,8 @@ class ModelAnalysisDashboard(Dashboard):
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
             port=port,
-            locale=locale)
+            locale=locale,
+            no_inline_dashboard=True)
 
         def predict():
             data = request.get_json(force=True)
