@@ -10,15 +10,15 @@ import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { TreatmentTable } from "./TreatmentTable";
+import { TreatmentBarChart } from "./TreatmentBarChart";
 import { TreatmentTableStyles } from "./TreatmentTableStyles";
 
-export interface ITreatmentTableSectionProps {
+export interface ITreatmentBarChartSectionProps {
   data?: ICausalPolicy;
 }
 
-export class TreatmentTableSection extends React.PureComponent<
-  ITreatmentTableSectionProps
+export class TreatmentBarChartSection extends React.PureComponent<
+  ITreatmentBarChartSectionProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -28,26 +28,29 @@ export class TreatmentTableSection extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
+      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
-              localization.Counterfactuals.treatmentSize,
-              this.props.data?.local_policies?.length
+              localization.Counterfactuals.averageGain,
+              "Tech support"
             )}
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "l1" }}>
+          <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
             <Stack.Item>
-              <TreatmentTable data={this.props.data?.policy_tree} />
+              <TreatmentBarChart data={this.props.data?.policy_gains} />
             </Stack.Item>
-            <Stack.Item>
+            <Stack.Item className={styles.description}>
               <Text variant={"medium"} className={styles.label}>
-                {localization.Counterfactuals.treatmentTableDescription}
+                {localization.formatString(
+                  localization.Counterfactuals.treatmentBarDescription,
+                  "Tech support"
+                )}
               </Text>
               <Text variant={"medium"} className={styles.label}>
-                {localization.Counterfactuals.treatmentTable}
+                {localization.Counterfactuals.treatmentBarText}
               </Text>
             </Stack.Item>
           </Stack>
