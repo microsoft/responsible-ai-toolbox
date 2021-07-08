@@ -5042,6 +5042,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
   ],
   policies: [
     {
+      control_treatment: "decrease",
       local_policies: [
         {
           age: 50,
