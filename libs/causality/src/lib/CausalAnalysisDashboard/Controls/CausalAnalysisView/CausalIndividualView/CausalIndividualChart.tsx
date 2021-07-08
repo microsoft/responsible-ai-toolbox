@@ -29,8 +29,7 @@ import {
   ComboBox,
   Stack,
   IComboBoxOption,
-  IComboBox,
-  Slider
+  IComboBox
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -49,7 +48,7 @@ export interface ICausalIndividualChartState {
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  treatmentValue?: string;
+  // treatmentValue?: string;
 }
 
 export class CausalIndividualChart extends React.PureComponent<
@@ -73,7 +72,7 @@ export class CausalIndividualChart extends React.PureComponent<
       pointIsActive: [],
       selectedCohortIndex: 0,
       selectedPointsIndexes: [],
-      treatmentValue: "",
+      // treatmentValue: "",
       xDialogOpen: false,
       yDialogOpen: false
     };
@@ -257,7 +256,7 @@ export class CausalIndividualChart extends React.PureComponent<
             useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
-          <div>
+          {/* <div>
             <b>{`${localization.CausalAnalysis.IndividualView.currentTreatment}: ${this.state.treatmentValue}`}</b>
           </div>
           <Slider
@@ -268,7 +267,7 @@ export class CausalIndividualChart extends React.PureComponent<
             defaultValue={20}
             showValue
             snapToStep
-          />
+          /> */}
         </Stack>
       </div>
     );
