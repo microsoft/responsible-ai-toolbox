@@ -3,6 +3,9 @@
     "ExpandableText": {
       "SeeMore": "See more",
       "SeeLess": "See less"
+    },
+    "NoData": {
+      "Title": "No data"
     }
   },
   "Interpret": {
@@ -610,6 +613,20 @@
       "selectTreatment": "Select treatment",
       "currentTreatment": "Current treatment value",
       "setNewTreatment": "Set new treatment value"
+    },
+    "TreatmentPolicy": {
+      "SelectPolicy": "Set treatment feature",
+      "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+      "TableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+      "Table": "The table can be read by taking a row and then taking a column of that specific row.",
+      "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+      "nSample": "n = {0}",
+      "Recommended": "Recommended treatment = {0}",
+      "Left": "{0} <= {1}",
+      "Right": "{0} > {1}",
+      "averageGain": "Average gains of alternative policies over no {0} treatment",
+      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
+      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
   },
   "Counterfactuals": {
@@ -626,17 +643,7 @@
     "saveAsNew": "Save as new datapoint",
     "seePrediction": "See prediction deltas",
     "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
-    "treatmentDescription": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
-    "treatmentTableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
-    "treatmentTable": "The table can be read by taking a row and then taking a column of that specific row.",
-    "treatmentSize": "Interpretable recommended global treatment policy for sample size (n) = {0}",
-    "nSample": "n = {0}",
-    "treatment": "Recommended treatment = {0}",
-    "treatmentLeft": "{0} <= {1}",
-    "treatmentRight": "{0} > {1}",
-    "averageGain": "Average gains of alternative policies over no {0} treatment",
-    "treatmentBarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating everyone in your population with {0} = 0.",
-    "treatmentBarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken.",
+
     "recommendedPolicy": "Recommended policy gain",
     "individualTreatment": "Recommended individual treatment policy",
     "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",

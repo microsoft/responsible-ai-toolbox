@@ -44,6 +44,7 @@
           "ci_lower",
           "ci_upper",
           "class_names",
+          "control_treatment",
           "demographic_parity_difference",
           "demographic_parity_ratio",
           "desired_class",

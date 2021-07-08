@@ -14,7 +14,7 @@ import { TreatmentBarChart } from "./TreatmentBarChart";
 import { TreatmentTableStyles } from "./TreatmentTableStyles";
 
 export interface ITreatmentBarChartSectionProps {
-  data?: ICausalPolicy;
+  data: ICausalPolicy;
 }
 
 export class TreatmentBarChartSection extends React.PureComponent<
@@ -32,25 +32,26 @@ export class TreatmentBarChartSection extends React.PureComponent<
         <Stack.Item>
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
-              localization.Counterfactuals.averageGain,
+              localization.CausalAnalysis.TreatmentPolicy.averageGain,
               "Tech support"
             )}
           </Text>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
-            <Stack.Item>
+            <Stack.Item className={styles.chartContainer}>
               <TreatmentBarChart data={this.props.data?.policy_gains} />
             </Stack.Item>
             <Stack.Item className={styles.description}>
               <Text variant={"medium"} className={styles.label}>
                 {localization.formatString(
-                  localization.Counterfactuals.treatmentBarDescription,
-                  "Tech support"
+                  localization.CausalAnalysis.TreatmentPolicy.BarDescription,
+                  this.props.data?.treatment_feature,
+                  this.props.data?.control_treatment
                 )}
               </Text>
               <Text variant={"medium"} className={styles.label}>
-                {localization.Counterfactuals.treatmentBarText}
+                {localization.CausalAnalysis.TreatmentPolicy.BarText}
               </Text>
             </Stack.Item>
           </Stack>
