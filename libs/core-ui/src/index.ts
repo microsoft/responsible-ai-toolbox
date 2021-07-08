@@ -40,6 +40,7 @@ export * from "./lib/components/ConfirmationDialog";
 export * from "./lib/components/ExpandableText";
 export * from "./lib/components/InteractiveLegend";
 export * from "./lib/components/MissingParametersPlaceholder";
+export * from "./lib/components/NoData";
 export * from "./lib/components/SVGToolTip";
 export * from "./lib/Interfaces/ExplanationInterfaces";
 export * from "./lib/Interfaces/IExplanationContext";
