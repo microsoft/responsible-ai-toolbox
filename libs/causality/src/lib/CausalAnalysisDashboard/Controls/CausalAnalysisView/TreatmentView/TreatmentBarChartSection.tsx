@@ -32,25 +32,25 @@ export class TreatmentBarChartSection extends React.PureComponent<
         <Stack.Item>
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
-              localization.Counterfactuals.averageGain,
+              localization.CausalAnalysis.TreatmentPolicy.averageGain,
               "Tech support"
             )}
           </Text>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
-            <Stack.Item>
+            <Stack.Item className={styles.chartContainer}>
               <TreatmentBarChart data={this.props.data?.policy_gains} />
             </Stack.Item>
             <Stack.Item className={styles.description}>
               <Text variant={"medium"} className={styles.label}>
                 {localization.formatString(
-                  localization.Counterfactuals.treatmentBarDescription,
+                  localization.CausalAnalysis.TreatmentPolicy.BarDescription,
                   "Tech support"
                 )}
               </Text>
               <Text variant={"medium"} className={styles.label}>
-                {localization.Counterfactuals.treatmentBarText}
+                {localization.CausalAnalysis.TreatmentPolicy.BarText}
               </Text>
             </Stack.Item>
           </Stack>
