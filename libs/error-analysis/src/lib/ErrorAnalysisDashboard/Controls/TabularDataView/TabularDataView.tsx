@@ -1,14 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, ErrorCohort } from "@responsible-ai/core-ui";
+import {
+  JointDataset,
+  ErrorCohort,
+  constructRows,
+  constructCols,
+  rowsFromCustomPoints,
+  ITableState
+} from "@responsible-ai/core-ui";
 import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
   IDetailsHeaderProps,
   IDetailsColumnRenderTooltipProps,
-  ITheme,
   Selection,
   SelectionMode,
   Fabric,
@@ -22,17 +28,10 @@ import {
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import {
-  constructRows,
-  constructCols,
-  rowsFromCustomPoints,
-  ITableState
-} from "../../Utils/DatasetUtils";
 
 import { tabularDataViewStyles } from "./TabularDataView.styles";
 
 export interface ITabularDataViewProps {
-  theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
   jointDataset: JointDataset;
@@ -42,7 +41,7 @@ export interface ITabularDataViewProps {
   allSelectedIndexes?: number[];
   customPoints?: Array<{ [key: string]: any }>;
   selectedCohort: ErrorCohort;
-  setWhatIfDatapoint: (index: number) => void;
+  setWhatIfDatapoint?: (index: number) => void;
 }
 
 export interface ITabularDataViewState {
@@ -91,7 +90,7 @@ export class TabularDataView extends React.Component<
       onSelectionChanged: (): void => {
         const selectionDetails = this.getSelectionDetails();
         this.props.setSelectedIndexes(selectionDetails);
-        this.props.setWhatIfDatapoint(selectionDetails[0]);
+        this.props.setWhatIfDatapoint?.(selectionDetails[0]);
       }
     });
     this.updateSelection();
@@ -100,7 +99,8 @@ export class TabularDataView extends React.Component<
   public componentDidUpdate(prevProps: ITabularDataViewProps): void {
     if (
       this.props.customPoints !== prevProps.customPoints ||
-      this.props.selectedCohort !== prevProps.selectedCohort
+      this.props.selectedCohort !== prevProps.selectedCohort ||
+      this.props.selectedIndexes !== prevProps.selectedIndexes
     ) {
       const newTableState = this.updateItems();
       this.setState({ tableState: newTableState });
@@ -199,7 +199,7 @@ export class TabularDataView extends React.Component<
   }
 
   private onItemInvoked(item: any): void {
-    this.props.setWhatIfDatapoint(item[0] as number);
+    this.props.setWhatIfDatapoint?.(item[0] as number);
   }
 
   private tabularDataFilter(row: { [key: string]: number }): boolean {

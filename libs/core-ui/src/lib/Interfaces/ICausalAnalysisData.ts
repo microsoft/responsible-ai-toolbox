@@ -30,7 +30,7 @@ export interface ICausalPolicyTreeInternal {
 
 export interface ICausalPolicy {
   treatment_feature: string;
-  local_policies?: unknown[];
+  local_policies?: Array<{ [key: string]: any }>;
   policy_gains?: ICausalPolicyGains;
   policy_tree?: ICausalPolicyTreeInternal | ICausalPolicyTreeLeaf;
 }
@@ -39,6 +39,7 @@ export interface ICausalAnalysisSingleData {
   ci_lower: number;
   ci_upper: number;
   feature: string;
+  feature_value?: string;
   p_value: number;
   point: number;
   stderr: number;

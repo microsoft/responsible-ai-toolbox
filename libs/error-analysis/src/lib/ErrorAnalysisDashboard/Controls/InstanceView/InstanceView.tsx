@@ -127,20 +127,19 @@ export class InstanceView extends React.Component<
       return (
         <div className={classNames.frame}>
           <InspectionView
-            theme={this.context.theme}
-            messages={this.props.messages}
-            features={this.props.features}
+            features={this.context.modelMetadata.featureNames}
             jointDataset={this.context.jointDataset}
+            metadata={this.context.modelMetadata}
+            selectedCohort={this.props.selectedCohort}
+            messages={this.props.messages}
             inspectedIndexes={
               this.state.selectionDetails.selectedAllSelectedIndexes
             }
-            metadata={this.context.modelMetadata}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightOptions}
             weightLabels={this.props.weightLabels}
             invokeModel={this.props.invokeModel}
             onWeightChange={this.props.onWeightChange}
-            selectedCohort={this.props.selectedCohort}
           />
         </div>
       );
@@ -174,10 +173,9 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.CorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.context.theme}
-              messages={this.props.messages}
-              features={this.props.features}
+              features={this.context.modelMetadata.featureNames}
               jointDataset={this.context.jointDataset}
+              messages={this.props.messages}
               dataView={DataViewKeys.CorrectInstances}
               selectedIndexes={
                 this.state.selectionDetails.selectedCorrectDatasetIndexes
@@ -192,10 +190,9 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.IncorrectPredictionTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.context.theme}
-              messages={this.props.messages}
-              features={this.props.features}
+              features={this.context.modelMetadata.featureNames}
               jointDataset={this.context.jointDataset}
+              messages={this.props.messages}
               dataView={DataViewKeys.IncorrectInstances}
               selectedIndexes={
                 this.state.selectionDetails.selectedIncorrectDatasetIndexes
@@ -210,10 +207,9 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.AllSelectedTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.context.theme}
-              messages={this.props.messages}
-              features={this.props.features}
+              features={this.context.modelMetadata.featureNames}
               jointDataset={this.context.jointDataset}
+              messages={this.props.messages}
               dataView={DataViewKeys.SelectedInstances}
               setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
               selectedIndexes={
@@ -231,10 +227,9 @@ export class InstanceView extends React.Component<
           PredictionTabKeys.WhatIfDatapointsTab && (
           <div className="tabularDataView">
             <TabularDataView
-              theme={this.context.theme}
-              messages={this.props.messages}
-              features={this.props.features}
+              features={this.context.modelMetadata.featureNames}
               jointDataset={this.context.jointDataset}
+              messages={this.props.messages}
               customPoints={this.props.customPoints}
               dataView={DataViewKeys.SelectedInstances}
               setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
