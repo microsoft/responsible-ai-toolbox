@@ -543,29 +543,19 @@ class ModelAnalysis(object):
                 inst.__dict__[_MODEL] = pickle.load(file)
 
         # load each of the individual managers
+        manager_map = {
+            ManagerNames.CAUSAL: CausalManager,
+            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
+            ManagerNames.EXPLAINER: ExplainerManager,
+        }
         managers = []
-        cm_name = '_' + ManagerNames.CAUSAL + '_manager'
-        causal_dir = top_dir / ManagerNames.CAUSAL
-        causal_manager = CausalManager._load(causal_dir, inst)
-        inst.__dict__[cm_name] = causal_manager
-        managers.append(causal_manager)
-
-        cfm_name = '_' + ManagerNames.COUNTERFACTUAL + '_manager'
-        cf_dir = top_dir / ManagerNames.COUNTERFACTUAL
-        counterfactual_manager = CounterfactualManager._load(cf_dir, inst)
-        inst.__dict__[cfm_name] = counterfactual_manager
-        managers.append(counterfactual_manager)
-
-        eam_name = '_' + ManagerNames.ERROR_ANALYSIS + '_manager'
-        ea_dir = top_dir / ManagerNames.ERROR_ANALYSIS
-        error_analysis_manager = ErrorAnalysisManager._load(ea_dir, inst)
-        inst.__dict__[eam_name] = error_analysis_manager
-
-        exm_name = '_' + ManagerNames.EXPLAINER + '_manager'
-        exp_dir = top_dir / ManagerNames.EXPLAINER
-        explainer_manager = ExplainerManager._load(exp_dir, inst)
-        inst.__dict__[exm_name] = explainer_manager
-        managers.append(explainer_manager)
+        for manager_name, manager_class in manager_map.items():
+            full_name = f'_{manager_name}_manager'
+            manager_dir = top_dir / manager_name
+            manager = manager_class._load(manager_dir, inst)
+            inst.__dict__[full_name] = manager
+            managers.append(manager)
 
         inst.__dict__['_' + _MANAGERS] = managers
         return inst

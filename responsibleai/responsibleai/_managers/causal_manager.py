@@ -1,14 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
+"""Manager for causal analysis."""
 
-"""Defines the Causal Manager class."""
-import numpy as np
 import pandas as pd
 from uuid import uuid4
 
 from econml.solutions.causal_analysis import CausalAnalysis
+from pathlib import Path
 
-from responsibleai._config.base_config import BaseConfig
+from responsibleai._config.causal_config import CausalConfig
 from responsibleai._interfaces import (
     CausalData, CausalPolicy, CausalPolicyGains,
     CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
@@ -20,10 +20,13 @@ from responsibleai.modelanalysis.constants import ModelTask
 
 
 class CausalConstants:
+    """Constants for causal analysis."""
+
     # Model types
     AUTOML = 'automl'
     LINEAR = 'linear'
 
+    # Default configuration values
     DEFAULT_ALPHA = 0.05
     DEFAULT_MAX_CAT_EXPANSION = 50
     DEFAULT_TREATMENT_COST = 0
@@ -32,80 +35,9 @@ class CausalConstants:
     DEFAULT_SKIP_CAT_LIMIT_CHECKS = False
 
 
-class CausalConfig(BaseConfig):
-    def __init__(
-        self,
-        treatment_features,
-        heterogeneity_features,
-        nuisance_model,
-        heterogeneity_model,
-        alpha,
-        max_cat_expansion,
-        treatment_cost,
-        min_tree_leaf_samples,
-        max_tree_depth,
-        skip_cat_limit_checks,
-    ):
-        super().__init__()
-        self.treatment_features = treatment_features
-        self.heterogeneity_features = heterogeneity_features
-        self.nuisance_model = nuisance_model
-        self.heterogeneity_model = heterogeneity_model
-        self.alpha = alpha
-        self.max_cat_expansion = max_cat_expansion
-        self.treatment_cost = treatment_cost
-        self.min_tree_leaf_samples = min_tree_leaf_samples
-        self.max_tree_depth = max_tree_depth
-        self.skip_cat_limit_checks = skip_cat_limit_checks
-        self.id = str(uuid4())
-
-        # Outputs
-        self.causal_analysis = None
-        self.global_effects = None
-        self.local_effects = None
-        self.policies = None
-
-    def __eq__(self, other):
-        return all([
-            np.array_equal(self.treatment_features,
-                           other.treatment_features),
-            np.array_equal(self.heterogeneity_features,
-                           other.heterogeneity_features),
-            self.nuisance_model == other.nuisance_model,
-            self.heterogeneity_model == other.heterogeneity_model,
-            self.alpha == other.alpha,
-            self.max_cat_expansion == other.max_cat_expansion,
-            self.treatment_cost == other.treatment_cost,
-            self.min_tree_leaf_samples == other.min_tree_leaf_samples,
-            self.max_tree_depth == other.max_tree_depth,
-            self.skip_cat_limit_checks == other.skip_cat_limit_checks,
-        ])
-
-    def __repr__(self):
-        return ("CausalConfig("
-                f"treatment_features={self.treatment_features}, "
-                f"heterogeneity_features={self.heterogeneity_features}, "
-                f"nuisance_model={self.nuisance_model}, "
-                f"heterogeneity_model={self.heterogeneity_model}, "
-                f"alpha={self.alpha}, "
-                f"max_cat_expansion={self.max_cat_expansion}, "
-                f"treatment_cost={self.treatment_cost}, "
-                f"min_tree_leaf_samples={self.min_tree_leaf_samples}, "
-                f"max_tree_depth={self.max_tree_depth}, "
-                f"skip_cat_limit_checks={self.skip_cat_limit_checks})")
-
-    def to_result(self):
-        return {
-            'causal_analysis': self.causal_analysis,
-            'global_effects': self.global_effects,
-            'local_effects': self.local_effects,
-            'policies': self.policies,
-            'id': self.id,
-            'treatment_features': self.treatment_features
-        }
-
-
 class CausalManager(BaseManager):
+    """Manager for causal analysis."""
+
     TREATMENT_FEATURE = 'treatment_feature'
     LOCAL_POLICIES = 'local_policies'
     POLICY_TREE = 'policy_tree'
@@ -388,8 +320,44 @@ class CausalManager(BaseManager):
         return ManagerNames.CAUSAL
 
     def _save(self, path):
-        pass
+        """Save the CausalManager to the given path.
 
-    @staticmethod
-    def _load(path, model_analysis):
-        pass
+        :param path: The directory path to save the CausalManager to.
+        :type path: str
+        """
+        causal_dir = Path(path)
+        causal_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save results to disk
+        results_path = causal_dir / SerializationAttributes.RESULTS
+        results_path.mkdir(parents=True, exist_ok=True)
+        for result in self._results:
+            result_path = results_path / result.id
+            result.save(result_path)
+
+    @classmethod
+    def _load(cls, path, model_analysis):
+        """Load the CausalManager from the given path.
+
+        :param path: The directory path to load the CausalManager from.
+        :type path: str
+        :param model_analysis: The loaded parent ModelAnalysis.
+        :type model_analysis: ModelAnalysis
+        """
+        this = cls.__new__(cls)
+        causal_dir = Path(path)
+
+        # Rehydrate results
+        results_path = causal_dir / SerializationAttributes.RESULTS
+        paths = results_path.resolve().glob('*')
+        this.__dict__['_results'] = [CausalResult.load(p) for p in paths]
+
+        # Rehydrate model analysis data
+        this.__dict__['_train'] = model_analysis.train
+        this.__dict__['_test'] = model_analysis.test
+        this.__dict__['_target_column'] = model_analysis.target_column
+        this.__dict__['_task_type'] = model_analysis.task_type
+        this.__dict__['_categorical_features'] = \
+            model_analysis.categorical_features
+
+        return this
