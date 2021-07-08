@@ -21,7 +21,9 @@ DISALLOWED_DEPENDENCIES = [
     'jupyter'
 ]
 
-EXCEPTIONS = {}
+EXCEPTIONS = {
+    'econml': ['matplotlib']
+}
 
 
 @pytest.fixture(scope='class')
