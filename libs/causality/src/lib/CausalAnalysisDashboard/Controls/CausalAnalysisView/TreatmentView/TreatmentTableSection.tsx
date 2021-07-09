@@ -17,7 +17,7 @@ export interface ITreatmentTableSectionProps {
   data?: ICausalPolicy;
 }
 
-export class TreatmentTableSection extends React.PureComponent<
+export class TreatmentTableSection extends React.Component<
   ITreatmentTableSectionProps
 > {
   public static contextType = ModelAssessmentContext;
@@ -32,7 +32,7 @@ export class TreatmentTableSection extends React.PureComponent<
         <Stack.Item>
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
-              localization.Counterfactuals.treatmentSize,
+              localization.CausalAnalysis.TreatmentPolicy.Size,
               this.props.data?.local_policies?.length
             )}
           </Text>
@@ -44,10 +44,10 @@ export class TreatmentTableSection extends React.PureComponent<
             </Stack.Item>
             <Stack.Item>
               <Text variant={"medium"} className={styles.label}>
-                {localization.Counterfactuals.treatmentTableDescription}
+                {localization.CausalAnalysis.TreatmentPolicy.TableDescription}
               </Text>
               <Text variant={"medium"} className={styles.label}>
-                {localization.Counterfactuals.treatmentTable}
+                {localization.CausalAnalysis.TreatmentPolicy.Table}
               </Text>
             </Stack.Item>
           </Stack>
