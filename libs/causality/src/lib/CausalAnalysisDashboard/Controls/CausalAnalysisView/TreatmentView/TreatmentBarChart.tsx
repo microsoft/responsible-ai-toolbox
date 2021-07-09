@@ -73,6 +73,14 @@ export class TreatmentBarChart extends React.PureComponent<
         }
       }
     };
+    const alwaysTreats = this.props.data?.treatment_gains
+      ? Object.keys(this.props.data?.treatment_gains).map((t) =>
+          localization.formatString(
+            localization.CausalAnalysis.TreatmentPolicy.alwaysTreat,
+            t
+          )
+        )
+      : [];
     const xData = this.props.data?.treatment_gains
       ? [
           ...Object.values(this.props.data?.treatment_gains),
@@ -80,10 +88,7 @@ export class TreatmentBarChart extends React.PureComponent<
         ]
       : [this.props.data?.recommended_policy_gains];
     const yData = this.props.data?.treatment_gains
-      ? [
-          ...Object.keys(this.props.data?.treatment_gains),
-          localization.Counterfactuals.recommendedPolicy
-        ]
+      ? [...alwaysTreats, localization.Counterfactuals.recommendedPolicy]
       : [localization.Counterfactuals.recommendedPolicy];
     const trace = {
       orientation: "h",

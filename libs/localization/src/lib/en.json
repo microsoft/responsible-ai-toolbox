@@ -624,6 +624,7 @@
       "Recommended": "Recommended treatment = {0}",
       "Left": "{0} <= {1}",
       "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
       "averageGain": "Average gains of alternative policies over no {0} treatment",
       "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
       "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
