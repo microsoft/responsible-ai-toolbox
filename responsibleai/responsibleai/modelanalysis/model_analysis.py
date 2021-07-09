@@ -171,6 +171,21 @@ class ModelAnalysis(object):
                     ModelTask.CLASSIFICATION, ModelTask.REGRESSION)
             )
 
+        if serializer is not None:
+            if not hasattr(serializer, 'save'):
+                raise UserConfigValidationException(
+                    'The serializer does not implement save()')
+
+            if not hasattr(serializer, 'load'):
+                raise UserConfigValidationException(
+                    'The serializer does not implement load()')
+
+            try:
+                pickle.dumps(serializer)
+            except Exception:
+                raise UserConfigValidationException(
+                    'The serializer should be serializable via pickle')
+
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
             if len(set(train.columns) - set(test.columns)) != 0 or \
                     len(set(test.columns) - set(train.columns)):
@@ -199,17 +214,38 @@ class ModelAnalysis(object):
                         ' do not occur in train data'
                     )
 
-            # Run predict of the model
-            try:
-                small_train_data = train.iloc[0:2].drop(
-                    [target_column], axis=1)
-                small_test_data = test.iloc[0:2].drop([target_column], axis=1)
-                model.predict(small_train_data)
-                model.predict(small_test_data)
-            except Exception:
-                raise UserConfigValidationException(
-                    'The model passed cannot be used for getting predictions'
-                )
+            if train_labels is not None and task_type == \
+                    ModelTask.CLASSIFICATION:
+                if len(set(train[target_column].unique()) -
+                       set(train_labels)) != 0 or \
+                        len(set(train_labels) -
+                            set(train[target_column].unique())) != 0:
+                    raise UserConfigValidationException(
+                        'The train labels and distinct values in '
+                        'target (train data) do not match')
+
+                if len(set(test[target_column].unique()) -
+                       set(train_labels)) != 0 or \
+                        len(set(train_labels) -
+                            set(test[target_column].unique())) != 0:
+                    raise UserConfigValidationException(
+                        'The train labels and distinct values in '
+                        'target (test data) do not match')
+
+            if model is not None:
+                # Run predict of the model
+                try:
+                    small_train_data = train.iloc[0:1].drop(
+                        [target_column], axis=1)
+                    small_test_data = test.iloc[0:1].drop(
+                        [target_column], axis=1)
+                    model.predict(small_train_data)
+                    model.predict(small_test_data)
+                except Exception:
+                    raise UserConfigValidationException(
+                        'The model passed cannot be used for'
+                        ' getting predictions'
+                    )
 
     @property
     def causal(self) -> CausalManager:
