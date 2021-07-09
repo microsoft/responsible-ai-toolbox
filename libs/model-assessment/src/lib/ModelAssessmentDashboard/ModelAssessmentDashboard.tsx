@@ -398,7 +398,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     if (index > 0) {
       dataCount = tabs[index - 1].dataCount;
     } else {
-      dataCount = this.state.baseCohort.cohortStats.totalCohort
+      dataCount = this.state.baseCohort.cohortStats.totalCohort;
     }
     tabs.splice(index, 0, { dataCount, key: tab });
     this.setState({ activeGlobalTabs: tabs });
