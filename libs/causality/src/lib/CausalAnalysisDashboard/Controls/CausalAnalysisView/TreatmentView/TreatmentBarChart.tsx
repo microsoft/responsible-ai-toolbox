@@ -8,13 +8,14 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
+  AccessibleChart,
   IData,
   IPlotlyProperty,
   PlotlyThemes
 } from "@responsible-ai/mlchartlib";
+import { getTheme } from "office-ui-fabric-react";
 import Plotly from "plotly.js";
 import React from "react";
-import Plot from "react-plotly.js";
 
 export interface ITreatmentBarChartProps {
   data?: ICausalPolicyGains;
@@ -38,10 +39,13 @@ export class TreatmentBarChart extends React.PureComponent<
       ? PlotlyThemes.applyTheme(plotlyProps, this.props.theme)
       : plotlyProps;
     return (
-      <Plot
-        data={themedProps.data}
-        layout={themedProps.layout as Plotly.Layout}
-        config={themedProps.config}
+      <AccessibleChart
+        plotlyProps={{
+          config: themedProps.config,
+          data: themedProps.data,
+          layout: themedProps.layout as Plotly.Layout
+        }}
+        theme={getTheme()}
       />
     );
   }
@@ -54,7 +58,7 @@ export class TreatmentBarChart extends React.PureComponent<
       },
       data: [],
       layout: {
-        autosize: true,
+        autosize: false,
         dragmode: false,
         font: {
           size: 10

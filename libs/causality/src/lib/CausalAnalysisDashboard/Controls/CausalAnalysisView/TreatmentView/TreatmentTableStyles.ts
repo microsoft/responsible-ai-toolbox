@@ -17,6 +17,7 @@ export interface ITreatmentTableStyles {
   spinButtonText: IStyle;
   table: IStyle;
   label: IStyle;
+  chartContainer: IStyle;
 }
 
 export const TreatmentTableStyles: () => IProcessedStyleSet<
@@ -33,6 +34,7 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       minWidth: "250px",
       textAlign: "center"
     },
+    chartContainer: { minHeight: "500px" },
     description: {
       paddingTop: "110px"
     },

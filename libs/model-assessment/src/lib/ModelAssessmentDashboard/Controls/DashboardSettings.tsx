@@ -67,14 +67,15 @@ export class DashboardSettings extends React.PureComponent<
     );
   }
   private renderDelete = (
-    _item?: IModelAssessmentDashboardTab,
+    item?: IModelAssessmentDashboardTab,
     index?: number | undefined
   ): React.ReactNode => {
-    if (!index) {
+    if (!index || !item) {
       return React.Fragment;
     }
     return (
       <DashboardSettingDeleteButton
+        name={item.key}
         index={index}
         removeTab={this.props.removeTab}
       />
