@@ -127,16 +127,6 @@ export class CounterfactualChart extends React.PureComponent<
     );
     const weightVectorsAreEqual =
       this.props.selectedWeightVector === prevProps.selectedWeightVector;
-    const activePointsAreEqual = _.isEqual(
-      this.state.pointIsActive,
-      prevState.pointIsActive
-    );
-    const customPointsAreEqual =
-      this.state.customPoints === prevState.customPoints;
-    const customActivePointsAreEqual = _.isEqual(
-      this.state.customPointIsActive,
-      prevState.customPointIsActive
-    );
     if (!selectionsAreEqual || !weightVectorsAreEqual) {
       this.selectedFeatureImportance = this.state.selectedPointsIndexes.map(
         (rowIndex, colorIndex) => {
@@ -179,18 +169,6 @@ export class CounterfactualChart extends React.PureComponent<
           this.selectedFeatureImportance[0].unsortedAggregateY
         ).reverse();
       }
-    }
-    if (
-      !selectionsAreEqual ||
-      !activePointsAreEqual ||
-      !customPointsAreEqual ||
-      !customActivePointsAreEqual ||
-      !weightVectorsAreEqual
-    ) {
-      this.includedFeatureImportance = this.selectedFeatureImportance.filter(
-        (_f, i) => this.state.pointIsActive[i]
-      );
-      this.forceUpdate();
     }
     this.setState({ sortArray, sortingSeriesIndex });
   }
