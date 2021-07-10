@@ -135,7 +135,10 @@ class FairnessDashboard(Dashboard):
 
                 result = {"data": {
                     "global": metric_frame.overall[metric_name],
-                    "bins": list(metric_frame.by_group.to_dict().values()),
+                    "bins": list([
+                                entry for entry in list(metric_frame.by_group.to_dict().values()) 
+                                if not isinstance(entry[0], tuple)
+                            ][0].values()),
                 }}
                 if error_function_name in metric_method:
                     result["data"].update({
