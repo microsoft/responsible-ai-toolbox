@@ -225,9 +225,13 @@ class CausalManager(BaseManager):
             y = pd.concat([self._train, self._test], ignore_index=True)[
                 self._target_column].values.ravel()
 
+            categoricals = self._categorical_features
+            if categoricals is None:
+                categoricals = []
+
             analysis = CausalAnalysis(
                 config.treatment_features,
-                self._categorical_features,
+                categoricals,
                 heterogeneity_inds=config.heterogeneity_features,
                 classification=is_classification,
                 nuisance_models=config.nuisance_model,

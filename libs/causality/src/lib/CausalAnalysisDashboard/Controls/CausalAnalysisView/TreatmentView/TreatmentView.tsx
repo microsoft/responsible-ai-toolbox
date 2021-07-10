@@ -1,28 +1,58 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalPolicy } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { ICausalPolicy, NoData } from "@responsible-ai/core-ui";
+import { Stack } from "office-ui-fabric-react";
 import React from "react";
 
-import { TreatmentStyles } from "./TreatmentStyles";
+import { TreatmentBarChartSection } from "./TreatmentBarChartSection";
+import { TreatmentListSection } from "./TreatmentListSection";
+import { TreatmentSelection } from "./TreatmentSelection";
 import { TreatmentTableSection } from "./TreatmentTableSection";
 
 export interface ITreatmentViewProps {
-  data?: ICausalPolicy;
+  data?: ICausalPolicy[];
+}
+export interface ITreatmentViewState {
+  selectedPolicy?: ICausalPolicy;
 }
 
-export class TreatmentView extends React.PureComponent<ITreatmentViewProps> {
+export class TreatmentView extends React.Component<
+  ITreatmentViewProps,
+  ITreatmentViewState
+> {
+  public constructor(props: ITreatmentViewProps) {
+    super(props);
+    this.state = {
+      selectedPolicy: props.data?.[0]
+    };
+  }
   public render(): React.ReactNode {
-    const styles = TreatmentStyles();
-    return (
-      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
-        <Text variant={"medium"} className={styles.label}>
-          {localization.Counterfactuals.treatmentDescription}
-        </Text>
-        <TreatmentTableSection data={this.props.data} />
+    return this.state.selectedPolicy ? (
+      <Stack horizontal={false} grow>
+        <Stack.Item>
+          <TreatmentSelection data={this.props.data} onSelect={this.onSelect} />
+        </Stack.Item>
+        <Stack.Item>
+          <TreatmentTableSection data={this.state.selectedPolicy} />
+        </Stack.Item>
+        <Stack.Item />
+        <Stack.Item>
+          <TreatmentBarChartSection data={this.state.selectedPolicy} />
+        </Stack.Item>
+        <Stack.Item>
+          <TreatmentListSection data={this.state.selectedPolicy} />
+        </Stack.Item>
       </Stack>
+    ) : (
+      <NoData />
     );
   }
+  private onSelect = (index: number): void => {
+    if (this.props.data) {
+      this.setState({
+        selectedPolicy: this.props.data[index]
+      });
+    }
+  };
 }

@@ -10,15 +10,15 @@ import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { TreatmentTable } from "./TreatmentTable";
+import { TreatmentBarChart } from "./TreatmentBarChart";
 import { TreatmentTableStyles } from "./TreatmentTableStyles";
 
-export interface ITreatmentTableSectionProps {
-  data?: ICausalPolicy;
+export interface ITreatmentBarChartSectionProps {
+  data: ICausalPolicy;
 }
 
-export class TreatmentTableSection extends React.Component<
-  ITreatmentTableSectionProps
+export class TreatmentBarChartSection extends React.PureComponent<
+  ITreatmentBarChartSectionProps
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<
@@ -28,26 +28,30 @@ export class TreatmentTableSection extends React.Component<
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
+      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
-              localization.CausalAnalysis.TreatmentPolicy.Size,
-              this.props.data?.local_policies?.length
+              localization.CausalAnalysis.TreatmentPolicy.averageGain,
+              "Tech support"
             )}
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "l1" }}>
-            <Stack.Item>
-              <TreatmentTable data={this.props.data?.policy_tree} />
+          <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
+            <Stack.Item className={styles.chartContainer}>
+              <TreatmentBarChart data={this.props.data?.policy_gains} />
             </Stack.Item>
-            <Stack.Item>
+            <Stack.Item className={styles.description}>
               <Text variant={"medium"} className={styles.label}>
-                {localization.CausalAnalysis.TreatmentPolicy.TableDescription}
+                {localization.formatString(
+                  localization.CausalAnalysis.TreatmentPolicy.BarDescription,
+                  this.props.data?.treatment_feature,
+                  this.props.data?.control_treatment
+                )}
               </Text>
               <Text variant={"medium"} className={styles.label}>
-                {localization.CausalAnalysis.TreatmentPolicy.Table}
+                {localization.CausalAnalysis.TreatmentPolicy.BarText}
               </Text>
             </Stack.Item>
           </Stack>

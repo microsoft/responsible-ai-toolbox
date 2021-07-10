@@ -49,7 +49,8 @@ class Dashboard(object):
                  model_data,
                  public_ip,
                  port,
-                 locale):
+                 locale,
+                 no_inline_dashboard=False):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
@@ -75,6 +76,8 @@ class Dashboard(object):
 
         html = self.load_index()
         print(f'{dashboard_type} started at {self._service.env.base_url}')
+        if no_inline_dashboard:
+            return
         self._service.env.display(html)
 
     def add_route(self):
@@ -87,6 +90,7 @@ class Dashboard(object):
         self.add_url_rule(visual, '/', methods=["GET"])
         return
 
+    @staticmethod
     def get_widget_path(path):
         script_path = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(script_path, "widget", path)
