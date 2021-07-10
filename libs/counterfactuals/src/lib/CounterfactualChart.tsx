@@ -19,11 +19,7 @@ import {
   InteractiveLegend,
   ICounterfactualData
 } from "@responsible-ai/core-ui";
-import {
-  WhatIfConstants,
-  LocalImportancePlots,
-  IGlobalSeries
-} from "@responsible-ai/interpret";
+import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -35,7 +31,6 @@ import _ from "lodash";
 import {
   getTheme,
   DefaultButton,
-  IDropdownOption,
   IComboBoxOption,
   ComboBox,
   IComboBox,
@@ -45,6 +40,7 @@ import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
+import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualChartProps {
   data: ICounterfactualData;
   selectedWeightVector: WeightVectorOption;
@@ -61,7 +57,6 @@ export interface ICounterfactualChartState {
   isPanelOpen: boolean;
   editingDataCustomIndex?: number;
   customPoints: Array<{ [key: string]: any }>;
-  featuresOption: IDropdownOption[];
   request?: AbortController;
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
@@ -82,16 +77,10 @@ export class CounterfactualChart extends React.PureComponent<
 
   private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
-  private includedFeatureImportance: IGlobalSeries[] = [];
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
   private stringifiedValues: { [key: string]: string } = {};
-  private selectedDatapoints: any[][] = [];
-  private customDatapoints: any[][] = [];
-  private testableDatapoints: any[][] = [];
   private temporaryPoint: { [key: string]: any } | undefined;
-  private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
-  private testableDatapointNames: string[] = [];
 
   public constructor(props: ICounterfactualChartProps) {
     super(props);
@@ -100,7 +89,6 @@ export class CounterfactualChart extends React.PureComponent<
       customPointIsActive: [],
       customPoints: [],
       editingDataCustomIndex: undefined,
-      featuresOption: [],
       isPanelOpen: false,
       originalData: undefined,
       pointIsActive: [],
@@ -119,31 +107,8 @@ export class CounterfactualChart extends React.PureComponent<
 
     this.fetchData = _.debounce(this.fetchData.bind(this), 400);
 
-    const featuresOption = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
-
     this.setState({
-      chartProps: this.generateDefaultChartAxes(),
-      featuresOption
+      chartProps: this.generateDefaultChartAxes()
     });
   }
 
@@ -195,16 +160,6 @@ export class CounterfactualChart extends React.PureComponent<
           };
         }
       );
-      this.selectedDatapoints = this.state.selectedPointsIndexes.map(
-        (rowIndex) => {
-          const row = this.context.jointDataset.getRow(rowIndex);
-          return JointDataset.datasetSlice(
-            row,
-            this.context.jointDataset.metaDict,
-            this.context.jointDataset.datasetFeatureCount
-          );
-        }
-      );
       if (
         this.state.sortingSeriesIndex === undefined ||
         !this.state.selectedPointsIndexes.includes(
@@ -225,15 +180,6 @@ export class CounterfactualChart extends React.PureComponent<
         ).reverse();
       }
     }
-    if (!customPointsAreEqual) {
-      this.customDatapoints = this.state.customPoints.map((row) => {
-        return JointDataset.datasetSlice(
-          row,
-          this.context.jointDataset.metaDict,
-          this.context.jointDataset.datasetFeatureCount
-        );
-      });
-    }
     if (
       !selectionsAreEqual ||
       !activePointsAreEqual ||
@@ -244,37 +190,6 @@ export class CounterfactualChart extends React.PureComponent<
       this.includedFeatureImportance = this.selectedFeatureImportance.filter(
         (_f, i) => this.state.pointIsActive[i]
       );
-      const includedColors = this.includedFeatureImportance.map(
-        (item) => FabricStyles.fabricColorPalette[item.colorIndex]
-      );
-      const includedNames = this.includedFeatureImportance.map(
-        (item) => item.name
-      );
-      const includedRows = this.selectedDatapoints.filter(
-        (_f, i) => this.state.pointIsActive[i]
-      );
-      const includedCustomRows = this.customDatapoints.filter((_f, i) => {
-        if (this.state.pointIsActive[i]) {
-          includedColors.push(
-            FabricStyles.fabricColorPalette[
-              WhatIfConstants.MAX_SELECTION + i + 1
-            ]
-          );
-          includedColors.push(
-            FabricStyles.fabricColorPalette[
-              WhatIfConstants.MAX_SELECTION + i + 1
-            ]
-          );
-          includedNames.push(
-            this.state.customPoints[i][WhatIfConstants.namePath]
-          );
-          return true;
-        }
-        return false;
-      });
-      this.testableDatapoints = [...includedRows, ...includedCustomRows];
-      this.testableDatapointColors = includedColors;
-      this.testableDatapointNames = includedNames;
       this.forceUpdate();
     }
     this.setState({ sortArray, sortingSeriesIndex });
@@ -464,21 +379,10 @@ export class CounterfactualChart extends React.PureComponent<
                 )}
               </div>
             </div>
-            <LocalImportancePlots
-              includedFeatureImportance={this.includedFeatureImportance}
-              jointDataset={this.context.jointDataset}
-              metadata={this.context.modelMetadata}
-              selectedWeightVector={this.props.selectedWeightVector}
-              weightOptions={this.props.weightOptions}
-              weightLabels={this.props.weightLabels}
-              invokeModel={this.props.invokeModel}
-              onWeightChange={this.props.onWeightChange}
-              testableDatapoints={this.testableDatapoints}
-              testableDatapointNames={this.testableDatapointNames}
-              testableDatapointColors={this.testableDatapointColors}
-              featuresOption={this.state.featuresOption}
-              sortArray={this.state.sortArray}
-              sortingSeriesIndex={this.state.sortingSeriesIndex}
+            <LocalImportanceChart
+              rowNumber={this.state.selectedPointsIndexes[0]}
+              currentClass={this.getCurrentClass()}
+              data={this.props.data}
             />
           </div>
         </div>
