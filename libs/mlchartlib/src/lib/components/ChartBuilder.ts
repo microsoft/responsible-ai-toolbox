@@ -30,16 +30,20 @@ export class ChartBuilder {
       y: any;
       group: any;
       size: any;
-      xLB: any;
-      xUB: any;
-      yLB: any;
-      yUB: any;
+      xLowerBound: any;
+      xUpperBound: any;
+      yLowerBound: any;
+      yUpperBound: any;
     }> = jmespath.search(
       rows,
       `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${
         datum.yAccessor
-      }, xLB: ${datum.xAccessorLB}, xUB: ${datum.xAccessorUB},
-      yLB: ${datum.yAccessorLB}, yUB: ${datum.yAccessorUB}
+      }, xLowerBound: ${datum.xAccessorLowerBound}, xUpperBound: ${
+        datum.xAccessorUpperBound
+      },
+      yLowerBound: ${datum.yAccessorLowerBound}, yUpperBound: ${
+        datum.yAccessorUpperBound
+      }
       , group: ${datum.groupBy}, size: ${datum.sizeAccessor}${datumLevelPaths}}`
     );
     // for bubble charts, we scale all sizes to the max size, only needs to be done once since its global
@@ -165,32 +169,32 @@ export class ChartBuilder {
       result.push(groupingDictionary[key]);
     });
 
-    const performanceLB: any = [];
-    const performanceUB: any = [];
+    const performanceLowerBound: any = [];
+    const performanceUpperBound: any = [];
     projectedRows.forEach((row) => {
       console.log(row);
-      performanceLB.push(row.xLB);
-      performanceUB.push(row.xUB);
+      performanceLowerBound.push(row.xLowerBound);
+      performanceUpperBound.push(row.xUpperBound);
     });
 
     result[0].error_x = {
-      array: performanceUB,
-      arrayminus: performanceLB,
+      array: performanceUpperBound,
+      arrayminus: performanceLowerBound,
       type: "data",
       visible: true
     }; // eslint-disable-line no-use-before-define
 
-    const fairnessLB: any = [];
-    const fairnessUB: any = [];
+    const fairnessLowerBound: any = [];
+    const fairnessUpperBound: any = [];
     projectedRows.forEach((row) => {
       console.log(row);
-      fairnessLB.push(row.yLB);
-      fairnessUB.push(row.yUB);
+      fairnessLowerBound.push(row.yLowerBound);
+      fairnessUpperBound.push(row.yUpperBound);
     });
 
     result[0].error_y = {
-      array: fairnessLB,
-      arrayminus: fairnessUB,
+      array: fairnessLowerBound,
+      arrayminus: fairnessUpperBound,
       type: "data",
       visible: true
     }; // eslint-disable-line no-use-before-define

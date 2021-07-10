@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricResponse, IMetricRequest } from "@responsible-ai/core-ui";
+import {
+  IMetricResponse,
+  IMetricRequest,
+  IFairnessResponse
+} from "@responsible-ai/core-ui";
 import _ from "lodash";
 
 import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
@@ -104,7 +108,7 @@ export class MetricsCache {
     key: string,
     fairnessMethod: FairnessModes,
     errorKey: string
-  ): Promise<{ overall: number; bounds?: number[] }> {
+  ): Promise<IFairnessResponse> {
     // // Equalized Odds is calculated based on two other fairness metrics.
     // if (key.startsWith("equalized_odds")) {
     //   return this.getEqualizedOdds(
@@ -165,17 +169,20 @@ export class MetricsCache {
       const minIndex = _.indexOf(bins, min, 0);
       const maxIndex = _.indexOf(bins, max, 0);
 
-      minLowerBound = binBounds[minIndex][0];
-      minUpperBound = binBounds[minIndex][1];
+      minLowerBound = binBounds[minIndex].lower;
+      minUpperBound = binBounds[minIndex].upper;
 
-      maxLowerBound = binBounds[maxIndex][0];
-      maxUpperBound = binBounds[maxIndex][1];
+      maxLowerBound = binBounds[maxIndex].lower;
+      maxUpperBound = binBounds[maxIndex].upper;
     }
 
     if (fairnessMethod === FairnessModes.Min) {
       response = { overall: min };
       if (minLowerBound && minUpperBound) {
-        response["bounds"] = [minLowerBound, minUpperBound];
+        response["bounds"] = {
+          lower: minLowerBound,
+          upper: minUpperBound
+        };
       }
       return response;
     }
@@ -183,7 +190,10 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Max) {
       response = { overall: min };
       if (maxLowerBound && maxUpperBound) {
-        response["bounds"] = [maxLowerBound, maxUpperBound];
+        response["bounds"] = {
+          lower: maxLowerBound,
+          upper: maxUpperBound
+        };
       }
       return response;
     }
@@ -197,10 +207,10 @@ export class MetricsCache {
       }
       if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
         return {
-          bounds: [
-            minLowerBound / maxUpperBound,
-            minUpperBound / maxLowerBound
-          ],
+          bounds: {
+            lower: minLowerBound / maxUpperBound,
+            upper: minUpperBound / maxLowerBound
+          },
           overall: min / max
         };
       }
@@ -209,10 +219,13 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Difference) {
       response = { overall: max - min };
       if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
-        response["bounds"] = [
-          _.max([maxLowerBound - minUpperBound, 0]),
-          _.max([minUpperBound - maxLowerBound, maxUpperBound - minLowerBound])
-        ];
+        response["bounds"] = {
+          lower: _.max([maxLowerBound - minUpperBound, 0]),
+          upper: _.max([
+            minUpperBound - maxLowerBound,
+            maxUpperBound - minLowerBound
+          ])
+        };
       }
       return response;
     }

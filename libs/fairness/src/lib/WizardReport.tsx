@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricResponse, PredictionTypes } from "@responsible-ai/core-ui";
+import {
+  IMetricResponse,
+  PredictionTypes,
+  IFairnessResponse,
+  IBounds
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
@@ -55,7 +60,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     const performanceKey = this.props.performancePickerProps
       .selectedPerformanceKey;
     const fairnessKey = this.props.fairnessPickerProps.selectedFairnessKey;
-    // const errorKey = this.props.errorPickerProps.selectedErrorKey;
     const outcomeKey: string =
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
@@ -360,17 +364,14 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       let outcomes: IMetricResponse;
 
       const disparities: Dictionary<number> = {};
-      const disparityBounds: Dictionary<number[]> = {};
+      const disparityBounds: Dictionary<IBounds> = {};
       const performance = await this.getMetric(
         this.props.performancePickerProps.selectedPerformanceKey,
         this.props.errorPickerProps.selectedErrorKey
       );
       // TODO: extend disparities to query for all possible kinds of disparities
       // https://github.com/microsoft/responsible-ai-widgets/issues/65
-      const fairnessResponse: {
-        overall: number;
-        bounds?: number[];
-      } = await this.getFairnessMetric(
+      const fairnessResponse: IFairnessResponse = await this.getFairnessMetric(
         this.props.fairnessPickerProps.selectedFairnessKey,
         fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
           .fairnessMode,
@@ -467,7 +468,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     metricName: string,
     fairnessMode: FairnessModes,
     errorKey: string
-  ): Promise<{ overall: number; bounds?: number[] }> {
+  ): Promise<IFairnessResponse> {
     return await this.props.metricsCache.getFairnessMetric(
       this.props.dashboardContext.binVector,
       this.props.featureBinPickerProps.selectedBinIndex,

@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricResponse } from "@responsible-ai/core-ui";
+import { IBounds, IMetricResponse } from "@responsible-ai/core-ui";
 import { Dictionary } from "lodash";
 
 export interface IMetrics {
   performance: IMetricResponse;
   outcomes: IMetricResponse;
   disparities: Dictionary<number>;
-  disparityBounds?: Dictionary<number[]>;
+  disparityBounds?: Dictionary<IBounds>;
   // Optional, based on model type
   falsePositiveRates?: IMetricResponse;
   falseNegativeRates?: IMetricResponse;

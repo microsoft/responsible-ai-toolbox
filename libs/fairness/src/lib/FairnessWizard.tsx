@@ -23,6 +23,7 @@ import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { IFairnessProps } from "./IFairnessProps";
 import { defaultTheme } from "./Themes";
+import { IErrorOption } from "./util/ErrorMetrics";
 import {
   IFairnessOption,
   fairnessOptions,
@@ -54,6 +55,12 @@ export interface IFairnessPickerPropsV2 {
   onFairnessChange: (newKey: string) => void;
 }
 
+export interface IErrorPickerPropsV2 {
+  errorOptions?: IErrorOption[];
+  selectedErrorKey: string;
+  onErrorChange: (newKey: string) => void;
+}
+
 export interface IFeatureBinPickerPropsV2 {
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
@@ -67,7 +74,7 @@ export interface IWizardStateV2 {
   dashboardContext: IFairnessContext;
   performanceMetrics: IPerformanceOption[];
   fairnessMetrics: IFairnessOption[];
-  errorMetrics?: any;
+  errorMetrics?: IErrorOption[];
   selectedPerformanceKey: string;
   selectedFairnessKey: string;
   selectedErrorKey: string;

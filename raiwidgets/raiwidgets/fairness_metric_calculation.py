@@ -22,8 +22,8 @@ METRICFRAME_NOT_AVAILABLE_ERROR_MESSAGE = "The fairness metric module " \
     "needs to provide a MetricFrame class to calculate metrics. For an " \
     "refer to fairlearn.metrics.MetricFrame"
 
-z_score = 1.959964
-alpha = 0.95
+z_score = 1.959964  # This z-score corresponds to the 95% confidence interval
+alpha = 0.95        # Conventional level of power for statistical tests
 digits_of_precision = 4
 def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
     """ Returns lower and upper bound 
@@ -55,18 +55,14 @@ def compute_standard_normal_error_binomial(metric_value, sample_size, z_score):
     return z_score * np.sqrt(metric_value * (1.0 - metric_value)) / np.sqrt(sample_size)
 
 def compute_standard_normal_error(metric_value, y_true, y_pred, sample_size, z_score):
-    """ Standard Error Calculation (Binary Classification)
+    """ Standard Error Calculation
 
-    Assumes infinitely large population,
-    Should be used when the sampling fraction is small.
-    For sampling fraction > 5%, may want to use finite population correction
-    https://en.wikipedia.org/wiki/Margin_of_error
+    Attempting to generalize for regression/probability tasks. Incomplete
 
-    Note: 
-        Returns absolute error (%)
     """
 
-    return z_score * np.sqrt() / np.sqrt(sample_size)
+    # return z_score * np.sqrt() / np.sqrt(sample_size)
+    return
 
 def wilson_wrapper(y_true, y_pred, func):
     assert len(y_true) == len(y_pred)

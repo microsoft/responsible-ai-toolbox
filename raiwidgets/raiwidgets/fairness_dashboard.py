@@ -39,12 +39,6 @@ class FairnessDashboard(Dashboard):
             fairness_metric_module=None,
             fairness_metric_mapping=None,
             custom_metric_functions=None):
-            # custom_metric_functions={"Recall Wilson": 
-            #     {
-            #         "model_type": ["error"],
-            #         "function": recall_wilson
-            #     }
-            # }):
         """Initialize the fairness dashboard."""
 
         metrics_module = FairnessMetricModule(
@@ -111,11 +105,10 @@ class FairnessDashboard(Dashboard):
                 This function always calculates the error_function, if available,
                 so that the value is cached in the MetricsCache
 
-                Params
-                    binVector
-                    errorKey
-                    metricKey
-                    modelIndex
+            Request attributes:
+                binVector: the sensitive features binning vector
+                metricKey: the metricKey that corresponds to the function that will be calculated
+                modelIndex: the model index used to index the predicted y's by that model
             """
             try:
                 data = request.get_json(force=True)
@@ -124,14 +117,12 @@ class FairnessDashboard(Dashboard):
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                errorKey = data['errorKey']
                 metric_name = data['metricKey']
                 error_function_name = f"{metric_name} bounds"
                 metric_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("function")
                 metric_method = {
                     metric_name: metric_function
                 }
-                # if errorKey != "disabled":
                 error_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("error_function")
                 if error_function is not None:
                     metric_method.update({error_function_name: error_function})
@@ -148,9 +139,16 @@ class FairnessDashboard(Dashboard):
                 }}
                 if error_function_name in metric_method:
                     result["data"].update({
-                        "bounds": metric_frame.overall[error_function_name],
+                        "bounds": {
+                            "lower": metric_frame.overall[error_function_name][0],
+                            "upper": metric_frame.overall[error_function_name][1],
+                        },
                         # [(x1, y1), (x2, y2), (x3, y3)...]
-                        "binBounds": list(metric_frame.by_group[error_function_name].to_dict().values())
+                        "binBounds": [{
+                            "lower": bounds[0],
+                            "upper": bounds[1]
+                        }
+                            for bounds in list(metric_frame.by_group[error_function_name].to_dict().values())]
                     })
                 return jsonify(result)
             except Exception as ex:
