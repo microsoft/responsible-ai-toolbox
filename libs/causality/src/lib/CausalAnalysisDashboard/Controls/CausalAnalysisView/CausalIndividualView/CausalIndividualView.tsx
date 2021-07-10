@@ -44,7 +44,7 @@ export class CausalIndividualView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CausalIndividualStyles();
     return (
-      <Stack grow tokens={{ padding: "l1" }}>
+      <Stack grow tokens={{ padding: "16px 8px" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.label}>
             {localization.CausalAnalysis.IndividualView.description}
@@ -55,10 +55,8 @@ export class CausalIndividualView extends React.PureComponent<
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
-            <Text variant={"medium"} className={styles.label}>
-              <b>
-                {localization.CausalAnalysis.IndividualView.directIndividual}
-              </b>
+            <Text variant={"medium"} className={styles.header}>
+              {localization.CausalAnalysis.IndividualView.directIndividual}
             </Text>
             <CausalCallout />
           </Stack>
@@ -72,7 +70,7 @@ export class CausalIndividualView extends React.PureComponent<
             </MissingParametersPlaceholder>
           )}
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item className={styles.aggregateChart}>
           {this.state.selectedData && (
             <CausalAggregateChart data={this.state.selectedData} />
           )}

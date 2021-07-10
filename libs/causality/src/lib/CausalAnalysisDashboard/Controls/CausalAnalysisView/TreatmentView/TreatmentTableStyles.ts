@@ -12,6 +12,7 @@ export interface ITreatmentTableStyles {
   description: IStyle;
   detailsList: IStyle;
   detailsListDescription: IStyle;
+  dropdown: IStyle;
   header: IStyle;
   spinButton: IStyle;
   spinButtonText: IStyle;
@@ -34,7 +35,9 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       minWidth: "250px",
       textAlign: "center"
     },
-    chartContainer: { minHeight: "500px" },
+    chartContainer: {
+      minHeight: "500px"
+    },
     description: {
       paddingTop: "110px"
     },
@@ -47,10 +50,14 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       fontWeight: "normal",
       paddingTop: "50px"
     },
+    dropdown: {
+      paddingLeft: "20px",
+      width: "220px"
+    },
     header: {
       fontFamily: "Segoe UI",
       fontSize: "14px",
-      fontWeight: "25px",
+      fontWeight: "600",
       lineHeight: "16px"
     },
     label: {
