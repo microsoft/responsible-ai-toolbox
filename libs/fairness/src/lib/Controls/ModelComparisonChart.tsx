@@ -397,34 +397,27 @@ export class ModelComparisonChart extends React.Component<
 
       const performanceArray = (await Promise.all(performancePromises)).map(
         (metric) => {
-          console.log(metric);
           return metric.global;
         }
       );
 
       const performanceBounds = (await Promise.all(performancePromises)).map(
         (metric) => {
-          console.log(metric);
           return metric.bounds;
         }
       );
 
       const fairnessArray = (await Promise.all(fairnessPromises)).map(
         (metric) => {
-          console.log(metric);
           return metric.overall;
         }
       );
 
       const fairnessBounds = (await Promise.all(fairnessPromises)).map(
         (metric) => {
-          console.log(metric);
           return metric.bounds;
         }
       );
-
-      console.log(performanceBounds);
-      console.log(fairnessBounds);
 
       this.setState({
         fairnessArray,

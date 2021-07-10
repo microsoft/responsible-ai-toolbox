@@ -172,7 +172,6 @@ export class ChartBuilder {
     const performanceLowerBound: any = [];
     const performanceUpperBound: any = [];
     projectedRows.forEach((row) => {
-      console.log(row);
       performanceLowerBound.push(row.xLowerBound);
       performanceUpperBound.push(row.xUpperBound);
     });
@@ -187,7 +186,6 @@ export class ChartBuilder {
     const fairnessLowerBound: any = [];
     const fairnessUpperBound: any = [];
     projectedRows.forEach((row) => {
-      console.log(row);
       fairnessLowerBound.push(row.yLowerBound);
       fairnessUpperBound.push(row.yUpperBound);
     });
