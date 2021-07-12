@@ -212,6 +212,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 metrics={this.state.metrics}
                 fairnessPickerProps={this.props.fairnessPickerProps}
                 performancePickerProps={this.props.performancePickerProps}
+                errorPickerProps={this.props.errorPickerProps}
                 chartKey={this.state.chartKey}
                 onUpdateChartKey={this.updateChartKey}
               />
@@ -270,6 +271,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
           parentErrorChanged={this.errorChanged}
+          outcomeBounds={this.state?.metrics?.outcomes?.binBounds}
+          falseNegativeBounds={
+            this.state?.metrics?.falseNegativeRates?.binBounds
+          }
+          falsePositiveBounds={
+            this.state?.metrics?.falsePositiveRates?.binBounds
+          }
         />
         {mainChart}
       </Stack>
@@ -412,6 +420,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             this.props.errorPickerProps.selectedErrorKey
           );
           outcomes = await this.getMetric(
+            // call will always return error bounds
             "average",
             this.props.errorPickerProps.selectedErrorKey
           );

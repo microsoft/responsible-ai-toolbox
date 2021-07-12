@@ -36,6 +36,9 @@ export interface IDropdownBarProps {
   };
   fairnessBounds?: Array<IBounds | undefined>;
   performanceBounds?: Array<IBounds | undefined>;
+  outcomeBounds?: Array<IBounds | undefined>;
+  falsePositiveBounds?: Array<IBounds | undefined>;
+  falseNegativeBounds?: Array<IBounds | undefined>;
 }
 
 export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
@@ -110,7 +113,13 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
             (typeof this.props.fairnessBounds === "undefined" ||
               _.isEmpty(this.props.fairnessBounds.filter(Boolean))) &&
             (typeof this.props.performanceBounds === "undefined" ||
-              _.isEmpty(this.props.performanceBounds.filter(Boolean)))
+              _.isEmpty(this.props.performanceBounds.filter(Boolean))) &&
+            (typeof this.props.outcomeBounds === "undefined" ||
+              _.isEmpty(this.props.outcomeBounds.filter(Boolean))) &&
+            (typeof this.props.falseNegativeBounds === "undefined" ||
+              _.isEmpty(this.props.falseNegativeBounds.filter(Boolean))) &&
+            (typeof this.props.falsePositiveBounds === "undefined" ||
+              _.isEmpty(this.props.falsePositiveBounds.filter(Boolean)))
           }
           onChange={this.props.parentErrorChanged}
         />

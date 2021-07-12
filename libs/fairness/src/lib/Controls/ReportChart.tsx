@@ -9,6 +9,7 @@ import React from "react";
 import {
   IPerformancePickerPropsV2,
   IFairnessPickerPropsV2,
+  IErrorPickerPropsV2,
   IFeatureBinPickerPropsV2
 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
@@ -21,6 +22,7 @@ export interface IReportChartProps {
   dashboardContext: IFairnessContext;
   performancePickerProps: IPerformancePickerPropsV2;
   fairnessPickerProps: IFairnessPickerPropsV2;
+  errorPickerProps: IErrorPickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   areaHeights: number;
   metrics: IMetrics;
@@ -117,6 +119,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
             featureBinPickerProps={this.props.featureBinPickerProps}
+            errorPickerProps={this.props.errorPickerProps}
             performancePickerProps={this.props.performancePickerProps}
             areaHeights={this.props.areaHeights}
           />
@@ -126,6 +129,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
             featureBinPickerProps={this.props.featureBinPickerProps}
+            errorPickerProps={this.props.errorPickerProps}
             areaHeights={this.props.areaHeights}
           />
         )}

@@ -9,6 +9,7 @@ import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import {
+  IErrorPickerPropsV2,
   IFeatureBinPickerPropsV2,
   IPerformancePickerPropsV2
 } from "../FairnessWizard";
@@ -26,6 +27,7 @@ interface IPerformancePlotProps {
   areaHeights: number;
   performancePickerProps: IPerformancePickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
+  errorPickerProps: IErrorPickerPropsV2;
 }
 
 export class PerformancePlot extends React.PureComponent<
@@ -76,6 +78,86 @@ export class PerformancePlot extends React.PureComponent<
           y: groupNamesWithBuffer
         }
       ];
+      // Plot Error Bars
+      if (
+        this.props.errorPickerProps.selectedErrorKey !== "disabled" &&
+        typeof this.props.metrics.falsePositiveRates !== "undefined"
+      ) {
+        barPlotlyProps.data[0].error_x = {
+          array: this.props.metrics.falsePositiveRates.binBounds?.map(
+            (binBound, index) => {
+              if (
+                typeof this.props.metrics.falsePositiveRates?.bins[index] !==
+                "undefined"
+              ) {
+                return (
+                  binBound.upper -
+                  this.props.metrics.falsePositiveRates.bins[index]
+                ); // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          arrayminus: this.props.metrics.falsePositiveRates.binBounds?.map(
+            (binBound, index) => {
+              if (
+                typeof this.props.metrics.falsePositiveRates?.bins[index] !==
+                "undefined"
+              ) {
+                return (
+                  this.props.metrics.falsePositiveRates.bins[index] -
+                  binBound.lower
+                ); // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          type: "data",
+          visible: true
+        };
+        barPlotlyProps.data[0].textposition = "none";
+      }
+      if (
+        this.props.errorPickerProps.selectedErrorKey !== "disabled" &&
+        typeof this.props.metrics.falseNegativeRates !== "undefined"
+      ) {
+        barPlotlyProps.data[1].error_x = {
+          array: this.props.metrics.falseNegativeRates.binBounds?.map(
+            (binBound, index) => {
+              if (
+                typeof this.props.metrics.falseNegativeRates?.bins[index] !==
+                "undefined"
+              ) {
+                return (
+                  (binBound.upper -
+                    this.props.metrics.falseNegativeRates.bins[index]) *
+                  -1
+                ); // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          arrayminus: this.props.metrics.falseNegativeRates.binBounds?.map(
+            (binBound, index) => {
+              if (
+                typeof this.props.metrics.falseNegativeRates?.bins[index] !==
+                "undefined"
+              ) {
+                return (
+                  (this.props.metrics.falseNegativeRates.bins[index] -
+                    binBound.lower) *
+                  -1
+                ); // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          type: "data",
+          visible: true
+        };
+        barPlotlyProps.data[1].textposition = "none";
+      }
+
       // Annotations for both sides of the chart
       if (barPlotlyProps.layout) {
         barPlotlyProps.layout.annotations = [

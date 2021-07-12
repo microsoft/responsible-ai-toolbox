@@ -8,7 +8,10 @@ import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
-import { IFeatureBinPickerPropsV2 } from "../FairnessWizard";
+import {
+  IFeatureBinPickerPropsV2,
+  IErrorPickerPropsV2
+} from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
 import { SharedStyles } from "../Shared.styles";
 
@@ -22,6 +25,7 @@ interface IOutcomePlotProps {
   metrics: IMetrics;
   areaHeights: number;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
+  errorPickerProps: IErrorPickerPropsV2;
 }
 
 export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
@@ -61,6 +65,33 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: groupNamesWithBuffer
         }
       ];
+      if (this.props.errorPickerProps.selectedErrorKey !== "disabled") {
+        barPlotlyProps.data[0].error_x = {
+          array: this.props.metrics.outcomes.binBounds?.map(
+            (binBound, index) => {
+              if (
+                typeof this.props.metrics.outcomes?.bins[index] !== "undefined"
+              ) {
+                return binBound.upper - this.props.metrics.outcomes.bins[index]; // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          arrayminus: this.props.metrics.outcomes.binBounds?.map(
+            (binBound, index) => {
+              if (
+                typeof this.props.metrics.outcomes?.bins[index] !== "undefined"
+              ) {
+                return this.props.metrics.outcomes.bins[index] - binBound.lower; // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          type: "data",
+          visible: true
+        };
+        barPlotlyProps.data[0].textposition = "none";
+      }
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
