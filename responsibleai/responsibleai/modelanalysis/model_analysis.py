@@ -4,22 +4,23 @@
 """Defines the ModelAnalysis class."""
 
 import json
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pickle
+
 from pathlib import Path
 
+from responsibleai._input_processing import _convert_to_list
+from responsibleai._interfaces import ModelAnalysisData, Dataset
 from responsibleai._internal.constants import\
     ManagerNames, Metadata, SKLearn
-from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._managers.counterfactual_manager import (
     CounterfactualManager)
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
-from responsibleai._interfaces import ModelAnalysisData, Dataset
-from responsibleai._input_processing import _convert_to_list
-from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai._tools.causal.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.modelanalysis.constants import ModelTask
 
 
 _DTYPES = 'dtypes'
