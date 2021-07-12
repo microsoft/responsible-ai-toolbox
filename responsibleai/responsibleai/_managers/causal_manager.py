@@ -4,7 +4,6 @@
 """Manager for causal analysis."""
 import json
 import pandas as pd
-import uuid
 
 from econml.solutions.causal_analysis import CausalAnalysis
 from pathlib import Path
@@ -125,7 +124,6 @@ class CausalManager(BaseManager):
         analysis.fit(X, y)
 
         result = CausalResult()
-        result.id = str(uuid.uuid4())
         result.config = {
             'treatment_features': treatment_features,
             'heterogeneity_features': heterogeneity_features,
@@ -223,14 +221,15 @@ class CausalManager(BaseManager):
         :param path: The directory path to save the ExplainerManager to.
         :type path: str
         """
-        top_dir = Path(path)
-        top_dir.mkdir(parents=True, exist_ok=True)
+        causal_dir = Path(path)
+        causal_dir.mkdir(parents=True, exist_ok=True)
 
         # Save results to disk
-        results_path = top_dir / SerializationAttributes.RESULTS
-        result_dicts = [result.to_dict() for result in self._results]
-        with open(results_path, 'w') as f:
-            json.dump(result_dicts, f)
+        results_path = causal_dir / SerializationAttributes.RESULTS
+        results_path.mkdir(parents=True, exist_ok=True)
+        for result in self._results:
+            result_path = results_path / result.id
+            result.save(result_path)
 
     @classmethod
     def _load(cls, path, model_analysis):
@@ -242,15 +241,17 @@ class CausalManager(BaseManager):
         :type model_analysis: ModelAnalysis
         """
         this = cls.__new__(cls)
-        top_dir = Path(path)
+        causal_dir = Path(path)
 
         # Rehydrate results
-        results_path = top_dir / SerializationAttributes.RESULTS
-        with open(results_path, 'r') as f:
-            result_dicts = json.load(f)
-        results = [CausalResult.from_dict(result_dict)
-                   for result_dict in result_dicts]
-        this.__dict__['_results'] = results
+        results_path = causal_dir / SerializationAttributes.RESULTS
+        result_paths = results_path.glob('/')
+        print(result_paths)
+        quit()
+        # results = []
+        # [CausalResult.load(result_path)
+        #            for result_dict in result_dicts]
+        # this.__dict__['_results'] = results
 
         # Rehydrate model analysis data
         this.__dict__['_train'] = model_analysis.train

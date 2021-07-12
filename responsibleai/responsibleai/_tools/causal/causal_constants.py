@@ -58,3 +58,9 @@ class SerializationAttributes:
     """Attributes constants for a serialized CausalResult."""
 
     RESULTS = 'results'
+    CAUSAL_ANALYSIS_FILENAME = 'causal-analysis.pkl'
+    GLOBAL_EFFECTS_FILENAME = 'global-effects.pkl'
+    LOCAL_EFFECTS_FILENAME = 'local-effects.pkl'
+    POLICIES_FILENAME = 'policies.pkl'
+
+    DASHBOARD_FILENAME = 'dashboard.json'

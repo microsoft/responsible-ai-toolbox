@@ -1,11 +1,19 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 """Result of causal analysis."""
+import datetime
+import json
+import pickle
+import uuid
 
-from responsibleai._tools.causal.causal_constants import ResultAttributes
+from pathlib import Path
+
+from responsibleai._tools.causal.causal_constants import (
+    ResultAttributes, SerializationAttributes)
 from responsibleai._interfaces import (
     CausalData, CausalPolicy, CausalPolicyGains,
     CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
+from responsibleai.serialization_utilities import serialize_json_safe
 
 
 class CausalResult:
@@ -13,14 +21,15 @@ class CausalResult:
 
     def __init__(
         self,
-        id=None,
         config=None,
         causal_analysis=None,
         global_effects=None,
         local_effects=None,
         policies=None,
     ):
-        self.id = id
+        self.id = str(uuid.uuid4())
+        self.created_date = datetime.datetime.now()
+
         self.config = config
         self.causal_analysis = causal_analysis
         self.global_effects = global_effects
@@ -29,6 +38,7 @@ class CausalResult:
 
     def serialize(self):
         causal_data = CausalData()
+
         causal_data.global_effects = self.global_effects\
             .reset_index().to_dict(orient='records')
         local_dicts = self.local_effects.groupby('sample').apply(
@@ -92,9 +102,44 @@ class CausalResult:
                 policy_tree[ResultAttributes.RIGHT])
         return policy_tree_object
 
+    def _get_dashboard_data(self):
+        return serialize_json_safe(self.serialize())
+
     def save(self, path):
-        pass
+        result_dir = Path(path)
+        result_dir.mkdir(parents=True, exist_ok=True)
+
+        SerAttrs = SerializationAttributes
+        with open(result_dir / SerAttrs.CAUSAL_ANALYSIS_FILENAME, 'wb') as f:
+            pickle.dump(self.local_effects, f)
+        with open(result_dir / SerAttrs.GLOBAL_EFFECTS_FILENAME, 'wb') as f:
+            pickle.dump(self.global_effects, f)
+        with open(result_dir / SerAttrs.LOCAL_EFFECTS_FILENAME, 'wb') as f:
+            pickle.dump(self.local_effects, f)
+        with open(result_dir / SerAttrs.POLICIES_FILENAME, 'wb') as f:
+            pickle.dump(self.policies, f)
+
+        dashboard = self._get_dashboard_data()
+        with open(result_dir / SerAttrs.DASHBOARD_FILENAME, 'w') as f:
+            json.dump(dashboard, f)
 
     @classmethod
     def load(cls, path) -> 'CausalResult':
-        pass
+        result_dir = Path(path)
+
+        SerAttrs = SerializationAttributes
+        with open(result_dir / SerAttrs.CAUSAL_ANALYSIS_FILENAME, 'wb') as f:
+            causal_analysis = pickle.load(f)
+        with open(result_dir / SerAttrs.GLOBAL_EFFECTS_FILENAME, 'wb') as f:
+            global_effects = pickle.load(f)
+        with open(result_dir / SerAttrs.LOCAL_EFFECTS_FILENAME, 'wb') as f:
+            local_effects = pickle.load(f)
+        with open(result_dir / SerAttrs.POLICIES_FILENAME, 'wb') as f:
+            policies = pickle.load(f)
+
+        return cls(
+            causal_analysis=causal_analysis,
+            global_effects=global_effects,
+            local_effects=local_effects,
+            policies=policies,
+        )
