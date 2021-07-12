@@ -3,6 +3,9 @@
     "ExpandableText": {
       "SeeMore": "Zobrazit více",
       "SeeLess": "Zobrazit méně"
+    },
+    "NoData": {
+      "Title": "No data"
     }
   },
   "Interpret": {
@@ -366,36 +369,79 @@
   },
   "CausalAnalysis": {
     "MainMenu": {
-      "header": "causal analysis",
-      "aggregate": "Aggregate causal effects",
-      "individual": "Individual causal effects",
-      "treatment": "Treatment policy",
-      "title": "Direct causal effect of each feature with 90% confidence interval",
-      "why": "Why must causal insights assume unconfoundedness?",
-      "learnMore": "Learn more"
+      "header": "analýza příčin",
+      "aggregate": "Agregace důsledků",
+      "individual": "Jednotlivé důsledky",
+      "treatment": "Zásady ošetření",
+      "title": "Přímý důsledek jednotlivých faktorů v 90% intervalu spolehlivosti",
+      "why": "Proč je potřeba předpokládat, že přehledy příčin nepůsobí současně?",
+      "learnMore": "Další informace"
     },
     "AggregateView": {
-      "description": "Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
-      "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
-      "unconfounding": "What are unconfounding variables?",
-      "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
-      "continuous": "Continuouts treatment variables: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
-      "binary": "Binary treatment variables: ",
-      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
+      "description": "Analýza příčin odpovídá na otázky typu: „Co kdyby?“ a popisuje, jak by se v reálném světe změnily výstupy, kdyby se někdo zachoval jinak a například se řídil jinou strategií naceňování nebo zvolil pro pacienta alternativní léčbu. Na rozdíl od modelových predikcí, které rozpoznávají důležité korelační vzorce vám tyto nástroje pomůžou rozpoznat nejdůležitější příčiny, které mají přímý vliv na výstupy faktoru, který vás zajímá. Tyto modely rozpoznávají důsledky jediného faktoru, zatímco ostatní současně působící faktory zůstávají konstantní. Ujistěte se, že zahrnujete širokou sadu faktorů, které by mohly korelovat s výstupem jakožto současně působící faktory.",
+      "directAggregate": "Přímý agregát důsledků jednotlivých ošetření v 95% intervalu spolehlivosti",
+      "unconfounding": "Co jsou současně nepůsobící proměnné?",
+      "confoundingFeature": "Současně působící faktor koreluje s ovladačem příčin a s výstupem zkoumání. Současně působící faktor vytváří nad rámec přímého důsledku další korelační cestu od ovladače příčin k výstupu. Pokud nejsou současně působící faktory zahrnuté a zohledněné v modelu, tyto další korelace můžou způsobit odchylku v odhadovaných důsledcích. Odchylka může být kladná i záporná v závislosti na směru korelací mezi vynechanými současně působícími faktory, ovladači příčin a výstupy.",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning",
+      "continuous": "Proměnné souvislého ošetření:",
+      "continuousDescription": "V průměru se v tomto vzorku zvýšení tohoto faktoru o 1 jednotku projeví jako zvýšení výstupu o X jednotek",
+      "here": "here",
+      "binary": "Proměnné binárního ošetření:",
+      "binaryDescription": "V průměru se zapnutí tohoto faktoru v tomto vzorku projeví jako zvýšení výstupu o X jednotek"
     },
     "IndividualView": {
-      "index": "Datapoint index",
-      "description": "Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
-      "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
-      "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
-      "selectTreatment": "Select treatment",
-      "currentTreatment": "Current treatment value",
-      "setNewTreatment": "Set new treatment value"
+      "index": "Index datového bodu",
+      "description": "Individuální důsledky můžou poskytnout informace o cílených nebo individuálních intervencích, jako je třeba cílená reklama zákazníkům nebo individuální plán léčby. Jak jedinec s konkrétní sadou faktorů zareaguje na změnu ovladače příčin? Tyto diagramy znázorňují marginální změnu výstupu, když se jednotlivé ovladače příčin změní. Pokud změníte ovladače příčin konkrétního jedince, nástroj citlivostní analýzy příčin vypočítá srovnávací dopady ve skutečném světě. U tohoto nástroje je potřeba za účelem pozorování specifikovat současné výstupy a možnosti ošetření a pak specifikovat srovnávací ošetření, které byste chtěli prozkoumat. ",
+      "directIndividual": "Přímý individuální důsledek jednotlivých ošetření v 95% intervalu spolehlivosti",
+      "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
+      "dataRequired": "Tato karta vyžaduje výběr datového bodu.",
+      "datapointIndex": "Index datového bodu",
+      "selectTreatment": "Vyberte ošetření",
+      "currentTreatment": "Aktuální hodnota ošetření",
+      "setNewTreatment": "Nastavení nové hodnoty ošetření"
+    },
+    "TreatmentPolicy": {
+      "SelectPolicy": "Set treatment feature",
+      "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+      "TableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+      "Table": "The table can be read by taking a row and then taking a column of that specific row.",
+      "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+      "nSample": "n = {0}",
+      "Recommended": "Recommended treatment = {0}",
+      "Left": "{0} <= {1}",
+      "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
+      "averageGain": "Average gains of alternative policies over no {0} treatment",
+      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
+      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
+  },
+  "Counterfactuals": {
+    "header": "What-If analysis",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "showOnly": "Show only",
+    "selectedDatapoint": "Selected datapoint",
+    "desiredClass": "Desired class for counterfactual(s)",
+    "currentClass": "Current class",
+    "createCounterfactual": "Create what-if counterfactual",
+    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "counterfactualName": "What-if counterfactual name",
+    "saveAsNew": "Save as new datapoint",
+    "seePrediction": "See prediction deltas",
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "recommendedPolicy": "Recommended policy gain",
+    "individualTreatment": "Recommended individual treatment policy",
+    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
+    "RecommendedTreatment": "Recommended treatment",
+    "EffectOfTreatment": "Effect",
+    "EffectLowerBound": "CI lower",
+    "EffectUpperBound": "CI upper",
+    "increaseByOne": "Increase value by 1",
+    "decreaseByOne": "Decrease value by 1",
+    "noData": "No data"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Třída {0}",
@@ -415,9 +461,6 @@
     "errorCoverage": "Pokrytí chyb",
     "errorCoverageInfo": "Pokrytí chyb ukazuje procento chyb, které jsou soustředěny ve výběru ze všech chyb přítomných v datové sadě.",
     "errorCoverageTitle": "Další informace o pokrytí chyb",
-    "errorRate": "Chybovost",
-    "errorRateInfo": "Míra chyb představuje procento instancí v uzlu, pro které systém selhal.",
-    "errorRateTitle": "Další informace o chybovosti",
     "globalExplanationView": "Globální vysvětlení",
     "localExplanationView": "Místní vysvětlení",
     "noFeature": "Žádná funkce",
@@ -430,7 +473,18 @@
     },
     "CohortInfo": {
       "cohortInformation": "Informace o kohortě",
-      "saveCohort": "Uložit jako novou kohortu"
+      "saveCohort": "Uložit jako novou kohortu",
+      "filters": "filters",
+      "basicInformation": "Basic Information",
+      "baseCohortInstances": "Instances in base cohort",
+      "selectedCohortInstances": "Instances in the selected cohort",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "total": "Total",
+      "predictionPath": "Prediction path (filters)"
+    },
+    "CohortList": {
+      "coverage": "Coverage"
     },
     "EditCohort": {
       "subText": "Zjistit více o vybrané kohortě. Upravit název kohorty. Smazat tuto kohortu.",
@@ -439,6 +493,12 @@
     "FeatureList": {
       "importances": "Významné prvky",
       "features": "Atributy"
+    },
+    "FilterTooltip": {
+      "correctNum": "Correct (#): ",
+      "incorrectNum": "Incorrect (#): ",
+      "countNum": "Count (#): ",
+      "errorSum": "Error sum: "
     },
     "InspectionView": {
       "emptyError": "Kliknutím na zaškrtávací políčka vyberte datové body v nesprávných a správných kategoriích.",
@@ -457,7 +517,7 @@
       "fullscreen": "Na celou obrazovku",
       "whatIf": "Citlivostní analýza",
       "featureList": "Seznam atributů",
-      "shiftCohort": "Posunout kohortu",
+      "shiftCohort": "Kohorta posunu",
       "saveCohort": "Uložit kohortu",
       "cohortList": "Seznam kohort",
       "cohortInfo": "Informace o kohortě",
@@ -480,6 +540,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "S mapou mřížky se můžete zaměřit na konkrétní filtry a kombinovat chybovost. Začněte dvěma funkcemi datové sady k porovnání."
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "Průzkumník chyb",
@@ -776,7 +851,7 @@
       "CalloutContent": "Přidání některých komponent (stromové zobrazení chyb, heat mapa chyb) vám umožní filtrovat data z globální kohorty, kterou vidíte v níže uvedených komponentách.",
       "AddButtonText": "Přidat"
     },
-    "CasualAnalysis": {
+    "CausalAnalysis": {
       "Table": {
         "name": "feature",
         "point": "point",
@@ -789,8 +864,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "Průzkumník dat",
-      "GlobalExplanation": "Globální vysvětlení",
-      "LocalExplanation": "Místní vysvětlení",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "Analýza chyb",
       "Fairness": "Nestrannost",
       "ModelStatistics": "Statistika modelu",
@@ -798,13 +872,43 @@
       "Counterfactuals": "Kontrafaktuály"
     },
     "MainMenu": {
-      "DashboardSettings": "Nastavení řídicího panelu"
+      "DashboardSettings": "Nastavení řídicího panelu",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "Rozložení řídicího panelu",
       "Content": "Tento seznam zobrazuje rozložení řídicího panelu. Každá komponenta označená identifikací může filtrovat data, která se zobrazí v níže uvedených komponentách. Komponenty můžete přidat, přetáhnout je a změnit pořadí toku nebo je zcela odstranit.",
       "DashboardComponents": "Komponenty řídicího panelu",
-      "DataPoints": "Počet datových bodů"
+      "DataPoints": "Počet datových bodů",
+      "DeleteDialog": {
+        "Title": "Delete {0}?",
+        "Content": "Are you sure you want to delete {0}?",
+        "Delete": "Delete",
+        "Cancel": "Cancel"
+      }
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance",
+      "CorrectPredictions": "Correct predictions",
+      "IncorrectPredictions": "Incorrect predictions"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }
