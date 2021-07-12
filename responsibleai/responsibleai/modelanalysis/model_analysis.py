@@ -233,7 +233,7 @@ class ModelAnalysis(object):
                         'target (test data) do not match')
 
             if model is not None:
-                # Run predict of the model
+                # Run predict() of the model
                 try:
                     small_train_data = train.iloc[0:1].drop(
                         [target_column], axis=1)
@@ -244,8 +244,23 @@ class ModelAnalysis(object):
                 except Exception:
                     raise UserConfigValidationException(
                         'The model passed cannot be used for'
-                        ' getting predictions'
+                        ' getting predictions via predict()'
                     )
+
+                # Run predict_proba() of the model
+                if task_type == ModelTask.CLASSIFICATION:
+                    try:
+                        small_train_data = train.iloc[0:1].drop(
+                            [target_column], axis=1)
+                        small_test_data = test.iloc[0:1].drop(
+                            [target_column], axis=1)
+                        model.predict_proba(small_train_data)
+                        model.predict_proba(small_test_data)
+                    except Exception:
+                        raise UserConfigValidationException(
+                            'The model passed cannot be used for'
+                            ' getting predictions via predict_proba()'
+                        )
 
     @property
     def causal(self) -> CausalManager:

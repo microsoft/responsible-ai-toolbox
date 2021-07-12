@@ -3,6 +3,7 @@
 
 import logging
 import pytest
+from unittest.mock import MagicMock
 from .common_utils import (create_iris_data,
                            create_cancer_data,
                            create_lightgbm_classifier)
@@ -155,16 +156,36 @@ class TestModelAnalysisValidations:
         assert 'The serializer should be serializable via pickle' in \
             str(ucve.value)
 
-    def test_model_predictions(self):
-        X_train, _, y_train, _, _, _ = \
-            create_cancer_data()
-        model = create_lightgbm_classifier(X_train, y_train)
-
+    def test_model_predictions_predict(self):
         X_train, X_test, y_train, y_test, _, _ = \
-            create_iris_data()
+            create_cancer_data()
 
         X_train['target'] = y_train
         X_test['target'] = y_test
+
+        model = MagicMock()
+        model.predict.side_effect = Exception()
+        with pytest.raises(UserConfigValidationException) as ucve:
+            ModelAnalysis(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column='target',
+                task_type='classification')
+
+        assert 'The model passed cannot be used for getting predictions ' + \
+            'via predict()' in str(ucve.value)
+
+    def test_model_predictions_predict_proba(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model = MagicMock()
+        model.predict.return_value = [0]
+        model.predict_proba.side_effect = Exception()
 
         with pytest.raises(UserConfigValidationException) as ucve:
             ModelAnalysis(
@@ -174,8 +195,8 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification')
 
-        assert 'The model passed cannot be used for getting predictions' \
-            in str(ucve.value)
+        assert 'The model passed cannot be used for getting predictions ' + \
+            'via predict_proba()' in str(ucve.value)
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
