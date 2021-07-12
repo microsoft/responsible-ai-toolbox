@@ -3,6 +3,9 @@
     "ExpandableText": {
       "SeeMore": "さらに表示",
       "SeeLess": "表示を減らす"
+    },
+    "NoData": {
+      "Title": "No data"
     }
   },
   "Interpret": {
@@ -366,36 +369,79 @@
   },
   "CausalAnalysis": {
     "MainMenu": {
-      "header": "causal analysis",
-      "aggregate": "Aggregate causal effects",
-      "individual": "Individual causal effects",
-      "treatment": "Treatment policy",
-      "title": "Direct causal effect of each feature with 90% confidence interval",
-      "why": "Why must causal insights assume unconfoundedness?",
-      "learnMore": "Learn more"
+      "header": "因果分析",
+      "aggregate": "集計因果効果",
+      "individual": "個別の因果効果",
+      "treatment": "処理ポリシー",
+      "title": "信頼区間が 90% の各機能の直接的な因果効果",
+      "why": "因果分析において条件付き独立性を想定する理由",
+      "learnMore": "詳細情報"
     },
     "AggregateView": {
-      "description": "Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
-      "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
-      "unconfounding": "What are unconfounding variables?",
-      "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
-      "continuous": "Continuouts treatment variables: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
-      "binary": "Binary treatment variables: ",
-      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
+      "description": "因果分析では、製品に関して別の価格戦略を追求することや、患者に対して別の治療を行うなど、ユーザーの動作が異なる場合に、実世界の結果がどのように変化するかについての 'what if' の質問の回答を提供します。重要な相関パターンを識別するモデル予測とは異なり、これらのツールは、興味のある結果に直接影響する最も重要な因果関係の機能を識別するのに役立ちます。これらのモデルは、1 つの機能の因果効果を識別し、他の交絡機能を一定に保ちます。パフォーマンスを向上させるには、結果と関連する可能性のある、あらゆる機能を交絡因子として含めてください。",
+      "directAggregate": "信頼区間が 95% の各処理の直接的な集計因果効果",
+      "unconfounding": "交絡因子のない変数とは",
+      "confoundingFeature": "交絡機能は、因果ドライバーと興味のある結果の両方に関連しています。交絡因子では、因果ドライバーから直接的な因果効果の上の結果への追加の相関パスが作成されます。交絡機能が測定され、モデルに含まれている場合を除いて、これらの追加の相関関係が因果効果の概算値に影響を与える可能性があります。この影響は、省略された交絡因子、因果ドライバー、結果の間の相関関係の方向に応じて正にも負にもなり得ます。",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning",
+      "continuous": "継続的処理変数:",
+      "continuousDescription": "このサンプルでは平均で、この機能を 1 単位増やすと、結果が X 単位増加します",
+      "here": "here",
+      "binary": "バイナリ処理変数:",
+      "binaryDescription": "このサンプルでは平均で、この機能をオンにすると、結果が X 単位増加します"
     },
     "IndividualView": {
-      "index": "Datapoint index",
-      "description": "Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
-      "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
-      "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
-      "selectTreatment": "Select treatment",
-      "currentTreatment": "Current treatment value",
-      "setNewTreatment": "Set new treatment value"
+      "index": "データポイント インデックス",
+      "description": "それぞれの因果効果は、顧客への対象プロモーションや個別の処理プランなど、対象または個人用の介入を通知できます。特定の機能セットを持つユーザーは、因果ドライバーの変更にどのように対応しますか? これらのプロットは、それぞれの因果ドライバーが変更されたときの結果における一般的でない変更を示します。因果の What-If ツールは、因果ドライバーを変更した場合の特定の個人に関する反事実的実世界の結果を計算します。このツールでは、現在の結果と観察に対する現在の処理オプションを指定してから、探索する反事実的処理を指定する必要があります。",
+      "directIndividual": "信頼区間が 95% の各処理の直接的な個別の因果効果",
+      "missingParameters": "このタブには、評価データセットを指定する必要があります。",
+      "dataRequired": "このタブでは、データポイントを選択する必要があります。",
+      "datapointIndex": "データポイント インデックス",
+      "selectTreatment": "処理の選択",
+      "currentTreatment": "現在の処理の値",
+      "setNewTreatment": "新しい処理の値を設定します"
+    },
+    "TreatmentPolicy": {
+      "SelectPolicy": "Set treatment feature",
+      "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+      "TableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+      "Table": "The table can be read by taking a row and then taking a column of that specific row.",
+      "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+      "nSample": "n = {0}",
+      "Recommended": "Recommended treatment = {0}",
+      "Left": "{0} <= {1}",
+      "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
+      "averageGain": "Average gains of alternative policies over no {0} treatment",
+      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
+      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
+  },
+  "Counterfactuals": {
+    "header": "What-If analysis",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "showOnly": "Show only",
+    "selectedDatapoint": "Selected datapoint",
+    "desiredClass": "Desired class for counterfactual(s)",
+    "currentClass": "Current class",
+    "createCounterfactual": "Create what-if counterfactual",
+    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "counterfactualName": "What-if counterfactual name",
+    "saveAsNew": "Save as new datapoint",
+    "seePrediction": "See prediction deltas",
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "recommendedPolicy": "Recommended policy gain",
+    "individualTreatment": "Recommended individual treatment policy",
+    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
+    "RecommendedTreatment": "Recommended treatment",
+    "EffectOfTreatment": "Effect",
+    "EffectLowerBound": "CI lower",
+    "EffectUpperBound": "CI upper",
+    "increaseByOne": "Increase value by 1",
+    "decreaseByOne": "Decrease value by 1",
+    "noData": "No data"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "クラス {0}",
@@ -415,9 +461,6 @@
     "errorCoverage": "エラー カバレッジ",
     "errorCoverageInfo": "エラー カバレッジは、データセットに存在するすべてのエラーに対して、選択範囲に集中しているエラーの割合を示しています。",
     "errorCoverageTitle": "エラー カバレッジに関する追加情報",
-    "errorRate": "エラー率",
-    "errorRateInfo": "エラー率は、システムが失敗したノード内のインスタンスの割合を表します。",
-    "errorRateTitle": "エラー率に関する追加情報",
     "globalExplanationView": "グローバル説明",
     "localExplanationView": "ローカル説明",
     "noFeature": "特徴量なし",
@@ -430,7 +473,18 @@
     },
     "CohortInfo": {
       "cohortInformation": "コーホート情報",
-      "saveCohort": "新しいコーホートとして保存する"
+      "saveCohort": "新しいコーホートとして保存する",
+      "filters": "filters",
+      "basicInformation": "Basic Information",
+      "baseCohortInstances": "Instances in base cohort",
+      "selectedCohortInstances": "Instances in the selected cohort",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "total": "Total",
+      "predictionPath": "Prediction path (filters)"
+    },
+    "CohortList": {
+      "coverage": "Coverage"
     },
     "EditCohort": {
       "subText": "選択したコーホートの詳細を確認します。そのコーホート名を編集します。このコーホートを削除します。",
@@ -439,6 +493,12 @@
     "FeatureList": {
       "importances": "重要度",
       "features": "特徴量"
+    },
+    "FilterTooltip": {
+      "correctNum": "Correct (#): ",
+      "incorrectNum": "Incorrect (#): ",
+      "countNum": "Count (#): ",
+      "errorSum": "Error sum: "
     },
     "InspectionView": {
       "emptyError": "チェック ボックスをクリックして、正しくないおよび正しいカテゴリのデータポイントを選択してください。",
@@ -457,7 +517,7 @@
       "fullscreen": "全画面表示",
       "whatIf": "What-If",
       "featureList": "特徴量の一覧",
-      "shiftCohort": "コーホートのシフト",
+      "shiftCohort": "シフト コーホート",
       "saveCohort": "コーホートを保存する",
       "cohortList": "コーホートの一覧",
       "cohortInfo": "コーホート情報",
@@ -480,6 +540,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "グリッド マップを使用すると、特定のフィルターに注目し、エラー率を組み合わせることができます。比較する 2 つのデータセット特徴量から開始します。"
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "エラー エクスプローラー",
@@ -776,7 +851,7 @@
       "CalloutContent": "コンポーネント (エラー ツリー ビュー、エラー ヒート マップ) を追加すると、下のコンポーネントに表示されるグローバル コーホートからデータをフィルター処理できるようになります。",
       "AddButtonText": "追加"
     },
-    "CasualAnalysis": {
+    "CausalAnalysis": {
       "Table": {
         "name": "feature",
         "point": "point",
@@ -789,8 +864,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "データ エクスプローラー",
-      "GlobalExplanation": "グローバル説明",
-      "LocalExplanation": "ローカル説明",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "エラー分析",
       "Fairness": "公平性",
       "ModelStatistics": "モデルの統計情報",
@@ -798,13 +872,43 @@
       "Counterfactuals": "反事実"
     },
     "MainMenu": {
-      "DashboardSettings": "ダッシュボードの設定"
+      "DashboardSettings": "ダッシュボードの設定",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "ダッシュボードのレイアウト",
       "Content": "この一覧は、ダッシュボードのレイアウトを示しています。識別がタグ付けされた各コンポーネントでは、データをフィルター処理して、WIT の下のコンポーネントに表示させることができます。コンポーネントの追加、ドラッグ アンド ドロップによるフローの順序変更、またはコンポーネントの削除を行うことができます。",
       "DashboardComponents": "ダッシュボードのコンポーネント",
-      "DataPoints": "データポイントの数"
+      "DataPoints": "データポイントの数",
+      "DeleteDialog": {
+        "Title": "Delete {0}?",
+        "Content": "Are you sure you want to delete {0}?",
+        "Delete": "Delete",
+        "Cancel": "Cancel"
+      }
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance",
+      "CorrectPredictions": "Correct predictions",
+      "IncorrectPredictions": "Incorrect predictions"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }
