@@ -8,7 +8,12 @@ import {
   Stack,
   Dropdown,
   Toggle,
-  IDropdownOption
+  IDropdownOption,
+  ActionButton,
+  Modal,
+  IconButton,
+  PrimaryButton,
+  IIconProps
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -20,6 +25,7 @@ import {
 } from "../FairnessWizard";
 
 import { IFairnessContext } from "./../util/IFairnessContext";
+import { DropdownBarStyles } from "./DropdownBar.styles";
 
 export interface IDropdownBarProps {
   dashboardContext: IFairnessContext;
@@ -46,8 +52,16 @@ export interface IDropdownBarProps {
   falseNegativeBounds?: Array<IBounds | undefined>;
 }
 
-export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
+export interface IState {
+  showModalHelp?: boolean;
+}
+
+export class DropdownBar extends React.PureComponent<
+  IDropdownBarProps,
+  IState
+> {
   public render(): React.ReactNode {
+    const styles = DropdownBarStyles();
     const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
       (x) => {
         return { key: x, text: x };
@@ -62,6 +76,49 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
       (x) => {
         return { key: x.key, text: x.title };
       }
+    );
+
+    const cancelIcon: IIconProps = { iconName: "Cancel" };
+
+    const howTo = (
+      <Stack className={styles.toolTipWrapper}>
+        <Stack>{localization.Fairness.DropdownHeaders.errorMetric}</Stack>
+        <Stack>
+          <ActionButton
+            className={styles.actionButton}
+            onClick={this.handleOpenModalHelp}
+          >
+            <div className={styles.infoButton}>i</div>
+            {localization.Fairness.ErrorBounds.howToRead}
+          </ActionButton>
+          <Modal
+            titleAriaId="help modal"
+            isOpen={this.state?.showModalHelp}
+            onDismiss={this.handleCloseModalHelp}
+            isModeless
+            containerClassName={styles.modalContentHelp}
+          >
+            <IconButton
+              iconProps={cancelIcon}
+              ariaLabel="Close popup modal"
+              onClick={this.handleCloseModalHelp}
+            />
+            <p className={styles.modalContentHelpText}>
+              {localization.Fairness.ErrorBounds.introModalText}
+              <br />
+              <br />
+            </p>
+            <div style={{ display: "flex", paddingBottom: "20px" }}>
+              <PrimaryButton
+                className={styles.doneButton}
+                onClick={this.handleCloseModalHelp}
+              >
+                {localization.Fairness.done}
+              </PrimaryButton>
+            </div>
+          </Modal>
+        </Stack>
+      </Stack>
     );
 
     return (
@@ -101,21 +158,10 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
         />
         <Toggle
           id="errorMetricDropdown"
-          label={localization.Fairness.DropdownHeaders.errorMetric}
+          label={howTo}
           defaultChecked={
             this.props.errorPickerProps.selectedErrorKey === "enabled"
           }
-          //defaultSelectedKey={this.props.errorPickerProps.selectedErrorKey}
-          // options={[
-          //   {
-          //     key: "disabled",
-          //     text: localization.Fairness.Metrics.errorMetricDisabled
-          //   },
-          //   {
-          //     key: "enabled",
-          //     text: localization.Fairness.Metrics.errorMetricEnabled
-          //   }
-          // ]}
           disabled={
             (typeof this.props.fairnessBounds === "undefined" ||
               _.isEmpty(this.props.fairnessBounds.filter(Boolean))) &&
@@ -133,4 +179,11 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
       </Stack>
     );
   }
+  private readonly handleOpenModalHelp = (): void => {
+    this.setState({ showModalHelp: true });
+  };
+
+  private readonly handleCloseModalHelp = (): void => {
+    this.setState({ showModalHelp: false });
+  };
 }

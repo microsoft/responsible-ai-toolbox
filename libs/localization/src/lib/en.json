@@ -1094,6 +1094,10 @@
       "performanceMetric": "Performance metric",
       "fairnessMetric": "Fairness metric",
       "errorMetric": "Enable error bars"
+    },
+    "ErrorBounds": {
+      "howToRead": "How to read these error bars",
+      "introModalText": "These error bars are generated using Wilson Interval Bounds (for binary classification) and Standard Normal Error (for regression/probability). Note there are many different ways to calculate error bars, but these were chosen for your convenience."
     }
   },
   "ModelAssessment": {
