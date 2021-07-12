@@ -3,6 +3,9 @@
     "ExpandableText": {
       "SeeMore": "Daha fazla göster",
       "SeeLess": "Daha az göster"
+    },
+    "NoData": {
+      "Title": "No data"
     }
   },
   "Interpret": {
@@ -366,36 +369,79 @@
   },
   "CausalAnalysis": {
     "MainMenu": {
-      "header": "causal analysis",
-      "aggregate": "Aggregate causal effects",
-      "individual": "Individual causal effects",
-      "treatment": "Treatment policy",
-      "title": "Direct causal effect of each feature with 90% confidence interval",
-      "why": "Why must causal insights assume unconfoundedness?",
-      "learnMore": "Learn more"
+      "header": "nedensel analiz",
+      "aggregate": "Kümeli nedensel etkiler",
+      "individual": "Bireysel nedensel etkiler",
+      "treatment": "Tedavi ilkesi",
+      "title": "Her özelliğin % 90 güven aralığı ile doğrudan nedensel etkisi",
+      "why": "Nedensel içgörüler neden çelişkili olmamayı varsaymak zorundadır?",
+      "learnMore": "Daha fazla bilgi"
     },
     "AggregateView": {
-      "description": "Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
-      "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
-      "unconfounding": "What are unconfounding variables?",
-      "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
-      "continuous": "Continuouts treatment variables: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
-      "binary": "Binary treatment variables: ",
-      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
+      "description": "Nedensel analiz, bir ürün için farklı bir fiyatlandırma stratejisi veya bir hasta için alternatif bir tedavi gibi birisinin farklı davranması durumunda gerçek dünya sonuçlarının nasıl değişeceğiyle ilgili 'durum çözümlemesi' sorularını yanıtlar. Önemli bağıntı desenlerini tanımlayan model tahminlerinin aksine, bu araçlar ilgilendiğiniz sonucu doğrudan etkileyen en önemli nedensel özellikleri belirlemenize yardımcı olur. Bu modeller, diğer çelişkili özellikleri sabit tutarak bir özelliğin nedensel etkisini tanımlar. İyi bir performans için, sonuçla ilişkili olabilecek geniş bir özellik kümesini çelişkili olarak dahil ettiğinizden emin olun.",
+      "directAggregate": "% 95 güven aralığı ile her tedavinin doğrudan toplam nedensel etkisi",
+      "unconfounding": "Çelişkili olmayan değişkenler nelerdir?",
+      "confoundingFeature": "Çelişkili bir özellik, hem nedensel etmen hem de ilginin sonucu ile ilişkilidir. Kurucu ortak, doğrudan nedensel etkinin üstüne, nedensel etmenden sonuca kadar fazladan bir bağıntı yolu yaratır. Çelişkili özellikler ölçülmedikçe ve modele dahil edilmedikçe, bu fazladan bağıntılar nedensel etkinin tahminlerini saptırabilir. Önyargı, göz ardı edilen çelişkiler, nedensel etmenler ve sonuçlar arasındaki bağıntı yönlerine bağlı olarak pozitif veya negatif olabilir.",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning",
+      "continuous": "Devam eden tedavi değişkenleri: ",
+      "continuousDescription": "Bu örnekte ortalama olarak, bu özelliği 1 birim artırmak, sonucun X birim artmasına neden olur.",
+      "here": "here",
+      "binary": "İkili işlem değişkenleri: ",
+      "binaryDescription": "Bu örnekte ortalama olarak, bu özelliğin kullanılması sonucun X birim artmasına neden olacaktır."
     },
     "IndividualView": {
-      "index": "Datapoint index",
-      "description": "Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
-      "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
-      "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
-      "selectTreatment": "Select treatment",
-      "currentTreatment": "Current treatment value",
-      "setNewTreatment": "Set new treatment value"
+      "index": "Datapoint dizini",
+      "description": "Bireysel nedensel etkiler, müşterilere yönelik hedefli bir tanıtım veya kişiselleştirilmiş bir tedavi planı gibi hedefli veya kişiselleştirilmiş müdahaleleri bilgilendirebilir. Belirli, bir dizi özelliğe sahip bir birey, nedensel bir etmendeki bir değişikliğe nasıl tepki verir? Bu çizimler, her bir nedensel etken değiştiğinde bir sonuçtaki sıra dışı değişimi gösterir. Nedensel durum çözümlemesi aracı, nedensel etmenleri değiştirdiyseniz, belirli bir birey için karşı olgusal gerçek dünya sonuçlarını hesaplar. Bu araç için, bir gözlem için mevcut sonucu ve mevcut tedavi seçeneğini belirlemeniz, ardından keşfetmek istediğiniz karşı olgusal tedaviyi belirtmeniz gerekir.",
+      "directIndividual": "% 95 güven aralığı ile her tedavinin doğrudan bireysel nedensel etkisi",
+      "missingParameters": "Bu sekme için değerlendirme veri kümesi sağlanması gerekir.",
+      "dataRequired": "Bu sekme, bir veri noktasının seçilmesini gerektirir.",
+      "datapointIndex": "Datapoint dizini",
+      "selectTreatment": "Tedavi seçin",
+      "currentTreatment": "Geçerli tedavi değeri",
+      "setNewTreatment": "Yeni tedavi değeri belirleyin"
+    },
+    "TreatmentPolicy": {
+      "SelectPolicy": "Set treatment feature",
+      "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+      "TableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+      "Table": "The table can be read by taking a row and then taking a column of that specific row.",
+      "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+      "nSample": "n = {0}",
+      "Recommended": "Recommended treatment = {0}",
+      "Left": "{0} <= {1}",
+      "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
+      "averageGain": "Average gains of alternative policies over no {0} treatment",
+      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
+      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
+  },
+  "Counterfactuals": {
+    "header": "What-If analysis",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "showOnly": "Show only",
+    "selectedDatapoint": "Selected datapoint",
+    "desiredClass": "Desired class for counterfactual(s)",
+    "currentClass": "Current class",
+    "createCounterfactual": "Create what-if counterfactual",
+    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "counterfactualName": "What-if counterfactual name",
+    "saveAsNew": "Save as new datapoint",
+    "seePrediction": "See prediction deltas",
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "recommendedPolicy": "Recommended policy gain",
+    "individualTreatment": "Recommended individual treatment policy",
+    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
+    "RecommendedTreatment": "Recommended treatment",
+    "EffectOfTreatment": "Effect",
+    "EffectLowerBound": "CI lower",
+    "EffectUpperBound": "CI upper",
+    "increaseByOne": "Increase value by 1",
+    "decreaseByOne": "Decrease value by 1",
+    "noData": "No data"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "{0} sınıfı",
@@ -415,9 +461,6 @@
     "errorCoverage": "Hata kapsamı",
     "errorCoverageInfo": "Hata kapsamı, veri kümesinde mevcut olan tüm hatalar arasından seçimde yoğunlaşmış olan hataların yüzdesini gösterir.",
     "errorCoverageTitle": "Hata kapsamıyla ilgili ek bilgiler",
-    "errorRate": "Hata oranı",
-    "errorRateInfo": "Hata oranı, düğümde sistemin başarısız olduğu örneklerin yüzdesini temsil eder.",
-    "errorRateTitle": "Hata oranıyla ilgili ek bilgiler",
     "globalExplanationView": "Genel açıklama",
     "localExplanationView": "Yerel açıklama",
     "noFeature": "Özellik yok",
@@ -430,7 +473,18 @@
     },
     "CohortInfo": {
       "cohortInformation": "Kohort bilgileri",
-      "saveCohort": "Yeni kohort olarak kaydet"
+      "saveCohort": "Yeni kohort olarak kaydet",
+      "filters": "filters",
+      "basicInformation": "Basic Information",
+      "baseCohortInstances": "Instances in base cohort",
+      "selectedCohortInstances": "Instances in the selected cohort",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "total": "Total",
+      "predictionPath": "Prediction path (filters)"
+    },
+    "CohortList": {
+      "coverage": "Coverage"
     },
     "EditCohort": {
       "subText": "Seçili kohort hakkında bilgi edinin. Kohort adını düzenleyin. Bu kohortu silin.",
@@ -439,6 +493,12 @@
     "FeatureList": {
       "importances": "Önem dereceleri",
       "features": "Özellikler"
+    },
+    "FilterTooltip": {
+      "correctNum": "Correct (#): ",
+      "incorrectNum": "Incorrect (#): ",
+      "countNum": "Count (#): ",
+      "errorSum": "Error sum: "
     },
     "InspectionView": {
       "emptyError": "Onay kutularına tıklayarak yanlış ve doğru kategorilerindeki veri noktalarını seçin.",
@@ -457,7 +517,7 @@
       "fullscreen": "Tam ekran",
       "whatIf": "Etki değerlendirmesi",
       "featureList": "Özellik listesi",
-      "shiftCohort": "Kohortu kaydır",
+      "shiftCohort": "Kaydırma kohortu",
       "saveCohort": "Kohortu kaydet",
       "cohortList": "Kohort listesi",
       "cohortInfo": "Kohort bilgileri",
@@ -480,6 +540,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "Kılavuz haritasıyla belirli filtrelere odaklanabilir ve hata oranlarını birleştirebilirsiniz. Karşılaştırmak için iki veri kümesi özelliğiyle başlayın."
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "Hata gezgini",
@@ -776,7 +851,7 @@
       "CalloutContent": "Bazı bileşenlerin (hata ağaç görünümü, hata ısı haritası) eklenmesi, aşağıdaki bileşenlerde gördüğünüz genel kohort verilerini filtrelemenizi sağlar.",
       "AddButtonText": "Ekle"
     },
-    "CasualAnalysis": {
+    "CausalAnalysis": {
       "Table": {
         "name": "feature",
         "point": "point",
@@ -789,8 +864,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "Veri gezgini",
-      "GlobalExplanation": "Genel açıklama",
-      "LocalExplanation": "Yerel açıklama",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "Hata analizi",
       "Fairness": "Eşitlik",
       "ModelStatistics": "Model istatistikleri",
@@ -798,13 +872,43 @@
       "Counterfactuals": "Karşı olgusallar"
     },
     "MainMenu": {
-      "DashboardSettings": "Pano ayarları"
+      "DashboardSettings": "Pano ayarları",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "Pano düzeni",
       "Content": "Bu listede panonun düzeni görüntülenir. Tanımlama ile etiketlenen her bileşen, aşağıdaki bileşenlerde görüntülemek için verileri filtreleyebilir. Akışı yeniden sıralamak veya bileşenleri silmek için bileşenleri ekleyebilir veya sürükleyip bırakabilirsiniz.",
       "DashboardComponents": "Pano bileşenleri",
-      "DataPoints": "Veri noktası sayısı"
+      "DataPoints": "Veri noktası sayısı",
+      "DeleteDialog": {
+        "Title": "Delete {0}?",
+        "Content": "Are you sure you want to delete {0}?",
+        "Delete": "Delete",
+        "Cancel": "Cancel"
+      }
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance",
+      "CorrectPredictions": "Correct predictions",
+      "IncorrectPredictions": "Incorrect predictions"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }
