@@ -27,7 +27,7 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='regre')
         assert 'Unsupported task type. Should be one of classification or ' + \
-            'regression' in str(ucve)
+            'regression' in str(ucve.value)
 
     def test_validate_bad_target_name(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -45,7 +45,7 @@ class TestModelAnalysisValidations:
                 target_column='bad_target',
                 task_type='classification')
         assert "Target name bad_target not present in train/test data" in \
-            str(ucve)
+            str(ucve.value)
 
     def test_validate_categorical_features_having_target(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -64,7 +64,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 categorical_features=['target'])
         assert 'Found target name target in categorical feature list' in \
-            str(ucve)
+            str(ucve.value)
 
     def test_validate_categorical_features_not_having_train_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -83,7 +83,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 categorical_features=['some bad feature name'])
         assert 'Found some feature names in categorical feature which' + \
-            ' do not occur in train data' in str(ucve)
+            ' do not occur in train data' in str(ucve.value)
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -110,7 +110,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 serializer=serializer
             )
-        assert 'The serializer does not implement save()' in str(ucve)
+        assert 'The serializer does not implement save()' in str(ucve.value)
 
         with pytest.raises(UserConfigValidationException) as ucve:
             class SaveOnlySerializer:
@@ -129,7 +129,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 serializer=serializer
             )
-        assert 'The serializer does not implement load()' in str(ucve)
+        assert 'The serializer does not implement load()' in str(ucve.value)
 
         with pytest.raises(UserConfigValidationException) as ucve:
             class Serializer:
@@ -152,7 +152,8 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 serializer=serializer
             )
-        assert 'The serializer should be serializable via pickle' in str(ucve)
+        assert 'The serializer should be serializable via pickle' in \
+            str(ucve.value)
 
     def test_model_predictions(self):
         X_train, _, y_train, _, _, _ = \
@@ -174,7 +175,7 @@ class TestModelAnalysisValidations:
                 task_type='classification')
 
         assert 'The model passed cannot be used for getting predictions' \
-            in str(ucve)
+            in str(ucve.value)
 
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -191,7 +192,8 @@ class TestModelAnalysisValidations:
                 test=X_test,
                 target_column='target',
                 task_type='classification')
-        assert 'The features in train and test data do not match' in str(ucve)
+        assert 'The features in train and test data do not match' in \
+            str(ucve.value)
 
     def test_train_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -210,7 +212,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 train_labels=[0, 1, 2])
         assert 'The train labels and distinct values in ' + \
-            'target (train data) do not match' in str(ucve)
+            'target (train data) do not match' in str(ucve.value)
 
         y_train[0] = 2
         X_train['target'] = y_train
@@ -225,7 +227,7 @@ class TestModelAnalysisValidations:
                 task_type='classification',
                 train_labels=[0, 1])
         assert 'The train labels and distinct values in target ' + \
-            '(train data) do not match' in str(ucve)
+            '(train data) do not match' in str(ucve.value)
 
         y_train[0] = 0
         y_test[0] = 2
@@ -240,5 +242,6 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification',
                 train_labels=[0, 1])
+
         assert 'The train labels and distinct values in target ' + \
-            '(test data) do not match' in str(ucve)
+            '(test data) do not match' in str(ucve.value)
