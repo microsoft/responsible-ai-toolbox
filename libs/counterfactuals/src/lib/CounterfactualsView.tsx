@@ -46,7 +46,7 @@ export class CounterfactualsView extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack grow tokens={{ padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "16px 0" }}>
         <Stack.Item>
           <Text variant={"medium"}>
             {localization.Counterfactuals.whatifDescription}
@@ -54,6 +54,7 @@ export class CounterfactualsView extends React.PureComponent<
         </Stack.Item>
         <Stack.Item>
           <CounterfactualChart
+            data={this.props.data}
             selectedWeightVector={this.state.selectedWeightVector}
             weightOptions={this.state.weightVectorOptions}
             weightLabels={this.state.weightVectorLabels}

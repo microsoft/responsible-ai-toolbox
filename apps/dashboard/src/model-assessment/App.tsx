@@ -12,12 +12,12 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
-  generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
-  generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator,
-  DatasetName
+  DatasetName,
+  generateJsonTreeBoston,
+  generateJsonTreeAdultCensusIncome
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -47,30 +47,30 @@ export class App extends React.Component<IAppProps> {
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
       locale: this.props.language,
-      localUrl: "",
-      requestDebugML: generateJsonTreeAdultCensusIncome,
-      requestImportances: createJsonImportancesGenerator(
-        this.props.dataset.featureNames,
-        DatasetName.BreastCancer
-      ),
+      localUrl: "https://www.bing.com/",
       requestMatrix: generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
-      stringParams: { contextualHelp: this.messages }
+      stringParams: { contextualHelp: this.messages },
+      theme: this.props.theme
     };
 
-    if ("categoricalMap" in this.props.dataset) {
-      return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    if (this.props.classDimension === 1) {
+      // Boston
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBoston;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.Boston
+      );
+    } else {
+      // Adult
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeAdultCensusIncome;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.AdultCensusIncome
+      );
     }
-
-    modelAssessmentDashboardProps.dataset.featureNames = this.props.dataset.featureNames;
-    modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
-    modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
-    modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
-      this.props.dataset.featureNames,
-      DatasetName.BreastCancer
-    );
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
   }

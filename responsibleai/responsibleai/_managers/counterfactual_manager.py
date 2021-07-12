@@ -29,7 +29,7 @@ class CounterfactualConfig(BaseConfig):
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
-                 features_to_vary=None):
+                 features_to_vary=None, feature_importance=False):
         super(CounterfactualConfig, self).__init__()
         self.method = method
         self.continuous_features = continuous_features
@@ -38,6 +38,7 @@ class CounterfactualConfig(BaseConfig):
         self.desired_class = desired_class
         self.permitted_range = permitted_range
         self.features_to_vary = features_to_vary
+        self.feature_importance = feature_importance
         self.counterfactual_obj = None
         self.has_computation_failed = False
         self.failure_reason = None
@@ -50,12 +51,14 @@ class CounterfactualConfig(BaseConfig):
             self.desired_range == other_cf_config.desired_range and
             self.desired_class == other_cf_config.desired_class and
             self.permitted_range == other_cf_config.permitted_range and
-            self.features_to_vary == other_cf_config.features_to_vary
+            self.features_to_vary == other_cf_config.features_to_vary and
+            self.feature_importance == other_cf_config.feature_importance
         )
 
 
 class CounterfactualManager(BaseManager):
-    def __init__(self, model, train, test, target_column, task_type):
+    def __init__(self, model, train, test, target_column, task_type,
+                 categorical_features):
         """Defines the CounterfactualManager for generating counterfactuals
            from a model.
 
@@ -74,12 +77,15 @@ class CounterfactualManager(BaseManager):
         :type target_column: str
         :param task_type: Task type is either 'classification/regression'
         :type task_type: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         """
         self._model = model
         self._train = train
         self._test = test
         self._target_column = target_column
         self._task_type = task_type
+        self._categorical_features = categorical_features
         self._counterfactual_config_list = []
 
     def _create_diceml_explainer(self, method, continuous_features):
@@ -87,7 +93,6 @@ class CounterfactualManager(BaseManager):
         dice_data = dice_ml.Data(dataframe=self._train,
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
-
         model_type = CounterfactualConstants.CLASSIFIER \
             if self._task_type == ModelTask.CLASSIFICATION else \
             CounterfactualConstants.REGRESSOR
@@ -135,19 +140,15 @@ class CounterfactualManager(BaseManager):
             self._counterfactual_config_list.append(new_counterfactual_config)
 
     def add(self,
-            continuous_features,
             total_CFs,
             method=CounterfactualConstants.RANDOM,
             desired_class=None,
             desired_range=None,
             permitted_range=None,
-            features_to_vary=None):
+            features_to_vary=None,
+            feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
-        :param continuous_features: List of names of continuous features.
-                                    The remaining features are categorical
-                                    features.
-        :type continuous_features: list
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
         :param desired_class: Desired counterfactual class. For binary
@@ -166,7 +167,17 @@ class CounterfactualManager(BaseManager):
         :param features_to_vary: Either a string "all" or a list of
                                  feature names to vary.
         :type features_to_vary: list
+        :param feature_importance: Flag to compute feature importance using
+                                   dice-ml.
+        :type feature_importance: bool
         """
+        if self._categorical_features is None:
+            continuous_features = \
+                list(set(self._train.columns) - set([self._target_column]))
+        else:
+            continuous_features = list(set(self._train.columns) -
+                                       set([self._target_column]) -
+                                       set(self._categorical_features))
 
         counterfactual_config = CounterfactualConfig(
             method=method,
@@ -175,7 +186,8 @@ class CounterfactualManager(BaseManager):
             desired_class=desired_class,
             desired_range=desired_range,
             permitted_range=permitted_range,
-            features_to_vary=features_to_vary)
+            features_to_vary=features_to_vary,
+            feature_importance=feature_importance)
 
         self._add_counterfactual_config(counterfactual_config)
 
@@ -197,11 +209,19 @@ class CounterfactualManager(BaseManager):
 
                     X_test = self._test.drop([self._target_column], axis=1)
 
-                    counterfactual_obj = \
-                        dice_explainer.generate_counterfactuals(
-                            X_test, total_CFs=cf_config.total_CFs,
-                            desired_class=cf_config.desired_class,
-                            desired_range=cf_config.desired_range)
+                    if not cf_config.feature_importance:
+                        counterfactual_obj = \
+                            dice_explainer.generate_counterfactuals(
+                                X_test, total_CFs=cf_config.total_CFs,
+                                desired_class=cf_config.desired_class,
+                                desired_range=cf_config.desired_range)
+                    else:
+                        counterfactual_obj = \
+                            dice_explainer.global_feature_importance(
+                                X_test,
+                                total_CFs=cf_config.total_CFs,
+                                desired_class=cf_config.desired_class,
+                                desired_range=cf_config.desired_range)
 
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
@@ -252,12 +272,18 @@ class CounterfactualManager(BaseManager):
             self._get_counterfactual(i) for i in self.get()]
 
     def _get_counterfactual(self, counterfactual):
-        counterfactual_data = CounterfactualData()
+        cfdata = CounterfactualData()
         json_data = json.loads(counterfactual.to_json())
-        counterfactual_data.cfsList = json_data["cfs_list"]
-        counterfactual_data.featureNames = json_data[
+        cfdata.cfs_list = json_data["cfs_list"]
+        cfdata.feature_names = json_data["feature_names"]
+        cfdata.feature_names_including_target = json_data[
             "feature_names_including_target"]
-        return counterfactual_data
+        cfdata.summary_importance = json_data["summary_importance"]
+        cfdata.local_importance = json_data["local_importance"]
+        cfdata.model_type = json_data["model_type"]
+        cfdata.desired_class = json_data["desired_class"]
+        cfdata.desired_range = json_data["desired_range"]
+        return cfdata
 
     @property
     def name(self):

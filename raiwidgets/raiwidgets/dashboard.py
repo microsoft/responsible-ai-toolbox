@@ -3,12 +3,14 @@
 
 """Defines the dashboard class."""
 
-from rai_core_flask import FlaskHelper  # , environment_detector
 import json
 import os
-from html.parser import HTMLParser
 import uuid
-from responsibleai._input_processing import _safe_object_serializer
+
+from html.parser import HTMLParser
+from rai_core_flask import FlaskHelper  # , environment_detector
+
+from responsibleai.serialization_utilities import serialize_json_safe
 
 
 class InLineScript(HTMLParser):
@@ -47,7 +49,8 @@ class Dashboard(object):
                  model_data,
                  public_ip,
                  port,
-                 locale):
+                 locale,
+                 no_inline_dashboard=False):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
@@ -73,6 +76,8 @@ class Dashboard(object):
 
         html = self.load_index()
         print(f'{dashboard_type} started at {self._service.env.base_url}')
+        if no_inline_dashboard:
+            return
         self._service.env.display(html)
 
     def add_route(self):
@@ -85,6 +90,7 @@ class Dashboard(object):
         self.add_url_rule(visual, '/', methods=["GET"])
         return
 
+    @staticmethod
     def get_widget_path(path):
         script_path = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(script_path, "widget", path)
@@ -106,7 +112,7 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_model_data__",
                 json.dumps(self.model_data,
-                           default=_safe_object_serializer))
+                           default=serialize_json_safe))
             return content
 
     def add_url_rule(self, func, route, methods):

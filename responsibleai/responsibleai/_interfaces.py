@@ -2,16 +2,24 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import List
+from typing import Any, Dict, List, Tuple, Union
+
+
+class TaskType(str, Enum):
+    CLASSIFICATION = 'classification'
+    REGRESSION = 'regression'
 
 
 class Dataset:
-    predictedY: List
+    task_type: TaskType
+    predicted_y: List
     features: List[List[int]]
-    featureNames: List[str]
-    probabilityY: List
-    trueY: List
-    classNames: List[str]
+    feature_names: List[str]
+    probability_y: List
+    true_y: List
+    class_names: List[str]
+    categorical_map: Dict[int, List[str]]
+    target_column: str
 
 
 class BoundedCoordinates:
@@ -46,16 +54,8 @@ class ModelClass(str, Enum):
     BLACKBOX = 'blackbox'
 
 
-class ModelMethod(str, Enum):
-    CLASSIFIER = 'classifier'
-    REGRESSOR = 'regressor'
-
-
 class ModelExplanationData:
     modelClass: ModelClass
-    method: ModelMethod
-    predictedY: List
-    probabilityY: List[List[float]]
     explanationMethod: str
     precomputedExplanations: PrecomputedExplanations
 
@@ -69,20 +69,55 @@ class CausalMetric:
     ci_lower: float
     ci_upper: float
     feature: str
+    feature_value: str
     p_value: float
     point: float
     stderr: float
     zstat: float
 
 
+class CausalPolicyGains:
+    recommended_policy_gains: float
+    treatment_gains: Dict[str, float]
+
+
+class CausalPolicyTreeLeaf:
+    leaf: True
+    n_samples: int
+    treatment: str
+
+
+class CausalPolicyTreeInternal:
+    leaf: False
+    feature: str
+    threshold: Union[float, str]  # TODO: Categorical features
+    left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
+    right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
+
+
+class CausalPolicy:
+    treatment_feature: str
+    control_treatment: str
+    local_policies: List[Dict[str, Any]]
+    policy_gains: CausalPolicyGains
+    policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
+
+
 class CausalData:
-    globalCausalEffects: List[CausalMetric]
-    localCausalEffects: List[List[CausalMetric]]
+    global_effects: List[CausalMetric]
+    local_effects: List[List[CausalMetric]]
+    policies: List[CausalPolicy]
 
 
 class CounterfactualData:
-    cfsList: List[List[List[float]]]
-    featureNames: List[float]
+    cfs_list: List[List[List[float]]]
+    feature_names: List[str]
+    feature_names_including_target: List[str]
+    summary_importance: List[float]
+    local_importance: List[List[float]]
+    model_type: str
+    desired_class: str
+    desired_range: List[Tuple[float]]
 
 
 class ModelAnalysisData:

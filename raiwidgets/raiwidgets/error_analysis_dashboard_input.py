@@ -10,7 +10,7 @@ import pandas as pd
 import traceback
 from .constants import ModelTask, SKLearn
 from .error_handling import _format_exception
-from responsibleai._input_processing import _serialize_json_safe
+from responsibleai.serialization_utilities import serialize_json_safe
 from erroranalysis._internal.error_analyzer import (
     ModelAnalyzer, PredictionsAnalyzer)
 from erroranalysis._internal.metrics import metric_to_func
@@ -182,7 +182,7 @@ class ErrorAnalysisDashboardInput:
                                  " dataset.")
             self.dashboard_input[
                 ExplanationDashboardInterface.TRAINING_DATA
-            ] = _serialize_json_safe(list_dataset)
+            ] = serialize_json_safe(list_dataset)
             self.dashboard_input[
                 ExplanationDashboardInterface.IS_CLASSIFIER
             ] = self._is_classifier

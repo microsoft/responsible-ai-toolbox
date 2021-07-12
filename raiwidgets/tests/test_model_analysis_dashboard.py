@@ -12,34 +12,34 @@ from responsibleai._interfaces import CausalData, CounterfactualData, Dataset,\
 
 class TestModelAnalysisDashboard:
     def test_model_analysis_adult(self):
-        x, y = shap.datasets.adult()
+        X, y = shap.datasets.adult()
         y = [1 if r else 0 for r in y]
 
-        x, y = sklearn.utils.resample(
-            x, y, n_samples=1000, random_state=7, stratify=y)
+        X, y = sklearn.utils.resample(
+            X, y, n_samples=1000, random_state=7, stratify=y)
 
         X_train, X_test, y_train, y_test = train_test_split(
-            x, y, test_size=0.2, random_state=7, stratify=y)
+            X, y, test_size=0.2, random_state=7, stratify=y)
 
         knn = sklearn.neighbors.KNeighborsClassifier()
         knn.fit(X_train, y_train)
 
-        x["income"] = y
-        X_test["income"] = y_test
+        X['Income'] = y
+        X_test['Income'] = y_test
 
-        ma = ModelAnalysis(knn, x, X_test, "income", "classification",
+        ma = ModelAnalysis(knn, X, X_test, 'Income', 'classification',
                            categorical_features=['Workclass', 'Education-Num',
                                                  'Marital Status',
                                                  'Occupation', 'Relationship',
                                                  'Race',
                                                  'Sex', 'Country'])
         ma.explainer.add()
-        ma.counterfactual.add(['Age',
-                               'Capital Gain', 'Capital Loss',
-                               'Hours per week'], 10,
-                              desired_class="opposite")
+        ma.counterfactual.add(10, desired_class='opposite')
         ma.error_analysis.add()
-        ma.causal.add()
+        ma.causal.add(treatment_features=['Hours per week', 'Occupation'],
+                      heterogeneity_features=None,
+                      upper_bound_on_cat_expansion=42,
+                      skip_cat_limit_checks=True)
         ma.compute()
 
         widget = ModelAnalysisDashboard(ma)

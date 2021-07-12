@@ -82,6 +82,24 @@ export class Cohort {
     }
   }
 
+  public sortByGroup(
+    columnName: string = JointDataset.IndexLabel,
+    groupingFunction: (row: any) => boolean
+  ): void {
+    this.filteredData.sort((a, b) => {
+      const columnDifference = a[columnName] - b[columnName];
+      if (groupingFunction(a) === groupingFunction(b)) {
+        return columnDifference;
+      }
+      // 10000 is used as a large enough constant to ensure that the
+      // importance of the grouping is higher than column difference
+      if (groupingFunction(a)) {
+        return -10000 + columnDifference;
+      }
+      return 10000 + columnDifference;
+    });
+  }
+
   // whether to apply bins is a decision made at the ui control level,
   // should not mutate the true dataset. Instead, bin props are preserved
   // and applied when requested.
