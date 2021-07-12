@@ -9,6 +9,7 @@ export interface IFairnessMetadata {
   defaultPerformanceMetric: string;
   fairnessMetrics: string[];
   defaultFairnessMetric: string;
+  defaultErrorMetric: string;
   numberOfModels: number;
   charts: string[];
 }

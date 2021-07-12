@@ -6,6 +6,7 @@ import { IFairnessMetadata, PredictionTypes } from "./IFairnessMetadata";
 const fairnessDatasets = {
   binaryClassification: {
     charts: ["Selection rate", "False positive and false negative rates"],
+    defaultErrorMetric: "Enabled",
     defaultFairnessMetric: "Demographic parity difference",
     defaultPerformanceMetric: "Accuracy",
     fairnessMetrics: [
@@ -58,6 +59,7 @@ const fairnessDatasets = {
   },
   probability: {
     charts: ["Distribution of predictions", "Over- and underprediction"],
+    defaultErrorMetric: "Enabled",
     defaultFairnessMetric: "Maximum mean squared error",
     defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [
@@ -82,6 +84,7 @@ const fairnessDatasets = {
   },
   regression: {
     charts: ["Distribution of predictions"],
+    defaultErrorMetric: "Enabled",
     defaultFairnessMetric: "Maximum mean absolute error",
     defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [

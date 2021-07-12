@@ -7,6 +7,7 @@ import { describeConfigurationPages } from "./configurationPages/describeConfigu
 import { describeGetStartedPage } from "./configurationPages/describeGetStarted";
 import { fairnessDatasets } from "./fairnessDatasets";
 import { describeModelComparisonView } from "./modelComparisonView/describeModelComparisonView";
+import { describeModelComparisonViewWithError } from "./modelComparisonView/describeModelComparisonViewWithError";
 import { describeSingleModelView } from "./singleModelView/describeSingleModelView";
 
 export function describeFairness(name: keyof typeof fairnessDatasets): void {
@@ -32,6 +33,7 @@ export function describeFairness(name: keyof typeof fairnessDatasets): void {
     describeGetStartedPage();
     describeConfigurationPages(name);
     describeModelComparisonView(fairnessDatasets[name]);
+    describeModelComparisonViewWithError(fairnessDatasets[name]);
     describeSingleModelView(fairnessDatasets[name]);
   });
 }
