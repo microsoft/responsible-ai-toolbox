@@ -481,13 +481,10 @@ export class ModelComparisonChart extends React.Component<
   };
 
   private readonly errorChanged = (
-    _ev: React.FormEvent<HTMLDivElement>,
-    option?: IDropdownOption
+    _ev: React.MouseEvent<HTMLElement>,
+    checked?: boolean
   ): void => {
-    if (!option) {
-      return;
-    }
-    const errorKey = option.key.toString();
+    const errorKey = checked ? "enabled" : "disabled";
     if (this.state.errorKey !== errorKey) {
       this.props.errorPickerProps.onErrorChange(errorKey);
       this.setState({ errorKey });

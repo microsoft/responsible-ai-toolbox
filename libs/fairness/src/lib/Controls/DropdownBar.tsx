@@ -4,7 +4,12 @@
 import { IBounds } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { Stack, Dropdown, IDropdownOption } from "office-ui-fabric-react";
+import {
+  Stack,
+  Dropdown,
+  Toggle,
+  IDropdownOption
+} from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -32,7 +37,7 @@ export interface IDropdownBarProps {
     (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void;
   };
   parentErrorChanged: {
-    (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void;
+    (event: React.MouseEvent<HTMLElement>, checked?: boolean): void;
   };
   fairnessBounds?: Array<IBounds | undefined>;
   performanceBounds?: Array<IBounds | undefined>;
@@ -94,21 +99,23 @@ export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
           disabled={false}
           onChange={this.props.parentFairnessChanged}
         />
-        <Dropdown
-          style={{ minWidth: "240px" }}
+        <Toggle
           id="errorMetricDropdown"
           label={localization.Fairness.DropdownHeaders.errorMetric}
-          defaultSelectedKey={this.props.errorPickerProps.selectedErrorKey}
-          options={[
-            {
-              key: "disabled",
-              text: localization.Fairness.Metrics.errorMetricDisabled
-            },
-            {
-              key: "enabled",
-              text: localization.Fairness.Metrics.errorMetricEnabled
-            }
-          ]}
+          defaultChecked={
+            this.props.errorPickerProps.selectedErrorKey === "enabled"
+          }
+          //defaultSelectedKey={this.props.errorPickerProps.selectedErrorKey}
+          // options={[
+          //   {
+          //     key: "disabled",
+          //     text: localization.Fairness.Metrics.errorMetricDisabled
+          //   },
+          //   {
+          //     key: "enabled",
+          //     text: localization.Fairness.Metrics.errorMetricEnabled
+          //   }
+          // ]}
           disabled={
             (typeof this.props.fairnessBounds === "undefined" ||
               _.isEmpty(this.props.fairnessBounds.filter(Boolean))) &&

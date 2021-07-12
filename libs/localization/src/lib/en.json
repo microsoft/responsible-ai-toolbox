@@ -1093,7 +1093,7 @@
       "sensitiveFeature": "Sensitive feature",
       "performanceMetric": "Performance metric",
       "fairnessMetric": "Fairness metric",
-      "errorMetric": "Error bar function"
+      "errorMetric": "Enable error bars"
     }
   },
   "ModelAssessment": {
