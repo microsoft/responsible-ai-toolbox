@@ -3,6 +3,9 @@
     "ExpandableText": {
       "SeeMore": "Mehr anzeigen",
       "SeeLess": "Weniger anzeigen"
+    },
+    "NoData": {
+      "Title": "No data"
     }
   },
   "Interpret": {
@@ -366,36 +369,79 @@
   },
   "CausalAnalysis": {
     "MainMenu": {
-      "header": "causal analysis",
-      "aggregate": "Aggregate causal effects",
-      "individual": "Individual causal effects",
-      "treatment": "Treatment policy",
-      "title": "Direct causal effect of each feature with 90% confidence interval",
-      "why": "Why must causal insights assume unconfoundedness?",
-      "learnMore": "Learn more"
+      "header": "Ursachenanalyse",
+      "aggregate": "Aggregierte kausale Wirkungen",
+      "individual": "Individuelle kausale Wirkungen",
+      "treatment": "Behandlungsrichtlinie",
+      "title": "Direkte kausale Wirkung der einzelnen Features mit einem Konfidenzintervall von 90 %",
+      "why": "Warum müssen kausale Erkenntnisse von Störungsfreiheit ausgehen?",
+      "learnMore": "Weitere Informationen"
     },
     "AggregateView": {
-      "description": "Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
-      "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
-      "unconfounding": "What are unconfounding variables?",
-      "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
-      "continuous": "Continuouts treatment variables: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
-      "binary": "Binary treatment variables: ",
-      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
+      "description": "Die Ursachenanalyse beantwortet Was-wäre-wenn-Fragen darüber, wie sich die Ergebnisse in der realen Welt verändert hätten, wenn sich jemand anders verhalten hätte, z. B. durch Verfolgung einer anderen Preisstrategie für ein Produkt oder eine alternative Behandlung für einen Patienten. Im Gegensatz zu Modellvorhersagen, die wichtige Korrelationsmuster identifizieren, unterstützen diese Tools Sie beim Identifizieren der wichtigsten kausalen Features, die sich direkt auf das fragliche Ergebnis auswirken. Diese Modelle identifizieren die kausale Wirkung eines Features und halten andere Störfaktoren konstant. Um eine gute Leistung zu erzielen, beziehen Sie eine große Anzahl von Features ein, die möglicherweise als Störfaktoren mit dem Ergebnis korrelieren.",
+      "directAggregate": "Direkte aggregierte kausale Wirkung der einzelnen Behandlungen mit einem Konfidenzintervall von 95 %",
+      "unconfounding": "Was sind störungsfreie Faktoren?",
+      "confoundingFeature": "Ein Störfaktor korreliert sowohl mit dem kausalen Faktor als auch mit dem relevanten Ergebnis. Der Störfaktor erstellt neben der direkten kausalen Wirkung einen zusätzlichen Korrelationspfad vom kausalen Treiber zum Ergebnis. Wenn keine Störfaktoren gemessen und in das Modell einbezogen werden, können diese zusätzlichen Korrelationen die Schätzungen zur kausalen Wirkung beeinflussen. Die Beeinflussung kann positiv oder negativ sein, abhängig von den Richtungen der Korrelationen zwischen ausgelassenen Störfaktoren, kausalen Faktoren und Ergebnissen.",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning",
+      "continuous": "Kontinuierliche Behandlungsfaktoren: ",
+      "continuousDescription": "In diesem Beispiel führt die Erhöhung dieses Features um 1 Einheit dazu, dass das Ergebnis im Durchschnitt um X Einheiten zunimmt.",
+      "here": "here",
+      "binary": "Binäre Behandlungsfaktoren: ",
+      "binaryDescription": "In diesem Beispiel führt die Aktivierung dieses Features dazu, dass das Ergebnis im Durchschnitt um X Einheiten zunimmt."
     },
     "IndividualView": {
-      "index": "Datapoint index",
-      "description": "Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
-      "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
-      "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
-      "selectTreatment": "Select treatment",
-      "currentTreatment": "Current treatment value",
-      "setNewTreatment": "Set new treatment value"
+      "index": "Datenpunktindex",
+      "description": "Individuelle kausale Wirkungen können Informationen für zielgerichtete oder personalisierte Eingriffe wie z. B. eine gezielte Sonderaktion für Kunden oder einen individualisierten Behandlungsplan bereitstellen. Wie reagiert eine Person mit bestimmten Features auf die Änderung eines kausalen Faktors? Diese Plots zeigen die marginale Veränderung eines Ergebnisses, wenn die einzelnen kausalen Faktoren geändert werden. Das kausale Was-wäre-wenn-Tool berechnet die kontrafaktischen Ergebnisse der realen Welt für eine bestimmte Person, wenn deren kausale Einflussfaktoren geändert wurden. Für dieses Tool müssen Sie das aktuelle Ergebnis und die aktuelle Behandlungsoption für eine Beobachtung festlegen und dann die kontrafaktische Behandlung angeben, die Sie untersuchen möchten.",
+      "directIndividual": "Direkte individuelle kausale Wirkung der einzelnen Behandlungen mit einem Konfidenzintervall von 95 %",
+      "missingParameters": "Auf dieser Registerkarte muss ein Auswertungsdataset angegeben werden.",
+      "dataRequired": "Für diese Registerkarte muss ein Datenpunkt ausgewählt werden.",
+      "datapointIndex": "Datenpunktindex",
+      "selectTreatment": "Behandlung auswählen",
+      "currentTreatment": "Aktueller Behandlungswert",
+      "setNewTreatment": "Neuen Behandlungswert festlegen"
+    },
+    "TreatmentPolicy": {
+      "SelectPolicy": "Set treatment feature",
+      "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+      "TableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+      "Table": "The table can be read by taking a row and then taking a column of that specific row.",
+      "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+      "nSample": "n = {0}",
+      "Recommended": "Recommended treatment = {0}",
+      "Left": "{0} <= {1}",
+      "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
+      "averageGain": "Average gains of alternative policies over no {0} treatment",
+      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
+      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
+  },
+  "Counterfactuals": {
+    "header": "What-If analysis",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "showOnly": "Show only",
+    "selectedDatapoint": "Selected datapoint",
+    "desiredClass": "Desired class for counterfactual(s)",
+    "currentClass": "Current class",
+    "createCounterfactual": "Create what-if counterfactual",
+    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "counterfactualName": "What-if counterfactual name",
+    "saveAsNew": "Save as new datapoint",
+    "seePrediction": "See prediction deltas",
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "recommendedPolicy": "Recommended policy gain",
+    "individualTreatment": "Recommended individual treatment policy",
+    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
+    "RecommendedTreatment": "Recommended treatment",
+    "EffectOfTreatment": "Effect",
+    "EffectLowerBound": "CI lower",
+    "EffectUpperBound": "CI upper",
+    "increaseByOne": "Increase value by 1",
+    "decreaseByOne": "Decrease value by 1",
+    "noData": "No data"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Klasse {0}",
@@ -415,9 +461,6 @@
     "errorCoverage": "Fehlerrate",
     "errorCoverageInfo": "Die Fehlerquote zeigt den Prozentsatz der Fehler an, die in der Auswahl aller im Dataset auftretenden Fehler auftreten.",
     "errorCoverageTitle": "Weitere Informationen zur Fehlerquote",
-    "errorRate": "Fehlerquote",
-    "errorRateInfo": "Die Fehlerrate stellt den Prozentsatz der Instanzen im Knoten dar, bei denen das System fehlgeschlagen ist.",
-    "errorRateTitle": "Weitere Informationen zur Fehlerquote",
     "globalExplanationView": "Globale Erklärung",
     "localExplanationView": "Lokale Erklärung",
     "noFeature": "Kein Attribut",
@@ -430,7 +473,18 @@
     },
     "CohortInfo": {
       "cohortInformation": "Kohorteninformationen:",
-      "saveCohort": "Als neue Kohorte speichern"
+      "saveCohort": "Als neue Kohorte speichern",
+      "filters": "filters",
+      "basicInformation": "Basic Information",
+      "baseCohortInstances": "Instances in base cohort",
+      "selectedCohortInstances": "Instances in the selected cohort",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "total": "Total",
+      "predictionPath": "Prediction path (filters)"
+    },
+    "CohortList": {
+      "coverage": "Coverage"
     },
     "EditCohort": {
       "subText": "Mehr über die ausgewählte Kohorte erfahren. Den Kohortennamen bearbeiten. Diese Kohorte löschen.",
@@ -439,6 +493,12 @@
     "FeatureList": {
       "importances": "Wichtigkeiten",
       "features": "Attribute"
+    },
+    "FilterTooltip": {
+      "correctNum": "Correct (#): ",
+      "incorrectNum": "Incorrect (#): ",
+      "countNum": "Count (#): ",
+      "errorSum": "Error sum: "
     },
     "InspectionView": {
       "emptyError": "Wählen Sie Datenpunkte in den Kategorien „Falsch“ und „Richtig“ aus, indem Sie auf die Kontrollkästchen klicken.",
@@ -466,11 +526,11 @@
     },
     "MapShift": {
       "subText": "Möchten Sie Ihre Suche mit einer anderen Karte neu starten? Speichern Sie sie als neue Kohorte. Andernfalls gehen die ausgewählten Filter verloren.",
-      "title": "Kartneverschiebung",
+      "title": "Kartenverschiebung",
       "close": "Schließen",
       "move": "Verschieben",
       "saveAs": "Als neue Kohorte speichern",
-      "shift": "Verschieben",
+      "shift": "Verschiebung",
       "cancel": "Abbrechen"
     },
     "MatrixArea": {
@@ -480,6 +540,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "Mit der Rasterkarte können Sie sich auf bestimmte Filter konzentrieren und Fehlerraten kombinieren. Starten Sie mit dem Vergleichen zweier Dataset-Attribute."
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "Fehler-Explorer",
@@ -776,7 +851,7 @@
       "CalloutContent": "Durch das Hinzufügen einiger Komponenten (Fehlerstrukturansicht, Fehlerwärmebild) können Sie die Daten aus der globalen Kohorte abwärts filtern, um sie in den nachstehenden Komponenten entsprechend anzuzeigen.",
       "AddButtonText": "Hinzufügen"
     },
-    "CasualAnalysis": {
+    "CausalAnalysis": {
       "Table": {
         "name": "feature",
         "point": "point",
@@ -789,8 +864,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "Daten-Explorer",
-      "GlobalExplanation": "Globale Erklärung",
-      "LocalExplanation": "Lokale Erklärung",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "Fehleranalyse",
       "Fairness": "Fairness",
       "ModelStatistics": "Modellstatistiken",
@@ -798,13 +872,43 @@
       "Counterfactuals": "Alternativen"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboardeinstellungen"
+      "DashboardSettings": "Dashboardeinstellungen",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "Dashboardlayout",
       "Content": "Diese Liste zeigt das Layout des Dashboards. Jede mit \"Identifizieren\" markierte Komponente kann Daten abwärts filtern, die in den darunter aufgeführten Komponenten angezeigt werden sollen. Sie können Komponenten hinzufügen, per Drag & Drop verschieben, um den Flow neu anzuordnen, oder Komponenten löschen.",
       "DashboardComponents": "Dashboardkomponenten",
-      "DataPoints": "Anzahl von Datenpunkten"
+      "DataPoints": "Anzahl von Datenpunkten",
+      "DeleteDialog": {
+        "Title": "Delete {0}?",
+        "Content": "Are you sure you want to delete {0}?",
+        "Delete": "Delete",
+        "Cancel": "Cancel"
+      }
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance",
+      "CorrectPredictions": "Correct predictions",
+      "IncorrectPredictions": "Incorrect predictions"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }
