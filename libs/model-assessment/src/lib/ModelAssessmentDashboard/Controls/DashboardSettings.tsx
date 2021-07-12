@@ -49,7 +49,7 @@ export class DashboardSettings extends React.PureComponent<
     ];
     return (
       <Panel
-        headerText={localization.ErrorAnalysis.CohortInfo.cohortInformation}
+        headerText={localization.ModelAssessment.DashboardSettings.Title}
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"

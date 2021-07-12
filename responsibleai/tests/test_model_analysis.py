@@ -43,16 +43,16 @@ class TestModelAnalysis(object):
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.CAUSAL,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_iris(self, manager_type):
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
-        X_train = pd.DataFrame(X_train, columns=feature_names)
-        X_test = pd.DataFrame(X_test, columns=feature_names)
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
         manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [feature_names[0]],
             ManagerParams.DESIRED_CLASS: 0,
             ManagerParams.FEATURE_IMPORTANCE: True
         }
@@ -65,10 +65,8 @@ class TestModelAnalysis(object):
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_cancer(self, manager_type):
-        X_train, X_test, y_train, y_test, feature_names, classes = \
+        X_train, X_test, y_train, y_test, _, classes = \
             create_cancer_data()
-        X_train = pd.DataFrame(X_train, columns=feature_names)
-        X_test = pd.DataFrame(X_test, columns=feature_names)
         models = create_models_classification(X_train, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
