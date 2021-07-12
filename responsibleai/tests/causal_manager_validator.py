@@ -4,6 +4,7 @@
 import pytest
 
 import pandas as pd
+import numpy as np
 
 from responsibleai.exceptions import (
     DuplicateManagerConfigException,
@@ -36,6 +37,16 @@ LOCAL_POLICY_ATTRIBUTES = [
 
 def validate_causal(model_analysis, data, target_column,
                     treatment_features, max_cat_expansion):
+    if len(np.unique(data[target_column])) > 2:
+        with pytest.raises(AssertionError) as ae:
+            model_analysis.causal.add(
+                treatment_features,
+                nuisance_model='automl',
+                upper_bound_on_cat_expansion=max_cat_expansion)
+            model_analysis.causal.compute()
+        assert "Multiclass classification isn't supported" in str(ae.value)
+        return
+
     # Add the first configuration
     model_analysis.causal.add(
         treatment_features,

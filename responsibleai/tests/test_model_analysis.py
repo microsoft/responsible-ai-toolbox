@@ -43,6 +43,7 @@ class TestModelAnalysis(object):
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.CAUSAL,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_iris(self, manager_type):
         X_train, X_test, y_train, y_test, feature_names, classes = \
@@ -51,6 +52,7 @@ class TestModelAnalysis(object):
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
         manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [feature_names[0]],
             ManagerParams.DESIRED_CLASS: 0,
             ManagerParams.FEATURE_IMPORTANCE: True
         }
