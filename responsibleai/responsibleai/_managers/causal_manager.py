@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 """Manager for causal analysis."""
-import json
 import pandas as pd
 
 from econml.solutions.causal_analysis import CausalAnalysis
@@ -245,13 +244,8 @@ class CausalManager(BaseManager):
 
         # Rehydrate results
         results_path = causal_dir / SerializationAttributes.RESULTS
-        result_paths = results_path.glob('/')
-        print(result_paths)
-        quit()
-        # results = []
-        # [CausalResult.load(result_path)
-        #            for result_dict in result_dicts]
-        # this.__dict__['_results'] = results
+        paths = results_path.resolve().glob('*')
+        this.__dict__['_results'] = [CausalResult.load(p) for p in paths]
 
         # Rehydrate model analysis data
         this.__dict__['_train'] = model_analysis.train

@@ -62,8 +62,10 @@ class ModelAnalysis(object):
     :param train_labels: The class labels in the training dataset
     :type train_labels: ndarray
     :param serializer: Picklable custom serializer with save and load
-        methods defined for model that is not serializable. The save
-        method returns a dictionary state and load method returns the model.
+        methods for custom model serialization.
+        The save method writes the model to file given a parent directory.
+        The load method returns the deserialized model from the same
+        parent directory.
     :type serializer: object
     """
 
@@ -480,12 +482,11 @@ class ModelAnalysis(object):
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
-            model_data = self._serializer.save(self.model)
+            # save the model
+            self._serializer.save(self.model, top_dir)
             # save the serializer
             with open(top_dir / _SERIALIZER, 'wb') as file:
                 pickle.dump(self._serializer, file)
-            # save the model
-            self._write_to_file(top_dir / _MODEL_PKL, model_data)
         else:
             has_setstate = hasattr(self.model, '__setstate__')
             has_getstate = hasattr(self.model, '__getstate__')
@@ -533,11 +534,10 @@ class ModelAnalysis(object):
 
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
-            with open(serializer_path) as file:
+            with open(serializer_path, 'rb') as file:
                 serializer = pickle.load(file)
             inst.__dict__['_' + _SERIALIZER] = serializer
-            with open(top_dir / _MODEL_PKL, 'rb') as file:
-                inst.__dict__[_MODEL] = serializer.load(file)
+            inst.__dict__[_MODEL] = serializer.load(top_dir)
         else:
             inst.__dict__['_' + _SERIALIZER] = None
             with open(top_dir / _MODEL_PKL, 'rb') as file:
