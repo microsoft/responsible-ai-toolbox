@@ -631,7 +631,7 @@
     }
   },
   "Counterfactuals": {
-    "header": "What-If analysis",
+    "header": "What-If counterfactuals",
     "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
     "showOnly": "Show only",
     "selectedDatapoint": "Selected datapoint",
@@ -656,7 +656,9 @@
     "EffectUpperBound": "CI upper",
     "increaseByOne": "Increase value by 1",
     "decreaseByOne": "Decrease value by 1",
-    "noData": "No data"
+    "noData": "No data",
+    "localImportanceDescription": "The top ranked features in Row {0} to perturb in order to achieve desired model prediction from counterfactual analysis: {1}",
+    "localImportanceSelectData": "Select a data point to view local importance chart"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",
