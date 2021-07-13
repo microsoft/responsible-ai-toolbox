@@ -3112,6 +3112,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       zstat: 2.4537515529836944
     }
   ],
+  id: "abc",
   local_effects: [
     [
       {

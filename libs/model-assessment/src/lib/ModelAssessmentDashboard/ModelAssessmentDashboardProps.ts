@@ -46,6 +46,14 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestCausalWhatIf?: (
+    id: string,
+    features: unknown,
+    featureName: string,
+    newValue: unknown,
+    target: unknown,
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryMessage) => void;

@@ -28,6 +28,14 @@ export interface IModelAssessmentContext {
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
   telemetryHook: (message: ITelemetryMessage) => void;
+  requestCausalWhatIf?: (
+    id: string,
+    features: unknown,
+    featureName: string,
+    newValue: unknown,
+    target: unknown,
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   requestPredictions:
     | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;

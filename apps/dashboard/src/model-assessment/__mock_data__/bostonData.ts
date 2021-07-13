@@ -3646,6 +3646,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       zstat: 2.4537515529836944
     }
   ],
+  id: "abc",
   local_effects: [
     [
       {

@@ -31,10 +31,11 @@ import {
   IComboBoxOption,
   IComboBox
 } from "office-ui-fabric-react";
-import React from "react";
+import React, { FormEvent } from "react";
 
 import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
 import { CausalIndivisualConstants } from "./CausalIndivisualConstants";
+import { CausalWhatIf } from "./CausalWhatIf";
 
 export interface ICausalIndividualChartProps {
   onDataClick?: (data: number | undefined) => void;
@@ -48,7 +49,6 @@ export interface ICausalIndividualChartState {
   selectedPointsIndexes: number[];
   pointIsActive: boolean[];
   customPointIsActive: boolean[];
-  // treatmentValue?: string;
 }
 
 export class CausalIndividualChart extends React.PureComponent<
@@ -72,7 +72,6 @@ export class CausalIndividualChart extends React.PureComponent<
       pointIsActive: [],
       selectedCohortIndex: 0,
       selectedPointsIndexes: [],
-      // treatmentValue: "",
       xDialogOpen: false,
       yDialogOpen: false
     };
@@ -236,38 +235,7 @@ export class CausalIndividualChart extends React.PureComponent<
             useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
-          <ComboBox
-            label={localization.CausalAnalysis.IndividualView.selectTreatment}
-            options={[
-              {
-                key: "a",
-                text: "a"
-              },
-              {
-                key: "b",
-                text: "b"
-              },
-              {
-                key: "c",
-                text: "c"
-              }
-            ]}
-            ariaLabel={"treatment picker"}
-            useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
-          />
-          {/* <div>
-            <b>{`${localization.CausalAnalysis.IndividualView.currentTreatment}: ${this.state.treatmentValue}`}</b>
-          </div>
-          <Slider
-            label={localization.CausalAnalysis.IndividualView.setNewTreatment}
-            min={0}
-            max={100}
-            step={5}
-            defaultValue={20}
-            showValue
-            snapToStep
-          /> */}
+          <CausalWhatIf />
         </Stack>
       </div>
     );
