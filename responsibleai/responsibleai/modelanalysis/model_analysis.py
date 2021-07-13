@@ -107,6 +107,7 @@ class ModelAnalysis(object):
         self.target_column = target_column
         self.task_type = task_type
         self.categorical_features = categorical_features
+
         self._serializer = serializer
         self._causal_manager = CausalManager(
             train, test, target_column, task_type, categorical_features)
