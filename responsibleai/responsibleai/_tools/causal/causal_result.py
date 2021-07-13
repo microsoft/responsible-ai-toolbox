@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 """Result of causal analysis."""
-import datetime
 import json
 import uuid
 
@@ -37,7 +36,6 @@ class CausalResult:
         policies=None,
     ):
         self.id = str(uuid.uuid4())
-        self.created_date = datetime.datetime.now()
 
         self.config = config
         self.causal_analysis = causal_analysis
@@ -45,7 +43,35 @@ class CausalResult:
         self.local_effects = local_effects
         self.policies = policies
 
-    def serialize(self):
+    def save(self, path):
+        result_dir = Path(path)
+        result_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save all result attributes to disk
+        save_attributes(self, self._ATTRIBUTES, result_dir)
+
+        # Save dashboard file
+        dashboard = self._get_dashboard_data()
+        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
+        with open(result_dir / dashboard_filename, 'w') as f:
+            json.dump(dashboard, f)
+
+    @classmethod
+    def load(cls, path) -> 'CausalResult':
+        result_dir = Path(path)
+
+        result_id = result_dir.name
+        loaded = cls()
+        loaded.id = result_id
+
+        # Load all result attributes from disk
+        load_attributes(loaded, cls._ATTRIBUTES, result_dir)
+        return loaded
+
+    def _get_dashboard_data(self):
+        return serialize_json_safe(self._get_dashboard_object())
+
+    def _get_dashboard_object(self):
         causal_data = CausalData()
 
         causal_data.global_effects = self.global_effects\
@@ -62,6 +88,10 @@ class CausalResult:
     def _whatif(self, X, X_feature_new, feature_name, y, alpha=0.1):
         return self.causal_analysis.whatif(
             X, X_feature_new, feature_name, y, alpha=alpha)
+
+    def _cohort_effects(self, X_test, alpha=0.01, keep_all_levels=False):
+        return self.causal_analysis.cohort_causal_effect(
+            X_test, alpha=alpha, keep_all_levels=keep_all_levels)
 
     def _get_policy_object(self, policy):
         policy_object = CausalPolicy()
@@ -111,29 +141,3 @@ class CausalResult:
             policy_tree_object.right = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.RIGHT])
         return policy_tree_object
-
-    def _get_dashboard_data(self):
-        return serialize_json_safe(self.serialize())
-
-    def save(self, path):
-        result_dir = Path(path)
-        result_dir.mkdir(parents=True, exist_ok=True)
-
-        # Save all result attributes to disk
-        save_attributes(self, self._ATTRIBUTES, result_dir)
-
-        # Save dashboard file
-        dashboard = self._get_dashboard_data()
-        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
-        with open(result_dir / dashboard_filename, 'w') as f:
-            json.dump(dashboard, f)
-
-    @classmethod
-    def load(cls, path) -> 'CausalResult':
-        result_dir = Path(path)
-
-        loaded = cls()
-
-        # Load all result attributes from disk
-        load_attributes(loaded, cls._ATTRIBUTES, result_dir)
-        return loaded

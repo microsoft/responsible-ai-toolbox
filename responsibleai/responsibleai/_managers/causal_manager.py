@@ -13,6 +13,7 @@ from responsibleai.exceptions import (
     UserConfigValidationException)
 from responsibleai._tools.causal.causal_constants import (
     DefaultParams, ModelTypes, ResultAttributes, SerializationAttributes)
+from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.modelanalysis.constants import ModelTask
 
@@ -109,10 +110,14 @@ class CausalManager(BaseManager):
         y = pd.concat([self._train, self._test], ignore_index=True)[
             self._target_column].values.ravel()
 
+        categoricals = self._categorical_features
+        if categoricals is None:
+            categoricals = []
+
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         analysis = CausalAnalysis(
             treatment_features,
-            self._categorical_features,
+            categoricals,
             heterogeneity_inds=heterogeneity_features,
             classification=is_classification,
             nuisance_models=nuisance_model,
@@ -123,18 +128,18 @@ class CausalManager(BaseManager):
         analysis.fit(X, y)
 
         result = CausalResult()
-        result.config = {
-            'treatment_features': treatment_features,
-            'heterogeneity_features': heterogeneity_features,
-            'nuisance_model': nuisance_model,
-            'heterogeneity_model': heterogeneity_model,
-            'alpha': alpha,
-            'upper_bound_on_cat_expansion': upper_bound_on_cat_expansion,
-            'treatment_cost': treatment_cost,
-            'min_tree_leaf_samples': min_tree_leaf_samples,
-            'max_tree_depth': max_tree_depth,
-            'skip_cat_limit_checks': skip_cat_limit_checks,
-        }
+        result.config = CausalConfig(
+            treatment_features=treatment_features,
+            heterogeneity_features=heterogeneity_features,
+            nuisance_model=nuisance_model,
+            heterogeneity_model=heterogeneity_model,
+            alpha=alpha,
+            upper_bound_on_cat_expansion=upper_bound_on_cat_expansion,
+            treatment_cost=treatment_cost,
+            min_tree_leaf_samples=min_tree_leaf_samples,
+            max_tree_depth=max_tree_depth,
+            skip_cat_limit_checks=skip_cat_limit_checks,
+        )
 
         result.causal_analysis = analysis
 
@@ -204,7 +209,7 @@ class CausalManager(BaseManager):
         :return: List of CausalData objects.
         :rtype: List[CausalData]
         """
-        return [result.serialize() for result in self._results]
+        return [result._get_dashboard_object() for result in self._results]
 
     @property
     def name(self):

@@ -2,10 +2,8 @@
 # Licensed under the MIT License.
 
 import logging
-import pickle
 import pytest
 
-from pathlib import Path
 from unittest.mock import MagicMock
 
 from .common_utils import (create_iris_data,
