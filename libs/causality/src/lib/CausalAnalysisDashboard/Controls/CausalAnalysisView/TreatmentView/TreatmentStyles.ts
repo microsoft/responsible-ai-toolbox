@@ -13,6 +13,7 @@ export interface ITreatmentStyles {
   label: IStyle;
   lasso: IStyle;
   table: IStyle;
+  header: IStyle;
   leftPane: IStyle;
   rightPane: IStyle;
   cell: IStyle;
@@ -36,6 +37,11 @@ export const TreatmentStyles: () => IProcessedStyleSet<
       display: "flex",
       justifyContent: "space-between",
       padding: "10px"
+    },
+    header: {
+      fontSize: 14,
+      margin: "20px",
+      textAlign: "left"
     },
     label: {
       display: "inline-block",
