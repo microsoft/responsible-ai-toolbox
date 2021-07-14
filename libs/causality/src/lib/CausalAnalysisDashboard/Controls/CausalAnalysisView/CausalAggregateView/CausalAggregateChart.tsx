@@ -9,7 +9,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _, { isEqual } from "lodash";
-import { getTheme, Link, Stack } from "office-ui-fabric-react";
+import { getTheme, Text, Link, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { getCausalDisplayFeatureName } from "../../../getCausalDisplayFeatureName";
@@ -41,12 +41,14 @@ export class CausalAggregateChart extends React.PureComponent<
         </Stack.Item>
         <Stack.Item grow className={styles.rightPane}>
           <Stack horizontal={false}>
-            <Stack.Item className={styles.label}>
-              <b>{localization.CausalAnalysis.AggregateView.continuous}</b>
+            <Stack.Item className={styles.header}>
+              {localization.CausalAnalysis.AggregateView.continuous}
               {localization.CausalAnalysis.AggregateView.continuousDescription}
             </Stack.Item>
             <Stack.Item className={styles.label}>
-              <b>{localization.CausalAnalysis.AggregateView.binary}</b>
+              <Text variant={"xLarge"} className={styles.header}>
+                {localization.CausalAnalysis.AggregateView.binary}
+              </Text>
               {localization.CausalAnalysis.AggregateView.binaryDescription}
             </Stack.Item>
             <Stack.Item className={styles.lasso}>

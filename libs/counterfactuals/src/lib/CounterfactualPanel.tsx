@@ -165,7 +165,10 @@ export class CounterfactualPanel extends React.Component<
       items.push(this.props.originalData);
       selectedData.forEach((point, i) => {
         const temp = {};
-        temp["row"] = `Row ${i + 1}`;
+        temp["row"] = localization.formatString(
+          localization.Counterfactuals.counterfactualEx,
+          i + 1
+        );
         this.props.data?.feature_names.forEach((f, j) => {
           temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
         });
@@ -181,7 +184,7 @@ export class CounterfactualPanel extends React.Component<
     );
     data["row"] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
-      row
+      this.props.selectedIndex
     );
     return data;
   }
@@ -191,8 +194,8 @@ export class CounterfactualPanel extends React.Component<
       fieldName: "row",
       isResizable: true,
       key: "row",
-      minWidth: 150,
-      name: "row"
+      minWidth: 200,
+      name: ""
     });
     if (this.props.data) {
       this.props.data.feature_names.forEach((f) =>
@@ -200,7 +203,7 @@ export class CounterfactualPanel extends React.Component<
           fieldName: f,
           isResizable: true,
           key: f,
-          minWidth: 150,
+          minWidth: 175,
           name: f
         })
       );
@@ -269,7 +272,11 @@ export class CounterfactualPanel extends React.Component<
           <Stack.Item>
             <TextField
               value={this.state.data[column.key]}
-              label={column.key}
+              label={
+                column.key === "row"
+                  ? localization.Counterfactuals.createOwn
+                  : column.key
+              }
               id={column.key}
               disabled={column.key === "row"}
               onChange={this.updateData.bind(this)}

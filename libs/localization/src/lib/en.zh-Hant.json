@@ -3,6 +3,9 @@
     "ExpandableText": {
       "SeeMore": "查看更多",
       "SeeLess": "查看較少"
+    },
+    "NoData": {
+      "Title": "No data"
     }
   },
   "Interpret": {
@@ -366,36 +369,79 @@
   },
   "CausalAnalysis": {
     "MainMenu": {
-      "header": "causal analysis",
-      "aggregate": "Aggregate causal effects",
-      "individual": "Individual causal effects",
-      "treatment": "Treatment policy",
-      "title": "Direct causal effect of each feature with 90% confidence interval",
-      "why": "Why must causal insights assume unconfoundedness?",
-      "learnMore": "Learn more"
+      "header": "原因分析",
+      "aggregate": "彙總因果關係",
+      "individual": "個人因果關係",
+      "treatment": "治療原則",
+      "title": "具有 90% 信賴區間之每種特徵的直接因果關係",
+      "why": "為什麼必須將原因見解因果假設為非干擾因子?",
+      "learnMore": "深入了解"
     },
     "AggregateView": {
-      "description": "Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.",
-      "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
-      "unconfounding": "What are unconfounding variables?",
-      "confoundingFeature": "A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.",
-      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here",
-      "continuous": "Continuouts treatment variables: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units",
-      "binary": "Binary treatment variables: ",
-      "binaryDescription": "On average in this sample, turing on this feature will cause the outcome to increase by X units"
+      "description": "原因分析會回答如果某人行為不同時，現實世界結果會如何改變的「如果」相關問題，例如為產品採取不同的價格策略或病患的替代治療。這些工具與識別重要相互關聯模式的模型預測不同，它們可協助您識別直接影響感興趣結果的最重要原因特徵。這些模型會識別一項特徵的因果關係，將其他干擾因子特徵保持一致。為取得良好效能，請務必包含可能與結果相互關聯做為干擾因子的廣泛特徵組合。",
+      "directAggregate": "具有 95% 信賴區間之每種治療的直接彙總因果關係",
+      "unconfounding": "什麼是未受干擾變數?",
+      "confoundingFeature": "干擾因子特徵同時與原因驅策因素和感興趣的結果相互關聯。干擾因子會建立從原因驅策因素到直接因果關係頂層結果上的額外相互關聯路徑。除非已計算好干擾因子特徵並將其包含在模型中，否則這些額外的相互關聯可能會造成因果關係的偏差預估。這偏差可能是正面或負面，取決於省略的干擾因子、原因驅策因素以及結果之間的相互關聯方向。",
+      "lasso": "A lasso was fit to predict y from X[-i], and a lasso was fit to predict X[i] from X[-i]. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning",
+      "continuous": "持續治療變數:",
+      "continuousDescription": "在此範例中，平均只要將此功能增加 1 個單位，就會造成結果增加 X 個單位",
+      "here": "here",
+      "binary": "二進位治療變數:",
+      "binaryDescription": "在此範例中，平均只要將此功能開啟，就會造成結果增加 X 個單位"
     },
     "IndividualView": {
-      "index": "Datapoint index",
-      "description": "Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.",
-      "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
-      "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
-      "selectTreatment": "Select treatment",
-      "currentTreatment": "Current treatment value",
-      "setNewTreatment": "Set new treatment value"
+      "index": "資料點索引",
+      "description": "個人因果關係可顯示目標或個人化的操作，例如對客戶或個人化治療計劃的目標提升。有特定特徵組合的個人如何回應原因驅策因素下的變更? 這些繪圖會顯示當變更每個原因驅策因素時，在結果中的邊際變化。當您變更其原因驅策因素時，原因性如果工具會為特定個人計算如果變更其原因驅策因素時，反事實的現實世界結果。您必須針對此工具為觀察指定目前結果和目前的治療選項，然後指定您想要探索的反事實治療。",
+      "directIndividual": "具有 95% 信賴區間之每種治療的直接個人因果關係",
+      "missingParameters": "此索引標籤需要提供評估資料集。",
+      "dataRequired": "此索引標籤需要選取資料點。",
+      "datapointIndex": "資料點索引",
+      "selectTreatment": "選取治療",
+      "currentTreatment": "目前的治療值",
+      "setNewTreatment": "設定新的治療值"
+    },
+    "TreatmentPolicy": {
+      "SelectPolicy": "Set treatment feature",
+      "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
+      "TableDescription": "This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.",
+      "Table": "The table can be read by taking a row and then taking a column of that specific row.",
+      "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
+      "nSample": "n = {0}",
+      "Recommended": "Recommended treatment = {0}",
+      "Left": "{0} <= {1}",
+      "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
+      "averageGain": "Average gains of alternative policies over no {0} treatment",
+      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
+      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
+  },
+  "Counterfactuals": {
+    "header": "What-If analysis",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "showOnly": "Show only",
+    "selectedDatapoint": "Selected datapoint",
+    "desiredClass": "Desired class for counterfactual(s)",
+    "currentClass": "Current class",
+    "createCounterfactual": "Create what-if counterfactual",
+    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "counterfactualName": "What-if counterfactual name",
+    "saveAsNew": "Save as new datapoint",
+    "seePrediction": "See prediction deltas",
+    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "recommendedPolicy": "Recommended policy gain",
+    "individualTreatment": "Recommended individual treatment policy",
+    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
+    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
+    "RecommendedTreatment": "Recommended treatment",
+    "EffectOfTreatment": "Effect",
+    "EffectLowerBound": "CI lower",
+    "EffectUpperBound": "CI upper",
+    "increaseByOne": "Increase value by 1",
+    "decreaseByOne": "Decrease value by 1",
+    "noData": "No data"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "類別 {0}",
@@ -415,9 +461,6 @@
     "errorCoverage": "錯誤涵蓋範圍",
     "errorCoverageInfo": "錯誤涵蓋範圍顯示了在資料集中存在的所有錯誤中，集中在選取範圍的錯誤百分比。",
     "errorCoverageTitle": "錯誤涵蓋範圍的其他資訊",
-    "errorRate": "錯誤率",
-    "errorRateInfo": "錯誤率代表系統失敗節點中實例的百分比。",
-    "errorRateTitle": "錯誤率的其他資訊",
     "globalExplanationView": "全域解釋",
     "localExplanationView": "局部解釋",
     "noFeature": "無特徵",
@@ -430,7 +473,18 @@
     },
     "CohortInfo": {
       "cohortInformation": "世代資訊",
-      "saveCohort": "另存為新的世代"
+      "saveCohort": "另存為新的世代",
+      "filters": "filters",
+      "basicInformation": "Basic Information",
+      "baseCohortInstances": "Instances in base cohort",
+      "selectedCohortInstances": "Instances in the selected cohort",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "total": "Total",
+      "predictionPath": "Prediction path (filters)"
+    },
+    "CohortList": {
+      "coverage": "Coverage"
     },
     "EditCohort": {
       "subText": "了解所選的世代。編輯其世代名稱。刪除此世代。",
@@ -439,6 +493,12 @@
     "FeatureList": {
       "importances": "重要性",
       "features": "特徵"
+    },
+    "FilterTooltip": {
+      "correctNum": "Correct (#): ",
+      "incorrectNum": "Incorrect (#): ",
+      "countNum": "Count (#): ",
+      "errorSum": "Error sum: "
     },
     "InspectionView": {
       "emptyError": "請按一下核取方塊來選取錯誤和正確類別中的資料點。",
@@ -480,6 +540,21 @@
     },
     "MatrixLegend": {
       "heatMapDescription": "格線圖讓您可以專注於特定的篩選並合併錯誤率。從比較兩個資料集特徵開始。"
+    },
+    "Metrics": {
+      "metricName": "Metric name",
+      "metricValue": "Metric value",
+      "errorRate": "Error rate",
+      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
+      "errorRateTitle": "Additional information on error rate",
+      "meanSquaredError": "Mean squared error",
+      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
+      "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "meanSquaredErrorShort": "Mean sq. error",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
+      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
+      "meanAbsoluteErrorShort": "Mean abs. error"
     },
     "Navigation": {
       "errorExplorer": "錯誤總管",
@@ -776,7 +851,7 @@
       "CalloutContent": "新增部分元件 (錯誤樹狀檢視、錯誤熱度圖) 可讓您篩選從下方元件中所看到的全域世代資料。",
       "AddButtonText": "新增"
     },
-    "CasualAnalysis": {
+    "CausalAnalysis": {
       "Table": {
         "name": "feature",
         "point": "point",
@@ -789,8 +864,7 @@
     },
     "ComponentNames": {
       "DataExplorer": "資料總管",
-      "GlobalExplanation": "全域解釋",
-      "LocalExplanation": "區域解釋",
+      "FeatureImportances": "Feature importances",
       "ErrorAnalysis": "錯誤分析",
       "Fairness": "公平性",
       "ModelStatistics": "模型統計資料",
@@ -798,13 +872,43 @@
       "Counterfactuals": "反事實"
     },
     "MainMenu": {
-      "DashboardSettings": "儀表板設定"
+      "DashboardSettings": "儀表板設定",
+      "shiftCohort": "Shift cohort",
+      "saveCohort": "Save cohort",
+      "cohortList": "Cohort list",
+      "cohortInfo": "Cohort info",
+      "cohortSettings": "Cohort settings",
+      "createCohort": "Create cohort"
     },
     "DashboardSettings": {
       "Title": "儀表板版面配置",
       "Content": "此清單顯示儀表板的版面配置。每件以 [識別] 標記的元件都可篩選要在 Wit 下方元件中檢視的資料。您可以新增元件、拖放元件以重新排序流程或刪除元件。",
       "DashboardComponents": "儀表板元件",
-      "DataPoints": "資料點數目"
+      "DataPoints": "資料點數目",
+      "DeleteDialog": {
+        "Title": "Delete {0}?",
+        "Content": "Are you sure you want to delete {0}?",
+        "Delete": "Delete",
+        "Cancel": "Cancel"
+      }
+    },
+    "FeatureImportances": {
+      "GlobalExplanation": "Aggregate feature importance",
+      "LocalExplanation": "Individual feature importance",
+      "CorrectPredictions": "Correct predictions",
+      "IncorrectPredictions": "Incorrect predictions"
+    },
+    "CohortInformation": {
+      "GlobalCohort": "Global cohort: ",
+      "DefaultCohort": " (default)",
+      "DataPoints": "Number of datapoints",
+      "Filters": "Number of filters",
+      "ChangeGlobalCohort": "Change global cohort",
+      "CreateNewCohort": "Create new cohort"
+    },
+    "CohortSettings": {
+      "CohortSettingsTitle": "Cohort settings",
+      "CohortSettingsDescription": "Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts."
     }
   }
 }
