@@ -69,7 +69,7 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
   public render(): React.ReactNode {
     return (
       <Stack horizontal>
-        <Stack grow tokens={{ padding: "16px 24px" }}>
+        <Stack grow tokens={{ padding: "16px 24px", maxWidth: "80%" }}>
           <Text variant={"xLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
