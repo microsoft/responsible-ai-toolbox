@@ -624,13 +624,14 @@
       "Recommended": "Recommended treatment = {0}",
       "Left": "{0} <= {1}",
       "Right": "{0} > {1}",
+      "alwaysTreat": "Always treat '{0}'",
       "averageGain": "Average gains of alternative policies over no {0} treatment",
       "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
       "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken."
     }
   },
   "Counterfactuals": {
-    "header": "What-If analysis",
+    "header": "What-If counterfactuals",
     "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
     "showOnly": "Show only",
     "selectedDatapoint": "Selected datapoint",
@@ -642,6 +643,9 @@
     "counterfactualName": "What-if counterfactual name",
     "saveAsNew": "Save as new datapoint",
     "seePrediction": "See prediction deltas",
+    "createOwn": "Create your own counterfactual:",
+    "referenceDatapoint": "Reference datapoint: Row {0}",
+    "counterfactualEx": "Counterfactual Ex {0}",
     "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
 
     "recommendedPolicy": "Recommended policy gain",
@@ -655,7 +659,9 @@
     "EffectUpperBound": "CI upper",
     "increaseByOne": "Increase value by 1",
     "decreaseByOne": "Decrease value by 1",
-    "noData": "No data"
+    "noData": "No data",
+    "localImportanceDescription": "The top ranked features in Row {0} to perturb in order to achieve desired model prediction from counterfactual analysis: {1}",
+    "localImportanceSelectData": "Select a data point to view local importance chart"
   },
   "ErrorAnalysis": {
     "defaultClassNames": "Class {0}",

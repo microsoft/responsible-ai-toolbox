@@ -8,18 +8,23 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ICausalIndividualStyles {
+  aggregateChart: IStyle;
   container: IStyle;
   description: IStyle;
+  header: IStyle;
   label: IStyle;
   lasso: IStyle;
   individualTable: IStyle;
-  individualChart: IStyle;
 }
 
 export const CausalIndividualStyles: () => IProcessedStyleSet<
   ICausalIndividualStyles
 > = () => {
   return mergeStyleSets<ICausalIndividualStyles>({
+    aggregateChart: {
+      display: "flex",
+      height: "100%"
+    },
     container: {
       display: "flex",
       flex: 1,
@@ -30,8 +35,9 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<
       justifyContent: "space-between",
       padding: "10px"
     },
-    individualChart: {
-      backgroundColor: "red"
+    header: {
+      fontSize: 14,
+      fontWeight: "600"
     },
     individualTable: {
       width: "70%"

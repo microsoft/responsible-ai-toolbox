@@ -70,6 +70,8 @@ def create_iris_data():
         iris.data, iris.target, test_size=0.2, random_state=0)
     feature_names = [name.replace(' (cm)', '') for name in iris.feature_names]
     classes = iris.target_names
+    X_train = pd.DataFrame(X_train, columns=feature_names)
+    X_test = pd.DataFrame(X_test, columns=feature_names)
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
@@ -83,6 +85,8 @@ def create_cancer_data():
         test_size=0.2, random_state=0)
     feature_names = breast_cancer_data.feature_names
     classes = breast_cancer_data.target_names.tolist()
+    X_train = pd.DataFrame(X_train, columns=feature_names)
+    X_test = pd.DataFrame(X_test, columns=feature_names)
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 

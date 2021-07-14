@@ -11,6 +11,7 @@ export interface ICausalAggregateStyles {
   container: IStyle;
   description: IStyle;
   label: IStyle;
+  header: IStyle;
   lasso: IStyle;
   table: IStyle;
   leftPane: IStyle;
@@ -22,14 +23,17 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<
 > = () => {
   return mergeStyleSets<ICausalAggregateStyles>({
     container: {
-      display: "flex",
-      flex: 1,
-      flexDirection: "row"
+      height: "auto"
     },
     description: {
       display: "flex",
       justifyContent: "space-between",
       padding: "10px"
+    },
+    header: {
+      fontSize: 14,
+      fontWeight: "600",
+      textAlign: "left"
     },
     label: {
       display: "inline-block",
