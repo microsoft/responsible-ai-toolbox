@@ -1128,8 +1128,8 @@
       "createCohort": "Create cohort"
     },
     "DashboardSettings": {
-      "Title": "Dashboard layout",
-      "Content": "This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.",
+      "Title": "Dashboard navigation",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.",
       "DashboardComponents": "Dashboard components",
       "DataPoints": "Number of datapoints",
       "DeleteDialog": {
