@@ -13,6 +13,7 @@ from erroranalysis._internal.surrogate_error_tree import (
     compute_json_error_tree)
 from erroranalysis._internal.error_report import ErrorReport
 from erroranalysis._internal.constants import ModelTask, Metrics
+from erroranalysis._internal.version_checker import check_pandas_version
 
 
 class BaseAnalyzer(ABC):
@@ -55,6 +56,7 @@ class BaseAnalyzer(ABC):
                 category_values = category_arr.tolist()
                 self._categories.append(category_values)
                 self._category_dictionary[category_index] = category_values
+        check_pandas_version(self.feature_names)
 
     @property
     def categories(self):

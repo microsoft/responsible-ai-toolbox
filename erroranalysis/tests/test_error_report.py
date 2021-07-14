@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pytest
 import uuid
 
 from erroranalysis._internal.error_report import ErrorReport
@@ -12,8 +13,10 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 class TestErrorReport(object):
 
-    def test_error_report_iris(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+    @pytest.mark.parametrize('alter_feature_names', [True, False])
+    def test_error_report_iris(self, alter_feature_names):
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_data(append_special_characters=alter_feature_names)
 
         models = create_models_classification(X_train, y_train)
 
@@ -53,11 +56,19 @@ def is_valid_uuid(id):
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
-                       categorical_features):
-    model_analyzer = ModelAnalyzer(model, X_test, y_test,
-                                   feature_names,
-                                   categorical_features)
-    error_report1 = model_analyzer.create_error_report()
+                       categorical_features, expect_user_warnings=False):
+    if expect_user_warnings:
+        with pytest.warns(UserWarning):
+            model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                           feature_names,
+                                           categorical_features)
+    else:
+        model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features)
+    error_report1 = model_analyzer.create_error_report(filter_features=None,
+                                                       max_depth=3,
+                                                       num_leaves=None)
     error_report2 = model_analyzer.create_error_report()
     assert error_report1.id != error_report2.id
 
