@@ -20,6 +20,8 @@ export interface IDropdownBarStyles {
   toolTipWrapper: IStyle;
   mainRight: IStyle;
   actionButton: IStyle;
+  title: IStyle;
+  callout: IStyle;
 }
 
 export const DropdownBarStyles: () => IProcessedStyleSet<
@@ -29,6 +31,10 @@ export const DropdownBarStyles: () => IProcessedStyleSet<
   return mergeStyleSets<IDropdownBarStyles>({
     actionButton: {
       height: "auto"
+    },
+    callout: {
+      padding: "20px 24px",
+      width: 320
     },
     doneButton: {
       color: theme.semanticColors.bodyText,
@@ -70,6 +76,9 @@ export const DropdownBarStyles: () => IProcessedStyleSet<
     spinner: {
       margin: "auto",
       padding: "40px"
+    },
+    title: {
+      marginBottom: 12
     },
     toolTipWrapper: {
       display: "flex",

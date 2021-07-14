@@ -1,6 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// 1. Extend table with bounds
+// 2. Get tooltip on charts
+// 3. Move "How to " to be same alignment
+// 4. Follow up w/ Michael + Miro about utility of table w/ confidence
+// 5. Follow up w/ Miro about displaying table w/ confidence
+// 6. Check with strings (email everyone + deadline)
+
 import { IBounds } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -10,10 +17,11 @@ import {
   Toggle,
   IDropdownOption,
   ActionButton,
-  Modal,
-  IconButton,
-  PrimaryButton,
-  IIconProps
+  Callout,
+  //IconButton,
+  Text
+  // PrimaryButton,
+  //IIconProps
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -53,13 +61,20 @@ export interface IDropdownBarProps {
 }
 
 export interface IState {
-  showModalHelp?: boolean;
+  showErrorCallout?: boolean;
 }
 
 export class DropdownBar extends React.PureComponent<
   IDropdownBarProps,
   IState
 > {
+  public constructor(props: IDropdownBarProps) {
+    super(props);
+    this.state = {
+      showErrorCallout: false
+    };
+  }
+
   public render(): React.ReactNode {
     const styles = DropdownBarStyles();
     const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
@@ -78,7 +93,8 @@ export class DropdownBar extends React.PureComponent<
       }
     );
 
-    const cancelIcon: IIconProps = { iconName: "Cancel" };
+    //const cancelIcon: IIconProps = { iconName: "Cancel" };
+    const infoButtonId = "infoButtonId";
 
     const howTo = (
       <Stack className={styles.toolTipWrapper}>
@@ -88,35 +104,45 @@ export class DropdownBar extends React.PureComponent<
             className={styles.actionButton}
             onClick={this.handleOpenModalHelp}
           >
-            <div className={styles.infoButton}>i</div>
-            {localization.Fairness.ErrorBounds.howToRead}
-          </ActionButton>
-          <Modal
-            titleAriaId="help modal"
-            isOpen={this.state?.showModalHelp}
-            onDismiss={this.handleCloseModalHelp}
-            isModeless
-            containerClassName={styles.modalContentHelp}
-          >
-            <IconButton
-              iconProps={cancelIcon}
-              ariaLabel="Close popup modal"
-              onClick={this.handleCloseModalHelp}
-            />
-            <p className={styles.modalContentHelpText}>
-              {localization.Fairness.ErrorBounds.introModalText}
-              <br />
-              <br />
-            </p>
-            <div style={{ display: "flex", paddingBottom: "20px" }}>
-              <PrimaryButton
-                className={styles.doneButton}
-                onClick={this.handleCloseModalHelp}
-              >
-                {localization.Fairness.done}
-              </PrimaryButton>
+            <div className={styles.infoButton} id={infoButtonId}>
+              i
             </div>
-          </Modal>
+          </ActionButton>
+          {this.state.showErrorCallout && (
+            <Callout
+              className={styles.callout}
+              role="alertdialog"
+              gapSpace={0}
+              target={`#${infoButtonId}`}
+              onDismiss={this.handleCloseModalHelp}
+              setInitialFocus
+            >
+              <Text block variant="xLarge" className={styles.title}>
+                {localization.Fairness.ErrorBounds.howToRead}
+              </Text>
+              <Text block variant="small">
+                {localization.Fairness.ErrorBounds.introModalText}
+              </Text>
+              {/* <IconButton
+                iconProps={cancelIcon}
+                ariaLabel="Close popup modal"
+                onClick={this.handleCloseModalHelp}
+              />
+              <p className={styles.modalContentHelpText}>
+                {localization.Fairness.ErrorBounds.introModalText}
+                <br />
+                <br />
+              </p>
+              <div style={{ display: "flex", paddingBottom: "20px" }}>
+                <PrimaryButton
+                  className={styles.doneButton}
+                  onClick={this.handleCloseModalHelp}
+                >
+                  {localization.Fairness.done}
+                </PrimaryButton>
+              </div> */}
+            </Callout>
+          )}
         </Stack>
       </Stack>
     );
@@ -180,10 +206,10 @@ export class DropdownBar extends React.PureComponent<
     );
   }
   private readonly handleOpenModalHelp = (): void => {
-    this.setState({ showModalHelp: true });
+    this.setState({ showErrorCallout: true });
   };
 
   private readonly handleCloseModalHelp = (): void => {
-    this.setState({ showModalHelp: false });
+    this.setState({ showErrorCallout: false });
   };
 }

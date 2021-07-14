@@ -25,10 +25,10 @@ METRICFRAME_NOT_AVAILABLE_ERROR_MESSAGE = "The fairness metric module " \
 z_score = 1.959964  # This z-score corresponds to the 95% confidence interval
 alpha = 0.95        # Conventional level of power for statistical tests
 digits_of_precision = 4
+
+
 def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
-    """ Returns lower and upper bound 
-    
-    Binomial Proportion
+    """ Returns lower and upper bound (Binomial Proportion)
     """
     denominator = 1 + z**2 / n
     centre_adjusted_probability = p + z * z / (2 * n)
@@ -41,6 +41,7 @@ def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
     return (round(lower_bound, digits), round(upper_bound, digits))
 
 
+# Unused
 def compute_standard_normal_error_binomial(metric_value, sample_size, z_score):
     """ Standard Error Calculation (Binary Classification)
 
@@ -54,6 +55,7 @@ def compute_standard_normal_error_binomial(metric_value, sample_size, z_score):
     """
     return z_score * np.sqrt(metric_value * (1.0 - metric_value)) / np.sqrt(sample_size)
 
+
 def compute_standard_normal_error(metric_value, y_true, y_pred, sample_size, z_score):
     """ Standard Error Calculation
 
@@ -61,8 +63,9 @@ def compute_standard_normal_error(metric_value, y_true, y_pred, sample_size, z_s
 
     """
 
-    # return z_score * np.sqrt() / np.sqrt(sample_size)
+    # return z_score * np.sqrt(VARIANCE HERE) / np.sqrt(sample_size)
     return
+
 
 def wilson_wrapper(y_true, y_pred, func):
     assert len(y_true) == len(y_pred)
@@ -78,14 +81,18 @@ def wilson_wrapper(y_true, y_pred, func):
 def recall_wilson(y_true, y_pred):
     assert len(y_true) == len(y_pred)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-    bounds = compute_wilson_bounds(tp / (tp + fn), tp + fn, digits_of_precision, z_score)
+    bounds = compute_wilson_bounds(
+        tp / (tp + fn), tp + fn, digits_of_precision, z_score)
     return bounds
+
 
 def precision_wilson(y_true, y_pred):
     assert len(y_true) == len(y_pred)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-    bounds = compute_wilson_bounds(tp / (tp + fp), tp + fp, digits_of_precision, z_score)
+    bounds = compute_wilson_bounds(
+        tp / (tp + fp), tp + fp, digits_of_precision, z_score)
     return bounds
+
 
 def standard_normal_wrapper(y_true, y_pred, func):
     assert len(y_true) == len(y_pred)
@@ -94,6 +101,7 @@ def standard_normal_wrapper(y_true, y_pred, func):
     error = compute_standard_normal_error(metric_value, sample_size, z_score)
     return (metric_value - error, metric_value + error)
 
+
 def rmse_standard_normal(y_true, y_pred):
     assert len(y_true) == len(y_pred)
     rmse = _root_mean_squared_error(y_true, y_pred)
@@ -101,6 +109,7 @@ def rmse_standard_normal(y_true, y_pred):
 
     c1, c2 = stats.chi2.ppf([(1 - alpha) / 2, (1 + alpha) / 2], sample_size)
     return np.sqrt(sample_size / c2) * rmse, np.sqrt(sample_size / c1) * rmse
+
 
 class FairnessMetricModule:
     def __init__(self, module_name=None, mapping=None):
@@ -161,7 +170,7 @@ class FairnessMetricModule:
                 "zero_one_loss": {
                     "model_type": [],
                     "function": skm.zero_one_loss,
-                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.zero_one_loss)
+                    # "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.zero_one_loss)
                 },
                 "specificity_score": {
                     "model_type": [],
@@ -186,7 +195,7 @@ class FairnessMetricModule:
                 "auc": {
                     "model_type": ["probability"],
                     "function": skm.roc_auc_score,
-                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.roc_auc_score)
+                    # "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.roc_auc_score)
                 },
                 "root_mean_squared_error": {
                     "model_type": ["regression", "probability"],
@@ -196,22 +205,22 @@ class FairnessMetricModule:
                 "balanced_root_mean_squared_error": {
                     "model_type": ["probability"],
                     "function": _balanced_root_mean_squared_error,
-                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _balanced_root_mean_squared_error)
+                    # "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, _balanced_root_mean_squared_error)
                 },
                 "mean_squared_error": {
                     "model_type": ["regression", "probability"],
                     "function": skm.mean_squared_error,
-                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_squared_error)
+                    # "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_squared_error)
                 },
                 "mean_absolute_error": {
                     "model_type": ["regression", "probability"],
                     "function": skm.mean_absolute_error,
-                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_absolute_error)
+                    # "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.mean_absolute_error)
                 },
                 "r2_score": {
                     "model_type": ["regression"],
                     "function": skm.r2_score,
-                    #"error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.r2_score)
+                    # "error_function": lambda y_true, y_pred: standard_normal_wrapper(y_true, y_pred, skm.r2_score)
                 },
                 "f1_score": {
                     "model_type": ["classification"],
@@ -221,7 +230,7 @@ class FairnessMetricModule:
                 "log_loss": {
                     "model_type": ["probability"],
                     "function": skm.log_loss,
-                    "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, skm.log_loss)
+                    # "error_function": lambda y_true, y_pred: wilson_wrapper(y_true, y_pred, skm.log_loss)
                 },
                 "overprediction": {
                     "model_type": [],
