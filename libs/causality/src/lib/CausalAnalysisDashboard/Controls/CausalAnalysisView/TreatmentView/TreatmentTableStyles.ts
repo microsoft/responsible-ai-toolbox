@@ -16,6 +16,7 @@ export interface ITreatmentTableStyles {
   header: IStyle;
   spinButton: IStyle;
   spinButtonText: IStyle;
+  singleCell: IStyle;
   table: IStyle;
   label: IStyle;
   chartContainer: IStyle;
@@ -68,6 +69,10 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<
       paddingBottom: "10px",
       paddingLeft: "30px",
       textAlign: "left"
+    },
+    singleCell: {
+      border: "1px",
+      borderStyle: "solid"
     },
     spinButton: {
       paddingLeft: "10px",
