@@ -146,33 +146,34 @@ class ErrorAnalysisManager(BaseManager):
         A model that implements sklearn.predict or sklearn.predict_proba
         or function that accepts a 2d ndarray.
     :type model: object
-    :param train: The training dataset including the label column.
-    :type train: pandas.DataFrame
+    :param dataset: The dataset including the label column.
+    :type dataset: pandas.DataFrame
     :param target_column: The name of the label column.
     :type target_column: str
     """
 
-    def __init__(self, model, train, target_column, categorical_features=None):
+    def __init__(self, model, dataset, target_column,
+                 categorical_features=None):
         """Defines the ErrorAnalysisManager for discovering errors in a model.
 
         :param model: The model to analyze errors on.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
         :type model: object
-        :param train: The training dataset including the label column.
-        :type train: pandas.DataFrame
+        :param dataset: The dataset including the label column.
+        :type dataset: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
         """
-        self._y_train = train[target_column]
-        self._train = train.drop(columns=[target_column])
-        self._feature_names = list(self._train.columns)
+        self._true_y = dataset[target_column]
+        self._dataset = dataset.drop(columns=[target_column])
+        self._feature_names = list(self._dataset.columns)
         self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
         self._analyzer = ModelAnalyzer(model,
-                                       self._train,
-                                       self._y_train,
+                                       self._dataset,
+                                       self._true_y,
                                        self._feature_names,
                                        self._categorical_features)
 
@@ -311,15 +312,15 @@ class ErrorAnalysisManager(BaseManager):
         categorical_features = model_analysis.categorical_features
         inst.__dict__['_categorical_features'] = categorical_features
         target_column = model_analysis.target_column
-        y_train = model_analysis.train[target_column]
-        train = model_analysis.train.drop(columns=[target_column])
-        inst.__dict__['_train'] = train
-        inst.__dict__['_y_train'] = y_train
-        feature_names = list(train.columns)
+        true_y = model_analysis.test[target_column]
+        dataset = model_analysis.test.drop(columns=[target_column])
+        inst.__dict__['_dataset'] = dataset
+        inst.__dict__['_true_y'] = true_y
+        feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
         inst.__dict__['_analyzer'] = ModelAnalyzer(model_analysis.model,
-                                                   train,
-                                                   y_train,
+                                                   dataset,
+                                                   true_y,
                                                    feature_names,
                                                    categorical_features)
         return inst

@@ -27,13 +27,13 @@ def validate_error_analysis(model_analysis, expected_reports=1):
     for report in reports:
         json_matrix = report.json_matrix
 
-        ea_x_train = model_analysis.error_analysis._train
-        ea_y_train = model_analysis.error_analysis._y_train
+        ea_x_dataset = model_analysis.error_analysis._dataset
+        ea_true_y = model_analysis.error_analysis._true_y
 
-        expected_count = len(ea_x_train)
+        expected_count = len(ea_x_dataset)
         if json_matrix is not None:
-            predictions = model_analysis.model.predict(ea_x_train)
-            expected_false_count = sum(predictions != ea_y_train)
+            predictions = model_analysis.model.predict(ea_x_dataset)
+            expected_false_count = sum(predictions != ea_true_y)
             validate_matrix(json_matrix, expected_count, expected_false_count)
 
         json_tree = report.json_tree
