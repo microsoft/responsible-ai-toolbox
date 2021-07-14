@@ -116,7 +116,7 @@ class ModelAnalysis(object):
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features)
         error_analysis_manager = ErrorAnalysisManager(model,
-                                                      train,
+                                                      test,
                                                       target_column,
                                                       categorical_features)
         self._error_analysis_manager = error_analysis_manager
