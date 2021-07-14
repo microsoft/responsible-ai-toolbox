@@ -643,6 +643,9 @@
     "counterfactualName": "What-if counterfactual name",
     "saveAsNew": "Save as new datapoint",
     "seePrediction": "See prediction deltas",
+    "createOwn": "Create your own counterfactual:",
+    "referenceDatapoint": "Reference datapoint: Row {0}",
+    "counterfactualEx": "Counterfactual Ex {0}",
     "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
 
     "recommendedPolicy": "Recommended policy gain",
