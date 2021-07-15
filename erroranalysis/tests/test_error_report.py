@@ -23,7 +23,8 @@ class TestErrorReport(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features,
+                               expect_user_warnings=alter_feature_names)
 
     def test_error_report_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
@@ -58,7 +59,8 @@ def is_valid_uuid(id):
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        categorical_features, expect_user_warnings=False):
     if expect_user_warnings:
-        with pytest.warns(UserWarning):
+        with pytest.warns(UserWarning,
+                          match='which has issues with pandas version'):
             model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                            feature_names,
                                            categorical_features)
