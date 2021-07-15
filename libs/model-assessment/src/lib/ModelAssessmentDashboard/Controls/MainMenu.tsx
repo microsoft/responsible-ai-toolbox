@@ -12,7 +12,8 @@ import {
   CommandBar,
   ICommandBarItemProps,
   IIconProps,
-  IButtonStyles
+  IButtonStyles,
+  Layer
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -74,7 +75,7 @@ export class MainMenu extends React.PureComponent<
     farItems.push(...helpItems);
     const classNames = mainMenuStyles();
     return (
-      <>
+      <Layer>
         <div className={classNames.banner}>
           <div className={classNames.mainMenu}>
             <CommandBar
@@ -97,7 +98,7 @@ export class MainMenu extends React.PureComponent<
           activeGlobalTabs={this.props.activeGlobalTabs}
           removeTab={this.props.removeTab}
         />
-      </>
+      </Layer>
     );
   }
 
