@@ -1,8 +1,10 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pandas as pd
 import pytest
 import uuid
+
 
 from erroranalysis._internal.error_report import ErrorReport
 from common_utils import (
@@ -58,7 +60,7 @@ def is_valid_uuid(id):
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        categorical_features, expect_user_warnings=False):
-    if expect_user_warnings:
+    if expect_user_warnings and pd.__version__[0] == '0':
         with pytest.warns(UserWarning,
                           match='which has issues with pandas version'):
             model_analyzer = ModelAnalyzer(model, X_test, y_test,
