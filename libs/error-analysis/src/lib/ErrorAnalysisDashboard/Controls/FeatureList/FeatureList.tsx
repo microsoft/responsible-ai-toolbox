@@ -107,7 +107,14 @@ export class FeatureList extends React.Component<
     this.layerHostId = getId("featuresListHost");
     this._selection = new Selection({
       onSelectionChanged: (): void => {
-        const newSelectedFeatures = this.getSelectionDetails();
+        let newSelectedFeatures = this.getSelectionDetails();
+        const oldSelectedFeaturesNotSearched = this.state.selectedFeatures.filter(
+          (oldSelectedFeature) =>
+            !this.state.searchedFeatures.includes(oldSelectedFeature)
+        );
+        newSelectedFeatures = newSelectedFeatures.concat(
+          oldSelectedFeaturesNotSearched
+        );
         const enableApplyButton =
           this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
           newSelectedFeatures.some(
@@ -125,25 +132,7 @@ export class FeatureList extends React.Component<
 
   public componentDidUpdate(prevProps: IFeatureListProps): void {
     if (this.props.importances !== prevProps.importances) {
-      const percents = updatePercents(this.props.importances);
-      const [sortedPercents, sortedFeatures] = sortByPercent(
-        percents,
-        this.props.features
-      );
-      const searchedFeatures = sortedFeatures.filter((sortedFeature) =>
-        this.state.searchedFeatures.includes(sortedFeature)
-      );
-      const tableState = updateItems(
-        sortedPercents,
-        sortedFeatures,
-        searchedFeatures,
-        this.props.isEnabled
-      );
-      this.setState({
-        searchedFeatures,
-        tableState
-      });
-      this.updateSelection();
+      this.updateTable();
     }
   }
 
@@ -316,6 +305,31 @@ export class FeatureList extends React.Component<
     });
   }
 
+  private updateTable(): void {
+    const percents = updatePercents(this.props.importances);
+    const [sortedPercents, sortedFeatures] = sortByPercent(
+      percents,
+      this.props.features
+    );
+    const searchedFeatures = sortedFeatures.filter((sortedFeature) =>
+      this.state.searchedFeatures.includes(sortedFeature)
+    );
+    const tableState = updateItems(
+      sortedPercents,
+      sortedFeatures,
+      searchedFeatures,
+      this.props.isEnabled
+    );
+    this.setState(
+      {
+        tableState
+      },
+      () => {
+        this.updateSelection();
+      }
+    );
+  }
+
   private getSelectionDetails(): string[] {
     const selectedRows = this._selection.getSelection();
     const keys = selectedRows.map((row) => row[0] as string);
@@ -323,11 +337,16 @@ export class FeatureList extends React.Component<
   }
 
   private onSearch(searchValue: string): void {
-    this.setState({
-      searchedFeatures: this.props.features.filter((feature) =>
-        feature.includes(searchValue)
-      )
-    });
+    this.setState(
+      {
+        searchedFeatures: this.props.features.filter((feature) =>
+          feature.includes(searchValue)
+        )
+      },
+      () => {
+        this.updateTable();
+      }
+    );
   }
 
   private apply(): void {

@@ -24,7 +24,7 @@ export class PredictionPath extends React.Component<IPredictionPathProps> {
     const classNames = predictionPathStyles();
     return (
       <Stack>
-        {filters.map((filter: string, index: number) => (
+        {filters.reverse().map((filter: string, index: number) => (
           <div key={index}>
             <Stack horizontal tokens={alignmentStackTokens}>
               <Stack verticalAlign="center">
