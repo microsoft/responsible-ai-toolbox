@@ -241,6 +241,7 @@ class CausalManager(BaseManager):
                 heterogeneity_inds=config.heterogeneity_features,
                 classification=is_classification,
                 nuisance_models=config.nuisance_model,
+                heterogeneity_model=config.heterogeneity_model,
                 upper_bound_on_cat_expansion=config.max_cat_expansion,
                 skip_cat_limit_checks=config.skip_cat_limit_checks,
                 n_jobs=-1)
