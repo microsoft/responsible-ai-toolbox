@@ -235,6 +235,7 @@ export class CounterfactualPanel extends React.Component<
   ): void {
     const target = evt.target as Element;
     const id = target.id;
+    this.props.setCustomRowProperty(id, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = toNumber(newValue);
       return { data: prevState.data };
@@ -300,9 +301,7 @@ export class CounterfactualPanel extends React.Component<
                     jointDataset={this.context.jointDataset}
                     metadata={this.context.modelMetadata}
                     selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.context.jointDataset.getRow(
-                      this.props.selectedIndex
-                    )}
+                    temporaryPoint={this.props.temporaryPoint}
                   />
                 </Callout>
               )}
