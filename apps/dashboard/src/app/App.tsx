@@ -4,7 +4,13 @@
 import { generateRoute } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
-import { ITheme } from "office-ui-fabric-react";
+import {
+  Customizer,
+  getId,
+  ILayerProps,
+  ITheme,
+  LayerHost
+} from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 
@@ -25,8 +31,11 @@ interface IAppState extends Required<IAppSetting> {
 
 export class App extends React.Component<IAppSetting, IAppState> {
   public static route = generateRoute(routeKey);
+  private layerHostId: string;
   public constructor(props: IAppSetting) {
     super(props);
+    this.layerHostId = getId("cohortsLayerHost");
+
     this.state = this.getState({ ...this.props, iteration: 0 });
   }
   public componentDidUpdate(prevProps: IAppSetting): void {
@@ -50,78 +59,81 @@ export class App extends React.Component<IAppSetting, IAppState> {
           }}
           key={this.state.iteration}
         >
-          {this.state.application === "interpret" && (
-            <Interpret
-              dataset={
-                applications[this.state.application].datasets[
+          <LayerHost id={this.layerHostId} style={{ position: "relative" }} />
+          <Customizer scopedSettings={{ Layer: { hostId: this.layerHostId } }}>
+            {this.state.application === "interpret" && (
+              <Interpret
+                dataset={
+                  applications[this.state.application].datasets[
+                    this.state.dataset
+                  ].data
+                }
+                classDimension={
+                  applications[this.state.application].datasets[
+                    this.state.dataset
+                  ].classDimension
+                }
+                theme={theme}
+                language={Language[this.state.language]}
+                version={
+                  applications[this.state.application].versions[
+                    this.state.version
+                  ]
+                }
+              />
+            )}
+            {this.state.application === "fairness" && (
+              <Fairness
+                dataset={
+                  applications[this.state.application].datasets[
+                    this.state.dataset
+                  ].data
+                }
+                theme={themes[this.state.theme]}
+                language={Language[this.state.language]}
+                version={
+                  applications[this.state.application].versions[
+                    this.state.version
+                  ]
+                }
+              />
+            )}
+            {this.state.application === "errorAnalysis" && (
+              <ErrorAnalysis
+                dataset={
+                  applications[this.state.application].datasets[
+                    this.state.dataset
+                  ].data
+                }
+                classDimension={
+                  applications[this.state.application].datasets[
+                    this.state.dataset
+                  ].classDimension
+                }
+                theme={theme}
+                language={Language[this.state.language]}
+                version={
+                  applications[this.state.application].versions[
+                    this.state.version
+                  ]
+                }
+              />
+            )}
+            {this.state.application === "modelAssessment" && (
+              <ModelAssessment
+                {...applications[this.state.application].datasets[
                   this.state.dataset
-                ].data
-              }
-              classDimension={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].classDimension
-              }
-              theme={theme}
-              language={Language[this.state.language]}
-              version={
-                applications[this.state.application].versions[
-                  this.state.version
-                ]
-              }
-            />
-          )}
-          {this.state.application === "fairness" && (
-            <Fairness
-              dataset={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].data
-              }
-              theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
-              version={
-                applications[this.state.application].versions[
-                  this.state.version
-                ]
-              }
-            />
-          )}
-          {this.state.application === "errorAnalysis" && (
-            <ErrorAnalysis
-              dataset={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].data
-              }
-              classDimension={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].classDimension
-              }
-              theme={theme}
-              language={Language[this.state.language]}
-              version={
-                applications[this.state.application].versions[
-                  this.state.version
-                ]
-              }
-            />
-          )}
-          {this.state.application === "modelAssessment" && (
-            <ModelAssessment
-              {...applications[this.state.application].datasets[
-                this.state.dataset
-              ]}
-              theme={theme}
-              language={Language[this.state.language]}
-              version={
-                applications[this.state.application].versions[
-                  this.state.version
-                ]
-              }
-            />
-          )}
+                ]}
+                theme={theme}
+                language={Language[this.state.language]}
+                version={
+                  applications[this.state.application].versions[
+                    this.state.version
+                  ]
+                }
+              />
+            )}
+          </Customizer>
         </div>
         <Redirect to={generatePath(App.route, this.state)} push />
       </>
