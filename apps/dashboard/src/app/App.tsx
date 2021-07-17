@@ -4,13 +4,7 @@
 import { generateRoute } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  Customizer,
-  getId,
-  ILayerProps,
-  ITheme,
-  LayerHost
-} from "office-ui-fabric-react";
+import { Customizer, getId, ITheme, LayerHost } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 
