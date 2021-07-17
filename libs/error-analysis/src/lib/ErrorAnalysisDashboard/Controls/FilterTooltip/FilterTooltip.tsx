@@ -43,7 +43,9 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
               </text>
               <text className={classNames.numIncorrect}>
                 {localization.ErrorAnalysis.FilterTooltip.errorSum}
-                {this.props.filterProps.numIncorrect.toFixed(2)}
+                {this.props.filterProps.numIncorrect > 0.1
+                  ? this.props.filterProps.numIncorrect.toFixed(2)
+                  : this.props.filterProps.numIncorrect.toFixed(4)}
               </text>
             </g>
           )}
@@ -70,7 +72,7 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
               </text>
             </g>
           </g>
-          <g className={classNames.errorRateCell}>
+          <g className={classNames.metricValueCell}>
             <rect className={classNames.metricBarRed} />
             <g>
               <text className={classNames.smallHeader}>
@@ -80,7 +82,9 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
                 )}
               </text>
               <text className={classNames.valueBlack}>
-                {this.props.filterProps.metricValue.toFixed(2)}
+                {this.props.filterProps.metricValue > 0.1
+                  ? this.props.filterProps.metricValue.toFixed(2)
+                  : this.props.filterProps.metricValue.toFixed(4)}
                 {isErrorRate ? "%" : ""}
               </text>
             </g>
