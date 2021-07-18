@@ -10,6 +10,7 @@ import { localization } from "@responsible-ai/localization";
 import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { TreatmentCell } from "./TreatmentCell";
 import { TreatmentTable } from "./TreatmentTable";
 import { TreatmentTableStyles } from "./TreatmentTableStyles";
 
@@ -40,7 +41,11 @@ export class TreatmentTableSection extends React.Component<
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "l1" }}>
             <Stack.Item>
-              <TreatmentTable data={this.props.data?.policy_tree} />
+              {this.props.data?.policy_tree?.leaf ? (
+                <TreatmentCell data={this.props.data?.policy_tree} />
+              ) : (
+                <TreatmentTable data={this.props.data?.policy_tree} />
+              )}
             </Stack.Item>
             <Stack.Item>
               <Text variant={"medium"} className={styles.label}>

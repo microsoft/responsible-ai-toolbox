@@ -54,14 +54,6 @@ def compute_json_error_tree(analyzer,
         max_depth = DEFAULT_MAX_DEPTH
     if num_leaves is None:
         num_leaves = DEFAULT_NUM_LEAVES
-    if analyzer.model_task == ModelTask.CLASSIFICATION:
-        surrogate = LGBMClassifier(n_estimators=1,
-                                   max_depth=max_depth,
-                                   num_leaves=num_leaves)
-    else:
-        surrogate = LGBMRegressor(n_estimators=1,
-                                  max_depth=max_depth,
-                                  num_leaves=num_leaves)
     is_model_analyzer = hasattr(analyzer, MODEL)
     if is_model_analyzer:
         filtered_df = filter_from_cohort(analyzer.dataset,
@@ -109,8 +101,7 @@ def compute_json_error_tree(analyzer,
         indexes.append(analyzer.feature_names.index(feature))
     if is_pandas:
         input_data = input_data.to_numpy()
-    cat_ind_reindexed = []
-    categories_reindexed = []
+
     if analyzer.categorical_features:
         # Inplace replacement of columns
         for idx, c_i in enumerate(analyzer.categorical_indexes):
@@ -118,18 +109,18 @@ def compute_json_error_tree(analyzer,
     dataset_sub_features = input_data[:, indexes]
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     dataset_sub_names = list(dataset_sub_names)
-    if analyzer.categorical_features:
-        for c_index, feature in enumerate(analyzer.categorical_features):
-            try:
-                index_sub = dataset_sub_names.index(feature)
-            except ValueError:
-                continue
-            cat_ind_reindexed.append(index_sub)
-            categories_reindexed.append(analyzer.categories[c_index])
-        surrogate.fit(dataset_sub_features, diff,
-                      categorical_feature=cat_ind_reindexed)
-    else:
-        surrogate.fit(dataset_sub_features, diff)
+
+    categorical_info = get_categorical_info(analyzer,
+                                            dataset_sub_names)
+    cat_ind_reindexed, categories_reindexed = categorical_info
+
+    surrogate = create_surrogate_model(analyzer,
+                                       dataset_sub_features,
+                                       diff,
+                                       max_depth,
+                                       num_leaves,
+                                       cat_ind_reindexed)
+
     filtered_indexed_df = pd.DataFrame(dataset_sub_features,
                                        columns=dataset_sub_names)
     filtered_indexed_df[DIFF] = diff
@@ -147,6 +138,75 @@ def compute_json_error_tree(analyzer,
                          dataset_sub_names,
                          metric=analyzer.metric)
     return json_tree
+
+
+def create_surrogate_model(analyzer,
+                           dataset_sub_features,
+                           diff,
+                           max_depth,
+                           num_leaves,
+                           cat_ind_reindexed):
+    """Creates and fits the surrogate lightgbm model.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param dataset_sub_features: The subset of features to train the
+        surrogate model on.
+    :type dataset_sub_features: numpy.array or pandas.DataFrame
+    :param diff: The difference between the true and predicted labels column.
+    :type diff: numpy.array
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param cat_ind_reindexed: The list of categorical feature indexes.
+    :type cat_ind_reindexed: list[int]
+    :return: The trained surrogate model.
+    :rtype: LGBMClassifier or LGBMRegressor
+    """
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        surrogate = LGBMClassifier(n_estimators=1,
+                                   max_depth=max_depth,
+                                   num_leaves=num_leaves)
+    else:
+        surrogate = LGBMRegressor(n_estimators=1,
+                                  max_depth=max_depth,
+                                  num_leaves=num_leaves)
+    if cat_ind_reindexed:
+        surrogate.fit(dataset_sub_features, diff,
+                      categorical_feature=cat_ind_reindexed)
+    else:
+        surrogate.fit(dataset_sub_features, diff)
+    return surrogate
+
+
+def get_categorical_info(analyzer, dataset_sub_names):
+    """Returns the categorical information for the given feature names.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param dataset_sub_names: The subset of feature names to get the
+        categorical indexes and names for.
+    :type dataset_sub_names: list[str]
+    :return: The categorical indexes and categories for the subset
+        of features specified.
+    :rtype: tuple[list]
+    """
+    cat_ind_reindexed = []
+    categories_reindexed = []
+    if analyzer.categorical_features:
+        for c_index, feature in enumerate(analyzer.categorical_features):
+            try:
+                index_sub = dataset_sub_names.index(feature)
+            except ValueError:
+                continue
+            cat_ind_reindexed.append(index_sub)
+            categories_reindexed.append(analyzer.categories[c_index])
+    return (cat_ind_reindexed, categories_reindexed)
 
 
 def get_max_split_index(tree):
@@ -236,7 +296,7 @@ def node_to_json(df, tree, nodeid, categories, json,
         p_node_name = feature_names[parent[SPLIT_FEATURE]]
         parent_threshold = parent['threshold']
         parent_decision_type = parent['decision_type']
-        if side == TreeSide.RIGHT_CHILD:
+        if side == TreeSide.LEFT_CHILD:
             if parent_decision_type == '<=':
                 method = "less and equal"
                 arg = float(parent_threshold)
@@ -253,7 +313,7 @@ def node_to_json(df, tree, nodeid, categories, json,
                                                             parent,
                                                             categories)
                 df = df.query(query)
-        elif side == TreeSide.LEFT_CHILD:
+        elif side == TreeSide.RIGHT_CHILD:
             if parent_decision_type == '<=':
                 method = "greater"
                 arg = float(parent_threshold)

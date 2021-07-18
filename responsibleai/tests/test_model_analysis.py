@@ -43,6 +43,7 @@ class TestModelAnalysis(object):
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.CAUSAL,
                                               ManagerNames.EXPLAINER])
     def test_model_analysis_iris(self, manager_type):
         X_train, X_test, y_train, y_test, feature_names, classes = \
@@ -51,6 +52,7 @@ class TestModelAnalysis(object):
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
         manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [feature_names[0]],
             ManagerParams.DESIRED_CLASS: 0,
             ManagerParams.FEATURE_IMPORTANCE: True
         }
@@ -88,7 +90,7 @@ class TestModelAnalysis(object):
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
         manager_args = {
-            ManagerParams.TREATMENT_FEATURES: [0]
+            ManagerParams.TREATMENT_FEATURES: ['col0']
         }
 
         for model in models:
@@ -106,10 +108,11 @@ class TestModelAnalysis(object):
             continuous_features, target_name, classes = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
+
         model = create_complex_classification_pipeline(
             X_train, y_train, continuous_features, categorical_features)
         manager_args = {
-            ManagerParams.TREATMENT_FEATURES: [0],
+            ManagerParams.TREATMENT_FEATURES: ['age', 'hours_per_week'],
             ManagerParams.DESIRED_CLASS: 'opposite',
             ManagerParams.FEATURE_IMPORTANCE: False
         }
