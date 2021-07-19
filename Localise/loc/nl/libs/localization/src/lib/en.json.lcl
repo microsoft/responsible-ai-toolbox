@@ -1007,7 +1007,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Shift]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Shift]]></Val>
+            <Val><![CDATA[Verplaatsen]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
