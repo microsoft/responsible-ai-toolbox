@@ -123,6 +123,7 @@ class ExplainerManager(BaseManager):
             model_task = ModelTask.Classification
         else:
             model_task = ModelTask.Regression
+
         explainer = MimicExplainer(
             self._model,
             self._initialization_examples,

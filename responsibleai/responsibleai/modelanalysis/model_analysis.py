@@ -33,6 +33,7 @@ _SERIALIZER = 'serializer'
 _CLASSES = 'classes'
 _MANAGERS = 'managers'
 _CATEGORICAL_FEATURES = 'categorical_features'
+_TRAN_LABELS = 'train_labels'
 _META_JSON = Metadata.META_JSON
 
 
@@ -108,14 +109,13 @@ class ModelAnalysis(object):
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
-
-        if self.task_type == ModelTask.CLASSIFICATION:
-            if train_labels is None:
-                self._classes = train[target_column].unique()
-            else:
-                self._classes = train_labels
-        else:
-            self._classes = None
+        self._train_labels = train_labels
+        self._classes = ModelAnalysis._get_classes(
+            task_type=self.task_type,
+            train=self.train,
+            target_column=self.target_column,
+            train_labels=self._train_labels
+        )
 
         self._causal_manager = CausalManager(
             train, test, target_column, task_type, categorical_features)
@@ -139,6 +139,16 @@ class ModelAnalysis(object):
                           self._counterfactual_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
+
+    @staticmethod
+    def _get_classes(task_type, train, target_column, train_labels):
+        if task_type == ModelTask.CLASSIFICATION:
+            if train_labels is None:
+                return train[target_column].unique()
+            else:
+                return train_labels
+        else:
+            return None
 
     def _validate_model_analysis_input_parameters(
             self, model, train, test, target_column,
@@ -459,9 +469,12 @@ class ModelAnalysis(object):
         self._write_to_file(top_dir / (_TEST + _DTYPES),
                             json.dumps(dtypes))
         self._write_to_file(top_dir / _TEST, self.test.to_json())
-        meta = {_TARGET_COLUMN: self.target_column,
-                _TASK_TYPE: self.task_type,
-                _CATEGORICAL_FEATURES: self.categorical_features}
+        meta = {
+            _TARGET_COLUMN: self.target_column,
+            _TASK_TYPE: self.task_type,
+            _CATEGORICAL_FEATURES: self.categorical_features,
+            _TRAN_LABELS: self._train_labels
+        }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
@@ -505,11 +518,17 @@ class ModelAnalysis(object):
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
-        target_column = meta[_TARGET_COLUMN]
-        inst.__dict__[_TARGET_COLUMN] = target_column
+        inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
-        inst.__dict__['_' + _CLASSES] = train[target_column].unique()
         inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
+        inst.__dict__['_' + _TRAN_LABELS] = meta[_TRAN_LABELS]
+        inst.__dict__['_' + _CLASSES] = ModelAnalysis._get_classes(
+            task_type=meta[_TASK_TYPE],
+            train=train,
+            target_column=meta[_TARGET_COLUMN],
+            train_labels=meta[_TRAN_LABELS]
+        )
+
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:
