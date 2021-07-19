@@ -7,7 +7,7 @@ from pathlib import Path
 import json
 from responsibleai._internal.constants import (
     ManagerNames, ListProperties, ErrorAnalysisManagerKeys as Keys)
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai._managers.base_manager import BaseManager, measure_time
 from responsibleai._config.base_config import BaseConfig
 from responsibleai.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
@@ -202,9 +202,12 @@ class ErrorAnalysisManager(BaseManager):
         else:
             self._ea_config_list.append(ea_config)
 
+    @measure_time
     def compute(self):
         """Creates an ErrorReport by running the error analyzer on the model.
         """
+        print("Error Analysis")
+        print('Current Status: Generating error analysis reports.')
         for config in self._ea_config_list:
             if config.is_computed:
                 continue
@@ -216,6 +219,7 @@ class ErrorAnalysisManager(BaseManager):
                                                         max_depth=max_depth,
                                                         num_leaves=num_leaves)
             self._ea_report_list.append(report)
+        print('Current Status: Finished generating error analysis reports.')
 
     def get(self):
         """Get the computed error reports.

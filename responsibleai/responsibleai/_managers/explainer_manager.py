@@ -19,7 +19,7 @@ from interpret_community.explanation.explanation import (
 from responsibleai._internal.constants import (
     ManagerNames, Metadata, ListProperties, ExplanationKeys,
     ExplainerManagerKeys as Keys)
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai._managers.base_manager import BaseManager, measure_time
 from responsibleai._interfaces import ModelExplanationData,\
     PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
 from responsibleai._input_processing import _convert_to_list
@@ -113,15 +113,16 @@ class ExplainerManager(BaseManager):
             self._surrogate_model = LinearExplainableModel
         self._is_added = True
 
+    @measure_time
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
+        print("Explanations")
         if not self._is_added:
             return
         if self._is_run:
             return
-        print('Current Status: Explaining {0} features'.format(len(self._features)))
-        import timeit
-        start_time = timeit.default_timer()
+        print('Current Status: Explaining {0} features'.format(len(
+            self._features)))
         model_task = ModelTask.Unknown
         explainer = MimicExplainer(
             self._model,
@@ -132,11 +133,8 @@ class ExplainerManager(BaseManager):
             classes=self._classes,
             categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
-        self.elapsed = timeit.default_timer() - start_time
-        m, s = divmod(self.elapsed, 60)
-        print('Current Status: Explained {0} features. Time taken: {1} min {2} sec'.format(
-              len(self._features), m, s)
-        )
+        print('Current Status: Explained {0} features.'.format(
+            len(self._features)))
 
     def get(self):
         """Get the computed explanation.

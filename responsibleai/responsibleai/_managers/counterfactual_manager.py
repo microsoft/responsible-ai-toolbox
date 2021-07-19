@@ -8,7 +8,7 @@ from dice_ml import Dice
 import numpy as np
 
 from responsibleai._internal.constants import ManagerNames
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai._managers.base_manager import BaseManager, measure_time
 from responsibleai._config.base_config import BaseConfig
 from responsibleai.modelanalysis.constants import ModelTask
 from responsibleai.exceptions import (
@@ -191,18 +191,18 @@ class CounterfactualManager(BaseManager):
 
         self._add_counterfactual_config(counterfactual_config)
 
+    @measure_time
     def compute(self):
         """Computes the counterfactual examples by running the counterfactual
            configuration."""
+        print("Counterfactual")
         for cf_config in self._counterfactual_config_list:
             if not cf_config.is_computed:
                 cf_config.is_computed = True
                 try:
-                    print('Current Status: Generating {0} counterfactuals for {1} samples'.format(
-                          cf_config.total_CFs, len(self._test))
-                    )
-                    import timeit
-                    start_time = timeit.default_timer()
+                    print('Current Status: Generating {0} counterfactuals'
+                          ' for {1} samples'.format(
+                              cf_config.total_CFs, len(self._test)))
                     dice_explainer = self._create_diceml_explainer(
                         method=cf_config.method,
                         continuous_features=cf_config.continuous_features)
@@ -225,11 +225,9 @@ class CounterfactualManager(BaseManager):
 
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
-                    self.elapsed = timeit.default_timer() - start_time
-                    m, s = divmod(self.elapsed, 60)
-                    print('Current Status: Generated {0} counterfactuals for {1} samples. Time taken: {2} min {3} sec'.format(
-                          cf_config.total_CFs, len(self._test), m, s)
-                    )
+                    print('Current Status: Generated {0} counterfactuals'
+                          ' for {1} samples.'.format(
+                              cf_config.total_CFs, len(self._test)))
                 except Exception as e:
                     cf_config.has_computation_failed = True
                     cf_config.failure_reason = str(e)

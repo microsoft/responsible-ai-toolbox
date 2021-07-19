@@ -12,7 +12,7 @@ from responsibleai._interfaces import (
     CausalData, CausalPolicy, CausalPolicyGains,
     CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
 from responsibleai._internal.constants import ManagerNames
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai._managers.base_manager import BaseManager, measure_time
 from responsibleai.exceptions import (
     UserConfigValidationException, DuplicateManagerConfigException)
 from responsibleai.modelanalysis.constants import ModelTask
@@ -210,8 +210,11 @@ class CausalManager(BaseManager):
 
         self._causal_config_list.append(causal_config)
 
+    @measure_time
     def compute(self):
         """Computes the causal insights by running the causal configuration."""
+        print("Causal Effects")
+        print('Current Status: Generating Causal Effects.')
         for config in self._causal_config_list:
             if config.is_computed:
                 continue
@@ -280,6 +283,7 @@ class CausalManager(BaseManager):
                     self.POLICY_TREE: tree.tree_dictionary
                 }
                 config.policies.append(policy)
+        print('Current Status: Finished generating causal effects.')
 
     def get(self):
         """Get the computed causal insights."""
