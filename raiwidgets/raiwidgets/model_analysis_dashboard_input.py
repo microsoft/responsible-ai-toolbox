@@ -105,6 +105,24 @@ class ModelAnalysisDashboardInput:
                 WidgetRequestResponseConstants.data: []
             }
 
+    def causal_whatif(self, post_data):
+        try:
+            id, features, feature_name, new_value, target = post_data
+            whatif = self._analysis.causal._whatif(
+                id, pd.DataFrame.from_records(features), new_value,
+                feature_name, target)
+            return {
+                WidgetRequestResponseConstants.data: whatif
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate causal what-if",
+                WidgetRequestResponseConstants.data: []
+            }
+
     def _convert_to_list(self, array):
         if issparse(array):
             if array.shape[1] > 1000:

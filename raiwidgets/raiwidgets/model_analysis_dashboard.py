@@ -53,6 +53,12 @@ class ModelAnalysisDashboard(Dashboard):
 
         self.add_url_rule(matrix, '/matrix', methods=["POST"])
 
+        def causal_whatif():
+            data = request.get_json(force=True)
+            return jsonify(self.input.causal_whatif(data))
+
+        self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
+
         def importances():
             return jsonify(self.input.importances())
 

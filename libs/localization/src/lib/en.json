@@ -585,7 +585,7 @@
     "MainMenu": {
       "header": "causal analysis",
       "aggregate": "Aggregate causal effects",
-      "individual": "Individual causal effects",
+      "individual": "Individual causal what-if",
       "treatment": "Treatment policy",
       "title": "Direct causal effect of each feature with 90% confidence interval",
       "why": "Why is it important to include confounding features?",
@@ -612,6 +612,8 @@
       "datapointIndex": "Datapoint index",
       "selectTreatment": "Select treatment",
       "currentTreatment": "Current treatment value",
+      "currentOutcome": "Current outcome",
+      "newOutcome": "New outcome",
       "setNewTreatment": "Set new treatment value"
     },
     "TreatmentPolicy": {
@@ -1111,13 +1113,13 @@
     },
     "CausalAnalysis": {
       "Table": {
-        "name": "feature",
-        "point": "point",
-        "stderr": "stderr",
-        "zstat": "zstat",
-        "pValue": "p_value",
-        "ciLower": "ci_lower",
-        "ciUpper": "ci_upper"
+        "name": "Feature",
+        "point": "Effect estimate",
+        "stderr": "Standard error",
+        "zstat": "Z-score",
+        "pValue": "P-value",
+        "ciLower": "Confidence interval (lower)",
+        "ciUpper": "Confidence interval (upper)"
       }
     },
     "ComponentNames": {

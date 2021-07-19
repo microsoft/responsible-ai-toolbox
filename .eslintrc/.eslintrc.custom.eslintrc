@@ -86,6 +86,7 @@
           "n_samples",
           "p_value",
           "plot_bgcolor",
+          "point_estimate",
           "policy_gains",
           "policy_tree",
           "precision_score",

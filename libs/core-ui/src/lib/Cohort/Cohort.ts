@@ -7,6 +7,7 @@ import {
   ICompositeFilter,
   Operations
 } from "../Interfaces/IFilter";
+import { compare } from "../util/compare";
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
@@ -68,7 +69,7 @@ export class Cohort {
   ): void {
     if (this.currentSortKey !== columnName) {
       this.filteredData.sort((a, b) => {
-        return a[columnName] - b[columnName];
+        return compare(a[columnName], b[columnName]);
       });
       this.currentSortKey = columnName;
       this.currentSortReversed = false;
@@ -87,7 +88,7 @@ export class Cohort {
     groupingFunction: (row: any) => boolean
   ): void {
     this.filteredData.sort((a, b) => {
-      const columnDifference = a[columnName] - b[columnName];
+      const columnDifference = compare(a[columnName], b[columnName]);
       if (groupingFunction(a) === groupingFunction(b)) {
         return columnDifference;
       }
