@@ -181,7 +181,7 @@ export class ChartBuilder {
       arrayminus: performanceLowerBound,
       type: "data",
       visible: true
-    }; // eslint-disable-line no-use-before-define
+    };
 
     const fairnessLowerBound: any = [];
     const fairnessUpperBound: any = [];
@@ -195,7 +195,7 @@ export class ChartBuilder {
       arrayminus: fairnessUpperBound,
       type: "data",
       visible: true
-    }; // eslint-disable-line no-use-before-define
+    };
     return result;
   }
 
