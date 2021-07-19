@@ -107,28 +107,34 @@ class ModelAnalysis(object):
         self.target_column = target_column
         self.task_type = task_type
         self.categorical_features = categorical_features
-
         self._serializer = serializer
+
+        if self.task_type == ModelTask.CLASSIFICATION:
+            if train_labels is None:
+                self._classes = train[target_column].unique()
+            else:
+                self._classes = train_labels
+        else:
+            self._classes = None
+
         self._causal_manager = CausalManager(
             train, test, target_column, task_type, categorical_features)
+
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features)
-        error_analysis_manager = ErrorAnalysisManager(model,
-                                                      test,
-                                                      target_column,
-                                                      categorical_features)
-        self._error_analysis_manager = error_analysis_manager
-        if train_labels is None:
-            self._classes = train[target_column].unique()
-        else:
-            self._classes = train_labels
+
+        self._error_analysis_manager = ErrorAnalysisManager(
+            model, test, target_column,
+            categorical_features)
+
         self._explainer_manager = ExplainerManager(
             model, train, test,
             target_column,
             self._classes,
             categorical_features=categorical_features)
+
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
                           self._error_analysis_manager,
