@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 """Result of causal analysis."""
+
 import json
 import uuid
 
@@ -9,7 +10,7 @@ from pathlib import Path
 from responsibleai._tools.causal.causal_constants import (
     ResultAttributes, SerializationAttributes)
 from responsibleai._interfaces import (
-    CausalData, CausalPolicy, CausalPolicyGains,
+    CausalConfig, CausalData, CausalPolicy, CausalPolicyGains,
     CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
@@ -38,6 +39,7 @@ class CausalResult:
         self.id = str(uuid.uuid4())
 
         self.config = config
+
         self.causal_analysis = causal_analysis
         self.global_effects = global_effects
         self.local_effects = local_effects
@@ -74,6 +76,9 @@ class CausalResult:
     def _get_dashboard_object(self):
         causal_data = CausalData()
 
+        causal_data.id = self.id
+        causal_data.config = self._get_config_object(self.config)
+
         causal_data.global_effects = self.global_effects\
             .reset_index().to_dict(orient='records')
         local_dicts = self.local_effects.groupby('sample').apply(
@@ -92,6 +97,11 @@ class CausalResult:
     def _cohort_effects(self, X_test, alpha=0.01, keep_all_levels=False):
         return self.causal_analysis.cohort_causal_effect(
             X_test, alpha=alpha, keep_all_levels=keep_all_levels)
+
+    def _get_config_object(self, config):
+        config_object = CausalConfig()
+        config_object.treatment_features = config.treatment_features
+        return config_object
 
     def _get_policy_object(self, policy):
         policy_object = CausalPolicy()

@@ -3,6 +3,7 @@
 
 """Manager for causal analysis."""
 import pandas as pd
+import sys
 
 from econml.solutions.causal_analysis import CausalAnalysis
 from pathlib import Path
@@ -57,6 +58,10 @@ class CausalManager(BaseManager):
         min_tree_leaf_samples=DefaultParams.DEFAULT_MIN_TREE_LEAF_SAMPLES,
         max_tree_depth=DefaultParams.DEFAULT_MAX_TREE_DEPTH,
         skip_cat_limit_checks=DefaultParams.DEFAULT_SKIP_CAT_LIMIT_CHECKS,
+        categories=DefaultParams.DEFAULT_CATEGORIES,
+        n_jobs=DefaultParams.DEFAULT_N_JOBS,
+        verbose=DefaultParams.DEFAULT_VERBOSE,
+        random_state=DefaultParams.DEFAULT_RANDOM_STATE,
     ):
         """Compute causal insights.
         :param treatment_features: Treatment feature names.
@@ -87,6 +92,24 @@ class CausalManager(BaseManager):
                                       fit robustly. Setting this to True
                                       will skip these checks.
         :type skip_cat_limit_checks: bool
+        :param categories: 'auto' or list of category values, default 'auto'
+            What categories to use for the categorical columns.
+            If 'auto', then the categories will be inferred for all
+            categorical columns. Otherwise, this argument should have
+            as many entries as there are categorical columns.
+            Each entry should be either 'auto' to infer the values for
+            that column or the list of values for the column.
+            If explicit values are provided, the first value is treated
+            as the "control" value for that column against which other
+            values are compared.
+        :type categories: str or list
+        :param n_jobs: Degree of parallelism to use when training models
+            via joblib.Parallel
+        :type n_jobs: int
+        :param verbose: Controls the verbosity when fitting and predicting.
+        :type verbose: int
+        :param random_state: Controls the randomness of the estimator.
+        :type random_state: int or RandomState or None
         """
         if not set(treatment_features).issubset(set(self._train.columns)):
             raise UserConfigValidationException(
@@ -124,8 +147,13 @@ class CausalManager(BaseManager):
             heterogeneity_model=heterogeneity_model,
             upper_bound_on_cat_expansion=upper_bound_on_cat_expansion,
             skip_cat_limit_checks=skip_cat_limit_checks,
-            n_jobs=-1)
-        analysis.fit(X, y)
+            n_jobs=n_jobs,
+            categories=categories,
+            verbose=verbose,
+            random_state=random_state,
+        )
+        self._fit_causal_analysis(analysis, X, y,
+                                  upper_bound_on_cat_expansion)
 
         result = CausalResult()
         result.config = CausalConfig(
@@ -139,6 +167,10 @@ class CausalManager(BaseManager):
             min_tree_leaf_samples=min_tree_leaf_samples,
             max_tree_depth=max_tree_depth,
             skip_cat_limit_checks=skip_cat_limit_checks,
+            n_jobs=n_jobs,
+            categories=categories,
+            verbose=verbose,
+            random_state=random_state,
         )
 
         result.causal_analysis = analysis
@@ -158,6 +190,26 @@ class CausalManager(BaseManager):
                 alpha, max_tree_depth, min_tree_leaf_samples)
             result.policies.append(policy)
         self._results.append(result)
+
+    def _fit_causal_analysis(
+        self,
+        causal_analysis,
+        X,
+        y,
+        max_cat_expansion
+    ):
+        try:
+            causal_analysis.fit(X, y)
+        except ValueError as e:
+            message = str(e)
+            expected = "increase the upper_bound_on_cat_expansion"
+            clarification = (
+                " Increase the value {} in model_analysis.causal.add("
+                "upper_bound_on_cat_expansion={})."
+            ).format(max_cat_expansion, max_cat_expansion)
+            if expected in message:
+                raise ValueError(message + clarification)
+            raise e
 
     def _create_policy(
         self,
@@ -193,6 +245,15 @@ class CausalManager(BaseManager):
             ResultAttributes.POLICY_TREE: tree.tree_dictionary
         }
 
+    def _whatif(self, id, X, X_feature_new, feature_name, y, alpha=0.1):
+        """Get what-if data."""
+        filtered = [r for r in self.get() if r.id == id]
+        if len(filtered) == 0:
+            raise ValueError(f"Failed to find causal result with ID: {id}")
+        result = filtered[0]
+        return result._whatif(X, X_feature_new, feature_name,
+                              y, alpha=alpha).to_dict(orient="records")
+
     def compute(self):
         """No-op function to comply with model analysis design."""
         pass
@@ -222,7 +283,7 @@ class CausalManager(BaseManager):
     def _save(self, path):
         """Save the CausalManager to the given path.
 
-        :param path: The directory path to save the ExplainerManager to.
+        :param path: The directory path to save the CausalManager to.
         :type path: str
         """
         causal_dir = Path(path)
@@ -239,7 +300,7 @@ class CausalManager(BaseManager):
     def _load(cls, path, model_analysis):
         """Load the CausalManager from the given path.
 
-        :param path: The directory path to load the ErrorAnalysisManager from.
+        :param path: The directory path to load the CausalManager from.
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis

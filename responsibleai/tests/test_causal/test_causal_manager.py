@@ -36,7 +36,8 @@ class TestCausalManager:
 
         assert len(results) == 1
         assert len(results[0].policies) == 1
-        assert len(results[0].treatment_features) == 1
+        assert len(results[0].config.treatment_features) == 1
+        assert results[0].config.treatment_features[0] == 'ZN'
 
     def test_causal_save_and_load(self, boston_data, tmpdir):
         train_df, test_df, feature_names, target_feature = boston_data
@@ -62,3 +63,18 @@ class TestCausalManager:
         assert post_result.global_effects is not None
         assert post_result.local_effects is not None
         assert post_result.policies is not None
+
+    def test_causal_cat_expansion(self, boston_data):
+        train_df, test_df, feature_names, target_feature = boston_data
+
+        model = None
+        task = ModelTask.REGRESSION
+        analysis = ModelAnalysis(
+            model, train_df, test_df, target_feature, task,
+            categorical_features=['ZN'])
+
+        treatment_features = ['ZN']
+
+        expected = "Increase the value 50"
+        with pytest.raises(ValueError, match=expected):
+            analysis.causal.add(treatment_features=treatment_features)

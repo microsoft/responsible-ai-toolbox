@@ -1,3 +1,7 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+"""Utilities for attribute serialization."""
+
 import json
 import pickle
 
