@@ -5,6 +5,8 @@ export interface ICausalAnalysisData {
   global_effects: ICausalAnalysisSingleData[];
   local_effects: ICausalAnalysisSingleData[][];
   policies?: ICausalPolicy[];
+  id: string;
+  treatment_features: string[];
 }
 
 export interface ICausalPolicyGains {
@@ -45,4 +47,13 @@ export interface ICausalAnalysisSingleData {
   point: number;
   stderr: number;
   zstat: number;
+}
+
+export interface ICausalWhatIfData {
+  ci_lower: number;
+  ci_upper: number;
+  pvalue: number;
+  point_estimate: number;
+  stderr: number;
+  zstat?: number;
 }
