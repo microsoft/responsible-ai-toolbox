@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from "@responsible-ai/core-ui";
+import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
@@ -26,6 +26,14 @@ interface IOutcomePlotProps {
   areaHeights: number;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   errorPickerProps: IErrorPickerPropsV2;
+  fairnessBounds?: Array<IBounds | undefined>;
+  performanceBounds?: Array<IBounds | undefined>;
+  outcomeBounds?: Array<IBounds | undefined>;
+  falsePositiveBounds?: Array<IBounds | undefined>;
+  falseNegativeBounds?: Array<IBounds | undefined>;
+  parentErrorChanged: {
+    (event: React.MouseEvent<HTMLElement>, checked?: boolean): void;
+  };
 }
 
 export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
@@ -171,10 +179,17 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <div className={sharedStyles.chartWrapper}>
-            <Stack horizontal horizontalAlign={"space-between"}>
-              <div className={sharedStyles.chartSubHeader} />
-              <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
-            </Stack>
+            <ModalHelp
+              theme={theme}
+              graphTooltipStrings={outcomeChartModalHelpStrings}
+              errorPickerProps={this.props.errorPickerProps}
+              fairnessBounds={this.props.fairnessBounds}
+              performanceBounds={this.props.performanceBounds}
+              outcomeBounds={this.props.outcomeBounds}
+              falsePositiveBounds={this.props.falsePositiveBounds}
+              falseNegativeBounds={this.props.falseNegativeBounds}
+              parentErrorChanged={this.props.parentErrorChanged}
+            />
             <div className={sharedStyles.chartBody}>
               <AccessibleChart
                 plotlyProps={barPlotlyProps}

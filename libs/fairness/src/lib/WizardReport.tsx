@@ -215,6 +215,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
                 errorPickerProps={this.props.errorPickerProps}
                 chartKey={this.state.chartKey}
                 onUpdateChartKey={this.updateChartKey}
+                parentErrorChanged={this.errorChanged}
               />
             </Stack>
           </Stack.Item>
@@ -265,19 +266,19 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           dashboardContext={this.props.dashboardContext}
           performancePickerProps={this.props.performancePickerProps}
           fairnessPickerProps={this.props.fairnessPickerProps}
-          errorPickerProps={this.props.errorPickerProps}
+          //errorPickerProps={this.props.errorPickerProps}
           featureBinPickerProps={this.props.featureBinPickerProps}
           parentFeatureChanged={this.featureChanged}
           parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
-          parentErrorChanged={this.errorChanged}
-          outcomeBounds={this.state?.metrics?.outcomes?.binBounds}
-          falseNegativeBounds={
-            this.state?.metrics?.falseNegativeRates?.binBounds
-          }
-          falsePositiveBounds={
-            this.state?.metrics?.falsePositiveRates?.binBounds
-          }
+          //parentErrorChanged={this.errorChanged}
+          // outcomeBounds={this.state?.metrics?.outcomes?.binBounds}
+          // falseNegativeBounds={
+          //   this.state?.metrics?.falseNegativeRates?.binBounds
+          // }
+          // falsePositiveBounds={
+          //   this.state?.metrics?.falsePositiveRates?.binBounds
+          // }
         />
         {mainChart}
       </Stack>

@@ -12,6 +12,8 @@ import {
 
 export interface ISharedStyles {
   presentationArea: IStyle;
+  actionButton: IStyle;
+  callout: IStyle;
   chartWrapper: IStyle;
   chartBody: IStyle;
   chartHeader: IStyle;
@@ -25,11 +27,25 @@ export interface ISharedStyles {
   doneButton: IStyle;
   modalContentHelp: IStyle;
   modalContentHelpText: IStyle;
+  toolTipWrapper: IStyle;
+  tooltipBarWrapper: IStyle;
+  graphTooltipWrapper: IStyle;
+  errorTooltipWrapper: IStyle;
+  title: IStyle;
+  toggle: IStyle;
+  errorTooltipHeader: IStyle;
 }
 
 export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
   const theme = getTheme();
   return mergeStyleSets<ISharedStyles>({
+    actionButton: {
+      height: "auto"
+    },
+    callout: {
+      padding: "20px 24px",
+      width: 320
+    },
     chartBody: {
       flex: 1
     },
@@ -66,6 +82,17 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       margin: "auto",
       padding: "12px"
     },
+    errorTooltipHeader: {
+      paddingRight: "5px"
+    },
+    errorTooltipWrapper: {
+      alignItems: "center",
+      display: "flex",
+      flexFlow: "row nowrap"
+    },
+    graphTooltipWrapper: {
+      marginLeft: "80px"
+    },
     header: {
       alignItems: "center",
       backgroundColor: theme.semanticColors.bodyBackground,
@@ -88,9 +115,7 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       fontWeight: "600",
       height: "15px",
       lineHeight: "14px",
-      marginLeft: "250px",
-      marginRight: "3px",
-      marginTop: "3px",
+      margin: "3px",
       textAlign: "center",
       width: "15px"
     },
@@ -120,6 +145,21 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       display: "flex",
       flexDirection: "row",
       paddingBottom: "7px"
+    },
+    title: {
+      marginBottom: 12
+    },
+    toggle: {
+      margin: "0px"
+    },
+    tooltipBarWrapper: {
+      justifyContent: "space-between",
+      padding: "15px 0px"
+    },
+    toolTipWrapper: {
+      alignItems: "center",
+      display: "flex",
+      flexFlow: "row wrap"
     }
   });
 };

@@ -1099,7 +1099,7 @@
     },
     "ErrorBounds": {
       "howToRead": "How to read these error bars",
-      "introModalText": "These error bars are generated using Wilson Interval Bounds (for binary classification) and Standard Normal Error (for regression/probability). Note there are many different ways to calculate error bars, so these estimates may not be appropriate in all cases."
+      "introModalText": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using Wilson scores (for binary classification) or normal approximation (for other tasks)."
     }
   },
   "ModelAssessment": {

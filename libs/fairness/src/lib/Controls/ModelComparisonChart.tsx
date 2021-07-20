@@ -11,16 +11,11 @@ import {
 import { IBounds } from "libs/core-ui/src/lib/Interfaces/IFairnessData";
 import _ from "lodash";
 import {
-  ActionButton,
-  PrimaryButton,
-  IconButton,
   getTheme,
   Text,
   Spinner,
   SpinnerSize,
   Stack,
-  Modal,
-  IIconProps,
   IDropdownOption
 } from "office-ui-fabric-react";
 import React from "react";
@@ -39,6 +34,7 @@ import { MetricsCache } from "./../util/MetricsCache";
 import { performanceOptions } from "./../util/PerformanceMetrics";
 import { DropdownBar } from "./DropdownBar";
 import { Insights } from "./Insights";
+import { ModalHelp } from "./ModalHelp";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 export interface IModelComparisonProps {
@@ -156,6 +152,7 @@ export class ModelComparisonChart extends React.Component<
 
   public render(): React.ReactNode {
     const styles = ModelComparisonChartStyles();
+    const theme = getTheme();
     const sharedStyles = SharedStyles();
 
     let mainChart;
@@ -255,8 +252,6 @@ export class ModelComparisonChart extends React.Component<
         props.layout.yaxis.title = fairnessMetricTitle;
       }
 
-      const cancelIcon: IIconProps = { iconName: "Cancel" };
-
       // The help text for performance metrics needs to indicate
       // that a lower/higher value is better in the corresponding cases.
       const helpModalText1 = localization.formatString(
@@ -279,45 +274,23 @@ export class ModelComparisonChart extends React.Component<
           : localization.Fairness.ModelComparison.higher
       );
 
+      const helpString = [
+        localization.Fairness.ModelComparison.introModalText,
+        helpModalText1,
+        helpModalText2
+      ];
+
       mainChart = (
         <Stack horizontal>
           <Stack className={sharedStyles.mainLeft}>
-            <Stack className={styles.howTo}>
-              <ActionButton onClick={this.handleOpenModalHelp}>
-                <div className={styles.infoButton}>i</div>
-                {localization.Fairness.ModelComparison.howToRead}
-              </ActionButton>
-              <Modal
-                titleAriaId="help modal"
-                isOpen={this.state.showModalHelp}
-                onDismiss={this.handleCloseModalHelp}
-                isModeless
-                containerClassName={styles.modalContentHelp}
-              >
-                <IconButton
-                  iconProps={cancelIcon}
-                  ariaLabel="Close popup modal"
-                  onClick={this.handleCloseModalHelp}
-                />
-                <p className={styles.modalContentHelpText}>
-                  {localization.Fairness.ModelComparison.introModalText}
-                  <br />
-                  <br />
-                  {helpModalText1}
-                  <br />
-                  <br />
-                  {helpModalText2}
-                </p>
-                <div style={{ display: "flex", paddingBottom: "20px" }}>
-                  <PrimaryButton
-                    className={styles.doneButton}
-                    onClick={this.handleCloseModalHelp}
-                  >
-                    {localization.Fairness.done}
-                  </PrimaryButton>
-                </div>
-              </Modal>
-            </Stack>
+            <ModalHelp
+              theme={theme}
+              graphTooltipStrings={helpString}
+              errorPickerProps={this.props.errorPickerProps}
+              performanceBounds={this.state.performanceBounds}
+              fairnessBounds={this.state.fairnessBounds}
+              parentErrorChanged={this.errorChanged}
+            />
             <div id="FairnessPerformanceTradeoffChart">
               <AccessibleChart
                 plotlyProps={props}
@@ -350,17 +323,13 @@ export class ModelComparisonChart extends React.Component<
           </Text>
         </div>
         <DropdownBar
-          fairnessBounds={this.state.fairnessBounds}
-          performanceBounds={this.state.performanceBounds}
           dashboardContext={this.props.dashboardContext}
           performancePickerProps={this.props.performancePickerProps}
           fairnessPickerProps={this.props.fairnessPickerProps}
-          errorPickerProps={this.props.errorPickerProps}
           featureBinPickerProps={this.props.featureBinPickerProps}
           parentFeatureChanged={this.featureChanged}
           parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
-          parentErrorChanged={this.errorChanged}
         />
         {mainChart}
       </Stack>
@@ -489,13 +458,5 @@ export class ModelComparisonChart extends React.Component<
       this.props.errorPickerProps.onErrorChange(errorKey);
       this.setState({ errorKey });
     }
-  };
-
-  private readonly handleOpenModalHelp = (): void => {
-    this.setState({ showModalHelp: true });
-  };
-
-  private readonly handleCloseModalHelp = (): void => {
-    this.setState({ showModalHelp: false });
   };
 }

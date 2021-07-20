@@ -28,6 +28,9 @@ export interface IReportChartProps {
   metrics: IMetrics;
   chartKey?: string;
   onUpdateChartKey: (chartKey: string) => void;
+  parentErrorChanged: {
+    (event: React.MouseEvent<HTMLElement>, checked?: boolean): void;
+  };
 }
 
 const performanceKey = "performance";
@@ -119,9 +122,19 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
             featureBinPickerProps={this.props.featureBinPickerProps}
-            errorPickerProps={this.props.errorPickerProps}
             performancePickerProps={this.props.performancePickerProps}
             areaHeights={this.props.areaHeights}
+            errorPickerProps={this.props.errorPickerProps}
+            //fairnessBounds={this.props.metrics.disparityBounds}
+            performanceBounds={this.props.metrics.performance.binBounds}
+            outcomeBounds={this.props.metrics.outcomes.binBounds}
+            falsePositiveBounds={
+              this.props.metrics.falsePositiveRates?.binBounds
+            }
+            falseNegativeBounds={
+              this.props.metrics.falseNegativeRates?.binBounds
+            }
+            parentErrorChanged={this.props.parentErrorChanged}
           />
         )}
         {this.state.chartKey === outcomeKey && (
@@ -129,8 +142,18 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             dashboardContext={this.props.dashboardContext}
             metrics={this.props.metrics}
             featureBinPickerProps={this.props.featureBinPickerProps}
-            errorPickerProps={this.props.errorPickerProps}
             areaHeights={this.props.areaHeights}
+            errorPickerProps={this.props.errorPickerProps}
+            //fairnessBounds={this.props.metrics.disparityBounds}
+            performanceBounds={this.props.metrics.performance.binBounds}
+            outcomeBounds={this.props.metrics.outcomes.binBounds}
+            falsePositiveBounds={
+              this.props.metrics.falsePositiveRates?.binBounds
+            }
+            falseNegativeBounds={
+              this.props.metrics.falseNegativeRates?.binBounds
+            }
+            parentErrorChanged={this.props.parentErrorChanged}
           />
         )}
       </Stack>
