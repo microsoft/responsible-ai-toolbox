@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pytest
 import pandas as pd
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.matrix_filter import (
@@ -14,10 +15,12 @@ from common_utils import (
     create_models_classification,
     create_models_regression)
 from erroranalysis._internal.constants import (
-    ModelTask, TRUE_Y, ROW_INDEX, Metrics, metric_to_display_name)
+    ModelTask, TRUE_Y, ROW_INDEX, MatrixParams, Metrics,
+    metric_to_display_name)
 from erroranalysis._internal.metrics import metric_to_func
 
 TOLERANCE = 1e-5
+BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 
 
 class TestMatrixFilter(object):
@@ -59,6 +62,39 @@ class TestMatrixFilter(object):
         run_error_analyzer_on_models(X_train, y_train, X_test,
                                      y_test, feature_names,
                                      model_task, filters=filters)
+
+    def test_matrix_filter_iris_quantile_binning(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer_on_models(X_train, y_train, X_test,
+                                     y_test, feature_names,
+                                     model_task,
+                                     quantile_binning=True)
+
+    def test_matrix_filter_iris_num_bins(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        model_task = ModelTask.CLASSIFICATION
+        num_bins_list = [2, 4, 10, 12]
+        for num_bins in num_bins_list:
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names,
+                                         model_task,
+                                         num_bins=num_bins)
+
+    def test_matrix_filter_iris_invalid_num_bins(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        model_task = ModelTask.CLASSIFICATION
+        invalid_num_bins_list = [-10, -1, 0]
+        err = 'Number of bins parameter must be greater than 0 for the heatmap'
+        for num_bins in invalid_num_bins_list:
+            with pytest.raises(ValueError, match=err):
+                run_error_analyzer_on_models(X_train, y_train, X_test,
+                                             y_test, feature_names,
+                                             model_task,
+                                             num_bins=num_bins)
 
     def test_matrix_filter_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
@@ -163,7 +199,9 @@ def run_error_analyzer_on_models(X_train,
                                  model_task,
                                  filters=None,
                                  composite_filters=None,
-                                 matrix_features=None):
+                                 matrix_features=None,
+                                 quantile_binning=False,
+                                 num_bins=BIN_THRESHOLD):
     if model_task == ModelTask.CLASSIFICATION:
         models = create_models_classification(X_train, y_train)
     else:
@@ -175,7 +213,9 @@ def run_error_analyzer_on_models(X_train,
                            categorical_features, model_task=model_task,
                            filters=filters,
                            composite_filters=composite_filters,
-                           matrix_features=matrix_features)
+                           matrix_features=matrix_features,
+                           quantile_binning=quantile_binning,
+                           num_bins=num_bins)
 
 
 def run_error_analyzer(model,
@@ -186,7 +226,9 @@ def run_error_analyzer(model,
                        model_task,
                        filters=None,
                        composite_filters=None,
-                       matrix_features=None):
+                       matrix_features=None,
+                       quantile_binning=False,
+                       num_bins=BIN_THRESHOLD):
     error_analyzer = ModelAnalyzer(model,
                                    X_test,
                                    y_test,
@@ -200,7 +242,9 @@ def run_error_analyzer(model,
         features = matrix_features
     matrix = error_analyzer.compute_matrix(features,
                                            filters,
-                                           composite_filters)
+                                           composite_filters,
+                                           quantile_binning=quantile_binning,
+                                           num_bins=num_bins)
     validation_data = X_test
     if filters is not None or composite_filters is not None:
         validation_data = filter_from_cohort(X_test,

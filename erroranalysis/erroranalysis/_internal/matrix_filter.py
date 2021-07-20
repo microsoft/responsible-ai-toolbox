@@ -10,22 +10,23 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                ROW_INDEX,
                                                DIFF,
                                                ModelTask,
+                                               MatrixParams,
                                                Metrics,
                                                metric_to_display_name)
 from erroranalysis._internal.metrics import metric_to_func
 
 
-BIN_THRESHOLD = 8
-CATEGORY1 = "category1"
-CATEGORY2 = "category2"
-COUNT = "count"
-FALSE_COUNT = "falseCount"
-INTERVAL_MIN = "intervalMin"
-INTERVAL_MAX = "intervalMax"
-MATRIX = "matrix"
-METRIC_VALUE = "metricValue"
-METRIC_NAME = "metricName"
-VALUES = "values"
+BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
+CATEGORY1 = 'category1'
+CATEGORY2 = 'category2'
+COUNT = 'count'
+FALSE_COUNT = 'falseCount'
+INTERVAL_MIN = 'intervalMin'
+INTERVAL_MAX = 'intervalMax'
+MATRIX = 'matrix'
+METRIC_VALUE = 'metricValue'
+METRIC_NAME = 'metricName'
+VALUES = 'values'
 
 
 def compute_json_matrix(analyzer, features, filters, composite_filters):
@@ -34,10 +35,14 @@ def compute_json_matrix(analyzer, features, filters, composite_filters):
     compute_matrix(analyzer, features, filters, composite_filters)
 
 
-def compute_matrix(analyzer, features, filters, composite_filters):
+def compute_matrix(analyzer, features, filters, composite_filters,
+                   quantile_binning=False, num_bins=BIN_THRESHOLD):
+    if num_bins <= 0:
+        raise ValueError(
+            'Number of bins parameter must be greater than 0 for the heatmap')
     if features[0] is None and features[1] is None:
         raise ValueError(
-            "One or two features must be specified to compute the heat map")
+            'One or two features must be specified to compute the heat map')
     is_model_analyzer = hasattr(analyzer, 'model')
     if is_model_analyzer:
         filtered_df = filter_from_cohort(analyzer.dataset,
@@ -115,21 +120,41 @@ def compute_matrix(analyzer, features, filters, composite_filters):
         if analyzer.categorical_features is not None:
             f1_is_cat = feat1 in analyzer.categorical_features
             f2_is_cat = feat2 in analyzer.categorical_features
-        if unique_count1 > BIN_THRESHOLD and not f1_is_cat:
-            tabdf1, bins = pd.cut(df[feat1], BIN_THRESHOLD,
-                                  retbins=True)
-            tabdf1_err = pd.cut(df_err[feat1], bins)
+        if unique_count1 > num_bins and not f1_is_cat:
+            tabdf1, bins = bin_data(df,
+                                    feat1,
+                                    num_bins,
+                                    retbins=True,
+                                    quantile_binning=quantile_binning)
+            tabdf1_err = bin_data(df_err,
+                                  feat1,
+                                  bins,
+                                  quantile_binning=quantile_binning)
             categories1 = tabdf1.cat.categories
+            # Note: use exact same object so that the line:
+            # cat1 in matrix_err_counts.index
+            # does not fail below, categories are same regardless
+            tabdf1_err.cat.categories = categories1
         else:
             tabdf1 = df[feat1]
             tabdf1_err = df_err[feat1]
             categories1 = np.unique(tabdf1.to_numpy(),
                                     return_counts=True)[0]
-        if unique_count2 > BIN_THRESHOLD and not f2_is_cat:
-            tabdf2, bins = pd.cut(df[feat2], BIN_THRESHOLD,
-                                  retbins=True)
-            tabdf2_err = pd.cut(df_err[feat2], bins)
+        if unique_count2 > num_bins and not f2_is_cat:
+            tabdf2, bins = bin_data(df,
+                                    feat2,
+                                    num_bins,
+                                    retbins=True,
+                                    quantile_binning=quantile_binning)
+            tabdf2_err = bin_data(df_err,
+                                  feat2,
+                                  bins,
+                                  quantile_binning=quantile_binning)
             categories2 = tabdf2.cat.categories
+            # Note: use exact same object so that the line:
+            # cat2 in matrix_err_counts.columns
+            # does not fail below, categories are same regardless
+            tabdf2_err.cat.categories = categories2
         else:
             tabdf2 = df[feat2]
             tabdf2_err = df_err[feat2]
@@ -168,10 +193,13 @@ def compute_matrix(analyzer, features, filters, composite_filters):
         f1_is_cat = False
         if analyzer.categorical_features is not None:
             f1_is_cat = feat1 in analyzer.categorical_features
-        if unique_count1 > BIN_THRESHOLD and not f1_is_cat:
-            cutdf, bins = pd.cut(df[feat1], BIN_THRESHOLD,
-                                 retbins=True)
-            bin_range = range(BIN_THRESHOLD)
+        if unique_count1 > num_bins and not f1_is_cat:
+            cutdf, bins = bin_data(df,
+                                   feat1,
+                                   num_bins,
+                                   retbins=True,
+                                   quantile_binning=quantile_binning)
+            bin_range = range(num_bins)
             catr = cutdf.cat.rename_categories(bin_range)
             catn, counts = np.unique(catr.to_numpy(),
                                      return_counts=True)
@@ -185,7 +213,10 @@ def compute_matrix(analyzer, features, filters, composite_filters):
                     fix_counts.append(counts[counts_idx])
                     counts_idx += 1
             counts = fix_counts
-            cut_err = pd.cut(df_err[feat1], bins)
+            cut_err = bin_data(df_err,
+                               feat1,
+                               bins,
+                               quantile_binning=quantile_binning)
             catr_err = cut_err.cat.rename_categories(bin_range)
             val_err, counts_err = np.unique(catr_err.to_numpy(),
                                             return_counts=True)
@@ -209,6 +240,19 @@ def compute_matrix(analyzer, features, filters, composite_filters):
         matrix = matrix_1d(categories, val_err, counts,
                            counts_err, metric)
     return matrix
+
+
+def bin_data(df, feat, bins, retbins=False, quantile_binning=False):
+    feat_col = df[feat]
+    # Note: if column is empty pd.qcut raises error but pd.cut does not
+    # and just returns the correct binned data and bins if retbins=True,
+    # also if using existing array of bins pd.cut must be used as pd.qcut
+    # cannot bin based on specified binning edges (I know it's complicated!)
+    is_bins_constant = not isinstance(bins, np.ndarray)
+    if quantile_binning and not feat_col.empty and is_bins_constant:
+        return pd.qcut(feat_col, bins, retbins=retbins)
+    else:
+        return pd.cut(feat_col, bins, retbins=retbins)
 
 
 class _AggFunc(object):
