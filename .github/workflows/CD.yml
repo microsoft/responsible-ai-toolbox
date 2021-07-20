@@ -39,6 +39,18 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
 
+      - id: publish_url_for_js
+        name: publish_url_for_js
+        run: |
+          if [[ '${{ github.event_name }}' == 'push' ]]
+          then
+            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_js}/index.html"
+          elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_pull_request}/${blob_path_for_pull_request}/${dashboardDirectory}/index.html"
+          else
+            echo "Invalid event $${{ github.event_name }}"
+          fi
+
       - name: Install yarn
         run: npm install yarn -g
       - name: Install
@@ -101,18 +113,6 @@ jobs:
           name: dist
           path: dist
 
-      - id: publish_url_for_js
-        name: publish_url_for_js
-        run: |
-          if [[ '${{ github.event_name }}' == 'push' ]]
-          then
-            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_js}/index.html"
-          else if [[ '${{ github.event_name }}' == 'pull_request' ]]
-            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_pull_request}/${blob_path_for_pull_request}/${dashboardDirectory}/index.html"
-          else
-            echo "Invalid event $${{ github.event_name }}"
-          fi
-
       - name: Upload dashboard ${{steps.publish_url_for_js.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
@@ -121,7 +121,7 @@ jobs:
             if [[ '${{ github.event_name }}' == 'push' ]]
             then
               az storage blob sync -c "${{env.blob_container_for_js}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
-            else if [[ '${{ github.event_name }}' == 'pull_request' ]]
+            elif [[ '${{ github.event_name }}' == 'pull_request' ]]
             then
               az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" -d "${{env.blob_path_for_pull_request}}/${{ env.dashboardDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             else
@@ -144,7 +144,7 @@ jobs:
             if [[ '${{ github.event_name }}' == 'push' ]]
             then
               az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
-            else if [[ '${{ github.event_name }}' == 'pull_request' ]]
+            elif [[ '${{ github.event_name }}' == 'pull_request' ]]
               az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{env.blob_path_for_pull_request}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             else
               echo "Invalid event $${{ github.event_name }}"
@@ -158,7 +158,7 @@ jobs:
             if [[ '${{ github.event_name }}' == 'push' ]]
             then
               az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
-            else if [[ '${{ github.event_name }}' == 'pull_request' ]]
+            elif [[ '${{ github.event_name }}' == 'pull_request' ]]
               az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{env.blob_path_for_pull_request}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             else
               echo "Invalid event $${{ github.event_name }}"
