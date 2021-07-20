@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort, ICausalAnalysisData } from "@responsible-ai/core-ui";
+import {
+  ErrorCohort,
+  ICausalAnalysisData,
+  ICausalWhatIfData
+} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
@@ -30,12 +34,12 @@ export interface IModelAssessmentContext {
   telemetryHook: (message: ITelemetryMessage) => void;
   requestCausalWhatIf?: (
     id: string,
-    features: unknown,
+    features: unknown[],
     featureName: string,
-    newValue: unknown,
-    target: unknown,
+    newValue: unknown[],
+    target: unknown[],
     abortSignal: AbortSignal
-  ) => Promise<any[]>;
+  ) => Promise<ICausalWhatIfData[]>;
   requestPredictions:
     | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;

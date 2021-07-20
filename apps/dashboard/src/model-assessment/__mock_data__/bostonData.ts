@@ -6085,6 +6085,11 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       },
       treatment_feature: "hours-per-week"
     }
+  ],
+  treatment_features: [
+    "OverTime (base=No): Yes",
+    "StockOptionLevel",
+    "MonthlyIncome"
   ]
 };
 export const bostonErrorAnalysisConfig: IErrorAnalysisConfig = {

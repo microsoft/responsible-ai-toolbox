@@ -100,7 +100,8 @@ class CausalConfig(BaseConfig):
             'global_effects': self.global_effects,
             'local_effects': self.local_effects,
             'policies': self.policies,
-            'id': self.id
+            'id': self.id,
+            'treatment_features': self.treatment_features
         }
 
 
@@ -296,10 +297,11 @@ class CausalManager(BaseManager):
         :rtype: List[CausalData]
         """
         causal_filtered = [x for x in self.get() if x["id"] == id]
-        if causal_filtered is None:
+        if len(causal_filtered) == 0:
             raise Exception(f"Failed to find causal with id: {id}")
         causal = causal_filtered[0]['causal_analysis']
-        whatif = causal._whatif_dict(X, Xnew, feature_index, y)
+        whatif = causal.whatif(X, Xnew, feature_index, y).to_dict(
+            orient="records")
         return whatif
 
     def get_data(self):
@@ -313,6 +315,7 @@ class CausalManager(BaseManager):
     def _get_causal_object(self, causal_insights):
         causal_data = CausalData()
         causal_data.id = causal_insights['id']
+        causal_data.treatment_features = causal_insights['treatment_features']
         causal_data.global_effects = causal_insights['global_effects']\
             .reset_index().to_dict(orient='records')
         causal_data.local_effects = [list(v) for v in causal_insights[

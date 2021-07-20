@@ -109,9 +109,10 @@ class ModelAnalysisDashboardInput:
         try:
             id, features, feature_name, new_value, target = post_data
             whatif = self._analysis.causal._whatif(
-                id, [features], feature_name, [new_value], [target])
+                id, pd.DataFrame.from_records(features), new_value,
+                feature_name, target)
             return {
-                WidgetRequestResponseConstants.data: whatif[0]
+                WidgetRequestResponseConstants.data: whatif
             }
         except Exception as e:
             print(e)

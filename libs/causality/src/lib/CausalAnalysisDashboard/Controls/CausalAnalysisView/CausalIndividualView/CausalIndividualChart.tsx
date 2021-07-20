@@ -31,24 +31,21 @@ import {
   IComboBoxOption,
   IComboBox
 } from "office-ui-fabric-react";
-import React, { FormEvent } from "react";
+import React from "react";
 
 import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
-import { CausalIndivisualConstants } from "./CausalIndivisualConstants";
+import { CausalIndividualConstants } from "./CausalIndividualConstants";
 import { CausalWhatIf } from "./CausalWhatIf";
 
 export interface ICausalIndividualChartProps {
-  onDataClick?: (data: number | undefined) => void;
+  onDataClick: (data: number | undefined) => void;
 }
 
 export interface ICausalIndividualChartState {
   chartProps?: IGenericChartProps;
   xDialogOpen: boolean;
   yDialogOpen: boolean;
-  selectedCohortIndex: number;
-  selectedPointsIndexes: number[];
-  pointIsActive: boolean[];
-  customPointIsActive: boolean[];
+  selectedIndex?: number;
 }
 
 export class CausalIndividualChart extends React.PureComponent<
@@ -68,10 +65,6 @@ export class CausalIndividualChart extends React.PureComponent<
     super(props);
 
     this.state = {
-      customPointIsActive: [],
-      pointIsActive: [],
-      selectedCohortIndex: 0,
-      selectedPointsIndexes: [],
       xDialogOpen: false,
       yDialogOpen: false
     };
@@ -81,34 +74,6 @@ export class CausalIndividualChart extends React.PureComponent<
     this.setState({
       chartProps: this.generateDefaultChartAxes()
     });
-  }
-
-  public componentDidUpdate(
-    _prevProps: ICausalIndividualChartProps,
-    prevState: ICausalIndividualChartState
-  ): void {
-    if (!this.state) {
-      return;
-    }
-    const selectionsAreEqual = _.isEqual(
-      this.state.selectedPointsIndexes,
-      prevState.selectedPointsIndexes
-    );
-    const activePointsAreEqual = _.isEqual(
-      this.state.pointIsActive,
-      prevState.pointIsActive
-    );
-    const customActivePointsAreEqual = _.isEqual(
-      this.state.customPointIsActive,
-      prevState.customPointIsActive
-    );
-    if (
-      !selectionsAreEqual ||
-      !activePointsAreEqual ||
-      !customActivePointsAreEqual
-    ) {
-      this.forceUpdate();
-    }
   }
 
   public render(): React.ReactNode {
@@ -126,11 +91,10 @@ export class CausalIndividualChart extends React.PureComponent<
     const plotlyProps = this.generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+      this.context.selectedErrorCohort.cohort
     );
-    const cohortLength = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.filteredData.length;
+    const cohortLength = this.context.selectedErrorCohort.cohort.filteredData
+      .length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -230,12 +194,12 @@ export class CausalIndividualChart extends React.PureComponent<
             label={localization.CausalAnalysis.IndividualView.datapointIndex}
             onChange={this.selectPointFromDropdown}
             options={this.getDataOptions()}
-            selectedKey={"" + this.state.selectedPointsIndexes[0]}
+            selectedKey={this.state.selectedIndex}
             ariaLabel={"datapoint picker"}
             useComboBoxAsMenuWidth
             styles={FabricStyles.smallDropdownStyle}
           />
-          <CausalWhatIf />
+          <CausalWhatIf selectedIndex={this.state.selectedIndex} />
         </Stack>
       </div>
     );
@@ -244,13 +208,13 @@ export class CausalIndividualChart extends React.PureComponent<
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
     this.temporaryPoint[
-      CausalIndivisualConstants.namePath
+      CausalIndividualConstants.namePath
     ] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       index
     );
-    this.temporaryPoint[CausalIndivisualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[CausalIndivisualConstants.MAX_SELECTION];
+    this.temporaryPoint[CausalIndividualConstants.colorPath] =
+      FabricStyles.fabricColorPalette[CausalIndividualConstants.MAX_SELECTION];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
     });
@@ -301,36 +265,16 @@ export class CausalIndividualChart extends React.PureComponent<
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (typeof item?.key === "string") {
-      const index = Number.parseInt(item.key);
+    if (typeof item?.key === "number") {
+      const index = item.key;
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
     }
   };
 
-  private toggleSelectionOfPoint(index?: number): void {
-    if (index === undefined) {
-      return;
-    }
-    const indexOf = this.state.selectedPointsIndexes.indexOf(index);
-    let newSelections = [...this.state.selectedPointsIndexes];
-    let pointIsActive = [...this.state.pointIsActive];
-    if (indexOf === -1) {
-      newSelections = [index];
-      pointIsActive = [true];
-    } else {
-      newSelections.splice(indexOf, 1);
-      pointIsActive.splice(indexOf, 1);
-    }
-    if (this.props.onDataClick) {
-      this.props.onDataClick(
-        newSelections.length === 1 ? newSelections[0] : undefined
-      );
-    }
-    this.setState({
-      pointIsActive,
-      selectedPointsIndexes: newSelections
-    });
+  private toggleSelectionOfPoint(selectedIndex?: number): void {
+    this.props.onDataClick(selectedIndex);
+    this.setState({ selectedIndex });
   }
 
   private generatePlotlyProps(
@@ -339,7 +283,7 @@ export class CausalIndividualChart extends React.PureComponent<
     cohort: Cohort
   ): IPlotlyProperty {
     const plotlyProps = _.cloneDeep(
-      CausalIndivisualConstants.basePlotlyProperties
+      CausalIndividualConstants.basePlotlyProperties
     );
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -347,18 +291,15 @@ export class CausalIndividualChart extends React.PureComponent<
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
-        const selectionIndex = this.state.selectedPointsIndexes.indexOf(
-          rowIndex
-        );
-        if (selectionIndex === -1) {
+        if (rowIndex !== this.state.selectedIndex) {
           return FabricStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[selectionIndex];
+        return FabricStyles.fabricColorPalette[0];
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
-        this.state.selectedPointsIndexes.includes(i) ? "square" : "circle"
-      ) as any
+        this.state.selectedIndex === i ? "square" : "circle"
+      )
     };
 
     plotlyProps.data[1] = {
@@ -377,7 +318,7 @@ export class CausalIndividualChart extends React.PureComponent<
         line: {
           color:
             FabricStyles.fabricColorPalette[
-              CausalIndivisualConstants.MAX_SELECTION + 1
+              CausalIndividualConstants.MAX_SELECTION + 1
             ],
           width: 2
         },
@@ -525,13 +466,13 @@ export class CausalIndividualChart extends React.PureComponent<
   }
 
   private getDataOptions(): IComboBoxOption[] {
-    const indexes = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.unwrap(JointDataset.IndexLabel);
+    const indexes = this.context.selectedErrorCohort.cohort.unwrap(
+      JointDataset.IndexLabel
+    );
     indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
     return indexes.map((index) => {
       return {
-        key: "" + index,
+        key: index,
         text: `Index ${index}`
       };
     });

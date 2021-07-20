@@ -107,7 +107,8 @@ class CausalData:
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
     policies: List[CausalPolicy]
-    index: int
+    id: str
+    treatment_features: [str]
 
 
 class CounterfactualData:

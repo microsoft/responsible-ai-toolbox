@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICausalWhatIfData } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData,
@@ -37,9 +38,18 @@ export class ModelAssessment extends React.Component {
         return callFlaskService(data, "/importances");
       };
       callBack.requestCausalWhatIf = async (
-        ...args: [string, unknown, string, unknown, unknown]
-      ): Promise<any[]> => {
-        return callFlaskService(args, "/causal_whatif");
+        id: string,
+        features: unknown[],
+        featureName: string,
+        newValue: unknown[],
+        target: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalWhatIfData[]> => {
+        return callFlaskService(
+          [id, features, featureName, newValue, target],
+          "/causal_whatif",
+          abortSignal
+        );
       };
     }
 

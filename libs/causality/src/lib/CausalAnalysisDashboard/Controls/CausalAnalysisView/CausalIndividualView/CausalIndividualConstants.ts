@@ -3,7 +3,7 @@
 
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
-export class CausalIndivisualConstants {
+export class CausalIndividualConstants {
   public static basePlotlyProperties: IPlotlyProperty = {
     config: { displaylogo: false, displayModeBar: false, responsive: true },
     data: [{}],
@@ -24,7 +24,7 @@ export class CausalIndivisualConstants {
       yaxis: {
         automargin: true
       }
-    } as any
+    }
   };
   public static readonly MAX_SELECTION = 0;
   public static readonly MAX_CLASSES_TOOLTIP = 5;
