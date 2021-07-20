@@ -124,7 +124,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }));
             }}
           />
-          <Stack tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}>
+          <Stack tokens={{ childrenGap: "10px", padding: "50px 0 0 0" }}>
             <Stack.Item
               className={modelAssessmentDashboardStyles.section}
               styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
