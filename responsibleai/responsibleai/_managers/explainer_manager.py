@@ -121,9 +121,15 @@ class ExplainerManager(BaseManager):
             return
         if self._is_run:
             return
+
         print('Current Status: Explaining {0} features'.format(len(
             self._features)))
-        model_task = ModelTask.Unknown
+
+        if self._classes is not None:
+            model_task = ModelTask.Classification
+        else:
+            model_task = ModelTask.Regression
+
         explainer = MimicExplainer(
             self._model,
             self._initialization_examples,
