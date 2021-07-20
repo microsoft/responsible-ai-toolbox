@@ -3646,6 +3646,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       zstat: 2.4537515529836944
     }
   ],
+  id: "abc",
   local_effects: [
     [
       {
@@ -6084,6 +6085,11 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       },
       treatment_feature: "hours-per-week"
     }
+  ],
+  treatment_features: [
+    "OverTime (base=No): Yes",
+    "StockOptionLevel",
+    "MonthlyIncome"
   ]
 };
 export const bostonErrorAnalysisConfig: IErrorAnalysisConfig = {

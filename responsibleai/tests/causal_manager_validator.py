@@ -97,16 +97,20 @@ def validate_causal(model_analysis, data, target_column,
 def _check_causal_results(causal_results, is_serialized=False):
     if is_serialized:
         assert isinstance(causal_results, CausalData)
-        assert len(causal_results.__dict__) == 3
+        assert len(causal_results.__dict__) == 5
         global_effects = causal_results.global_effects
         local_effects = causal_results.local_effects
         policies = causal_results.policies
+        assert len(causal_results.id) > 0
+        assert causal_results.treatment_features is not None
     else:
         assert isinstance(causal_results, dict)
-        assert len(causal_results) == 4
+        assert len(causal_results) == 6
         global_effects = causal_results['global_effects']
         local_effects = causal_results['local_effects']
         policies = causal_results['policies']
+        assert len(causal_results['id']) > 0
+        assert causal_results['treatment_features'] is not None
 
         _check_causal_analysis(causal_results['causal_analysis'])
 
