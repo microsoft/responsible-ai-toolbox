@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICausalWhatIfData } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
@@ -48,6 +49,7 @@ export class App extends React.Component<IAppProps> {
       ...this.props,
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
+      requestCausalWhatIf: this.requestCausalWhatIf,
       requestMatrix: generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
@@ -74,4 +76,30 @@ export class App extends React.Component<IAppProps> {
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
   }
+  private readonly requestCausalWhatIf = async (
+    _id: string,
+    _features: unknown[],
+    _featureName: string,
+    newValue: unknown[],
+    _y: unknown[],
+    abortSignal: AbortSignal
+  ): Promise<ICausalWhatIfData[]> => {
+    return new Promise<ICausalWhatIfData[]>((resolver) => {
+      setTimeout(() => {
+        if (abortSignal.aborted) {
+          return;
+        }
+        resolver(
+          newValue.map((target) => ({
+            ci_lower: target as number,
+            ci_upper: target as number,
+            point_estimate: target as number,
+            pvalue: 0,
+            stderr: 0,
+            zstat: undefined
+          }))
+        );
+      }, 500);
+    });
+  };
 }
