@@ -100,8 +100,9 @@ jobs:
         with:
           name: dist
           path: dist
-      
+
       - id: publish_url_for_js
+        name: publish_url_for_js
         run: |
           if [[ '${{ github.event_name }}' == 'push' ]]
           then
@@ -112,7 +113,6 @@ jobs:
           fi
 
       - name: Upload dashboard ${{steps.publish_url_for_js.outputs.url}}
-        if: ${{ github.event_name  == 'push' }}
         uses: Azure/cli@v1.0.0
         with:
           azcliversion: 2.16.0
