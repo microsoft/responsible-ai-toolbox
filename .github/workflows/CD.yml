@@ -46,6 +46,7 @@ jobs:
           then
             echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_js}/index.html"
           elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+          then
             echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_pull_request}/${blob_path_for_pull_request}/${dashboardDirectory}/index.html"
           else
             echo "Invalid event $${{ github.event_name }}"
@@ -145,6 +146,7 @@ jobs:
             then
               az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+            then
               az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{env.blob_path_for_pull_request}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             else
               echo "Invalid event $${{ github.event_name }}"
@@ -159,6 +161,7 @@ jobs:
             then
               az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+            then
               az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{env.blob_path_for_pull_request}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             else
               echo "Invalid event $${{ github.event_name }}"
