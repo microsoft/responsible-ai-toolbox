@@ -237,5 +237,6 @@ def validate_model_analysis(
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
     assert model_analysis.categorical_features == categorical_features
-    np.testing.assert_array_equal(model_analysis._classes,
-                                  train_data[target_column].unique())
+    if task_type == ModelTask.CLASSIFICATION:
+        np.testing.assert_array_equal(model_analysis._classes,
+                                      train_data[target_column].unique())
