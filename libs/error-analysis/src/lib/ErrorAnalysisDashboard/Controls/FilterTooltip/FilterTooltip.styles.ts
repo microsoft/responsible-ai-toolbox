@@ -18,7 +18,7 @@ export interface IFilterTooltipStyles {
   smallHeader: IStyle;
   valueRed: IStyle;
   valueBlack: IStyle;
-  errorRateCell: IStyle;
+  metricValueCell: IStyle;
   errorCoverageCell: IStyle;
   numCorrect: IStyle;
   numIncorrect: IStyle;
@@ -43,9 +43,6 @@ export const filterTooltipStyles: () => IProcessedStyleSet<
     errorCoverageCell: {
       transform: "translate(20px, 45px)"
     },
-    errorRateCell: {
-      transform: "translate(20px, 75px)"
-    },
     hideFilterTooltip: {
       visibility: "hidden"
     },
@@ -55,6 +52,9 @@ export const filterTooltipStyles: () => IProcessedStyleSet<
     metricBarRed: mergeStyles(metricBar, {
       fill: theme.palette.red
     }),
+    metricValueCell: {
+      transform: "translate(20px, 75px)"
+    },
     numCorrect: {
       fontSize: "8px",
       fontWeight: "500",

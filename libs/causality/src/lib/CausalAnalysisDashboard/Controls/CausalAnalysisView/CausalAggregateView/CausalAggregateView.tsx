@@ -31,13 +31,13 @@ export class CausalAggregateView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
     return (
-      <Stack grow tokens={{ padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "16px 8px" }}>
         <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
           <Text variant={"medium"} className={styles.label}>
             {localization.CausalAnalysis.AggregateView.description}
           </Text>
-          <Text variant={"medium"} className={styles.label}>
-            <b>{localization.CausalAnalysis.AggregateView.directAggregate}</b>
+          <Text variant={"medium"} className={styles.header}>
+            {localization.CausalAnalysis.AggregateView.directAggregate}
           </Text>
           <CausalCallout />
         </Stack>

@@ -27,7 +27,7 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
     if (!this.props.data) {
-      return <>No Data</>;
+      return <div>{localization.CausalAnalysis.TreatmentPolicy.noData}</div>;
     }
     if (this.props.data.leaf) {
       return (

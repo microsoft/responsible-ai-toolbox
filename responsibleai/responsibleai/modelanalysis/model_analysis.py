@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import pickle
 from pathlib import Path
+
 from responsibleai._internal.constants import\
     ManagerNames, Metadata, SKLearn
 from responsibleai._managers.causal_manager import CausalManager
@@ -17,6 +18,8 @@ from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai._interfaces import ModelAnalysisData, Dataset
 from responsibleai._input_processing import _convert_to_list
+from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai.exceptions import UserConfigValidationException
 
 
 _DTYPES = 'dtypes'
@@ -30,6 +33,7 @@ _SERIALIZER = 'serializer'
 _CLASSES = 'classes'
 _MANAGERS = 'managers'
 _CATEGORICAL_FEATURES = 'categorical_features'
+_TRAN_LABELS = 'train_labels'
 _META_JSON = Metadata.META_JSON
 
 
@@ -52,6 +56,10 @@ class ModelAnalysis(object):
     :param task_type: The task to run, can be `classification` or
         `regression`.
     :type task_type: str
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
+    :param train_labels: The class labels in the training dataset
+    :type train_labels: ndarray
     :param serializer: Picklable custom serializer with save and load
         methods defined for model that is not serializable. The save
         method returns a dictionary state and load method returns the model.
@@ -75,47 +83,201 @@ class ModelAnalysis(object):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         :param train_labels: The class labels in the training dataset
         :type train_labels: ndarray
+        :param serializer: Picklable custom serializer with save and load
+            methods defined for model that is not serializable. The save
+            method returns a dictionary state and load method returns the
+            model.
+        :type serializer: object
         """
+        self._validate_model_analysis_input_parameters(
+            model=model, train=train, test=test,
+            target_column=target_column, task_type=task_type,
+            categorical_features=categorical_features,
+            train_labels=train_labels,
+            serializer=serializer)
         self.model = model
         self.train = train
         self.test = test
         self.target_column = target_column
-        if (task_type != "classification" and task_type != "regression"):
-            raise ValueError("Unsupported task_type")
         self.task_type = task_type
         self.categorical_features = categorical_features
         self._serializer = serializer
+        self._train_labels = train_labels
+        self._classes = ModelAnalysis._get_classes(
+            task_type=self.task_type,
+            train=self.train,
+            target_column=self.target_column,
+            train_labels=self._train_labels
+        )
+
         self._causal_manager = CausalManager(
             train, test, target_column, task_type, categorical_features)
+
         self._counterfactual_manager = CounterfactualManager(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features)
-        error_analysis_manager = ErrorAnalysisManager(model,
-                                                      train,
-                                                      target_column,
-                                                      categorical_features)
-        self._error_analysis_manager = error_analysis_manager
-        if train_labels is None:
-            self._classes = train[target_column].unique()
-        else:
-            self._classes = train_labels
+
+        self._error_analysis_manager = ErrorAnalysisManager(
+            model, test, target_column,
+            categorical_features)
+
         self._explainer_manager = ExplainerManager(
             model, train, test,
             target_column,
             self._classes,
             categorical_features=categorical_features)
+
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
+
+    @staticmethod
+    def _get_classes(task_type, train, target_column, train_labels):
+        if task_type == ModelTask.CLASSIFICATION:
+            if train_labels is None:
+                return train[target_column].unique()
+            else:
+                return train_labels
+        else:
+            return None
+
+    def _validate_model_analysis_input_parameters(
+            self, model, train, test, target_column,
+            task_type, categorical_features=None, train_labels=None,
+            serializer=None):
+        """
+        Validate the inputs for ModelAnalysis class.
+
+        :param model: The model to compute RAI insights for.
+            A model that implements sklearn.predict or sklearn.predict_proba
+            or function that accepts a 2d ndarray.
+        :type model: object
+        :param train: The training dataset including the label column.
+        :type train: pandas.DataFrame
+        :param test: The test dataset including the label column.
+        :type test: pandas.DataFrame
+        :param target_column: The name of the label column.
+        :type target_column: str
+        :param task_type: The task to run, can be `classification` or
+            `regression`.
+        :type task_type: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
+        :param train_labels: The class labels in the training dataset
+        :type train_labels: ndarray
+        :param serializer: Picklable custom serializer with save and load
+            methods defined for model that is not serializable. The save
+            method returns a dictionary state and load method returns the
+            model.
+        :type serializer: object
+        """
+
+        if task_type != ModelTask.CLASSIFICATION and \
+                task_type != ModelTask.REGRESSION:
+            raise UserConfigValidationException(
+                'Unsupported task type. Should be one of {0} or {1}'.format(
+                    ModelTask.CLASSIFICATION, ModelTask.REGRESSION)
+            )
+
+        if serializer is not None:
+            if not hasattr(serializer, 'save'):
+                raise UserConfigValidationException(
+                    'The serializer does not implement save()')
+
+            if not hasattr(serializer, 'load'):
+                raise UserConfigValidationException(
+                    'The serializer does not implement load()')
+
+            try:
+                pickle.dumps(serializer)
+            except Exception:
+                raise UserConfigValidationException(
+                    'The serializer should be serializable via pickle')
+
+        if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
+            if len(set(train.columns) - set(test.columns)) != 0 or \
+                    len(set(test.columns) - set(train.columns)):
+                raise UserConfigValidationException(
+                    'The features in train and test data do not match')
+
+            if target_column not in list(train.columns) or \
+                    target_column not in list(test.columns):
+                raise UserConfigValidationException(
+                    'Target name {0} not present in train/test data'.format(
+                        target_column)
+                )
+
+            if categorical_features is not None and \
+                    len(categorical_features) > 0:
+                if target_column in categorical_features:
+                    raise UserConfigValidationException(
+                        'Found target name {0} in '
+                        'categorical feature list'.format(
+                            target_column)
+                    )
+
+                if not set(categorical_features).issubset(set(train.columns)):
+                    raise UserConfigValidationException(
+                        'Found some feature names in categorical feature which'
+                        ' do not occur in train data'
+                    )
+
+            if train_labels is not None and task_type == \
+                    ModelTask.CLASSIFICATION:
+                if len(set(train[target_column].unique()) -
+                       set(train_labels)) != 0 or \
+                        len(set(train_labels) -
+                            set(train[target_column].unique())) != 0:
+                    raise UserConfigValidationException(
+                        'The train labels and distinct values in '
+                        'target (train data) do not match')
+
+                if len(set(test[target_column].unique()) -
+                       set(train_labels)) != 0 or \
+                        len(set(train_labels) -
+                            set(test[target_column].unique())) != 0:
+                    raise UserConfigValidationException(
+                        'The train labels and distinct values in '
+                        'target (test data) do not match')
+
+            if model is not None:
+                # Run predict() of the model
+                try:
+                    small_train_data = train.iloc[0:1].drop(
+                        [target_column], axis=1)
+                    small_test_data = test.iloc[0:1].drop(
+                        [target_column], axis=1)
+                    model.predict(small_train_data)
+                    model.predict(small_test_data)
+                except Exception:
+                    raise UserConfigValidationException(
+                        'The model passed cannot be used for'
+                        ' getting predictions via predict()'
+                    )
+
+                # Run predict_proba() of the model
+                if task_type == ModelTask.CLASSIFICATION:
+                    try:
+                        small_train_data = train.iloc[0:1].drop(
+                            [target_column], axis=1)
+                        small_test_data = test.iloc[0:1].drop(
+                            [target_column], axis=1)
+                        model.predict_proba(small_train_data)
+                        model.predict_proba(small_test_data)
+                    except Exception:
+                        raise UserConfigValidationException(
+                            'The model passed cannot be used for'
+                            ' getting predictions via predict_proba()'
+                        )
 
     @property
     def causal(self) -> CausalManager:
@@ -307,9 +469,12 @@ class ModelAnalysis(object):
         self._write_to_file(top_dir / (_TEST + _DTYPES),
                             json.dumps(dtypes))
         self._write_to_file(top_dir / _TEST, self.test.to_json())
-        meta = {_TARGET_COLUMN: self.target_column,
-                _TASK_TYPE: self.task_type,
-                _CATEGORICAL_FEATURES: self.categorical_features}
+        meta = {
+            _TARGET_COLUMN: self.target_column,
+            _TASK_TYPE: self.task_type,
+            _CATEGORICAL_FEATURES: self.categorical_features,
+            _TRAN_LABELS: self._train_labels
+        }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
@@ -353,11 +518,17 @@ class ModelAnalysis(object):
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
-        target_column = meta[_TARGET_COLUMN]
-        inst.__dict__[_TARGET_COLUMN] = target_column
+        inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
-        inst.__dict__['_' + _CLASSES] = train[target_column].unique()
         inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
+        inst.__dict__['_' + _TRAN_LABELS] = meta[_TRAN_LABELS]
+        inst.__dict__['_' + _CLASSES] = ModelAnalysis._get_classes(
+            task_type=meta[_TASK_TYPE],
+            train=train,
+            target_column=meta[_TARGET_COLUMN],
+            train_labels=meta[_TRAN_LABELS]
+        )
+
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path) as file:

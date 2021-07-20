@@ -3,11 +3,12 @@
 
 import { ICausalPolicy, NoData } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text, Dropdown, IDropdownOption } from "office-ui-fabric-react";
-import React, { FormEvent } from "react";
+import { Stack, Text } from "office-ui-fabric-react";
+import React from "react";
 
 import { TreatmentBarChartSection } from "./TreatmentBarChartSection";
 import { TreatmentListSection } from "./TreatmentListSection";
+import { TreatmentSelection } from "./TreatmentSelection";
 import { TreatmentStyles } from "./TreatmentStyles";
 import { TreatmentTableSection } from "./TreatmentTableSection";
 
@@ -16,7 +17,6 @@ export interface ITreatmentViewProps {
 }
 export interface ITreatmentViewState {
   selectedPolicy?: ICausalPolicy;
-  dropdownOptions: IDropdownOption[];
 }
 
 export class TreatmentView extends React.Component<
@@ -26,49 +26,41 @@ export class TreatmentView extends React.Component<
   public constructor(props: ITreatmentViewProps) {
     super(props);
     this.state = {
-      dropdownOptions: props.data
-        ? props.data.map((p, i) => ({
-            key: i,
-            selected: i === 0,
-            text: p.treatment_feature
-          }))
-        : [],
       selectedPolicy: props.data?.[0]
     };
   }
   public render(): React.ReactNode {
     const styles = TreatmentStyles();
     return this.state.selectedPolicy ? (
-      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
-        <Text variant={"medium"} className={styles.label}>
-          {localization.CausalAnalysis.TreatmentPolicy.Description}
-        </Text>
-        <Dropdown
-          options={this.state.dropdownOptions}
-          onChange={this.onSelect}
-          label={localization.CausalAnalysis.TreatmentPolicy.SelectPolicy}
-        />
-        <TreatmentTableSection data={this.state.selectedPolicy} />
-        <TreatmentBarChartSection data={this.state.selectedPolicy} />
-        <TreatmentListSection data={this.state.selectedPolicy} />
+      <Stack horizontal={false} grow>
+        <Stack.Item className={styles.header}>
+          <Text variant={"medium"}>
+            {localization.CausalAnalysis.TreatmentPolicy.header}
+          </Text>
+        </Stack.Item>
+        <Stack.Item>
+          <TreatmentSelection data={this.props.data} onSelect={this.onSelect} />
+        </Stack.Item>
+        <Stack.Item>
+          <TreatmentTableSection data={this.state.selectedPolicy} />
+        </Stack.Item>
+        <Stack.Item />
+        <Stack.Item>
+          <TreatmentBarChartSection data={this.state.selectedPolicy} />
+        </Stack.Item>
+        <Stack.Item>
+          <TreatmentListSection data={this.state.selectedPolicy} />
+        </Stack.Item>
       </Stack>
     ) : (
       <NoData />
     );
   }
-  private onSelect = (
-    _event: FormEvent<HTMLDivElement>,
-    _option?: IDropdownOption | undefined,
-    index?: number | undefined
-  ): void => {
-    if (index === undefined) {
+  private onSelect = (index: number): void => {
+    if (this.props.data) {
       this.setState({
-        selectedPolicy: undefined
+        selectedPolicy: this.props.data[index]
       });
-      return;
     }
-    this.setState({
-      selectedPolicy: this.props.data?.[index]
-    });
   };
 }

@@ -278,7 +278,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   className={modelAssessmentDashboardStyles.buttonSection}
                 >
                   <AddTabButton
-                    tabIndex={0}
+                    tabIndex={i + 1}
                     onAdd={this.addTab}
                     availableTabs={this.addTabDropdownOptions}
                   />
@@ -395,7 +395,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   private addTab = (index: number, tab: GlobalTabKeys): void => {
     const tabs = [...this.state.activeGlobalTabs];
-    tabs.splice(index, 0, { dataCount: 0, key: tab });
+    let dataCount: number;
+    if (index > 0) {
+      dataCount = tabs[index - 1].dataCount;
+    } else {
+      dataCount = this.state.baseCohort.cohortStats.totalCohort;
+    }
+    tabs.splice(index, 0, { dataCount, key: tab });
     this.setState({ activeGlobalTabs: tabs });
   };
 

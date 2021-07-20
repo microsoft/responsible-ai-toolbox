@@ -39,7 +39,135 @@ PERFORMANCE OF THIS SOFTWARE.
 
 ---------------------------------------------------------
 
-importlib-metadata 3.4.0 - Apache-2.0
+tslib 2.2.0 - 0BSD
+https://www.typescriptlang.org/
+
+Copyright (c) Microsoft Corporation.
+
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+dataclasses 0.8 - Apache-2.0
+
+
+
+Apache License
+
+Version 2.0, January 2004
+
+http://www.apache.org/licenses/ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      
+
+      "License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document.
+
+      
+
+      "Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
+
+      
+
+      "Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity.
+
+      
+
+      "You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License.
+
+      
+
+      "Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files.
+
+      
+
+      "Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.
+
+      
+
+      "Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below).
+
+      
+
+      "Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof.
+
+      
+
+      "Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution."
+
+      
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Work, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications, and in Source or Object form, provided that You meet the following conditions:
+
+      (a) You must give any other recipients of the Work or Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding those notices that do not pertain to any part of the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works, in at least one of the following places: within a NOTICE text file distributed as part of the Derivative Works; within the Source form or documentation, if provided along with the Derivative Works; or, within a display generated by the Derivative Works, if and wherever such third-party notices normally appear. The contents of the NOTICE file are for informational purposes only and do not modify the License. You may add Your own attribution notices within Derivative Works that You distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such additional attribution notices cannot be construed as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and may provide additional or different license terms and conditions for use, reproduction, or distribution of Your modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and distribution of the Work otherwise complies with the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise, any Contribution intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms and conditions of this License, without any additional terms or conditions. Notwithstanding the above, nothing herein shall supersede or modify the terms of any separate license agreement you may have executed with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability. END OF TERMS AND CONDITIONS
+
+APPENDIX: How to apply the Apache License to your work.
+
+To apply the Apache License to your work, attach the following boilerplate notice, with the fields enclosed by brackets "[]" replaced with your own identifying information. (Don't include the brackets!) The text should be enclosed in the appropriate comment syntax for the file format. We also recommend that a file or class name and description of purpose be included on the same "printed page" as the copyright notice for easier identification within third-party archives.
+
+Copyright [yyyy] [name of copyright owner]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+
+you may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+
+distributed under the License is distributed on an "AS IS" BASIS,
+
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+See the License for the specific language governing permissions and
+
+limitations under the License.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+importlib-metadata 4.6.1 - Apache-2.0
 
 
 Copyright 2017-2019 Jason R. Coombs, Barry Warsaw
@@ -170,114 +298,7 @@ limitations under the License.
 
 ---------------------------------------------------------
 
-prometheus-client 0.9.0 - Apache-2.0
-
-
-Copyright (c) 2005-2016, Michele Simionato
-
-Apache License
-
-Version 2.0, January 2004
-
-http://www.apache.org/licenses/ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
-
-   1. Definitions.
-
-      
-
-      "License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document.
-
-      
-
-      "Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
-
-      
-
-      "Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity.
-
-      
-
-      "You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License.
-
-      
-
-      "Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files.
-
-      
-
-      "Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.
-
-      
-
-      "Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below).
-
-      
-
-      "Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof.
-
-      
-
-      "Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution."
-
-      
-
-      "Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work.
-
-   2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form.
-
-   3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Work, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed.
-
-   4. Redistribution. You may reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications, and in Source or Object form, provided that You meet the following conditions:
-
-      (a) You must give any other recipients of the Work or Derivative Works a copy of this License; and
-
-      (b) You must cause any modified files to carry prominent notices stating that You changed the files; and
-
-      (c) You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding those notices that do not pertain to any part of the Derivative Works; and
-
-      (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works, in at least one of the following places: within a NOTICE text file distributed as part of the Derivative Works; within the Source form or documentation, if provided along with the Derivative Works; or, within a display generated by the Derivative Works, if and wherever such third-party notices normally appear. The contents of the NOTICE file are for informational purposes only and do not modify the License. You may add Your own attribution notices within Derivative Works that You distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such additional attribution notices cannot be construed as modifying the License.
-
-      You may add Your own copyright statement to Your modifications and may provide additional or different license terms and conditions for use, reproduction, or distribution of Your modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and distribution of the Work otherwise complies with the conditions stated in this License.
-
-   5. Submission of Contributions. Unless You explicitly state otherwise, any Contribution intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms and conditions of this License, without any additional terms or conditions. Notwithstanding the above, nothing herein shall supersede or modify the terms of any separate license agreement you may have executed with Licensor regarding such Contributions.
-
-   6. Trademarks. This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file.
-
-   7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
-
-   8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.
-
-   9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability. END OF TERMS AND CONDITIONS
-
-APPENDIX: How to apply the Apache License to your work.
-
-To apply the Apache License to your work, attach the following boilerplate notice, with the fields enclosed by brackets "[]" replaced with your own identifying information. (Don't include the brackets!) The text should be enclosed in the appropriate comment syntax for the file format. We also recommend that a file or class name and description of purpose be included on the same "printed page" as the copyright notice for easier identification within third-party archives.
-
-Copyright [yyyy] [name of copyright owner]
-
-Licensed under the Apache License, Version 2.0 (the "License");
-
-you may not use this file except in compliance with the License.
-
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-
-distributed under the License is distributed on an "AS IS" BASIS,
-
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-See the License for the specific language governing permissions and
-
-limitations under the License.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-python-dateutil 2.8.1 - Apache-2.0
+python-dateutil 2.8.2 - Apache-2.0
 
 
 Copyright 2017
@@ -604,7 +625,7 @@ limitations under the License.
 
 ---------------------------------------------------------
 
-packaging 20.8 - Apache-2.0 OR (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause)
+packaging 21.0 - Apache-2.0 OR (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause)
 
 
 copyright 2014-2019
@@ -673,6 +694,24 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
+cloudpickle 1.6.0 - BSD-2-Clause
+
+
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
 colorama 0.4.4 - BSD-2-Clause
 
 
@@ -691,29 +730,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-decorator 4.4.2 - BSD-2-Clause
+decorator 5.0.9 - BSD-2-Clause
 
 
 Copyright (c) 2005-2018, Michele Simionato
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-enum34 1.1.10 - BSD-2-Clause
-
-
-Copyright (c) 2013, Ethan Furman.
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -873,7 +893,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-ipykernel 5.4.3 - BSD-2-Clause
+ipykernel 5.5.5 - BSD-2-Clause
 
 
 Copyright (c) IPython Development Team.
@@ -898,12 +918,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-itsdangerous 1.1.0 - BSD-2-Clause
+Jinja2 3.0.1 - BSD-2-Clause
 
 
-copyright 2011 Pallets Team
-Copyright (c) 2011 by the Pallets team.
-Copyright (c) Django Software Foundation and individual contributors.
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -919,7 +936,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-jupyter-client 6.1.11 - BSD-2-Clause
+jupyter-client 6.2.0 - BSD-2-Clause
 
 
 Copyright (c) 2010 The IPython Team
@@ -946,107 +963,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-jupyter-core 4.7.0 - BSD-2-Clause
-
-
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-MarkupSafe 1.1.1 - BSD-2-Clause
-
-
-Copyright 2010 Pallets
-copyright 2010 Pallets
-copyright 2010 Pallets Team
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-mistune 0.8.4 - BSD-2-Clause
-
-
-(c) 2004 Foo Corporation
-Copyright (c) 2014 - 2015, Hsiaoming Yang
-copyright (c) 2014 - 2018 by Hsiaoming Yang.
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-nbclient 0.5.1 - BSD-2-Clause
+jupyter-core 4.7.1 - BSD-2-Clause
 
 
 Copyright (c) IPython Development Team.
 Copyright (c) Jupyter Development Team.
-Copyright (c) 2020-, Jupyter Development Team
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-nbconvert 6.0.7 - BSD-2-Clause
-
-
-Copyright 2011-2016 Twitter, Inc.
-Copyright (c) 2014-2017, PhosphorJS
-Copyright (c) IPython Development Team.
-Copyright (c) Jupyter Development Team.
-Copyright (c) 2011 by MarkLogic Corporation
-copyright 2015- s, Jupyter Development Team
+copyright 2015, Jupyter Development Team
 Copyright (c) 2015-, Jupyter Development Team
-Copyright (c) 2017, Jupyter Development Team.
-Copyright (c) 2014 The IPython Development Team
-Copyright (c) 2001-2015, IPython Development Team
-Copyright (c) 2013, the IPython Development Team.
-Copyright (c) 2016, the IPython Development Team.
-Copyright (c) 2014-2016, Jupyter Development Team.
-Copyright (c) 2014-2017, Jupyter Development Team.
-Copyright 2015-present Palantir Technologies, Inc.
-Copyright 2017-present Palantir Technologies, Inc.
-(c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org> Adapted from GitHub
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -1062,7 +985,26 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-nest-asyncio 1.4.3 - BSD-2-Clause
+llvmlite 0.36.0 - BSD-2-Clause
+
+
+Copyright (c) 2014-, Continuum Analytics, Inc.
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+MarkupSafe 2.0.1 - BSD-2-Clause
 
 
 
@@ -1080,7 +1022,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-prompt-toolkit 3.0.14 - BSD-2-Clause
+nest-asyncio 1.5.1 - BSD-2-Clause
 
 
 
@@ -1098,20 +1040,128 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-Pygments 2.7.4 - BSD-2-Clause
+networkx 2.5 - BSD-2-Clause
+
+
+Copyright (c) 2015 - Thomson Licensing, SAS
+Copyright 2011 Alex Levenson <alex@isnotinvain.com>
+Copyright 2011 Reya Group <http://www.reyagroup.com>
+copyright f'2004- date.today().year, NetworkX Developers
+Copyright 2011 Diederik van Liere <diederik.vanliere@rotman.utoronto.ca>
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+numba 0.53.1 - BSD-2-Clause
+
+
+Copyright (c) 2005 Don Owens
+Copyright (c) 2013 Eddy Petrisor
+Copyright (c) 2012, Anaconda, Inc.
+Copyright (c) 2017 Intel Corporation
+copyright u'2012-2020, Anaconda, Inc. and others
+Copyright (c) 2005-2010 ActiveState Software Inc.
+Copyright (c) 2013 Marek Majkowski <marek@popcount.org>
+Copyright (c) Corporation for National Research Initiatives.
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+numpy 1.21.0 - BSD-2-Clause
+
+
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+pandas 1.3.0 - BSD-2-Clause
+
+
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+prompt-toolkit 3.0.19 - BSD-2-Clause
+
+
+Copyright (c) 2014, Jonathan Slenders
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+Pygments 2.9.0 - BSD-2-Clause
 
 
 (c) 2014
 (c) FSF.
 (c) V End
 (c) 2000-2003
+copyright 2006.
 (c) Justin Fletcher
 Copyright 1999-2011
 Copyright 2006-'+date
+(c) openEHR Foundation
 Copyright 2013 Wikimedia
 copyright 2006. Uploaded
 (c) 2015 Andreas Rossberg
+(c) Justin Fletcher, 1998
 Copyright (c) 2006, Manni
+Copyright (c) 1998 Comment
 Copyright (c) 2005-2006 by
 Copyright (c) Rich Hickey.
 Copyright (c) INRIA - Serge
@@ -1127,9 +1177,10 @@ Copyright 2008, 280 North, Inc.
 Copyright (c) 2009-2010, Gary L.
 Copyright (c) 2014 Fullstack.io.
 copyright (c) 2004 by Andre Simon
-copyright 2006 by Armin Ronacher.
 Copyright (c) 2017 Johannes Holzl.
 Copyright 2007-2012 LassoSoft Inc.
+Copyright 1999-2011 Comment Comment
+Copyright 2005 Brian Alliet Comment
 Copyright (c) 2005-2007 Terence Parr
 Copyright 2012-2018 Manas Technology
 Copyright (c) 2009 Benjamin Kowarsch.
@@ -1138,13 +1189,14 @@ Copyright (c) 2004, 2005, 2006 Aelitis
 Copyright (c) 2015 DH electronics GmbH
 Copyright 1997 University of Cambridge
 Copyright 2007-2013 by the Sphinx team
+Copyright (c) 2008 Slava Pestov Comment
 Copyright (c) 2009-2010, Gary L. Cutler
 Copyright (c) 2010, Gary L. Cutler, GPL
 Portions (c) International Organization
 Copyright (c) 1997 Borland International
 Copyright (c) 2003, 04 by Johannes Barre
 Copyright (c) 2012-2013 Nenad Rakocevic.
-Copyright 2006-2016 by the Pygments team
+Copyright 2006-2019 by the Pygments team
 Copyright (c) 1998 the Initial Developer.
 Copyright (c) 2003 Sun Microsystems, Inc.
 Copyright 2012 Nokia Siemens Networks Oyj
@@ -1155,30 +1207,45 @@ Copyright (c) 2009-2010, Gary L. Cutler, GPL
 Copyright (c) 1998-2009, Modelica Association
 Copyright (c) 2008, Brian Frank and Andy Frank
 Copyright (c) 2018 Marek Vasut <marex@denx.de>
+Copyright 1997 University of Cambridge Comment
 Copyright 2006-2014, 2016 by the Pygments team
+Copyright 2006-2014, MetaQuotes Software Corp.
+Copyright 2009-2013, MetaQuotes Software Corp.
+copyright 2006-2014, MetaQuotes Software Corp.
+(c) Name.Entity 1998-2009, Modelica Association
+Copyright (c) 2010, Gary L. Cutler, GPL Comment
 Copyright (c) 1995-2004 Functional Objects, Inc.
 Copyright 2004-2008 Jean Privat <jean@pryen.org>
 Copyright (c) 2005 Free Software Foundation, Inc.
 Copyright 2014 Lucas Bajolet <r4pass@hotmail.com>
+(c) Name.Entity Copyright 2006 by Text Punctuation
 (c) Copyright 2006 by <a href http://mydomain.tld'>
 Copyright (c) 1998,1999,2000,2001,2002 Tal Davidson.
+Copyright (c) 2009-2010, Gary L. Cutler, GPL Comment
 Copyright (c) 1991, Jos van der Woude, jvdwoude@hut.nl
-Copyright 2015 Muthiah Annamalai <ezhillang@gmail.com>
 Copyright 2013 Alexis Laferriere <alexis.laf@xymus.net>
 Copyright 2013 Matthieu Lucas <lucasmatthieu@gmail.com>
 Copyright 2014 Alexis Laferriere <alexis.laf@xymus.net>
 Copyright 2012-2013 Alexis Laferriere <alexis.laf@xymus.net>
+Copyright (c) 2009 The R Foundation for Statistical Computing
 Copyright 1996 Institut National de Recherche en Informatique
+(c) 2000-2003 by cYcnus visit www.cYcnus.de licenser@cYcnus.de
 Copyright (c) 2008 The Regents of the University of California.
+Copyright (c) 2006 Kashia Buch (kashia@vfemail.net), Fabian Buch
+Copyright (c) 1985-1986, 1992, 1994-1995, 1999-2015 Free Software
 Copyright (c) 2000 Information-technology Promotion Agency, Japan
 Copyright (c) 2000 Network Applied Communication Laboratory, Inc.
 Copyright (c) 2011 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (c) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005
 Copyright (c) 2009 The R Foundation for Statistical Computing ISBN
 Copyright 2009-2013, MetaQuotes Software Corp. http://www.mql4.com
 Copyright (c) 1996-2016 by the PostgreSQL Global Development Group.
 Copyright (c) 1994-5 by the Regents of the University of California.
 Copyright (c) 2008-2011 The Regents of the University of California.
+Copyright (c) 1984, 1985, 1988, 2010 Howard Trickey and Oren Patashnik.
 Copyright 2006-2014, MetaQuotes Software Corp. http://www.metaquotes.net
+(c) Copyright 2006 Salvatore Filippone University of Rome Tor Vergata Comment
+Copyright 1996 Institut National de Recherche en Informatique et Comment Comment
 copyright 2006-2014, MetaQuotes Software Corp. property link http://www.mql4.com
 Copyright (c) 1984, 1985, 1988, 2010 Howard Trickey and Oren Patashnik. Unlimited
 Copyright (c) 1985-1986, 1992, 1994-1995, 1999-2015 Free Software Foundation, Inc.
@@ -1189,6 +1256,7 @@ Copyright (c) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005 Free Software
 Copyright (c) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 (c) Copyright 2006 Salvatore Filippone University of Rome Tor Vergata $ Alfredo Buttari University of Rome Tor Vergata
 Copyright 2012 by Luis Majano and Ortus Solutions, Corp www.gocontentbox.org www.luismajano.com www.ortussolutions.com
+Copyright 2012 by Luis Majano and Ortus Solutions, Corp www.gocontentbox.org www.luismajano.com www.ortussolutions.com Apache License
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -1223,51 +1291,2122 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-scipy 1.6.0 - BSD-2-Clause
+scipy 1.7.0 - BSD-2-Clause
 
 
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-Send2Trash 1.5.0 - BSD-2-Clause
-
-
-Copyright 2017 Virgil Dupras
-Copyright (c) 2017, Virgil Dupras
-Copyright 2013 Hardcoded Software (http://www.hardcoded.net)
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-terminado 0.9.2 - BSD-2-Clause
-
-
-Copyright (c) Jupyter Development Team
-Copyright (c) 2014-, Jupyter development team
-Copyright (c) 2014, Ramalingam Saravanan <sarava@sarava.net>
+(c) Col
+(c) KvK
+(c) 2011
+(c) 2012
+(c) 2014
+(c) KKOK KkK
+(c) cosc cos
+(c) B Whether
+Copyright 2001
+Copyright 2003
+Copyright 2008
+(c) , (R,1) col
+copyright u'2019
+(c) Copyright John
+Copyright (c) 2014
+Copyright (c) 2018
+Copyright (c) 2019
+Copyright 2014 LRI
+Copyright 2015 LRI
+copyright (c) 2005
+(c) Compute Hessian
+Copyright 2014 LASMEA
+Copyright Evan Miller
+Copyright John Maddock
+(c) .GT. ZERO .AND. ABS
+Copyright (c) 2010 Ilya
+Copyright (c) 2010-2019
+Copyright Albert Steppi
+Copyright Gautam Sewani
+Copyright Nat Goodspeed
+Copyright Nick Thompson
+(c) 2008 Gordon Woodhull
+(c) David Abrahams 2002.
+(c) KKKKKwKnKK K KQKKKKe
+Copyright (c) 2018 Yi Ji
+Copyright 2012 IBM Corp.
+Copyright 2013 Kyle Lutz
+Copyright 2018 Ulf Adams
+Copyright Hans Dembinski
+copyrighted by Alan Genz
+(c) Peter Kankowski, 2008
+Copyright (c) 2019 Damian
+Copyright 2003 Bruce Barr
+Copyright 2006 Johan Rade
+Copyright 2012 K R Walker
+Copyright Andrey Semashev
+Copyright Antony Polukhin
+Copyright Jaap Suter 2003
+Copyright Jan Langer 2002
+Copyright Lingxi Li 2015.
+Copyright Paul A. Bristow
+Csp self.spmatrix (c) Dsp
+copyright Jason Rice 2016
+copyright Jason Rice 2017
+copyright Xiaogang Zhang.
+Copyright 2000 Jens Maurer
+Copyright 2003 Jeremy Siek
+Copyright 2005 Peter Dimov
+Copyright 2007 Peter Dimov
+Copyright 2008 Beman Dawes
+Copyright 2008 Peter Dimov
+Copyright 2010 Beman Dawes
+Copyright 2011 Simon West.
+Copyright 2013 Ankur Sinha
+Copyright 2013 Peter Dimov
+Copyright 2014 Neil Groves
+Copyright 2014 Peter Dimov
+Copyright 2016 Jorge Lodos
+Copyright 2018 Peter Dimov
+Copyright 2019 Peter Dimov
+Copyright Beman Dawes 2002
+Copyright Beman Dawes 2003
+Copyright Beman Dawes 2006
+Copyright Beman Dawes 2007
+Copyright Beman Dawes 2008
+Copyright Beman Dawes 2009
+Copyright Beman Dawes 2010
+Copyright Beman Dawes 2011
+Copyright Beman Dawes 2013
+Copyright Beman Dawes 2014
+Copyright Beman Dawes 2015
+Copyright Bruno Dutra 2015
+Copyright Franz Detro 2014
+Copyright Jens Maurer 2000
+Copyright Jens Maurer 2002
+Copyright Jens Maurer 2006
+Copyright Joel Falcou 2015
+Copyright Peter Dimov 2001
+Copyright Rene Rivera 2013
+Copyright Rene Rivera 2014
+Copyright Rene Rivera 2015
+Copyright Rene Rivera 2017
+(c) Copyright 2014 Jim Bell
+(c) Copyright Edward Diener
+(c) Copyright Ion Gaztanaga
+(c) Copyright Nick Thompson
+(c) KKKKY KKKKKKKKKKKKKKKKe
+(c) KZK8K K9K8K KCKDKCKDK7K
+(c) KaKKKQK K KzKkKKKiKKqKK
+Copyright (c) 2005 Voipster
+Copyright (c) 2011 Jamboree
+Copyright (c) 2013 Jamboree
+Copyright (c) 2014 Jamboree
+Copyright 2005 Dan Marsden.
+Copyright 2006 John Maddock
+Copyright 2008 John Maddock
+Copyright 2009 Neil Groves.
+Copyright 2010 John Maddock
+Copyright 2011, Andrew Ross
+Copyright 2013 Paul Bristow
+Copyright 2014 John Maddock
+Copyright 2014 NumScale SAS
+Copyright 2014 Paul Bristow
+Copyright 2015 NumScale SAS
+Copyright 2015 Peter Dimov.
+Copyright 2017 John Maddock
+Copyright 2017 Peter Dimov.
+Copyright 2017 Vinnie Falco
+Copyright Beman Dawes 2001.
+Copyright Beman Dawes 2005.
+Copyright Beman Dawes, 2009
+Copyright Eric Niebler 2008
+Copyright Eric Niebler 2009
+Copyright Louis Dionne 2013
+Copyright Neil Groves 2007.
+Copyright Neil Groves 2009.
+Copyright Neil Groves 2010.
+Copyright Neil Groves 2014.
+Copyright Peter Dimov 2019.
+Copyright Thomas Mang 2012.
+copyright Louis Dionne 2016
+(c) Copyright Francois Faure
+(c) Copyright Howard Hinnant
+Copyright (c) 2017 Dynatrace
+Copyright 2000 by Alan Genz.
+Copyright 2001 John Maddock.
+Copyright 2002 Daryle Walker
+Copyright 2003 - 2011 LASMEA
+Copyright 2004 Eric Niebler.
+Copyright 2005 Ben Hutchings
+Copyright 2005 Eric Niebler.
+Copyright 2006 Eric Niebler.
+Copyright 2006 Ion Gaztanaga
+Copyright 2007 Aaron Windsor
+Copyright 2007 Baruch Zilber
+Copyright 2007 Boris Gubenko
+Copyright 2007 Eric Niebler.
+Copyright 2008 CodeRage, LLC
+Copyright 2008 Eric Niebler.
+Copyright 2008 Gautam Sewani
+Copyright 2009 Eric Niebler.
+Copyright 2010 Eric Niebler.
+Copyright 2011 Eric Niebler.
+Copyright 2011 John Maddock.
+Copyright 2012 Chung-Lin Wen
+Copyright 2012 Denis Demidov
+Copyright 2012 Eric Niebler.
+Copyright 2012 John Maddock.
+Copyright 2013 Andrea Gavana
+Copyright 2013 John Maddock.
+Copyright 2014 MetaScale SAS
+Copyright 2015 John Maddock.
+Copyright 2016 John Maddock.
+Copyright 2017 Daniel James.
+Copyright 2018 John Maddock.
+Copyright 2019 John Maddock.
+Copyright Bryce Lelbach 2010
+Copyright Daniel Walker 2007
+Copyright Dietmar Kuehl 2001
+Copyright Eric Friedman 2002
+Copyright Eric Friedman 2003
+Copyright Eric Niebler 2005.
+Copyright Eric Niebler 2014.
+Copyright Gautam Sewani 2008
+Copyright John Maddock 2005.
+Copyright John Maddock 2006.
+Copyright John Maddock 2007.
+Copyright John Maddock 2008.
+Copyright John Maddock 2009.
+Copyright John Maddock 2010.
+Copyright John Maddock 2011.
+Copyright John Maddock 2012.
+Copyright John Maddock 2013.
+Copyright John Maddock 2014.
+Copyright John Maddock 2015.
+Copyright John Maddock 2016.
+Copyright John Maddock 2017.
+Copyright John Maddock 2018.
+Copyright Orson Peters 2017.
+Copyright Paul Bristow 2007.
+Copyright Paul Bristow 2014.
+Copyright Robert Ramey 2007.
+Copyright Robin Eckert 2015.
+Copyright Timmo Stange 2007.
+Copyright Yosef Meller, 2009
+(c) Copyright Jens Mauer 2001
+Copyright (c) 2002 Bill Kempf
+Copyright (c) 2004 Peder Holt
+Copyright (c) 2005 Peder Holt
+Copyright (c) 2006 Johan Rade
+Copyright (c) 2007 Peder Holt
+Copyright (c) 2010 Peder Holt
+Copyright (c) 2014 Eric Moore
+Copyright (c) 2014 Ian Forbed
+Copyright (c) 2015 Mario Lang
+Copyright (c) 2018 ERGO-Code.
+Copyright (c) 2018 Fady Essam
+Copyright (c) 2019 Peter Bell
+Copyright (c) Piers Lawrence.
+Copyright 2002 Pearu Peterson
+Copyright 2005 Daniel Egloff.
+Copyright 2005 Daniel Wallin.
+Copyright 2005 Jeremy G. Siek
+Copyright 2006 Andy Tompkins.
+Copyright 2006 Douglas Gregor
+Copyright 2007 Andy Tompkins.
+Copyright 2007 David Jenkins.
+Copyright 2008 David Jenkins.
+Copyright 2008 Howard Hinnant
+Copyright 2009 Andy Tompkins.
+Copyright 2009, Andrew Sutton
+Copyright 2010 Andy Tompkins.
+Copyright 2010 Mario Mulansky
+Copyright 2011 Karsten Ahnert
+Copyright 2011 Mario Mulansky
+Copyright 2012 Christoph Koke
+Copyright 2012 Karsten Ahnert
+Copyright 2012 Mario Mulansky
+Copyright 2013 Karsten Ahnert
+Copyright 2013 Mario Mulansky
+Copyright 2013 Nikhar Agrawal
+Copyright 2014 Anton Bikineev
+Copyright 2014 Bill Gallafent
+Copyright 2014, Eric W. Moore
+Copyright 2015 John Fletcher.
+Copyright 2015 Mario Mulansky
+Copyright 2018 Hans Dembinski
+Copyright 2018 Stefan Seefeld
+Copyright 2019 Hans Dembinski
+Copyright 2019 Mateusz Loskot
+Copyright Andreas Schwab 2019
+Copyright Andy Tompkins 2006.
+Copyright Christian Lorentzen
+Copyright Daniel Walker 2006.
+Copyright Daniel Wallin 2005.
+Copyright Daniel Wallin 2006.
+Copyright Daniel Wallin 2007.
+Copyright Marco Guazzone 2014
+Copyright Nat Goodspeed 2014.
+Copyright Nick Thompson 2017.
+Copyright Nick Thompson 2019.
+Copyright Nick Thompson, 2017
+Copyright Nick Thompson, 2018
+Copyright Nick Thompson, 2019
+Copyright Ruslan Baratov 2017
+Copyright Samuel Krempp 2003.
+Copyright Steven J. Ross 2014
+Copyright Vladimir Prus 2002.
+Copyright Vladimir Prus 2004.
+Copyright Vladimir Prus, 2002
+Copyright Xiaogang Zhang 2006
+copyright Cephes Math Library
+(c) Copyright Beman Dawes 2002
+(c) Copyright Bill Kempf 2001.
+(c) Copyright Bill Kempf 2002.
+(c) Copyright Brian Kuhl 2016.
+(c) Copyright Darin Adler 2000
+(c) Copyright Jeremy Siek 2006
+(c) Copyright Johan Rade 2006.
+(c) Copyright Paul Moore 1999.
+(c) Copyright Peter Dimov 2019
+(c) Copyright Synge Todo 2003.
+(c) Copyright Tobias Schwinger
+(c) KKPSKKtK KWKzKeKzKvK KyKjK
+Copyright (c) 2001 Darin Adler
+Copyright (c) 2001 Doug Gregor
+Copyright (c) 2001 Peter Dimov
+Copyright (c) 2002 Beman Dawes
+Copyright (c) 2002 Jens Maurer
+Copyright (c) 2002 Peter Dimov
+Copyright (c) 2003 Daniel Frey
+Copyright (c) 2003 Peter Dimov
+Copyright (c) 2003 Thomas Witt
+Copyright (c) 2005 Dan Marsden
+Copyright (c) 2006 Dan Marsden
+Copyright (c) 2006 Peter Dimov
+Copyright (c) 2007 Dan Marsden
+Copyright (c) 2007 Peter Dimov
+Copyright (c) 2008 Beman Dawes
+Copyright (c) 2008 Damian Eads
+Copyright (c) 2008 Peter Dimov
+Copyright (c) 2009 Carl Barron
+Copyright (c) 2009 Peter Dimov
+Copyright (c) 2010 Neil Groves
+Copyright (c) 2012 David Stone
+Copyright (c) 2012 Google Inc.
+Copyright (c) 2013 Carl Barron
+Copyright (c) 2013 Peter Dimov
+Copyright (c) 2014 Lee Clagett
+Copyright (c) 2014 Peter Dimov
+Copyright (c) 2014 Tomoki Imai
+Copyright (c) 2015 Seth Heeren
+Copyright (c) 2016 Lee Clagett
+Copyright (c) 2016 Peter Dimov
+Copyright (c) 2018 Peter Dimov
+Copyright (c) 2019 Peter Dimov
+Copyright (c) Beman Dawes 2011
+Copyright (c) Beman Dawes 2015
+Copyright (c) Dan Watkins 2003
+Copyright (c) Jeremy Siek 2001
+Copyright 1999 Travis Oliphant
+Copyright 2000 Maarten Keijzer
+Copyright 2002 Gary Strangman.
+Copyright 2005 Douglas Gregor.
+Copyright 2005 Joel de Guzman.
+Copyright 2005 Travis Oliphant
+Copyright 2006 Roland Schwarz.
+Copyright 2008 Hartmut Kaiser.
+Copyright 2009 Steven Watanabe
+Copyright 2010 Kenneth Riddile
+Copyright 2010 Paul A. Bristow
+Copyright 2011 Paul A. Bristow
+Copyright 2011 Steven Watanabe
+Copyright 2012 Andreas Pokorny
+Copyright 2012 Paul A. Bristow
+Copyright 2012 Steven Watanabe
+Copyright 2013 Andrey Semashev
+Copyright 2013 Pascal Germroth
+Copyright 2014 Andrey Semashev
+Copyright 2014 Antony Polukhin
+Copyright 2015 Andrey Semashev
+Copyright 2015 Antony Polukhin
+Copyright 2015 Steven Watanabe
+Copyright 2016 Andrey Semashev
+Copyright 2017 Andrey Semashev
+Copyright 2018 Steven Watanabe
+Copyright 2019 Henry Schreiner
+Copyright Alain Miniussi 2014.
+Copyright Beman Dawes 1994-99.
+Copyright David Abrahams 2001.
+Copyright David Abrahams 2002.
+Copyright David Abrahams 2003.
+Copyright David Abrahams 2004.
+Copyright David Abrahams 2005.
+Copyright David Abrahams 2006.
+Copyright David Abrahams 2009.
+Copyright Douglas Gregor 2003.
+Copyright Douglas Gregor 2004.
+Copyright Emil Dotchevski 2007
+Copyright Jim Bosch 2010-2012.
+Copyright John Maddock 2006-7.
+Copyright John Maddock 2007-8.
+Copyright Oliver Kowalke 2009.
+Copyright Oliver Kowalke 2013.
+Copyright Oliver Kowalke 2014.
+Copyright Oliver Kowalke 2015.
+Copyright Oliver Kowalke 2016.
+Copyright Oliver Kowalke 2017.
+Copyright Oliver Kowalke 2018.
+Copyright Paul Mensonides 2003
+Copyright Sergey Krivonos 2017
+Copyright Shreyans Doshi 2017.
+Copyright Stefan Seefeld 2005.
+Copyright Stefan Seefeld 2016.
+Copyright Steven Watanabe 2009
+Copyright Steven Watanabe 2010
+Copyright Steven Watanabe 2011
+Copyright Steven Watanabe 2014
+Qhull, Copyright (c) 1993-2019
+copyrighted by Enthought, Inc.
+(c) Copyright 2002 Robert Ramey
+(c) Copyright 2004 Robert Ramey
+(c) Copyright 2005 John Maddock
+(c) Copyright 2005 Robert Ramey
+(c) Copyright 2007 Robert Ramey
+(c) Copyright 2008 Robert Ramey
+(c) Copyright 2009 Robert Ramey
+(c) Copyright 2010 Daniel James
+(c) Copyright 2010 Robert Ramey
+(c) Copyright 2014 Robert Ramey
+(c) Copyright Beman Dawes 1999.
+(c) Copyright Beman Dawes 2000.
+(c) Copyright Beman Dawes 2001.
+(c) Copyright Beman Dawes 2003.
+(c) Copyright Boris Rasin 2014.
+(c) Copyright Darin Adler 2001.
+(c) Copyright Jens Maurer 2001.
+(c) Copyright Jens Maurer 2003.
+(c) Copyright Jeremy Siek 1999.
+(c) Copyright Jeremy Siek 2000.
+(c) Copyright Jeremy Siek 2001.
+(c) Copyright Jeremy Siek 2002.
+(c) Copyright Jeremy Siek 2004.
+(c) Copyright Jim Douglas 2005.
+(c) Copyright Jorge Lodos 2008.
+(c) Copyright Peter Dimov 2001.
+(c) Copyright Peter Dimov 2002.
+(c) Copyright Peter Dimov 2008.
+(c) Copyright Peter Dimov 2017.
+(c) Copyright Rene Rivera 2005.
+(c) Copyright Robert Ramey 2004
+(c) Copyright Thomas Witt 2002.
+(c) Copyright Toon Knapen 2001.
+(c) Copyright Toon Knapen 2003.
+(c) KSSKaKoKUKoKeKIKKKKK KKKKKK
+Copyright (c) 2002 John Maddock
+Copyright (c) 2003 John Maddock
+Copyright (c) 2003 Martin Wille
+Copyright (c) 2004 John Maddock
+Copyright (c) 2005 Eric Niebler
+Copyright (c) 2005 Peter Dimov.
+Copyright (c) 2006 Eric Niebler
+Copyright (c) 2006 John Maddock
+Copyright (c) 2006 Stephen Nutt
+Copyright (c) 2007 John Maddock
+Copyright (c) 2008 Roelof Naude
+Copyright (c) 2009 John Maddock
+Copyright (c) 2010 Eric Niebler
+Copyright (c) 2011 Aaron Graham
+Copyright (c) 2011 Brandon Kohn
+Copyright (c) 2011 Eric Niebler
+Copyright (c) 2011 John Maddock
+Copyright (c) 2012 Nathan Ridge
+Copyright (c) 2012 Oswin Krause
+Copyright (c) 2012 Robert Ramey
+Copyright (c) 2013 Eurodecision
+Copyright (c) 2014 Eric Niebler
+Copyright (c) 2015 John Maddock
+Copyright (c) 2015 Orson Peters
+Copyright (c) 2015 Robert Ramey
+Copyright (c) 2016 Adrian Veres
+Copyright (c) 2017 John Maddock
+Copyright (c) 2017 Robert Ramey
+Copyright (c) 2017 Vinnie Falco
+Copyright (c) Thomas Witt 2002.
+Copyright (c) Tyler Reddy, 2016
+Copyright 2002-2018 Peter Dimov
+Copyright 2003-2005 Peter Dimov
+Copyright 2004-2005 Peter Dimov
+Copyright 2004-2006 Peter Dimov
+Copyright 2004-2008 Peter Dimov
+Copyright 2005 Matthias Troyer.
+Copyright 2005-2013 Peter Dimov
+Copyright 2007 Tobias Schwinger
+Copyright 2008 Christophe Henry
+Copyright 2008,2012 Peter Dimov
+Copyright 2011 Christophe Henry
+Copyright 2012 (c) Google, Inc.
+Copyright 2012 Lucanus Simonson
+Copyright 2012, Philipp Moeller
+Copyright 2013 Maciej Piechotka
+Copyright 2019 Emil Dotchevski.
+Copyright Adam D. Walling 2012.
+Copyright Aleksey Gurtovoy 2004
+Copyright Aleksey Gurtovoy 2006
+Copyright Aleksey Gurtovoy 2008
+Copyright Alexander Grund 2018.
+Copyright Andrey Semashev 2013.
+Copyright Andrey Semashev 2015.
+Copyright Andrey Semashev 2016.
+Copyright Andrey Semashev 2018.
+Copyright Andrey Semashev 2019.
+Copyright Beman Dawes 2002-2009
+Copyright Benjamin Worpitz 2018
+Copyright Bertolt Mildner 2004.
+Copyright Charly Chevalier 2015
+Copyright Daniel Trebbien 2010.
+Copyright Frank Mori Hess 2007.
+Copyright Frank Mori Hess 2008.
+Copyright Frank Mori Hess 2009.
+Copyright Jens Maurer 2000-2001
+Copyright Jens Maurer 2006-1011
+Copyright Jessica Hamilton 2014
+Copyright John Maddock 2008-11.
+Copyright John R. Bandela 2001.
+Copyright Paul A. Bristow 2006.
+Copyright Paul A. Bristow 2007.
+Copyright Paul A. Bristow 2010.
+Copyright Paul A. Bristow 2012.
+Copyright Paul A. Bristow 2013.
+Copyright Paul A. Bristow 2014.
+Copyright Paul A. Bristow 2017.
+Copyright Peter Dimov 2000-2002
+Copyright Peter Dimov 2000-2003
+Copyright Peter Dimov 2001-2002
+Copyright Peter Dimov 2001-2003
+Copyright Rene Rivera 2005-2016
+Copyright Rene Rivera 2008-2013
+Copyright Rene Rivera 2008-2015
+Copyright Rene Rivera 2008-2017
+Copyright Rene Rivera 2008-2019
+Copyright Rene Rivera 2011-2012
+Copyright Rene Rivera 2011-2015
+Copyright Rene Rivera 2012-2015
+Copyright Rene Rivera 2013-2015
+Copyright Rene Rivera 2014-2015
+Copyright Rene Rivera 2015-2016
+Copyright Rene Rivera 2015-2019
+(c) Copyright 2007 Andrew Sutton
+(c) Copyright 2007 David Deakins
+(c) Copyright 2008 CodeRage, LLC
+(c) Copyright 2012 Vicente Botet
+(c) Copyright 2013 Tim Blechmann
+(c) Copyright Andrew Sutton 2007
+(c) Copyright Balint Cserni 2017
+(c) Copyright Bryce Lelbach 2010
+(c) Copyright Bryce Lelbach 2011
+(c) Copyright Daniel K. O. 2005.
+(c) Copyright Edward Diener 2012
+(c) Copyright Hubert Holin 2001.
+(c) Copyright Hubert Holin 2003.
+(c) Copyright Ion Gaztanaga 2008
+(c) Copyright Jeremy Siek, 2001.
+(c) Copyright John Maddock 2000.
+(c) Copyright John Maddock 2001.
+(c) Copyright John Maddock 2002.
+(c) Copyright John Maddock 2003.
+(c) Copyright John Maddock 2005.
+(c) Copyright John Maddock 2006.
+(c) Copyright John Maddock 2007.
+(c) Copyright John Maddock 2008.
+(c) Copyright John Maddock 2010.
+(c) Copyright John Maddock 2011.
+(c) Copyright John Maddock 2015.
+(c) Copyright John Maddock 2017.
+(c) Copyright John Maddock 2018.
+(c) Copyright Lie-Quan Lee 2001.
+(c) Copyright Martin Wille 2003.
+(c) Copyright Orson Peters 2017.
+(c) Copyright Rani Sharoni 2003.
+Copyright (3) Ion Gaztanaga 2013
+Copyright (c) 2001 Bruce Florman
+Copyright (c) 2001 Daniel Nuffer
+Copyright (c) 2001 Dietmar Kuehl
+Copyright (c) 2002 Jeff Westfahl
+Copyright (c) 2003 Eric Friedman
+Copyright (c) 2003 Giovanni Bajo
+Copyright (c) 2003 Vaclav Vesely
+Copyright (c) 2004 Angus Leeming
+Copyright (c) 2004 Daniel Wallin
+Copyright (c) 2005 Aaron Windsor
+Copyright (c) 2005 Stefan Arentz
+Copyright (c) 2006 Daniel Wallin
+Copyright (c) 2006 Tomas Puverle
+Copyright (c) 2007, Damian Eads.
+Copyright (c) 2008 Eric Niebler.
+Copyright (c) 2008 Ion Gaztanaga
+Copyright (c) 2009 Andrew Sutton
+Copyright (c) 2009 Helge Bahmann
+Copyright (c) 2009 Phil Endecott
+Copyright (c) 2010 Artyom Beilis
+Copyright (c) 2010 Bryce Lelbach
+Copyright (c) 2010 Helge Bahmann
+Copyright (c) 2010 Thomas Heller
+Copyright (c) 2010 Tim Blechmann
+Copyright (c) 2011 Bryce Lelbach
+Copyright (c) 2011 Helge Bahmann
+Copyright (c) 2011 Thomas Heller
+Copyright (c) 2011 Tim Blechmann
+Copyright (c) 2012 Artyom Beilis
+Copyright (c) 2012 Paul Fultz II
+Copyright (c) 2012 Tim Blechmann
+Copyright (c) 2013 Agustin Berge
+Copyright (c) 2013 Joaquim Duran
+Copyright (c) 2013 Kenneth L. Ho
+Copyright (c) 2013 Tim Blechmann
+Copyright (c) 2014 Agustin Berge
+Copyright (c) 2014 Ahmed Charles
+Copyright (c) 2014 John Fletcher
+Copyright (c) 2014 Paul Fultz II
+Copyright (c) 2015 Artyom Beilis
+Copyright (c) 2015 Ion Gaztanaga
+Copyright (c) 2015 John Fletcher
+Copyright (c) 2015 Paul Fultz II
+Copyright (c) 2016 Barrett Adair
+Copyright (c) 2016 Paul Fultz II
+Copyright (c) 2017 Michel Morin.
+Copyright (c) 2018 Artyom Beilis
+Copyright (c) Aaron Windsor 2007
+Copyright (c) Kevlin Henney 2001
+Copyright (c) Pablo Aguilar 2005
+Copyright 1991 Dieter Kraft, FHM
+Copyright 2002, 2009 Peter Dimov
+Copyright 2002, 2020 Peter Dimov
+Copyright 2005, 2014 Peter Dimov
+Copyright 2006 Thorsten Ottosen.
+Copyright 2006, 2020 Peter Dimov
+Copyright 2007 Christian Henning
+Copyright 2007, 2014 Peter Dimov
+Copyright 2007, 2019 Peter Dimov
+Copyright 2007, 2020 Peter Dimov
+Copyright 2008 Christian Henning
+Copyright 2008 Intel Corporation
+Copyright 2008, 2020 Peter Dimov
+Copyright 2009 Christian Henning
+Copyright 2009-2014 Neil Groves.
+Copyright 2010 Christian Henning
+Copyright 2010 Thomas Claveirole
+Copyright 2012 Christian Henning
+Copyright 2012 Olivier Tournaire
+Copyright 2013 Christian Henning
+Copyright 2013 Christian Shelton
+Copyright 2013 Cromwell D. Enage
+Copyright 2015-2017 Peter Dimov.
+Copyright 2015-2019 Peter Dimov.
+Copyright 2016, 2017 Peter Dimov
+Copyright 2017 James E. King III
+Copyright 2017-2019 Peter Dimov.
+Copyright 2018, 2020 Peter Dimov
+Copyright 2019, 2020 Peter Dimov
+Copyright Alexander Nasonov 2004
+Copyright Anne M. Archibald 2008
+Copyright Beman Dawes 1995-2001.
+Copyright Beman Dawes 2002, 2006
+Copyright Beman Dawes 2003, 2006
+Copyright Beman Dawes 2006, 2007
+Copyright Beman Dawes, 2002-2005
+Copyright Benjamin Sobotta 2012.
+Copyright Christopher Brown 2013
+Copyright Jason Rhinelander 2016
+Copyright Louis Dionne 2013-2017
+Copyright Neil Groves 2003-2004.
+Copyright Nicholas Thompson 2018
+Copyright Nikhar Agrawal 2013-14
+Copyright Nikolay Mladenov 2007.
+Copyright Pavol Droba 2002-2003.
+Copyright Pavol Droba 2002-2004.
+Copyright Pavol Droba 2002-2006.
+Copyright Peter Dimov 2017, 2018
+Copyright Thorsten Ottosen 2006.
+Copyright Thorsten Ottosen 2008.
+copyright Boost Software License
+copyright Louis Dionne 2013-2016
+copyright Louis Dionne 2013-2017
+(c) Copyright 2006 David Abrahams
+(c) Copyright 2006 Douglas Gregor
+(c) Copyright 2009 Eric Bose-Wolf
+(c) Copyright 2013 Ruslan Baratov
+(c) Copyright Anton Bikineev 2014
+(c) Copyright Artyom Beilis 2010.
+(c) Copyright Boris Gubenko 2007.
+(c) Copyright Bruno Lalande 2008.
+(c) Copyright Daniel Wallin 2004.
+(c) Copyright Daryle Walker 2001.
+(c) Copyright Douglas Gregor 2010
+(c) Copyright Edward Diener 2011.
+(c) Copyright Edward Diener 2013.
+(c) Copyright Edward Diener 2014.
+(c) Copyright Edward Diener 2015.
+(c) Copyright Edward Diener 2016.
+(c) Copyright Edward Diener 2019.
+(c) Copyright Gennaro Prota 2003.
+(c) Copyright Howard Hinnant 2004
+(c) Copyright Ion Gaztanaga 2005.
+(c) Copyright Ion Gaztanaga 2006.
+(c) Copyright Ion Gaztanaga 2009.
+(c) Copyright Ion Gaztanaga 2014.
+(c) Copyright Juergen Hunold 2008
+(c) Copyright Milan Svoboda 2008.
+(c) Copyright Nick Thompson 2017.
+(c) Copyright Nick Thompson 2018.
+(c) Copyright Nick Thompson 2019.
+(c) Copyright Noel Belcourt 2007.
+(c) Copyright Pablo Halpern 2009.
+(c) Copyright Ronald Garcia 2002.
+Copyright (c) 2000 Stephen Cleary
+Copyright (c) 2001 Daryle Walker.
+Copyright (c) 2001 David Abrahams
+Copyright (c) 2001 Stephen Cleary
+Copyright (c) 2002 David Abrahams
+Copyright (c) 2002 Joel de Guzman
+Copyright (c) 2003 David Abrahams
+Copyright (c) 2003 Gennaro Prota.
+Copyright (c) 2003 Hartmut Kaiser
+Copyright (c) 2003 Howard Hinnant
+Copyright (c) 2003 Joel de Guzman
+Copyright (c) 2003 Vesa Karvonen.
+Copyright (c) 2003 Vladimir Prus.
+Copyright (c) 2004 Hartmut Kaiser
+Copyright (c) 2004 Joel de Guzman
+Copyright (c) 2004 Ralf Mattethat
+Copyright (c) 2005 Igor Chesnokov
+Copyright (c) 2006 Douglas Gregor
+Copyright (c) 2006 Piotr Wyderski
+Copyright (c) 2006 Xiaogang Zhang
+Copyright (c) 2006-7 John Maddock
+Copyright (c) 2007 Douglas Gregor
+Copyright (c) 2007 Hartmut Kaiser
+Copyright (c) 2007 Joel de Guzman
+Copyright (c) 2008 Michael Marcin
+Copyright (c) 2009 Chris Hoeppler
+Copyright (c) 2009 Francois Barel
+Copyright (c) 2009 Gunter Winkler
+Copyright (c) 2009 Hartmut Kaiser
+Copyright (c) 2009 Pauli Virtanen
+Copyright (c) 2009 Sebastian Redl
+Copyright (c) 2009, Motorola, Inc
+Copyright (c) 2010 Alfredo Correa
+Copyright (c) 2011 ! Brandon Kohn
+Copyright (c) 2011 Hartmut Kaiser
+Copyright (c) 2011 Thomas Bernard
+Copyright (c) 2012 Hartmut Kaiser
+Copyright (c) 2012 Martin Raspaud
+Copyright (c) 2013 Anton Bikineev
+Copyright (c) 2013 Mateusz Loskot
+Copyright (c) 2013 Pauli Virtanen
+Copyright (c) 2013 Sebastian Redl
+Copyright (c) 2014 Erik Erlandson
+Copyright (c) 2014 Glen Fernandes
+Copyright (c) 2014 Joel de Guzman
+Copyright (c) 2014 Oliver Kowalke
+Copyright (c) 2014 Thomas Bernard
+Copyright (c) 2015 Sebastian Redl
+Copyright (c) 2016 Norbert Wenzel
+Copyright (c) 2016-2018 ERGO-Code
+Copyright (c) 2016-2019 ERGO-Code
+Copyright (c) 2017 Daniela Engert
+Copyright (c) 2018 Alain Miniussi
+Copyright (c) 2018 Evgeny Shulgin
+Copyright (c) 2018 Sergei Fedorov
+Copyright (c) 2018 Stefan Seefeld
+Copyright (c) 2019 Joel de Guzman
+Copyright (c) Chris Glover, 2016.
+Copyright (c) Douglas Gregor 2004
+Copyright (c) Douglas Gregor 2008
+Copyright (c) Marshall Clow 2014.
+Copyright (c) Marshall Clow 2017.
+Copyright (c) Vladimir Prus 2003.
+Copyright 2001 Indiana University
+Copyright 2005 Alexander Nasonov.
+Copyright 2005-2009 Daniel James.
+Copyright 2005-2011 Daniel James.
+Copyright 2005-2012 Daniel James.
+Copyright 2005-2014 Daniel James.
+Copyright 2006-2007 Boris Gubenko
+Copyright 2007 Alexandre Courpron
+Copyright 2007-2008 CodeRage, LLC
+Copyright 2007-2012 Ion Gaztanaga
+Copyright 2011 Paul A. Bristow To
+Copyright 2015, 2016 Peter Dimov.
+Copyright 2015, 2019 Peter Dimov.
+Copyright 2017 James E. King, III
+Copyright 2017, 2018 Peter Dimov.
+Copyright 2017, 2019 Peter Dimov.
+Copyright Barrett Adair 2015-2017
+Copyright Barrett Adair 2015-2018
+Copyright Barrett Adair 2016-2017
+Copyright Cromwell D. Enage 2013.
+Copyright Cromwell D. Enage 2017.
+Copyright Cromwell D. Enage 2018.
+Copyright Cromwell D. Enage 2019.
+Copyright Dave Abrahams 2001-2002
+Copyright Eric Friedman 2002-2003
+Copyright John Maddock 2005-2006.
+Copyright John Maddock 2005-2008.
+Copyright Paul A. Bristow 2006-7.
+Copyright Thijs van den Berg 2014
+Copyright Thorsten Ottosen, 2009.
+(c) Copyright 2005 Matthias Troyer
+(c) Copyright 2007 Matthias Troyer
+(c) Copyright 2008 Matthias Troyer
+(c) Copyright 2013 Andrey Semashev
+(c) Copyright 2017 Andrey Semashev
+(c) Copyright David Abrahams 2000.
+(c) Copyright David Abrahams 2001.
+(c) Copyright David Abrahams 2002.
+(c) Copyright David Abrahams 2003.
+(c) Copyright David Abrahams 2004.
+(c) Copyright Douglas Gregor 2001.
+(c) Copyright Douglas Gregor 2002.
+(c) Copyright Ignacy Gawedzki 2010
+(c) Copyright Joel de Guzman 2003.
+(c) Copyright John Maddock 2001-8.
+(c) Copyright John Maddock 2006-7.
+(c) Copyright John Maddock 2006-8.
+(c) Copyright Paul A. Bristow 2011
+(c) Copyright Roland Richter 2003.
+(c) Copyright Stefan Slapeta 2004.
+(c) Copyright Stephen Cleary 2000.
+Copyright (c) 1995, Gerald Evenden
+Copyright (c) 2000 David Abrahams.
+Copyright (c) 2002 Travis Oliphant
+Copyright (c) 2003 Paul Mensonides
+Copyright (c) 2003-2008 Jan Gaspar
+Copyright (c) 2005 Douglas Gregor.
+Copyright (c) 2005-2007 Peder Holt
+Copyright (c) 2006 Steven Watanabe
+Copyright (c) 2006-2008 Johan Rade
+Copyright (c) 2007 Alexey Baskakov
+Copyright (c) 2007 Matthias Troyer
+Copyright (c) 2008 Frank Mori Hess
+Copyright (c) 2008 Steven Watanabe
+Copyright (c) 2008-2009 Ben Hanson
+Copyright (c) 2009 Boris Schaeling
+Copyright (c) 2009 Frank Mori Hess
+Copyright (c) 2009 Steven Watanabe
+Copyright (c) 2009, Gunter Winkler
+Copyright (c) 2009, Marco Guazzone
+Copyright (c) 2010 Paul A. Bristow
+Copyright (c) 2011 Emil Dotchevski
+Copyright (c) 2011 Paul A. Bristow
+Copyright (c) 2011 Steven Watanabe
+Copyright (c) 2012 Boris Schaeling
+Copyright (c) 2012 Kohei Takahashi
+Copyright (c) 2012 Paul A. Bristow
+Copyright (c) 2012, Michele Caini.
+Copyright (c) 2013 Antony Polukhin
+Copyright (c) 2013 Paul A. Bristow
+Copyright (c) 2014 Andrey Semashev
+Copyright (c) 2014 Christoph Weiss
+Copyright (c) 2014 Kohei Takahashi
+Copyright (c) 2015 Andrey Semashev
+Copyright (c) 2015 Kohei Takahashi
+Copyright (c) 2016 Kohei Takahashi
+Copyright (c) 2017 Andrey Semashev
+Copyright (c) 2017 Kohei Takahashi
+Copyright (c) 2017-2018 Chris Beck
+Copyright (c) 2018 Andrey Semashev
+Copyright (c) 2018 Kohei Takahashi
+Copyright (c) 2018, Quansight-Labs
+Copyright (c) 2018-2019 Cem Bassoy
+Copyright (c) 2018-2019 ERGO-Code.
+Copyright (c) 2019 Andrey Semashev
+Copyright (c) Andrey Semashev 2017
+Copyright (c) David Abrahams 2001.
+Copyright 2002 Indiana University.
+Copyright 2003 Guillaume Melquiond
+Copyright 2005 Guillaume Melquiond
+Copyright 2007 Stanford University
+Copyright 2009-2011 Karsten Ahnert
+Copyright 2009-2011 Mario Mulansky
+Copyright 2009-2012 Karsten Ahnert
+Copyright 2009-2012 Mario Mulansky
+Copyright 2009-2013 Karsten Ahnert
+Copyright 2009-2013 Mario Mulansky
+Copyright 2009-2015 Mario Mulansky
+Copyright 2010-2011 Karsten Ahnert
+Copyright 2010-2011 Mario Mulansky
+Copyright 2010-2012 Karsten Ahnert
+Copyright 2010-2012 Mario Mulansky
+Copyright 2010-2013 Karsten Ahnert
+Copyright 2010-2013 Mario Mulansky
+Copyright 2010-2014 Mario Mulansky
+Copyright 2010-2015 Mario Mulansky
+Copyright 2011 -2013 John Maddock.
+Copyright 2011-2012 Karsten Ahnert
+Copyright 2011-2012 Mario Mulansky
+Copyright 2011-2013 Karsten Ahnert
+Copyright 2011-2013 Mario Mulansky
+Copyright 2011-2015 Mario Mulansky
+Copyright 2012-2013 Karsten Ahnert
+Copyright 2012-2013 Mario Mulansky
+Copyright 2012-2015 Mario Mulansky
+Copyright 2013-2014 Karsten Ahnert
+Copyright 2013-2014 Mario Mulansky
+Copyright 2015 Klemens Morgenstern
+Copyright 2015-2016 Hans Dembinski
+Copyright 2015-2017 Hans Dembinski
+Copyright 2015-2018 Hans Dembinski
+Copyright 2015-2019 Hans Dembinski
+Copyright 2016 Klemens Morgenstern
+Copyright 2017 Two Blue Cubes Ltd.
+Copyright 2018-2019 Hans Dembinski
+Copyright 2019 Przemyslaw Bartosik
+Copyright Christoper Kohlhoff 2007
+Copyright David Abrahams 2000-2002
+Copyright David Abrahams 2001-2002
+Copyright David Abrahams 2002-2003
+Copyright David Abrahams 2003-2004
+Copyright Douglas Gregor 2001-2006
+Copyright John Maddock 2006, 2007.
+Copyright John Maddock 2006, 2010.
+Copyright John Maddock 2006, 2011.
+Copyright John Maddock 2006, 2012.
+Copyright John Maddock 2007, 2014.
+Copyright John Maddock 2008, 2012.
+Copyright John Maddock 2010, 2012.
+Copyright Paul Bristow 2006, 2007.
+Copyright Paul Bristow 2007, 2011.
+Copyright Vladimir Prus 2002-2004.
+(c) Copyright 2004 Pavel Vozenilek.
+(c) Copyright 2007 Anthony Williams
+(c) Copyright 2008 Anthony Williams
+(c) Copyright 2016 Raffi Enficiaud.
+(c) Copyright Andrey Semashev 2017.
+(c) Copyright Antony Polukhin 2013.
+(c) Copyright Antony Polukhin 2014.
+(c) Copyright Craig Henderson 2002.
+(c) Copyright Dustin Spicuzza 2009.
+(c) Copyright Jonathan Graehl 2004.
+(c) Copyright Paul A. Bristow 2006.
+(c) Copyright Paul Mensonides 2002.
+(c) Copyright Paul Mensonides 2003.
+(c) Copyright Paul Mensonides 2005.
+(c) Copyright Paul Mensonides 2011.
+(c) Copyright Paul Mensonides 2012.
+(c) Copyright Peter Dimov 2004-2005
+(c) Copyright Raffi Enficiaud 2017.
+(c) Copyright Raffi Enficiaud 2018.
+(c) Copyright Raffi Enficiaud 2019.
+Copyright (c) 1988 by Theo Jurriens
+Copyright (c) 2000, Frank Warmerdam
+Copyright (c) 2001-2003 Mac Murrett
+Copyright (c) 2001-2005 Peter Dimov
+Copyright (c) 2001-2008 Peter Dimov
+Copyright (c) 2002, Frank Warmerdam
+Copyright (c) 2003-2005 Peter Dimov
+Copyright (c) 2004 Arkadiy Vertleyb
+Copyright (c) 2005 Arkadiy Vertleyb
+Copyright (c) 2005-2006 Dan Marsden
+Copyright (c) 2005-2007 Dan Marsden
+Copyright (c) 2006 Arkadiy Vertleyb
+Copyright (c) 2006 Tobias Schwinger
+Copyright (c) 2007 Tobias Schwinger
+Copyright (c) 2011 Julio Hoffimann.
+Copyright (c) 2012 Anthony Williams
+Copyright (c) 2012 Lorenzo Caminiti
+Copyright (c) 2013-2014 Damien Buhl
+Copyright (c) 2016 K. Noel Belcourt
+Copyright (c) 2019 T. Zachary Laine
+Copyright (c) Benjamin Sobotta 2012
+Copyright (c) Pauli Virtanen, 2010.
+Copyright 2002 H Lohninger, TU Wein
+Copyright 2002, 2005 Daryle Walker.
+Copyright 2008 Andreas Huber Doenni
+Copyright 2008-2009 Frank Mori Hess
+Copyright 2008-2010 Gordon Woodhull
+Copyright 2011 - 2013 John Maddock.
+Copyright 2011-2012 Steven Watanabe
+Copyright 2012-2013 Steven Watanabe
+Copyright 2015 Jon Lund Steffensen.
+Copyright 2015-2018 Andrey Semashev
+Copyright 2016-2018 Andrey Semashev
+Copyright 2017, NVIDIA CORPORATION.
+Copyright Douglas Gregor 2001-2003.
+Copyright Douglas Gregor 2001-2004.
+Copyright Douglas Gregor 2002-2003.
+Copyright Douglas Gregor 2002-2004.
+Copyright Eric Niebler 2013-present
+Copyright Gottfried Ganssauge 2003.
+Copyright Howard Hinnant 2007-2010.
+Copyright John R. Bandela 2000-2002
+Copyright Kevlin Henney, 2000-2005.
+Copyright Michael Drexl 2005, 2006.
+Copyright Sebastian Ramacher, 2007.
+Copyright Steven Watanabe 2009-2011
+Copyright Steven Watanabe 2010-2011
+Copyright Thijs van den Berg, 2008.
+(c) Copyright 2002, 2003 Beman Dawes
+(c) Copyright 2002-2009 Robert Ramey
+(c) Copyright 2002-2014 Robert Ramey
+(c) Copyright 2002-4 Pavel Vozenilek
+(c) Copyright 2016 Ashish Sadanandan
+(c) Copyright Aleksey Gurtovoy 2002.
+(c) Copyright Aleksey Gurtovoy 2003.
+(c) Copyright Beman Dawes 1995-2001.
+(c) Copyright Beman Dawes 1999-2003.
+(c) Copyright Daniel Frey 2002-2017.
+(c) Copyright Eric Niebler 2004-2005
+(c) Copyright Herve Bronnimann 2004.
+(c) Copyright Jeremiah Willcock 2004
+(c) Copyright Jeremy Siek 1999-2001.
+(c) Copyright Jessica Hamilton 2014.
+(c) Copyright Markus Schoepflin 2007
+(c) Copyright Matthias Troyerk 2006.
+(c) Copyright Peter Dimov 2001, 2002
+(c) Copyright Reimar Doffinger 2018.
+(c) Copyright Thomas Claveirole 2010
+(c) Copyright Thorsten Ottosen 2005.
+Copyright (2) Beman Dawes 2010, 2011
+Copyright (c) 1993-2019 C.B. Barber.
+Copyright (c) 1998-2002 John Maddock
+Copyright (c) 1998-2004 John Maddock
+Copyright (c) 1998-2005 John Maddock
+Copyright (c) 1998-2009 John Maddock
+Copyright (c) 1999-2003 Jaakko Jarvi
+Copyright (c) 2001 Alexander Peslyak
+Copyright (c) 2001 Daniel C. Nuffer.
+Copyright (c) 2001, 2002 Peter Dimov
+Copyright (c) 2001, Daniel C. Nuffer
+Copyright (c) 2001-2003 John Maddock
+Copyright (c) 2002, 2003 Peter Dimov
+Copyright (c) 2002-2003 Martin Wille
+Copyright (c) 2003 Gerald I. Evenden
+Copyright (c) 2003-2005 John Maddock
+Copyright (c) 2004 Gerald I. Evenden
+Copyright (c) 2005 Matthew Calabrese
+Copyright (c) 2005-2009 Jongsoo Park
+Copyright (c) 2005-2016 Daniel James
+Copyright (c) 2007 Cybozu Labs, Inc.
+Copyright (c) 2007 Marcin Kalicinski
+Copyright (c) 2007, 2008 Peter Dimov
+Copyright (c) 2007, 2013 Peter Dimov
+Copyright (c) 2007, 2014 Peter Dimov
+Copyright (c) 2008 Gerald I. Evenden
+Copyright (c) 2008, 2009 Peter Dimov
+Copyright (c) 2008, 2011 Peter Dimov
+Copyright (c) 2008, 2018 Peter Dimov
+Copyright (c) 2009, 2015 Peter Dimov
+Copyright (c) 2010-2011 David Bellot
+Copyright (c) 2013 Tim Blechmann ARM
+Copyright (c) 2015-2019 Vinnie Falco
+Copyright (c) 2016-2019 Damian Jarek
+Copyright (c) 2016-2019 Vinnie Falco
+Copyright (c) 2017 James E. King III
+Copyright (c) 2018 James E. King III
+Copyright (c) Christof Meerwald 2003
+Copyright (c) Jeremy Siek 2001-2003.
+Copyright (c) T. Zachary Laine 2018.
+Copyright 2011, 2012 Paul A. Bristow
+Copyright 2011-2013 Thorsten Ottosen
+Copyright 2013 Christopher Kormanyos
+Copyright 2013 University of Warsaw.
+Copyright 2013, 2017 Andrey Semashev
+Copyright 2013, 2017-2018 Cray, Inc.
+Copyright 2014 Christopher Kormanyos
+Copyright 2015, 2017 Andrey Semashev
+Copyright 2015, 2020 Andrey Semashev
+Copyright 2015-2019 Antony Polukhin.
+Copyright 2016, 2017 Andrey Semashev
+Copyright 2016-2019 Antony Polukhin.
+Copyright 2018, 2019 Andrey Semashev
+Copyright 2018-2019 Antony Polukhin.
+Copyright Aleksey Gurtovoy 2000-2002
+Copyright Aleksey Gurtovoy 2000-2003
+Copyright Aleksey Gurtovoy 2000-2004
+Copyright Aleksey Gurtovoy 2000-2006
+Copyright Aleksey Gurtovoy 2000-2008
+Copyright Aleksey Gurtovoy 2000-2009
+Copyright Aleksey Gurtovoy 2000-2010
+Copyright Aleksey Gurtovoy 2001-2004
+Copyright Aleksey Gurtovoy 2001-2006
+Copyright Aleksey Gurtovoy 2001-2007
+Copyright Aleksey Gurtovoy 2001-2008
+Copyright Aleksey Gurtovoy 2002-2004
+Copyright Aleksey Gurtovoy 2002-2006
+Copyright Aleksey Gurtovoy 2003-2004
+Copyright Aleksey Gurtovoy 2003-2007
+Copyright Frank Mori Hess 2007,2009.
+Copyright Frank Mori Hess 2007-2008.
+Copyright Frank Mori Hess 2007-2009.
+Copyright Frank Mori Hess 2007-2010.
+Copyright Kohei Takahashi 2012-2014.
+Copyright Paul A. Bristow 2006-2011.
+Copyright Paul A. Bristow 2009, 2011
+Copyright Shunsuke Sogame 2005-2006.
+copyright 2004 Brian Ravnsgaard Riis
+(c) Copyright 2005-7 Anthony Williams
+(c) Copyright 2005-8 Anthony Williams
+(c) Copyright 2006-7 Anthony Williams
+(c) Copyright 2006-8 Anthony Williams
+(c) Copyright 2007-2009 Andrew Sutton
+(c) Copyright 2007-8 Anthony Williams
+(c) Copyright 2007-9 Anthony Williams
+(c) Copyright 2008-9 Anthony Williams
+(c) Copyright Edward Diener 2011,2012
+(c) Copyright Edward Diener 2011-2015
+(c) Copyright Edward Diener 2012,2013
+(c) Copyright Gennadiy Rozental 2001.
+(c) Copyright Hubert Holin 2003-2005.
+(c) Copyright Ion Gaztanaga 2006-2015
+(c) Copyright Ion Gaztanaga 2010-2013
+(c) Copyright Ion Gaztanaga 2013-2014
+(c) Copyright John Maddock 2005-2006.
+(c) Copyright John Maddock 2006, 2015
+(c) Copyright Jonathan Turkanis 2003.
+(c) Copyright Jonathan Turkanis 2004.
+(c) Copyright Markus Schoepflin 2005.
+(c) Copyright Michael Glassford 2004.
+(c) Copyright Rani Sharoni 2003-2005.
+(c) Copyright Yuriy Krasnoschek 2009.
+(c) KyKOKQKOKEK9K8K KFKGKGKJKHKKAKKAK
+Copyright (c) 2001-2003 Daniel Nuffer
+Copyright (c) 2002 Raghavendra Satish
+Copyright (c) 2002-2003 Eric Friedman
+Copyright (c) 2003-2004 Gennaro Prota
+Copyright (c) 2004 Kristopher Beevers
+Copyright (c) 2005, 2014 Eric Niebler
+Copyright (c) 2005-2006 Joao Abecasis
+Copyright (c) 2005-2008 Daniel James.
+Copyright (c) 2005-2011 Daniel James.
+Copyright (c) 2006, Stephan Diederich
+Copyright (c) 2007 - Sebastien Fabbro
+Copyright (c) 2007, 2013 John Maddock
+Copyright (c) 2007, Tobias Schwinger.
+Copyright (c) 2007-8 Anthony Williams
+Copyright (c) 2007-9 Anthony Williams
+Copyright (c) 2008-2011 Daniel James.
+Copyright (c) 2008-2013 Tim Blechmann
+Copyright (c) 2008-2016 Daniel James.
+Copyright (c) 2008-2016 Tim Blechmann
+Copyright (c) 2009-2011 Artyom Beilis
+Copyright (c) 2009-2013 Tim Blechmann
+Copyright (c) 2010-2011 Bryce Lelbach
+Copyright (c) 2010-2011 Thomas Heller
+Copyright (c) 2010-2011 Tim Blechmann
+Copyright (c) 2011 Jan Frederick Eick
+Copyright (c) 2011 Paul A. Bristow To
+Copyright (c) 2011-2013 Andrew Hundt.
+Copyright (c) 2013-2014 Agustin Berge
+Copyright (c) 2013-2014 Ion Gaztanaga
+Copyright (c) 2014 Mathjax Consortium
+Copyright (c) 2014-2015 John Fletcher
+Copyright (c) 2015-2017 Martin Hensel
+Copyright (c) 2016 2017 Felix Lenders
+Copyright (c) Damian Eads, 2007-2008.
+Copyright (c) Intel Corporation 2008.
+Copyright 1999-2003 Aleksey Gurtovoy.
+Copyright 2007-2008 Christian Henning
+Copyright 2008 Joaquin M Lopez Munoz.
+Copyright 2016 Joaquin M Lopez Munoz.
+Copyright 2016 Klemens D. Morgenstern
+Copyright 2017 Joaquin M Lopez Munoz.
+Copyright 2017 Valentin Noah Hartmann
+Copyright 2018 Joaquin M Lopez Munoz.
+Copyright Andrii Sydorchuk 2010-2012.
+Copyright Antony Polukhin, 2013-2014.
+Copyright Antony Polukhin, 2016-2019.
+Copyright Beman Dawes 1994-2007, 2011
+Copyright Beman Dawes 2002-2005, 2009
+Copyright Christopher Kormanyos 2013.
+Copyright Christopher Kormanyos 2014.
+Copyright Matthew Pulver 2018 - 2019.
+Copyright Nick Thompson, John Maddock
+Copyright Paul A. Bristow 2006, 2007.
+Copyright Paul A. Bristow 2007, 2009.
+Copyright Paul A. Bristow 2007, 2010.
+Copyright Paul A. Bristow 2007, 2012.
+Copyright Paul A. Bristow 2008, 2009.
+Copyright Paul A. Bristow 2008, 2010.
+Copyright Paul A. Bristow 2008, 2014.
+Copyright Paul A. Bristow 2011, 2012.
+Copyright Steven J. Ross 2001 - 2009.
+Copyright Steven J. Ross 2001 - 2014.
+Copyright Thorsten Ottosen 2003-2004.
+Copyright Thorsten Ottosen 2003-2005.
+Copyright Thorsten Ottosen 2003-2006.
+Copyright Thorsten Ottosen 2003-2007.
+Copyright Thorsten Ottosen 2003-2008.
+copyright Gonzalo Brito Gadeschi 2015
+(c) Copyright 2007-10 Anthony Williams
+(c) Copyright 2008-10 Anthony Williams
+(c) Copyright 2009-2011 Frederic Bron.
+(c) Copyright Beman Dawes 2001 - 2003.
+(c) Copyright Beman Dawes 2002 - 2003.
+(c) Copyright Benedek Thaler 2015-2016
+(c) Copyright Darin Adler 2001 - 2002.
+(c) Copyright Daryle Walker 2000-2001.
+(c) Copyright Daryle Walker 2001-2002.
+(c) Copyright Edward Diener 2011,2013.
+(c) Copyright Edward Diener 2011,2014.
+(c) Copyright Edward Diener 2014,2019.
+(c) Copyright Eric Friedman 2002-2003.
+(c) Copyright Ion Gaztanaga 2004-2015.
+(c) Copyright Ion Gaztanaga 2005-2012.
+(c) Copyright Ion Gaztanaga 2005-2013.
+(c) Copyright Ion Gaztanaga 2005-2014.
+(c) Copyright Ion Gaztanaga 2005-2015.
+(c) Copyright Ion Gaztanaga 2005-2016.
+(c) Copyright Ion Gaztanaga 2006-2012.
+(c) Copyright Ion Gaztanaga 2006-2013.
+(c) Copyright Ion Gaztanaga 2006-2014.
+(c) Copyright Ion Gaztanaga 2007-2012.
+(c) Copyright Ion Gaztanaga 2007-2013.
+(c) Copyright Ion Gaztanaga 2007-2014.
+(c) Copyright Ion Gaztanaga 2008-2012.
+(c) Copyright Ion Gaztanaga 2008-2013.
+(c) Copyright Ion Gaztanaga 2008-2015.
+(c) Copyright Ion Gaztanaga 2009-2012.
+(c) Copyright Ion Gaztanaga 2009-2013.
+(c) Copyright Ion Gaztanaga 2010-2012.
+(c) Copyright Ion Gaztanaga 2010-2016.
+(c) Copyright Ion Gaztanaga 2011-2012.
+(c) Copyright Ion Gaztanaga 2011-2013.
+(c) Copyright Ion Gaztanaga 2011-2014.
+(c) Copyright Ion Gaztanaga 2012-2012.
+(c) Copyright Ion Gaztanaga 2012-2013.
+(c) Copyright Ion Gaztanaga 2012-2015.
+(c) Copyright Ion Gaztanaga 2012-2016.
+(c) Copyright Ion Gaztanaga 2013-2013.
+(c) Copyright Ion Gaztanaga 2014-2014.
+(c) Copyright Ion Gaztanaga 2014-2015.
+(c) Copyright Ion Gaztanaga 2014-2017.
+(c) Copyright Ion Gaztanaga 2015-2015.
+(c) Copyright Ion Gaztanaga 2015-2016.
+(c) Copyright Ion Gaztanaga 2015-2017.
+(c) Copyright Ion Gaztanaga 2016-2016.
+(c) Copyright Ion Gaztanaga 2017-2017.
+(c) Copyright Ion Gaztanaga 2017-2018.
+(c) Copyright Ion Gaztanaga 2018-2018.
+(c) Copyright Jens Maurer 2001 - 2002.
+(c) Copyright Jens Maurer 2001 - 2003.
+(c) Copyright Jens Maurer 2002 - 2003.
+(c) Copyright Toon Knapen 2001 - 2003.
+(c) Copyright Vicente J. Botet Escriba
+Copyright (c) 1998-2003 Joel de Guzman
+Copyright (c) 1998-2008 Joel de Guzman
+Copyright (c) 2001-2002 Joel de Guzman
+Copyright (c) 2001-2003 Hartmut Kaiser
+Copyright (c) 2001-2003 Joel de Guzman
+Copyright (c) 2001-2007 Hartmut Kaiser
+Copyright (c) 2001-2007 Joel de Guzman
+Copyright (c) 2001-2008 Hartmut Kaiser
+Copyright (c) 2001-2008 Joel de Guzman
+Copyright (c) 2001-2009 Joel de Guzman
+Copyright (c) 2001-2010 Hartmut Kaiser
+Copyright (c) 2001-2010 Joel de Guzman
+Copyright (c) 2001-2011 Joel de Guzman
+Copyright (c) 2001-2011 Thomas Bernard
+Copyright (c) 2001-2012 Joel de Guzman
+Copyright (c) 2001-2013 Joel de Guzman
+Copyright (c) 2001-2014 Joel de Guzman
+Copyright (c) 2001-2015 Joel de Guzman
+Copyright (c) 2001-2019 Joel de Guzman
+Copyright (c) 2002-2003 David Abrahams
+Copyright (c) 2002-2003 Hartmut Kaiser
+Copyright (c) 2002-2003 Joel de Guzman
+Copyright (c) 2002-2006 Hartmut Kaiser
+Copyright (c) 2004 Jonathan Brandmeyer
+Copyright (c) 2005-2006 Alain Miniussi
+Copyright (c) 2005-2006 Douglas Gregor
+Copyright (c) 2005-2008 Hartmut Kaiser
+Copyright (c) 2005-2010 Joel de Guzman
+Copyright (c) 2005-2011 Joel de Guzman
+Copyright (c) 2005-2012 Joel de Guzman
+Copyright (c) 2005-2013 Joel de Guzman
+Copyright (c) 2007, 2008, Damian Eads.
+Copyright (c) 2007-2011 Hartmut Kaiser
+Copyright (c) 2008, 2016 Tim Blechmann
+Copyright (c) 2008-2011 Hartmut Kaiser
+Copyright (c) 2009 Christopher Schmidt
+Copyright (c) 2009, 2011 Helge Bahmann
+Copyright (c) 2009, 2016 Tim Blechmann
+Copyright (c) 2009-2010 Hartmut Kaiser
+Copyright (c) 2010 Christopher Schmidt
+Copyright (c) 2011, 2016 Tim Blechmann
+Copyright (c) 2011-2012 ! Brandon Kohn
+Copyright (c) 2011-2012 Thomas Bernard
+Copyright (c) 2012, Jaydeep P. Bardhan
+Copyright (c) 2012, Matthew G. Knepley
+Copyright (c) 2014 Riccardo Marcangelo
+Copyright (c) 2014, Janani Padmanabhan
+Copyright (c) 2018 Two Blue Cubes Ltd.
+Copyright (c) Christopher Diggins 2005
+Copyright (c) Marshall Clow 2008-2012.
+Copyright (c) Marshall Clow 2010-2012.
+Copyright (c) Marshall Clow 2011-2012.
+Copyright (c) Marshall Clow 2012-2012.
+Copyright (c) Marshall Clow 2012-2015.
+Copyright 2002, 2009, 2014 Peter Dimov
+Copyright 2004-2005 by Enthought, Inc.
+Copyright 2007 University of Karlsruhe
+Copyright Andrey Semashev 2007 - 2013.
+Copyright Andrey Semashev 2007 - 2014.
+Copyright Andrey Semashev 2007 - 2015.
+Copyright Andrey Semashev 2007 - 2016.
+Copyright Andrey Semashev 2018 - 2020.
+Copyright Beman Dawes 1994, 2006, 2008
+Copyright Beman Dawes 2003, 2006, 2008
+Copyright Beman Dawes 2003, 2006, 2010
+Copyright Beman Dawes 2003, 2006, 2011
+Copyright Beman Dawes 2010, 2011, 2014
+Copyright Peter Dimov 2017, 2018, 2020
+copyright 2008- s, The SciPy community
+(c) Copyright 2005-2006 Matthias Troyer
+(c) Copyright 2005-2007 Matthias Troyer
+(c) Copyright Daryle Walker 2001, 2006.
+(c) Copyright Guillaume Melquiond 2003.
+(c) Copyright Howard Hinnant 2007-2010.
+(c) Copyright John Maddock 2001 - 2002.
+(c) Copyright John Maddock 2001 - 2003.
+(c) Copyright John Maddock 2002 - 2003.
+(c) Copyright Nicolai M. Josuttis 2001.
+(c) Copyright Olaf Krzikalla 2004-2006.
+Copyright (c) 1998-2000 Dr John Maddock
+Copyright (c) 2000, 2001 Stephen Cleary
+Copyright (c) 2001-2009, Hartmut Kaiser
+Copyright (c) 2001-2011 Hartmut Kaiser.
+Copyright (c) 2001-2012 Hartmut Kaiser.
+Copyright (c) 2001-2013 Hartmut Kaiser.
+Copyright (c) 2007-2008 Steven Watanabe
+Copyright (c) 2007-2009 Steven Watanabe
+Copyright (c) 2007-2010 Steven Watanabe
+Copyright (c) 2008-2009 Frank Mori Hess
+Copyright (c) 2009-2010, Marco Guazzone
+Copyright (c) 2009-2012, Marco Guazzone
+Copyright (c) 2010 Thomas P. Robitaille
+Copyright (c) 2011-2015 Akira Takahashi
+Copyright (c) 2012 Pieter Bastiaan Ober
+Copyright (c) 2012-2014 Kohei Takahashi
+Copyright (c) 2014 Pieter Bastiaan Ober
+Copyright (c) 2014,2018 Kohei Takahashi
+Copyright (c) 2014-2015 Kohei Takahashi
+Copyright (c) 2015 Andrzej Krzemienski.
+Copyright (c) 2016 Andrzej Krzemienski.
+Copyright (c) 2017 Andrzej Krzemienski.
+Copyright 2002-2003 Guillaume Melquiond
+Copyright 2009 Vicente J. Botet Escriba
+Copyright 2010 Vicente J. Botet Escriba
+Copyright 2011 Vicente J. Botet Escriba
+Copyright 2012 Vicente J. Botet Escriba
+Copyright 2015, 2017, 2019 Peter Dimov.
+Copyright 2016, 2018, 2019 Peter Dimov.
+Copyright Alexander Nasonov, 2006-2010.
+Copyright Christopher Kormanyos 2013-14
+Copyright John Maddock 2005-2006, 2011.
+Copyright John Maddock 2006-7, 2013-14.
+Copyright Vicente J. Botet Escriba 2009
+Copyright Vicente J. Botet Escriba 2010
+(c) Copyright 2007-2010 Anthony Williams
+(c) Copyright 2009-2012 Anthony Williams
+(c) Copyright 2013, 2020 Andrey Semashev
+(c) Copyright Boris Gubenko 2006 - 2007.
+(c) Copyright Gennaro Prota 2003 - 2004.
+(c) Copyright Microsoft Corporation 2014
+(c) Copyright Paul Mensonides 2002-2011.
+Copyright (arg) 2001-2014 Joel de Guzman
+Copyright (c) 1989-2004 Johannes Braams.
+Copyright (c) 1994 by Xerox Corporation.
+Copyright (c) 1996-2008 Rice University.
+Copyright (c) 2001, 2002 Enthought, Inc.
+Copyright (c) 2001-2003 William E. Kempf
+Copyright (c) 2003, 2007-14 Matteo Frigo
+Copyright (c) 2003-2005 Peter J. Verveer
+Copyright (c) 2004-2008 Rene Nyffenegger
+Copyright (c) 2005, 2006 Douglas Gregor.
+Copyright (c) 2006-2007 Matias Capeletto
+Copyright (c) 2006-2007 Tobias Schwinger
+Copyright (c) 2007-2008 Tobias Schwinger
+Copyright (c) 2008-2018 Lorenzo Caminiti
+Copyright (c) 2008-2019 Lorenzo Caminiti
+Copyright (c) 2009-2012 Lorenzo Caminiti
+Copyright (c) 2010 Athanasios Iliopoulos
+Copyright (c) 2011 Christopher Jefferson
+Copyright (c) 2013 Christopher Kormanyos
+Copyright (c) 2014, 2019 Andrey Semashev
+Copyright (c) 2014, 2020 Andrey Semashev
+Copyright (c) 2014, Andrzej Krzemienski.
+Copyright (c) 2015 Agustin K-ballo Berge
+Copyright (c) 2016-2018 T. Zachary Laine
+Copyright (c) Microsoft Corporation 2014
+Copyright 2000 University of Notre Dame.
+Copyright 2001 University of Notre Dame.
+Copyright 2002-2006 Andreas Huber Doenni
+Copyright 2002-2007 Andreas Huber Doenni
+Copyright 2002-2008 Andreas Huber Doenni
+Copyright 2002-2010 Andreas Huber Doenni
+Copyright 2002-2016 The SciPy Developers
+Copyright 2005-2006 Andreas Huber Doenni
+Copyright 2005-2008 Andreas Huber Doenni
+Copyright 2012-2013 Andreas Angelopoulos
+Copyright Paul A. Bristow 2007, 2013-14.
+Copyright Ralf W. Grosse-Kunstleve 2006.
+Copyright Vicente J. Botet Escriba 2012.
+(c) Copyright 2003-2007 Jonathan Turkanis
+(c) Copyright 2004-2007 Jonathan Turkanis
+(c) Copyright 2005-2007 Jonathan Turkanis
+(c) Copyright Christopher Jefferson 2011.
+(c) Copyright David Abrahams 2001 - 2002.
+(c) Copyright David Abrahams 2002 - 2003.
+(c) Copyright Jeremy William Murphy 2015.
+(c) Copyright Jeremy William Murphy 2016.
+(c) Copyright R.W. Grosse-Kunstleve 2002.
+(c) Copyright Thorsten Ottosen 2002-2003.
+CNRS/Univ. Clermont II Copyright 2014 LRI
+Copyright (c) 1999-2003 Jeremiah Willcock
+Copyright (c) 2001-2009, 2012 Peter Dimov
+Copyright (c) 2002 by Andrei Alexandrescu
+Copyright (c) 2002-2006 Marcin Kalicinski
+Copyright (c) 2002-2007 Marcin Kalicinski
+Copyright (c) 2004, 2005 Arkadiy Vertleyb
+Copyright (c) 2007-2009 Joachim Faulhaber
+Copyright (c) 2007-2010 Joachim Faulhaber
+Copyright (c) 2007-2011 Joachim Faulhaber
+Copyright (c) 2007-2012 Joachim Faulhaber
+Copyright (c) 2008 Federico J. Fernandez.
+Copyright (c) 2008-2009 Joachim Faulhaber
+Copyright (c) 2008-2010 Joachim Faulhaber
+Copyright (c) 2008-2011 Joachim Faulhaber
+Copyright (c) 2008-2012 Joachim Faulhaber
+Copyright (c) 2008-2012 Simonson Lucanus.
+Copyright (c) 2009-2009 Joachim Faulhaber
+Copyright (c) 2009-2010 Joachim Faulhaber
+Copyright (c) 2009-2011 Joachim Faulhaber
+Copyright (c) 2010-2010 Joachim Faulhaber
+Copyright (c) 2010-2011 Joachim Faulhaber
+Copyright (c) 2011-2011 Joachim Faulhaber
+Copyright (c) 2012 - 2014 Andrey Semashev
+Copyright (c) 2012-2012 Andrii Sydorchuk.
+Copyright (c) 2013 - 2014 Andrey Semashev
+Copyright (c) 2013 - 2020 Andrey Semashev
+Copyright (c) 2014, Athanasios Iliopoulos
+Copyright (c) 2016 Klemens D. Morgenstern
+Copyright (c) 2017 - 2018 Andrey Semashev
+Copyright (c) 2017 Klemens D. Morgenstern
+Copyright (c) 2018 Klemens D. Morgenstern
+Copyright (c) 2019 - 2020 Alexander Grund
+Copyright (c) 2019 Klemens D. Morgenstern
+Copyright 2001, 2004, 2011 Daryle Walker.
+Copyright 2006 Michael van der Westhuizen
+Copyright 2008 Adobe Systems Incorporated
+Copyright 2010-2012, D. E. Shaw Research.
+Copyright Gottfried Ganssauge 2003..2006.
+copyright (c) 1995-2010 Geodan, Amsterdam
+(c) Copyright 2011Vicente J. Botet Escriba
+(c) Copyright Beman Dawes 2006, 2009, 2014
+(c) Copyright Edward Diener 2011,2012,2013
+(c) Copyright Edward Diener 2011,2012,2019
+(c) Copyright Edward Diener 2011-2015,2019
+(c) Copyright Edward Diener 2012,2013,2019
+(c) Copyright Jonathan Turkanis 2004-2005.
+(c) Copyright Peter Dimov 2001, 2002, 2003
+(c) Copyright Samuli-Petrus Korhonen 2017.
+Copyright (c) 1990-2004 by Johannes Braams
+Copyright (c) 1994 Hewlett-Packard Company
+Copyright (c) 2000 Cadenza New Zealand Ltd
+Copyright (c) 2001 by Andrei Alexandrescu.
+Copyright (c) 2001, 2002, 2003 Peter Dimov
+Copyright (c) 2001, 2002, 2012 Peter Dimov
+Copyright (c) 2002, 2008, 2013 Peter Dimov
+Copyright (c) 2002, 2009, 2014 Peter Dimov
+Copyright (c) 2002, 2018, 2019 Peter Dimov
+Copyright (c) 2003, 2006 Gerald I. Evenden
+Copyright (c) 2005-2015, Michele Simionato
+Copyright (c) 2006, 2009 Marcin Kalicinski
+Copyright (c) 2006-2008 Alexander Chemeris
+Copyright (c) 2007, 2008, 2012 Peter Dimov
+Copyright (c) 2017, 2018 James E. King III
+Copyright 1984, 1995 by Stephen L. Moshier
+Copyright 1984, 1996 by Stephen L. Moshier
+Copyright 2003-2008 Joaquin M Lopez Munoz.
+Copyright 2003-2013 Joaquin M Lopez Munoz.
+Copyright 2003-2014 Joaquin M Lopez Munoz.
+Copyright 2003-2015 Joaquin M Lopez Munoz.
+Copyright 2003-2016 Joaquin M Lopez Munoz.
+Copyright 2003-2017 Joaquin M Lopez Munoz.
+Copyright 2003-2018 Joaquin M Lopez Munoz.
+Copyright 2003-2019 Joaquin M Lopez Munoz.
+Copyright 2006 Eric Niebler, Olivier Gygi.
+Copyright 2006-2008 Joaquin M Lopez Munoz.
+Copyright 2006-2009 Joaquin M Lopez Munoz.
+Copyright 2006-2011 Joaquin M Lopez Munoz.
+Copyright 2006-2013 Joaquin M Lopez Munoz.
+Copyright 2006-2014 Joaquin M Lopez Munoz.
+Copyright 2006-2015 Joaquin M Lopez Munoz.
+Copyright 2006-2018 Joaquin M Lopez Munoz.
+Copyright 2006-2019 Joaquin M Lopez Munoz.
+Copyright 2015-2018 Klemens D. Morgenstern
+Copyright 2016-2017 Joaquin M Lopez Munoz.
+Copyright 2016-2018 Joaquin M Lopez Munoz.
+Copyright 2016-2019 Joaquin M Lopez Munoz.
+Copyright 2017-2018 Joaquin M Lopez Munoz.
+Copyright Arno Schoedl & Neil Groves 2009.
+Copyright Kevlin Henney, 2000, 2001, 2002.
+Portions Copyright (c) 2002 David Abrahams
+(c) Copyright 2010 Vicente J. Botet Escriba
+(c) Copyright 2011 Vicente J. Botet Escriba
+(c) Copyright 2012 Vicente J. Botet Escriba
+(c) Copyright 2013 Vicente J. Botet Escriba
+(c) Copyright 2014 Vicente J. Botet Escriba
+(c) Copyright Aleksey Gurtovoy 2002 - 2003.
+Copyright (c) 2003-2004, 2008 Gennaro Prota
+Copyright (c) 2003-2006, 2008 Gennaro Prota
+Copyright (c) 2009-2010 Christopher Schmidt
+Copyright (c) 2009-2011 Christopher Schmidt
+Copyright (c) 2010-2011 Christopher Schmidt
+Copyright (c) 2011 Vicente J. Botet Escriba
+Copyright (c) 2011-2013, 2016 Tim Blechmann
+Copyright (c) 2012 Vicente J. Botet Escriba
+Copyright (c) 2013 Vicente J. Botet Escriba
+Copyright (c) 2014 Vicente J. Botet Escriba
+Copyright (c) 2015 Vicente J. Botet Escriba
+Copyright (c) 2017 Vicente J. Botet Escriba
+Copyright 1985 by Stephen L. Moshier Direct
+Copyright 2002 Brad King and Douglas Gregor
+Copyright 2005 Daniel Egloff, Eric Niebler.
+Copyright 2005 Daniel Egloff, Olivier Gygi.
+Copyright 2005 Eric Niebler, Daniel Egloff.
+Copyright 2006 Daniel Egloff, Olivier Gygi.
+Copyright 2006 Olivier Gygi, Daniel Egloff.
+Copyright 2006, Eric Niebler, Olivier Gygi.
+Copyright 2010 Daniel Wallin, Eric Niebler.
+Copyright Paul A. Bristow 2006, 2007, 2012.
+Copyright Paul A. Bristow 2006, 2012, 2017.
+Copyright Paul A. Bristow 2016, 2017, 2018.
+(c) Copyright Eric Ford & Hubert Holin 2001.
+(c) Copyright Eric Ford 2001 & Hubert Holin.
+(c) Copyright Markus Schoepflin 2002 - 2003.
+(c) Copyright Vicente J. Botet Escriba 2010.
+(c) Copyright Vicente J. Botet Escriba 2014.
+Copyright (c) 1993-2019 The Geometry Center.
+Copyright (c) 2001-2011 - Scilab Enterprises
+Copyright (c) 2002 Eric Friedman, Itay Maman
+Copyright (c) 2002 Juan Carlos Arevalo-Baeza
+Copyright (c) 2003 Eric Friedman, Itay Maman
+Copyright (c) 2008, 2009, 2016 Tim Blechmann
+Copyright (c) 2010 - Jordi Gutierrez Hermoso
+Copyright (c) 2012 Barend Gehrels, Amsterdam
+Copyright (c) 2013 Barend Gehrels, Amsterdam
+Copyright (c) 2014 Barend Gehrels, Amsterdam
+Copyright (c) 2014,2015,2018 Kohei Takahashi
+Copyright (c) 2014-2016 Andrzej Krzemienski.
+Copyright (c) 2015 Barend Gehrels, Amsterdam
+Copyright (c) 2015-2018 Andrzej Krzemienski.
+Copyright (c) 2017 Barend Gehrels, Amsterdam
+Copyright (c) 2019 Barend Gehrels, Amsterdam
+Copyright 2009-2010 Vicente J. Botet Escriba
+Copyright 2009-2011 Vicente J. Botet Escriba
+Copyright 2009-2012 Vicente J. Botet Escriba
+Copyright 2012 (c) Jeffrey Lee Hellrung, Jr.
+Copyright Christopher Kormanyos 2002 - 2011.
+Copyright Christopher Kormanyos 2002 - 2013.
+Copyright Vicente J. Botet Escriba 2009-2011
+(c) Copyright Joaquin M Lopez Munoz 2006-2013
+Copyright (c) 2013-2014, 2020 Andrey Semashev
+Copyright (c) 2014, 2015 Andrzej Krzemienski.
+Copyright (c) 2014-2018, 2020 Andrey Semashev
+Copyright 1997-2001 University of Notre Dame.
+Copyright 2000 Jeremy Siek (jsiek@lsc.nd.edu)
+Copyright 2005 Trustees of Indiana University
+Copyright 2006 Trustees of Indiana University
+Copyright Beman Dawes and Daryle Walker 1999.
+Copyright Daniel Wallin, David Abrahams 2005.
+Copyright Daniel Wallin, David Abrahams 2010.
+Copyright David Abrahams, Daniel Wallin 2003.
+Copyright David Abrahams, Daniel Wallin 2005.
+Copyright Thorsten Ottosen, Neil Groves 2006.
+(c) Copyright Guillaume Melquiond 2002 - 2003.
+Copyright (c) 2004 CrystalClear Software, Inc.
+Copyright (c) 2005 CrystalClear Software, Inc.
+Copyright (c) 2006 CrystalClear Software, Inc.
+Copyright (c) 2006, 2007 Julio M. Merino Vidal
+Copyright (c) 2009-2017 The MathJax Consortium
+Copyright (c) 2010-2017 The MathJax Consortium
+Copyright (c) 2011 Jeff Flinn, Boris Schaeling
+Copyright (c) 2011-2015 The MathJax Consortium
+Copyright (c) 2011-2017 The MathJax Consortium
+Copyright (c) 2012 Mateusz Loskot, London, UK.
+Copyright (c) 2013 Mateusz Loskot, London, UK.
+Copyright (c) 2013-2017 The MathJax Consortium
+Copyright (c) 2014 - 2018 Andrzej Krzemienski.
+Copyright (c) 2014 Mateusz Loskot, London, UK.
+Copyright (c) 2014-2017 The MathJax Consortium
+Copyright (c) 2015 - 2017 Andrzej Krzemienski.
+Copyright (c) 2015-2017 The MathJax Consortium
+Copyright (c) 2016 Modified Work Barrett Adair
+Copyright (c) 2016-2017 The MathJax Consortium
+Copyright 2005 Eric Niebler, Michael Gauckler.
+Copyright 2005-2007 Adobe Systems Incorporated
+Copyright 2009 Trustees of Indiana University.
+Copyright 2011 Garmin Ltd. or its subsidiaries
+Copyright 2012 Chung-Lin Wen, Davide Anastasia
+Copyright David Abrahams and Jeremy Siek 2003.
+Copyright J.S. Roy (js@jeannot.org), 2002-2005
+Copyright John Maddock 2006, 2007, 2012, 2014.
+Copyright Peter Dimov and David Abrahams 2002.
+Copyright (c) 1995 Maarten Hilferink, Amsterdam
+Copyright (c) 2002 Brad King and Douglas Gregor
+Copyright (c) 2003 Gunter Winkler, Joerg Walter
+Copyright (c) 2003-2011 Christopher M. Kohlhoff
+Copyright (c) 2006-2009, 2012 Alexander Nasonov
+Copyright (c) 2009, Pauli Virtanen <pav@iki.fi>
+Copyright (c) 2012 - 2014, 2017 Andrey Semashev
+Copyright (c) 2013 - 2018, 2020 Andrey Semashev
+Copyright (c) 2013 Tim Blechmann Linux-specific
+Copyright (c) 2015, Pauli Virtanen <pav@iki.fi>
+Copyright 2001, 2003, 2004, 2012 Daryle Walker.
+Copyright 2002 Rensselaer Polytechnic Institute
+Copyright 2004-9 Trustees of Indiana University
+Copyright 2010 Fabien Castan, Christian Henning
+(c) Copyright 2004 Robert Ramey and Martin Ecker
+(c) Copyright 2009-2012 Vicente J. Botet Escriba
+(c) Copyright 2010-2011 Vicente J. Botet Escriba
+(c) Copyright 2011-2012 Vicente J. Botet Escriba
+(c) Copyright 2011-2013 Vicente J. Botet Escriba
+(c) Copyright 2011-2015 Vicente J. Botet Escriba
+(c) Copyright 2013,2014 Vicente J. Botet Escriba
+(c) Copyright 2013,2015 Vicente J. Botet Escriba
+(c) Copyright Daniel Frey and Robert Ramey 2009.
+(c) Copyright Eric Jourdanneau, Joel Falcou 2010
+CNRS/Univ. Clermont II Copyright 2009 - 2011 LRI
+Copyright (c) 2001, Thomas Flemming, tf@ttqv.com
+Copyright (c) 2005 Arkadiy Vertleyb, Peder Holt.
+Copyright (c) 2008 Ilya Sokolov, Boris Schaeling
+Copyright (c) 2009, Spirent Communications, Inc.
+Copyright (c) 2010 Eric Jourdanneau, Joel Falcou
+Copyright (c) 2010 Felipe Tanus, Boris Schaeling
+Copyright (c) 2011-2012 Vicente J. Botet Escriba
+Copyright (c) 2011-2013 Vicente J. Botet Escriba
+Copyright (c) 2012 Bruno Lalande, Paris, France.
+Copyright (c) 2012-2013 Vicente J. Botet Escriba
+Copyright (c) 2013 Bruno Lalande, Paris, France.
+Copyright (c) 2013 John Maddock, Antony Polukhin
+Copyright (c) 2013,2014 Vicente J. Botet Escriba
+Copyright (c) 2013-2014 Vicente J. Botet Escriba
+Copyright (c) 2014 Bruno Lalande, Paris, France.
+Copyright (c) 2014-2015 Vicente J. Botet Escriba
+Copyright (c) 2014-2017 Vicente J. Botet Escriba
+Copyright (c) 2015 Oracle and/or its affiliates.
+Copyright (c) 2016 Oracle and/or its affiliates.
+Copyright (c) 2017 Oracle and/or its affiliates.
+Copyright (c) 2018 Adam Butcher, Antony Polukhin
+Copyright (c) 2018 Oracle and/or its affiliates.
+Copyright (c) 2019 Oracle and/or its affiliates.
+Copyright 1984, 1987, 1995 by Stephen L. Moshier
+Copyright 1984, 1987, 2000 by Stephen L. Moshier
+Copyright 1984, 1995, 2000 by Stephen L. Moshier
+Copyright 1985, 1987, 2000 by Stephen L. Moshier
+Copyright 2003 Guillaume Melquiond, Sylvain Pion
+Copyright 2010 Gaetano Mendola, 2011 Simon West.
+Copyright Justinas Vygintas Daugmaudis 2010-2018
+copyright (c) 2014 Oracle and/or its affiliates.
+copyright (c) 2015 Oracle and/or its affiliates.
+copyright (c) 2016 Oracle and/or its affiliates.
+copyright (c) 2017 Oracle and/or its affiliates.
+copyright (c) 2018 Oracle and/or its affiliates.
+copyright (c) 2019 Oracle and/or its affiliates.
+(c) Copyright David Abrahams, Vicente Botet 2009.
+(c) Copyright John Maddock and Steve Cleary 2000.
+(c) Copyright Vicente J. Botet Escriba 2013-2014.
+(c) Copyright Vicente J. Botet Escriba 2013-2017.
+(c) Copyright Vicente J. Botet Escriba 2014-2015.
+Copyright (c) 2002-2003 Eric Friedman, Itay Maman
+Copyright (c) 2003-2004 Jeremy B. Maitin-Shepard.
+Copyright (c) 2006 Trustees of Indiana University
+Copyright (c) 2007 Trustees of Indiana University
+Copyright (c) 2007-2011 Barend Gehrels, Amsterdam
+Copyright (c) 2007-2012 Barend Gehrels, Amsterdam
+Copyright (c) 2007-2013 Barend Gehrels, Amsterdam
+Copyright (c) 2007-2014 Barend Gehrels, Amsterdam
+Copyright (c) 2007-2015 Barend Gehrels, Amsterdam
+Copyright (c) 2007-2016 Barend Gehrels, Amsterdam
+Copyright (c) 2007-2017 Barend Gehrels, Amsterdam
+Copyright (c) 2008-2012 Barend Gehrels, Amsterdam
+Copyright (c) 2008-2014 Barend Gehrels, Amsterdam
+Copyright (c) 2008-2015 Barend Gehrels, Amsterdam
+Copyright (c) 2009 Trustees of Indiana University
+Copyright (c) 2009-2012 Barend Gehrels, Amsterdam
+Copyright (c) 2009-2015 Barend Gehrels, Amsterdam
+Copyright (c) 2010-2012 Barend Gehrels, Amsterdam
+Copyright (c) 2011-2012 Barend Gehrels, Amsterdam
+Copyright (c) 2011-2015 Barend Gehrels, Amsterdam
+Copyright (c) 2012-2014 Barend Gehrels, Amsterdam
+Copyright (c) 2012-2015 Barend Gehrels, Amsterdam
+Copyright (c) 2013 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2014 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2014, Oracle and/or its affiliates.
+Copyright (c) 2014-2015 Barend Gehrels, Amsterdam
+Copyright (c) 2015, Oracle and/or its affiliates.
+Copyright (c) 2015-2016 Barend Gehrels, Amsterdam
+Copyright (c) 2016, Oracle and/or its affiliates.
+Copyright (c) 2017 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2017, Oracle and/or its affiliates.
+Copyright (c) 2017-2017 Barend Gehrels, Amsterdam
+Copyright (c) 2018 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2018, Oracle and/or its affiliates.
+Copyright (c) 2018-2019 Barend Gehrels, Amsterdam
+Copyright (c) 2019, Oracle and/or its affiliates.
+Copyright (c) 2019-2019 Barend Gehrels, Amsterdam
+Copyright 1984, 1987 by Stephen L. Moshier Direct
+Copyright 1984, 1991 by Stephen L. Moshier Direct
+Copyright 1985, 1987 by Stephen L. Moshier Direct
+Copyright 2003 The Trustees of Indiana University
+Copyright 2005 Felix Hofling, Guillaume Melquiond
+Copyright 2008 Christian Henning, Lubomir Bourdev
+Copyright 2012 Kenneth Riddile, Christian Henning
+Copyright Paul A. Bristow 2006, 2007, 2009, 2010.
+Copyright Paul A. Bristow 2007, 2009, 2010, 2012.
+Copyright Paul A. Bristow 2007, 2010, 2012, 2014.
+copyright (c) 2013, Oracle and/or its affiliates.
+copyright (c) 2014, Oracle and/or its affiliates.
+copyright (c) 2015, Oracle and/or its affiliates.
+copyright (c) 2016, Oracle and/or its affiliates.
+copyright (c) 2017, Oracle and/or its affiliates.
+copyright (c) 2018, Oracle and/or its affiliates.
+Copyright (c) 2000-2002 Joerg Walter, Mathias Koch
+Copyright (c) 2000-2004 Joerg Walter, Mathias Koch
+Copyright (c) 2001 Vladimir Prus <ghost@cs.msu.su>
+Copyright (c) 2003-2008 Matthias Christian Schabel
+Copyright (c) 2003-2009 Matthias Christian Schabel
+Copyright (c) 2010 David Fong and Michael Saunders
+Copyright (c) 2019 Dario Menendez, Banco Santander
+Copyright 2002 The Trustees of Indiana University.
+Copyright 2004 The Trustees of Indiana University.
+Copyright 2005 The Trustees of Indiana University.
+Copyright 2006 The Trustees of Indiana University.
+Copyright 2009 The Trustees of Indiana University.
+Copyright 2010 The Trustees of Indiana University.
+Copyright 2012 Fernando Vilas 2010 Daniel Trebbien
+Copyright 2012 The Trustees of Indiana University.
+Copyright 2018 Mateusz Loskot <mateusz@loskot.net>
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2010.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2011.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2012.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2013.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2014.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2015.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2016.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2017.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2018.
+(c) Copyright Dave Abrahams and Daryle Walker 2001.
+(c) Copyright Jeremy Siek and John R. Bandela 2001.
+(c) Copyright John Maddock & Thorsten Ottosen 2005.
+(c) Copyright Kevlin Henney and Dave Abrahams 1999.
+Copyright (c) 1992-2015 The University of Tennessee
+Copyright (c) 2000 Gary Powell (powellg@amazon.com)
+Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
+Copyright (c) 2001, 2002 Python Software Foundation
+Copyright (c) 2001-2007 Hartmut Kaiser Revised 2007
+Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+Copyright (c) 2002,2003 CrystalClear Software, Inc.
+Copyright (c) 2002-2004 CrystalClear Software, Inc.
+Copyright (c) 2002-2005 CrystalClear Software, Inc.
+Copyright (c) 2003-2004 CrystalClear Software, Inc.
+Copyright (c) 2003-2005 CrystalClear Software, Inc.
+Copyright (c) 2004-2005 CrystalClear Software, Inc.
+Copyright (c) 2006, Systems Optimization Laboratory
+Copyright (c) 2007, John Travers <jtravs@gmail.com>
+Copyright (c) 2009-2011 Mateusz Loskot, London, UK.
+Copyright (c) 2009-2012 Mateusz Loskot, London, UK.
+Copyright (c) 2009-2013 Mateusz Loskot, London, UK.
+Copyright (c) 2009-2014 Mateusz Loskot, London, UK.
+Copyright (c) 2009-2015 Mateusz Loskot, London, UK.
+Copyright (c) 2009-2017 Mateusz Loskot, London, UK.
+Copyright (c) 2011-2012 Mateusz Loskot, London, UK.
+Copyright (c) 2012-2014 Mateusz Loskot, London, UK.
+Copyright (c) 2014-2015 Mateusz Loskot, London, UK.
+Copyright 2004, 2005 Trustees of Indiana University
+Copyright 2005 David Abrahams and Aleksey Gurtovoy.
+Copyright 2012 Olivier Tournaire, Christian Henning
+Copyright 2014 Renato Tegon Forti, Antony Polukhin.
+Copyright 2016 Klemens Morgenstern, Antony Polukhin
+Copyright 2019 Miral Shah <miralshah2211@gmail.com>
+Copyright Alexander Nasonov & Paul A. Bristow 2006.
+Copyright David Abrahams and Nikolay Mladenov 2003.
+(c) Copyright 2005 Matthias Troyer and Dave Abrahams
+Copyright (c) 2011, 2012 Jeff Flinn, Boris Schaeling
+Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+Copyright (c) 2015 Jakub Pola <jakub.pola@gmail.com>
+Copyright (c) 2015 Jakub Szuppe <j.szuppe@gmail.com>
+Copyright (c) 2016 Jakub Szuppe <j.szuppe@gmail.com>
+Copyright (c) 2018 Adeel Ahmad, Islamabad, Pakistan.
+Copyright (c) 2018 Jakub Szuppe <j.szuppe@gmail.com>
+Copyright (c) 2018, Cem Bassoy, cem.bassoy@gmail.com
+Copyright 1997-2008 by Agner Fog. GNU General Public
+Copyright 2000 John Maddock (john@johnmaddock.co.uk)
+Copyright 2002-2008 by Agner Fog. GNU General Public
+Copyright 2002-2014 by Agner Fog. GNU General Public
+Copyright 2004-2008 by Agner Fog. GNU General Public
+Copyright 2004-2013 by Agner Fog. GNU General Public
+Copyright 2004-5 The Trustees of Indiana University.
+Copyright 2013 Christian Henning and Juan V. Puertos
+Copyright David Abrahams 2002, Joel de Guzman, 2002.
+Copyright Peter Dimov and Multi Media Ltd 2001, 2002
+Copyright Thorsten Ottosen, Neil Groves 2006 - 2008.
+(c) Copyright 2003-4 Pavel Vozenilek and Robert Ramey
+(c) Copyright 2008-2009,2012 Vicente J. Botet Escriba
+(c) Copyright 2011,2012,2015 Vicente J. Botet Escriba
+(c) Copyright 2011-2012,2015 Vicente J. Botet Escriba
+(c) Copyright Greg Colvin and Beman Dawes 1998, 1999.
+Copyright (c) 1998-2003 by the University of Florida.
+Copyright (c) 2000 Gary Powell (gwpowell@hotmail.com)
+Copyright (c) 2001 Jeremy Siek <jsiek@cs.indiana.edu>
+Copyright (c) 2001-2002 Chuck Allison and Jeremy Siek
+Copyright (c) 2002 Gary Powell (gwpowell@hotmail.com)
+Copyright (c) 2002-2003 David Moore, William E. Kempf
+Copyright (c) 2003, Fernando Luis Cacciola Carballal.
+Copyright (c) 2005, Fernando Luis Cacciola Carballal.
+Copyright (c) 2006 Xiaogang Zhang, 2015 John Maddock.
+Copyright (c) 2007 Douglas Gregor and Matthias Troyer
+Copyright (c) 2008-2011 Bruno Lalande, Paris, France.
+Copyright (c) 2008-2012 Bruno Lalande, Paris, France.
+Copyright (c) 2008-2013 Bruno Lalande, Paris, France.
+Copyright (c) 2008-2014 Bruno Lalande, Paris, France.
+Copyright (c) 2008-2015 Bruno Lalande, Paris, France.
+Copyright (c) 2008-2017 Bruno Lalande, Paris, France.
+Copyright (c) 2011-2012 Bruno Lalande, Paris, France.
+Copyright (c) 2012-2014 Bruno Lalande, Paris, France.
+Copyright (c) 2014 Samuel Debionne, Grenoble, France.
+Copyright (c) 2014-2015 Bruno Lalande, Paris, France.
+Copyright (c) 2014-2016 Oracle and/or its affiliates.
+Copyright (c) 2014-2018 Oracle and/or its affiliates.
+Copyright (c) 2015-2016 Oracle and/or its affiliates.
+Copyright (c) 2015-2018 Oracle and/or its affiliates.
+Copyright (c) 2016-2018 Oracle and/or its affiliates.
+Copyright (c) 2016-2019 Oracle and/or its affiliates.
+Copyright (c) 2017-2018 Oracle and/or its affiliates.
+Copyright (c) 2017-2019 Oracle and/or its affiliates.
+Copyright (c) 2018-2019 Oracle and/or its affiliates.
+Copyright (c) Alexander Zaitsev <zamazan4ik@gmail.by>
+Copyright David Abrahams 2002, Nikolay Mladenov 2007.
+Copyright David Abrahams and Thomas Becker 2000-2006.
+copyright (c) 2013-2017 Oracle and/or its affiliates.
+copyright (c) 2013-2018 Oracle and/or its affiliates.
+copyright (c) 2013-2019 Oracle and/or its affiliates.
+copyright (c) 2014-2015 Oracle and/or its affiliates.
+copyright (c) 2014-2017 Oracle and/or its affiliates.
+copyright (c) 2014-2018 Oracle and/or its affiliates.
+copyright (c) 2014-2019 Oracle and/or its affiliates.
+copyright (c) 2015-2016 Oracle and/or its affiliates.
+copyright (c) 2015-2017 Oracle and/or its affiliates.
+copyright (c) 2015-2019 Oracle and/or its affiliates.
+copyright (c) 2016-2018 Oracle and/or its affiliates.
+copyright (c) 2017-2018 Oracle and/or its affiliates.
+(c) Copyright Vicente J. Botet Escriba 2008-2009,2012.
+Copyright (c) 2004 The Trustees of Indiana University.
+Copyright (c) 2006 The Trustees of Indiana University.
+Copyright (c) 2007 The Trustees of Indiana University.
+Copyright (c) 2011-2013 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2011-2014 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2011-2015 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2011-2016 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2011-2017 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2011-2018 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2011-2019 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2012-2013 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2012-2015 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2013-2014 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2013-2015 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2013-2017 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2014-2015 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2014-2015, Oracle and/or its affiliates.
+Copyright (c) 2014-2017 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2014-2017, Oracle and/or its affiliates.
+Copyright (c) 2014-2018 Adam Wulkiewicz, Lodz, Poland.
+Copyright (c) 2014-2018, Oracle and/or its affiliates.
+Copyright (c) 2014-2019, Oracle and/or its affiliates.
+Copyright (c) 2015-2017, Oracle and/or its affiliates.
+Copyright (c) 2015-2018, Oracle and/or its affiliates.
+Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>
+Copyright (c) 2016, 2018 Oracle and/or its affiliates.
+Copyright (c) 2016-2017, Oracle and/or its affiliates.
+Copyright (c) 2017, 2019 Oracle and/or its affiliates.
+Copyright (c) 2017-2018, Oracle and/or its affiliates.
+Copyright (c) 2017-2019, Oracle and/or its affiliates.
+Copyright (c) 2018-2019, Oracle and/or its affiliates.
+Copyright (c) Alexander Zaitsev <zamazan4ik@gmail.com>
+Copyright (c) Jeremy Siek 2001, Marc Wintermantel 2002
+Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
+Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
+Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier
+Copyright 1984, 1987, 1992, 2000 by Stephen L. Moshier
+Copyright 2007-2008 Andreas Pokorny, Christian Henning
+Copyright 2007-2008 Christian Henning, Andreas Pokorny
+Copyright 2007-2012 Christian Henning, Andreas Pokorny
+Copyright 2007-2012 Christian Henning, Lubomir Bourdev
+Copyright 2010-2012 Kenneth Riddile, Christian Henning
+copyright (c) 2013, 2014 Oracle and/or its affiliates.
+copyright (c) 2013-2014, Oracle and/or its affiliates.
+copyright (c) 2013-2015, Oracle and/or its affiliates.
+copyright (c) 2013-2017, Oracle and/or its affiliates.
+copyright (c) 2013-2018, Oracle and/or its affiliates.
+copyright (c) 2013-2019, Oracle and/or its affiliates.
+copyright (c) 2014-2017, Oracle and/or its affiliates.
+copyright (c) 2014-2018, Oracle and/or its affiliates.
+copyright (c) 2014-2019, Oracle and/or its affiliates.
+copyright (c) 2015-2016, Oracle and/or its affiliates.
+copyright (c) 2015-2017, Oracle and/or its affiliates.
+copyright (c) 2015-2018, Oracle and/or its affiliates.
+copyright (c) 2015-2019, Oracle and/or its affiliates.
+copyright (c) 2016-2019, Oracle and/or its affiliates.
+copyright (c) 2017, 2019 Oracle and/or its affiliates.
+copyright (c) 2017-2018, Oracle and/or its affiliates.
+copyright (c) 2017-2019, Oracle and/or its affiliates.
+copyright (c) 2018-2019, Oracle and/or its affiliates.
+(c) Copyright Beman Dawes and Ullrich Koethe 1995-2001.
+(c) Copyright David Abrahams 2001, Howard Hinnant 2001.
+(c) Copyright Hubert Holin and Daryle Walker 2001-2002.
+Copyright (c) 1995, 2007-2015 Barend Gehrels, Amsterdam
+Copyright (c) 1995-2013 Jean-loup Gailly and Mark Adler
+Copyright (c) 2000 Gary Powell (gary.powell@sierra.com)
+Copyright (c) 2001 Gary Powell (gary.powell@sierra.com)
+Copyright (c) 2002 Lars Gullik Bjonnes <larsbj@lyx.org>
+Copyright (c) 2011 Boris Schaeling (boris@highscore.de)
+Copyright (c) 2014 Roshan <thisisroshansmail@gmail.com>
+Copyright (c) 2014, 2018, Oracle and/or its affiliates.
+Copyright (c) 2014, 2019, Oracle and/or its affiliates.
+Copyright (c) 2015 Orson Peters <orsonpeters@gmail.com>
+Copyright 1984, 1987, 1988 by Stephen L. Moshier Direct
+Copyright 1984, 1987, 1989 by Stephen L. Moshier Direct
+Copyright 1984, 1987, 1993 by Stephen L. Moshier Direct
+Copyright 1985, 1987, 1989 by Stephen L. Moshier Direct
+Copyright 2004-2006 The Trustees of Indiana University.
+Copyright 2005-2009 The Trustees of Indiana University.
+Copyright 2019 Pranam Lashkari <plashkari628@gmail.com>
+copyright (c) 2014, 2018, Oracle and/or its affiliates.
+copyright (c) 2014, 2019, Oracle and/or its affiliates.
+copyright (c) 2015, 2018, Oracle and/or its affiliates.
+copyright (c) 2017, 2019, Oracle and/or its affiliates.
+copyright (c) 2018, 2019, Oracle and/or its affiliates.
+(c) Copyright Boris Rasin and Antony Polukhin 2014-2019.
+(c) Copyright Dave Abrahams and Daniel Walker 1999-2003.
+(c) Copyright Fernando Luis Cacciola Carballal 2000-2004
+(c) Copyright Robert Ramey 2003. Jonathan Turkanis 2004.
+Copyright (c) 2001 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
+Copyright (c) 2001-2004 Peter Dimov and Multi Media Ltd.
+Copyright (c) 2002 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
+Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
+Copyright (c) 2002,2003,2020 CrystalClear Software, Inc.
+Copyright (c) 2002-2003,2005 CrystalClear Software, Inc.
+Copyright (c) 2012 Massachusetts Institute of Technology
+Copyright (c) 2019 Vinnie Falco (vinnie.falco@gmail.com)
+Copyright (c) Donald Stufft and individual contributors.
+Copyright 2004, 2005 The Trustees of Indiana University.
+Copyright 2008 CodeRage, LLC 2004-2007 Jonathan Turkanis
+Copyright 2014 Marco Guazzone (marco.guazzone@gmail.com)
+Copyright 2014-2015 Renato Tegon Forti, Antony Polukhin.
+(c) ACM, 2011. http://doi.acm.org/10.1145/1916461.1916469
+(c) Copyright Daryle Walker and Stephen Cleary 2001-2002.
+Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
+Copyright (c) 2002, 2003 Peter Dimov and Multi Media Ltd.
+Copyright (c) 2002,2003, 2007 CrystalClear Software, Inc.
+Copyright (c) 2002,2003, 2020 CrystalClear Software, Inc.
+Copyright (c) 2007 Douglas Gregor <doug.gregor@gmail.com>
+Copyright (c) 2009 Ben Hanson (http://www.benhanson.net/)
+Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
+Copyright (c) 2013-2015 Kyle Lutz <kyle.r.lutz@gmail.com>
+Copyright (c) 2015 Francisco Jose Tapia fjtapia@gmail.com
+Copyright (c) 2016 Francisco Jose Tapia fjtapia@gmail.com
+Copyright (c) 2017 Francisco Jose Tapia fjtapia@gmail.com
+Copyright (c) 2018 Alain Miniussi <alain.miniussi@oca.eu>
+Copyright (c) 2018-2019, Cem Bassoy, cem.bassoy@gmail.com
+Copyright (c) 2019 Mika Fischer (mika.fischer@zoopnet.de)
+Copyright 2002 Aleksey Gurtovoy (agurtovoy@meta-comm.com)
+Copyright 2014 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2015 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2017 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2018 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2019 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2009 - 2010.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2009 - 2011.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2009 - 2012.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2010 - 2011.
+Copyright Abel Sinkovics (abel@sinkovics.hu) 2011 - 2012.
+Copyright Ralf W. Grosse-Kunstleve & David Abrahams 2006.
+(c) Copyright 2002-2008, Fernando Luis Cacciola Carballal.
+(c) Copyright 2011-2012,2017-2018 Vicente J. Botet Escriba
+Copyright (c) 1996 Silicon Graphics Computer Systems, Inc.
+Copyright (c) 1998 Silicon Graphics Computer Systems, Inc.
+Copyright (c) 2001-2003 Douglas Gregor (gregod@cs.rpi.edu)
+Copyright (c) 2003, 2008 Fernando Luis Cacciola Carballal.
+Copyright (c) 2006-2007, Robert Hetland <hetland@tamu.edu>
+Copyright (c) 2006-2015 The University of Colorado Denver.
+Copyright (c) 2011, 2012 Martin Lambers <marlam@marlam.de>
+Copyright (c) 2012 Flavio De Lorenzi (fdlorenzi@gmail.com)
+Copyright (c) 2014-2015 Samuel Debionne, Grenoble, France.
+Copyright 1997, 1998, 1999, 2000 University of Notre Dame.
+Copyright 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
+Copyright 2009 (c) Dean Michael Berris <me@deanberris.com>
+Copyright (c) 2001 Jeremy Siek, Douglas Gregor, Brian Osman
+Copyright (c) 2004-2006 The Trustees of Indiana University.
+Copyright (c) 2004-2008 The Trustees of Indiana University.
+Copyright (c) 2004-2009 The Trustees of Indiana University.
+Copyright (c) 2005-2006 The Trustees of Indiana University.
+Copyright (c) 2005-2008 The Trustees of Indiana University.
+Copyright (c) 2005-2010 The Trustees of Indiana University.
+Copyright (c) 2006 Tiago de Paula Peixoto <tiago@forked.de>
+Copyright (c) 2006-2009 Dmitry Bufistov and Andrey Parfenov
+Copyright (c) 2006-2010 The Trustees of Indiana University.
+Copyright (c) 2017 Denis Demidov <dennis.demidov@gmail.com>
+Copyright 2013 Juan V. Puertos G-Cluster, Christian Henning
+Copyright (c) 2001 Housemarque Oy http://www.housemarque.com
+Copyright (c) 2002-2005, Jean-Sebastien Roy (js@jeannot.org)
+Copyright (c) 2004-2005, Jean-Sebastien Roy (js@jeannot.org)
+Copyright (c) 2014, 2019, 2020 Oracle and/or its affiliates.
+Copyright (c) 2017-2018 Alexandr Poltavsky, Antony Polukhin.
+Copyright (c) Tobias Schwinger http://spirit.sourceforge.net
+Copyright 1984, 1987, 1989, 1992, 2000 by Stephen L. Moshier
+Copyright (c) 2000-2003 Brian McNamara and Yannis Smaragdakis
+Copyright (c) 2002,2003,2005,2020 CrystalClear Software, Inc.
+Copyright (c) 2003 Martin Wille http://spirit.sourceforge.net
+Copyright (c) 2011 Aaron Graham http://spirit.sourceforge.net
+Copyright (c) 2014 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright (c) 2014, 2018, 2019, Oracle and/or its affiliates.
+Copyright (c) 2017 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright (c) Charles Karney (2008-2017) <charles@karney.com>
+Copyright (c) Glen Joseph Fernandes 2019 (glenjofe@gmail.com)
+Copyright 1984, 1987, 1988, 1992 by Stephen L. Moshier Direct
+Copyright 1984, 1987, 1989, 1992 by Stephen L. Moshier Direct
+(c) 2018 - 2019 Niall Douglas <http://www.nedproductions.biz/>
+(c) 2018 - 2020 Niall Douglas <http://www.nedproductions.biz/>
+(c) Copyright 2002-2008 Robert Ramey and Joaquin M Lopez Munoz
+(c) Copyright Runar Undheim, Robert Ramey & John Maddock 2008.
+Copyright (c) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
+Copyright (c) 2000-2015 The University of California Berkeley.
+Copyright (c) 2001 Bruce Florman http://spirit.sourceforge.net
+Copyright (c) 2001 Daniel Nuffer http://spirit.sourceforge.net
+Copyright (c) 2002 Jeff Westfahl http://spirit.sourceforge.net
+Copyright (c) 2003 Giovanni Bajo http://spirit.sourceforge.net
+Copyright (c) 2003 Vaclav Vesely http://spirit.sourceforge.net
+Copyright (c) 2005-2006 Douglas Gregor <doug.gregor@gmail.com>
+Copyright (c) 2006 Joao Abecasis http://spirit.sourceforge.net
+Copyright (c) 2007-2009 Ben Hanson (http://www.benhanson.net/)
+Copyright (c) 2008-2009 Ben Hanson (http://www.benhanson.net/)
+Copyright (c) 2010 2015 Francisco Jose Tapia fjtapia@gmail.com
+Copyright (c) 2010 Bryce Lelbach http://spirit.sourceforge.net
+Copyright (c) 2010 Matthias Walter (xammy@xammy.homelinux.net)
+Copyright (c) 2011 Bryce Lelbach http://spirit.sourceforge.net
+Copyright (c) 2013 Agustin Berge http://spirit.sourceforge.net
+Copyright (c) 2017 Kristian Popov <kristian.popov@outlook.com>
+Copyright (c) Tyler Reddy, Richard Gowers, and Max Linke, 2016
+Copyright 2012-2019 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2014,2018 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2014-2015 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2014-2016 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2017-2018 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright 2017-2019 Glen Joseph Fernandes (glenjofe@gmail.com)
+Copyright Daniel Walker, Eric Niebler, Michel Morin 2008-2012.
+(c) Copyright Andreas Huber Doenni 2002-2005, Eric Niebler 2006
+(c) Copyright Peter Dimov and Multi Media Ltd. 2001, 2002, 2003
+Copyright (c) 1996,1997 Silicon Graphics Computer Systems, Inc.
+Copyright (c) 1996-1998 Silicon Graphics Computer Systems, Inc.
+Copyright (c) 2001, 2002, 2003 Peter Dimov and Multi Media Ltd.
+Copyright (c) 2002 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2003 Gustavo Guerra http://spirit.sourceforge.net
+Copyright (c) 2003 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2003 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 2003 Jonathan de Halleux (dehalleux@pelikhan.com)
+Copyright (c) 2004 David M. Cooke <cookedm@physics.mcmaster.ca>
+Copyright (c) 2009 Francois Barel http://spirit.sourceforge.net
+Copyright (c) 2011 Thomas Bernard http://spirit.sourceforge.net
+Copyright (c) 2016 Frank Hein, maxence business consulting gmbh
+Copyright Daryle Walker, Hubert Holin, John Maddock 2006 - 2007
+(c) Copyright Mat Marcus, Jesse Jones and Adobe Systems Inc 2001
+Copyright (c) 2000-2010 Joerg Walter, Mathias Koch, David Bellot
+Copyright (c) 2000-2011 Joerg Walter, Mathias Koch, David Bellot
+Copyright (c) 2000-2013 Joerg Walter, Mathias Koch. David Bellot
+Copyright (c) 2003, Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2007 Matthias Troyer <troyer@boost-consulting.com>
+copyrighted 2004 by David M. Cooke <cookedm@physics.mcmaster.ca>
+Copyright (c) 2002-2003 Toon Knapen, Kresimir Fresl, Joerg Walter
+Copyright (c) 2003, 2007-14 Massachusetts Institute of Technology
+Copyright (c) 2006 Tobias Schwinger http://spirit.sourceforge.net
+Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc.
+Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
+Copyright (c) 2006-2010 Emil Dotchevski and Reverge Studios, Inc.
+Copyright (c) 2006-2013 Emil Dotchevski and Reverge Studios, Inc.
+Copyright (c) 2008-2009 Emil Dotchevski and Reverge Studios, Inc.
+Copyright (c) 2008-2016 Emil Dotchevski and Reverge Studios, Inc.
+Copyright (c) 2008-2017 Emil Dotchevski and Reverge Studios, Inc.
+Copyright Neil Groves & Thorsten Ottosen & Pavol Droba 2003-2004.
+Copyright (c) 2000-2007 Joerg Walter, Mathias Koch, Gunter Winkler
+Copyright (c) 2000-2009 Joerg Walter, Mathias Koch, Gunter Winkler
+Copyright (c) 2001, Daniel C. Nuffer http://spirit.sourceforge.net
+Copyright (c) 2002-2003 Martin Wille http://spirit.sourceforge.net
+Copyright 2002 Herve Bronnimann, Guillaume Melquiond, Sylvain Pion
+Copyright 2012 Christian Henning, Andreas Pokorny, Lubomir Bourdev
+(c) Copyright David Abrahams, Jeremy Siek, Daryle Walker 1999-2001.
+Copyright (c) 2001-2003 Daniel Nuffer http://spirit.sourceforge.net
+Copyright (c) 2001-2009 Daniel Nuffer http://spirit.sourceforge.net
+Copyright (c) 2002 Raghavendra Satish http://spirit.sourceforge.net
+Copyright (c) 2018 Yaghyavardhan Singh Khangarot, Hyderabad, India.
+Copyright 2019 Olzhas Zhumabek <anonymous.from.applecity@gmail.com>
+Copyright (c) 1998-2002 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 1998-2003 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 1999-2006 Cortex Software GmbH, Kantstrasse 57, Berlin
+Copyright (c) 2001-2002 Enthought, Inc. 2003-2019, SciPy Developers.
+Copyright (c) 2001-2003 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2001-2003 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 2001-2007 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2001-2008 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2001-2010 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2001-2011 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2001-2011 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 2001-2012 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2001-2012 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 2001-2014 Joel de Guzman http://spirit.sourceforge.net
+Copyright (c) 2002-2003 Hartmut Kaiser http://spirit.sourceforge.net
+Copyright (c) 2002-2006 Hartmut Kaiser http://spirit.sourceforge.net
+(c) Copyright 2004-2009 Robert Ramey, Martin Ecker and Takatoshi Kondo
+Copyright (c) 2008 Brian M. Clapper <bmc@clapper.org> , Gael Varoquaux
+Copyright (c) 2008 Rep Invariant Systems, Inc. (info@repinvariant.com)
+(c) Copyright 2007, 2008 Steven Watanabe, Joseph Gauterin, Niels Dekker
+Copyright (c) 2007, 2008 Steven Watanabe, Joseph Gauterin, Niels Dekker
+Copyright (c) 2015 Muhammad Junaid Muzammil <mjunaidmuzammil@gmail.com>
+Copyright 2002-2003 Herve Bronnimann, Guillaume Melquiond, Sylvain Pion
+Copyright 2007-2008 Christian Henning, Andreas Pokorny, Lubomir Bourdev
+Copyright 2007-2012 Christian Henning, Andreas Pokorny, Lubomir Bourdev
+Copyright (c) 2001 Ronald Garcia, Indiana University (garcia@osl.iu.edu)
+Copyright (c) 2000-2013 Joerg Walter, Mathias Koch, Athanasios Iliopoulos
+Copyright 2003-2013 Joaquin M Lopez Munoz. 2019 Mike Dev <mike.dev@gmx.de>
+(c) Copyright 2002 Rani Sharoni (rani_sharoni@hotmail.com) and Robert Ramey
+(c) Copyright Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000.
+Copyright 2014 by P.-G. Martinsson, V. Rokhlin, Y. Shkolnisky, and M. Tygert.
+copyright A. Volgenant/Amsterdam School of Economics, University of Amsterdam.
+Copyright (c) 2002-2003 Juan Carlos Arevalo-Baeza http://spirit.sourceforge.net
+Copyright (c) 2000-2010 Joerg Walter, Mathias Koch, Gunter Winkler, David Bellot
+(c) Copyright Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000-2005.
+Copyright 1987-, A. Volgenant/Amsterdam School of Economics, University of Amsterdam
+(c) Copyright 2010 Just Software Solutions Ltd http://www.justsoftwaresolutions.co.uk
+Copyright (c) 2002 Brad King (brad.king@kitware.com) Douglas Gregor (gregod@cs.rpi.edu)
+KQKJKCKGKEKBKMKrK (c) KUKoKoKiKeKeKiKiKiKiKiKiKiKiKiKiKiKiKiKiKoKeKaKiKiKiKiKdKIKAKThKOK
+Copyright (c) 2010 Nuovation System Designs, LLC Grant Erickson <gerickson@nuovations.com>
+(c) Copyright 2009-2011 Frederic Bron, Robert Stewart, Steven Watanabe & Roman Perepelitsa.
+(c) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000.
+Copyright (c) 2008 Stefan van der Walt <stefan@mentat.za.net> , Pauli Virtanen <pav@iki.fi>
+Copyright (c) 2018 Sylvain Gubian <sylvain.gubian@pmi.com> , Yang Xiang <yang.xiang@pmi.com>
+(c) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard Hinnant and John Maddock 2000.
+Copyright (c) 2003 Jonathan de Halleux (dehalleux@pelikhan.com) http://spirit.sourceforge.net
+(c) Copyright Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant & John Maddock 2000.
+(c) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000-2003.
+(c) Copyright David Abrahams Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000-2002.
+Copyright (c) 1999-2001 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi) Gary Powell (gwpowell@hotmail.com)
+(c) KKdegKoKKKKY KY KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKe
+Copyright (c) 2013 Jakob Lykke Andersen, University of Southern Denmark (jlandersen@imada.sdu.dk)
+Copyright (c) Tyler Reddy, Ross Hemsley, Edd Edmondson, Nikolai Nowaczyk, Joe Pitt-Francis, 2015.
+Copyright (c) 2001 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi) 2001 Gary Powell (gary.powell@sierra.com)
+(c) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard Hinnant and John Maddock 2000, 2010.
+Copyright (c) 2003 Jonathan de Halleux http://spirit.sourceforge.net/ http://www.boost.org/libs/spirit
+(c) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant & John Maddock 2000.
+Copyright (c) 2003, The Regents of the University of California, through Lawrence Berkeley National Laboratory
+Copyright (c) 2003-2009, The Regents of the University of California, through Lawrence Berkeley National Laboratory
+Copyright 2002 Marc Wintermantel (wintermantel@even-ag.ch) ETH Zurich, Center of Structure Technologies (https://web.archive.org/web/20050307090307/http://www.structures.ethz.ch/)
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -1301,10 +3440,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-webencodings 0.5.1 - BSD-2-Clause
+Werkzeug 2.0.1 - BSD-2-Clause
 
 
-Copyright 2012 by Simon Sapin
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -1334,7 +3472,18 @@ BSD-2-Clause AND BSD-3-Clause
 
 ---------------------------------------------------------
 
-click 7.1.2 - BSD-2-Clause AND BSD-3-Clause
+cached-property 1.5.2 - BSD-2-Clause AND BSD-3-Clause
+
+
+Copyright (c) 2015, Daniel Greenfeld
+
+BSD-2-Clause AND BSD-3-Clause
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+click 8.0.1 - BSD-2-Clause AND BSD-3-Clause
 
 
 Copyright 2014 Pallets
@@ -1356,6 +3505,34 @@ copyright 2010 Pallets
 Copyright (c) 2015 CERN.
 Copyright (c) 2010 by the Pallets team.
 (c) Copyright 2010 by <a href http://domain.invalid/'>
+
+BSD-2-Clause AND BSD-3-Clause
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+h5py 3.3.0 - BSD-2-Clause AND BSD-3-Clause
+
+
+PyTables Copyright Statement
+Copyright (c) 2009 Darren Dale
+Copyright 2006-2007 by The HDF Group
+Copyright (c) 2006-2008 Alexander Chemeris
+Copyright (c) 2002, 2003, 2004 Francesc Altet
+Copyright 2001-2013 Python Software Foundation
+Copyright (c) 2005, 2006, 2007 Carabos Coop. V.
+copyright 2014, Andrew Collette and contributors
+Copyright (c) 2008 Andrew Collette http://h5py.org
+Copyright (c) 2009 Andrew Collette http://h5py.org
+Copyright (c) 2008 Andrew Collette and contributors
+Copyright 2008-2013 Andrew Collette and contributors
+Copyright 2008-2019 Andrew Collette and contributors
+Copyright (c) 2008-2009 Andrew Collette http://h5py.org
+Copyright (c) 2000-2007 Marc Alexander Lehmann <schmorp@schmorp.de>
+Copyright (c) 2000-2008 Marc Alexander Lehmann <schmorp@schmorp.de>
+Copyright 1998-2006 by the Board of Trustees of the University of Illinois.
+Copyright (c) 2008-2013 Andrew Collette and contributors http://www.h5py.org
 
 BSD-2-Clause AND BSD-3-Clause
 
@@ -1423,7 +3600,79 @@ BSD-2-Clause AND BSD-3-Clause
 
 ---------------------------------------------------------
 
-Jinja2 2.11.2 - BSD-2-Clause AND BSD-3-Clause
+ipython 7.25.0 - BSD-2-Clause AND BSD-3-Clause
+
+
+(c) Python and NumPy
+Copyright (c) 2000 Thomas Heller
+Copyright (c) 2010 Doug Hellmann.
+Portions (c) 2009 by Robert Kern.
+copyright 2007 by Armin Ronacher.
+Copyright (c) 2014, Jonathan Slenders
+Copyright (c) 2015, Jonathan Slenders
+copyright The IPython Development Team
+Copyright (c) IPython Development Team.
+Copyright (c) 2011, IPython Development Team
+Copyright (c) 2012 IPython Development Team.
+Copyright (c) 2008, IPython Development Team.
+Copyright (c) 2012, IPython Development Team.
+Copyright (c) 2008 Pauli Virtanen <pav@iki.fi>
+Copyright (c) 2008 The IPython Development Team
+Copyright (c) 2011 The IPython Development Team
+Copyright (c) 2013 The IPython Development Team
+Copyright (c) 2012 The IPython Development Team.
+Copyright (c) 2012- The IPython Development Team
+Copyright (c) 2018 The IPython Development Team.
+Copyright (c) 2011, the IPython Development Team.
+Copyright (c) 2012, the IPython Development Team.
+Copyright (c) 2013, the IPython Development Team.
+Copyright (c) 2008-2011, IPython Development Team.
+Copyright (c) 2010-2011, IPython Development Team.
+Copyright (c) 2001 Janko Hauser <jhauser@zscout.de>
+Copyright (c) 2001, Janko Hauser <jhauser@zscout.de>
+Copyright (c) 2008-2011 The IPython Development Team
+Copyright (c) 2008-2012 The IPython Development Team
+Copyright (c) 2008-Present, IPython Development Team
+Copyright (c) 2009-2011 The IPython Development Team
+Copyright (c) 2010-2011 The IPython Development Team.
+Copyright (c) 2001 Nathaniel Gray <n8gray@caltech.edu>
+Copyright (c) 2001 Fernando Perez <fperez@colorado.edu>
+Copyright (c) 2001, Nathaniel Gray <n8gray@caltech.edu>
+Copyright (c) 2005 Fernando Perez. <fperez@colorado.edu>
+Copyright (c) 2016 The IPython Team <ipython-dev@scipy.org>
+Copyright (c) 2001-2004 Fernando Perez <fperez@colorado.edu>
+Copyright (c) 2001-2005 Fernando Perez <fperez@colorado.edu>
+Copyright (c) 2001-2006 Fernando Perez <fperez@colorado.edu>
+Copyright (c) 2005-2006 Fernando Perez <fperez@colorado.edu>
+Copyright (c) 2001 Python Software Foundation, www.python.org
+Copyright (c) 2001-2007 Fernando Perez. <fperez@colorado.edu>
+Copyright (c) 2002-2006 Fernando Perez. <fperez@colorado.edu>
+Copyright (c) 2005-2006 Fernando Perez. <fperez@colorado.edu>
+Copyright (c) 2001, Fernando Perez <fernando.perez@colorado.edu>
+Copyright (c) 2005 Jorgen Stenarson <jorgen.stenarson@bostream.nu>
+Copyright (c) 2001-2007, Fernando Perez <fernando.perez@colorado.edu>
+Copyright (c) 2005-2006 Fernando Perez. <Fernando.Perez@colorado.edu>
+Copyright (c) 2005 Fernando Perez <fperez@colorado.edu> Brian E Granger <ellisonbg@gmail.com> Benjamin Ragan-Kelley <benjaminrk@gmail.com>
+
+BSD-2-Clause AND BSD-3-Clause
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+itsdangerous 2.0.1 - BSD-2-Clause AND BSD-3-Clause
+
+
+Copyright 2011 Pallets
+copyright 2011 Pallets
+
+BSD-2-Clause AND BSD-3-Clause
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+Jinja2 2.11.3 - BSD-2-Clause AND BSD-3-Clause
 
 
 Copyright 2007 Pallets
@@ -1436,20 +3685,7 @@ BSD-2-Clause AND BSD-3-Clause
 
 ---------------------------------------------------------
 
-Jinja2 2.11.1 - BSD-2-Clause AND BSD-3-Clause
-
-
-Copyright 2007 Pallets
-copyright 2007 Pallets
-(c) Copyright 2008 by <a href http://domain.invalid/'>
-
-BSD-2-Clause AND BSD-3-Clause
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-joblib 1.0.0 - BSD-2-Clause AND BSD-3-Clause
+joblib 1.0.1 - BSD-2-Clause AND BSD-3-Clause
 
 
 Copyright (c) 2008-2016
@@ -1473,94 +3709,6 @@ BSD-2-Clause AND BSD-3-Clause
 
 ---------------------------------------------------------
 
-jupyterlab-widgets 1.0.0 - BSD-2-Clause AND BSD-3-Clause
-
-
-Copyright 2010-2015 Mike Bostock
-Copyright (c) 2014 Jameson Little
-Copyright (c) 2014-2017, PhosphorJS
-Copyright (c) Jupyter Development Team.
-Copyright JS Foundation and other contributors
-Copyright (c) 2015 Project Jupyter Contributors
-Copyright (c) Isaac Z. Schlueter and Contributors
-Copyright jQuery Foundation and other contributors
-Copyright JS Foundation and other contributors, https://js.foundation
-Copyright jQuery Foundation and other contributors, https://jquery.org
-Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
-(c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Backbone
-Copyright (c) 2009-2018 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors <http://underscorejs.org/>
-
-BSD-2-Clause AND BSD-3-Clause
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-nbformat 5.1.2 - BSD-2-Clause AND BSD-3-Clause
-
-
-Copyright (c) IPython Development Team.
-Copyright (c) Jupyter Development Team.
-copyright 2015, Jupyter Development Team
-Copyright (c) 2015-, Jupyter Development Team
-Copyright (c) 2001-2015, IPython Development Team
-Copyright (c) 2008-2011 The IPython Development Team
-
-BSD-2-Clause AND BSD-3-Clause
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-notebook 6.2.0 - BSD-2-Clause AND BSD-3-Clause
-
-
-Copyright (c) 2014
-Copyright Dave Gandy 2016.
-Copyright (c) 2012 Google Inc.
-copyright (c) by Lennart Ochel
-copyright AtomicPages LLC 2014
-Copyright (c) 2017 ORGANIZATION
-Copyright 2014-2019 Volker Sorge
-Copyright 2011-2019 Twitter, Inc.
-Copyright 2012-2013 Ulrich Sossou
-Copyright (c) 2011 Fabrice Bellard
-Copyright (c) Alexandru Marasteanu
-copyright (c) 2015 by Calin Barbat
-Copyright (c) 2019 RunningCoder.org
-Copyright 2007-2012 Steven Levithan
-Copyright (c) 2007 Cybozu Labs, Inc.
-Copyright (c) 2015-2019 Martin Hensel
-copyright (c) HicknHack Software Gmbh
-Copyright (c) IPython Development Team.
-Copyright (c) Jupyter Development Team.
-(c) JS Foundation and other contributors
-Copyright (c) 2013-present, Facebook, Inc.
-Copyright (c) 2011 by MarkLogic Corporation
-copyright (c) 2015 by Grzegorz Mazur Loosely
-copyright (c) 2016 Jared Dean, SAS Institute
-copyright (c) by Marijn Haverbeke and others
-Copyright (c) 2009-2018 The MathJax Consortium
-Copyright (c) 2010-2018 The MathJax Consortium
-Copyright (c) 2011-2015 The MathJax Consortium
-Copyright (c) 2015-, Jupyter Development Team.
-Copyright (c) 2001-2015, IPython Development Team
-copyright 2015, Jupyter Team, https://jupyter.org
-Copyright (c) 2008-2015, IPython Development Team.
-Copyright jQuery Foundation and other contributors.
-(c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org> Adapted from GitHub
-Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-Copyright (c) 2012-2013, Christopher Jeffrey (MIT License) https://github.com/chjj/term.js
-(c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Underscore
-Copyright (c) 2011-2018, Christopher Jeffrey. (MIT Licensed) https://github.com/markedjs/marked
-
-BSD-2-Clause AND BSD-3-Clause
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 pycparser 2.20 - BSD-2-Clause AND BSD-3-Clause
 
 
@@ -1574,25 +3722,12 @@ BSD-2-Clause AND BSD-3-Clause
 
 ---------------------------------------------------------
 
-testpath 0.4.4 - BSD-2-Clause AND BSD-3-Clause
+threadpoolctl 2.2.0 - BSD-2-Clause AND BSD-3-Clause
 
 
-copyright 2015, Jupyter Development Team
-Copyright (c) 2015, The Jupyter Development Team
-
-BSD-2-Clause AND BSD-3-Clause
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-Werkzeug 1.0.1 - BSD-2-Clause AND BSD-3-Clause
-
-
-Copyright 2007 Pallets
-copyright 2007 Pallets
-Copyright 2010 Canonical Ltd.
-(c) JS Foundation and other contributors
+Copyright (c) 2017, Intel Corporation
+(Copyright (c) 2017, Intel Corporation)
+Copyright (c) 2019, threadpoolctl contributors
 
 BSD-2-Clause AND BSD-3-Clause
 
@@ -1600,26 +3735,48 @@ BSD-2-Clause AND BSD-3-Clause
 
 ---------------------------------------------------------
 
-widgetsnbextension 3.5.1 - BSD-2-Clause AND BSD-3-Clause
+pyzmq 22.1.0 - BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-3.0-only AND NOASSERTION
 
 
-Copyright (c) 2014 Dan Le
-Copyright (c) 2014 Adam Krebs
-Copyright (c) 2014-2017, PhosphorJS
-(c) 2015 Adam Krebs, Jimmy Yuen Ho Wong
-Copyright (c) IPython Development Team.
-Copyright (c) Jupyter Development Team.
-Copyright JS Foundation and other contributors
-Copyright (c) 2015 Project Jupyter Contributors
-Copyright jQuery Foundation and other contributors
-Copyright Joyent, Inc. and other Node contributors.
-Copyright (c) 2010-2015 Jeremy Ashkenas, DocumentCloud
-(c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Backbone
-(c) 2009-2018 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Underscore
-Copyright Paul Johnston 2000 - 2002. Other contributors Greg Holt, Andrew Kepert, Ydnar, Lostinet
-Copyright Angel Marin, Paul Johnston 2000 - 2009. Other contributors Greg Holt, Andrew Kepert, Ydnar, Lostinet
+Copyright (c) 2016
+Copyright (c) 2018
+Copyright (c) 2019
+(c) PyZMQ Developers
+Copyright (c) 2007-2016
+Copyright (c) 2007-2017
+Copyright (c) 2007-2018
+Copyright (c) 2007-2019
+Copyright (c) 2016-2017
+Copyright 2009 Facebook
+Copyright 2010 Facebook
+Copyright 2011 Facebook
+Copyright (c) 2010 Justin Riley
+Copyright (c) PyZMQ Developers.
+Copyright (c) 2010 Brian Granger
+Copyright (c) 2010 Lisandro Dalcin
+Copyright (c) 2010 The IPython Team
+Copyright (c) Stef van der Struijk.
+Copyright (c) 2011- PyZMQ Developers
+Copyright (c) 2011-2012 Travis Cline
+Copyright (c) 2012 Godefroid Chapelle
+Copyright (c) PyZMQ Development Team.
+Copyright (c) 2010 Andrew Gwozdziewycz
+Copyright (c) 2012 The ZeroMQ Authors.
+Copyright (c) 2007-2010 iMatix Corporation
+Copyright (c) 2010 Brian Granger, Fernando Perez
+Copyright (c) 2010-2011 IPython Development Team
+Copyright (c) 2010 Brian Granger, Min Ragan-Kelley
+Copyright (c) 2010 Min Ragan-Kelley, Brian Granger
+copyright u'Brian E. Granger & Min Ragan-Kelley. OMQ
+Copyright (c) 2010 Brian E. Granger & Min Ragan-Kelley
+Copyright (c) 2013 Brian E. Granger & Min Ragan-Kelley
+Copyright (c) 2010-2012 Brian Granger, Min Ragan-Kelley
+Copyright (c) 2009-2012, Brian Granger, Min Ragan-Kelley
+Copyright (c) 2010-2011 Brian E. Granger & Min Ragan-Kelley
+Copyright (c) 2003-2007 Robey Pointer <robeypointer@gmail.com>
+Copyright (c) 2007 Free Software Foundation, Inc. <http://fsf.org/>
 
-BSD-2-Clause AND BSD-3-Clause
+BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-3.0-only AND NOASSERTION
 
 ---------------------------------------------------------
 
@@ -1781,13 +3938,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-d3-array 1.2.4 - BSD-3-Clause
+d3-array 2.8.0 - BSD-3-Clause
 https://d3js.org/d3-array/
 
-Copyright 2018 Mike Bostock
-Copyright 2010-2016 Mike Bostock
+Copyright 2018 Vladimir Agafonkin.
 
-Copyright 2010-2016 Mike Bostock
+Copyright 2010-2020 Mike Bostock
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -1820,12 +3976,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-d3-array 2.8.0 - BSD-3-Clause
+d3-array 1.2.4 - BSD-3-Clause
 https://d3js.org/d3-array/
 
-Copyright 2018 Vladimir Agafonkin.
+Copyright 2018 Mike Bostock
+Copyright 2010-2016 Mike Bostock
 
-Copyright 2010-2020 Mike Bostock
+Copyright 2010-2016 Mike Bostock
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -1897,7 +4054,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-d3-color 1.4.1 - BSD-3-Clause
+d3-color 2.0.0 - BSD-3-Clause
 https://d3js.org/d3-color/
 
 Copyright 2010-2016 Mike Bostock
@@ -1935,7 +4092,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-d3-color 2.0.0 - BSD-3-Clause
+d3-color 1.4.1 - BSD-3-Clause
 https://d3js.org/d3-color/
 
 Copyright 2010-2016 Mike Bostock
@@ -2625,10 +4782,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-d3-time 1.1.0 - BSD-3-Clause
+d3-time 2.0.0 - BSD-3-Clause
 https://d3js.org/d3-time/
 
-Copyright 2019 Mike Bostock
 Copyright 2010-2016 Mike Bostock
 
 Copyright 2010-2016 Mike Bostock
@@ -2664,9 +4820,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-d3-time 2.0.0 - BSD-3-Clause
+d3-time 1.1.0 - BSD-3-Clause
 https://d3js.org/d3-time/
 
+Copyright 2019 Mike Bostock
 Copyright 2010-2016 Mike Bostock
 
 Copyright 2010-2016 Mike Bostock
@@ -3027,28 +5184,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-jupyterlab-pygments 0.1.2 - BSD-3-Clause
-
-
-Copyright (c) Jupyter Development Team.
-Copyright (c) 2015 Project Jupyter Contributors
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-   3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 mapbox-gl 1.10.1 - BSD-3-Clause
 https://github.com/mapbox/mapbox-gl-js#readme
 
@@ -3150,6 +5285,28 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
+matplotlib-inline 0.1.2 - BSD-3-Clause
+
+
+Copyright (c) 2019
+Copyright (c) IPython Development Team.
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+   3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
 pbf 3.2.1 - BSD-3-Clause
 https://github.com/mapbox/pbf
 
@@ -3169,51 +5326,6 @@ modification, are permitted provided that the following conditions are met:
   and/or other materials provided with the distribution.
 
 * Neither the name of pbf nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-react-transition-group 4.4.1 - BSD-3-Clause
-https://github.com/reactjs/react-transition-group#readme
-
-(c) Sindre Sorhus
-Copyright 2013-present, Facebook, Inc.
-Copyright (c) 2013-present, Facebook, Inc.
-Copyright (c) Facebook, Inc. and its affiliates.
-Copyright (c) 2018, React Community Forked from React (https://github.com/facebook/react)
-
-BSD 3-Clause License
-
-Copyright (c) 2018, React Community
-Forked from React (https://github.com/facebook/react) Copyright 2013-present, Facebook, Inc.
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-
-* Neither the name of the copyright holder nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
 
@@ -3265,6 +5377,26 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+scikit-learn 0.24.2 - BSD-3-Clause
+
+
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+   3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
@@ -3343,29 +5475,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-threadpoolctl 2.1.0 - BSD-3-Clause
-
-
-Copyright (c) 2017, Intel Corporation
-(Copyright (c) 2017, Intel Corporation)
-Copyright (c) 2019, threadpoolctl contributors
-
-Copyright (c) <year> <owner> . All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-   3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
@@ -4388,38 +6497,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-@babel/runtime 7.12.1 - MIT
-https://babeljs.io/
-
-
-MIT License
-
-Copyright (c) 2014-present Sebastian McKenzie and other contributors
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 @choojs/findup 0.2.1 - MIT
 https://github.com/choojs/findup
 
@@ -5361,35 +7438,6 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-argon2-cffi 20.1.0 - MIT
-
-
-Copyright (c) 2015
-Copyright (c) 2015 Thomas Pornin
-copyright (c) 2015 Thomas Pornin
-copyright u'2015, Hynek Schlawack
-Copyright (c) 2015 Hynek Schlawack
-copyright (c) Samuel Neves, 2013-2015
-Copyright (c) 2001-2015 by Michael Shell
-Copyright (c) 2006-2013 Alexander Chemeris
-copyright (c) 2015 Daniel Dinu, Dmitry Khovratovich
-Copyright 2015 Daniel Dinu, Dmitry Khovratovich, Jean-Philippe Aumasson, and Samuel Neves
-Copyright (c) 1993-2000 by Gerry Murray, Silvano Balemi, Jon Dixon, Peter N'uchter, Juergen von Hagen
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 array-bounds 1.0.1 - MIT
 https://github.com/dfcreative/array-bounds#readme
 
@@ -5579,24 +7627,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-attrs 20.3.0 - MIT
-
-
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 axios 0.21.1 - MIT
 https://github.com/axios/axios
 
@@ -5659,7 +7689,7 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-backports.functools-lru-cache 1.6.1 - MIT
+backports.functools-lru-cache 1.6.4 - MIT
 
 
 Copyright Jason R. Coombs
@@ -5865,6 +7895,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
+bit-twiddle 0.0.2 - MIT
+
+
+(c) 2013 Mikola Lysenko.
+
+MIT License
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
 bit-twiddle 1.0.2 - MIT
 https://github.com/mikolalysenko/bit-twiddle
 
@@ -5899,25 +7948,6 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-bit-twiddle 0.0.2 - MIT
-
-
-(c) 2013 Mikola Lysenko.
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 bl 2.2.1 - MIT
 https://github.com/rvagg/bl
 
@@ -5942,20 +7972,31 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-bn.js 4.11.9 - MIT
+bn.js 4.12.0 - MIT
 https://github.com/indutny/bn.js
 
 Copyright Fedor Indutny, 2015.
 
-MIT License
+Copyright Fedor Indutny, 2015.
 
-Copyright (c) <year> <copyright holders>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
@@ -6189,7 +8230,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-cffi 1.14.4 - MIT
+cffi 1.14.6 - MIT
 
 
 
@@ -6723,40 +8764,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-concat-stream 1.6.2 - MIT
-https://github.com/maxogden/concat-stream#readme
-
-Copyright (c) 2013 Max Ogden
-
-The MIT License
-
-Copyright (c) 2013 Max Ogden
-
-Permission is hereby granted, free of charge, 
-to any person obtaining a copy of this software and 
-associated documentation files (the "Software"), to 
-deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, 
-merge, publish, distribute, sublicense, and/or sell 
-copies of the Software, and to permit persons to whom 
-the Software is furnished to do so, 
-subject to the following conditions:
-
-The above copyright notice and this permission notice 
-shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 concat-stream 2.0.0 - MIT
 https://github.com/maxogden/concat-stream#readme
 
@@ -6791,20 +8798,35 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-configparser 5.0.1 - MIT
+concat-stream 1.6.2 - MIT
+https://github.com/maxogden/concat-stream#readme
 
+Copyright (c) 2013 Max Ogden
 
-Copyright Jason R. Coombs
+The MIT License
 
-MIT License
+Copyright (c) 2013 Max Ogden
 
-Copyright (c) <year> <copyright holders>
+Permission is hereby granted, free of charge, 
+to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to 
+deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, 
+merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom 
+the Software is furnished to do so, 
+subject to the following conditions:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice 
+shall be included in all copies or substantial portions of the Software.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
@@ -7222,36 +9244,6 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-csstype 3.0.3 - MIT
-https://github.com/frenic/csstype#readme
-
-Copyright (c) 2017-2018 Fredrik Nicol
-
-Copyright (c) 2017-2018 Fredrik Nicol
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 cubic-hermite 1.0.0 - MIT
 https://github.com/mikolalysenko/cubic-hermite
 
@@ -7499,34 +9491,33 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-dom-helpers 5.2.0 - MIT
-https://github.com/react-bootstrap/dom-helpers#readme
+dice-ml 0.6.1 - MIT
 
-Copyright (c) 2015 Jason Quense
-Copyright 2013-2014, Facebook, Inc.
-Copyright 2014-2015, Facebook, Inc.
 
-The MIT License (MIT)
+(c) C T6
+Copyright Dave Gandy 2016.
+copyright Google 2013Roboto
+Copyright (c) Microsoft Corporation.
+(c) JS Foundation and other contributors
+(c) Copyright 2019, Ramaravind, Amit, Chenhao
+Copyright JS Foundation and other contributors
+(c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
+Copyright jQuery Foundation and other contributors
+(c) 2011-2015 by tyPoland Lukasz Dziedzic (http://www.typoland.com/)
+Copyright (c) 2011-2015 by tyPoland Lukasz Dziedzic (http://www.typoland.com/)
+wCopyright (c) 2011-2015 by tyPoland Lukasz Dziedzic (http://www.typoland.com/)
+Copyright 2006 The Inconsolata Project AuthorsInconsolataBold2.000 CYRE Inconsolata-BoldInconsolata BoldVersion
+Copyright 2006 The Inconsolata Project AuthorsInconsolataRegular2.000 CYRE Inconsolata-RegularInconsolata RegularVersion
 
-Copyright (c) 2015 Jason Quense
+MIT License
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Copyright (c) <year> <copyright holders>
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
@@ -7826,12 +9817,10 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-entrypoints 0.3 - MIT
+erroranalysis 0.1.10 - MIT
 
 
-copyright 2015, Thomas Kluyver
-Copyright (c) Thomas Kluyver and contributors
-Copyright (c) 2015 Thomas Kluyver and contributors
+Copyright (c) Microsoft Corporation
 
 MIT License
 
@@ -7909,7 +9898,7 @@ SOFTWARE.
 
 ---------------------------------------------------------
 
-es-abstract 1.17.6 - MIT
+es-abstract 1.18.0-next.0 - MIT
 https://github.com/ljharb/es-abstract#readme
 
 (c) Object C
@@ -7941,7 +9930,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-es-abstract 1.18.0-next.0 - MIT
+es-abstract 1.17.6 - MIT
 https://github.com/ljharb/es-abstract#readme
 
 (c) Object C
@@ -8577,7 +10566,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-gevent 20.6.2 - MIT
+gevent 20.9.0 - MIT
 
 
 Copyright 2018
@@ -10406,6 +12395,45 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
+interpret-community 0.18.1 - MIT
+
+
+(c) Sindre Sorhus
+Copyright 2018 Mike Bostock
+Copyright 2016 Mike Bostock.
+Copyright 2017 Mike Bostock.
+Copyright 2019 Mike Bostock.
+Copyright (c) 2011 Google Inc.
+Copyright 2012-2019, Plotly, Inc.
+Copyright (c) Microsoft Corporation.
+Copyright (c) 2014-2015, Jon Schlinkert.
+Copyright (c) Facebook, Inc. and its affiliates.
+Copyright (c) 2009 Thomas Robinson <280north.com>
+Copyright Joyent, Inc. and other Node contributors.
+copyright 2016 Sean Connelly (@voidqk), http://syntheti.cc
+Copyright (c) 2010-2013 Arthur Clemens, arthur@visiblearea.com
+(c) Copyright 2016, Sean Connelly (@voidqk), http://syntheti.cc
+(c) Copyright 2017, Sean Connelly (@voidqk), http://syntheti.cc
+Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors
+Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
+Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+(c) CARTO </a> ,tiles https://cartodb-basemaps-c.global.ssl.fastly.net/dark_all
+(c) CARTO </a> ,tiles https://cartodb-basemaps-c.global.ssl.fastly.net/light_all
+
+MIT License
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
 interval-tree-1d 1.0.3 - MIT
 https://github.com/mikolalysenko/interval-tree-1d
 
@@ -10539,7 +12567,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-isarray 0.0.1 - MIT
+isarray 1.0.0 - MIT
 https://github.com/juliangruber/isarray
 
 Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
@@ -10558,7 +12586,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-isarray 1.0.0 - MIT
+isarray 0.0.1 - MIT
 https://github.com/juliangruber/isarray
 
 Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
@@ -11211,23 +13239,37 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-jsonschema 3.2.0 - MIT
+json5 2.2.0 - MIT
+http://json5.org/
 
-
-Copyright (c) 2012 Julian Berman
-Copyright (c) 2013 Julian Berman
-u'Julian Berman copyright u'2013
-Copyright (c) Twisted Matrix Laboratories.
+(c) 2019 Denis Pushkarev
+copyright (c) 2019 Denis Pushkarev
+Copyright (c) 2012-2018 Aseem Kishore, and others
 
 MIT License
 
-Copyright (c) <year> <copyright holders>
+Copyright (c) 2012-2018 Aseem Kishore, and [others].
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+[others]: https://github.com/json5/json5/contributors
+
 
 ---------------------------------------------------------
 
@@ -11331,33 +13373,136 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-lightgbm 3.1.1 - MIT
+lightgbm 3.2.1 - MIT
 
 
 Copyright (c) 2014
 Copyright (c) 2017
+Bf16ToF32Odd (c) Packet4f
+Copyright Paul Dreik 2019
+Bf16ToF32Even (c) Packet4f
 Copyright 2013 Google Inc.
+Copyright (c) Daniel Lemire
+Copyright (c) 2010, Intel Corp.
 Copyright (c) 2013 Dropbox, Inc.
+Copyright (c) 2007 Julien Pommier
+Copyright (c) 2009 Claire Maurice
 Copyright (c) 2011 Hannes Hofmann
+Copyright (c) 2010 Vincent Lejeune
+Copyright (c) Fabian Giesen, 2016.
 Copyright (c) Microsoft Corporation
+Copyright (c) 2001 Intel Corporation.
+Copyright (c) 2011, Intel Corporation.
+Copyright 2017 The TensorFlow Authors.
+Copyright (c) 2018 Wave Computing, Inc.
 Copyright (c) 2016 Microsoft Corporation.
 Copyright (c) 2017 Microsoft Corporation.
 Copyright (c) 2018 Microsoft Corporation.
 Copyright (c) 2019 Microsoft Corporation.
 Copyright 2010-2012, D. E. Shaw Research.
 (c) 2012,2014 Advanced Micro Devices, Inc.
+Copyright (c) 2012 - 2016, Victor Zverovich
+Copyright (c) 2017 Codeplay Software Limited
+Copyright (c) 2012 - present, Victor Zverovich
+Copyright (c) 2009 Keir Mierle <mierle@gmail.com>
+Copyright (c) 2009 Rohit Garg <rpg.314@gmail.com>
 Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
 Copyright (c) 2015 Jakub Pola <jakub.pola@gmail.com>
 Copyright (c) 2015 Jakub Szuppe <j.szuppe@gmail.com>
-Copyright (c) 2015 Kyle Lutz <kyle.r.lutz@gmail.com>
+Copyright (c) 2016 Eugene Brevdo <ebrevdo@gmail.com>
 Copyright (c) 2016 Jakub Szuppe <j.szuppe@gmail.com>
+Copyright (c) 2018 - present, Remotion (Igor Schulz)
 Copyright (c) 2018 Jakub Szuppe <j.szuppe@gmail.com>
+Copyright (c) 2011 Timothy E. Holy tim.holy@gmail.com
 Copyright (c) 2014 Roshan <thisisroshansmail@gmail.com>
+Copyright (c) 2009 Hauke Heibel <hauke.heibel@gmail.com>
+Copyright (c) 2009 Kenneth Riddile <kfriddile@yahoo.com>
+Copyright (c) 2010 Hauke Heibel <hauke.heibel@gmail.com>
+Copyright (c) 2014 Pedro Gonnet (pedro.gonnet@gmail.com)
+Copyright (c) 2016 Pedro Gonnet (pedro.gonnet@gmail.com)
+Copyright (c) 2016 Tobias Wood <tobias@spinicist.org.uk>
+Copyright (c) 2009 Ricard Marxer <email@ricardmarxer.com>
+Copyright (c) 2010 Jitse Niesen <jitse@maths.leeds.ac.uk>
+Copyright (c) 2011 Jitse Niesen <jitse@maths.leeds.ac.uk>
+Copyright (c) 2012 Alexey Korepanov <kaikaikai@yandex.ru>
+Copyright (c) 2013 Jean Ceccato <jean.ceccato@ensimag.fr>
+Copyright (c) 2013 Jitse Niesen <jitse@maths.leeds.ac.uk>
 Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
 Copyright (c) 2013-2015 Kyle Lutz <kyle.r.lutz@gmail.com>
+Copyright (c) 2008 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2009 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2010 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2011 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2013 Gauthier Brun <brun.gauthier@gmail.com>
+Copyright (c) 2009 Mathieu Gautier <mathieu.gautier@cea.fr>
+Copyright (c) 2013 Nicolas Carre <nicolas.carre@ensimag.fr>
+Copyright (c) 2016 Rasmus Munk Larsen (rmlarsen@google.com)
+Copyright (c) 2016 Rasmus Munk Larsen <rmlarsen@google.com>
 Copyright (c) 2017 Denis Demidov <dennis.demidov@gmail.com>
+Copyright (c) 2018 Rasmus Munk Larsen <rmlarsen@google.com>
+Copyright (c) 2019 Rasmus Munk Larsen <rmlarsen@google.com>
+Copyright (c) 2007 Michael Olbrich <michael.olbrich@gmx.net>
+Copyright (c) 2010 Thomas Capricelli <orzel@freehackers.org>
+Copyright (c) 2013 Pavel Holoborodko <pavel@holoborodko.com>
+Copyright (c) 2008 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2009 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2010 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2010-2013 Hauke Heibel <hauke.heibel@gmail.com>
+Copyright (c) 2012 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2014 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2015 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2016 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2017 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2018 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2019 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2010,2012 Jitse Niesen <jitse@maths.leeds.ac.uk>
+Copyright (c) 2011-2012 Jitse Niesen <jitse@maths.leeds.ac.uk>
 Copyright (c) 2017 Kristian Popov <kristian.popov@outlook.com>
+Copyright (c) 2006-2008 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2006-2009 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2006-2010 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2007-2009 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2007-2010 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2007-2011 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2008-2009 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2008-2010 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2009-2010 Benoit Jacob <jacob.benoit.1@gmail.com>
+Copyright (c) 2010 Konstantinos Margaritis <markos@freevec.org>
+Copyright (c) 2016 Konstantinos Margaritis <markos@freevec.org>
 Copyright (c) 2009, Jay Loden, Dave Daeschler, Giampaolo Rodola.
+Copyright (c) 2014 Benoit Steiner (benoit.steiner.goog@gmail.com)
+Copyright (c) 2014 Benoit Steiner <benoit.steiner.goog@gmail.com>
+Copyright (c) 2015 Benoit Steiner <benoit.steiner.goog@gmail.com>
+Copyright (c) 2016 Benoit Steiner (benoit.steiner.goog@gmail.com)
+Copyright (c) 2016 Benoit Steiner <benoit.steiner.goog@gmail.com>
+Copyright (c) 2008-2009 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2010 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2011 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2014 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2016 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2017 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2018 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2008-2019 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2009-2010 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2009-2014 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2009-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2009-2019 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2010-2011 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2010-2016 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2011-2014 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2011-2018 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2012-2016 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2013-2014 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2013-2016 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2014-2017 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2014-2019 Gael Guennebaud <gael.guennebaud@inria.fr>
+Copyright (c) 2012 - present, Victor Zverovich and fmt contributors
+Copyright (c) 2013 Pierre Zoppitelli <pierre.zoppitelli@ensimag.fr>
+Copyright (c) 2018 - present, Victor Zverovich and fmt contributors
+Copyright (c) 2008-2016 Konstantinos Margaritis <markos@freevec.org>
+Copyright (c) 2010-2016 Konstantinos Margaritis <markos@freevec.org>
+Copyright (c) 2006-2008, 2010 Benoit Jacob <jacob.benoit.1@gmail.com>
 Copyright (c) 2015 Muhammad Junaid Muzammil <mjunaidmuzammil@gmail.com>
 
 MIT License
@@ -11392,7 +13537,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-lodash 4.17.20 - MIT
+lodash 4.17.21 - MIT
 https://lodash.com/
 
 Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
@@ -12970,7 +15115,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-parso 0.8.1 - MIT
+parso 0.8.2 - MIT
 
 
 Copyright (c) <2013-2017>
@@ -13033,7 +15178,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-pathlib2 2.3.5 - MIT
+pathlib2 2.3.6 - MIT
 
 
 Copyright (c) 2014-2017 Matthias C. M. Troffaes
@@ -13679,50 +15824,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-pyrsistent 0.17.3 - MIT
-
-
-Copyright (c) 2013 Matthew Rocklin
-Copyright (c) 2019 Tobias Gustafsson
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-pytz 2020.5 - MIT
+pytz 2021.1 - MIT
 
 
 Copyright (c) 2003-2019 Stuart Bishop <stuart@stuartbishop.net>
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-pywinpty 0.5.7 - MIT
-
-
-Copyright (c) 2017 Spyder IDE
-Copyright (c) 2017-2018 Spyder Project
 
 MIT License
 
@@ -13821,7 +15926,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-rai-core-flask 0.0.3 - MIT
+rai-core-flask 0.2.2 - MIT
 
 
 Copyright (c) Microsoft Corporation
@@ -15304,40 +17409,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-signum 0.0.0 - MIT
-https://github.com/mikolalysenko/signum
-
-(c) 2014 Mikola Lysenko.
-Copyright (c) 2013 Mikola Lysenko
-
-
-The MIT License (MIT)
-
-Copyright (c) 2013 Mikola Lysenko
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-
----------------------------------------------------------
-
----------------------------------------------------------
-
 signum 1.0.0 - MIT
 https://github.com/mikolalysenko/signum
 
@@ -15372,10 +17443,10 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-simplicial-complex 1.0.0 - MIT
-https://github.com/mikolalysenko/simplicial-complex
+signum 0.0.0 - MIT
+https://github.com/mikolalysenko/signum
 
-(c) 2013-2014 Mikola Lysenko.
+(c) 2014 Mikola Lysenko.
 Copyright (c) 2013 Mikola Lysenko
 
 
@@ -15420,6 +17491,40 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+simplicial-complex 1.0.0 - MIT
+https://github.com/mikolalysenko/simplicial-complex
+
+(c) 2013-2014 Mikola Lysenko.
+Copyright (c) 2013 Mikola Lysenko
+
+
+The MIT License (MIT)
+
+Copyright (c) 2013 Mikola Lysenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
 
 ---------------------------------------------------------
 
@@ -15527,7 +17632,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-six 1.15.0 - MIT
+six 1.16.0 - MIT
 
 
 
@@ -15574,6 +17679,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+slicer 0.0.7 - MIT
+
+
+
+MIT License
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
@@ -15833,7 +17956,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-string_decoder 1.1.1 - MIT
+string_decoder 1.3.0 - MIT
 https://github.com/nodejs/string_decoder
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -15892,7 +18015,7 @@ IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-string_decoder 1.3.0 - MIT
+string_decoder 1.1.1 - MIT
 https://github.com/nodejs/string_decoder
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -16543,6 +18666,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+tqdm 4.61.2 - MIT
+
+
+
+MIT License
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
@@ -17945,26 +20086,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------
 
-zipp 3.4.0 - MIT
-
-
-Copyright Jason R. Coombs
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-greenlet 1.0.0 - MIT AND Python-2.0
+greenlet 0.4.17 - MIT AND Python-2.0
 
 
 copyright u'2011, Armin Rigo, Christian Tismer
@@ -17977,7 +20099,20 @@ MIT AND Python-2.0
 
 ---------------------------------------------------------
 
-pywin32 300 - PSF-2.0
+typing-extensions 3.10.0.0 - OTHER
+
+
+Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam
+Copyright (c) 1995-2001 Corporation for National Research Initiatives
+Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Python Software Foundation
+
+OTHER
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+
+pywin32 301 - PSF-2.0
 
 
 
@@ -17987,150 +20122,7 @@ PSF-2.0
 
 ---------------------------------------------------------
 
-defusedxml 0.6.0 - Python-2.0
-
-
-Copyright (c) 2013-2017 by Christian Heimes
-Copyright (c) 2013 by Christian Heimes <christian@python.org>
-Copyright (c) 2013-2017 by Christian Heimes <christian@python.org>
-Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Python Software Foundation
-
-PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
-
-   1. This LICENSE AGREEMENT is between the Python Software Foundation ("PSF"), and the Individual or Organization ("Licensee") accessing and otherwise using this software ("Python") in source or binary form and its associated documentation.
-
-   2. Subject to the terms and conditions of this License Agreement, PSF hereby grants Licensee a nonexclusive, royalty-free, world-wide license to reproduce, analyze, test, perform and/or display publicly, prepare derivative works, distribute, and otherwise use Python alone or in any derivative version, provided, however, that PSF's License Agreement and PSF's notice of copyright, i.e., "Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006 Python Software Foundation; All Rights Reserved" are retained in Python alone or in any derivative version prepared by Licensee.
-
-   3. In the event Licensee prepares a derivative work that is based on or incorporates Python or any part thereof, and wants to make the derivative work available to others as provided herein, then Licensee hereby agrees to include in any such work a brief summary of the changes made to Python.
-
-   4. PSF is making Python available to Licensee on an "AS IS" basis. PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.
-
-   5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON, OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-   6. This License Agreement will automatically terminate upon a material breach of its terms and conditions.
-
-   7. Nothing in this License Agreement shall be deemed to create any relationship of agency, partnership, or joint venture between PSF and Licensee. This License Agreement does not grant permission to use PSF trademarks or trade name in a trademark sense to endorse or promote products or services of Licensee, or any third party.
-
-   8. By copying, installing or otherwise using Python, Licensee agrees to be bound by the terms and conditions of this License Agreement. BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0
-
-BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1
-
-   1. This LICENSE AGREEMENT is between BeOpen.com ("BeOpen"), having an office at 160 Saratoga Avenue, Santa Clara, CA 95051, and the Individual or Organization ("Licensee") accessing and otherwise using this software in source or binary form and its associated documentation ("the Software").
-
-   2. Subject to the terms and conditions of this BeOpen Python License Agreement, BeOpen hereby grants Licensee a non-exclusive, royalty-free, world-wide license to reproduce, analyze, test, perform and/or display publicly, prepare derivative works, distribute, and otherwise use the Software alone or in any derivative version, provided, however, that the BeOpen Python License is retained in the Software, alone or in any derivative version prepared by Licensee.
-
-   3. BeOpen is making the Software available to Licensee on an "AS IS" basis. BEOPEN MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, BEOPEN MAKES NO AND DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.
-
-   4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THE SOFTWARE, OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-   5. This License Agreement will automatically terminate upon a material breach of its terms and conditions.
-
-   6. This License Agreement shall be governed by and interpreted in all respects by the law of the State of California, excluding conflict of law provisions. Nothing in this License Agreement shall be deemed to create any relationship of agency, partnership, or joint venture between BeOpen and Licensee. This License Agreement does not grant permission to use BeOpen trademarks or trade names in a trademark sense to endorse or promote products or services of Licensee, or any third party. As an exception, the "BeOpen Python" logos available at http://www.pythonlabs.com/logos.html may be used according to the permissions granted on that web page.
-
-   7. By copying, installing or otherwise using the software, Licensee agrees to be bound by the terms and conditions of this License Agreement. CNRI OPEN SOURCE LICENSE AGREEMENT (for Python 1.6b1) IMPORTANT: PLEASE READ THE FOLLOWING AGREEMENT CAREFULLY.
-
-BY CLICKING ON "ACCEPT" WHERE INDICATED BELOW, OR BY COPYING, INSTALLING OR OTHERWISE USING PYTHON 1.6, beta 1 SOFTWARE, YOU ARE DEEMED TO HAVE AGREED TO THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT.
-
-   1. This LICENSE AGREEMENT is between the Corporation for National Research Initiatives, having an office at 1895 Preston White Drive, Reston, VA 20191 ("CNRI"), and the Individual or Organization ("Licensee") accessing and otherwise using Python 1.6, beta 1 software in source or binary form and its associated documentation, as released at the www.python.org Internet site on August 4, 2000 ("Python 1.6b1").
-
-   2. Subject to the terms and conditions of this License Agreement, CNRI hereby grants Licensee a non-exclusive, royalty-free, world-wide license to reproduce, analyze, test, perform and/or display publicly, prepare derivative works, distribute, and otherwise use Python 1.6b1 alone or in any derivative version, provided, however, that CNRIs License Agreement is retained in Python 1.6b1, alone or in any derivative version prepared by Licensee.
-
-   Alternately, in lieu of CNRIs License Agreement, Licensee may substitute the following text (omitting the quotes): "Python 1.6, beta 1, is made available subject to the terms and conditions in CNRIs License Agreement. This Agreement may be located on the Internet using the following unique, persistent identifier (known as a handle): 1895.22/1011. This Agreement may also be obtained from a proxy server on the Internet using the URL:http://hdl.handle.net/1895.22/1011".
-
-   3. In the event Licensee prepares a derivative work that is based on or incorporates Python 1.6b1 or any part thereof, and wants to make the derivative work available to the public as provided herein, then Licensee hereby agrees to indicate in any such work the nature of the modifications made to Python 1.6b1.
-
-   4. CNRI is making Python 1.6b1 available to Licensee on an "AS IS" basis. CNRI MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, CNRI MAKES NO AND DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON 1.6b1 WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.
-
-   5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS A RESULT OF USING, MODIFYING OR DISTRIBUTING PYTHON 1.6b1, OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-   6. This License Agreement will automatically terminate upon a material breach of its terms and conditions.
-
-   7. This License Agreement shall be governed by and interpreted in all respects by the law of the State of Virginia, excluding conflict of law provisions. Nothing in this License Agreement shall be deemed to create any relationship of agency, partnership, or joint venture between CNRI and Licensee. This License Agreement does not grant permission to use CNRI trademarks or trade name in a trademark sense to endorse or promote products or services of Licensee, or any third party.
-
-   8. By clicking on the "ACCEPT" button where indicated, or by copying, installing or otherwise using Python 1.6b1, Licensee agrees to be bound by the terms and conditions of this License Agreement. ACCEPT CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2
-
-Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam, The Netherlands. All rights reserved.
-
-Permission to use, copy, modify, and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation, and that the name of Stichting Mathematisch Centrum or CWI not be used in advertising or publicity pertaining to distribution of the software without specific, written prior permission.
-
-STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-typing 3.7.4.3 - Python-2.0
-
-
-Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam
-Copyright (c) 1995-2001 Corporation for National Research Initiatives
-Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Python Software Foundation
-
-PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
-
-   1. This LICENSE AGREEMENT is between the Python Software Foundation ("PSF"), and the Individual or Organization ("Licensee") accessing and otherwise using this software ("Python") in source or binary form and its associated documentation.
-
-   2. Subject to the terms and conditions of this License Agreement, PSF hereby grants Licensee a nonexclusive, royalty-free, world-wide license to reproduce, analyze, test, perform and/or display publicly, prepare derivative works, distribute, and otherwise use Python alone or in any derivative version, provided, however, that PSF's License Agreement and PSF's notice of copyright, i.e., "Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006 Python Software Foundation; All Rights Reserved" are retained in Python alone or in any derivative version prepared by Licensee.
-
-   3. In the event Licensee prepares a derivative work that is based on or incorporates Python or any part thereof, and wants to make the derivative work available to others as provided herein, then Licensee hereby agrees to include in any such work a brief summary of the changes made to Python.
-
-   4. PSF is making Python available to Licensee on an "AS IS" basis. PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.
-
-   5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON, OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-   6. This License Agreement will automatically terminate upon a material breach of its terms and conditions.
-
-   7. Nothing in this License Agreement shall be deemed to create any relationship of agency, partnership, or joint venture between PSF and Licensee. This License Agreement does not grant permission to use PSF trademarks or trade name in a trademark sense to endorse or promote products or services of Licensee, or any third party.
-
-   8. By copying, installing or otherwise using Python, Licensee agrees to be bound by the terms and conditions of this License Agreement. BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0
-
-BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1
-
-   1. This LICENSE AGREEMENT is between BeOpen.com ("BeOpen"), having an office at 160 Saratoga Avenue, Santa Clara, CA 95051, and the Individual or Organization ("Licensee") accessing and otherwise using this software in source or binary form and its associated documentation ("the Software").
-
-   2. Subject to the terms and conditions of this BeOpen Python License Agreement, BeOpen hereby grants Licensee a non-exclusive, royalty-free, world-wide license to reproduce, analyze, test, perform and/or display publicly, prepare derivative works, distribute, and otherwise use the Software alone or in any derivative version, provided, however, that the BeOpen Python License is retained in the Software, alone or in any derivative version prepared by Licensee.
-
-   3. BeOpen is making the Software available to Licensee on an "AS IS" basis. BEOPEN MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, BEOPEN MAKES NO AND DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.
-
-   4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THE SOFTWARE, OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-   5. This License Agreement will automatically terminate upon a material breach of its terms and conditions.
-
-   6. This License Agreement shall be governed by and interpreted in all respects by the law of the State of California, excluding conflict of law provisions. Nothing in this License Agreement shall be deemed to create any relationship of agency, partnership, or joint venture between BeOpen and Licensee. This License Agreement does not grant permission to use BeOpen trademarks or trade names in a trademark sense to endorse or promote products or services of Licensee, or any third party. As an exception, the "BeOpen Python" logos available at http://www.pythonlabs.com/logos.html may be used according to the permissions granted on that web page.
-
-   7. By copying, installing or otherwise using the software, Licensee agrees to be bound by the terms and conditions of this License Agreement. CNRI OPEN SOURCE LICENSE AGREEMENT (for Python 1.6b1) IMPORTANT: PLEASE READ THE FOLLOWING AGREEMENT CAREFULLY.
-
-BY CLICKING ON "ACCEPT" WHERE INDICATED BELOW, OR BY COPYING, INSTALLING OR OTHERWISE USING PYTHON 1.6, beta 1 SOFTWARE, YOU ARE DEEMED TO HAVE AGREED TO THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT.
-
-   1. This LICENSE AGREEMENT is between the Corporation for National Research Initiatives, having an office at 1895 Preston White Drive, Reston, VA 20191 ("CNRI"), and the Individual or Organization ("Licensee") accessing and otherwise using Python 1.6, beta 1 software in source or binary form and its associated documentation, as released at the www.python.org Internet site on August 4, 2000 ("Python 1.6b1").
-
-   2. Subject to the terms and conditions of this License Agreement, CNRI hereby grants Licensee a non-exclusive, royalty-free, world-wide license to reproduce, analyze, test, perform and/or display publicly, prepare derivative works, distribute, and otherwise use Python 1.6b1 alone or in any derivative version, provided, however, that CNRIs License Agreement is retained in Python 1.6b1, alone or in any derivative version prepared by Licensee.
-
-   Alternately, in lieu of CNRIs License Agreement, Licensee may substitute the following text (omitting the quotes): "Python 1.6, beta 1, is made available subject to the terms and conditions in CNRIs License Agreement. This Agreement may be located on the Internet using the following unique, persistent identifier (known as a handle): 1895.22/1011. This Agreement may also be obtained from a proxy server on the Internet using the URL:http://hdl.handle.net/1895.22/1011".
-
-   3. In the event Licensee prepares a derivative work that is based on or incorporates Python 1.6b1 or any part thereof, and wants to make the derivative work available to the public as provided herein, then Licensee hereby agrees to indicate in any such work the nature of the modifications made to Python 1.6b1.
-
-   4. CNRI is making Python 1.6b1 available to Licensee on an "AS IS" basis. CNRI MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, CNRI MAKES NO AND DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON 1.6b1 WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.
-
-   5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS A RESULT OF USING, MODIFYING OR DISTRIBUTING PYTHON 1.6b1, OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-   6. This License Agreement will automatically terminate upon a material breach of its terms and conditions.
-
-   7. This License Agreement shall be governed by and interpreted in all respects by the law of the State of Virginia, excluding conflict of law provisions. Nothing in this License Agreement shall be deemed to create any relationship of agency, partnership, or joint venture between CNRI and Licensee. This License Agreement does not grant permission to use CNRI trademarks or trade name in a trademark sense to endorse or promote products or services of Licensee, or any third party.
-
-   8. By clicking on the "ACCEPT" button where indicated, or by copying, installing or otherwise using Python 1.6b1, Licensee agrees to be bound by the terms and conditions of this License Agreement. ACCEPT CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2
-
-Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam, The Netherlands. All rights reserved.
-
-Permission to use, copy, modify, and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies and that both that copyright notice and this permission notice appear in supporting documentation, and that the name of Stichting Mathematisch Centrum or CWI not be used in advertising or publicity pertaining to distribution of the software without specific, written prior permission.
-
-STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
----------------------------------------------------------
-
----------------------------------------------------------
-
-typing-extensions 3.7.4.3 - Python-2.0
+typing 3.10.0.0 - Python-2.0
 
 
 Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam
@@ -18430,7 +20422,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY EXPRESSED O
 
 ---------------------------------------------------------
 
-zope.interface 5.2.0 - ZPL-2.1
+zope.interface 5.4.0 - ZPL-2.1
 
 
 copyright 2012-2017, Zope Foundation

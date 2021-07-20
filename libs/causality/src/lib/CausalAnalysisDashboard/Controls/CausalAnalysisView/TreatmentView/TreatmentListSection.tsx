@@ -42,8 +42,8 @@ export class TreatmentListSection extends React.Component<
     return (
       <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Stack.Item>
-          <Text variant={"medium"} className={styles.label}>
-            <b>{localization.Counterfactuals.individualTreatment}</b>
+          <Text variant={"medium"} className={styles.header}>
+            {localization.Counterfactuals.individualTreatment}
           </Text>
         </Stack.Item>
         <Stack.Item>
