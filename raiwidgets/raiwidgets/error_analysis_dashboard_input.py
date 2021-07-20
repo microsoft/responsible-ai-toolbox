@@ -122,6 +122,12 @@ class ErrorAnalysisDashboardInput:
             dataset, true_y = self.input_explanation(explanation,
                                                      dataset,
                                                      true_y)
+            row_length = len(dataset)
+            # Only check dataset on explanation for row length bounds
+            if row_length > 100000:
+                raise ValueError(
+                    "Exceeds maximum number of rows"
+                    "for visualization (100000)")
 
         if classes is not None:
             classes = self._convert_to_list(classes)
@@ -170,10 +176,6 @@ class ErrorAnalysisDashboardInput:
         row_length = 0
         if list_dataset is not None:
             row_length, feature_length = np.shape(list_dataset)
-            if row_length > 100000:
-                raise ValueError(
-                    "Exceeds maximum number of rows"
-                    "for visualization (100000)")
             if feature_length > 1000:
                 raise ValueError("Exceeds maximum number of features for"
                                  " visualization (1000). Please regenerate the"
@@ -273,6 +275,10 @@ class ErrorAnalysisDashboardInput:
             if total == 0:
                 metric_value = 0
             else:
+                if not isinstance(predicted_y, np.ndarray):
+                    predicted_y = np.array(predicted_y)
+                if not isinstance(true_y, np.ndarray):
+                    true_y = np.array(true_y)
                 diff = predicted_y != true_y
                 error = sum(diff)
                 metric_value = error / total
