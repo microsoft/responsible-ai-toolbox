@@ -18,7 +18,7 @@ from responsibleai._managers.counterfactual_manager import (
     CounterfactualManager)
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
-from responsibleai._tools.causal.causal_manager import CausalManager
+from responsibleai._managers.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.constants import ModelTask
 
