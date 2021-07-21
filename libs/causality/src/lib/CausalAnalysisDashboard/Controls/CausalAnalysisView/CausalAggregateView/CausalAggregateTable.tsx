@@ -72,19 +72,29 @@ export class CausalAggregateTable extends React.PureComponent<
       {
         fieldName: nameof<ICausalAnalysisSingleData>("ci_lower"),
         key: "ciLower",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 175,
+        minWidth: 150,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
         fieldName: nameof<ICausalAnalysisSingleData>("ci_upper"),
         key: "ciUpper",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 175,
+        minWidth: 150,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
-    const items = this.props.data;
+    const items = this.props.data.map((d) => {
+      const roundedData = {};
+      Object.entries(d).forEach(([key, value]) => {
+        if (typeof value === "number") {
+          roundedData[key] = value.toFixed(3);
+        } else {
+          roundedData[key] = value;
+        }
+      });
+      return roundedData;
+    });
     return (
       <DetailsList
         items={items}
