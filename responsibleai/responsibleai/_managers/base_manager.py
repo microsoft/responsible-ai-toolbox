@@ -4,12 +4,16 @@
 """Defines the base class for managers."""
 
 from abc import ABC, abstractmethod
+import timeit
 
 
-def measure_time(manager_compute_func):
+def measure_time(manager_compute_func, show_progress=False):
     def compute_wrapper(*args, **kwargs):
+        print(args)
+        print(args[0])
+        import pdb
+        pdb.set_trace()
         separator(80)
-        import timeit
         start_time = timeit.default_timer()
         manager_compute_func(*args, **kwargs)
         elapsed = timeit.default_timer() - start_time
@@ -24,6 +28,11 @@ def separator(max_len):
     print('=' * max_len)
 
 
+def log(log_str, print_to_console=False):
+    if print_to_console:
+        print(log_str)
+
+
 class BaseManager(ABC):
     """The base class for managers."""
 
@@ -36,8 +45,12 @@ class BaseManager(ABC):
         """Abstract method to add a computation to the manager."""
 
     @abstractmethod
-    def compute(self):
-        """Abstract method to compute the new work in the add method."""
+    def compute(self, show_progress):
+        """Abstract method to compute the new work in the add method.
+
+        :param show_progress: Boolean flag to give user feedback.
+        :type show_progress: bool
+        """
 
     @abstractmethod
     def get(self):

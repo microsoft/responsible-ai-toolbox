@@ -311,7 +311,7 @@ class ModelAnalysis(object):
         """
         return self._explainer_manager
 
-    def compute(self):
+    def compute(self, show_progress=False):
         """Calls compute on each of the managers."""
         for manager in self._managers:
             manager.compute()
