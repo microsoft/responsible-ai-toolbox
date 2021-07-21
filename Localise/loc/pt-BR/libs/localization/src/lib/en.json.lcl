@@ -1007,7 +1007,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Shift]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Turno]]></Val>
+            <Val><![CDATA[Mudar]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

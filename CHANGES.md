@@ -24,6 +24,47 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.9.0
+
+- educational materials
+  - add Model Analysis notebook for regression
+- new features
+  - local importance chart for counterfactual dashboard
+  - add multi causal policy support
+  - add delete tab dialog and remove inline widget for model assessment dashboard
+  - add treatment policy and table to causal analysis dashboard
+  - create new custom individual feature importance component
+- breaking changes
+- bug fixes
+  - Model Analysis:
+    - sticky layer for cohort and dashboard settings
+    - restrict EA tree to 80% width
+    - restrict ipykernel<0.6
+    - fix flyout title and description
+    - fix add button behavior by adding components in the appropriate spot
+    - show add button only for components that can render
+    - add validations for input parameters for Model Analysis class
+    - validate treatment features in causal manager
+    - explicitly pass model task to MimicExplainer in model analyzer
+  - Error Analysis:
+    - remove 100k row limit
+    - fix zero nodes in tree view
+    - fix search functionality in features list
+    - fix displayed filter order in tree view to start from root node
+    - raise warning for older version of pandas when feature names contain '-'
+    - expand number of decimals shown in filter tooltips when values below 0.1
+    - fix regression case for 1d heatmap matrix metrics being calculated incorrectly
+  - set original data from dropdown for counterfactuals
+  - use test data instead of train data for error analysis manager in model analyzer
+  - causal analysis to keep all levels in dataframe outputs
+  - pin networkx pip package to prevent installation of matplotlib
+  - add target_column causal policy gain to UI control
+- other
+  - unit tests for multiclass classification for causal analysis
+  - add model analysis notebooks to notebook gate
+  - add test for causal manager for None categoricals
+  - fix example code for model assessment
+
 ## v0.8.0
 
 - educational materials

@@ -8,7 +8,8 @@ import {
   IDataset,
   IErrorAnalysisConfig,
   ICausalAnalysisData,
-  ICounterfactualData
+  ICounterfactualData,
+  ICausalWhatIfData
 } from "@responsible-ai/core-ui";
 import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -46,6 +47,14 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestCausalWhatIf?: (
+    id: string,
+    features: unknown[],
+    featureName: string,
+    newValue: unknown[],
+    target: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalWhatIfData[]>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryMessage) => void;
