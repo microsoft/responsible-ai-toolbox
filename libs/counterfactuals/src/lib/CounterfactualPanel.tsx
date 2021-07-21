@@ -179,9 +179,11 @@ export class CounterfactualPanel extends React.Component<
   }
   private processSelectionData(items: any, row: number): any {
     const data = _.cloneDeep(items[row]);
-    Object.keys(data).forEach(
-      (k) => (data[k] = data[k] === "-" ? items[0][k] : data[k])
-    );
+    Object.keys(data).forEach((k) => {
+      data[k] = data[k] === "-" ? items[0][k] : data[k];
+      const keyIndex = this.props.data?.feature_names.indexOf(k);
+      this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
+    });
     data["row"] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       this.props.selectedIndex
@@ -229,12 +231,14 @@ export class CounterfactualPanel extends React.Component<
     }
     return <div />;
   }
-  private updateData(
+  private updateColValue(
     evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ): void {
     const target = evt.target as Element;
     const id = target.id;
+    const keyIndex = this.props.data?.feature_names.indexOf(id);
+    this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = toNumber(newValue);
       return { data: prevState.data };
@@ -279,7 +283,7 @@ export class CounterfactualPanel extends React.Component<
               }
               id={column.key}
               disabled={column.key === "row"}
-              onChange={this.updateData.bind(this)}
+              onChange={this.updateColValue.bind(this)}
             />
           </Stack.Item>
           {column.key === "row" && (
@@ -300,9 +304,7 @@ export class CounterfactualPanel extends React.Component<
                     jointDataset={this.context.jointDataset}
                     metadata={this.context.modelMetadata}
                     selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.context.jointDataset.getRow(
-                      this.props.selectedIndex
-                    )}
+                    temporaryPoint={this.props.temporaryPoint}
                   />
                 </Callout>
               )}
