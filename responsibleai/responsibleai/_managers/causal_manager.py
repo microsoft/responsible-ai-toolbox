@@ -4,6 +4,7 @@
 """Defines the Causal Manager class."""
 import numpy as np
 import pandas as pd
+from uuid import uuid4
 
 from econml.solutions.causal_analysis import CausalAnalysis
 
@@ -56,6 +57,7 @@ class CausalConfig(BaseConfig):
         self.min_tree_leaf_samples = min_tree_leaf_samples
         self.max_tree_depth = max_tree_depth
         self.skip_cat_limit_checks = skip_cat_limit_checks
+        self.id = str(uuid4())
 
         # Outputs
         self.causal_analysis = None
@@ -98,6 +100,8 @@ class CausalConfig(BaseConfig):
             'global_effects': self.global_effects,
             'local_effects': self.local_effects,
             'policies': self.policies,
+            'id': self.id,
+            'treatment_features': self.treatment_features
         }
 
 
@@ -296,6 +300,20 @@ class CausalManager(BaseManager):
     def list(self):
         pass
 
+    def _whatif(self, id, X, Xnew, feature_index, y):
+        """Get what-if data
+
+        :return: List of CausalData objects.
+        :rtype: List[CausalData]
+        """
+        causal_filtered = [x for x in self.get() if x["id"] == id]
+        if len(causal_filtered) == 0:
+            raise Exception(f"Failed to find causal with id: {id}")
+        causal = causal_filtered[0]['causal_analysis']
+        whatif = causal.whatif(X, Xnew, feature_index, y).to_dict(
+            orient="records")
+        return whatif
+
     def get_data(self):
         """Get causal data
 
@@ -306,6 +324,8 @@ class CausalManager(BaseManager):
 
     def _get_causal_object(self, causal_insights):
         causal_data = CausalData()
+        causal_data.id = causal_insights['id']
+        causal_data.treatment_features = causal_insights['treatment_features']
         causal_data.global_effects = causal_insights['global_effects']\
             .reset_index().to_dict(orient='records')
         causal_data.local_effects = [list(v) for v in causal_insights[

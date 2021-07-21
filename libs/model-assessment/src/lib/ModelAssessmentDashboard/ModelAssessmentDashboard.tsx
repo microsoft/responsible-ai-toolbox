@@ -96,6 +96,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
+          requestCausalWhatIf: this.props.requestCausalWhatIf,
           requestLocalFeatureExplanations: this.props
             .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
@@ -269,6 +270,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   {t.key === GlobalTabKeys.CounterfactualsTab &&
                     this.props.counterfactualData?.[0] && (
                       <CounterfactualsTab
+                        classDimension={this.props.classDimension}
                         data={this.props.counterfactualData?.[0]}
                       />
                     )}
