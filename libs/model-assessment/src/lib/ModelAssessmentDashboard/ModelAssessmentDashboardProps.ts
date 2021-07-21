@@ -27,7 +27,7 @@ export interface IModelAssessmentDashboardProps
     IModelAssessmentData {
   locale?: string;
   stringParams?: IStringsParam;
-
+  classDimension?: 1 | 2 | 3;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
