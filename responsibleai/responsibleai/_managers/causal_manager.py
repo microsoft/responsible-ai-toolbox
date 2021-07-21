@@ -186,6 +186,12 @@ class CausalManager(BaseManager):
                                       will skip these checks.
         :type skip_cat_limit_checks: bool
         """
+        if not set(treatment_features).issubset(set(self._train.columns)):
+            raise UserConfigValidationException(
+                'Found some feature names in treatment feature list which'
+                ' do not occur in train data'
+            )
+
         causal_config = CausalConfig(
             treatment_features,
             heterogeneity_features=heterogeneity_features,
