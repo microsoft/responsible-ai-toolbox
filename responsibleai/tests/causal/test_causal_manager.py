@@ -32,3 +32,4 @@ class TestCausalManager:
 
         assert len(results) == 1
         assert len(results[0]['policies']) == 1
+        assert len(results[0]['treatment_features']) == 1
