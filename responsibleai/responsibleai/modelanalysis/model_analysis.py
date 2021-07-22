@@ -354,6 +354,7 @@ class ModelAnalysis(object):
     def _get_dataset(self):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
+        dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(
             self._classes)
 
