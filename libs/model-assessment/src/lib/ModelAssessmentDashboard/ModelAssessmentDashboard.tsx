@@ -270,7 +270,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   {t.key === GlobalTabKeys.CounterfactualsTab &&
                     this.props.counterfactualData?.[0] && (
                       <CounterfactualsTab
-                        classDimension={this.props.classDimension}
                         data={this.props.counterfactualData?.[0]}
                       />
                     )}
