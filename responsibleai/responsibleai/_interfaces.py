@@ -119,7 +119,7 @@ class CounterfactualData:
     local_importance: List[List[float]]
     model_type: str
     desired_class: str
-    desired_range: List[Tuple[float]]
+    desired_range: Tuple[float]
 
 
 class ModelAnalysisData:
