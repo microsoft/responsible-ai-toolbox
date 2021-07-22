@@ -212,14 +212,18 @@ function buildModelMetadata(
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
-    props.dataset.features,
-    props.dataset.categorical_map
+    props.dataset.features
+  ).map(
+    (v, i) =>
+      v ||
+      props.dataset.categorical_features.includes(
+        props.dataset.feature_names[i]
+      )
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
       props.dataset.features,
-      featureIsCategorical,
-      props.dataset.categorical_map
+      featureIsCategorical
     ) || [];
   return {
     classNames,

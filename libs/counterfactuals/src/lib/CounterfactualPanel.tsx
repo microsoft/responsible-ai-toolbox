@@ -111,7 +111,7 @@ export class CounterfactualPanel extends React.Component<
               {localization.Counterfactuals.panelDescription}
             </Text>
           </Stack.Item>
-          <Stack.Item>
+          <Stack.Item className={classes.listContainer}>
             <DetailsList
               items={items}
               columns={columns}

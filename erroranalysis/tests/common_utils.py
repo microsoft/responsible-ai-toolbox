@@ -209,3 +209,7 @@ def create_titanic_pipeline(X_train, y_train):
                            LogisticRegression(solver='lbfgs'))])
     clf.fit(X_train, y_train)
     return clf
+
+
+def create_dataframe(data, feature_names):
+    return pd.DataFrame(data, columns=feature_names)
