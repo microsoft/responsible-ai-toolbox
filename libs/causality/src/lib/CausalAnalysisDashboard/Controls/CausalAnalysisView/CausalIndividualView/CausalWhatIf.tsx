@@ -66,7 +66,7 @@ export class CausalWhatIf extends React.Component<
     if (!this.context.causalAnalysisData) {
       return <NoData />;
     }
-    const treatmentOptions: IComboBoxOption[] = this.context.causalAnalysisData?.treatment_features.map(
+    const treatmentOptions: IComboBoxOption[] = this.context.causalAnalysisData?.config.treatment_features.map(
       (n) => ({
         key: n,
         text: n

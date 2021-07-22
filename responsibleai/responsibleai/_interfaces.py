@@ -109,6 +109,7 @@ class CausalConfig:
 
 class CausalData:
     id: str
+    config: CausalConfig
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
     policies: List[CausalPolicy]

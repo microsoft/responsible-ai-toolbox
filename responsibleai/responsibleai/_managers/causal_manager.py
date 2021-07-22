@@ -3,7 +3,6 @@
 
 """Manager for causal analysis."""
 import pandas as pd
-import sys
 
 from econml.solutions.causal_analysis import CausalAnalysis
 from pathlib import Path
