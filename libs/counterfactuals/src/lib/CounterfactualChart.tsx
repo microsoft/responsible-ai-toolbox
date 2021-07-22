@@ -381,8 +381,7 @@ export class CounterfactualChart extends React.PureComponent<
       return this.props.data.desired_class;
     }
     if (this.props.data.desired_range) {
-      const ranges = this.props.data.desired_range.map((t) => t.join("->"));
-      return ranges.join(",");
+      return this.props.data.desired_range.join("->");
     }
     return "";
   }
