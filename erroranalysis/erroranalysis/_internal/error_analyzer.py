@@ -8,9 +8,10 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.feature_selection import (
     mutual_info_classif, mutual_info_regression)
-from erroranalysis._internal.matrix_filter import compute_json_matrix
+from erroranalysis._internal.matrix_filter import (
+    compute_matrix as _compute_matrix)
 from erroranalysis._internal.surrogate_error_tree import (
-    compute_json_error_tree)
+    compute_error_tree as _compute_error_tree)
 from erroranalysis._internal.error_report import ErrorReport
 from erroranalysis._internal.constants import ModelTask, Metrics
 from erroranalysis._internal.version_checker import check_pandas_version
@@ -99,7 +100,7 @@ class BaseAnalyzer(ABC):
         return self._metric
 
     def compute_matrix(self, features, filters, composite_filters):
-        return compute_json_matrix(self, features, filters, composite_filters)
+        return _compute_matrix(self, features, filters, composite_filters)
 
     def compute_error_tree(self,
                            features,
@@ -107,28 +108,28 @@ class BaseAnalyzer(ABC):
                            composite_filters,
                            max_depth=None,
                            num_leaves=None):
-        return compute_json_error_tree(self,
-                                       features,
-                                       filters,
-                                       composite_filters,
-                                       max_depth=max_depth,
-                                       num_leaves=num_leaves)
+        return _compute_error_tree(self,
+                                   features,
+                                   filters,
+                                   composite_filters,
+                                   max_depth=max_depth,
+                                   num_leaves=num_leaves)
 
     def create_error_report(self,
                             filter_features=None,
                             max_depth=None,
                             num_leaves=None):
-        json_tree = self.compute_error_tree(self.feature_names,
-                                            None,
-                                            None,
-                                            max_depth=max_depth,
-                                            num_leaves=num_leaves)
-        json_matrix = None
+        tree = self.compute_error_tree(self.feature_names,
+                                       None,
+                                       None,
+                                       max_depth=max_depth,
+                                       num_leaves=num_leaves)
+        matrix = None
         if filter_features is not None:
-            json_matrix = self.compute_matrix(filter_features,
-                                              None,
-                                              None)
-        return ErrorReport(json_tree, json_matrix)
+            matrix = self.compute_matrix(filter_features,
+                                         None,
+                                         None)
+        return ErrorReport(tree, matrix)
 
     def compute_importances(self):
         input_data = self.dataset
