@@ -6,7 +6,7 @@ import React from "react";
 
 import { App } from "./App";
 
-describe("FairnessWizardV2", () => {
+describe("FairnessWizardV1", () => {
   it("should render successfully", () => {
     const tree = shallow(<App />);
     expect(tree).toMatchSnapshot();
