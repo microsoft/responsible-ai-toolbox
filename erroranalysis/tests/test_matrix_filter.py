@@ -198,8 +198,9 @@ def run_error_analyzer(model,
         features = [feature_names[0], feature_names[1]]
     else:
         features = matrix_features
-    json_matrix = error_analyzer.compute_matrix(features, filters,
-                                                composite_filters)
+    matrix = error_analyzer.compute_matrix(features,
+                                           filters,
+                                           composite_filters)
     validation_data = X_test
     if filters is not None or composite_filters is not None:
         validation_data = filter_from_cohort(X_test,
@@ -224,37 +225,37 @@ def run_error_analyzer(model,
     else:
         raise NotImplementedError(
             "Metric {} validation not supported yet".format(metric))
-    validate_matrix(json_matrix,
+    validate_matrix(matrix,
                     expected_count,
                     expected_error,
                     features,
                     metric=metric)
 
 
-def validate_matrix(json_matrix, exp_total_count,
+def validate_matrix(matrix, exp_total_count,
                     exp_total_error,
                     features,
                     metric=Metrics.ERROR_RATE):
-    assert MATRIX in json_matrix
-    assert CATEGORY1 in json_matrix
-    num_cat1 = len(json_matrix[CATEGORY1][VALUES])
+    assert MATRIX in matrix
+    assert CATEGORY1 in matrix
+    num_cat1 = len(matrix[CATEGORY1][VALUES])
     if len(features) == 2:
-        assert len(json_matrix[MATRIX]) == num_cat1
-        assert CATEGORY2 in json_matrix
-        num_cat2 = len(json_matrix[CATEGORY2][VALUES])
-        assert len(json_matrix[MATRIX][0]) == num_cat2
-        validate_matrix_metric(json_matrix, exp_total_count,
+        assert len(matrix[MATRIX]) == num_cat1
+        assert CATEGORY2 in matrix
+        num_cat2 = len(matrix[CATEGORY2][VALUES])
+        assert len(matrix[MATRIX][0]) == num_cat2
+        validate_matrix_metric(matrix, exp_total_count,
                                exp_total_error, metric,
                                num_cat1, num_cat2)
     else:
-        assert len(json_matrix[MATRIX][0]) == num_cat1
-        assert len(json_matrix[MATRIX]) == 1
-        validate_matrix_metric(json_matrix, exp_total_count,
+        assert len(matrix[MATRIX][0]) == num_cat1
+        assert len(matrix[MATRIX]) == 1
+        validate_matrix_metric(matrix, exp_total_count,
                                exp_total_error, metric,
                                1, num_cat1)
 
 
-def validate_matrix_metric(json_matrix, exp_total_count,
+def validate_matrix_metric(matrix, exp_total_count,
                            exp_total_error, metric,
                            num_cat1, num_cat2):
     if metric == Metrics.ERROR_RATE:
@@ -263,8 +264,8 @@ def validate_matrix_metric(json_matrix, exp_total_count,
         total_false_count = 0
         for i in range(num_cat1):
             for j in range(num_cat2):
-                total_count += json_matrix[MATRIX][i][j][COUNT]
-                total_false_count += json_matrix[MATRIX][i][j][FALSE_COUNT]
+                total_count += matrix[MATRIX][i][j][COUNT]
+                total_false_count += matrix[MATRIX][i][j][FALSE_COUNT]
         assert exp_total_count == total_count
         assert exp_total_error == total_false_count
     elif metric == Metrics.MEAN_SQUARED_ERROR:
@@ -273,11 +274,11 @@ def validate_matrix_metric(json_matrix, exp_total_count,
         total_metric_value = 0
         for i in range(num_cat1):
             for j in range(num_cat2):
-                count = json_matrix[MATRIX][i][j][COUNT]
+                count = matrix[MATRIX][i][j][COUNT]
                 total_count += count
-                cell_value = json_matrix[MATRIX][i][j][METRIC_VALUE] * count
+                cell_value = matrix[MATRIX][i][j][METRIC_VALUE] * count
                 total_metric_value += cell_value
-                metric_name = json_matrix[MATRIX][i][j][METRIC_NAME]
+                metric_name = matrix[MATRIX][i][j][METRIC_NAME]
                 assert metric_name == metric_to_display_name[metric]
         total_metric_value = total_metric_value / total_count
         assert exp_total_count == total_count

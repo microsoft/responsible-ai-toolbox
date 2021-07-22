@@ -152,7 +152,7 @@ class CausalManager(BaseManager):
         treatment_features,
         heterogeneity_features=None,
         nuisance_model=CausalConstants.LINEAR,
-        heterogeneity_model=None,
+        heterogeneity_model=CausalConstants.LINEAR,
         alpha=CausalConstants.DEFAULT_ALPHA,
         upper_bound_on_cat_expansion=CausalConstants.DEFAULT_MAX_CAT_EXPANSION,
         treatment_cost=CausalConstants.DEFAULT_TREATMENT_COST,
@@ -245,6 +245,7 @@ class CausalManager(BaseManager):
                 heterogeneity_inds=config.heterogeneity_features,
                 classification=is_classification,
                 nuisance_models=config.nuisance_model,
+                heterogeneity_model=config.heterogeneity_model,
                 upper_bound_on_cat_expansion=config.max_cat_expansion,
                 skip_cat_limit_checks=config.skip_cat_limit_checks,
                 n_jobs=-1)

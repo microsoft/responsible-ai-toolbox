@@ -39,6 +39,7 @@
           "balanced_accuracy_score",
           "balanced_accuracy_score_min",
           "balanced_root_mean_squared_error",
+          "categorical_features",
           "categorical_map",
           "cfs_list",
           "ci_lower",
