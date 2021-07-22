@@ -49,6 +49,22 @@ def compute_json_error_tree(analyzer,
                             composite_filters,
                             max_depth=DEFAULT_MAX_DEPTH,
                             num_leaves=DEFAULT_NUM_LEAVES):
+    # Note: this is for backcompat for older versions
+    # of raiwidgets pypi package
+    return compute_error_tree(analyzer,
+                              features,
+                              filters,
+                              composite_filters,
+                              max_depth,
+                              num_leaves)
+
+
+def compute_error_tree(analyzer,
+                       features,
+                       filters,
+                       composite_filters,
+                       max_depth=DEFAULT_MAX_DEPTH,
+                       num_leaves=DEFAULT_NUM_LEAVES):
     # Fit a surrogate model on errors
     if max_depth is None:
         max_depth = DEFAULT_MAX_DEPTH
@@ -126,18 +142,18 @@ def compute_json_error_tree(analyzer,
     filtered_indexed_df[DIFF] = diff
     filtered_indexed_df[TRUE_Y] = true_y
     filtered_indexed_df[PRED_Y] = pred_y
-    model_json = surrogate._Booster.dump_model()
-    tree_structure = model_json["tree_info"][0]['tree_structure']
+    dumped_model = surrogate._Booster.dump_model()
+    tree_structure = dumped_model["tree_info"][0]['tree_structure']
     max_split_index = get_max_split_index(tree_structure) + 1
-    json_tree = traverse(filtered_indexed_df,
-                         tree_structure,
-                         max_split_index,
-                         (categories_reindexed,
-                          cat_ind_reindexed),
-                         [],
-                         dataset_sub_names,
-                         metric=analyzer.metric)
-    return json_tree
+    tree = traverse(filtered_indexed_df,
+                    tree_structure,
+                    max_split_index,
+                    (categories_reindexed,
+                     cat_ind_reindexed),
+                    [],
+                    dataset_sub_names,
+                    metric=analyzer.metric)
+    return tree
 
 
 def create_surrogate_model(analyzer,
@@ -223,7 +239,7 @@ def traverse(df,
              tree,
              max_split_index,
              categories,
-             json,
+             dict,
              feature_names,
              parent=None,
              side=TreeSide.UNKNOWN,
@@ -235,21 +251,21 @@ def traverse(df,
     else:
         nodeid = 0
 
-    # write current node to json
-    json, df = node_to_json(df, tree, nodeid, categories, json,
+    # write current node to a dictionary that can be saved as json
+    dict, df = node_to_dict(df, tree, nodeid, categories, dict,
                             feature_names, metric, parent, side)
 
-    # write children to json
+    # write children to a dictionary that can be saved as json
     if 'leaf_value' not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
-        json = traverse(df, left_child, max_split_index,
-                        categories, json, feature_names,
+        dict = traverse(df, left_child, max_split_index,
+                        categories, dict, feature_names,
                         tree, TreeSide.LEFT_CHILD, metric)
-        json = traverse(df, right_child, max_split_index,
-                        categories, json, feature_names,
+        dict = traverse(df, right_child, max_split_index,
+                        categories, dict, feature_names,
                         tree, TreeSide.RIGHT_CHILD, metric)
-    return json
+    return dict
 
 
 def create_categorical_arg(parent_threshold):
@@ -283,7 +299,7 @@ def create_categorical_query(method, arg, p_node_name, parent, categories):
     return query, condition
 
 
-def node_to_json(df, tree, nodeid, categories, json,
+def node_to_dict(df, tree, nodeid, categories, json,
                  feature_names, metric, parent=None,
                  side=TreeSide.UNKNOWN):
     p_node_name = None
