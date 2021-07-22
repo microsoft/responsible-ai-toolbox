@@ -3,7 +3,7 @@
 
 export interface ICausalAnalysisData {
   id: string;
-  config: ICausalConfig;
+  config?: ICausalConfig;
   global_effects: ICausalAnalysisSingleData[];
   local_effects: ICausalAnalysisSingleData[][];
   policies?: ICausalPolicy[];
