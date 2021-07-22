@@ -101,8 +101,8 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     # validate deserialized error report json
     error_report_deserialized = ErrorReport.from_json(json_str1)
     assert error_report_deserialized.id == error_report1.id
-    assert error_report_deserialized.json_matrix == error_report1.json_matrix
-    assert error_report_deserialized.json_tree == error_report1.json_tree
+    assert error_report_deserialized.matrix == error_report1.matrix
+    assert error_report_deserialized.tree == error_report1.tree
 
     # validate error report does not modify original dataset in ModelAnalyzer
     if isinstance(X_test, pd.DataFrame):

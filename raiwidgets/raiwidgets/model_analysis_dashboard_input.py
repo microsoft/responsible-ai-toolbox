@@ -56,11 +56,11 @@ class ModelAnalysisDashboardInput:
     def debug_ml(self, data):
         try:
             features, filters, composite_filters, max_depth, num_leaves = data
-            json_tree = self._error_analyzer.compute_error_tree(
+            tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
                 max_depth, num_leaves)
             return {
-                WidgetRequestResponseConstants.data: json_tree
+                WidgetRequestResponseConstants.data: tree
             }
         except Exception as e:
             print(e)
@@ -76,10 +76,10 @@ class ModelAnalysisDashboardInput:
             features, filters, composite_filters = data
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.data: []}
-            json_matrix = self._error_analyzer.compute_matrix(
+            matrix = self._error_analyzer.compute_matrix(
                 features, filters, composite_filters)
             return {
-                WidgetRequestResponseConstants.data: json_matrix
+                WidgetRequestResponseConstants.data: matrix
             }
         except Exception as e:
             print(e)
