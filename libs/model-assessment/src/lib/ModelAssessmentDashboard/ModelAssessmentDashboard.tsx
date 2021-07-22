@@ -125,7 +125,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }));
             }}
           />
-          <Stack tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}>
+          <Stack tokens={{ childrenGap: "10px", padding: "50px 0 0 0" }}>
             <Stack.Item
               className={modelAssessmentDashboardStyles.section}
               styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
@@ -270,7 +270,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   {t.key === GlobalTabKeys.CounterfactualsTab &&
                     this.props.counterfactualData?.[0] && (
                       <CounterfactualsTab
-                        classDimension={this.props.classDimension}
                         data={this.props.counterfactualData?.[0]}
                       />
                     )}

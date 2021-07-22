@@ -13,7 +13,6 @@ import React from "react";
 import { CounterfactualsView } from "./CounterfactualsView";
 
 export interface ICounterfactualsTabProps {
-  classDimension?: 1 | 2 | 3;
   data: ICounterfactualData;
 }
 
@@ -27,14 +26,13 @@ export class CounterfactualsTab extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack grow tokens={{ padding: "16px 24px" }}>
-        <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
+      <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
+        <Stack.Item>
           <Text variant={"xLarge"}>{localization.Counterfactuals.header}</Text>
-        </Stack>
-        <CounterfactualsView
-          data={this.props.data}
-          classDimension={this.props.classDimension}
-        />
+        </Stack.Item>
+        <Stack.Item>
+          <CounterfactualsView data={this.props.data} />
+        </Stack.Item>
       </Stack>
     );
   }
