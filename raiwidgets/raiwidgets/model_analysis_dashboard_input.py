@@ -67,7 +67,7 @@ class ModelAnalysisDashboardInput:
             traceback.print_exc()
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate json tree representation",
+                    f"Failed to generate json tree representation:{str(e)}",
                 WidgetRequestResponseConstants.data: []
             }
 
