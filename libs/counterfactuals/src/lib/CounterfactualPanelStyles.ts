@@ -51,10 +51,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<
       paddingTop: "5px"
     },
     listContainer: {
-      border: "1px solid red",
-      float: "left",
-      position: "relative",
-      width: "100%"
+      height: "100%",
+      maxWidth: "900px",
+      overflow: "scroll"
     },
     negativeNumber: {
       color: theme.palette.red

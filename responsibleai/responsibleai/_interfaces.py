@@ -18,7 +18,7 @@ class Dataset:
     probability_y: List
     true_y: List
     class_names: List[str]
-    categorical_map: Dict[int, List[str]]
+    categorical_features: [str]
     target_column: str
 
 
