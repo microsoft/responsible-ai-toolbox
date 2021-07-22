@@ -10,6 +10,7 @@ import {
 } from "@responsible-ai/core-ui";
 
 export const bostonData: IDataset = {
+  categorical_features: ["CHAS"],
   feature_names: [
     "CRIM",
     "ZN",

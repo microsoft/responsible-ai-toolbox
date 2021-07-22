@@ -23,6 +23,10 @@ def filter_from_cohort(df, filters, composite_filters,
                        pred_y=None):
     if not isinstance(df, pd.DataFrame):
         df = pd.DataFrame(df, columns=feature_names)
+    else:
+        # Note: we make a non-deep copy of the input dataframe since
+        # we will add columns below
+        df = df.copy()
     df[TRUE_Y] = true_y
     if pred_y is not None:
         df[PRED_Y] = pred_y

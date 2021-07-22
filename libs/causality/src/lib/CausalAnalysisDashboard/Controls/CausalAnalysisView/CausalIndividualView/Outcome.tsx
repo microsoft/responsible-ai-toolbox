@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalWhatIfData } from "@responsible-ai/core-ui";
 import { Label, Spinner, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 interface IOutcomeProps {
   label: string;
-  value: ICausalWhatIfData | undefined;
+  value: number | undefined;
 }
 
 const outcome: React.FC<IOutcomeProps> = (props: IOutcomeProps) => {
@@ -16,11 +15,7 @@ const outcome: React.FC<IOutcomeProps> = (props: IOutcomeProps) => {
       <div />
       <Stack>
         <Label>{props.label}</Label>
-        {props.value === undefined ? (
-          <Spinner />
-        ) : (
-          <Text>{props.value.point_estimate}</Text>
-        )}
+        {props.value === undefined ? <Spinner /> : <Text>{props.value}</Text>}
       </Stack>
     </Stack>
   );
