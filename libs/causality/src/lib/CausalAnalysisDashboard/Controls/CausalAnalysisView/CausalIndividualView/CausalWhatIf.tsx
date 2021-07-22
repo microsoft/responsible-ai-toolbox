@@ -37,7 +37,7 @@ interface ICausalWhatIfState {
   treatmentValueMin?: number;
   treatmentValueMax?: number;
   treatmentValueStep?: number;
-  currentOutcome?: ICausalWhatIfData;
+  currentOutcome?: number;
   newOutcome?: ICausalWhatIfData;
 }
 
@@ -56,10 +56,13 @@ export class CausalWhatIf extends React.Component<
   }
   public componentDidUpdate(prev: ICausalWhatIfProps): void {
     if (prev.selectedIndex !== this.props.selectedIndex) {
-      this.getWhatIf();
+      this.setTreatmentFeature();
     }
   }
   public render(): React.ReactNode {
+    if (this.context.dataset.task_type !== "regression") {
+      return React.Fragment;
+    }
     if (!this.context.causalAnalysisData) {
       return <NoData />;
     }
@@ -71,9 +74,6 @@ export class CausalWhatIf extends React.Component<
     );
 
     const classNames = causalIndividualChartStyles();
-    // if (this.context.dataset.task_type !== "regression") {
-    //   return React.Fragment;
-    // }
     return (
       <>
         <ComboBox
@@ -99,9 +99,8 @@ export class CausalWhatIf extends React.Component<
               max={this.state.treatmentValueMax}
               defaultValue={this.state.newTreatmentValue}
               onChange={this.onTreatmentValueChange}
-              showValue={false}
+              valueFormat={this.showNewTreatmentRawValue}
             />
-            <Text>{this.state.newTreatmentRawValue}</Text>
             <Stack horizontal>
               <Outcome
                 label={
@@ -111,7 +110,7 @@ export class CausalWhatIf extends React.Component<
               />
               <Outcome
                 label={localization.CausalAnalysis.IndividualView.newOutcome}
-                value={this.state.newOutcome}
+                value={this.state.newOutcome?.point_estimate}
               />
             </Stack>
           </Stack>
@@ -135,37 +134,44 @@ export class CausalWhatIf extends React.Component<
     );
   };
 
+  private readonly showNewTreatmentRawValue = (): string => {
+    return `${this.state.newTreatmentRawValue}`;
+  };
+
   private readonly setTreatmentFeature = (
-    _: React.FormEvent<IComboBox>,
+    _?: React.FormEvent<IComboBox>,
     option?: IComboBoxOption | undefined
   ): void => {
-    if (typeof option?.key !== "string") {
+    let featureName = this.state.treatmentFeature;
+    if (typeof option?.key === "string") {
+      featureName = option.key;
+    }
+    if (!featureName) {
       return;
     }
     if (this.props.selectedIndex === undefined) {
       this.setState({
+        currentOutcome: undefined,
         treatmentFeature: undefined,
         treatmentValueMax: undefined,
         treatmentValueMin: undefined
       });
+      return;
     }
     const featureKey =
       JointDataset.DataLabelRoot +
-      this.context.dataset.feature_names.indexOf(option.key);
-    const treatmentValue =
-      this.props.selectedIndex === undefined
-        ? undefined
-        : this.context.selectedErrorCohort.cohort.filteredData[
-            this.props.selectedIndex
-          ][featureKey];
+      this.context.dataset.feature_names.indexOf(featureName);
+    const treatmentValue = this.context.selectedErrorCohort.cohort.getRow(
+      this.props.selectedIndex
+    )[featureKey];
     const meta = this.context.jointDataset.metaDict[
       JointDataset.DataLabelRoot +
-        this.context.dataset.feature_names.indexOf(option.key)
+        this.context.dataset.feature_names.indexOf(featureName)
     ];
     let treatmentValueMin: number | undefined,
       treatmentValueMax: number | undefined,
       treatmentValueStep: number | undefined;
-    if (this.context.dataset.categorical_features.includes(option.key)) {
+    if (this.context.dataset.categorical_features.includes(featureName)) {
       treatmentValueMin = 0;
       treatmentValueMax = meta.sortedCategoricalValues
         ? meta.sortedCategoricalValues.length - 1
@@ -179,11 +185,14 @@ export class CausalWhatIf extends React.Component<
     const rawValue = this.getRawValue(treatmentValue, featureKey);
     this.setState(
       {
+        currentOutcome: this.context.selectedErrorCohort.cohort.getRow(
+          this.props.selectedIndex
+        )[JointDataset.TrueYLabel],
         currentTreatmentRawValue: rawValue,
         currentTreatmentValue: treatmentValue,
         newTreatmentRawValue: rawValue,
         newTreatmentValue: treatmentValue,
-        treatmentFeature: option.key,
+        treatmentFeature: featureName,
         treatmentValueMax,
         treatmentValueMin,
         treatmentValueStep
@@ -220,13 +229,10 @@ export class CausalWhatIf extends React.Component<
       return;
     }
     this.setState({
-      currentOutcome: undefined,
       newOutcome: undefined
     });
     const data = _.chain(
-      this.context.selectedErrorCohort.cohort.filteredData[
-        this.props.selectedIndex
-      ]
+      this.context.selectedErrorCohort.cohort.getRow(this.props.selectedIndex)
     )
       .pickBy(
         (_, k) =>
@@ -242,22 +248,18 @@ export class CausalWhatIf extends React.Component<
     this._getWhatIfController = new AbortController();
     const result = await this.context.requestCausalWhatIf(
       this.context.causalAnalysisData?.id,
-      [data, data],
+      [data],
       this.state.treatmentFeature,
-      [this.state.currentTreatmentRawValue, this.state.newTreatmentRawValue],
+      [this.state.newTreatmentRawValue],
       [
-        this.context.selectedErrorCohort.cohort.filteredData[
+        this.context.selectedErrorCohort.cohort.getRow(
           this.props.selectedIndex
-        ][JointDataset.TrueYLabel],
-        this.context.selectedErrorCohort.cohort.filteredData[
-          this.props.selectedIndex
-        ][JointDataset.TrueYLabel]
+        )[JointDataset.TrueYLabel]
       ],
       this._getWhatIfController.signal
     );
     this.setState({
-      currentOutcome: result[0],
-      newOutcome: result[1]
+      newOutcome: result[0]
     });
   };
 }
