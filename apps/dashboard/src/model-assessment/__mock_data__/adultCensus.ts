@@ -10,61 +10,16 @@ import {
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
-  categorical_map: {
-    "1": [
-      " ?",
-      " Federal-gov",
-      " Local-gov",
-      " Private",
-      " Self-emp-inc",
-      " Self-emp-not-inc",
-      " State-gov"
-    ],
-    "3": [
-      " 10th",
-      " 5th-6th",
-      " 7th-8th",
-      " 9th",
-      " Assoc-acdm",
-      " Assoc-voc",
-      " Bachelors",
-      " HS-grad",
-      " Masters",
-      " Some-college"
-    ],
-    "5": [
-      " Divorced",
-      " Married-civ-spouse",
-      " Never-married",
-      " Separated",
-      " Widowed"
-    ],
-    "6": [
-      " ?",
-      " Adm-clerical",
-      " Craft-repair",
-      " Exec-managerial",
-      " Farming-fishing",
-      " Handlers-cleaners",
-      " Machine-op-inspct",
-      " Other-service",
-      " Prof-specialty",
-      " Sales",
-      " Tech-support",
-      " Transport-moving"
-    ],
-    "7": [
-      " Husband",
-      " Not-in-family",
-      " Other-relative",
-      " Own-child",
-      " Unmarried",
-      " Wife"
-    ],
-    "8": [" Asian-Pac-Islander", " Black", " White"],
-    "9": [" Female", " Male"],
-    "13": [" ?", " Canada", " El-Salvador", " Ireland", " United-States"]
-  },
+  categorical_features: [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "gender",
+    "native-country"
+  ],
   class_names: ["<=50K", ">50K"],
   feature_names: [
     "age",
@@ -3082,6 +3037,9 @@ export const adultCounterfactualData: ICounterfactualData = {
 };
 
 export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
+  config: {
+    treatment_features: ["education-num", "fnlwgt", "capital-gain"]
+  },
   global_effects: [
     {
       ci_lower: -0.2419328967749073,
@@ -6622,8 +6580,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       },
       treatment_feature: "workclass"
     }
-  ],
-  treatment_features: ["education-num", "fnlwgt", "capital-gain"]
+  ]
 };
 export const adultCensusCausalErrorAnalysisConfig: IErrorAnalysisConfig = {
   maxDepth: 3,

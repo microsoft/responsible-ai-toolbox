@@ -10,6 +10,7 @@ import {
 } from "@responsible-ai/core-ui";
 
 export const bostonData: IDataset = {
+  categorical_features: ["CHAS"],
   feature_names: [
     "CRIM",
     "ZN",
@@ -3617,6 +3618,13 @@ export const bostonCounterfactualData: ICounterfactualData = {
 };
 
 export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
+  config: {
+    treatment_features: [
+      "OverTime (base=No): Yes",
+      "StockOptionLevel",
+      "MonthlyIncome"
+    ]
+  },
   global_effects: [
     {
       ci_lower: -0.2419328967749073,
@@ -6085,11 +6093,6 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       },
       treatment_feature: "hours-per-week"
     }
-  ],
-  treatment_features: [
-    "OverTime (base=No): Yes",
-    "StockOptionLevel",
-    "MonthlyIncome"
   ]
 };
 export const bostonErrorAnalysisConfig: IErrorAnalysisConfig = {

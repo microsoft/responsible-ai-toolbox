@@ -4,8 +4,7 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData,
-  IDataset
+  IFairnessData
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -173,16 +172,8 @@ export const applications: IApplications = <const>{
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoModelData: {
         classDimension: 2,
-        dataset: {
-          categorical_map: adultCensusWithFairnessDataset.categorical_map,
-          class_names: adultCensusWithFairnessDataset.class_names,
-          feature_names: adultCensusWithFairnessDataset.feature_names,
-          features: adultCensusWithFairnessDataset.features,
-          target_column: adultCensusWithFairnessDataset.target_column,
-          task_type: adultCensusWithFairnessDataset.task_type,
-          true_y: adultCensusWithFairnessDataset.true_y
-        } as IDataset
-      } as IModelAssessmentDataSet,
+        dataset: adultCensusWithFairnessDataset
+      },
       bostonData: {
         classDimension: 1,
         dataset: bostonDataMAD,

@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import numpy as np
 import pandas as pd
 import pytest
 import uuid
@@ -8,8 +9,9 @@ import uuid
 
 from erroranalysis._internal.error_report import ErrorReport
 from common_utils import (
-    create_boston_data, create_iris_data, create_cancer_data,
-    create_models_classification, create_models_regression)
+    create_boston_data, create_dataframe, create_iris_data,
+    create_cancer_data, create_models_classification,
+    create_models_regression)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 
@@ -42,6 +44,18 @@ class TestErrorReport(object):
     def test_error_report_boston(self):
         X_train, X_test, y_train, y_test, feature_names = \
             create_boston_data()
+        models = create_models_regression(X_train, y_train)
+
+        for model in models:
+            categorical_features = []
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               categorical_features)
+
+    def test_error_report_boston_pandas(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_boston_data()
+        X_train = create_dataframe(X_train, feature_names)
+        X_test = create_dataframe(X_test, feature_names)
         models = create_models_regression(X_train, y_train)
 
         for model in models:
@@ -83,7 +97,15 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     json_str1 = error_report1.to_json()
     json_str2 = error_report2.to_json()
     assert json_str1 != json_str2
+
+    # validate deserialized error report json
     error_report_deserialized = ErrorReport.from_json(json_str1)
     assert error_report_deserialized.id == error_report1.id
-    assert error_report_deserialized.json_matrix == error_report1.json_matrix
-    assert error_report_deserialized.json_tree == error_report1.json_tree
+    assert error_report_deserialized.matrix == error_report1.matrix
+    assert error_report_deserialized.tree == error_report1.tree
+
+    # validate error report does not modify original dataset in ModelAnalyzer
+    if isinstance(X_test, pd.DataFrame):
+        assert X_test.equals(model_analyzer.dataset)
+    else:
+        assert np.array_equal(X_test, model_analyzer.dataset)

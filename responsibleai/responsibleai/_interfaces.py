@@ -18,7 +18,7 @@ class Dataset:
     probability_y: List
     true_y: List
     class_names: List[str]
-    categorical_map: Dict[int, List[str]]
+    categorical_features: [str]
     target_column: str
 
 
@@ -103,12 +103,16 @@ class CausalPolicy:
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
 
+class CausalConfig:
+    treatment_features: [str]
+
+
 class CausalData:
+    id: str
+    config: CausalConfig
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
     policies: List[CausalPolicy]
-    id: str
-    treatment_features: [str]
 
 
 class CounterfactualData:
