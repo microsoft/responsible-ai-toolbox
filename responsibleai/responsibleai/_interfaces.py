@@ -103,12 +103,16 @@ class CausalPolicy:
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
 
+class CausalConfig:
+    treatment_features: [str]
+
+
 class CausalData:
+    id: str
+    config: CausalConfig
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
     policies: List[CausalPolicy]
-    id: str
-    treatment_features: [str]
 
 
 class CounterfactualData:

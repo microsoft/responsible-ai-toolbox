@@ -4,22 +4,23 @@
 """Defines the ModelAnalysis class."""
 
 import json
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pickle
+
 from pathlib import Path
 
+from responsibleai._input_processing import _convert_to_list
+from responsibleai._interfaces import ModelAnalysisData, Dataset
 from responsibleai._internal.constants import\
     ManagerNames, Metadata, SKLearn
-from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._managers.counterfactual_manager import (
     CounterfactualManager)
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
-from responsibleai._interfaces import ModelAnalysisData, Dataset
-from responsibleai._input_processing import _convert_to_list
-from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai._managers.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.modelanalysis.constants import ModelTask
 
 
 _DTYPES = 'dtypes'
@@ -61,8 +62,10 @@ class ModelAnalysis(object):
     :param train_labels: The class labels in the training dataset
     :type train_labels: ndarray
     :param serializer: Picklable custom serializer with save and load
-        methods defined for model that is not serializable. The save
-        method returns a dictionary state and load method returns the model.
+        methods for custom model serialization.
+        The save method writes the model to file given a parent directory.
+        The load method returns the deserialized model from the same
+        parent directory.
     :type serializer: object
     """
 
@@ -479,12 +482,11 @@ class ModelAnalysis(object):
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
         if self._serializer is not None:
-            model_data = self._serializer.save(self.model)
+            # save the model
+            self._serializer.save(self.model, top_dir)
             # save the serializer
             with open(top_dir / _SERIALIZER, 'wb') as file:
                 pickle.dump(self._serializer, file)
-            # save the model
-            self._write_to_file(top_dir / _MODEL_PKL, model_data)
         else:
             has_setstate = hasattr(self.model, '__setstate__')
             has_getstate = hasattr(self.model, '__getstate__')
@@ -532,40 +534,29 @@ class ModelAnalysis(object):
 
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
-            with open(serializer_path) as file:
+            with open(serializer_path, 'rb') as file:
                 serializer = pickle.load(file)
             inst.__dict__['_' + _SERIALIZER] = serializer
-            with open(top_dir / _MODEL_PKL, 'rb') as file:
-                inst.__dict__[_MODEL] = serializer.load(file)
+            inst.__dict__[_MODEL] = serializer.load(top_dir)
         else:
             inst.__dict__['_' + _SERIALIZER] = None
             with open(top_dir / _MODEL_PKL, 'rb') as file:
                 inst.__dict__[_MODEL] = pickle.load(file)
 
         # load each of the individual managers
+        manager_map = {
+            ManagerNames.CAUSAL: CausalManager,
+            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
+            ManagerNames.EXPLAINER: ExplainerManager,
+        }
         managers = []
-        cm_name = '_' + ManagerNames.CAUSAL + '_manager'
-        causal_dir = top_dir / ManagerNames.CAUSAL
-        causal_manager = CausalManager._load(causal_dir, inst)
-        inst.__dict__[cm_name] = causal_manager
-        managers.append(causal_manager)
-
-        cfm_name = '_' + ManagerNames.COUNTERFACTUAL + '_manager'
-        cf_dir = top_dir / ManagerNames.COUNTERFACTUAL
-        counterfactual_manager = CounterfactualManager._load(cf_dir, inst)
-        inst.__dict__[cfm_name] = counterfactual_manager
-        managers.append(counterfactual_manager)
-
-        eam_name = '_' + ManagerNames.ERROR_ANALYSIS + '_manager'
-        ea_dir = top_dir / ManagerNames.ERROR_ANALYSIS
-        error_analysis_manager = ErrorAnalysisManager._load(ea_dir, inst)
-        inst.__dict__[eam_name] = error_analysis_manager
-
-        exm_name = '_' + ManagerNames.EXPLAINER + '_manager'
-        exp_dir = top_dir / ManagerNames.EXPLAINER
-        explainer_manager = ExplainerManager._load(exp_dir, inst)
-        inst.__dict__[exm_name] = explainer_manager
-        managers.append(explainer_manager)
+        for manager_name, manager_class in manager_map.items():
+            full_name = f'_{manager_name}_manager'
+            manager_dir = top_dir / manager_name
+            manager = manager_class._load(manager_dir, inst)
+            inst.__dict__[full_name] = manager
+            managers.append(manager)
 
         inst.__dict__['_' + _MANAGERS] = managers
         return inst

@@ -3037,6 +3037,9 @@ export const adultCounterfactualData: ICounterfactualData = {
 };
 
 export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
+  config: {
+    treatment_features: ["education-num", "fnlwgt", "capital-gain"]
+  },
   global_effects: [
     {
       ci_lower: -0.2419328967749073,
@@ -6577,8 +6580,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
       },
       treatment_feature: "workclass"
     }
-  ],
-  treatment_features: ["education-num", "fnlwgt", "capital-gain"]
+  ]
 };
 export const adultCensusCausalErrorAnalysisConfig: IErrorAnalysisConfig = {
   maxDepth: 3,

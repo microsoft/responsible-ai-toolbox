@@ -63,10 +63,10 @@ export class CausalWhatIf extends React.Component<
     if (this.context.dataset.task_type !== "regression") {
       return React.Fragment;
     }
-    if (!this.context.causalAnalysisData) {
+    if (!this.context.causalAnalysisData?.config) {
       return <NoData />;
     }
-    const treatmentOptions: IComboBoxOption[] = this.context.causalAnalysisData?.treatment_features.map(
+    const treatmentOptions: IComboBoxOption[] = this.context.causalAnalysisData?.config?.treatment_features.map(
       (n) => ({
         key: n,
         text: n
