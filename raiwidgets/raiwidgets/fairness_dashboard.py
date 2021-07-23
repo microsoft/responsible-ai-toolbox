@@ -5,10 +5,12 @@
 
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
-from responsibleai._input_processing import _convert_to_string_list_dict, _convert_to_list
+from responsibleai._input_processing import _convert_to_string_list_dict,\
+    _convert_to_list
 
 from flask import jsonify, request
 import numpy as np
+
 
 class FairnessDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
@@ -100,15 +102,17 @@ class FairnessDashboard(Dashboard):
         self.fairness_metrics_module = metrics_module
 
         def metrics():
-            """ 
+            """
             Note:
-                This function always calculates the error_function, if available,
-                so that the value is cached in the MetricsCache
+                This function always calculates the error_function,
+                if available, so that the value is cached in the MetricsCache
 
             Request attributes:
                 binVector: the sensitive features binning vector
-                metricKey: the metricKey that corresponds to the function that will be calculated
-                modelIndex: the model index used to index the predicted y's by that model
+                metricKey: the metricKey that corresponds to the function that
+                    will be calculated
+                modelIndex: the model index used to index the predicted y's
+                    by that model
             """
             try:
                 data = request.get_json(force=True)
@@ -119,11 +123,15 @@ class FairnessDashboard(Dashboard):
 
                 metric_name = data['metricKey']
                 error_function_name = f"{metric_name} bounds"
-                metric_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("function")
+                metric_function = \
+                    self.fairness_metrics_module._metric_methods.get(
+                        data["metricKey"]).get("function")
                 metric_method = {
                     metric_name: metric_function
                 }
-                error_function = self.fairness_metrics_module._metric_methods.get(data["metricKey"]).get("error_function")
+                error_function = \
+                    self.fairness_metrics_module._metric_methods.get(
+                        data["metricKey"]).get("error_function")
                 if error_function is not None:
                     metric_method.update({error_function_name: error_function})
 
@@ -136,22 +144,27 @@ class FairnessDashboard(Dashboard):
                 result = {"data": {
                     "global": metric_frame.overall[metric_name],
                     "bins": list([
-                                entry for entry in list(metric_frame.by_group.to_dict().values()) 
-                                if not isinstance(entry[0], tuple)
-                            ][0].values()),
+                        entry for entry in
+                        list(metric_frame.by_group.to_dict().values())
+                        if not isinstance(entry[0], tuple)
+                    ][0].values()),
                 }}
                 if error_function_name in metric_method:
                     result["data"].update({
                         "bounds": {
-                            "lower": metric_frame.overall[error_function_name][0],
-                            "upper": metric_frame.overall[error_function_name][1],
+                            "lower":
+                            metric_frame.overall[error_function_name][0],
+                            "upper":
+                            metric_frame.overall[error_function_name][1],
                         },
                         # [(x1, y1), (x2, y2), (x3, y3)...]
                         "binBounds": [{
                             "lower": bounds[0],
                             "upper": bounds[1]
                         }
-                            for bounds in list(metric_frame.by_group[error_function_name].to_dict().values())]
+                            for bounds in list(
+                                metric_frame.by_group[error_function_name]\
+                                .to_dict().values())]
                     })
                 return jsonify(result)
             except Exception as ex:
