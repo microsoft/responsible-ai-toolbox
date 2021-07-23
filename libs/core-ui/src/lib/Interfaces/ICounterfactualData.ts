@@ -10,5 +10,5 @@ export interface ICounterfactualData {
   local_importance?: number[][];
   model_type?: string;
   desired_class?: string;
-  desired_range?: number[][];
+  desired_range?: [number, number];
 }
