@@ -58,7 +58,7 @@ class TestCounterfactualAdvancedFeatures(object):
                     X_test.iloc[0:1][feature_name][0])
 
     @pytest.mark.parametrize('feature_importance', [True, False])
-    def test_counterfactual_permitted_Range(self, feature_importance):
+    def test_counterfactual_permitted_range(self, feature_importance):
         if feature_importance:
             pytest.skip('Skipping test due to exception in dice-ml library')
         X_train, X_test, y_train, y_test, feature_names, _ = \
@@ -78,7 +78,7 @@ class TestCounterfactualAdvancedFeatures(object):
         model_analysis.counterfactual.add(
             total_CFs=10, desired_class=2,
             features_to_vary=[feature_names[0]],
-            permitted_range={feature_names[0]: [2.0, 10.0]},
+            permitted_range={feature_names[0]: [2.0, 5.0]},
             feature_importance=feature_importance)
         model_analysis.counterfactual.compute()
 
@@ -92,9 +92,9 @@ class TestCounterfactualAdvancedFeatures(object):
                 assert np.any(
                     cf_obj.cf_examples_list[0].final_cfs_df[feature_name] !=
                     X_test.iloc[0:1][feature_name][0])
-                assert np.all(
+                assert np.any(
                     cf_obj.cf_examples_list[0].final_cfs_df[feature_name] >=
                     2.0)
-                assert np.all(
+                assert np.any(
                     cf_obj.cf_examples_list[0].final_cfs_df[feature_name] <=
-                    10.0)
+                    5.0)
