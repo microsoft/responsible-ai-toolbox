@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IBounds } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IBounds } from "libs/core-ui/src/lib/Interfaces/IFairnessData";
 import _ from "lodash";
 import {
   ActionButton,
@@ -19,7 +19,7 @@ import { SharedStyles } from "../Shared.styles";
 
 interface IModalHelpProps {
   theme: ITheme;
-  graphTooltipStrings: string[];
+  graphCalloutStrings: string[];
   fairnessBounds?: Array<IBounds | undefined>;
   performanceBounds?: Array<IBounds | undefined>;
   outcomeBounds?: Array<IBounds | undefined>;
@@ -50,12 +50,12 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
     const graphInfoButtonId = "graphInfoButtonId";
     const errorBarInfoButtonId = "errorBarInfoButtonId";
 
-    const graphTooltip = (
-      <Stack className={sharedStyles.toolTipWrapper}>
+    const graphCallout = (
+      <Stack className={sharedStyles.calloutWrapper}>
         <Stack>
           <ActionButton
             className={sharedStyles.actionButton}
-            onClick={this.handleOpenGraphTooltip}
+            onClick={this.handleOpenGraphCallout}
           >
             <div className={sharedStyles.infoButton} id={graphInfoButtonId}>
               i
@@ -68,14 +68,14 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
               role="alertdialog"
               gapSpace={0}
               target={`#${graphInfoButtonId}`}
-              onDismiss={this.handleCloseGraphTooltip}
+              onDismiss={this.handleCloseGraphCallout}
               setInitialFocus
             >
               <Text block variant="xLarge" className={sharedStyles.title}>
                 {localization.Fairness.ModelComparison.howToRead}
               </Text>
 
-              {this.props.graphTooltipStrings.map((text, index) => (
+              {this.props.graphCalloutStrings.map((text, index) => (
                 <Text block variant="small" key={index}>
                   {text}
                   <>
@@ -90,17 +90,17 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
       </Stack>
     );
 
-    const errorBarTooltip = (
-      <Stack className={sharedStyles.toolTipWrapper}>
+    const errorBarCallout = (
+      <Stack className={sharedStyles.calloutWrapper}>
         <ActionButton
           className={sharedStyles.actionButton}
-          onClick={this.handleOpenErrorTooltip}
+          onClick={this.handleOpenErrorCallout}
         >
           <div className={sharedStyles.infoButton} id={errorBarInfoButtonId}>
             i
           </div>
         </ActionButton>
-        <span className={sharedStyles.errorTooltipHeader}>
+        <span className={sharedStyles.errorCalloutHeader}>
           {localization.Fairness.DropdownHeaders.errorMetric}
         </span>
         {this.state.showErrorCallout && (
@@ -109,7 +109,7 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
             role="alertdialog"
             gapSpace={0}
             target={`#${errorBarInfoButtonId}`}
-            onDismiss={this.handleCloseErrorTooltip}
+            onDismiss={this.handleCloseErrorCallout}
             setInitialFocus
           >
             <Text block variant="xLarge" className={sharedStyles.title}>
@@ -124,10 +124,10 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
     );
 
     return (
-      <Stack horizontal className={sharedStyles.tooltipBarWrapper}>
-        <div className={sharedStyles.graphTooltipWrapper}>{graphTooltip}</div>
-        <div className={sharedStyles.errorTooltipWrapper}>
-          {errorBarTooltip}
+      <Stack horizontal className={sharedStyles.calloutBarWrapper}>
+        <div className={sharedStyles.graphCalloutWrapper}>{graphCallout}</div>
+        <div className={sharedStyles.errorCalloutWrapper}>
+          {errorBarCallout}
           <Toggle
             className={sharedStyles.toggle}
             id="errorMetricDropdown"
@@ -153,19 +153,19 @@ export class ModalHelp extends React.PureComponent<IModalHelpProps, IState> {
     );
   }
 
-  private readonly handleOpenErrorTooltip = (): void => {
+  private readonly handleOpenErrorCallout = (): void => {
     this.setState({ showErrorCallout: true });
   };
 
-  private readonly handleCloseErrorTooltip = (): void => {
+  private readonly handleCloseErrorCallout = (): void => {
     this.setState({ showErrorCallout: false });
   };
 
-  private readonly handleOpenGraphTooltip = (): void => {
+  private readonly handleOpenGraphCallout = (): void => {
     this.setState({ showGraphCallout: true });
   };
 
-  private readonly handleCloseGraphTooltip = (): void => {
+  private readonly handleCloseGraphCallout = (): void => {
     this.setState({ showGraphCallout: false });
   };
 }

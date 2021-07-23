@@ -27,13 +27,13 @@ export interface ISharedStyles {
   doneButton: IStyle;
   modalContentHelp: IStyle;
   modalContentHelpText: IStyle;
-  toolTipWrapper: IStyle;
-  tooltipBarWrapper: IStyle;
-  graphTooltipWrapper: IStyle;
-  errorTooltipWrapper: IStyle;
+  calloutWrapper: IStyle;
+  calloutBarWrapper: IStyle;
+  graphCalloutWrapper: IStyle;
+  errorCalloutWrapper: IStyle;
   title: IStyle;
   toggle: IStyle;
-  errorTooltipHeader: IStyle;
+  errorCalloutHeader: IStyle;
 }
 
 export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
@@ -45,6 +45,15 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
     callout: {
       padding: "20px 24px",
       width: 320
+    },
+    calloutBarWrapper: {
+      justifyContent: "space-between",
+      padding: "15px 0px"
+    },
+    calloutWrapper: {
+      alignItems: "center",
+      display: "flex",
+      flexFlow: "row wrap"
     },
     chartBody: {
       flex: 1
@@ -82,15 +91,15 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       margin: "auto",
       padding: "12px"
     },
-    errorTooltipHeader: {
+    errorCalloutHeader: {
       paddingRight: "5px"
     },
-    errorTooltipWrapper: {
+    errorCalloutWrapper: {
       alignItems: "center",
       display: "flex",
       flexFlow: "row nowrap"
     },
-    graphTooltipWrapper: {
+    graphCalloutWrapper: {
       marginLeft: "80px"
     },
     header: {
@@ -151,15 +160,6 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
     },
     toggle: {
       margin: "0px"
-    },
-    tooltipBarWrapper: {
-      justifyContent: "space-between",
-      padding: "15px 0px"
-    },
-    toolTipWrapper: {
-      alignItems: "center",
-      display: "flex",
-      flexFlow: "row wrap"
     }
   });
 };

@@ -322,7 +322,7 @@ export class PerformancePlot extends React.PureComponent<
           <div className={sharedStyles.chartWrapper}>
             <ModalHelp
               theme={theme}
-              graphTooltipStrings={performanceChartModalHelpStrings}
+              graphCalloutStrings={performanceChartModalHelpStrings}
               errorPickerProps={this.props.errorPickerProps}
               fairnessBounds={this.props.fairnessBounds}
               performanceBounds={this.props.performanceBounds}

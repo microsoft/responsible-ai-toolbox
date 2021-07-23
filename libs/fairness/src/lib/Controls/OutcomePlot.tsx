@@ -181,7 +181,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           <div className={sharedStyles.chartWrapper}>
             <ModalHelp
               theme={theme}
-              graphTooltipStrings={outcomeChartModalHelpStrings}
+              graphCalloutStrings={outcomeChartModalHelpStrings}
               errorPickerProps={this.props.errorPickerProps}
               fairnessBounds={this.props.fairnessBounds}
               performanceBounds={this.props.performanceBounds}

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IBounds } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   AccessibleChart,
@@ -8,7 +9,6 @@ import {
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
-import { IBounds } from "libs/core-ui/src/lib/Interfaces/IFairnessData";
 import _ from "lodash";
 import {
   getTheme,
@@ -285,7 +285,7 @@ export class ModelComparisonChart extends React.Component<
           <Stack className={sharedStyles.mainLeft}>
             <ModalHelp
               theme={theme}
-              graphTooltipStrings={helpString}
+              graphCalloutStrings={helpString}
               errorPickerProps={this.props.errorPickerProps}
               performanceBounds={this.state.performanceBounds}
               fairnessBounds={this.state.fairnessBounds}
