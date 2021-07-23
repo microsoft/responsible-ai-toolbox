@@ -129,7 +129,9 @@ class BaseAnalyzer(ABC):
             matrix = self.compute_matrix(filter_features,
                                          None,
                                          None)
-        return ErrorReport(tree, matrix)
+        return ErrorReport(tree, matrix,
+                           tree_features=self.feature_names,
+                           matrix_features=filter_features)
 
     def compute_importances(self):
         input_data = self.dataset
