@@ -5,6 +5,8 @@ import pytest
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX, VALUES)
 from responsibleai.exceptions import DuplicateManagerConfigException
+from responsibleai._internal.constants import (
+    ErrorAnalysisManagerKeys as Keys)
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -24,8 +26,14 @@ def validate_error_analysis(model_analysis, expected_reports=1):
     reports = model_analysis.error_analysis.get()
     assert isinstance(reports, list)
     assert len(reports) == expected_reports
-    for report in reports:
+    ea_info_list = model_analysis.error_analysis.list()
+    for idx, report in enumerate(reports):
         matrix = report.matrix
+        matrix_features = report.matrix_features
+        tree_features = report.tree_features
+        info_features = ea_info_list[Keys.REPORTS][idx][Keys.FILTER_FEATURES]
+        assert matrix_features == info_features
+        assert tree_features == model_analysis.error_analysis._feature_names
 
         ea_x_dataset = model_analysis.error_analysis._dataset
         ea_true_y = model_analysis.error_analysis._true_y
