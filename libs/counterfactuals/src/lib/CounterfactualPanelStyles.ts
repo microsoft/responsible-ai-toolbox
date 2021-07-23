@@ -19,6 +19,7 @@ export interface ICounterfactualPanelStyles {
   predictedBlock: IStyle;
   negativeNumber: IStyle;
   positiveNumber: IStyle;
+  searchBox: IStyle;
   tooltipWrapper: IStyle;
   tooltipColumn: IStyle;
   tooltipTable: IStyle;
@@ -70,6 +71,10 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<
       display: "flex",
       flexDirection: "row",
       paddingTop: "5px"
+    },
+    searchBox: {
+      padding: "20px 0",
+      width: "200px"
     },
     tooltipColumn: {
       alignItems: "flex-start",
