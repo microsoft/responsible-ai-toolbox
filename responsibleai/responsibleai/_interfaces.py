@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Union
 
 
 class TaskType(str, Enum):
@@ -123,7 +123,7 @@ class CounterfactualData:
     local_importance: List[List[float]]
     model_type: str
     desired_class: str
-    desired_range: List[Tuple[float]]
+    desired_range: List[float]
 
 
 class ModelAnalysisData:
