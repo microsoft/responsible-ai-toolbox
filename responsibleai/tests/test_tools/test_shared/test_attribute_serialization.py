@@ -58,7 +58,7 @@ class TestAttributeSerialization:
         save_attributes(example, ['a', 'b'], save_dir)
 
         o_post = Example()
-        message = "No such file or directory: .*save-dir/c.pkl"
+        message = ".*No such file or directory: .*save-dir[\\\\/]+c.pkl"
         with pytest.raises(FileNotFoundError, match=message):
             load_attributes(o_post, ['a', 'b', 'c'], save_dir)
 
