@@ -27,6 +27,7 @@ import {
 import React from "react";
 
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
+import { ILocalImportanceData } from "./LocalImportanceChart";
 
 export interface ICounterfactualListProps {
   selectedIndex: number;
@@ -44,6 +45,7 @@ export interface ICounterfactualListProps {
 interface ICounterfactualListState {
   data: any;
   showCallout: boolean;
+  sortedFeatureNames: string[];
 }
 
 export class CounterfactualList extends React.Component<
@@ -67,7 +69,8 @@ export class CounterfactualList extends React.Component<
     });
     this.state = {
       data: this.processSelectionData(this.getItems(), 0),
-      showCallout: false
+      showCallout: false,
+      sortedFeatureNames: this.getSortedFeatureNames()
     };
   }
 
@@ -145,7 +148,7 @@ export class CounterfactualList extends React.Component<
       minWidth: 200,
       name: ""
     });
-    this.props.featureNames.forEach((f) =>
+    this.state.sortedFeatureNames.forEach((f) =>
       columns.push({
         fieldName: f,
         isResizable: true,
@@ -248,5 +251,25 @@ export class CounterfactualList extends React.Component<
       );
     }
     return <div />;
+  }
+  private getSortedFeatureNames(): string[] {
+    const data: ILocalImportanceData[] = [];
+    const localImportanceData = this.props.data?.local_importance?.[
+      this.props.selectedIndex
+    ];
+    if (!localImportanceData) {
+      return [];
+    }
+    this.props?.data?.feature_names.forEach((f, index) => {
+      data.push({
+        label: f,
+        value: localImportanceData[index] || -Infinity
+      });
+    });
+    data.sort((d1, d2) => d2.value - d1.value);
+    const result = data
+      .map((p) => p.label)
+      .filter((l) => this.props.featureNames?.includes(l));
+    return result;
   }
 }
