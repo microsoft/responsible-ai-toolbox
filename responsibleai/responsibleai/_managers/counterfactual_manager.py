@@ -156,6 +156,9 @@ class CounterfactualManager(BaseManager):
             feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
+        :param method: Type of dice-ml explainer. Either of "random", "genetic"
+                       or "kdtree".
+        :type method: str
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
         :param desired_class: Desired counterfactual class. For binary
