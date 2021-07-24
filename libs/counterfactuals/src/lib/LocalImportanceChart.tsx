@@ -25,7 +25,7 @@ export interface ILocalImportanceChartProps {
   theme?: string;
 }
 
-interface ILocalImportanceData {
+export interface ILocalImportanceData {
   label: string;
   value: number;
 }
