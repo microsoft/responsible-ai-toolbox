@@ -63,6 +63,10 @@ class ModelExplanationData:
 class ErrorAnalysisData:
     maxDepth: int
     numLeaves: int
+    tree: list
+    matrix: list
+    tree_features: List[str]
+    matrix_features: List[str]
 
 
 class CausalMetric:
@@ -131,4 +135,4 @@ class ModelAnalysisData:
     modelExplanationData: List[ModelExplanationData]
     causalAnalysisData: List[CausalData]
     counterfactualData: List[CounterfactualData]
-    errorAnalysisConfig: List[ErrorAnalysisData]
+    errorAnalysisData: List[ErrorAnalysisData]

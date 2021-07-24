@@ -1,16 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
 import React from "react";
-
-import { noFeature } from "../../Constants";
 
 import { matrixFooterStyles } from "./MatrixFooter.styles";
 
 export interface IMatrixFooterProps {
-  jsonMatrix?: any;
-  selectedFeature1: string;
-  selectedFeature2: string;
+  jsonMatrix?: IErrorAnalysisMatrix;
+  selectedFeature1?: string;
+  selectedFeature2?: string;
   selectedCells?: boolean[];
   category1Values: any[];
   category2Values: any[];
@@ -23,8 +22,7 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
     const classNames = matrixFooterStyles();
     return (
       <div>
-        {(this.props.selectedFeature2 === noFeature ||
-          this.props.sameFeatureSelected) &&
+        {(!this.props.selectedFeature2 || this.props.sameFeatureSelected) &&
           this.props.category1Values.length > 0 && (
             <div
               key={`${this.props.matrixLength}row`}
@@ -46,8 +44,8 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
               })}
             </div>
           )}
-        {this.props.selectedFeature1 !== noFeature &&
-          this.props.selectedFeature2 !== noFeature &&
+        {this.props.selectedFeature1 &&
+          this.props.selectedFeature2 &&
           !this.props.sameFeatureSelected &&
           this.props.category2Values.length > 0 && (
             <div

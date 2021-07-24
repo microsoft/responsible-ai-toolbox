@@ -49,7 +49,7 @@ class TestModelAnalysisDashboard:
             widget.input.dashboard_input.modelExplanationData[0],
             ModelExplanationData)
         assert isinstance(
-            widget.input.dashboard_input.errorAnalysisConfig[0],
+            widget.input.dashboard_input.errorAnalysisData[0],
             ErrorAnalysisData)
         assert isinstance(
             widget.input.dashboard_input.causalAnalysisData[0],

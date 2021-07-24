@@ -53,4 +53,4 @@ export * from "./lib/Interfaces/IModelExplanationData";
 export * from "./lib/Interfaces/IWeightedDropdownContext";
 export * from "./lib/Interfaces/IFilter";
 export * from "./lib/Interfaces/ICohort";
-export * from "./lib/Interfaces/IErrorAnalysisConfig";
+export * from "./lib/Interfaces/IErrorAnalysisData";
