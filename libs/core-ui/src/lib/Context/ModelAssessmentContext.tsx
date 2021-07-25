@@ -3,12 +3,12 @@
 
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
+
 import { ErrorCohort } from "../Cohort/ErrorCohort";
 import {
   ICausalAnalysisData,
   ICausalWhatIfData
 } from "../Interfaces/ICausalAnalysisData";
-
 import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisConfig } from "../Interfaces/IErrorAnalysisConfig";

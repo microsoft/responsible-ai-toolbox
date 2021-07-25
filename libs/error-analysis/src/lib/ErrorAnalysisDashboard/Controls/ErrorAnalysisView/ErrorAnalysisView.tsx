@@ -46,13 +46,10 @@ export interface IErrorAnalysisViewProps {
   showCohortName: boolean;
 }
 
-export class ErrorAnalysisView extends React.PureComponent<
-  IErrorAnalysisViewProps
-> {
+export class ErrorAnalysisView extends React.PureComponent<IErrorAnalysisViewProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     return (

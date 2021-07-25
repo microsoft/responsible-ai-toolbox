@@ -11,9 +11,7 @@ import { SharedStyles } from "../Shared.styles";
 import { IPerformancePlotLegendProps } from "./PerformancePlot";
 import { PerformancePlotStyles } from "./PerformancePlot.styles";
 
-export class PerformancePlotLegend extends React.PureComponent<
-  IPerformancePlotLegendProps
-> {
+export class PerformancePlotLegend extends React.PureComponent<IPerformancePlotLegendProps> {
   public render(): React.ReactNode {
     const styles = PerformancePlotStyles();
     const sharedStyles = SharedStyles();

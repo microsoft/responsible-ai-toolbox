@@ -34,9 +34,7 @@ export interface IGlobalFeatureImportanceProps {
   onChange: (config: IFeatureImportanceConfig, id: string) => void;
 }
 
-export class FeatureImportanceWrapper extends React.PureComponent<
-  IGlobalFeatureImportanceProps
-> {
+export class FeatureImportanceWrapper extends React.PureComponent<IGlobalFeatureImportanceProps> {
   public render(): React.ReactNode {
     const chartTypeOptions: IComboBoxOption[] =
       this.props.dashboardContext.explanationContext.localExplanation !==

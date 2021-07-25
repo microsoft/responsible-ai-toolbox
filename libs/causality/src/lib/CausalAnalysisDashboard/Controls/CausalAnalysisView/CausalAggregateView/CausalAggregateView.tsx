@@ -20,13 +20,10 @@ export interface ICausalAggregateViewProps {
   data: ICausalAnalysisData;
 }
 
-export class CausalAggregateView extends React.PureComponent<
-  ICausalAggregateViewProps
-> {
+export class CausalAggregateView extends React.PureComponent<ICausalAggregateViewProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();

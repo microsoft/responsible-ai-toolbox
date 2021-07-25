@@ -9,7 +9,7 @@ import { describeAxisConfigDialog } from "./describeAxisConfigDialog";
 export function describeAggregatePlot(dataShape: IInterpretData): void {
   describe("Aggregate plot", () => {
     const props = {
-      chart: (undefined as unknown) as BoxChart,
+      chart: undefined as unknown as BoxChart,
       dataShape
     };
     beforeEach(() => {

@@ -2,6 +2,80 @@
 // Licensed under the MIT License.
 
 import { IInterpretData } from "./IInterpretData";
+const bostonData = {
+    datapoint: 102,
+    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
+    defaultXAxis: "Index",
+    defaultYAxis: "CRIM",
+    featureNames: [
+      "LSTAT",
+      "RM",
+      "PTRATIO",
+      "NOX",
+      "DIS",
+      "AGE",
+      "TAX",
+      "CRIM",
+      "B",
+      "INDUS",
+      "RAD",
+      "ZN",
+      "CHAS"
+    ]
+  },
+  ibmData = {
+    datapoint: 20,
+    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
+    defaultXAxis: "Index",
+    defaultYAxis: "Age",
+    featureNames: [
+      "OverTime",
+      "JobRole",
+      "MaritalStatus",
+      "YearsAtCompany",
+      "JobSatisfaction",
+      "TotalWorkingYears",
+      "YearsSinceLastProm...",
+      "YearsInCurrentRole",
+      "YearsWithCurrManag...",
+      "NumCompaniesWorked",
+      "EducationField",
+      "JobInvolvement",
+      "RelationshipSatisf...",
+      "EnvironmentSatisfa...",
+      "Age",
+      "DistanceFromHome",
+      "MonthlyIncome",
+      "WorkLifeBalance",
+      "TrainingTimesLastY...",
+      "JobLevel",
+      "Department",
+      "StockOptionLevel",
+      "DailyRate",
+      "Gender",
+      "BusinessTravel",
+      "MonthlyRate",
+      "PerformanceRating",
+      "Education",
+      "HourlyRate",
+      "PercentSalaryHike"
+    ],
+    isClassification: true
+  },
+  irisData = {
+    datapoint: 30,
+    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
+    defaultXAxis: "Index",
+    defaultYAxis: "sepal length (cm)",
+    featureNames: [
+      "petal length (cm)",
+      "petal width (cm)",
+      "sepal length (cm)",
+      "sepal width (cm)"
+    ],
+    isClassification: true,
+    isMulticlass: true
+  };
 
 const interpretDatasets = {
   automlMimicAdult: {
@@ -24,94 +98,22 @@ const interpretDatasets = {
     noDataset: true,
     noPredict: true
   },
-  bostonData: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    defaultXAxis: "Index",
-    defaultYAxis: "CRIM",
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ]
-  },
+  bostonData,
   bostonDataGlobal: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    defaultXAxis: "Index",
-    defaultYAxis: "CRIM",
+    ...bostonData,
     featureNames: ["INDUS", "DIS", "NOX", "LSTAT", "AGE", "CHAS", "B", "CRIM"],
     noLocalImportance: true
   },
   bostonDataNoDataset: {
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
+    ...bostonData,
     noDataset: true
   },
   bostonDataNoPredict: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
+    ...bostonData,
     noPredict: true
   },
   bostonDataNoY: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    defaultXAxis: "Index",
-    defaultYAxis: "CRIM",
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
+    ...bostonData,
     noPredict: true,
     noY: true
   },
@@ -163,188 +165,39 @@ const interpretDatasets = {
     noFeatureImportance: true,
     noY: true
   },
-  ibmData: {
-    datapoint: 20,
-    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
-    defaultXAxis: "Index",
-    defaultYAxis: "Age",
-    featureNames: [
-      "OverTime",
-      "JobRole",
-      "MaritalStatus",
-      "YearsAtCompany",
-      "JobSatisfaction",
-      "TotalWorkingYears",
-      "YearsSinceLastProm...",
-      "YearsInCurrentRole",
-      "YearsWithCurrManag...",
-      "NumCompaniesWorked",
-      "EducationField",
-      "JobInvolvement",
-      "RelationshipSatisf...",
-      "EnvironmentSatisfa...",
-      "Age",
-      "DistanceFromHome",
-      "MonthlyIncome",
-      "WorkLifeBalance",
-      "TrainingTimesLastY...",
-      "JobLevel",
-      "Department",
-      "StockOptionLevel",
-      "DailyRate",
-      "Gender",
-      "BusinessTravel",
-      "MonthlyRate",
-      "PerformanceRating",
-      "Education",
-      "HourlyRate",
-      "PercentSalaryHike"
-    ],
-    isClassification: true
-  },
+  ibmData,
   ibmDataInconsistent: {
-    datapoint: 20,
-    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
-    defaultXAxis: "Index",
-    defaultYAxis: "Age",
+    ...ibmData,
     errorMessage:
       "Inconsistent dimensions. Predicted probability[0] has dimensions 2, expected 1",
-    featureNames: [
-      "OverTime",
-      "JobRole",
-      "MaritalStatus",
-      "YearsAtCompany",
-      "JobSatisfaction",
-      "TotalWorkingYears",
-      "YearsSinceLastProm...",
-      "YearsInCurrentRole",
-      "YearsWithCurrManag...",
-      "NumCompaniesWorked",
-      "EducationField",
-      "JobInvolvement",
-      "RelationshipSatisf...",
-      "EnvironmentSatisfa...",
-      "Age",
-      "DistanceFromHome",
-      "MonthlyIncome",
-      "WorkLifeBalance",
-      "TrainingTimesLastY...",
-      "JobLevel",
-      "Department",
-      "StockOptionLevel",
-      "DailyRate",
-      "Gender",
-      "BusinessTravel",
-      "MonthlyRate",
-      "PerformanceRating",
-      "Education",
-      "HourlyRate",
-      "PercentSalaryHike"
-    ]
+    isClassification: false
   },
   ibmNoClass: {
-    datapoint: 20,
-    datasetBarLabel: ["0 - 3", "4 - 7", "8 - 11", "12 - 15", "16 - 19"],
-    defaultXAxis: "Index",
-    defaultYAxis: "Age",
-    featureNames: [
-      "OverTime",
-      "JobRole",
-      "MaritalStatus",
-      "YearsAtCompany",
-      "JobSatisfaction",
-      "TotalWorkingYears",
-      "YearsSinceLastProm...",
-      "YearsInCurrentRole",
-      "YearsWithCurrManag...",
-      "NumCompaniesWorked",
-      "EducationField",
-      "JobInvolvement",
-      "RelationshipSatisf...",
-      "EnvironmentSatisfa...",
-      "Age",
-      "DistanceFromHome",
-      "MonthlyIncome",
-      "WorkLifeBalance",
-      "TrainingTimesLastY...",
-      "JobLevel",
-      "Department",
-      "StockOptionLevel",
-      "DailyRate",
-      "Gender",
-      "BusinessTravel",
-      "MonthlyRate",
-      "PerformanceRating",
-      "Education",
-      "HourlyRate",
-      "PercentSalaryHike"
-    ],
-    isClassification: true
+    ...ibmData
   },
-  irisData: {
-    datapoint: 30,
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
-    defaultXAxis: "Index",
-    defaultYAxis: "sepal length (cm)",
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true
-  },
+  irisData,
   irisDataNoLocal: {
-    datapoint: 30,
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
-    defaultXAxis: "Index",
-    defaultYAxis: "sepal length (cm)",
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true,
+    ...irisData,
     noLocalImportance: true
   },
   irisGlobal: {
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true,
+    ...irisData,
     noDataset: true,
     noLocalImportance: true,
     noPredict: true,
     noY: true
   },
   irisNoData: {
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true,
+    ...irisData,
     noDataset: true,
     noPredict: true,
     noY: true
   },
   irisNoFeatures: {
-    datapoint: 30,
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
+    ...irisData,
     defaultXAxis: "Index",
     defaultYAxis: "Feature 0",
-    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"],
-    isClassification: true,
-    isMulticlass: true
+    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"]
   }
 };
 const withType: {
