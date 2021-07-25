@@ -15,7 +15,6 @@ import {
   PlotlyThemes
 } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack, Text } from "office-ui-fabric-react";
-import Plotly from "plotly.js";
 import React from "react";
 
 export interface ILocalImportanceChartProps {
@@ -63,7 +62,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
             plotlyProps={{
               config: themedProps.config,
               data: themedProps.data,
-              layout: themedProps.layout as Plotly.Layout
+              layout: themedProps.layout
             }}
             theme={getTheme()}
           />
