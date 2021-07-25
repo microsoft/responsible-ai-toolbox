@@ -1,5 +1,8 @@
+const { getJestProjects } = require("@nrwl/jest");
+
 module.exports = {
   projects: [
+    ...getJestProjects(),
     "<rootDir>/libs/interpret",
     "<rootDir>/libs/fairness",
     "<rootDir>/libs/core-ui",

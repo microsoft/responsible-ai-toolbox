@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   INumericRange,
@@ -14,6 +10,10 @@ import {
 import _ from "lodash";
 
 import { cohortKey } from "../cohortKey";
+import {
+  IMultiClassLocalFeatureImportance,
+  ISingleClassLocalFeatureImportance
+} from "../Interfaces/ExplanationInterfaces";
 import {
   IExplanationModelMetadata,
   ModelTypes

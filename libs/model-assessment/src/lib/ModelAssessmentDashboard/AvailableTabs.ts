@@ -3,9 +3,9 @@
 
 import { JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IModelAssessmentDashboardProps } from "@responsible-ai/model-assessment";
 import { IDropdownOption } from "office-ui-fabric-react";
 
+import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export function getAvailableTabs(
