@@ -61,9 +61,12 @@ export class MatrixFilter extends React.PureComponent<
   public constructor(props: IMatrixFilterProps) {
     super(props);
     this.state = this.props.state;
-    this.options = props.features.map((feature) => {
-      return { key: feature, text: feature };
-    });
+    this.options = [
+      { key: "", text: localization.ErrorAnalysis.noFeature },
+      ...props.features.map((feature) => {
+        return { key: feature, text: feature };
+      })
+    ];
     if (!this.props.isEnabled && this.props.matrixFeatures) {
       const features = this.props.matrixFeatures;
       this.state = {
@@ -91,7 +94,7 @@ export class MatrixFilter extends React.PureComponent<
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
-                selectedKey={this.state.selectedFeature1}
+                defaultSelectedKey=""
                 label="X-Axis: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -102,12 +105,11 @@ export class MatrixFilter extends React.PureComponent<
                   directionalHintFixed: true
                 }}
                 disabled={!this.props.isEnabled}
-                placeholder={localization.ErrorAnalysis.noFeature}
               />
             </Stack.Item>
             <Stack.Item key="feature2key">
               <ComboBox
-                selectedKey={this.state.selectedFeature2}
+                defaultSelectedKey=""
                 label="Y-Axis: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -118,7 +120,6 @@ export class MatrixFilter extends React.PureComponent<
                   directionalHintFixed: true
                 }}
                 disabled={!this.props.isEnabled}
-                placeholder={localization.ErrorAnalysis.noFeature}
               />
             </Stack.Item>
           </Stack>
