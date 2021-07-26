@@ -60,6 +60,7 @@ intersphinx_mapping = {
     'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
     'sklearn': ('https://scikit-learn.org/stable/', None),
     'fairlearn': ('https://fairlearn.github.io/main/', None),
+    'dice-ml': ('http://interpret.ml/DiCE/', None)
 }
 
 
