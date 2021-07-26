@@ -13,7 +13,7 @@ export async function callFlaskService<TRequest, TResponse>(
   const url = config.baseUrl + urlPath;
   return fetch(url, {
     body: JSON.stringify(data),
-    credentials: "include",
+    credentials: config.withCredentials ? "include" : "omit",
     headers: {
       "Content-Type": "application/json"
     },
