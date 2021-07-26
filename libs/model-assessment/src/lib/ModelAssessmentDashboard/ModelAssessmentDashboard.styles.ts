@@ -8,6 +8,7 @@ export interface IModelAssessmentDashboardStyles {
   section: IStyle;
   buttonSection: IStyle;
   sectionHeader: IStyle;
+  mainContent: IStyle;
 }
 
 export const modelAssessmentDashboardStyles = mergeStyleSets<
@@ -16,8 +17,14 @@ export const modelAssessmentDashboardStyles = mergeStyleSets<
   buttonSection: {
     textAlign: "center"
   },
+  mainContent: {
+    height: "100%",
+    overflowY: "scroll",
+    position: "relative"
+  },
   page: {
     boxSizing: "border-box",
+    height: "100%",
     padding: "16px 40px 0 14px",
     width: "100%"
   },

@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Union
 
 
 class TaskType(str, Enum):
@@ -103,12 +103,16 @@ class CausalPolicy:
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
 
+class CausalConfig:
+    treatment_features: [str]
+
+
 class CausalData:
+    id: str
+    config: CausalConfig
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
     policies: List[CausalPolicy]
-    id: str
-    treatment_features: [str]
 
 
 class CounterfactualData:
@@ -119,7 +123,7 @@ class CounterfactualData:
     local_importance: List[List[float]]
     model_type: str
     desired_class: str
-    desired_range: List[Tuple[float]]
+    desired_range: List[float]
 
 
 class ModelAnalysisData:

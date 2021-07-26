@@ -70,19 +70,19 @@ class TestSurrogateErrorTree(object):
         filtered_indexed_df[DIFF] = diff
         filtered_indexed_df[TRUE_Y] = y_test
         filtered_indexed_df[PRED_Y] = pred_y
-        json_tree = traverse(filtered_indexed_df,
-                             tree_structure,
-                             max_split_index,
-                             (categories_reindexed,
-                              cat_ind_reindexed),
-                             [],
-                             feature_names,
-                             metric=error_analyzer.metric)
+        tree = traverse(filtered_indexed_df,
+                        tree_structure,
+                        max_split_index,
+                        (categories_reindexed,
+                         cat_ind_reindexed),
+                        [],
+                        feature_names,
+                        metric=error_analyzer.metric)
         # create dictionary from json tree id to values
-        json_tree_dict = {}
-        for entry in json_tree:
-            json_tree_dict[entry['id']] = entry
-        validate_traversed_tree(tree_structure, json_tree_dict,
+        tree_dict = {}
+        for entry in tree:
+            tree_dict[entry['id']] = entry
+        validate_traversed_tree(tree_structure, tree_dict,
                                 max_split_index, feature_names)
 
 
@@ -95,20 +95,20 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         tree_features = feature_names
     filters = None
     composite_filters = None
-    json_tree = error_analyzer.compute_error_tree(tree_features,
-                                                  filters,
-                                                  composite_filters)
-    assert json_tree is not None
-    assert len(json_tree) > 0
-    assert ERROR in json_tree[0]
-    assert ID in json_tree[0]
-    assert PARENTID in json_tree[0]
-    assert json_tree[0][PARENTID] is None
-    assert SIZE in json_tree[0]
-    assert json_tree[0][SIZE] == len(X_test)
+    tree = error_analyzer.compute_error_tree(tree_features,
+                                             filters,
+                                             composite_filters)
+    assert tree is not None
+    assert len(tree) > 0
+    assert ERROR in tree[0]
+    assert ID in tree[0]
+    assert PARENTID in tree[0]
+    assert tree[0][PARENTID] is None
+    assert SIZE in tree[0]
+    assert tree[0][SIZE] == len(X_test)
 
 
-def validate_traversed_tree(tree, json_tree_dict, max_split_index,
+def validate_traversed_tree(tree, tree_dict, max_split_index,
                             feature_names, parent_id=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
@@ -117,25 +117,25 @@ def validate_traversed_tree(tree, json_tree_dict, max_split_index,
     else:
         nodeid = 0
 
-    assert json_tree_dict[nodeid]['id'] == nodeid
-    assert json_tree_dict[nodeid]['parentId'] == parent_id
+    assert tree_dict[nodeid]['id'] == nodeid
+    assert tree_dict[nodeid]['parentId'] == parent_id
     if SPLIT_FEATURE in tree:
         node_name = feature_names[tree[SPLIT_FEATURE]]
     else:
         node_name = None
-    assert json_tree_dict[nodeid]['nodeName'] == node_name
+    assert tree_dict[nodeid]['nodeName'] == node_name
 
     # validate children
     if 'leaf_value' not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
         validate_traversed_tree(left_child,
-                                json_tree_dict,
+                                tree_dict,
                                 max_split_index,
                                 feature_names,
                                 nodeid)
         validate_traversed_tree(right_child,
-                                json_tree_dict,
+                                tree_dict,
                                 max_split_index,
                                 feature_names,
                                 nodeid)

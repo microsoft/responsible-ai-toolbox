@@ -24,6 +24,21 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.9.1
+
+- educational materials
+- new features
+- breaking changes
+  - error report in erroranalysis package had json_tree renamed to tree and json_matrix renamed to matrix
+- bug fixes
+  - fix econML inputs
+  - add categorical feature to causal whatif
+  - fix counterfactual panel scroll bar
+  - round precision in causal analysis tables
+  - fix calculating feature importances after error report due to dataframe on analyzer being modified
+- other
+  - dump information about the most time consuming tests
+
 ## v0.9.0
 
 - educational materials
