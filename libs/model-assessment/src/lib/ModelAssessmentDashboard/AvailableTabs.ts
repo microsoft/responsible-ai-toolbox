@@ -12,17 +12,22 @@ export function getAvailableTabs(
   excludeErrorAnalysis: boolean
 ): IDropdownOption[] {
   const availableTabs: IDropdownOption[] = [];
-  if (!excludeErrorAnalysis && props.errorAnalysisData?.length) {
+  if (
+    !excludeErrorAnalysis &&
+    (props.requestDebugML || props.errorAnalysisData?.[0]?.tree)
+  ) {
     availableTabs.push({
       key: GlobalTabKeys.ErrorAnalysisTab,
       text: localization.ModelAssessment.ComponentNames.ErrorAnalysis
     });
   }
 
-  availableTabs.push({
-    key: GlobalTabKeys.ModelStatisticsTab,
-    text: localization.ModelAssessment.ComponentNames.ModelStatistics
-  });
+  if (props.dataset.predicted_y) {
+    availableTabs.push({
+      key: GlobalTabKeys.ModelStatisticsTab,
+      text: localization.ModelAssessment.ComponentNames.ModelStatistics
+    });
+  }
   availableTabs.push({
     key: GlobalTabKeys.DataExplorerTab,
     text: localization.ModelAssessment.ComponentNames.DataExplorer
