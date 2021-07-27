@@ -25,7 +25,7 @@ class ModelAnalysisDashboardInput:
         self._is_classifier = model is not None\
             and hasattr(model, SKLearn.PREDICT_PROBA) and \
             model.predict_proba is not None
-        self._dataframeColumns = None
+        self._dataframeColumns = self.dashboard_input.dataset.features
         self.dashboard_input = analysis.get_data()
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
