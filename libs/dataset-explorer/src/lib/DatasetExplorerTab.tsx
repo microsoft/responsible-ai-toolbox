@@ -84,6 +84,16 @@ export class DatasetExplorerTab extends React.Component<
     });
   }
 
+  public componentDidUpdate(): void {
+    const selectedCohortIndex = this.context.errorCohorts.findIndex(
+      (errorCohort) =>
+        errorCohort.cohort.name === this.context.selectedErrorCohort.cohort.name
+    );
+    if (selectedCohortIndex !== this.state.selectedCohortIndex) {
+      this.setState({ selectedCohortIndex });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
@@ -93,15 +103,6 @@ export class DatasetExplorerTab extends React.Component<
           {localization.Interpret.DatasetExplorer.missingParameters}
         </MissingParametersPlaceholder>
       );
-    }
-
-    const selectedCohortIndex = this.context.errorCohorts.findIndex(
-      (errorCohort) =>
-        errorCohort.cohort.name === this.context.selectedErrorCohort.cohort.name
-    );
-    if (selectedCohortIndex !== this.state.selectedCohortIndex) {
-      this.setState({ selectedCohortIndex });
-      return <div />;
     }
 
     if (this.state.chartProps === undefined) {
