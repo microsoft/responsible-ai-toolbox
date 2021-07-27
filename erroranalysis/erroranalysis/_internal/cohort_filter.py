@@ -13,7 +13,9 @@ from erroranalysis._internal.constants import (PRED_Y,
 
 METHOD_EQUAL = 'equal'
 METHOD_GREATER = 'greater'
+METHOD_LESS = 'less'
 METHOD_LESS_AND_EQUAL = 'less and equal'
+METHOD_GREATER_AND_EQUAL = 'greater and equal'
 METHOD_RANGE = 'in the range of'
 
 
@@ -53,8 +55,12 @@ def build_query(filters, categorical_features, categories):
             colname = filter['column']
             if method == METHOD_GREATER:
                 queries.append("`" + colname + "` > " + arg0)
+            elif method == METHOD_LESS:
+                queries.append("`" + colname + "` < " + arg0)
             elif method == METHOD_LESS_AND_EQUAL:
                 queries.append("`" + colname + "` <= " + arg0)
+            elif method == METHOD_GREATER_AND_EQUAL:
+                queries.append("`" + colname + "` >= " + arg0)
             elif method == METHOD_RANGE:
                 arg1 = str(filter['arg'][1])
                 queries.append("`" + colname + "` >= " + arg0 +
