@@ -45,7 +45,6 @@ export interface ICounterfactualListProps {
 interface ICounterfactualListState {
   data: any;
   showCallout: boolean;
-  sortedFeatureNames: string[];
 }
 
 export class CounterfactualList extends React.Component<
@@ -69,8 +68,7 @@ export class CounterfactualList extends React.Component<
     });
     this.state = {
       data: this.processSelectionData(this.getItems(), 0),
-      showCallout: false,
-      sortedFeatureNames: this.getSortedFeatureNames()
+      showCallout: false
     };
   }
 
