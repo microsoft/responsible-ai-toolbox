@@ -44,7 +44,7 @@ export interface IDatasetExplorerTabState {
   chartProps?: IGenericChartProps;
 }
 
-export class DatasetExplorerTab extends React.PureComponent<
+export class DatasetExplorerTab extends React.Component<
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
 > {
@@ -84,6 +84,16 @@ export class DatasetExplorerTab extends React.PureComponent<
     });
   }
 
+  public componentDidUpdate(): void {
+    const selectedCohortIndex = this.context.errorCohorts.findIndex(
+      (errorCohort) =>
+        errorCohort.cohort.name === this.context.selectedErrorCohort.cohort.name
+    );
+    if (selectedCohortIndex !== this.state.selectedCohortIndex) {
+      this.setState({ selectedCohortIndex });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
@@ -94,6 +104,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
+
     if (this.state.chartProps === undefined) {
       return <div />;
     }

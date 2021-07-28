@@ -52,7 +52,7 @@ interface IErrorAnalysisViewTabState {
   openFeatureList: boolean;
 }
 
-export class ErrorAnalysisViewTab extends React.PureComponent<
+export class ErrorAnalysisViewTab extends React.Component<
   IErrorAnalysisViewTabProps,
   IErrorAnalysisViewTabState
 > {
