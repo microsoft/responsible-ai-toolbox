@@ -248,7 +248,7 @@ class ErrorAnalysisDashboardInput:
         if self._categorical_features:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP
-            ] = self._error_analyzer.category_dictionary
+            ] = serialize_json_safe(self._error_analyzer.category_dictionary)
         # Compute metrics on all data cohort
         if self._error_analyzer.model_task == ModelTask.CLASSIFICATION:
             if self._error_analyzer.metric is None:
