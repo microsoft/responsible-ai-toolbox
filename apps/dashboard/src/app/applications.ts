@@ -36,12 +36,12 @@ import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
-  adultCensusCausalErrorAnalysisConfig,
+  adultCensusCausalErrorAnalysisData,
   adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
   bostonData as bostonDataMAD,
-  bostonErrorAnalysisConfig,
+  bostonErrorAnalysisData,
   bostonWithFairnessModelExplanationData
 } from "../model-assessment/__mock_data__/bostonData";
 
@@ -153,21 +153,21 @@ export const applications: IApplications = <const>{
         classDimension: 2,
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoCausalData: {
         classDimension: 2,
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoCounterfactualData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoModelData: {
@@ -177,7 +177,7 @@ export const applications: IApplications = <const>{
       bostonData: {
         classDimension: 1,
         dataset: bostonDataMAD,
-        errorAnalysisConfig: [bostonErrorAnalysisConfig],
+        errorAnalysisData: [bostonErrorAnalysisData],
         modelExplanationData: [bostonWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },

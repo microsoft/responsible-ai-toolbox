@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CohortSource } from "@responsible-ai/core-ui";
+import {
+  CohortSource,
+  IErrorAnalysisMatrixNode
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   DefaultButton,
@@ -14,7 +17,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { noFeature } from "../../Constants";
 import { IMatrixAreaState } from "../../MatrixFilterState";
 import { MatrixCells } from "../MatrixCells/MatrixCells";
 import { MatrixFooter } from "../MatrixFooter/MatrixFooter";
@@ -54,7 +56,7 @@ export class MatrixArea extends React.PureComponent<
       selectedCells: this.props.state.selectedCells
     };
     if (this.props.state.selectedCells === undefined) {
-      fetchMatrix(this.props, this.reloadData.bind(this));
+      this.reloadData();
     }
   }
 
@@ -68,7 +70,7 @@ export class MatrixArea extends React.PureComponent<
       selectedFeature2Changed ||
       this.props.baseCohort !== prevProps.baseCohort
     ) {
-      fetchMatrix(this.props, this.reloadData.bind(this));
+      this.reloadData();
     }
   }
 
@@ -82,11 +84,7 @@ export class MatrixArea extends React.PureComponent<
     // 3.) when user first changes feature a render is triggered but componentDidUpdate
     // is only called after initial render is done, which would be an inconsistent state
     // Note in third case we just show empty and not the help text
-    if (
-      !this.state.jsonMatrix ||
-      (this.props.selectedFeature1 === noFeature &&
-        this.props.selectedFeature2 === noFeature)
-    ) {
+    if (!this.state.jsonMatrix) {
       return (
         <Stack styles={emptyTextStyle} tokens={emptyTextPadding}>
           <Text variant="medium">
@@ -104,7 +102,7 @@ export class MatrixArea extends React.PureComponent<
     const sameFeatureSelected =
       this.props.selectedFeature1 === this.props.selectedFeature2;
     let rows = 0;
-    if (this.props.selectedFeature2 !== noFeature && !sameFeatureSelected) {
+    if (this.props.selectedFeature2 && !sameFeatureSelected) {
       rows = Math.floor((this.state.jsonMatrix.matrix.length - 1) / 2);
     } else {
       rows = this.state.jsonMatrix.matrix.length / 2;
@@ -141,14 +139,13 @@ export class MatrixArea extends React.PureComponent<
         </Stack>
         <div className={classNames.matrixArea}>
           <div>
-            {this.props.selectedFeature2 !== noFeature && !sameFeatureSelected && (
+            {this.props.selectedFeature2 && !sameFeatureSelected && (
               <div className={classNames.matrixLabelBottom}>
                 <div className={classNames.matrixLabelTab} />
                 <div>{this.props.selectedFeature2}</div>
               </div>
             )}
-            {(this.props.selectedFeature2 === noFeature ||
-              sameFeatureSelected) && (
+            {(!this.props.selectedFeature2 || sameFeatureSelected) && (
               <div className={classNames.emptyLabelPadding} />
             )}
             <MatrixCells
@@ -171,7 +168,7 @@ export class MatrixArea extends React.PureComponent<
               matrixLength={matrixLength}
             />
           </div>
-          {this.props.selectedFeature1 !== noFeature && (
+          {this.props.selectedFeature1 && (
             <div className={styledMatrixLabel}>
               {this.props.selectedFeature1}
             </div>
@@ -181,16 +178,20 @@ export class MatrixArea extends React.PureComponent<
     );
   }
 
-  private reloadData(jsonMatrix: any): void {
+  private reloadData = async (): Promise<void> => {
+    const jsonMatrix = await fetchMatrix(this.props);
+    if (!jsonMatrix) {
+      return;
+    }
     let maxMetricValue = 0;
-    jsonMatrix.matrix.forEach((row: any): void => {
-      row.forEach((value: any): void => {
+    jsonMatrix.matrix.forEach((row: IErrorAnalysisMatrixNode[]): void => {
+      row.forEach((value: IErrorAnalysisMatrixNode): void => {
         if (value.falseCount !== undefined) {
           const errorRate = value.falseCount / value.count;
           if (!Number.isNaN(errorRate)) {
             maxMetricValue = Math.max(maxMetricValue, errorRate);
           }
-        } else {
+        } else if (value.metricValue !== undefined) {
           const metricValue = value.metricValue;
           if (!Number.isNaN(metricValue)) {
             maxMetricValue = Math.max(maxMetricValue, metricValue);
@@ -208,7 +209,7 @@ export class MatrixArea extends React.PureComponent<
       maxMetricValue,
       selectedCells: undefined
     });
-  }
+  };
 
   private selectAll(matrixLength: number, rowLength: number): void {
     const size = matrixLength * rowLength;
@@ -268,6 +269,9 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private updateStateFromSelectedCells(selectedCells: boolean[]): void {
+    if (!this.state.jsonMatrix) {
+      return;
+    }
     // Create a composite filter from the selected cells
     const compositeFilter = createCompositeFilterFromCells(
       selectedCells,

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  IErrorAnalysisMatrix,
   IExplanationDashboardData,
   ISerializedExplanationData
 } from "@responsible-ai/core-ui";
@@ -55,7 +56,9 @@ export class App extends React.Component<IAppProps> {
     requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
       return callFlaskService(data, "/predict");
     };
-    requestMatrixMethod = async (data: any[]): Promise<any[]> => {
+    requestMatrixMethod = async (
+      data: any[]
+    ): Promise<IErrorAnalysisMatrix> => {
       return callFlaskService(data, "/matrix");
     };
     requestDebugMLMethod = async (data: any[]): Promise<any[]> => {

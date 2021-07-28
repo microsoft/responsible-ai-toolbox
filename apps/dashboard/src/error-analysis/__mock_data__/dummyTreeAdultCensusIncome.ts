@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const dummyTreeAdultCensusIncomeData = [
+import { IErrorAnalysisTreeNode } from "@responsible-ai/core-ui";
+
+export const dummyTreeAdultCensusIncomeData: IErrorAnalysisTreeNode[] = [
   {
-    arg: "",
+    arg: undefined,
     badFeaturesRowCount: 0,
     condition: "",
     error: 18,
@@ -14,7 +16,7 @@ export const dummyTreeAdultCensusIncomeData = [
     metricValue: 0,
     nodeIndex: 0,
     nodeName: "marital-status",
-    parentId: "",
+    parentId: undefined,
     parentNodeName: "",
     pathFromRoot: "",
     size: 48,
