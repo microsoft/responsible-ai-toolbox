@@ -90,7 +90,6 @@ export function buildInitialModelAssessmentContext(
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
-    jointDataset,
     false
   ).map((item) => {
     return {

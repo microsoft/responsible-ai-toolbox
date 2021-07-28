@@ -1,24 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { noFeature } from "./Constants";
+import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
 
 export interface IMatrixLegendState {
   maxMetricValue: number;
 }
 
 export interface IMatrixFilterState {
-  selectedFeature1: string;
-  selectedFeature2: string;
+  selectedFeature1?: string;
+  selectedFeature2?: string;
   matrixLegendState: IMatrixLegendState;
 }
 
 export interface IMatrixAreaState {
-  jsonMatrix?: any;
+  jsonMatrix?: IErrorAnalysisMatrix;
   maxMetricValue: number;
   selectedCells?: boolean[];
-  matrixFeature1: string;
-  matrixFeature2: string;
+  matrixFeature1?: string;
+  matrixFeature2?: string;
   disableClearAll: boolean;
   disableSelectAll: boolean;
 }
@@ -26,8 +26,8 @@ export interface IMatrixAreaState {
 export function createInitialMatrixFilterState(): IMatrixFilterState {
   return {
     matrixLegendState: { maxMetricValue: 0 },
-    selectedFeature1: noFeature,
-    selectedFeature2: noFeature
+    selectedFeature1: undefined,
+    selectedFeature2: undefined
   };
 }
 
@@ -36,8 +36,8 @@ export function createInitialMatrixAreaState(): IMatrixAreaState {
     disableClearAll: true,
     disableSelectAll: false,
     jsonMatrix: undefined,
-    matrixFeature1: noFeature,
-    matrixFeature2: noFeature,
+    matrixFeature1: undefined,
+    matrixFeature2: undefined,
     maxMetricValue: 0,
     selectedCells: undefined
   };

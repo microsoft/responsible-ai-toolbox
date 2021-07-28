@@ -508,8 +508,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
-                    staticTreeNodes={this.props.staticDebugML}
-                    staticMatrix={this.props.staticMatrix}
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                     features={this.props.features}
                     selectedFeatures={this.state.selectedFeatures}

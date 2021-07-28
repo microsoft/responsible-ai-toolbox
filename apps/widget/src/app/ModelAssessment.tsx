@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalWhatIfData } from "@responsible-ai/core-ui";
+import {
+  ICausalWhatIfData,
+  IErrorAnalysisMatrix
+} from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData,
@@ -28,7 +31,9 @@ export class ModelAssessment extends React.Component {
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
       };
-      callBack.requestMatrix = async (data: any[]): Promise<any[]> => {
+      callBack.requestMatrix = async (
+        data: any[]
+      ): Promise<IErrorAnalysisMatrix> => {
         return callFlaskService(data, "/matrix");
       };
       callBack.requestDebugML = async (data: any[]): Promise<any[]> => {
