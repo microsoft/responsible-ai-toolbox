@@ -90,22 +90,22 @@ class FlaskHelper(object):
         return True
 
     def run(self):
-        """TODO."""
-        class devnull:
-            write = lambda _: None  # noqa: E731
-
         ip = LOCALHOST
         # Note: for credentialed or public VM use the private IP address
         if self.env_name in VM_ENVS:
             host_name = socket.gethostname()
             ip = socket.gethostbyname(host_name)
-        server = WSGIServer((ip, self.port), self.app, log=devnull)
-        self.app.config["server"] = server
+        self.server = WSGIServer((ip, self.port), self.app)
+        self.app.config["server"] = self.server
         # self.app.config["CACHE_TYPE"] = "null"
-        server.serve_forever()
+        self.server.serve_forever()
 
         # Closes server on program exit, including freeing all sockets
         def closeserver():
-            server.stop()
+            self.stop()
 
         atexit.register(closeserver)
+
+    def stop(self):
+        if(self.server.started):
+            self.server.stop()

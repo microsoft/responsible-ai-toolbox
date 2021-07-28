@@ -52,7 +52,7 @@ interface IErrorAnalysisViewTabState {
   openFeatureList: boolean;
 }
 
-export class ErrorAnalysisViewTab extends React.PureComponent<
+export class ErrorAnalysisViewTab extends React.Component<
   IErrorAnalysisViewTabProps,
   IErrorAnalysisViewTabState
 > {
@@ -99,13 +99,14 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
             )}
           </Stack>
           <ErrorAnalysisView
+            tree={this.props.tree}
             messages={this.props.messages}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
             getTreeNodes={this.props.getTreeNodes}
             getMatrix={this.props.getMatrix}
-            staticTreeNodes={this.props.staticTreeNodes}
-            staticMatrix={this.props.staticMatrix}
+            matrix={this.props.matrix}
+            matrixFeatures={this.props.matrixFeatures}
             errorAnalysisOption={this.props.errorAnalysisOption}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
