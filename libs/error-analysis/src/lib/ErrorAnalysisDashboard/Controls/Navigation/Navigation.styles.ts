@@ -13,20 +13,21 @@ export interface INavigationStyles {
   breadcrumb: IStyle;
 }
 
-export const navigationStyles: () => IProcessedStyleSet<INavigationStyles> =
-  () => {
-    const theme = getTheme();
-    return mergeStyleSets<INavigationStyles>({
-      breadcrumb: {
-        padding: "0px 0px 0px 10px"
-      },
-      navigation: {
-        backgroundColor: theme.palette.white,
-        borderTop: "1px solid #C8C8C8",
-        boxSizing: "border-box",
-        color: theme.palette.black,
-        height: "25px",
-        width: "100%"
-      }
-    });
-  };
+export const navigationStyles: () => IProcessedStyleSet<
+  INavigationStyles
+> = () => {
+  const theme = getTheme();
+  return mergeStyleSets<INavigationStyles>({
+    breadcrumb: {
+      padding: "0px 0px 0px 10px"
+    },
+    navigation: {
+      backgroundColor: theme.palette.white,
+      borderTop: "1px solid #C8C8C8",
+      boxSizing: "border-box",
+      color: theme.palette.black,
+      height: "25px",
+      width: "100%"
+    }
+  });
+};

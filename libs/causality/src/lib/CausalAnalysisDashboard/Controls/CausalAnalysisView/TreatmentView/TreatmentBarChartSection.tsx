@@ -17,10 +17,13 @@ export interface ITreatmentBarChartSectionProps {
   data: ICausalPolicy;
 }
 
-export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarChartSectionProps> {
+export class TreatmentBarChartSection extends React.PureComponent<
+  ITreatmentBarChartSectionProps
+> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();

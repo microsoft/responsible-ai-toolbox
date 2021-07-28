@@ -108,11 +108,10 @@ export class FeatureList extends React.Component<
     this._selection = new Selection({
       onSelectionChanged: (): void => {
         let newSelectedFeatures = this.getSelectionDetails();
-        const oldSelectedFeaturesNotSearched =
-          this.state.selectedFeatures.filter(
-            (oldSelectedFeature) =>
-              !this.state.searchedFeatures.includes(oldSelectedFeature)
-          );
+        const oldSelectedFeaturesNotSearched = this.state.selectedFeatures.filter(
+          (oldSelectedFeature) =>
+            !this.state.searchedFeatures.includes(oldSelectedFeature)
+        );
         newSelectedFeatures = newSelectedFeatures.concat(
           oldSelectedFeaturesNotSearched
         );

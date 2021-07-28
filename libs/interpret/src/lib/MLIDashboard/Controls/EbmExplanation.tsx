@@ -128,8 +128,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
       featureIndex: number,
       explanationContext: IExplanationContext
     ): IPlotlyProperty => {
-      const ebmObject =
-        explanationContext.ebmExplanation as IFeatureValueExplanation;
+      const ebmObject = explanationContext.ebmExplanation as IFeatureValueExplanation;
       const boundedCoordinates = ebmObject?.featureList[featureIndex];
 
       const featureName =
@@ -185,12 +184,11 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
 
   public constructor(props: IEbmProps) {
     super(props);
-    this.featureOptions =
-      props.explanationContext.modelMetadata.featureNames.map(
-        (featureName, featureIndex) => {
-          return { key: featureIndex, text: featureName };
-        }
-      );
+    this.featureOptions = props.explanationContext.modelMetadata.featureNames.map(
+      (featureName, featureIndex) => {
+        return { key: featureIndex, text: featureName };
+      }
+    );
     this.state = {
       selectedFeature: 0
     };

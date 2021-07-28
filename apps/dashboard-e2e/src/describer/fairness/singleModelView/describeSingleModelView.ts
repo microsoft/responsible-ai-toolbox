@@ -9,7 +9,7 @@ import { getToModelComparisonPageWithDefaults } from "../utils";
 export function describeSingleModelView(data: IFairnessMetadata): void {
   describe("single model view", () => {
     const props = {
-      chart: undefined as unknown as ScatterChart
+      chart: (undefined as unknown) as ScatterChart
     };
     beforeEach(() => {
       // move to the single model view

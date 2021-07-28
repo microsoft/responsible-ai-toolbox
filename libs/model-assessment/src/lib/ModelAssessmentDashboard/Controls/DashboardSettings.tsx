@@ -22,7 +22,9 @@ export interface IDashboardSettingsProps {
   removeTab(index: number): void;
 }
 
-export class DashboardSettings extends React.PureComponent<IDashboardSettingsProps> {
+export class DashboardSettings extends React.PureComponent<
+  IDashboardSettingsProps
+> {
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {

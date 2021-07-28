@@ -12,13 +12,14 @@ export interface IBarChartStyles {
   centered: IStyle;
 }
 
-export const barChartStyles: IProcessedStyleSet<IBarChartStyles> =
-  mergeStyleSets<IBarChartStyles>({
-    barChart: {
-      flex: 1,
-      width: "100%"
-    },
-    centered: {
-      margin: "auto"
-    }
-  });
+export const barChartStyles: IProcessedStyleSet<IBarChartStyles> = mergeStyleSets<
+  IBarChartStyles
+>({
+  barChart: {
+    flex: 1,
+    width: "100%"
+  },
+  centered: {
+    margin: "auto"
+  }
+});

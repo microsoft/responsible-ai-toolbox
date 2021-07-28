@@ -157,19 +157,17 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         .map((featureIndex) => {
           return {
             key: featureIndex,
-            text: props.explanationContext.modelMetadata.featureNames[
-              featureIndex
-            ]
+            text:
+              props.explanationContext.modelMetadata.featureNames[featureIndex]
           };
         })
         .reverse();
     } else {
-      this.featuresOption =
-        props.explanationContext.modelMetadata.featureNames.map(
-          (featureName, featureIndex) => {
-            return { key: featureIndex, text: featureName };
-          }
-        );
+      this.featuresOption = props.explanationContext.modelMetadata.featureNames.map(
+        (featureName, featureIndex) => {
+          return { key: featureIndex, text: featureName };
+        }
+      );
     }
     this.state = {
       abortController: undefined,
@@ -637,10 +635,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       return [];
     }
     const rangeView = this.state.rangeView;
-    const selectedRow =
-      this.props.explanationContext.testDataset.dataset[
-        this.props.datapointIndex
-      ];
+    const selectedRow = this.props.explanationContext.testDataset.dataset[
+      this.props.datapointIndex
+    ];
     return this.buildRange().map((val) => {
       const copy = _.cloneDeep(selectedRow);
       copy[rangeView.featureIndex] = val;

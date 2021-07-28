@@ -156,15 +156,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         const localImportances =
           props.precomputedExplanations.localFeatureImportance.scores;
         if (isThreeDimArray(localImportances)) {
-          featureLength = (
-            props.precomputedExplanations.localFeatureImportance
-              .scores[0][0] as number[]
-          ).length;
+          featureLength = (props.precomputedExplanations.localFeatureImportance
+            .scores[0][0] as number[]).length;
         } else {
-          featureLength = (
-            props.precomputedExplanations.localFeatureImportance
-              .scores[0] as number[]
-          ).length;
+          featureLength = (props.precomputedExplanations.localFeatureImportance
+            .scores[0] as number[]).length;
         }
       } else if (
         props.precomputedExplanations &&
@@ -341,8 +337,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             precomputedExplanations: this.props.precomputedExplanations
           } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          requestLocalFeatureExplanations:
-            this.props.requestLocalFeatureExplanations,
+          requestLocalFeatureExplanations: this.props
+            .requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
           selectedErrorCohort: this.state.selectedCohort,
           telemetryHook:
@@ -700,8 +696,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       addTemporaryCohort = false;
     }
     const baseCohortFilters = this.state.baseCohort.cohort.filters;
-    const baseCohortCompositeFilters =
-      this.state.baseCohort.cohort.compositeFilters;
+    const baseCohortCompositeFilters = this.state.baseCohort.cohort
+      .compositeFilters;
     const selectedCohort: ErrorCohort = new ErrorCohort(
       new Cohort(
         selectedCohortName,

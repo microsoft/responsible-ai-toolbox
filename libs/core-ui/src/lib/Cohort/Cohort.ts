@@ -155,8 +155,9 @@ export class Cohort {
     if (localFeatureImportances.length === 0) {
       return [];
     }
-    this.cachedTransposedLocalFeatureImportances =
-      ModelExplanationUtils.transpose2DArray(localFeatureImportances);
+    this.cachedTransposedLocalFeatureImportances = ModelExplanationUtils.transpose2DArray(
+      localFeatureImportances
+    );
     return this.cachedTransposedLocalFeatureImportances;
   }
 

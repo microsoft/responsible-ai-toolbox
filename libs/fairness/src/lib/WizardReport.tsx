@@ -51,8 +51,8 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       106;
     const areaHeights = Math.max(300, alternateHeight);
 
-    const performanceKey =
-      this.props.performancePickerProps.selectedPerformanceKey;
+    const performanceKey = this.props.performancePickerProps
+      .selectedPerformanceKey;
     const fairnessKey = this.props.fairnessPickerProps.selectedFairnessKey;
     const outcomeKey: string =
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -133,10 +133,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         outcomeKey
       );
 
-      const formattedBinPerformanceValues =
-        this.state.metrics.performance.bins.map((value) =>
-          FormatMetrics.formatNumbers(value, performanceKey)
-        );
+      const formattedBinPerformanceValues = this.state.metrics.performance.bins.map(
+        (value) => FormatMetrics.formatNumbers(value, performanceKey)
+      );
       const formattedBinOutcomeValues = this.state.metrics.outcomes.bins.map(
         (value) => FormatMetrics.formatNumbers(value, outcomeKey)
       );
@@ -295,10 +294,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
-      const index =
-        this.props.dashboardContext.modelMetadata.featureNames.indexOf(
-          featureKey
-        );
+      const index = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
+        featureKey
+      );
       this.props.featureBinPickerProps.selectedBinIndex = index;
       this.props.featureBinPickerProps.onBinChange(index);
       this.setState({ featureKey, metrics: undefined });
@@ -348,12 +346,13 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       );
       // TODO: extend disparities to query for all possible kinds of disparities
       // https://github.com/microsoft/responsible-ai-widgets/issues/65
-      disparities[this.props.fairnessPickerProps.selectedFairnessKey] =
-        await this.getFairnessMetric(
-          this.props.fairnessPickerProps.selectedFairnessKey,
-          fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
-            .fairnessMode
-        );
+      disparities[
+        this.props.fairnessPickerProps.selectedFairnessKey
+      ] = await this.getFairnessMetric(
+        this.props.fairnessPickerProps.selectedFairnessKey,
+        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
+          .fairnessMode
+      );
       switch (this.props.dashboardContext.modelMetadata.PredictionType) {
         case PredictionTypes.BinaryClassification: {
           falseNegativeRates = await this.getMetric("miss_rate");
@@ -362,10 +361,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           break;
         }
         case PredictionTypes.Probability: {
-          predictions =
-            this.props.dashboardContext.predictions[
-              this.props.selectedModelIndex
-            ];
+          predictions = this.props.dashboardContext.predictions[
+            this.props.selectedModelIndex
+          ];
           overpredictions = await this.getMetric("overprediction");
           underpredictions = await this.getMetric("underprediction");
           outcomes = await this.getMetric("average");
@@ -373,10 +371,9 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         }
         case PredictionTypes.Regression:
         default: {
-          predictions =
-            this.props.dashboardContext.predictions[
-              this.props.selectedModelIndex
-            ];
+          predictions = this.props.dashboardContext.predictions[
+            this.props.selectedModelIndex
+          ];
           errors = predictions.map((predicted, index) => {
             return predicted - this.props.dashboardContext.trueY[index];
           });

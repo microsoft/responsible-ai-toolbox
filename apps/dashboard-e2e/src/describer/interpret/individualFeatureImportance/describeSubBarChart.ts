@@ -7,9 +7,9 @@ import { IInterpretData } from "../IInterpretData";
 
 export function describeSubBarChart(dataShape: IInterpretData): void {
   const props = {
-    chart: undefined as unknown as ScatterChart,
+    chart: (undefined as unknown) as ScatterChart,
     dataShape,
-    subBarChart: undefined as unknown as BarChart
+    subBarChart: (undefined as unknown) as BarChart
   };
   describe("Sub bar chart", () => {
     before(() => {

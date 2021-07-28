@@ -18,7 +18,9 @@ interface IConfirmationDialogProps {
   onConfirm(): void;
   onClose(): void;
 }
-export class ConfirmationDialog extends React.Component<IConfirmationDialogProps> {
+export class ConfirmationDialog extends React.Component<
+  IConfirmationDialogProps
+> {
   public render(): React.ReactNode {
     const dialogContentProps = {
       subText: this.props.subText,

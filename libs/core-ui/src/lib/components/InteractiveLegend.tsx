@@ -28,7 +28,9 @@ export interface IInteractiveLegendProps {
   items: ILegendItem[];
 }
 
-export class InteractiveLegend extends React.PureComponent<IInteractiveLegendProps> {
+export class InteractiveLegend extends React.PureComponent<
+  IInteractiveLegendProps
+> {
   private readonly classes = interactiveLegendStyles();
 
   public render(): React.ReactNode {

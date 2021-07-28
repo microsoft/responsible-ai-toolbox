@@ -61,20 +61,17 @@ export class App extends React.Component<IAppProps> {
     if (this.props.classDimension === 1) {
       // Boston
       modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBoston;
-      modelAssessmentDashboardProps.requestImportances =
-        createJsonImportancesGenerator(
-          this.props.dataset.feature_names,
-          DatasetName.Boston
-        );
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.Boston
+      );
     } else {
       // Adult
-      modelAssessmentDashboardProps.requestDebugML =
-        generateJsonTreeAdultCensusIncome;
-      modelAssessmentDashboardProps.requestImportances =
-        createJsonImportancesGenerator(
-          this.props.dataset.feature_names,
-          DatasetName.AdultCensusIncome
-        );
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeAdultCensusIncome;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.AdultCensusIncome
+      );
     }
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;

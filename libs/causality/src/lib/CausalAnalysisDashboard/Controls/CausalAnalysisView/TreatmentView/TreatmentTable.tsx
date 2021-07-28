@@ -20,8 +20,9 @@ export interface ITreatmentTableProps {
 
 export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();

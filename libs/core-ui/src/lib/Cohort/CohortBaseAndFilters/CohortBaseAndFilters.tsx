@@ -24,7 +24,9 @@ const maxWidthStackStyle: IStackStyles = {
   }
 };
 
-export class CohortBaseAndFilters extends React.Component<ICohortBaseAndFiltersProps> {
+export class CohortBaseAndFilters extends React.Component<
+  ICohortBaseAndFiltersProps
+> {
   public render(): React.ReactNode {
     const classNames = cohortBaseAndFiltersStyles();
     const filters = this.props.cohort.filtersToString().join(", ");

@@ -63,8 +63,9 @@ export class SaveCohort extends React.Component<
   ISaveCohortState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public constructor(props: ISaveCohortProps) {
     super(props);

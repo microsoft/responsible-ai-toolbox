@@ -67,8 +67,9 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       localExplanation !== undefined &&
       localExplanation.values !== undefined
     ) {
-      const featuresByClassMatrix =
-        this.getFeatureByClassMatrix(localExplanation);
+      const featuresByClassMatrix = this.getFeatureByClassMatrix(
+        localExplanation
+      );
       const sortVector = this.getSortVector(localExplanation);
       const defaultVisibleClasses =
         this.state.selectedSorting !== FeatureKeys.AbsoluteGlobal &&

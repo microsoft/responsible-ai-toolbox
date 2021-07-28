@@ -101,8 +101,9 @@ export class FairnessWizardV2 extends React.PureComponent<
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
       // we must assume that the same performance metrics are provided across models and bins
-      performanceMetrics =
-        WizardBuilder.buildPerformanceListForPrecomputedMetrics(this.props);
+      performanceMetrics = WizardBuilder.buildPerformanceListForPrecomputedMetrics(
+        this.props
+      );
       fairnessMetrics = WizardBuilder.buildFairnessListForPrecomputedMetrics(
         this.props
       );
@@ -399,8 +400,9 @@ export class FairnessWizardV2 extends React.PureComponent<
       const newContext = _.cloneDeep(this.state.dashboardContext);
 
       newContext.binVector = this.props.precomputedFeatureBins[index].binVector;
-      newContext.groupNames =
-        this.props.precomputedFeatureBins[index].binLabels;
+      newContext.groupNames = this.props.precomputedFeatureBins[
+        index
+      ].binLabels;
 
       this.setState({ dashboardContext: newContext, selectedBinIndex: index });
     } else {

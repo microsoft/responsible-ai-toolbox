@@ -21,10 +21,13 @@ export interface ITreatmentBarChartProps {
   theme?: string;
 }
 
-export class TreatmentBarChart extends React.PureComponent<ITreatmentBarChartProps> {
+export class TreatmentBarChart extends React.PureComponent<
+  ITreatmentBarChartProps
+> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     if (!this.props.data) {

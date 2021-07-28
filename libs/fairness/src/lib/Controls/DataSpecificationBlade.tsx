@@ -12,7 +12,9 @@ export interface IDataSpecProps {
   featureNames: string[];
 }
 
-export class DataSpecificationBlade extends React.PureComponent<IDataSpecProps> {
+export class DataSpecificationBlade extends React.PureComponent<
+  IDataSpecProps
+> {
   public render(): React.ReactNode {
     const styles = DataSpecificationBladeStyles();
     return (

@@ -135,8 +135,9 @@ export class AxisConfigDialog extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const selectedMeta =
-      this.props.jointDataset.metaDict[this.state.selectedColumn.property];
+    const selectedMeta = this.props.jointDataset.metaDict[
+      this.state.selectedColumn.property
+    ];
     const isDataColumn = this.state.selectedColumn.property.includes(
       JointDataset.DataLabelRoot
     );

@@ -28,15 +28,11 @@ export function getClassLength(props: IExplanationDashboardProps): number {
   ) {
     // determine if passed in values is 1D or 2D
     if (
-      (
-        props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][]
-      ).every((dim1) => Array.isArray(dim1))
+      (props.precomputedExplanations.globalFeatureImportance
+        .scores as number[][]).every((dim1) => Array.isArray(dim1))
     ) {
-      return (
-        props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][]
-      )[0].length;
+      return (props.precomputedExplanations.globalFeatureImportance
+        .scores as number[][])[0].length;
     }
   }
   if (

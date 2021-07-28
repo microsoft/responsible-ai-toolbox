@@ -48,8 +48,9 @@ export class ModelPerformanceTab extends React.PureComponent<
   IModelPerformanceTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "ModelPerformanceChart";
 
@@ -340,13 +341,13 @@ export class ModelPerformanceTab extends React.PureComponent<
         this.context.modelMetadata.modelType
       );
     }
-    const cohort =
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort;
+    const cohort = this.context.errorCohorts[this.state.selectedCohortIndex]
+      .cohort;
     const yValues = cohort.unwrap(this.state.chartProps.yAxis.property, true);
     const indexArray = cohort.unwrap(JointDataset.IndexLabel);
-    const sortedCategoricalValues =
-      this.context.jointDataset.metaDict[this.state.chartProps.yAxis.property]
-        .sortedCategoricalValues;
+    const sortedCategoricalValues = this.context.jointDataset.metaDict[
+      this.state.chartProps.yAxis.property
+    ].sortedCategoricalValues;
     const indexes = sortedCategoricalValues?.map((_, labelIndex) => {
       return indexArray.filter((_, index) => {
         return yValues[index] === labelIndex;

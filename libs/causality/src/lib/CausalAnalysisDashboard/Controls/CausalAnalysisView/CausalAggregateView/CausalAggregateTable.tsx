@@ -23,10 +23,13 @@ export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];
 }
 
-export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTableProps> {
+export class CausalAggregateTable extends React.PureComponent<
+  ICausalAggregateTableProps
+> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const columns: IColumn[] = [

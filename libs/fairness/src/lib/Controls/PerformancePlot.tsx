@@ -28,7 +28,9 @@ interface IPerformancePlotProps {
   featureBinPickerProps: IFeatureBinPickerPropsV2;
 }
 
-export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> {
+export class PerformancePlot extends React.PureComponent<
+  IPerformancePlotProps
+> {
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();

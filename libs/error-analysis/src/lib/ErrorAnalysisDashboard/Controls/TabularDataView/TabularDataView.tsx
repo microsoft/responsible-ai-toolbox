@@ -61,8 +61,9 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   if (!props) {
     return <div />;
   }
-  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
-    (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
+    tooltipHostProps
+  ) => <TooltipHost {...tooltipHostProps} />;
   return (
     <div>
       {defaultRender?.({

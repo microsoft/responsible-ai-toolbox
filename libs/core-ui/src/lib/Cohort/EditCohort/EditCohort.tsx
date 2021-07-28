@@ -60,8 +60,9 @@ export class EditCohort extends React.Component<
   IEditCohortState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public constructor(props: IEditCohortProps) {
     super(props);

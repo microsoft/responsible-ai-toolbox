@@ -6,7 +6,7 @@ import { IInterpretData } from "../IInterpretData";
 
 export function describeSubLineChart(dataShape: IInterpretData): void {
   const props = {
-    chart: undefined as unknown as ScatterChart,
+    chart: (undefined as unknown) as ScatterChart,
     dataShape
   };
   describe("Sub line chart", () => {

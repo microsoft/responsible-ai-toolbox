@@ -53,8 +53,9 @@ export class CounterfactualList extends React.Component<
   ICounterfactualListState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
   private selection: ISelection;
   public constructor(props: ICounterfactualListProps) {
     super(props);
@@ -99,10 +100,9 @@ export class CounterfactualList extends React.Component<
 
   private getItems(): any {
     const items: any = [];
-    const selectedData =
-      this.props.data?.cfs_list[
-        this.props.selectedIndex % this.props.data?.cfs_list.length
-      ];
+    const selectedData = this.props.data?.cfs_list[
+      this.props.selectedIndex % this.props.data?.cfs_list.length
+    ];
     if (selectedData && this.props.originalData) {
       items.push(this.props.originalData);
       selectedData.forEach((point, i) => {
@@ -254,8 +254,9 @@ export class CounterfactualList extends React.Component<
   }
   private getSortedFeatureNames(): string[] {
     const data: ILocalImportanceData[] = [];
-    const localImportanceData =
-      this.props.data?.local_importance?.[this.props.selectedIndex];
+    const localImportanceData = this.props.data?.local_importance?.[
+      this.props.selectedIndex
+    ];
     if (!localImportanceData) {
       return [];
     }

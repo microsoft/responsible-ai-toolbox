@@ -21,8 +21,9 @@ export interface ITreatmentListProps {
 
 export class TreatmentList extends React.Component<ITreatmentListProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     if (!this.props.data) {

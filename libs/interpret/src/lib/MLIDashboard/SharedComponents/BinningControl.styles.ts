@@ -13,17 +13,18 @@ export interface IBinningControlStyles {
   parameterSet: IStyle;
 }
 
-export const binningControlStyles: IProcessedStyleSet<IBinningControlStyles> =
-  mergeStyleSets<IBinningControlStyles>({
-    featurePicker: {
-      borderBottom: "1px solid grey",
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "3px 15px"
-    },
-    parameterSet: { display: "flex" },
-    rangeView: {
-      display: "flex",
-      justifyContent: "flex-end"
-    }
-  });
+export const binningControlStyles: IProcessedStyleSet<IBinningControlStyles> = mergeStyleSets<
+  IBinningControlStyles
+>({
+  featurePicker: {
+    borderBottom: "1px solid grey",
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "3px 15px"
+  },
+  parameterSet: { display: "flex" },
+  rangeView: {
+    display: "flex",
+    justifyContent: "flex-end"
+  }
+});

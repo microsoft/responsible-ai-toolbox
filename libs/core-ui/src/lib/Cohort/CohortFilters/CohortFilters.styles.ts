@@ -14,21 +14,22 @@ export interface ICohortFiltersStyles {
   tableData: IStyle;
 }
 
-export const cohortFiltersStyles: () => IProcessedStyleSet<ICohortFiltersStyles> =
-  () => {
-    return mergeStyleSets<ICohortFiltersStyles>({
-      header: {
-        fontSize: "14px",
-        fontWeight: "600"
-      },
-      section: {
-        paddingBottom: "10px !important",
-        paddingLeft: "20px",
-        paddingTop: "10px !important"
-      },
-      subsection: {},
-      tableData: {
-        fontSize: "16px"
-      }
-    });
-  };
+export const cohortFiltersStyles: () => IProcessedStyleSet<
+  ICohortFiltersStyles
+> = () => {
+  return mergeStyleSets<ICohortFiltersStyles>({
+    header: {
+      fontSize: "14px",
+      fontWeight: "600"
+    },
+    section: {
+      paddingBottom: "10px !important",
+      paddingLeft: "20px",
+      paddingTop: "10px !important"
+    },
+    subsection: {},
+    tableData: {
+      fontSize: "16px"
+    }
+  });
+};

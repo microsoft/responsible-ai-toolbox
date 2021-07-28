@@ -32,8 +32,9 @@ export class CounterfactualsView extends React.PureComponent<
   ICounterfactualsViewState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
   public constructor(props: ICounterfactualsViewProps) {
     super(props);
     this.state = buildCounterfactualState(

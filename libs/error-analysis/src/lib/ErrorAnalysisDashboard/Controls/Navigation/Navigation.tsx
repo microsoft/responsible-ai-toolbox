@@ -95,8 +95,8 @@ export class Navigation extends React.Component<INavigationProps> {
           });
           items.push({
             key: PredictionTabKeys.InspectionTab,
-            text: localization.ErrorAnalysis.Navigation
-              .localExplanationInspection
+            text:
+              localization.ErrorAnalysis.Navigation.localExplanationInspection
           });
         }
       }

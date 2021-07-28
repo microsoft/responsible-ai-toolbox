@@ -11,12 +11,13 @@ export interface ITabularDataViewStyles {
   mainScrollBarPane: IStyle;
 }
 
-export const tabularDataViewStyles: () => IProcessedStyleSet<ITabularDataViewStyles> =
-  () => {
-    return mergeStyleSets<ITabularDataViewStyles>({
-      mainScrollBarPane: {
-        height: "800px",
-        position: "relative"
-      }
-    });
-  };
+export const tabularDataViewStyles: () => IProcessedStyleSet<
+  ITabularDataViewStyles
+> = () => {
+  return mergeStyleSets<ITabularDataViewStyles>({
+    mainScrollBarPane: {
+      height: "800px",
+      position: "relative"
+    }
+  });
+};

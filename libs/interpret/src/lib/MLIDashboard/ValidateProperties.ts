@@ -148,8 +148,8 @@ export class ValidateProperties {
     if (!this.props.precomputedExplanations?.globalFeatureImportance?.scores) {
       return;
     }
-    const globalExp =
-      this.props.precomputedExplanations?.globalFeatureImportance?.scores;
+    const globalExp = this.props.precomputedExplanations
+      ?.globalFeatureImportance?.scores;
     const globalFeatureLength =
       this.props.precomputedExplanations?.globalFeatureImportance?.featureNames
         ?.length ?? this.featureLength;
@@ -177,8 +177,8 @@ export class ValidateProperties {
     if (!this.props.precomputedExplanations?.localFeatureImportance?.scores) {
       return;
     }
-    const localExp =
-      this.props.precomputedExplanations.localFeatureImportance.scores;
+    const localExp = this.props.precomputedExplanations.localFeatureImportance
+      .scores;
     if (isThreeDimArray(localExp)) {
       if (
         !this.validate3D(
