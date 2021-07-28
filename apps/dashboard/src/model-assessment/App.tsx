@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICausalWhatIfData } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
@@ -12,12 +13,12 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
-  generateJsonTreeAdultCensusIncome,
   generateJsonMatrix,
-  generateJsonTreeBreastCancer,
   createJsonImportancesGenerator,
   createPredictionsRequestGenerator,
-  DatasetName
+  DatasetName,
+  generateJsonTreeBoston,
+  generateJsonTreeAdultCensusIncome
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -47,30 +48,58 @@ export class App extends React.Component<IAppProps> {
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
       locale: this.props.language,
-      localUrl: "",
-      requestDebugML: generateJsonTreeAdultCensusIncome,
-      requestImportances: createJsonImportancesGenerator(
-        this.props.dataset.feature_names,
-        DatasetName.BreastCancer
-      ),
+      localUrl: "https://www.bing.com/",
+      requestCausalWhatIf: this.requestCausalWhatIf,
       requestMatrix: generateJsonMatrix,
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
-      stringParams: { contextualHelp: this.messages }
+      stringParams: { contextualHelp: this.messages },
+      theme: this.props.theme
     };
 
-    if ("categoricalMap" in this.props.dataset) {
-      return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    if (this.props.classDimension === 1) {
+      // Boston
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBoston;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.Boston
+      );
+    } else {
+      // Adult
+      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeAdultCensusIncome;
+      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
+        this.props.dataset.feature_names,
+        DatasetName.AdultCensusIncome
+      );
     }
-
-    modelAssessmentDashboardProps.localUrl = "https://www.bing.com/";
-    modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBreastCancer;
-    modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
-      this.props.dataset.feature_names,
-      DatasetName.BreastCancer
-    );
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
   }
+  private readonly requestCausalWhatIf = async (
+    _id: string,
+    _features: unknown[],
+    _featureName: string,
+    newValue: unknown[],
+    _y: unknown[],
+    abortSignal: AbortSignal
+  ): Promise<ICausalWhatIfData[]> => {
+    return new Promise<ICausalWhatIfData[]>((resolver) => {
+      setTimeout(() => {
+        if (abortSignal.aborted) {
+          return;
+        }
+        resolver(
+          newValue.map((target) => ({
+            ci_lower: target as number,
+            ci_upper: target as number,
+            point_estimate: target as number,
+            pvalue: 0,
+            stderr: 0,
+            zstat: undefined
+          }))
+        );
+      }, 500);
+    });
+  };
 }

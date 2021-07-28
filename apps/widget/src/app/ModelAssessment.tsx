@@ -2,8 +2,13 @@
 // Licensed under the MIT License.
 
 import {
+  ICausalWhatIfData,
+  IErrorAnalysisMatrix
+} from "@responsible-ai/core-ui";
+import {
   ModelAssessmentDashboard,
-  IModelAssessmentData
+  IModelAssessmentData,
+  IModelAssessmentDashboardProps
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
@@ -14,32 +19,49 @@ import { modelData as modelDataImported } from "./modelData";
 export class ModelAssessment extends React.Component {
   public render(): React.ReactNode {
     const modelData: IModelAssessmentData = modelDataImported;
-    let requestPredictionsMethod = undefined;
-    let requestMatrixMethod = undefined;
-    let requestDebugMLMethod = undefined;
-    let requestImportancesMethod = undefined;
+    const callBack: Pick<
+      IModelAssessmentDashboardProps,
+      | "requestPredictions"
+      | "requestDebugML"
+      | "requestMatrix"
+      | "requestImportances"
+      | "requestCausalWhatIf"
+    > = {};
     if (config.baseUrl !== undefined) {
-      requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
+      callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
       };
-      requestMatrixMethod = async (data: any[]): Promise<any[]> => {
+      callBack.requestMatrix = async (
+        data: any[]
+      ): Promise<IErrorAnalysisMatrix> => {
         return callFlaskService(data, "/matrix");
       };
-      requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
+      callBack.requestDebugML = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/tree");
       };
-      requestImportancesMethod = async (data: any[]): Promise<any[]> => {
+      callBack.requestImportances = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/importances");
+      };
+      callBack.requestCausalWhatIf = async (
+        id: string,
+        features: unknown[],
+        featureName: string,
+        newValue: unknown[],
+        target: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalWhatIfData[]> => {
+        return callFlaskService(
+          [id, features, featureName, newValue, target],
+          "/causal_whatif",
+          abortSignal
+        );
       };
     }
 
     return (
       <ModelAssessmentDashboard
         {...modelData}
-        requestPredictions={requestPredictionsMethod}
-        requestDebugML={requestDebugMLMethod}
-        requestMatrix={requestMatrixMethod}
-        requestImportances={requestImportancesMethod}
+        {...callBack}
         localUrl={config.baseUrl}
         locale={config.locale}
         theme={undefined}

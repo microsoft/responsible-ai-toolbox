@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IErrorAnalysisTreeNode } from "@responsible-ai/core-ui";
 import { Property } from "csstype";
 import { HierarchyPointNode } from "d3-hierarchy";
 
@@ -37,21 +38,8 @@ export interface ITreeViewRendererState {
 }
 
 // Represents IRequestNode with augmented calculations
-export interface ITreeNode {
-  arg: number;
-  condition: string;
-  error: number;
+export interface ITreeNode extends IErrorAnalysisTreeNode {
   rootErrorSize: number;
-  id: string;
-  isErrorMetric: boolean;
-  method: string;
-  metricName: string;
-  metricValue: number;
-  nodeIndex: number;
-  nodeName: string;
-  parentId: string;
-  parentNodeName: string;
-  size: number;
   errorColor: Property.Color;
   filterProps: FilterProps;
   maskShift: number;

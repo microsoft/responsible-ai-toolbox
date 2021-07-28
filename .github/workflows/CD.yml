@@ -5,11 +5,14 @@ name: CD
 env:
   folder_to_upload: dist/apps/dashboard
   blob_account: responsibleai
-  blob_container: latest
+  blob_container_for_pull_request: pullrequest
+  blob_container_for_js: latest
   blob_container_for_raiwidget: raiwidgets
+  blob_path_for_pull_request: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}
   node-version: 16.x
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
+  dashboardDirectory: dashboard
 
 on:
   push:
@@ -35,6 +38,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.node-version }}
+
+      - id: publish_url_for_js
+        name: publish_url_for_js
+        run: |
+          if [[ '${{ github.event_name }}' == 'push' ]]
+          then
+            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_js}/index.html"
+          elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+          then
+            echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_pull_request}/${blob_path_for_pull_request}/${dashboardDirectory}/index.html"
+          else
+            echo "Invalid event $${{ github.event_name }}"
+          fi
 
       - name: Install yarn
         run: npm install yarn -g
@@ -90,52 +106,66 @@ jobs:
         working-directory: ${{ env.widgetDirectory }}
 
       - name: run tests
-        run: pytest
-
-      - name: skip publish for pull request
-        if: ${{ github.event_name  == 'pull_request' }}
-        run: |
-          echo "skip publish for pull request"
+        run: pytest --durations=10
 
       - name: Upload a Build result
-        if: ${{ github.event_name  == 'push' }}
         uses: actions/upload-artifact@v2
         with:
           name: dist
           path: dist
 
-      - id: publish_url
-        if: ${{ github.event_name  == 'push' }}
-        run: |
-          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container}/index.html"
-      - name: Upload dashboard ${{steps.publish_url.outputs.url}}
-        if: ${{ github.event_name  == 'push' }}
+      - name: Upload dashboard ${{steps.publish_url_for_js.outputs.url}}
         uses: Azure/cli@v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            if [[ '${{ github.event_name }}' == 'push' ]]
+            then
+              az storage blob sync -c "${{env.blob_container_for_js}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+            then
+              az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{env.folder_to_upload}}" -d "${{env.blob_path_for_pull_request}}/${{ env.dashboardDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            else
+              echo "Invalid event $${{ github.event_name }}"
+            fi
 
-      - id: package_url
-        if: ${{ github.event_name  == 'push' }}
-        run: |
-          echo "::set-output name=url::https://${blob_account}.blob.core.windows.net/${blob_container_for_raiwidget}/${{steps.version.outputs.version}}/"
+      - uses: unsplash/comment-on-pr@master
+        if: ${{ github.event_name  == 'pull_request' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: ${{steps.publish_url_for_js.outputs.url}}
+          check_for_duplicate_msg: true
 
-      - name: Upload package ${{steps.package_url.outputs.url}}
-        if: ${{ github.event_name  == 'push' }}
+      - name: Upload responsible-ai
         uses: Azure/cli@v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            if [[ '${{ github.event_name }}' == 'push' ]]
+            then
+              az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+            then
+              az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{ env.raiDirectory }}/dist/" -d "${{env.blob_path_for_pull_request}}/${{ env.raiDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            else
+              echo "Invalid event $${{ github.event_name }}"
+            fi
 
-      - name: Upload package ${{steps.package_url.outputs.url}}
-        if: ${{ github.event_name  == 'push' }}
+      - name: Upload raiwidgets
         uses: Azure/cli@v1.0.0
         with:
           azcliversion: 2.16.0
           inlineScript: |
-            az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            if [[ '${{ github.event_name }}' == 'push' ]]
+            then
+              az storage blob sync -c "${{env.blob_container_for_raiwidget}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{steps.version.outputs.version}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            elif [[ '${{ github.event_name }}' == 'pull_request' ]]
+            then
+              az storage blob sync -c "${{env.blob_container_for_pull_request}}" --account-name "${{env.blob_account}}" -s "${{ env.widgetDirectory }}/dist/" -d "${{env.blob_path_for_pull_request}}/${{ env.widgetDirectory }}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+            else
+              echo "Invalid event $${{ github.event_name }}"
+            fi
 
   cd-typescript-publish:
     if: ${{ github.event_name  == 'push' }}

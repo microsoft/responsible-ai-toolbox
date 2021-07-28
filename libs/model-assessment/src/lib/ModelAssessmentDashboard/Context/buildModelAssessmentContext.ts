@@ -25,9 +25,13 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
+import { getAvailableTabs } from "../AvailableTabs";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
-import { IModelAssessmentDashboardState } from "../ModelAssessmentDashboardState";
-import { PredictionTabKeys, GlobalTabKeys } from "../ModelAssessmentEnums";
+import {
+  IModelAssessmentDashboardState,
+  IModelAssessmentDashboardTab
+} from "../ModelAssessmentDashboardState";
+import { GlobalTabKeys } from "../ModelAssessmentEnums";
 
 export function buildInitialModelAssessmentContext(
   props: IModelAssessmentDashboardProps
@@ -82,33 +86,20 @@ export function buildInitialModelAssessmentContext(
     );
     weightVectorOptions.push(index);
   });
+
+  // only include tabs for which we have the required data
+  const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
+    props,
+    false
+  ).map((item) => {
+    return {
+      dataCount: jointDataset.datasetRowCount,
+      key: item.key as GlobalTabKeys
+    };
+  });
+
   return {
-    activeGlobalTabs: [
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.ErrorAnalysisTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.ModelStatisticsTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.DataExplorerTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.FeatureImportancesTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.CausalAnalysisTab
-      },
-      {
-        dataCount: jointDataset.datasetRowCount,
-        key: GlobalTabKeys.CounterfactualsTab
-      }
-    ],
+    activeGlobalTabs,
     baseCohort: cohorts[0],
     cohorts,
     createCohortVisible: false,
@@ -128,7 +119,6 @@ export function buildInitialModelAssessmentContext(
     matrixFilterState: createInitialMatrixFilterState(),
     modelChartConfig: undefined,
     modelMetadata,
-    predictionTab: PredictionTabKeys.CorrectPredictionTab,
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedFeatures: props.dataset.feature_names,
@@ -221,14 +211,18 @@ function buildModelMetadata(
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
-    props.dataset.features,
-    props.dataset.categorical_map
+    props.dataset.features
+  ).map(
+    (v, i) =>
+      v ||
+      props.dataset.categorical_features.includes(
+        props.dataset.feature_names[i]
+      )
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
       props.dataset.features,
-      featureIsCategorical,
-      props.dataset.categorical_map
+      featureIsCategorical
     ) || [];
   return {
     classNames,

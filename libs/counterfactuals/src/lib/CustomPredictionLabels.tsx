@@ -8,14 +8,7 @@ import {
   ModelExplanationUtils
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  DirectionalHint,
-  IconButton,
-  ITooltipProps,
-  Text,
-  TooltipDelay,
-  TooltipHost
-} from "office-ui-fabric-react";
+import { IconButton, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { CounterfactualConstants } from "./CounterfactualConstants";
@@ -36,11 +29,6 @@ export class CustomPredictionLabels extends React.Component<
       const predictedClass = this.props.jointDataset.hasPredictedY
         ? this.props.temporaryPoint?.[JointDataset.PredictedYLabel]
         : undefined;
-      const predictedClassName =
-        predictedClass !== undefined
-          ? this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
-              .sortedCategoricalValues?.[predictedClass]
-          : undefined;
       const predictedProb =
         this.props.jointDataset.hasPredictedProbabilities &&
         predictedClass !== undefined
@@ -111,8 +99,8 @@ export class CustomPredictionLabels extends React.Component<
             </Text>
           );
         });
-        const tooltipProps: ITooltipProps = {
-          onRenderContent: () => (
+        return (
+          <div className={classNames.predictedBlock}>
             <div className={classNames.tooltipWrapper}>
               <div className={classNames.tooltipTitle}>
                 <Text variant="large">
@@ -138,40 +126,6 @@ export class CustomPredictionLabels extends React.Component<
                   </Text>
                   {tooltipDeltas}
                 </div>
-              </div>
-            </div>
-          )
-        };
-        return (
-          <div className={classNames.predictedBlock}>
-            <TooltipHost
-              tooltipProps={tooltipProps}
-              delay={TooltipDelay.zero}
-              id={CounterfactualConstants.whatIfPredictionTooltipIds}
-              directionalHint={DirectionalHint.leftCenter}
-              styles={{ root: { display: "inline-block" } }}
-            >
-              <IconButton
-                className={classNames.tooltipHost}
-                iconProps={{ iconName: "More" }}
-              />
-            </TooltipHost>
-            <div>
-              <div>
-                <Text className={classNames.boldText} variant="small">
-                  {localization.Interpret.WhatIfTab.newPredictedClass}
-                </Text>
-                <Text variant="small">{predictedClassName}</Text>
-              </div>
-              <div>
-                <Text className={classNames.boldText} variant="small">
-                  {localization.Interpret.WhatIfTab.newProbability}
-                </Text>
-                <Text variant="small" id="WhatIfNewProbability">
-                  {predictedProb.toLocaleString(undefined, {
-                    maximumFractionDigits: 3
-                  })}
-                </Text>
               </div>
             </div>
           </div>

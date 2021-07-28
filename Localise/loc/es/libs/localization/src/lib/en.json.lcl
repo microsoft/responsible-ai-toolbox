@@ -73,12 +73,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.here" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[here]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[aquí]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.lasso" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A lasso was fit to predict y from X[-i]5D;, and a lasso was fit to predict X[i]5D; from X[-i]5D;. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here]]></Val>
+          <Val><![CDATA[A lasso was fit to predict y from X[-i]5D;, and a lasso was fit to predict X[i]5D; from X[-i]5D;. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un lazo se ajustaba para predecir «y» de X[-i]5D;, y un lazo se ajustaba para predecir X[i]5D; desde X[-i]5D;. El efecto causal puede visualizarse como la correlación de las variaciones residuales o no explicadas de las dos tareas de predicción sin explicar. Obtenga más información sobre Aprendizaje automático doble aquí.]]></Val>
+            <Val><![CDATA[Se ajustó un lazo para predecir "y" a partir de X[-i]5D;, y otro para predecir X[i]5D; a partir de X[-i]5D;. El efecto causal puede visualizarse como la correlación de las variaciones residuales o no explicadas de las dos tareas de predicción sin explicar. Obtenga más información sobre Aprendizaje automático doble aquí.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[A lasso was fit to predict y from X[-i]5D;, and a lasso was fit to predict X[i]5D; from X[-i]5D;. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning here]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -235,6 +247,123 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[En este gráfico se muestra el promedio de los beneficios que ofrecerían varias directivas de tratamiento con respecto a la línea base al tratar siempre {0} con {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarText" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The first bar indicates average gains if the recommended global treatment policy described above was taken.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La primera barra indica las ganancias medias si se ha tomado la directiva de tratamiento global recomendada descrita anteriormente.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Estas herramientas ayudan a crear directivas para futuras intervenciones. Puede identificar qué partes de la muestra obtendrán las respuestas más grandes para un controlador causal (por ejemplo, tratamientos) o construir reglas para definir qué poblaciones futuras tendrán los mayores efectos de tratamiento.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.Left" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[{0} <= {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} <= {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.Recommended" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recommended treatment = {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tratamiento recomendado = {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.Right" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[{0} > {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} > {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.SelectPolicy" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Set treatment feature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Establecer característica de tratamiento]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.Size" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Interpretable recommended global treatment policy for sample size (n) = {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Directiva de tratamiento global recomendada interpretable para el tamaño de la muestra (n) = {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.Table" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The table can be read by taking a row and then taking a column of that specific row.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Para leer la tabla, tome una fila y, a continuación, tome una columna de esa fila específica.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.TableDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[En esta tabla se muestra una directiva interpretable de tratamiento global recomendado para el tamaño de la muestra. La tabla proporciona las reglas generales de segmentación y los tratamientos recomendados para la característica de tratamiento que ha seleccionado.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.alwaysTreat" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Always treat '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tratar siempre "{0}"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.averageGain" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Average gains of alternative policies over no {0} treatment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Promedio de los beneficios de directivas alternativas con respecto al no tratamiento de {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.TreatmentPolicy.nSample" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[n = {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[n = {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Core.ExpandableText.SeeLess" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[See less]]></Val>
@@ -249,6 +378,240 @@
           <Val><![CDATA[See more]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ver más]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.NoData.Title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[No data]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sin datos]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.EffectLowerBound" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[CI lower]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[IC inferior]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.EffectOfTreatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Effect]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Efecto]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.EffectUpperBound" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[CI upper]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[IC superior]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.RecommendedTreatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recommended treatment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tratamiento recomendado]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.counterfactualName" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What-if counterfactual name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre de contrafáctico hipotético]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.createCounterfactual" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Create what-if counterfactual]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Crear contrafáctico hipotético]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.currentClass" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Current class]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Clase actual]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.decreaseByOne" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decrease value by 1]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Disminuir valor en 1]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.desiredClass" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Desired class for counterfactual(s)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Clase deseada para los contrafácticos]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.header" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What-If analysis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Análisis de hipótesis]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.increaseByOne" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Increase value by 1]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Incrementar valor en 1]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.individualTreatment" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recommended individual treatment policy]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Directiva de tratamiento individual recomendada]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.listChoose" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use the spinner control to choose the top k samples you’d like to view.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Use el control de indicador giratorio para elegir los k más importantes que desea ver.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.listDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Esta lista muestra los k principales ejemplos del conjunto de datos ordenados por el efecto causal de un tratamiento recomendado, junto con sus intervalos de confianza inferiores y superiores (IC). Esta lista ordenada muestra fundamentalmente quiénes son los principales usuarios de su muestra a abordar con un tratamiento recomendado que tendrá el mayor efecto sobre el resultado.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.noData" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[No data]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sin datos]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.panelDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Explore los contrafácticos y cree los suyos propios. Busque características para ver los valores sugeridos en un conjunto diverso de ejemplos de contrafácticos. Establezca los valores contrafácticos sugeridos para la característica (para ello haga clic en el texto "establecer valores" para cada nombre contrafáctico). Asigne un nombre a su contrafáctico y guárdelo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.panelHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What-if counterfactuals]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Contrafácticos hipotéticos]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.recommendedPolicy" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recommended policy gain]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Beneficio de la directiva recomendada]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.saveAsNew" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Save as new datapoint]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Guardar como nuevo punto de datos]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.saveDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[No recomendamos a los usuarios que tomen decisiones para la vida real basadas solo en esta herramienta, sin el respaldo de una inferencia causal matemáticamente robusta. Para estos casos, use nuestro kit de herramientas para el análisis causal.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.seePrediction" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[See prediction deltas]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ver deltas de predicción]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.selectedDatapoint" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Selected datapoint]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Punto de datos seleccionado]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.showOnly" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Show only]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mostrar solo]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.showTop" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mostrar los ejemplos de punto de datos superiores ordenados por efectos causales para una característica de tratamiento recomendado: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.whatifDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una hipótesis permite alterar características para cualquier entrada y observar cómo cambia la predicción del modelo. Puede alterar las características manualmente o simplemente especificar la predicción deseada (por ejemplo, una etiqueta de clase para un clasificador) para ver una lista de los puntos de datos más cercanos a la entrada original que darían lugar a la predicción deseada. También se conoce como contrafácticos de predicción y puede usarlos para explorar las relaciones que conoce el modelo; comprender las características importantes necesarias para las predicciones del modelo; o depurar los casos extremos del modelo. Para empezar, elija los puntos de entrada de la tabla de datos o del gráfico de dispersión.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -271,6 +634,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.baseCohortInstances" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Instances in base cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Instancias en base cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.basicInformation" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Basic Information]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Información básica]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.CohortInfo.cohortInformation" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cohort information]]></Val>
@@ -280,11 +661,74 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.correct" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Correct]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Correcto]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.filters" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[filters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[filtros]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.incorrect" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Incorrect]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Incorrecto]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.predictionPath" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Prediction path (filters)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ruta de predicción (filtros)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.CohortInfo.saveCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Save as a new cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Guardar como una nueva cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.selectedCohortInstances" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Instances in the selected cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Instancias del cohorte seleccionado]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortInfo.total" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Total]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Total]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortList.coverage" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Coverage]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cobertura]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -321,6 +765,42 @@
           <Val><![CDATA[Importances]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Importancias]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.FilterTooltip.correctNum" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Correct (#): ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Correcto (#): ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.FilterTooltip.countNum" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Count (#): ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Recuento (#): ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.FilterTooltip.errorSum" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Error sum: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Suma de errores: ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.FilterTooltip.incorrectNum" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Incorrect (#): ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Incorrecto (#): ]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -527,7 +1007,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Shift]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Desplazamiento]]></Val>
+            <Val><![CDATA[Desplazar]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -582,6 +1062,123 @@
           <Val><![CDATA[With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Con el mapa de la cuadrícula puede centrarse en filtros específicos y combinar las calificaciones de error.  Comience con dos características del conjunto de datos que quiera comparar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.errorRate" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Error rate]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Calificación de errores]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.errorRateInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The error rate represents the percentage of instances in the node for which the system has failed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La calificación de errores representa el porcentaje de instancias en el nodo para las que sistema ha producido errores.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.errorRateTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on error rate]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Información adicional sobre calificación de errores]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanAbsoluteError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean absolute error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Error absoluto medio]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanAbsoluteErrorInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The mean absolute error is the average of the sum of the errors.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El error absoluto medio es el promedio de la suma de los errores.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanAbsoluteErrorShort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean abs. error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Error abs. medio]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanAbsoluteErrorTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on mean absolute error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Información adicional sobre el error absoluto medio]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanSquaredError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean squared error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Error cuadrático medio]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanSquaredErrorInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The mean squared error is the average of the squares of the errors.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El error cuadrático medio es el promedio de los cuadrados de los errores.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanSquaredErrorShort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean sq. error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Error cuadrático medio]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.meanSquaredErrorTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on mean squared error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Información adicional sobre el error cuadrático medio]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.metricName" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metric name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre de la métrica]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.metricValue" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metric value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Valor de métrica]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -843,33 +1440,6 @@
           <Val><![CDATA[Additional information on error coverage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Información adicional sobre cobertura de error]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";ErrorAnalysis.errorRate" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Error rate]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Calificación de errores]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";ErrorAnalysis.errorRateInfo" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The error rate represents the percentage of instances in the node for which the system has failed.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La calificación de errores representa el porcentaje de instancias en el nodo para las que sistema ha producido errores.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";ErrorAnalysis.errorRateTitle" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Additional information on error rate]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Información adicional sobre calificación de errores]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5833,7 +6403,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.ciLower" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.ciLower" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ci_lower]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -5842,7 +6412,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.ciUpper" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.ciUpper" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ci_upper]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -5851,7 +6421,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.name" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.name" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[feature]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -5860,7 +6430,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.pValue" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.pValue" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[p_value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -5869,7 +6439,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.point" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.point" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[point]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -5878,7 +6448,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.stderr" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.stderr" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[stderr]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -5887,11 +6457,83 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CasualAnalysis.Table.zstat" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CausalAnalysis.Table.zstat" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[zstat]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[zstat]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.ChangeGlobalCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Change global cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cambiar cohorte global]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.CreateNewCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Create new cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Crear cohorte nuevo]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.DataPoints" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Number of datapoints]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Número de puntos de datos]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.DefaultCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ (default)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ (predeterminada)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.Filters" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Number of filters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Número de filtros]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.GlobalCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Global cohort: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cohorte global: ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortSettings.CohortSettingsDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Global cohorts are subsets of data created by manually adding filters or saving a selected group in the error analysis component. View, create, edit, duplicate, and delete cohorts.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Los cohortes globales son subconjuntos de datos creados al agregar filtros manualmente o guardar un grupo seleccionado en el componente de análisis de errores. Ver, crear, editar, duplicar y eliminar cohortes.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortSettings.CohortSettingsTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohort settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Configuración de cohorte]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5941,20 +6583,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.ComponentNames.GlobalExplanation" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.ComponentNames.FeatureImportances" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Global explanation]]></Val>
+          <Val><![CDATA[Feature importances]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Explicación global]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";ModelAssessment.ComponentNames.LocalExplanation" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Local explanation]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Explicación local]]></Val>
+            <Val><![CDATA[Importancia de la característica]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5995,6 +6628,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.DeleteDialog.Cancel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cancel]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cancelar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.DeleteDialog.Content" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Are you sure you want to delete {0}?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[¿Está seguro de que desea eliminar {0}?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.DeleteDialog.Delete" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eliminar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DashboardSettings.DeleteDialog.Title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete {0}?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[¿Eliminar {0}?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ModelAssessment.DashboardSettings.Title" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dashboard layout]]></Val>
@@ -6004,11 +6673,101 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ModelAssessment.FeatureImportances.CorrectPredictions" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Correct predictions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Predicciones correctas]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.FeatureImportances.GlobalExplanation" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Aggregate feature importance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Importancia de la característica Agregar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.FeatureImportances.IncorrectPredictions" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Incorrect predictions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Predicciones incorrectas]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.FeatureImportances.LocalExplanation" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Individual feature importance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Importancia de la característica Individual]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ModelAssessment.MainMenu.DashboardSettings" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dashboard settings]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Configuración del panel]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.cohortInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohort info]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Información de cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.cohortList" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohort list]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Lista de cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.cohortSettings" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohort settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Configuración de cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.createCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Create cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Crear cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.saveCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Save cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Guardar cohorte]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.MainMenu.shiftCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Shift cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cohorte de desplazamiento]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -33,7 +33,8 @@ class ModelAnalysisDashboard(Dashboard):
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
             port=port,
-            locale=locale)
+            locale=locale,
+            no_inline_dashboard=True)
 
         def predict():
             data = request.get_json(force=True)
@@ -51,6 +52,12 @@ class ModelAnalysisDashboard(Dashboard):
             return jsonify(self.input.matrix(data))
 
         self.add_url_rule(matrix, '/matrix', methods=["POST"])
+
+        def causal_whatif():
+            data = request.get_json(force=True)
+            return jsonify(self.input.causal_whatif(data))
+
+        self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
 
         def importances():
             return jsonify(self.input.importances())

@@ -7,6 +7,7 @@ import {
   ICompositeFilter,
   Operations
 } from "../Interfaces/IFilter";
+import { compare } from "../util/compare";
 import { JointDataset } from "../util/JointDataset";
 import { ModelExplanationUtils } from "../util/ModelExplanationUtils";
 
@@ -68,7 +69,7 @@ export class Cohort {
   ): void {
     if (this.currentSortKey !== columnName) {
       this.filteredData.sort((a, b) => {
-        return a[columnName] - b[columnName];
+        return compare(a[columnName], b[columnName]);
       });
       this.currentSortKey = columnName;
       this.currentSortReversed = false;
@@ -80,6 +81,24 @@ export class Cohort {
       this.filteredData.reverse();
       this.currentSortReversed = true;
     }
+  }
+
+  public sortByGroup(
+    columnName: string = JointDataset.IndexLabel,
+    groupingFunction: (row: any) => boolean
+  ): void {
+    this.filteredData.sort((a, b) => {
+      const columnDifference = compare(a[columnName], b[columnName]);
+      if (groupingFunction(a) === groupingFunction(b)) {
+        return columnDifference;
+      }
+      // 10000 is used as a large enough constant to ensure that the
+      // importance of the grouping is higher than column difference
+      if (groupingFunction(a)) {
+        return -10000 + columnDifference;
+      }
+      return 10000 + columnDifference;
+    });
   }
 
   // whether to apply bins is a decision made at the ui control level,

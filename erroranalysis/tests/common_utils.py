@@ -73,13 +73,16 @@ def create_sklearn_random_forest_regressor(X, y):
     return model
 
 
-def create_iris_data():
+def create_iris_data(append_special_characters=False):
     # Import Iris dataset
     iris = load_iris()
     # Split data into train and test
     X_train, X_test, y_train, y_validation = train_test_split(
         iris.data, iris.target, test_size=0.2, random_state=0)
-    feature_names = [name.replace(' (cm)', '') for name in iris.feature_names]
+    feature_names = [
+        name.replace(' (cm)', '-' if append_special_characters else '')
+        for name in iris.feature_names]
+
     classes = iris.target_names
     return X_train, X_test, y_train, y_validation, feature_names, classes
 
@@ -206,3 +209,7 @@ def create_titanic_pipeline(X_train, y_train):
                            LogisticRegression(solver='lbfgs'))])
     clf.fit(X_train, y_train)
     return clf
+
+
+def create_dataframe(data, feature_names):
+    return pd.DataFrame(data, columns=feature_names)

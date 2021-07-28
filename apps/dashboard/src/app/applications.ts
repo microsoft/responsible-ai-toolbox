@@ -36,9 +36,14 @@ import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
-  adultCensusCausalErrorAnalysisConfig,
+  adultCensusCausalErrorAnalysisData,
   adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
+import {
+  bostonData as bostonDataMAD,
+  bostonErrorAnalysisData,
+  bostonWithFairnessModelExplanationData
+} from "../model-assessment/__mock_data__/bostonData";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;
@@ -148,8 +153,32 @@ export const applications: IApplications = <const>{
         classDimension: 2,
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      adultCensusIncomeNoCausalData: {
+        classDimension: 2,
+        counterfactualData: [adultCounterfactualData],
+        dataset: adultCensusWithFairnessDataset,
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      adultCensusIncomeNoCounterfactualData: {
+        causalAnalysisData: [adultCensusCausalAnalysisData],
+        classDimension: 2,
+        dataset: adultCensusWithFairnessDataset,
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      adultCensusIncomeNoModelData: {
+        classDimension: 2,
+        dataset: adultCensusWithFairnessDataset
+      },
+      bostonData: {
+        classDimension: 1,
+        dataset: bostonDataMAD,
+        errorAnalysisData: [bostonErrorAnalysisData],
+        modelExplanationData: [bostonWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "Version-1": 1 }

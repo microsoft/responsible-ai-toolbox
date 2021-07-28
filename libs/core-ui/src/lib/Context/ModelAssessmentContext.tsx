@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort, ICausalAnalysisData } from "@responsible-ai/core-ui";
+import {
+  ErrorCohort,
+  ICausalAnalysisData,
+  ICausalWhatIfData
+} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
-import { IErrorAnalysisConfig } from "../Interfaces/IErrorAnalysisConfig";
+import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { ITelemetryMessage } from "../util/ITelemetryMessage";
@@ -18,7 +22,7 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData;
-  errorAnalysisConfig?: IErrorAnalysisConfig;
+  errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
@@ -28,6 +32,14 @@ export interface IModelAssessmentContext {
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
   telemetryHook: (message: ITelemetryMessage) => void;
+  requestCausalWhatIf?: (
+    id: string,
+    features: unknown[],
+    featureName: string,
+    newValue: unknown[],
+    target: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalWhatIfData[]>;
   requestPredictions:
     | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;

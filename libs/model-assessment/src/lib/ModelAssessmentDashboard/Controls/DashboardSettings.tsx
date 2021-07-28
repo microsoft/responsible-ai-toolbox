@@ -49,7 +49,7 @@ export class DashboardSettings extends React.PureComponent<
     ];
     return (
       <Panel
-        headerText={localization.ErrorAnalysis.CohortInfo.cohortInformation}
+        headerText={localization.ModelAssessment.DashboardSettings.Title}
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
@@ -67,14 +67,15 @@ export class DashboardSettings extends React.PureComponent<
     );
   }
   private renderDelete = (
-    _item?: IModelAssessmentDashboardTab,
+    item?: IModelAssessmentDashboardTab,
     index?: number | undefined
   ): React.ReactNode => {
-    if (!index) {
+    if (!index || !item) {
       return React.Fragment;
     }
     return (
       <DashboardSettingDeleteButton
+        name={item.key}
         index={index}
         removeTab={this.props.removeTab}
       />

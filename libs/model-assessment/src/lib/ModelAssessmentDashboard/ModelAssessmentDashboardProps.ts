@@ -6,11 +6,14 @@ import {
   IModelExplanationData,
   ITelemetryMessage,
   IDataset,
-  IErrorAnalysisConfig,
+  IErrorAnalysisData,
   ICausalAnalysisData,
-  ICounterfactualData
+  ICounterfactualData,
+  ICausalWhatIfData,
+  IErrorAnalysisTreeNode,
+  IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
-import { IRequestNode, IStringsParam } from "@responsible-ai/error-analysis";
+import { IStringsParam } from "@responsible-ai/error-analysis";
 
 export interface IModelAssessmentData {
   dataset: IDataset;
@@ -19,7 +22,7 @@ export interface IModelAssessmentData {
   >;
   causalAnalysisData?: ICausalAnalysisData[];
   counterfactualData?: ICounterfactualData[];
-  errorAnalysisConfig?: IErrorAnalysisConfig[];
+  errorAnalysisData?: IErrorAnalysisData[];
 }
 
 export interface IModelAssessmentDashboardProps
@@ -27,7 +30,7 @@ export interface IModelAssessmentDashboardProps
     IModelAssessmentData {
   locale?: string;
   stringParams?: IStringsParam;
-
+  classDimension?: 1 | 2 | 3;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
@@ -40,12 +43,23 @@ export interface IModelAssessmentDashboardProps
   requestDebugML?: (
     request: any[],
     abortSignal: AbortSignal
-  ) => Promise<IRequestNode[]>;
-  requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  ) => Promise<IErrorAnalysisTreeNode[]>;
+  requestMatrix?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisMatrix>;
   requestImportances?: (
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  requestCausalWhatIf?: (
+    id: string,
+    features: unknown[],
+    featureName: string,
+    newValue: unknown[],
+    target: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalWhatIfData[]>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryMessage) => void;

@@ -4,22 +4,25 @@
 import json
 import uuid
 
-_ErrorReportVersion = '1.0'
-_AllVersions = [_ErrorReportVersion]
+_ErrorReportVersion1 = '1.0'
+_ErrorReportVersion2 = '2.0'
+_AllVersions = [_ErrorReportVersion1, _ErrorReportVersion2]
 _VERSION = 'version'
 
-JSON_TREE = 'json_tree'
-JSON_MATRIX = 'json_matrix'
+TREE = 'tree'
+MATRIX = 'matrix'
+TREE_FEATURES = 'tree_features'
+MATRIX_FEATURES = 'matrix_features'
 ID = 'id'
 METADATA = 'metadata'
 
 
 def json_converter(obj):
-    """Helper function to convert ErrorReport object to json.
+    """Helper function to convert ErrorReport object to a dictionary.
 
-    :param obj: Object to convert to json.
+    :param obj: Object to convert to a dictionary which can be saved as json.
     :type obj: object
-    :return: The converted json.
+    :return: The converted dictionary which can be saved as json.
     :rtype: dict
     """
     if isinstance(obj, ErrorReport):
@@ -31,89 +34,135 @@ def json_converter(obj):
         return obj.__dict__
 
 
-def as_error_report(json_dict):
-    """Helper function to convert json to an ErrorReport object.
+def as_error_report(error_dict):
+    """Helper function to convert a dictionary to an ErrorReport object.
 
-    :param json_dict: The json to convert.
-    :type json_dict: dict
+    :param error_dict: The dictionary to convert.
+    :type error_dict: dict
     :return: The converted ErrorReport.
     :rtype: ErrorReport
     """
-    if METADATA in json_dict:
-        version = json_dict[METADATA].get(_VERSION)
+    if METADATA in error_dict:
+        version = error_dict[METADATA].get(_VERSION)
         if version is None:
             raise ValueError('No version field in the json input')
         elif version not in _AllVersions:
             raise ValueError(
                 "Unknown version in read ErrorReport: {}".format(version))
-        return ErrorReport(json_dict[JSON_TREE],
-                           json_dict[JSON_MATRIX],
-                           json_dict[ID])
+        if version == _ErrorReportVersion1:
+            return ErrorReport(error_dict[TREE],
+                               error_dict[MATRIX],
+                               error_dict[ID])
+        else:
+            return ErrorReport(error_dict[TREE],
+                               error_dict[MATRIX],
+                               error_dict[TREE_FEATURES],
+                               error_dict[MATRIX_FEATURES],
+                               error_dict[ID])
     else:
-        return json_dict
+        return error_dict
 
 
 class ErrorReport(object):
 
     """Defines the ErrorReport, which contains the tree and matrix filter.
 
-    :param json_tree: The json representation of the tree.
-    :type json_tree: dict
-    :param json_matrix: The json representation of the matrix filter.
-    :type json_matrix: dict
+    :param tree: The representation of the tree.
+    :type tree: dict
+    :param matrix: The representation of the matrix filter.
+    :type matrix: dict
     :param id: The unique identifier for the ErrorReport.
         A new unique id is created if none is specified.
     :type id: str
     """
 
-    def __init__(self, json_tree, json_matrix, id=None):
+    def __init__(self,
+                 tree,
+                 matrix,
+                 tree_features=None,
+                 matrix_features=None,
+                 id=None):
         """Defines the ErrorReport, which contains the tree and matrix filter.
 
-        :param json_tree: The json representation of the tree.
-        :type json_tree: dict
-        :param json_matrix: The json representation of the matrix filter.
-        :type json_matrix: dict
+        :param tree: The representation of the tree.
+        :type tree: dict
+        :param matrix: The representation of the matrix filter.
+        :type matrix: dict
+        :param tree_features: The features that were selected to train the
+            decision tree on errors.
+        :param tree_features: list[str]
+        :param matrix_features: The one or two features selected for creating
+            the matrix filter (aka heatmap).
+        :param matrix_features: list[str]
         :param id: The unique identifier for the ErrorReport.
             A new unique id is created if none is specified.
         :type id: str
         """
         self._id = id or str(uuid.uuid4())
-        self._json_tree = json_tree
-        self._json_matrix = json_matrix
-        self._metadata = {_VERSION: _ErrorReportVersion}
+        self._tree = tree
+        self._matrix = matrix
+        self._tree_features = tree_features
+        self._matrix_features = matrix_features
+        self._metadata = {_VERSION: _ErrorReportVersion2}
 
     @property
     def __dict__(self):
         """Returns the dictionary representation of the Error Report.
 
-        The dictionary contains the json representation of the tree,
+        The dictionary contains the representation of the tree,
         the matrix filter and any Error Report metadata.
 
         :return: The dictionary representation of the Error Report.
         :rtype: dict
         """
-        return {JSON_TREE: self._json_tree,
-                JSON_MATRIX: self._json_matrix,
+        return {TREE: self._tree,
+                MATRIX: self._matrix,
+                TREE_FEATURES: self._tree_features,
+                MATRIX_FEATURES: self._matrix_features,
                 ID: self._id,
                 METADATA: self._metadata}
 
     @property
-    def json_tree(self):
-        """Returns the json representation of the tree.
+    def tree(self):
+        """Returns the representation of the tree.
 
-        :return: The json representation of the tree.
+        :return: The representation of the tree.
         :rtype: dict
         """
-        return self._json_tree
+        return self._tree
 
     @property
-    def json_matrix(self):
-        """Returns the json representation of the matrix filter.
+    def matrix(self):
+        """Returns the representation of the matrix filter.
 
-        :return: The json representation of the matrix filter.
+        :return: The representation of the matrix filter.
         :rtype: dict
         """
-        return self._json_matrix
+        return self._matrix
+
+    @property
+    def tree_features(self):
+        """Returns the features that were selected to train tree.
+
+        The features are used to train the surrogate decision
+        tree on errors.
+
+        :return: The features selected to train tree.
+        :rtype: list[str]
+        """
+        return self._tree_features
+
+    @property
+    def matrix_features(self):
+        """Returns the features that were used to create the matrix filter.
+
+        The one or two features are used to create the matrix
+        filter (aka heatmap).
+
+        :return: The features selected to create matrix filter.
+        :rtype: list[str]
+        """
+        return self._matrix_features
 
     @property
     def id(self):
