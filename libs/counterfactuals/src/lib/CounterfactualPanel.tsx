@@ -8,7 +8,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import { toLower } from "lodash";
 import {
   Panel,
   PanelType,
@@ -57,12 +56,11 @@ export class CounterfactualPanel extends React.Component<
   }
   public render(): React.ReactNode {
     const classes = counterfactualPanelStyles();
-    const filterFilter = this.getFilterFeatures();
     return (
       <Panel
         isOpen={this.props.isPanelOpen}
         type={PanelType.largeFixed}
-        onDismiss={this.props.closePanel}
+        onDismiss={this.onClosePanel.bind(this)}
         closeButtonAriaLabel="Close"
         headerText={localization.Counterfactuals.panelHeader}
       >
@@ -77,13 +75,13 @@ export class CounterfactualPanel extends React.Component<
               placeholder={
                 localization.Interpret.WhatIf.filterFeaturePlaceholder
               }
-              onChange={this.setFilterText}
+              onChange={this.setFilterText.bind(this)}
             />
           </Stack.Item>
           <Stack.Item>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}
-              featureNames={filterFilter}
+              filterText={this.state.filterText}
               originalData={this.props.originalData}
               data={this.props.data}
               temporaryPoint={this.props.temporaryPoint}
@@ -123,9 +121,15 @@ export class CounterfactualPanel extends React.Component<
       </Panel>
     );
   }
+  private onClosePanel(): void {
+    this.setState({
+      filterText: undefined
+    });
+    this.props.closePanel();
+  }
   private handleSavePoint(): void {
     this.props.saveAsPoint();
-    this.props.closePanel();
+    this.onClosePanel();
   }
   private setCustomRowProperty = (
     key: string | number,
@@ -142,16 +146,5 @@ export class CounterfactualPanel extends React.Component<
     this.setState({
       filterText: newValue
     });
-  };
-  private getFilterFeatures = (): string[] => {
-    const allFeatures = this.props.data?.feature_names || [];
-    const invalidInput =
-      this.state.filterText === undefined ||
-      this.state.filterText === null ||
-      !/\S/.test(this.state.filterText);
-    const filtered = invalidInput
-      ? allFeatures
-      : allFeatures.filter((f) => f.includes(toLower(this.state.filterText)));
-    return filtered;
   };
 }

@@ -8,7 +8,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _, { toNumber } from "lodash";
+import _, { toLower, toNumber } from "lodash";
 import {
   Callout,
   ConstrainMode,
@@ -31,9 +31,9 @@ import { ILocalImportanceData } from "./LocalImportanceChart";
 
 export interface ICounterfactualListProps {
   selectedIndex: number;
-  featureNames?: string[];
   originalData: { [key: string]: any };
   data?: ICounterfactualData;
+  filterText?: string;
   temporaryPoint: { [key: string]: any } | undefined;
   setCustomRowProperty(
     key: string | number,
@@ -138,7 +138,8 @@ export class CounterfactualList extends React.Component<
 
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
-    if (!this.props.featureNames || this.props.featureNames.length === 0) {
+    const featureNames = this.getFilterFeatures();
+    if (!featureNames || featureNames.length === 0) {
       return columns;
     }
     columns.push({
@@ -148,7 +149,7 @@ export class CounterfactualList extends React.Component<
       minWidth: 200,
       name: ""
     });
-    this.state.sortedFeatureNames.forEach((f) =>
+    featureNames.forEach((f) =>
       columns.push({
         fieldName: f,
         isResizable: true,
@@ -252,6 +253,18 @@ export class CounterfactualList extends React.Component<
     }
     return <div />;
   }
+
+  private getFilterFeatures = (): string[] => {
+    const allFeatures = this.getSortedFeatureNames();
+    const filterText = this.props.filterText;
+    const invalidInput =
+      filterText === undefined || filterText === null || !/\S/.test(filterText);
+    const filtered = invalidInput
+      ? allFeatures
+      : allFeatures.filter((f) => f.includes(toLower(filterText)));
+    return filtered;
+  };
+
   private getSortedFeatureNames(): string[] {
     const data: ILocalImportanceData[] = [];
     const localImportanceData = this.props.data?.local_importance?.[
@@ -267,9 +280,7 @@ export class CounterfactualList extends React.Component<
       });
     });
     data.sort((d1, d2) => d2.value - d1.value);
-    const result = data
-      .map((p) => p.label)
-      .filter((l) => this.props.featureNames?.includes(l));
+    const result = data.map((p) => p.label);
     return result;
   }
 }
