@@ -62,11 +62,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
     this.state = buildInitialModelAssessmentContext(_.cloneDeep(props));
 
-    this.addTabDropdownOptions = getAvailableTabs(
-      this.props,
-      this.state.jointDataset,
-      true
-    );
+    this.addTabDropdownOptions = getAvailableTabs(this.props, true);
 
     if (this.props.requestImportances) {
       this.props
@@ -85,7 +81,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           causalAnalysisData: this.props.causalAnalysisData?.[0],
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
-          errorAnalysisConfig: this.props.errorAnalysisConfig?.[0],
+          errorAnalysisData: this.props.errorAnalysisData?.[0],
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: this.props.modelExplanationData?.[0]
@@ -164,13 +160,21 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
                   >
                     {t.key === GlobalTabKeys.ErrorAnalysisTab &&
-                      this.props.errorAnalysisConfig?.[0] && (
+                      this.props.errorAnalysisData?.[0] && (
                         <ErrorAnalysisViewTab
+                          tree={this.props.errorAnalysisData[0].tree}
+                          matrix={this.props.errorAnalysisData[0].matrix}
+                          matrixFeatures={
+                            this.props.errorAnalysisData[0].matrix_features
+                          }
                           messages={this.props.stringParams?.contextualHelp}
                           getTreeNodes={this.props.requestDebugML}
                           getMatrix={this.props.requestMatrix}
                           updateSelectedCohort={this.updateSelectedCohort}
-                          features={this.props.dataset.feature_names}
+                          features={
+                            this.props.errorAnalysisData[0].tree_features ||
+                            this.props.dataset.feature_names
+                          }
                           selectedFeatures={this.state.selectedFeatures}
                           errorAnalysisOption={this.state.errorAnalysisOption}
                           selectedCohort={this.state.selectedCohort}

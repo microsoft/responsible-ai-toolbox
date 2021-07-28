@@ -6,8 +6,10 @@ import {
   ICompositeFilter,
   CohortSource,
   ErrorCohort,
-  MetricCohortStats
+  MetricCohortStats,
+  IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import {
   ComboBox,
   IComboBox,
@@ -18,7 +20,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { noFeature } from "../../Constants";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
@@ -28,8 +29,12 @@ import { matrixFilterStyles } from "./MatrixFilter.styles";
 export interface IMatrixFilterProps {
   theme?: ITheme;
   features: string[];
-  getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  staticMatrix?: any;
+  getMatrix?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisMatrix>;
+  matrix?: IErrorAnalysisMatrix;
+  matrixFeatures?: string[];
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -53,35 +58,22 @@ export class MatrixFilter extends React.PureComponent<
   IMatrixFilterState
 > {
   private options: IComboBoxOption[];
-  private selectedKey1: number;
-  private selectedKey2: number;
   public constructor(props: IMatrixFilterProps) {
     super(props);
     this.state = this.props.state;
-    this.options = [{ key: 0, text: noFeature }].concat(
-      props.features.map((feature, index) => {
-        return { key: index + 1, text: feature };
+    this.options = [
+      { key: "", text: localization.ErrorAnalysis.noFeature },
+      ...props.features.map((feature) => {
+        return { key: feature, text: feature };
       })
-    );
-    this.selectedKey1 = 0;
-    this.selectedKey2 = 0;
-    if (!this.props.isEnabled) {
-      const features = this.props.staticMatrix.features;
+    ];
+    if (!this.props.isEnabled && this.props.matrixFeatures) {
+      const features = this.props.matrixFeatures;
       this.state = {
         matrixLegendState: this.state.matrixLegendState,
         selectedFeature1: features[0],
         selectedFeature2: features[1]
       };
-    }
-    if (this.state.selectedFeature1 !== noFeature) {
-      this.selectedKey1 = this.options.findIndex(
-        (option) => option.text === this.state.selectedFeature1
-      );
-    }
-    if (this.state.selectedFeature2 !== noFeature) {
-      this.selectedKey2 = this.options.findIndex(
-        (option) => option.text === this.state.selectedFeature2
-      );
     }
   }
 
@@ -102,7 +94,7 @@ export class MatrixFilter extends React.PureComponent<
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
-                selectedKey={this.selectedKey1}
+                defaultSelectedKey=""
                 label="X-Axis: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -117,7 +109,7 @@ export class MatrixFilter extends React.PureComponent<
             </Stack.Item>
             <Stack.Item key="feature2key">
               <ComboBox
-                selectedKey={this.selectedKey2}
+                defaultSelectedKey=""
                 label="Y-Axis: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -135,7 +127,7 @@ export class MatrixFilter extends React.PureComponent<
             theme={this.props.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
-            staticMatrixData={this.props.staticMatrix?.data}
+            matrix={this.props.matrix}
             selectedFeature1={this.state.selectedFeature1}
             selectedFeature2={this.state.selectedFeature2}
             updateSelectedCohort={this.props.updateSelectedCohort}
@@ -154,15 +146,8 @@ export class MatrixFilter extends React.PureComponent<
     _?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (item !== undefined) {
-      if (item.text !== noFeature) {
-        this.selectedKey1 = this.options.findIndex(
-          (option) => option.text === item.text
-        );
-      } else {
-        this.selectedKey1 = 0;
-      }
-      this.setState({ selectedFeature1: item.text });
+    if (typeof item?.key == "string") {
+      this.setState({ selectedFeature1: item.key });
     }
   };
 
@@ -170,15 +155,8 @@ export class MatrixFilter extends React.PureComponent<
     _?: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
-    if (item !== undefined) {
-      if (item.text !== noFeature) {
-        this.selectedKey2 = this.options.findIndex(
-          (option) => option.text === item.text
-        );
-      } else {
-        this.selectedKey2 = 0;
-      }
-      this.setState({ selectedFeature2: item.text });
+    if (typeof item?.key == "string") {
+      this.setState({ selectedFeature2: item.key });
     }
   };
 

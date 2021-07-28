@@ -349,7 +349,7 @@ class ModelAnalysis(object):
         data = ModelAnalysisData()
         data.dataset = self._get_dataset()
         data.modelExplanationData = self.explainer.get_data()
-        data.errorAnalysisConfig = self.error_analysis.get_data()
+        data.errorAnalysisData = self.error_analysis.get_data()
         data.causalAnalysisData = self.causal.get_data()
         data.counterfactualData = self.counterfactual.get_data()
         return data

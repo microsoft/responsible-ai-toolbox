@@ -5,7 +5,7 @@ import {
   ICausalAnalysisData,
   ICounterfactualData,
   IDataset,
-  IErrorAnalysisConfig,
+  IErrorAnalysisData,
   IModelExplanationData
 } from "@responsible-ai/core-ui";
 
@@ -6582,7 +6582,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
     }
   ]
 };
-export const adultCensusCausalErrorAnalysisConfig: IErrorAnalysisConfig = {
+export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
   numLeaves: 11
 };
