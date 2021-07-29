@@ -124,6 +124,7 @@ export class SidePanel extends React.Component<
                 </ul>
               </LabelWithCallout>
               <Dropdown
+                id={"classWeightDropdown"}
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
