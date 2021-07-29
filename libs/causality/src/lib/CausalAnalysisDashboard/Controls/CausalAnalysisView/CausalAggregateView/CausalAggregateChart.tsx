@@ -21,13 +21,10 @@ export interface ICausalAggregateChartProps {
   data: ICausalAnalysisSingleData[];
 }
 
-export class CausalAggregateChart extends React.PureComponent<
-  ICausalAggregateChartProps
-> {
+export class CausalAggregateChart extends React.PureComponent<ICausalAggregateChartProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();

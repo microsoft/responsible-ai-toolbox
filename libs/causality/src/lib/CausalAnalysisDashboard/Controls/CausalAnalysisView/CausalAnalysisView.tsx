@@ -19,13 +19,10 @@ export interface ICausalAnalysisViewProps {
   data: ICausalAnalysisData;
 }
 
-export class CausalAnalysisView extends React.PureComponent<
-  ICausalAnalysisViewProps
-> {
+export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     return (

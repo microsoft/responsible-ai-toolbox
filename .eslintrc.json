@@ -8,6 +8,7 @@
   "extends": [
     "plugin:@nrwl/nx/typescript",
     "plugin:@nrwl/nx/javascript",
+    "plugin:@nrwl/nx/react",
     "./.eslintrc/.eslintrc.comments.eslintrc",
     "./.eslintrc/.eslintrc.filenames.eslintrc",
     "./.eslintrc/.eslintrc.react.eslintrc",
@@ -15,6 +16,36 @@
     "./.eslintrc/.eslintrc.typescript.eslintrc",
     "./.eslintrc/.eslintrc.unicorn.eslintrc",
     "./.eslintrc/.eslintrc.custom.eslintrc"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    }
   ],
   "env": {
     "browser": true,

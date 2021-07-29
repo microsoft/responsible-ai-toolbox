@@ -26,9 +26,7 @@ export interface IExistingPredictionLabelsProps {
   jointDataset: JointDataset;
   selectedWhatIfRootIndex: number;
 }
-export class ExistingPredictionLabels extends React.Component<
-  IExistingPredictionLabelsProps
-> {
+export class ExistingPredictionLabels extends React.Component<IExistingPredictionLabelsProps> {
   public render(): React.ReactNode {
     const classNames = whatIfTabStyles();
     if (this.props.metadata.modelType !== ModelTypes.Regression) {
@@ -53,11 +51,11 @@ export class ExistingPredictionLabels extends React.Component<
           this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
             .treatAsCategorical
         ) {
-          const categoricalValues = this.props.jointDataset.metaDict[
-            JointDataset.PredictedYLabel
-          ].sortedCategoricalValues;
+          const categoricalValues =
+            this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
+              .sortedCategoricalValues;
           const categoricalClassIndex = categoricalValues?.indexOf(
-            (predictedClass as unknown) as string
+            predictedClass as unknown as string
           );
           tempPredictedProb =
             row[
@@ -78,9 +76,9 @@ export class ExistingPredictionLabels extends React.Component<
           .reverse()
           .slice(0, WhatIfConstants.MAX_CLASSES_TOOLTIP);
         const tooltipClasses = sortedProbs.map((index) => {
-          const className = this.props.jointDataset.metaDict[
-            JointDataset.PredictedYLabel
-          ].sortedCategoricalValues?.[index];
+          const className =
+            this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
+              .sortedCategoricalValues?.[index];
           return (
             <Text block variant="small" key={index}>
               {className}

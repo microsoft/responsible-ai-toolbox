@@ -10,9 +10,7 @@ export interface IMissingParametersPlaceholderProps {
   children: string;
 }
 
-export class MissingParametersPlaceholder extends React.Component<
-  IMissingParametersPlaceholderProps
-> {
+export class MissingParametersPlaceholder extends React.Component<IMissingParametersPlaceholderProps> {
   public render(): React.ReactNode {
     const classNames = missingParametersPlaceholderStyles();
     return (

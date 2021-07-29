@@ -56,8 +56,8 @@ export class ExplanationExploration extends React.PureComponent<
         ...this.props.dashboardContext.explanationContext,
         testDataset: {
           ...this.props.dashboardContext.explanationContext.testDataset,
-          dataset: this.props.dashboardContext.explanationContext.testDataset
-            .dataset
+          dataset:
+            this.props.dashboardContext.explanationContext.testDataset.dataset
         }
       });
       this.plotlyProps =
@@ -204,7 +204,8 @@ export class ExplanationExploration extends React.PureComponent<
 
   private handleClick = (data: any): void => {
     const clickedId = (data.points[0] as any).customdata;
-    const selections: string[] = this.props.selectionContext.selectedIds.slice();
+    const selections: string[] =
+      this.props.selectionContext.selectedIds.slice();
     const existingIndex = selections.indexOf(clickedId);
     if (existingIndex !== -1) {
       selections.splice(existingIndex, 1);

@@ -28,9 +28,8 @@ export class CausalCallout extends React.Component<
   ICausalCalloutState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {

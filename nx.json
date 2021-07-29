@@ -21,25 +21,13 @@
     }
   },
   "projects": {
-    "interpret": {
-      "tags": []
-    },
-    "fairness": {
+    "causality": {
       "tags": []
     },
     "core-ui": {
       "tags": []
     },
-    "dataset-explorer": {
-      "tags": []
-    },
-    "causality": {
-      "tags": []
-    },
     "counterfactuals": {
-      "tags": []
-    },
-    "mlchartlib": {
       "tags": []
     },
     "dashboard": {
@@ -49,10 +37,25 @@
       "tags": [],
       "implicitDependencies": ["dashboard"]
     },
-    "localization": {
+    "dataset-explorer": {
       "tags": []
     },
     "error-analysis": {
+      "tags": []
+    },
+    "fairness": {
+      "tags": []
+    },
+    "interpret": {
+      "tags": []
+    },
+    "localization": {
+      "tags": []
+    },
+    "mlchartlib": {
+      "tags": []
+    },
+    "model-assessment": {
       "tags": []
     },
     "widget": {
@@ -61,9 +64,14 @@
     "widget-e2e": {
       "tags": [],
       "implicitDependencies": ["widget"]
-    },
-    "model-assessment": {
-      "tags": []
     }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }
