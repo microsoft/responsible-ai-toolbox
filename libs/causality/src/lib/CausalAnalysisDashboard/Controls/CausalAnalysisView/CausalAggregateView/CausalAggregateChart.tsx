@@ -86,8 +86,7 @@ export class CausalAggregateChart extends React.PureComponent<
           visible: true
         },
         hovertemplate:
-          `${localization.CausalAnalysis.AggregateView.confidenceUpper}: %{customdata[0]:.3f}` +
-          "<br>" +
+          `${localization.CausalAnalysis.AggregateView.confidenceUpper}: %{customdata[0]:.3f}<br>` +
           `${localization.CausalAnalysis.AggregateView.causalPoint}: %{y:.3f}<br>` +
           `${localization.CausalAnalysis.AggregateView.confidenceLower}: %{customdata[1]:.3f}<br>`,
         mode: "markers",
