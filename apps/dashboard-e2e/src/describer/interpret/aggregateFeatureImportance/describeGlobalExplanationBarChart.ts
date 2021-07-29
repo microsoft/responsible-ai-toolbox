@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selectDropdown } from "apps/dashboard-e2e/src/util/dropdown";
-
 import { BarChart } from "../../../util/BarChart";
+import { selectDropdown } from "../../../util/dropdown";
 import { IInterpretData } from "../IInterpretData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
@@ -13,7 +12,7 @@ export function describeGlobalExplanationBarChart(
 ): void {
   describe("Bar chart", () => {
     const props = {
-      chart: (undefined as unknown) as BarChart,
+      chart: undefined as unknown as BarChart,
       dataShape
     };
     beforeEach(() => {

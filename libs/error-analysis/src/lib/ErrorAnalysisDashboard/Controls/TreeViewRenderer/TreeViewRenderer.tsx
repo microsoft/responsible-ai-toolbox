@@ -97,9 +97,8 @@ export class TreeViewRenderer extends React.PureComponent<
   ITreeViewRendererState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ITreeViewRendererProps) {
     super(props);
     // Note: we take state from props in case
@@ -149,9 +148,9 @@ export class TreeViewRenderer extends React.PureComponent<
     }
 
     if (svgOuterFrame.current) {
-      const svg = select<SVGSVGElement, undefined>(svgOuterFrame.current).datum<
-        ISVGDatum
-      >({
+      const svg = select<SVGSVGElement, undefined>(
+        svgOuterFrame.current
+      ).datum<ISVGDatum>({
         filterBrushEvent: true,
         height: viewerHeight,
         width: viewerWidth
@@ -441,39 +440,37 @@ export class TreeViewRenderer extends React.PureComponent<
 
       // From the retrieved request, calculate additional properties
       // that won't change during UI updates
-      const treeNodes = requestTreeNodes.map(
-        (node): ITreeNode => {
-          const globalErrorPerc = node.error / rootErrorSize;
-          let errorPerc: number;
-          if (node.metricName !== Metrics.ErrorRate) {
-            errorPerc = node.metricValue;
-          } else {
-            errorPerc = node.error / node.size;
-          }
-          const calcMaskShift = globalErrorPerc * 52;
-          const filterProps = this.calculateFilterProps(node, rootErrorSize);
-
-          let heatmapStyle: Property.Color = errorAvgColor;
-
-          if (errorPerc > rootLocalError * errorRatioThreshold) {
-            heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
-          }
-
-          return {
-            ...node,
-            errorColor: heatmapStyle,
-            filterProps,
-            maskShift: calcMaskShift,
-            nodeState: {
-              isSelectedLeaf: false,
-              onSelectedPath: false,
-              style: undefined
-            },
-            r: 28,
-            rootErrorSize
-          };
+      const treeNodes = requestTreeNodes.map((node): ITreeNode => {
+        const globalErrorPerc = node.error / rootErrorSize;
+        let errorPerc: number;
+        if (node.metricName !== Metrics.ErrorRate) {
+          errorPerc = node.metricValue;
+        } else {
+          errorPerc = node.error / node.size;
         }
-      );
+        const calcMaskShift = globalErrorPerc * 52;
+        const filterProps = this.calculateFilterProps(node, rootErrorSize);
+
+        let heatmapStyle: Property.Color = errorAvgColor;
+
+        if (errorPerc > rootLocalError * errorRatioThreshold) {
+          heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
+        }
+
+        return {
+          ...node,
+          errorColor: heatmapStyle,
+          filterProps,
+          maskShift: calcMaskShift,
+          nodeState: {
+            isSelectedLeaf: false,
+            onSelectedPath: false,
+            style: undefined
+          },
+          r: 28,
+          rootErrorSize
+        };
+      });
 
       const tempRoot = d3stratify()(treeNodes);
       const treemap = d3tree().size([viewerWidth, viewerHeight]);

@@ -20,66 +20,65 @@ export interface IExplanationDashboardStyles {
   clearButton: IStyle;
 }
 
-export const explanationDashboardStyles: IProcessedStyleSet<IExplanationDashboardStyles> = mergeStyleSets<
-  IExplanationDashboardStyles
->({
-  chartsWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    height: "100%",
-    overflow: "hidden",
-    width: "100%"
-  },
-  clearButton: {
-    flex: 1
-  },
-  explainerDashboard: {
-    height: "100%",
-    width: "100%"
-  },
-  globalChartsWrapper: {
-    display: "flex",
-    flexDirection: "row",
-    height: "55%",
-    width: "100%"
-  },
-  localChartsWrapper: {
-    borderTopStyle: "solid",
-    borderTopWidth: "2px",
-    boxSizing: "border-box",
-    height: "45%",
-    width: "100%"
-  },
-  localCommands: {
-    borderBottomStyle: "solid",
-    borderBottomWidth: "1px",
-    display: "flex",
-    flexDirection: "row",
-    width: "100%"
-  },
-  localPlaceholder: {
-    alignItems: "center",
-    display: "flex",
-    fontSize: "25px",
-    height: "100px"
-  },
-  placeholderText: {
-    fontFamily: `Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+export const explanationDashboardStyles: IProcessedStyleSet<IExplanationDashboardStyles> =
+  mergeStyleSets<IExplanationDashboardStyles>({
+    chartsWrapper: {
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: 1,
+      height: "100%",
+      overflow: "hidden",
+      width: "100%"
+    },
+    clearButton: {
+      flex: 1
+    },
+    explainerDashboard: {
+      height: "100%",
+      width: "100%"
+    },
+    globalChartsWrapper: {
+      display: "flex",
+      flexDirection: "row",
+      height: "55%",
+      width: "100%"
+    },
+    localChartsWrapper: {
+      borderTopStyle: "solid",
+      borderTopWidth: "2px",
+      boxSizing: "border-box",
+      height: "45%",
+      width: "100%"
+    },
+    localCommands: {
+      borderBottomStyle: "solid",
+      borderBottomWidth: "1px",
+      display: "flex",
+      flexDirection: "row",
+      width: "100%"
+    },
+    localPlaceholder: {
+      alignItems: "center",
+      display: "flex",
+      fontSize: "25px",
+      height: "100px"
+    },
+    placeholderText: {
+      fontFamily: `Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
       sans-serif`,
-    lineHeight: "35px",
-    margin: "auto",
-    padding: "40px"
-  },
-  tabbedViewer: {
-    display: "flex",
-    flexDirection: "row",
-    height: "100%"
-  },
-  viewPanel: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%"
-  }
-});
+      lineHeight: "35px",
+      margin: "auto",
+      padding: "40px"
+    },
+    tabbedViewer: {
+      display: "flex",
+      flexDirection: "row",
+      height: "100%"
+    },
+    viewPanel: {
+      display: "flex",
+      flexDirection: "column",
+      width: "100%"
+    }
+  });
