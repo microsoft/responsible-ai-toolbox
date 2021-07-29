@@ -33,7 +33,8 @@ export class TreatmentBarChartSection extends React.PureComponent<
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
               localization.CausalAnalysis.TreatmentPolicy.averageGain,
-              "Tech support"
+              this.props.data.control_treatment,
+              this.props.data.treatment_feature
             )}
           </Text>
         </Stack.Item>
