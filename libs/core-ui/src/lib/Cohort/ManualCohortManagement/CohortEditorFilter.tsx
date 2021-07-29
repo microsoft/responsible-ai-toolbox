@@ -45,9 +45,7 @@ export interface ICohortEditorFilterProps {
   saveState(index?: number): void;
   cancelFilter(): void;
 }
-export class CohortEditorFilter extends React.Component<
-  ICohortEditorFilterProps
-> {
+export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps> {
   private readonly dataArray: IComboBoxOption[] = new Array(
     this.props.jointDataset.datasetFeatureCount
   )
@@ -86,9 +84,8 @@ export class CohortEditorFilter extends React.Component<
     }
   ];
   public render(): React.ReactNode {
-    const selectedMeta = this.props.jointDataset.metaDict[
-      this.props.openedFilter.column
-    ];
+    const selectedMeta =
+      this.props.jointDataset.metaDict[this.props.openedFilter.column];
     const numericDelta =
       selectedMeta.treatAsCategorical ||
       selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||

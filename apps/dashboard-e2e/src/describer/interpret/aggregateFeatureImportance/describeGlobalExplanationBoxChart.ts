@@ -11,7 +11,7 @@ export function describeGlobalExplanationBoxChart(
 ): void {
   describe("Box chart", () => {
     const props = {
-      chart: (undefined as unknown) as BoxChart,
+      chart: undefined as unknown as BoxChart,
       dataShape
     };
     beforeEach(() => {

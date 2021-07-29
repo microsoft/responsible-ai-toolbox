@@ -71,9 +71,8 @@ export class InstanceView extends React.Component<
   IInstanceViewState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private choiceItems: IChoiceGroupOption[] = [];
   public constructor(props: IInstanceViewProps) {
@@ -364,52 +363,52 @@ export class InstanceView extends React.Component<
     this.setState(reloadDataFunc);
   }
 
-  private onRenderLabel = (type: SelectionType) => (
-    p: IChoiceGroupOption | undefined
-  ): JSX.Element => {
-    const classNames = InstanceViewStyles();
-    let selectionText = "";
-    switch (type) {
-      case SelectionType.AllSelectionType:
-        selectionText = localization.formatString(
-          localization.ErrorAnalysis.InstanceView.selection,
-          this.state.selectionDetails.selectedAllSelectedIndexes.length
-        );
-        break;
-      case SelectionType.CorrectSelectionType:
-        selectionText = localization.formatString(
-          localization.ErrorAnalysis.InstanceView.selection,
-          this.state.selectionDetails.selectedCorrectDatasetIndexes.length
-        );
-        break;
-      case SelectionType.IncorrectSelectionType:
-        selectionText = localization.formatString(
-          localization.ErrorAnalysis.InstanceView.selection,
-          this.state.selectionDetails.selectedIncorrectDatasetIndexes.length
-        );
-        break;
-      default:
-        break;
-    }
-    const stackItemStyles: IStackItemStyles = {
-      root: classNames.stackItemsStyle
+  private onRenderLabel =
+    (type: SelectionType) =>
+    (p: IChoiceGroupOption | undefined): JSX.Element => {
+      const classNames = InstanceViewStyles();
+      let selectionText = "";
+      switch (type) {
+        case SelectionType.AllSelectionType:
+          selectionText = localization.formatString(
+            localization.ErrorAnalysis.InstanceView.selection,
+            this.state.selectionDetails.selectedAllSelectedIndexes.length
+          );
+          break;
+        case SelectionType.CorrectSelectionType:
+          selectionText = localization.formatString(
+            localization.ErrorAnalysis.InstanceView.selection,
+            this.state.selectionDetails.selectedCorrectDatasetIndexes.length
+          );
+          break;
+        case SelectionType.IncorrectSelectionType:
+          selectionText = localization.formatString(
+            localization.ErrorAnalysis.InstanceView.selection,
+            this.state.selectionDetails.selectedIncorrectDatasetIndexes.length
+          );
+          break;
+        default:
+          break;
+      }
+      const stackItemStyles: IStackItemStyles = {
+        root: classNames.stackItemsStyle
+      };
+      const textStyle = {
+        root: classNames.selectedTextStyle
+      };
+      return (
+        <Stack>
+          <Stack.Item align="start">
+            <span id={p?.labelId} className="ms-ChoiceFieldLabel">
+              {p?.text}
+            </span>
+          </Stack.Item>
+          <Stack.Item align="start" styles={stackItemStyles}>
+            <Text variant="small" styles={textStyle}>
+              {selectionText}
+            </Text>
+          </Stack.Item>
+        </Stack>
+      );
     };
-    const textStyle = {
-      root: classNames.selectedTextStyle
-    };
-    return (
-      <Stack>
-        <Stack.Item align="start">
-          <span id={p?.labelId} className="ms-ChoiceFieldLabel">
-            {p?.text}
-          </span>
-        </Stack.Item>
-        <Stack.Item align="start" styles={stackItemStyles}>
-          <Text variant="small" styles={textStyle}>
-            {selectionText}
-          </Text>
-        </Stack.Item>
-      </Stack>
-    );
-  };
 }

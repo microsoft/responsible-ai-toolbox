@@ -11,12 +11,11 @@ export interface IMatrixFilterStyles {
   matrixFilter: IStyle;
 }
 
-export const matrixFilterStyles: () => IProcessedStyleSet<
-  IMatrixFilterStyles
-> = () => {
-  return mergeStyleSets<IMatrixFilterStyles>({
-    matrixFilter: {
-      padding: "0px 0px 0px 25px"
-    }
-  });
-};
+export const matrixFilterStyles: () => IProcessedStyleSet<IMatrixFilterStyles> =
+  () => {
+    return mergeStyleSets<IMatrixFilterStyles>({
+      matrixFilter: {
+        padding: "0px 0px 0px 25px"
+      }
+    });
+  };

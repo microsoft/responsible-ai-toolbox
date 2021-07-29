@@ -4077,10 +4077,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-plotly.js@^2.2.4":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@types/react-plotly.js/-/react-plotly.js-2.2.4.tgz#360fcfcace64d0ef173cf0c7d67fc2441b39f659"
-  integrity sha512-dsvngno7Ar13XoF2eJXM609Msoc5DPboNp8x4NE4L+rsBEEsu16/0b0Fze8REx3fA4HEUk4rcn3uJsx48m2sew==
+"@types/react-plotly.js@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@types/react-plotly.js/-/react-plotly.js-2.5.0.tgz#bf7793ed16db13a2bd775ff8fa8f9595e82e8597"
+  integrity sha512-bda7N/Y65d1x0FfwhgUXAugGeG9CRIxmkW/yBL8PVFUMvZGpfEnw4bXKjDozBYlOskVfxj6UQ9IKmZI6CZ7/QQ==
   dependencies:
     "@types/plotly.js" "*"
     "@types/react" "*"

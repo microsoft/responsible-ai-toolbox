@@ -74,9 +74,8 @@ export class GlobalExplanationTab extends React.PureComponent<
   IGlobalExplanationTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly explainerCalloutInfo = this.props.explanationMethod
     ? explainerCalloutDictionary[this.props.explanationMethod]
@@ -411,8 +410,8 @@ export class GlobalExplanationTab extends React.PureComponent<
   ): void => {
     // set to dependence plot initially, can be changed if other feature importances available
     const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
-    const xIsDithered = this.context.jointDataset.metaDict[xKey]
-      .treatAsCategorical;
+    const xIsDithered =
+      this.context.jointDataset.metaDict[xKey].treatAsCategorical;
     const yKey =
       JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
     const chartProps: IGenericChartProps = {
