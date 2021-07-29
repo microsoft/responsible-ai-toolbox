@@ -71,8 +71,9 @@ export class CounterfactualChart extends React.PureComponent<
   ICounterfactualChartState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<typeof ModelAssessmentContext> =
-    defaultModelAssessmentContext;
+  public context: React.ContextType<
+    typeof ModelAssessmentContext
+  > = defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
@@ -189,8 +190,8 @@ export class CounterfactualChart extends React.PureComponent<
       this.state.chartProps,
       this.context.selectedErrorCohort.cohort
     );
-    const cohortLength =
-      this.context.selectedErrorCohort.cohort.filteredData.length;
+    const cohortLength = this.context.selectedErrorCohort.cohort.filteredData
+      .length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -422,7 +423,7 @@ export class CounterfactualChart extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -536,8 +537,9 @@ export class CounterfactualChart extends React.PureComponent<
           let predictedClass = 0;
           let maxProb = Number.MIN_SAFE_INTEGER;
           for (const [i, element] of predictionVector.entries()) {
-            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
-              element;
+            fetchingReference[
+              JointDataset.ProbabilityYRoot + i.toString()
+            ] = element;
             if (element > maxProb) {
               predictedClass = i;
               maxProb = element;
@@ -583,8 +585,9 @@ export class CounterfactualChart extends React.PureComponent<
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
-        const selectionIndex =
-          this.state.selectedPointsIndexes.indexOf(rowIndex);
+        const selectionIndex = this.state.selectedPointsIndexes.indexOf(
+          rowIndex
+        );
         if (selectionIndex === -1) {
           return FabricStyles.fabricColorInactiveSeries;
         }
@@ -685,8 +688,9 @@ export class CounterfactualChart extends React.PureComponent<
     });
     let hovertemplate = "";
     if (chartProps.xAxis) {
-      const metaX =
-        this.context.jointDataset.metaDict[chartProps.xAxis.property];
+      const metaX = this.context.jointDataset.metaDict[
+        chartProps.xAxis.property
+      ];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
       hovertemplate += metaX.label + ": %{customdata.X}<br>";
 
@@ -712,8 +716,9 @@ export class CounterfactualChart extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      const metaY =
-        this.context.jointDataset.metaDict[chartProps.yAxis.property];
+      const metaY = this.context.jointDataset.metaDict[
+        chartProps.yAxis.property
+      ];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
       hovertemplate += metaY.label + ": %{customdata.Y}<br>";
       rawY.forEach((val, index) => {
@@ -746,8 +751,8 @@ export class CounterfactualChart extends React.PureComponent<
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
     const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered =
-      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
+    const yIsDithered = this.context.jointDataset.metaDict[yKey]
+      .treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
