@@ -66,7 +66,6 @@ interface IGlobalExplanationTabState {
   globalBarSettings?: IGlobalBarSettings;
   dependenceProps?: IGenericChartProps;
   cohortSeries: IGlobalSeries[];
-  activeSeries: IGlobalSeries[];
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -91,7 +90,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       initialCohortIndex = this.props.initialCohortIndex;
     }
     this.state = {
-      activeSeries: [],
       chartType: ChartTypes.Bar,
       cohortSeries: [],
       selectedCohortIndex: initialCohortIndex,
@@ -115,10 +113,6 @@ export class GlobalExplanationTab extends React.PureComponent<
 
     const cohortSeries = this.getGlobalSeries();
     this.setState({
-      activeSeries: this.getActiveCohortSeries(
-        sortArray.map(() => true),
-        cohortSeries
-      ),
       cohortSeries,
       globalBarSettings: this.getDefaultSettings(),
       sortArray
@@ -213,7 +207,9 @@ export class GlobalExplanationTab extends React.PureComponent<
             chartType={this.state.chartType}
             unsortedX={this.context.modelMetadata.featureNamesAbridged}
             originX={this.context.modelMetadata.featureNames}
-            unsortedSeries={this.state.activeSeries}
+            unsortedSeries={this.getActiveCohortSeries(
+              this.state.seriesIsActive
+            )}
             topK={this.state.topK}
             onFeatureSelection={this.handleFeatureSelection}
             selectedFeatureIndex={this.state.selectedFeatureIndex}
@@ -329,7 +325,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     const seriesIsActive = [...this.state.seriesIsActive];
     seriesIsActive[index] = !seriesIsActive[index];
     this.setState({
-      activeSeries: this.getActiveCohortSeries(seriesIsActive),
       seriesIsActive
     });
   };
@@ -366,7 +361,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
     this.setState({
-      activeSeries: this.getActiveCohortSeries(seriesIsActive),
       cohortSeries: this.getGlobalSeries(),
       selectedCohortIndex,
       seriesIsActive
