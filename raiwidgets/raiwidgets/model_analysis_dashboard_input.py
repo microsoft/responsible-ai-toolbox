@@ -26,15 +26,14 @@ class ModelAnalysisDashboardInput:
             and hasattr(model, SKLearn.PREDICT_PROBA) and \
             model.predict_proba is not None
         self.dashboard_input = analysis.get_data()
-        self._dataframeColumns = self.dashboard_input.dataset.feature_names
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
         self._error_analyzer = analysis.error_analysis._analyzer
 
     def on_predict(self, data):
         try:
-            if self._dataframeColumns is not None:
-                data = pd.DataFrame(data, columns=self._dataframeColumns)
+            data = pd.DataFrame(
+                data, columns=self.dashboard_input.dataset.feature_names)
             if (self._is_classifier):
                 prediction = self._convert_to_list(
                     self._analysis.model.predict_proba(data))
