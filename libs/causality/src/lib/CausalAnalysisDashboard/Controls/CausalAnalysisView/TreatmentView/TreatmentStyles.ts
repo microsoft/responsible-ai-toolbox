@@ -9,6 +9,7 @@ import {
 
 export interface ITreatmentStyles {
   container: IStyle;
+  listContainer: IStyle;
   description: IStyle;
   label: IStyle;
   lasso: IStyle;
@@ -60,6 +61,10 @@ export const TreatmentStyles: () => IProcessedStyleSet<ITreatmentStyles> =
         height: "100%",
         padding: "10px",
         width: "70%"
+      },
+      listContainer: {
+        maxHeight: "65vh",
+        overflowY: "scroll"
       },
       rightPane: {
         width: "25%"
