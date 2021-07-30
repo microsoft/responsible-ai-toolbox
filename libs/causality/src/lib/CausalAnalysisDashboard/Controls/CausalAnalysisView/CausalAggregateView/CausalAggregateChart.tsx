@@ -22,13 +22,10 @@ export interface ICausalAggregateChartProps {
   data: ICausalAnalysisSingleData[];
 }
 
-export class CausalAggregateChart extends React.PureComponent<
-  ICausalAggregateChartProps
-> {
+export class CausalAggregateChart extends React.PureComponent<ICausalAggregateChartProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
@@ -79,7 +76,7 @@ export class CausalAggregateChart extends React.PureComponent<
     plotlyProps.data = [
       {
         customdata: this.props.data.map(
-          (d) => ([d.ci_upper, d.ci_lower] as unknown) as Datum
+          (d) => [d.ci_upper, d.ci_lower] as unknown as Datum
         ),
         error_y: {
           array: this.props.data.map((d) => d.ci_upper - d.point),
