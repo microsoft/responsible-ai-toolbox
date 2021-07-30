@@ -601,7 +601,10 @@
       "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units.",
       "here": "here",
       "binary": "Binary treatments: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the outcome to increase by X units."
+      "binaryDescription": "On average in this sample, turning on this feature will cause the outcome to increase by X units.",
+      "confidenceLower": "Confidence interval (lower)",
+      "confidenceUpper": "Confidence interval (upper)",
+      "causalPoint": "Causal effect point"
     },
     "IndividualView": {
       "index": "Datapoint index",
