@@ -194,9 +194,10 @@ export function createCompositeFilterFromCells(
           } else {
             let cat1arg = category1Values[i].value;
             if (typeof cat1arg == "string") {
-              cat1arg = baseCohort.jointDataset.metaDict[
-                keyFeature1
-              ].sortedCategoricalValues?.indexOf(cat1arg);
+              cat1arg =
+                baseCohort.jointDataset.metaDict[
+                  keyFeature1
+                ].sortedCategoricalValues?.indexOf(cat1arg);
             }
             cellCompositeFilters.push({
               arg: [cat1arg],
@@ -218,9 +219,10 @@ export function createCompositeFilterFromCells(
           } else {
             let cat2arg = category2Values[j].value;
             if (typeof cat2arg == "string") {
-              cat2arg = baseCohort.jointDataset.metaDict[
-                keyFeature2
-              ].sortedCategoricalValues?.indexOf(cat2arg);
+              cat2arg =
+                baseCohort.jointDataset.metaDict[
+                  keyFeature2
+                ].sortedCategoricalValues?.indexOf(cat2arg);
             }
             cellCompositeFilters.push({
               arg: [cat2arg],

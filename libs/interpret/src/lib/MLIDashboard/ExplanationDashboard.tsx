@@ -152,51 +152,54 @@ export class ExplanationDashboard extends React.Component<
     }
   );
 
-  private static getClassLength: (
-    props: IExplanationDashboardProps
-  ) => number = memoize((props: IExplanationDashboardProps): number => {
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.localFeatureImportance &&
-      props.precomputedExplanations.localFeatureImportance.scores
-    ) {
-      const localImportances =
-        props.precomputedExplanations.localFeatureImportance.scores;
+  private static getClassLength: (props: IExplanationDashboardProps) => number =
+    memoize((props: IExplanationDashboardProps): number => {
       if (
-        (localImportances as number[][][]).every((dim1) => {
-          return dim1.every((dim2) => Array.isArray(dim2));
-        })
+        props.precomputedExplanations &&
+        props.precomputedExplanations.localFeatureImportance &&
+        props.precomputedExplanations.localFeatureImportance.scores
       ) {
-        return localImportances.length;
+        const localImportances =
+          props.precomputedExplanations.localFeatureImportance.scores;
+        if (
+          (localImportances as number[][][]).every((dim1) => {
+            return dim1.every((dim2) => Array.isArray(dim2));
+          })
+        ) {
+          return localImportances.length;
+        }
+        // 2d is regression (could be a non-scikit convention binary, but that is not supported)
+        return 1;
       }
-      // 2d is regression (could be a non-scikit convention binary, but that is not supported)
+      if (
+        props.precomputedExplanations &&
+        props.precomputedExplanations.globalFeatureImportance &&
+        props.precomputedExplanations.globalFeatureImportance.scores
+      ) {
+        // determine if passed in vaules is 1D or 2D
+        if (
+          (
+            props.precomputedExplanations.globalFeatureImportance
+              .scores as number[][]
+          ).every((dim1) => Array.isArray(dim1))
+        ) {
+          return (
+            props.precomputedExplanations.globalFeatureImportance
+              .scores as number[][]
+          )[0].length;
+        }
+      }
+      if (
+        props.probabilityY &&
+        Array.isArray(props.probabilityY) &&
+        Array.isArray(props.probabilityY[0]) &&
+        props.probabilityY[0].length > 0
+      ) {
+        return props.probabilityY[0].length;
+      }
+      // default to regression case
       return 1;
-    }
-    if (
-      props.precomputedExplanations &&
-      props.precomputedExplanations.globalFeatureImportance &&
-      props.precomputedExplanations.globalFeatureImportance.scores
-    ) {
-      // determine if passed in vaules is 1D or 2D
-      if (
-        (props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][]).every((dim1) => Array.isArray(dim1))
-      ) {
-        return (props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][])[0].length;
-      }
-    }
-    if (
-      props.probabilityY &&
-      Array.isArray(props.probabilityY) &&
-      Array.isArray(props.probabilityY[0]) &&
-      props.probabilityY[0].length > 0
-    ) {
-      return props.probabilityY[0].length;
-    }
-    // default to regression case
-    return 1;
-  });
+    });
 
   private readonly selectionContext = new SelectionContext(rowIndex, 1);
   private selectionSubscription: string | undefined;
@@ -209,9 +212,8 @@ export class ExplanationDashboard extends React.Component<
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
-    const explanationContext: IExplanationContext = ExplanationDashboard.buildInitialExplanationContext(
-      props
-    );
+    const explanationContext: IExplanationContext =
+      ExplanationDashboard.buildInitialExplanationContext(props);
     const defaultTopK = Math.min(
       8,
       explanationContext.modelMetadata.featureNames.length
@@ -286,9 +288,8 @@ export class ExplanationDashboard extends React.Component<
         explanationContext,
         weightContext: {
           onSelection: this.onClassSelect,
-          options: ExplanationDashboard.buildWeightDropdownOptions(
-            explanationContext
-          ),
+          options:
+            ExplanationDashboard.buildWeightDropdownOptions(explanationContext),
           selectedKey: props.predictedY
             ? WeightVectors.Predicted
             : WeightVectors.AbsAvg
@@ -348,12 +349,13 @@ export class ExplanationDashboard extends React.Component<
         props.precomputedExplanations.localFeatureImportance.scores,
         modelMetadata.modelType
       );
-      const flattenedFeatureMatrix = ExplanationDashboard.buildLocalFlattenMatrix(
-        localFeatureMatrix,
-        modelMetadata.modelType,
-        testDataset,
-        weighting
-      );
+      const flattenedFeatureMatrix =
+        ExplanationDashboard.buildLocalFlattenMatrix(
+          localFeatureMatrix,
+          modelMetadata.modelType,
+          testDataset,
+          weighting
+        );
       const intercepts = undefined;
       // if (props.precomputedExplanations.localFeatureImportance.intercept) {
       //     intercepts = (modelMetadata.modelType === ModelTypes.regression ?
@@ -381,16 +383,19 @@ export class ExplanationDashboard extends React.Component<
       // determine if passed in vaules is 1D or 2D
       // Use the global explanation if its been computed and is 2D
       if (
-        (props.precomputedExplanations.globalFeatureImportance
-          .scores as number[][]).every((dim1) => Array.isArray(dim1))
+        (
+          props.precomputedExplanations.globalFeatureImportance
+            .scores as number[][]
+        ).every((dim1) => Array.isArray(dim1))
       ) {
         globalExplanation = {};
         globalExplanation.perClassFeatureImportances = props
           .precomputedExplanations.globalFeatureImportance.scores as number[][];
-        globalExplanation.flattenedFeatureImportances = globalExplanation.perClassFeatureImportances.map(
-          (classArray) => classArray.reduce((a, b) => a + b),
-          0
-        );
+        globalExplanation.flattenedFeatureImportances =
+          globalExplanation.perClassFeatureImportances.map(
+            (classArray) => classArray.reduce((a, b) => a + b),
+            0
+          );
         globalExplanation.intercepts = intercepts;
       } else if (localExplanation === undefined) {
         // Take the global if we can't build better from local
@@ -401,9 +406,8 @@ export class ExplanationDashboard extends React.Component<
       }
     }
     if (globalExplanation === undefined && localExplanation !== undefined) {
-      globalExplanation = ExplanationDashboard.buildGlobalExplanationFromLocal(
-        localExplanation
-      );
+      globalExplanation =
+        ExplanationDashboard.buildGlobalExplanationFromLocal(localExplanation);
       isGlobalDerived = true;
     }
 
@@ -416,40 +420,41 @@ export class ExplanationDashboard extends React.Component<
         displayParameters: {
           interpolation: "vh"
         },
-        featureList: props.precomputedExplanations.ebmGlobalExplanation.feature_list
-          .map((featureExplanation) => {
-            if (featureExplanation.type !== "univariate") {
-              return undefined;
-            }
-            if (
-              featureExplanation.scores &&
-              isTwoDimArray(featureExplanation.scores)
-            ) {
+        featureList:
+          props.precomputedExplanations.ebmGlobalExplanation.feature_list
+            .map((featureExplanation) => {
+              if (featureExplanation.type !== "univariate") {
+                return undefined;
+              }
+              if (
+                featureExplanation.scores &&
+                isTwoDimArray(featureExplanation.scores)
+              ) {
+                return {
+                  lowerBounds: featureExplanation.lower_bounds
+                    ? featureExplanation.lower_bounds
+                    : undefined,
+                  names: featureExplanation.names,
+                  scores: featureExplanation.scores,
+                  type: "univariate",
+                  upperBounds: featureExplanation.upper_bounds
+                    ? featureExplanation.upper_bounds
+                    : undefined
+                } as IMultiClassBoundedCoordinates;
+              }
               return {
                 lowerBounds: featureExplanation.lower_bounds
-                  ? featureExplanation.lower_bounds
+                  ? [featureExplanation.lower_bounds]
                   : undefined,
                 names: featureExplanation.names,
-                scores: featureExplanation.scores,
+                scores: [featureExplanation.scores],
                 type: "univariate",
                 upperBounds: featureExplanation.upper_bounds
-                  ? featureExplanation.upper_bounds
+                  ? [featureExplanation.upper_bounds]
                   : undefined
               } as IMultiClassBoundedCoordinates;
-            }
-            return {
-              lowerBounds: featureExplanation.lower_bounds
-                ? [featureExplanation.lower_bounds]
-                : undefined,
-              names: featureExplanation.names,
-              scores: [featureExplanation.scores],
-              type: "univariate",
-              upperBounds: featureExplanation.upper_bounds
-                ? [featureExplanation.upper_bounds]
-                : undefined
-            } as IMultiClassBoundedCoordinates;
-          })
-          .filter((featureExplanation) => featureExplanation !== undefined)
+            })
+            .filter((featureExplanation) => featureExplanation !== undefined)
       };
     }
 
@@ -612,11 +617,15 @@ export class ExplanationDashboard extends React.Component<
             return dim1.every((dim2) => Array.isArray(dim2));
           })
         ) {
-          featureLength = (props.precomputedExplanations.localFeatureImportance
-            .scores[0][0] as number[]).length;
+          featureLength = (
+            props.precomputedExplanations.localFeatureImportance
+              .scores[0][0] as number[]
+          ).length;
         } else {
-          featureLength = (props.precomputedExplanations.localFeatureImportance
-            .scores[0] as number[]).length;
+          featureLength = (
+            props.precomputedExplanations.localFeatureImportance
+              .scores[0] as number[]
+          ).length;
         }
       } else if (
         props.precomputedExplanations &&
@@ -709,13 +718,12 @@ export class ExplanationDashboard extends React.Component<
       return;
     }
     const newState = _.cloneDeep(this.state);
-    newState.dashboardContext.explanationContext = ExplanationDashboard.buildInitialExplanationContext(
-      this.props
-    );
+    newState.dashboardContext.explanationContext =
+      ExplanationDashboard.buildInitialExplanationContext(this.props);
     if (newState.dashboardContext.explanationContext.localExplanation) {
-      (newState.configs[
-        globalFeatureImportanceId
-      ] as IFeatureImportanceConfig).displayMode = FeatureImportanceModes.Box;
+      (
+        newState.configs[globalFeatureImportanceId] as IFeatureImportanceConfig
+      ).displayMode = FeatureImportanceModes.Box;
     }
     this.setState(newState);
     this.fetchExplanations();
@@ -991,16 +999,18 @@ export class ExplanationDashboard extends React.Component<
           this.setState((prevState) => {
             const weighting =
               prevState.dashboardContext.weightContext.selectedKey;
-            const localFeatureMatrix = ExplanationDashboard.buildLocalFeatureMatrix(
-              result,
-              modelMetadata.modelType
-            );
-            const flattenedFeatureMatrix = ExplanationDashboard.buildLocalFlattenMatrix(
-              localFeatureMatrix,
-              modelMetadata.modelType,
-              testDataset,
-              weighting
-            );
+            const localFeatureMatrix =
+              ExplanationDashboard.buildLocalFeatureMatrix(
+                result,
+                modelMetadata.modelType
+              );
+            const flattenedFeatureMatrix =
+              ExplanationDashboard.buildLocalFlattenMatrix(
+                localFeatureMatrix,
+                modelMetadata.modelType,
+                testDataset,
+                weighting
+              );
             const newState = _.cloneDeep(prevState);
             newState.dashboardContext.explanationContext.localExplanation = {
               flattenedValues: flattenedFeatureMatrix,
@@ -1011,10 +1021,12 @@ export class ExplanationDashboard extends React.Component<
               prevState.dashboardContext.explanationContext
                 .globalExplanation === undefined
             ) {
-              newState.dashboardContext.explanationContext.globalExplanation = ExplanationDashboard.buildGlobalExplanationFromLocal(
-                newState.dashboardContext.explanationContext.localExplanation
-              );
-              newState.dashboardContext.explanationContext.isGlobalDerived = true;
+              newState.dashboardContext.explanationContext.globalExplanation =
+                ExplanationDashboard.buildGlobalExplanationFromLocal(
+                  newState.dashboardContext.explanationContext.localExplanation
+                );
+              newState.dashboardContext.explanationContext.isGlobalDerived =
+                true;
             }
             return newState;
           });
@@ -1036,12 +1048,14 @@ export class ExplanationDashboard extends React.Component<
       );
       newWeightContext.selectedKey = item.key as any;
 
-      const flattenedFeatureMatrix = ExplanationDashboard.buildLocalFlattenMatrix(
-        prevState.dashboardContext.explanationContext.localExplanation?.values,
-        prevState.dashboardContext.explanationContext.modelMetadata.modelType,
-        prevState.dashboardContext.explanationContext.testDataset,
-        item.key as any
-      );
+      const flattenedFeatureMatrix =
+        ExplanationDashboard.buildLocalFlattenMatrix(
+          prevState.dashboardContext.explanationContext.localExplanation
+            ?.values,
+          prevState.dashboardContext.explanationContext.modelMetadata.modelType,
+          prevState.dashboardContext.explanationContext.testDataset,
+          item.key as any
+        );
       return {
         dashboardContext: {
           explanationContext: {

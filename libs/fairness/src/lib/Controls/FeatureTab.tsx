@@ -194,12 +194,16 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
           <Text variant={"medium"} block>
             {localization.formatString(
               localization.Fairness.Feature.summaryNumericCount,
-              (this.props.dashboardContext.modelMetadata.featureRanges[
-                index
-              ] as INumericRange).min,
-              (this.props.dashboardContext.modelMetadata.featureRanges[
-                index
-              ] as INumericRange).max,
+              (
+                this.props.dashboardContext.modelMetadata.featureRanges[
+                  index
+                ] as INumericRange
+              ).min,
+              (
+                this.props.dashboardContext.modelMetadata.featureRanges[
+                  index
+                ] as INumericRange
+              ).max,
               item.labelArray.length
             )}
           </Text>

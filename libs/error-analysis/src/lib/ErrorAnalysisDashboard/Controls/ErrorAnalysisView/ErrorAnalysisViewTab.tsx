@@ -57,9 +57,8 @@ export class ErrorAnalysisViewTab extends React.Component<
   IErrorAnalysisViewTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public constructor(props: IErrorAnalysisViewTabProps) {
     super(props);

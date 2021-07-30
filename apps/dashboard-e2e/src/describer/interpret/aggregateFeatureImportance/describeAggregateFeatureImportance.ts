@@ -4,7 +4,10 @@
 import { getMenu } from "../../../util/getMenu";
 import { interpretDatasets } from "../interpretDatasets";
 
-import { describeGlobalExplanationBarChart } from "./describeGlobalExplanationBarChart";
+import {
+  describeGlobalExplanationBarChart,
+  describeGlobalExplanationBarChartExplicitValues
+} from "./describeGlobalExplanationBarChart";
 import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBoxChart";
 
 const testName = "Aggregate feature importance";
@@ -22,6 +25,9 @@ export function describeAggregateFeatureImportance(
       getMenu("Aggregate feature importance", "#DashboardPivot").click();
     });
     describeGlobalExplanationBarChart(datasetShape);
+    if (datasetShape.aggregateFeatureImportanceExpectedValues) {
+      describeGlobalExplanationBarChartExplicitValues(datasetShape);
+    }
     if (!datasetShape.noLocalImportance) {
       describeGlobalExplanationBoxChart(datasetShape);
     }

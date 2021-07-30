@@ -46,9 +46,8 @@ export class PredictionLabel extends React.Component<IPredictionLabelProps> {
   }
 
   private makeProbabilityLabel(): string {
-    const probability = this.props.predictedProbabilities?.[
-      this.props.prediction
-    ];
+    const probability =
+      this.props.predictedProbabilities?.[this.props.prediction];
     return localization.formatString(
       localization.Interpret.IcePlot.probabilityLabel,
       probability?.toLocaleString(undefined, { minimumFractionDigits: 3 })

@@ -27,8 +27,9 @@ export function buildGlobalProperties(
       result.globalImportanceIntercept = precomputedExplanations
         .globalFeatureImportance.intercept as number[];
     } else {
-      result.globalImportance = (precomputedExplanations.globalFeatureImportance
-        .scores as number[]).map((value) => [value]);
+      result.globalImportance = (
+        precomputedExplanations.globalFeatureImportance.scores as number[]
+      ).map((value) => [value]);
       result.globalImportanceIntercept = [
         precomputedExplanations.globalFeatureImportance.intercept as number
       ];
@@ -76,8 +77,9 @@ export const getClassLength: (
       if (
         isTwoDimArray(precomputedExplanations.globalFeatureImportance.scores)
       ) {
-        return (precomputedExplanations.globalFeatureImportance
-          .scores as number[][]).length;
+        return (
+          precomputedExplanations.globalFeatureImportance.scores as number[][]
+        ).length;
       }
     }
     if (

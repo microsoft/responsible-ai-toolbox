@@ -3,6 +3,10 @@
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {}
+    },
+    {
       "files": ["main.tsx"],
       "rules": {
         "filenames/match-regex": "off"

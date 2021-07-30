@@ -22,9 +22,7 @@ export interface ICohortEditorFilterList {
   removeFilter(index: number): void;
 }
 
-export class CohortEditorFilterList extends React.Component<
-  ICohortEditorFilterList
-> {
+export class CohortEditorFilterList extends React.Component<ICohortEditorFilterList> {
   private filterMethodLabels: { [key in FilterMethods]: string } = {
     [FilterMethods.Equal]: localization.Interpret.FilterOperations.equals,
     [FilterMethods.GreaterThan]:

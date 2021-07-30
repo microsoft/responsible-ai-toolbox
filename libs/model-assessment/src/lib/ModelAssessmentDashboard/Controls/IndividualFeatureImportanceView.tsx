@@ -67,9 +67,8 @@ export class IndividualFeatureImportanceView extends React.Component<
   IIndividualFeatureImportanceState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private selection: Selection = new Selection({
     onSelectionChanged: (): void => {
@@ -240,18 +239,19 @@ export class IndividualFeatureImportanceView extends React.Component<
           row[JointDataset.TrueYLabel] === row[JointDataset.PredictedYLabel]
       );
       // find first incorrect item
-      const firstIncorrectItemIndex = this.props.selectedCohort.cohort.filteredData.findIndex(
-        (row) =>
-          row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
-      );
+      const firstIncorrectItemIndex =
+        this.props.selectedCohort.cohort.filteredData.findIndex(
+          (row) =>
+            row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+        );
 
       groups = [
         {
           count: firstIncorrectItemIndex,
           key: "groupCorrect",
           level: 0,
-          name:
-            localization.ModelAssessment.FeatureImportances.CorrectPredictions,
+          name: localization.ModelAssessment.FeatureImportances
+            .CorrectPredictions,
           startIndex: 0
         },
         {
@@ -260,9 +260,8 @@ export class IndividualFeatureImportanceView extends React.Component<
             firstIncorrectItemIndex,
           key: "groupIncorrect",
           level: 0,
-          name:
-            localization.ModelAssessment.FeatureImportances
-              .IncorrectPredictions,
+          name: localization.ModelAssessment.FeatureImportances
+            .IncorrectPredictions,
           startIndex: firstIncorrectItemIndex
         }
       ];
@@ -308,9 +307,8 @@ export class IndividualFeatureImportanceView extends React.Component<
     if (!props) {
       return <div />;
     }
-    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
-      tooltipHostProps
-    ) => <TooltipHost {...tooltipHostProps} />;
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
     return (
       <div>
         {defaultRender?.({
