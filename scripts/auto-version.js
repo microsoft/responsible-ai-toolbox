@@ -15,6 +15,7 @@ function getVersion(release) {
   const revision = execSync("git rev-list --count HEAD").toString().trim();
   const versionStr = fs.readFileSync(versionCfgFile).toString().trim();
   var version = semver.coerce(versionStr, true);
+  return "0.5.0-351-patch";
   if (release) {
     return `${version.major}.${version.minor}.${version.patch}`;
   } else {
