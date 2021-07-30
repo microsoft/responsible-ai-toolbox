@@ -598,10 +598,10 @@
       "confoundingFeature": "A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.",
       "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
       "continuous": "Continuous treatments: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units.",
+      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.",
       "here": "here",
       "binary": "Binary treatments: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the outcome to increase by X units."
+      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units."
     },
     "IndividualView": {
       "index": "Datapoint index",
