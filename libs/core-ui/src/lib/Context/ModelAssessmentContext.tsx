@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ErrorCohort,
-  ICausalAnalysisData,
-  ICausalWhatIfData
-} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
+import { ErrorCohort } from "../Cohort/ErrorCohort";
+import {
+  ICausalAnalysisData,
+  ICausalWhatIfData
+} from "../Interfaces/ICausalAnalysisData";
 import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
-import { IErrorAnalysisConfig } from "../Interfaces/IErrorAnalysisConfig";
+import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { ITelemetryMessage } from "../util/ITelemetryMessage";
@@ -22,7 +22,7 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData;
-  errorAnalysisConfig?: IErrorAnalysisConfig;
+  errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.

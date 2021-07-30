@@ -1,9 +1,9 @@
 {
   "version": 1,
   "projects": {
-    "interpret": {
-      "root": "libs/interpret",
-      "sourceRoot": "libs/interpret/src",
+    "causality": {
+      "root": "libs/causality",
+      "sourceRoot": "libs/causality/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -11,29 +11,29 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/interpret/**/*.js",
-              "libs/interpret/**/*.jsx",
-              "libs/interpret/**/*.ts",
-              "libs/interpret/**/*.tsx",
-              "libs/interpret/**/*.test.ts",
-              "libs/interpret/**/*.test.tsx",
-              "libs/interpret/**/*.test.js",
-              "libs/interpret/**/*.test.jsx",
-              "libs/interpret/**/*.spec.ts",
-              "libs/interpret/**/*.spec.tsx",
-              "libs/interpret/**/*.spec.js",
-              "libs/interpret/**/*.spec.jsx",
-              "libs/interpret/**/*.d.ts"
+              "libs/causality/**/*.js",
+              "libs/causality/**/*.jsx",
+              "libs/causality/**/*.ts",
+              "libs/causality/**/*.tsx",
+              "libs/causality/**/*.test.ts",
+              "libs/causality/**/*.test.tsx",
+              "libs/causality/**/*.test.js",
+              "libs/causality/**/*.test.jsx",
+              "libs/causality/**/*.spec.ts",
+              "libs/causality/**/*.spec.tsx",
+              "libs/causality/**/*.spec.js",
+              "libs/causality/**/*.spec.jsx",
+              "libs/causality/**/*.d.ts"
             ]
           }
         },
         "build": {
           "builder": "@nrwl/web:package",
           "options": {
-            "outputPath": "dist/libs/interpret",
-            "tsConfig": "libs/interpret/tsconfig.lib.json",
-            "project": "libs/interpret/package.json",
-            "entryFile": "libs/interpret/src/index.ts",
+            "outputPath": "dist/libs/causality",
+            "tsConfig": "libs/causality/tsconfig.lib.json",
+            "project": "libs/causality/package.json",
+            "entryFile": "libs/causality/src/index.ts",
             "external": [
               "jmespath",
               "localized-strings",
@@ -63,79 +63,10 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/interpret/jest.config.js",
+            "jestConfig": "libs/causality/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": ["coverage/libs/interpret"]
-        }
-      }
-    },
-    "fairness": {
-      "root": "libs/fairness",
-      "sourceRoot": "libs/fairness/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/fairness/**/*.js",
-              "libs/fairness/**/*.jsx",
-              "libs/fairness/**/*.ts",
-              "libs/fairness/**/*.tsx",
-              "libs/fairness/**/*.test.ts",
-              "libs/fairness/**/*.test.tsx",
-              "libs/fairness/**/*.test.js",
-              "libs/fairness/**/*.test.jsx",
-              "libs/fairness/**/*.spec.ts",
-              "libs/fairness/**/*.spec.tsx",
-              "libs/fairness/**/*.spec.js",
-              "libs/fairness/**/*.spec.jsx",
-              "libs/fairness/**/*.d.ts"
-            ]
-          }
-        },
-        "build": {
-          "builder": "@nrwl/web:package",
-          "options": {
-            "outputPath": "dist/libs/fairness",
-            "tsConfig": "libs/fairness/tsconfig.lib.json",
-            "project": "libs/fairness/package.json",
-            "entryFile": "libs/fairness/src/index.ts",
-            "external": [
-              "jmespath",
-              "localized-strings",
-              "lodash",
-              "memoize-one",
-              "moment",
-              "office-ui-fabric-react",
-              "plotly.js",
-              "react-plotly.js",
-              "react",
-              "react-dom",
-              "uuid"
-            ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "./rollup.config.js",
-            "assets": [
-              {
-                "glob": "README.md",
-                "input": ".",
-                "output": "."
-              }
-            ],
-            "buildableProjectDepsInPackageJsonType": "dependencies"
-          },
-          "outputs": ["{options.outputPath}"]
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/fairness/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": ["coverage/libs/fairness"]
+          "outputs": ["coverage/libs/causality"]
         }
       }
     },
@@ -208,144 +139,6 @@
         }
       }
     },
-    "dataset-explorer": {
-      "root": "libs/dataset-explorer",
-      "sourceRoot": "libs/dataset-explorer/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/dataset-explorer/**/*.js",
-              "libs/dataset-explorer/**/*.jsx",
-              "libs/dataset-explorer/**/*.ts",
-              "libs/dataset-explorer/**/*.tsx",
-              "libs/dataset-explorer/**/*.test.ts",
-              "libs/dataset-explorer/**/*.test.tsx",
-              "libs/dataset-explorer/**/*.test.js",
-              "libs/dataset-explorer/**/*.test.jsx",
-              "libs/dataset-explorer/**/*.spec.ts",
-              "libs/dataset-explorer/**/*.spec.tsx",
-              "libs/dataset-explorer/**/*.spec.js",
-              "libs/dataset-explorer/**/*.spec.jsx",
-              "libs/dataset-explorer/**/*.d.ts"
-            ]
-          }
-        },
-        "build": {
-          "builder": "@nrwl/web:package",
-          "options": {
-            "outputPath": "dist/libs/dataset-explorer",
-            "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",
-            "project": "libs/dataset-explorer/package.json",
-            "entryFile": "libs/dataset-explorer/src/index.ts",
-            "external": [
-              "jmespath",
-              "localized-strings",
-              "lodash",
-              "memoize-one",
-              "moment",
-              "office-ui-fabric-react",
-              "plotly.js",
-              "react-plotly.js",
-              "react",
-              "react-dom",
-              "uuid"
-            ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "./rollup.config.js",
-            "assets": [
-              {
-                "glob": "README.md",
-                "input": ".",
-                "output": "."
-              }
-            ],
-            "buildableProjectDepsInPackageJsonType": "dependencies"
-          },
-          "outputs": ["{options.outputPath}"]
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/dataset-explorer/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": ["coverage/libs/dataset-explorer"]
-        }
-      }
-    },
-    "causality": {
-      "root": "libs/causality",
-      "sourceRoot": "libs/causality/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/causality/**/*.js",
-              "libs/causality/**/*.jsx",
-              "libs/causality/**/*.ts",
-              "libs/causality/**/*.tsx",
-              "libs/causality/**/*.test.ts",
-              "libs/causality/**/*.test.tsx",
-              "libs/causality/**/*.test.js",
-              "libs/causality/**/*.test.jsx",
-              "libs/causality/**/*.spec.ts",
-              "libs/causality/**/*.spec.tsx",
-              "libs/causality/**/*.spec.js",
-              "libs/causality/**/*.spec.jsx",
-              "libs/causality/**/*.d.ts"
-            ]
-          }
-        },
-        "build": {
-          "builder": "@nrwl/web:package",
-          "options": {
-            "outputPath": "dist/libs/causality",
-            "tsConfig": "libs/causality/tsconfig.lib.json",
-            "project": "libs/causality/package.json",
-            "entryFile": "libs/causality/src/index.ts",
-            "external": [
-              "jmespath",
-              "localized-strings",
-              "lodash",
-              "memoize-one",
-              "moment",
-              "office-ui-fabric-react",
-              "plotly.js",
-              "react-plotly.js",
-              "react",
-              "react-dom",
-              "uuid"
-            ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "./rollup.config.js",
-            "assets": [
-              {
-                "glob": "README.md",
-                "input": ".",
-                "output": "."
-              }
-            ],
-            "buildableProjectDepsInPackageJsonType": "dependencies"
-          },
-          "outputs": ["{options.outputPath}"]
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/causality/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": ["coverage/libs/causality"]
-        }
-      }
-    },
     "counterfactuals": {
       "root": "libs/counterfactuals",
       "sourceRoot": "libs/counterfactuals/src",
@@ -412,75 +205,6 @@
             "passWithNoTests": true
           },
           "outputs": ["coverage/libs/counterfactuals"]
-        }
-      }
-    },
-    "mlchartlib": {
-      "root": "libs/mlchartlib",
-      "sourceRoot": "libs/mlchartlib/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/mlchartlib/**/*.js",
-              "libs/mlchartlib/**/*.jsx",
-              "libs/mlchartlib/**/*.ts",
-              "libs/mlchartlib/**/*.tsx",
-              "libs/mlchartlib/**/*.test.ts",
-              "libs/mlchartlib/**/*.test.tsx",
-              "libs/mlchartlib/**/*.test.js",
-              "libs/mlchartlib/**/*.test.jsx",
-              "libs/mlchartlib/**/*.spec.ts",
-              "libs/mlchartlib/**/*.spec.tsx",
-              "libs/mlchartlib/**/*.spec.js",
-              "libs/mlchartlib/**/*.spec.jsx",
-              "libs/mlchartlib/**/*.d.ts"
-            ]
-          }
-        },
-        "build": {
-          "builder": "@nrwl/web:package",
-          "options": {
-            "outputPath": "dist/libs/mlchartlib",
-            "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
-            "project": "libs/mlchartlib/package.json",
-            "entryFile": "libs/mlchartlib/src/index.ts",
-            "external": [
-              "jmespath",
-              "localized-strings",
-              "lodash",
-              "memoize-one",
-              "moment",
-              "office-ui-fabric-react",
-              "plotly.js",
-              "react-plotly.js",
-              "react",
-              "react-dom",
-              "uuid"
-            ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "./rollup.config.js",
-            "assets": [
-              {
-                "glob": "README.md",
-                "input": ".",
-                "output": "."
-              }
-            ],
-            "buildableProjectDepsInPackageJsonType": "dependencies"
-          },
-          "outputs": ["{options.outputPath}"]
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/mlchartlib/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": ["coverage/libs/mlchartlib"]
         }
       }
     },
@@ -611,9 +335,9 @@
         }
       }
     },
-    "localization": {
-      "root": "libs/localization",
-      "sourceRoot": "libs/localization/src",
+    "dataset-explorer": {
+      "root": "libs/dataset-explorer",
+      "sourceRoot": "libs/dataset-explorer/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -621,25 +345,29 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/localization/**/*.js",
-              "libs/localization/**/*.jsx",
-              "libs/localization/**/*.ts",
-              "libs/localization/**/*.tsx",
-              "libs/localization/**/*.spec.ts",
-              "libs/localization/**/*.spec.tsx",
-              "libs/localization/**/*.spec.js",
-              "libs/localization/**/*.spec.jsx",
-              "libs/localization/**/*.d.ts"
+              "libs/dataset-explorer/**/*.js",
+              "libs/dataset-explorer/**/*.jsx",
+              "libs/dataset-explorer/**/*.ts",
+              "libs/dataset-explorer/**/*.tsx",
+              "libs/dataset-explorer/**/*.test.ts",
+              "libs/dataset-explorer/**/*.test.tsx",
+              "libs/dataset-explorer/**/*.test.js",
+              "libs/dataset-explorer/**/*.test.jsx",
+              "libs/dataset-explorer/**/*.spec.ts",
+              "libs/dataset-explorer/**/*.spec.tsx",
+              "libs/dataset-explorer/**/*.spec.js",
+              "libs/dataset-explorer/**/*.spec.jsx",
+              "libs/dataset-explorer/**/*.d.ts"
             ]
           }
         },
         "build": {
           "builder": "@nrwl/web:package",
           "options": {
-            "outputPath": "dist/libs/localization",
-            "tsConfig": "libs/localization/tsconfig.lib.json",
-            "project": "libs/localization/package.json",
-            "entryFile": "libs/localization/src/index.ts",
+            "outputPath": "dist/libs/dataset-explorer",
+            "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",
+            "project": "libs/dataset-explorer/package.json",
+            "entryFile": "libs/dataset-explorer/src/index.ts",
             "external": [
               "jmespath",
               "localized-strings",
@@ -669,10 +397,10 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/localization/jest.config.js",
+            "jestConfig": "libs/dataset-explorer/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": ["coverage/libs/localization"]
+          "outputs": ["coverage/libs/dataset-explorer"]
         }
       }
     },
@@ -742,6 +470,347 @@
             "passWithNoTests": true
           },
           "outputs": ["coverage/libs/error-analysis"]
+        }
+      }
+    },
+    "fairness": {
+      "root": "libs/fairness",
+      "sourceRoot": "libs/fairness/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/fairness/**/*.js",
+              "libs/fairness/**/*.jsx",
+              "libs/fairness/**/*.ts",
+              "libs/fairness/**/*.tsx",
+              "libs/fairness/**/*.test.ts",
+              "libs/fairness/**/*.test.tsx",
+              "libs/fairness/**/*.test.js",
+              "libs/fairness/**/*.test.jsx",
+              "libs/fairness/**/*.spec.ts",
+              "libs/fairness/**/*.spec.tsx",
+              "libs/fairness/**/*.spec.js",
+              "libs/fairness/**/*.spec.jsx",
+              "libs/fairness/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/fairness",
+            "tsConfig": "libs/fairness/tsconfig.lib.json",
+            "project": "libs/fairness/package.json",
+            "entryFile": "libs/fairness/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/fairness/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/fairness"]
+        }
+      }
+    },
+    "interpret": {
+      "root": "libs/interpret",
+      "sourceRoot": "libs/interpret/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/interpret/**/*.js",
+              "libs/interpret/**/*.jsx",
+              "libs/interpret/**/*.ts",
+              "libs/interpret/**/*.tsx",
+              "libs/interpret/**/*.test.ts",
+              "libs/interpret/**/*.test.tsx",
+              "libs/interpret/**/*.test.js",
+              "libs/interpret/**/*.test.jsx",
+              "libs/interpret/**/*.spec.ts",
+              "libs/interpret/**/*.spec.tsx",
+              "libs/interpret/**/*.spec.js",
+              "libs/interpret/**/*.spec.jsx",
+              "libs/interpret/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/interpret",
+            "tsConfig": "libs/interpret/tsconfig.lib.json",
+            "project": "libs/interpret/package.json",
+            "entryFile": "libs/interpret/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/interpret/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/interpret"]
+        }
+      }
+    },
+    "localization": {
+      "root": "libs/localization",
+      "sourceRoot": "libs/localization/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/localization/**/*.js",
+              "libs/localization/**/*.jsx",
+              "libs/localization/**/*.ts",
+              "libs/localization/**/*.tsx",
+              "libs/localization/**/*.spec.ts",
+              "libs/localization/**/*.spec.tsx",
+              "libs/localization/**/*.spec.js",
+              "libs/localization/**/*.spec.jsx",
+              "libs/localization/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/localization",
+            "tsConfig": "libs/localization/tsconfig.lib.json",
+            "project": "libs/localization/package.json",
+            "entryFile": "libs/localization/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/localization/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/localization"]
+        }
+      }
+    },
+    "mlchartlib": {
+      "root": "libs/mlchartlib",
+      "sourceRoot": "libs/mlchartlib/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/mlchartlib/**/*.js",
+              "libs/mlchartlib/**/*.jsx",
+              "libs/mlchartlib/**/*.ts",
+              "libs/mlchartlib/**/*.tsx",
+              "libs/mlchartlib/**/*.test.ts",
+              "libs/mlchartlib/**/*.test.tsx",
+              "libs/mlchartlib/**/*.test.js",
+              "libs/mlchartlib/**/*.test.jsx",
+              "libs/mlchartlib/**/*.spec.ts",
+              "libs/mlchartlib/**/*.spec.tsx",
+              "libs/mlchartlib/**/*.spec.js",
+              "libs/mlchartlib/**/*.spec.jsx",
+              "libs/mlchartlib/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/mlchartlib",
+            "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
+            "project": "libs/mlchartlib/package.json",
+            "entryFile": "libs/mlchartlib/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/mlchartlib/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/mlchartlib"]
+        }
+      }
+    },
+    "model-assessment": {
+      "root": "libs/model-assessment",
+      "sourceRoot": "libs/model-assessment/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/model-assessment/**/*.js",
+              "libs/model-assessment/**/*.jsx",
+              "libs/model-assessment/**/*.ts",
+              "libs/model-assessment/**/*.tsx",
+              "libs/model-assessment/**/*.test.ts",
+              "libs/model-assessment/**/*.test.tsx",
+              "libs/model-assessment/**/*.test.js",
+              "libs/model-assessment/**/*.test.jsx",
+              "libs/model-assessment/**/*.spec.ts",
+              "libs/model-assessment/**/*.spec.tsx",
+              "libs/model-assessment/**/*.spec.js",
+              "libs/model-assessment/**/*.spec.jsx",
+              "libs/model-assessment/**/*.d.ts"
+            ]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/model-assessment",
+            "tsConfig": "libs/model-assessment/tsconfig.lib.json",
+            "project": "libs/model-assessment/package.json",
+            "entryFile": "libs/model-assessment/src/index.ts",
+            "external": [
+              "jmespath",
+              "localized-strings",
+              "lodash",
+              "memoize-one",
+              "moment",
+              "office-ui-fabric-react",
+              "plotly.js",
+              "react-plotly.js",
+              "react",
+              "react-dom",
+              "uuid"
+            ],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "./rollup.config.js",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ],
+            "buildableProjectDepsInPackageJsonType": "dependencies"
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/model-assessment/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/model-assessment"]
         }
       }
     },
@@ -866,75 +935,6 @@
               "apps/widget-e2e/src/**/*.js"
             ]
           }
-        }
-      }
-    },
-    "model-assessment": {
-      "root": "libs/model-assessment",
-      "sourceRoot": "libs/model-assessment/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/model-assessment/**/*.js",
-              "libs/model-assessment/**/*.jsx",
-              "libs/model-assessment/**/*.ts",
-              "libs/model-assessment/**/*.tsx",
-              "libs/model-assessment/**/*.test.ts",
-              "libs/model-assessment/**/*.test.tsx",
-              "libs/model-assessment/**/*.test.js",
-              "libs/model-assessment/**/*.test.jsx",
-              "libs/model-assessment/**/*.spec.ts",
-              "libs/model-assessment/**/*.spec.tsx",
-              "libs/model-assessment/**/*.spec.js",
-              "libs/model-assessment/**/*.spec.jsx",
-              "libs/model-assessment/**/*.d.ts"
-            ]
-          }
-        },
-        "build": {
-          "builder": "@nrwl/web:package",
-          "options": {
-            "outputPath": "dist/libs/model-assessment",
-            "tsConfig": "libs/model-assessment/tsconfig.lib.json",
-            "project": "libs/model-assessment/package.json",
-            "entryFile": "libs/model-assessment/src/index.ts",
-            "external": [
-              "jmespath",
-              "localized-strings",
-              "lodash",
-              "memoize-one",
-              "moment",
-              "office-ui-fabric-react",
-              "plotly.js",
-              "react-plotly.js",
-              "react",
-              "react-dom",
-              "uuid"
-            ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
-            "rollupConfig": "./rollup.config.js",
-            "assets": [
-              {
-                "glob": "README.md",
-                "input": ".",
-                "output": "."
-              }
-            ],
-            "buildableProjectDepsInPackageJsonType": "dependencies"
-          },
-          "outputs": ["{options.outputPath}"]
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/model-assessment/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": ["coverage/libs/model-assessment"]
         }
       }
     }

@@ -258,6 +258,10 @@ class ErrorAnalysisManager(BaseManager):
         error_analysis = ErrorAnalysisData()
         error_analysis.maxDepth = report[Keys.MAX_DEPTH]
         error_analysis.numLeaves = report[Keys.NUM_LEAVES]
+        error_analysis.tree = self._analyzer.compute_error_tree(
+            self._feature_names, None, None)
+        error_analysis.matrix = self._analyzer.compute_matrix(
+            self._feature_names, None, None)
         return error_analysis
 
     @property

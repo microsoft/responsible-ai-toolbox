@@ -15,4 +15,7 @@ export interface IInterpretData {
   noY?: boolean;
   isClassification?: boolean;
   isMulticlass?: boolean;
+  aggregateFeatureImportanceExpectedValues?: {
+    [key: string]: number;
+  };
 }

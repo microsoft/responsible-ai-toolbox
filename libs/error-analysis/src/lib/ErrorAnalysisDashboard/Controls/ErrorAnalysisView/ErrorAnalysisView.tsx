@@ -8,7 +8,9 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   MetricCohortStats,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  IErrorAnalysisTreeNode,
+  IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -23,10 +25,17 @@ export interface IErrorAnalysisViewProps {
   messages?: HelpMessageDict;
   features: string[];
   selectedFeatures: string[];
-  getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  staticTreeNodes?: any;
-  staticMatrix?: any;
+  getTreeNodes?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisTreeNode[]>;
+  getMatrix?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisMatrix>;
+  tree?: IErrorAnalysisTreeNode[];
+  matrix?: IErrorAnalysisMatrix;
+  matrixFeatures?: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   updateSelectedCohort: (
     filters: IFilter[],
@@ -46,13 +55,10 @@ export interface IErrorAnalysisViewProps {
   showCohortName: boolean;
 }
 
-export class ErrorAnalysisView extends React.PureComponent<
-  IErrorAnalysisViewProps
-> {
+export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     return (
@@ -62,7 +68,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             theme={this.context.theme}
             messages={this.props.messages}
             getTreeNodes={this.props.getTreeNodes}
-            staticTreeNodes={this.props.staticTreeNodes}
+            tree={this.props.tree}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
             updateSelectedCohort={this.props.updateSelectedCohort}
@@ -78,7 +84,8 @@ export class ErrorAnalysisView extends React.PureComponent<
             theme={this.context.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
-            staticMatrix={this.props.staticMatrix}
+            matrix={this.props.matrix}
+            matrixFeatures={this.props.matrixFeatures}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}

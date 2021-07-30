@@ -90,7 +90,6 @@ export function buildInitialModelAssessmentContext(
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
-    jointDataset,
     false
   ).map((item) => {
     return {
@@ -176,13 +175,15 @@ function buildModelMetadata(
         props.modelExplanationData?.[0]?.precomputedExplanations
           .localFeatureImportance.scores;
       if (isThreeDimArray(localImportances)) {
-        featureLength = (props.modelExplanationData?.[0]
-          ?.precomputedExplanations.localFeatureImportance
-          .scores[0][0] as number[]).length;
+        featureLength = (
+          props.modelExplanationData?.[0]?.precomputedExplanations
+            .localFeatureImportance.scores[0][0] as number[]
+        ).length;
       } else {
-        featureLength = (props.modelExplanationData?.[0]
-          ?.precomputedExplanations.localFeatureImportance
-          .scores[0] as number[]).length;
+        featureLength = (
+          props.modelExplanationData?.[0]?.precomputedExplanations
+            .localFeatureImportance.scores[0] as number[]
+        ).length;
       }
     } else if (
       props.modelExplanationData?.[0]?.precomputedExplanations &&

@@ -17,13 +17,10 @@ export interface ITreatmentBarChartSectionProps {
   data: ICausalPolicy;
 }
 
-export class TreatmentBarChartSection extends React.PureComponent<
-  ITreatmentBarChartSectionProps
-> {
+export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarChartSectionProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
@@ -33,7 +30,8 @@ export class TreatmentBarChartSection extends React.PureComponent<
           <Text variant={"medium"} className={styles.header}>
             {localization.formatString(
               localization.CausalAnalysis.TreatmentPolicy.averageGain,
-              "Tech support"
+              this.props.data.control_treatment,
+              this.props.data.treatment_feature
             )}
           </Text>
         </Stack.Item>

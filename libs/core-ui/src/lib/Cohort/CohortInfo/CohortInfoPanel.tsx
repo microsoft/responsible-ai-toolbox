@@ -32,9 +32,7 @@ const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
   main: { zIndex: 1 }
 };
 
-export class CohortInfoPanel extends React.PureComponent<
-  ICohortInfoPanelProps
-> {
+export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> {
   public render(): React.ReactNode {
     return (
       <Panel

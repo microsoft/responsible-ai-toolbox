@@ -17,9 +17,7 @@ export interface IPerformancePickingTabProps extends IWizardTabProps {
   performancePickerProps: IPerformancePickerPropsV2;
 }
 
-export class PerformanceTab extends React.PureComponent<
-  IPerformancePickingTabProps
-> {
+export class PerformanceTab extends React.PureComponent<IPerformancePickingTabProps> {
   public render(): React.ReactNode {
     const theme = getTheme();
     return (
@@ -69,10 +67,11 @@ export class PerformanceTab extends React.PureComponent<
                 key: performance.key,
                 metric: performance.key,
                 name: performance.title,
-                onSelect: this.props.performancePickerProps.onPerformanceChange.bind(
-                  this,
-                  performance.key
-                )
+                onSelect:
+                  this.props.performancePickerProps.onPerformanceChange.bind(
+                    this,
+                    performance.key
+                  )
               };
             }
           )}

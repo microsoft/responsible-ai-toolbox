@@ -97,8 +97,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             precomputedExplanations: this.props.precomputedExplanations
           } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          requestLocalFeatureExplanations: this.props
-            .requestLocalFeatureExplanations,
+          requestLocalFeatureExplanations:
+            this.props.requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
           selectedErrorCohort: new ErrorCohort(
             this.state.selectedCohort,
