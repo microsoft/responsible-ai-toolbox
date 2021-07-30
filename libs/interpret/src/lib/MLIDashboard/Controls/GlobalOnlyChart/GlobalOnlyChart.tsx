@@ -30,9 +30,8 @@ export class GlobalOnlyChart extends React.PureComponent<
   IGlobalOnlyChartState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public componentDidMount(): void {
     if (
@@ -69,9 +68,8 @@ export class GlobalOnlyChart extends React.PureComponent<
                   globalImportance.map((classArray) => classArray[index]) || []
               };
             }),
-      sortArray: ModelExplanationUtils.buildSortedVector(
-        globalImportance
-      ).reverse(),
+      sortArray:
+        ModelExplanationUtils.buildSortedVector(globalImportance).reverse(),
       topK: Math.min(
         4,
         this.context.modelExplanationData?.precomputedExplanations

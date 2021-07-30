@@ -45,9 +45,8 @@ export class CounterfactualPanel extends React.Component<
   ICounterfactualState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ICounterfactualPanelProps) {
     super(props);
     this.state = {

@@ -116,14 +116,13 @@ export class LocalImportancePlots extends React.Component<
   public render(): React.ReactNode {
     const classNames = whatIfTabStyles();
     let secondaryPlot: React.ReactNode;
-    const featureImportanceSortOptions: IDropdownOption[] = this.props.includedFeatureImportance.map(
-      (item, index) => {
+    const featureImportanceSortOptions: IDropdownOption[] =
+      this.props.includedFeatureImportance.map((item, index) => {
         return {
           key: index,
           text: item.name
         };
-      }
-    );
+      });
     if (
       this.state.secondaryChartChoice === WhatIfConstants.featureImportanceKey
     ) {

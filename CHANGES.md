@@ -24,6 +24,32 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.9.2
+
+- educational materials
+- new features
+  - Model Analysis:
+    - add search box to counterfactuals panel
+    - add support for feature to vary and permitted range in counterfactual manager
+  - add matrix features and tree features to error report object in erroranalysis package
+- breaking changes
+- bug fixes
+  - call flask service credential
+  - Model Analysis:
+    - fix hardcoded feature name in counterfactual panel
+    - fix refresh on global cohort change
+    - add tree_features and matrix_features params to static tree and heatmap
+    - update sticky menu
+    - change counter factual desired_range to tuple
+  - fix aggregate feature importance chart for multiclass classification
+  - fix serialize_json_safe not escaping special characters which caused
+    dashboard to fail to render on pandas dataframe that had double quotes
+    in string values
+- other
+  - add dice-ml to intersphinx_mapping
+  - add missing documentation for counterfactual manager
+  - fix python responsibleai package test for windows
+
 ## v0.9.1
 
 - educational materials

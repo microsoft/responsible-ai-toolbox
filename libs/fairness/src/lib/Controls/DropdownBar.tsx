@@ -31,21 +31,18 @@ export interface IDropdownBarProps {
 
 export class DropdownBar extends React.PureComponent<IDropdownBarProps> {
   public render(): React.ReactNode {
-    const featureOptions: IDropdownOption[] = this.props.dashboardContext.modelMetadata.featureNames.map(
-      (x) => {
+    const featureOptions: IDropdownOption[] =
+      this.props.dashboardContext.modelMetadata.featureNames.map((x) => {
         return { key: x, text: x };
-      }
-    );
-    const performanceDropDown: IDropdownOption[] = this.props.performancePickerProps.performanceOptions.map(
-      (x) => {
+      });
+    const performanceDropDown: IDropdownOption[] =
+      this.props.performancePickerProps.performanceOptions.map((x) => {
         return { key: x.key, text: x.title };
-      }
-    );
-    const fairnessDropdown: IDropdownOption[] = this.props.fairnessPickerProps.fairnessOptions.map(
-      (x) => {
+      });
+    const fairnessDropdown: IDropdownOption[] =
+      this.props.fairnessPickerProps.fairnessOptions.map((x) => {
         return { key: x.key, text: x.title };
-      }
-    );
+      });
 
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "0 100px" }}>

@@ -99,11 +99,15 @@ function buildModelMetadata(
           return dim1.every((dim2) => Array.isArray(dim2));
         })
       ) {
-        featureLength = (props.precomputedExplanations.localFeatureImportance
-          .scores[0][0] as number[]).length;
+        featureLength = (
+          props.precomputedExplanations.localFeatureImportance
+            .scores[0][0] as number[]
+        ).length;
       } else {
-        featureLength = (props.precomputedExplanations.localFeatureImportance
-          .scores[0] as number[]).length;
+        featureLength = (
+          props.precomputedExplanations.localFeatureImportance
+            .scores[0] as number[]
+        ).length;
       }
     } else if (
       props.precomputedExplanations &&

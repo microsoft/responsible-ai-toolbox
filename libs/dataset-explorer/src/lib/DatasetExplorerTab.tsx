@@ -49,9 +49,8 @@ export class DatasetExplorerTab extends React.Component<
   IDatasetExplorerTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "DatasetExplorerChart";
 
@@ -121,9 +120,9 @@ export class DatasetExplorerTab extends React.Component<
             return { key: index, text: errorCohort.cohort.name };
           })
         : undefined;
-    const cohortLength = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.filteredData.length;
+    const cohortLength =
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+        .filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -384,8 +383,8 @@ export class DatasetExplorerTab extends React.Component<
 
   private generateDefaultYAxis(): ISelectorConfig {
     const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.context.jointDataset.metaDict[yKey]
-      .treatAsCategorical;
+    const yIsDithered =
+      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     return {
       options: {
         bin: false,

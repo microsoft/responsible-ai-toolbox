@@ -339,8 +339,8 @@ export class CohortEditor extends React.PureComponent<
     const openedFilter = this.state.openedFilter;
     if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
-      const meta = this.props.jointDataset.metaDict[openedFilter.column]
-        .featureRange;
+      const meta =
+        this.props.jointDataset.metaDict[openedFilter.column].featureRange;
       openedFilter.arg[0] = meta?.min || Number.MIN_SAFE_INTEGER;
       openedFilter.arg[1] = meta?.max || Number.MAX_SAFE_INTEGER;
     } else {

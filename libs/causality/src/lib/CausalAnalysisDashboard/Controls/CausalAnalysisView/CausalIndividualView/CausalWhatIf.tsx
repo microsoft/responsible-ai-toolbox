@@ -46,9 +46,8 @@ export class CausalWhatIf extends React.Component<
   ICausalWhatIfState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   private _getWhatIfController: AbortController | undefined;
   public constructor(props: ICausalWhatIfProps) {
     super(props);
@@ -66,12 +65,11 @@ export class CausalWhatIf extends React.Component<
     if (!this.context.causalAnalysisData?.config) {
       return <NoData />;
     }
-    const treatmentOptions: IComboBoxOption[] = this.context.causalAnalysisData?.config?.treatment_features.map(
-      (n) => ({
+    const treatmentOptions: IComboBoxOption[] =
+      this.context.causalAnalysisData?.config?.treatment_features.map((n) => ({
         key: n,
         text: n
-      })
-    );
+      }));
 
     const classNames = causalIndividualChartStyles();
     return (
@@ -164,10 +162,11 @@ export class CausalWhatIf extends React.Component<
     const treatmentValue = this.context.selectedErrorCohort.cohort.getRow(
       this.props.selectedIndex
     )[featureKey];
-    const meta = this.context.jointDataset.metaDict[
-      JointDataset.DataLabelRoot +
-        this.context.dataset.feature_names.indexOf(featureName)
-    ];
+    const meta =
+      this.context.jointDataset.metaDict[
+        JointDataset.DataLabelRoot +
+          this.context.dataset.feature_names.indexOf(featureName)
+      ];
     let treatmentValueMin: number | undefined,
       treatmentValueMax: number | undefined,
       treatmentValueStep: number | undefined;

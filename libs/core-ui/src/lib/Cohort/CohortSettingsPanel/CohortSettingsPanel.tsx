@@ -27,9 +27,7 @@ export interface ICohortSettingsPanelProps {
   toggleCreateCohortVisibility: () => void;
 }
 
-export class CohortSettingsPanel extends React.PureComponent<
-  ICohortSettingsPanelProps
-> {
+export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPanelProps> {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 

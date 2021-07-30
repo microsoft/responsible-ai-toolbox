@@ -27,9 +27,8 @@ export class TreatmentListSection extends React.Component<
   public static contextType = ModelAssessmentContext;
   public minCount = 1;
   public maxCount = 100;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ITreatmentListSectionProps) {
     super(props);
     this.state = {

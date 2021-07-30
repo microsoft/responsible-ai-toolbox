@@ -16,13 +16,10 @@ export interface ICounterfactualsTabProps {
   data: ICounterfactualData;
 }
 
-export class CounterfactualsTab extends React.PureComponent<
-  ICounterfactualsTabProps
-> {
+export class CounterfactualsTab extends React.PureComponent<ICounterfactualsTabProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     return (

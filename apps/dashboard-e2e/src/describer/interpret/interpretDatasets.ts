@@ -282,6 +282,12 @@ const interpretDatasets = {
     isClassification: true
   },
   irisData: {
+    aggregateFeatureImportanceExpectedValues: {
+      "Average of absolute value": 0.329,
+      "Class: setosa": 0.387,
+      "Class: versicolor": 0.365,
+      "Class: virginica": 0.236
+    },
     datapoint: 30,
     datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
     defaultXAxis: "Index",

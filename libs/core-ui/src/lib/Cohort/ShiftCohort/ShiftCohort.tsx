@@ -61,9 +61,8 @@ export class ShiftCohort extends React.Component<
   IShiftCohortState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public constructor(props: IShiftCohortProps) {
     super(props);
