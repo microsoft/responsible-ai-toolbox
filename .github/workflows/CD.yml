@@ -90,8 +90,8 @@ jobs:
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
 
-      - name: run tests
-        run: pytest
+      #- name: run tests
+      #  run: pytest
 
       - name: skip publish for pull request
         if: ${{ github.event_name  == 'pull_request' }}
