@@ -16,6 +16,7 @@ import { TreatmentTableStyles } from "./TreatmentTableStyles";
 export interface ITreatmentTableProps {
   data?: ICausalPolicyTreeInternal | ICausalPolicyTreeLeaf;
   horizontal?: boolean;
+  innerTable?: boolean;
 }
 
 export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
@@ -52,71 +53,79 @@ export class TreatmentTable extends React.PureComponent<ITreatmentTableProps> {
     }
     if (!this.props.horizontal) {
       return (
-        <table className={styles.table}>
+        <table
+          className={this.props.innerTable ? styles.tableInner : styles.table}
+        >
           <tr>
-            <th className={styles.cell}>
+            <td className={styles.td}>
               {localization.formatString(
                 localization.CausalAnalysis.TreatmentPolicy.Left,
                 this.props.data.feature,
                 this.props.data.threshold
               )}
-            </th>
-            <th>
+            </td>
+            <td className={styles.td}>
               <TreatmentTable
                 data={this.props.data.left}
                 horizontal={!this.props.horizontal}
+                innerTable
               />
-            </th>
+            </td>
           </tr>
           <tr>
-            <th className={styles.cell}>
+            <td className={styles.td}>
               {localization.formatString(
                 localization.CausalAnalysis.TreatmentPolicy.Right,
                 this.props.data.feature,
                 this.props.data.threshold
               )}
-            </th>
-            <th>
+            </td>
+            <td className={styles.td}>
               <TreatmentTable
                 data={this.props.data.right}
                 horizontal={!this.props.horizontal}
+                innerTable
               />
-            </th>
+            </td>
           </tr>
         </table>
       );
     }
     return (
-      <table className={styles.cell}>
+      <table
+        className={this.props.innerTable ? styles.tableInner : styles.table}
+      >
         <tr>
-          <th className={styles.cell}>
+          <td className={styles.td}>
             {localization.formatString(
               localization.CausalAnalysis.TreatmentPolicy.Left,
               this.props.data.feature,
               this.props.data.threshold
             )}
-          </th>
-          <th className={styles.cell}>
+          </td>
+          <td className={styles.td}>
             {localization.formatString(
               localization.CausalAnalysis.TreatmentPolicy.Right,
               this.props.data.feature,
               this.props.data.threshold
             )}
-          </th>
+          </td>
         </tr>
         <tr>
-          <th>
+          <td className={styles.td}>
             <TreatmentTable
               data={this.props.data.left}
               horizontal={!this.props.horizontal}
+              innerTable
             />
-          </th>
-          <th>
+          </td>
+          <td className={styles.td}>
             <TreatmentTable
               data={this.props.data.right}
               horizontal={!this.props.horizontal}
+              innerTable
             />
-          </th>
+          </td>
         </tr>
       </table>
     );
