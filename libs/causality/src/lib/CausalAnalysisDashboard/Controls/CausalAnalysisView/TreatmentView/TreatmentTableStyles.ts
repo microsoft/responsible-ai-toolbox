@@ -19,7 +19,6 @@ export interface ITreatmentTableStyles {
   singleCell: IStyle;
   table: IStyle;
   tableInner: IStyle;
-  th: IStyle;
   td: IStyle;
   label: IStyle;
   chartContainer: IStyle;
@@ -74,7 +73,8 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
       },
       singleCell: {
         border: "1px",
-        borderStyle: "solid"
+        borderStyle: "solid",
+        width: "30vw"
       },
       spinButton: {
         paddingLeft: "10px",
@@ -91,10 +91,10 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         fontStyle: "normal",
         fontWeight: "normal",
         textAlign: "center",
-        width: "60vw"
+        width: "50vw"
       },
       tableInner: {
-        border: "none",
+        borderCollapse: "collapse",
         fontFamily: "Segoe UI",
         fontSize: "14px",
         fontStyle: "normal",
@@ -103,11 +103,6 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         width: "100%"
       },
       td: {
-        border: "1px solid #dddddd",
-        padding: "0",
-        textAlign: "center"
-      },
-      th: {
         border: "1px solid #dddddd",
         padding: "0",
         textAlign: "center"
