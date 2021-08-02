@@ -110,11 +110,11 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
-        if not set(treatment_features).issubset(set(self._train.columns)):
-            raise UserConfigValidationException(
-                'Found some feature names in treatment feature list which'
-                ' do not occur in train data'
-            )
+        difference_set = set(treatment_features) - set(self._train.columns)
+        if len(difference_set) > 0:
+            message = ("Feature names in treatment_features do "
+                       f"not exist in train data: {list(difference_set)}")
+            raise UserConfigValidationException(message)
 
         if nuisance_model not in [ModelTypes.AUTOML,
                                   ModelTypes.LINEAR]:

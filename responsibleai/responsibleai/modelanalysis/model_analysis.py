@@ -185,12 +185,14 @@ class ModelAnalysis(object):
         :type serializer: object
         """
 
-        if task_type != ModelTask.CLASSIFICATION and \
-                task_type != ModelTask.REGRESSION:
-            raise UserConfigValidationException(
-                'Unsupported task type. Should be one of {0} or {1}'.format(
-                    ModelTask.CLASSIFICATION, ModelTask.REGRESSION)
-            )
+        valid_tasks = [
+            ModelTask.CLASSIFICATION.value,
+            ModelTask.REGRESSION.value
+        ]
+        if task_type not in valid_tasks:
+            message = (f"Unsupported task type '{task_type}'. "
+                       f"Should be one of {valid_tasks}")
+            raise UserConfigValidationException(message)
 
         if model is None:
             warnings.warn(
@@ -235,11 +237,12 @@ class ModelAnalysis(object):
                             target_column)
                     )
 
-                if not set(categorical_features).issubset(set(train.columns)):
-                    raise UserConfigValidationException(
-                        'Found some feature names in categorical feature which'
-                        ' do not occur in train data'
-                    )
+                difference_set = set(categorical_features) - set(train.columns)
+                if len(difference_set) > 0:
+                    message = ("Feature names in categorical_features "
+                               "do not exist in train data: "
+                               f"{list(difference_set)}")
+                    raise UserConfigValidationException(message)
 
             if train_labels is not None and task_type == \
                     ModelTask.CLASSIFICATION:
