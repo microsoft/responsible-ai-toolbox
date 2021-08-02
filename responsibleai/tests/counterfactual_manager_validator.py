@@ -24,6 +24,17 @@ def verify_counterfactual_object(counterfactual_obj, feature_importance=False):
 def validate_counterfactual(cf_analyzer,
                             desired_class=None, desired_range=None,
                             feature_importance=False):
+    if cf_analyzer.model is None:
+        with pytest.raises(UserConfigValidationException,
+                           match='Model is required for counterfactual '
+                                 'example generation and explanations'):
+            cf_analyzer.counterfactual.add(
+                total_CFs=10,
+                method='random',
+                desired_class=desired_class,
+                desired_range=desired_range,
+                feature_importance=feature_importance)
+        return
 
     # Add the first configuration
     cf_analyzer.counterfactual.add(total_CFs=10,
