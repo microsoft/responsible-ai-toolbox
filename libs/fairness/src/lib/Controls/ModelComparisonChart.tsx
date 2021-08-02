@@ -18,6 +18,7 @@ import {
   Stack,
   IDropdownOption
 } from "office-ui-fabric-react";
+import { Datum } from "plotly.js";
 import React from "react";
 
 import {
@@ -87,6 +88,8 @@ export class ModelComparisonChart extends React.Component<
     },
     data: [
       {
+        // how to generate dictionary?
+        // change configuration
         datapointLevelAccessors: {
           customdata: {
             path: ["index"],
@@ -230,20 +233,75 @@ export class ModelComparisonChart extends React.Component<
         );
 
       const props = _.cloneDeep(this.plotlyProps);
-      props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
-        (series) => {
-          if (series.name) {
-            series.name = this.props.dashboardContext.modelNames[series.name];
-          }
-          series.text = this.props.dashboardContext.modelNames;
-          return series;
-        }
-      );
 
       const performanceMetricTitle = selectedMetric.title;
       const fairnessMetric =
         fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey];
       const fairnessMetricTitle = fairnessMetric.title;
+      props.data = ChartBuilder.buildPlotlySeries(props.data[0], data).map(
+        (series) => {
+          if (series.name) {
+            series.name = this.props.dashboardContext.modelNames[series.name];
+          }
+
+          series.customdata = ([] as unknown) as Datum[];
+          const digitsOfPrecision = 5;
+
+          for (let i = 0; i < data.length; i++) {
+            const x = series.x
+              ? Number(series.x[i]).toFixed(digitsOfPrecision)
+              : undefined;
+            const y = series.y
+              ? Number(series.y[i]).toFixed(digitsOfPrecision)
+              : undefined;
+
+            const xBounds =
+              series?.error_x?.type === "data" &&
+              series?.error_x?.arrayminus &&
+              series?.error_x?.array &&
+              series.error_x.arrayminus[i] !== 0 &&
+              series.error_x.array[i] !== 0 &&
+              x
+                ? "[" +
+                  (Number(x) - Number(series.error_x.arrayminus[i])).toFixed(
+                    digitsOfPrecision
+                  ) +
+                  ", " +
+                  (Number(x) + Number(series.error_x.array[i])).toFixed(
+                    digitsOfPrecision
+                  ) +
+                  "]"
+                : "";
+            const yBounds =
+              series?.error_y?.type === "data" &&
+              series?.error_y?.arrayminus &&
+              series?.error_y?.array &&
+              series.error_y.arrayminus[i] !== 0 &&
+              series.error_y.array[i] !== 0 &&
+              y
+                ? "[" +
+                  (Number(y) - Number(series.error_y.arrayminus[i])).toFixed(
+                    digitsOfPrecision
+                  ) +
+                  ", " +
+                  (Number(y) + Number(series.error_y.array[i])).toFixed(
+                    digitsOfPrecision
+                  ) +
+                  "]"
+                : "";
+
+            series.customdata.push(({
+              x,
+              xBounds,
+              y,
+              yBounds
+            } as unknown) as Datum);
+          }
+
+          series.text = this.props.dashboardContext.modelNames;
+          return series;
+        }
+      );
 
       if (props.layout?.xaxis) {
         props.layout.xaxis.title = performanceMetricTitle;

@@ -169,33 +169,38 @@ export class ChartBuilder {
       result.push(groupingDictionary[key]);
     });
 
-    const performanceLowerBound: any = [];
-    const performanceUpperBound: any = [];
+    const xLowerBound: any = [];
+    const xUpperBound: any = [];
     projectedRows.forEach((row) => {
-      performanceLowerBound.push(row.xLowerBound);
-      performanceUpperBound.push(row.xUpperBound);
+      xLowerBound.push(row.xLowerBound);
+      xUpperBound.push(row.xUpperBound);
     });
 
+    // Will not display on other charts that don't have bounds passed in
     result[0].error_x = {
-      array: performanceUpperBound,
-      arrayminus: performanceLowerBound,
+      array: xUpperBound,
+      arrayminus: xLowerBound,
       type: "data",
       visible: true
     };
 
-    const fairnessLowerBound: any = [];
-    const fairnessUpperBound: any = [];
+    const yLowerBound: any = [];
+    const yUpperBound: any = [];
     projectedRows.forEach((row) => {
-      fairnessLowerBound.push(row.yLowerBound);
-      fairnessUpperBound.push(row.yUpperBound);
+      yLowerBound.push(row.yLowerBound);
+      yUpperBound.push(row.yUpperBound);
     });
 
     result[0].error_y = {
-      array: fairnessLowerBound,
-      arrayminus: fairnessUpperBound,
+      array: yLowerBound,
+      arrayminus: yUpperBound,
       type: "data",
       visible: true
     };
+
+    result[0].hovertemplate =
+      // "%{text} <br> %{xaxis.title.text}: %{customdata.x} [%{customdata.xLower}, %{customdata.xUpper}]<br> %{yaxis.title.text}: %{customdata.y} [%{customdata.yLower}, %{customdata.yUpper}]";
+      "%{text} <br> %{xaxis.title.text}: %{customdata.x} %{customdata.xBounds}<br> %{yaxis.title.text}: %{customdata.y} %{customdata.yBounds}";
     return result;
   }
 
