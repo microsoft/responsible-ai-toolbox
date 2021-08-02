@@ -105,13 +105,13 @@ class CounterfactualManager(BaseManager):
         return dice_explainer
 
     def _add_counterfactual_config(self, new_counterfactual_config):
-        if new_counterfactual_config.features_to_vary != 'all' and \
-                not set(new_counterfactual_config.features_to_vary).issubset(
-                    set(self._train.columns)):
-            raise UserConfigValidationException(
-                'Found some feature names in features_to_vary list which'
-                ' do not occur in train data'
-            )
+        to_vary = new_counterfactual_config.features_to_vary
+        if to_vary != 'all':
+            difference_set = set(to_vary) - set(self._train.columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in features_to_vary do "
+                           f"not exist in train data: {list(difference_set)}")
+            raise UserConfigValidationException(message)
 
         if self._task_type == ModelTask.CLASSIFICATION:
             if new_counterfactual_config.desired_class is None:
