@@ -78,7 +78,6 @@ export class CounterfactualChart extends React.PureComponent<
 
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
-  private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
 
   public constructor(props: ICounterfactualChartProps) {
@@ -400,7 +399,6 @@ export class CounterfactualChart extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -422,7 +420,6 @@ export class CounterfactualChart extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -822,7 +819,6 @@ export class CounterfactualChart extends React.PureComponent<
       return;
     }
     const editingData = this.temporaryPoint;
-    this.stringifiedValues[key] = newValue;
     if (isString) {
       editingData[key] = newValue;
       this.forceUpdate();
