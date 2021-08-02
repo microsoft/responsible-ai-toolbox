@@ -27,7 +27,7 @@ def validate_counterfactual(cf_analyzer,
     if cf_analyzer.model is None:
         with pytest.raises(UserConfigValidationException,
                            match='Model is required for counterfactual '
-                                 'example generation and explanations'):
+                                 'example generation and feature importances'):
             cf_analyzer.counterfactual.add(
                 total_CFs=10,
                 method='random',

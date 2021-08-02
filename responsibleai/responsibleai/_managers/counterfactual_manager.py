@@ -108,7 +108,7 @@ class CounterfactualManager(BaseManager):
         if self._model is None:
             raise UserConfigValidationException(
                 'Model is required for counterfactual example generation and '
-                'explanations')
+                'feature importances')
 
         if new_counterfactual_config.features_to_vary != 'all' and \
                 not set(new_counterfactual_config.features_to_vary).issubset(
