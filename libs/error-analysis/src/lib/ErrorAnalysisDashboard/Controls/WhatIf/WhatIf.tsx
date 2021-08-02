@@ -265,7 +265,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -293,7 +293,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }

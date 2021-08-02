@@ -628,7 +628,7 @@ export class WhatIfTab extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -640,7 +640,7 @@ export class WhatIfTab extends React.PureComponent<
   private setTemporaryPointToCustomPoint(index: number): void {
     this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -762,7 +762,7 @@ export class WhatIfTab extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }
