@@ -57,7 +57,6 @@ export class CausalIndividualChart extends React.PureComponent<
     defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "CausalIndividualChart";
-  private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
 
   public constructor(props: ICausalIndividualChartProps) {
@@ -213,9 +212,6 @@ export class CausalIndividualChart extends React.PureComponent<
       );
     this.temporaryPoint[CausalIndividualConstants.colorPath] =
       FabricStyles.fabricColorPalette[CausalIndividualConstants.MAX_SELECTION];
-    Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
-    });
   }
 
   private onXSet = (value: ISelectorConfig): void => {
