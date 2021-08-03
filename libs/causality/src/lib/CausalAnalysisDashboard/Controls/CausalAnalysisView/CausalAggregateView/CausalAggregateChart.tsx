@@ -39,8 +39,10 @@ export class CausalAggregateChart extends React.PureComponent<ICausalAggregateCh
         </Stack.Item>
         <Stack.Item grow className={styles.rightPane}>
           <Stack horizontal={false}>
-            <Stack.Item className={styles.header}>
-              {localization.CausalAnalysis.AggregateView.continuous}
+            <Stack.Item className={styles.label}>
+              <Text variant={"xLarge"} className={styles.header}>
+                {localization.CausalAnalysis.AggregateView.continuous}
+              </Text>
               {localization.CausalAnalysis.AggregateView.continuousDescription}
             </Stack.Item>
             <Stack.Item className={styles.label}>

@@ -14,6 +14,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { TreatmentStyles } from "./TreatmentStyles";
+
 export interface ITreatmentListProps {
   data?: Array<{ [key: string]: any }>;
   topN: number;
@@ -28,6 +30,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     if (!this.props.data) {
       return <>No Data</>;
     }
+    const styles = TreatmentStyles();
     const defaultColumns: IColumn[] = [
       {
         fieldName: "Treatment",
@@ -78,13 +81,15 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
       .sort((a, b) => b["Effect of treatment"] - a["Effect of treatment"])
       .slice(0, maxCount);
     return (
-      <DetailsList
-        items={items}
-        columns={columns}
-        selectionMode={SelectionMode.none}
-        setKey="set"
-        layoutMode={DetailsListLayoutMode.justified}
-      />
+      <div className={styles.listContainer}>
+        <DetailsList
+          items={items}
+          columns={columns}
+          selectionMode={SelectionMode.none}
+          setKey="set"
+          layoutMode={DetailsListLayoutMode.justified}
+        />
+      </div>
     );
   }
 }

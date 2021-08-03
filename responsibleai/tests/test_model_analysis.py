@@ -123,6 +123,26 @@ class TestModelAnalysis(object):
                            classes=classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_model_analysis_no_model(self, manager_type):
+
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+        model = None
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: ['col0']
+        }
+
+        run_model_analysis(model, X_train, X_test, LABELS, [],
+                           manager_type, manager_args,
+                           classes=classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
     def test_modelanalysis_boston(self, manager_type):
@@ -164,10 +184,24 @@ def run_model_analysis(model, train_data, test_data, target_column,
         else:
             test_data = test_data[0:1]
 
-    model_analysis = ModelAnalysis(model, train_data, test_data,
-                                   target_column,
-                                   categorical_features=categorical_features,
-                                   task_type=task_type)
+    if model is None:
+        with pytest.warns(
+                UserWarning,
+                match='INVALID-MODEL-WARNING: '
+                      'No valid model is supplied. '
+                      'The explanations, error analysis and '
+                      'counterfactuals may not work'):
+            model_analysis = ModelAnalysis(
+                model, train_data, test_data,
+                target_column,
+                categorical_features=categorical_features,
+                task_type=task_type)
+    else:
+        model_analysis = ModelAnalysis(
+            model, train_data, test_data,
+            target_column,
+            categorical_features=categorical_features,
+            task_type=task_type)
 
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(model_analysis)
