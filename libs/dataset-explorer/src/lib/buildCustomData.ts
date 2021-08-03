@@ -8,6 +8,7 @@ import {
   ChartTypes,
   IGenericChartProps
 } from "@responsible-ai/core-ui";
+import { Dictionary } from "lodash";
 
 export function buildCustomData(
   jointData: JointDataset,
@@ -15,7 +16,7 @@ export function buildCustomData(
   cohort: Cohort
 ): any[] {
   const customdata = cohort.unwrap(JointDataset.IndexLabel).map((val) => {
-    const dict = {};
+    const dict: Dictionary<any> = {};
     dict[JointDataset.IndexLabel] = val;
     return dict;
   });

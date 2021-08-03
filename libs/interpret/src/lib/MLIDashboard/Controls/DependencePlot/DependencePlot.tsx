@@ -16,7 +16,7 @@ import {
   IPlotlyProperty,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
@@ -150,7 +150,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       cohort.sort(chartProps.colorAxis.property);
     }
     const customdata = cohort.unwrap(JointDataset.IndexLabel).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });

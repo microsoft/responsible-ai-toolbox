@@ -104,11 +104,12 @@ export class CounterfactualList extends React.Component<
     if (selectedData && this.props.originalData) {
       items.push(this.props.originalData);
       selectedData.forEach((point, i) => {
-        const temp = {};
-        temp.row = localization.formatString(
-          localization.Counterfactuals.counterfactualEx,
-          i + 1
-        );
+        const temp = {
+          row: localization.formatString(
+            localization.Counterfactuals.counterfactualEx,
+            i + 1
+          )
+        };
         this.props.data?.feature_names.forEach((f, j) => {
           temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
         });

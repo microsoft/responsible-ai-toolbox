@@ -22,7 +22,7 @@ import {
   PlotlyMode,
   IData
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -369,7 +369,7 @@ export class CausalIndividualChart extends React.PureComponent<
       dictionary,
       JointDataset.IndexLabel
     ).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });

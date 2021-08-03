@@ -27,7 +27,7 @@ import {
   PlotlyMode,
   IData
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -472,11 +472,12 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.jointDataset.metaDict,
       this.context.jointDataset.datasetFeatureCount
     );
-    const data = {};
-    data.row = localization.formatString(
-      localization.Counterfactuals.referenceDatapoint,
-      index
-    );
+    const data = {
+      row: localization.formatString(
+        localization.Counterfactuals.referenceDatapoint,
+        index
+      )
+    };
     const featureNames = this.context?.dataset?.feature_names;
     featureNames.forEach((f, index) => {
       data[f] = dataPoint[index];
@@ -676,7 +677,7 @@ export class CounterfactualChart extends React.PureComponent<
       dictionary,
       JointDataset.IndexLabel
     ).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
