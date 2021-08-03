@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+from responsibleai.exceptions import UserConfigValidationException
 import pytest
 from responsibleai._internal.constants import ManagerNames, ListProperties
 from responsibleai import ModelTask
@@ -10,7 +11,14 @@ LIGHTGBM_METHOD = 'mimic.lightgbm'
 
 def setup_explainer(model_analysis, add_explainer=True):
     if add_explainer:
-        model_analysis.explainer.add()
+        if model_analysis.model is None:
+            with pytest.raises(
+                    UserConfigValidationException,
+                    match='Model is required for model explanations'):
+                model_analysis.explainer.add()
+            return
+        else:
+            model_analysis.explainer.add()
         # Validate calling add multiple times prints a warning
         with pytest.warns(UserWarning):
             model_analysis.explainer.add()
@@ -18,6 +26,8 @@ def setup_explainer(model_analysis, add_explainer=True):
 
 
 def validate_explainer(model_analysis, X_train, X_test, classes):
+    if model_analysis.model is None:
+        return
     explanations = model_analysis.explainer.get()
     assert isinstance(explanations, list)
     assert len(explanations) == 1
