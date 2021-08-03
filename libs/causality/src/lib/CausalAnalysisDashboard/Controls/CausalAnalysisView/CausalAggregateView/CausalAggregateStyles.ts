@@ -38,6 +38,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         display: "inline-block",
         flex: "1",
         fontSize: 14,
+        paddingBottom: "5px",
         textAlign: "left"
       },
       lasso: {
