@@ -94,10 +94,11 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       this.props.metadata.modelType === ModelTypes.Regression
         ? this.props.jointDataset.metaDict[this.props.chartProps.xAxis.property]
             .label
-        : this.props.jointDataset.metaDict[this.props.chartProps.xAxis.property]
-            .label +
-          " : " +
-          this.props.selectedWeightLabel;
+        : `${
+            this.props.jointDataset.metaDict[
+              this.props.chartProps.xAxis.property
+            ].label
+          } : ${this.props.selectedWeightLabel}`;
     return (
       <div className={classNames.DependencePlot}>
         <div className={classNames.chartWithAxes}>
@@ -173,23 +174,23 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         plotlyProps.data[0].x = dithered.map((dither, index) => {
           return rawX[index] + dither;
         });
-        hovertemplate += xLabel + ": %{customdata.X}<br>";
+        hovertemplate += `${xLabel}: %{customdata.X}<br>`;
         rawX.forEach((val, index) => {
           // If categorical, show string value in tooltip
           if (
             jointData.metaDict[chartProps.xAxis.property].treatAsCategorical
           ) {
-            customdata[index]["X"] =
+            customdata[index].X =
               jointData.metaDict[
                 chartProps.xAxis.property
               ].sortedCategoricalValues?.[val];
           } else {
-            customdata[index]["X"] = val;
+            customdata[index].X = val;
           }
         });
       } else {
         plotlyProps.data[0].x = rawX;
-        hovertemplate += xLabel + ": %{x}<br>";
+        hovertemplate += `${xLabel}: %{x}<br>`;
       }
     }
     if (chartProps.yAxis) {
@@ -204,19 +205,17 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       const yLabel = localization.Interpret.Charts.featureImportance;
       plotlyProps.data[0].y = rawY;
       rawY.forEach((val, index) => {
-        customdata[index]["Yformatted"] = val.toLocaleString(undefined, {
+        customdata[index].Yformatted = val.toLocaleString(undefined, {
           maximumFractionDigits: 3
         });
       });
-      hovertemplate += yLabel + ": %{customdata.Yformatted}<br>";
+      hovertemplate += `${yLabel}: %{customdata.Yformatted}<br>`;
     }
     const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
     indecies.forEach((absoluteIndex, i) => {
-      customdata[i]["AbsoluteIndex"] = absoluteIndex;
+      customdata[i].AbsoluteIndex = absoluteIndex;
     });
-    hovertemplate +=
-      localization.Interpret.Charts.rowIndex +
-      ": %{customdata.AbsoluteIndex}<br>";
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.AbsoluteIndex}<br>`;
     hovertemplate += "<extra></extra>";
     plotlyProps.data[0].customdata = customdata as any;
     plotlyProps.data[0].hovertemplate = hovertemplate;

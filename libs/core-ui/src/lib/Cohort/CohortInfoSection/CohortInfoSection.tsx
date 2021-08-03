@@ -33,14 +33,12 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }
-    const datapointsCountString =
-      localization.ModelAssessment.CohortInformation.DataPoints +
-      " = " +
-      currentCohort.cohortStats.totalCohort.toString();
-    const filtersCountString =
-      localization.ModelAssessment.CohortInformation.Filters +
-      " = " +
-      currentCohort.cohort.filters.length.toString();
+    const datapointsCountString = `${
+      localization.ModelAssessment.CohortInformation.DataPoints
+    } = ${currentCohort.cohortStats.totalCohort.toString()}`;
+    const filtersCountString = `${
+      localization.ModelAssessment.CohortInformation.Filters
+    } = ${currentCohort.cohort.filters.length.toString()}`;
     return (
       <Stack grow tokens={{ childrenGap: 10, padding: "16px 24px" }}>
         <Text variant={"xLarge"}>{cohortInfoTitle}</Text>

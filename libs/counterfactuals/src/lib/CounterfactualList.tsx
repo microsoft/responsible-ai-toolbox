@@ -105,7 +105,7 @@ export class CounterfactualList extends React.Component<
       items.push(this.props.originalData);
       selectedData.forEach((point, i) => {
         const temp = {};
-        temp["row"] = localization.formatString(
+        temp.row = localization.formatString(
           localization.Counterfactuals.counterfactualEx,
           i + 1
         );
@@ -127,7 +127,7 @@ export class CounterfactualList extends React.Component<
         this.context.dataset.feature_names.indexOf(k);
       this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
     });
-    data["row"] = localization.formatString(
+    data.row = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       this.props.selectedIndex
     );

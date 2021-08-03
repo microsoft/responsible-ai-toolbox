@@ -26,12 +26,12 @@ export function buildCustomData(
       rawX.forEach((val, index) => {
         // If categorical, show string value in tooltip
         if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
-          customdata[index]["X"] =
+          customdata[index].X =
             jointData.metaDict[
               chartProps.xAxis.property
             ].sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["X"] = (val as number).toLocaleString(undefined, {
+          customdata[index].X = (val as number).toLocaleString(undefined, {
             maximumFractionDigits: 3
           });
         }
@@ -43,12 +43,12 @@ export function buildCustomData(
       rawY.forEach((val, index) => {
         // If categorical, show string value in tooltip
         if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
-          customdata[index]["Y"] =
+          customdata[index].Y =
             jointData.metaDict[
               chartProps.yAxis.property
             ].sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
+          customdata[index].Y = (val as number).toLocaleString(undefined, {
             maximumFractionDigits: 3
           });
         }
@@ -59,12 +59,12 @@ export function buildCustomData(
       const rawColor = cohort.unwrap(colorAxis.property);
       rawColor.forEach((val, index) => {
         if (jointData.metaDict[colorAxis.property].treatAsCategorical) {
-          customdata[index]["Color"] =
+          customdata[index].Color =
             jointData.metaDict[colorAxis.property].sortedCategoricalValues?.[
               val
             ];
         } else {
-          customdata[index]["Color"] = val.toLocaleString(undefined, {
+          customdata[index].Color = val.toLocaleString(undefined, {
             maximumFractionDigits: 3
           });
         }
@@ -72,7 +72,7 @@ export function buildCustomData(
     }
     const indices = cohort.unwrap(JointDataset.IndexLabel, false);
     indices.forEach((absoluteIndex, i) => {
-      customdata[i]["AbsoluteIndex"] = absoluteIndex;
+      customdata[i].AbsoluteIndex = absoluteIndex;
     });
   }
   if (
@@ -83,7 +83,7 @@ export function buildCustomData(
     if (yMeta.treatAsCategorical) {
       const rawY = cohort.unwrap(chartProps.yAxis.property);
       rawY.forEach((val, index) => {
-        customdata[index]["Y"] = yMeta.sortedCategoricalValues?.[val];
+        customdata[index].Y = yMeta.sortedCategoricalValues?.[val];
       });
     }
   }

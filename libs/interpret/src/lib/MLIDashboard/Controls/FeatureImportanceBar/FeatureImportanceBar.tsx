@@ -175,11 +175,8 @@ export class FeatureImportanceBar extends React.PureComponent<
       baseSeries.layout.barmode = "group";
       let hovertemplate = this.props.unsortedSeries[0].unsortedFeatureValues
         ? "%{customdata.HoverText}: %{customdata.Yvalue}<br>"
-        : localization.Interpret.Charts.featurePrefix +
-          ": %{customdata.HoverText}<br>";
-      hovertemplate +=
-        localization.Interpret.Charts.importancePrefix +
-        ": %{customdata.Yformatted}<br>";
+        : `${localization.Interpret.Charts.featurePrefix}: %{customdata.HoverText}<br>`;
+      hovertemplate += `${localization.Interpret.Charts.importancePrefix}: %{customdata.Yformatted}<br>`;
       hovertemplate += "%{customdata.Name}<br>";
       hovertemplate += "<extra></extra>";
 

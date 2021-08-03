@@ -154,7 +154,7 @@ export class ExplanationExploration extends React.PureComponent<
           </div>
           {this.state.isCalloutVisible && (
             <Callout
-              target={"#" + this.iconId}
+              target={`#${this.iconId}`}
               setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
