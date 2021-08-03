@@ -4,7 +4,8 @@ import pytest
 
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX, VALUES)
-from responsibleai.exceptions import DuplicateManagerConfigException
+from responsibleai.exceptions import DuplicateManagerConfigException, \
+    UserConfigValidationException
 from responsibleai._internal.constants import (
     ErrorAnalysisManagerKeys as Keys)
 
@@ -16,13 +17,20 @@ ID = 'id'
 
 def setup_error_analysis(model_analysis, add_ea=True, max_depth=3):
     if add_ea:
-        model_analysis.error_analysis.add(max_depth=max_depth)
-        with pytest.raises(DuplicateManagerConfigException):
+        if model_analysis.model is None:
+            with pytest.raises(UserConfigValidationException,
+                               match='Model is required for error analysis'):
+                model_analysis.error_analysis.add(max_depth=max_depth)
+        else:
             model_analysis.error_analysis.add(max_depth=max_depth)
+            with pytest.raises(DuplicateManagerConfigException):
+                model_analysis.error_analysis.add(max_depth=max_depth)
     model_analysis.error_analysis.compute()
 
 
 def validate_error_analysis(model_analysis, expected_reports=1):
+    if model_analysis.model is None:
+        return
     reports = model_analysis.error_analysis.get()
     assert isinstance(reports, list)
     assert len(reports) == expected_reports
