@@ -312,8 +312,8 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       ];
     }
 
-    barPlotlyProps.data[0].customdata = ([] as unknown) as Datum[];
-    barPlotlyProps.data[1].customdata = ([] as unknown) as Datum[];
+    barPlotlyProps.data[0].customdata = [] as unknown as Datum[];
+    barPlotlyProps.data[1].customdata = [] as unknown as Datum[];
     const digitsOfPrecision = 1;
 
     for (let j = 0; j < barPlotlyProps.data.length; j++) {
@@ -331,32 +331,31 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           const y = barPlotlyProps.data[j].y
             ? String(barPlotlyProps.data[j].y?.[i]).trim()
             : undefined;
-
+          const errorX = barPlotlyProps.data[j]?.error_x;
           const xBounds =
-            barPlotlyProps.data[j]?.error_x?.type === "data" &&
-            barPlotlyProps.data[j]?.error_x?.arrayminus &&
-            barPlotlyProps.data[j]?.error_x?.array &&
-            barPlotlyProps.data[j].error_x.arrayminus[i] !== 0 &&
-            barPlotlyProps.data[j].error_x.array[i] !== 0 &&
+            errorX &&
+            errorX.type === "data" &&
+            errorX.arrayminus &&
+            errorX.array &&
+            errorX.arrayminus[i] !== 0 &&
+            errorX.array[i] !== 0 &&
             x
               ? "[" +
-                (
-                  Number(x) -
-                  100 * Number(barPlotlyProps.data[j].error_x.arrayminus[i])
-                ).toFixed(digitsOfPrecision) +
+                (Number(x) - 100 * Number(errorX.arrayminus[i])).toFixed(
+                  digitsOfPrecision
+                ) +
                 "%, " +
-                (
-                  Number(x) +
-                  100 * Number(barPlotlyProps.data[j].error_x.array[i])
-                ).toFixed(digitsOfPrecision) +
+                (Number(x) + 100 * Number(errorX.array[i])).toFixed(
+                  digitsOfPrecision
+                ) +
                 "%]"
               : "";
 
-          barPlotlyProps.data[j].customdata.push(({
+          barPlotlyProps.data[j].customdata.push({
             x,
             xBounds,
             y
-          } as unknown) as Datum);
+          } as unknown as Datum);
           barPlotlyProps.data[j].hovertemplate =
             "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}: %{customdata.x}% %{customdata.xBounds}<extra></extra>";
         }
