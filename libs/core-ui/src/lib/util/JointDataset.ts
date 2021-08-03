@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   INumericRange,
@@ -14,6 +10,10 @@ import {
 import _ from "lodash";
 
 import { cohortKey } from "../cohortKey";
+import {
+  IMultiClassLocalFeatureImportance,
+  ISingleClassLocalFeatureImportance
+} from "../Interfaces/ExplanationInterfaces";
 import {
   IExplanationModelMetadata,
   ModelTypes
@@ -122,9 +122,9 @@ export class JointDataset {
       args.dataset[0].forEach((_, colIndex) => {
         const key = JointDataset.DataLabelRoot + colIndex.toString();
         if (args.metadata.featureIsCategorical?.[colIndex]) {
-          const sortedUnique = (args.metadata.featureRanges[
-            colIndex
-          ] as ICategoricalRange).uniqueValues
+          const sortedUnique = (
+            args.metadata.featureRanges[colIndex] as ICategoricalRange
+          ).uniqueValues
             .concat()
             .sort();
           this.metaDict[key] = {
@@ -213,21 +213,20 @@ export class JointDataset {
           const projection = predictedProbabilities.map(
             (row) => row[classIndex]
           );
-          this.metaDict[
-            JointDataset.ProbabilityYRoot + classIndex.toString()
-          ] = {
-            abbridgedLabel: label,
-            category: ColumnCategories.Outcome,
-            featureRange: {
-              max: Math.max(...projection),
-              min: Math.min(...projection),
-              rangeType: RangeTypes.Numeric
-            },
-            isCategorical: false,
-            label,
-            sortedCategoricalValues: undefined,
-            treatAsCategorical: false
-          };
+          this.metaDict[JointDataset.ProbabilityYRoot + classIndex.toString()] =
+            {
+              abbridgedLabel: label,
+              category: ColumnCategories.Outcome,
+              featureRange: {
+                max: Math.max(...projection),
+                min: Math.min(...projection),
+                rangeType: RangeTypes.Numeric
+              },
+              isCategorical: false,
+              label,
+              sortedCategoricalValues: undefined,
+              treatAsCategorical: false
+            };
         });
         this.hasPredictedProbabilities = true;
         this.predictionClassCount = args.metadata.classNames.length;

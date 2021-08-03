@@ -47,9 +47,8 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
 
 export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private rowOptions: IDropdownOption[] | undefined;
   private stringifiedValues: { [key: string]: string } = {};
@@ -266,7 +265,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -283,9 +282,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       return undefined;
     }
     this.props.currentCohort.cohort.sort();
-    this.temporaryPoint = this.props.currentCohort.cohort.filteredData[
-      indexes[0]
-    ];
+    this.temporaryPoint =
+      this.props.currentCohort.cohort.filteredData[indexes[0]];
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]
@@ -295,7 +293,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -335,9 +333,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           let predictedClass = 0;
           let maxProb = Number.MIN_SAFE_INTEGER;
           for (const [i, element] of predictionVector.entries()) {
-            fetchingReference[
-              JointDataset.ProbabilityYRoot + i.toString()
-            ] = element;
+            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
+              element;
             if (element > maxProb) {
               predictedClass = i;
               maxProb = element;

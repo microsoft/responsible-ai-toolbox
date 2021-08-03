@@ -23,13 +23,10 @@ export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];
 }
 
-export class CausalAggregateTable extends React.PureComponent<
-  ICausalAggregateTableProps
-> {
+export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTableProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const columns: IColumn[] = [
@@ -88,7 +85,7 @@ export class CausalAggregateTable extends React.PureComponent<
       const roundedData = {};
       Object.entries(d).forEach(([key, value]) => {
         if (typeof value === "number") {
-          roundedData[key] = value.toFixed(3);
+          roundedData[key] = value.toExponential(3);
         } else {
           roundedData[key] = value;
         }

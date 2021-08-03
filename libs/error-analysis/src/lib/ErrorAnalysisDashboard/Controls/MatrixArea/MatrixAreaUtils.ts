@@ -9,29 +9,25 @@ import {
   ErrorCohortStats,
   ErrorCohort,
   Metrics,
-  MetricCohortStats
+  MetricCohortStats,
+  IErrorAnalysisMatrix,
+  IErrorAnalysisMatrixCategory,
+  IErrorAnalysisMatrixNode
 } from "@responsible-ai/core-ui";
-
-import { noFeature } from "../../Constants";
 
 import { IMatrixAreaProps } from "./MatrixAreaProps";
 
-export function fetchMatrix(
-  props: IMatrixAreaProps,
-  reloadData: (matrix: any) => void
-): void {
-  if (props.getMatrix === undefined && props.staticMatrixData !== undefined) {
-    // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
-    setTimeout(() => {
-      reloadData(props.staticMatrixData);
-    }, 100);
+export async function fetchMatrix(
+  props: IMatrixAreaProps
+): Promise<IErrorAnalysisMatrix | undefined> {
+  if (!props.getMatrix && props.matrix) {
+    return props.matrix;
   }
   if (
     props.getMatrix === undefined ||
-    (props.selectedFeature1 === noFeature &&
-      props.selectedFeature2 === noFeature)
+    (!props.selectedFeature1 && !props.selectedFeature2)
   ) {
-    return;
+    return undefined;
   }
   const filtersRelabeled = ErrorCohort.getLabeledFilters(
     props.baseCohort.cohort.filters,
@@ -41,36 +37,26 @@ export function fetchMatrix(
     props.baseCohort.cohort.compositeFilters,
     props.baseCohort.jointDataset
   );
-  let selectedFeature1: string | undefined = props.selectedFeature1;
-  if (props.selectedFeature1 === noFeature) {
-    selectedFeature1 = undefined;
-  }
-  let selectedFeature2: string | undefined = props.selectedFeature2;
+  const selectedFeature1: string | undefined =
+    props.selectedFeature1 || props.selectedFeature2;
+  const selectedFeature2: string | undefined =
+    props.selectedFeature2 === props.selectedFeature1
+      ? undefined
+      : props.selectedFeature2;
   // Note: edge case, if both features selected are the same one, show just a row
-  if (
-    props.selectedFeature2 === noFeature ||
-    (props.selectedFeature2 === props.selectedFeature1 &&
-      selectedFeature1 !== undefined)
-  ) {
-    selectedFeature2 = undefined;
-  }
-  props
-    .getMatrix(
-      [
-        [selectedFeature1, selectedFeature2],
-        filtersRelabeled,
-        compositeFiltersRelabeled
-      ],
-      new AbortController().signal
-    )
-    .then((result) => {
-      reloadData(result);
-    });
+  return props.getMatrix(
+    [
+      [selectedFeature1, selectedFeature2],
+      filtersRelabeled,
+      compositeFiltersRelabeled
+    ],
+    new AbortController().signal
+  );
 }
 
 export function createCohortStatsFromSelectedCells(
   selectedCells: boolean[],
-  jsonMatrix: { matrix: unknown[] }
+  jsonMatrix: IErrorAnalysisMatrix
 ): MetricCohortStats {
   let falseCohortCount = 0;
   let totalCohortCount = 0;
@@ -80,8 +66,8 @@ export function createCohortStatsFromSelectedCells(
   let falseCount = 0;
   let totalCount = 0;
   let existsSelectedCell = false;
-  jsonMatrix.matrix.forEach((row: any, i: number) => {
-    row.forEach((value: any, j: number) => {
+  jsonMatrix.matrix.forEach((row: IErrorAnalysisMatrixNode[], i: number) => {
+    row.forEach((value: IErrorAnalysisMatrixNode, j: number) => {
       if (selectedCells !== undefined && selectedCells[j + i * row.length]) {
         if (value.falseCount !== undefined) {
           falseCohortCount += value.falseCount;
@@ -152,14 +138,14 @@ export function createCohortStatsFromSelectedCells(
 
 export function createCompositeFilterFromCells(
   selectedCells: boolean[],
-  jsonMatrix: { matrix: any[]; category1: any; category2: any },
-  selectedFeature1: string,
-  selectedFeature2: string,
+  jsonMatrix: IErrorAnalysisMatrix,
+  selectedFeature1: string | undefined,
+  selectedFeature2: string | undefined,
   baseCohort: ErrorCohort,
   features: string[]
 ): ICompositeFilter[] {
   const feature2IsSelected =
-    selectedFeature2 !== noFeature && selectedFeature2 !== selectedFeature1;
+    selectedFeature2 && selectedFeature2 !== selectedFeature1;
   // Extract categories
   let [category1Values, cat1HasIntervals] = extractCategories(
     jsonMatrix.category1
@@ -176,7 +162,7 @@ export function createCompositeFilterFromCells(
   const multiCellCompositeFilters: ICompositeFilter[] = [];
   let keyFeature1 = undefined;
   let keyFeature2 = undefined;
-  if (feature2IsSelected && selectedFeature1 === noFeature) {
+  if (feature2IsSelected && selectedFeature1) {
     // Vertical case, where feature 2 is selected and feature 1 is not
     keyFeature2 = getKey(selectedFeature2, features);
     category2Values = category1Values;
@@ -208,9 +194,10 @@ export function createCompositeFilterFromCells(
           } else {
             let cat1arg = category1Values[i].value;
             if (typeof cat1arg == "string") {
-              cat1arg = baseCohort.jointDataset.metaDict[
-                keyFeature1
-              ].sortedCategoricalValues?.indexOf(cat1arg);
+              cat1arg =
+                baseCohort.jointDataset.metaDict[
+                  keyFeature1
+                ].sortedCategoricalValues?.indexOf(cat1arg);
             }
             cellCompositeFilters.push({
               arg: [cat1arg],
@@ -232,9 +219,10 @@ export function createCompositeFilterFromCells(
           } else {
             let cat2arg = category2Values[j].value;
             if (typeof cat2arg == "string") {
-              cat2arg = baseCohort.jointDataset.metaDict[
-                keyFeature2
-              ].sortedCategoricalValues?.indexOf(cat2arg);
+              cat2arg =
+                baseCohort.jointDataset.metaDict[
+                  keyFeature2
+                ].sortedCategoricalValues?.indexOf(cat2arg);
             }
             cellCompositeFilters.push({
               arg: [cat2arg],
@@ -262,11 +250,9 @@ export function createCompositeFilterFromCells(
   return compositeFilters;
 }
 
-export function extractCategories(category: {
-  values: any[];
-  intervalMin: any[];
-  intervalMax: any[];
-}): [any[], boolean] {
+export function extractCategories(
+  category?: IErrorAnalysisMatrixCategory
+): [any[], boolean] {
   if (category === undefined) {
     return [[], false];
   }
@@ -275,8 +261,8 @@ export function extractCategories(category: {
   for (let i = 0; i < category.values.length; i++) {
     const value = category.values[i];
     if (
-      "intervalMin" in category &&
-      "intervalMax" in category &&
+      category.intervalMin &&
+      category.intervalMax &&
       category.intervalMin.length > 0 &&
       category.intervalMax.length > 0
     ) {
@@ -292,7 +278,13 @@ export function extractCategories(category: {
   return [categoryValues, catHasIntervals];
 }
 
-function getKey(feature: string, features: string[]): string {
+function getKey(
+  feature: string | undefined,
+  features: string[]
+): string | undefined {
+  if (!feature) {
+    return undefined;
+  }
   const index = features.indexOf(feature);
   return JointDataset.DataLabelRoot + index.toString();
 }

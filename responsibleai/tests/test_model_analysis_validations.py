@@ -3,11 +3,14 @@
 
 import logging
 import pytest
+
 from unittest.mock import MagicMock
+
 from .common_utils import (create_iris_data,
                            create_cancer_data,
                            create_binary_classification_dataset,
                            create_lightgbm_classifier)
+
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -21,15 +24,15 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        with pytest.raises(UserConfigValidationException) as ucve:
+        message = ("Unsupported task type 'regre'. "
+                   "Should be one of \\['classification', 'regression'\\]")
+        with pytest.raises(UserConfigValidationException, match=message):
             ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column='target',
                 task_type='regre')
-        assert 'Unsupported task type. Should be one of classification or ' + \
-            'regression' in str(ucve.value)
 
     def test_validate_bad_target_name(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -76,16 +79,16 @@ class TestModelAnalysisValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        with pytest.raises(UserConfigValidationException) as ucve:
+        message = ("Feature names in categorical_features "
+                   "do not exist in train data: \\['not_a_feature'\\]")
+        with pytest.raises(UserConfigValidationException, match=message):
             ModelAnalysis(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column='target',
                 task_type='classification',
-                categorical_features=['some bad feature name'])
-        assert 'Found some feature names in categorical feature which' + \
-            ' do not occur in train data' in str(ucve.value)
+                categorical_features=['not_a_feature'])
 
     def test_validate_serializer(self):
         X_train, X_test, y_train, y_test, _, _ = \
@@ -269,7 +272,7 @@ class TestModelAnalysisValidations:
             '(test data) do not match' in str(ucve.value)
 
 
-class TestCausalManagerValidations:
+class TestFeatureNameListValidations:
 
     def test_treatment_features_list_not_having_train_features(self):
         X_train, y_train, X_test, y_test, _ = \
@@ -286,8 +289,28 @@ class TestCausalManagerValidations:
             target_column='target',
             task_type='classification')
 
-        with pytest.raises(
-                UserConfigValidationException,
-                match='Found some feature names in treatment feature list' +
-                      ' which do not occur in train data'):
-            model_analysis.causal.add(treatment_features=['random'])
+        message = ("Feature names in treatment_features "
+                   "do not exist in train data: \\['not_a_feature'\\]")
+        with pytest.raises(UserConfigValidationException, match=message):
+            model_analysis.causal.add(treatment_features=['not_a_feature'])
+
+    def test_features_to_vary_list_not_having_train_features(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+
+        message = ("Feature names in features_to_vary do "
+                   "not exist in train data: \\['not_a_feature'\\]")
+        with pytest.raises(UserConfigValidationException, match=message):
+            model_analysis.counterfactual.add(
+                total_CFs=10, features_to_vary=['not_a_feature'])

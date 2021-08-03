@@ -1,9 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Metrics } from "@responsible-ai/core-ui";
+import {
+  IErrorAnalysisMatrix,
+  IErrorAnalysisMatrixNode,
+  Metrics
+} from "@responsible-ai/core-ui";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
+import _ from "lodash";
 import {
   DirectionalHint,
   mergeStyles,
@@ -16,16 +21,15 @@ import {
 import React from "react";
 
 import { ColorPalette, isColorDark } from "../../ColorPalette";
-import { noFeature } from "../../Constants";
 import { FilterProps } from "../../FilterProps";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { matrixCellsStyles } from "./MatrixCells.styles";
 
 export interface IMatrixCellsProps {
-  jsonMatrix?: any;
-  selectedFeature1: string;
-  selectedFeature2: string;
+  jsonMatrix: IErrorAnalysisMatrix;
+  selectedFeature1?: string;
+  selectedFeature2?: string;
   selectedCells?: boolean[];
   category1Values: any[];
   sameFeatureSelected: boolean;
@@ -40,17 +44,16 @@ export interface IMatrixCellsProps {
 export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
   public render(): React.ReactNode {
     const classNames = matrixCellsStyles();
-    const topMatrixClass =
-      this.props.selectedFeature1 !== noFeature
-        ? classNames.matrixRow
-        : classNames.matrixCol;
+    const topMatrixClass = this.props.selectedFeature1
+      ? classNames.matrixRow
+      : classNames.matrixCol;
 
     let totalError = 0;
     let falseCount = 0;
     let maxMetricValue = 0;
     let metricName: string = Metrics.ErrorRate;
-    this.props.jsonMatrix.matrix.forEach((row: any) => {
-      row.forEach((value: any) => {
+    for (const row of this.props.jsonMatrix.matrix) {
+      for (const value of row) {
         if (value.falseCount !== undefined) {
           falseCount += value.falseCount;
         } else if (value.metricValue !== undefined) {
@@ -60,149 +63,152 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
             maxMetricValue = Math.max(maxMetricValue, value.metricValue);
           }
         }
-      });
-    });
+      }
+    }
     const matrixLength = this.props.jsonMatrix.matrix.length;
-    return this.props.jsonMatrix.matrix.map((row: any, i: number) => (
-      <div key={`${i}row`} className={topMatrixClass}>
-        {row.map((value: any, j: number) => {
-          let errorRatio = 0;
-          let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
-          if (value.count > 0) {
-            if (value.falseCount !== undefined) {
-              errorRatio = (value.falseCount / value.count) * 100;
+    return _.map<IErrorAnalysisMatrixNode[], JSX.Element>(
+      this.props.jsonMatrix.matrix,
+      (row: IErrorAnalysisMatrixNode[], i: number) => (
+        <div key={`${i}row`} className={topMatrixClass}>
+          {row.map((value, j: number) => {
+            let errorRatio = 0;
+            let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
+            if (value.count > 0) {
+              if (value.falseCount !== undefined) {
+                errorRatio = (value.falseCount / value.count) * 100;
+              } else {
+                metricName = value.metricName;
+                if (value.metricName === Metrics.MeanSquaredError) {
+                  errorRatio = (value.metricValue / maxMetricValue) * 100;
+                }
+              }
+              const bkgcolor = this.colorLookup(errorRatio);
+              const color = this.textColorForBackground(bkgcolor);
+              styledGradientMatrixCell = mergeStyles([
+                styledGradientMatrixCell,
+                {
+                  background: bkgcolor,
+                  color
+                }
+              ]);
             } else {
-              metricName = value.metricName;
-              if (value.metricName === Metrics.MeanSquaredError) {
-                errorRatio = (value.metricValue / maxMetricValue) * 100;
-              }
+              styledGradientMatrixCell = mergeStyles([
+                styledGradientMatrixCell,
+                classNames.nanMatrixCell
+              ]);
             }
-            const bkgcolor = this.colorLookup(errorRatio);
-            const color = this.textColorForBackground(bkgcolor);
-            styledGradientMatrixCell = mergeStyles([
-              styledGradientMatrixCell,
-              {
-                background: bkgcolor,
-                color
-              }
-            ]);
-          } else {
-            styledGradientMatrixCell = mergeStyles([
-              styledGradientMatrixCell,
-              classNames.nanMatrixCell
-            ]);
-          }
-          if (
-            this.props.selectedCells !== undefined &&
-            this.props.selectedCells[j + i * row.length]
-          ) {
-            styledGradientMatrixCell = mergeStyles([
-              styledGradientMatrixCell,
-              classNames.selectedMatrixCell
-            ]);
-          }
-          let error: number;
-          let baseError: number;
-          let metricValue: number;
-          if (value.falseCount !== undefined) {
-            metricValue = errorRatio;
-            error = value.falseCount;
-            baseError = falseCount;
-          } else {
-            metricValue = value.metricValue;
-            error = value.metricValue * value.count;
-            baseError = totalError;
-          }
-          const filterProps = new FilterProps(
-            error,
-            value.count,
-            baseError,
-            metricName,
-            metricValue
-          );
-          const tooltipProps: ITooltipProps = {
-            onRenderContent: () => (
-              <svg width="110" height="140" viewBox="0 0 70 70">
-                <g style={{ transform: "translate(-10px,-10px)" }}>
-                  <FilterTooltip filterProps={filterProps} />
-                </g>
-              </svg>
-            )
-          };
-          const hostStyles: Partial<ITooltipHostStyles> = {
-            root: {
-              alignItems: "center",
-              display: "flex",
-              height: "100%",
-              width: "100%"
-            }
-          };
-          const cellData = (
-            <div
-              key={`${i}_${j}cell`}
-              className={classNames.matrixCell}
-              onClick={(): void =>
-                this.props.selectedCellHandler(i, j, matrixLength, row.length)
-              }
-              role="button"
-              tabIndex={i}
-              onKeyUp={undefined}
-            >
-              <TooltipHost
-                tooltipProps={tooltipProps}
-                delay={TooltipDelay.zero}
-                id={`${i}_${j}celltooltip`}
-                directionalHint={DirectionalHint.bottomCenter}
-                styles={hostStyles}
-              >
-                <div className={styledGradientMatrixCell}>
-                  {`${errorRatio.toFixed(0)}%`}
-                </div>
-              </TooltipHost>
-            </div>
-          );
-          if (this.props.selectedFeature1 === noFeature) {
-            const categoryData = (
-              <div
-                key={`${i}_${j}category1`}
-                className={classNames.matrixCellPivot1Categories}
-              >
-                {this.props.category1Values[j].value}
-              </div>
-            );
-            return (
-              <div key={`${j}row`} className={classNames.matrixRow}>
-                {categoryData}
-                {cellData}
-              </div>
-            );
-          } else if (j === 0) {
             if (
-              this.props.selectedFeature2 === noFeature ||
-              this.props.sameFeatureSelected
+              this.props.selectedCells !== undefined &&
+              this.props.selectedCells[j + i * row.length]
             ) {
+              styledGradientMatrixCell = mergeStyles([
+                styledGradientMatrixCell,
+                classNames.selectedMatrixCell
+              ]);
+            }
+            let error: number;
+            let baseError: number;
+            let metricValue: number;
+            if (value.falseCount !== undefined) {
+              metricValue = errorRatio;
+              error = value.falseCount;
+              baseError = falseCount;
+            } else {
+              metricValue = value.metricValue;
+              error = value.metricValue * value.count;
+              baseError = totalError;
+            }
+            const filterProps = new FilterProps(
+              error,
+              value.count,
+              baseError,
+              metricName,
+              metricValue
+            );
+            const tooltipProps: ITooltipProps = {
+              onRenderContent: () => (
+                <svg width="110" height="140" viewBox="0 0 70 70">
+                  <g style={{ transform: "translate(-10px,-10px)" }}>
+                    <FilterTooltip filterProps={filterProps} />
+                  </g>
+                </svg>
+              )
+            };
+            const hostStyles: Partial<ITooltipHostStyles> = {
+              root: {
+                alignItems: "center",
+                display: "flex",
+                height: "100%",
+                width: "100%"
+              }
+            };
+            const cellData = (
+              <div
+                key={`${i}_${j}cell`}
+                className={classNames.matrixCell}
+                onClick={(): void =>
+                  this.props.selectedCellHandler(i, j, matrixLength, row.length)
+                }
+                role="button"
+                tabIndex={i}
+                onKeyUp={undefined}
+              >
+                <TooltipHost
+                  tooltipProps={tooltipProps}
+                  delay={TooltipDelay.zero}
+                  id={`${i}_${j}celltooltip`}
+                  directionalHint={DirectionalHint.bottomCenter}
+                  styles={hostStyles}
+                >
+                  <div className={styledGradientMatrixCell}>
+                    {`${errorRatio.toFixed(0)}%`}
+                  </div>
+                </TooltipHost>
+              </div>
+            );
+            if (!this.props.selectedFeature1) {
+              const categoryData = (
+                <div
+                  key={`${i}_${j}category1`}
+                  className={classNames.matrixCellPivot1Categories}
+                >
+                  {this.props.category1Values[j].value}
+                </div>
+              );
+              return (
+                <div key={`${j}row`} className={classNames.matrixRow}>
+                  {categoryData}
+                  {cellData}
+                </div>
+              );
+            } else if (j === 0) {
+              if (
+                !this.props.selectedFeature2 ||
+                this.props.sameFeatureSelected
+              ) {
+                return [
+                  <div
+                    key={`${i}_${j}category1`}
+                    className={classNames.matrixCellPivot1Categories}
+                  />,
+                  cellData
+                ];
+              }
               return [
                 <div
                   key={`${i}_${j}category1`}
                   className={classNames.matrixCellPivot1Categories}
-                />,
+                >
+                  {this.props.category1Values[i].value}
+                </div>,
                 cellData
               ];
             }
-            return [
-              <div
-                key={`${i}_${j}category1`}
-                className={classNames.matrixCellPivot1Categories}
-              >
-                {this.props.category1Values[i].value}
-              </div>,
-              cellData
-            ];
-          }
-          return cellData;
-        })}
-      </div>
-    ));
+            return cellData;
+          })}
+        </div>
+      )
+    );
   }
 
   private mapRange(

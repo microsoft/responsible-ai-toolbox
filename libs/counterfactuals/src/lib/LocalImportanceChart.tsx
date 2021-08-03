@@ -15,7 +15,6 @@ import {
   PlotlyThemes
 } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack, Text } from "office-ui-fabric-react";
-import Plotly from "plotly.js";
 import React from "react";
 
 export interface ILocalImportanceChartProps {
@@ -25,18 +24,15 @@ export interface ILocalImportanceChartProps {
   theme?: string;
 }
 
-interface ILocalImportanceData {
+export interface ILocalImportanceData {
   label: string;
   value: number;
 }
 
-export class LocalImportanceChart extends React.PureComponent<
-  ILocalImportanceChartProps
-> {
+export class LocalImportanceChart extends React.PureComponent<ILocalImportanceChartProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     if (this.props.rowNumber === undefined) {
@@ -66,7 +62,7 @@ export class LocalImportanceChart extends React.PureComponent<
             plotlyProps={{
               config: themedProps.config,
               data: themedProps.data,
-              layout: themedProps.layout as Plotly.Layout
+              layout: themedProps.layout
             }}
             theme={getTheme()}
           />
@@ -111,9 +107,8 @@ export class LocalImportanceChart extends React.PureComponent<
     if (this.props.rowNumber === undefined) {
       return data;
     }
-    const localImportanceData = this.props.data?.local_importance?.[
-      this.props.rowNumber
-    ];
+    const localImportanceData =
+      this.props.data?.local_importance?.[this.props.rowNumber];
     if (!localImportanceData) {
       return data;
     }

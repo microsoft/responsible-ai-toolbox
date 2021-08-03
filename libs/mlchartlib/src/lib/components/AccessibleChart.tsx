@@ -52,9 +52,10 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             className={accessibleChartStyles.chart}
             data={themedProps.data}
             layout={
-              { ...themedProps.layout, ...this.props.relayoutArg } as Partial<
-                Plotly.Layout
-              >
+              {
+                ...themedProps.layout,
+                ...this.props.relayoutArg
+              } as Partial<Plotly.Layout>
             }
             config={themedProps.config as Partial<Plotly.Config>}
             onClick={this.props.onClickHandler}

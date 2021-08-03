@@ -13,19 +13,18 @@ export interface INoDataMessageStyles {
   secondaryMessage: IStyle;
 }
 
-export const noDataMessageStyles: IProcessedStyleSet<INoDataMessageStyles> = mergeStyleSets<
-  INoDataMessageStyles
->({
-  centered: {
-    fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
+export const noDataMessageStyles: IProcessedStyleSet<INoDataMessageStyles> =
+  mergeStyleSets<INoDataMessageStyles>({
+    centered: {
+      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
       -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
-    margin: "auto",
-    padding: "40px"
-  },
-  primaryMessage: {
-    fontSize: "20px"
-  },
-  secondaryMessage: {
-    fontSize: "16px"
-  }
-});
+      margin: "auto",
+      padding: "40px"
+    },
+    primaryMessage: {
+      fontSize: "20px"
+    },
+    secondaryMessage: {
+      fontSize: "16px"
+    }
+  });

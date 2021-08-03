@@ -8,6 +8,7 @@ import json
 import numpy as np
 from scipy.sparse import issparse
 from pathlib import Path
+
 from interpret_community.mimic.mimic_explainer import MimicExplainer
 from interpret_community.mimic.models.lightgbm_model import (
     LGBMExplainableModel)
@@ -16,6 +17,8 @@ from interpret_community.mimic.models.linear_model import (
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     save_explanation, load_explanation, FeatureImportanceExplanation)
+
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (
     ManagerNames, Metadata, ListProperties, ExplanationKeys,
     ExplainerManagerKeys as Keys)
@@ -100,6 +103,10 @@ class ExplainerManager(BaseManager):
 
     def add(self):
         """Add an explainer to be computed later."""
+        if self._model is None:
+            raise UserConfigValidationException(
+                'Model is required for model explanations')
+
         if self._is_added:
             warnings.warn(("Ignoring.  Explanation has already been added, "
                            "currently limited to one explainer type."),

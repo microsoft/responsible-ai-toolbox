@@ -5,6 +5,8 @@
 
 from pathlib import Path
 import json
+
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._internal.constants import (
     ManagerNames, ListProperties, ErrorAnalysisManagerKeys as Keys)
 from responsibleai._managers.base_manager import BaseManager
@@ -188,6 +190,10 @@ class ErrorAnalysisManager(BaseManager):
             matrix filter.
         :type filter_features: list
         """
+        if self._analyzer.model is None:
+            raise UserConfigValidationException(
+                'Model is required for error analysis')
+
         ea_config = ErrorAnalysisConfig(
             max_depth=max_depth,
             num_leaves=num_leaves,
@@ -258,6 +264,10 @@ class ErrorAnalysisManager(BaseManager):
         error_analysis = ErrorAnalysisData()
         error_analysis.maxDepth = report[Keys.MAX_DEPTH]
         error_analysis.numLeaves = report[Keys.NUM_LEAVES]
+        error_analysis.tree = self._analyzer.compute_error_tree(
+            self._feature_names, None, None)
+        error_analysis.matrix = self._analyzer.compute_matrix(
+            self._feature_names, None, None)
         return error_analysis
 
     @property

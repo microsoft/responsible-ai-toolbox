@@ -248,7 +248,7 @@ class ErrorAnalysisDashboardInput:
         if self._categorical_features:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP
-            ] = self._error_analyzer.category_dictionary
+            ] = serialize_json_safe(self._error_analyzer.category_dictionary)
         # Compute metrics on all data cohort
         if self._error_analyzer.model_task == ModelTask.CLASSIFICATION:
             if self._error_analyzer.metric is None:
@@ -417,12 +417,12 @@ class ErrorAnalysisDashboardInput:
 
     def debug_ml(self, features, filters, composite_filters):
         try:
-            json_tree = self._error_analyzer.compute_error_tree(
+            tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
                 max_depth=self._max_depth,
                 num_leaves=self._num_leaves)
             return {
-                WidgetRequestResponseConstants.DATA: json_tree
+                WidgetRequestResponseConstants.DATA: tree
             }
         except Exception as e:
             print(e)
@@ -437,10 +437,10 @@ class ErrorAnalysisDashboardInput:
         try:
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.DATA: []}
-            json_matrix = self._error_analyzer.compute_matrix(
+            matrix = self._error_analyzer.compute_matrix(
                 features, filters, composite_filters)
             return {
-                WidgetRequestResponseConstants.DATA: json_matrix
+                WidgetRequestResponseConstants.DATA: matrix
             }
         except Exception as e:
             print(e)

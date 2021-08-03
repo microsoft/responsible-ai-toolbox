@@ -10,7 +10,7 @@ import { describeSubLineChart } from "./describeSubLineChart";
 export function describeDataPointChart(dataShape: IInterpretData): void {
   describe("Individual datapoints chart", () => {
     const props = {
-      chart: (undefined as unknown) as ScatterChart,
+      chart: undefined as unknown as ScatterChart,
       dataShape
     };
     beforeEach(() => {

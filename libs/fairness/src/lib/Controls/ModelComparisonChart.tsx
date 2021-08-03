@@ -467,9 +467,10 @@ export class ModelComparisonChart extends React.Component<
     }
     const featureKey = option.key.toString();
     if (this.state.featureKey !== featureKey) {
-      const index = this.props.dashboardContext.modelMetadata.featureNames.indexOf(
-        featureKey
-      );
+      const index =
+        this.props.dashboardContext.modelMetadata.featureNames.indexOf(
+          featureKey
+        );
       this.props.featureBinPickerProps.selectedBinIndex = index;
       this.props.featureBinPickerProps.onBinChange(index);
       this.setState({

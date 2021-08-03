@@ -164,9 +164,11 @@ export class PerturbationExploration extends React.Component<
                 defaultValue={featureValue}
                 onEdit={this.onValueEdit}
                 enumeratedValues={
-                  (this.props.explanationContext.modelMetadata.featureRanges[
-                    featureIndex
-                  ] as ICategoricalRange).uniqueValues
+                  (
+                    this.props.explanationContext.modelMetadata.featureRanges[
+                      featureIndex
+                    ] as ICategoricalRange
+                  ).uniqueValues
                 }
                 rangeType={
                   this.props.explanationContext.modelMetadata.featureRanges[

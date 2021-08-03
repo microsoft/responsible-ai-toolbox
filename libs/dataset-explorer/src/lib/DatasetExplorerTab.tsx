@@ -44,14 +44,13 @@ export interface IDatasetExplorerTabState {
   chartProps?: IGenericChartProps;
 }
 
-export class DatasetExplorerTab extends React.PureComponent<
+export class DatasetExplorerTab extends React.Component<
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "DatasetExplorerChart";
 
@@ -84,6 +83,16 @@ export class DatasetExplorerTab extends React.PureComponent<
     });
   }
 
+  public componentDidUpdate(): void {
+    const selectedCohortIndex = this.context.errorCohorts.findIndex(
+      (errorCohort) =>
+        errorCohort.cohort.name === this.context.selectedErrorCohort.cohort.name
+    );
+    if (selectedCohortIndex !== this.state.selectedCohortIndex) {
+      this.setState({ selectedCohortIndex });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
@@ -94,6 +103,7 @@ export class DatasetExplorerTab extends React.PureComponent<
         </MissingParametersPlaceholder>
       );
     }
+
     if (this.state.chartProps === undefined) {
       return <div />;
     }
@@ -110,9 +120,9 @@ export class DatasetExplorerTab extends React.PureComponent<
             return { key: index, text: errorCohort.cohort.name };
           })
         : undefined;
-    const cohortLength = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.filteredData.length;
+    const cohortLength =
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+        .filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -373,8 +383,8 @@ export class DatasetExplorerTab extends React.PureComponent<
 
   private generateDefaultYAxis(): ISelectorConfig {
     const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.context.jointDataset.metaDict[yKey]
-      .treatAsCategorical;
+    const yIsDithered =
+      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     return {
       options: {
         bin: false,

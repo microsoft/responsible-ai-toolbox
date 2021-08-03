@@ -105,6 +105,18 @@ class CounterfactualManager(BaseManager):
         return dice_explainer
 
     def _add_counterfactual_config(self, new_counterfactual_config):
+        if self._model is None:
+            raise UserConfigValidationException(
+                'Model is required for counterfactual example generation and '
+                'feature importances')
+
+        to_vary = new_counterfactual_config.features_to_vary
+        if to_vary != 'all':
+            difference_set = set(to_vary) - set(self._train.columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in features_to_vary do "
+                           f"not exist in train data: {list(difference_set)}")
+            raise UserConfigValidationException(message)
 
         if self._task_type == ModelTask.CLASSIFICATION:
             if new_counterfactual_config.desired_class is None:
@@ -145,10 +157,13 @@ class CounterfactualManager(BaseManager):
             desired_class=None,
             desired_range=None,
             permitted_range=None,
-            features_to_vary=None,
+            features_to_vary='all',
             feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
+        :param method: Type of dice-ml explainer. Either of "random", "genetic"
+                       or "kdtree".
+        :type method: str
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
         :param desired_class: Desired counterfactual class. For binary
@@ -209,14 +224,18 @@ class CounterfactualManager(BaseManager):
                             dice_explainer.generate_counterfactuals(
                                 X_test, total_CFs=cf_config.total_CFs,
                                 desired_class=cf_config.desired_class,
-                                desired_range=cf_config.desired_range)
+                                desired_range=cf_config.desired_range,
+                                features_to_vary=cf_config.features_to_vary,
+                                permitted_range=cf_config.permitted_range)
                     else:
                         counterfactual_obj = \
                             dice_explainer.global_feature_importance(
                                 X_test,
                                 total_CFs=cf_config.total_CFs,
                                 desired_class=cf_config.desired_class,
-                                desired_range=cf_config.desired_range)
+                                desired_range=cf_config.desired_range,
+                                features_to_vary=cf_config.features_to_vary,
+                                permitted_range=cf_config.permitted_range)
 
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
