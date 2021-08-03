@@ -6,6 +6,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -34,32 +35,36 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const defaultColumns: IColumn[] = [
       {
         fieldName: "Treatment",
+        isResizable: true,
         key: "Treatment",
-        maxWidth: 400,
+        maxWidth: 250,
         minWidth: 175,
         name: localization.Counterfactuals.RecommendedTreatment
       },
       {
         fieldName: "Effect of treatment",
+        isResizable: true,
         isSorted: true,
         isSortedDescending: false,
         key: "Effect of treatment",
-        maxWidth: 300,
-        minWidth: 150,
+        maxWidth: 400,
+        minWidth: 200,
         name: localization.Counterfactuals.EffectOfTreatment
       },
       {
         fieldName: "Effect of treatment lower bound",
+        isResizable: true,
         key: "Effect of treatment lower bound",
-        maxWidth: 300,
-        minWidth: 150,
+        maxWidth: 100,
+        minWidth: 75,
         name: localization.Counterfactuals.EffectLowerBound
       },
       {
         fieldName: "Effect of treatment upper bound",
+        isResizable: true,
         key: "Effect of treatment upper bound",
-        maxWidth: 300,
-        minWidth: 150,
+        maxWidth: 100,
+        minWidth: 75,
         name: localization.Counterfactuals.EffectUpperBound
       }
     ];
@@ -69,6 +74,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const leftColumns = leftKeys.map((k) => {
       return {
         fieldName: k,
+        isResizable: true,
         key: k,
         maxWidth: 100,
         minWidth: 75,
@@ -80,10 +86,11 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const items = this.props.data
       .sort((a, b) => b["Effect of treatment"] - a["Effect of treatment"])
       .slice(0, maxCount);
+    const convertedItems = items.map((item) => this.toScientific(item));
     return (
       <div className={styles.listContainer}>
         <DetailsList
-          items={items}
+          items={convertedItems}
           columns={columns}
           selectionMode={SelectionMode.none}
           setKey="set"
@@ -91,5 +98,15 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
         />
       </div>
     );
+  }
+  private toScientific(item: { [key: string]: any }): { [key: string]: any } {
+    const copy = _.cloneDeep(item);
+    Object.keys(copy).forEach((k) => {
+      const isFloat = typeof copy[k] === "number" && copy[k] % 1 !== 0;
+      if (isFloat) {
+        copy[k] = copy[k].toExponential(3);
+      }
+    });
+    return copy;
   }
 }
