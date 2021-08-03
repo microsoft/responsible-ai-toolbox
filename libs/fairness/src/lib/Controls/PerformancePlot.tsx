@@ -5,6 +5,7 @@ import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
+import { Datum } from "plotly.js";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
@@ -311,6 +312,57 @@ export class PerformancePlot extends React.PureComponent<
       performanceChartModalHelpStrings = [
         localization.Fairness.Report.regressionPerformanceHowToRead
       ];
+    }
+
+    barPlotlyProps.data[0].customdata = ([] as unknown) as Datum[];
+    barPlotlyProps.data[1].customdata = ([] as unknown) as Datum[];
+    const digitsOfPrecision = 1;
+
+    for (let j = 0; j < barPlotlyProps.data.length; j++) {
+      if (barPlotlyProps.data) {
+        for (
+          let i = 0;
+          i < this.props.dashboardContext.groupNames.length;
+          i++
+        ) {
+          const x = barPlotlyProps
+            ? (Number(barPlotlyProps.data[j].x?.[i]) * 100).toFixed(
+                digitsOfPrecision
+              )
+            : undefined;
+          const y = barPlotlyProps.data[j].y
+            ? String(barPlotlyProps.data[j].y?.[i]).trim()
+            : undefined;
+
+          const xBounds =
+            barPlotlyProps.data[j]?.error_x?.type === "data" &&
+            barPlotlyProps.data[j]?.error_x?.arrayminus &&
+            barPlotlyProps.data[j]?.error_x?.array &&
+            barPlotlyProps.data[j].error_x.arrayminus[i] !== 0 &&
+            barPlotlyProps.data[j].error_x.array[i] !== 0 &&
+            x
+              ? "[" +
+                (
+                  Number(x) -
+                  100 * Number(barPlotlyProps.data[j].error_x.arrayminus[i])
+                ).toFixed(digitsOfPrecision) +
+                "%, " +
+                (
+                  Number(x) +
+                  100 * Number(barPlotlyProps.data[j].error_x.array[i])
+                ).toFixed(digitsOfPrecision) +
+                "%]"
+              : "";
+
+          barPlotlyProps.data[j].customdata.push(({
+            x,
+            xBounds,
+            y
+          } as unknown) as Datum);
+          barPlotlyProps.data[j].hovertemplate =
+            "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}: %{customdata.x}% %{customdata.xBounds}<extra></extra>";
+        }
+      }
     }
 
     return (

@@ -198,9 +198,6 @@ export class ChartBuilder {
       visible: true
     };
 
-    result[0].hovertemplate =
-      // "%{text} <br> %{xaxis.title.text}: %{customdata.x} [%{customdata.xLower}, %{customdata.xUpper}]<br> %{yaxis.title.text}: %{customdata.y} [%{customdata.yLower}, %{customdata.yUpper}]";
-      "%{text} <br> %{xaxis.title.text}: %{customdata.x} %{customdata.xBounds}<br> %{yaxis.title.text}: %{customdata.y} %{customdata.yBounds}";
     return result;
   }
 

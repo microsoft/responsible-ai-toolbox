@@ -88,8 +88,6 @@ export class ModelComparisonChart extends React.Component<
     },
     data: [
       {
-        // how to generate dictionary?
-        // change configuration
         datapointLevelAccessors: {
           customdata: {
             path: ["index"],
@@ -247,27 +245,27 @@ export class ModelComparisonChart extends React.Component<
           series.customdata = ([] as unknown) as Datum[];
           const digitsOfPrecision = 5;
 
-          for (let i = 0; i < data.length; i++) {
+          for (let modelId = 0; modelId < data.length; modelId++) {
             const x = series.x
-              ? Number(series.x[i]).toFixed(digitsOfPrecision)
+              ? Number(series.x[modelId]).toFixed(digitsOfPrecision)
               : undefined;
             const y = series.y
-              ? Number(series.y[i]).toFixed(digitsOfPrecision)
+              ? Number(series.y[modelId]).toFixed(digitsOfPrecision)
               : undefined;
 
             const xBounds =
               series?.error_x?.type === "data" &&
               series?.error_x?.arrayminus &&
               series?.error_x?.array &&
-              series.error_x.arrayminus[i] !== 0 &&
-              series.error_x.array[i] !== 0 &&
+              series.error_x.arrayminus[modelId] !== 0 &&
+              series.error_x.array[modelId] !== 0 &&
               x
                 ? "[" +
-                  (Number(x) - Number(series.error_x.arrayminus[i])).toFixed(
-                    digitsOfPrecision
-                  ) +
+                  (
+                    Number(x) - Number(series.error_x.arrayminus[modelId])
+                  ).toFixed(digitsOfPrecision) +
                   ", " +
-                  (Number(x) + Number(series.error_x.array[i])).toFixed(
+                  (Number(x) + Number(series.error_x.array[modelId])).toFixed(
                     digitsOfPrecision
                   ) +
                   "]"
@@ -276,26 +274,29 @@ export class ModelComparisonChart extends React.Component<
               series?.error_y?.type === "data" &&
               series?.error_y?.arrayminus &&
               series?.error_y?.array &&
-              series.error_y.arrayminus[i] !== 0 &&
-              series.error_y.array[i] !== 0 &&
+              series.error_y.arrayminus[modelId] !== 0 &&
+              series.error_y.array[modelId] !== 0 &&
               y
                 ? "[" +
-                  (Number(y) - Number(series.error_y.arrayminus[i])).toFixed(
-                    digitsOfPrecision
-                  ) +
+                  (
+                    Number(y) - Number(series.error_y.arrayminus[modelId])
+                  ).toFixed(digitsOfPrecision) +
                   ", " +
-                  (Number(y) + Number(series.error_y.array[i])).toFixed(
+                  (Number(y) + Number(series.error_y.array[modelId])).toFixed(
                     digitsOfPrecision
                   ) +
                   "]"
                 : "";
 
             series.customdata.push(({
+              modelId,
               x,
               xBounds,
               y,
               yBounds
             } as unknown) as Datum);
+            series.hovertemplate =
+              "%{text} <br> %{xaxis.title.text}: %{customdata.x} %{customdata.xBounds}<br> %{yaxis.title.text}: %{customdata.y} %{customdata.yBounds}<extra></extra>";
           }
 
           series.text = this.props.dashboardContext.modelNames;

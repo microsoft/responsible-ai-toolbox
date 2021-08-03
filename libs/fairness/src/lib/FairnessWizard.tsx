@@ -401,7 +401,7 @@ export class FairnessWizardV2 extends React.PureComponent<
       return;
     }
     if (data.points && data.points[0]) {
-      this.setState({ selectedModelId: data.points[0].customdata });
+      this.setState({ selectedModelId: data.points[0].customdata.modelId });
     }
   };
 

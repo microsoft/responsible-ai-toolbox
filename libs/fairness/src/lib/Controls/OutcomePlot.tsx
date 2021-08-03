@@ -5,6 +5,7 @@ import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
+import { Datum } from "plotly.js";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
@@ -47,6 +48,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         ? "selection_rate"
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
+    console.log(outcomeMetric);
     let outcomeChartModalHelpStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
@@ -170,6 +172,47 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       outcomeChartModalHelpStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
+    }
+
+    barPlotlyProps.data[0].customdata = ([] as unknown) as Datum[];
+    const digitsOfPrecision = 1;
+
+    for (let i = 0; i < this.props.dashboardContext.groupNames.length; i++) {
+      const x = barPlotlyProps.data[0].x
+        ? (Number(barPlotlyProps.data[0].x[i]) * 100).toFixed(digitsOfPrecision)
+        : undefined;
+      const y = barPlotlyProps.data[0].y
+        ? String(barPlotlyProps.data[0].y[i]).trim()
+        : undefined;
+
+      const xBounds =
+        barPlotlyProps.data[0]?.error_x?.type === "data" &&
+        barPlotlyProps.data[0]?.error_x?.arrayminus &&
+        barPlotlyProps.data[0]?.error_x?.array &&
+        barPlotlyProps.data[0].error_x.arrayminus[i] !== 0 &&
+        barPlotlyProps.data[0].error_x.array[i] !== 0 &&
+        x
+          ? "[" +
+            (
+              Number(x) -
+              100 * Number(barPlotlyProps.data[0].error_x.arrayminus[i])
+            ).toFixed(digitsOfPrecision) +
+            "%, " +
+            (
+              Number(x) +
+              100 * Number(barPlotlyProps.data[0].error_x.array[i])
+            ).toFixed(digitsOfPrecision) +
+            "%]"
+          : "";
+
+      barPlotlyProps.data[0].customdata.push(({
+        outcomeMetric: outcomeMetric.title,
+        x,
+        xBounds,
+        y
+      } as unknown) as Datum);
+      barPlotlyProps.data[0].hovertemplate =
+        "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}: %{customdata.x}% %{customdata.xBounds}<extra></extra>";
     }
 
     return (
