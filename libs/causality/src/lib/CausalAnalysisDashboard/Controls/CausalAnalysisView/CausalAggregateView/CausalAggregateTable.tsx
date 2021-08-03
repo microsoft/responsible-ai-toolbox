@@ -85,7 +85,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
       const roundedData = {};
       Object.entries(d).forEach(([key, value]) => {
         if (typeof value === "number") {
-          roundedData[key] = value.toFixed(3);
+          roundedData[key] = value.toExponential(3);
         } else {
           roundedData[key] = value;
         }

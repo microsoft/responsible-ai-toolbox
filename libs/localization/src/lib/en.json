@@ -662,7 +662,7 @@
     "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
     "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
     "RecommendedTreatment": "Recommended treatment",
-    "EffectOfTreatment": "Effect",
+    "EffectOfTreatment": "Effect of recommendation",
     "EffectLowerBound": "CI lower",
     "EffectUpperBound": "CI upper",
     "increaseByOne": "Increase value by 1",
