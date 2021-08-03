@@ -105,6 +105,11 @@ class CounterfactualManager(BaseManager):
         return dice_explainer
 
     def _add_counterfactual_config(self, new_counterfactual_config):
+        if self._model is None:
+            raise UserConfigValidationException(
+                'Model is required for counterfactual example generation and '
+                'feature importances')
+
         to_vary = new_counterfactual_config.features_to_vary
         if to_vary != 'all':
             difference_set = set(to_vary) - set(self._train.columns)

@@ -6,9 +6,10 @@
 import json
 import numpy as np
 import pandas as pd
-import pickle
-
 from pathlib import Path
+import pickle
+import warnings
+
 
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ModelAnalysisData, Dataset
@@ -192,6 +193,12 @@ class ModelAnalysis(object):
             message = (f"Unsupported task type '{task_type}'. "
                        f"Should be one of {valid_tasks}")
             raise UserConfigValidationException(message)
+
+        if model is None:
+            warnings.warn(
+                'INVALID-MODEL-WARNING: No valid model is supplied. '
+                'The explanations, error analysis and counterfactuals '
+                'may not work')
 
         if serializer is not None:
             if not hasattr(serializer, 'save'):
@@ -491,12 +498,13 @@ class ModelAnalysis(object):
             with open(top_dir / _SERIALIZER, 'wb') as file:
                 pickle.dump(self._serializer, file)
         else:
-            has_setstate = hasattr(self.model, '__setstate__')
-            has_getstate = hasattr(self.model, '__getstate__')
-            if not (has_setstate and has_getstate):
-                raise ValueError(
-                    "Model must be picklable or a custom serializer must"
-                    " be specified")
+            if self.model is not None:
+                has_setstate = hasattr(self.model, '__setstate__')
+                has_getstate = hasattr(self.model, '__getstate__')
+                if not (has_setstate and has_getstate):
+                    raise ValueError(
+                        "Model must be picklable or a custom serializer must"
+                        " be specified")
             with open(top_dir / _MODEL_PKL, 'wb') as file:
                 pickle.dump(self.model, file)
 
