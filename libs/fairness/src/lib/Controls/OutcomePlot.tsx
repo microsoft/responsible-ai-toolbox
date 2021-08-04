@@ -38,7 +38,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     let outcomeChartModalHelpStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
-        return name + " ";
+        return `${name} `;
       }
     );
 

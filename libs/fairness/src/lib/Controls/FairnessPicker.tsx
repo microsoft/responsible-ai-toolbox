@@ -62,7 +62,7 @@ export class FairnessPicker extends React.PureComponent<
         </div>
         {this.state.showCallout && (
           <Callout
-            target={"#" + this._fairnessDropdownHelpId}
+            target={`#${this._fairnessDropdownHelpId}`}
             setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"

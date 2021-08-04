@@ -86,8 +86,9 @@ export class CustomPredictionLabels extends React.Component<ICustomPredictionLab
                 variant="small"
                 key={index}
               >
-                {"+" +
-                  delta.toLocaleString(undefined, { maximumFractionDigits: 3 })}
+                {`+${delta.toLocaleString(undefined, {
+                  maximumFractionDigits: 3
+                })}`}
               </Text>
             );
           }

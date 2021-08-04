@@ -425,7 +425,7 @@ export class Violin extends React.PureComponent<
           </div>
           {this.state.calloutContent && (
             <Callout
-              target={"#" + this.state.calloutId}
+              target={`#${this.state.calloutId}`}
               setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
