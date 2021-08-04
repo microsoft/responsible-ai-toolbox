@@ -10,10 +10,15 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
 import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  SelectionMode
+  IDetailsColumnRenderTooltipProps,
+  IDetailsHeaderProps,
+  IRenderFunction,
+  SelectionMode,
+  TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -31,6 +36,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.name,
         fieldName: nameof<ICausalAnalysisSingleData>("feature"),
         isResizable: true,
         key: "name",
@@ -40,6 +46,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         onRender: getCausalDisplayFeatureName
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.point,
         fieldName: nameof<ICausalAnalysisSingleData>("point"),
         isResizable: true,
         key: "point",
@@ -48,6 +55,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         name: localization.ModelAssessment.CausalAnalysis.Table.point
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.stderr,
         fieldName: nameof<ICausalAnalysisSingleData>("stderr"),
         isResizable: true,
         key: "stderr",
@@ -56,6 +64,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         name: localization.ModelAssessment.CausalAnalysis.Table.stderr
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.zstat,
         fieldName: nameof<ICausalAnalysisSingleData>("zstat"),
         isResizable: true,
         key: "zstat",
@@ -64,6 +73,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         name: localization.ModelAssessment.CausalAnalysis.Table.zstat
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.pValue,
         fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
         isResizable: true,
         key: "pValue",
@@ -72,6 +82,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         name: localization.ModelAssessment.CausalAnalysis.Table.pValue
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.ciLower,
         fieldName: nameof<ICausalAnalysisSingleData>("ci_lower"),
         isResizable: true,
         key: "ciLower",
@@ -80,6 +91,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.ciUpper,
         fieldName: nameof<ICausalAnalysisSingleData>("ci_upper"),
         isResizable: true,
         key: "ciUpper",
@@ -104,7 +116,9 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
         items={items}
         columns={columns}
         selectionMode={SelectionMode.none}
-        setKey="set"
+        onRenderDetailsHeader={this.onRenderDetailsHeader}
+        checkboxVisibility={CheckboxVisibility.hidden}
+        selectionPreservedOnEmptyClick
         layoutMode={DetailsListLayoutMode.justified}
       />
     );
@@ -115,4 +129,23 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
       this.forceUpdate();
     }
   }
+
+  private onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
+    props,
+    defaultRender
+  ) => {
+    if (!props) {
+      return <div />;
+    }
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+    return (
+      <div>
+        {defaultRender?.({
+          ...props,
+          onRenderColumnHeaderTooltip
+        })}
+      </div>
+    );
+  };
 }
