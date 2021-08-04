@@ -12,8 +12,7 @@ from pathlib import Path
 
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import (
-    UserConfigValidationException)
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._tools.causal.causal_constants import (
     DefaultParams, ModelTypes, ResultAttributes, SerializationAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
@@ -89,12 +88,12 @@ class CausalManager(BaseManager):
         :param upper_bound_on_cat_expansion: Maximum expansion for
                                              categorical features.
         :type upper_bound_on_cat_expansion: int
-        :param treatment_cost: Cost of treatment. If 0 all treatments will
-            have zero cost. If a list is passed then each element will be
+        :param treatment_cost: Cost of treatment. If 0, all treatments will
+            have zero cost. If a list is passed, then each element will be
             applied to each treatment feature. Each element can be a scalar
             value to indicate a constant cost of applying that treatment or
             an array indicating the cost for each sample. If the treatment
-            is a discrete treatment then the array for that feature should
+            is a discrete treatment, then the array for that feature should
             be two dimensional wih the first dimension representing samples
             and t second representing the difference in cost between the
             non-default values and the default value.
@@ -216,7 +215,7 @@ class CausalManager(BaseManager):
                        "treatment per sample. "
                        "Found treatment_cost of type "
                        f"{type(treatment_cost)}, expected list.")
-            raise ValueError(message)
+            raise UserConfigValidationException(message)
         elif len(treatment_cost) != len(treatment_features):
             message = ("treatment_cost must be a list with "
                        "the same number of elements as "
@@ -224,7 +223,7 @@ class CausalManager(BaseManager):
                        "Length of treatment_cost was "
                        f"{len(treatment_cost)}, expected "
                        f"{len(treatment_features)}.")
-            raise ValueError(message)
+            raise UserConfigValidationException(message)
 
         for i in range(len(treatment_features)):
             policy = self._create_policy(

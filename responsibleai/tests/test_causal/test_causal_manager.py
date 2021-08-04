@@ -9,6 +9,7 @@ from unittest.mock import patch, ANY
 from ..common_utils import create_boston_data
 
 from responsibleai import ModelAnalysis, ModelTask
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._managers.causal_manager import CausalManager
 
 
@@ -94,7 +95,7 @@ class TestCausalManagerTreatmentCosts:
                    "or an array specifying the cost of treatment per "
                    "sample. Found treatment_cost "
                    "of type <class 'int'>, expected list.")
-        with pytest.raises(ValueError, match=message):
+        with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=5)
 
     def test_nonlist_cost(self, cost_manager):
@@ -104,7 +105,7 @@ class TestCausalManagerTreatmentCosts:
                    "specifying the cost of treatment per sample. "
                    "Found treatment_cost of type <class 'numpy.ndarray'>, "
                    "expected list.")
-        with pytest.raises(ValueError, match=message):
+        with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['ZN', 'RM', 'B'],
                              treatment_cost=np.array([1, 2]))
 
@@ -112,7 +113,7 @@ class TestCausalManagerTreatmentCosts:
         expected = ("treatment_cost must be a list with the same number of "
                     "elements as treatment_features. "
                     "Length of treatment_cost was 2, expected 3.")
-        with pytest.raises(ValueError, match=expected):
+        with pytest.raises(UserConfigValidationException, match=expected):
             cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2])
 
     def test_constant_cost_per_treatment_feature(self, cost_manager):
@@ -141,6 +142,6 @@ class TestCausalManagerTreatmentCosts:
             np.array([1, 2, 3, 4, 5]),
             np.array([2, 3, 4, 5, 1]),
         ]
-        with pytest.raises(ValueError):
+        with pytest.raises(Exception):
             cost_manager.add(['ZN', 'B'], treatment_cost=costs,
                              skip_cat_limit_checks=True)
