@@ -38,58 +38,65 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.name,
         fieldName: nameof<ICausalAnalysisSingleData>("feature"),
+        isResizable: true,
         key: "name",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 110,
+        minWidth: 70,
         name: localization.ModelAssessment.CausalAnalysis.Table.name,
         onRender: getCausalDisplayFeatureName
       },
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.point,
         fieldName: nameof<ICausalAnalysisSingleData>("point"),
+        isResizable: true,
         key: "point",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 100,
+        minWidth: 70,
         name: localization.ModelAssessment.CausalAnalysis.Table.point
       },
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.stderr,
         fieldName: nameof<ICausalAnalysisSingleData>("stderr"),
+        isResizable: true,
         key: "stderr",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 100,
+        minWidth: 70,
         name: localization.ModelAssessment.CausalAnalysis.Table.stderr
       },
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.zstat,
         fieldName: nameof<ICausalAnalysisSingleData>("zstat"),
+        isResizable: true,
         key: "zstat",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 70,
+        minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.zstat
       },
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.pValue,
         fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
+        isResizable: true,
         key: "pValue",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 70,
+        minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.pValue
       },
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.ciLower,
         fieldName: nameof<ICausalAnalysisSingleData>("ci_lower"),
+        isResizable: true,
         key: "ciLower",
-        maxWidth: 175,
-        minWidth: 150,
+        maxWidth: 130,
+        minWidth: 80,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
         ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.ciUpper,
         fieldName: nameof<ICausalAnalysisSingleData>("ci_upper"),
+        isResizable: true,
         key: "ciUpper",
-        maxWidth: 175,
-        minWidth: 150,
+        maxWidth: 130,
+        minWidth: 80,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
