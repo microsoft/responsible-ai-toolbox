@@ -80,6 +80,8 @@ export class GlobalExplanationTab extends React.PureComponent<
     ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
 
+  private depPlot = React.createRef<HTMLDivElement>();
+
   private defaultMinK = 4;
 
   public constructor(props: IGlobalExplanationTabProps) {
@@ -253,6 +255,7 @@ export class GlobalExplanationTab extends React.PureComponent<
             <div
               id="DependencePlot"
               className={classNames.secondaryChartAndLegend}
+              ref={this.depPlot}
             >
               <DependencePlot
                 chartProps={this.state.dependenceProps}
@@ -422,6 +425,7 @@ export class GlobalExplanationTab extends React.PureComponent<
         property: yKey
       }
     };
+    this.depPlot.current?.scrollIntoView();
     this.setState({
       dependenceProps: chartProps,
       selectedCohortIndex: cohortIndex,
