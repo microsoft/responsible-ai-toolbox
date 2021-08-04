@@ -128,7 +128,7 @@ export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTa
     defaultRender
   ) => {
     if (!props) {
-      return <div>{"Test"}</div>;
+      return <></>;
     }
     const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
       (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
