@@ -4,6 +4,7 @@
 import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import { getTheme, Stack } from "office-ui-fabric-react";
 import { Datum } from "plotly.js";
 import React from "react";
@@ -312,22 +313,28 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       ];
     }
 
-    barPlotlyProps.data[0].customdata = [] as unknown as Datum[];
-    barPlotlyProps.data[1].customdata = [] as unknown as Datum[];
     const digitsOfPrecision = 1;
+    const outcomeMetricNames = barPlotlyProps.data.map((datum) => {
+      return datum.name;
+    });
 
     for (let j = 0; j < barPlotlyProps.data.length; j++) {
+      barPlotlyProps.data[j].customdata = [] as unknown as Datum[];
       if (barPlotlyProps.data) {
         for (
           let i = 0;
           i < this.props.dashboardContext.groupNames.length;
           i++
         ) {
+          const outcomeMetric = outcomeMetricNames[j]
+            ? `${outcomeMetricNames[j]}: `
+            : "";
           const x = barPlotlyProps
             ? (Number(barPlotlyProps.data[j].x?.[i]) * 100).toFixed(
                 digitsOfPrecision
               )
             : undefined;
+          // type casting -> type checking
           const y = barPlotlyProps.data[j].y
             ? String(barPlotlyProps.data[j].y?.[i]).trim()
             : undefined;
@@ -340,24 +347,29 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
             errorX.arrayminus[i] !== 0 &&
             errorX.array[i] !== 0 &&
             x
-              ? "[" +
-                (Number(x) - 100 * Number(errorX.arrayminus[i])).toFixed(
+              ? `[${(Number(x) - 100 * Number(errorX.arrayminus[i])).toFixed(
                   digitsOfPrecision
-                ) +
-                "%, " +
-                (Number(x) + 100 * Number(errorX.array[i])).toFixed(
+                )}%, ${(Number(x) + 100 * Number(errorX.array[i])).toFixed(
                   digitsOfPrecision
-                ) +
-                "%]"
+                )}%]`
               : "";
 
-          barPlotlyProps.data[j].customdata.push({
-            x,
-            xBounds,
-            y
-          } as unknown as Datum);
+          if (
+            barPlotlyProps !== undefined &&
+            barPlotlyProps.data !== undefined &&
+            barPlotlyProps.data[j] !== undefined &&
+            barPlotlyProps.data[j].customdata !== undefined &&
+            _.isArray(barPlotlyProps.data[j].customdata)
+          ) {
+            barPlotlyProps.data[j].customdata!.push({
+              outcomeMetric: outcomeMetric[j],
+              x,
+              xBounds,
+              y
+            } as unknown as Datum);
+          }
           barPlotlyProps.data[j].hovertemplate =
-            "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}: %{customdata.x}% %{customdata.xBounds}<extra></extra>";
+            "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}%{customdata.x}% %{customdata.xBounds}<extra></extra>";
         }
       }
     }
