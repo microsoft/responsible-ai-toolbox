@@ -77,14 +77,12 @@ export class MultiICEPlot extends React.PureComponent<
     if (metadata.modelType === ModelTypes.Regression) {
       return localization.Interpret.IcePlot.prediction;
     }
-    return (
-      localization.Interpret.IcePlot.predictedProbability +
-      "<br>" +
-      localization.formatString(
-        localization.Interpret.WhatIfTab.classLabel,
-        metadata.classNames[selectedClass]
-      )
-    );
+    return `${
+      localization.Interpret.IcePlot.predictedProbability
+    }<br>${localization.formatString(
+      localization.Interpret.WhatIfTab.classLabel,
+      metadata.classNames[selectedClass]
+    )}`;
   }
   private static buildPlotlyProps(
     metadata: IExplanationModelMetadata,
@@ -113,9 +111,7 @@ export class MultiICEPlot extends React.PureComponent<
         const predictionLabel =
           metadata.modelType === ModelTypes.Regression
             ? localization.Interpret.IcePlot.prediction
-            : localization.Interpret.IcePlot.predictedProbability +
-              ": " +
-              metadata.classNames[selectedClass];
+            : `${localization.Interpret.IcePlot.predictedProbability}: ${metadata.classNames[selectedClass]}`;
         const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
         return {
           customdata: transposedY[selectedClass].map((predY) => {

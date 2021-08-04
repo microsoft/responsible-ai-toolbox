@@ -34,6 +34,7 @@ export * from "./lib/util/PartialRequired";
 export * from "./lib/util/nameof";
 export * from "./lib/util/rowErrorSize";
 export * from "./lib/util/string";
+export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryMessage";
 export * from "./lib/components/AxisConfigDialog";
 export * from "./lib/components/ConfirmationDialog";

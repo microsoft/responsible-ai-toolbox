@@ -93,7 +93,7 @@ export class LocalImportancePlots extends React.Component<
       crossClassInfoVisible: false,
       iceTooltipVisible: false,
       secondaryChartChoice: WhatIfConstants.featureImportanceKey,
-      selectedFeatureKey: JointDataset.DataLabelRoot + "0",
+      selectedFeatureKey: `${JointDataset.DataLabelRoot}0`,
       selectedICEClass: 0,
       sortArray: this.props.sortArray,
       sortingSeriesIndex: undefined,

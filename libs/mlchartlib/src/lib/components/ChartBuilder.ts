@@ -16,14 +16,13 @@ export class ChartBuilder {
     const groupingDictionary: { [key: string]: Partial<Data> } = {};
     let defaultSeries: Partial<Data> | undefined;
     const datumLevelPaths: string = datum.datapointLevelAccessors
-      ? ", " +
-        Object.keys(datum.datapointLevelAccessors)
+      ? `, ${Object.keys(datum.datapointLevelAccessors)
           .map((key) => {
             return `${key}: [${datum.datapointLevelAccessors?.[key].path.join(
               ", "
             )}]`;
           })
-          .join(", ")
+          .join(", ")}`
       : "";
     const projectedRows: Array<{
       x: any;

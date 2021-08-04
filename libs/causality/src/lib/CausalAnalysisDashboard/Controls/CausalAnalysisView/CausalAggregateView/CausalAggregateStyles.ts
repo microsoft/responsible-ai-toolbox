@@ -22,7 +22,8 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
   () => {
     return mergeStyleSets<ICausalAggregateStyles>({
       container: {
-        height: "auto"
+        maxHeight: "50%",
+        overflowY: "scroll"
       },
       description: {
         display: "flex",

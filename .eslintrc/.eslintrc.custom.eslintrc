@@ -317,6 +317,8 @@
     "no-undef": "error",
     "no-array-constructor": "error",
     "no-unused-vars": "error",
-    "no-useless-constructor": "error"
+    "no-useless-constructor": "error",
+    "dot-notation": "error",
+    "prefer-template": "error"
   }
 }

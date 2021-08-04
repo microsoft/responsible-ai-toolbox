@@ -47,7 +47,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
     let performanceChartModalHelpStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
-        return name + " ";
+        return `${name} `;
       }
     );
 
