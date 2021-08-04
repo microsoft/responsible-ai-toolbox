@@ -275,7 +275,7 @@ export async function callFlaskService<TRequest, TResponse>(
   data: TRequest,
   urlPath: string
 ): Promise<TResponse> {
-  const url = "http://localhost:5000" + urlPath;
+  const url = `http://localhost:5000${urlPath}`;
   return fetch(url, {
     body: JSON.stringify(data),
     headers: {

@@ -67,7 +67,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     return (
       <div className={accessibleChartStyles.noData}>
         {this.props.localizedStrings
-          ? this.props.localizedStrings["noData"]
+          ? this.props.localizedStrings.noData
           : "No Data"}
       </div>
     );
@@ -102,15 +102,15 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             for (let i = 0; i < tableWidth; i++) {
               // Add String() because sometimes data may be Nan
               xRowCells.push(
-                <td key={i + ".x"}>{datum.x ? formatValue(datum.x[i]) : ""}</td>
+                <td key={`${i}.x`}>{datum.x ? formatValue(datum.x[i]) : ""}</td>
               );
               yRowCells.push(
-                <td key={i + ".y"}>{datum.y ? formatValue(datum.y[i]) : ""}</td>
+                <td key={`${i}.y`}>{datum.y ? formatValue(datum.y[i]) : ""}</td>
               );
             }
             return [
-              <tr key={index + ".x"}>{xRowCells}</tr>,
-              <tr key={index + ".y"}>{yRowCells}</tr>
+              <tr key={`${index}.x`}>{xRowCells}</tr>,
+              <tr key={`${index}.y`}>{yRowCells}</tr>
             ];
           })}
         </tbody>
