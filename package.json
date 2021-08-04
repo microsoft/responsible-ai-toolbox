@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "babel-plugin-transform-remove-strict-mode": "0.0.2",
     "d3-array": "^2.8.0",
     "d3-color": "^2.0.0",
     "d3-hierarchy": "^2.0.0",
@@ -106,7 +105,6 @@
     "@typescript-eslint/eslint-plugin": "4.28.4",
     "@typescript-eslint/parser": "4.28.4",
     "babel-jest": "26.2.2",
-    "babel-plugin-transform-remove-strict-mode": "0.0.2",
     "commander": "^7.1.0",
     "cross-env": "7.0.2",
     "cypress": "4.12.1",

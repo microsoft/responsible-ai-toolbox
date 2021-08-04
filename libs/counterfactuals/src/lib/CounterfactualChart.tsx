@@ -27,7 +27,7 @@ import {
   PlotlyMode,
   IData
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -319,7 +319,7 @@ export class CounterfactualChart extends React.PureComponent<
                   label={localization.Counterfactuals.selectedDatapoint}
                   onChange={this.selectPointFromDropdown}
                   options={this.getDataOptions()}
-                  selectedKey={"" + this.state.selectedPointsIndexes[0]}
+                  selectedKey={`${this.state.selectedPointsIndexes[0]}`}
                   ariaLabel={"datapoint picker"}
                   useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
@@ -472,11 +472,12 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.jointDataset.metaDict,
       this.context.jointDataset.datasetFeatureCount
     );
-    const data = {};
-    data["row"] = localization.formatString(
-      localization.Counterfactuals.referenceDatapoint,
-      index
-    );
+    const data = {
+      row: localization.formatString(
+        localization.Counterfactuals.referenceDatapoint,
+        index
+      )
+    };
     const featureNames = this.context?.dataset?.feature_names;
     featureNames.forEach((f, index) => {
       data[f] = dataPoint[index];
@@ -676,7 +677,7 @@ export class CounterfactualChart extends React.PureComponent<
       dictionary,
       JointDataset.IndexLabel
     ).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
@@ -685,13 +686,13 @@ export class CounterfactualChart extends React.PureComponent<
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += metaX.label + ": %{customdata.X}<br>";
+      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
-          customdata[index]["X"] = metaX.sortedCategoricalValues?.[val];
+          customdata[index].X = metaX.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["X"] = (val as number).toLocaleString(undefined, {
+          customdata[index].X = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -712,12 +713,12 @@ export class CounterfactualChart extends React.PureComponent<
       const metaY =
         this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += metaY.label + ": %{customdata.Y}<br>";
+      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
-          customdata[index]["Y"] = metaY.sortedCategoricalValues?.[val];
+          customdata[index].Y = metaY.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
+          customdata[index].Y = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -734,15 +735,14 @@ export class CounterfactualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate +=
-      localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
   }
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    const yKey = JointDataset.DataLabelRoot + "0";
+    const yKey = `${JointDataset.DataLabelRoot}0`;
     const yIsDithered =
       this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     const chartProps: IGenericChartProps = {
@@ -750,7 +750,7 @@ export class CounterfactualChart extends React.PureComponent<
       xAxis: {
         options: {},
         property: this.context.jointDataset.hasPredictedProbabilities
-          ? JointDataset.ProbabilityYRoot + "0"
+          ? `${JointDataset.ProbabilityYRoot}0`
           : JointDataset.IndexLabel
       },
       yAxis: {
@@ -846,7 +846,7 @@ export class CounterfactualChart extends React.PureComponent<
     indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
     return indexes.map((index) => {
       return {
-        key: "" + index,
+        key: `${index}`,
         text: `Index ${index}`
       };
     });

@@ -46,7 +46,7 @@ export class InfoCallout extends React.Component<
         />
         {this.state.isCalloutVisible && (
           <Callout
-            target={"#" + this.props.iconId}
+            target={`#${this.props.iconId}`}
             setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"
