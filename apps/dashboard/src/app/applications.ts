@@ -13,6 +13,7 @@ import { binaryClassification } from "../fairness/__mock_data__/binaryClassifica
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
+import { precomputedBinaryWithError } from "../fairness/__mock_data__/precomputedBinaryWithError";
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
@@ -110,12 +111,19 @@ export const applications: IApplications = <const>{
   },
   fairness: {
     datasets: {
-      binaryClassification: { data: binaryClassification },
+      binaryClassification: {
+        data: { ...binaryClassification, errorKey: "disabled" }
+      },
+      binaryClassificationWithError: {
+        data: binaryClassification,
+        errorKey: true
+      },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryMissingMetrics: {
         data: precomputedBinaryMissingMetrics
       },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
+      precomputedBinaryWithError: { data: precomputedBinaryWithError },
       probability: { data: probability },
       regression: { data: regression }
     },

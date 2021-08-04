@@ -26,6 +26,7 @@ export class Fairness extends React.Component {
           classNames: modelData.classes,
           featureNames: modelData.features
         }}
+        errorKey={modelData.errorKey}
         testData={modelData.dataset}
         predictedY={modelData.predicted_ys}
         trueY={modelData.true_y}

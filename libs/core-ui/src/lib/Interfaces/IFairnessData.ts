@@ -60,6 +60,7 @@ export interface IFairnessBaseData {
   modelNames?: string[];
   trueY: number[];
   testData?: any[][];
+  errorKey?: string;
 }
 export interface IPreComputedData {
   precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;

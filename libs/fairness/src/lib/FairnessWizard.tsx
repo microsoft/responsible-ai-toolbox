@@ -135,7 +135,11 @@ export class FairnessWizardV2 extends React.PureComponent<
         fairnessMetrics,
         defaultFairnessMetricPrioritization
       );
-      selectedErrorKey = "enabled";
+      if (this.props.errorKey === "disabled") {
+        selectedErrorKey = "disabled";
+      } else {
+        selectedErrorKey = "enabled";
+      }
 
       this.state = {
         activeTabKey: featureBinTabKey,
@@ -187,7 +191,11 @@ export class FairnessWizardV2 extends React.PureComponent<
       defaultFairnessMetricPrioritization
     );
 
-    selectedErrorKey = "enabled";
+    if (this.props.errorKey === "disabled") {
+      selectedErrorKey = "disabled";
+    } else {
+      selectedErrorKey = "enabled";
+    }
 
     this.state = {
       activeTabKey: introTabKey,
