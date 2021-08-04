@@ -111,7 +111,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     defaultRender
   ) => {
     if (!props) {
-      return <></>;
+      return <div />;
     }
     const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
       (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
