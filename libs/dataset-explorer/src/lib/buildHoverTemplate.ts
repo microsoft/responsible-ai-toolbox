@@ -20,35 +20,33 @@ export function buildHoverTemplate(
     case ChartTypes.Scatter: {
       if (chartProps.xAxis) {
         if (chartProps.xAxis.options.dither) {
-          hovertemplate += xName + ": %{customdata.X}<br>";
+          hovertemplate += `${xName}: %{customdata.X}<br>`;
         } else {
-          hovertemplate += xName + ": %{x}<br>";
+          hovertemplate += `${xName}: %{x}<br>`;
         }
       }
       if (chartProps.yAxis) {
         if (chartProps.yAxis.options.dither) {
-          hovertemplate += yName + ": %{customdata.Y}<br>";
+          hovertemplate += `${yName}: %{customdata.Y}<br>`;
         } else {
-          hovertemplate += yName + ": %{y}<br>";
+          hovertemplate += `${yName}: %{y}<br>`;
         }
       }
       if (chartProps.colorAxis) {
-        hovertemplate +=
-          jointData.metaDict[chartProps.colorAxis.property].label +
-          ": %{customdata.Color}<br>";
+        hovertemplate += `${
+          jointData.metaDict[chartProps.colorAxis.property].label
+        }: %{customdata.Color}<br>`;
       }
-      hovertemplate +=
-        localization.Interpret.Charts.rowIndex +
-        ": %{customdata.AbsoluteIndex}<br>";
+      hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.AbsoluteIndex}<br>`;
       break;
     }
     case ChartTypes.Histogram: {
-      hovertemplate += xName + ": %{text}<br>";
+      hovertemplate += `${xName}: %{text}<br>`;
       if (
         chartProps.yAxis.property !== ColumnCategories.None &&
         jointData.metaDict[chartProps.yAxis.property].treatAsCategorical
       ) {
-        hovertemplate += yName + ": %{customdata.Y}<br>";
+        hovertemplate += `${yName}: %{customdata.Y}<br>`;
       }
       hovertemplate += localization.formatString(
         localization.Interpret.Charts.countTooltipPrefix,

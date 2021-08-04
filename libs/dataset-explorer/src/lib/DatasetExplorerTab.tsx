@@ -382,7 +382,7 @@ export class DatasetExplorerTab extends React.Component<
   }
 
   private generateDefaultYAxis(): ISelectorConfig {
-    const yKey = JointDataset.DataLabelRoot + "0";
+    const yKey = `${JointDataset.DataLabelRoot}0`;
     const yIsDithered =
       this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     return {

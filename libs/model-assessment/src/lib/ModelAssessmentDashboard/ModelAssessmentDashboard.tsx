@@ -321,11 +321,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             <CohortEditor
               jointDataset={this.state.jointDataset}
               filterList={this.state.baseCohort.cohort.filters}
-              cohortName={
-                localization.Interpret.Cohort.cohort +
-                " " +
-                (this.state.cohorts.length + 1).toString()
-              }
+              cohortName={`${localization.Interpret.Cohort.cohort} ${(
+                this.state.cohorts.length + 1
+              ).toString()}`}
               onSave={(manuallyCreatedCohort: Cohort): void => {
                 const newErrorCohort = new ErrorCohort(
                   manuallyCreatedCohort,

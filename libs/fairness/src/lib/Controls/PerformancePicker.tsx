@@ -61,7 +61,7 @@ export class PerformancePicker extends React.PureComponent<
         </div>
         {this.state.showCallout && (
           <Callout
-            target={"#" + this._performanceDropdownHelpId}
+            target={`#${this._performanceDropdownHelpId}`}
             setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"
