@@ -3,7 +3,8 @@
 
 import {
   defaultModelAssessmentContext,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  toScientific
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -86,7 +87,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const items = this.props.data
       .sort((a, b) => b["Effect of treatment"] - a["Effect of treatment"])
       .slice(0, maxCount);
-    const convertedItems = items.map((item) => this.toScientific(item));
+    const convertedItems = items.map((item) => toScientific(item));
     return (
       <div className={styles.listContainer}>
         <DetailsList
@@ -98,15 +99,5 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
         />
       </div>
     );
-  }
-  private toScientific(item: { [key: string]: any }): { [key: string]: any } {
-    const copy = _.cloneDeep(item);
-    Object.keys(copy).forEach((k) => {
-      const isFloat = typeof copy[k] === "number" && copy[k] % 1 !== 0;
-      if (isFloat) {
-        copy[k] = copy[k].toExponential(3);
-      }
-    });
-    return copy;
   }
 }
