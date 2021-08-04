@@ -272,7 +272,7 @@ class TestModelAnalysisValidations:
             '(test data) do not match' in str(ucve.value)
 
 
-class TestFeatureNameListValidations:
+class TestCausalUserConfigValidations:
 
     def test_treatment_features_list_not_having_train_features(self):
         X_train, y_train, X_test, y_test, _ = \
@@ -294,6 +294,9 @@ class TestFeatureNameListValidations:
         with pytest.raises(UserConfigValidationException, match=message):
             model_analysis.causal.add(treatment_features=['not_a_feature'])
 
+
+class TestCounterfactualUserConfigValidations:
+
     def test_features_to_vary_list_not_having_train_features(self):
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset()
@@ -314,3 +317,93 @@ class TestFeatureNameListValidations:
         with pytest.raises(UserConfigValidationException, match=message):
             model_analysis.counterfactual.add(
                 total_CFs=10, features_to_vary=['not_a_feature'])
+
+    def test_permitted_range_not_having_train_features(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+
+        message = ("Feature names in permitted_range do "
+                   "not exist in train data: \\['not_a_feature'\\]")
+        with pytest.raises(UserConfigValidationException, match=message):
+            model_analysis.counterfactual.add(
+                total_CFs=10, permitted_range={'not_a_feature': [20, 40]})
+
+    def test_desired_class_not_set(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+        with pytest.raises(
+                UserConfigValidationException,
+                match='The desired_class attribute should be '
+                      'either \'opposite\' binary classification or '
+                      'the class value for multi-classification scenarios.'):
+            model_analysis.counterfactual.add(
+                total_CFs=10,
+                method='random')
+
+    def test_desired_range_not_set(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='regression')
+        with pytest.raises(
+                UserConfigValidationException,
+                match='The desired_range should not be None'
+                      ' for regression scenarios.'):
+            model_analysis.counterfactual.add(
+                total_CFs=10,
+                method='random')
+
+    def test_desired_class_opposite_multi_classification(self):
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='The desired_class attribute should not be \'opposite\''
+                      ' It should be the class value for multiclass'
+                      ' classification scenario.'):
+            model_analysis.counterfactual.add(
+                total_CFs=10,
+                method='random',
+                desired_class='opposite')

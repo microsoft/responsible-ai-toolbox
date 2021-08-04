@@ -116,13 +116,23 @@ class CounterfactualManager(BaseManager):
             if len(difference_set) > 0:
                 message = ("Feature names in features_to_vary do "
                            f"not exist in train data: {list(difference_set)}")
-            raise UserConfigValidationException(message)
+                raise UserConfigValidationException(message)
+
+        if new_counterfactual_config.permitted_range is not None:
+            permitted_features = \
+                list(new_counterfactual_config.permitted_range)
+            difference_set = set(permitted_features) - set(self._train.columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in permitted_range do "
+                           f"not exist in train data: {list(difference_set)}")
+                raise UserConfigValidationException(message)
 
         if self._task_type == ModelTask.CLASSIFICATION:
             if new_counterfactual_config.desired_class is None:
                 raise UserConfigValidationException(
                     'The desired_class attribute should be either \'{0}\''
-                    ' or the class value for classification scenarios.'.format(
+                    ' binary classification or the class value for '
+                    'multi-classification scenarios.'.format(
                         CounterfactualConstants.OPPOSITE))
 
             is_multiclass = len(np.unique(
