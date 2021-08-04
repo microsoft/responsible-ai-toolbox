@@ -86,7 +86,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       this.state.selectedCohortIndex
     );
     const metricsList = this.generateMetrics().reverse();
-    const height = Math.max(400, 160 * metricsList.length) + "px";
+    const height = `${Math.max(400, 160 * metricsList.length)}px`;
     const cohortOptions =
       this.state.chartProps.yAxis.property !== cohortKey
         ? this.context.errorCohorts.map((errorCohort, index) => {
@@ -293,7 +293,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       this.context.modelMetadata.modelType === ModelTypes.Binary &&
       this.context.jointDataset.hasPredictedProbabilities
     ) {
-      bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
+      bestModelMetricKey = `${JointDataset.ProbabilityYRoot}0`;
     } else if (this.context.modelMetadata.modelType === ModelTypes.Regression) {
       if (
         this.context.jointDataset.hasPredictedY &&

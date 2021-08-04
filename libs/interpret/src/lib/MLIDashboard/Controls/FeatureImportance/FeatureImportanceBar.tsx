@@ -125,7 +125,7 @@ export class FeatureImportanceBar extends React.PureComponent<
           </div>
           {this.state.isCalloutVisible && (
             <Callout
-              target={"#" + this._iconId}
+              target={`#${this._iconId}`}
               setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"

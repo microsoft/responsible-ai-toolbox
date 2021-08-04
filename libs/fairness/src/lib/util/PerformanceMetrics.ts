@@ -225,9 +225,9 @@ export const performanceOptions: { [key: string]: IPerformanceOption } = {
 // selected by default.
 export const defaultPerformanceMetricPrioritization = [
   // binary classification
-  performanceOptions["accuracy_score"].key,
+  performanceOptions.accuracy_score.key,
   // regression / probability
-  performanceOptions["mean_squared_error"].key,
-  performanceOptions["mean_absolute_error"].key,
-  performanceOptions["root_mean_squared_error"].key
+  performanceOptions.mean_squared_error.key,
+  performanceOptions.mean_absolute_error.key,
+  performanceOptions.root_mean_squared_error.key
 ];

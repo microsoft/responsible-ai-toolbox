@@ -355,12 +355,12 @@ export class ScatterUtils {
     props.data[0].yAccessor = yAccessor;
     props.data[0].xAccessor = xAccessor;
     if (props.data[0].datapointLevelAccessors) {
-      props.data[0].datapointLevelAccessors["text"].path = [
+      props.data[0].datapointLevelAccessors.text.path = [
         xAccessor,
         yAccessor,
         colorAccessor
       ];
-      props.data[0].datapointLevelAccessors["text"].mapArgs = [
+      props.data[0].datapointLevelAccessors.text.mapArgs = [
         localization.Interpret.ExplanationScatter.index,
         modelData.featureNames[maxIndex],
         localization.Interpret.ExplanationScatter.predictedY
@@ -420,12 +420,12 @@ export class ScatterUtils {
     props.data[0].xAccessor = xAccessor;
     props.data[0].yAccessor = yAccessor;
     if (props.data[0].datapointLevelAccessors) {
-      props.data[0].datapointLevelAccessors["text"].path = [
+      props.data[0].datapointLevelAccessors.text.path = [
         xAccessor,
         yAccessor,
         colorAccessor
       ];
-      props.data[0].datapointLevelAccessors["text"].mapArgs = [
+      props.data[0].datapointLevelAccessors.text.mapArgs = [
         localization.formatString(
           localization.Interpret.ExplanationScatter.dataLabel,
           modelData.featureNames[maxIndex]
@@ -443,10 +443,10 @@ export class ScatterUtils {
 
     const yAxisLabel =
       modelData.modelType === ModelTypes.Binary
-        ? localization.formatString(
+        ? `${localization.formatString(
             localization.Interpret.ExplanationScatter.importanceLabel,
             modelData.featureNames[maxIndex]
-          ) + ` : ${modelData.classNames[0]}`
+          )} : ${modelData.classNames[0]}`
         : localization.formatString(
             localization.Interpret.ExplanationScatter.importanceLabel,
             modelData.featureNames[maxIndex]
@@ -606,9 +606,9 @@ export class ScatterUtils {
     label: string,
     index: number
   ): void {
-    if (props.data[0]?.datapointLevelAccessors?.["text"]?.mapArgs) {
-      props.data[0].datapointLevelAccessors["text"].mapArgs[index] = label;
-      props.data[0].datapointLevelAccessors["text"].path[index] = accessor;
+    if (props.data[0]?.datapointLevelAccessors?.text?.mapArgs) {
+      props.data[0].datapointLevelAccessors.text.mapArgs[index] = label;
+      props.data[0].datapointLevelAccessors.text.path[index] = accessor;
     }
   }
 
