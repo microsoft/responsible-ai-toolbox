@@ -7,10 +7,15 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  SelectionMode
+  IDetailsColumnRenderTooltipProps,
+  IDetailsHeaderProps,
+  IRenderFunction,
+  SelectionMode,
+  TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -33,6 +38,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const styles = TreatmentStyles();
     const defaultColumns: IColumn[] = [
       {
+        ariaLabel: localization.Counterfactuals.RecommendedTreatment,
         fieldName: "Treatment",
         key: "Treatment",
         maxWidth: 400,
@@ -40,6 +46,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
         name: localization.Counterfactuals.RecommendedTreatment
       },
       {
+        ariaLabel: localization.Counterfactuals.EffectOfTreatment,
         fieldName: "Effect of treatment",
         isSorted: true,
         isSortedDescending: false,
@@ -49,6 +56,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
         name: localization.Counterfactuals.EffectOfTreatment
       },
       {
+        ariaLabel: localization.Counterfactuals.EffectLowerBound,
         fieldName: "Effect of treatment lower bound",
         key: "Effect of treatment lower bound",
         maxWidth: 300,
@@ -56,6 +64,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
         name: localization.Counterfactuals.EffectLowerBound
       },
       {
+        ariaLabel: localization.Counterfactuals.EffectUpperBound,
         fieldName: "Effect of treatment upper bound",
         key: "Effect of treatment upper bound",
         maxWidth: 300,
@@ -68,6 +77,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
     const leftKeys = allKeys.filter((c) => !defaultKeys.has(c));
     const leftColumns = leftKeys.map((k) => {
       return {
+        ariaLabel: k,
         fieldName: k,
         key: k,
         maxWidth: 100,
@@ -87,9 +97,31 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
           columns={columns}
           selectionMode={SelectionMode.none}
           setKey="set"
+          onRenderDetailsHeader={this.onRenderDetailsHeader}
+          checkboxVisibility={CheckboxVisibility.hidden}
+          selectionPreservedOnEmptyClick
           layoutMode={DetailsListLayoutMode.justified}
         />
       </div>
     );
   }
+
+  private onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
+    props,
+    defaultRender
+  ) => {
+    if (!props) {
+      return <div />;
+    }
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+    return (
+      <div>
+        {defaultRender?.({
+          ...props,
+          onRenderColumnHeaderTooltip
+        })}
+      </div>
+    );
+  };
 }
