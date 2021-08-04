@@ -227,11 +227,9 @@ class CausalManager(BaseManager):
             raise ValueError(message)
 
         for i in range(len(treatment_features)):
-            treatment_feature = treatment_features[i]
-            cost = 0 if treatment_cost is None else treatment_cost[i]
             policy = self._create_policy(
                 analysis, X_test,
-                treatment_feature, cost,
+                treatment_features[i], treatment_cost[i],
                 alpha, max_tree_depth, min_tree_leaf_samples)
             result.policies.append(policy)
         self._results.append(result)
