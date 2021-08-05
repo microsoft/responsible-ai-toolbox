@@ -131,7 +131,7 @@ class CounterfactualManager(BaseManager):
             if new_counterfactual_config.desired_class is None:
                 raise UserConfigValidationException(
                     'The desired_class attribute should be either \'{0}\''
-                    ' binary classification or the class value for '
+                    ' for binary classification or the class value for '
                     'multi-classification scenarios.'.format(
                         CounterfactualConstants.OPPOSITE))
 

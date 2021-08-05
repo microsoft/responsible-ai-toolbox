@@ -356,7 +356,7 @@ class TestCounterfactualUserConfigValidations:
         with pytest.raises(
                 UserConfigValidationException,
                 match='The desired_class attribute should be '
-                      'either \'opposite\' binary classification or '
+                      'either \'opposite\' for binary classification or '
                       'the class value for multi-classification scenarios.'):
             model_analysis.counterfactual.add(
                 total_CFs=10,
