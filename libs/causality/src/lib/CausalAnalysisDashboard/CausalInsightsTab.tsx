@@ -31,9 +31,8 @@ export class CausalInsightsTab extends React.PureComponent<
   ICausalInsightsTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public constructor(props: ICausalInsightsTabProps) {
     super(props);
