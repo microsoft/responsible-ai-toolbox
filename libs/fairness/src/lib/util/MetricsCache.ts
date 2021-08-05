@@ -184,9 +184,12 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Min) {
       response = { overall: min };
       if (minLowerBound && minUpperBound) {
-        response.bounds = {
-          lower: minLowerBound,
-          upper: minUpperBound
+        response = {
+          ...response,
+          bounds: {
+            lower: minLowerBound,
+            upper: minUpperBound
+          }
         };
       }
       return response;
@@ -195,9 +198,12 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Max) {
       response = { overall: min };
       if (maxLowerBound && maxUpperBound) {
-        response.bounds = {
-          lower: maxLowerBound,
-          upper: maxUpperBound
+        response = {
+          ...response,
+          bounds: {
+            lower: maxLowerBound,
+            upper: maxUpperBound
+          }
         };
       }
       return response;
@@ -224,13 +230,21 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Difference) {
       response = { overall: max - min };
       if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
-        response.bounds = {
-          lower: _.max([maxLowerBound - minUpperBound, 0]),
-          upper: _.max([
-            minUpperBound - maxLowerBound,
-            maxUpperBound - minLowerBound
-          ])
-        };
+        const lower = _.max([maxLowerBound - minUpperBound, 0]);
+        const upper = _.max([
+          minUpperBound - maxLowerBound,
+          maxUpperBound - minLowerBound
+        ]);
+
+        if (lower && upper) {
+          response = {
+            ...response,
+            bounds: {
+              lower,
+              upper
+            }
+          };
+        }
       }
       return response;
     }
