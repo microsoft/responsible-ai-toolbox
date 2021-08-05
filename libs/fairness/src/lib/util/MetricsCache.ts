@@ -39,7 +39,7 @@ export class MetricsCache {
   ): Promise<IMetricResponse> {
     let value = this.cache[featureIndex][modelIndex][key];
     if (
-      (value === undefined || (!value["bounds"] && errorKey !== "disabled")) &&
+      (value === undefined || (!value.bounds && errorKey !== "disabled")) &&
       this.fetchMethod
     ) {
       value = await this.fetchMethod({
@@ -71,7 +71,7 @@ export class MetricsCache {
         fairnessMethod,
         errorKey
       )
-    )["overall"];
+    ).overall;
     const truePositiveRateMetric = (
       await this.getFairnessMetric(
         binIndexVector,
@@ -83,7 +83,7 @@ export class MetricsCache {
         fairnessMethod,
         errorKey
       )
-    )["overall"];
+    ).overall;
 
     if (
       falsePositiveRateMetric === Number.NaN ||
@@ -128,7 +128,7 @@ export class MetricsCache {
     const metricKey = fairnessOptions[key].fairnessMetric;
     let value = this.cache[featureIndex][modelIndex][metricKey];
     if (
-      (value === undefined || (!value["bounds"] && errorKey !== "disabled")) &&
+      (value === undefined || (!value.bounds && errorKey !== "disabled")) &&
       this.fetchMethod
     ) {
       value = await this.fetchMethod({
@@ -184,7 +184,7 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Min) {
       response = { overall: min };
       if (minLowerBound && minUpperBound) {
-        response["bounds"] = {
+        response.bounds = {
           lower: minLowerBound,
           upper: minUpperBound
         };
@@ -195,7 +195,7 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Max) {
       response = { overall: min };
       if (maxLowerBound && maxUpperBound) {
-        response["bounds"] = {
+        response.bounds = {
           lower: maxLowerBound,
           upper: maxUpperBound
         };
@@ -224,7 +224,7 @@ export class MetricsCache {
     if (fairnessMethod === FairnessModes.Difference) {
       response = { overall: max - min };
       if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
-        response["bounds"] = {
+        response.bounds = {
           lower: _.max([maxLowerBound - minUpperBound, 0]),
           upper: _.max([
             minUpperBound - maxLowerBound,

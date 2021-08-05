@@ -174,7 +174,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       ];
     }
 
-    barPlotlyProps.data[0].customdata = ([] as unknown) as Datum[];
+    barPlotlyProps.data[0].customdata = [] as unknown as Datum[];
     const digitsOfPrecision = 1;
 
     for (let i = 0; i < this.props.dashboardContext.groupNames.length; i++) {
@@ -192,25 +192,21 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         barPlotlyProps.data[0].error_x.arrayminus[i] !== 0 &&
         barPlotlyProps.data[0].error_x.array[i] !== 0 &&
         x
-          ? "[" +
-            (
+          ? `[${(
               Number(x) -
               100 * Number(barPlotlyProps.data[0].error_x.arrayminus[i])
-            ).toFixed(digitsOfPrecision) +
-            "%, " +
-            (
+            ).toFixed(digitsOfPrecision)}%, ${(
               Number(x) +
               100 * Number(barPlotlyProps.data[0].error_x.array[i])
-            ).toFixed(digitsOfPrecision) +
-            "%]"
+            ).toFixed(digitsOfPrecision)}%]`
           : "";
 
-      barPlotlyProps.data[0].customdata.push(({
+      barPlotlyProps.data[0].customdata.push({
         outcomeMetric: outcomeMetric.title,
         x,
         xBounds,
         y
-      } as unknown) as Datum);
+      } as unknown as Datum);
       barPlotlyProps.data[0].hovertemplate =
         "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}: %{customdata.x}% %{customdata.xBounds}<extra></extra>";
     }

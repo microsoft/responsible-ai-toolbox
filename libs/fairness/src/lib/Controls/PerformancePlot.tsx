@@ -314,11 +314,9 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
     }
 
     const digitsOfPrecision = 1;
-    const outcomeMetricNames = barPlotlyProps.data.map((datum) => {
-      return datum.name;
-    });
 
     for (let j = 0; j < barPlotlyProps.data.length; j++) {
+      const outcomeMetricName = barPlotlyProps.data[j].name;
       barPlotlyProps.data[j].customdata = [] as unknown as Datum[];
       if (barPlotlyProps.data) {
         for (
@@ -326,8 +324,8 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           i < this.props.dashboardContext.groupNames.length;
           i++
         ) {
-          const outcomeMetric = outcomeMetricNames[j]
-            ? `${outcomeMetricNames[j]}: `
+          const outcomeMetric = outcomeMetricName
+            ? `${outcomeMetricName}: `
             : "";
           const x = barPlotlyProps
             ? (Number(barPlotlyProps.data[j].x?.[i]) * 100).toFixed(
@@ -362,7 +360,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
             _.isArray(barPlotlyProps.data[j].customdata)
           ) {
             barPlotlyProps.data[j].customdata!.push({
-              outcomeMetric: outcomeMetric[j],
+              outcomeMetric,
               x,
               xBounds,
               y

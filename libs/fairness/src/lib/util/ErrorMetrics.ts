@@ -27,6 +27,6 @@ export const errorOptions: { [key: string]: IErrorOption } = {
 
 export const defaultErrorMetricPrioritization = [
   // binary classification
-  errorOptions["enabled"].key,
-  errorOptions["disabled"].key
+  errorOptions.enabled.key,
+  errorOptions.disabled.key
 ];

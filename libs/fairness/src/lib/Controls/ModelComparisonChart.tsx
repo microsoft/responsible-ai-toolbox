@@ -171,12 +171,8 @@ export class ModelComparisonChart extends React.Component<
         />
       );
     } else {
-      const {
-        fairnessArray,
-        fairnessBounds,
-        performanceBounds,
-        errorKey
-      } = this.state;
+      const { fairnessArray, fairnessBounds, performanceBounds, errorKey } =
+        this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
           Fairness: fairnessArray[index],
@@ -242,7 +238,7 @@ export class ModelComparisonChart extends React.Component<
             series.name = this.props.dashboardContext.modelNames[series.name];
           }
 
-          series.customdata = ([] as unknown) as Datum[];
+          series.customdata = [] as unknown as Datum[];
           const digitsOfPrecision = 5;
 
           for (let modelId = 0; modelId < data.length; modelId++) {
@@ -260,15 +256,11 @@ export class ModelComparisonChart extends React.Component<
               series.error_x.arrayminus[modelId] !== 0 &&
               series.error_x.array[modelId] !== 0 &&
               x
-                ? "[" +
-                  (
+                ? `[${(
                     Number(x) - Number(series.error_x.arrayminus[modelId])
-                  ).toFixed(digitsOfPrecision) +
-                  ", " +
-                  (Number(x) + Number(series.error_x.array[modelId])).toFixed(
-                    digitsOfPrecision
-                  ) +
-                  "]"
+                  ).toFixed(digitsOfPrecision)}, ${(
+                    Number(x) + Number(series.error_x.array[modelId])
+                  ).toFixed(digitsOfPrecision)}]`
                 : "";
             const yBounds =
               series?.error_y?.type === "data" &&
@@ -277,24 +269,20 @@ export class ModelComparisonChart extends React.Component<
               series.error_y.arrayminus[modelId] !== 0 &&
               series.error_y.array[modelId] !== 0 &&
               y
-                ? "[" +
-                  (
+                ? `[${(
                     Number(y) - Number(series.error_y.arrayminus[modelId])
-                  ).toFixed(digitsOfPrecision) +
-                  ", " +
-                  (Number(y) + Number(series.error_y.array[modelId])).toFixed(
-                    digitsOfPrecision
-                  ) +
-                  "]"
+                  ).toFixed(digitsOfPrecision)}, ${(
+                    Number(y) + Number(series.error_y.array[modelId])
+                  ).toFixed(digitsOfPrecision)}]`
                 : "";
 
-            series.customdata.push(({
+            series.customdata.push({
               modelId,
               x,
               xBounds,
               y,
               yBounds
-            } as unknown) as Datum);
+            } as unknown as Datum);
             series.hovertemplate =
               "%{text} <br> %{xaxis.title.text}: %{customdata.x} %{customdata.xBounds}<br> %{yaxis.title.text}: %{customdata.y} %{customdata.yBounds}<extra></extra>";
           }
