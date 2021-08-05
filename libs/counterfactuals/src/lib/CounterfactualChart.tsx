@@ -63,7 +63,7 @@ export interface ICounterfactualChartState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
-  originalData?: any;
+  originalData?: { [key: string]: string | number };
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -465,7 +465,9 @@ export class CounterfactualChart extends React.PureComponent<
     this.toggleSelectionOfPoint(index);
   };
 
-  private getOriginalData(index: number): { [key: string]: any } | undefined {
+  private getOriginalData(
+    index: number
+  ): { [key: string]: string | number } | undefined {
     const row = this.context.jointDataset.getRow(index);
     const dataPoint = JointDataset.datasetSlice(
       row,
@@ -478,10 +480,13 @@ export class CounterfactualChart extends React.PureComponent<
         index
       )
     };
-    const featureNames = this.context?.dataset?.feature_names;
-    featureNames.forEach((f, index) => {
-      data[f] = dataPoint[index];
-    });
+    if (this.context?.dataset?.target_column) {
+      const featureNames = this.context?.dataset?.feature_names;
+      featureNames.forEach((f, index) => {
+        data[f] = dataPoint[index];
+      });
+      data[this.context.dataset.target_column] = row[JointDataset.TrueYLabel];
+    }
     return data;
   }
 
@@ -813,7 +818,7 @@ export class CounterfactualChart extends React.PureComponent<
   private setCustomRowProperty = (
     key: string | number,
     isString: boolean,
-    newValue?: string
+    newValue?: string | number
   ): void => {
     if (!this.temporaryPoint || !newValue) {
       return;
@@ -825,7 +830,7 @@ export class CounterfactualChart extends React.PureComponent<
     } else {
       const asNumber = +newValue;
       // because " " evaluates to 0 in js
-      const isWhitespaceOnly = /^\s*$/.test(newValue);
+      const isWhitespaceOnly = /^\s*$/.test(newValue?.toString());
       if (Number.isNaN(asNumber) || isWhitespaceOnly) {
         this.validationErrors[key] =
           localization.Interpret.WhatIfTab.nonNumericValue;

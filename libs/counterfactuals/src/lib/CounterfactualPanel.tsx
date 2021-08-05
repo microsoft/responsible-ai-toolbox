@@ -26,8 +26,8 @@ export interface ICounterfactualPanelProps {
   selectedIndex: number;
   data?: ICounterfactualData;
   isPanelOpen: boolean;
-  temporaryPoint: { [key: string]: any } | undefined;
-  originalData: { [key: string]: any };
+  temporaryPoint: { [key: string]: string | number } | undefined;
+  originalData: { [key: string]: string | number };
   closePanel(): void;
   saveAsPoint(): void;
   setCustomRowProperty(
@@ -93,7 +93,9 @@ export class CounterfactualPanel extends React.Component<
                 <TextField
                   id="whatIfNameLabel"
                   label={localization.Counterfactuals.counterfactualName}
-                  value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
+                  value={this.props.temporaryPoint?.[
+                    WhatIfConstants.namePath
+                  ]?.toString()}
                   onChange={this.setCustomRowProperty.bind(
                     this,
                     WhatIfConstants.namePath,
