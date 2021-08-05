@@ -69,16 +69,25 @@ export function generateRandomMetrics(
   const bins: number[] = new Array(binSize + 1)
     .fill(0)
     .map(() => Math.random() / 3 + 0.33);
-  const binBounds: IBounds[] = new Array(binSize + 1)
-    .fill({})
-    .map(() => ({ lower: Math.random() / 3, upper: Math.random() / 3 + 0.66 }));
+  const binBounds: IBounds[] = bins.map((bin) => {
+    return {
+      lower: bin - Math.pow(Math.random() / 3, 2),
+      upper: bin + Math.pow(Math.random() / 3, 2)
+    };
+  });
+  const global: number = Math.random() / 3 + 0.33;
+  const bounds: IBounds = {
+    lower: global - Math.pow(Math.random() / 3, 2),
+    upper: global + Math.pow(Math.random() / 3, 2)
+  };
+
   const promise = new Promise<IMetricResponse>((resolve, reject) => {
     const timeout = setTimeout(() => {
       resolve({
         binBounds,
         bins,
-        bounds: { lower: Math.random() / 3, upper: Math.random() / 3 + 0.66 },
-        global: Math.random() / 3 + 0.33
+        bounds,
+        global
       });
     }, 300);
     if (abortSignal) {

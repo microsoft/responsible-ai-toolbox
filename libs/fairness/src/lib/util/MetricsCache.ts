@@ -236,7 +236,7 @@ export class MetricsCache {
           maxUpperBound - minLowerBound
         ]);
 
-        if (lower && upper) {
+        if (lower !== undefined && upper !== undefined) {
           response = {
             ...response,
             bounds: {
