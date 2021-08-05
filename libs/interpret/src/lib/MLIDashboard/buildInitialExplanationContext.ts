@@ -201,7 +201,7 @@ export function buildInitialExplanationContext(
     weightVectorOptions.push(index);
   });
   return {
-    activeGlobalTab: GlobalTabKeys.ModelPerformance,
+    activeGlobalTab: GlobalTabKeys.ExplanationTab,
     cohorts,
     jointDataset,
     modelMetadata,
