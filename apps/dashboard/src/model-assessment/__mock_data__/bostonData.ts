@@ -1256,14 +1256,8 @@ export const bostonCounterfactualData: ICounterfactualData = {
     ]
   ],
   desired_class: "opposite",
-  feature_names: ["age", "capital-gain", "capital-loss", "hours-per-week"],
-  feature_names_including_target: [
-    "age",
-    "capital-gain",
-    "capital-loss",
-    "hours-per-week",
-    "income"
-  ],
+  feature_names: ["CRIM", "ZN", "INDUS", "CHAS"],
+  feature_names_including_target: ["CRIM", "ZN", "INDUS", "CHAS", "y"],
   local_importance: [
     [
       -0.20821475752391416, -0.22963955590635177, -0.08919800506838538,
@@ -1466,17 +1460,13 @@ export const bostonCounterfactualData: ICounterfactualData = {
 
 export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
   config: {
-    treatment_features: [
-      "OverTime (base=No): Yes",
-      "StockOptionLevel",
-      "MonthlyIncome"
-    ]
+    treatment_features: ["CRIM", "ZN", "INDUS"]
   },
   global_effects: [
     {
       ci_lower: -0.2419328967749073,
       ci_upper: -0.1428698896693828,
-      feature: "OverTime (base=No): Yes",
+      feature: "CRIM",
       p_value: 2.6711762067333496e-14,
       point: -0.19240139322214506,
       stderr: 0.025271639654330606,
@@ -1485,7 +1475,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
     {
       ci_lower: 0.024554703670239472,
       ci_upper: 0.07637320978494788,
-      feature: "StockOptionLevel",
+      feature: "ZN",
       p_value: 0.0001348326275600237,
       point: 0.05046395672759368,
       stderr: 0.013219249568728346,
@@ -1494,7 +1484,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
     {
       ci_lower: 0.0000018156074109169128,
       ci_upper: 0.0000162287897705993,
-      feature: "MonthlyIncome",
+      feature: "INDUS",
       p_value: 0.014137461979327226,
       point: 0.000009022198590758107,
       stderr: 0.0000036768997985094956,
@@ -1507,7 +1497,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1516,7 +1506,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1525,7 +1515,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1536,7 +1526,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1545,7 +1535,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1554,7 +1544,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1565,7 +1555,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1574,7 +1564,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1583,7 +1573,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1594,7 +1584,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1603,7 +1593,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1612,7 +1602,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1623,7 +1613,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1632,7 +1622,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1641,7 +1631,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1652,7 +1642,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1661,7 +1651,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1670,7 +1660,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1681,7 +1671,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1690,7 +1680,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1699,7 +1689,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1710,7 +1700,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1719,7 +1709,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1728,7 +1718,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1739,7 +1729,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1748,7 +1738,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1757,7 +1747,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1768,7 +1758,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1777,7 +1767,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1786,7 +1776,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1797,7 +1787,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1806,7 +1796,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1815,7 +1805,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1826,7 +1816,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1835,7 +1825,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1844,7 +1834,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1855,7 +1845,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1864,7 +1854,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1873,7 +1863,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1884,7 +1874,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1893,7 +1883,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1902,7 +1892,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1913,7 +1903,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1922,7 +1912,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1931,7 +1921,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -1942,7 +1932,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -1951,7 +1941,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -1960,7 +1950,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -1971,7 +1961,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -1980,7 +1970,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -1989,7 +1979,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2000,7 +1990,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2009,7 +1999,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2018,7 +2008,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2029,7 +2019,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2038,7 +2028,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2047,7 +2037,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2058,7 +2048,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2067,7 +2057,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2076,7 +2066,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2087,7 +2077,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2096,7 +2086,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2105,7 +2095,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2116,7 +2106,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2125,7 +2115,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2134,7 +2124,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2145,7 +2135,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2154,7 +2144,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2163,7 +2153,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2174,7 +2164,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2183,7 +2173,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2192,7 +2182,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2203,7 +2193,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2212,7 +2202,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2221,7 +2211,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2232,7 +2222,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2241,7 +2231,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2250,7 +2240,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2261,7 +2251,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2270,7 +2260,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2279,7 +2269,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2290,7 +2280,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2299,7 +2289,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2308,7 +2298,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2319,7 +2309,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2328,7 +2318,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2337,7 +2327,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2348,7 +2338,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2357,7 +2347,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2366,7 +2356,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2377,7 +2367,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2386,7 +2376,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2395,7 +2385,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2406,7 +2396,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2415,7 +2405,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2424,7 +2414,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2435,7 +2425,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2444,7 +2434,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2453,7 +2443,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2464,7 +2454,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2473,7 +2463,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2482,7 +2472,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2493,7 +2483,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2502,7 +2492,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2511,7 +2501,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2522,7 +2512,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2531,7 +2521,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2540,7 +2530,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2551,7 +2541,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2560,7 +2550,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2569,7 +2559,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2580,7 +2570,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2589,7 +2579,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2598,7 +2588,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2609,7 +2599,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2618,7 +2608,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2627,7 +2617,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2638,7 +2628,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2647,7 +2637,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2656,7 +2646,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2667,7 +2657,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2676,7 +2666,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2685,7 +2675,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2696,7 +2686,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2705,7 +2695,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2714,7 +2704,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2725,7 +2715,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2734,7 +2724,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2743,7 +2733,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2754,7 +2744,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2763,7 +2753,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2772,7 +2762,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2783,7 +2773,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2792,7 +2782,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2801,7 +2791,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2812,7 +2802,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2821,7 +2811,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2830,7 +2820,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
@@ -2841,7 +2831,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.6205969134844145,
         ci_upper: 0.08391259687531821,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.13541889529026166,
         point: -0.2683421583045481,
         stderr: 0.17972511635846725,
@@ -2850,7 +2840,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.013814157021996676,
         ci_upper: 0.4224305766318246,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.036395100224307066,
         point: 0.21812236682691066,
         stderr: 0.10424079800265262,
@@ -2859,7 +2849,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000013135089088685406,
         ci_upper: 0.00016718524433278489,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.021779202266668587,
         point: 0.00009016016671073516,
         stderr: 0.000039299231123435804,
@@ -2870,7 +2860,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.5852475174832195,
         ci_upper: 0.018440074107750837,
-        feature: "OverTime (base=No): Yes",
+        feature: "CRIM",
         p_value: 0.06573492498091793,
         point: -0.2834037216877343,
         stderr: 0.1540047665040738,
@@ -2879,7 +2869,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: -0.04502125543631039,
         ci_upper: 0.291109171393397,
-        feature: "StockOptionLevel",
+        feature: "ZN",
         p_value: 0.15130719936772685,
         point: 0.12304395797854331,
         stderr: 0.08574913352517222,
@@ -2888,7 +2878,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
       {
         ci_lower: 0.000026488867786397727,
         ci_upper: 0.00012910783721632458,
-        feature: "MonthlyIncome",
+        feature: "INDUS",
         p_value: 0.002960511625147853,
         point: 0.00007779835250136117,
         stderr: 0.00002617878956944418,
