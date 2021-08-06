@@ -6,7 +6,60 @@ import { IFairnessMetadata, PredictionTypes } from "./IFairnessMetadata";
 const fairnessDatasets = {
   binaryClassification: {
     charts: ["Selection rate", "False positive and false negative rates"],
-    defaultErrorMetric: "Enabled",
+    defaultErrorMetric: "enabled",
+    defaultFairnessMetric: "Demographic parity difference",
+    defaultPerformanceMetric: "Accuracy",
+    fairnessMetrics: [
+      "Accuracy score difference",
+      "Minimum accuracy score",
+      "Accuracy score ratio",
+      "Balanced accuracy score minimum",
+      "Demographic parity difference",
+      "Demographic parity ratio",
+      "Equalized odds difference",
+      "Equalized odds ratio",
+      "Error rate difference",
+      "Error rate ratio",
+      "Minimum F1-score",
+      "False negative rate difference",
+      "False negative rate ratio",
+      "False positive rate difference",
+      "False positive rate ratio",
+      "Minimum precision score",
+      "Minimum recall score",
+      "True negative rate difference",
+      "True negative rate ratio",
+      "True negative rate difference",
+      "True positive rate ratio"
+    ],
+    numberOfModels: 3,
+    performanceMetrics: [
+      "Accuracy",
+      "Balanced accuracy",
+      "Precision",
+      "Recall",
+      "F1-score"
+    ],
+    predictionType: PredictionTypes.BinaryClassification,
+    sensitiveFeatures: {
+      "Sensitive feature 0": ["a", "b", "very long group name indeed"],
+      "Sensitive feature 1": ["1", "2", "3"],
+      "Sensitive feature 2": [
+        "test1",
+        "test2",
+        "test3",
+        "test4",
+        "test5",
+        "test6",
+        "test7",
+        "test8"
+      ],
+      "Sensitive feature 3": ["0", "1", "2", "3"]
+    }
+  },
+  binaryClassificationWithError: {
+    charts: ["Selection rate", "False positive and false negative rates"],
+    defaultErrorMetric: "enabled",
     defaultFairnessMetric: "Demographic parity difference",
     defaultPerformanceMetric: "Accuracy",
     fairnessMetrics: [
@@ -59,7 +112,7 @@ const fairnessDatasets = {
   },
   probability: {
     charts: ["Distribution of predictions", "Over- and underprediction"],
-    defaultErrorMetric: "Enabled",
+    defaultErrorMetric: "enabled",
     defaultFairnessMetric: "Maximum mean squared error",
     defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [
@@ -84,7 +137,7 @@ const fairnessDatasets = {
   },
   regression: {
     charts: ["Distribution of predictions"],
-    defaultErrorMetric: "Enabled",
+    defaultErrorMetric: "enabled",
     defaultFairnessMetric: "Maximum mean absolute error",
     defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [
@@ -107,6 +160,7 @@ const fairnessDatasets = {
     }
   }
 };
+
 const withType: {
   [key in keyof typeof fairnessDatasets]: IFairnessMetadata;
 } = fairnessDatasets;

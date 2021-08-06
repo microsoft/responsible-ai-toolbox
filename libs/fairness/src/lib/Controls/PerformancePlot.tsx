@@ -20,7 +20,7 @@ import { SharedStyles } from "../Shared.styles";
 
 import { FormatMetrics } from "./../util/FormatMetrics";
 import { IFairnessContext } from "./../util/IFairnessContext";
-import { ModalHelp } from "./ModalHelp";
+import { CalloutHelpBar } from "./CalloutHelpBar";
 import { PerformancePlotLegend } from "./PerformancePlotLegend";
 
 interface IPerformancePlotProps {
@@ -45,7 +45,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
     const sharedStyles = SharedStyles();
-    let performanceChartModalHelpStrings: string[] = [];
+    let performanceChartCalloutHelpBarStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
         return `${name} `;
@@ -89,14 +89,13 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       // Plot Error Bars
       if (
         this.props.errorPickerProps.selectedErrorKey !== "disabled" &&
-        typeof this.props.metrics.falsePositiveRates !== "undefined"
+        this.props.metrics.falsePositiveRates !== undefined
       ) {
         barPlotlyProps.data[0].error_x = {
           array: this.props.metrics.falsePositiveRates.binBounds?.map(
             (binBound, index) => {
               if (
-                typeof this.props.metrics.falsePositiveRates?.bins[index] !==
-                "undefined"
+                this.props.metrics.falsePositiveRates?.bins[index] !== undefined
               ) {
                 return (
                   binBound.upper -
@@ -109,8 +108,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           arrayminus: this.props.metrics.falsePositiveRates.binBounds?.map(
             (binBound, index) => {
               if (
-                typeof this.props.metrics.falsePositiveRates?.bins[index] !==
-                "undefined"
+                this.props.metrics.falsePositiveRates?.bins[index] !== undefined
               ) {
                 return (
                   this.props.metrics.falsePositiveRates.bins[index] -
@@ -127,14 +125,13 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       }
       if (
         this.props.errorPickerProps.selectedErrorKey !== "disabled" &&
-        typeof this.props.metrics.falseNegativeRates !== "undefined"
+        this.props.metrics.falseNegativeRates !== undefined
       ) {
         barPlotlyProps.data[1].error_x = {
           array: this.props.metrics.falseNegativeRates.binBounds?.map(
             (binBound, index) => {
               if (
-                typeof this.props.metrics.falseNegativeRates?.bins[index] !==
-                "undefined"
+                this.props.metrics.falseNegativeRates?.bins[index] !== undefined
               ) {
                 return (
                   (binBound.upper -
@@ -148,8 +145,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           arrayminus: this.props.metrics.falseNegativeRates.binBounds?.map(
             (binBound, index) => {
               if (
-                typeof this.props.metrics.falseNegativeRates?.bins[index] !==
-                "undefined"
+                this.props.metrics.falseNegativeRates?.bins[index] !== undefined
               ) {
                 return (
                   (this.props.metrics.falseNegativeRates.bins[index] -
@@ -198,7 +194,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
-      performanceChartModalHelpStrings = [
+      performanceChartCalloutHelpBarStrings = [
         localization.Fairness.Report.classificationPerformanceHowToReadV2
       ];
     }
@@ -264,7 +260,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           }
         ];
       }
-      performanceChartModalHelpStrings = [
+      performanceChartCalloutHelpBarStrings = [
         localization.Fairness.Report.probabilityPerformanceHowToRead1,
         localization.Fairness.Report.probabilityPerformanceHowToRead2,
         localization.Fairness.Report.probabilityPerformanceHowToRead3
@@ -308,7 +304,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           )
         } as any
       ];
-      performanceChartModalHelpStrings = [
+      performanceChartCalloutHelpBarStrings = [
         localization.Fairness.Report.regressionPerformanceHowToRead
       ];
     }
@@ -379,9 +375,8 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <div className={sharedStyles.chartWrapper}>
-            <ModalHelp
-              theme={theme}
-              graphCalloutStrings={performanceChartModalHelpStrings}
+            <CalloutHelpBar
+              graphCalloutStrings={performanceChartCalloutHelpBarStrings}
               errorPickerProps={this.props.errorPickerProps}
               fairnessBounds={this.props.fairnessBounds}
               performanceBounds={this.props.performanceBounds}

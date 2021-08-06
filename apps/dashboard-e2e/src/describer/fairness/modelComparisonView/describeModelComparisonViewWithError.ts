@@ -25,10 +25,6 @@ export function describeModelComparisonViewWithError(
         "contain.text",
         data.defaultFairnessMetric
       );
-      cy.get("#errorMetricDropdown").should(
-        "contain.text",
-        data.defaultErrorMetric
-      );
       cy.get('button:contains("How to read this chart")').should("exist");
       // assert that the plot has the right number of points for models
       cy.get(".point").should("have.length", data.numberOfModels);

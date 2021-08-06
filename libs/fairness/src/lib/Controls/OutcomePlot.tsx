@@ -19,7 +19,7 @@ import { SharedStyles } from "../Shared.styles";
 import { FormatMetrics } from "./../util/FormatMetrics";
 import { IFairnessContext } from "./../util/IFairnessContext";
 import { performanceOptions } from "./../util/PerformanceMetrics";
-import { ModalHelp } from "./ModalHelp";
+import { CalloutHelpBar } from "./CalloutHelpBar";
 
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;
@@ -48,8 +48,8 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         ? "selection_rate"
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
-    console.log(outcomeMetric);
-    let outcomeChartModalHelpStrings: string[] = [];
+
+    let outcomeChartCalloutHelpBarStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
         return `${name} `;
@@ -79,9 +79,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         barPlotlyProps.data[0].error_x = {
           array: this.props.metrics.outcomes.binBounds?.map(
             (binBound, index) => {
-              if (
-                typeof this.props.metrics.outcomes?.bins[index] !== "undefined"
-              ) {
+              if (this.props.metrics.outcomes?.bins[index] !== undefined) {
                 return binBound.upper - this.props.metrics.outcomes.bins[index]; // convert from bounds to relative error
               }
               return 0;
@@ -89,9 +87,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           ) || [0],
           arrayminus: this.props.metrics.outcomes.binBounds?.map(
             (binBound, index) => {
-              if (
-                typeof this.props.metrics.outcomes?.bins[index] !== "undefined"
-              ) {
+              if (this.props.metrics.outcomes?.bins[index] !== undefined) {
                 return this.props.metrics.outcomes.bins[index] - binBound.lower; // convert from bounds to relative error
               }
               return 0;
@@ -105,7 +101,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
-      outcomeChartModalHelpStrings = [
+      outcomeChartCalloutHelpBarStrings = [
         localization.Fairness.Report.classificationOutcomesHowToRead
       ];
     }
@@ -137,7 +133,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           )
         } as any
       ];
-      outcomeChartModalHelpStrings = [
+      outcomeChartCalloutHelpBarStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
     }
@@ -169,7 +165,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           )
         } as any
       ];
-      outcomeChartModalHelpStrings = [
+      outcomeChartCalloutHelpBarStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
     }
@@ -218,9 +214,8 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <div className={sharedStyles.chartWrapper}>
-            <ModalHelp
-              theme={theme}
-              graphCalloutStrings={outcomeChartModalHelpStrings}
+            <CalloutHelpBar
+              graphCalloutStrings={outcomeChartCalloutHelpBarStrings}
               errorPickerProps={this.props.errorPickerProps}
               fairnessBounds={this.props.fairnessBounds}
               performanceBounds={this.props.performanceBounds}

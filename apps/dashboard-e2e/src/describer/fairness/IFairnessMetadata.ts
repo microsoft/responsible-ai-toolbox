@@ -16,11 +16,13 @@ export interface IFairnessMetadata {
 
 export enum PredictionTypes {
   BinaryClassification = "binaryClassification",
+  BinaryClassificationWithError = "binaryClassificationWithError",
   Regression = "regression",
   Probability = "probability"
 }
 
 export type PredictionType =
   | PredictionTypes.BinaryClassification
+  | PredictionTypes.BinaryClassificationWithError
   | PredictionTypes.Probability
   | PredictionTypes.Regression;

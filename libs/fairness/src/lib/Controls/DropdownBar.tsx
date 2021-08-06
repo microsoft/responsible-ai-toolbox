@@ -1,11 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// 1. (abandoned) Extend table with bounds
-// 2. Get tooltip on charts
-// 3. Move "How to " to be same alignment
-// 6. Check with strings (email everyone + deadline)
-
 import { localization } from "@responsible-ai/localization";
 import { Stack, Dropdown, IDropdownOption } from "office-ui-fabric-react";
 import React from "react";

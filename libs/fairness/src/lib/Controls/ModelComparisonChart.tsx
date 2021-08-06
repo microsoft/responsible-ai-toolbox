@@ -33,9 +33,9 @@ import { FairnessModes, fairnessOptions } from "./../util/FairnessMetrics";
 import { IFairnessContext } from "./../util/IFairnessContext";
 import { MetricsCache } from "./../util/MetricsCache";
 import { performanceOptions } from "./../util/PerformanceMetrics";
+import { CalloutHelpBar } from "./CalloutHelpBar";
 import { DropdownBar } from "./DropdownBar";
 import { Insights } from "./Insights";
-import { ModalHelp } from "./ModalHelp";
 import { ModelComparisonChartStyles } from "./ModelComparisonChart.styles";
 
 export interface IModelComparisonProps {
@@ -53,7 +53,7 @@ export interface IModelComparisonProps {
 }
 
 export interface IState {
-  showModalHelp?: boolean;
+  showCalloutHelpBar?: boolean;
   featureKey?: string;
   performanceKey?: string;
   fairnessKey?: string;
@@ -330,8 +330,7 @@ export class ModelComparisonChart extends React.Component<
       mainChart = (
         <Stack horizontal>
           <Stack className={sharedStyles.mainLeft}>
-            <ModalHelp
-              theme={theme}
+            <CalloutHelpBar
               graphCalloutStrings={helpString}
               errorPickerProps={this.props.errorPickerProps}
               performanceBounds={this.state.performanceBounds}
@@ -342,9 +341,9 @@ export class ModelComparisonChart extends React.Component<
               <AccessibleChart
                 plotlyProps={props}
                 onClickHandler={this.props.onChartClick}
-                theme={getTheme()}
+                theme={theme}
                 themeOverride={{
-                  axisGridColor: getTheme().semanticColors.disabledBorder
+                  axisGridColor: theme.semanticColors.disabledBorder
                 }}
               />
             </div>

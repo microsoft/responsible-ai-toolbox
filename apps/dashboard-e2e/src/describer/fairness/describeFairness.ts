@@ -7,10 +7,14 @@ import { describeConfigurationPages } from "./configurationPages/describeConfigu
 import { describeGetStartedPage } from "./configurationPages/describeGetStarted";
 import { fairnessDatasets } from "./fairnessDatasets";
 import { describeModelComparisonView } from "./modelComparisonView/describeModelComparisonView";
-// import { describeModelComparisonViewWithError } from "./modelComparisonView/describeModelComparisonViewWithError";
+import { describeModelComparisonViewWithError } from "./modelComparisonView/describeModelComparisonViewWithError";
 import { describeSingleModelView } from "./singleModelView/describeSingleModelView";
+import { describeSingleModelViewWithError } from "./singleModelView/describeSingleModelViewWithError";
 
-export function describeFairness(name: keyof typeof fairnessDatasets): void {
+export function describeFairness(
+  name: keyof typeof fairnessDatasets,
+  checkErrorBars = false
+): void {
   describe(name, () => {
     beforeEach(() => {
       cy.visit(`#/fairness/${name}/light/english/Version-2`);
@@ -32,8 +36,12 @@ export function describeFairness(name: keyof typeof fairnessDatasets): void {
 
     describeGetStartedPage();
     describeConfigurationPages(name);
-    describeModelComparisonView(fairnessDatasets[name]);
-    // describeModelComparisonViewWithError(fairnessDatasets[name]);
-    describeSingleModelView(fairnessDatasets[name]);
+    if (checkErrorBars) {
+      describeModelComparisonViewWithError(fairnessDatasets[name]);
+      describeSingleModelViewWithError(fairnessDatasets[name]);
+    } else {
+      describeModelComparisonView(fairnessDatasets[name]);
+      describeSingleModelView(fairnessDatasets[name]);
+    }
   });
 }

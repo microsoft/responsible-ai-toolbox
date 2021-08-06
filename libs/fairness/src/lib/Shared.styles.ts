@@ -30,7 +30,7 @@ export interface ISharedStyles {
   calloutWrapper: IStyle;
   calloutBarWrapper: IStyle;
   graphCalloutWrapper: IStyle;
-  errorCalloutWrapper: IStyle;
+  errorBarsCalloutWrapper: IStyle;
   title: IStyle;
   toggle: IStyle;
   errorCalloutHeader: IStyle;
@@ -91,13 +91,13 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       margin: "auto",
       padding: "12px"
     },
-    errorCalloutHeader: {
-      paddingRight: "5px"
-    },
-    errorCalloutWrapper: {
+    errorBarsCalloutWrapper: {
       alignItems: "center",
       display: "flex",
       flexFlow: "row nowrap"
+    },
+    errorCalloutHeader: {
+      paddingRight: "5px"
     },
     graphCalloutWrapper: {
       marginLeft: "80px"

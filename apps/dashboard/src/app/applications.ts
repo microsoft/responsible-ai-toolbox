@@ -10,6 +10,7 @@ import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
+import { binaryClassificationWithError } from "../fairness/__mock_data__/binaryClassificationWithError";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
@@ -115,8 +116,7 @@ export const applications: IApplications = <const>{
         data: { ...binaryClassification, errorKey: "disabled" }
       },
       binaryClassificationWithError: {
-        data: binaryClassification,
-        errorKey: true
+        data: binaryClassificationWithError
       },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryMissingMetrics: {
