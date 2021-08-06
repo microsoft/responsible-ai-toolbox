@@ -659,10 +659,11 @@
 
     "recommendedPolicy": "Recommended policy gain",
     "individualTreatment": "Recommended individual treatment policy",
-    "listDescription": "This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.",
+    "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left four columns report whether treatment is recommended for the observation, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
     "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
-    "showTop": "Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}",
+    "showTop": "Datapoints with the largest estimated causal responses to treatment feature: {0}",
     "RecommendedTreatment": "Recommended treatment",
+    "CurrentTreatment": "Current treatment",
     "EffectOfTreatment": "Effect of recommendation",
     "EffectLowerBound": "CI lower",
     "EffectUpperBound": "CI upper",
