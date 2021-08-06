@@ -239,48 +239,64 @@ export class ModelComparisonChart extends React.Component<
           }
 
           series.customdata = [] as unknown as Datum[];
-          const digitsOfPrecision = 5;
+          const digitsOfPrecision = 4;
 
           for (let modelId = 0; modelId < data.length; modelId++) {
-            const x = series.x
-              ? Number(series.x[modelId]).toFixed(digitsOfPrecision)
-              : undefined;
-            const y = series.y
-              ? Number(series.y[modelId]).toFixed(digitsOfPrecision)
-              : undefined;
+            const tempX = series.x ? series.x[modelId] : undefined;
+            const tempY = series.y ? series.y[modelId] : undefined;
+            const lowerErrorX =
+              series?.error_x?.type === "data" && series.error_x.arrayminus
+                ? series.error_x.arrayminus[modelId]
+                : undefined;
+            const upperErrorX =
+              series?.error_x?.type === "data" && series.error_x.array
+                ? series.error_x.array[modelId]
+                : undefined;
+            const lowerErrorY =
+              series?.error_y?.type === "data" && series.error_y.arrayminus
+                ? series.error_y.arrayminus[modelId]
+                : undefined;
+            const upperErrorY =
+              series?.error_y?.type === "data" && series.error_y.array
+                ? series.error_y.array[modelId]
+                : undefined;
+
+            const x =
+              series.x && tempX !== undefined && typeof tempX == "number"
+                ? tempX
+                : undefined;
+            const y =
+              series.y && tempY !== undefined && typeof tempY == "number"
+                ? tempY
+                : undefined;
 
             const xBounds =
-              series?.error_x?.type === "data" &&
-              series?.error_x?.arrayminus &&
-              series?.error_x?.array &&
-              series.error_x.arrayminus[modelId] !== 0 &&
-              series.error_x.array[modelId] !== 0 &&
-              x
-                ? `[${(
-                    Number(x) - Number(series.error_x.arrayminus[modelId])
-                  ).toFixed(digitsOfPrecision)}, ${(
-                    Number(x) + Number(series.error_x.array[modelId])
+              lowerErrorX !== 0 &&
+              upperErrorX !== 0 &&
+              typeof lowerErrorX == "number" &&
+              typeof upperErrorX == "number" &&
+              x !== undefined
+                ? `[${(x - lowerErrorX).toFixed(digitsOfPrecision)}, ${(
+                    x + upperErrorX
                   ).toFixed(digitsOfPrecision)}]`
                 : "";
             const yBounds =
               series?.error_y?.type === "data" &&
-              series?.error_y?.arrayminus &&
-              series?.error_y?.array &&
-              series.error_y.arrayminus[modelId] !== 0 &&
-              series.error_y.array[modelId] !== 0 &&
-              y
-                ? `[${(
-                    Number(y) - Number(series.error_y.arrayminus[modelId])
-                  ).toFixed(digitsOfPrecision)}, ${(
-                    Number(y) + Number(series.error_y.array[modelId])
+              lowerErrorY !== 0 &&
+              upperErrorY !== 0 &&
+              typeof lowerErrorY == "number" &&
+              typeof upperErrorY == "number" &&
+              y !== undefined
+                ? `[${(y - lowerErrorY).toFixed(digitsOfPrecision)}, ${(
+                    y + upperErrorY
                   ).toFixed(digitsOfPrecision)}]`
                 : "";
 
             series.customdata.push({
               modelId,
-              x,
+              x: x?.toFixed(digitsOfPrecision),
               xBounds,
-              y,
+              y: y?.toFixed(digitsOfPrecision),
               yBounds
             } as unknown as Datum);
             series.hovertemplate =

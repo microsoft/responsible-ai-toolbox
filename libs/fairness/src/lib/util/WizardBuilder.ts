@@ -263,7 +263,7 @@ export class WizardBuilder {
       [errorMetric: string]: IErrorOption[];
     } = {};
     Object.values(errorOptions).forEach((errorOption) => {
-      if (errorOption.key in allErrorMetrics) {
+      if (allErrorMetrics[errorOption.key]) {
         allErrorMetrics[errorOption.key].push(errorOption);
       } else {
         allErrorMetrics[errorOption.key] = [errorOption];

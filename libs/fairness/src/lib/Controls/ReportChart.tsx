@@ -125,7 +125,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             performancePickerProps={this.props.performancePickerProps}
             areaHeights={this.props.areaHeights}
             errorPickerProps={this.props.errorPickerProps}
-            //fairnessBounds={this.props.metrics.disparityBounds}
             performanceBounds={this.props.metrics.performance.binBounds}
             outcomeBounds={this.props.metrics.outcomes.binBounds}
             falsePositiveBounds={
@@ -144,7 +143,6 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
             featureBinPickerProps={this.props.featureBinPickerProps}
             areaHeights={this.props.areaHeights}
             errorPickerProps={this.props.errorPickerProps}
-            //fairnessBounds={this.props.metrics.disparityBounds}
             performanceBounds={this.props.metrics.performance.binBounds}
             outcomeBounds={this.props.metrics.outcomes.binBounds}
             falsePositiveBounds={

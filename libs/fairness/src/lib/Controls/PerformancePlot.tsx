@@ -313,7 +313,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
 
     for (let j = 0; j < barPlotlyProps.data.length; j++) {
       const outcomeMetricName = barPlotlyProps.data[j].name;
-      barPlotlyProps.data[j].customdata = [] as unknown as Datum[];
+      barPlotlyProps.data[j].customdata = [];
       if (barPlotlyProps.data) {
         for (
           let i = 0;
@@ -323,29 +323,37 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           const outcomeMetric = outcomeMetricName
             ? `${outcomeMetricName}: `
             : "";
-          const x = barPlotlyProps
-            ? (Number(barPlotlyProps.data[j].x?.[i]) * 100).toFixed(
-                digitsOfPrecision
-              )
+          const tempData = barPlotlyProps.data
+            ? barPlotlyProps.data[j]
             : undefined;
-          // type casting -> type checking
-          const y = barPlotlyProps.data[j].y
-            ? String(barPlotlyProps.data[j].y?.[i]).trim()
-            : undefined;
-          const errorX = barPlotlyProps.data[j]?.error_x;
+          const tempY = tempData && tempData.y ? tempData.y[i] : undefined;
+          const tempX = tempData && tempData.x ? tempData.x[i] : undefined;
+
+          const x =
+            tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
+          const y =
+            tempY !== undefined && typeof tempY == "string"
+              ? tempY.trim()
+              : undefined;
+          const lowerErrorX =
+            tempData?.error_x?.type === "data" && tempData.error_x.arrayminus
+              ? tempData.error_x.arrayminus[i]
+              : undefined;
+          const upperErrorX =
+            tempData?.error_x?.type === "data" && tempData.error_x.array
+              ? tempData.error_x.array[i]
+              : undefined;
+
           const xBounds =
-            errorX &&
-            errorX.type === "data" &&
-            errorX.arrayminus &&
-            errorX.array &&
-            errorX.arrayminus[i] !== 0 &&
-            errorX.array[i] !== 0 &&
-            x
-              ? `[${(Number(x) - 100 * Number(errorX.arrayminus[i])).toFixed(
-                  digitsOfPrecision
-                )}%, ${(Number(x) + 100 * Number(errorX.array[i])).toFixed(
-                  digitsOfPrecision
-                )}%]`
+            lowerErrorX !== 0 &&
+            upperErrorX !== 0 &&
+            typeof lowerErrorX == "number" &&
+            typeof upperErrorX == "number" &&
+            x !== undefined
+              ? `[${(100 * (x - lowerErrorX)).toFixed(digitsOfPrecision)}%, ${(
+                  100 *
+                  (x + upperErrorX)
+                ).toFixed(digitsOfPrecision)}%]`
               : "";
 
           if (
@@ -357,7 +365,10 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           ) {
             barPlotlyProps.data[j].customdata!.push({
               outcomeMetric,
-              x,
+              x:
+                x !== undefined
+                  ? (100 * x).toFixed(digitsOfPrecision)
+                  : undefined,
               xBounds,
               y
             } as unknown as Datum);

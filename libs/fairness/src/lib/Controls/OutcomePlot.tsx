@@ -170,36 +170,48 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       ];
     }
 
-    barPlotlyProps.data[0].customdata = [] as unknown as Datum[];
+    barPlotlyProps.data[0].customdata = [];
     const digitsOfPrecision = 1;
 
     for (let i = 0; i < this.props.dashboardContext.groupNames.length; i++) {
-      const x = barPlotlyProps.data[0].x
-        ? (Number(barPlotlyProps.data[0].x[i]) * 100).toFixed(digitsOfPrecision)
+      const tempY = barPlotlyProps.data[0].y
+        ? barPlotlyProps.data[0].y[i]
         : undefined;
-      const y = barPlotlyProps.data[0].y
-        ? String(barPlotlyProps.data[0].y[i]).trim()
+      const tempX = barPlotlyProps.data[0].x
+        ? barPlotlyProps.data[0].x[i]
         : undefined;
+      const x =
+        tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
+      const y =
+        tempY !== undefined && typeof tempY == "string"
+          ? tempY.trim()
+          : undefined;
+      const lowerErrorX =
+        barPlotlyProps.data[0]?.error_x?.type === "data" &&
+        barPlotlyProps.data[0].error_x.arrayminus
+          ? barPlotlyProps.data[0].error_x.arrayminus[i]
+          : undefined;
+      const upperErrorX =
+        barPlotlyProps.data[0]?.error_x?.type === "data" &&
+        barPlotlyProps.data[0].error_x.array
+          ? barPlotlyProps.data[0].error_x.array[i]
+          : undefined;
 
       const xBounds =
-        barPlotlyProps.data[0]?.error_x?.type === "data" &&
-        barPlotlyProps.data[0]?.error_x?.arrayminus &&
-        barPlotlyProps.data[0]?.error_x?.array &&
-        barPlotlyProps.data[0].error_x.arrayminus[i] !== 0 &&
-        barPlotlyProps.data[0].error_x.array[i] !== 0 &&
-        x
-          ? `[${(
-              Number(x) -
-              100 * Number(barPlotlyProps.data[0].error_x.arrayminus[i])
-            ).toFixed(digitsOfPrecision)}%, ${(
-              Number(x) +
-              100 * Number(barPlotlyProps.data[0].error_x.array[i])
+        lowerErrorX !== 0 &&
+        upperErrorX !== 0 &&
+        typeof lowerErrorX == "number" &&
+        typeof upperErrorX == "number" &&
+        x !== undefined
+          ? `[${(100 * (x - lowerErrorX)).toFixed(digitsOfPrecision)}%, ${(
+              100 *
+              (x + upperErrorX)
             ).toFixed(digitsOfPrecision)}%]`
           : "";
 
       barPlotlyProps.data[0].customdata.push({
         outcomeMetric: outcomeMetric.title,
-        x,
+        x: x !== undefined ? (100 * x).toFixed(digitsOfPrecision) : undefined,
         xBounds,
         y
       } as unknown as Datum);

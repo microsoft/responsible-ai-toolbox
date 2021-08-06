@@ -26,9 +26,6 @@ interface ICalloutHelpBarProps {
 }
 
 export class CalloutHelpBar extends React.PureComponent<ICalloutHelpBarProps> {
-  public constructor(props: ICalloutHelpBarProps) {
-    super(props);
-  }
   public render(): React.ReactNode {
     const sharedStyles = SharedStyles();
 
