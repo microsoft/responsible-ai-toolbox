@@ -1,24 +1,4 @@
-/* ======= FONTS ==========*/
-/* @font-face {
-    font-family: "TT Commons Regular";
-    src: url("../fonts/TypeType-TTCommonsRegular.woff") format("woff"),
-    url("../fonts/TypeType-TTCommonsRegular.otf") format("opentype");
-  }
-  @font-face {
-    font-family: 'TT Commons Medium';
-    src: url("../fonts/TypeType-TTCommonsMedium.woff") format("woff"),
-         url("../fonts/TypeType-TTCommonsMedium.otf") format("opentype");
-  }
-  @font-face {
-    font-family: "TT Commons Bold";
-    src: url("../fonts/TypeType-TTCommonsBold.woff") format("woff"),
-         url("../fonts/TypeType-TTCommonsBold.otf") format("opentype");
-  } */
-
 /* ===== COMMAN CSS CLASSES START ===== */
-/* body{
-    font-family: 'TT Commons Regular', Arial, sans-serif;
-} */
 h1 {
   font-size: 100px;
 }
