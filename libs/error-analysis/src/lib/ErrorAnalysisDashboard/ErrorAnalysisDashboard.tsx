@@ -540,7 +540,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     </Pivot>
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.DataExplorerTab && (
-                      <DatasetExplorerTab showCohortSelection={false} />
+                      <DatasetExplorerTab showCohortSelection />
                     )}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
