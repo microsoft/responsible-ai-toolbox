@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import pytest
-from responsibleai import ModelTask
 from responsibleai.exceptions import (
     DuplicateManagerConfigException, UserConfigValidationException
 )
@@ -84,19 +83,3 @@ def validate_counterfactual(cf_analyzer,
     assert isinstance(cf_analyzer.counterfactual.get(), list)
     assert len(cf_analyzer.counterfactual.get()) == 2
     assert len(cf_analyzer.counterfactual.get(failed_to_compute=True)) == 1
-
-    task_type = cf_analyzer.task_type
-    if task_type == ModelTask.REGRESSION:
-        with pytest.raises(UserConfigValidationException):
-            cf_analyzer.counterfactual.add(
-                total_CFs=10,
-                method='random',
-                desired_range=None,
-                feature_importance=feature_importance)
-    else:
-        with pytest.raises(UserConfigValidationException):
-            cf_analyzer.counterfactual.add(
-                total_CFs=10,
-                method='random',
-                desired_class=None,
-                feature_importance=feature_importance)
