@@ -31,14 +31,14 @@ import { ILocalImportanceData } from "./LocalImportanceChart";
 
 export interface ICounterfactualListProps {
   selectedIndex: number;
-  originalData: { [key: string]: any };
+  originalData: { [key: string]: string | number };
   data?: ICounterfactualData;
   filterText?: string;
   temporaryPoint: { [key: string]: any } | undefined;
   setCustomRowProperty(
     key: string | number,
     isString: boolean,
-    newValue?: string
+    newValue?: string | number
   ): void;
 }
 
@@ -96,7 +96,7 @@ export class CounterfactualList extends React.Component<
   }
 
   private getItems(): any {
-    const items: any = [];
+    const items: Array<Record<string, string | number>> = [];
     const selectedData =
       this.props.data?.cfs_list[
         this.props.selectedIndex % this.props.data?.cfs_list.length
@@ -110,7 +110,7 @@ export class CounterfactualList extends React.Component<
             i + 1
           )
         };
-        this.props.data?.feature_names.forEach((f, j) => {
+        this.props.data?.feature_names_including_target.forEach((f, j) => {
           temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
         });
         items.push(temp);
@@ -119,13 +119,15 @@ export class CounterfactualList extends React.Component<
     return items;
   }
 
-  private processSelectionData(items: any, row: number): any {
+  private processSelectionData(
+    items: Array<Record<string, string | number>>,
+    row: number
+  ): unknown {
     const data = _.cloneDeep(items[row]);
     Object.keys(data).forEach((k) => {
       data[k] = data[k] === "-" ? items[0][k] : data[k];
       const keyIndex =
-        this.context.dataset.feature_names &&
-        this.context.dataset.feature_names.indexOf(k);
+        this.props.data?.feature_names_including_target.indexOf(k);
       this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
     });
     data.row = localization.formatString(
@@ -166,7 +168,8 @@ export class CounterfactualList extends React.Component<
   ): void {
     const target = evt.target as Element;
     const id = target.id;
-    const keyIndex = this.context.dataset.feature_names.indexOf(id);
+    const keyIndex =
+      this.props.data?.feature_names_including_target.indexOf(id);
     this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = toNumber(newValue);
@@ -271,7 +274,7 @@ export class CounterfactualList extends React.Component<
     if (!localImportanceData) {
       return [];
     }
-    this.props?.data?.feature_names.forEach((f, index) => {
+    this.props?.data?.feature_names_including_target.forEach((f, index) => {
       data.push({
         label: f,
         value: localImportanceData[index] || -Infinity
