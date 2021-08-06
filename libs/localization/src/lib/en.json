@@ -589,7 +589,8 @@
       "treatment": "Treatment policy",
       "title": "Direct causal effect of each feature with 90% confidence interval",
       "why": "Why is it important to include confounding features?",
-      "learnMore": "Learn more"
+      "learnMore": "Learn more",
+      "cohortInfo": "Global cohorts are not currently supported for causal analysis. All causal analyses will be shown for all data."
     },
     "AggregateView": {
       "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure to include a wide set of features that may correlate with the outcome as confounders.",
