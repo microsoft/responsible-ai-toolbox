@@ -488,7 +488,7 @@ export class JointDataset {
     const featureRange = meta.featureRange;
     // use data-dict for undefined binCount (building default bin)
     // use filtered data for user provided binCount
-    let binCount = 5;
+    let binCount = binCountIn || 5;
     if (binCountIn === undefined) {
       if (featureRange.rangeType === RangeTypes.Integer) {
         const uniqueValues = _.uniq(this.dataDict?.map((row) => row[key]));

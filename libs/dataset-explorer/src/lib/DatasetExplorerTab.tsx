@@ -84,6 +84,10 @@ export class DatasetExplorerTab extends React.Component<
   }
 
   public componentDidUpdate(): void {
+    if (this.props.showCohortSelection) {
+      return;
+    }
+
     const selectedCohortIndex = this.context.errorCohorts.findIndex(
       (errorCohort) =>
         errorCohort.cohort.name === this.context.selectedErrorCohort.cohort.name

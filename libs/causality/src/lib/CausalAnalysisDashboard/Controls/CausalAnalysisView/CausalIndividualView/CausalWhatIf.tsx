@@ -3,12 +3,12 @@
 
 import {
   ColumnCategories,
-  defaultModelAssessmentContext,
   FabricStyles,
   ICausalWhatIfData,
   JointDataset,
   ModelAssessmentContext,
-  NoData
+  NoData,
+  defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -95,7 +95,7 @@ export class CausalWhatIf extends React.Component<
               min={this.state.treatmentValueMin}
               step={this.state.treatmentValueStep}
               max={this.state.treatmentValueMax}
-              defaultValue={this.state.newTreatmentValue}
+              value={this.state.newTreatmentValue}
               onChange={this.onTreatmentValueChange}
               valueFormat={this.showNewTreatmentRawValue}
             />
