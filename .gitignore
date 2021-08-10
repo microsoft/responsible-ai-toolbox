@@ -22,6 +22,9 @@ rollup.json
 .settings/
 *.sublime-workspace
 
+# IDE - Visual Studio
+.vs/*
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
