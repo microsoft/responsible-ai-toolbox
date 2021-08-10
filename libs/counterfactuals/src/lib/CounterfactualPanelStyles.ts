@@ -48,7 +48,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         width: "100%"
       },
       customPredictBlock: {
-        paddingTop: "5px"
+        padding: "10px"
       },
       listContainer: {
         height: "100%",
