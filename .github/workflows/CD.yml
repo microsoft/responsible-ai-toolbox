@@ -13,6 +13,7 @@ env:
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
   dashboardDirectory: dashboard
+  retentionDays: 90
 
 on:
   push:
@@ -52,6 +53,17 @@ jobs:
           else
             echo "Invalid event $${{ github.event_name }}"
           fi
+
+      - name: Get retention cut off date
+        id: retention_date
+        run: echo "::set-output name=date::$(date --date='${{env.retentionDays}} days ago' +'%Y-%m-%dT00:00Z')"
+
+      - name: Delete old files before ${{steps.retention_date.outputs.date}}
+        uses: Azure/cli@v1.0.0
+        with:
+          azcliversion: 2.16.0
+          inlineScript: |
+            az storage blob delete-batch --account-name "${{env.blob_account}}" -s "${{env.blob_container_for_raiwidget}}" --dryrun --if-unmodified-since "${{steps.retention_date.outputs.date}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
 
       - name: Install yarn
         run: npm install yarn -g
