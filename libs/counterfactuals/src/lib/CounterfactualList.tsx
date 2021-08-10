@@ -111,7 +111,7 @@ export class CounterfactualList extends React.Component<
           )
         };
         this.props.data?.feature_names_including_target.forEach((f, j) => {
-          temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
+          temp[f] = this.props.originalData?.[f] !== point[j] ? point[j] : "-";
         });
         items.push(temp);
       });
