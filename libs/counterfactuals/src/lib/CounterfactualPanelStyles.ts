@@ -14,6 +14,7 @@ export interface ICounterfactualPanelStyles {
   cPanel: IStyle;
   container: IStyle;
   customPredictBlock: IStyle;
+  counterfactualList: IStyle;
   button: IStyle;
   boldText: IStyle;
   predictedBlock: IStyle;
@@ -41,6 +42,11 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         verticalAlign: "center"
       },
       container: {
+        width: "100%"
+      },
+      counterfactualList: {
+        height: "100%",
+        overflow: "scroll",
         width: "100%"
       },
       cPanel: {

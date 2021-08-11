@@ -24,7 +24,7 @@ export const modelAssessmentDashboardStyles =
     page: {
       boxSizing: "border-box",
       height: "100%",
-      padding: "16px 40px 0 14px",
+      padding: "16px 14px 0 14px",
       width: "100%"
     },
     section: {
