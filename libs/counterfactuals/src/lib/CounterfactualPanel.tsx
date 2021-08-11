@@ -77,7 +77,7 @@ export class CounterfactualPanel extends React.Component<
               onChange={this.setFilterText.bind(this)}
             />
           </Stack.Item>
-          <Stack.Item>
+          <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}
               filterText={this.state.filterText}
