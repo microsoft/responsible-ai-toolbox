@@ -265,7 +265,7 @@
     },
     "GlobalTab": {
       "collapsedHelperText": "Explore the top k important features that impact your overall model predictions.",
-      "helperText": "Use the slider to show descending feature importances . Select up to three cohorts to see their feature importances side by side. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
+      "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
       "_helperText.comment": "paragraph summarizing the view on this page and available actions",
       "topAtoB": "Top {0}-{1} features",
       "_topAtoB.comment": "label on a slider, will tell user the index of the features they are currently seeing, like Top 5-10 features",
@@ -320,7 +320,7 @@
     },
     "ModelPerformance": {
       "collapsedHelperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics.",
-      "helperText": "You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions. Select the gear in the graph to change graph type.",
+      "helperText": "You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.",
       "_helperText.comment": "explains the view on this page and what actions can be taken",
       "modelStatistics": "Model statistics",
       "_modelStatistics.comment": "label for area listing statistics about model prediction",
@@ -353,7 +353,7 @@
     },
     "DatasetExplorer": {
       "collapsedHelperText": "Learn about the over/underpresentation in your dataset.",
-      "helperText": "Create dataset cohorts to the left to analyze statistics along filters such as predicted outcome, dataset features and error groups. Use the x-axis and color selectors to further slice your dataset into more dimensions.",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups.",
       "_helperText.comment": "paragraph summarizing the view on this page and what actions the user can take",
       "colorValue": "Color value",
       "_colorValue.comment": "label on button to set how data is mapped to color in chart",
@@ -560,9 +560,9 @@
       "_precision.comment": "computed precision of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "recall": "Recall: {0}",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
-      "fpr": "FPR: {0}",
+      "fpr": "False Positive Rates: {0}",
       "_fpr.comment": "False positive rate, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
-      "fnr": "FNR: {0}",
+      "fnr": "False Negative Rates: {0}",
       "_fnr.comment": "False negative rate, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers"
     },
     "GlobalOnlyChart": {
@@ -778,7 +778,7 @@
       "clearAll": "Clear all"
     },
     "MatrixLegend": {
-      "heatMapDescription": "With the grid map you can focus on specific filters and combine error rates.  Start with two dataset features to compare."
+      "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
     },
     "Metrics": {
       "metricName": "Metric name",
@@ -813,7 +813,7 @@
     },
     "TreeView": {
       "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data.",
-      "treeDescriptionExpanded": "This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree go to the \"Feature list\" panel."
+      "treeDescriptionExpanded": "This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Configure error explorer.\""
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"
@@ -1153,7 +1153,8 @@
       "GlobalExplanation": "Aggregate feature importance",
       "LocalExplanation": "Individual feature importance",
       "CorrectPredictions": "Correct predictions",
-      "IncorrectPredictions": "Incorrect predictions"
+      "IncorrectPredictions": "Incorrect predictions",
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration."
     },
     "CohortInformation": {
       "GlobalCohort": "Global cohort: ",

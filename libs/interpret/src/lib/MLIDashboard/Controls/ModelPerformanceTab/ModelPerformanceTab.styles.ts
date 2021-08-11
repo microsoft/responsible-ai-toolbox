@@ -137,7 +137,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        height: "120px",
+        height: "150px",
         justifyContent: "center",
         padding: "0 10px 0 20px"
       },

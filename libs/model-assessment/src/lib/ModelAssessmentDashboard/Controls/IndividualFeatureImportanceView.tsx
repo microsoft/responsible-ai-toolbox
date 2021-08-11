@@ -11,7 +11,8 @@ import {
   FabricStyles,
   constructRows,
   constructCols,
-  ModelTypes
+  ModelTypes,
+  ExpandableText
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -134,6 +135,11 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return (
       <Stack tokens={{ childrenGap: "10px", padding: "15px 38px 0 38px" }}>
+        <div>
+          <ExpandableText iconName="Info">
+            {localization.ModelAssessment.FeatureImportances.IndividualFeature}
+          </ExpandableText>
+        </div>
         <div className="tabularDataView">
           <div style={{ height: "800px", position: "relative" }}>
             <Fabric>
