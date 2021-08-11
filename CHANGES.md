@@ -24,6 +24,27 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.9.3
+
+- educational materials
+- new features
+  - causal treatment cost argument can be passed per feature/sample/category
+  - target added to counterfactual tabular output
+- breaking changes
+- bug fixes
+  - improved text for causal what-if
+  - fix for missing values in dataset
+  - improvement for default explanation tab
+  - fix for multiple feature importances detail view
+  - fix for causal what-if slider being stuck
+  - fixes for cohort selection
+  - fixes for error analysis matrix view
+  - fix for extra scroll bar in counterfactuals view
+  - fix for train data input in classification notebook
+- other
+  - improved error messages for responsibleai ModelAnalysis
+  - improved validation when not passing a model to ModelAnalysis
+
 ## v0.9.2
 
 - educational materials
