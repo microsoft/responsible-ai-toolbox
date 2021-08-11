@@ -38,11 +38,11 @@ export async function fetchMatrix(
     props.baseCohort.jointDataset
   );
   const selectedFeature1: string | undefined =
-    props.selectedFeature1 || props.selectedFeature2;
+    props.selectedFeature1 || props.selectedFeature2 || undefined;
   const selectedFeature2: string | undefined =
-    props.selectedFeature2 === props.selectedFeature1
+    props.selectedFeature2 === selectedFeature1
       ? undefined
-      : props.selectedFeature2;
+      : props.selectedFeature2 || undefined;
   // Note: edge case, if both features selected are the same one, show just a row
   return props.getMatrix(
     [
