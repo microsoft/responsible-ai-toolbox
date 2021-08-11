@@ -177,6 +177,7 @@ export class ChartBuilder {
 
     // Will not display on other charts that don't have bounds passed in
     result[0].error_x = {
+      // `array` and `arrayminus` are error bounds as described in Plotly API
       array: xUpperBound,
       arrayminus: xLowerBound,
       type: "data",

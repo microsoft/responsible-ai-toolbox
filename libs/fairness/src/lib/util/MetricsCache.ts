@@ -94,16 +94,12 @@ export class MetricsCache {
 
     if (fairnessMethod === FairnessModes.Difference) {
       const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
-      return maxMetric === undefined
-        ? { overall: Number.NaN }
-        : { overall: maxMetric };
+      return { overall: maxMetric ?? Number.NaN };
     }
 
     // assumes FairnessModes.Ratio
     const minMetric = min([falsePositiveRateMetric, truePositiveRateMetric]);
-    return minMetric === undefined
-      ? { overall: Number.NaN }
-      : { overall: minMetric };
+    return { overall: minMetric ?? Number.NaN };
   }
 
   public async getFairnessMetric(

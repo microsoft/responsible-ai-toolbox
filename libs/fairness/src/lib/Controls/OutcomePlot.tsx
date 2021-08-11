@@ -77,6 +77,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
       ];
       if (this.props.errorPickerProps.selectedErrorKey !== "disabled") {
         barPlotlyProps.data[0].error_x = {
+          // `array` and `arrayminus` are error bounds as described in Plotly API
           array: this.props.metrics.outcomes.binBounds?.map(
             (binBound, index) => {
               if (this.props.metrics.outcomes?.bins[index] !== undefined) {
@@ -174,27 +175,23 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
     const digitsOfPrecision = 1;
 
     for (let i = 0; i < this.props.dashboardContext.groupNames.length; i++) {
-      const tempY = barPlotlyProps.data[0].y
-        ? barPlotlyProps.data[0].y[i]
-        : undefined;
-      const tempX = barPlotlyProps.data[0].x
-        ? barPlotlyProps.data[0].x[i]
-        : undefined;
+      const tempY = barPlotlyProps.data[0].y?.[i];
+      const tempX = barPlotlyProps.data[0].x?.[i];
+      // ensure x is a number
       const x =
         tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
+      // ensure y is a string
       const y =
         tempY !== undefined && typeof tempY == "string"
           ? tempY.trim()
           : undefined;
       const lowerErrorX =
-        barPlotlyProps.data[0]?.error_x?.type === "data" &&
-        barPlotlyProps.data[0].error_x.arrayminus
-          ? barPlotlyProps.data[0].error_x.arrayminus[i]
+        barPlotlyProps.data[0]?.error_x?.type === "data"
+          ? barPlotlyProps.data[0].error_x.arrayminus?.[i]
           : undefined;
       const upperErrorX =
-        barPlotlyProps.data[0]?.error_x?.type === "data" &&
-        barPlotlyProps.data[0].error_x.array
-          ? barPlotlyProps.data[0].error_x.array[i]
+        barPlotlyProps.data[0]?.error_x?.type === "data"
+          ? barPlotlyProps.data[0].error_x.array?.[i]
           : undefined;
 
       const xBounds =

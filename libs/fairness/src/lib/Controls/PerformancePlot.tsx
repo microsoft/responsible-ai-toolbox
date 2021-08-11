@@ -92,6 +92,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
         this.props.metrics.falsePositiveRates !== undefined
       ) {
         barPlotlyProps.data[0].error_x = {
+          // `array` and `arrayminus` are error bounds as described in Plotly API
           array: this.props.metrics.falsePositiveRates.binBounds?.map(
             (binBound, index) => {
               if (
@@ -323,25 +324,25 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
           const outcomeMetric = outcomeMetricName
             ? `${outcomeMetricName}: `
             : "";
-          const tempData = barPlotlyProps.data
-            ? barPlotlyProps.data[j]
-            : undefined;
-          const tempY = tempData && tempData.y ? tempData.y[i] : undefined;
-          const tempX = tempData && tempData.x ? tempData.x[i] : undefined;
+          const tempData = barPlotlyProps.data?.[j];
+          const tempY = tempData ? tempData.y?.[i] : undefined;
+          const tempX = tempData ? tempData.x?.[i] : undefined;
 
+          // ensure x is number
           const x =
             tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
+          // ensure y is string
           const y =
             tempY !== undefined && typeof tempY == "string"
               ? tempY.trim()
               : undefined;
           const lowerErrorX =
-            tempData?.error_x?.type === "data" && tempData.error_x.arrayminus
-              ? tempData.error_x.arrayminus[i]
+            tempData?.error_x?.type === "data"
+              ? tempData.error_x.arrayminus?.[i]
               : undefined;
           const upperErrorX =
-            tempData?.error_x?.type === "data" && tempData.error_x.array
-              ? tempData.error_x.array[i]
+            tempData?.error_x?.type === "data"
+              ? tempData.error_x.array?.[i]
               : undefined;
 
           const xBounds =
@@ -357,10 +358,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
               : "";
 
           if (
-            barPlotlyProps !== undefined &&
-            barPlotlyProps.data !== undefined &&
-            barPlotlyProps.data[j] !== undefined &&
-            barPlotlyProps.data[j].customdata !== undefined &&
+            barPlotlyProps?.data?.[j]?.customdata &&
             _.isArray(barPlotlyProps.data[j].customdata)
           ) {
             barPlotlyProps.data[j].customdata!.push({

@@ -93,7 +93,7 @@ const flights = {
   skipFairness: false
 };
 
-export class FairnessWizardV2 extends React.PureComponent<
+export class FairnessWizard extends React.PureComponent<
   IFairnessProps,
   IWizardStateV2
 > {
