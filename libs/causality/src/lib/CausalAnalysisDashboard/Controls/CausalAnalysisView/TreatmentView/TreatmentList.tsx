@@ -50,9 +50,9 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
       },
       {
         ariaLabel: localization.Counterfactuals.CurrentTreatment,
-        fieldName: "currentTreatment",
+        fieldName: "Current treatment",
         isResizable: true,
-        key: "currentTreatment",
+        key: "Current treatment",
         maxWidth: 250,
         minWidth: 125,
         name: localization.Counterfactuals.CurrentTreatment

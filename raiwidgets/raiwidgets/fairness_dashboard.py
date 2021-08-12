@@ -103,9 +103,9 @@ class FairnessDashboard(Dashboard):
                 metric_method = self.fairness_metrics_module.\
                     _metric_methods.get(data["metricKey"]).get("function")
                 metric_frame = self.fairness_metrics_module.MetricFrame(
-                    metric_method,
-                    self.model_data['true_y'],
-                    self.model_data['predicted_ys'][data["modelIndex"]],
+                    metrics=metric_method,
+                    y_true=self.model_data['true_y'],
+                    y_pred=self.model_data['predicted_ys'][data["modelIndex"]],
                     sensitive_features=data["binVector"])
                 return jsonify({"data": {
                     "global": metric_frame.overall,
