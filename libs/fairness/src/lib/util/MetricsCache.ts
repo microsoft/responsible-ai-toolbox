@@ -135,16 +135,19 @@ export class MetricsCache {
       });
       this.cache[featureIndex][modelIndex][metricKey] = value;
     }
-    if (!value?.bins) {
+    if (!value || !value?.bins) {
       return { overall: Number.NaN };
     }
 
+    let response;
+    let binBounds;
+    let lowerBounds;
+    let upperBounds;
     let minLowerBound;
     let maxLowerBound;
     let minUpperBound;
     let maxUpperBound;
 
-    let response;
     let bins = value.bins
       .slice()
       .filter((x) => x !== undefined && !Number.isNaN(x) && !_.isArray(x[0])); // filters out confidence bounds
@@ -163,18 +166,24 @@ export class MetricsCache {
 
     // Use confidence bounds for each bin if they exist
     if (value?.binBounds) {
-      const binBounds = value.binBounds
+      binBounds = value.binBounds
         .slice()
         .filter((x) => x !== undefined && !Number.isNaN(x));
 
-      const minIndex = _.indexOf(bins, min, 0);
-      const maxIndex = _.indexOf(bins, max, 0);
-
-      minLowerBound = binBounds[minIndex].lower;
-      minUpperBound = binBounds[minIndex].upper;
-
-      maxLowerBound = binBounds[maxIndex].lower;
-      maxUpperBound = binBounds[maxIndex].upper;
+      lowerBounds = binBounds
+        ? value?.binBounds.map((binBound) => {
+            return binBound.lower;
+          })
+        : undefined;
+      upperBounds = binBounds
+        ? value?.binBounds.map((binBound) => {
+            return binBound.upper;
+          })
+        : undefined;
+      minLowerBound = _.min(lowerBounds);
+      maxLowerBound = _.max(lowerBounds);
+      minUpperBound = _.min(upperBounds);
+      maxUpperBound = _.max(upperBounds);
     }
 
     if (fairnessMethod === FairnessModes.Min) {
@@ -206,43 +215,112 @@ export class MetricsCache {
     }
 
     if (fairnessMethod === FairnessModes.Ratio) {
-      if (max === 0) {
-        return { overall: 0 };
-      }
-      if (maxUpperBound === 0 || maxLowerBound === 0) {
-        return { overall: min / max };
-      }
-      if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
+      if (binBounds && binBounds.length > 1) {
+        let minRatio = Infinity;
+        let maxRatio = -Infinity;
+        for (let i = 0; i < binBounds.length - 1; i++) {
+          for (let j = 1; j < binBounds.length; j++) {
+            let minCandidate;
+            let maxCandidate;
+
+            // if there is overlap
+            if (
+              binBounds[i].upper > binBounds[j].lower &&
+              binBounds[j].upper > binBounds[i].lower
+            ) {
+              const minCandidate1 = binBounds[i].lower / binBounds[j].upper;
+              const minCandidate2 = binBounds[j].lower / binBounds[i].upper;
+              const minCandidate =
+                minCandidate1 < minCandidate2 ? minCandidate1 : minCandidate2;
+
+              minRatio = minCandidate < minRatio ? minCandidate : minRatio;
+              maxRatio = 1;
+            } else {
+              // index i is completely greater than j
+              if (binBounds[i].upper > binBounds[j].upper) {
+                minCandidate = binBounds[j].lower / binBounds[i].upper;
+                maxCandidate = binBounds[j].upper / binBounds[i].lower;
+              } else {
+                minCandidate = binBounds[i].lower / binBounds[j].upper;
+                maxCandidate = binBounds[i].upper / binBounds[j].lower;
+              }
+
+              minRatio = minCandidate < minRatio ? minCandidate : minRatio;
+              maxRatio = maxCandidate > maxRatio ? maxCandidate : maxRatio;
+            }
+          }
+        }
         return {
           bounds: {
-            lower: minLowerBound / maxUpperBound,
-            upper: minUpperBound / maxLowerBound
+            lower: minRatio,
+            upper: maxRatio
           },
           overall: min / max
         };
       }
+      return {
+        overall: min / max
+      };
     }
 
     if (fairnessMethod === FairnessModes.Difference) {
-      response = { overall: max - min };
-      if (minLowerBound && maxLowerBound && minUpperBound && maxUpperBound) {
-        const lower = _.max([maxLowerBound - minUpperBound, 0]);
-        const upper = _.max([
-          minUpperBound - maxLowerBound,
-          maxUpperBound - minLowerBound
-        ]);
+      if (binBounds && binBounds.length > 1) {
+        let minDiff = Infinity;
+        let maxDiff = -Infinity;
+        for (let i = 0; i < binBounds.length - 1; i++) {
+          for (let j = i + 1; j < binBounds.length; j++) {
+            let minCandidate;
+            let maxCandidate;
 
-        if (lower !== undefined && upper !== undefined) {
-          response = {
-            ...response,
-            bounds: {
-              lower,
-              upper
+            // if there is overlap
+            if (
+              binBounds[i].upper > binBounds[j].lower &&
+              binBounds[j].upper > binBounds[i].lower
+            ) {
+              const maxCandidate1 = Math.abs(
+                binBounds[j].upper - binBounds[i].lower
+              );
+              const maxCandidate2 = Math.abs(
+                binBounds[i].upper - binBounds[j].lower
+              );
+              maxCandidate =
+                maxCandidate1 > maxCandidate2 ? maxCandidate1 : maxCandidate2;
+
+              minDiff = 0;
+              maxDiff = maxCandidate > maxDiff ? maxCandidate : maxDiff;
+            } else {
+              // index i is completely greater than j
+              if (binBounds[i].upper > binBounds[j].upper) {
+                minCandidate = binBounds[i].lower - binBounds[j].upper;
+                maxCandidate = binBounds[i].upper - binBounds[j].lower;
+              } else {
+                minCandidate = binBounds[j].lower - binBounds[i].upper;
+                maxCandidate = binBounds[j].upper - binBounds[i].lower;
+              }
+
+              if (minCandidate < 0) {
+                console.log(minDiff);
+              }
+
+              minDiff = minCandidate < minDiff ? minCandidate : minDiff;
+              maxDiff = maxCandidate > maxDiff ? maxCandidate : maxDiff;
             }
-          };
+          }
         }
+        if (minDiff < 0) {
+          console.log(minDiff);
+        }
+        return {
+          bounds: {
+            lower: minDiff,
+            upper: maxDiff
+          },
+          overall: max - min
+        };
       }
-      return response;
+      return {
+        overall: max - min
+      };
     }
 
     return { overall: Number.NaN };
