@@ -66,7 +66,10 @@ export class CounterfactualPanel extends React.Component<
         <Stack tokens={{ childrenGap: "m1" }}>
           <Stack.Item>
             <Text variant={"medium"}>
-              {localization.Counterfactuals.panelDescription}
+              {localization.formatString(
+                localization.Counterfactuals.panelDescription,
+                this.props.data?.desired_class
+              )}
             </Text>
           </Stack.Item>
           <Stack.Item className={classes.searchBox}>
