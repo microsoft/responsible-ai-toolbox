@@ -26,17 +26,6 @@ def boston_data():
 
 
 @pytest.fixture(scope='module')
-def adult_data():
-    X_train_df, X_test_df, y_train, y_test,\
-        _, _, target_name, _ = create_adult_income_dataset()
-    train_df = copy.deepcopy(X_train_df)
-    test_df = copy.deepcopy(X_test_df)
-    train_df[target_name] = y_train
-    test_df[target_name] = y_test
-    return train_df, test_df, X_train_df.columns, target_name
-
-
-@pytest.fixture(scope='module')
 def parks_data():
     feature_names = ['state', 'population', 'attraction', 'area']
     train_df = pd.DataFrame([
