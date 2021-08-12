@@ -213,7 +213,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               this.state.seriesIsActive
             )}
             topK={this.state.topK}
-            onFeatureSelection={this.handleFeatureSelection}
+            onFeatureSelection={this.onFeatureSelection}
             selectedFeatureIndex={this.state.selectedFeatureIndex}
           />
           <SidePanel
@@ -393,10 +393,22 @@ export class GlobalExplanationTab extends React.PureComponent<
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
-      const key = item.key as string;
+      const key = item.key;
       const index = this.context.jointDataset.metaDict[key].index;
       if (index !== undefined) {
         this.handleFeatureSelection(this.state.selectedCohortIndex, index);
+      }
+    }
+  };
+  private onFeatureSelection = (
+    cohortIndex: number,
+    featureIndex: number
+  ): void => {
+    for (let i = 0; i < this.state.seriesIsActive.length; i++) {
+      if (!this.state.seriesIsActive[i]) continue;
+      if (cohortIndex-- === 0) {
+        this.handleFeatureSelection(i, featureIndex);
+        return;
       }
     }
   };
@@ -425,12 +437,19 @@ export class GlobalExplanationTab extends React.PureComponent<
         property: yKey
       }
     };
-    this.depPlot.current?.scrollIntoView();
     this.setState({
       dependenceProps: chartProps,
       selectedCohortIndex: cohortIndex,
       selectedFeatureIndex: featureIndex
     });
+    // some how scroll does not work in studio under certain reslution
+    // put a manual timeout to handle the issue
+    setTimeout(() => {
+      this.depPlot.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
+    }, 0.5);
   };
 
   private readonly onDependenceChange = (
