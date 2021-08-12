@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
+import copy
 import numpy as np
 import pytest
 import pandas as pd
 
 from unittest.mock import patch, ANY
 
-from ..common_utils import create_boston_data
+from ..common_utils import create_boston_data, create_adult_income_dataset
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai.exceptions import UserConfigValidationException
@@ -22,6 +23,17 @@ def boston_data():
     test_df = pd.DataFrame(X_test, columns=feature_names)
     test_df[target_feature] = y_test
     return train_df, test_df, feature_names, target_feature
+
+
+@pytest.fixture(scope='module')
+def adult_data():
+    X_train_df, X_test_df, y_train, y_test,\
+        _, _, target_name, _ = create_adult_income_dataset()
+    train_df = copy.deepcopy(X_train_df)
+    test_df = copy.deepcopy(X_test_df)
+    train_df[target_name] = y_train
+    test_df[target_name] = y_test
+    return train_df, test_df, X_train_df.columns, target_name
 
 
 class TestCausalManager:
@@ -68,6 +80,51 @@ class TestCausalManager:
         expected = "Increase the value 50"
         with pytest.raises(ValueError, match=expected):
             manager.add(['ZN'])
+
+    def test_causal_train_test_categories(self):
+        feature_names = ['state', 'population', 'attraction', 'area']
+        train_df = pd.DataFrame([
+            ['massachusetts', 3129, 'trees', 11],
+            ['utah', 41891, 'rocks', 51],
+            ['california', 193912, 'trees', 62],
+            ['california', 123901, 'trees', 25],
+            ['utah', 39012, 'rocks', 34],
+            ['colorado', 30102, 'rocks', 40],
+            ['massachusetts', 4222, 'trees', 15],
+            ['colorado', 20342, 'rocks', 42],
+            ['arizona', 3201, 'rocks', 90],
+            ['massachusetts', 3129, 'trees', 11],
+            ['utah', 41891, 'rocks', 51],
+            ['california', 193912, 'trees', 62],
+            ['california', 123901, 'trees', 25],
+            ['utah', 39012, 'rocks', 34],
+            ['colorado', 30102, 'rocks', 40],
+            ['massachusetts', 4222, 'trees', 15],
+            ['colorado', 20342, 'rocks', 42],
+            ['arizona', 3201, 'rocks', 90],
+        ], columns=feature_names)
+
+        test_df = pd.DataFrame([
+            ['california', 203912, 'trees', 102],
+            ['utah', 5102, 'rocks', 21],
+            ['colorado', 8120, 'rocks', 31],
+            ['indiana', 301, 'trees', 78],
+            ['california', 203912, 'trees', 102],
+            ['utah', 5102, 'rocks', 21],
+            ['colorado', 8120, 'rocks', 31],
+            ['indiana', 301, 'trees', 78],
+        ], columns=feature_names)
+
+        print(train_df)
+        print(test_df)
+
+        target_feature = 'area'
+        manager = CausalManager(train_df, test_df, target_feature,
+                                ModelTask.REGRESSION, ['state', 'attraction'])
+
+        manager.add(['population'],
+                    skip_cat_limit_checks=True,
+                    upper_bound_on_cat_expansion=50)
 
 
 @pytest.fixture(scope='class')
