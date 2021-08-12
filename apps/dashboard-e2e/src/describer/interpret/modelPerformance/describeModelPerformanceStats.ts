@@ -33,8 +33,12 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
         cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
           "Recall"
         );
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains("FPR");
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains("FNR");
+        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
+          "False Positive Rates"
+        );
+        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
+          "False Negative Rates"
+        );
       } else {
         cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains("MSE");
         cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
