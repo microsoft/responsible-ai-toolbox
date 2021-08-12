@@ -6,6 +6,7 @@ import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { ColorPalette } from "../../ColorPalette";
 import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
 import { INodeDetail } from "../../TreeViewState";
 import { Gradient } from "../Gradient/Gradient";
@@ -59,6 +60,35 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                 </div>
               </Stack>
             </Stack>
+            <svg
+              width="60"
+              height="60"
+              viewBox="-2 -2 56 56"
+              pointerEvents="auto"
+            >
+              <mask id="detailMask">
+                <rect x="-26" y="-26" width="52" height="52" fill="white" />
+              </mask>
+              <g className={classNames.opacityToggleCircle}>
+                <circle
+                  r="26"
+                  className={classNames.node}
+                  style={{ fill: this.props.nodeDetail.errorColor }}
+                />
+                <g
+                  style={this.props.nodeDetail.maskDown}
+                  mask="url(#detailMask)"
+                  className={classNames.nopointer}
+                >
+                  <circle
+                    r="26"
+                    className={classNames.node}
+                    fill={ColorPalette.FillStyle}
+                    style={this.props.nodeDetail.maskUp}
+                  />
+                </g>
+              </g>
+            </svg>
           </Stack>
           <Stack>
             <Stack horizontal>
