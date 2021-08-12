@@ -36,6 +36,45 @@ def adult_data():
     return train_df, test_df, X_train_df.columns, target_name
 
 
+@pytest.fixture(scope='module')
+def parks_data():
+    feature_names = ['state', 'population', 'attraction', 'area']
+    train_df = pd.DataFrame([
+        ['massachusetts', 3129, 'trees', 11],
+        ['utah', 41891, 'rocks', 51],
+        ['california', 193912, 'trees', 62],
+        ['california', 123901, 'trees', 25],
+        ['utah', 39012, 'rocks', 34],
+        ['colorado', 30102, 'rocks', 40],
+        ['massachusetts', 4222, 'trees', 15],
+        ['colorado', 20342, 'rocks', 42],
+        ['arizona', 3201, 'rocks', 90],
+        ['massachusetts', 3129, 'trees', 11],
+        ['utah', 41891, 'rocks', 51],
+        ['california', 193912, 'trees', 62],
+        ['california', 123901, 'trees', 25],
+        ['utah', 39012, 'rocks', 34],
+        ['colorado', 30102, 'rocks', 40],
+        ['massachusetts', 4222, 'trees', 15],
+        ['colorado', 20342, 'rocks', 42],
+        ['arizona', 3201, 'rocks', 90],
+    ], columns=feature_names)
+
+    test_df = pd.DataFrame([
+        ['california', 203912, 'trees', 102],
+        ['utah', 5102, 'rocks', 21],
+        ['colorado', 8120, 'rocks', 31],
+        ['indiana', 301, 'trees', 78],
+        ['california', 203912, 'trees', 102],
+        ['utah', 5102, 'rocks', 21],
+        ['colorado', 8120, 'rocks', 31],
+        ['indiana', 301, 'trees', 78],
+    ], columns=feature_names)
+
+    target_feature = 'area'
+    return train_df, test_df, target_feature
+
+
 class TestCausalManager:
     def test_causal_no_categoricals(self, boston_data):
         train_df, test_df, feature_names, target_feature = boston_data
@@ -81,50 +120,20 @@ class TestCausalManager:
         with pytest.raises(ValueError, match=expected):
             manager.add(['ZN'])
 
-    def test_causal_train_test_categories(self):
-        feature_names = ['state', 'population', 'attraction', 'area']
-        train_df = pd.DataFrame([
-            ['massachusetts', 3129, 'trees', 11],
-            ['utah', 41891, 'rocks', 51],
-            ['california', 193912, 'trees', 62],
-            ['california', 123901, 'trees', 25],
-            ['utah', 39012, 'rocks', 34],
-            ['colorado', 30102, 'rocks', 40],
-            ['massachusetts', 4222, 'trees', 15],
-            ['colorado', 20342, 'rocks', 42],
-            ['arizona', 3201, 'rocks', 90],
-            ['massachusetts', 3129, 'trees', 11],
-            ['utah', 41891, 'rocks', 51],
-            ['california', 193912, 'trees', 62],
-            ['california', 123901, 'trees', 25],
-            ['utah', 39012, 'rocks', 34],
-            ['colorado', 30102, 'rocks', 40],
-            ['massachusetts', 4222, 'trees', 15],
-            ['colorado', 20342, 'rocks', 42],
-            ['arizona', 3201, 'rocks', 90],
-        ], columns=feature_names)
-
-        test_df = pd.DataFrame([
-            ['california', 203912, 'trees', 102],
-            ['utah', 5102, 'rocks', 21],
-            ['colorado', 8120, 'rocks', 31],
-            ['indiana', 301, 'trees', 78],
-            ['california', 203912, 'trees', 102],
-            ['utah', 5102, 'rocks', 21],
-            ['colorado', 8120, 'rocks', 31],
-            ['indiana', 301, 'trees', 78],
-        ], columns=feature_names)
-
-        print(train_df)
-        print(test_df)
-
-        target_feature = 'area'
+    def test_causal_train_test_categories(self, parks_data):
+        train_df, test_df, target_feature = parks_data
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, ['state', 'attraction'])
 
-        manager.add(['population'],
-                    skip_cat_limit_checks=True,
-                    upper_bound_on_cat_expansion=50)
+        message = ("Causal analysis requires that every category of "
+                   "categorical features present in the test data be "
+                   "also present in the train data. "
+                   "Categories missing from train data: "
+                   "{'state': \\['indiana'\\]}")
+        with pytest.raises(UserConfigValidationException, match=message):
+            manager.add(['population'],
+                        skip_cat_limit_checks=True,
+                        upper_bound_on_cat_expansion=50)
 
 
 @pytest.fixture(scope='class')
