@@ -78,8 +78,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         paddingTop: "5px"
       },
       searchBox: {
-        padding: "20px 0",
-        width: "200px"
+        padding: "20px 0"
       },
       tooltipColumn: {
         alignItems: "flex-start",

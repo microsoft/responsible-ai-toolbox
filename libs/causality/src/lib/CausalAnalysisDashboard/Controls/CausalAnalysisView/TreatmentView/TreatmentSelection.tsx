@@ -6,7 +6,7 @@ import { localization } from "@responsible-ai/localization";
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
-import { TreatmentTableStyles } from "./TreatmentTableStyles";
+import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentSelectionProps {
   data?: ICausalPolicy[];

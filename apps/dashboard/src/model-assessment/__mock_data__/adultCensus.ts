@@ -4384,17 +4384,47 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
         feature: "age",
         leaf: false,
         left: {
-          leaf: true,
-          n_samples: 16,
-          treatment: "increase"
-        },
-        right: {
           feature: "education-num",
           leaf: false,
           left: {
             leaf: true,
             n_samples: 17,
             treatment: "increase"
+          },
+          right: {
+            leaf: true,
+            n_samples: 15,
+            treatment: "decrease"
+          },
+          threshold: 11
+        },
+        right: {
+          feature: "capital-gain",
+          leaf: false,
+          left: {
+            feature: "capital-loss",
+            leaf: false,
+            left: {
+              leaf: true,
+              n_samples: 16,
+              treatment: "increase"
+            },
+            right: {
+              feature: "fnlwgt",
+              leaf: false,
+              left: {
+                leaf: true,
+                n_samples: 17,
+                treatment: "increase"
+              },
+              right: {
+                leaf: true,
+                n_samples: 15,
+                treatment: "decrease"
+              },
+              threshold: 11
+            },
+            threshold: 32
           },
           right: {
             leaf: true,
