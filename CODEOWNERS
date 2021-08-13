@@ -1,3 +1,8 @@
+# Error analysis package
 /erroranalysis @imatiach-msft
+
+# Responsible AI widgets package
 /raiwidgets @zhb000 @xuke444 @romanlutz
+
+# Responsible AI SDK package
 /responsibleai @gaugup @gregorybchris @imatiach-msft @riedgar-ms @romanlutz @xuke444
