@@ -640,14 +640,14 @@
   },
   "Counterfactuals": {
     "header": "What-If counterfactuals",
-    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.",
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.",
     "showOnly": "Show only",
     "selectedDatapoint": "Selected datapoint",
     "desiredClass": "Desired class for counterfactual(s)",
     "currentClass": "Current class",
     "createCounterfactual": "Create what-if counterfactual",
     "panelHeader": "What-if counterfactuals",
-    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
     "counterfactualName": "What-if counterfactual name",
     "saveAsNew": "Save as new datapoint",
     "seePrediction": "See prediction deltas",
@@ -655,7 +655,7 @@
     "noFeatures": "No features available",
     "referenceDatapoint": "Reference datapoint: Row {0}",
     "counterfactualEx": "Counterfactual Ex {0}",
-    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "saveDescription": "These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.",
 
     "recommendedPolicy": "Recommended policy gain",
     "individualTreatment": "Recommended individual treatment policy",
@@ -670,7 +670,7 @@
     "increaseByOne": "Increase value by 1",
     "decreaseByOne": "Decrease value by 1",
     "noData": "No data",
-    "localImportanceDescription": "The top ranked features in Row {0} to perturb in order to achieve desired model prediction from counterfactual analysis: {1}",
+    "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
     "localImportanceSelectData": "Select a data point to view local importance chart"
   },
   "ErrorAnalysis": {
