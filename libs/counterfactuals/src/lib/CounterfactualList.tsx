@@ -263,7 +263,7 @@ export class CounterfactualList extends React.Component<
       filterText === undefined || filterText === null || !/\S/.test(filterText);
     const filtered = invalidInput
       ? allFeatures
-      : allFeatures.filter((f) => f.includes(toLower(filterText)));
+      : allFeatures.filter((f) => toLower(f).includes(toLower(filterText)));
     return filtered;
   };
 

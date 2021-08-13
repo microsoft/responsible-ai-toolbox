@@ -24,15 +24,24 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
 
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
+    const isBinaryFeature = this.context.dataset.categorical_features.includes(
+      this.props.data.treatment_feature
+    );
     return (
       <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.header}>
-            {localization.formatString(
-              localization.CausalAnalysis.TreatmentPolicy.averageGain,
-              this.props.data.control_treatment,
-              this.props.data.treatment_feature
-            )}
+            {isBinaryFeature
+              ? localization.formatString(
+                  localization.CausalAnalysis.TreatmentPolicy.averageGainBinary,
+                  this.props.data.treatment_feature
+                )
+              : localization.formatString(
+                  localization.CausalAnalysis.TreatmentPolicy
+                    .averageGainContinuous,
+                  this.props.data.control_treatment,
+                  this.props.data.treatment_feature
+                )}
           </Text>
         </Stack.Item>
         <Stack.Item>
@@ -42,14 +51,20 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
             </Stack.Item>
             <Stack.Item className={styles.description}>
               <Text variant={"medium"} className={styles.label}>
-                {localization.formatString(
-                  localization.CausalAnalysis.TreatmentPolicy.BarDescription,
-                  this.props.data?.treatment_feature,
-                  this.props.data?.control_treatment
-                )}
+                {isBinaryFeature
+                  ? localization.formatString(
+                      localization.CausalAnalysis.TreatmentPolicy
+                        .BarDescriptionBinary,
+                      this.props.data?.treatment_feature
+                    )
+                  : localization.CausalAnalysis.TreatmentPolicy
+                      .BarDescriptionContinuous}
               </Text>
               <Text variant={"medium"} className={styles.label}>
-                {localization.CausalAnalysis.TreatmentPolicy.BarText}
+                {isBinaryFeature
+                  ? localization.CausalAnalysis.TreatmentPolicy.BarTextBinary
+                  : localization.CausalAnalysis.TreatmentPolicy
+                      .BarTextContinuous}
               </Text>
             </Stack.Item>
           </Stack>
