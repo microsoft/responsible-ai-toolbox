@@ -8,18 +8,13 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ITreatmentTableStyles {
-  cell: IStyle;
   description: IStyle;
   detailsList: IStyle;
   detailsListDescription: IStyle;
   dropdown: IStyle;
-  header: IStyle;
   spinButton: IStyle;
   spinButtonText: IStyle;
-  singleCell: IStyle;
   table: IStyle;
-  tableInner: IStyle;
-  td: IStyle;
   label: IStyle;
   chartContainer: IStyle;
 }
@@ -27,16 +22,6 @@ export interface ITreatmentTableStyles {
 export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyles> =
   () => {
     return mergeStyleSets<ITreatmentTableStyles>({
-      cell: {
-        borderStyle: "groove",
-        fontFamily: "Segoe UI",
-        fontSize: "14px",
-        fontStyle: "normal",
-        fontWeight: "normal",
-        height: "100px",
-        minWidth: "250px",
-        textAlign: "center"
-      },
       chartContainer: {
         minHeight: "500px"
       },
@@ -56,12 +41,6 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         paddingLeft: "20px",
         width: "220px"
       },
-      header: {
-        fontFamily: "Segoe UI",
-        fontSize: "14px",
-        fontWeight: "600",
-        lineHeight: "16px"
-      },
       label: {
         display: "inline-block",
         flex: "1",
@@ -70,11 +49,6 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         paddingBottom: "10px",
         paddingLeft: "30px",
         textAlign: "left"
-      },
-      singleCell: {
-        border: "1px",
-        borderStyle: "solid",
-        width: "30vw"
       },
       spinButton: {
         paddingLeft: "10px",
@@ -86,26 +60,12 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
       },
       table: {
         borderCollapse: "collapse",
-        fontFamily: "Segoe UI",
-        fontSize: "14px",
-        fontStyle: "normal",
-        fontWeight: "normal",
+        "td, th": {
+          border: "1px",
+          borderStyle: "solid"
+        },
         textAlign: "center",
         width: "50vw"
-      },
-      tableInner: {
-        borderCollapse: "collapse",
-        fontFamily: "Segoe UI",
-        fontSize: "14px",
-        fontStyle: "normal",
-        fontWeight: "normal",
-        textAlign: "center",
-        width: "100%"
-      },
-      td: {
-        border: "1px solid #dddddd",
-        padding: "0",
-        textAlign: "center"
       }
     });
   };

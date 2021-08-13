@@ -7,11 +7,11 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { SpinButton, Stack, Text } from "office-ui-fabric-react";
+import { Label, SpinButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { TreatmentList } from "./TreatmentList";
-import { TreatmentTableStyles } from "./TreatmentTableStyles";
+import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentListSectionProps {
   data?: ICausalPolicy;
@@ -41,9 +41,7 @@ export class TreatmentListSection extends React.Component<
     return (
       <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Stack.Item>
-          <Text variant={"medium"} className={styles.header}>
-            {localization.Counterfactuals.individualTreatment}
-          </Text>
+          <Label>{localization.Counterfactuals.individualTreatment}</Label>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "l1" }}>

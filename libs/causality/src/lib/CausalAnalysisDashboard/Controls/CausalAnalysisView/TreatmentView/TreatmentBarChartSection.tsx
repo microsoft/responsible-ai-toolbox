@@ -7,11 +7,11 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { Label, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { TreatmentBarChart } from "./TreatmentBarChart";
-import { TreatmentTableStyles } from "./TreatmentTableStyles";
+import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentBarChartSectionProps {
   data: ICausalPolicy;
@@ -27,13 +27,13 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
     return (
       <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
-          <Text variant={"medium"} className={styles.header}>
+          <Label>
             {localization.formatString(
               localization.CausalAnalysis.TreatmentPolicy.averageGain,
               this.props.data.control_treatment,
               this.props.data.treatment_feature
             )}
-          </Text>
+          </Label>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
