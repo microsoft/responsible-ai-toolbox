@@ -87,21 +87,21 @@
     "individualTreatment": "Recommended individual treatment policy",
     "listChoose": "Use the spinner control to choose the top k samples you’d like to view.",
     "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
-    "localImportanceDescription": "The top ranked features in Row {0} to perturb in order to achieve desired model prediction from counterfactual analysis: {1}",
+    "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
     "localImportanceSelectData": "Select a data point to view local importance chart",
     "noData": "No data",
     "noFeatures": "No features available",
-    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
     "panelHeader": "What-if counterfactuals",
     "recommendedPolicy": "Recommended policy gain",
     "referenceDatapoint": "Reference datapoint: Row {0}",
     "saveAsNew": "Save as new datapoint",
-    "saveDescription": "Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.",
+    "saveDescription": "These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.",
     "seePrediction": "See prediction deltas",
     "selectedDatapoint": "Selected datapoint",
     "showOnly": "Show only",
     "showTop": "Datapoints with the largest estimated causal responses to treatment feature: {0}",
-    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot."
+    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot."
   },
   "ErrorAnalysis": {
     "Cohort": {
@@ -706,13 +706,13 @@
       "_label.comment": "label for dropdown allowing user to select how importance across multiple output classes is aggregated",
       "_overview.comment": "explains absolute value weights",
       "_predictedClassInfo.comment": "explains predicted class weight",
-      "absoluteValInfo": "Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes",
+      "absoluteValInfo": "Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes",
       "close": "Close",
       "crossClassWeights": "Cross class weights",
-      "enumeratedClassInfo": "Enumerated class names: Shows only the specified class's feature importance values across all data points.",
+      "enumeratedClassInfo": "Enumerated class names: Shows only the specified class's feature importance values across all data points.",
       "info": "Information on cross-class calculation",
       "label": "Cross-class weighting:",
-      "overviewInfo": "Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:",
+      "overviewInfo": "Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:",
       "predictedClassInfo": "Predicted class: Shows the feature importance value for a given point's predicted class"
     },
     "DatasetExplorer": {
@@ -1099,7 +1099,7 @@
     "modelPerformance": "Model performance",
     "perturbationExploration": "Perturbation exploration",
     "predictedClass": "Predicted class",
-    "selectPoint": "Select a point to see its local explanation",
+    "selectPoint": "Select a point to see its local explanation",
     "summaryImportance": "Summary importance"
   },
   "ModelAssessment": {
