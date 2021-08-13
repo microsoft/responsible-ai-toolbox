@@ -18,7 +18,7 @@ export interface ICustomPredictionLabelsProps {
   metadata: IExplanationModelMetadata;
   jointDataset: JointDataset;
   selectedWhatIfRootIndex: number;
-  temporaryPoint: { [key: string]: any } | undefined;
+  temporaryPoint: { [key: string]: string | number } | undefined;
 }
 export class CustomPredictionLabels extends React.Component<ICustomPredictionLabelsProps> {
   public render(): React.ReactNode {
