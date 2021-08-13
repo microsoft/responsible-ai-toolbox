@@ -251,8 +251,7 @@ export class CounterfactualList extends React.Component<
           item={this.state.data}
           itemIndex={-1}
           groupNestingDepth={detailsFooterProps.groupNestingDepth}
-          selectionMode={SelectionMode.single}
-          selection={detailsFooterProps.selection}
+          selectionMode={SelectionMode.none}
           onRenderItemColumn={this.renderDetailsFooterItemColumn}
         />
       );
