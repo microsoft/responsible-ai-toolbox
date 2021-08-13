@@ -120,7 +120,7 @@ class TestCausalManager:
                    "Categories missing from train data: "
                    "{'state': \\['indiana'\\]}")
         with pytest.raises(UserConfigValidationException, match=message):
-            manager.add(['population'],
+            manager.add(['state'],
                         skip_cat_limit_checks=True,
                         upper_bound_on_cat_expansion=50)
 
