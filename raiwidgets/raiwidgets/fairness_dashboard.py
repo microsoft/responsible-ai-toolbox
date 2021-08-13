@@ -39,19 +39,12 @@ class FairnessDashboard(Dashboard):
             public_ip=None,
             port=None,
             fairness_metric_module=None,
-            fairness_metric_mapping=None,
-            custom_metric_functions=None):
+            fairness_metric_mapping=None):
         """Initialize the fairness dashboard."""
 
         metrics_module = FairnessMetricModule(
             module_name=fairness_metric_module,
             mapping=fairness_metric_mapping)
-
-        if custom_metric_functions is not None:
-            metrics_module._metric_methods.update(custom_metric_functions)
-        # metrics_module.error_methods = [
-        #     method[0] for method in metrics_module._metric_methods.items()
-        #     if "method" in method[1]["model_type"]]
 
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
@@ -88,8 +81,6 @@ class FairnessDashboard(Dashboard):
                 metrics_module.regression_methods,
             "probability_methods":
                 metrics_module.probability_methods,
-            # "error_methods":
-            #     metrics_module.error_methods
         }
 
         super(FairnessDashboard, self).__init__(

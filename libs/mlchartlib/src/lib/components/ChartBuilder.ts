@@ -29,10 +29,10 @@ export class ChartBuilder {
       y: any;
       group: any;
       size: any;
-      xLowerBound: any;
-      xUpperBound: any;
-      yLowerBound: any;
-      yUpperBound: any;
+      xLowerBound: number;
+      xUpperBound: number;
+      yLowerBound: number;
+      yUpperBound: number;
     }> = jmespath.search(
       rows,
       `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${

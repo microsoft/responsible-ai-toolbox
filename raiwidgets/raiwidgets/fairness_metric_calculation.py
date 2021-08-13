@@ -5,11 +5,7 @@ import importlib
 from packaging import version
 import numpy as np
 from sklearn.metrics import confusion_matrix
-from scipy import stats
 
-from fairlearn.metrics._extra_metrics import (
-    _root_mean_squared_error,
-)
 
 MODULE_NOT_INSTALLED_ERROR_MESSAGE = "{} is not installed. " \
     "Either install fairlearn or provide another fairness metric module."
@@ -38,22 +34,6 @@ def compute_wilson_bounds(p, n, digits=digits_of_precision, z=z_score):
     return (round(lower_bound, digits), round(upper_bound, digits))
 
 
-# Unused
-def compute_standard_normal_error_binomial(metric_value, sample_size, z_score):
-    """ Standard Error Calculation (Binary Classification)
-
-    Assumes infinitely large population,
-    Should be used when the sampling fraction is small.
-    For sampling fraction > 5%, may want to use finite population correction
-    https://en.wikipedia.org/wiki/Margin_of_error
-
-    Note:
-        Returns absolute error (%)
-    """
-    return z_score * np.sqrt(metric_value * (1.0 - metric_value)) \
-        / np.sqrt(sample_size)
-
-
 def wilson_wrapper(y_true, y_pred, func):
     assert len(y_true) == len(y_pred)
     p = func(y_true, y_pred)
@@ -65,6 +45,7 @@ def wilson_wrapper(y_true, y_pred, func):
 
 # custom recall/precision error bar functions to have n =/= len(y_pred)
 # because it should be n = (tp + fn) and n = (tp+fp), respectively
+
 
 def general_cm_wilson(a, b, digits_of_precision, z_score):
     """

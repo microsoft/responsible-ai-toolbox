@@ -27,10 +27,7 @@ export interface ISharedStyles {
   doneButton: IStyle;
   modalContentHelp: IStyle;
   modalContentHelpText: IStyle;
-  calloutWrapper: IStyle;
   calloutBarWrapper: IStyle;
-  graphCalloutWrapper: IStyle;
-  errorBarsCalloutWrapper: IStyle;
   title: IStyle;
   toggle: IStyle;
   errorCalloutHeader: IStyle;
@@ -47,13 +44,8 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       width: 320
     },
     calloutBarWrapper: {
-      justifyContent: "space-between",
+      marginLeft: "80px",
       padding: "15px 0px"
-    },
-    calloutWrapper: {
-      alignItems: "center",
-      display: "flex",
-      flexFlow: "row wrap"
     },
     chartBody: {
       flex: 1
@@ -91,16 +83,8 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       margin: "auto",
       padding: "12px"
     },
-    errorBarsCalloutWrapper: {
-      alignItems: "center",
-      display: "flex",
-      flexFlow: "row nowrap"
-    },
     errorCalloutHeader: {
       paddingRight: "5px"
-    },
-    graphCalloutWrapper: {
-      marginLeft: "80px"
     },
     header: {
       alignItems: "center",
@@ -118,9 +102,7 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
     infoButton: {
       border: "1px solid",
       borderRadius: "50%",
-      color: theme.semanticColors.bodyText,
       float: "left",
-      fontSize: "12px",
       fontWeight: "600",
       height: "15px",
       lineHeight: "14px",

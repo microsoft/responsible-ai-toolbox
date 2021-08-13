@@ -30,19 +30,21 @@ export class CalloutGraph extends React.PureComponent<
   public render(): React.ReactNode {
     const sharedStyles = SharedStyles();
     return (
-      <Stack className={sharedStyles.graphCalloutWrapper}>
-        <Stack className={sharedStyles.calloutWrapper}>
+      <Stack>
+        <Stack horizontal verticalAlign="center">
           <Stack>
             <ActionButton
               className={sharedStyles.actionButton}
               onClick={this.handleOpenGraphCallout}
             >
-              <div
+              <Text
+                block
+                variant="medium"
                 className={sharedStyles.infoButton}
                 id={this.props.graphInfoButtonId}
               >
                 i
-              </div>
+              </Text>
               {localization.Fairness.ModelComparison.howToRead}
             </ActionButton>
             {this.state.showGraphCallout && (

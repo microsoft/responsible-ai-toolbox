@@ -33,12 +33,16 @@ export class CalloutHelpBar extends React.PureComponent<ICalloutHelpBarProps> {
     const errorBarsInfoButtonId = "errorBarInfoButtonId";
 
     return (
-      <Stack horizontal className={sharedStyles.calloutBarWrapper}>
+      <Stack
+        horizontal
+        horizontalAlign="space-between"
+        className={sharedStyles.calloutBarWrapper}
+      >
         <CalloutGraph
           graphInfoButtonId={graphInfoButtonId}
           graphCalloutStrings={this.props.graphCalloutStrings}
         />
-        <Stack className={sharedStyles.errorBarsCalloutWrapper}>
+        <Stack horizontal verticalAlign="center">
           <CalloutErrorBars errorBarsInfoButtonId={errorBarsInfoButtonId} />
           <Toggle
             className={sharedStyles.toggle}

@@ -29,17 +29,19 @@ export class CalloutErrorBars extends React.PureComponent<
   public render(): React.ReactNode {
     const sharedStyles = SharedStyles();
     return (
-      <Stack className={sharedStyles.calloutWrapper}>
+      <Stack horizontal verticalAlign="center">
         <ActionButton
           className={sharedStyles.actionButton}
           onClick={this.handleOpenErrorBarsCallout}
         >
-          <div
+          <Text
+            block
+            variant="medium"
             className={sharedStyles.infoButton}
             id={this.props.errorBarsInfoButtonId}
           >
             i
-          </div>
+          </Text>
         </ActionButton>
         <span className={sharedStyles.errorCalloutHeader}>
           {localization.Fairness.DropdownHeaders.errorMetric}
