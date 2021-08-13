@@ -27,6 +27,7 @@ from sklearn.metrics import (
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
 DEFAULT_NUM_LEAVES = 31
+DEFAULT_MIN_CHILD_SAMPLES = 20
 
 
 class TreeSide(str, Enum):
@@ -48,7 +49,8 @@ def compute_json_error_tree(analyzer,
                             filters,
                             composite_filters,
                             max_depth=DEFAULT_MAX_DEPTH,
-                            num_leaves=DEFAULT_NUM_LEAVES):
+                            num_leaves=DEFAULT_NUM_LEAVES,
+                            min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
     # Note: this is for backcompat for older versions
     # of raiwidgets pypi package
     return compute_error_tree(analyzer,
@@ -56,7 +58,8 @@ def compute_json_error_tree(analyzer,
                               filters,
                               composite_filters,
                               max_depth,
-                              num_leaves)
+                              num_leaves,
+                              min_child_samples)
 
 
 def compute_error_tree(analyzer,
@@ -64,12 +67,15 @@ def compute_error_tree(analyzer,
                        filters,
                        composite_filters,
                        max_depth=DEFAULT_MAX_DEPTH,
-                       num_leaves=DEFAULT_NUM_LEAVES):
+                       num_leaves=DEFAULT_NUM_LEAVES,
+                       min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
     # Fit a surrogate model on errors
     if max_depth is None:
         max_depth = DEFAULT_MAX_DEPTH
     if num_leaves is None:
         num_leaves = DEFAULT_NUM_LEAVES
+    if min_child_samples is None:
+        min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
     is_model_analyzer = hasattr(analyzer, MODEL)
     if is_model_analyzer:
         filtered_df = filter_from_cohort(analyzer.dataset,
@@ -135,6 +141,7 @@ def compute_error_tree(analyzer,
                                        diff,
                                        max_depth,
                                        num_leaves,
+                                       min_child_samples,
                                        cat_ind_reindexed)
 
     filtered_indexed_df = pd.DataFrame(dataset_sub_features,
@@ -161,6 +168,7 @@ def create_surrogate_model(analyzer,
                            diff,
                            max_depth,
                            num_leaves,
+                           min_child_samples,
                            cat_ind_reindexed):
     """Creates and fits the surrogate lightgbm model.
 
@@ -178,6 +186,8 @@ def create_surrogate_model(analyzer,
     :param num_leaves: The number of leaves of the surrogate tree
         trained on errors.
     :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to create one leaf.
+    :type min_child_samples: int
     :param cat_ind_reindexed: The list of categorical feature indexes.
     :type cat_ind_reindexed: list[int]
     :return: The trained surrogate model.
@@ -186,11 +196,13 @@ def create_surrogate_model(analyzer,
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         surrogate = LGBMClassifier(n_estimators=1,
                                    max_depth=max_depth,
-                                   num_leaves=num_leaves)
+                                   num_leaves=num_leaves,
+                                   min_child_samples=min_child_samples)
     else:
         surrogate = LGBMRegressor(n_estimators=1,
                                   max_depth=max_depth,
-                                  num_leaves=num_leaves)
+                                  num_leaves=num_leaves,
+                                  min_child_samples=min_child_samples)
     if cat_ind_reindexed:
         surrogate.fit(dataset_sub_features, diff,
                       categorical_feature=cat_ind_reindexed)

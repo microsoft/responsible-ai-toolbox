@@ -21,6 +21,7 @@ REPORTS = 'reports'
 CONFIG = 'config'
 MAX_DEPTH = Keys.MAX_DEPTH
 NUM_LEAVES = Keys.NUM_LEAVES
+MIN_CHILD_SAMPLES = Keys.MIN_CHILD_SAMPLES
 FILTER_FEATURES = Keys.FILTER_FEATURES
 IS_COMPUTED = 'is_computed'
 
@@ -51,15 +52,21 @@ def as_error_config(json_dict):
     """
     has_max_depth = MAX_DEPTH in json_dict
     has_num_leaves = NUM_LEAVES in json_dict
+    has_min_child_samples = MIN_CHILD_SAMPLES in json_dict
     has_filter_features = FILTER_FEATURES in json_dict
     has_is_computed = IS_COMPUTED in json_dict
     has_all_fields = (has_max_depth and has_num_leaves and
-                      has_filter_features and has_is_computed)
+                      has_min_child_samples and has_filter_features and
+                      has_is_computed)
     if has_all_fields:
         max_depth = json_dict[MAX_DEPTH]
         num_leaves = json_dict[NUM_LEAVES]
+        min_child_samples = json_dict[MIN_CHILD_SAMPLES]
         filter_features = json_dict[FILTER_FEATURES]
-        config = ErrorAnalysisConfig(max_depth, num_leaves, filter_features)
+        config = ErrorAnalysisConfig(max_depth,
+                                     num_leaves,
+                                     min_child_samples,
+                                     filter_features)
         config.is_computed = json_dict[IS_COMPUTED]
         return config
     else:
@@ -74,18 +81,24 @@ class ErrorAnalysisConfig(BaseConfig):
     :type max_depth: int
     :param num_leaves: The number of leaves in the tree.
     :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
     :param filter_features: One or two features to use for the
         matrix filter.
     :type filter_features: list
     """
 
-    def __init__(self, max_depth, num_leaves, filter_features):
+    def __init__(self, max_depth, num_leaves, min_child_samples, filter_features):
         """Defines the ErrorAnalysisConfig, specifying the parameters to run.
 
         :param max_depth: The maximum depth of the tree.
         :type max_depth: int
         :param num_leaves: The number of leaves in the tree.
         :type num_leaves: int
+        :param min_child_samples: The minimal number of data required to
+            create one leaf.
+        :type min_child_samples: int
         :param filter_features: One or two features to use for the
             matrix filter.
         :type filter_features: list
@@ -93,6 +106,7 @@ class ErrorAnalysisConfig(BaseConfig):
         super(ErrorAnalysisConfig, self).__init__()
         self.max_depth = max_depth
         self.num_leaves = num_leaves
+        self.min_child_samples = min_child_samples
         self.filter_features = filter_features
 
     def __eq__(self, other_ea_config):
@@ -104,6 +118,7 @@ class ErrorAnalysisConfig(BaseConfig):
         return (
             self.max_depth == other_ea_config.max_depth and
             self.num_leaves == other_ea_config.num_leaves and
+            self.min_child_samples == other_ea_config.min_child_samples and
             self.filter_features == other_ea_config.filter_features
         )
 
@@ -111,14 +126,15 @@ class ErrorAnalysisConfig(BaseConfig):
     def __dict__(self):
         """Returns the dictionary representation of the ErrorAnalysisConfig.
 
-        The dictionary contains the max depth, num leaves and list of
-        matrix filter features.
+        The dictionary contains the max depth, num leaves, min
+        child samples and list of matrix filter features.
 
         :return: The dictionary representation of the ErrorAnalysisConfig.
         :rtype: dict
         """
         return {'max_depth': self.max_depth,
                 'num_leaves': self.num_leaves,
+                'min_child_samples': self.min_child_samples,
                 'filter_features': self.filter_features,
                 'is_computed': self.is_computed}
 
@@ -179,13 +195,17 @@ class ErrorAnalysisManager(BaseManager):
                                        self._feature_names,
                                        self._categorical_features)
 
-    def add(self, max_depth=3, num_leaves=31, filter_features=None):
+    def add(self, max_depth=3, num_leaves=31,
+            min_child_samples=20, filter_features=None):
         """Add an error analyzer to be computed later.
 
         :param max_depth: The maximum depth of the tree.
         :type max_depth: int
         :param num_leaves: The number of leaves in the tree.
         :type num_leaves: int
+        :param min_child_samples: The minimal number of data required to
+            create one leaf.
+        :type min_child_samples: int
         :param filter_features: One or two features to use for the
             matrix filter.
         :type filter_features: list
@@ -197,6 +217,7 @@ class ErrorAnalysisManager(BaseManager):
         ea_config = ErrorAnalysisConfig(
             max_depth=max_depth,
             num_leaves=num_leaves,
+            min_child_samples=min_child_samples,
             filter_features=filter_features)
         is_duplicate = ea_config.is_duplicate(
             self._ea_config_list)
@@ -217,10 +238,12 @@ class ErrorAnalysisManager(BaseManager):
             config.is_computed = True
             max_depth = config.max_depth
             num_leaves = config.num_leaves
+            min_child_samples = config.min_child_samples
             filter_features = config.filter_features
-            report = self._analyzer.create_error_report(filter_features,
-                                                        max_depth=max_depth,
-                                                        num_leaves=num_leaves)
+            report = self._analyzer.create_error_report(
+                filter_features, max_depth=max_depth,
+                min_child_samples=min_child_samples,
+                num_leaves=num_leaves)
             self._ea_report_list.append(report)
 
     def get(self):
@@ -246,6 +269,7 @@ class ErrorAnalysisManager(BaseManager):
             report[Keys.IS_COMPUTED] = config.is_computed
             report[Keys.MAX_DEPTH] = config.max_depth
             report[Keys.NUM_LEAVES] = config.num_leaves
+            report[Keys.MIN_CHILD_SAMPLES] = config.min_child_samples
             report[Keys.FILTER_FEATURES] = config.filter_features
             reports.append(report)
         props[Keys.REPORTS] = reports
@@ -264,8 +288,10 @@ class ErrorAnalysisManager(BaseManager):
         error_analysis = ErrorAnalysisData()
         error_analysis.maxDepth = report[Keys.MAX_DEPTH]
         error_analysis.numLeaves = report[Keys.NUM_LEAVES]
+        error_analysis.minChildSamples = report[Keys.MIN_CHILD_SAMPLES]
         error_analysis.tree = self._analyzer.compute_error_tree(
-            self._feature_names, None, None)
+            self._feature_names, None, None, error_analysis.maxDepth,
+            error_analysis.numLeaves, error_analysis.minChildSamples)
         error_analysis.matrix = self._analyzer.compute_matrix(
             self._feature_names, None, None)
         return error_analysis
