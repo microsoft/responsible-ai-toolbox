@@ -48,6 +48,8 @@ interface ICounterfactualListState {
   showCallout: boolean;
 }
 
+const nameColumnKey = "row";
+
 export class CounterfactualList extends React.Component<
   ICounterfactualListProps,
   ICounterfactualListState
@@ -134,7 +136,50 @@ export class CounterfactualList extends React.Component<
     item?: Record<string, string | number>,
     index?: number | undefined
   ) => {
-    if (index === undefined || index < 0 || !item?.row) return React.Fragment;
+    //footer
+    if (index === -1) {
+      const classNames = counterfactualPanelStyles();
+      return (
+        <Stack>
+          <Stack.Item>
+            <TextField
+              value={this.state.data[nameColumnKey]?.toString()}
+              label={localization.Counterfactuals.createOwn}
+              id={nameColumnKey}
+              disabled
+              onChange={this.updateColValue}
+            />
+          </Stack.Item>
+          <Stack.Item className={classNames.predictedLink}>
+            <div
+              id={"predictionLink"}
+              className={classNames.predictedLink}
+              onMouseOver={this.toggleCallout}
+              onFocus={this.toggleCallout}
+              onMouseOut={this.toggleCallout}
+              onBlur={this.toggleCallout}
+            >
+              {localization.Counterfactuals.seePrediction}
+            </div>
+            {this.state.showCallout && (
+              <Callout
+                target={"#predictionLink"}
+                onDismiss={this.toggleCallout}
+                setInitialFocus
+              >
+                <CustomPredictionLabels
+                  jointDataset={this.context.jointDataset}
+                  metadata={this.context.modelMetadata}
+                  selectedWhatIfRootIndex={this.props.selectedIndex}
+                  temporaryPoint={this.props.temporaryPoint}
+                />
+              </Callout>
+            )}
+          </Stack.Item>
+        </Stack>
+      );
+    }
+    if (index === undefined || !item?.row) return React.Fragment;
     return (
       <Stack>
         <Text>{item.row}</Text>
@@ -151,9 +196,9 @@ export class CounterfactualList extends React.Component<
       return columns;
     }
     columns.push({
-      fieldName: "row",
+      fieldName: nameColumnKey,
       isResizable: true,
-      key: "row",
+      key: nameColumnKey,
       minWidth: 200,
       name: "",
       onRender: this.renderName
@@ -199,50 +244,16 @@ export class CounterfactualList extends React.Component<
     column?: IColumn
   ): React.ReactNode | undefined => {
     if (column) {
-      const classNames = counterfactualPanelStyles();
       return (
         <Stack horizontal={false}>
           <Stack.Item>
             <TextField
               value={this.state.data[column.key]?.toString()}
-              label={
-                column.key === "row"
-                  ? localization.Counterfactuals.createOwn
-                  : column.key
-              }
+              label={column.key}
               id={column.key}
-              disabled={column.key === "row"}
               onChange={this.updateColValue}
             />
           </Stack.Item>
-          {column.key === "row" && (
-            <Stack.Item>
-              <div
-                id={"predictionLink"}
-                className={classNames.predictedLink}
-                onMouseOver={this.toggleCallout.bind(this)}
-                onFocus={this.toggleCallout.bind(this)}
-                onMouseOut={this.toggleCallout.bind(this)}
-                onBlur={this.toggleCallout.bind(this)}
-              >
-                {localization.Counterfactuals.seePrediction}
-              </div>
-              {this.state.showCallout && (
-                <Callout
-                  target={"#predictionLink"}
-                  onDismiss={this.toggleCallout}
-                  setInitialFocus
-                >
-                  <CustomPredictionLabels
-                    jointDataset={this.context.jointDataset}
-                    metadata={this.context.modelMetadata}
-                    selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.props.temporaryPoint}
-                  />
-                </Callout>
-              )}
-            </Stack.Item>
-          )}
         </Stack>
       );
     }
