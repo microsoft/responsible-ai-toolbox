@@ -79,8 +79,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         paddingTop: "5px"
       },
       predictedLink: {
-        color: theme.palette.blue,
-        fontSize: "14px"
+        color: theme.palette.blue
       },
       searchBox: {
         padding: "20px 0"
