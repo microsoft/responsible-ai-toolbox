@@ -108,6 +108,7 @@ def mae_standard_normal(y_true, y_pred):
     return mae - standard_error, mae + standard_error
 
 
+# TODO: Logarithmic loss implemented, but should be logistic loss
 def log_loss_standard_normal(y_true, y_pred):
     assert len(y_true) == len(y_pred)
     log_loss = np.log(np.abs(y_true - y_pred))
