@@ -47,6 +47,8 @@ interface ICounterfactualListState {
   showCallout: boolean;
 }
 
+const nameColumnKey = "row";
+
 export class CounterfactualList extends React.Component<
   ICounterfactualListProps,
   ICounterfactualListState
@@ -133,7 +135,42 @@ export class CounterfactualList extends React.Component<
     item?: Record<string, string | number>,
     index?: number | undefined
   ) => {
-    if (index === undefined || index < 0 || !item?.row) return React.Fragment;
+    //footer
+    if (index === -1) {
+      return (
+        <Stack>
+          <Stack.Item>
+            <TextField
+              value={this.state.data[nameColumnKey]?.toString()}
+              label={localization.Counterfactuals.createOwn}
+              id={nameColumnKey}
+              disabled
+              onChange={this.updateColValue}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Link id={"predictionLink"} onClick={this.toggleCallout}>
+              {localization.Counterfactuals.seePrediction}
+            </Link>
+            {this.state.showCallout && (
+              <Callout
+                target={"#predictionLink"}
+                onDismiss={this.toggleCallout}
+                setInitialFocus
+              >
+                <CustomPredictionLabels
+                  jointDataset={this.context.jointDataset}
+                  metadata={this.context.modelMetadata}
+                  selectedWhatIfRootIndex={this.props.selectedIndex}
+                  temporaryPoint={this.props.temporaryPoint}
+                />
+              </Callout>
+            )}
+          </Stack.Item>
+        </Stack>
+      );
+    }
+    if (index === undefined || !item?.row) return React.Fragment;
     return (
       <Stack>
         <Text>{item.row}</Text>
@@ -150,9 +187,9 @@ export class CounterfactualList extends React.Component<
       return columns;
     }
     columns.push({
-      fieldName: "row",
+      fieldName: nameColumnKey,
       isResizable: true,
-      key: "row",
+      key: nameColumnKey,
       minWidth: 200,
       name: "",
       onRender: this.renderName
@@ -203,37 +240,11 @@ export class CounterfactualList extends React.Component<
           <Stack.Item>
             <TextField
               value={this.state.data[column.key]?.toString()}
-              label={
-                column.key === "row"
-                  ? localization.Counterfactuals.createOwn
-                  : column.key
-              }
+              label={column.key}
               id={column.key}
-              disabled={column.key === "row"}
               onChange={this.updateColValue}
             />
           </Stack.Item>
-          {column.key === "row" && (
-            <Stack.Item>
-              <Link id={"predictionLink"} onClick={this.toggleCallout}>
-                {localization.Counterfactuals.seePrediction}
-              </Link>
-              {this.state.showCallout && (
-                <Callout
-                  target={"#predictionLink"}
-                  onDismiss={this.toggleCallout}
-                  setInitialFocus
-                >
-                  <CustomPredictionLabels
-                    jointDataset={this.context.jointDataset}
-                    metadata={this.context.modelMetadata}
-                    selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.props.temporaryPoint}
-                  />
-                </Callout>
-              )}
-            </Stack.Item>
-          )}
         </Stack>
       );
     }
