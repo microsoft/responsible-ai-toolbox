@@ -25,6 +25,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 import { ILocalImportanceData } from "./LocalImportanceChart";
 
@@ -46,6 +47,8 @@ interface ICounterfactualListState {
   data: Record<string, string | number>;
   showCallout: boolean;
 }
+
+const nameColumnKey = "row";
 
 export class CounterfactualList extends React.Component<
   ICounterfactualListProps,
@@ -133,7 +136,50 @@ export class CounterfactualList extends React.Component<
     item?: Record<string, string | number>,
     index?: number | undefined
   ) => {
-    if (index === undefined || index < 0 || !item?.row) return React.Fragment;
+    //footer
+    if (index === -1) {
+      const classNames = counterfactualPanelStyles();
+      return (
+        <Stack>
+          <Stack.Item>
+            <TextField
+              value={this.state.data[nameColumnKey]?.toString()}
+              label={localization.Counterfactuals.createOwn}
+              id={nameColumnKey}
+              disabled
+              onChange={this.updateColValue}
+            />
+          </Stack.Item>
+          <Stack.Item className={classNames.predictedLink}>
+            <div
+              id={"predictionLink"}
+              className={classNames.predictedLink}
+              onMouseOver={this.toggleCallout}
+              onFocus={this.toggleCallout}
+              onMouseOut={this.toggleCallout}
+              onBlur={this.toggleCallout}
+            >
+              {localization.Counterfactuals.seePrediction}
+            </div>
+            {this.state.showCallout && (
+              <Callout
+                target={"#predictionLink"}
+                onDismiss={this.toggleCallout}
+                setInitialFocus
+              >
+                <CustomPredictionLabels
+                  jointDataset={this.context.jointDataset}
+                  metadata={this.context.modelMetadata}
+                  selectedWhatIfRootIndex={this.props.selectedIndex}
+                  temporaryPoint={this.props.temporaryPoint}
+                />
+              </Callout>
+            )}
+          </Stack.Item>
+        </Stack>
+      );
+    }
+    if (index === undefined || !item?.row) return React.Fragment;
     return (
       <Stack>
         <Text>{item.row}</Text>
@@ -150,9 +196,9 @@ export class CounterfactualList extends React.Component<
       return columns;
     }
     columns.push({
-      fieldName: "row",
+      fieldName: nameColumnKey,
       isResizable: true,
-      key: "row",
+      key: nameColumnKey,
       minWidth: 200,
       name: "",
       onRender: this.renderName
@@ -203,37 +249,11 @@ export class CounterfactualList extends React.Component<
           <Stack.Item>
             <TextField
               value={this.state.data[column.key]?.toString()}
-              label={
-                column.key === "row"
-                  ? localization.Counterfactuals.createOwn
-                  : column.key
-              }
+              label={column.key}
               id={column.key}
-              disabled={column.key === "row"}
               onChange={this.updateColValue}
             />
           </Stack.Item>
-          {column.key === "row" && (
-            <Stack.Item>
-              <Link id={"predictionLink"} onClick={this.toggleCallout}>
-                {localization.Counterfactuals.seePrediction}
-              </Link>
-              {this.state.showCallout && (
-                <Callout
-                  target={"#predictionLink"}
-                  onDismiss={this.toggleCallout}
-                  setInitialFocus
-                >
-                  <CustomPredictionLabels
-                    jointDataset={this.context.jointDataset}
-                    metadata={this.context.modelMetadata}
-                    selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.props.temporaryPoint}
-                  />
-                </Callout>
-              )}
-            </Stack.Item>
-          )}
         </Stack>
       );
     }
@@ -266,7 +286,7 @@ export class CounterfactualList extends React.Component<
       filterText === undefined || filterText === null || !/\S/.test(filterText);
     const filtered = invalidInput
       ? allFeatures
-      : allFeatures.filter((f) => f.includes(toLower(filterText)));
+      : allFeatures.filter((f) => toLower(f).includes(toLower(filterText)));
     return filtered;
   };
 

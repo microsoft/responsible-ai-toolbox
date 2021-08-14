@@ -39,8 +39,12 @@
       "why": "Why is it important to include confounding features?"
     },
     "TreatmentPolicy": {
-      "BarDescription": "This graph shows the average gains of various treatment policies over the baseline of always treating {0} with {1}",
-      "BarText": "The first bar indicates average gains if the recommended global treatment policy described above was taken.",
+      "averageGainBinary": "Average gains of alternative policies over no {0} treatment.",
+      "averageGainContinuous": "Average gains of alternative policies over no modification to the current treatment level for {0} treatment.",
+      "BarDescriptionBinary": "This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.",
+      "BarDescriptionContinuous": "This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.",
+      "BarTextBinary": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.",
+      "BarTextContinuous": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.",
       "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
       "Left": "{0} <= {1}",
       "Recommended": "Recommended treatment = {0}",
@@ -50,7 +54,6 @@
       "Table": "The table can be read by taking a row and then taking a column of that specific row.",
       "TableDescription": "This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.",
       "alwaysTreat": "Always treat '{0}'",
-      "averageGain": "Average gains of alternative policies over {0} {1} treatment",
       "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
       "nSample": "n = {0}",
       "noData": "No data"
