@@ -25,6 +25,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 import { ILocalImportanceData } from "./LocalImportanceChart";
 
@@ -198,6 +199,7 @@ export class CounterfactualList extends React.Component<
     column?: IColumn
   ): React.ReactNode | undefined => {
     if (column) {
+      const classNames = counterfactualPanelStyles();
       return (
         <Stack horizontal={false}>
           <Stack.Item>
@@ -215,9 +217,16 @@ export class CounterfactualList extends React.Component<
           </Stack.Item>
           {column.key === "row" && (
             <Stack.Item>
-              <Link id={"predictionLink"} onClick={this.toggleCallout}>
+              <div
+                id={"predictionLink"}
+                className={classNames.predictedLink}
+                onMouseOver={this.toggleCallout.bind(this)}
+                onFocus={this.toggleCallout.bind(this)}
+                onMouseOut={this.toggleCallout.bind(this)}
+                onBlur={this.toggleCallout.bind(this)}
+              >
                 {localization.Counterfactuals.seePrediction}
-              </Link>
+              </div>
               {this.state.showCallout && (
                 <Callout
                   target={"#predictionLink"}
