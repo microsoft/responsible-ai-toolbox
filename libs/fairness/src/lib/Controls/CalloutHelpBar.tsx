@@ -6,7 +6,7 @@ import _ from "lodash";
 import { Stack, Toggle } from "office-ui-fabric-react";
 import React from "react";
 
-import { IErrorPickerPropsV2 } from "../FairnessWizard";
+import { IErrorPickerProps } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
 
 import { CalloutErrorBars } from "./CalloutErrorBars";
@@ -19,7 +19,7 @@ interface ICalloutHelpBarProps {
   outcomeBounds?: Array<IBounds | undefined>;
   falsePositiveBounds?: Array<IBounds | undefined>;
   falseNegativeBounds?: Array<IBounds | undefined>;
-  errorPickerProps: IErrorPickerPropsV2;
+  errorPickerProps: IErrorPickerProps;
   parentErrorChanged: {
     (event: React.MouseEvent<HTMLElement>, checked?: boolean): void;
   };
@@ -47,9 +47,7 @@ export class CalloutHelpBar extends React.PureComponent<ICalloutHelpBarProps> {
           <Toggle
             className={sharedStyles.toggle}
             id="errorMetricDropdown"
-            defaultChecked={
-              this.props.errorPickerProps.selectedErrorKey === "enabled"
-            }
+            defaultChecked={this.props.errorPickerProps.errorBarsEnabled}
             disabled={
               (typeof this.props.fairnessBounds === "undefined" ||
                 _.isEmpty(this.props.fairnessBounds.filter(Boolean))) &&

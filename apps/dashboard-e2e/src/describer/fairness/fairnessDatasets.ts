@@ -6,7 +6,7 @@ import { IFairnessMetadata, PredictionTypes } from "./IFairnessMetadata";
 const fairnessDatasets = {
   binaryClassification: {
     charts: ["Selection rate", "False positive and false negative rates"],
-    defaultErrorMetric: "enabled",
+    defaultErrorMetric: false,
     defaultFairnessMetric: "Demographic parity difference",
     defaultPerformanceMetric: "Accuracy",
     fairnessMetrics: [
@@ -59,7 +59,7 @@ const fairnessDatasets = {
   },
   binaryClassificationWithError: {
     charts: ["Selection rate", "False positive and false negative rates"],
-    defaultErrorMetric: "enabled",
+    defaultErrorMetric: true,
     defaultFairnessMetric: "Demographic parity difference",
     defaultPerformanceMetric: "Accuracy",
     fairnessMetrics: [
@@ -112,7 +112,7 @@ const fairnessDatasets = {
   },
   probability: {
     charts: ["Distribution of predictions", "Over- and underprediction"],
-    defaultErrorMetric: "enabled",
+    defaultErrorMetric: false,
     defaultFairnessMetric: "Maximum mean squared error",
     defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [
@@ -137,7 +137,31 @@ const fairnessDatasets = {
   },
   regression: {
     charts: ["Distribution of predictions"],
-    defaultErrorMetric: "enabled",
+    defaultErrorMetric: false,
+    defaultFairnessMetric: "Maximum mean absolute error",
+    defaultPerformanceMetric: "Mean squared error",
+    fairnessMetrics: [
+      "Maximum mean absolute error",
+      "Maximum mean squared error",
+      "Minimum R2-score"
+    ],
+    numberOfModels: 3,
+    performanceMetrics: [
+      "Mean absolute error",
+      "R-squared score",
+      "Mean squared error",
+      "Root mean squared error"
+    ],
+    predictionType: PredictionTypes.Regression,
+    sensitiveFeatures: {
+      "Sensitive feature 0": ["a", "b"],
+      "Sensitive feature 1": ["1", "2", "3"],
+      "Sensitive feature 2": ["1 - 3", "4 - 5", "6 - 7", "8 - 9", "10 - 12"]
+    }
+  },
+  regressionWithError: {
+    charts: ["Distribution of predictions"],
+    defaultErrorMetric: true,
     defaultFairnessMetric: "Maximum mean absolute error",
     defaultPerformanceMetric: "Mean squared error",
     fairnessMetrics: [

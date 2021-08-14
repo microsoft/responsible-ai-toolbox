@@ -32,7 +32,7 @@ export interface IMetricRequest {
   metricKey: string;
   binVector: number[];
   modelIndex: number;
-  errorKey?: string;
+  errorBarsEnabled?: boolean;
 }
 
 export interface IFairnessResponse {
@@ -60,7 +60,7 @@ export interface IFairnessBaseData {
   modelNames?: string[];
   trueY: number[];
   testData?: any[][];
-  errorKey?: string;
+  errorBarsEnabled?: boolean;
 }
 export interface IPreComputedData {
   precomputedMetrics: Array<Array<{ [key: string]: IMetricResponse }>>;

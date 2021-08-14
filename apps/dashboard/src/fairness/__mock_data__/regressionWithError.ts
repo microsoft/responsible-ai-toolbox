@@ -3,9 +3,9 @@
 
 import { IFairnessData } from "@responsible-ai/core-ui";
 
-import { binaryClassification } from "./binaryClassification";
+import { regression } from "./regression";
 
-export const binaryClassificationWithError: IFairnessData = {
-  ...binaryClassification,
+export const regressionWithError: IFairnessData = {
+  ...regression,
   errorBarsEnabled: true
 };

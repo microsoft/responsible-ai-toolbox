@@ -25,7 +25,7 @@ import {
   IPerformancePickerPropsV2,
   IFeatureBinPickerPropsV2,
   IFairnessPickerPropsV2,
-  IErrorPickerPropsV2
+  IErrorPickerProps
 } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
 
@@ -45,7 +45,7 @@ export interface IModelComparisonProps {
   modelCount: number;
   performancePickerProps: IPerformancePickerPropsV2;
   fairnessPickerProps: IFairnessPickerPropsV2;
-  errorPickerProps: IErrorPickerPropsV2;
+  errorPickerProps: IErrorPickerProps;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
   onEditConfigs: () => void;
@@ -61,7 +61,7 @@ export interface IState {
   performanceBounds?: Array<IBounds | undefined>;
   fairnessArray?: number[];
   fairnessBounds?: Array<IBounds | undefined>;
-  errorKey?: string;
+  errorBarsEnabled?: boolean;
 }
 
 export class ModelComparisonChart extends React.Component<
@@ -145,7 +145,7 @@ export class ModelComparisonChart extends React.Component<
   public constructor(props: IModelComparisonProps) {
     super(props);
     this.state = {
-      errorKey: this.props.errorPickerProps.selectedErrorKey,
+      errorBarsEnabled: this.props.errorPickerProps.errorBarsEnabled,
       fairnessKey: this.props.fairnessPickerProps.selectedFairnessKey,
       performanceKey: this.props.performancePickerProps.selectedPerformanceKey
     };
@@ -171,8 +171,12 @@ export class ModelComparisonChart extends React.Component<
         />
       );
     } else {
-      const { fairnessArray, fairnessBounds, performanceBounds, errorKey } =
-        this.state;
+      const {
+        fairnessArray,
+        fairnessBounds,
+        performanceBounds,
+        errorBarsEnabled
+      } = this.state;
       const data = this.state.performanceArray.map((performance, index) => {
         return {
           Fairness: fairnessArray[index],
@@ -185,7 +189,7 @@ export class ModelComparisonChart extends React.Component<
         };
       });
 
-      if (errorKey !== "disabled") {
+      if (errorBarsEnabled) {
         if (_.isArray(performanceBounds)) {
           performanceBounds.forEach((bounds, index) => {
             if (bounds !== undefined) {
@@ -300,7 +304,7 @@ export class ModelComparisonChart extends React.Component<
               yBounds
             } as unknown as Datum);
             series.hovertemplate =
-              "%{text} <br> %{xaxis.title.text}: %{customdata.x} %{customdata.xBounds}<br> %{yaxis.title.text}: %{customdata.y} %{customdata.yBounds}<extra></extra>";
+              "%{text} <br>%{xaxis.title.text}: %{customdata.x} %{customdata.xBounds}<br> %{yaxis.title.text}: %{customdata.y} %{customdata.yBounds}<extra></extra>";
           }
 
           series.text = this.props.dashboardContext.modelNames;
@@ -408,7 +412,7 @@ export class ModelComparisonChart extends React.Component<
             this.props.featureBinPickerProps.selectedBinIndex,
             modelIndex,
             this.props.performancePickerProps.selectedPerformanceKey,
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
         });
       const fairnessOption =
@@ -422,7 +426,7 @@ export class ModelComparisonChart extends React.Component<
             modelIndex,
             this.props.fairnessPickerProps.selectedFairnessKey,
             fairnessOption.fairnessMode,
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
         });
 
@@ -511,10 +515,10 @@ export class ModelComparisonChart extends React.Component<
     _ev: React.MouseEvent<HTMLElement>,
     checked?: boolean
   ): void => {
-    const errorKey = checked ? "enabled" : "disabled";
-    if (this.state.errorKey !== errorKey) {
-      this.props.errorPickerProps.onErrorChange(errorKey);
-      this.setState({ errorKey });
+    const errorBarsEnabled = checked;
+    if (this.state.errorBarsEnabled !== errorBarsEnabled) {
+      this.props.errorPickerProps.onErrorChange(errorBarsEnabled ?? false);
+      this.setState({ errorBarsEnabled });
     }
   };
 }

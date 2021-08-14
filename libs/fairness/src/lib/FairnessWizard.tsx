@@ -23,7 +23,6 @@ import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { IFairnessProps } from "./IFairnessProps";
 import { defaultTheme } from "./Themes";
-import { IErrorOption } from "./util/ErrorMetrics";
 import {
   IFairnessOption,
   fairnessOptions,
@@ -55,10 +54,9 @@ export interface IFairnessPickerPropsV2 {
   onFairnessChange: (newKey: string) => void;
 }
 
-export interface IErrorPickerPropsV2 {
-  errorOptions?: IErrorOption[];
-  selectedErrorKey: string;
-  onErrorChange: (newKey: string) => void;
+export interface IErrorPickerProps {
+  errorBarsEnabled: boolean;
+  onErrorChange: (newKey: boolean) => void;
 }
 
 export interface IFeatureBinPickerPropsV2 {
@@ -74,10 +72,9 @@ export interface IWizardStateV2 {
   dashboardContext: IFairnessContext;
   performanceMetrics: IPerformanceOption[];
   fairnessMetrics: IFairnessOption[];
-  errorMetrics?: IErrorOption[];
   selectedPerformanceKey: string;
   selectedFairnessKey: string;
-  selectedErrorKey: string;
+  errorBarsEnabled: boolean;
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
   metricCache: MetricsCache;
@@ -106,7 +103,6 @@ export class FairnessWizard extends React.PureComponent<
     let fairnessMetrics: IFairnessOption[];
     let selectedPerformanceKey: string;
     let selectedFairnessKey: string;
-    let selectedErrorKey: string;
     loadTheme(props.theme || defaultTheme);
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
@@ -135,17 +131,13 @@ export class FairnessWizard extends React.PureComponent<
         fairnessMetrics,
         defaultFairnessMetricPrioritization
       );
-      if (this.props.errorKey === "disabled") {
-        selectedErrorKey = "disabled";
-      } else {
-        selectedErrorKey = "enabled";
-      }
 
       this.state = {
         activeTabKey: featureBinTabKey,
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
         ),
+        errorBarsEnabled: this.props.errorBarsEnabled ?? false,
         fairnessMetrics,
         featureBins: readonlyFeatureBins,
         metricCache: new MetricsCache(
@@ -156,7 +148,6 @@ export class FairnessWizard extends React.PureComponent<
         ),
         performanceMetrics,
         selectedBinIndex: 0,
-        selectedErrorKey,
         selectedFairnessKey,
         selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
         selectedPerformanceKey,
@@ -191,15 +182,10 @@ export class FairnessWizard extends React.PureComponent<
       defaultFairnessMetricPrioritization
     );
 
-    if (this.props.errorKey === "disabled") {
-      selectedErrorKey = "disabled";
-    } else {
-      selectedErrorKey = "enabled";
-    }
-
     this.state = {
       activeTabKey: introTabKey,
       dashboardContext: fairnessContext,
+      errorBarsEnabled: this.props.errorBarsEnabled ?? false,
       fairnessMetrics,
       featureBins,
       metricCache: new MetricsCache(
@@ -209,7 +195,6 @@ export class FairnessWizard extends React.PureComponent<
       ),
       performanceMetrics,
       selectedBinIndex: 0,
-      selectedErrorKey,
       selectedFairnessKey,
       selectedModelId: this.props.predictedY.length === 1 ? 0 : undefined,
       selectedPerformanceKey,
@@ -239,9 +224,8 @@ export class FairnessWizard extends React.PureComponent<
       selectedFairnessKey: this.state.selectedFairnessKey
     };
     const errorPickerProps = {
-      errorOptions: this.state.errorMetrics,
-      onErrorChange: this.setErrorKey,
-      selectedErrorKey: this.state.selectedErrorKey
+      errorBarsEnabled: this.state.errorBarsEnabled,
+      onErrorChange: this.setErrorBarsEnabled
     };
     const featureBinPickerProps = {
       featureBins: this.state.featureBins,
@@ -424,8 +408,8 @@ export class FairnessWizard extends React.PureComponent<
     this.setState({ selectedFairnessKey: key });
   };
 
-  private readonly setErrorKey = (key: string): void => {
-    this.setState({ selectedErrorKey: key });
+  private readonly setErrorBarsEnabled = (key: boolean): void => {
+    this.setState({ errorBarsEnabled: key });
   };
 
   private readonly setBinIndex = (index: number): void => {

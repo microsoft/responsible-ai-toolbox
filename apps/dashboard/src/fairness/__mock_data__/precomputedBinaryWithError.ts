@@ -5,7 +5,10 @@ import { IFairnessData } from "@responsible-ai/core-ui";
 
 import { precomputedBinary } from "./precomputedBinary";
 
-Object.assign(precomputedBinary, {
+// deep copy
+const precomputedBinaryCopy = JSON.parse(JSON.stringify(precomputedBinary));
+
+Object.assign(precomputedBinaryCopy, {
   ...precomputedBinary,
   precomputedMetrics: [
     // gender
@@ -159,4 +162,4 @@ Object.assign(precomputedBinary, {
   ]
 });
 
-export const precomputedBinaryWithError: IFairnessData = precomputedBinary;
+export const precomputedBinaryWithError: IFairnessData = precomputedBinaryCopy;

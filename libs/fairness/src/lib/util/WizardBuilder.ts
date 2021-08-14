@@ -18,7 +18,6 @@ import {
 import _ from "lodash";
 
 import { BinnedResponseBuilder } from "./BinnedResponseBuilder";
-import { IErrorOption, errorOptions } from "./ErrorMetrics";
 import { IFairnessOption, fairnessOptions } from "./FairnessMetrics";
 import { IBinnedResponse } from "./IBinnedResponse";
 import {
@@ -245,33 +244,6 @@ export class WizardBuilder {
     Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
       if (key in allFairnessMetrics) {
         allFairnessMetrics[key].forEach((metric) => {
-          if (metric !== undefined) {
-            providedMetrics.push(metric);
-          }
-        });
-      }
-    });
-    return customMetrics.concat(providedMetrics);
-  }
-
-  public static buildErrorBoundListForPrecomputedMetrics(
-    props: IPreComputedData
-  ): IErrorOption[] {
-    const customMetrics: IErrorOption[] = [];
-    const providedMetrics: IErrorOption[] = [];
-    const allErrorMetrics: {
-      [errorMetric: string]: IErrorOption[];
-    } = {};
-    Object.values(errorOptions).forEach((errorOption) => {
-      if (allErrorMetrics[errorOption.key]) {
-        allErrorMetrics[errorOption.key].push(errorOption);
-      } else {
-        allErrorMetrics[errorOption.key] = [errorOption];
-      }
-    });
-    Object.keys(props.precomputedMetrics[0][0]).forEach((key) => {
-      if (key in allErrorMetrics) {
-        allErrorMetrics[key].forEach((metric) => {
           if (metric !== undefined) {
             providedMetrics.push(metric);
           }

@@ -11,7 +11,7 @@ import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import {
-  IErrorPickerPropsV2,
+  IErrorPickerProps,
   IFeatureBinPickerPropsV2,
   IPerformancePickerPropsV2
 } from "../FairnessWizard";
@@ -29,7 +29,7 @@ interface IPerformancePlotProps {
   areaHeights: number;
   performancePickerProps: IPerformancePickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
-  errorPickerProps: IErrorPickerPropsV2;
+  errorPickerProps: IErrorPickerProps;
   fairnessBounds?: Array<IBounds | undefined>;
   performanceBounds?: Array<IBounds | undefined>;
   outcomeBounds?: Array<IBounds | undefined>;
@@ -88,7 +88,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       ];
       // Plot Error Bars
       if (
-        this.props.errorPickerProps.selectedErrorKey !== "disabled" &&
+        this.props.errorPickerProps.errorBarsEnabled &&
         this.props.metrics.falsePositiveRates !== undefined
       ) {
         barPlotlyProps.data[0].error_x = {
@@ -125,7 +125,7 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
         barPlotlyProps.data[0].textposition = "none";
       }
       if (
-        this.props.errorPickerProps.selectedErrorKey !== "disabled" &&
+        this.props.errorPickerProps.errorBarsEnabled &&
         this.props.metrics.falseNegativeRates !== undefined
       ) {
         barPlotlyProps.data[1].error_x = {
@@ -310,69 +310,77 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       ];
     }
 
-    const digitsOfPrecision = 1;
+    if (
+      this.props.dashboardContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+    ) {
+      const digitsOfPrecision = 1;
 
-    for (let j = 0; j < barPlotlyProps.data.length; j++) {
-      const outcomeMetricName = barPlotlyProps.data[j].name;
-      barPlotlyProps.data[j].customdata = [];
-      if (barPlotlyProps.data) {
-        for (
-          let i = 0;
-          i < this.props.dashboardContext.groupNames.length;
-          i++
-        ) {
-          const outcomeMetric = outcomeMetricName
-            ? `${outcomeMetricName}: `
-            : "";
-          const tempData = barPlotlyProps.data?.[j];
-          const tempY = tempData ? tempData.y?.[i] : undefined;
-          const tempX = tempData ? tempData.x?.[i] : undefined;
-
-          // ensure x is number
-          const x =
-            tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
-          // ensure y is string
-          const y =
-            tempY !== undefined && typeof tempY == "string"
-              ? tempY.trim()
-              : undefined;
-          const lowerErrorX =
-            tempData?.error_x?.type === "data"
-              ? tempData.error_x.arrayminus?.[i]
-              : undefined;
-          const upperErrorX =
-            tempData?.error_x?.type === "data"
-              ? tempData.error_x.array?.[i]
-              : undefined;
-
-          const xBounds =
-            lowerErrorX !== 0 &&
-            upperErrorX !== 0 &&
-            typeof lowerErrorX == "number" &&
-            typeof upperErrorX == "number" &&
-            x !== undefined
-              ? `[${(100 * (x - lowerErrorX)).toFixed(digitsOfPrecision)}%, ${(
-                  100 *
-                  (x + upperErrorX)
-                ).toFixed(digitsOfPrecision)}%]`
-              : "";
-
-          if (
-            barPlotlyProps?.data?.[j]?.customdata &&
-            _.isArray(barPlotlyProps.data[j].customdata)
+      for (let j = 0; j < barPlotlyProps.data.length; j++) {
+        const outcomeMetricName = barPlotlyProps.data[j].name;
+        barPlotlyProps.data[j].customdata = [];
+        if (barPlotlyProps.data) {
+          for (
+            let i = 0;
+            i < this.props.dashboardContext.groupNames.length;
+            i++
           ) {
-            barPlotlyProps.data[j].customdata!.push({
-              outcomeMetric,
-              x:
-                x !== undefined
-                  ? (100 * x).toFixed(digitsOfPrecision)
-                  : undefined,
-              xBounds,
-              y
-            } as unknown as Datum);
+            const outcomeMetric = outcomeMetricName
+              ? `${outcomeMetricName}: `
+              : "";
+            const tempData = barPlotlyProps.data?.[j];
+            const tempY = tempData ? tempData.y?.[i] : undefined;
+            const tempX = tempData ? tempData.x?.[i] : undefined;
+
+            // ensure x is number
+            const x =
+              tempX !== undefined && typeof tempX == "number"
+                ? tempX
+                : undefined;
+            // ensure y is string
+            const y =
+              tempY !== undefined && typeof tempY == "string"
+                ? tempY.trim()
+                : undefined;
+            const lowerErrorX =
+              tempData?.error_x?.type === "data"
+                ? tempData.error_x.arrayminus?.[i]
+                : undefined;
+            const upperErrorX =
+              tempData?.error_x?.type === "data"
+                ? tempData.error_x.array?.[i]
+                : undefined;
+
+            const xBounds =
+              lowerErrorX !== 0 &&
+              upperErrorX !== 0 &&
+              typeof lowerErrorX == "number" &&
+              typeof upperErrorX == "number" &&
+              x !== undefined
+                ? `[${(100 * (x - lowerErrorX)).toFixed(
+                    digitsOfPrecision
+                  )}%, ${(100 * (x + upperErrorX)).toFixed(
+                    digitsOfPrecision
+                  )}%]`
+                : "";
+
+            if (
+              barPlotlyProps?.data?.[j]?.customdata &&
+              _.isArray(barPlotlyProps.data[j].customdata)
+            ) {
+              barPlotlyProps.data[j].customdata!.push({
+                outcomeMetric,
+                x:
+                  x !== undefined
+                    ? (100 * x).toFixed(digitsOfPrecision)
+                    : undefined,
+                xBounds,
+                y
+              } as unknown as Datum);
+            }
+            barPlotlyProps.data[j].hovertemplate =
+              "<b>%{customdata.y}</b><br>%{customdata.outcomeMetric}%{customdata.x}% %{customdata.xBounds}<extra></extra>";
           }
-          barPlotlyProps.data[j].hovertemplate =
-            "<b>%{customdata.y}</b><br> %{customdata.outcomeMetric}%{customdata.x}% %{customdata.xBounds}<extra></extra>";
         }
       }
     }

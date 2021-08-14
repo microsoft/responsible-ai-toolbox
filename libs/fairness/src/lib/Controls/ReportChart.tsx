@@ -9,7 +9,7 @@ import React from "react";
 import {
   IPerformancePickerPropsV2,
   IFairnessPickerPropsV2,
-  IErrorPickerPropsV2,
+  IErrorPickerProps,
   IFeatureBinPickerPropsV2
 } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
@@ -22,7 +22,7 @@ export interface IReportChartProps {
   dashboardContext: IFairnessContext;
   performancePickerProps: IPerformancePickerPropsV2;
   fairnessPickerProps: IFairnessPickerPropsV2;
-  errorPickerProps: IErrorPickerPropsV2;
+  errorPickerProps: IErrorPickerProps;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   areaHeights: number;
   metrics: IMetrics;

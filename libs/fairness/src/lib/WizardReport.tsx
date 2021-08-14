@@ -35,7 +35,7 @@ export interface IState {
   featureKey?: string;
   fairnessKey?: string;
   performanceKey?: string;
-  errorKey?: string;
+  errorBarsEnabled?: boolean;
   showModalHelp?: boolean;
   chartKey?: string;
 }
@@ -345,10 +345,10 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     _ev: React.MouseEvent<HTMLElement>,
     checked?: boolean
   ): void => {
-    const errorKey = checked ? "enabled" : "disabled";
-    if (this.state.errorKey !== errorKey) {
-      this.props.errorPickerProps.onErrorChange(errorKey);
-      this.setState({ errorKey, metrics: undefined });
+    const errorBarsEnabled = checked;
+    if (this.state.errorBarsEnabled !== errorBarsEnabled) {
+      this.props.errorPickerProps.onErrorChange(errorBarsEnabled ?? false);
+      this.setState({ errorBarsEnabled, metrics: undefined });
     }
   };
 
@@ -366,7 +366,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       const disparityBounds: Dictionary<IBounds> = {};
       const performance = await this.getMetric(
         this.props.performancePickerProps.selectedPerformanceKey,
-        this.props.errorPickerProps.selectedErrorKey
+        this.props.errorPickerProps.errorBarsEnabled
       );
       // TODO: extend disparities to query for all possible kinds of disparities
       // https://github.com/microsoft/responsible-ai-widgets/issues/65
@@ -374,7 +374,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         this.props.fairnessPickerProps.selectedFairnessKey,
         fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
           .fairnessMode,
-        this.props.errorPickerProps.selectedErrorKey
+        this.props.errorPickerProps.errorBarsEnabled
       );
       disparities[this.props.fairnessPickerProps.selectedFairnessKey] =
         fairnessResponse.overall;
@@ -386,15 +386,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         case PredictionTypes.BinaryClassification: {
           falseNegativeRates = await this.getMetric(
             "miss_rate",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           falsePositiveRates = await this.getMetric(
             "fallout_rate",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           outcomes = await this.getMetric(
             "selection_rate",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           break;
         }
@@ -405,16 +405,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             ];
           overpredictions = await this.getMetric(
             "overprediction",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           underpredictions = await this.getMetric(
             "underprediction",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           outcomes = await this.getMetric(
-            // call will always return error bounds
             "average",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           break;
         }
@@ -429,7 +428,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           });
           outcomes = await this.getMetric(
             "average",
-            this.props.errorPickerProps.selectedErrorKey
+            this.props.errorPickerProps.errorBarsEnabled
           );
           break;
         }
@@ -455,21 +454,21 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
 
   private async getMetric(
     metricName: string,
-    errorKey: string
+    errorBarsEnabled: boolean
   ): Promise<IMetricResponse> {
     return await this.props.metricsCache.getMetric(
       this.props.dashboardContext.binVector,
       this.props.featureBinPickerProps.selectedBinIndex,
       this.props.selectedModelIndex,
       metricName,
-      errorKey
+      errorBarsEnabled
     );
   }
 
   private async getFairnessMetric(
     metricName: string,
     fairnessMode: FairnessModes,
-    errorKey: string
+    errorBarsEnabled: boolean
   ): Promise<IFairnessResponse> {
     return await this.props.metricsCache.getFairnessMetric(
       this.props.dashboardContext.binVector,
@@ -477,7 +476,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       this.props.selectedModelIndex,
       metricName,
       fairnessMode,
-      errorKey
+      errorBarsEnabled
     );
   }
 }
