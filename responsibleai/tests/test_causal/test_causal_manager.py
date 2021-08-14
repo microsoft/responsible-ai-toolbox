@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 import pandas as pd
 
+from typing import Tuple
 from unittest.mock import patch, ANY
 
 from ..common_utils import create_boston_data
@@ -14,19 +15,56 @@ from responsibleai._managers.causal_manager import CausalManager
 
 
 @pytest.fixture(scope='module')
-def boston_data():
+def boston_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
     target_feature = 'TARGET'
     X_train, X_test, y_train, y_test, feature_names = create_boston_data()
     train_df = pd.DataFrame(X_train, columns=feature_names)
     train_df[target_feature] = y_train
     test_df = pd.DataFrame(X_test, columns=feature_names)
     test_df[target_feature] = y_test
-    return train_df, test_df, feature_names, target_feature
+    return train_df, test_df, target_feature
+
+
+@pytest.fixture(scope='module')
+def parks_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
+    feature_names = ['state', 'population', 'attraction', 'area']
+    train_df = pd.DataFrame([
+        ['massachusetts', 3129, 'trees', 11],
+        ['utah', 41891, 'rocks', 51],
+        ['california', 193912, 'trees', 62],
+        ['california', 123901, 'trees', 25],
+        ['utah', 39012, 'rocks', 34],
+        ['colorado', 30102, 'rocks', 40],
+        ['massachusetts', 4222, 'trees', 15],
+        ['colorado', 20342, 'rocks', 42],
+        ['arizona', 3201, 'rocks', 90],
+        ['massachusetts', 3129, 'trees', 11],
+        ['utah', 41891, 'rocks', 51],
+        ['california', 193912, 'trees', 62],
+        ['california', 123901, 'trees', 25],
+        ['utah', 39012, 'rocks', 34],
+        ['colorado', 30102, 'rocks', 40],
+        ['massachusetts', 4222, 'trees', 15],
+        ['colorado', 20342, 'rocks', 42],
+        ['arizona', 3201, 'rocks', 90],
+    ], columns=feature_names)
+
+    test_df = pd.DataFrame([
+        ['california', 323412, 'trees', 102],
+        ['utah', 5103, 'rocks', 23],
+        ['colorado', 4312, 'rocks', 19],
+        ['california', 203912, 'trees', 202],
+        ['utah', 5102, 'rocks', 21],
+        ['colorado', 8120, 'rocks', 31],
+    ], columns=feature_names)
+
+    target_feature = 'area'
+    return train_df, test_df, target_feature
 
 
 class TestCausalManager:
     def test_causal_no_categoricals(self, boston_data):
-        train_df, test_df, feature_names, target_feature = boston_data
+        train_df, test_df, target_feature = boston_data
 
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, None)
@@ -38,7 +76,7 @@ class TestCausalManager:
         assert result.config.treatment_features[0] == 'ZN'
 
     def test_causal_save_and_load(self, boston_data, tmpdir):
-        train_df, test_df, feature_names, target_feature = boston_data
+        train_df, test_df, target_feature = boston_data
 
         save_dir = tmpdir.mkdir('save-dir')
 
@@ -59,20 +97,40 @@ class TestCausalManager:
         assert post_result.local_effects is not None
         assert post_result.policies is not None
 
-    def test_causal_cat_expansion(self, boston_data):
-        train_df, test_df, feature_names, target_feature = boston_data
+    def test_causal_cat_expansion(self, parks_data):
+        train_df, test_df, target_feature = parks_data
 
         manager = CausalManager(train_df, test_df, target_feature,
-                                ModelTask.REGRESSION, ['ZN'])
+                                ModelTask.REGRESSION, ['state', 'attraction'])
 
         expected = "Increase the value 50"
         with pytest.raises(ValueError, match=expected):
-            manager.add(['ZN'])
+            manager.add(['state'])
+
+    def test_causal_train_test_categories(self, parks_data):
+        train_df, test_df, target_feature = parks_data
+
+        test_df = test_df.copy()
+        test_df.loc[len(test_df.index)] = ['indiana', 301, 'trees', 78]
+        test_df.loc[len(test_df.index)] = ['indiana', 222, 'trees', 81]
+
+        manager = CausalManager(train_df, test_df, target_feature,
+                                ModelTask.REGRESSION, ['state', 'attraction'])
+
+        message = ("Causal analysis requires that every category of "
+                   "categorical features present in the test data be "
+                   "also present in the train data. "
+                   "Categories missing from train data: "
+                   "{'state': \\['indiana'\\]}")
+        with pytest.raises(UserConfigValidationException, match=message):
+            manager.add(['state'],
+                        skip_cat_limit_checks=True,
+                        upper_bound_on_cat_expansion=50)
 
 
 @pytest.fixture(scope='class')
 def cost_manager(boston_data):
-    train_df, test_df, feature_names, target_feature = boston_data
+    train_df, test_df, target_feature = boston_data
 
     test_df = test_df[:7]
     return CausalManager(train_df, test_df, target_feature,
