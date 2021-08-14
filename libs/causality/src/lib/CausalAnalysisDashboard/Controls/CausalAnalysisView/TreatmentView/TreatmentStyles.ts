@@ -63,7 +63,8 @@ export const TreatmentStyles: () => IProcessedStyleSet<ITreatmentStyles> =
         width: "70%"
       },
       listContainer: {
-        maxHeight: "65%",
+        maxHeight: "500px",
+        minHeight: "250px",
         overflowY: "scroll"
       },
       rightPane: {
