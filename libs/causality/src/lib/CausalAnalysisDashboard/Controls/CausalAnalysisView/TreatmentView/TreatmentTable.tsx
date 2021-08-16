@@ -91,7 +91,6 @@ export class TreatmentTable extends React.PureComponent<
         )}
       </th>
     );
-    console.log(rightRows);
     return [...leftRows, ...rightRows];
   };
 
