@@ -274,27 +274,18 @@ export class ModelComparisonChart extends React.Component<
                 ? tempY
                 : undefined;
 
-            const xBounds =
-              lowerErrorX !== 0 &&
-              upperErrorX !== 0 &&
-              typeof lowerErrorX == "number" &&
-              typeof upperErrorX == "number" &&
-              x !== undefined
-                ? `[${(x - lowerErrorX).toFixed(digitsOfPrecision)}, ${(
-                    x + upperErrorX
-                  ).toFixed(digitsOfPrecision)}]`
-                : "";
-            const yBounds =
-              series?.error_y?.type === "data" &&
-              lowerErrorY !== 0 &&
-              upperErrorY !== 0 &&
-              typeof lowerErrorY == "number" &&
-              typeof upperErrorY == "number" &&
-              y !== undefined
-                ? `[${(y - lowerErrorY).toFixed(digitsOfPrecision)}, ${(
-                    y + upperErrorY
-                  ).toFixed(digitsOfPrecision)}]`
-                : "";
+            const xBounds = this.formatBoundsTooltip(
+              lowerErrorX,
+              upperErrorX,
+              digitsOfPrecision,
+              x
+            );
+            const yBounds = this.formatBoundsTooltip(
+              lowerErrorY,
+              upperErrorY,
+              digitsOfPrecision,
+              y
+            );
 
             series.customdata.push({
               modelId,
@@ -520,5 +511,22 @@ export class ModelComparisonChart extends React.Component<
       this.props.errorPickerProps.onErrorChange(errorBarsEnabled ?? false);
       this.setState({ errorBarsEnabled });
     }
+  };
+
+  private formatBoundsTooltip = (
+    lowerError: Datum | undefined,
+    upperError: Datum | undefined,
+    digitsOfPrecision: number,
+    baseMetric: number | undefined
+  ): string => {
+    return lowerError !== 0 &&
+      upperError !== 0 &&
+      typeof lowerError == "number" &&
+      typeof upperError == "number" &&
+      baseMetric !== undefined
+      ? `[${(baseMetric - lowerError).toFixed(digitsOfPrecision)}, ${(
+          baseMetric + upperError
+        ).toFixed(digitsOfPrecision)}]`
+      : "";
   };
 }

@@ -47,6 +47,38 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toMatchObject(expectedResult);
   });
+  it("should calculate difference (with overlap and reverse order) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.45, upper: 0.75 },
+        { lower: 0.25, upper: 0.55 }
+      ],
+      bins: [0.7, 0.3],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      bounds: { lower: 0, upper: closeTo(0.5) },
+      overall: closeTo(0.4)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate difference (with complete overlap) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.2, upper: 0.8 },
+        { lower: 0.5, upper: 0.7 }
+      ],
+      bins: [0.5, 0.6],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      bounds: { lower: 0, upper: closeTo(0.5) },
+      overall: closeTo(0.1)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
   it("should calculate difference (without overlap) correctly", () => {
     const mockValue = {
       binBounds: [
@@ -54,6 +86,22 @@ describe("calculateFairnessMetric", () => {
         { lower: 0.65, upper: 0.75 }
       ],
       bins: [0.3, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.3), upper: closeTo(0.5) },
+      overall: closeTo(0.4)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate difference (without overlap and reverse order) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.65, upper: 0.75 },
+        { lower: 0.25, upper: 0.35 }
+      ],
+      bins: [0.7, 0.3],
       global: 0.5
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
@@ -107,6 +155,38 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toMatchObject(expectedResult);
   });
+  it("should calculate ratio (with overlap and reverse order) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.4, upper: 0.75 },
+        { lower: 0.25, upper: 0.6 }
+      ],
+      bins: [0.7, 0.35],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.33), upper: 1 },
+      overall: closeTo(0.5)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate ratio (with complete overlap) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.2, upper: 0.8 },
+        { lower: 0.5, upper: 0.7 }
+      ],
+      bins: [0.5, 0.6],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.29), upper: 1 },
+      overall: closeTo(0.83)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
   it("should calculate ratio (without overlap) correctly", () => {
     const mockValue = {
       binBounds: [
@@ -114,6 +194,22 @@ describe("calculateFairnessMetric", () => {
         { lower: 0.6, upper: 0.75 }
       ],
       bins: [0.35, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.33), upper: closeTo(0.67) },
+      overall: closeTo(0.5)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate ratio (without overlap and reverse order) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.6, upper: 0.75 },
+        { lower: 0.25, upper: 0.4 }
+      ],
+      bins: [0.7, 0.35],
       global: 0.5
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
