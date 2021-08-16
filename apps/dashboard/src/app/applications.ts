@@ -43,6 +43,8 @@ import {
   adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
+  bostonCensusCausalAnalysisData,
+  bostonCounterfactualData,
   bostonData as bostonDataMAD,
   bostonErrorAnalysisData,
   bostonWithFairnessModelExplanationData
@@ -185,7 +187,9 @@ export const applications: IApplications = <const>{
         dataset: adultCensusWithFairnessDataset
       },
       bostonData: {
+        causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
+        counterfactualData: [bostonCounterfactualData],
         dataset: bostonDataMAD,
         errorAnalysisData: [bostonErrorAnalysisData],
         modelExplanationData: [bostonWithFairnessModelExplanationData]

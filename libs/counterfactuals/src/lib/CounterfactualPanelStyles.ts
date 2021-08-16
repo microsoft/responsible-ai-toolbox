@@ -14,10 +14,12 @@ export interface ICounterfactualPanelStyles {
   cPanel: IStyle;
   container: IStyle;
   customPredictBlock: IStyle;
+  counterfactualList: IStyle;
   button: IStyle;
   boldText: IStyle;
   predictedBlock: IStyle;
   negativeNumber: IStyle;
+  predictedLink: IStyle;
   positiveNumber: IStyle;
   searchBox: IStyle;
   tooltipWrapper: IStyle;
@@ -43,12 +45,17 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       container: {
         width: "100%"
       },
+      counterfactualList: {
+        height: "100%",
+        overflow: "scroll",
+        width: "100%"
+      },
       cPanel: {
         float: "left",
         width: "100%"
       },
       customPredictBlock: {
-        paddingTop: "5px"
+        padding: "10px"
       },
       listContainer: {
         height: "100%",
@@ -71,9 +78,11 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         flexDirection: "row",
         paddingTop: "5px"
       },
+      predictedLink: {
+        color: theme.palette.blue
+      },
       searchBox: {
-        padding: "20px 0",
-        width: "200px"
+        padding: "20px 0"
       },
       tooltipColumn: {
         alignItems: "flex-start",

@@ -22,7 +22,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
   () => {
     return mergeStyleSets<ICausalAggregateStyles>({
       container: {
-        maxHeight: "50%",
+        height: "500px",
         overflowY: "scroll"
       },
       description: {
@@ -51,7 +51,6 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         textAlign: "left"
       },
       leftPane: {
-        height: "100%",
         padding: "10px",
         width: "70%"
       },

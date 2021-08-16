@@ -41,10 +41,7 @@ export const treeLegendStyles: () => IProcessedStyleSet<ITreeLegendStyles> =
         backgroundColor: theme.palette.red
       }),
       node: {
-        ":hover": {
-          strokeWidth: "3px"
-        },
-        cursor: "pointer",
+        cursor: "default",
         opacity: "1",
         stroke: "#089acc",
         strokeWidth: "0px"

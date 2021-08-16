@@ -2,15 +2,17 @@
 # Licensed under the MIT License.
 
 """Manager for causal analysis."""
+import numpy as np
 import pandas as pd
+
+from typing import Any, List, Optional, Union
 
 from econml.solutions.causal_analysis import CausalAnalysis
 from pathlib import Path
 
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import (
-    UserConfigValidationException)
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._tools.causal.causal_constants import (
     DefaultParams, ModelTypes, ResultAttributes, SerializationAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
@@ -47,20 +49,29 @@ class CausalManager(BaseManager):
 
     def add(
         self,
-        treatment_features,
-        heterogeneity_features=None,
-        nuisance_model=ModelTypes.LINEAR,
-        heterogeneity_model=ModelTypes.LINEAR,
-        alpha=DefaultParams.DEFAULT_ALPHA,
-        upper_bound_on_cat_expansion=DefaultParams.DEFAULT_MAX_CAT_EXPANSION,
-        treatment_cost=DefaultParams.DEFAULT_TREATMENT_COST,
-        min_tree_leaf_samples=DefaultParams.DEFAULT_MIN_TREE_LEAF_SAMPLES,
-        max_tree_depth=DefaultParams.DEFAULT_MAX_TREE_DEPTH,
-        skip_cat_limit_checks=DefaultParams.DEFAULT_SKIP_CAT_LIMIT_CHECKS,
-        categories=DefaultParams.DEFAULT_CATEGORIES,
-        n_jobs=DefaultParams.DEFAULT_N_JOBS,
-        verbose=DefaultParams.DEFAULT_VERBOSE,
-        random_state=DefaultParams.DEFAULT_RANDOM_STATE,
+        treatment_features: List[str],
+        heterogeneity_features: Optional[List[str]] = None,
+        nuisance_model: str = ModelTypes.LINEAR,
+        heterogeneity_model: str = ModelTypes.LINEAR,
+        alpha: float = DefaultParams.DEFAULT_ALPHA,
+        upper_bound_on_cat_expansion: int = (
+            DefaultParams.DEFAULT_MAX_CAT_EXPANSION),
+        treatment_cost: Union[float, List[Union[float, np.ndarray]]] = (
+            DefaultParams.DEFAULT_TREATMENT_COST),
+        min_tree_leaf_samples: int = (
+            DefaultParams.DEFAULT_MIN_TREE_LEAF_SAMPLES),
+        max_tree_depth: int = (
+            DefaultParams.DEFAULT_MAX_TREE_DEPTH),
+        skip_cat_limit_checks: bool = (
+            DefaultParams.DEFAULT_SKIP_CAT_LIMIT_CHECKS),
+        categories: Union[str, List[Union[str, List[Any]]]] = (
+            DefaultParams.DEFAULT_CATEGORIES),
+        n_jobs: int = (
+            DefaultParams.DEFAULT_N_JOBS),
+        verbose: int = (
+            DefaultParams.DEFAULT_VERBOSE),
+        random_state: Optional[Union[int, np.random.RandomState]] = (
+            DefaultParams.DEFAULT_RANDOM_STATE),
     ):
         """Compute causal insights.
         :param treatment_features: Treatment feature names.
@@ -77,19 +88,25 @@ class CausalManager(BaseManager):
         :param upper_bound_on_cat_expansion: Maximum expansion for
                                              categorical features.
         :type upper_bound_on_cat_expansion: int
-        :param treatment_cost: Cost to treat one individual or
-                               per-individual costs as an array.
-        :type treatment_cost: float or array
+        :param treatment_cost: Cost of treatment. If 0, all treatments will
+            have zero cost. If a list is passed, then each element will be
+            applied to each treatment feature. Each element can be a scalar
+            value to indicate a constant cost of applying that treatment or
+            an array indicating the cost for each sample. If the treatment
+            is a discrete treatment, then the array for that feature should
+            be two dimensional wih the first dimension representing samples
+            and t second representing the difference in cost between the
+            non-default values and the default value.
+        :type treatment_cost: None, List of float or array
         :param min_tree_leaf_samples: Minimum number of samples per leaf
-                                      in policy tree.
+            in policy tree.
         :type min_tree_leaf_samples: int
         :param max_tree_depth: Maximum depth of policy tree.
         :type max_tree_depth: int
-        :param skip_cat_limit_checks: By default, categorical features need
-                                      to have several instances of each
-                                      category in order for a model to be
-                                      fit robustly. Setting this to True
-                                      will skip these checks.
+        :param skip_cat_limit_checks:
+            By default, categorical features need to have several instances
+            of each category in order for a model to be fit robustly.
+            Setting this to True will skip these checks.
         :type skip_cat_limit_checks: bool
         :param categories: 'auto' or list of category values, default 'auto'
             What categories to use for the categorical columns.
@@ -109,6 +126,8 @@ class CausalManager(BaseManager):
         :type verbose: int
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
+        :return: Causal result.
+        :rtype: CausalResult
         """
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
@@ -124,17 +143,16 @@ class CausalManager(BaseManager):
                        f"got {nuisance_model}")
             raise UserConfigValidationException(message)
 
-        # Update X and y to contain both train and test
-        # This solves issues with categorical features missing some
-        # categories in the test set and causing transformers to fail
-        X = pd.concat([self._train, self._test], ignore_index=True)\
-            .drop([self._target_column], axis=1)
-        y = pd.concat([self._train, self._test], ignore_index=True)[
-            self._target_column].values.ravel()
-
         categoricals = self._categorical_features
         if categoricals is None:
             categoricals = []
+
+        X_train = self._train.drop([self._target_column], axis=1)
+        X_test = self._test.drop([self._target_column], axis=1)
+        y_train = self._train[self._target_column].values.ravel()
+
+        self._validate_train_test_categories(
+            X_train, X_test, categoricals)
 
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         analysis = CausalAnalysis(
@@ -151,7 +169,7 @@ class CausalManager(BaseManager):
             verbose=verbose,
             random_state=random_state,
         )
-        self._fit_causal_analysis(analysis, X, y,
+        self._fit_causal_analysis(analysis, X_train, y_train,
                                   upper_bound_on_cat_expansion)
 
         result = CausalResult()
@@ -174,21 +192,65 @@ class CausalManager(BaseManager):
 
         result.causal_analysis = analysis
 
-        X_test = self._test.drop([self._target_column], axis=1)
-
         result.global_effects = analysis.global_causal_effect(
             alpha=alpha, keep_all_levels=True)
         result.local_effects = analysis.local_causal_effect(
             X_test, alpha=alpha, keep_all_levels=True)
 
         result.policies = []
-        for treatment_feature in treatment_features:
+
+        # Check treatment_cost is valid
+        if isinstance(treatment_cost, int) and treatment_cost == 0:
+            treatment_cost = [0] * len(treatment_features)
+
+        if not isinstance(treatment_cost, list):
+            message = ("treatment_cost must be a list with "
+                       "the same number of elements as "
+                       "treatment_features where each element "
+                       "is either a constant cost of treatment "
+                       "or an array specifying the cost of "
+                       "treatment per sample. "
+                       "Found treatment_cost of type "
+                       f"{type(treatment_cost)}, expected list.")
+            raise UserConfigValidationException(message)
+        elif len(treatment_cost) != len(treatment_features):
+            message = ("treatment_cost must be a list with "
+                       "the same number of elements as "
+                       "treatment_features. "
+                       "Length of treatment_cost was "
+                       f"{len(treatment_cost)}, expected "
+                       f"{len(treatment_features)}.")
+            raise UserConfigValidationException(message)
+
+        for i in range(len(treatment_features)):
             policy = self._create_policy(
                 analysis, X_test,
-                treatment_feature, treatment_cost,
+                treatment_features[i], treatment_cost[i],
                 alpha, max_tree_depth, min_tree_leaf_samples)
             result.policies.append(policy)
         self._results.append(result)
+        return result
+
+    def _validate_train_test_categories(
+        self,
+        X_train: pd.DataFrame,
+        X_test: pd.DataFrame,
+        categoricals,
+    ):
+        discovered = {}
+        for column in X_train.columns:
+            if column in categoricals:
+                train_unique = np.unique(X_train[column])
+                test_unique = np.unique(X_test[column])
+                difference = np.setdiff1d(test_unique, train_unique)
+                if difference.shape[0] != 0:
+                    discovered[column] = difference.tolist()
+        if len(discovered) > 0:
+            message = ("Causal analysis requires that every category of "
+                       "categorical features present in the test data "
+                       "be also present in the train data. "
+                       "Categories missing from train data: {}")
+            raise UserConfigValidationException(message.format(discovered))
 
     def _fit_causal_analysis(
         self,

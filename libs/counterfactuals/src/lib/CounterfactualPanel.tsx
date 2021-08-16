@@ -15,7 +15,8 @@ import {
   Stack,
   PrimaryButton,
   TextField,
-  SearchBox
+  SearchBox,
+  Toggle
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -26,8 +27,8 @@ export interface ICounterfactualPanelProps {
   selectedIndex: number;
   data?: ICounterfactualData;
   isPanelOpen: boolean;
-  temporaryPoint: { [key: string]: any } | undefined;
-  originalData: { [key: string]: any };
+  temporaryPoint: { [key: string]: string | number } | undefined;
+  originalData: { [key: string]: string | number };
   closePanel(): void;
   saveAsPoint(): void;
   setCustomRowProperty(
@@ -38,6 +39,7 @@ export interface ICounterfactualPanelProps {
 }
 interface ICounterfactualState {
   filterText?: string;
+  sortFeatures: boolean;
 }
 
 export class CounterfactualPanel extends React.Component<
@@ -50,7 +52,8 @@ export class CounterfactualPanel extends React.Component<
   public constructor(props: ICounterfactualPanelProps) {
     super(props);
     this.state = {
-      filterText: undefined
+      filterText: undefined,
+      sortFeatures: false
     };
   }
   public render(): React.ReactNode {
@@ -66,18 +69,28 @@ export class CounterfactualPanel extends React.Component<
         <Stack tokens={{ childrenGap: "m1" }}>
           <Stack.Item>
             <Text variant={"medium"}>
-              {localization.Counterfactuals.panelDescription}
+              {localization.formatString(
+                localization.Counterfactuals.panelDescription,
+                this.props.data?.desired_class
+              )}
             </Text>
           </Stack.Item>
           <Stack.Item className={classes.searchBox}>
-            <SearchBox
-              placeholder={
-                localization.Interpret.WhatIf.filterFeaturePlaceholder
-              }
-              onChange={this.setFilterText.bind(this)}
-            />
+            <Stack horizontal tokens={{ childrenGap: "l1" }}>
+              <SearchBox
+                placeholder={
+                  localization.Interpret.WhatIf.filterFeaturePlaceholder
+                }
+                onChange={this.setFilterText.bind(this)}
+              />
+              <Toggle
+                label={localization.Counterfactuals.WhatIf.sortFeatures}
+                inlineLabel
+                onChange={this.toggleSortFeatures}
+              />
+            </Stack>
           </Stack.Item>
-          <Stack.Item>
+          <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}
               filterText={this.state.filterText}
@@ -85,6 +98,7 @@ export class CounterfactualPanel extends React.Component<
               data={this.props.data}
               temporaryPoint={this.props.temporaryPoint}
               setCustomRowProperty={this.props.setCustomRowProperty}
+              sortFeatures={this.state.sortFeatures}
             />
           </Stack.Item>
           <Stack.Item>
@@ -93,7 +107,9 @@ export class CounterfactualPanel extends React.Component<
                 <TextField
                   id="whatIfNameLabel"
                   label={localization.Counterfactuals.counterfactualName}
-                  value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
+                  value={this.props.temporaryPoint?.[
+                    WhatIfConstants.namePath
+                  ]?.toString()}
                   onChange={this.setCustomRowProperty.bind(
                     this,
                     WhatIfConstants.namePath,
@@ -120,6 +136,14 @@ export class CounterfactualPanel extends React.Component<
       </Panel>
     );
   }
+  private toggleSortFeatures = (
+    _event: React.MouseEvent<HTMLElement, MouseEvent>,
+    checked?: boolean | undefined
+  ) => {
+    if (checked !== undefined) {
+      this.setState({ sortFeatures: checked });
+    }
+  };
   private onClosePanel(): void {
     this.setState({
       filterText: undefined
