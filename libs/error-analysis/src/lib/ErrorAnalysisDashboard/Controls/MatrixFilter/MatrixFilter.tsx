@@ -95,7 +95,7 @@ export class MatrixFilter extends React.PureComponent<
             <Stack.Item key="feature1key">
               <ComboBox
                 defaultSelectedKey=""
-                label="X-Axis: Feature 1"
+                label="Y-Axis: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
                 useComboBoxAsMenuWidth
@@ -110,7 +110,7 @@ export class MatrixFilter extends React.PureComponent<
             <Stack.Item key="feature2key">
               <ComboBox
                 defaultSelectedKey=""
-                label="Y-Axis: Feature 2"
+                label="X-Axis: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
                 useComboBoxAsMenuWidth
