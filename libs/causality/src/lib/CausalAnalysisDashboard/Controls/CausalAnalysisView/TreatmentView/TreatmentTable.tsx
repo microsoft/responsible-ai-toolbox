@@ -68,7 +68,7 @@ export class TreatmentTable extends React.PureComponent<
       1 << (maxLevel - 1)
     );
     leftRows[0].unshift(
-      <th rowSpan={leftMaxLevel}>
+      <th rowSpan={leftMaxLevel} key={-1}>
         {localization.formatString(
           localization.CausalAnalysis.TreatmentPolicy.Left,
           this.props.data.feature,
@@ -83,7 +83,7 @@ export class TreatmentTable extends React.PureComponent<
       1 << (maxLevel - 1)
     );
     rightRows[0].unshift(
-      <th rowSpan={rightMaxLevel}>
+      <th rowSpan={rightMaxLevel} key={-1}>
         {localization.formatString(
           localization.CausalAnalysis.TreatmentPolicy.Right,
           this.props.data.feature,
@@ -91,6 +91,7 @@ export class TreatmentTable extends React.PureComponent<
         )}
       </th>
     );
+    console.log(rightRows);
     return [...leftRows, ...rightRows];
   };
 
@@ -118,14 +119,14 @@ export class TreatmentTable extends React.PureComponent<
           currentRow.push(
             <TreatmentCell
               data={next.data}
-              key={0}
+              key={currentRow.length}
               rowSpan={next.rowSpan}
               colSpan={next.colSpan}
             />
           );
         } else {
           currentRow.push(
-            <th colSpan={next.colSpan >> 1}>
+            <th colSpan={next.colSpan >> 1} key={currentRow.length}>
               {localization.formatString(
                 localization.CausalAnalysis.TreatmentPolicy.Left,
                 next.data.feature,
@@ -134,7 +135,7 @@ export class TreatmentTable extends React.PureComponent<
             </th>
           );
           currentRow.push(
-            <th colSpan={next.colSpan >> 1}>
+            <th colSpan={next.colSpan >> 1} key={currentRow.length}>
               {localization.formatString(
                 localization.CausalAnalysis.TreatmentPolicy.Right,
                 next.data.feature,
