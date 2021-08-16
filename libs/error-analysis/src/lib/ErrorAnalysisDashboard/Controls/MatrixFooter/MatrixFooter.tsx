@@ -22,7 +22,7 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
     const classNames = matrixFooterStyles();
     return (
       <div>
-        {(!this.props.selectedFeature2 || this.props.sameFeatureSelected) &&
+        {(!this.props.selectedFeature1 || this.props.sameFeatureSelected) &&
           this.props.category1Values.length > 0 && (
             <div
               key={`${this.props.matrixLength}row`}
