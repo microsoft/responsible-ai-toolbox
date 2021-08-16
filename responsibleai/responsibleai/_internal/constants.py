@@ -42,6 +42,7 @@ class ErrorAnalysisManagerKeys(object):
     IS_COMPUTED = 'is_computed'
     MAX_DEPTH = 'max_depth'
     NUM_LEAVES = 'num_leaves'
+    MIN_CHILD_SAMPLES = 'min_child_samples'
     FILTER_FEATURES = 'filter_features'
     REPORTS = 'reports'
 

@@ -37,7 +37,8 @@ class ErrorAnalysisDashboardInput:
             model_task,
             metric,
             max_depth,
-            num_leaves):
+            num_leaves,
+            min_child_samples):
         """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -93,6 +94,9 @@ class ErrorAnalysisDashboardInput:
         :param num_leaves: The number of leaves of the surrogate tree
             trained on errors.
         :type num_leaves: int
+        :param min_child_samples: The minimal number of data required
+            to create one leaf.
+        :type min_child_samples: int
         """
         self._model = model
         full_dataset = dataset
@@ -113,6 +117,7 @@ class ErrorAnalysisDashboardInput:
         feature_length = None
         self._max_depth = max_depth
         self._num_leaves = num_leaves
+        self._min_child_samples = min_child_samples
 
         if has_explanation:
             if classes is None:
@@ -420,7 +425,8 @@ class ErrorAnalysisDashboardInput:
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
                 max_depth=self._max_depth,
-                num_leaves=self._num_leaves)
+                num_leaves=self._num_leaves,
+                min_child_samples=self._min_child_samples)
             return {
                 WidgetRequestResponseConstants.DATA: tree
             }

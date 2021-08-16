@@ -11,6 +11,7 @@ from flask import jsonify, request
 
 DEFAULT_MAX_DEPTH = 3
 DEFAULT_NUM_LEAVES = 31
+DEFAULT_MIN_CHILD_SAMPLES = 20
 
 
 class ErrorAnalysisDashboard(Dashboard):
@@ -81,7 +82,8 @@ class ErrorAnalysisDashboard(Dashboard):
                  categorical_features=None, true_y_dataset=None,
                  pred_y=None, model_task=ModelTask.UNKNOWN,
                  metric=None, max_depth=DEFAULT_MAX_DEPTH,
-                 num_leaves=DEFAULT_NUM_LEAVES):
+                 num_leaves=DEFAULT_NUM_LEAVES,
+                 min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
         """ErrorAnalysis Dashboard Class.
 
         :param explanation: An object that represents an explanation.
@@ -141,12 +143,15 @@ class ErrorAnalysisDashboard(Dashboard):
         :param num_leaves: The number of leaves of the surrogate tree
             trained on errors.
         :type num_leaves: int
+        :param min_child_samples: The minimal number of data required
+            to create one leaf.
+        :type min_child_samples: int
         """
         self.input = ErrorAnalysisDashboardInput(
             explanation, model, dataset, true_y, classes,
             features, categorical_features,
             true_y_dataset, pred_y, model_task, metric,
-            max_depth, num_leaves)
+            max_depth, num_leaves, min_child_samples)
         super(ErrorAnalysisDashboard, self).__init__(
             dashboard_type="ErrorAnalysis",
             model_data=self.input.dashboard_input,
