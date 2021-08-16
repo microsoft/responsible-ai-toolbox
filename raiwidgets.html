@@ -119,7 +119,7 @@
 <p>Package for the fairness, explanation, and error analysis widgets.</p>
 <dl class="py class">
 <dt id="raiwidgets.ErrorAnalysisDashboard">
-<em class="property">class </em><code class="sig-prename descclassname">raiwidgets.</code><code class="sig-name descname">ErrorAnalysisDashboard</code><span class="sig-paren">(</span><em class="sig-param">explanation=None</em>, <em class="sig-param">model=None</em>, <em class="sig-param">*</em>, <em class="sig-param">dataset=None</em>, <em class="sig-param">true_y=None</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">features=None</em>, <em class="sig-param">port=None</em>, <em class="sig-param">locale=None</em>, <em class="sig-param">public_ip=None</em>, <em class="sig-param">categorical_features=None</em>, <em class="sig-param">true_y_dataset=None</em>, <em class="sig-param">pred_y=None</em>, <em class="sig-param">model_task=&lt;ModelTask.UNKNOWN: 'unknown'&gt;</em>, <em class="sig-param">metric=None</em>, <em class="sig-param">max_depth=3</em>, <em class="sig-param">num_leaves=31</em>, <em class="sig-param">min_child_samples=20</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/microsoft/responsible-ai-widgets/blob/main/raiwidgets/raiwidgets/error_analysis_dashboard.py#L17-L184"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raiwidgets.ErrorAnalysisDashboard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">raiwidgets.</code><code class="sig-name descname">ErrorAnalysisDashboard</code><span class="sig-paren">(</span><em class="sig-param">explanation=None</em>, <em class="sig-param">model=None</em>, <em class="sig-param">*</em>, <em class="sig-param">dataset=None</em>, <em class="sig-param">true_y=None</em>, <em class="sig-param">classes=None</em>, <em class="sig-param">features=None</em>, <em class="sig-param">port=None</em>, <em class="sig-param">locale=None</em>, <em class="sig-param">public_ip=None</em>, <em class="sig-param">categorical_features=None</em>, <em class="sig-param">true_y_dataset=None</em>, <em class="sig-param">pred_y=None</em>, <em class="sig-param">pred_y_dataset=None</em>, <em class="sig-param">model_task=&lt;ModelTask.UNKNOWN: 'unknown'&gt;</em>, <em class="sig-param">metric=None</em>, <em class="sig-param">max_depth=3</em>, <em class="sig-param">num_leaves=31</em>, <em class="sig-param">min_child_samples=20</em>, <em class="sig-param">sample_dataset=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/microsoft/responsible-ai-widgets/blob/main/raiwidgets/raiwidgets/error_analysis_dashboard.py#L17-L161"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raiwidgets.ErrorAnalysisDashboard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">raiwidgets.dashboard.Dashboard</span></code></p>
 <p>ErrorAnalysis Dashboard Class.</p>
 <dl class="field-list simple">
@@ -131,7 +131,7 @@ the classification case it has a method of predict_proba()
 returning the prediction probabilities for each class and
 for the regression case a method of predict() returning the
 prediction value.</p></li>
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>]</em><em>[</em><em>]</em>) – A matrix of feature vector examples
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>]</em><em>[</em><em>]</em>) – A matrix of feature vector examples
 (# examples x # features), the same samples used to build the
 explanation. Overwrites any existing dataset on the
 explanation object.</p></li>
@@ -167,9 +167,44 @@ metrics include ‘mean_absolute_error’, ‘mean_squared_error’,
 on errors.</p></li>
 <li><p><strong>num_leaves</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of leaves of the surrogate tree
 trained on errors.</p></li>
+<li><p><strong>sample_dataset</strong> (<em>pd.DataFrame</em><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>]</em><em>[</em><em>]</em>) – Dataset with fewer samples than the main
+dataset. Used to improve performance only when an
+Explanation object is not provided.  Used only if
+explanation is not specified for the dataset explorer.
+Specify less than 10k points for optimal performance.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Example</dt>
+<dd class="field-even"><p></p></dd>
 </dl>
+<p># Run simple view of error analysis with just predictions and
+# true labels
+&gt;&gt;&gt; predictions = model.predict(X_test)
+&gt;&gt;&gt; from raiwidgets import ErrorAnalysisDashboard
+&gt;&gt;&gt; ErrorAnalysisDashboard(dataset=X_test, true_y=y_test,
+…                        features=features, pred_y=predictions)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p># Run error analysis with a model and a computed explanation
+&gt;&gt;&gt; from raiwidgets import ErrorAnalysisDashboard
+&gt;&gt;&gt; ErrorAnalysisDashboard(global_explanation, model,
+…                        dataset=X_test, true_y=y_test)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p># Run error analysis on large data and a downsampled dataset
+# for the UI
+&gt;&gt;&gt; from raiwidgets import ErrorAnalysisDashboard
+&gt;&gt;&gt; ErrorAnalysisDashboard(sample_dataset=X_test_sample,
+…                        dataset=X_test,
+…                        features=features,
+…                        true_y=y_test_sample,
+…                        true_y_dataset=y_test,
+…                        pred_y=X_test_sample_pred_y,
+…                        pred_y_dataset=X_test_pred_y)</p>
 </dd></dl>
 
 <dl class="py class">
