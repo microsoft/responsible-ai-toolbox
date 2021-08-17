@@ -43,14 +43,14 @@ def wilson_wrapper(y_true, y_pred, func):
         return [None, None]
     return result
 
-# custom recall/precision error bar functions to have n =/= len(y_pred)
-# because it should be n = (tp + fn) and n = (tp+fp), respectively
-
 
 def general_cm_wilson(a, b, digits_of_precision, z_score):
     """
     Computes generalized confusion matrix wilson bounds
     Used for rates of the form: a / (a + b)
+
+    This is necessary because the denominators for rates such as
+    True Positive Rate need to be out of total positive results
     """
     n = a + b
     return compute_wilson_bounds(a / n, n, digits_of_precision, z_score)
@@ -106,16 +106,6 @@ def mae_standard_normal(y_true, y_pred):
     mae = np.mean(absolute_error)
     standard_error = z_score * sample_std / np.sqrt(len(y_true))
     return mae - standard_error, mae + standard_error
-
-
-# TODO: Logarithmic loss implemented, but should be logistic loss
-def log_loss_standard_normal(y_true, y_pred):
-    assert len(y_true) == len(y_pred)
-    log_loss = np.log(np.abs(y_true - y_pred))
-    sample_std = np.std(log_loss)
-    mean_log_loss = np.mean(log_loss)
-    standard_error = z_score * sample_std / np.sqrt(len(y_true))
-    return mean_log_loss - standard_error, mean_log_loss + standard_error
 
 
 class FairnessMetricModule:
@@ -231,8 +221,7 @@ class FairnessMetricModule:
                 },
                 "log_loss": {
                     "model_type": ["probability"],
-                    "function": skm.log_loss,
-                    "error_function": log_loss_standard_normal
+                    "function": skm.log_loss
                 },
                 "overprediction": {
                     "model_type": [],
