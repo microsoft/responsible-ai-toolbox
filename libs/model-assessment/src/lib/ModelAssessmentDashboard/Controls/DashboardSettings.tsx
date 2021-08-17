@@ -32,12 +32,6 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
         name: localization.ModelAssessment.DashboardSettings.DashboardComponents
       },
       {
-        fieldName: "dataCount",
-        key: "dataCount",
-        minWidth: 50,
-        name: localization.ModelAssessment.DashboardSettings.DataPoints
-      },
-      {
         fieldName: "key",
         key: "delete",
         minWidth: 20,
