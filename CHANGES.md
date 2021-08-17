@@ -30,6 +30,8 @@ this file to understand what changed.
 - new features
   - causal treatment cost argument can be passed per feature/sample/category
   - target added to counterfactual tabular output
+  - causal analysis now trains the model on training data, not both train and test
+  - min_child_samples parameter for error analysis
 - breaking changes
 - bug fixes
   - improved text for causal what-if
@@ -41,9 +43,13 @@ this file to understand what changed.
   - fixes for error analysis matrix view
   - fix for extra scroll bar in counterfactuals view
   - fix for train data input in classification notebook
+  - fix for bug in counterfactual feature_to_vary parameter
+  - fix for x and y axes of error analysis heatmap
+  - fix for counterfactual predict
 - other
   - improved error messages for responsibleai ModelAnalysis
   - improved validation when not passing a model to ModelAnalysis
+  - updated ModelAnalysis classification notebook to use separate train and test datasets
 
 ## v0.9.2
 
