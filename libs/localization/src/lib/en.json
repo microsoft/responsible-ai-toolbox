@@ -262,10 +262,10 @@
       "save": "Save"
     },
     "DropdownHeaders": {
-      "sensitiveFeature": "Sensitive feature",
-      "performanceMetric": "Performance metric",
+      "errorMetric": "Enable error bars",
       "fairnessMetric": "Fairness metric",
-      "errorMetric": "Enable error bars"
+      "performanceMetric": "Performance metric",
+      "sensitiveFeature": "Sensitive feature"
     },
     "ErrorBounds": {
       "howToRead": "How to read these error bars",

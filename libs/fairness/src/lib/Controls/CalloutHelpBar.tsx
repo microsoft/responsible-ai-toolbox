@@ -29,36 +29,25 @@ export class CalloutHelpBar extends React.PureComponent<ICalloutHelpBarProps> {
   public render(): React.ReactNode {
     const sharedStyles = SharedStyles();
 
-    const graphInfoButtonId = "graphInfoButtonId";
-    const errorBarsInfoButtonId = "errorBarInfoButtonId";
-
     return (
       <Stack
         horizontal
         horizontalAlign="space-between"
         className={sharedStyles.calloutBarWrapper}
       >
-        <CalloutGraph
-          graphInfoButtonId={graphInfoButtonId}
-          graphCalloutStrings={this.props.graphCalloutStrings}
-        />
+        <CalloutGraph graphCalloutStrings={this.props.graphCalloutStrings} />
         <Stack horizontal verticalAlign="center">
-          <CalloutErrorBars errorBarsInfoButtonId={errorBarsInfoButtonId} />
+          <CalloutErrorBars />
           <Toggle
             className={sharedStyles.toggle}
             id="errorMetricDropdown"
             defaultChecked={this.props.errorPickerProps.errorBarsEnabled}
             disabled={
-              (typeof this.props.fairnessBounds === "undefined" ||
-                _.isEmpty(this.props.fairnessBounds.filter(Boolean))) &&
-              (typeof this.props.performanceBounds === "undefined" ||
-                _.isEmpty(this.props.performanceBounds.filter(Boolean))) &&
-              (typeof this.props.outcomeBounds === "undefined" ||
-                _.isEmpty(this.props.outcomeBounds.filter(Boolean))) &&
-              (typeof this.props.falseNegativeBounds === "undefined" ||
-                _.isEmpty(this.props.falseNegativeBounds.filter(Boolean))) &&
-              (typeof this.props.falsePositiveBounds === "undefined" ||
-                _.isEmpty(this.props.falsePositiveBounds.filter(Boolean)))
+              _.some(this.props.fairnessBounds, (a) => !a) &&
+              _.some(this.props.performanceBounds, (a) => !a) &&
+              _.some(this.props.outcomeBounds, (a) => !a) &&
+              _.some(this.props.falseNegativeBounds, (a) => !a) &&
+              _.some(this.props.falsePositiveBounds, (a) => !a)
             }
             onChange={this.props.parentErrorChanged}
           />

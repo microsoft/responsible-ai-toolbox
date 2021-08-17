@@ -6,7 +6,6 @@ import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { getTheme, Stack } from "office-ui-fabric-react";
-import { Datum } from "plotly.js";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
@@ -21,6 +20,11 @@ import { SharedStyles } from "../Shared.styles";
 import { FormatMetrics } from "./../util/FormatMetrics";
 import { IFairnessContext } from "./../util/IFairnessContext";
 import { CalloutHelpBar } from "./CalloutHelpBar";
+import {
+  buildFalseNegativeErrorBounds,
+  buildFalsePositiveErrorBounds,
+  buildCustomTooltips
+} from "./PerformancePlotHelper";
 import { PerformancePlotLegend } from "./PerformancePlotLegend";
 
 interface IPerformancePlotProps {
@@ -91,75 +95,18 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
         this.props.errorPickerProps.errorBarsEnabled &&
         this.props.metrics.falsePositiveRates !== undefined
       ) {
-        barPlotlyProps.data[0].error_x = {
-          // `array` and `arrayminus` are error bounds as described in Plotly API
-          array: this.props.metrics.falsePositiveRates.binBounds?.map(
-            (binBound, index) => {
-              if (
-                this.props.metrics.falsePositiveRates?.bins[index] !== undefined
-              ) {
-                return (
-                  binBound.upper -
-                  this.props.metrics.falsePositiveRates.bins[index]
-                ); // convert from bounds to relative error
-              }
-              return 0;
-            }
-          ) || [0],
-          arrayminus: this.props.metrics.falsePositiveRates.binBounds?.map(
-            (binBound, index) => {
-              if (
-                this.props.metrics.falsePositiveRates?.bins[index] !== undefined
-              ) {
-                return (
-                  this.props.metrics.falsePositiveRates.bins[index] -
-                  binBound.lower
-                ); // convert from bounds to relative error
-              }
-              return 0;
-            }
-          ) || [0],
-          type: "data",
-          visible: true
-        };
+        barPlotlyProps.data[0].error_x = buildFalsePositiveErrorBounds(
+          this.props.metrics.falsePositiveRates
+        );
         barPlotlyProps.data[0].textposition = "none";
       }
       if (
         this.props.errorPickerProps.errorBarsEnabled &&
         this.props.metrics.falseNegativeRates !== undefined
       ) {
-        barPlotlyProps.data[1].error_x = {
-          array: this.props.metrics.falseNegativeRates.binBounds?.map(
-            (binBound, index) => {
-              if (
-                this.props.metrics.falseNegativeRates?.bins[index] !== undefined
-              ) {
-                return (
-                  (binBound.upper -
-                    this.props.metrics.falseNegativeRates.bins[index]) *
-                  -1
-                ); // convert from bounds to relative error
-              }
-              return 0;
-            }
-          ) || [0],
-          arrayminus: this.props.metrics.falseNegativeRates.binBounds?.map(
-            (binBound, index) => {
-              if (
-                this.props.metrics.falseNegativeRates?.bins[index] !== undefined
-              ) {
-                return (
-                  (this.props.metrics.falseNegativeRates.bins[index] -
-                    binBound.lower) *
-                  -1
-                ); // convert from bounds to relative error
-              }
-              return 0;
-            }
-          ) || [0],
-          type: "data",
-          visible: true
-        };
+        barPlotlyProps.data[1].error_x = buildFalseNegativeErrorBounds(
+          this.props.metrics.falseNegativeRates
+        );
         barPlotlyProps.data[1].textposition = "none";
       }
 
@@ -310,79 +257,12 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
       ];
     }
 
+    // Create custom hover tooltips
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
       PredictionTypes.BinaryClassification
     ) {
-      const digitsOfPrecision = 1;
-
-      for (let j = 0; j < barPlotlyProps.data.length; j++) {
-        const outcomeMetricName = barPlotlyProps.data[j].name;
-        barPlotlyProps.data[j].customdata = [];
-        if (barPlotlyProps.data) {
-          for (
-            let i = 0;
-            i < this.props.dashboardContext.groupNames.length;
-            i++
-          ) {
-            const outcomeMetric = outcomeMetricName
-              ? `${outcomeMetricName}: `
-              : "";
-            const tempData = barPlotlyProps.data?.[j];
-            const tempY = tempData ? tempData.y?.[i] : undefined;
-            const tempX = tempData ? tempData.x?.[i] : undefined;
-
-            // ensure x is number
-            const x =
-              tempX !== undefined && typeof tempX == "number"
-                ? tempX
-                : undefined;
-            // ensure y is string
-            const y =
-              tempY !== undefined && typeof tempY == "string"
-                ? tempY.trim()
-                : undefined;
-            const lowerErrorX =
-              tempData?.error_x?.type === "data"
-                ? tempData.error_x.arrayminus?.[i]
-                : undefined;
-            const upperErrorX =
-              tempData?.error_x?.type === "data"
-                ? tempData.error_x.array?.[i]
-                : undefined;
-
-            const xBounds =
-              lowerErrorX !== 0 &&
-              upperErrorX !== 0 &&
-              typeof lowerErrorX == "number" &&
-              typeof upperErrorX == "number" &&
-              x !== undefined
-                ? `[${(100 * (x - lowerErrorX)).toFixed(
-                    digitsOfPrecision
-                  )}%, ${(100 * (x + upperErrorX)).toFixed(
-                    digitsOfPrecision
-                  )}%]`
-                : "";
-
-            if (
-              barPlotlyProps?.data?.[j]?.customdata &&
-              _.isArray(barPlotlyProps.data[j].customdata)
-            ) {
-              barPlotlyProps.data[j].customdata!.push({
-                outcomeMetric,
-                x:
-                  x !== undefined
-                    ? (100 * x).toFixed(digitsOfPrecision)
-                    : undefined,
-                xBounds,
-                y
-              } as unknown as Datum);
-            }
-            barPlotlyProps.data[j].hovertemplate =
-              "<b>%{customdata.y}</b><br>%{customdata.outcomeMetric}%{customdata.x}% %{customdata.xBounds}<extra></extra>";
-          }
-        }
-      }
+      buildCustomTooltips(barPlotlyProps, this.props.dashboardContext);
     }
 
     return (

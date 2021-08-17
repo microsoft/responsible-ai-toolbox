@@ -8,19 +8,15 @@ import React from "react";
 
 import { SharedStyles } from "../Shared.styles";
 
-interface ICalloutErrorBarsProps {
-  errorBarsInfoButtonId: string;
-}
-
 export interface IState {
-  showErrorBarsCallout?: boolean;
+  showErrorBarsCallout: boolean;
 }
 
-export class CalloutErrorBars extends React.PureComponent<
-  ICalloutErrorBarsProps,
+export class CalloutErrorBars extends React.Component<
+  Record<string, never>,
   IState
 > {
-  public constructor(props: ICalloutErrorBarsProps) {
+  public constructor(props: Record<string, never>) {
     super(props);
     this.state = {
       showErrorBarsCallout: false
@@ -28,6 +24,7 @@ export class CalloutErrorBars extends React.PureComponent<
   }
   public render(): React.ReactNode {
     const sharedStyles = SharedStyles();
+    const errorBarsInfoButtonId = "errorBarInfoButtonId";
     return (
       <Stack horizontal verticalAlign="center">
         <ActionButton
@@ -38,7 +35,7 @@ export class CalloutErrorBars extends React.PureComponent<
             block
             variant="medium"
             className={sharedStyles.infoButton}
-            id={this.props.errorBarsInfoButtonId}
+            id={errorBarsInfoButtonId}
           >
             i
           </Text>
@@ -51,7 +48,7 @@ export class CalloutErrorBars extends React.PureComponent<
             className={sharedStyles.callout}
             role="alertdialog"
             gapSpace={0}
-            target={`#${this.props.errorBarsInfoButtonId}`}
+            target={`#${errorBarsInfoButtonId}`}
             onDismiss={this.handleCloseErrorBarsCallout}
             setInitialFocus
           >

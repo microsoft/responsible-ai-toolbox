@@ -10,11 +10,10 @@ import { SharedStyles } from "../Shared.styles";
 
 interface ICalloutGraphProps {
   graphCalloutStrings: string[];
-  graphInfoButtonId: string;
 }
 
 export interface IState {
-  showGraphCallout?: boolean;
+  showGraphCallout: boolean;
 }
 
 export class CalloutGraph extends React.PureComponent<
@@ -29,6 +28,7 @@ export class CalloutGraph extends React.PureComponent<
   }
   public render(): React.ReactNode {
     const sharedStyles = SharedStyles();
+    const graphInfoButtonId = "graphInfoButtonId";
     return (
       <Stack>
         <Stack horizontal verticalAlign="center">
@@ -41,7 +41,7 @@ export class CalloutGraph extends React.PureComponent<
                 block
                 variant="medium"
                 className={sharedStyles.infoButton}
-                id={this.props.graphInfoButtonId}
+                id={graphInfoButtonId}
               >
                 i
               </Text>
@@ -52,7 +52,7 @@ export class CalloutGraph extends React.PureComponent<
                 className={sharedStyles.callout}
                 role="alertdialog"
                 gapSpace={0}
-                target={`#${this.props.graphInfoButtonId}`}
+                target={`#${graphInfoButtonId}`}
                 onDismiss={this.handleCloseGraphCallout}
                 setInitialFocus
               >

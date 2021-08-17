@@ -242,7 +242,7 @@ export class ModelComparisonChart extends React.Component<
             series.name = this.props.dashboardContext.modelNames[series.name];
           }
 
-          series.customdata = [] as unknown as Datum[];
+          series.customdata = [];
           const digitsOfPrecision = 4;
 
           for (let modelId = 0; modelId < data.length; modelId++) {
@@ -265,14 +265,8 @@ export class ModelComparisonChart extends React.Component<
                 ? series.error_y.array?.[modelId]
                 : undefined;
 
-            const x =
-              series.x && tempX !== undefined && typeof tempX == "number"
-                ? tempX
-                : undefined;
-            const y =
-              series.y && tempY !== undefined && typeof tempY == "number"
-                ? tempY
-                : undefined;
+            const x = series.x && typeof tempX == "number" ? tempX : undefined;
+            const y = series.y && typeof tempY == "number" ? tempY : undefined;
 
             const xBounds = this.formatBoundsTooltip(
               lowerErrorX,
