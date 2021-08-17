@@ -39,7 +39,7 @@
       "why": "Why is it important to include confounding features?"
     },
     "TreatmentPolicy": {
-      "averageGainBinary": "Average gains of alternative policies over no {0} treatment.",
+      "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value.",
       "averageGainContinuous": "Average gains of alternative policies over no modification to the current treatment level for {0} treatment.",
       "BarDescriptionBinary": "This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.",
       "BarDescriptionContinuous": "This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.",
