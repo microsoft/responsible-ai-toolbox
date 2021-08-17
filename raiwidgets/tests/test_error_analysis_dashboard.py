@@ -66,3 +66,38 @@ class TestErrorAnalysisDashboard:
         knn.fit(X_train, y_train)
         ErrorAnalysisDashboard(model=knn, dataset=X_test,
                                true_y=y_test, classes=classes)
+
+    def test_error_analysis_sample_dataset_with_many_more_rows(self):
+        X, y = make_classification(n_samples=400000)
+
+        # Split data into train and test
+        X_train, X_test, y_train, y_test = train_test_split(X,
+                                                            y,
+                                                            test_size=0.2,
+                                                            random_state=0)
+        classes = np.unique(y_train).tolist()
+        feature_names = ["col" + str(i) for i in list(range(X_train.shape[1]))]
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        logreg = sklearn.linear_model.LogisticRegression()
+        logreg.fit(X_train, y_train)
+        _, X_test_sample, _, y_test_sample = train_test_split(X_test,
+                                                              y_test,
+                                                              test_size=0.01,
+                                                              random_state=0)
+        ErrorAnalysisDashboard(model=logreg,
+                               dataset=X_test,
+                               true_y=y_test_sample,
+                               true_y_dataset=y_test,
+                               classes=classes,
+                               sample_dataset=X_test_sample)
+
+        pred_y = logreg.predict(X_test)
+        pred_y_sample = logreg.predict(X_test_sample)
+        ErrorAnalysisDashboard(dataset=X_test,
+                               true_y=y_test_sample,
+                               true_y_dataset=y_test,
+                               classes=classes,
+                               sample_dataset=X_test_sample,
+                               pred_y=pred_y_sample,
+                               pred_y_dataset=pred_y)

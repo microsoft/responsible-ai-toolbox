@@ -107,23 +107,27 @@ class BaseAnalyzer(ABC):
                            filters,
                            composite_filters,
                            max_depth=None,
-                           num_leaves=None):
+                           num_leaves=None,
+                           min_child_samples=None):
         return _compute_error_tree(self,
                                    features,
                                    filters,
                                    composite_filters,
                                    max_depth=max_depth,
-                                   num_leaves=num_leaves)
+                                   num_leaves=num_leaves,
+                                   min_child_samples=min_child_samples)
 
     def create_error_report(self,
                             filter_features=None,
                             max_depth=None,
-                            num_leaves=None):
+                            num_leaves=None,
+                            min_child_samples=None):
         tree = self.compute_error_tree(self.feature_names,
                                        None,
                                        None,
                                        max_depth=max_depth,
-                                       num_leaves=num_leaves)
+                                       num_leaves=num_leaves,
+                                       min_child_samples=min_child_samples)
         matrix = None
         if filter_features is not None:
             matrix = self.compute_matrix(filter_features,
