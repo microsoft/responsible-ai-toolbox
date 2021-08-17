@@ -20,6 +20,20 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toEqual(expectedResult);
   });
+  it("should return NaN for invalid FairnessMode", () => {
+    const mockValue = {
+      bins: [],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(
+      mockValue,
+      "invalid" as FairnessModes.Max
+    );
+    const expectedResult = {
+      overall: Number.NaN
+    };
+    expect(result).toEqual(expectedResult);
+  });
   it("should calculate difference without binBounds correctly", () => {
     const mockValue = {
       bins: [0.5, 0.2],
