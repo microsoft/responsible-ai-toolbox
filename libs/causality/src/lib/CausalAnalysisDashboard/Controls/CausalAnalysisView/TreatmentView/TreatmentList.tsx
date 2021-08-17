@@ -61,8 +61,6 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
         ariaLabel: localization.Counterfactuals.EffectOfTreatment,
         fieldName: "Effect of treatment",
         isResizable: true,
-        isSorted: true,
-        isSortedDescending: false,
         key: "Effect of treatment",
         maxWidth: 400,
         minWidth: 200,
