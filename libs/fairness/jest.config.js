@@ -6,8 +6,8 @@ module.exports = {
   coverageThreshold: {
     "./libs/fairness/src/lib/util/calculateFairnessMetric.ts": {
       branches: 98,
-      functions: 86,
-      lines: 99,
+      functions: 98,
+      lines: 98,
       statements: 98
     }
   },

@@ -31,6 +31,18 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toEqual(expectedResult);
   });
+  it("should return only overall result if binBounds falsey", () => {
+    const mockValue = {
+      binBounds: [],
+      bins: [0.3, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      overall: closeTo(0.4)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
   it("should calculate difference (with overlap) correctly", () => {
     const mockValue = {
       binBounds: [
@@ -68,6 +80,22 @@ describe("calculateFairnessMetric", () => {
       binBounds: [
         { lower: 0.2, upper: 0.8 },
         { lower: 0.5, upper: 0.7 }
+      ],
+      bins: [0.5, 0.6],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      bounds: { lower: 0, upper: closeTo(0.5) },
+      overall: closeTo(0.1)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate difference (with complete overlap and reversed order) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.5, upper: 0.7 },
+        { lower: 0.2, upper: 0.8 }
       ],
       bins: [0.5, 0.6],
       global: 0.5
@@ -124,6 +152,40 @@ describe("calculateFairnessMetric", () => {
     const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
     const expectedResult = {
       bounds: { lower: closeTo(0.1), upper: closeTo(0.5) },
+      overall: closeTo(0.4)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate difference with 3+ groups correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.45, upper: 0.55 },
+        { lower: 0.25, upper: 0.35 },
+        { lower: 0.65, upper: 0.75 }
+      ],
+      bins: [0.5, 0.3, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.1), upper: closeTo(0.5) },
+      overall: closeTo(0.4)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate difference with 3+ groups correctly (with overlap)", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.45, upper: 0.7 },
+        { lower: 0.25, upper: 0.35 },
+        { lower: 0.65, upper: 0.75 }
+      ],
+      bins: [0.5, 0.3, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      bounds: { lower: closeTo(0), upper: closeTo(0.5) },
       overall: closeTo(0.4)
     };
     expect(result).toMatchObject(expectedResult);
@@ -187,6 +249,22 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toMatchObject(expectedResult);
   });
+  it("should calculate ratio (with complete overlap and reversed order) correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.5, upper: 0.7 },
+        { lower: 0.2, upper: 0.8 }
+      ],
+      bins: [0.5, 0.6],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.29), upper: 1 },
+      overall: closeTo(0.83)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
   it("should calculate ratio (without overlap) correctly", () => {
     const mockValue = {
       binBounds: [
@@ -232,6 +310,40 @@ describe("calculateFairnessMetric", () => {
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
       bounds: { lower: closeTo(0.33), upper: closeTo(0.92) },
+      overall: closeTo(0.5)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate ratio with 3+ groups correctly", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.45, upper: 0.55 },
+        { lower: 0.25, upper: 0.4 },
+        { lower: 0.6, upper: 0.75 }
+      ],
+      bins: [0.5, 0.35, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.33), upper: closeTo(0.92) },
+      overall: closeTo(0.5)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should calculate ratio with 3+ groups correctly (with overlap)", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.45, upper: 0.65 },
+        { lower: 0.25, upper: 0.4 },
+        { lower: 0.6, upper: 0.75 }
+      ],
+      bins: [0.5, 0.35, 0.7],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
+    const expectedResult = {
+      bounds: { lower: closeTo(0.33), upper: closeTo(1) },
       overall: closeTo(0.5)
     };
     expect(result).toMatchObject(expectedResult);

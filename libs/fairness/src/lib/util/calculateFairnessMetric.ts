@@ -36,16 +36,12 @@ export function calculateFairnessMetric(
       .slice()
       .filter((x) => x !== undefined && !Number.isNaN(x));
 
-    lowerBounds = binBounds
-      ? value?.binBounds.map((binBound) => {
-          return binBound.lower;
-        })
-      : undefined;
-    upperBounds = binBounds
-      ? value?.binBounds.map((binBound) => {
-          return binBound.upper;
-        })
-      : undefined;
+    lowerBounds = value?.binBounds.map((binBound) => {
+      return binBound.lower;
+    });
+    upperBounds = value?.binBounds.map((binBound) => {
+      return binBound.upper;
+    });
     minLowerBound = _.min(lowerBounds);
     maxLowerBound = _.max(lowerBounds);
     minUpperBound = _.min(upperBounds);
@@ -127,9 +123,7 @@ export function calculateFairnessMetric(
     return {
       overall: min / max
     };
-  }
-
-  if (fairnessMethod === FairnessModes.Difference) {
+  } else if (fairnessMethod === FairnessModes.Difference) {
     if (binBounds && binBounds.length > 1) {
       let minDiff = Infinity;
       let maxDiff = -Infinity;
@@ -181,6 +175,5 @@ export function calculateFairnessMetric(
       overall: max - min
     };
   }
-
   return { overall: Number.NaN };
 }
