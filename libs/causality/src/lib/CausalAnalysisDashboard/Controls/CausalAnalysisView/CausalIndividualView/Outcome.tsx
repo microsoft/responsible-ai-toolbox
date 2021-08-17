@@ -7,15 +7,27 @@ import React from "react";
 interface IOutcomeProps {
   label: string;
   value: number | undefined;
+  lower?: number;
+  upper?: number;
 }
 
 const outcome: React.FC<IOutcomeProps> = (props: IOutcomeProps) => {
   return (
-    <Stack horizontal>
-      <div />
-      <Stack>
-        <Label>{props.label}</Label>
-        {props.value === undefined ? <Spinner /> : <Text>{props.value}</Text>}
+    <Stack>
+      <Label>{props.label}</Label>
+      <Stack horizontal verticalAlign="end" tokens={{ childrenGap: "s1" }}>
+        <Stack.Item>
+          {props.value === undefined ? (
+            <Spinner />
+          ) : (
+            <Text variant="large">{props.value}</Text>
+          )}
+        </Stack.Item>
+        <Stack.Item>
+          {props.lower !== undefined && props.upper !== undefined && (
+            <Text variant="small">{`(${props.lower}, ${props.upper})`}</Text>
+          )}
+        </Stack.Item>
       </Stack>
     </Stack>
   );
