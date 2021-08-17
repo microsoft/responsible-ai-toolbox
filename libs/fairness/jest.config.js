@@ -4,7 +4,7 @@
 module.exports = {
   coverageDirectory: "../../coverage/libs/fairness",
   coverageThreshold: {
-    "src/lib/util/calculateFairnessMetric.ts": {
+    "./libs/fairness/src/lib/util/calculateFairnessMetric.ts": {
       branches: 98,
       functions: 86,
       lines: 99,
