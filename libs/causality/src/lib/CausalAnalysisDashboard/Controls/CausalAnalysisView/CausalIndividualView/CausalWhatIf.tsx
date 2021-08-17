@@ -22,7 +22,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
+import { causalWhatIfStyles } from "./CausalWhatIf.styles";
 import { Outcome } from "./Outcome";
 
 export interface ICausalWhatIfProps {
@@ -71,7 +71,7 @@ export class CausalWhatIf extends React.Component<
         text: n
       }));
 
-    const classNames = causalIndividualChartStyles();
+    const classNames = causalWhatIfStyles();
     return (
       <>
         <ComboBox
@@ -89,28 +89,51 @@ export class CausalWhatIf extends React.Component<
           </Text>
         )}
         {!!this.state.treatmentValueMax && (
-          <Stack>
-            <Slider
-              label={localization.CausalAnalysis.IndividualView.setNewTreatment}
-              min={this.state.treatmentValueMin}
-              step={this.state.treatmentValueStep}
-              max={this.state.treatmentValueMax}
-              value={this.state.newTreatmentValue}
-              onChange={this.onTreatmentValueChange}
-              valueFormat={this.showNewTreatmentRawValue}
-            />
-            <Stack horizontal>
-              <Outcome
+          <Stack tokens={{ childrenGap: "l1" }}>
+            <Stack.Item>
+              <Slider
                 label={
-                  localization.CausalAnalysis.IndividualView.currentOutcome
+                  localization.CausalAnalysis.IndividualView.setNewTreatment
                 }
-                value={this.state.currentOutcome}
+                min={this.state.treatmentValueMin}
+                step={this.state.treatmentValueStep}
+                max={this.state.treatmentValueMax}
+                value={this.state.newTreatmentValue}
+                onChange={this.onTreatmentValueChange}
+                valueFormat={this.showNewTreatmentRawValue}
               />
-              <Outcome
-                label={localization.CausalAnalysis.IndividualView.newOutcome}
-                value={this.state.newOutcome?.point_estimate}
-              />
-            </Stack>
+              <Text variant="small" className={classNames.treatmentValue}>
+                {localization.formatString(
+                  localization.CausalAnalysis.IndividualView.treatmentValue,
+                  this.state.treatmentValueMin,
+                  "-10%",
+                  this.state.treatmentValueMax,
+                  "+10%"
+                )}
+              </Text>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack horizontal tokens={{ childrenGap: "l1" }}>
+                <Stack.Item className={classNames.currentOutcome}>
+                  <Outcome
+                    label={
+                      localization.CausalAnalysis.IndividualView.currentOutcome
+                    }
+                    value={this.state.currentOutcome}
+                  />
+                </Stack.Item>
+                <Stack.Item className={classNames.newOutcome}>
+                  <Outcome
+                    label={
+                      localization.CausalAnalysis.IndividualView.newOutcome
+                    }
+                    value={this.state.newOutcome?.point_estimate}
+                    lower={this.state.newOutcome?.ci_lower}
+                    upper={this.state.newOutcome?.ci_upper}
+                  />
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
           </Stack>
         )}
       </>

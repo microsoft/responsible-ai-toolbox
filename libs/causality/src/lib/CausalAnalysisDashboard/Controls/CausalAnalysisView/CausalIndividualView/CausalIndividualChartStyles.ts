@@ -26,7 +26,6 @@ export interface ICausalIndividualChartStyles {
   legendAndText: IStyle;
   cohortPickerWrapper: IStyle;
   cohortPickerLabel: IStyle;
-  boldText: IStyle;
   chartWithAxes: IStyle;
   chartWithVertical: IStyle;
   verticalAxis: IStyle;
@@ -77,15 +76,11 @@ export interface ICausalIndividualChartStyles {
 
 export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndividualChartStyles> =
   () => {
-    const legendWidth = "160px";
+    const legendWidth = "400px";
     const theme = getTheme();
     return mergeStyleSets<ICausalIndividualChartStyles>({
       blackIcon: {
         color: theme.semanticColors.bodyText
-      },
-      boldText: {
-        fontWeight: "600",
-        paddingBottom: "5px"
       },
       calloutActions: {
         marginTop: 20,
