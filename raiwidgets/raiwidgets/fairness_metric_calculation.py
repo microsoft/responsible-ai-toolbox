@@ -186,7 +186,7 @@ class FairnessMetricModule:
                 "selection_rate": {
                     "model_type": [],
                     "function": selection_rate,
-                    "error_function": lambda y_true, y_pred:\
+                    "error_function": lambda y_true, y_pred:
                         wilson_wrapper(y_true, y_pred, selection_rate)
                 },
                 "auc": {

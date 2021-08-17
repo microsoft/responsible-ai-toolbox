@@ -5,19 +5,21 @@ import pytest
 import numpy as np
 from raiwidgets.fairness_metric_calculation import (
     compute_wilson_bounds, recall_wilson,
-    precision_wilson, false_positive_rate_wilson, 
+    precision_wilson, false_positive_rate_wilson,
     true_negative_rate_wilson, false_negative_rate_wilson,
     mse_standard_normal, mae_standard_normal)
 
 
 @pytest.fixture()
 def sample_binary_data():
-    return np.array([0, 1, 1, 1, 0, 1, 0, 1, 0, 0]), np.array([0, 1, 1, 1, 1, 1, 1, 0, 0, 0])
+    return np.array([0, 1, 1, 1, 0, 1, 0, 1, 0, 0]),\
+        np.array([0, 1, 1, 1, 1, 1, 1, 0, 0, 0])
 
 
 @pytest.fixture()
 def sample_continuous_data():
-    return np.array([25, 36, 12, 10, 52, 64, 34, 36, 11, 17]), np.array([37, 29, 20, 2, 12, 75, 53, 64, 23, 29])
+    return np.array([25, 36, 12, 10, 52, 64, 34, 36, 11, 17]),\
+        np.array([37, 29, 20, 2, 12, 75, 53, 64, 23, 29])
 
 
 def test_compute_wilson_bounds():
