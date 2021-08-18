@@ -27,7 +27,7 @@ this file to understand what changed.
 ## v0.9.4
 
 - bug fixes
-  - fixed causal treatment policy display issue happened when switch between features
+  - fixed causal treatment policy display issue happening when switching between features
 
 ## v0.9.3
 
