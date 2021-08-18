@@ -81,44 +81,51 @@ export function calculateFairnessMetric(
   // `overall` property of the Ratio
   if (fairnessMethod === FairnessModes.Ratio) {
     if (binBounds && binBounds.length > 1) {
-      let minRatio = Infinity;
-      let maxRatio = -Infinity;
+      let lowerRatio = Infinity;
+      let upperRatio = Infinity;
       for (let i = 0; i < binBounds.length - 1; i++) {
         for (let j = i + 1; j < binBounds.length; j++) {
-          let minCandidate;
-          let maxCandidate;
+          let lowerCandidate;
+          let upperCandidate;
 
           // if there is overlap
           if (
             binBounds[i].upper > binBounds[j].lower &&
             binBounds[j].upper > binBounds[i].lower
           ) {
-            const minCandidate1 = binBounds[i].lower / binBounds[j].upper;
-            const minCandidate2 = binBounds[j].lower / binBounds[i].upper;
-            const minCandidate =
-              minCandidate1 < minCandidate2 ? minCandidate1 : minCandidate2;
+            const lowerCandidate1 = binBounds[i].lower / binBounds[j].upper;
+            const lowerCandidate2 = binBounds[j].lower / binBounds[i].upper;
+            const lowerCandidate =
+              lowerCandidate1 < lowerCandidate2
+                ? lowerCandidate1
+                : lowerCandidate2;
 
-            minRatio = minCandidate < minRatio ? minCandidate : minRatio;
-            maxRatio = 1;
+            // for ratio, we want smallest lower and upper bounds
+            lowerRatio =
+              lowerCandidate < lowerRatio ? lowerCandidate : lowerRatio;
+            upperRatio = 1 < upperRatio ? 1 : upperRatio;
           } else {
             // index i is completely greater than j
             if (binBounds[i].upper > binBounds[j].upper) {
-              minCandidate = binBounds[j].lower / binBounds[i].upper;
-              maxCandidate = binBounds[j].upper / binBounds[i].lower;
+              lowerCandidate = binBounds[j].lower / binBounds[i].upper;
+              upperCandidate = binBounds[j].upper / binBounds[i].lower;
             } else {
-              minCandidate = binBounds[i].lower / binBounds[j].upper;
-              maxCandidate = binBounds[i].upper / binBounds[j].lower;
+              lowerCandidate = binBounds[i].lower / binBounds[j].upper;
+              upperCandidate = binBounds[i].upper / binBounds[j].lower;
             }
 
-            minRatio = minCandidate < minRatio ? minCandidate : minRatio;
-            maxRatio = maxCandidate > maxRatio ? maxCandidate : maxRatio;
+            // for ratio, we want smallest lower and upper bounds
+            lowerRatio =
+              lowerCandidate < lowerRatio ? lowerCandidate : lowerRatio;
+            upperRatio =
+              upperCandidate < upperRatio ? upperCandidate : upperRatio;
           }
         }
       }
       return {
         bounds: {
-          lower: minRatio,
-          upper: maxRatio
+          lower: lowerRatio,
+          upper: upperRatio
         },
         overall: min / max
       };
@@ -133,48 +140,52 @@ export function calculateFairnessMetric(
   // `overall` property of the Difference
   if (fairnessMethod === FairnessModes.Difference) {
     if (binBounds && binBounds.length > 1) {
-      let minDiff = Infinity;
-      let maxDiff = -Infinity;
+      let lowerDiff = -Infinity;
+      let upperDiff = -Infinity;
       for (let i = 0; i < binBounds.length - 1; i++) {
         for (let j = i + 1; j < binBounds.length; j++) {
-          let minCandidate;
-          let maxCandidate;
+          let lowerCandidate;
+          let upperCandidate;
 
           // if there is overlap
           if (
             binBounds[i].upper > binBounds[j].lower &&
             binBounds[j].upper > binBounds[i].lower
           ) {
-            const maxCandidate1 = Math.abs(
+            const upperCandidate1 = Math.abs(
               binBounds[j].upper - binBounds[i].lower
             );
-            const maxCandidate2 = Math.abs(
+            const upperCandidate2 = Math.abs(
               binBounds[i].upper - binBounds[j].lower
             );
-            maxCandidate =
-              maxCandidate1 > maxCandidate2 ? maxCandidate1 : maxCandidate2;
+            upperCandidate =
+              upperCandidate1 > upperCandidate2
+                ? upperCandidate1
+                : upperCandidate2;
 
-            minDiff = 0;
-            maxDiff = maxCandidate > maxDiff ? maxCandidate : maxDiff;
+            // for difference, we want largest lower and upper bounds
+            lowerDiff = 0 > lowerDiff ? 0 : lowerDiff;
+            upperDiff = upperCandidate > upperDiff ? upperCandidate : upperDiff;
           } else {
             // index i is completely greater than j
             if (binBounds[i].upper > binBounds[j].upper) {
-              minCandidate = binBounds[i].lower - binBounds[j].upper;
-              maxCandidate = binBounds[i].upper - binBounds[j].lower;
+              lowerCandidate = binBounds[i].lower - binBounds[j].upper;
+              upperCandidate = binBounds[i].upper - binBounds[j].lower;
             } else {
-              minCandidate = binBounds[j].lower - binBounds[i].upper;
-              maxCandidate = binBounds[j].upper - binBounds[i].lower;
+              lowerCandidate = binBounds[j].lower - binBounds[i].upper;
+              upperCandidate = binBounds[j].upper - binBounds[i].lower;
             }
 
-            minDiff = minCandidate < minDiff ? minCandidate : minDiff;
-            maxDiff = maxCandidate > maxDiff ? maxCandidate : maxDiff;
+            // for difference, we want largest lower and upper bounds
+            lowerDiff = lowerCandidate > lowerDiff ? lowerCandidate : lowerDiff;
+            upperDiff = upperCandidate > upperDiff ? upperCandidate : upperDiff;
           }
         }
       }
       return {
         bounds: {
-          lower: minDiff,
-          upper: maxDiff
+          lower: lowerDiff,
+          upper: upperDiff
         },
         overall: max - min
       };

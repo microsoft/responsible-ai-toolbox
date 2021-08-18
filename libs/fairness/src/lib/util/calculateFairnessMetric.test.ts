@@ -165,7 +165,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
     const expectedResult = {
-      bounds: { lower: closeTo(0.1), upper: closeTo(0.5) },
+      bounds: { lower: closeTo(0.3), upper: closeTo(0.5) },
       overall: closeTo(0.4)
     };
     expect(result).toMatchObject(expectedResult);
@@ -182,7 +182,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
     const expectedResult = {
-      bounds: { lower: closeTo(0.1), upper: closeTo(0.5) },
+      bounds: { lower: closeTo(0.3), upper: closeTo(0.5) },
       overall: closeTo(0.4)
     };
     expect(result).toMatchObject(expectedResult);
@@ -199,7 +199,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
     const expectedResult = {
-      bounds: { lower: closeTo(0), upper: closeTo(0.5) },
+      bounds: { lower: closeTo(0.3), upper: closeTo(0.5) },
       overall: closeTo(0.4)
     };
     expect(result).toMatchObject(expectedResult);
@@ -216,10 +216,10 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
     const expectedResult = {
-      // since there is overlap: the lower bound = 0
+      // from the 1st and 2nd point: the lower bound = 0.7 - 0.3 = 0.4
       // from the 1st and 3rd point: the upper bound = 0.95 - 0.1 = 0.85
       // the largest difference between nominal bins: overall = 0.8 - 0.2 = 0.6
-      bounds: { lower: closeTo(0), upper: closeTo(0.85) },
+      bounds: { lower: closeTo(0.4), upper: closeTo(0.85) },
       overall: closeTo(0.6)
     };
     expect(result).toMatchObject(expectedResult);
@@ -343,7 +343,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
-      bounds: { lower: closeTo(0.33), upper: closeTo(0.92) },
+      bounds: { lower: closeTo(0.33), upper: closeTo(0.67) },
       overall: closeTo(0.5)
     };
     expect(result).toMatchObject(expectedResult);
@@ -360,7 +360,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
-      bounds: { lower: closeTo(0.33), upper: closeTo(0.92) },
+      bounds: { lower: closeTo(0.33), upper: closeTo(0.67) },
       overall: closeTo(0.5)
     };
     expect(result).toMatchObject(expectedResult);
@@ -377,7 +377,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
-      bounds: { lower: closeTo(0.33), upper: closeTo(1) },
+      bounds: { lower: closeTo(0.33), upper: closeTo(0.67) },
       overall: closeTo(0.5)
     };
     expect(result).toMatchObject(expectedResult);
@@ -395,9 +395,9 @@ describe("calculateFairnessMetric", () => {
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
       // from the 1st and 3rd point: the lower bound = 0.1 / 0.95
-      // since there is overlap: the upper bound = 1
+      // from the 1st and 2nd point: the upper bound = 0.3 / 0.7
       // the smallest ratio between nominal bins: overall = 0.2 / 0.8
-      bounds: { lower: closeTo(0.09), upper: closeTo(1) },
+      bounds: { lower: closeTo(0.09), upper: closeTo(0.43) },
       overall: closeTo(0.25)
     };
     expect(result).toMatchObject(expectedResult);
