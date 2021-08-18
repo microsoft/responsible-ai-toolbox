@@ -38,7 +38,7 @@ export function checkPerformanceMetricSelectionPage(name: string): void {
     getSpan("Accuracy").should("exist");
   } else if (name === "probability") {
     getSpan("Balanced root mean squared error").should("exist");
-  } else if (name === "regression") {
+  } else if (name === "regression" || name === "regressionWithError") {
     getSpan("Mean absolute error").should("exist");
   } else {
     throw new RangeError(`Unrecognized name: ${name}`);

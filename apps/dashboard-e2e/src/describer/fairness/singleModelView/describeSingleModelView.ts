@@ -3,7 +3,7 @@
 
 import { getSpan } from "../../../util/getSpan";
 import { ScatterChart } from "../../../util/ScatterChart";
-import { IFairnessMetadata } from "../IFairnessMetadata";
+import { IFairnessMetadata, PredictionTypes } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
 export function describeSingleModelView(
@@ -70,7 +70,10 @@ export function describeSingleModelView(
             .should("exist");
         }
       );
-      if (checkErrorBars) {
+      if (
+        checkErrorBars &&
+        data.predictionType === PredictionTypes.BinaryClassificationWithError
+      ) {
         cy.get(".xerror").should(
           "have.length",
           data.sensitiveFeatures[Object.keys(data.sensitiveFeatures)[0]].length
@@ -87,7 +90,10 @@ export function describeSingleModelView(
           "contain.text",
           data.charts[1]
         );
-        if (checkErrorBars) {
+        if (
+          checkErrorBars &&
+          data.predictionType === PredictionTypes.BinaryClassificationWithError
+        ) {
           cy.get(".xerror").should(
             "have.length",
             2 *
