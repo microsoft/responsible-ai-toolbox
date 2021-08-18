@@ -8,13 +8,13 @@ import { getComboBoxValue, selectComboBox } from "../../../util/comboBox";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
-const topKLabelReg = /^Top 1-(\d+) features$/;
+const topKLabelReg = /^Top (\d+) features$/;
 function getTopKValue(): number {
   const exec = topKLabelReg.exec(cy.$$("#TopKSliderContainer label").text());
-  if (!exec || !exec[1]) {
+  if (!exec || !exec[0]) {
     throw new Error("Cannot find top k label");
   }
-  return toNumber(exec[1]);
+  return toNumber(exec[0]);
 }
 
 export function describeGlobalExplanationChart<
