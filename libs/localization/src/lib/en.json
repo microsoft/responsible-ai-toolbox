@@ -772,13 +772,13 @@
       "clickHere": "Learn more",
       "limeDescription": "This explainer uses LIME, which provides a linear approximation of the model. To get an explanation, we do the following: perturb the instance, get model predictions, and use these predictions as labels to learn a sparse linear model that is locally faithful. The weights of this linear model are used as 'feature importances'. Click the link below to learn more.",
       "limeTitle": "LIME (Local Interpretable Model-Agnostic Explanations)",
-      "mimicDescription": "This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree)",
+      "mimicDescription": "This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree).",
       "mimicTitle": "Mimic (Global Surrogate Explanations)",
       "pfiDescription": "This explainer randomly shuffles data one feature at a time for the entire dataset and calculates how much the performance metric of interest changes (default performance metrics: F1 for binary classification, F1 Score with micro average for multiclass classification and mean absolute error for regression). The larger the change, the more important that feature is. This explainer can only explain the overall behavior of the underlying model but does not explain individual predictions. Feature importance value of a feature represents the delta in the performance of the model by perturbing that particular feature.",
       "pfiTitle": "Permutation feature importance (PFI)",
       "shapDescription": "This explainer uses SHAP, which is a game theoretic approach to explaining models, where the importance of features sets is measured by \"hiding\" those features from the model through marginalization. Click the link below to learn more.",
       "shapTitle": "Shapley values",
-      "whatDoExplanationsMean": "What do these explanations mean?"
+      "whatDoFeatureMean": "What do these feature importance values mean?"
     },
     "FeatureImportanceWrapper": {
       "_barText.comment": "a bar plot ",
@@ -855,13 +855,13 @@
       "datasetCohorts": "Dataset cohorts",
       "datasetRequired": "Dependence plots require the evaluation dataset and local feature importance array.",
       "dependencePlotFeatureSelectPlaceholder": "Select feature",
-      "dependencePlotHelperText": "This dependence plot shows the relationship between the value of a feature to the corresponding importance of the feature across a cohort.",
+      "dependencePlotHelperText": "This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.",
       "dependencePlotTitle": "Dependence plots",
       "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
       "sortBy": "Sort by",
-      "topAtoB": "Top {0}-{1} features",
+      "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
       "weightOptions": "Class importance weights"
     },
