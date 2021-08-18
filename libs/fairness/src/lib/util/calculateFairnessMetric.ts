@@ -75,7 +75,10 @@ export function calculateFairnessMetric(
     }
     return response;
   }
-
+  // Note: The `bounds` of this Ratio metric looks at all 
+  // disaggregated bounds, even if those disaggregated bounds are not
+  // the bounds of the nominal extremes that contribute to the 
+  // `overall` property of the Ratio
   if (fairnessMethod === FairnessModes.Ratio) {
     if (binBounds && binBounds.length > 1) {
       let minRatio = Infinity;
@@ -123,7 +126,12 @@ export function calculateFairnessMetric(
     return {
       overall: min / max
     };
-  } else if (fairnessMethod === FairnessModes.Difference) {
+  } 
+  // Note: The `bounds` of this Difference metric looks at all 
+  // disaggregated bounds, even if those disaggregated bounds are not
+  // the bounds of the nominal extremes that contribute to the 
+  // `overall` property of the Difference
+  if (fairnessMethod === FairnessModes.Difference) {
     if (binBounds && binBounds.length > 1) {
       let minDiff = Infinity;
       let maxDiff = -Infinity;

@@ -204,6 +204,26 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toMatchObject(expectedResult);
   });
+  it("should handle difference case with large binBound that provides the largest and smallest bounds", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.1, upper: 0.3 },
+        { lower: 0.7, upper: 0.9 },
+        { lower: 0.08, upper: 0.95 }
+      ],
+      bins: [0.2, 0.8, 0.5],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      // since there is overlap: the lower bound = 0
+      // from the 1st and 3rd point: the upper bound = 0.95 - 0.1 = 0.85
+      // the largest difference between nominal bins: overall = 0.8 - 0.2 = 0.6
+      bounds: { lower: closeTo(0), upper: closeTo(0.85) },
+      overall: closeTo(0.6)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
   it("should calculate ratio without binBounds correctly", () => {
     const mockValue = {
       bins: [0.5, 0.2],
@@ -359,6 +379,26 @@ describe("calculateFairnessMetric", () => {
     const expectedResult = {
       bounds: { lower: closeTo(0.33), upper: closeTo(1) },
       overall: closeTo(0.5)
+    };
+    expect(result).toMatchObject(expectedResult);
+  });
+  it("should handle ratio case with large binBound that provides the largest and smallest bounds", () => {
+    const mockValue = {
+      binBounds: [
+        { lower: 0.1, upper: 0.3 },
+        { lower: 0.7, upper: 0.9 },
+        { lower: 0.08, upper: 0.95 }
+      ],
+      bins: [0.2, 0.8, 0.5],
+      global: 0.5
+    };
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const expectedResult = {
+      // from the 1st and 3rd point: the lower bound = 0.1 / 0.95
+      // since there is overlap: the upper bound = 1
+      // the smallest ratio between nominal bins: overall = 0.2 / 0.8
+      bounds: { lower: closeTo(0.12), upper: closeTo(1) },
+      overall: closeTo(0.25)
     };
     expect(result).toMatchObject(expectedResult);
   });
