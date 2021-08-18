@@ -3,7 +3,13 @@
 
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { ActionButton, Stack, Text, Callout } from "office-ui-fabric-react";
+import {
+  ActionButton,
+  Stack,
+  Text,
+  Callout,
+  Link
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { SharedStyles } from "../Shared.styles";
@@ -56,7 +62,21 @@ export class CalloutErrorBars extends React.Component<
               {localization.Fairness.ErrorBounds.howToRead}
             </Text>
             <Text block variant="small">
-              {localization.Fairness.ErrorBounds.introModalText}
+              {localization.Fairness.ErrorBounds.introModalText1}
+              <Link
+                href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval"
+                target="_blank"
+              >
+                {localization.Fairness.ErrorBounds.wilsonScores}
+              </Link>
+              {localization.Fairness.ErrorBounds.introModalText2}
+              <Link
+                href="https://onlinestatbook.com/2/estimation/mean.html"
+                target="_blank"
+              >
+                {localization.Fairness.ErrorBounds.normalApproximation}
+              </Link>
+              {localization.Fairness.ErrorBounds.introModalText3}
             </Text>
           </Callout>
         )}

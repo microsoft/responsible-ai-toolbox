@@ -269,7 +269,11 @@
     },
     "ErrorBounds": {
       "howToRead": "How to read these error bars",
-      "introModalText": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using Wilson scores (for binary classification) or normal approximation (for other tasks)."
+      "introModalText1": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ",
+      "wilsonScores": "Wilson scores",
+      "introModalText2": " (for binary classification) or ",
+      "normalApproximation": "normal approximation",
+      "introModalText3": " (for other tasks)."
     },
     "Fairness": {
       "body": "Fairness metrics quantify variation of your model's behavior across selected features. There are several kinds of fairness metrics that are based on a variety of performance metrics. They either capture the difference or ratio between the extreme values across the groups, or simply the worst value of any group.",
