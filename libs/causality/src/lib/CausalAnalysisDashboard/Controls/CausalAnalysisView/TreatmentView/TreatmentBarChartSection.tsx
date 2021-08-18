@@ -34,7 +34,8 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
             {isBinaryFeature
               ? localization.formatString(
                   localization.CausalAnalysis.TreatmentPolicy.averageGainBinary,
-                  this.props.data.treatment_feature
+                  this.props.data.treatment_feature,
+                  this.props.data.control_treatment
                 )
               : localization.formatString(
                   localization.CausalAnalysis.TreatmentPolicy
