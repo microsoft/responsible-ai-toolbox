@@ -24,6 +24,11 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.9.4
+
+- bug fixes
+  - fixed causal treatment policy display issue happened when switch between features
+
 ## v0.9.3
 
 - educational materials
