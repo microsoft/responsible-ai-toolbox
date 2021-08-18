@@ -22,6 +22,11 @@ jobs:
         run: |
           echo "Only rai-tooling or wrapped-flask can be used."
           exit 1
+      - name: fail if Test nor Prod
+        if: ${{ ! (github.event.inputs.pypiType == 'Test' || github.event.inputs.pypiType == 'Prod') }}
+        run: |
+          echo "Only Test or Prod can be used."
+          exit 1
 
       # build wheel
       - uses: actions/checkout@v2
