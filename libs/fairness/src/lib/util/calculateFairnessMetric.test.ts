@@ -392,12 +392,12 @@ describe("calculateFairnessMetric", () => {
       bins: [0.2, 0.8, 0.5],
       global: 0.5
     };
-    const result = calculateFairnessMetric(mockValue, FairnessModes.Difference);
+    const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
       // from the 1st and 3rd point: the lower bound = 0.1 / 0.95
       // since there is overlap: the upper bound = 1
       // the smallest ratio between nominal bins: overall = 0.2 / 0.8
-      bounds: { lower: closeTo(0.12), upper: closeTo(1) },
+      bounds: { lower: closeTo(0.09), upper: closeTo(1) },
       overall: closeTo(0.25)
     };
     expect(result).toMatchObject(expectedResult);
