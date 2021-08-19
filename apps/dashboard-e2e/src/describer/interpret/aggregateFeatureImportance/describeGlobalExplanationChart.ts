@@ -8,7 +8,7 @@ import { getComboBoxValue, selectComboBox } from "../../../util/comboBox";
 import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
-const topKLabelReg = /^Top 1-(\d+) features$/;
+const topKLabelReg = /^Top (\d+) features by their importance$/;
 function getTopKValue(): number {
   const exec = topKLabelReg.exec(cy.$$("#TopKSliderContainer label").text());
   if (!exec || !exec[1]) {

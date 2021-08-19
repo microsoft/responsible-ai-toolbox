@@ -105,7 +105,6 @@ export class GlobalOnlyChart extends React.PureComponent<
           <Text variant="medium" className={classNames.sliderLabel}>
             {localization.formatString(
               localization.Interpret.GlobalTab.topAtoB,
-              +1,
               +this.state.topK
             )}
           </Text>
