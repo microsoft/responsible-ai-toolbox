@@ -7,7 +7,7 @@ import re
 import uuid
 
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Optional, Tuple, Union
 
 from responsibleai._tools.causal.causal_constants import (
     ResultAttributes, SerializationAttributes)
@@ -146,12 +146,11 @@ class CausalResult:
         else:
             policy_tree_object = CausalPolicyTreeInternal()
             policy_tree_object.leaf = policy_tree[ResultAttributes.LEAF]
-            feature, category = self._parse_feature_category(
+            feature, category, threshold = self._parse_feature_category(
                 policy_tree, self.config.categorical_features)
             policy_tree_object.feature = feature
             policy_tree_object.category = category
-            policy_tree_object.threshold = policy_tree[
-                ResultAttributes.THRESHOLD]
+            policy_tree_object.threshold = threshold
             policy_tree_object.left = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.LEFT])
             policy_tree_object.right = self._get_policy_tree_object(
@@ -159,8 +158,13 @@ class CausalResult:
         return policy_tree_object
 
     @classmethod
-    def _parse_feature_category(cls, policy_tree, categoricals):
+    def _parse_feature_category(
+        cls,
+        policy_tree,
+        categoricals,
+    ) -> Tuple[str, Optional[str], Optional[float]]:
         tree_feature = policy_tree[ResultAttributes.FEATURE]
+        threshold = policy_tree[ResultAttributes.THRESHOLD]
         feature = tree_feature
         category = None
         for cat_feature in sorted(categoricals)[::-1]:
@@ -168,5 +172,6 @@ class CausalResult:
             if match is not None:
                 feature = match.group(1)
                 category = match.group(2)
+                threshold = None
                 break
-        return feature, category
+        return feature, category, threshold

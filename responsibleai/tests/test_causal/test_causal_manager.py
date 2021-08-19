@@ -157,18 +157,26 @@ class TestCausalDashboardData:
     def test_categorical_policy(self, boston_data_categorical):
         train_df, test_df, target_feature = boston_data_categorical
         categoricals = train_df.select_dtypes(include=[object]).columns
+
+        # Just use categoricals to force categorical policy tree
         new_features = list(categoricals) + [target_feature]
         train_df = train_df[new_features]
         test_df = test_df[new_features]
 
+        # Sample data for easier debug
         test_df = test_df[:10]
+
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, categoricals)
 
         result = manager.add(['AGE_CAT', 'INDUS_CAT'])
         dashboard_data = result._get_dashboard_data()
-        for policy in dashboard_data['policies']:
+
+        policies = dashboard_data['policies']
+        assert len(policies) > 0
+        for policy in policies:
             tree = policy['policy_tree']
             assert not tree['leaf']
             assert tree['feature'] in categoricals
             assert tree['category'] is not None
+            assert tree['threshold'] is None

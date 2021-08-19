@@ -95,7 +95,7 @@ class CausalPolicyTreeInternal:
     leaf: False
     feature: str
     category: Optional[str]
-    threshold: Union[float, str]
+    threshold: Optional[float]
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
 
