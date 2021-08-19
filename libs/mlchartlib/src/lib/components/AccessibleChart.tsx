@@ -41,8 +41,8 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     let themeOverride = this.props.themeOverride;
     if (
       !themeOverride &&
-      typeof this.props.theme !== "string" &&
-      this.props.theme
+      this.props.theme &&
+      typeof this.props.theme !== "string"
     ) {
       themeOverride = {
         axisColor: this.props.theme.palette.neutralPrimary,
