@@ -1,8 +1,9 @@
 import copy
+import numpy as np
 import pandas as pd
 import pytest
 
-from typing import Tuple
+from typing import List, Tuple
 
 from ..common_utils import create_adult_income_dataset, create_boston_data
 
@@ -29,6 +30,21 @@ def boston_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
     return train_df, test_df, target_feature
 
 
+def _discretize_feature(
+    feature: np.ndarray,
+    category_map: List[Tuple[float, str]]
+):
+    """Map continous features onto discrete categories.
+    - All feature values must be positive.
+    - First lower bound must be zero.
+    - Lower bounds must be strictly ascending.
+    """
+    cat_feat = np.zeros(feature.shape[0]).astype(str)
+    for lower_bound, category in category_map:
+        cat_feat[feature >= lower_bound] = category
+    return cat_feat
+
+
 @pytest.fixture(scope='session')
 def boston_data_categorical(boston_data):
     train_df, test_df, target_feature = boston_data
@@ -36,50 +52,15 @@ def boston_data_categorical(boston_data):
     test_df = copy.deepcopy(test_df)
 
     for df in [train_df, test_df]:
-        cat_feat = df['AGE'].copy()
-        cat_feat[cat_feat >= 90] = -1
-        cat_feat[cat_feat >= 65] = -2
-        cat_feat[cat_feat >= 40] = -3
-        cat_feat[cat_feat >= 0] = -4
-        cat_feat = cat_feat.astype(str)
-        cat_feat[cat_feat == '-1.0'] = 'oldest'
-        cat_feat[cat_feat == '-2.0'] = 'older'
-        cat_feat[cat_feat == '-3.0'] = 'newer'
-        cat_feat[cat_feat == '-4.0'] = 'newest'
-        df['AGE_CAT'] = cat_feat
-
-    for df in [train_df, test_df]:
-        cat_feat = df['RM'].copy()
-        cat_feat[cat_feat >= 5] = -1
-        cat_feat[cat_feat >= 0] = -2
-        cat_feat = cat_feat.astype(str)
-        cat_feat[cat_feat == '-1.0'] = 'large'
-        cat_feat[cat_feat == '-2.0'] = 'small'
-        df['RM_CAT'] = cat_feat
-
-    for df in [train_df, test_df]:
-        cat_feat = df['INDUS'].copy()
-        cat_feat[cat_feat >= 18] = -1
-        cat_feat[cat_feat >= 10] = -2
-        cat_feat[cat_feat >= 0] = -3
-        cat_feat = cat_feat.astype(str)
-        cat_feat[cat_feat == '-1.0'] = 'commercial'
-        cat_feat[cat_feat == '-2.0'] = 'mixed'
-        cat_feat[cat_feat == '-3.0'] = 'residential'
-        df['INDUS_CAT'] = cat_feat
-
-    for df in [train_df, test_df]:
-        cat_feat = df['CRIM'].copy()
-        cat_feat[cat_feat >= 60] = -1
-        cat_feat[cat_feat >= 40] = -2
-        cat_feat[cat_feat >= 20] = -3
-        cat_feat[cat_feat >= 0] = -4
-        cat_feat = cat_feat.astype(str)
-        cat_feat[cat_feat == '-1.0'] = 'high crime'
-        cat_feat[cat_feat == '-2.0'] = 'some crime'
-        cat_feat[cat_feat == '-3.0'] = 'low cr'
-        cat_feat[cat_feat == '-4.0'] = 'no crime'
-        df['CRIM_CAT'] = cat_feat
+        cat_map = [(0, 'newest'), (40, 'newer'), (65, 'older'), (90, 'oldest')]
+        df['AGE_CAT'] = _discretize_feature(df['AGE'], cat_map)
+        cat_map = [(0, 'small'), (5, 'large')]
+        df['RM_CAT'] = _discretize_feature(df['RM'], cat_map)
+        cat_map = [(0, 'residential'), (10, 'mixed'), (18, 'commercial')]
+        df['INDUS_CAT'] = _discretize_feature(df['INDUS'], cat_map)
+        cat_map = [(0, 'no crime'), (5, 'low crime'),
+                   (10, 'medium crime'), (20, 'high crime')]
+        df['CRIM_CAT'] = _discretize_feature(df['CRIM'], cat_map)
 
     return train_df, test_df, target_feature
 
