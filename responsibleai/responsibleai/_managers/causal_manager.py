@@ -188,6 +188,7 @@ class CausalManager(BaseManager):
             categories=categories,
             verbose=verbose,
             random_state=random_state,
+            categorical_features=self._categorical_features,
         )
 
         result.causal_analysis = analysis

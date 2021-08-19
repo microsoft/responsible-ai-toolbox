@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 
 class TaskType(str, Enum):
@@ -18,7 +18,7 @@ class Dataset:
     probability_y: List
     true_y: List
     class_names: List[str]
-    categorical_features: [str]
+    categorical_features: List[str]
     target_column: str
 
 
@@ -94,7 +94,8 @@ class CausalPolicyTreeLeaf:
 class CausalPolicyTreeInternal:
     leaf: False
     feature: str
-    threshold: Union[float, str]  # TODO: Categorical features
+    category: Optional[str]
+    threshold: Union[float, str]
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
 
@@ -108,7 +109,7 @@ class CausalPolicy:
 
 
 class CausalConfig:
-    treatment_features: [str]
+    treatment_features: List[str]
 
 
 class CausalData:

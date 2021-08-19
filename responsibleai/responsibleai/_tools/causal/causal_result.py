@@ -3,15 +3,18 @@
 """Result of causal analysis."""
 
 import json
+import re
 import uuid
 
 from pathlib import Path
+from typing import Any, Optional, Union
 
 from responsibleai._tools.causal.causal_constants import (
     ResultAttributes, SerializationAttributes)
 from responsibleai._interfaces import (
-    CausalConfig, CausalData, CausalPolicy, CausalPolicyGains,
-    CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
+    CausalConfig as CausalConfigInterface, CausalData, CausalPolicy,
+    CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
+from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
 from responsibleai.serialization_utilities import serialize_json_safe
@@ -30,11 +33,11 @@ class CausalResult:
 
     def __init__(
         self,
-        config=None,
-        causal_analysis=None,
-        global_effects=None,
-        local_effects=None,
-        policies=None,
+        config: Optional[CausalConfig] = None,
+        causal_analysis: Optional[Any] = None,
+        global_effects: Optional[Any] = None,
+        local_effects: Optional[Any] = None,
+        policies: Optional[Any] = None,
     ):
         self.id = str(uuid.uuid4())
 
@@ -45,7 +48,7 @@ class CausalResult:
         self.local_effects = local_effects
         self.policies = policies
 
-    def save(self, path):
+    def save(self, path: Union[str, Path]):
         result_dir = Path(path)
         result_dir.mkdir(parents=True, exist_ok=True)
 
@@ -59,7 +62,7 @@ class CausalResult:
             json.dump(dashboard, f)
 
     @classmethod
-    def load(cls, path) -> 'CausalResult':
+    def load(cls, path: Union[str, Path]) -> 'CausalResult':
         result_dir = Path(path)
 
         result_id = result_dir.name
@@ -99,7 +102,7 @@ class CausalResult:
             X_test, alpha=alpha, keep_all_levels=keep_all_levels)
 
     def _get_config_object(self, config):
-        config_object = CausalConfig()
+        config_object = CausalConfigInterface()
         config_object.treatment_features = config.treatment_features
         return config_object
 
@@ -143,7 +146,10 @@ class CausalResult:
         else:
             policy_tree_object = CausalPolicyTreeInternal()
             policy_tree_object.leaf = policy_tree[ResultAttributes.LEAF]
-            policy_tree_object.feature = policy_tree[ResultAttributes.FEATURE]
+            feature, category = self._parse_feature_category(
+                policy_tree, self.config.categorical_features)
+            policy_tree_object.feature = feature
+            policy_tree_object.category = category
             policy_tree_object.threshold = policy_tree[
                 ResultAttributes.THRESHOLD]
             policy_tree_object.left = self._get_policy_tree_object(
@@ -151,3 +157,16 @@ class CausalResult:
             policy_tree_object.right = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.RIGHT])
         return policy_tree_object
+
+    @classmethod
+    def _parse_feature_category(cls, policy_tree, categoricals):
+        tree_feature = policy_tree[ResultAttributes.FEATURE]
+        feature = tree_feature
+        category = None
+        for cat_feature in sorted(categoricals)[::-1]:
+            match = re.match(f'({cat_feature})_(.+)', tree_feature)
+            if match is not None:
+                feature = match.group(1)
+                category = match.group(2)
+                break
+        return feature, category

@@ -2,64 +2,12 @@
 # Licensed under the MIT License.
 import numpy as np
 import pytest
-import pandas as pd
 
-from typing import Tuple
 from unittest.mock import patch, ANY
-
-from ..common_utils import create_boston_data
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._managers.causal_manager import CausalManager
-
-
-@pytest.fixture(scope='module')
-def boston_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
-    target_feature = 'TARGET'
-    X_train, X_test, y_train, y_test, feature_names = create_boston_data()
-    train_df = pd.DataFrame(X_train, columns=feature_names)
-    train_df[target_feature] = y_train
-    test_df = pd.DataFrame(X_test, columns=feature_names)
-    test_df[target_feature] = y_test
-    return train_df, test_df, target_feature
-
-
-@pytest.fixture(scope='module')
-def parks_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
-    feature_names = ['state', 'population', 'attraction', 'area']
-    train_df = pd.DataFrame([
-        ['massachusetts', 3129, 'trees', 11],
-        ['utah', 41891, 'rocks', 51],
-        ['california', 193912, 'trees', 62],
-        ['california', 123901, 'trees', 25],
-        ['utah', 39012, 'rocks', 34],
-        ['colorado', 30102, 'rocks', 40],
-        ['massachusetts', 4222, 'trees', 15],
-        ['colorado', 20342, 'rocks', 42],
-        ['arizona', 3201, 'rocks', 90],
-        ['massachusetts', 3129, 'trees', 11],
-        ['utah', 41891, 'rocks', 51],
-        ['california', 193912, 'trees', 62],
-        ['california', 123901, 'trees', 25],
-        ['utah', 39012, 'rocks', 34],
-        ['colorado', 30102, 'rocks', 40],
-        ['massachusetts', 4222, 'trees', 15],
-        ['colorado', 20342, 'rocks', 42],
-        ['arizona', 3201, 'rocks', 90],
-    ], columns=feature_names)
-
-    test_df = pd.DataFrame([
-        ['california', 323412, 'trees', 102],
-        ['utah', 5103, 'rocks', 23],
-        ['colorado', 4312, 'rocks', 19],
-        ['california', 203912, 'trees', 202],
-        ['utah', 5102, 'rocks', 21],
-        ['colorado', 8120, 'rocks', 31],
-    ], columns=feature_names)
-
-    target_feature = 'area'
-    return train_df, test_df, target_feature
 
 
 class TestCausalManager:
@@ -203,3 +151,24 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(Exception):
             cost_manager.add(['ZN', 'B'], treatment_cost=costs,
                              skip_cat_limit_checks=True)
+
+
+class TestCausalDashboardData:
+    def test_categorical_policy(self, boston_data_categorical):
+        train_df, test_df, target_feature = boston_data_categorical
+        categoricals = train_df.select_dtypes(include=[object]).columns
+        new_features = list(categoricals) + [target_feature]
+        train_df = train_df[new_features]
+        test_df = test_df[new_features]
+
+        test_df = test_df[:10]
+        manager = CausalManager(train_df, test_df, target_feature,
+                                ModelTask.REGRESSION, categoricals)
+
+        result = manager.add(['AGE_CAT', 'INDUS_CAT'])
+        dashboard_data = result._get_dashboard_data()
+        for policy in dashboard_data['policies']:
+            tree = policy['policy_tree']
+            assert not tree['leaf']
+            assert tree['feature'] in categoricals
+            assert tree['category'] is not None
