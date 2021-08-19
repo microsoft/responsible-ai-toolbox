@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 import copy
 import numpy as np
 import pandas as pd
