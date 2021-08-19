@@ -13,8 +13,10 @@ from erroranalysis._internal.matrix_filter import (
 from erroranalysis._internal.surrogate_error_tree import (
     compute_error_tree as _compute_error_tree)
 from erroranalysis._internal.error_report import ErrorReport
-from erroranalysis._internal.constants import ModelTask, Metrics
+from erroranalysis._internal.constants import ModelTask, Metrics, MatrixParams
 from erroranalysis._internal.version_checker import check_pandas_version
+
+BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 
 
 class BaseAnalyzer(ABC):
@@ -99,8 +101,18 @@ class BaseAnalyzer(ABC):
     def metric(self):
         return self._metric
 
-    def compute_matrix(self, features, filters, composite_filters):
-        return _compute_matrix(self, features, filters, composite_filters)
+    def compute_matrix(self,
+                       features,
+                       filters,
+                       composite_filters,
+                       quantile_binning=False,
+                       num_bins=BIN_THRESHOLD):
+        return _compute_matrix(self,
+                               features,
+                               filters,
+                               composite_filters,
+                               quantile_binning=quantile_binning,
+                               num_bins=num_bins)
 
     def compute_error_tree(self,
                            features,

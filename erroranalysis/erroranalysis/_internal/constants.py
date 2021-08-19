@@ -32,6 +32,12 @@ class ModelTask(str, Enum):
     Regression = 'regression'
 
 
+class MatrixParams:
+    """Provide default parameters for the matrix filter aka heatmap APIs.
+    """
+    BIN_THRESHOLD = 8
+
+
 class Metrics(str, Enum):
     """Provide the supported error analysis metrics.
 
