@@ -170,7 +170,7 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toMatchObject(expectedResult);
   });
-  it("should calculate difference with 3+ groups correctly", () => {
+  it("should calculate difference with 3+ groups correctly (permuted order)", () => {
     const mockValue = {
       binBounds: [
         { lower: 0.45, upper: 0.55 },
@@ -365,7 +365,7 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toMatchObject(expectedResult);
   });
-  it("should calculate ratio with 3+ groups correctly", () => {
+  it("should calculate ratio with 3+ groups correctly (permuted order)", () => {
     const mockValue = {
       binBounds: [
         { lower: 0.45, upper: 0.55 },
@@ -428,7 +428,7 @@ describe("calculateFairnessMetric", () => {
     };
     const result = calculateFairnessMetric(mockValue, FairnessModes.Ratio);
     const expectedResult = {
-      // from the 1st and 3rd point: the lower bound = 0.1 / 0.95
+      // from the 1st and 3rd point: the lower bound = 0.08 / 0.9
       // from the 1st and 2nd point: the upper bound = 0.3 / 0.7
       // the smallest ratio between nominal bins: overall = 0.2 / 0.8
       bounds: { lower: closeTo(0.09), upper: closeTo(0.43) },
