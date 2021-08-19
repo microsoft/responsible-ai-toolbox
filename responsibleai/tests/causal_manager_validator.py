@@ -110,7 +110,7 @@ def _check_config(config, is_serialized=False):
         assert len(config.__dict__) == 1
         assert config.treatment_features is not None
     else:
-        assert len(config.__dict__) == 14
+        assert len(config.__dict__) == 15
 
 
 def _check_causal_analysis(causal_analysis):
