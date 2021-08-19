@@ -168,7 +168,6 @@ export class GlobalExplanationTab extends React.PureComponent<
           <Slider
             label={localization.formatString(
               localization.Interpret.GlobalTab.topAtoB,
-              1,
               this.state.topK
             )}
             className={classNames.startingK}
@@ -185,7 +184,7 @@ export class GlobalExplanationTab extends React.PureComponent<
           {this.explainerCalloutInfo && (
             <LabelWithCallout
               label={
-                localization.Interpret.ExplanationSummary.whatDoExplanationsMean
+                localization.Interpret.ExplanationSummary.whatDoFeatureMean
               }
               calloutTitle={this.explainerCalloutInfo.title}
               type="button"
