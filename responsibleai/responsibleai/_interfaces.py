@@ -91,11 +91,22 @@ class CausalPolicyTreeLeaf:
     treatment: str
 
 
+class ComparisonTypes:
+    LT = 'lt'  # less than
+    LTE = 'lte'  # less than or equal to
+    GT = 'gt'  # greater than
+    GTE = 'gte'  # greater than or equal to
+    EQ = 'eq'  # equal to
+    NE = 'ne'  # not equal to
+    IN = 'in'  # in the set
+    NIN = 'nin'  # not in the set
+
+
 class CausalPolicyTreeInternal:
     leaf: False
     feature: str
-    category: Optional[str]
-    threshold: Optional[float]
+    comparison: str
+    value: Union[str, float, int, List[Union[str, float, int]]]
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
 

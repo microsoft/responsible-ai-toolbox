@@ -15,11 +15,11 @@ class TestCausalResultParseCategorial:
             "right": {"leaf": True, "n_samples": 6, "treatment": "increase"},
         }
         categoricals = np.array(['Fruit', 'Vegetable'])
-        feature, category, threshold = CausalResult._parse_feature_category(
+        feature, comparison, value = CausalResult._parse_comparison(
             policy_tree, categoricals)
         assert feature == 'Fruit'
-        assert category == 'apple'
-        assert threshold is None
+        assert comparison == 'eq'
+        assert value == 'apple'
 
     def test_selection_not_greedy(self):
         policy_tree = {
@@ -30,13 +30,13 @@ class TestCausalResultParseCategorial:
             "right": {"leaf": True, "n_samples": 6, "treatment": "increase"},
         }
         categoricals = np.array(['a', 'a_b'])
-        feature, category, threshold = CausalResult._parse_feature_category(
+        feature, comparison, value = CausalResult._parse_comparison(
             policy_tree, categoricals)
         # If greedy we would extract
         # feature="a" and category="b_0", which is wrong
         assert feature == 'a_b'
-        assert category == '0'
-        assert threshold is None
+        assert comparison == 'eq'
+        assert value == '0'
 
     def test_failed_parse(self):
         policy_tree = {
@@ -47,11 +47,11 @@ class TestCausalResultParseCategorial:
             "right": {"leaf": True, "n_samples": 6, "treatment": "increase"},
         }
         categoricals = np.array(['Vegetable', 'Grain'])
-        feature, category, threshold = CausalResult._parse_feature_category(
+        feature, comparison, value = CausalResult._parse_comparison(
             policy_tree, categoricals)
         assert feature == 'Fruit_apple'
-        assert category is None
-        assert threshold == 0.5
+        assert comparison == 'gt'
+        assert value == 0.5
 
     def test_empty_category(self):
         policy_tree = {
@@ -62,8 +62,8 @@ class TestCausalResultParseCategorial:
             "right": {"leaf": True, "n_samples": 6, "treatment": "increase"},
         }
         categoricals = np.array(['Fruit'])
-        feature, category, threshold = CausalResult._parse_feature_category(
+        feature, comparison, value = CausalResult._parse_comparison(
             policy_tree, categoricals)
         assert feature == 'Fruit_'
-        assert category is None
-        assert threshold == 0.5
+        assert comparison == 'gt'
+        assert value == 0.5

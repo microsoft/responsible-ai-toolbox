@@ -169,7 +169,7 @@ class TestCausalDashboardData:
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, categoricals)
 
-        result = manager.add(['AGE_CAT', 'INDUS_CAT'])
+        result = manager.add(['AGE_CAT', 'INDUS_CAT'], random_state=42)
         dashboard_data = result._get_dashboard_data()
 
         policies = dashboard_data['policies']
@@ -178,5 +178,5 @@ class TestCausalDashboardData:
             tree = policy['policy_tree']
             assert not tree['leaf']
             assert tree['feature'] in categoricals
-            assert tree['category'] is not None
-            assert tree['threshold'] is None
+            assert tree['comparison'] == 'eq'
+            assert tree['value'] == 'no crime'

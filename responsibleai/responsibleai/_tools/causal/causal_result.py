@@ -13,7 +13,8 @@ from responsibleai._tools.causal.causal_constants import (
     ResultAttributes, SerializationAttributes)
 from responsibleai._interfaces import (
     CausalConfig as CausalConfigInterface, CausalData, CausalPolicy,
-    CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
+    CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf,
+    ComparisonTypes)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
@@ -146,11 +147,11 @@ class CausalResult:
         else:
             policy_tree_object = CausalPolicyTreeInternal()
             policy_tree_object.leaf = policy_tree[ResultAttributes.LEAF]
-            feature, category, threshold = self._parse_feature_category(
+            feature, comparison, value = self._parse_comparison(
                 policy_tree, self.config.categorical_features)
             policy_tree_object.feature = feature
-            policy_tree_object.category = category
-            policy_tree_object.threshold = threshold
+            policy_tree_object.comparison = comparison
+            policy_tree_object.value = value
             policy_tree_object.left = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.LEFT])
             policy_tree_object.right = self._get_policy_tree_object(
@@ -158,20 +159,50 @@ class CausalResult:
         return policy_tree_object
 
     @classmethod
-    def _parse_feature_category(
+    def _parse_comparison(
         cls,
         policy_tree,
         categoricals,
-    ) -> Tuple[str, Optional[str], Optional[float]]:
+    ) -> Tuple[str, str, Union[float, int, str]]:
+        """Attempt to parse a categorical comparison from a policy tree node.
+
+        The default assumption is that the feature is continuous and will
+        have a real-valued threshold.
+
+        This function checks known categorical features and attempts to parse
+        a (feature, category) pair that would come from a one-hot encoding.
+
+        Example (continuous):
+            Original feature: "Size"
+            Original comparison value: 0.891
+            Parsed feature: "Size"
+            Parsed comparison: "gt"
+            Parsed comparison value: 0.891
+
+        Example (categorical):
+            Original feature: "Fruit_apple"
+            Original comparison value: 0.5
+            Parsed feature: "Fruit"
+            Parsed comparison: "eq"
+            Parsed comparison value: "apple"
+
+        """
         tree_feature = policy_tree[ResultAttributes.FEATURE]
         threshold = policy_tree[ResultAttributes.THRESHOLD]
+
+        # Default assumption is a continuous feature
         feature = tree_feature
-        category = None
+        comparison = ComparisonTypes.GT
+        value = threshold
+
+        # Check for a categorical feature
         for cat_feature in sorted(categoricals)[::-1]:
-            match = re.match(f'({cat_feature})_(.+)', tree_feature)
+            pattern = f'({cat_feature})_(.+)'
+            match = re.match(pattern, tree_feature)
             if match is not None:
                 feature = match.group(1)
-                category = match.group(2)
-                threshold = None
+                value = match.group(2)
+                comparison = ComparisonTypes.EQ
                 break
-        return feature, category, threshold
+
+        return feature, comparison, value
