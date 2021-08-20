@@ -18,8 +18,8 @@ import { JointDataset } from "../../util/JointDataset";
 export interface ICohortEditorFilterList {
   filters: IFilter[];
   jointDataset: JointDataset;
-  editFilter(index: number): void;
-  removeFilter(index: number): void;
+  editFilter?(index: number): void;
+  removeFilter?(index: number): void;
 }
 
 export class CohortEditorFilterList extends React.Component<ICohortEditorFilterList> {
@@ -46,16 +46,20 @@ export class CohortEditorFilterList extends React.Component<ICohortEditorFilterL
             return (
               <div key={index}>
                 {this.setFilterLabel(filter)}
-                <IconButton
-                  id={`editFilerBtn-${index}`}
-                  iconProps={{ iconName: "Edit" }}
-                  onClick={(): void => this.props.editFilter(index)}
-                />
-                <IconButton
-                  id={`removeFilterBtn-${index}`}
-                  iconProps={{ iconName: "Clear" }}
-                  onClick={(): void => this.props.removeFilter(index)}
-                />
+                {this.props.editFilter && (
+                  <IconButton
+                    id={`editFilerBtn-${index}`}
+                    iconProps={{ iconName: "Edit" }}
+                    onClick={(): void => this.props.editFilter?.(index)}
+                  />
+                )}
+                {this.props.removeFilter && (
+                  <IconButton
+                    id={`removeFilterBtn-${index}`}
+                    iconProps={{ iconName: "Clear" }}
+                    onClick={(): void => this.props.removeFilter?.(index)}
+                  />
+                )}
               </div>
             );
           })

@@ -672,7 +672,7 @@
       "_placeholderName.comment": "starting name for a new cohort",
       "_selectFilter.comment": "prompt to select an attribute to filter on",
       "addFilter": "Add filter",
-      "addedFilters": "Added filters",
+      "addedFilters": "Filters",
       "cancel": "Cancel",
       "cancelExistingCohort": "Are you sure you want to cancel editing cohort and go back?",
       "cancelNewCohort": "Are you sure you want to cancel creating a new cohort and go back?",
@@ -684,7 +684,7 @@
       "cohortNamePlaceholder": "Name your cohort",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort.",
       "delete": "Delete",
-      "noAddedFilters": "No filters added yet",
+      "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "selectFilter": "Select filter"

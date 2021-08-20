@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  CohortEditorFilterList,
   defaultModelAssessmentContext,
   ErrorCohort,
   ModelAssessmentContext
@@ -15,13 +16,9 @@ import {
   Dialog,
   DialogType,
   DialogFooter,
-  Dropdown,
-  Label,
-  Stack
+  Dropdown
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { shiftCohortStyles } from "./ShiftCohort.styles";
 
 export interface IShiftCohortProps {
   onDismiss: () => void;
@@ -73,9 +70,8 @@ export class ShiftCohort extends React.Component<
     if (!this.state) {
       return React.Fragment;
     }
-    const classNames = shiftCohortStyles();
     const filters =
-      this.state.savedCohorts[this.state.selectedCohort].filtersToString();
+      this.state.savedCohorts[this.state.selectedCohort].cohort.filters;
     return (
       <Dialog
         hidden={false}
@@ -103,27 +99,13 @@ export class ShiftCohort extends React.Component<
           options={this.state.options}
           onChange={this.onChange}
         />
-        <Label>{localization.ModelAssessment.Cohort.cohortInfo}</Label>
-        <Stack>
-          {filters.reverse().map((filter: string, index: number) => (
-            <div key={index}>
-              <Stack horizontal tokens={{ childrenGap: "l1" }}>
-                <Stack verticalAlign="center">
-                  <i className={classNames.filterCircle} />
-                </Stack>
-                <Stack verticalAlign="center">
-                  <div>{filter}</div>
-                </Stack>
-              </Stack>
-              {index !== filters.length - 1 && (
-                <div className={classNames.stepBar} />
-              )}
-            </div>
-          ))}
-        </Stack>
+        <CohortEditorFilterList
+          filters={filters}
+          jointDataset={this.context.jointDataset}
+        />
         <DialogFooter>
           <PrimaryButton
-            onClick={this.onApplyClick.bind(this)}
+            onClick={this.shiftCohort}
             text={localization.ModelAssessment.Cohort.apply}
           />
           <DefaultButton
@@ -144,12 +126,7 @@ export class ShiftCohort extends React.Component<
     }
   };
 
-  private shiftCohort(): void {
+  private shiftCohort = (): void => {
     this.props.onApply(this.state.savedCohorts[this.state.selectedCohort]);
-  }
-
-  private onApplyClick(): void {
-    this.props.onDismiss();
-    this.shiftCohort();
-  }
+  };
 }
