@@ -34,10 +34,13 @@ class ErrorAnalysisDashboardInput:
             categorical_features,
             true_y_dataset,
             pred_y,
+            pred_y_dataset,
             model_task,
             metric,
             max_depth,
-            num_leaves):
+            num_leaves,
+            min_child_samples,
+            sample_dataset):
         """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
@@ -73,6 +76,11 @@ class ErrorAnalysisDashboardInput:
             alternative to the model and explanation for a more limited
             view.
         :type pred_y: numpy.ndarray or list[]
+        :param pred_y_dataset: The predicted labels for the provided dataset.
+            Only needed if providing a sample dataset for the UI while using
+            the full dataset for the tree view and heatmap. Otherwise specify
+            pred_y parameter only.
+        :type pred_y_dataset: numpy.array or list[]
         :param model_task: Optional parameter to specify whether the model
             is a classification or regression model. In most cases, the
             type of the model can be inferred based on the shape of the
@@ -93,6 +101,15 @@ class ErrorAnalysisDashboardInput:
         :param num_leaves: The number of leaves of the surrogate tree
             trained on errors.
         :type num_leaves: int
+        :param min_child_samples: The minimal number of data required
+            to create one leaf.
+        :type min_child_samples: int
+        :param sample_dataset: Dataset with fewer samples than the main
+            dataset. Used to improve performance only when an
+            Explanation object is not provided.  Used only if
+            explanation is not specified for the dataset explorer.
+            Specify less than 10k points for optimal performance.
+        :type sample_dataset: pd.DataFrame or numpy.ndarray or list[][]
         """
         self._model = model
         full_dataset = dataset
@@ -100,6 +117,10 @@ class ErrorAnalysisDashboardInput:
             full_true_y = true_y
         else:
             full_true_y = true_y_dataset
+        if pred_y_dataset is None:
+            full_pred_y = pred_y
+        else:
+            full_pred_y = pred_y_dataset
         self._categorical_features = categorical_features
         self._string_ind_data = None
         self._categories = []
@@ -113,6 +134,7 @@ class ErrorAnalysisDashboardInput:
         feature_length = None
         self._max_depth = max_depth
         self._num_leaves = num_leaves
+        self._min_child_samples = min_child_samples
 
         if has_explanation:
             if classes is None:
@@ -128,6 +150,8 @@ class ErrorAnalysisDashboardInput:
                 raise ValueError(
                     "Exceeds maximum number of rows"
                     "for visualization (100000)")
+        elif sample_dataset is not None:
+            dataset = sample_dataset
 
         if classes is not None:
             classes = self._convert_to_list(classes)
@@ -238,7 +262,7 @@ class ErrorAnalysisDashboardInput:
             # Assume classification for backwards compatibility
             if model_task == ModelTask.UNKNOWN:
                 model_task = ModelTask.CLASSIFICATION
-            self._error_analyzer = PredictionsAnalyzer(pred_y,
+            self._error_analyzer = PredictionsAnalyzer(full_pred_y,
                                                        full_dataset,
                                                        full_true_y,
                                                        features,
@@ -261,10 +285,8 @@ class ErrorAnalysisDashboardInput:
             else:
                 metric = self._error_analyzer.metric
         if model_available and true_y_dataset is not None:
-            full_predicted_y = self.compute_predicted_y(model, full_dataset)
-        else:
-            full_predicted_y = predicted_y
-        self.set_root_metric(full_predicted_y, full_true_y, metric)
+            full_pred_y = self.compute_predicted_y(model, full_dataset)
+        self.set_root_metric(full_pred_y, full_true_y, metric)
 
     def set_root_metric(self, predicted_y, true_y, metric):
         if metric != Metrics.ERROR_RATE:
@@ -420,7 +442,8 @@ class ErrorAnalysisDashboardInput:
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
                 max_depth=self._max_depth,
-                num_leaves=self._num_leaves)
+                num_leaves=self._num_leaves,
+                min_child_samples=self._min_child_samples)
             return {
                 WidgetRequestResponseConstants.DATA: tree
             }

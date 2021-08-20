@@ -13,6 +13,9 @@ SIZE = 'size'
 PARENTID = 'parentId'
 ERROR = 'error'
 ID = 'id'
+MIN_CHILD_SAMPLES = Keys.MIN_CHILD_SAMPLES
+REPORTS = Keys.REPORTS
+FILTER_FEATURES = Keys.FILTER_FEATURES
 
 
 def setup_error_analysis(model_analysis, add_ea=True, max_depth=3):
@@ -39,7 +42,7 @@ def validate_error_analysis(model_analysis, expected_reports=1):
         matrix = report.matrix
         matrix_features = report.matrix_features
         tree_features = report.tree_features
-        info_features = ea_info_list[Keys.REPORTS][idx][Keys.FILTER_FEATURES]
+        info_features = ea_info_list[REPORTS][idx][FILTER_FEATURES]
         assert matrix_features == info_features
         assert tree_features == model_analysis.error_analysis._feature_names
 
@@ -53,7 +56,8 @@ def validate_error_analysis(model_analysis, expected_reports=1):
             validate_matrix(matrix, expected_count, expected_false_count)
 
         tree = report.tree
-        validate_tree(tree, expected_count)
+        min_child_samples = ea_info_list[REPORTS][idx][MIN_CHILD_SAMPLES]
+        validate_tree(tree, expected_count, min_child_samples)
 
 
 def validate_matrix(matrix, exp_total_count, exp_total_false_count):
@@ -75,7 +79,7 @@ def validate_matrix(matrix, exp_total_count, exp_total_false_count):
     assert exp_total_false_count == total_false_count
 
 
-def validate_tree(tree, expected_count):
+def validate_tree(tree, expected_count, min_child_samples):
     assert tree is not None
     assert len(tree) > 0
     assert ERROR in tree[0]
@@ -84,3 +88,5 @@ def validate_tree(tree, expected_count):
     assert tree[0][PARENTID] is None
     assert SIZE in tree[0]
     assert tree[0][SIZE] == expected_count
+    for node in tree:
+        assert node[SIZE] >= min_child_samples

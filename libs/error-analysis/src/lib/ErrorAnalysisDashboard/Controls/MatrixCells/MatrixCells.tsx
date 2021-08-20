@@ -44,9 +44,10 @@ export interface IMatrixCellsProps {
 export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
   public render(): React.ReactNode {
     const classNames = matrixCellsStyles();
-    const topMatrixClass = this.props.selectedFeature1
-      ? classNames.matrixRow
-      : classNames.matrixCol;
+    const topMatrixClass: string =
+      this.props.selectedFeature1 && !this.props.selectedFeature2
+        ? classNames.matrixCol
+        : classNames.matrixRow;
 
     let totalError = 0;
     let falseCount = 0;
@@ -166,7 +167,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                 </TooltipHost>
               </div>
             );
-            if (!this.props.selectedFeature1) {
+            if (!this.props.selectedFeature2) {
               const categoryData = (
                 <div
                   key={`${i}_${j}category1`}
@@ -182,10 +183,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                 </div>
               );
             } else if (j === 0) {
-              if (
-                !this.props.selectedFeature2 ||
-                this.props.sameFeatureSelected
-              ) {
+              if (!this.props.selectedFeature1) {
                 return [
                   <div
                     key={`${i}_${j}category1`}

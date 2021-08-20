@@ -162,8 +162,8 @@ export function createCompositeFilterFromCells(
   const multiCellCompositeFilters: ICompositeFilter[] = [];
   let keyFeature1 = undefined;
   let keyFeature2 = undefined;
-  if (feature2IsSelected && selectedFeature1) {
-    // Vertical case, where feature 2 is selected and feature 1 is not
+  if (feature2IsSelected && !selectedFeature1) {
+    // Horizontal case, where feature 2 is selected and feature 1 is not
     keyFeature2 = getKey(selectedFeature2, features);
     category2Values = category1Values;
     cat2HasIntervals = cat1HasIntervals;

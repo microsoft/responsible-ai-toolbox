@@ -57,11 +57,13 @@ class TestSurrogateErrorTree(object):
         diff = pred_y != y_test
         max_depth = 3
         num_leaves = 31
+        min_child_samples = 20
         surrogate = create_surrogate_model(error_analyzer,
                                            X_test,
                                            diff,
                                            max_depth,
                                            num_leaves,
+                                           min_child_samples,
                                            cat_ind_reindexed)
         model_json = surrogate._Booster.dump_model()
         tree_structure = model_json["tree_info"][0]['tree_structure']
@@ -85,9 +87,22 @@ class TestSurrogateErrorTree(object):
         validate_traversed_tree(tree_structure, tree_dict,
                                 max_split_index, feature_names)
 
+    def test_min_child_samples(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        model = create_kneighbors_classifier(X_train, y_train)
+        categorical_features = []
+        min_child_samples_list = [5, 10, 20]
+        for min_child_samples in min_child_samples_list:
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               categorical_features,
+                               min_child_samples=min_child_samples)
+
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
-                       categorical_features, tree_features=None):
+                       categorical_features, tree_features=None,
+                       max_depth=3, num_leaves=31,
+                       min_child_samples=20):
     error_analyzer = ModelAnalyzer(model, X_test, y_test,
                                    feature_names,
                                    categorical_features)
@@ -95,9 +110,10 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         tree_features = feature_names
     filters = None
     composite_filters = None
-    tree = error_analyzer.compute_error_tree(tree_features,
-                                             filters,
-                                             composite_filters)
+    tree = error_analyzer.compute_error_tree(
+        tree_features, filters, composite_filters,
+        max_depth=max_depth, num_leaves=num_leaves,
+        min_child_samples=min_child_samples)
     assert tree is not None
     assert len(tree) > 0
     assert ERROR in tree[0]
@@ -106,6 +122,8 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     assert tree[0][PARENTID] is None
     assert SIZE in tree[0]
     assert tree[0][SIZE] == len(X_test)
+    for node in tree:
+        assert node[SIZE] >= min_child_samples
 
 
 def validate_traversed_tree(tree, tree_dict, max_split_index,
