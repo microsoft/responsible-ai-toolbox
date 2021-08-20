@@ -83,16 +83,18 @@ export function calculateFairnessMetric(
     if (binBounds && binBounds.length > 1) {
       let lowerRatio = Infinity;
       let upperRatio = Infinity;
+      // iterate through all pairs of binBounds
       for (let i = 0; i < binBounds.length - 1; i++) {
         for (let j = i + 1; j < binBounds.length; j++) {
           let lowerCandidate;
           let upperCandidate;
 
-          // if there is overlap
+          // if there is overlap, the pair has an upper ratio of 1
           if (
             binBounds[i].upper > binBounds[j].lower &&
             binBounds[j].upper > binBounds[i].lower
           ) {
+            // calculate both ways to get a minimum bound
             const lowerCandidate1 = binBounds[i].lower / binBounds[j].upper;
             const lowerCandidate2 = binBounds[j].lower / binBounds[i].upper;
             const lowerCandidate =
@@ -114,7 +116,7 @@ export function calculateFairnessMetric(
               upperCandidate = binBounds[i].upper / binBounds[j].lower;
             }
 
-            // for ratio, we want smallest lower and upper bounds
+            // for ratio, we want smallest lower and upper bounds for conservative bounds
             lowerRatio =
               lowerCandidate < lowerRatio ? lowerCandidate : lowerRatio;
             upperRatio =
@@ -142,16 +144,18 @@ export function calculateFairnessMetric(
     if (binBounds && binBounds.length > 1) {
       let lowerDiff = -Infinity;
       let upperDiff = -Infinity;
+      // iterate through all pairs of binBounds
       for (let i = 0; i < binBounds.length - 1; i++) {
         for (let j = i + 1; j < binBounds.length; j++) {
           let lowerCandidate;
           let upperCandidate;
 
-          // if there is overlap
+          // if there is overlap, the pair has a lower difference of 0
           if (
             binBounds[i].upper > binBounds[j].lower &&
             binBounds[j].upper > binBounds[i].lower
           ) {
+            // calculate both ways to get a maximum bound
             const upperCandidate1 = Math.abs(
               binBounds[j].upper - binBounds[i].lower
             );
@@ -163,7 +167,7 @@ export function calculateFairnessMetric(
                 ? upperCandidate1
                 : upperCandidate2;
 
-            // for difference, we want largest lower and upper bounds
+            // for difference, we want largest lower and upper bounds for conservative bounds
             lowerDiff = 0 > lowerDiff ? 0 : lowerDiff;
             upperDiff = upperCandidate > upperDiff ? upperCandidate : upperDiff;
           } else {
