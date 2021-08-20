@@ -333,6 +333,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          //error analysis does not have manual cohort adding
+          addCohort: () => undefined,
           baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
           errorCohorts: this.state.cohorts,
@@ -345,13 +347,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             this.props.requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
           selectedErrorCohort: this.state.selectedCohort,
+          shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
               return;
             }),
-          theme: this.props.theme,
-          updateErrorCohorts: this.updateErrorCohorts
+          theme: this.props.theme
         }}
       >
         <div className={classNames.page}>
@@ -768,14 +770,15 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     this.setState({ selectedWeightVector: weightOption });
   };
 
-  private updateErrorCohorts = (
-    cohorts: ErrorCohort[],
-    selectedCohort: ErrorCohort,
-    baseCohort?: ErrorCohort
-  ): void => {
+  private shiftErrorCohort = (selectedCohort: ErrorCohort): void => {
+    console.log(selectedCohort);
+    let cohorts = this.state.cohorts;
+    cohorts = cohorts.filter(
+      (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
+    );
     this.setState({
-      baseCohort: baseCohort || this.state.baseCohort,
-      cohorts,
+      baseCohort: selectedCohort,
+      cohorts: [...cohorts, selectedCohort],
       selectedCohort
     });
   };
