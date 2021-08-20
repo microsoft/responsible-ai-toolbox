@@ -4,6 +4,7 @@
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
+import { Cohort } from "../Cohort/Cohort";
 import { ErrorCohort } from "../Cohort/ErrorCohort";
 import {
   ICausalAnalysisData,
@@ -50,14 +51,12 @@ export interface IModelAssessmentContext {
         explanationAlgorithm?: string
       ) => Promise<any[]>)
     | undefined;
-  updateErrorCohorts(
-    cohorts: ErrorCohort[],
-    selectedCohort: ErrorCohort,
-    baseCohort?: ErrorCohort
-  ): void;
+  shiftErrorCohort(cohort: ErrorCohort): void;
+  addCohort(cohort: Cohort): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
+  addCohort: () => undefined,
   baseErrorCohort: {} as ErrorCohort,
   dataset: {} as IDataset,
   errorCohorts: [],
@@ -67,9 +66,9 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,
+  shiftErrorCohort: () => undefined,
   telemetryHook: () => undefined,
-  theme: {} as ITheme,
-  updateErrorCohorts: () => undefined
+  theme: {} as ITheme
 };
 const modelAssessmentContext = React.createContext<IModelAssessmentContext>(
   defaultModelAssessmentContext

@@ -681,7 +681,7 @@
       "_placeholderName.comment": "starting name for a new cohort",
       "_selectFilter.comment": "prompt to select an attribute to filter on",
       "addFilter": "Add filter",
-      "addedFilters": "Added filters",
+      "addedFilters": "Filters",
       "cancel": "Cancel",
       "cancelExistingCohort": "Are you sure you want to cancel editing cohort and go back?",
       "cancelNewCohort": "Are you sure you want to cancel creating a new cohort and go back?",
@@ -693,7 +693,7 @@
       "cohortNamePlaceholder": "Name your cohort",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort.",
       "delete": "Delete",
-      "noAddedFilters": "No filters added yet",
+      "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "selectFilter": "Select filter"
@@ -1132,6 +1132,15 @@
         "zstat": "Z-score"
       }
     },
+    "Cohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "cohortInfo": "Cohort info",
+      "cohortList": "Cohort list",
+      "selectCohort": "Select a cohort",
+      "shiftCohort": "Shift cohort",
+      "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
     "CohortInformation": {
       "ChangeGlobalCohort": "Change global cohort",
       "CreateNewCohort": "Create new cohort",
@@ -1173,7 +1182,7 @@
       "LocalExplanation": "Individual feature importance"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard settings",
+      "DashboardSettings": "Dashboard navigation",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
