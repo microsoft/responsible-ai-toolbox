@@ -210,7 +210,8 @@ def _check_policy_tree(policy_tree, config, depth=0, is_serialized=False):
         else:
             assert isinstance(policy_tree, CausalPolicyTreeInternal)
             assert isinstance(policy_tree.feature, str)
-            assert hasattr(policy_tree, 'threshold')
+            assert isinstance(policy_tree.comparison, str)
+            assert isinstance(policy_tree.value, (str, int, float))
             _check_policy_tree(policy_tree.left, config, depth=depth + 1,
                                is_serialized=is_serialized)
             _check_policy_tree(policy_tree.right, config, depth=depth + 1,
