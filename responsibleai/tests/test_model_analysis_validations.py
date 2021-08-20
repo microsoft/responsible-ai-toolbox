@@ -411,17 +411,13 @@ class TestCounterfactualUserConfigValidations:
 
     def test_eval_data_having_new_categories(self):
         train_data = pd.DataFrame(
-            data = [
-                        [1, 2, 0],
-                        [2, 3, 1]
-                        [3, 3, 0]
-                   ],
+            data=[[1, 2, 0],
+                  [2, 3, 1],
+                  [3, 3, 0]],
             columns=['c1', 'c2', 'target']
         )
         test_data = pd.DataFrame(
-            data = [
-                        [1, 1, 0],
-                   ],
+            data=[[1, 1, 0]],
             columns=['c1', 'c2', 'target']
         )
 
@@ -437,14 +433,14 @@ class TestCounterfactualUserConfigValidations:
             task_type='classification',
             categorical_features=['c2'])
 
-        message = ("'Counterfactual example generation requires that every category of "
+        message = ("Counterfactual example generation requires "
+                   "that every category of "
                    "categorical features present in the test data be "
                    "also present in the train data. "
                    "Categories missing from train data: "
-                   "{'c2': \\['1'\\]}")
+                   "{'c2': \\[1\\]}")
         with pytest.raises(
-                UserConfigValidationException,
-                match=message):
+                UserConfigValidationException, match=message):
             model_analysis.counterfactual.add(
                 total_CFs=10,
                 method='random',

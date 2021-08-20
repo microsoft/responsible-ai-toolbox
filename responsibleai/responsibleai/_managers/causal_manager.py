@@ -9,7 +9,7 @@ from typing import Any, List, Optional, Union
 from econml.solutions.causal_analysis import CausalAnalysis
 from pathlib import Path
 
-from responsibleai._data_validations import _validate_train_test_categories
+from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import UserConfigValidationException
@@ -151,11 +151,11 @@ class CausalManager(BaseManager):
         X_test = self._test.drop([self._target_column], axis=1)
         y_train = self._train[self._target_column].values.ravel()
 
-        _validate_train_test_categories(
+        validate_train_test_categories(
             train_data=self._train,
             test_data=self._test,
-            categoricals=categoricals,
-            rai_compute_type='Causal analysis')
+            rai_compute_type='Causal analysis',
+            categoricals=categoricals)
 
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         analysis = CausalAnalysis(
