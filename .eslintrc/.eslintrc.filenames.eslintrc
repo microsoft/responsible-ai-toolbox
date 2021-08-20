@@ -27,9 +27,15 @@
       }
     },
     {
-      "files": ["*.test.tsx", "*.test.ts"],
+      "files": ["*.test.tsx"],
       "rules": {
         "filenames/match-regex": ["error", ["^[A-Z][A-z]+\\.test$"]]
+      }
+    },
+    {
+      "files": ["*.test.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-z]+\\.test$"]]
       }
     },
     {

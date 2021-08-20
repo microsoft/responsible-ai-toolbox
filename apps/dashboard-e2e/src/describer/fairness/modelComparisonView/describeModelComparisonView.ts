@@ -5,7 +5,10 @@ import { getSpan } from "../../../util/getSpan";
 import { IFairnessMetadata } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
-export function describeModelComparisonView(data: IFairnessMetadata): void {
+export function describeModelComparisonView(
+  data: IFairnessMetadata,
+  checkErrorBars: boolean
+): void {
   describe("model comparison view", () => {
     it("should find model comparison view", () => {
       // move to the model comparison view
@@ -26,6 +29,10 @@ export function describeModelComparisonView(data: IFairnessMetadata): void {
       cy.get('button:contains("How to read this chart")').should("exist");
       // assert that the plot has the right number of points for models
       cy.get(".point").should("have.length", data.numberOfModels);
+      if (checkErrorBars) {
+        cy.get(".yerror").should("have.length", data.numberOfModels);
+        cy.get(".xerror").should("have.length", data.numberOfModels);
+      }
       getSpan("Key insights").should("exist");
     });
   });

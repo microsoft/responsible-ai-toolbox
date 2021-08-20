@@ -31,11 +31,14 @@ export function checkPerformanceMetricSelectionPage(name: string): void {
   );
   cy.get(`button:contains("${fairnessMetricsTab}")`).should("exist");
   getSpan("How do you want to measure performance?").should("exist");
-  if (name === "binaryClassification") {
+  if (
+    name === "binaryClassification" ||
+    name === "binaryClassificationWithError"
+  ) {
     getSpan("Accuracy").should("exist");
   } else if (name === "probability") {
     getSpan("Balanced root mean squared error").should("exist");
-  } else if (name === "regression") {
+  } else if (name === "regression" || name === "regressionWithError") {
     getSpan("Mean absolute error").should("exist");
   } else {
     throw new RangeError(`Unrecognized name: ${name}`);

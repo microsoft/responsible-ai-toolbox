@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
+import {
+  IBounds,
+  IMetricRequest,
+  IMetricResponse
+} from "@responsible-ai/core-ui";
 
 export const supportedBinaryClassificationPerformanceKeys = [
   "accuracy_score",
@@ -64,13 +68,26 @@ export function generateRandomMetrics(
   const binSize = Math.max(...request.binVector);
   const bins: number[] = new Array(binSize + 1)
     .fill(0)
-    .map(() => Math.random());
-  // bins[2] = undefined;
+    .map(() => Math.random() / 3 + 0.33);
+  const binBounds: IBounds[] = bins.map((bin) => {
+    return {
+      lower: bin - Math.pow(Math.random() / 3, 2),
+      upper: bin + Math.pow(Math.random() / 3, 2)
+    };
+  });
+  const global: number = Math.random() / 3 + 0.33;
+  const bounds: IBounds = {
+    lower: global - Math.pow(Math.random() / 3, 2),
+    upper: global + Math.pow(Math.random() / 3, 2)
+  };
+
   const promise = new Promise<IMetricResponse>((resolve, reject) => {
     const timeout = setTimeout(() => {
       resolve({
+        binBounds,
         bins,
-        global: Math.random()
+        bounds,
+        global
       });
     }, 300);
     if (abortSignal) {

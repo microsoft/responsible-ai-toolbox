@@ -1,9 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IMetricResponse, IMetricRequest } from "@responsible-ai/core-ui";
+import {
+  IMetricResponse,
+  IMetricRequest,
+  IFairnessResponse
+} from "@responsible-ai/core-ui";
 import _, { max, min } from "lodash";
 
+import { calculateFairnessMetric } from "./calculateFairnessMetric";
 import { FairnessModes, fairnessOptions } from "./FairnessMetrics";
 
 export class MetricsCache {
@@ -30,12 +35,14 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    key: string
+    key: string,
+    errorBarsEnabled: boolean
   ): Promise<IMetricResponse> {
     let value = this.cache[featureIndex][modelIndex][key];
-    if (value === undefined && this.fetchMethod) {
+    if ((!value || (!value.bounds && errorBarsEnabled)) && this.fetchMethod) {
       value = await this.fetchMethod({
         binVector: binIndexVector,
+        errorBarsEnabled,
         metricKey: key,
         modelIndex
       });
@@ -48,41 +55,49 @@ export class MetricsCache {
     binIndexVector: number[],
     featureIndex: number,
     modelIndex: number,
-    fairnessMethod: FairnessModes
-  ): Promise<number> {
-    const falsePositiveRateMetric = await this.getFairnessMetric(
-      binIndexVector,
-      featureIndex,
-      modelIndex,
-      fairnessMethod === FairnessModes.Difference
-        ? "false_positive_rate_difference"
-        : "false_positive_rate_ratio",
-      fairnessMethod
-    );
-    const truePositiveRateMetric = await this.getFairnessMetric(
-      binIndexVector,
-      featureIndex,
-      modelIndex,
-      fairnessMethod === FairnessModes.Difference
-        ? "true_positive_rate_difference"
-        : "true_positive_rate_ratio",
-      fairnessMethod
-    );
+    fairnessMethod: FairnessModes,
+    errorBarsEnabled: boolean
+  ): Promise<IFairnessResponse> {
+    const falsePositiveRateMetric = (
+      await this.getFairnessMetric(
+        binIndexVector,
+        featureIndex,
+        modelIndex,
+        fairnessMethod === FairnessModes.Difference
+          ? "false_positive_rate_difference"
+          : "false_positive_rate_ratio",
+        fairnessMethod,
+        errorBarsEnabled
+      )
+    ).overall;
+    const truePositiveRateMetric = (
+      await this.getFairnessMetric(
+        binIndexVector,
+        featureIndex,
+        modelIndex,
+        fairnessMethod === FairnessModes.Difference
+          ? "true_positive_rate_difference"
+          : "true_positive_rate_ratio",
+        fairnessMethod,
+        errorBarsEnabled
+      )
+    ).overall;
 
     if (
       falsePositiveRateMetric === Number.NaN ||
       truePositiveRateMetric === Number.NaN
     ) {
-      return Number.NaN;
+      return { overall: Number.NaN };
     }
 
     if (fairnessMethod === FairnessModes.Difference) {
       const maxMetric = max([falsePositiveRateMetric, truePositiveRateMetric]);
-      return maxMetric === undefined ? Number.NaN : maxMetric;
+      return { overall: maxMetric ?? Number.NaN };
     }
 
+    // assumes FairnessModes.Ratio
     const minMetric = min([falsePositiveRateMetric, truePositiveRateMetric]);
-    return minMetric === undefined ? Number.NaN : minMetric;
+    return { overall: minMetric ?? Number.NaN };
   }
 
   public async getFairnessMetric(
@@ -90,63 +105,36 @@ export class MetricsCache {
     featureIndex: number,
     modelIndex: number,
     key: string,
-    fairnessMethod: FairnessModes
-  ): Promise<number> {
+    fairnessMethod: FairnessModes,
+    errorBarsEnabled: boolean
+  ): Promise<IFairnessResponse> {
     // Equalized Odds is calculated based on two other fairness metrics.
     if (key.startsWith("equalized_odds")) {
       return this.getEqualizedOdds(
         binIndexVector,
         featureIndex,
         modelIndex,
-        fairnessMethod
+        fairnessMethod,
+        errorBarsEnabled
       );
     }
 
     const metricKey = fairnessOptions[key].fairnessMetric;
     let value = this.cache[featureIndex][modelIndex][metricKey];
-    if (value === undefined && this.fetchMethod) {
+    if ((!value || (!value.bounds && errorBarsEnabled)) && this.fetchMethod) {
       value = await this.fetchMethod({
         binVector: binIndexVector,
+        errorBarsEnabled,
         metricKey,
         modelIndex
       });
       this.cache[featureIndex][modelIndex][metricKey] = value;
     }
-    if (!value?.bins) {
-      return Number.NaN;
+    if (!value || !value?.bins) {
+      return { overall: Number.NaN };
     }
 
-    const bins = value.bins
-      .slice()
-      .filter((x) => x !== undefined && !Number.isNaN(x));
-
-    const min = _.min(bins);
-    const max = _.max(bins);
-
-    if (min === undefined || max === undefined) {
-      return Number.NaN;
-    }
-
-    if (fairnessMethod === FairnessModes.Min) {
-      return min;
-    }
-
-    if (fairnessMethod === FairnessModes.Max) {
-      return max;
-    }
-
-    if (fairnessMethod === FairnessModes.Ratio) {
-      if (max === 0) {
-        return Number.NaN;
-      }
-      return min / max;
-    }
-
-    if (fairnessMethod === FairnessModes.Difference) {
-      return max - min;
-    }
-
-    return Number.NaN;
+    return calculateFairnessMetric(value, fairnessMethod);
   }
 
   public async getFairnessMetricV1(
@@ -157,7 +145,7 @@ export class MetricsCache {
     fairnessMethod: FairnessModes
   ): Promise<number> {
     let value = this.cache[featureIndex][modelIndex][key];
-    if (value === undefined && this.fetchMethod) {
+    if (!value && this.fetchMethod) {
       value = await this.fetchMethod({
         binVector: binIndexVector,
         metricKey: key,

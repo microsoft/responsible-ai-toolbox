@@ -1,27 +1,37 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from "@responsible-ai/core-ui";
+import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
 import { getTheme, Stack } from "office-ui-fabric-react";
+import { Datum } from "plotly.js";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
-import { IFeatureBinPickerPropsV2 } from "../FairnessWizard";
+import { IFeatureBinPickerPropsV2, IErrorPickerProps } from "../FairnessWizard";
 import { IMetrics } from "../IMetrics";
 import { SharedStyles } from "../Shared.styles";
 
 import { FormatMetrics } from "./../util/FormatMetrics";
 import { IFairnessContext } from "./../util/IFairnessContext";
 import { performanceOptions } from "./../util/PerformanceMetrics";
-import { ModalHelp } from "./ModalHelp";
+import { CalloutHelpBar } from "./CalloutHelpBar";
 
 interface IOutcomePlotProps {
   dashboardContext: IFairnessContext;
   metrics: IMetrics;
   areaHeights: number;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
+  errorPickerProps: IErrorPickerProps;
+  fairnessBounds?: Array<IBounds | undefined>;
+  performanceBounds?: Array<IBounds | undefined>;
+  outcomeBounds?: Array<IBounds | undefined>;
+  falsePositiveBounds?: Array<IBounds | undefined>;
+  falseNegativeBounds?: Array<IBounds | undefined>;
+  parentErrorChanged: {
+    (event: React.MouseEvent<HTMLElement>, checked?: boolean): void;
+  };
 }
 
 export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
@@ -35,7 +45,8 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
         ? "selection_rate"
         : "average";
     const outcomeMetric = performanceOptions[outcomeKey];
-    let outcomeChartModalHelpStrings: string[] = [];
+
+    let outcomeChartCalloutHelpBarStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
         return `${name} `;
@@ -61,10 +72,34 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           y: groupNamesWithBuffer
         }
       ];
+      if (this.props.errorPickerProps.errorBarsEnabled) {
+        barPlotlyProps.data[0].error_x = {
+          // `array` and `arrayminus` are error bounds as described in Plotly API
+          array: this.props.metrics.outcomes.binBounds?.map(
+            (binBound, index) => {
+              if (this.props.metrics.outcomes?.bins[index] !== undefined) {
+                return binBound.upper - this.props.metrics.outcomes.bins[index]; // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          arrayminus: this.props.metrics.outcomes.binBounds?.map(
+            (binBound, index) => {
+              if (this.props.metrics.outcomes?.bins[index] !== undefined) {
+                return this.props.metrics.outcomes.bins[index] - binBound.lower; // convert from bounds to relative error
+              }
+              return 0;
+            }
+          ) || [0],
+          type: "data",
+          visible: true
+        };
+        barPlotlyProps.data[0].textposition = "none";
+      }
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
-      outcomeChartModalHelpStrings = [
+      outcomeChartCalloutHelpBarStrings = [
         localization.Fairness.Report.classificationOutcomesHowToRead
       ];
     }
@@ -96,7 +131,7 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           )
         } as any
       ];
-      outcomeChartModalHelpStrings = [
+      outcomeChartCalloutHelpBarStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
     }
@@ -128,9 +163,59 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           )
         } as any
       ];
-      outcomeChartModalHelpStrings = [
+      outcomeChartCalloutHelpBarStrings = [
         localization.Fairness.Report.regressionOutcomesHowToRead
       ];
+    }
+
+    if (
+      this.props.dashboardContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+    ) {
+      barPlotlyProps.data[0].customdata = [];
+      const digitsOfPrecision = 1;
+
+      for (let i = 0; i < this.props.dashboardContext.groupNames.length; i++) {
+        const tempY = barPlotlyProps.data[0].y?.[i];
+        const tempX = barPlotlyProps.data[0].x?.[i];
+        // ensure x is a number
+        const x =
+          tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
+        // ensure y is a string
+        const y =
+          tempY !== undefined && typeof tempY == "string"
+            ? tempY.trim()
+            : undefined;
+        const lowerErrorX =
+          barPlotlyProps.data[0]?.error_x?.type === "data"
+            ? barPlotlyProps.data[0].error_x.arrayminus?.[i]
+            : undefined;
+        const upperErrorX =
+          barPlotlyProps.data[0]?.error_x?.type === "data"
+            ? barPlotlyProps.data[0].error_x.array?.[i]
+            : undefined;
+
+        const xBounds =
+          lowerErrorX !== 0 &&
+          upperErrorX !== 0 &&
+          typeof lowerErrorX == "number" &&
+          typeof upperErrorX == "number" &&
+          x !== undefined
+            ? `[${(100 * (x - lowerErrorX)).toFixed(digitsOfPrecision)}%, ${(
+                100 *
+                (x + upperErrorX)
+              ).toFixed(digitsOfPrecision)}%]`
+            : "";
+
+        barPlotlyProps.data[0].customdata.push({
+          outcomeMetric: outcomeMetric.title,
+          x: x !== undefined ? (100 * x).toFixed(digitsOfPrecision) : undefined,
+          xBounds,
+          y
+        } as unknown as Datum);
+        barPlotlyProps.data[0].hovertemplate =
+          "<b>%{customdata.y}</b><br>%{customdata.outcomeMetric}: %{customdata.x}% %{customdata.xBounds}<extra></extra>";
+      }
     }
 
     return (
@@ -140,10 +225,16 @@ export class OutcomePlot extends React.PureComponent<IOutcomePlotProps> {
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <div className={sharedStyles.chartWrapper}>
-            <Stack horizontal horizontalAlign={"space-between"}>
-              <div className={sharedStyles.chartSubHeader} />
-              <ModalHelp theme={theme} strings={outcomeChartModalHelpStrings} />
-            </Stack>
+            <CalloutHelpBar
+              graphCalloutStrings={outcomeChartCalloutHelpBarStrings}
+              errorPickerProps={this.props.errorPickerProps}
+              fairnessBounds={this.props.fairnessBounds}
+              performanceBounds={this.props.performanceBounds}
+              outcomeBounds={this.props.outcomeBounds}
+              falsePositiveBounds={this.props.falsePositiveBounds}
+              falseNegativeBounds={this.props.falseNegativeBounds}
+              parentErrorChanged={this.props.parentErrorChanged}
+            />
             <div className={sharedStyles.chartBody}>
               <AccessibleChart
                 plotlyProps={barPlotlyProps}

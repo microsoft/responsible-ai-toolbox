@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { IMetricRequest, IMetricResponse } from "@responsible-ai/core-ui";
-import { FairnessWizardV2 } from "@responsible-ai/fairness";
+import { FairnessWizard } from "@responsible-ai/fairness";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
@@ -21,11 +21,12 @@ export class Fairness extends React.Component {
     }
 
     return (
-      <FairnessWizardV2
+      <FairnessWizard
         dataSummary={{
           classNames: modelData.classes,
           featureNames: modelData.features
         }}
+        errorBarsEnabled={modelData.errorBarsEnabled}
         testData={modelData.dataset}
         predictedY={modelData.predicted_ys}
         trueY={modelData.true_y}

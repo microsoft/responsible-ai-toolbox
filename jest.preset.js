@@ -7,6 +7,7 @@ module.exports = {
   },
   resolver: "@nrwl/jest/plugins/resolver",
   moduleFileExtensions: ["ts", "js", "html"],
+  collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.ts?(x)"],
   coverageReporters: ["html", "cobertura", "lcov", "text"],
   setupFilesAfterEnv: ["<rootDir>/../../setupTest.ts"],

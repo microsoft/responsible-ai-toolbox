@@ -12,6 +12,8 @@ import {
 
 export interface ISharedStyles {
   presentationArea: IStyle;
+  actionButton: IStyle;
+  callout: IStyle;
   chartWrapper: IStyle;
   chartBody: IStyle;
   chartHeader: IStyle;
@@ -25,11 +27,26 @@ export interface ISharedStyles {
   doneButton: IStyle;
   modalContentHelp: IStyle;
   modalContentHelpText: IStyle;
+  calloutBarWrapper: IStyle;
+  title: IStyle;
+  toggle: IStyle;
+  errorCalloutHeader: IStyle;
 }
 
 export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
   const theme = getTheme();
   return mergeStyleSets<ISharedStyles>({
+    actionButton: {
+      height: "auto"
+    },
+    callout: {
+      padding: "20px 24px",
+      width: 320
+    },
+    calloutBarWrapper: {
+      marginLeft: "80px",
+      padding: "15px 0px"
+    },
     chartBody: {
       flex: 1
     },
@@ -66,6 +83,9 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       margin: "auto",
       padding: "12px"
     },
+    errorCalloutHeader: {
+      paddingRight: "5px"
+    },
     header: {
       alignItems: "center",
       backgroundColor: theme.semanticColors.bodyBackground,
@@ -82,15 +102,11 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
     infoButton: {
       border: "1px solid",
       borderRadius: "50%",
-      color: theme.semanticColors.bodyText,
       float: "left",
-      fontSize: "12px",
       fontWeight: "600",
       height: "15px",
       lineHeight: "14px",
-      marginLeft: "250px",
-      marginRight: "3px",
-      marginTop: "3px",
+      margin: "3px",
       textAlign: "center",
       width: "15px"
     },
@@ -120,6 +136,12 @@ export const SharedStyles: () => IProcessedStyleSet<ISharedStyles> = () => {
       display: "flex",
       flexDirection: "row",
       paddingBottom: "7px"
+    },
+    title: {
+      marginBottom: 12
+    },
+    toggle: {
+      margin: "0px"
     }
   });
 };
