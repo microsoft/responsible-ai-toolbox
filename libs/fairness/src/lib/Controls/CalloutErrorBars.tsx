@@ -45,10 +45,10 @@ export class CalloutErrorBars extends React.Component<
           >
             i
           </Text>
+          <Stack className={sharedStyles.errorCalloutHeader}>
+            {localization.Fairness.DropdownHeaders.errorMetric}
+          </Stack>
         </ActionButton>
-        <span className={sharedStyles.errorCalloutHeader}>
-          {localization.Fairness.DropdownHeaders.errorMetric}
-        </span>
         {this.state.showErrorBarsCallout && (
           <Callout
             className={sharedStyles.callout}
