@@ -7,6 +7,7 @@ import dice_ml
 from dice_ml import Dice
 import numpy as np
 
+from responsibleai._data_validations import _validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._config.base_config import BaseConfig
@@ -109,6 +110,12 @@ class CounterfactualManager(BaseManager):
             raise UserConfigValidationException(
                 'Model is required for counterfactual example generation and '
                 'feature importances')
+
+        _validate_train_test_categories(
+            train_data=self._train,
+            test_data=self._test,
+            categoricals=self._categorical_features,
+            rai_compute_type='Counterfactual example generation')
 
         to_vary = new_counterfactual_config.features_to_vary
         if to_vary != 'all':

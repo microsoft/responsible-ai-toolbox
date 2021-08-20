@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import logging
+import pandas as pd
 import pytest
 
 from unittest.mock import MagicMock
@@ -403,6 +404,47 @@ class TestCounterfactualUserConfigValidations:
                 match='The desired_class attribute should not be \'opposite\''
                       ' It should be the class value for multiclass'
                       ' classification scenario.'):
+            model_analysis.counterfactual.add(
+                total_CFs=10,
+                method='random',
+                desired_class='opposite')
+
+    def test_eval_data_having_new_categories(self):
+        train_data = pd.DataFrame(
+            data = [
+                        [1, 2, 0],
+                        [2, 3, 1]
+                        [3, 3, 0]
+                   ],
+            columns=['c1', 'c2', 'target']
+        )
+        test_data = pd.DataFrame(
+            data = [
+                        [1, 1, 0],
+                   ],
+            columns=['c1', 'c2', 'target']
+        )
+
+        X_train = train_data.drop(['target'], axis=1)
+        y_train = train_data['target']
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=train_data,
+            test=test_data,
+            target_column='target',
+            task_type='classification',
+            categorical_features=['c2'])
+
+        message = ("'Counterfactual example generation requires that every category of "
+                   "categorical features present in the test data be "
+                   "also present in the train data. "
+                   "Categories missing from train data: "
+                   "{'c2': \\['1'\\]}")
+        with pytest.raises(
+                UserConfigValidationException,
+                match=message):
             model_analysis.counterfactual.add(
                 total_CFs=10,
                 method='random',
