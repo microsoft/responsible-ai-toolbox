@@ -3,14 +3,15 @@
 
 export * from "./lib/cohortKey";
 export * from "./lib/Cohort/Cohort";
+export * from "./lib/Cohort/CohortList/CohortList";
 export * from "./lib/Cohort/Constants";
 export * from "./lib/Cohort/ErrorCohort";
 export * from "./lib/Cohort/CohortStats";
+export * from "./lib/Cohort/ManualCohortManagement/CohortEditorFilterList";
 export * from "./lib/Cohort/CohortBasedComponent";
 export * from "./lib/Cohort/CohortInfo/CohortInfo";
 export * from "./lib/Cohort/CohortInfo/CohortInfoPanel";
 export * from "./lib/Cohort/CohortInfoSection/CohortInfoSection";
-export * from "./lib/Cohort/CohortSettingsPanel/CohortSettingsPanel";
 export * from "./lib/Cohort/CohortList/CohortListPanel";
 export * from "./lib/Cohort/EditCohort/EditCohort";
 export * from "./lib/Cohort/ManualCohortManagement/CohortBar";

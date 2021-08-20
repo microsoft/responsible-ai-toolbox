@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  CohortSettingsPanel,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
@@ -12,10 +11,14 @@ import {
   CommandBar,
   ICommandBarItemProps,
   IIconProps,
-  IButtonStyles
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { ChangeGlobalCohortButton } from "../Cohort/ChangeGlobalCohortButton";
+import { CohortSettingsPanel } from "../Cohort/CohortSettingsPanel";
+import { CreateGlobalCohortButton } from "../Cohort/CreateGlobalCohortButton";
 import { IModelAssessmentDashboardTab } from "../ModelAssessmentDashboardState";
 
 import { DashboardSettings } from "./DashboardSettings";
@@ -23,8 +26,6 @@ import { mainMenuStyles } from "./MainMenu.styles";
 
 export interface IMainMenuProps {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
-  toggleShiftCohortVisibility: () => void;
-  toggleCreateCohortVisibility: () => void;
   removeTab(index: number): void;
 }
 interface IMainMenuState {
@@ -34,10 +35,6 @@ interface IMainMenuState {
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
 
-const buttonStyle: IButtonStyles = {
-  root: { padding: "0px 4px" }
-};
-
 export class MainMenu extends React.PureComponent<
   IMainMenuProps,
   IMainMenuState
@@ -45,51 +42,50 @@ export class MainMenu extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
+  private menuFarItems: ICommandBarItemProps[];
+  private menuItems: ICommandBarItemProps[];
   public constructor(props: IMainMenuProps) {
     super(props);
     this.state = {
       cohortSettingsPanelVisible: false,
       dashboardSettingsVisible: false
     };
-  }
-
-  public render(): React.ReactNode {
-    const farItems: ICommandBarItemProps[] = [];
-    const helpItems: ICommandBarItemProps[] = [
+    this.menuFarItems = [
       {
-        buttonStyles: buttonStyle,
         iconProps: settingsIcon,
         key: "cohortSettings",
         onClick: this.toggleCohortSettingsPanel,
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
-        buttonStyles: buttonStyle,
         iconProps: settingsIcon,
         key: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
       }
     ];
-    farItems.push(...helpItems);
+    this.menuItems = [
+      {
+        key: "cohort",
+        onRender: this.renderCohort,
+        text: ""
+      }
+    ];
+  }
+
+  public render(): React.ReactNode {
     const classNames = mainMenuStyles();
     return (
       <>
         <div className={classNames.banner}>
           <div className={classNames.mainMenu}>
-            <CommandBar
-              items={[]}
-              farItems={farItems}
-              ariaLabel="Use left and right arrow keys to navigate between commands"
-            />
+            <CommandBar items={this.menuItems} farItems={this.menuFarItems} />
           </div>
         </div>
         <CohortSettingsPanel
           errorCohorts={this.context.errorCohorts}
           isOpen={this.state?.cohortSettingsPanelVisible}
           onDismiss={this.toggleCohortSettingsPanel}
-          toggleCreateCohortVisibility={this.props.toggleCreateCohortVisibility}
-          toggleShiftCohortVisibility={this.props.toggleShiftCohortVisibility}
         />
         <DashboardSettings
           isOpen={this.state.dashboardSettingsVisible}
@@ -100,6 +96,38 @@ export class MainMenu extends React.PureComponent<
       </>
     );
   }
+
+  private renderCohort = (): React.ReactNode => {
+    const currentCohort = this.context.baseErrorCohort;
+    const cohortName = currentCohort.cohort.name;
+    // add (default) if it's the default cohort
+    let cohortInfoTitle =
+      localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
+    if (
+      currentCohort.cohort.filters.length === 0 &&
+      currentCohort.cohort.name === localization.Interpret.Cohort.defaultLabel
+    ) {
+      cohortInfoTitle +=
+        localization.ModelAssessment.CohortInformation.DefaultCohort;
+    }
+    const dataPointsCountString = `${
+      localization.ModelAssessment.CohortInformation.DataPoints
+    } = ${currentCohort.cohortStats.totalCohort.toString()}`;
+    const filtersCountString = `${
+      localization.ModelAssessment.CohortInformation.Filters
+    } = ${currentCohort.cohort.filters.length.toString()}`;
+    return (
+      <Stack horizontal tokens={{ childrenGap: "l1" }}>
+        <Text variant={"xLarge"}>{cohortInfoTitle}</Text>
+        <Stack>
+          <Text>{dataPointsCountString}</Text>
+          <Text>{filtersCountString}</Text>
+        </Stack>
+        <ChangeGlobalCohortButton />
+        <CreateGlobalCohortButton />
+      </Stack>
+    );
+  };
 
   private toggleCohortSettingsPanel = (): void =>
     this.setState((prev) => ({

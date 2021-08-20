@@ -1,30 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import {
-  DefaultButton,
-  Panel,
-  PanelType,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
-import React from "react";
-
 import {
   defaultModelAssessmentContext,
+  ErrorCohort,
   IModelAssessmentContext,
-  ModelAssessmentContext
-} from "../../Context/ModelAssessmentContext";
-import { CohortList } from "../CohortList/CohortList";
-import { ErrorCohort } from "../ErrorCohort";
+  ModelAssessmentContext,
+  CohortList
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
+import React from "react";
+
+import { ChangeGlobalCohortButton } from "./ChangeGlobalCohortButton";
+import { CreateGlobalCohortButton } from "./CreateGlobalCohortButton";
 
 export interface ICohortSettingsPanelProps {
   errorCohorts: ErrorCohort[];
   isOpen: boolean;
   onDismiss: () => void;
-  toggleShiftCohortVisibility: () => void;
-  toggleCreateCohortVisibility: () => void;
 }
 
 export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPanelProps> {
@@ -53,19 +47,8 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
             }
           </Text>
           <Stack horizontal tokens={{ childrenGap: 25 }}>
-            <DefaultButton
-              text={
-                localization.ModelAssessment.CohortInformation
-                  .ChangeGlobalCohort
-              }
-              onClick={this.props.toggleShiftCohortVisibility}
-            />
-            <DefaultButton
-              text={
-                localization.ModelAssessment.CohortInformation.CreateNewCohort
-              }
-              onClick={this.props.toggleCreateCohortVisibility}
-            />
+            <ChangeGlobalCohortButton />
+            <CreateGlobalCohortButton />
           </Stack>
           <CohortList
             errorCohorts={this.props.errorCohorts}
