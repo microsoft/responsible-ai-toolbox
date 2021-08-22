@@ -10,11 +10,14 @@ import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
+import { binaryClassificationWithError } from "../fairness/__mock_data__/binaryClassificationWithError";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
+import { precomputedBinaryWithError } from "../fairness/__mock_data__/precomputedBinaryWithError";
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
+import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -112,14 +115,21 @@ export const applications: IApplications = <const>{
   },
   fairness: {
     datasets: {
-      binaryClassification: { data: binaryClassification },
+      binaryClassification: {
+        data: { ...binaryClassification, errorBarsEnabled: false }
+      },
+      binaryClassificationWithError: {
+        data: binaryClassificationWithError
+      },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryMissingMetrics: {
         data: precomputedBinaryMissingMetrics
       },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
+      precomputedBinaryWithError: { data: precomputedBinaryWithError },
       probability: { data: probability },
-      regression: { data: regression }
+      regression: { data: regression },
+      regressionWithError: { data: regressionWithError }
     },
     versions: { "Version-2": 2 }
   },

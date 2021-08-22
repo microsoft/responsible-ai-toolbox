@@ -9,7 +9,7 @@
       "confoundingFeature": "A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.",
       "continuous": "Continuous treatments: ",
       "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.",
-      "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure to include a wide set of features that may correlate with the outcome as confounders.",
+      "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
       "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
       "here": "here",
       "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
@@ -263,9 +263,18 @@
       "save": "Save"
     },
     "DropdownHeaders": {
+      "errorMetric": "Enable error bars",
       "fairnessMetric": "Fairness metric",
       "performanceMetric": "Performance metric",
       "sensitiveFeature": "Sensitive feature"
+    },
+    "ErrorBounds": {
+      "howToRead": "How to read these error bars",
+      "introModalText1": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ",
+      "wilsonScores": "Wilson scores",
+      "introModalText2": " (for binary classification) or ",
+      "normalApproximation": "normal approximation",
+      "introModalText3": " (for other tasks)."
     },
     "Fairness": {
       "body": "Fairness metrics quantify variation of your model's behavior across selected features. There are several kinds of fairness metrics that are based on a variety of performance metrics. They either capture the difference or ratio between the extreme values across the groups, or simply the worst value of any group.",
@@ -672,7 +681,7 @@
       "_placeholderName.comment": "starting name for a new cohort",
       "_selectFilter.comment": "prompt to select an attribute to filter on",
       "addFilter": "Add filter",
-      "addedFilters": "Added filters",
+      "addedFilters": "Filters",
       "cancel": "Cancel",
       "cancelExistingCohort": "Are you sure you want to cancel editing cohort and go back?",
       "cancelNewCohort": "Are you sure you want to cancel creating a new cohort and go back?",
@@ -684,7 +693,7 @@
       "cohortNamePlaceholder": "Name your cohort",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort.",
       "delete": "Delete",
-      "noAddedFilters": "No filters added yet",
+      "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "selectFilter": "Select filter"
@@ -1123,6 +1132,15 @@
         "zstat": "Z-score"
       }
     },
+    "Cohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "cohortInfo": "Cohort info",
+      "cohortList": "Cohort list",
+      "selectCohort": "Select a cohort",
+      "shiftCohort": "Shift cohort",
+      "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
     "CohortInformation": {
       "ChangeGlobalCohort": "Change global cohort",
       "CreateNewCohort": "Create new cohort",
@@ -1164,7 +1182,7 @@
       "LocalExplanation": "Individual feature importance"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard settings",
+      "DashboardSettings": "Dashboard navigation",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",

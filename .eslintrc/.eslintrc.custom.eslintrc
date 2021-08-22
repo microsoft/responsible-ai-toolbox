@@ -54,6 +54,7 @@
           "equalized_odds_ratio",
           "error_rate_difference",
           "error_rate_ratio",
+          "error_x",
           "error_y",
           "f1_score",
           "f1_score_min",

@@ -9,7 +9,10 @@ import { fairnessDatasets } from "./fairnessDatasets";
 import { describeModelComparisonView } from "./modelComparisonView/describeModelComparisonView";
 import { describeSingleModelView } from "./singleModelView/describeSingleModelView";
 
-export function describeFairness(name: keyof typeof fairnessDatasets): void {
+export function describeFairness(
+  name: keyof typeof fairnessDatasets,
+  checkErrorBars = false
+): void {
   describe(name, () => {
     beforeEach(() => {
       cy.visit(`#/fairness/${name}/light/english/Version-2`);
@@ -31,7 +34,7 @@ export function describeFairness(name: keyof typeof fairnessDatasets): void {
 
     describeGetStartedPage();
     describeConfigurationPages(name);
-    describeModelComparisonView(fairnessDatasets[name]);
-    describeSingleModelView(fairnessDatasets[name]);
+    describeModelComparisonView(fairnessDatasets[name], checkErrorBars);
+    describeSingleModelView(fairnessDatasets[name], checkErrorBars);
   });
 }
