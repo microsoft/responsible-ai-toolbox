@@ -3,15 +3,19 @@
 """Result of causal analysis."""
 
 import json
+import re
 import uuid
 
 from pathlib import Path
+from typing import Any, Optional, Tuple, Union
 
 from responsibleai._tools.causal.causal_constants import (
     ResultAttributes, SerializationAttributes)
 from responsibleai._interfaces import (
-    CausalConfig, CausalData, CausalPolicy, CausalPolicyGains,
-    CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
+    CausalConfig as CausalConfigInterface, CausalData, CausalPolicy,
+    CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf,
+    ComparisonTypes)
+from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
 from responsibleai.serialization_utilities import serialize_json_safe
@@ -30,11 +34,11 @@ class CausalResult:
 
     def __init__(
         self,
-        config=None,
-        causal_analysis=None,
-        global_effects=None,
-        local_effects=None,
-        policies=None,
+        config: Optional[CausalConfig] = None,
+        causal_analysis: Optional[Any] = None,
+        global_effects: Optional[Any] = None,
+        local_effects: Optional[Any] = None,
+        policies: Optional[Any] = None,
     ):
         self.id = str(uuid.uuid4())
 
@@ -45,7 +49,7 @@ class CausalResult:
         self.local_effects = local_effects
         self.policies = policies
 
-    def save(self, path):
+    def save(self, path: Union[str, Path]):
         result_dir = Path(path)
         result_dir.mkdir(parents=True, exist_ok=True)
 
@@ -59,7 +63,7 @@ class CausalResult:
             json.dump(dashboard, f)
 
     @classmethod
-    def load(cls, path) -> 'CausalResult':
+    def load(cls, path: Union[str, Path]) -> 'CausalResult':
         result_dir = Path(path)
 
         result_id = result_dir.name
@@ -99,7 +103,7 @@ class CausalResult:
             X_test, alpha=alpha, keep_all_levels=keep_all_levels)
 
     def _get_config_object(self, config):
-        config_object = CausalConfig()
+        config_object = CausalConfigInterface()
         config_object.treatment_features = config.treatment_features
         return config_object
 
@@ -143,11 +147,62 @@ class CausalResult:
         else:
             policy_tree_object = CausalPolicyTreeInternal()
             policy_tree_object.leaf = policy_tree[ResultAttributes.LEAF]
-            policy_tree_object.feature = policy_tree[ResultAttributes.FEATURE]
-            policy_tree_object.threshold = policy_tree[
-                ResultAttributes.THRESHOLD]
+            feature, comparison, value = self._parse_comparison(
+                policy_tree, self.config.categorical_features)
+            policy_tree_object.feature = feature
+            policy_tree_object.right_comparison = comparison
+            policy_tree_object.comparison_value = value
             policy_tree_object.left = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.LEFT])
             policy_tree_object.right = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.RIGHT])
         return policy_tree_object
+
+    @classmethod
+    def _parse_comparison(
+        cls,
+        policy_tree,
+        categoricals,
+    ) -> Tuple[str, str, Union[float, int, str]]:
+        """Attempt to parse a categorical comparison from a policy tree node.
+
+        The default assumption is that the feature is continuous and will
+        have a real-valued threshold.
+
+        This function checks known categorical features and attempts to parse
+        a (feature, category) pair that would come from a one-hot encoding.
+
+        Example (continuous):
+            Original feature: "Size"
+            Original comparison value: 0.891
+            Parsed feature: "Size"
+            Parsed comparison: "gt"
+            Parsed comparison value: 0.891
+
+        Example (categorical):
+            Original feature: "Fruit_apple"
+            Original comparison value: 0.5
+            Parsed feature: "Fruit"
+            Parsed comparison: "eq"
+            Parsed comparison value: "apple"
+
+        """
+        tree_feature = policy_tree[ResultAttributes.FEATURE]
+        threshold = policy_tree[ResultAttributes.THRESHOLD]
+
+        # Default assumption is a continuous feature
+        feature = tree_feature
+        comparison = ComparisonTypes.GT
+        value = threshold
+
+        # Check for a categorical feature
+        for cat_feature in sorted(categoricals)[::-1]:
+            pattern = f'({cat_feature})_(.+)'
+            match = re.match(pattern, tree_feature)
+            if match is not None:
+                feature = match.group(1)
+                value = match.group(2)
+                comparison = ComparisonTypes.EQ
+                break
+
+        return feature, comparison, value
