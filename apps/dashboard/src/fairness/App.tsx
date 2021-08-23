@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { IFairnessData } from "@responsible-ai/core-ui";
-import { FairnessWizardV2, IFairnessProps } from "@responsible-ai/fairness";
+import { FairnessWizard, IFairnessProps } from "@responsible-ai/fairness";
 import { Language } from "@responsible-ai/localization";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
@@ -39,7 +39,7 @@ export class App extends React.Component<IAppProps> {
       // rolutz/branch_with_fairness_v1_and_interpret_v1 if needed
       case 2:
       default:
-        return <FairnessWizardV2 {...dashboardProps} />;
+        return <FairnessWizard {...dashboardProps} />;
     }
   }
 }
