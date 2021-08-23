@@ -150,8 +150,8 @@ class CausalResult:
             feature, comparison, value = self._parse_comparison(
                 policy_tree, self.config.categorical_features)
             policy_tree_object.feature = feature
-            policy_tree_object.comparison = comparison
-            policy_tree_object.value = value
+            policy_tree_object.right_comparison = comparison
+            policy_tree_object.comparison_value = value
             policy_tree_object.left = self._get_policy_tree_object(
                 policy_tree[ResultAttributes.LEFT])
             policy_tree_object.right = self._get_policy_tree_object(

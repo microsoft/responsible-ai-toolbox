@@ -178,5 +178,5 @@ class TestCausalDashboardData:
             tree = policy['policy_tree']
             assert not tree['leaf']
             assert tree['feature'] in categoricals
-            assert tree['comparison'] == 'eq'
-            assert tree['value'] == 'no crime'
+            assert tree['right_comparison'] == 'eq'
+            assert tree['comparison_value'] == 'no crime'
