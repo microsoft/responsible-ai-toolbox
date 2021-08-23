@@ -105,8 +105,8 @@ class ComparisonTypes:
 class CausalPolicyTreeInternal:
     leaf: False
     feature: str
-    comparison: str
-    value: Union[str, float, int, List[Union[str, float, int]]]
+    right_comparison: str
+    comparison_value: Union[str, float, int, List[Union[str, float, int]]]
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
 
