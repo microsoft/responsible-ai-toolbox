@@ -106,7 +106,10 @@ def build_cat_bounds_query(filter, colname, method,
         operator = " == "
     for arg in filter['arg']:
         cat_idx = categorical_features.index(colname)
-        arg_cat = "'{}'".format(str(categories[cat_idx][arg]))
+        if isinstance(categories[cat_idx][arg], str):
+            arg_cat = "'{}'".format(str(categories[cat_idx][arg]))
+        else:
+            arg_cat = "{}".format(str(categories[cat_idx][arg]))
         bounds.append("`{}`{}{}".format(colname, operator, arg_cat))
     if method == METHOD_EXCLUDES:
         return ' & '.join(bounds)
