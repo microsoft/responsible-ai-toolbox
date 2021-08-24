@@ -2,12 +2,13 @@
 # Licensed under the MIT License.
 
 from responsibleai import ModelAnalysis
-from .constants import SKLearn
+from .constants import SKLearn, ErrorMessages
 import pandas as pd
-import numpy as np
-from scipy.sparse import issparse
 from .interfaces import WidgetRequestResponseConstants
 import traceback
+from responsibleai._input_processing import _convert_to_list
+
+EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
 
 class ModelAnalysisDashboardInput:
@@ -35,11 +36,11 @@ class ModelAnalysisDashboardInput:
             data = pd.DataFrame(
                 data, columns=self.dashboard_input.dataset.feature_names)
             if (self._is_classifier):
-                prediction = self._convert_to_list(
-                    self._analysis.model.predict_proba(data))
+                prediction = _convert_to_list(
+                    self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
             else:
-                prediction = self._convert_to_list(
-                    self._analysis.model.predict(data))
+                prediction = _convert_to_list(
+                    self._analysis.model.predict(data), EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.data: prediction
             }
@@ -121,22 +122,3 @@ class ModelAnalysisDashboardInput:
                     "Failed to generate causal what-if",
                 WidgetRequestResponseConstants.data: []
             }
-
-    def _convert_to_list(self, array):
-        if issparse(array):
-            if array.shape[1] > 1000:
-                raise ValueError("Exceeds maximum number of features"
-                                 " for visualization (1000). Please regenerate"
-                                 " the explanation using fewer features"
-                                 " or initialize the dashboard without passing"
-                                 " a dataset.")
-            return array.toarray().tolist()
-        if (isinstance(array, pd.DataFrame)):
-            return array.values.tolist()
-        if (isinstance(array, pd.Series)):
-            return array.values.tolist()
-        if (isinstance(array, np.ndarray)):
-            return array.tolist()
-        if (isinstance(array, pd.Index)):
-            return array.tolist()
-        return array
