@@ -77,8 +77,11 @@ def build_query(filters, categorical_features, categories):
                 if is_categorical:
                     cat_idx = categorical_features.index(colname)
                     arg0i = filter['arg'][0]
-                    arg_cat = str(categories[cat_idx][arg0i])
-                    queries.append("`{}` == '{}'".format(colname, arg_cat))
+                    arg_cat = categories[cat_idx][arg0i]
+                    if isinstance(arg_cat, str):
+                        queries.append("`{}` == '{}'".format(colname, arg_cat))
+                    else:
+                        queries.append("`{}` == {}".format(colname, arg_cat))
                 else:
                     queries.append("`" + colname + "` == " + arg0)
             else:
