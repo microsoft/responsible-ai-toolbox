@@ -5,14 +5,14 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   IModelAssessmentContext,
-  ModelAssessmentContext,
-  CohortList
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ChangeGlobalCohortButton } from "./ChangeGlobalCohortButton";
+import { CohortList } from "./CohortList";
 import { CreateGlobalCohortButton } from "./CreateGlobalCohortButton";
 
 export interface ICohortSettingsPanelProps {
@@ -52,7 +52,6 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
           </Stack>
           <CohortList
             errorCohorts={this.props.errorCohorts}
-            includeDetails
             enableEditing={false}
           />
         </Stack>

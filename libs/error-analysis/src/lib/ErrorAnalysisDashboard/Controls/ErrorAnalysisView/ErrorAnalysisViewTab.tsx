@@ -15,7 +15,8 @@ import {
   Pivot,
   PivotItem,
   Stack,
-  Separator
+  Separator,
+  mergeStyles
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -66,9 +67,17 @@ export class ErrorAnalysisViewTab extends React.Component<
   }
 
   public render(): React.ReactNode {
+    const errorAnalysisTab = mergeStyles({
+      overflow: "auto",
+      width: "100%"
+    });
     return (
       <Stack horizontal>
-        <Stack grow tokens={{ maxWidth: "80%", padding: "16px 24px" }}>
+        <Stack
+          grow
+          tokens={{ maxWidth: "80%", padding: "16px 24px" }}
+          className={errorAnalysisTab}
+        >
           <Text variant={"xLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>

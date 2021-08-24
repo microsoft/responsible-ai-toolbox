@@ -137,16 +137,17 @@ export class MatrixArea extends React.PureComponent<
             disabled={this.state.disableSelectAll}
           />
         </Stack>
-        <div className={classNames.matrixArea}>
-          <div>
+        <Stack
+          horizontal
+          tokens={stackTokens}
+          className={classNames.matrixArea}
+        >
+          <Stack.Item>
             {this.props.selectedFeature2 && !sameFeatureSelected && (
               <div className={classNames.matrixLabelBottom}>
                 <div className={classNames.matrixLabelTab} />
                 <div>{this.props.selectedFeature2}</div>
               </div>
-            )}
-            {(!this.props.selectedFeature2 || sameFeatureSelected) && (
-              <div className={classNames.emptyLabelPadding} />
             )}
             <MatrixCells
               jsonMatrix={this.state.jsonMatrix}
@@ -167,13 +168,15 @@ export class MatrixArea extends React.PureComponent<
               sameFeatureSelected={sameFeatureSelected}
               matrixLength={matrixLength}
             />
-          </div>
-          {this.props.selectedFeature1 && (
-            <div className={styledMatrixLabel}>
-              {this.props.selectedFeature1}
-            </div>
-          )}
-        </div>
+          </Stack.Item>
+          <Stack.Item>
+            {this.props.selectedFeature1 && (
+              <div className={styledMatrixLabel}>
+                {this.props.selectedFeature1}
+              </div>
+            )}
+          </Stack.Item>
+        </Stack>
       </Stack>
     );
   }
