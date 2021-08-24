@@ -9,17 +9,22 @@ export interface IFairnessMetadata {
   defaultPerformanceMetric: string;
   fairnessMetrics: string[];
   defaultFairnessMetric: string;
+  defaultErrorMetric: boolean;
   numberOfModels: number;
   charts: string[];
 }
 
 export enum PredictionTypes {
   BinaryClassification = "binaryClassification",
+  BinaryClassificationWithError = "binaryClassificationWithError",
   Regression = "regression",
+  RegressionWithError = "regressionWithError",
   Probability = "probability"
 }
 
 export type PredictionType =
   | PredictionTypes.BinaryClassification
+  | PredictionTypes.BinaryClassificationWithError
   | PredictionTypes.Probability
-  | PredictionTypes.Regression;
+  | PredictionTypes.Regression
+  | PredictionTypes.RegressionWithError;

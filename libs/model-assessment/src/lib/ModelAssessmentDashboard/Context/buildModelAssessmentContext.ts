@@ -102,7 +102,6 @@ export function buildInitialModelAssessmentContext(
     activeGlobalTabs,
     baseCohort: cohorts[0],
     cohorts,
-    createCohortVisible: false,
     customPoints: [],
     dataChartConfig: undefined,
     dependenceProps: undefined,
@@ -127,7 +126,6 @@ export function buildInitialModelAssessmentContext(
         ? WeightVectors.AbsAvg
         : 0,
     selectedWhatIfIndex: undefined,
-    shiftCohortVisible: false,
     sortVector: undefined,
     treeViewState: createInitialTreeViewState(),
     weightVectorLabels,

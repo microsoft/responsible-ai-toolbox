@@ -110,7 +110,7 @@ def _check_config(config, is_serialized=False):
         assert len(config.__dict__) == 1
         assert config.treatment_features is not None
     else:
-        assert len(config.__dict__) == 14
+        assert len(config.__dict__) == 15
 
 
 def _check_causal_analysis(causal_analysis):
@@ -210,7 +210,8 @@ def _check_policy_tree(policy_tree, config, depth=0, is_serialized=False):
         else:
             assert isinstance(policy_tree, CausalPolicyTreeInternal)
             assert isinstance(policy_tree.feature, str)
-            assert hasattr(policy_tree, 'threshold')
+            assert isinstance(policy_tree.right_comparison, str)
+            assert isinstance(policy_tree.comparison_value, (str, int, float))
             _check_policy_tree(policy_tree.left, config, depth=depth + 1,
                                is_serialized=is_serialized)
             _check_policy_tree(policy_tree.right, config, depth=depth + 1,

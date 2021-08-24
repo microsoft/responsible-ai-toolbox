@@ -38,12 +38,25 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   }
 
   public render(): React.ReactNode {
+    let themeOverride = this.props.themeOverride;
+    if (
+      !themeOverride &&
+      this.props.theme &&
+      typeof this.props.theme !== "string"
+    ) {
+      themeOverride = {
+        axisColor: this.props.theme.palette.neutralPrimary,
+        axisGridColor: this.props.theme.palette.neutralLight,
+        backgroundColor: this.props.theme.palette.white,
+        fontColor: this.props.theme.semanticColors.bodyText
+      };
+    }
     if (this.hasData()) {
       const themedProps = this.props.theme
         ? PlotlyThemes.applyTheme(
             this.props.plotlyProps,
             this.props.theme,
-            this.props.themeOverride
+            themeOverride
           )
         : _.cloneDeep(this.props.plotlyProps);
       return (
