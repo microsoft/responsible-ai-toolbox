@@ -23,8 +23,14 @@ from responsibleai.modelanalysis.constants import ModelTask
 class CausalManager(BaseManager):
     """Manager for causal analysis."""
 
-    def __init__(self, train, test, target_column, task_type,
-                 categorical_features):
+    def __init__(
+        self,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        target_column: str,
+        task_type: str,
+        categorical_features: Optional[List[str]]
+    ):
         """Construct a CausalManager for generating causal analyses
            from a dataset.
         :param train: Dataset on which to compute global causal effects
@@ -44,7 +50,11 @@ class CausalManager(BaseManager):
         self._test = test
         self._target_column = target_column
         self._task_type = task_type
+
         self._categorical_features = categorical_features
+        if categorical_features is None:
+            self._categorical_features = []
+
         self._results = []
 
     def add(
@@ -143,21 +153,17 @@ class CausalManager(BaseManager):
                        f"got {nuisance_model}")
             raise UserConfigValidationException(message)
 
-        categoricals = self._categorical_features
-        if categoricals is None:
-            categoricals = []
-
         X_train = self._train.drop([self._target_column], axis=1)
         X_test = self._test.drop([self._target_column], axis=1)
         y_train = self._train[self._target_column].values.ravel()
 
         self._validate_train_test_categories(
-            X_train, X_test, categoricals)
+            X_train, X_test, self._categorical_features)
 
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         analysis = CausalAnalysis(
             treatment_features,
-            categoricals,
+            self._categorical_features,
             heterogeneity_inds=heterogeneity_features,
             classification=is_classification,
             nuisance_models=nuisance_model,
@@ -188,6 +194,7 @@ class CausalManager(BaseManager):
             categories=categories,
             verbose=verbose,
             random_state=random_state,
+            categorical_features=self._categorical_features,
         )
 
         result.causal_analysis = analysis
