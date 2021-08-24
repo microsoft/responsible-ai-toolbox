@@ -67,7 +67,7 @@ export abstract class CohortBasedComponent<
       cohortStats
     );
     let cohorts = this.state.cohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
+      (errorCohort) => !addTemporaryCohort || !errorCohort.isTemporary
     );
     if (addTemporaryCohort) {
       cohorts = [selectedCohort, ...cohorts];
