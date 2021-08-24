@@ -6,7 +6,7 @@ import shap
 import sklearn
 import numpy as np
 import pandas as pd
-from sklearn.datasets import make_classification
+from sklearn.datasets import make_classification, load_iris
 from raiwidgets import ErrorAnalysisDashboard
 from interpret_community.common.constants import ModelTask
 from interpret.ext.blackbox import MimicExplainer
@@ -101,3 +101,39 @@ class TestErrorAnalysisDashboard:
                                sample_dataset=X_test_sample,
                                pred_y=pred_y_sample,
                                pred_y_dataset=pred_y)
+
+    def test_error_analysis_pandas(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        # Validate error analysis dashboard on pandas DataFrame
+        # and pandas Series
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        y_train = pd.Series(y_train)
+        y_test = pd.Series(y_test)
+
+        knn = sklearn.neighbors.KNeighborsClassifier()
+        knn.fit(X_train, y_train)
+
+        model_task = ModelTask.Classification
+        explainer = MimicExplainer(knn,
+                                   X_train,
+                                   LGBMExplainableModel,
+                                   model_task=model_task)
+        global_explanation = explainer.explain_global(X_test)
+
+        ErrorAnalysisDashboard(global_explanation,
+                               knn,
+                               dataset=X_test,
+                               true_y=y_test)
+
+
+def create_iris_data():
+    # Import Iris dataset
+    iris = load_iris()
+    # Split data into train and test
+    X_train, X_test, y_train, y_test = train_test_split(
+        iris.data, iris.target, test_size=0.2, random_state=0)
+    feature_names = iris.feature_names
+    classes = iris.target_names
+    return X_train, X_test, y_train, y_test, feature_names, classes

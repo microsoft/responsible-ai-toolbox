@@ -20,6 +20,7 @@ class CausalConfig:
         categories,
         verbose,
         random_state,
+        categorical_features,
     ):
         self.treatment_features = treatment_features
         self.heterogeneity_features = heterogeneity_features
@@ -35,3 +36,4 @@ class CausalConfig:
         self.categories = categories
         self.verbose = verbose
         self.random_state = random_state
+        self.categorical_features = categorical_features

@@ -3,12 +3,14 @@
 
 from .explanation_constants import \
     ExplanationDashboardInterface, WidgetRequestResponseConstants
-from scipy.sparse import issparse
 import numpy as np
 import pandas as pd
-from .constants import SKLearn
+from .constants import SKLearn, ErrorMessages
 from .error_handling import _format_exception
 from responsibleai.serialization_utilities import serialize_json_safe
+from responsibleai._input_processing import _convert_to_list
+
+EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
 
 class ExplanationDashboardInput:
@@ -88,7 +90,7 @@ class ExplanationDashboardInput:
             self._dataframeColumns = dataset.columns
             self._dfdtypes = dataset.dtypes
         try:
-            list_dataset = self._convert_to_list(dataset)
+            list_dataset = _convert_to_list(dataset, EXP_VIZ_ERR_MSG)
         except Exception as ex:
             ex_str = _format_exception(ex)
             raise ValueError(
@@ -103,7 +105,7 @@ class ExplanationDashboardInput:
                     ex_str)
                 raise ValueError(msg)
             try:
-                predicted_y = self._convert_to_list(predicted_y)
+                predicted_y = _convert_to_list(predicted_y, EXP_VIZ_ERR_MSG)
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -138,19 +140,18 @@ class ExplanationDashboardInput:
         if true_y is not None and len(true_y) == row_length:
             self.dashboard_input[
                 ExplanationDashboardInterface.TRUE_Y
-            ] = self._convert_to_list(
-                true_y)
+            ] = _convert_to_list(true_y, EXP_VIZ_ERR_MSG)
 
         if local_explanation is not None:
             try:
-                local_explanation["scores"] = self._convert_to_list(
-                    local_explanation["scores"])
+                local_explanation["scores"] = _convert_to_list(
+                    local_explanation["scores"], EXP_VIZ_ERR_MSG)
                 if np.shape(local_explanation["scores"])[-1] > 1000:
                     raise ValueError("Exceeds maximum number of features for "
                                      "visualization (1000). Please regenerate"
                                      " the explanation using fewer features.")
-                local_explanation["intercept"] = self._convert_to_list(
-                    local_explanation["intercept"])
+                local_explanation["intercept"] = _convert_to_list(
+                    local_explanation["intercept"], EXP_VIZ_ERR_MSG)
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
                 # the numpy values will need to be converted to python,
@@ -181,11 +182,11 @@ class ExplanationDashboardInput:
                         " length differs from dataset")
         if local_explanation is None and global_explanation is not None:
             try:
-                global_explanation["scores"] = self._convert_to_list(
-                    global_explanation["scores"])
+                global_explanation["scores"] = _convert_to_list(
+                    global_explanation["scores"], EXP_VIZ_ERR_MSG)
                 if 'intercept' in global_explanation:
-                    global_explanation["intercept"] = self._convert_to_list(
-                        global_explanation["intercept"])
+                    global_explanation["intercept"] = _convert_to_list(
+                        global_explanation["intercept"], EXP_VIZ_ERR_MSG)
                 self.dashboard_input[
                     ExplanationDashboardInterface.GLOBAL_EXPLANATION
                 ] = global_explanation
@@ -209,7 +210,7 @@ class ExplanationDashboardInput:
                 and explanation.features is not None:
             features = explanation.features
         if features is not None:
-            features = self._convert_to_list(features)
+            features = _convert_to_list(features, EXP_VIZ_ERR_MSG)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
@@ -223,7 +224,7 @@ class ExplanationDashboardInput:
                 and explanation.classes is not None:
             classes = explanation.classes
         if classes is not None:
-            classes = self._convert_to_list(classes)
+            classes = _convert_to_list(classes, EXP_VIZ_ERR_MSG)
             if local_dim is not None and len(classes) != local_dim[0]:
                 raise ValueError("Class vector length mismatch:"
                                  "class names length differs from"
@@ -241,7 +242,8 @@ class ExplanationDashboardInput:
                                  " for given dataset type,"
                                  " inner error: {}".format(ex_str))
             try:
-                probability_y = self._convert_to_list(probability_y)
+                probability_y = _convert_to_list(probability_y,
+                                                 EXP_VIZ_ERR_MSG)
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -257,10 +259,11 @@ class ExplanationDashboardInput:
                 data = pd.DataFrame(data, columns=self._dataframeColumns)
                 data = data.astype(dict(self._dfdtypes))
             if (self._is_classifier):
-                prediction = self._convert_to_list(
-                    self._model.predict_proba(data))
+                prediction = _convert_to_list(
+                    self._model.predict_proba(data), EXP_VIZ_ERR_MSG)
             else:
-                prediction = self._convert_to_list(self._model.predict(data))
+                prediction = _convert_to_list(self._model.predict(data),
+                                              EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.DATA: prediction
             }
@@ -270,23 +273,6 @@ class ExplanationDashboardInput:
                 " while predicting...",
                 WidgetRequestResponseConstants.DATA: []
             }
-
-    def _convert_to_list(self, array):
-        if issparse(array):
-            if array.shape[1] > 1000:
-                raise ValueError("Exceeds maximum number of features"
-                                 " for visualization (1000). Please regenerate"
-                                 " the explanation using fewer features"
-                                 " or initialize the dashboard without passing"
-                                 " a dataset.")
-            return array.toarray().tolist()
-        if (isinstance(array, pd.DataFrame)):
-            return array.values.tolist()
-        if (isinstance(array, pd.Series)):
-            return array.values.tolist()
-        if (isinstance(array, np.ndarray)):
-            return array.tolist()
-        return array
 
     def _find_first_explanation(self, key):
         if self._mli_explanations is None:

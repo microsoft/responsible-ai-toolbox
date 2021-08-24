@@ -18,7 +18,7 @@ class Dataset:
     probability_y: List
     true_y: List
     class_names: List[str]
-    categorical_features: [str]
+    categorical_features: List[str]
     target_column: str
 
 
@@ -91,10 +91,22 @@ class CausalPolicyTreeLeaf:
     treatment: str
 
 
+class ComparisonTypes:
+    LT = 'lt'  # less than
+    LTE = 'lte'  # less than or equal to
+    GT = 'gt'  # greater than
+    GTE = 'gte'  # greater than or equal to
+    EQ = 'eq'  # equal to
+    NE = 'ne'  # not equal to
+    IN = 'in'  # in the set
+    NIN = 'nin'  # not in the set
+
+
 class CausalPolicyTreeInternal:
     leaf: False
     feature: str
-    threshold: Union[float, str]  # TODO: Categorical features
+    right_comparison: str
+    comparison_value: Union[str, float, int, List[Union[str, float, int]]]
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
 
@@ -108,7 +120,7 @@ class CausalPolicy:
 
 
 class CausalConfig:
-    treatment_features: [str]
+    treatment_features: List[str]
 
 
 class CausalData:
