@@ -94,7 +94,9 @@ export class MatrixFilter extends React.PureComponent<
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
-                defaultSelectedKey=""
+                defaultSelectedKey={
+                  this.props.matrixAreaState?.matrixFeature1 || ""
+                }
                 label="Y-Axis: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -109,7 +111,9 @@ export class MatrixFilter extends React.PureComponent<
             </Stack.Item>
             <Stack.Item key="feature2key">
               <ComboBox
-                defaultSelectedKey=""
+                defaultSelectedKey={
+                  this.props.matrixAreaState?.matrixFeature2 || ""
+                }
                 label="X-Axis: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -119,6 +123,7 @@ export class MatrixFilter extends React.PureComponent<
                   calloutMaxHeight: 300,
                   directionalHintFixed: true
                 }}
+                defaultValue={this.props.matrixAreaState?.matrixFeature2}
                 disabled={!this.props.isEnabled}
               />
             </Stack.Item>
