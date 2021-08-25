@@ -209,9 +209,7 @@ def run_model_analysis(model, train_data, test_data, target_column,
         setup_error_analysis(model_analysis)
 
     validate_model_analysis(model_analysis, train_data, test_data,
-                            target_column, task_type, categorical_features,
-                            should_ignore_data_comparison=(
-                                manager_type == ManagerNames.COUNTERFACTUAL))
+                            target_column, task_type, categorical_features)
 
     if manager_type == ManagerNames.CAUSAL:
         treatment_features = manager_args.get(ManagerParams.TREATMENT_FEATURES)
@@ -243,9 +241,7 @@ def run_model_analysis(model, train_data, test_data, target_column,
 
         validate_model_analysis(
             model_analysis, train_data, test_data,
-            target_column, task_type, categorical_features,
-            should_ignore_data_comparison=(
-                manager_type == ManagerNames.COUNTERFACTUAL))
+            target_column, task_type, categorical_features)
 
         if manager_type == ManagerNames.ERROR_ANALYSIS:
             validate_error_analysis(model_analysis)
@@ -262,12 +258,11 @@ def validate_model_analysis(
     test_data,
     target_column,
     task_type,
-    categorical_features,
-    should_ignore_data_comparison=False
+    categorical_features
 ):
-    if not should_ignore_data_comparison:
-        pd.testing.assert_frame_equal(model_analysis.train, train_data)
-        pd.testing.assert_frame_equal(model_analysis.test, test_data)
+
+    pd.testing.assert_frame_equal(model_analysis.train, train_data)
+    pd.testing.assert_frame_equal(model_analysis.test, test_data)
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
     assert model_analysis.categorical_features == categorical_features

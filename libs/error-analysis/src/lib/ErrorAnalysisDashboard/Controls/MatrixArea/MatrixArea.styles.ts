@@ -22,10 +22,9 @@ export const matrixAreaStyles: () => IProcessedStyleSet<IMatrixAreaStyles> =
         paddingTop: "60px"
       },
       matrixArea: {
-        display: "flex",
-        flexDirection: "row",
         paddingBottom: "50px",
-        paddingTop: "10px"
+        paddingTop: "10px",
+        width: "100%"
       },
       matrixLabel: {
         paddingLeft: "20px"
