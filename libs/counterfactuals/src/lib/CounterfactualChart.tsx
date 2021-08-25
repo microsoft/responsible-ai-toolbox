@@ -663,7 +663,7 @@ export class CounterfactualChart extends React.PureComponent<
       chartProps,
       plotlyProps.data[1]
     );
-    if (this.temporaryPoint) {
+    if (this.temporaryPoint && this.state.customPoints.length > 0) {
       this.generateDataTrace(
         [this.temporaryPoint],
         chartProps,
