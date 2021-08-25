@@ -17,9 +17,6 @@ class TestCounterfactualAdvancedFeatures(object):
     @pytest.mark.parametrize('feature_importance', [True, False])
     def test_counterfactual_vary_features(
             self, vary_all_features, feature_importance):
-        if feature_importance and not vary_all_features:
-            pytest.skip('Skipping test due to exception in dice-ml library')
-
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_data()
 
@@ -59,8 +56,6 @@ class TestCounterfactualAdvancedFeatures(object):
 
     @pytest.mark.parametrize('feature_importance', [True, False])
     def test_counterfactual_permitted_range(self, feature_importance):
-        if feature_importance:
-            pytest.skip('Skipping test due to exception in dice-ml library')
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_data()
 
