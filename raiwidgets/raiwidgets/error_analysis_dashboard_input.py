@@ -456,12 +456,14 @@ class ErrorAnalysisDashboardInput:
                 WidgetRequestResponseConstants.DATA: []
             }
 
-    def matrix(self, features, filters, composite_filters):
+    def matrix(self, features, filters, composite_filters,
+               quantile_binning, num_bins):
         try:
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.DATA: []}
             matrix = self._error_analyzer.compute_matrix(
-                features, filters, composite_filters)
+                features, filters, composite_filters,
+                quantile_binning, num_bins)
             return {
                 WidgetRequestResponseConstants.DATA: matrix
             }

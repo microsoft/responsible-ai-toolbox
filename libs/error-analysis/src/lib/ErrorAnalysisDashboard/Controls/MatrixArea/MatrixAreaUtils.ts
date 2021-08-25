@@ -15,40 +15,46 @@ import {
   IErrorAnalysisMatrixNode
 } from "@responsible-ai/core-ui";
 
-import { IMatrixAreaProps } from "./MatrixAreaProps";
-
 export async function fetchMatrix(
-  props: IMatrixAreaProps
+  quantileBinning: boolean,
+  numBins: number,
+  baseCohort: ErrorCohort,
+  selectedFeature1: string | undefined,
+  selectedFeature2: string | undefined,
+  getMatrix?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisMatrix>,
+  matrix?: IErrorAnalysisMatrix | undefined
 ): Promise<IErrorAnalysisMatrix | undefined> {
-  if (!props.getMatrix && props.matrix) {
-    return props.matrix;
+  if (!getMatrix && matrix) {
+    return matrix;
   }
-  if (
-    props.getMatrix === undefined ||
-    (!props.selectedFeature1 && !props.selectedFeature2)
-  ) {
+  if (getMatrix === undefined || (!selectedFeature1 && !selectedFeature2)) {
     return undefined;
   }
   const filtersRelabeled = ErrorCohort.getLabeledFilters(
-    props.baseCohort.cohort.filters,
-    props.baseCohort.jointDataset
+    baseCohort.cohort.filters,
+    baseCohort.jointDataset
   );
   const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
-    props.baseCohort.cohort.compositeFilters,
-    props.baseCohort.jointDataset
+    baseCohort.cohort.compositeFilters,
+    baseCohort.jointDataset
   );
-  const selectedFeature1: string | undefined =
-    props.selectedFeature1 || props.selectedFeature2 || undefined;
-  const selectedFeature2: string | undefined =
-    props.selectedFeature2 === selectedFeature1
+  const selectedFeature1Request: string | undefined =
+    selectedFeature1 || selectedFeature2 || undefined;
+  const selectedFeature2Request: string | undefined =
+    selectedFeature2 === selectedFeature1Request
       ? undefined
-      : props.selectedFeature2 || undefined;
+      : selectedFeature2 || undefined;
   // Note: edge case, if both features selected are the same one, show just a row
-  return props.getMatrix(
+  return getMatrix(
     [
-      [selectedFeature1, selectedFeature2],
+      [selectedFeature1Request, selectedFeature2Request],
       filtersRelabeled,
-      compositeFiltersRelabeled
+      compositeFiltersRelabeled,
+      quantileBinning,
+      numBins
     ],
     new AbortController().signal
   );

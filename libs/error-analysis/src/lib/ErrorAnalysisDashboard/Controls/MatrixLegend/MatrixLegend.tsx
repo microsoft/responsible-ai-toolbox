@@ -3,12 +3,7 @@
 
 import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  IStackStyles,
-  IStackTokens,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
+import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
@@ -25,12 +20,6 @@ export interface IMatrixLegendProps {
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
 const cellTokens: IStackTokens = { padding: 10 };
-const legendDescriptionPadding: IStackTokens = { padding: "20px 0px 20px 0px" };
-const legendDescriptionStyle: IStackStyles = {
-  root: {
-    width: 500
-  }
-};
 
 export class MatrixLegend extends React.Component<IMatrixLegendProps> {
   private readonly _errorRateIconId = "errorRateIconId";
@@ -42,14 +31,6 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
     const isRate = this.props.selectedCohort.metricName === Metrics.ErrorRate;
     return (
       <div className={classNames.matrixLegend}>
-        <Stack
-          styles={legendDescriptionStyle}
-          tokens={legendDescriptionPadding}
-        >
-          <Text variant={"smallPlus"}>
-            {localization.ErrorAnalysis.MatrixLegend.heatMapDescription}
-          </Text>
-        </Stack>
         <Stack tokens={stackTokens}>
           <Text variant={"xLarge"} block>
             Cohort: {this.props.baseCohort.cohort.name}
