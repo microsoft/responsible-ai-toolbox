@@ -61,5 +61,6 @@ export class DashboardSettingDeleteButton extends React.PureComponent<
 
   private removeTab = (): void => {
     this.props.removeTab(this.props.index);
+    this.hideDialog();
   };
 }
