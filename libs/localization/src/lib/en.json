@@ -67,6 +67,19 @@
     },
     "NoData": {
       "Title": "No data"
+    },
+    "ComparisonTypes": {
+      "lt": "{0} < {1}",
+      "lte": "{0} <= {1}",
+      "gt": "{0} > {1}",
+      "gte": "{0} >= {1}",
+      "eq": "{0} == {1}",
+      "ne": "{0} != {1}",
+      "in": "{0} in the set of ({1})",
+      "nin": "{0} not in the set of ({1})",
+      "rg": "{0} in the range of ({1})",
+      "nrg": "{0} in the range of ({1})",
+      "Unknown": "unknown"
     }
   },
   "Counterfactuals": {

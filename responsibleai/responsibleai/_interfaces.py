@@ -91,7 +91,7 @@ class CausalPolicyTreeLeaf:
     treatment: str
 
 
-class ComparisonTypes:
+class ComparisonTypes(str, Enum):
     LT = 'lt'  # less than
     LTE = 'lte'  # less than or equal to
     GT = 'gt'  # greater than
@@ -100,12 +100,14 @@ class ComparisonTypes:
     NE = 'ne'  # not equal to
     IN = 'in'  # in the set
     NIN = 'nin'  # not in the set
+    RG = 'rg'  # in the range
+    NRG = 'nrg'  # not in the range
 
 
 class CausalPolicyTreeInternal:
     leaf: False
     feature: str
-    right_comparison: str
+    right_comparison: ComparisonTypes
     comparison_value: Union[str, float, int, List[Union[str, float, int]]]
     left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
     right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
