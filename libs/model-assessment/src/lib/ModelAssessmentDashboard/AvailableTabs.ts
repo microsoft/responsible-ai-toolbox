@@ -40,6 +40,13 @@ export function getAvailableTabs(
     });
   }
 
+  if (props.counterfactualData && props.counterfactualData.length > 0) {
+    availableTabs.push({
+      key: GlobalTabKeys.CounterfactualsTab,
+      text: localization.ModelAssessment.ComponentNames.Counterfactuals
+    });
+  }
+
   if (props.causalAnalysisData && props.causalAnalysisData.length > 0) {
     availableTabs.push({
       key: GlobalTabKeys.CausalAnalysisTab,
@@ -47,11 +54,5 @@ export function getAvailableTabs(
     });
   }
 
-  if (props.counterfactualData && props.counterfactualData.length > 0) {
-    availableTabs.push({
-      key: GlobalTabKeys.CounterfactualsTab,
-      text: localization.ModelAssessment.ComponentNames.Counterfactuals
-    });
-  }
   return availableTabs;
 }
