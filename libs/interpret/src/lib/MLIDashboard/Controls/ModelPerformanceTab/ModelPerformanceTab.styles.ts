@@ -122,7 +122,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       scrollableWrapper: {
         flexGrow: "1",
         maxHeight: "700px",
-        overflowY: "auto"
+        overflowY: "scroll"
       },
       scrollContent: {
         alignItems: "stretch",
