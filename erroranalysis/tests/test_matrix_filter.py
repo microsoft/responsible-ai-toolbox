@@ -13,7 +13,8 @@ from common_utils import (
     create_simple_titanic_data, create_titanic_pipeline,
     create_binary_classification_dataset,
     create_models_classification,
-    create_models_regression)
+    create_models_regression,
+    create_wine_data)
 from erroranalysis._internal.constants import (
     ModelTask, TRUE_Y, ROW_INDEX, MatrixParams, Metrics,
     metric_to_display_name)
@@ -95,6 +96,25 @@ class TestMatrixFilter(object):
                                              y_test, feature_names,
                                              model_task,
                                              num_bins=num_bins)
+
+    def test_matrix_filter_wine_quantile_binning(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_wine_data()
+
+        model_task = ModelTask.CLASSIFICATION
+        one_feature_matrix = [feature_names[0]]
+        # validate quantile binning on wine dataset for one and two features
+        # note wine dataset has some cells with zero error in heatmap
+        run_error_analyzer_on_models(X_train, y_train, X_test,
+                                     y_test, feature_names,
+                                     model_task,
+                                     quantile_binning=True,
+                                     matrix_features=one_feature_matrix)
+        two_feature_matrix = [feature_names[0], feature_names[2]]
+        run_error_analyzer_on_models(X_train, y_train, X_test,
+                                     y_test, feature_names,
+                                     model_task,
+                                     quantile_binning=True,
+                                     matrix_features=two_feature_matrix)
 
     def test_matrix_filter_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
@@ -308,8 +328,12 @@ def validate_matrix_metric(matrix, exp_total_count,
         total_false_count = 0
         for i in range(num_cat1):
             for j in range(num_cat2):
-                total_count += matrix[MATRIX][i][j][COUNT]
-                total_false_count += matrix[MATRIX][i][j][FALSE_COUNT]
+                cell_count = matrix[MATRIX][i][j][COUNT]
+                assert cell_count >= 0
+                total_count += cell_count
+                cell_false_count = matrix[MATRIX][i][j][FALSE_COUNT]
+                assert cell_false_count >= 0
+                total_false_count += cell_false_count
         assert exp_total_count == total_count
         assert exp_total_error == total_false_count
     elif metric == Metrics.MEAN_SQUARED_ERROR:
@@ -319,8 +343,11 @@ def validate_matrix_metric(matrix, exp_total_count,
         for i in range(num_cat1):
             for j in range(num_cat2):
                 count = matrix[MATRIX][i][j][COUNT]
+                assert count >= 0
                 total_count += count
-                cell_value = matrix[MATRIX][i][j][METRIC_VALUE] * count
+                cell_metric_value = matrix[MATRIX][i][j][METRIC_VALUE]
+                assert cell_metric_value >= 0
+                cell_value = cell_metric_value * count
                 total_metric_value += cell_value
                 metric_name = matrix[MATRIX][i][j][METRIC_NAME]
                 assert metric_name == metric_to_display_name[metric]

@@ -8,7 +8,8 @@ import shap
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
 from sklearn.datasets import (
-    load_boston, load_breast_cancer, load_iris, make_classification)
+    load_boston, load_breast_cancer, load_iris, load_wine,
+    make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
@@ -77,14 +78,27 @@ def create_iris_data(append_special_characters=False):
     # Import Iris dataset
     iris = load_iris()
     # Split data into train and test
-    X_train, X_test, y_train, y_validation = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
         iris.data, iris.target, test_size=0.2, random_state=0)
     feature_names = [
         name.replace(' (cm)', '-' if append_special_characters else '')
         for name in iris.feature_names]
 
     classes = iris.target_names
-    return X_train, X_test, y_train, y_validation, feature_names, classes
+    return X_train, X_test, y_train, y_test, feature_names, classes
+
+
+def create_wine_data():
+    wine = load_wine()
+    X = wine.data
+    y = wine.target
+    classes = wine.target_names
+    feature_names = wine.feature_names
+    X_train, X_test, y_train, y_test = train_test_split(X,
+                                                        y,
+                                                        test_size=0.5,
+                                                        random_state=0)
+    return X_train, X_test, y_train, y_test, feature_names, classes
 
 
 def create_adult_census_data():
