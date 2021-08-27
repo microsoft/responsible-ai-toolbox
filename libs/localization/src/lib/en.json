@@ -180,8 +180,18 @@
       "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions.",
       "selectAll": "Select all"
     },
-    "MatrixLegend": {
+    "MatrixSummary": {
       "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
+    },
+    "MatrixOptions": {
+      "quantileBinningLabel": "Quantile binning",
+      "binningThresholdLabel": "Binning threshold",
+      "toggleOnLabel": "On",
+      "toggleOffLabel": "Off",
+      "quantileBinningInfoText": "Distribute values evenly across varying ranges of bins",
+      "quantileBinningTitle": "Additional information on quantile binning",
+      "binningThresholdInfoText": "Number of values required before binning",
+      "binningThresholdTitle": "Additional information on binning threshold"
     },
     "Metrics": {
       "errorRate": "Error rate",

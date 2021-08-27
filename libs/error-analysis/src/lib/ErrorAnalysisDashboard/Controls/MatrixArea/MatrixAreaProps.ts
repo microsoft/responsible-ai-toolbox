@@ -18,6 +18,7 @@ export interface IMatrixAreaProps {
   features: string[];
   selectedFeature1?: string;
   selectedFeature2?: string;
+  isEnabled: boolean;
   getMatrix?: (
     request: any,
     abortSignal: AbortSignal

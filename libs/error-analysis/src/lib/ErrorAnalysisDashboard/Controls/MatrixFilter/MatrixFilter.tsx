@@ -23,6 +23,7 @@ import React from "react";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
+import { MatrixSummary } from "../MatrixSummary/MatrixSummary";
 
 import { matrixFilterStyles } from "./MatrixFilter.styles";
 
@@ -51,7 +52,7 @@ export interface IMatrixFilterProps {
   isEnabled: boolean;
 }
 
-const stackTokens: IStackTokens = { childrenGap: 5 };
+const stackTokens: IStackTokens = { childrenGap: "l1" };
 
 export class MatrixFilter extends React.PureComponent<
   IMatrixFilterProps,
@@ -86,18 +87,14 @@ export class MatrixFilter extends React.PureComponent<
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
-          <MatrixLegend
-            selectedCohort={this.props.selectedCohort}
-            baseCohort={this.props.baseCohort}
-            max={this.state.matrixLegendState.maxMetricValue}
-          />
+          <MatrixSummary />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
                 defaultSelectedKey={
                   this.props.matrixAreaState?.matrixFeature1 || ""
                 }
-                label="Y-Axis: Feature 1"
+                label="Rows: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
                 useComboBoxAsMenuWidth
@@ -114,7 +111,7 @@ export class MatrixFilter extends React.PureComponent<
                 defaultSelectedKey={
                   this.props.matrixAreaState?.matrixFeature2 || ""
                 }
-                label="X-Axis: Feature 2"
+                label="Columns: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
                 useComboBoxAsMenuWidth
@@ -128,6 +125,11 @@ export class MatrixFilter extends React.PureComponent<
               />
             </Stack.Item>
           </Stack>
+          <MatrixLegend
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            max={this.state.matrixLegendState.maxMetricValue}
+          />
           <MatrixArea
             theme={this.props.theme}
             features={this.props.features}
@@ -141,6 +143,7 @@ export class MatrixFilter extends React.PureComponent<
             updateMatrixLegendState={this.updateMatrixLegendState}
             state={this.props.matrixAreaState}
             setMatrixAreaState={this.props.setMatrixAreaState}
+            isEnabled={this.props.isEnabled}
           />
         </Stack>
       </div>

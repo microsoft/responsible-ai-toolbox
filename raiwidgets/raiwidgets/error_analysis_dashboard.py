@@ -151,7 +151,9 @@ class ErrorAnalysisDashboard(Dashboard):
 
         def matrix():
             data = request.get_json(force=True)
-            return jsonify(self.input.matrix(data[0], data[1], data[2]))
+            matrix_result = self.input.matrix(data[0], data[1], data[2],
+                                              data[3], data[4])
+            return jsonify(matrix_result)
 
         self.add_url_rule(matrix, '/matrix', methods=["POST"])
 

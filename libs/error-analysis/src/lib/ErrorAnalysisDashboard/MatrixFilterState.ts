@@ -3,6 +3,8 @@
 
 import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
 
+const defaultNumBins = 8;
+
 export interface IMatrixLegendState {
   maxMetricValue: number;
 }
@@ -21,6 +23,8 @@ export interface IMatrixAreaState {
   matrixFeature2?: string;
   disableClearAll: boolean;
   disableSelectAll: boolean;
+  quantileBinning: boolean;
+  numBins: number;
 }
 
 export function createInitialMatrixFilterState(): IMatrixFilterState {
@@ -39,6 +43,8 @@ export function createInitialMatrixAreaState(): IMatrixAreaState {
     matrixFeature1: undefined,
     matrixFeature2: undefined,
     maxMetricValue: 0,
+    numBins: defaultNumBins,
+    quantileBinning: false,
     selectedCells: undefined
   };
 }
