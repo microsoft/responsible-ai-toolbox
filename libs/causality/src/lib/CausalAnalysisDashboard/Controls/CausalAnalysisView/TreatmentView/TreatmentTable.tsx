@@ -3,6 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
+  flipComparisonType,
   ICausalPolicyTreeNode,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -10,6 +11,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { TreatmentCell } from "./TreatmentCell";
+import { TreatmentCondition } from "./TreatmentCondition";
 import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentTableProps {
@@ -68,13 +70,13 @@ export class TreatmentTable extends React.PureComponent<
       1 << (maxLevel - 1)
     );
     leftRows[0].unshift(
-      <th rowSpan={leftMaxLevel} key={-1}>
-        {localization.formatString(
-          localization.CausalAnalysis.TreatmentPolicy.Left,
-          this.props.data.feature,
-          this.props.data.threshold
-        )}
-      </th>
+      <TreatmentCondition
+        rowSpan={leftMaxLevel}
+        key={-1}
+        fieldName={this.props.data.feature}
+        comparisonType={flipComparisonType(this.props.data.right_comparison)}
+        comparisonValue={this.props.data.comparison_value}
+      />
     );
     const rightMaxLevel = this.getMaxLevel(this.props.data.right);
     const rightRows = this.getBranchRows(
@@ -83,13 +85,13 @@ export class TreatmentTable extends React.PureComponent<
       1 << (maxLevel - 1)
     );
     rightRows[0].unshift(
-      <th rowSpan={rightMaxLevel} key={-1}>
-        {localization.formatString(
-          localization.CausalAnalysis.TreatmentPolicy.Right,
-          this.props.data.feature,
-          this.props.data.threshold
-        )}
-      </th>
+      <TreatmentCondition
+        rowSpan={rightMaxLevel}
+        key={-1}
+        fieldName={this.props.data.feature}
+        comparisonType={this.props.data.right_comparison}
+        comparisonValue={this.props.data.comparison_value}
+      />
     );
     return [...leftRows, ...rightRows];
   };
@@ -125,22 +127,22 @@ export class TreatmentTable extends React.PureComponent<
           );
         } else {
           currentRow.push(
-            <th colSpan={next.colSpan >> 1} key={currentRow.length}>
-              {localization.formatString(
-                localization.CausalAnalysis.TreatmentPolicy.Left,
-                next.data.feature,
-                next.data.threshold
-              )}
-            </th>
+            <TreatmentCondition
+              colSpan={next.colSpan >> 1}
+              key={currentRow.length}
+              fieldName={next.data.feature}
+              comparisonType={flipComparisonType(next.data.right_comparison)}
+              comparisonValue={next.data.comparison_value}
+            />
           );
           currentRow.push(
-            <th colSpan={next.colSpan >> 1} key={currentRow.length}>
-              {localization.formatString(
-                localization.CausalAnalysis.TreatmentPolicy.Right,
-                next.data.feature,
-                next.data.threshold
-              )}
-            </th>
+            <TreatmentCondition
+              colSpan={next.colSpan >> 1}
+              key={currentRow.length}
+              fieldName={next.data.feature}
+              comparisonType={next.data.right_comparison}
+              comparisonValue={next.data.comparison_value}
+            />
           );
           queue.push({
             colSpan: next.colSpan >> 1,

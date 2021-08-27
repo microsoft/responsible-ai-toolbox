@@ -6,7 +6,8 @@ import {
   ICounterfactualData,
   IDataset,
   IErrorAnalysisData,
-  IModelExplanationData
+  IModelExplanationData,
+  ComparisonTypes
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
@@ -4381,9 +4382,11 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
         treatment_gains: { decrease: 4.22, increase: 6.35 }
       },
       policy_tree: {
+        comparison_value: 32,
         feature: "age",
         leaf: false,
         left: {
+          comparison_value: 11,
           feature: "education-num",
           leaf: false,
           left: {
@@ -4396,12 +4399,14 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
             n_samples: 15,
             treatment: "decrease"
           },
-          threshold: 11
+          right_comparison: ComparisonTypes.GT
         },
         right: {
+          comparison_value: 11,
           feature: "capital-gain",
           leaf: false,
           left: {
+            comparison_value: 32,
             feature: "capital-loss",
             leaf: false,
             left: {
@@ -4410,6 +4415,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
               treatment: "increase"
             },
             right: {
+              comparison_value: 11,
               feature: "fnlwgt",
               leaf: false,
               left: {
@@ -4422,18 +4428,18 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
                 n_samples: 15,
                 treatment: "decrease"
               },
-              threshold: 11
+              right_comparison: ComparisonTypes.GT
             },
-            threshold: 32
+            right_comparison: ComparisonTypes.GT
           },
           right: {
             leaf: true,
             n_samples: 15,
             treatment: "decrease"
           },
-          threshold: 11
+          right_comparison: ComparisonTypes.GT
         },
-        threshold: 32
+        right_comparison: ComparisonTypes.EQ
       },
       treatment_feature: "hours-per-week"
     },

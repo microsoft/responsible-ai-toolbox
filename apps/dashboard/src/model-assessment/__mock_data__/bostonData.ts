@@ -6,7 +6,8 @@ import {
   ICounterfactualData,
   IDataset,
   IErrorAnalysisData,
-  IModelExplanationData
+  IModelExplanationData,
+  ComparisonTypes
 } from "@responsible-ai/core-ui";
 
 export const bostonData: IDataset = {
@@ -3096,17 +3097,19 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
         treatment_gains: { increase: 0.8864159071986357 }
       },
       policy_tree: {
+        comparison_value: -0.7757381716800167,
         feature: "RAD",
         leaf: false,
         left: {
+          comparison_value: 0.4739170692079284,
           feature: "RM",
           leaf: false,
           left: { leaf: true, n_samples: 2, treatment: "increase" },
           right: { leaf: true, n_samples: 5, treatment: "decrease" },
-          threshold: 0.4739170692079284
+          right_comparison: ComparisonTypes.GT
         },
         right: { leaf: true, n_samples: 95, treatment: "increase" },
-        threshold: -0.7757381716800167
+        right_comparison: ComparisonTypes.GT
       },
       treatment_feature: "ZN"
     },
@@ -3419,17 +3422,19 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
         treatment_gains: { increase: -1.2450412519031402 }
       },
       policy_tree: {
+        comparison_value: -0.4226331900042567,
         feature: "AGE",
         leaf: false,
         left: { leaf: true, n_samples: 30, treatment: "increase" },
         right: {
+          comparison_value: 0.6906881128368159,
           feature: "DIS",
           leaf: false,
           left: { leaf: true, n_samples: 68, treatment: "decrease" },
           right: { leaf: true, n_samples: 4, treatment: "increase" },
-          threshold: 0.6906881128368159
+          right_comparison: ComparisonTypes.GT
         },
-        threshold: -0.4226331900042567
+        right_comparison: ComparisonTypes.GT
       },
       treatment_feature: "NOX"
     }

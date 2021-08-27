@@ -100,6 +100,8 @@ class ComparisonTypes:
     NE = 'ne'  # not equal to
     IN = 'in'  # in the set
     NIN = 'nin'  # not in the set
+    RG = 'rg'  # in the range
+    NRG = 'nrg'  # not in the range
 
 
 class CausalPolicyTreeInternal:
