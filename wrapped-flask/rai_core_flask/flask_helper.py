@@ -14,6 +14,7 @@ import time
 
 from gevent.pywsgi import WSGIServer
 
+import logging
 
 LOCALHOST = 'localhost'
 VM_ENVS = {CREDENTIALED_VM, PUBLIC_VM}
@@ -25,6 +26,7 @@ class FlaskHelper(object):
     def __init__(self, ip=None, port=None, with_credentials=False):
         # The name passed to Flask needs to be unique per instance.
         self.app = Flask(uuid.uuid4().hex)
+
         self.port = port
         self.ip = ip
         self.with_credentials = with_credentials
@@ -95,7 +97,9 @@ class FlaskHelper(object):
         if self.env_name in VM_ENVS:
             host_name = socket.gethostname()
             ip = socket.gethostbyname(host_name)
-        self.server = WSGIServer((ip, self.port), self.app)
+        logger = logging.getLogger('wsgiserver')
+        logger.setLevel(logging.ERROR)
+        self.server = WSGIServer((ip, self.port), self.app, log=logger)
         self.app.config["server"] = self.server
         # self.app.config["CACHE_TYPE"] = "null"
         self.server.serve_forever()
