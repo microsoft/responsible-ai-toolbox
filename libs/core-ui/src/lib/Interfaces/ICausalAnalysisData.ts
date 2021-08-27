@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ComparisonTypes } from "./ComparisonTypes";
+
 export interface ICausalAnalysisData {
   id: string;
   config?: ICausalConfig;
@@ -32,7 +34,8 @@ export type ICausalPolicyTreeNode =
 export interface ICausalPolicyTreeInternal {
   leaf: false;
   feature: string;
-  threshold: number | string;
+  right_comparison: ComparisonTypes;
+  comparison_value: string | number | Array<string | number>;
   left: ICausalPolicyTreeNode;
   right: ICausalPolicyTreeNode;
 }

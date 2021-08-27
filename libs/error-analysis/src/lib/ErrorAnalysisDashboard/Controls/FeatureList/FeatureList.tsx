@@ -35,7 +35,9 @@ import {
   SelectionMode,
   SearchBox,
   Stack,
-  Text
+  Text,
+  TooltipHost,
+  TooltipOverflowMode
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -290,7 +292,15 @@ export class FeatureList extends React.Component<
           );
 
         default:
-          return <span>{fieldContent}</span>;
+          return (
+            <TooltipHost
+              id={column.key}
+              content={fieldContent}
+              overflowMode={TooltipOverflowMode.Parent}
+            >
+              <span>{fieldContent}</span>
+            </TooltipHost>
+          );
       }
     }
     return <span />;

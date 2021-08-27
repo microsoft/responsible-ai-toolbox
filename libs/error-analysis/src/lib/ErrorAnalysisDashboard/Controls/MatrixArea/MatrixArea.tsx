@@ -20,6 +20,7 @@ import React from "react";
 import { IMatrixAreaState } from "../../MatrixFilterState";
 import { MatrixCells } from "../MatrixCells/MatrixCells";
 import { MatrixFooter } from "../MatrixFooter/MatrixFooter";
+import { MatrixOptions } from "../MatrixOptions/MatrixOptions";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
 import { IMatrixAreaProps } from "./MatrixAreaProps";
@@ -38,7 +39,7 @@ const emptyTextStyle: IStackStyles = {
 
 const emptyTextPadding: IStackTokens = { padding: "10px 0px 0px 0px" };
 
-const stackTokens: IStackTokens = { childrenGap: 5 };
+const stackTokens: IStackTokens = { childrenGap: "l1" };
 
 export class MatrixArea extends React.PureComponent<
   IMatrixAreaProps,
@@ -53,6 +54,8 @@ export class MatrixArea extends React.PureComponent<
       matrixFeature1: this.props.selectedFeature1,
       matrixFeature2: this.props.selectedFeature2,
       maxMetricValue: this.props.state.maxMetricValue,
+      numBins: this.props.state.numBins,
+      quantileBinning: this.props.state.quantileBinning,
       selectedCells: this.props.state.selectedCells
     };
     if (this.props.state.selectedCells === undefined) {
@@ -125,7 +128,7 @@ export class MatrixArea extends React.PureComponent<
     );
     return (
       <Stack>
-        <Stack horizontal tokens={stackTokens}>
+        <Stack horizontal tokens={stackTokens} verticalAlign="center">
           <DefaultButton
             text={localization.ErrorAnalysis.MatrixArea.clearAll}
             onClick={this.clearAll.bind(this, matrixLength, matrixRowLength)}
@@ -135,6 +138,13 @@ export class MatrixArea extends React.PureComponent<
             text={localization.ErrorAnalysis.MatrixArea.selectAll}
             onClick={this.selectAll.bind(this, matrixLength, matrixRowLength)}
             disabled={this.state.disableSelectAll}
+          />
+          <MatrixOptions
+            quantileBinning={this.state.quantileBinning}
+            binningThreshold={this.state.numBins}
+            updateQuantileBinning={this.updateQuantileBinning.bind(this)}
+            updateNumBins={this.updateNumBins.bind(this)}
+            isEnabled={this.props.isEnabled}
           />
         </Stack>
         <Stack
@@ -182,7 +192,15 @@ export class MatrixArea extends React.PureComponent<
   }
 
   private reloadData = async (): Promise<void> => {
-    const jsonMatrix = await fetchMatrix(this.props);
+    const jsonMatrix = await fetchMatrix(
+      this.state.quantileBinning,
+      this.state.numBins,
+      this.props.baseCohort,
+      this.props.selectedFeature1,
+      this.props.selectedFeature2,
+      this.props.getMatrix,
+      this.props.matrix
+    );
     if (!jsonMatrix) {
       return;
     }
@@ -296,5 +314,17 @@ export class MatrixArea extends React.PureComponent<
       cells,
       cohortStats
     );
+  }
+
+  private updateNumBins(numBins: number): void {
+    this.setState({ numBins }, () => {
+      this.reloadData();
+    });
+  }
+
+  private updateQuantileBinning(quantileBinning: boolean): void {
+    this.setState({ quantileBinning }, () => {
+      this.reloadData();
+    });
   }
 }

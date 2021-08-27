@@ -67,6 +67,19 @@
     },
     "NoData": {
       "Title": "No data"
+    },
+    "ComparisonTypes": {
+      "lt": "{0} < {1}",
+      "lte": "{0} <= {1}",
+      "gt": "{0} > {1}",
+      "gte": "{0} >= {1}",
+      "eq": "{0} == {1}",
+      "ne": "{0} != {1}",
+      "in": "{0} in the set of ({1})",
+      "nin": "{0} not in the set of ({1})",
+      "rg": "{0} in the range of ({1})",
+      "nrg": "{0} in the range of ({1})",
+      "Unknown": "unknown"
     }
   },
   "Counterfactuals": {
@@ -180,8 +193,18 @@
       "emptyText": "Select two features by using the dropdowns above.  You can cluster and filter your data along two dimensions.",
       "selectAll": "Select all"
     },
-    "MatrixLegend": {
+    "MatrixSummary": {
       "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
+    },
+    "MatrixOptions": {
+      "quantileBinningLabel": "Quantile binning",
+      "binningThresholdLabel": "Binning threshold",
+      "toggleOnLabel": "On",
+      "toggleOffLabel": "Off",
+      "quantileBinningInfoText": "Distribute values evenly across varying ranges of bins",
+      "quantileBinningTitle": "Additional information on quantile binning",
+      "binningThresholdInfoText": "Number of values required before binning",
+      "binningThresholdTitle": "Additional information on binning threshold"
     },
     "Metrics": {
       "errorRate": "Error rate",

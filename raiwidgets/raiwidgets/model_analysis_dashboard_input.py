@@ -73,11 +73,16 @@ class ModelAnalysisDashboardInput:
 
     def matrix(self, data):
         try:
-            features, filters, composite_filters = data
+            features = data[0]
+            filters = data[1]
+            composite_filters = data[2]
+            quantile_binning = data[3]
+            num_bins = data[4]
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.data: []}
             matrix = self._error_analyzer.compute_matrix(
-                features, filters, composite_filters)
+                features, filters, composite_filters,
+                quantile_binning, num_bins)
             return {
                 WidgetRequestResponseConstants.data: matrix
             }
