@@ -17,10 +17,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: fail if neither responsibleai, raiwidgets nor wrapped-flask
+      - name: fail if neither rai-tooling nor wrapped-flask
         if: ${{ ! (github.event.inputs.targetPackage == 'rai-tooling' || github.event.inputs.targetPackage == 'wrapped-flask') }}
         run: |
           echo "Only rai-tooling or wrapped-flask can be used."
+          exit 1
+      - name: fail if Test nor Prod
+        if: ${{ ! (github.event.inputs.pypiType == 'Test' || github.event.inputs.pypiType == 'Prod') }}
+        run: |
+          echo "Only Test or Prod can be used."
           exit 1
 
       # build wheel
