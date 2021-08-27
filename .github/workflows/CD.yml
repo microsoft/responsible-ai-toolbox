@@ -108,8 +108,7 @@ jobs:
         working-directory: ${{ env.widgetDirectory }}
 
       - name: run tests
-        run: pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=responsibleai --cov-report=xml --cov-report=html
-             cat coverage.xml
+        run: pytest tests/ --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=responsibleai --cov-report=xml --cov-report=html
 
       - name: Upload code coverage results
         uses: actions/upload-artifact@v2
