@@ -108,7 +108,16 @@ jobs:
         working-directory: ${{ env.widgetDirectory }}
 
       - name: run tests
-        run: pytest --durations=10
+        run: pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=responsibleai --cov-report=xml --cov-report=html
+             cat coverage.xml
+
+      - name: Upload code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-results
+          path: htmlcov
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
 
       - name: Upload a Build result
         uses: actions/upload-artifact@v2
