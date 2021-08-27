@@ -461,8 +461,13 @@ export class CounterfactualChart extends React.PureComponent<
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
     const index = trace.customdata[JointDataset.IndexLabel];
-    this.setTemporaryPointToCopyOfDatasetPoint(index);
-    this.toggleSelectionOfPoint(index);
+    // custom point
+    if (trace.curveNumber === 1) {
+      this.removeCustomPoint(trace.pointNumber);
+    } else {
+      this.setTemporaryPointToCopyOfDatasetPoint(index);
+      this.toggleSelectionOfPoint(index);
+    }
   };
 
   private getOriginalData(
@@ -663,13 +668,6 @@ export class CounterfactualChart extends React.PureComponent<
       chartProps,
       plotlyProps.data[1]
     );
-    if (this.temporaryPoint && this.state.customPoints.length > 0) {
-      this.generateDataTrace(
-        [this.temporaryPoint],
-        chartProps,
-        plotlyProps.data[2]
-      );
-    }
     return plotlyProps;
   }
 
