@@ -34,6 +34,7 @@ interface IMainMenuState {
 }
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
+const navigationIcon: IIconProps = { iconName: "ViewList" };
 
 export class MainMenu extends React.PureComponent<
   IMainMenuProps,
@@ -58,7 +59,7 @@ export class MainMenu extends React.PureComponent<
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
-        iconProps: settingsIcon,
+        iconProps: navigationIcon,
         key: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
