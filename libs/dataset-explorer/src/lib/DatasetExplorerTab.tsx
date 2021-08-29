@@ -32,7 +32,7 @@ import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 import { generatePlotlyProps } from "./generatePlotlyProps";
 import { SidePanel } from "./SidePanel";
 
-export interface IDatasetExplorerTabProps {}
+export class IDatasetExplorerTabProps {}
 
 export interface IDatasetExplorerTabState {
   xDialogOpen: boolean;
