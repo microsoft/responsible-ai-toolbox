@@ -25,7 +25,7 @@ export class CounterfactualsTab extends React.PureComponent<ICounterfactualsTabP
     return (
       <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
         <Stack.Item>
-          <Text variant={"xLarge"}>{localization.Counterfactuals.header}</Text>
+          <Text variant={"xxLarge"}>{localization.Counterfactuals.header}</Text>
         </Stack.Item>
         <Stack.Item>
           <CounterfactualsView data={this.props.data} />
