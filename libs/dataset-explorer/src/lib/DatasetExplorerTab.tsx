@@ -32,9 +32,7 @@ import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 import { generatePlotlyProps } from "./generatePlotlyProps";
 import { SidePanel } from "./SidePanel";
 
-export interface IDatasetExplorerTabProps {
-  showCohortSelection: boolean;
-}
+export class IDatasetExplorerTabProps {}
 
 export interface IDatasetExplorerTabState {
   xDialogOpen: boolean;
@@ -66,35 +64,12 @@ export class DatasetExplorerTab extends React.Component<
   }
 
   public componentDidMount(): void {
-    let initialCohortIndex: number;
-    if (this.props.showCohortSelection) {
-      initialCohortIndex = 0;
-    } else {
-      initialCohortIndex = this.context.errorCohorts.findIndex(
-        (errorCohort) =>
-          errorCohort.cohort.name ===
-          this.context.selectedErrorCohort.cohort.name
-      );
-    }
+    const initialCohortIndex = 0;
 
     this.setState({
       chartProps: this.generateDefaultChartAxes(),
       selectedCohortIndex: initialCohortIndex
     });
-  }
-
-  public componentDidUpdate(): void {
-    if (this.props.showCohortSelection) {
-      return;
-    }
-
-    const selectedCohortIndex = this.context.errorCohorts.findIndex(
-      (errorCohort) =>
-        errorCohort.cohort.name === this.context.selectedErrorCohort.cohort.name
-    );
-    if (selectedCohortIndex !== this.state.selectedCohortIndex) {
-      this.setState({ selectedCohortIndex });
-    }
   }
 
   public render(): React.ReactNode {
@@ -148,27 +123,19 @@ export class DatasetExplorerTab extends React.Component<
             {localization.Interpret.DatasetExplorer.collapsedHelperText}
           </ExpandableText>
         </div>
-        {
-          // show cohort selection only in dashboards without global cohort selection mechanism
-          this.props.showCohortSelection && (
-            <div className={classNames.cohortPickerWrapper}>
-              <Text
-                variant="mediumPlus"
-                className={classNames.cohortPickerLabel}
-              >
-                {localization.Interpret.ModelPerformance.cohortPickerLabel}
-              </Text>
-              {cohortOptions && (
-                <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
-                  options={cohortOptions}
-                  selectedKey={this.state.selectedCohortIndex}
-                  onChange={this.setSelectedCohort}
-                />
-              )}
-            </div>
-          )
-        }
+        <div className={classNames.cohortPickerWrapper}>
+          <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
+            {localization.Interpret.ModelPerformance.cohortPickerLabel}
+          </Text>
+          {cohortOptions && (
+            <Dropdown
+              styles={{ dropdown: { width: 150 } }}
+              options={cohortOptions}
+              selectedKey={this.state.selectedCohortIndex}
+              onChange={this.setSelectedCohort}
+            />
+          )}
+        </div>
         <div className={classNames.mainArea} id={this.chartAndConfigsId}>
           <div className={classNames.chartWithAxes}>
             {this.state.yDialogOpen && (
