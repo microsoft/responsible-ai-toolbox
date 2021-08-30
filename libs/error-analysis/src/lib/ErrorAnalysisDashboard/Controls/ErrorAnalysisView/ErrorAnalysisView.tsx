@@ -18,7 +18,7 @@ import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { ITreeViewRendererState } from "../../TreeViewState";
-import { MatrixFilter } from "../MatrixFilter/MatrixFilter";
+import { MatrixFilter } from "../Matrix/MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
 export interface IErrorAnalysisViewProps {
