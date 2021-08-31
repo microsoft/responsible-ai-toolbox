@@ -9,12 +9,13 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { Link, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { CausalCallout } from "../../Common/CausalCallout";
+import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
+import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
 import { CausalIndividualChart } from "./CausalIndividualChart";
 import { CausalIndividualStyles } from "./CausalIndividualStyles";
@@ -53,11 +54,30 @@ export class CausalIndividualView extends React.PureComponent<
           <CausalIndividualChart onDataClick={this.handleOnClick} />
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
-            <Text variant={"medium"} className={styles.header}>
-              {localization.CausalAnalysis.IndividualView.directIndividual}
-            </Text>
-            <CausalCallout />
+          <Stack horizontal={false}>
+            <Stack.Item>
+              <Text variant={"medium"} className={styles.header}>
+                {localization.CausalAnalysis.IndividualView.directIndividual}
+              </Text>
+            </Stack.Item>
+            <Stack.Item className={styles.callout}>
+              <LabelWithCallout
+                label={localization.CausalAnalysis.MainMenu.why}
+                calloutTitle={causalCalloutDictionary.confounding.title}
+                type="button"
+              >
+                <Text block>
+                  {causalCalloutDictionary.confounding.description}
+                </Text>
+                <Link
+                  href={causalCalloutDictionary.confounding.linkUrl}
+                  target="_blank"
+                >
+                  {localization.Interpret.ExplanationSummary.clickHere}
+                </Link>
+              </LabelWithCallout>
+            </Stack.Item>
+            {/* <CausalCallout /> */}
           </Stack>
         </Stack.Item>
         <Stack.Item className={styles.individualTable}>
