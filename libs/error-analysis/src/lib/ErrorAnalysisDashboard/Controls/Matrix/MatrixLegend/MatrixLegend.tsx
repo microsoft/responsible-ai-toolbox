@@ -6,9 +6,9 @@ import { localization } from "@responsible-ai/localization";
 import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
-import { Gradient } from "../Gradient/Gradient";
-import { InfoCallout } from "../InfoCallout/InfoCallout";
+import { MetricUtils, MetricLocalizationType } from "../../../MetricUtils";
+import { Gradient } from "../../Gradient/Gradient";
+import { InfoCallout } from "../../InfoCallout/InfoCallout";
 
 import { matrixLegendStyles } from "./MatrixLegend.styles";
 
