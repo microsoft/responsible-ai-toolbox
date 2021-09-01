@@ -4,13 +4,13 @@
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
+  LabelWithCallout,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Link, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
 import { CausalAggregateChart } from "./CausalAggregateChart";

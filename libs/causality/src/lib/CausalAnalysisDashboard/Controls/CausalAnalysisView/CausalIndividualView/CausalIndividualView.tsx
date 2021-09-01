@@ -5,6 +5,7 @@ import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ICausalAnalysisSingleData,
+  LabelWithCallout,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -12,7 +13,6 @@ import { localization } from "@responsible-ai/localization";
 import { Link, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
