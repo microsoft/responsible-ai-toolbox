@@ -35,7 +35,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     const items: ICommandBarItemProps[] = [
       {
         iconProps: {
-          iconName: "AllApps"
+          iconName: "ViewList"
         },
         key: "application",
         subMenuProps: {
