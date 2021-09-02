@@ -228,7 +228,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             }
                           </Text>
                         </div>
-                        <DatasetExplorerTab showCohortSelection={false} />
+                        <DatasetExplorerTab />
                       </>
                     )}
                     {t.key === GlobalTabKeys.FeatureImportancesTab &&

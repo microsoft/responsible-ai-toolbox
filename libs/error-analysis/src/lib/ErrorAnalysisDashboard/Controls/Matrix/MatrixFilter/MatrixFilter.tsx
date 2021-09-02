@@ -20,7 +20,10 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
+import {
+  IMatrixAreaState,
+  IMatrixFilterState
+} from "../../../MatrixFilterState";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
 import { MatrixSummary } from "../MatrixSummary/MatrixSummary";

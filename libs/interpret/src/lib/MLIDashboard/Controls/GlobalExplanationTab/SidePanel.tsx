@@ -8,7 +8,8 @@ import {
   WeightVectorOption,
   ChartTypes,
   FabricStyles,
-  InteractiveLegend
+  InteractiveLegend,
+  LabelWithCallout
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -22,8 +23,6 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { LabelWithCallout } from "../Callout/LabelWithCallout";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
 import { IGlobalSeries } from "./IGlobalSeries";

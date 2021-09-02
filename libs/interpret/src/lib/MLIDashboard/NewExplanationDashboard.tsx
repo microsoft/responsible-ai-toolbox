@@ -171,9 +171,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExploration && (
-                    <DatasetExplorerTab showCohortSelection />
-                  )}
+                    GlobalTabKeys.DataExploration && <DatasetExplorerTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (
                     <GlobalExplanationTab
