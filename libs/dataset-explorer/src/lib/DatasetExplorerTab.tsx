@@ -3,7 +3,6 @@
 
 import {
   AxisConfigDialog,
-  ExpandableText,
   JointDataset,
   ColumnCategories,
   cohortKey,
@@ -116,12 +115,9 @@ export class DatasetExplorerTab extends React.Component<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <ExpandableText
-            expandedText={localization.Interpret.DatasetExplorer.helperText}
-            iconName="Info"
-          >
-            {localization.Interpret.DatasetExplorer.collapsedHelperText}
-          </ExpandableText>
+          <Text variant="medium">
+            {localization.Interpret.DatasetExplorer.helperText}
+          </Text>
         </div>
         <div className={classNames.cohortPickerWrapper}>
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>

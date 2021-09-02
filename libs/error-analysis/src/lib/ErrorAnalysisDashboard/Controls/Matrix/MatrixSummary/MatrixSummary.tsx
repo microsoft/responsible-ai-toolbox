@@ -17,7 +17,7 @@ export class MatrixSummary extends React.Component {
         className={classNames.legendDescriptionStyle}
         tokens={legendDescriptionPadding}
       >
-        <Text variant={"smallPlus"}>
+        <Text variant={"medium"}>
           {localization.ErrorAnalysis.MatrixSummary.heatMapDescription}
         </Text>
       </Stack>
