@@ -4,13 +4,14 @@
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
+  LabelWithCallout,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { Link, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { CausalCallout } from "../../Common/CausalCallout";
+import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
 import { CausalAggregateChart } from "./CausalAggregateChart";
 import { CausalAggregateStyles } from "./CausalAggregateStyles";
@@ -29,14 +30,34 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
     const styles = CausalAggregateStyles();
     return (
       <Stack grow tokens={{ padding: "16px 8px" }}>
-        <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
-          <Text variant={"medium"} className={styles.label}>
-            {localization.CausalAnalysis.AggregateView.description}
-          </Text>
-          <Text variant={"medium"} className={styles.header}>
-            {localization.CausalAnalysis.AggregateView.directAggregate}
-          </Text>
-          <CausalCallout />
+        <Stack horizontal={false}>
+          <Stack.Item>
+            <Text variant={"medium"} className={styles.label}>
+              {localization.CausalAnalysis.AggregateView.description}
+            </Text>
+          </Stack.Item>
+          <Stack.Item>
+            <Text variant={"medium"} className={styles.header}>
+              {localization.CausalAnalysis.AggregateView.directAggregate}
+            </Text>
+          </Stack.Item>
+          <Stack.Item className={styles.callout}>
+            <LabelWithCallout
+              label={localization.CausalAnalysis.MainMenu.why}
+              calloutTitle={causalCalloutDictionary.confounding.title}
+              type="button"
+            >
+              <Text block>
+                {causalCalloutDictionary.confounding.description}
+              </Text>
+              <Link
+                href={causalCalloutDictionary.confounding.linkUrl}
+                target="_blank"
+              >
+                {localization.Interpret.ExplanationSummary.clickHere}
+              </Link>
+            </LabelWithCallout>
+          </Stack.Item>
         </Stack>
         <Stack>
           <Stack.Item className={styles.table}>

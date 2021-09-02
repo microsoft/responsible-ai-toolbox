@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   Callout as FabricCallout,
@@ -11,6 +10,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 import { v4 } from "uuid";
+
+import { FabricStyles } from "../util/FabricStyles";
 
 import { labelWithCalloutStyles } from "./LabelWithCallout.styles";
 

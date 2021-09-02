@@ -8,6 +8,7 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ICausalAggregateStyles {
+  callout: IStyle;
   container: IStyle;
   description: IStyle;
   label: IStyle;
@@ -21,6 +22,9 @@ export interface ICausalAggregateStyles {
 export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateStyles> =
   () => {
     return mergeStyleSets<ICausalAggregateStyles>({
+      callout: {
+        margin: "-5px 0 0 -15px"
+      },
       container: {
         height: "500px",
         overflowY: "scroll"
