@@ -8,7 +8,6 @@ import {
   CohortSource,
   ErrorCohort,
   ErrorCohortStats,
-  ExpandableText,
   getRandomId,
   Metrics,
   MetricCohortStats,
@@ -32,7 +31,8 @@ import {
   IProcessedStyleSet,
   ITheme,
   mergeStyles,
-  Stack
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -261,15 +261,9 @@ export class TreeViewRenderer extends React.PureComponent<
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item>
-          <ExpandableText
-            expandedText={
-              localization.ErrorAnalysis.TreeView.treeDescriptionExpanded
-            }
-            iconName="Info"
-            variant={"smallPlus"}
-          >
+          <Text variant="medium">
             {localization.ErrorAnalysis.TreeView.treeDescription}
-          </ExpandableText>
+          </Text>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal className={classNames.svgContainer}>
