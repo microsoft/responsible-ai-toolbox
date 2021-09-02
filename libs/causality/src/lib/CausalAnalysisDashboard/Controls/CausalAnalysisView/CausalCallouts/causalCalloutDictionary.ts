@@ -17,7 +17,7 @@ interface ICausalInfo {
 
 const whyConfounding: ICausalInfo = {
   description: localization.CausalAnalysis.AggregateView.confoundingFeature,
-  linkUrl: "https://www.microsoft.com/en-us/research/project/econml/#!how-to",
+  linkUrl: "https://www.microsoft.com/research/project/econml/#!how-to",
   title: localization.CausalAnalysis.AggregateView.unconfounding
 };
 
