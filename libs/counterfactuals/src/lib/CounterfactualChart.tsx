@@ -461,10 +461,8 @@ export class CounterfactualChart extends React.PureComponent<
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
     const index = trace.customdata[JointDataset.IndexLabel];
-    // custom point
-    if (trace.curveNumber === 1) {
-      this.removeCustomPoint(trace.pointNumber);
-    } else {
+    // non-custom point
+    if (trace.curveNumber !== 1) {
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
     }
