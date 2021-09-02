@@ -3,7 +3,6 @@
 
 import {
   Cohort,
-  ExpandableText,
   JointDataset,
   WeightVectorOption,
   ModelExplanationUtils,
@@ -157,9 +156,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <ExpandableText iconName="Info">
+          <Text variant="medium">
             {localization.Interpret.GlobalTab.helperText}
-          </ExpandableText>
+          </Text>
         </div>
         <div
           className={classNames.globalChartControls}
