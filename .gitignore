@@ -23,6 +23,7 @@ rollup.json
 *.sublime-workspace
 
 # IDE - Visual Studio
+
 .vs/*
 
 # IDE - VSCode
