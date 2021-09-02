@@ -9,6 +9,7 @@ import {
 
 export interface ICausalIndividualStyles {
   aggregateChart: IStyle;
+  callout: IStyle;
   container: IStyle;
   description: IStyle;
   header: IStyle;
@@ -23,6 +24,9 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
       aggregateChart: {
         display: "flex",
         height: "100%"
+      },
+      callout: {
+        margin: "-5px 0 0 -15px"
       },
       container: {
         display: "flex",
