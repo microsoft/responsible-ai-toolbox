@@ -125,18 +125,7 @@ export class DatasetExplorerTab extends React.Component<
           </Text>
           {cohortOptions && (
             <Dropdown
-              styles={{
-                callout: {
-                  selectors: {
-                    ".ms-Button-flexContainer": {
-                      width: "100%"
-                    }
-                  }
-                },
-                dropdown: {
-                  width: 150
-                }
-              }}
+              className={classNames.dropdown}
               options={cohortOptions}
               selectedKey={this.state.selectedCohortIndex}
               onChange={this.setSelectedCohort}
