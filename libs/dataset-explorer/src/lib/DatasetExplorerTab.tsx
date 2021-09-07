@@ -148,7 +148,7 @@ export class DatasetExplorerTab extends React.Component<
             {this.state.yDialogOpen && (
               <AxisConfigDialog
                 jointDataset={this.context.jointDataset}
-                orderedGroupTitles=yAxisCategories}
+                orderedGroupTitles={yAxisCategories}
                 selectedColumn={this.state.chartProps.yAxis}
                 canBin={false}
                 mustBin={false}
