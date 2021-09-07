@@ -11,7 +11,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { InfoCallout } from "../InfoCallout/InfoCallout";
+import { InfoCallout } from "../../InfoCallout/InfoCallout";
 
 import { matrixOptionsStyles } from "./MatrixOptions.styles";
 

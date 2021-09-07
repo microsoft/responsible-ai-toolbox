@@ -11,7 +11,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 
-import { IMatrixAreaState } from "../../MatrixFilterState";
+import { IMatrixAreaState } from "../../../MatrixFilterState";
 
 export interface IMatrixAreaProps {
   theme?: ITheme;

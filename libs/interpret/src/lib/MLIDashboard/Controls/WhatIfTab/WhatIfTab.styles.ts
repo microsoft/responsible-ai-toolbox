@@ -149,8 +149,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         backgroundColor: theme.semanticColors.bodyBackground,
         boxShadow:
           "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
-        width: "40px",
-        zIndex: 99999
+        width: "40px"
       },
       customPredictBlock: {
         paddingTop: "5px"
@@ -171,8 +170,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
           "0px 4.8px 14.4px rgba(0, 0, 0, 0.18), 0px 25.6px 57.6px rgba(0, 0, 0, 0.22)",
         marginTop: "10px",
         paddingRight: "40px",
-        width: "250px",
-        zIndex: 99999
+        width: "250px"
       },
       featureImportanceArea: {
         width: "100%"

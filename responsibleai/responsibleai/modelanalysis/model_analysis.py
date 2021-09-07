@@ -263,12 +263,14 @@ class ModelAnalysis(object):
                         'target (test data) do not match')
 
             if model is not None:
+                # Pick one row from train and test data
+                small_train_data = train.iloc[0:1].drop(
+                    [target_column], axis=1)
+                small_test_data = test.iloc[0:1].drop(
+                    [target_column], axis=1)
+
                 # Run predict() of the model
                 try:
-                    small_train_data = train.iloc[0:1].drop(
-                        [target_column], axis=1)
-                    small_test_data = test.iloc[0:1].drop(
-                        [target_column], axis=1)
                     model.predict(small_train_data)
                     model.predict(small_test_data)
                 except Exception:
@@ -280,10 +282,6 @@ class ModelAnalysis(object):
                 # Run predict_proba() of the model
                 if task_type == ModelTask.CLASSIFICATION:
                     try:
-                        small_train_data = train.iloc[0:1].drop(
-                            [target_column], axis=1)
-                        small_test_data = test.iloc[0:1].drop(
-                            [target_column], axis=1)
                         model.predict_proba(small_train_data)
                         model.predict_proba(small_test_data)
                     except Exception:

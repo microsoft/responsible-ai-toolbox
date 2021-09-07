@@ -24,6 +24,52 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.10.0
+
+- educational materials
+  - update current model analysis classification notebook by adding treatment features for causal analysis
+- ## new features
+- breaking changes
+- bug fixes
+
+  - ## Model Analysis:
+    - change icon for ViewList in main menu
+    - fix model statistics component not showing all cohorts
+    - put causal component last, remove navigation
+    - hide removal dialog on click
+    - move cohort info and button to sticky menu, replace error stats with filters
+  - ## Error Analysis:
+    - refactor heatmap code and fix display issues for categoricals
+    - fix incorrect values in heatmap when there are empty error cells
+    - added quantile binning and number of bins functionality to erroranalysis package
+    - added quantile binning and number of bins to UX and hooked up calls to backend
+    - added tooltip to list of features for tree view
+    - fix backend to support equals filter for integer categorical columns
+    - fix backend to support include and exclude filters for integer categorical columns
+    - update default value for matrix feature
+    - fix cohort when switching tree view
+  - ## Causal:
+    - remove unnecessary z-index on what-if and causal components
+    - update causal policy to support categorical features
+    - format policy tree categorical features
+    - fix description on how confounding features are handled
+    - use lighter lines for causal plotly point graphs
+  - ## Fairness:
+    - incorporate uncertainty quantification in fairness widget v2
+  - ## Counterfactuals:
+    - upgrade dice-ml to 0.7
+    - update counterfactual list to allow string values
+    - extend unseen categorical check to counterfactuals
+  - add dropdown to dataset explorer by default
+  - fix removing what if point will keep a faded start on the chart
+  - suppress distracting logging from flask when running widgets
+  - fix large x and y axis going out of bounds
+  - refactor multiple instances of convert to list method in several dashboards
+  - add missing interpretability information and guidelines
+
+- other
+  - fix message and check for environment in release pipeline
+
 ## v0.9.4
 
 - bug fixes

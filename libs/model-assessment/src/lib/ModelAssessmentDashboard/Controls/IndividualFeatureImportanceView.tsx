@@ -11,8 +11,7 @@ import {
   FabricStyles,
   constructRows,
   constructCols,
-  ModelTypes,
-  ExpandableText
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -34,7 +33,8 @@ import {
   Stack,
   TooltipHost,
   IColumn,
-  IGroup
+  IGroup,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -135,12 +135,12 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return (
       <Stack tokens={{ childrenGap: "10px", padding: "15px 38px 0 38px" }}>
-        <div>
-          <ExpandableText iconName="Info">
+        <Stack.Item>
+          <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
-          </ExpandableText>
-        </div>
-        <div className="tabularDataView">
+          </Text>
+        </Stack.Item>
+        <Stack.Item className="tabularDataView">
           <div style={{ height: "800px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -166,7 +166,7 @@ export class IndividualFeatureImportanceView extends React.Component<
               </ScrollablePane>
             </Fabric>
           </div>
-        </div>
+        </Stack.Item>
         <LocalImportancePlots
           includedFeatureImportance={this.state.featureImportances}
           jointDataset={this.context.jointDataset}

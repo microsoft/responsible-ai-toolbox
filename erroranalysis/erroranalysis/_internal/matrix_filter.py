@@ -27,6 +27,7 @@ MATRIX = 'matrix'
 METRIC_VALUE = 'metricValue'
 METRIC_NAME = 'metricName'
 VALUES = 'values'
+PRECISION = 100
 
 
 def compute_json_matrix(analyzer, features, filters, composite_filters):
@@ -121,40 +122,30 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             f1_is_cat = feat1 in analyzer.categorical_features
             f2_is_cat = feat2 in analyzer.categorical_features
         if unique_count1 > num_bins and not f1_is_cat:
-            tabdf1, bins = bin_data(df,
-                                    feat1,
-                                    num_bins,
-                                    retbins=True,
-                                    quantile_binning=quantile_binning)
+            tabdf1 = bin_data(df,
+                              feat1,
+                              num_bins,
+                              quantile_binning=quantile_binning)
+            categories1 = tabdf1.cat.categories
             tabdf1_err = bin_data(df_err,
                                   feat1,
-                                  bins,
+                                  categories1,
                                   quantile_binning=quantile_binning)
-            categories1 = tabdf1.cat.categories
-            # Note: use exact same object so that the line:
-            # cat1 in matrix_err_counts.index
-            # does not fail below, categories are same regardless
-            tabdf1_err.cat.categories = categories1
         else:
             tabdf1 = df[feat1]
             tabdf1_err = df_err[feat1]
             categories1 = np.unique(tabdf1.to_numpy(),
                                     return_counts=True)[0]
         if unique_count2 > num_bins and not f2_is_cat:
-            tabdf2, bins = bin_data(df,
-                                    feat2,
-                                    num_bins,
-                                    retbins=True,
-                                    quantile_binning=quantile_binning)
+            tabdf2 = bin_data(df,
+                              feat2,
+                              num_bins,
+                              quantile_binning=quantile_binning)
+            categories2 = tabdf2.cat.categories
             tabdf2_err = bin_data(df_err,
                                   feat2,
-                                  bins,
+                                  categories2,
                                   quantile_binning=quantile_binning)
-            categories2 = tabdf2.cat.categories
-            # Note: use exact same object so that the line:
-            # cat2 in matrix_err_counts.columns
-            # does not fail below, categories are same regardless
-            tabdf2_err.cat.categories = categories2
         else:
             tabdf2 = df[feat2]
             tabdf2_err = df_err[feat2]
@@ -194,11 +185,10 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         if analyzer.categorical_features is not None:
             f1_is_cat = feat1 in analyzer.categorical_features
         if unique_count1 > num_bins and not f1_is_cat:
-            cutdf, bins = bin_data(df,
-                                   feat1,
-                                   num_bins,
-                                   retbins=True,
-                                   quantile_binning=quantile_binning)
+            cutdf = bin_data(df,
+                             feat1,
+                             num_bins,
+                             quantile_binning=quantile_binning)
             bin_range = range(num_bins)
             catr = cutdf.cat.rename_categories(bin_range)
             catn, counts = np.unique(catr.to_numpy(),
@@ -215,7 +205,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             counts = fix_counts
             cut_err = bin_data(df_err,
                                feat1,
-                               bins,
+                               cutdf.cat.categories,
                                quantile_binning=quantile_binning)
             catr_err = cut_err.cat.rename_categories(bin_range)
             val_err, counts_err = np.unique(catr_err.to_numpy(),
@@ -242,17 +232,26 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     return matrix
 
 
-def bin_data(df, feat, bins, retbins=False, quantile_binning=False):
+def bin_data(df, feat, bins, quantile_binning=False):
     feat_col = df[feat]
     # Note: if column is empty pd.qcut raises error but pd.cut does not
-    # and just returns the correct binned data and bins if retbins=True,
-    # also if using existing array of bins pd.cut must be used as pd.qcut
-    # cannot bin based on specified binning edges (I know it's complicated!)
-    is_bins_constant = not isinstance(bins, np.ndarray)
-    if quantile_binning and not feat_col.empty and is_bins_constant:
-        return pd.qcut(feat_col, bins, retbins=retbins)
+    # and just returns the correct binned data and bins if retbins=True.
+    # If using existing array of bins we manually compute the bins
+    # so the same categories are used.
+    is_bins_constant = not isinstance(bins, pd.IntervalIndex)
+    if not is_bins_constant:
+        bin_indexes = bins.get_indexer(feat_col)
+        cat = pd.Categorical.from_codes(bin_indexes,
+                                        categories=bins,
+                                        ordered=True)
+        cat_typed = feat_col._constructor(cat,
+                                          index=feat_col.index,
+                                          name=feat_col.name)
+        return cat_typed
+    if quantile_binning and not feat_col.empty:
+        return pd.qcut(feat_col, bins, precision=PRECISION)
     else:
-        return pd.cut(feat_col, bins, retbins=retbins)
+        return pd.cut(feat_col, bins, precision=PRECISION)
 
 
 class _AggFunc(object):

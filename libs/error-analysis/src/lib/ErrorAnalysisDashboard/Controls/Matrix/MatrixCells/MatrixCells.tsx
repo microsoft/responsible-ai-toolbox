@@ -20,9 +20,11 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ColorPalette, isColorDark } from "../../ColorPalette";
-import { FilterProps } from "../../FilterProps";
-import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
+import { ColorPalette, isColorDark } from "../../../ColorPalette";
+import { FilterProps } from "../../../FilterProps";
+import { FilterTooltip } from "../../FilterTooltip/FilterTooltip";
+import { IMatrixSingleCategory } from "../IMatrixCategory";
+import { MatrixCategory } from "../MatrixCategory/MatrixCategory";
 
 import { matrixCellsStyles } from "./MatrixCells.styles";
 
@@ -31,7 +33,7 @@ export interface IMatrixCellsProps {
   selectedFeature1?: string;
   selectedFeature2?: string;
   selectedCells?: boolean[];
-  category1Values: any[];
+  category1Values: IMatrixSingleCategory[];
   sameFeatureSelected: boolean;
   selectedCellHandler: (
     i: number,
@@ -173,7 +175,10 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                   key={`${i}_${j}category1`}
                   className={classNames.matrixCellPivot1Categories}
                 >
-                  {this.props.category1Values[j].value}
+                  <MatrixCategory
+                    category={this.props.category1Values}
+                    index={j}
+                  />
                 </div>
               );
               return (
@@ -197,7 +202,10 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                   key={`${i}_${j}category1`}
                   className={classNames.matrixCellPivot1Categories}
                 >
-                  {this.props.category1Values[i].value}
+                  <MatrixCategory
+                    category={this.props.category1Values}
+                    index={i}
+                  />
                 </div>,
                 cellData
               ];

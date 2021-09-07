@@ -3,7 +3,6 @@
 
 import {
   AxisConfigDialog,
-  ExpandableText,
   ColumnCategories,
   WeightVectorOption,
   JointDataset,
@@ -319,9 +318,9 @@ export class WhatIfTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <ExpandableText iconName="Info">
+          <Text variant="medium">
             {localization.Interpret.WhatIfTab.helperText}
-          </ExpandableText>
+          </Text>
         </div>
         <div className={classNames.mainArea}>
           <WhatIfPanel

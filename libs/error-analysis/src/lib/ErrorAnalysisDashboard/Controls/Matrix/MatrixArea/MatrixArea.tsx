@@ -17,7 +17,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IMatrixAreaState } from "../../MatrixFilterState";
+import { IMatrixAreaState } from "../../../MatrixFilterState";
 import { MatrixCells } from "../MatrixCells/MatrixCells";
 import { MatrixFooter } from "../MatrixFooter/MatrixFooter";
 import { MatrixOptions } from "../MatrixOptions/MatrixOptions";

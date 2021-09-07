@@ -4,6 +4,9 @@
 import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { IMatrixSingleCategory } from "../IMatrixCategory";
+import { MatrixCategory } from "../MatrixCategory/MatrixCategory";
+
 import { matrixFooterStyles } from "./MatrixFooter.styles";
 
 export interface IMatrixFooterProps {
@@ -11,8 +14,8 @@ export interface IMatrixFooterProps {
   selectedFeature1?: string;
   selectedFeature2?: string;
   selectedCells?: boolean[];
-  category1Values: any[];
-  category2Values: any[];
+  category1Values: IMatrixSingleCategory[];
+  category2Values: IMatrixSingleCategory[];
   sameFeatureSelected: boolean;
   matrixLength: number;
 }
@@ -32,13 +35,16 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
                 key={`${this.props.matrixLength}_${0}category1`}
                 className={classNames.matrixCellPivot1Categories}
               />
-              {this.props.category1Values.map((category: any, i: number) => {
+              {this.props.category1Values.map((_: any, i: number) => {
                 return (
                   <div
                     key={`${this.props.matrixLength}_${i + 1}category1`}
                     className={classNames.matrixCellPivot2Categories}
                   >
-                    {category.value}
+                    <MatrixCategory
+                      category={this.props.category1Values}
+                      index={i}
+                    />
                   </div>
                 );
               })}
@@ -56,13 +62,16 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
                 key={`${this.props.matrixLength}_${0}category1`}
                 className={classNames.matrixCellPivot1Categories}
               />
-              {this.props.category2Values.map((category: any, i: number) => {
+              {this.props.category2Values.map((_: any, i: number) => {
                 return (
                   <div
                     key={`${this.props.matrixLength}_${i + 1}category2`}
                     className={classNames.matrixCellPivot2Categories}
                   >
-                    {category.value}
+                    <MatrixCategory
+                      category={this.props.category2Values}
+                      index={i}
+                    />
                   </div>
                 );
               })}
