@@ -9,7 +9,7 @@ on:
 jobs:
   ci-python:
     env:
-      node-version: 16.x
+      node-version: 16.8
     strategy:
       matrix:
         packageDirectory:
