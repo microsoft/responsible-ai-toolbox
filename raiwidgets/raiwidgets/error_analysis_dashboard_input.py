@@ -284,7 +284,7 @@ class ErrorAnalysisDashboardInput:
                 metric = Metrics.MEAN_SQUARED_ERROR
             else:
                 metric = self._error_analyzer.metric
-        if model_available and true_y_dataset is not None:
+        if model_available:
             full_pred_y = self.compute_predicted_y(model, full_dataset)
         self.set_root_metric(full_pred_y, full_true_y, metric)
 
