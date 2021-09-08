@@ -33,7 +33,7 @@ export interface IMatrixAreaProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-  updateMatrixLegendState: (maxError: number) => void;
+  updateMatrixLegendState: (maxMetric: number, isErrorMetric: boolean) => void;
   state: IMatrixAreaState;
   setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
 }

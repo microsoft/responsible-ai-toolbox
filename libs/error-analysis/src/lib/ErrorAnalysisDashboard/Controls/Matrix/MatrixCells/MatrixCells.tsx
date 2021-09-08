@@ -61,9 +61,26 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           falseCount += value.falseCount;
         } else if (value.metricValue !== undefined) {
           metricName = value.metricName;
-          if (value.metricName === Metrics.MeanSquaredError) {
+          if (
+            metricName === Metrics.MeanSquaredError ||
+            metricName === Metrics.MeanAbsoluteError
+          ) {
             totalError += value.metricValue * value.count;
             maxMetricValue = Math.max(maxMetricValue, value.metricValue);
+          } else if (
+            metricName === Metrics.PrecisionScore ||
+            metricName === Metrics.RecallScore ||
+            metricName === Metrics.MicroPrecisionScore ||
+            metricName === Metrics.MacroPrecisionScore ||
+            metricName === Metrics.MicroRecallScore ||
+            metricName === Metrics.MacroRecallScore
+          ) {
+            totalError += value.error;
+            maxMetricValue = Math.max(maxMetricValue, value.metricValue);
+          } else {
+            throw new Error(
+              `Unknown metric value ${value.metricName} specified`
+            );
           }
         }
       }
@@ -76,16 +93,32 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           {row.map((value, j: number) => {
             let errorRatio = 0;
             let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
+            let isErrorMetric = true;
             if (value.count > 0) {
               if (value.falseCount !== undefined) {
                 errorRatio = (value.falseCount / value.count) * 100;
               } else {
                 metricName = value.metricName;
-                if (value.metricName === Metrics.MeanSquaredError) {
+                if (
+                  metricName === Metrics.MeanSquaredError ||
+                  metricName === Metrics.MeanAbsoluteError ||
+                  metricName === Metrics.PrecisionScore ||
+                  metricName === Metrics.RecallScore ||
+                  metricName === Metrics.MicroPrecisionScore ||
+                  metricName === Metrics.MacroPrecisionScore ||
+                  metricName === Metrics.MicroRecallScore ||
+                  metricName === Metrics.MacroRecallScore
+                ) {
                   errorRatio = (value.metricValue / maxMetricValue) * 100;
+                  if (
+                    metricName !== Metrics.MeanSquaredError &&
+                    metricName !== Metrics.MeanAbsoluteError
+                  ) {
+                    isErrorMetric = false;
+                  }
                 }
               }
-              const bkgcolor = this.colorLookup(errorRatio);
+              const bkgcolor = this.colorLookup(errorRatio, isErrorMetric);
               const color = this.textColorForBackground(bkgcolor);
               styledGradientMatrixCell = mergeStyles([
                 styledGradientMatrixCell,
@@ -225,14 +258,23 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
     return outputMin + (outputMax - outputMin) * value;
   }
 
-  private colorgradRatio(value: number): string | undefined {
+  private colorgradRatio(
+    value: number,
+    isErrorMetric: boolean
+  ): string | undefined {
+    const minColor = isErrorMetric
+      ? ColorPalette.MinErrorColor
+      : ColorPalette.MinMetricColor;
+    const maxColor = isErrorMetric
+      ? ColorPalette.MaxErrorColor
+      : ColorPalette.MaxMetricColor;
     return d3scaleLinear<string>()
       .domain([0, 1])
       .interpolate(d3interpolateHcl)
-      .range([ColorPalette.MinColor, ColorPalette.MaxColor])(value);
+      .range([minColor, maxColor])(value);
   }
 
-  private colorLookup(ratio: number): string {
+  private colorLookup(ratio: number, isErrorMetric: boolean): string {
     let result = "#eaeaea";
 
     if (!ratio) {
@@ -241,7 +283,9 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
 
     const rate = ratio / 100;
     if (rate > 0.01 && rate <= 1) {
-      result = this.colorgradRatio(this.mapRange(0, 1, rate)) || "#ffffff";
+      result =
+        this.colorgradRatio(this.mapRange(0, 1, rate), isErrorMetric) ||
+        "#ffffff";
     } else {
       result = "#ffffff";
     }

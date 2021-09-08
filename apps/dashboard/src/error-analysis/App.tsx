@@ -21,16 +21,21 @@ import {
   generateJsonMatrix,
   generateJsonTreeAdultCensusIncome,
   generateJsonTreeBreastCancer,
+  generateJsonTreeBreastCancerPrecision,
+  generateJsonTreeBreastCancerRecall,
   generateJsonTreeBoston,
   getJsonMatrix,
   getJsonTreeAdultCensusIncome,
   getJsonTreeBreastCancer,
+  getJsonTreeBreastCancerPrecision,
+  getJsonTreeBreastCancerRecall,
   getJsonTreeBoston,
   DatasetName
 } from "./utils";
 
 interface IAppProps {
   dataset: IExplanationDashboardData | ISerializedExplanationData;
+  datasetName: string;
   theme: ITheme;
   language: Language;
   version: 1 | 2 | 3;
@@ -210,6 +215,15 @@ export class App extends React.Component<IAppProps> {
     }
     if (this.props.version === 1) {
       const dataset = this.props.dataset as IExplanationDashboardData;
+      let datasetType: DatasetName = DatasetName.BreastCancer;
+      let requestFunction = generateJsonTreeBreastCancer;
+      if (this.props.datasetName === "breastCancerRecallData") {
+        datasetType = DatasetName.BreastCancerRecall;
+        requestFunction = generateJsonTreeBreastCancerRecall;
+      } else if (this.props.datasetName === "breastCancerPrecisionData") {
+        datasetType = DatasetName.BreastCancerPrecision;
+        requestFunction = generateJsonTreeBreastCancerPrecision;
+      }
       dashboardProp = {
         ...dataset,
         explanationMethod: "mimic",
@@ -218,13 +232,13 @@ export class App extends React.Component<IAppProps> {
           : [],
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
-        requestDebugML: generateJsonTreeBreastCancer,
+        requestDebugML: requestFunction,
         requestImportances: createJsonImportancesGenerator(
           "dataSummary" in this.props.dataset &&
             this.props.dataset.dataSummary.featureNames
             ? this.props.dataset.dataSummary.featureNames
             : [],
-          DatasetName.BreastCancer
+          datasetType
         ),
         requestMatrix: generateJsonMatrix,
         requestPredictions: !this.props.classDimension
@@ -251,6 +265,12 @@ export class App extends React.Component<IAppProps> {
         theme: this.props.theme
       };
     } else {
+      let requestFunction = getJsonTreeBreastCancer;
+      if (this.props.datasetName === "breastCancerRecallData") {
+        requestFunction = getJsonTreeBreastCancerRecall;
+      } else if (this.props.datasetName === "breastCancerPrecisionData") {
+        requestFunction = getJsonTreeBreastCancerPrecision;
+      }
       const dataset = this.props.dataset as IExplanationDashboardData;
       const featureNames = dataset.dataSummary.featureNames
         ? dataset.dataSummary.featureNames
@@ -261,7 +281,7 @@ export class App extends React.Component<IAppProps> {
         features: featureNames,
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
-        staticDebugML: getJsonTreeBreastCancer(featureNames),
+        staticDebugML: requestFunction(featureNames),
         staticMatrix: getJsonMatrix(),
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
