@@ -26,7 +26,7 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {
-        fieldName: "key",
+        fieldName: "name",
         key: "key",
         minWidth: 50,
         name: localization.ModelAssessment.DashboardSettings.DashboardComponents
@@ -67,7 +67,7 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
     }
     return (
       <DashboardSettingDeleteButton
-        name={item.key}
+        name={item.name}
         index={index}
         removeTab={this.props.removeTab}
       />
