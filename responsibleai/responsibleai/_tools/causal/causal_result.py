@@ -3,44 +3,45 @@
 """Result of causal analysis."""
 
 import json
+import pandas as pd
 import re
 import uuid
 
 from pathlib import Path
-from typing import Any, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 from responsibleai._tools.causal.causal_constants import (
-    ResultAttributes, SerializationAttributes)
+    ResultAttributes, Versions)
 from responsibleai._interfaces import (
     CausalConfig as CausalConfigInterface, CausalData, CausalPolicy,
     CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf,
     ComparisonTypes)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.shared.attribute_serialization import (
-    load_attributes, save_attributes)
-from responsibleai.serialization_utilities import serialize_json_safe
+    SerializationFormat)
+from responsibleai._tools.shared.base_result import BaseResult
 
 
-class CausalResult:
+class CausalResult(BaseResult['CausalResult']):
     """Result of causal analysis."""
 
-    _ATTRIBUTES = [
-        'config',
-        'causal_analysis',
-        'global_effects',
-        'local_effects',
-        'policies'
-    ]
+    _ATTRIBUTES = {
+        'config': SerializationFormat.PICKLE,
+        'causal_analysis': SerializationFormat.PICKLE,
+        'global_effects': SerializationFormat.PICKLE,
+        'local_effects': SerializationFormat.PICKLE,
+        'policies': SerializationFormat.PICKLE,
+    }
 
     def __init__(
         self,
         config: Optional[CausalConfig] = None,
         causal_analysis: Optional[Any] = None,
-        global_effects: Optional[Any] = None,
-        local_effects: Optional[Any] = None,
+        global_effects: Optional[pd.DataFrame] = None,
+        local_effects: Optional[pd.DataFrame] = None,
         policies: Optional[Any] = None,
     ):
-        self.id = str(uuid.uuid4())
+        super().__init__(str(uuid.uuid4()), Versions.CURRENT)
 
         self.config = config
 
@@ -49,38 +50,12 @@ class CausalResult:
         self.local_effects = local_effects
         self.policies = policies
 
-    def save(self, path: Union[str, Path]):
-        result_dir = Path(path)
-        result_dir.mkdir(parents=True, exist_ok=True)
-
-        # Save all result attributes to disk
-        save_attributes(self, self._ATTRIBUTES, result_dir)
-
-        # Save dashboard file
-        dashboard = self._get_dashboard_data()
-        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
-        with open(result_dir / dashboard_filename, 'w') as f:
-            json.dump(dashboard, f)
-
-    @classmethod
-    def load(cls, path: Union[str, Path]) -> 'CausalResult':
-        result_dir = Path(path)
-
-        result_id = result_dir.name
-        loaded = cls()
-        loaded.id = result_id
-
-        # Load all result attributes from disk
-        load_attributes(loaded, cls._ATTRIBUTES, result_dir)
-        return loaded
-
-    def _get_dashboard_data(self):
-        return serialize_json_safe(self._get_dashboard_object())
-
     def _get_dashboard_object(self):
         causal_data = CausalData()
 
         causal_data.id = self.id
+        causal_data.version = self.version
+
         causal_data.config = self._get_config_object(self.config)
 
         causal_data.global_effects = self.global_effects\
@@ -161,8 +136,8 @@ class CausalResult:
     @classmethod
     def _parse_comparison(
         cls,
-        policy_tree,
-        categoricals,
+        policy_tree: Any,
+        categoricals: List[str],
     ) -> Tuple[str, str, Union[float, int, str]]:
         """Attempt to parse a categorical comparison from a policy tree node.
 
@@ -206,3 +181,13 @@ class CausalResult:
                 break
 
         return feature, comparison, value
+
+    def _get_schema(cls, version: str):
+        schema_directory = Path(__file__).parent / 'dashboard_schemas'
+        schema_filename = f'schema_{version}.json'
+        schema_filepath = schema_directory / schema_filename
+        with open(schema_filepath, 'r') as f:
+            return json.load(f)
+
+    def _get_attributes(self):
+        return self._ATTRIBUTES

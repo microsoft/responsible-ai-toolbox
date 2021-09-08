@@ -58,9 +58,9 @@ class ResultAttributes:
     RIGHT = 'right'
 
 
-class SerializationAttributes:
-    """Attributes constants for a serialized CausalResult."""
+class Versions:
+    """Versions for CausalResults."""
 
-    RESULTS = 'results'
+    V_0_1_0 = '0.1.0'
 
-    DASHBOARD_FILENAME = 'dashboard.json'
+    CURRENT = V_0_1_0
