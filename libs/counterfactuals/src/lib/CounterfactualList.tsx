@@ -216,15 +216,17 @@ export class CounterfactualList extends React.Component<
         name: targetFeature || ""
       }
     );
-    featureNames.forEach((f) =>
-      columns.push({
-        fieldName: f,
-        isResizable: true,
-        key: f,
-        minWidth: 175,
-        name: f
-      })
-    );
+    featureNames
+      .filter((f) => f !== targetFeature)
+      .forEach((f) =>
+        columns.push({
+          fieldName: f,
+          isResizable: true,
+          key: f,
+          minWidth: 175,
+          name: f
+        })
+      );
     return columns;
   }
 
@@ -305,13 +307,12 @@ export class CounterfactualList extends React.Component<
 
   private getSortedFeatureNames(): string[] {
     const data: ILocalImportanceData[] = [];
-    const defaultFeatures = this.props?.data?.feature_names || [];
     const localImportanceData =
       this.props.data?.local_importance?.[this.props.selectedIndex];
     if (!localImportanceData || !this.props.sortFeatures) {
-      return defaultFeatures;
+      return this.props?.data?.feature_names_including_target || [];
     }
-    defaultFeatures.forEach((f, index) => {
+    this.props?.data?.feature_names_including_target.forEach((f, index) => {
       data.push({
         label: f,
         value: localImportanceData[index] || -Infinity
