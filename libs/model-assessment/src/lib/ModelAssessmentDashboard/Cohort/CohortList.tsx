@@ -11,7 +11,8 @@ import {
   Link,
   Stack,
   Text,
-  Label
+  Label,
+  SelectionMode
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -20,10 +21,6 @@ export interface ICohortListProps {
   onEditCohortClick?: (editedCohort: ErrorCohort) => void;
   onRemoveCohortClick?: (editedCohort: ErrorCohort) => void;
   enableEditing: boolean;
-}
-
-export interface ICohortListState {
-  items: ICohortListItem[];
 }
 
 export interface ICohortListItem {
@@ -35,18 +32,9 @@ export interface ICohortListItem {
   details?: string[];
 }
 
-export class CohortList extends React.Component<
-  ICohortListProps,
-  ICohortListState
-> {
-  private columns: IColumn[];
-  public constructor(props: ICohortListProps) {
-    super(props);
-    const cohortListItems = this.getCohortListItems();
-    this.state = {
-      items: cohortListItems
-    };
-    this.columns = [
+export class CohortList extends React.Component<ICohortListProps> {
+  public render(): React.ReactNode {
+    const columns = [
       {
         fieldName: "name",
         isResizable: true,
@@ -54,36 +42,26 @@ export class CohortList extends React.Component<
         maxWidth: 200,
         minWidth: 50,
         name: "Name"
+      },
+      {
+        fieldName: "details",
+        isResizable: true,
+        key: "detailsColumn",
+        maxWidth: 100,
+        minWidth: 75,
+        name: "Details"
       }
     ];
-    this.columns.push({
-      fieldName: "details",
-      isResizable: true,
-      key: "detailsColumn",
-      maxWidth: 100,
-      minWidth: 75,
-      name: "Details"
-    });
-  }
-
-  public componentDidUpdate(prevProps: ICohortListProps): void {
-    if (this.props.errorCohorts !== prevProps.errorCohorts) {
-      const cohortListItems = this.getCohortListItems();
-      this.setState({ items: cohortListItems });
-    }
-  }
-
-  public render(): React.ReactNode {
-    const items = this.state.items;
+    const items = this.getCohortListItems();
     return (
       <Stack>
         <Label>{localization.ModelAssessment.Cohort.cohortList}</Label>
         <DetailsList
           items={items}
-          columns={this.columns}
+          columns={columns}
           setKey="set"
           layoutMode={DetailsListLayoutMode.justified}
-          selectionPreservedOnEmptyClick
+          selectionMode={SelectionMode.none}
           checkboxVisibility={CheckboxVisibility.hidden}
           onRenderItemColumn={this.renderItemColumn.bind(this)}
         />
