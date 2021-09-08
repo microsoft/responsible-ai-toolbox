@@ -191,18 +191,31 @@ export class CounterfactualList extends React.Component<
   };
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
+    const targetFeature =
+      this.props.data?.feature_names_including_target[
+        this.props.data?.feature_names_including_target.length - 1
+      ];
     const featureNames = this.getFilterFeatures();
     if (!featureNames || featureNames.length === 0) {
       return columns;
     }
-    columns.push({
-      fieldName: nameColumnKey,
-      isResizable: true,
-      key: nameColumnKey,
-      minWidth: 200,
-      name: "",
-      onRender: this.renderName
-    });
+    columns.push(
+      {
+        fieldName: nameColumnKey,
+        isResizable: true,
+        key: nameColumnKey,
+        minWidth: 200,
+        name: "",
+        onRender: this.renderName
+      },
+      {
+        fieldName: targetFeature,
+        isResizable: true,
+        key: targetFeature || "",
+        minWidth: 175,
+        name: targetFeature || ""
+      }
+    );
     featureNames.forEach((f) =>
       columns.push({
         fieldName: f,
@@ -292,12 +305,13 @@ export class CounterfactualList extends React.Component<
 
   private getSortedFeatureNames(): string[] {
     const data: ILocalImportanceData[] = [];
+    const defaultFeatures = this.props?.data?.feature_names || [];
     const localImportanceData =
       this.props.data?.local_importance?.[this.props.selectedIndex];
     if (!localImportanceData || !this.props.sortFeatures) {
-      return this.props?.data?.feature_names_including_target || [];
+      return defaultFeatures;
     }
-    this.props?.data?.feature_names_including_target.forEach((f, index) => {
+    defaultFeatures.forEach((f, index) => {
       data.push({
         label: f,
         value: localImportanceData[index] || -Infinity
