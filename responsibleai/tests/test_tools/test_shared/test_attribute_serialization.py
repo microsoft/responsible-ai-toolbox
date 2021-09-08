@@ -4,7 +4,7 @@ import pytest
 
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes,
-    SerializationExtensions, SerializationFormats)
+    SerializationExtensions, SerializationFormat)
 
 
 class Example:
@@ -21,63 +21,75 @@ class TestAttributeSerialization:
 
     def test_pickle(self, tmpdir):
         example = Example(a='A', b='B', c='C')
-        attributes = ['a', 'b']
+        attributes = {
+            'a': SerializationFormat.PICKLE,
+            'b': SerializationFormat.PICKLE,
+        }
         save_dir = tmpdir.mkdir('save-dir')
-        file_format = SerializationFormats.PICKLE
-        self._validate_roundtrip(example, attributes, save_dir, file_format)
+        self._validate_roundtrip(example, attributes, save_dir)
 
     def test_json(self, tmpdir):
         example = Example(a={'a': 'A'}, b={'b': 'B'}, c={'c': 'C'})
-        attributes = ['a', 'b']
+        attributes = {
+            'a': SerializationFormat.JSON,
+            'b': SerializationFormat.JSON,
+        }
         save_dir = tmpdir.mkdir('save-dir')
-        file_format = SerializationFormats.JSON
-        self._validate_roundtrip(example, attributes, save_dir, file_format)
+        self._validate_roundtrip(example, attributes, save_dir)
 
     def test_text(self, tmpdir):
         example = Example(a='A', b='B', c='C')
         save_dir = tmpdir.mkdir('save-dir')
-        attributes = ['a', 'b']
-        file_format = SerializationFormats.TEXT
-        self._validate_roundtrip(example, attributes, save_dir, file_format)
-
-    def test_list_formats(self, tmpdir):
-        example = Example(a='A', b='B', c='C')
-        save_dir = tmpdir.mkdir('save-dir')
-        attributes = ['a', 'b']
-        file_format = [
-            SerializationFormats.TEXT,
-            SerializationFormats.PICKLE,
-        ]
-        self._validate_roundtrip(example, attributes, save_dir, file_format)
+        attributes = {
+            'a': SerializationFormat.TEXT,
+            'b': SerializationFormat.TEXT,
+        }
+        self._validate_roundtrip(example, attributes, save_dir)
 
     def test_missing_attribute_fail(self, tmpdir):
         save_dir = tmpdir.mkdir('save-dir')
 
-        example = Example(a='A', b='B', c='C')
-
-        save_attributes(example, ['a', 'b'], save_dir)
+        o_pre = Example(a='A', b='B', c='C')
+        attributes = {
+            'a': SerializationFormat.TEXT,
+            'b': SerializationFormat.TEXT,
+        }
+        save_attributes(o_pre, attributes, save_dir)
 
         o_post = Example()
-        message = ".*No such file or directory: .*save-dir[\\\\/]+c.pkl"
+        attributes = {
+            'a': SerializationFormat.TEXT,
+            'b': SerializationFormat.TEXT,
+            'c': SerializationFormat.TEXT,
+        }
+        message = ".*No such file or directory: .*save-dir[\\\\/]+c.txt"
         with pytest.raises(FileNotFoundError, match=message):
-            load_attributes(o_post, ['a', 'b', 'c'], save_dir)
+            load_attributes(o_post, attributes, save_dir)
 
     def test_missing_attribute_pass(self, tmpdir):
         save_dir = tmpdir.mkdir('save-dir')
 
-        example = Example(a='A', b='B', c='C')
-
-        save_attributes(example, ['a', 'b'], save_dir)
+        o_pre = Example(a='A', b='B', c='C')
+        attributes = {
+            'a': SerializationFormat.TEXT,
+            'b': SerializationFormat.TEXT,
+        }
+        save_attributes(o_pre, attributes, save_dir)
 
         o_post = Example()
-        load_attributes(o_post, ['a', 'b', 'c'], save_dir,
+        attributes = {
+            'a': SerializationFormat.TEXT,
+            'b': SerializationFormat.TEXT,
+            'c': SerializationFormat.TEXT,
+        }
+        load_attributes(o_post, attributes, save_dir,
                         fail_on_missing=False)
 
-    def _validate_roundtrip(self, o, attributes, save_dir, file_format):
-        save_attributes(o, attributes, save_dir, file_format=file_format)
+    def _validate_roundtrip(self, o, attributes, save_dir):
+        save_attributes(o, attributes, save_dir)
 
         o_post = Example()
-        load_attributes(o_post, attributes, save_dir, file_format=file_format)
+        load_attributes(o_post, attributes, save_dir)
 
         for attribute in attributes:
             assert getattr(o, attribute) == getattr(o_post, attribute)
