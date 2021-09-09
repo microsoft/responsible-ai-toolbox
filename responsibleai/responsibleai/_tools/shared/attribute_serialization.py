@@ -5,12 +5,11 @@
 import json
 import pickle
 
-from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import Any, List, Union
 
 
-class SerializationFormat(Enum):
+class SerializationFormats:
     PICKLE = 'pickle'
     JSON = 'json'
     TEXT = 'text'
@@ -22,12 +21,12 @@ class SerializationExtensions:
     TXT = 'txt'
 
     @classmethod
-    def from_format(cls, file_format: SerializationFormat) -> str:
-        if file_format == SerializationFormat.PICKLE:
+    def from_format(cls, file_format: str) -> str:
+        if file_format == SerializationFormats.PICKLE:
             return cls.PKL
-        elif file_format == SerializationFormat.JSON:
+        elif file_format == SerializationFormats.JSON:
             return cls.JSON
-        elif file_format == SerializationFormat.TEXT:
+        elif file_format == SerializationFormats.TEXT:
             return cls.TXT
         else:
             raise ValueError(f"Unknown format: {file_format}")
@@ -35,14 +34,14 @@ class SerializationExtensions:
 
 def save_attributes(
     o: Any,
-    attributes: Dict[str, SerializationFormat],
+    attributes: List[str],
     path: Union[str, Path],
+    file_format: Union[str, List[str]] = SerializationFormats.PICKLE,
 ) -> List[Path]:
     """Save attributes from an object to disk.
 
     :param o: Object from which to pull attributes.
-    :param attributes: Dictionary mapping attribute names to
-        serialization formats to use when saving each attribute.
+    :param attributes: List of attributes on the object to save.
     :param path: Path to directory on disk in which to write the attributes.
     :param file_format: File format to use when writing to disk. A list of
         file formats can be passed to assign each attribute a different
@@ -51,11 +50,13 @@ def save_attributes(
     """
     paths = []
     dir_path = Path(path)
-    for attribute, file_format in attributes.items():
+    is_format_list = isinstance(file_format, list)
+    for i, attribute in enumerate(attributes):
+        attribute_format = file_format[i] if is_format_list else file_format
         value = getattr(o, attribute)
-        extension = SerializationExtensions.from_format(file_format)
+        extension = SerializationExtensions.from_format(attribute_format)
         path = dir_path / f'{attribute}.{extension}'
-        _save_attribute(value, path, file_format)
+        _save_attribute(value, path, attribute_format)
         paths.append(path)
     return paths
 
@@ -65,13 +66,13 @@ def _save_attribute(
     path: Union[str, Path],
     file_format: str,
 ) -> None:
-    if file_format == SerializationFormat.PICKLE:
+    if file_format == SerializationFormats.PICKLE:
         with open(path, 'wb') as f:
             pickle.dump(value, f)
-    elif file_format == SerializationFormat.JSON:
+    elif file_format == SerializationFormats.JSON:
         with open(path, 'w') as f:
             json.dump(value, f)
-    elif file_format == SerializationFormat.TEXT:
+    elif file_format == SerializationFormats.TEXT:
         with open(path, 'w') as f:
             f.write(value)
     else:
@@ -80,40 +81,45 @@ def _save_attribute(
 
 def load_attributes(
     o: Any,
-    attributes: Dict[str, SerializationFormat],
+    attributes: List[str],
     path: Union[str, Path],
+    file_format: Union[str, List[str]] = SerializationFormats.PICKLE,
     fail_on_missing: bool = True,
 ) -> None:
     """Load attributes from disk and save to an existing object.
 
     :param o: Object on which to save the loaded attributes.
-    :param attributes: Dictionary mapping attribute names to
-        serialization formats to use when saving each attribute.
+    :param attributes: List of attributes to load to the object.
     :param path: Path to directory on disk where attributes are saved.
+    :param file_format: File format to use when loading attributes from
+        disk. A list of file formats can be passed to assign each
+        attribute a different format.
     :param fail_on_missing: Whether to raise an exception if an attribute
         was not found.
     """
     dir_path = Path(path)
-    for attribute, file_format in attributes.items():
-        extension = SerializationExtensions.from_format(file_format)
+    is_format_list = isinstance(file_format, list)
+    for i, attribute in enumerate(attributes):
+        attribute_format = file_format[i] if is_format_list else file_format
+        extension = SerializationExtensions.from_format(attribute_format)
         path = dir_path / f'{attribute}.{extension}'
         if not fail_on_missing and (not path.exists() or not path.is_file()):
             continue
-        value = _load_attribute(path, file_format)
+        value = _load_attribute(path, attribute_format)
         setattr(o, attribute, value)
 
 
 def _load_attribute(
     path: Union[str, Path],
-    file_format: SerializationFormat,
+    file_format: str,
 ) -> Any:
-    if file_format == SerializationFormat.PICKLE:
+    if file_format == SerializationFormats.PICKLE:
         with open(path, 'rb') as f:
             return pickle.load(f)
-    elif file_format == SerializationFormat.JSON:
+    elif file_format == SerializationFormats.JSON:
         with open(path, 'r') as f:
             return json.load(f)
-    elif file_format == SerializationFormat.TEXT:
+    elif file_format == SerializationFormats.TEXT:
         with open(path, 'r') as f:
             return f.read()
     else:

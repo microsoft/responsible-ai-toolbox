@@ -17,21 +17,19 @@ from responsibleai._interfaces import (
     CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf,
     ComparisonTypes)
 from responsibleai._tools.causal.causal_config import CausalConfig
-from responsibleai._tools.shared.attribute_serialization import (
-    SerializationFormat)
 from responsibleai._tools.shared.base_result import BaseResult
 
 
 class CausalResult(BaseResult['CausalResult']):
     """Result of causal analysis."""
 
-    _ATTRIBUTES = {
-        'config': SerializationFormat.PICKLE,
-        'causal_analysis': SerializationFormat.PICKLE,
-        'global_effects': SerializationFormat.PICKLE,
-        'local_effects': SerializationFormat.PICKLE,
-        'policies': SerializationFormat.PICKLE,
-    }
+    _ATTRIBUTES = [
+        'config',
+        'causal_analysis',
+        'global_effects',
+        'local_effects',
+        'policies',
+    ]
 
     def __init__(
         self,

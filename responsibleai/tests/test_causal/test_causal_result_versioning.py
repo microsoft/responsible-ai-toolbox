@@ -14,7 +14,6 @@ class TestCausalVersioning:
     def test_current_roundtrip(self, parks_data, tmpdir):
         train_df, test_df, target_feature = parks_data
         save_dir = tmpdir.mkdir('result-dir')
-        save_dir = '/datadrive/src/responsible-ai-widgets/responsibleai/tests/save-result'
 
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, ['state', 'attraction'])

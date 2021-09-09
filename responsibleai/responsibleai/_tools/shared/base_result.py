@@ -7,15 +7,13 @@ import jsonschema
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Generic, TypeVar, Union
+from typing import Any, Generic, List, TypeVar, Union
 
 from responsibleai.serialization_utilities import serialize_json_safe
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
 from responsibleai._internal.constants import (
     SerializationAttributes)
-from responsibleai._tools.shared.attribute_serialization import (
-    SerializationFormat)
 
 
 TResult = TypeVar('TResult')  # Type for subclasses of BaseResult
@@ -133,5 +131,5 @@ class BaseResult(ABC, Generic[TResult]):
         pass
 
     @abstractmethod
-    def _get_attributes(self) -> Dict[str, SerializationFormat]:
+    def _get_attributes(self) -> List[str]:
         pass
