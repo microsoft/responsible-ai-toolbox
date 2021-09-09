@@ -204,7 +204,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             modelAssessmentDashboardStyles.sectionHeader
                           }
                         >
-                          <Text variant={"xLarge"}>
+                          <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
                                 .ModelStatistics
@@ -221,7 +221,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             modelAssessmentDashboardStyles.sectionHeader
                           }
                         >
-                          <Text variant={"xLarge"}>
+                          <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
                                 .DataExplorer
