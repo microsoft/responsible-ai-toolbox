@@ -34,7 +34,6 @@ export interface IDatasetExplorerTabStyles {
   callout: IStyle;
   chartEditorButton: IStyle;
   smallItalic: IStyle;
-  dropdown: IStyle;
 }
 
 export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
@@ -97,18 +96,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         height: "12px",
         margin: "11px 4px 11px 8px",
         width: "12px"
-      },
-      dropdown: {
-        callout: {
-          selectors: {
-            ".ms-Button-flexContainer": {
-              width: "100%"
-            }
-          }
-        },
-        dropdown: {
-          width: 150
-        }
       },
       helperText: {
         paddingLeft: "15px",
