@@ -105,8 +105,8 @@ class CausalManager(BaseManager):
             value to indicate a constant cost of applying that treatment or
             an array indicating the cost for each sample. If the treatment
             is a discrete treatment, then the array for that feature should
-            be two dimensional wih the first dimension representing samples
-            and t second representing the difference in cost between the
+            be two dimensional with the first dimension representing samples
+            and the second representing the difference in cost between the
             non-default values and the default value.
         :type treatment_cost: None, List of float or array
         :param min_tree_leaf_samples: Minimum number of samples per leaf
