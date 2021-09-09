@@ -49,4 +49,5 @@ export interface IModelAssessmentDashboardState
 export interface IModelAssessmentDashboardTab {
   key: GlobalTabKeys;
   dataCount: number;
+  name: string;
 }
