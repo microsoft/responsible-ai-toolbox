@@ -64,3 +64,6 @@ class Versions:
     V_0_1_0 = '0.1.0'
 
     CURRENT = V_0_1_0
+    ALL = [
+        V_0_1_0,
+    ]

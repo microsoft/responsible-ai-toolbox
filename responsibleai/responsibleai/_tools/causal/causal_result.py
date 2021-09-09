@@ -181,6 +181,9 @@ class CausalResult(BaseResult['CausalResult']):
         return feature, comparison, value
 
     def _get_schema(cls, version: str):
+        if version not in Versions.ALL:
+            raise ValueError(f"Invalid version for causal result: {version}")
+
         schema_directory = Path(__file__).parent / 'dashboard_schemas'
         schema_filename = f'schema_{version}.json'
         schema_filepath = schema_directory / schema_filename
