@@ -26,7 +26,8 @@ import {
   CommandBarButton,
   Dropdown,
   IDropdownOption,
-  Label
+  Label,
+  Toggle
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -57,6 +58,7 @@ export interface ILocalImportancePlotsProps {
 export interface ILocalImportancePlotsState {
   topK: number;
   sortArray: number[];
+  sortAbsolute: boolean;
   sortingSeriesIndex: number | undefined;
   secondaryChartChoice: string;
   selectedFeatureKey: string;
@@ -95,6 +97,7 @@ export class LocalImportancePlots extends React.Component<
       secondaryChartChoice: WhatIfConstants.featureImportanceKey,
       selectedFeatureKey: `${JointDataset.DataLabelRoot}0`,
       selectedICEClass: 0,
+      sortAbsolute: true,
       sortArray: this.props.sortArray,
       sortingSeriesIndex: undefined,
       topK: 4
@@ -189,12 +192,25 @@ export class LocalImportancePlots extends React.Component<
                 >
                   {localization.Interpret.GlobalTab.sortBy}
                 </Text>
+                <Toggle
+                  label={localization.Interpret.GlobalTab.absoluteValues}
+                  inlineLabel
+                  checked={this.state.sortAbsolute}
+                  onChange={this.toggleSortAbsolute}
+                />
+                <Text
+                  variant={"medium"}
+                  className={classNames.cohortPickerLabel}
+                >
+                  {localization.Interpret.GlobalTab.datapoint}
+                </Text>
                 <Dropdown
                   styles={{ dropdown: { width: 150 } }}
                   options={featureImportanceSortOptions}
                   selectedKey={this.state.sortingSeriesIndex}
                   onChange={this.setSortIndex}
                 />
+
                 {this.props.metadata.modelType === ModelTypes.Multiclass && (
                   <div>
                     <div className={classNames.multiclassWeightLabel}>
@@ -441,9 +457,13 @@ export class LocalImportancePlots extends React.Component<
       return;
     }
     const newIndex = item.key as number;
-    const sortArray = ModelExplanationUtils.getSortIndices(
-      this.props.includedFeatureImportance[newIndex].unsortedAggregateY
-    ).reverse();
+    const sortArray = this.state.sortAbsolute
+      ? ModelExplanationUtils.getAbsoluteSortIndices(
+          this.props.includedFeatureImportance[newIndex].unsortedAggregateY
+        ).reverse()
+      : ModelExplanationUtils.getSortIndices(
+          this.props.includedFeatureImportance[newIndex].unsortedAggregateY
+        ).reverse();
     this.setState({ sortArray, sortingSeriesIndex: newIndex });
   };
 
@@ -474,5 +494,28 @@ export class LocalImportancePlots extends React.Component<
 
   private toggleICETooltip = (): void => {
     this.setState({ iceTooltipVisible: !this.state.iceTooltipVisible });
+  };
+
+  private toggleSortAbsolute = (
+    _event: React.MouseEvent<HTMLElement, MouseEvent>,
+    checked?: boolean | undefined
+  ) => {
+    if (checked !== undefined) {
+      let sortArray: number[] = [];
+      if (this.state.sortingSeriesIndex !== undefined) {
+        sortArray = checked
+          ? ModelExplanationUtils.getAbsoluteSortIndices(
+              this.props.includedFeatureImportance[
+                this.state.sortingSeriesIndex
+              ].unsortedAggregateY
+            ).reverse()
+          : ModelExplanationUtils.getSortIndices(
+              this.props.includedFeatureImportance[
+                this.state.sortingSeriesIndex
+              ].unsortedAggregateY
+            ).reverse();
+      }
+      this.setState({ sortAbsolute: checked, sortArray });
+    }
   };
 }
