@@ -29,21 +29,13 @@ export class ChartBuilder {
       y: any;
       group: any;
       size: any;
-      xLowerBound: number;
-      xUpperBound: number;
-      yLowerBound: number;
-      yUpperBound: number;
     }> = jmespath.search(
       rows,
       `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${
         datum.yAccessor
-      }, xLowerBound: ${datum.xAccessorLowerBound}, xUpperBound: ${
-        datum.xAccessorUpperBound
-      },
-      yLowerBound: ${datum.yAccessorLowerBound}, yUpperBound: ${
-        datum.yAccessorUpperBound
-      }
-      , group: ${datum.groupBy}, size: ${datum.sizeAccessor}${datumLevelPaths}}`
+      }, group: ${datum.groupBy}, size: ${
+        datum.sizeAccessor
+      }${datumLevelPaths}}`
     );
     // for bubble charts, we scale all sizes to the max size, only needs to be done once since its global
     // Due to https://github.com/plotly/plotly.js/issues/2080 we have to set size explicitly rather than use
@@ -125,7 +117,6 @@ export class ChartBuilder {
           (series.y as Datum[]).push(row.y);
         }
       }
-
       if (datum.sizeAccessor) {
         const size =
           (row.size * (datum.maxMarkerSize || 40) ** 2) / (2 * maxBubbleValue);
@@ -167,37 +158,6 @@ export class ChartBuilder {
     Object.keys(groupingDictionary).forEach((key) => {
       result.push(groupingDictionary[key]);
     });
-
-    const xLowerBound: any = [];
-    const xUpperBound: any = [];
-    projectedRows.forEach((row) => {
-      xLowerBound.push(row.xLowerBound);
-      xUpperBound.push(row.xUpperBound);
-    });
-
-    // Will not display on other charts that don't have bounds passed in
-    result[0].error_x = {
-      // `array` and `arrayminus` are error bounds as described in Plotly API
-      array: xUpperBound,
-      arrayminus: xLowerBound,
-      type: "data",
-      visible: true
-    };
-
-    const yLowerBound: any = [];
-    const yUpperBound: any = [];
-    projectedRows.forEach((row) => {
-      yLowerBound.push(row.yLowerBound);
-      yUpperBound.push(row.yUpperBound);
-    });
-
-    result[0].error_y = {
-      array: yLowerBound,
-      arrayminus: yUpperBound,
-      type: "data",
-      visible: true
-    };
-
     return result;
   }
 
