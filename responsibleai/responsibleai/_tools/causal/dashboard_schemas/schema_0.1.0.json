@@ -1,9 +1,28 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "AzureML Responsible AI causal analysis schema",
+  "title": "AzureML Responsible AI causal analysis dashboard schema",
   "description": "Full schema",
   "type": "object",
   "properties": {
+    "id": {
+      "description": "ID of causal result",
+      "type": "string"
+    },
+    "version": {
+      "description": "Version of causal result",
+      "type": "string"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "treatment_features": {
+          "description": "List of treatment features",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["treatment_features"]
+    },
     "global_effects": {
       "description": "Causal effects for whole dataset",
       "type": "array",
@@ -24,7 +43,14 @@
       "items": { "$ref": "#/definitions/policy" }
     }
   },
-  "required": ["global_effects", "local_effects", "policies"],
+  "required": [
+    "id",
+    "version",
+    "config",
+    "global_effects",
+    "local_effects",
+    "policies"
+  ],
   "definitions": {
     "causal_effect": {
       "type": "object",
