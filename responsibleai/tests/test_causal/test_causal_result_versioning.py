@@ -1,29 +1,33 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
 import pandas as pd
+import pytest
 
-from responsibleai._tools.causal.causal_result import CausalResult
+from jsonschema import ValidationError
 
 from responsibleai import ModelTask
 from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._tools.causal.causal_constants import Versions
+from responsibleai._tools.causal.causal_result import CausalResult
+
+
+@pytest.fixture(scope='module')
+def causal_result(parks_data):
+    train_df, test_df, target_feature = parks_data
+    manager = CausalManager(train_df, test_df, target_feature,
+                            ModelTask.REGRESSION, ['state', 'attraction'])
+
+    return manager.add(['attraction'],
+                       skip_cat_limit_checks=True,
+                       upper_bound_on_cat_expansion=50)
 
 
 class TestCausalVersioning:
-    def test_current_roundtrip(self, parks_data, tmpdir):
-        train_df, test_df, target_feature = parks_data
+    def test_current_roundtrip(self, tmpdir, causal_result):
         save_dir = tmpdir.mkdir('result-dir')
-
-        manager = CausalManager(train_df, test_df, target_feature,
-                                ModelTask.REGRESSION, ['state', 'attraction'])
-
-        result = manager.add(['attraction'],
-                             skip_cat_limit_checks=True,
-                             upper_bound_on_cat_expansion=50)
-
-        print(result._get_dashboard_data())
-
+        result = causal_result
         result.save(save_dir)
         loaded = CausalResult.load(save_dir)
         assert loaded.id == result.id
@@ -51,5 +55,30 @@ class TestCausalVersioning:
         else:
             assert o_1 == o_2
 
-    def test_backcompat_load(self):
-        pass
+    def test_invalid_version_load(self, tmpdir, causal_result):
+        save_dir = tmpdir.mkdir('result-dir')
+        result = causal_result
+        result.save(save_dir)
+
+        version_filepath = save_dir / 'version.json'
+        with open(version_filepath, 'w') as f:
+            new_version_data = {'version': 'invalid_version'}
+            json.dump(new_version_data, f)
+
+        message = r"Invalid version for causal result: invalid_version"
+        with pytest.raises(ValueError, match=message):
+            CausalResult.load(save_dir)
+
+    def test_invalid_dashboard_load(self, tmpdir, causal_result):
+        save_dir = tmpdir.mkdir('result-dir')
+        result = causal_result
+        result.save(save_dir)
+
+        dashboard_filepath = save_dir / 'dashboard.json'
+        with open(dashboard_filepath, 'w') as f:
+            new_dashboard_data = {'fake_dashboard': 'invalid'}
+            json.dump(new_dashboard_data, f)
+
+        message = r"Failed validating"
+        with pytest.raises(ValidationError, match=message):
+            CausalResult.load(save_dir)
