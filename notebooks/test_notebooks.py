@@ -175,6 +175,22 @@ def test_erroranalysis_dashboard_multiclass():
 
 
 @pytest.mark.notebooks
+def test_erroranalysis_dashboard_superconductor():
+    nb_name = "erroranalysis-dashboard-regression-superconductor"
+
+    test_values = {}
+    assay_one_notebook(nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_erroranalysis_dashboard_boston_housing():
+    nb_name = "erroranalysis-dashboard-regression-boston-housing"
+
+    test_values = {}
+    assay_one_notebook(nb_name, test_values)
+
+
+@pytest.mark.notebooks
 def test_model_analysis_adult_classification():
     nb_name = "model-analysis-adult-classification"
 

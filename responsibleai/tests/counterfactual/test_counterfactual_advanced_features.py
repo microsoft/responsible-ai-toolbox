@@ -3,6 +3,7 @@
 # Licensed under the MIT License.
 
 import pytest
+import numpy as np
 
 from ..common_utils import (
     create_iris_data, create_lightgbm_classifier
@@ -42,17 +43,28 @@ class TestCounterfactualAdvancedFeatures(object):
             feature_importance=feature_importance)
         model_analysis.counterfactual.compute()
 
-        # TODO: The logic below needs to be made robust for gated tests
-        # cf_obj = model_analysis.counterfactual.get()[0]
-        # for feature_name in feature_names:
-        #     if not vary_all_features and feature_name != feature_names[0]:
-        #         assert np.all(
-        #             cf_obj.cf_examples_list[0].final_cfs_df[feature_name] ==
-        #             X_test.iloc[0:1][feature_name][0])
-        #     else:
-        #         assert np.any(
-        #             cf_obj.cf_examples_list[0].final_cfs_df[feature_name] !=
-        #             X_test.iloc[0:1][feature_name][0])
+        cf_obj = model_analysis.counterfactual.get()[0]
+        for feature_name in feature_names:
+            if not vary_all_features and feature_name != feature_names[0]:
+                expected_array = np.repeat(
+                    [X_test.iloc[0:1][feature_name][0]],
+                    cf_obj.cf_examples_list[0].final_cfs_df.shape[0])
+                assert np.all(
+                    np.isclose(
+                        cf_obj.cf_examples_list[0].final_cfs_df[feature_name],
+                        expected_array
+                    )
+                )
+            else:
+                expected_array = np.repeat(
+                    [X_test.iloc[0:1][feature_name][0]],
+                    cf_obj.cf_examples_list[0].final_cfs_df.shape[0])
+                assert not np.all(
+                    np.isclose(
+                        cf_obj.cf_examples_list[0].final_cfs_df[feature_name],
+                        expected_array
+                    )
+                )
 
     @pytest.mark.parametrize('feature_importance', [True, False])
     def test_counterfactual_permitted_range(self, feature_importance):
@@ -78,19 +90,31 @@ class TestCounterfactualAdvancedFeatures(object):
         model_analysis.counterfactual.compute()
 
         # TODO: The logic below needs to be made robust for gated tests
-        # cf_obj = model_analysis.counterfactual.get()[0]
-        # for feature_name in feature_names:
-        #     if feature_name != feature_names[0]:
-        #         assert np.all(
-        #             cf_obj.cf_examples_list[0].final_cfs_df[feature_name] ==
-        #             X_test.iloc[0:1][feature_name][0])
-        #     else:
-        #         assert np.any(
-        #             cf_obj.cf_examples_list[0].final_cfs_df[feature_name] !=
-        #             X_test.iloc[0:1][feature_name][0])
-        #         assert np.any(
-        #             cf_obj.cf_examples_list[0].final_cfs_df[feature_name] >=
-        #             2.0)
-        #         assert np.any(
-        #             cf_obj.cf_examples_list[0].final_cfs_df[feature_name] <=
-        #             5.0)
+        cf_obj = model_analysis.counterfactual.get()[0]
+        for feature_name in feature_names:
+            if feature_name != feature_names[0]:
+                expected_array = np.repeat(
+                    [X_test.iloc[0:1][feature_name][0]],
+                    cf_obj.cf_examples_list[0].final_cfs_df.shape[0])
+                assert np.all(
+                    np.isclose(
+                        cf_obj.cf_examples_list[0].final_cfs_df[feature_name],
+                        expected_array
+                    )
+                )
+            else:
+                expected_array = np.repeat(
+                    [X_test.iloc[0:1][feature_name][0]],
+                    cf_obj.cf_examples_list[0].final_cfs_df.shape[0])
+                assert not np.all(
+                    np.isclose(
+                        cf_obj.cf_examples_list[0].final_cfs_df[feature_name],
+                        expected_array
+                    )
+                )
+                # assert np.any(
+                #     cf_obj.cf_examples_list[0].final_cfs_df[feature_name] >=
+                #     2.0)
+                # assert np.any(
+                #     cf_obj.cf_examples_list[0].final_cfs_df[feature_name] <=
+                #     5.0)
