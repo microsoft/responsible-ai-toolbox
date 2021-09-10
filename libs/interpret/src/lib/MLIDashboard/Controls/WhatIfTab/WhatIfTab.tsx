@@ -355,7 +355,18 @@ export class WhatIfTab extends React.PureComponent<
                   {localization.Interpret.WhatIfTab.cohortPickerLabel}
                 </Text>
                 <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
+                  styles={{
+                    callout: {
+                      selectors: {
+                        ".ms-Button-flexContainer": {
+                          width: "100%"
+                        }
+                      }
+                    },
+                    dropdown: {
+                      width: 150
+                    }
+                  }}
                   options={cohortOptions}
                   selectedKey={this.state.selectedCohortIndex}
                   onChange={this.setSelectedCohort}
