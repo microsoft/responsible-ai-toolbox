@@ -35,6 +35,25 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='regre')
 
+    def test_validate_test_data_size(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_iris_data()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            ModelAnalysis(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column='bad_target',
+                task_type='classification',
+                maximum_rows_for_test=len(y_test) - 1)
+        assert "The test data has more than 29 rows" in \
+            str(ucve.value)
+
     def test_validate_bad_target_name(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_iris_data()
