@@ -51,7 +51,7 @@ class TestModelAnalysisValidations:
                 target_column='bad_target',
                 task_type='classification',
                 maximum_rows_for_test=len(y_test) - 1)
-        assert "The test data has more than 29 rows" in \
+        assert "The test data has 30 rows, but limit is set to 29 rows" in \
             str(ucve.value)
 
     def test_validate_bad_target_name(self):

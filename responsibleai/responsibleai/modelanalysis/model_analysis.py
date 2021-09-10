@@ -225,7 +225,7 @@ class ModelAnalysis(object):
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
             if test.shape[0] > maximum_rows_for_test:
                 raise UserConfigValidationException(
-                    'The test data has {0}, but limit is set to {1} rows'.format(
+                    'The test data has {0} rows, but limit is set to {1} rows'.format(
                         test.shape[0], maximum_rows_for_test)
                 )
 
