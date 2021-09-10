@@ -1,7 +1,6 @@
 name: Release to PyPI
 
 env:
-  folder_to_upload: dist/apps/dashboard
   node-version: 16.8
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
