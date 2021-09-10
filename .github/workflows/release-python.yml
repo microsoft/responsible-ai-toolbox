@@ -133,7 +133,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ${{ [env.raiDirectory, env.widgetDirectory] }}
+        package:
+          [
+            responsibleai,
+            raiwidgets
+          ]
 
     steps:
       - name: Set up Python
