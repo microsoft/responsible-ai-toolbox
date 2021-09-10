@@ -1,6 +1,0 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
-import { describeFairness } from "../../describer/fairness/describeFairness";
-
-describeFairness("regressionWithError", true);
