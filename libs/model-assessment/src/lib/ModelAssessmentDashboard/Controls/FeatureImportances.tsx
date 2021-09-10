@@ -75,7 +75,7 @@ export class FeatureImportancesTab extends React.PureComponent<
     return (
       <Stack>
         <div style={{ padding: "16px 24px 16px 40px" }}>
-          <Text variant={"xLarge"}>
+          <Text variant={"xxLarge"}>
             {localization.ModelAssessment.ComponentNames.FeatureImportances}
           </Text>
         </div>

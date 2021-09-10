@@ -10,6 +10,14 @@ export class ModelExplanationUtils {
     return augmented.map((augmentedVal) => augmentedVal[1]);
   }
 
+  public static getAbsoluteSortIndices(input: number[]): number[] {
+    const augmented = input.map((val, index) => [val, index]);
+    augmented.sort((a, b) => {
+      return Math.abs(a[0]) - Math.abs(b[0]);
+    });
+    return augmented.map((augmentedVal) => augmentedVal[1]);
+  }
+
   public static buildSortedVector(
     matrix: number[][],
     selectedClassIndex?: number

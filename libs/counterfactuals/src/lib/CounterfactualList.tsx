@@ -191,27 +191,42 @@ export class CounterfactualList extends React.Component<
   };
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
+    const targetFeature =
+      this.props.data?.feature_names_including_target[
+        this.props.data?.feature_names_including_target.length - 1
+      ];
     const featureNames = this.getFilterFeatures();
     if (!featureNames || featureNames.length === 0) {
       return columns;
     }
-    columns.push({
-      fieldName: nameColumnKey,
-      isResizable: true,
-      key: nameColumnKey,
-      minWidth: 200,
-      name: "",
-      onRender: this.renderName
-    });
-    featureNames.forEach((f) =>
-      columns.push({
-        fieldName: f,
+    columns.push(
+      {
+        fieldName: nameColumnKey,
         isResizable: true,
-        key: f,
+        key: nameColumnKey,
+        minWidth: 200,
+        name: "",
+        onRender: this.renderName
+      },
+      {
+        fieldName: targetFeature,
+        isResizable: true,
+        key: targetFeature || "",
         minWidth: 175,
-        name: f
-      })
+        name: targetFeature || ""
+      }
     );
+    featureNames
+      .filter((f) => f !== targetFeature)
+      .forEach((f) =>
+        columns.push({
+          fieldName: f,
+          isResizable: true,
+          key: f,
+          minWidth: 175,
+          name: f
+        })
+      );
     return columns;
   }
 

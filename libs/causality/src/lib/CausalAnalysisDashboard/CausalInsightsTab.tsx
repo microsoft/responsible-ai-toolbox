@@ -46,7 +46,7 @@ export class CausalInsightsTab extends React.PureComponent<
           horizontal={false}
           tokens={{ childrenGap: "15px", padding: "0 0 0 8px" }}
         >
-          <Text variant={"xLarge"}>
+          <Text variant={"xxLarge"}>
             {localization.ModelAssessment.ComponentNames.CausalAnalysis}
           </Text>
         </Stack>

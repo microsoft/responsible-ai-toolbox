@@ -94,7 +94,8 @@ export function buildInitialModelAssessmentContext(
   ).map((item) => {
     return {
       dataCount: jointDataset.datasetRowCount,
-      key: item.key as GlobalTabKeys
+      key: item.key as GlobalTabKeys,
+      name: item.text as string
     };
   });
 
