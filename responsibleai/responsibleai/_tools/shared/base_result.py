@@ -47,10 +47,7 @@ class BaseResult(ABC, Generic[TResult]):
         save_attributes(self, self._get_attributes(), result_dir)
 
         # Save dashboard data
-        dashboard = self._get_dashboard_data()
-        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
-        with open(result_dir / dashboard_filename, 'w') as f:
-            json.dump(dashboard, f)
+        self._save_dashboard(result_dir)
 
     def _save_metadata(self, result_dir: Path):
         """Save result metadata to disk.
@@ -64,6 +61,16 @@ class BaseResult(ABC, Generic[TResult]):
         version_path = result_dir / SerializationAttributes.VERSION_FILENAME
         with open(version_path, 'w') as f:
             json.dump({SerializationAttributes.VERSION_KEY: self.version}, f)
+
+    def _save_dashboard(self, result_dir: Path):
+        """Save result dashboard to disk.
+
+        :param path: Path to result directory on disk.
+        """
+        dashboard = self._get_dashboard_data()
+        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
+        with open(result_dir / dashboard_filename, 'w') as f:
+            json.dump(dashboard, f)
 
     @classmethod
     def load(cls, path: Union[str, Path]) -> TResult:
@@ -81,9 +88,7 @@ class BaseResult(ABC, Generic[TResult]):
         load_attributes(loaded, loaded._get_attributes(), result_dir)
 
         # Load dashboard data
-        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
-        with open(result_dir / dashboard_filename, 'r') as f:
-            loaded._dashboard_data = json.load(f)
+        loaded._load_dashboard(result_dir)
 
         loaded._validate_schema()
         return loaded
@@ -100,6 +105,15 @@ class BaseResult(ABC, Generic[TResult]):
         version_path = result_dir / SerializationAttributes.VERSION_FILENAME
         with open(version_path, 'r') as f:
             self.version = json.load(f)[SerializationAttributes.VERSION_KEY]
+
+    def _load_dashboard(self, result_dir: Path) -> str:
+        """Load result dashboard from disk.
+
+        :param path: Path to result directory on disk.
+        """
+        dashboard_filename = SerializationAttributes.DASHBOARD_FILENAME
+        with open(result_dir / dashboard_filename, 'r') as f:
+            self._dashboard_data = json.load(f)
 
     def _validate_schema(self):
         schema = self._get_schema(self.version)
