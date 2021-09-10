@@ -100,7 +100,8 @@ class ModelAnalysis(object):
             method returns a dictionary state and load method returns the
             model.
         :type serializer: object
-        :param maximum_rows_for_test: Limit on size of test data (for performance reasons)
+        :param maximum_rows_for_test: Limit on size of test data
+            (for performance reasons)
         :type maximum_rows_for_test: int
         """
         self._validate_model_analysis_input_parameters(
@@ -188,7 +189,8 @@ class ModelAnalysis(object):
             method returns a dictionary state and load method returns the
             model.
         :type serializer: object
-        :param maximum_rows_for_test: Limit on size of test data (for performance reasons)
+        :param maximum_rows_for_test: Limit on size of test data
+            (for performance reasons)
         :type maximum_rows_for_test: int
         """
 
@@ -224,8 +226,9 @@ class ModelAnalysis(object):
 
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
             if test.shape[0] > maximum_rows_for_test:
+                msg_fmt = 'The test data has {0} rows, but limit is set to {1} rows'
                 raise UserConfigValidationException(
-                    'The test data has {0} rows, but limit is set to {1} rows'.format(
+                    msg_fmt.format(
                         test.shape[0], maximum_rows_for_test)
                 )
 
