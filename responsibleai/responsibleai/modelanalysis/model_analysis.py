@@ -100,13 +100,16 @@ class ModelAnalysis(object):
             method returns a dictionary state and load method returns the
             model.
         :type serializer: object
+        :param maximum_rows_for_test: Limit on size of test data (for performance reasons)
+        :type maximum_rows_for_test: int
         """
         self._validate_model_analysis_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features,
             train_labels=train_labels,
-            serializer=serializer)
+            serializer=serializer,
+            maximum_rows_for_test=maximum_rows_for_test)
         self.model = model
         self.train = train
         self.test = test
@@ -157,8 +160,9 @@ class ModelAnalysis(object):
 
     def _validate_model_analysis_input_parameters(
             self, model, train, test, target_column,
-            task_type, categorical_features=None, train_labels=None,
-            serializer=None):
+            task_type, categorical_features, train_labels,
+            serializer,
+            maximum_rows_for_test: int):
         """
         Validate the inputs for ModelAnalysis class.
 
@@ -184,6 +188,8 @@ class ModelAnalysis(object):
             method returns a dictionary state and load method returns the
             model.
         :type serializer: object
+        :param maximum_rows_for_test: Limit on size of test data (for performance reasons)
+        :type maximum_rows_for_test: int
         """
 
         valid_tasks = [
@@ -217,6 +223,12 @@ class ModelAnalysis(object):
                     'The serializer should be serializable via pickle')
 
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
+            if test.shape[0] > maximum_rows_for_test:
+                raise UserConfigValidationException(
+                    'The test data has more than {0} rows'.format(
+                        maximum_rows_for_test)
+                )
+
             if len(set(train.columns) - set(test.columns)) != 0 or \
                     len(set(test.columns) - set(train.columns)):
                 raise UserConfigValidationException(
